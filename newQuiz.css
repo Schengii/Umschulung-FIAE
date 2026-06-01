@@ -1,0 +1,93 @@
+/* für alles */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+
+/* intergrund */
+body {
+    background: #656262;
+}
+
+
+/* Container1 Quiz gesamtgröße */
+.test {
+    background: #f44d4d;
+    width: 90%;
+    max-width: 600px;
+    margin: 100px auto 0;
+    border-radius: 12px;
+    padding: 40px;
+}
+
+
+/* Container Überschrift */
+.test h1 {
+    font-size: 35px;
+    color: #001e4d;
+    font-weight: 600;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+
+/* Container 2 */
+.quiz1 {
+    padding: 20px 0;
+}
+
+
+/* Container 2 Überschrift */
+.quiz1 h2 {
+    font-size: 20px;
+    color: #001e4d;
+    font-weight: 600;
+}
+
+
+/* Buttons */
+.btn {
+    background: #fff;
+    color: #222;
+    font-weight: 600;
+    width: 100%;
+    border: 1px solid #333;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+/* Button hover */
+.btn:hover:not([disabled]) {
+    background: #222;
+    color: #fff;
+}
+
+
+/* Button disabled */
+.btn: disabled {
+    cursor: no-drop;
+}
+
+
+/* Weiter Button */
+#next-btn {
+    background: #001e4d;
+    color: #fff;
+    font-weight: 500;
+    width: 150px;
+    border: 0;
+    padding: 10px;
+    margin: 20px auto 0;
+    border-radius: 15px;
+    cursor: pointer;
+    display: none;
+}
