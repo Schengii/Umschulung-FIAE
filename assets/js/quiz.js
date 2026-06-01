@@ -1,4 +1,4 @@
-//Fragen für das Quiz mit Antworten
+// Fragen für das Quiz mit Antworten
 const questions = [
     {
         question: "Was ist der Unterschied zwischen einer Umschulung und einer Ausbildung?",
@@ -10,10 +10,10 @@ const questions = [
         ]
     },
     {
-        question: "Wie viele Berufsförderungswerke gibt es?",
+        question: "Wie viele Berufsförderungswerke gibt es in Deutschland?",
         answers: [
             { text: "5", correct: false },
-            { text: "22", correct: false },
+            { text: "12", correct: false },
             { text: "28", correct: true },
             { text: "Keine Antwort ist richtig", correct: false },
         ]
@@ -30,54 +30,63 @@ const questions = [
     {
         question: "Wann darf man eine Umschulung im BFW machen?",
         answers: [
-            { text: "Durch einen LTA", correct: true },
-            { text: "Jeder kann eine Umschulung jederzeit machen", correct: false },
-            { text: "Durch einen Unfall", correct: false },
+            { text: "Durch Bewilligung einer LTA (Leistung zur Teilhabe am Arbeitsleben)", correct: true },
+            { text: "Jeder kann eine Umschulung jederzeit einfach so machen", correct: false },
+            { text: "Durch einen leichten Autounfall ohne Reha-Bedarf", correct: false },
             { text: "Keine Antwort ist richtig", correct: false },
         ]
     },
     {
-        question: "Wo und wie lange mache ich MEIN Prakikum?",
+        question: "Wo und wie lange macht Maximilian sein Praktikum?",
         answers: [
             { text: "6 Monate lang bei Haribo", correct: false },
-            { text: "3 Jahre lang im BFW", correct: false },
-            { text: "1,5 Jahre lang bei DFG", correct: true },
-            { text: "Ich mache kein Praktikum", correct: false },
+            { text: "3 Jahre lang direkt im BFW", correct: false },
+            { text: "1,5 Jahre (18 Monate) lang bei der DFG in Bonn", correct: true },
+            { text: "Er macht kein Praktikum", correct: false },
         ]
     }
 ];
 
-//Deklaration
+// DOM Elemente
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
+const quizProgress = document.getElementById("quiz-progress");
 
-
-//Initialisierung
+// Spielvariablen
 let currentQuestionIndex = 0;
 let score = 0;
 
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
-    nextButton.innerHTML = "Next";
+    nextButton.innerHTML = 'Nächste Frage <i class="fa fa-arrow-right"></i>';
+    nextButton.className = "btn-primary";
     showQuestion();
 }
 
-
-//Quiz reset
 function showQuestion() {
     resetState();
     let currentQuestion = questions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
-    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+    
+    // Setzen der Frage
+    questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;
+    
+    // Fortschrittsanzeige aktualisieren
+    if (quizProgress) {
+        const percent = ((currentQuestionIndex) / questions.length) * 100;
+        quizProgress.style.width = `${percent}%`;
+    }
 
-
+    // Antworten generieren
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button");
         button.innerHTML = answer.text;
-        button.classList.add("btn");
+        button.classList.add("btn-quiz");
+        button.setAttribute("role", "button");
         answerButtons.appendChild(button);
+        
         if (answer.correct) {
             button.dataset.correct = answer.correct;
         }
@@ -85,8 +94,6 @@ function showQuestion() {
     });
 }
 
-
-//Weiter Button
 function resetState() {
     nextButton.style.display = "none";
     while (answerButtons.firstChild) {
@@ -94,37 +101,62 @@ function resetState() {
     }
 }
 
-
-//Mehrere Antworten sperren
 function selectAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
+    
     if (isCorrect) {
         selectedBtn.classList.add("correct");
         score++;
     } else {
         selectedBtn.classList.add("incorrect");
     }
+    
+    // Alle Knöpfe deaktivieren und die richtige Antwort markieren
     Array.from(answerButtons.children).forEach(button => {
         if (button.dataset.correct === "true") {
             button.classList.add("correct");
         }
         button.disabled = true;
     });
+    
     nextButton.style.display = "block";
 }
 
-
-//Endergebnis
 function showScore() {
     resetState();
-    questionElement.innerHTML = `Du hast ${score} Punkt/e von ${questions.length} erreicht.<br> Herzlichen Glückwunsch!`;
-    nextButton.innerHTML = "Neuer Versuch";
+    
+    if (quizProgress) {
+        quizProgress.style.width = "100%";
+    }
+    
+    const percentage = Math.round((score / questions.length) * 100);
+    let feedback = "";
+    
+    if (percentage === 100) {
+        feedback = "Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉";
+    } else if (percentage >= 60) {
+        feedback = "Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍";
+    } else {
+        feedback = "Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚";
+    }
+    
+    questionElement.innerHTML = `
+        <div style="text-align: center; padding: 1rem 0;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+            <h3>Quiz beendet!</h3>
+            <p style="font-size: 1.2rem; margin: 1rem 0; font-weight: bold; color: var(--primary);">
+                Du hast ${score} von ${questions.length} Punkten erreicht (${percentage}%).
+            </p>
+            <p style="color: var(--text-secondary);">${feedback}</p>
+        </div>
+    `;
+    
+    nextButton.innerHTML = '<i class="fa fa-refresh"></i> Quiz neu starten';
+    nextButton.className = "btn-primary";
     nextButton.style.display = "block";
 }
 
-
-//Index Fragenanzahl
 function handleNextButton() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
@@ -134,8 +166,6 @@ function handleNextButton() {
     }
 }
 
-
-//Abfrage nach jeder Antwort
 nextButton.addEventListener("click", () => {
     if (currentQuestionIndex < questions.length) {
         handleNextButton();
@@ -144,22 +174,5 @@ nextButton.addEventListener("click", () => {
     }
 });
 
-
-
-
+// Quiz beim Laden starten
 startQuiz();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,179 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <title>Praktikumsbetrieb</title>
-    <link rel="stylesheet" href="Praktikumsbetrieb.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktikumsbetrieb - Umschulung IT</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
-    <!----------------------------------------Überschrift---------------------------------------------->
-    <div class="header">
-        <h1>Fachinformatiker für Anwendungsentwicklung</h1>
-    </div>
+    <header>
+        <h1>Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</h1>
+    </header>
 
-    <!-----------------------------------------Menü Bar----------------------------------------->
-    <div class="topnav">
-        <ul>
-            <li><a href="Home.html"><i class="fa fa-home"></i> Home</a></li>
-
-            <!-------------------------------Ausbildung Dropdown Menü----------------------------------->
-            <li class="active"><a href="#"><i class="fa fa-university"> Ausbildung </i> <i
-                        class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="Ausbildungsablauf.html">Ablauf Ausbildung</a></li>
-                        <li><a href="Berufsförderungswerk.html">Berufsförderungswerk Dortmund</a></li>
-                        <div class="drop-menu">
-                            <li><a href="Kostenträger.html">Kostenträger +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a
-                                            href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html">Rentenversicherung</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation">Berufsgenossenschaften</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation">Agentur
-                                            für Arbeit</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Praktikumsbetrieb.html">Praktikumsbetrieb</a></li>
+    <!-- Navigation -->
+    <nav class="topnav" aria-label="Hauptnavigation">
+        <div class="nav-wrapper">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item active"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ausbildung <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link">Ablauf Ausbildung</a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link">Berufsförderungswerk Dortmund</a></li>
+                        <li class="dropdown-item">
+                            <a href="kostentraeger.html" class="dropdown-link">Kostenträger <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link">Rentenversicherung</a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Berufsgenossenschaften</a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Agentur für Arbeit</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link">Praktikumsbetrieb</a></li>
                     </ul>
-                </div>
-            </li>
-            <li><a href="Impressum.html"><i class="fa fa-phone"></i> Impressum</a></li>
-            <li><a href="News.html"><i class="fa fa-newspaper-o"></i> News</a></li>
-            <li><a href="Links.html"><i class="fa fa-external-link"></i> Links</a></li>
-            <li><a href="#">Weiteres <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="#">Test1</a></li>
-                        <li><a href="#">Test2</a></li>
-                        <div class="drop-menu">
-                            <li><a href="#">Games JS +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a href="snake.html" target="_blank">Snake JS</a></li>
-                                    <li><a href="Quiz.html" target="_blank">Quiz JS</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Startseite.html">Startseite</a></li>
+                </li>
+                <li class="nav-item"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> Impressum</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
+                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Weiteres <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="quiz.html" class="dropdown-link">Test Quiz</a></li>
+                        <li class="dropdown-item">
+                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="index.html" class="dropdown-link">Startseite</a></li>
                     </ul>
+                </li>
+            </ul>
+            
+            <div class="nav-controls">
+                <div class="search-container">
+                    <label for="searchbar" class="sr-only">Karten filtern</label>
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-            </li>
-            <li><input id="searchbar" onkeyup="search()" type="text" name="suche" placeholder=" Suche..."><i
-                    class="fa fa-search"></i></li>
-        </ul>
-    </div>
-
-
-    <!-------------------------------------------------Haupttext---------------------------------------------->
-    <div class="row">
-        <div class="leftcolumn">
-            <div class="card">
-
-                <!-------------------------------------Linker Text--------------------------------------------->
-                <h2><u>Praktikum</u></h2>
-                <h5><span>Warum ein Praktikum und für wie lange?</span></h5>
-                <p>Im Rahmen dieser Umschulung muss jeder Teilnehmer ein oder mehrere Prakikas absolvieren. In dem
-                    Berufsförderungswerk
-                    findet in der Regel nur die Theorie statt. Die Praxisanwendungen in der Realität unterscheiden sich
-                    oft mit der Theorie
-                    weshalb ein Praktikum die idealen Chance sein kann.</p>
-                <p>Die Teilnehmer dürfen sich ihren Prakikumsplatz selber frei aussuchen. Vorraussetzung ist das
-                    Unternehmen sollte
-                    etwas mit der jeweiligen Ausbildung zutun haben und es ist erwünscht, das Praktikum in Heimatsnähe
-                    zu machen.</p>
-                <hr>
-
-                <!-----------------------------------------Absatz---------------------------------------------------->
-                <h4><u>Die Deutsche Forschungsgemeinschaft</u></h4>
-                <p>Mein Prakikumsbetrieb ist die Deutsche Forschungsgemeinschaft (DFG) in Bonn. Der Hauptsitz ist nur
-                    1km von meinem
-                    Zuhause entfernt.<br> Was macht die DFG überhaupt?<br> Die Deutsche Forschungsgemeinschaft (DFG) ist
-                    eine fachübergreifende
-                    Einrichtung zur Förderung der Wissenschaft und Forschung an Hochschulen und anderen
-                    Forschungseinrichtungen. Der
-                    Schwerpunkt liegt dabei auf aus der Wissenschaft selbst entwickelten Vorhaben im Bereich der
-                    erkenntnissgeleiteten
-                    Forschung.
-                <p>Die DFG finanziert Forschungsvorhaben, entwirft Wettbewerbsräume und führt Verfahren zur
-                    Begutachtung,
-                    Bewertung, Auswahl und Entscheidungen von Forschungsanträgen durch. Sie gestaltet Rahmenbedingungen
-                    und Standards
-                    des wissenschaftlichens Arbeitens mit.
-                    Außerdem pflegt die DFG den Dialog mit Gesellschaft, Politik und Wirtschaft und unterstützt den
-                    Transfer von Erkenntnissen.
-                    Sie berät staatliche und im öffentlichen Interesse tätige Einrichtungen in wissenschaftlichen und
-                    wissenschaftspolitischen
-                    Fragen<br>Die Fördergelder werden zu zwei Dritteln vom Bund und zu einem Drittel von anderen Ländern
-                    getragen.</p>
-                <p>Besondere Aufmerksamkeit der DFG gilt darüber hinaus der Förderung internationaler Zusammenarbeit,
-                    von Forscher*innen
-                    in frühen Karrierephasen, der Gleichstellung der Geschlechter sowie der Vielfältigkeit in der
-                    Wissenschaft.</p>
-                <hr>
-
-                <!-----------------------------------------Absatz------------------------------------------------------>
-                <h4><u>Aufgaben der DFG</u></h4>
-                <p>Es gibt drei zentrale Handlungsansätze der DFG:</p>
-                <ul>
-                    <li>1. Fördern:<p>Die DFG fördert wissenschaftliche Erkenntnisprozesse durch die Organisation eines
-                            fairen,
-                            wissenschaftsbegleiteten Wettbewerbs für die Auswahl und Förderung von eingehenden
-                            Forschungsanträgen.</p>
-                    </li>
-                    <li>2. Erschließem: <p>Die DFG nutzt in einem begrenztem Ausmaß strategische Förderinitiativen zur
-                            Erschließung oder
-                            aktiven Unterstützung bestimmter Forschungsfelder sowie als Reaktion auf akuten
-                            Forschungsbedarf oder auf Anregungen
-                            zum Ausbau von Kooperationen.</p>
-                    </li>
-                    <li>3. Gestalten: <p>Die DFG entwickeln adäquate Rahmenbedingungen und Standards, die
-                            erkenntnisgeleitete Forschung
-                            höchster Qualität stärken.</p>
-                    </li>
-                </ul>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
-    </div>
+    </nav>
 
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div class="layout-grid">
+            <!-- Left Column -->
+            <div class="left-col">
+                <article class="card" aria-labelledby="praktikum-title">
+                    <h2 id="praktikum-title">Das Praktikum</h2>
+                    <h3>Warum ein Praktikum und für wie lange?</h3>
+                    <p>Im Rahmen dieser Umschulung muss jeder Teilnehmer ein oder mehrere Praktika absolvieren. In dem Berufsförderungswerk findet in der Regel nur die theoretische Ausbildung statt. Die praktischen Anwendungen in der realen Betriebswelt unterscheiden sich jedoch oft von der reinen Theorie, weshalb ein Praktikum die ideale Chance bietet, das Erlernte anzuwenden.</p>
+                    <p>Die Teilnehmer dürfen sich ihren Praktikumsplatz selbständig aussuchen. Voraussetzung ist, dass das Unternehmen zum Ausbildungsprofil passt; zudem ist es erwünscht, das Praktikum in Heimatnähe zu absolvieren.</p>
+                </article>
 
+                <article class="card" aria-labelledby="dfg-title">
+                    <h2 id="dfg-title">Mein Kooperationsbetrieb: Die DFG</h2>
+                    <p>Mein Praktikumsbetrieb ist die <strong>Deutsche Forschungsgemeinschaft (DFG)</strong> in Bonn. Der Hauptsitz liegt nur ca. 1 km von meinem Zuhause entfernt.</p>
+                    
+                    <h3>Was macht die DFG überhaupt?</h3>
+                    <p>Die Deutsche Forschungsgemeinschaft (DFG) ist die zentrale, fachübergreifende Selbstverwaltungorganisationsform der Wissenschaft in Deutschland. Sie dient der Förderung der Wissenschaft und Forschung an Hochschulen und anderen Forschungseinrichtungen.</p>
+                    <p>Der Schwerpunkt der DFG liegt auf der Finanzierung von Forschungsvorhaben, die aus der Wissenschaft selbst entwickelt werden (erkenntnisgeleitete Forschung). Sie entwirft Wettbewerbsräume und führt faire, wissenschaftsgeleitete Begutachtungs- und Auswahlverfahren durch. Zudem gestaltet sie die Rahmenbedingungen und Standards für das wissenschaftliche Arbeiten mit.</p>
+                    <p>Darüber hinaus pflegt die DFG den Dialog mit Gesellschaft, Politik und Wirtschaft, unterstützt den Wissenstransfer und berät staatliche Stellen in wissenschaftspolitischen Fragen. Die Fördergelder werden zu zwei Dritteln vom Bund und zu einem Drittel von den Bundesländern getragen.</p>
+                    <p>Besondere Aufmerksamkeit widmet die DFG der Förderung der internationalen Zusammenarbeit, von Wissenschaftler*innen in frühen Karrierephasen sowie der Gleichstellung der Geschlechter und der Vielfalt in der Wissenschaft.</p>
+                </article>
 
+                <article class="card" aria-labelledby="dfg-tasks">
+                    <h2 id="dfg-tasks">Drei zentrale Aufgaben der DFG</h2>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 1.5rem; border-left: 4px solid var(--primary); padding-left: 1rem;">
+                            <strong>1. Fördern</strong>
+                            <p style="margin-top: 0.25rem;">Die DFG fördert wissenschaftliche Erkenntnisprozesse durch die Organisation eines fairen, wissenschaftsbegleiteten Wettbewerbs für die Auswahl der besten Forschungsanträge.</p>
+                        </li>
+                        <li style="margin-bottom: 1.5rem; border-left: 4px solid var(--accent); padding-left: 1rem;">
+                            <strong>2. Erschließen</strong>
+                            <p style="margin-top: 0.25rem;">Die DFG nutzt gezielte strategische Förderinitiativen zur Erschließung oder aktiven Unterstützung bestimmter Forschungsfelder sowie als Reaktion auf akuten Forschungsbedarf.</p>
+                        </li>
+                        <li style="margin-bottom: 0; border-left: 4px solid var(--text-secondary); padding-left: 1rem;">
+                            <strong>3. Gestalten</strong>
+                            <p style="margin-top: 0.25rem;">Die DFG entwickelt adäquate Rahmenbedingungen und Qualitätsstandards, die erkenntnisgeleitete Forschung auf höchstem Niveau absichern.</p>
+                        </li>
+                    </ul>
+                </article>
+            </div>
 
-
-
-
-
-
-
-
-    <!------------------------------------------------Quellenangabe--------------------------------------------------------->
-    <div class="quellen">
-        Quellen:<a href="https://www.dfg.de/de/dfg-profil/ueber-die-dfg/was-ist-die-dfg">Deutsche
-            Forschungsgemeinschaft</a>
-    </div>
-
-
-    <!-------------------------------------------------------Fußzeile------------------------------------------------------->
-    <div class="footer">
-        <p>&copy; copyright Maximilian Schenk; Rüdesheimer Str.14; 53175 Bonn; Germany</p>
-        <div class="icons">
-            <i class="fa fa-facebook"></i>
-            <i class="fa fa-twitter"></i>
-            <i class="fa fa-instagram"></i>
-            <i class="fa fa-linkedin"></i>
+            <!-- Right Column -->
+            <aside class="right-col">
+                <section class="card" aria-labelledby="dfg-info-title">
+                    <h3 id="dfg-info-title">DFG auf einen Blick</h3>
+                    <p><strong>Typ:</strong> Forschungsförderorganisation</p>
+                    <p><strong>Hauptsitz:</strong> Kennedyallee 40, 53175 Bonn</p>
+                    <p><strong>Webseite:</strong> <a href="https://www.dfg.de/" target="_blank" rel="noopener">www.dfg.de</a></p>
+                    <hr>
+                    <p><strong>Maximilians Einsatzbereich:</strong><br>8-köpfiges Web-Entwicklerteam mit Schwerpunkt Frontend-Technologien (HTML5, CSS3, JavaScript).</p>
+                </section>
+                
+                <section class="card" aria-labelledby="sources-title">
+                    <h3 id="sources-title">Quellen</h3>
+                    <p><a href="https://www.dfg.de/de/dfg-profil/ueber-die-dfg/was-ist-die-dfg" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> DFG-Profil: Was ist die DFG?</a></p>
+                </section>
+            </aside>
         </div>
-    </div>
+    </main>
 
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
+        <div class="icons">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+        </div>
+    </footer>
 
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

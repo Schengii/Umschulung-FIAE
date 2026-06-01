@@ -1,185 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <title>Kontakt</title>
-    <!--Link zur CSS-Datei-->
-    <link rel="stylesheet" href="Impressum.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum & Kontakt - Umschulung IT</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
-
-    <!----------------------------------------Überschrift---------------------------------->
-    <div class="header">
+    <header>
         <h1>Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</h1>
-    </div>
+    </header>
 
-    <!-----------------------------------------Menü Bar----------------------------------------->
-    <div class="topnav">
-        <ul>
-            <li><a href="Home.html"><i class="fa fa-home"></i> Home</a></li>
-
-            <!-------------------------------Ausbildung Dropdown Menü----------------------------------->
-            <li><a href="#"><i class="fa fa-university"> Ausbildung </i> <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="Ausbildungsablauf.html">Ablauf Ausbildung</a></li>
-                        <li><a href="Berufsförderungswerk.html">Berufsförderungswerk Dortmund</a></li>
-                        <div class="drop-menu">
-                            <li><a href="Kostenträger.html">Kostenträger +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a
-                                            href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html">Rentenversicherung</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation">Berufsgenossenschaften</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation">Agentur
-                                            für Arbeit</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Praktikumsbetrieb.html">Praktikumsbetrieb</a></li>
+    <!-- Navigation -->
+    <nav class="topnav" aria-label="Hauptnavigation">
+        <div class="nav-wrapper">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ausbildung <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link">Ablauf Ausbildung</a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link">Berufsförderungswerk Dortmund</a></li>
+                        <li class="dropdown-item">
+                            <a href="kostentraeger.html" class="dropdown-link">Kostenträger <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link">Rentenversicherung</a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Berufsgenossenschaften</a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Agentur für Arbeit</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link">Praktikumsbetrieb</a></li>
                     </ul>
-                </div>
-            </li>
-            <li class="active"><a href="Impressum.html"><i class="fa fa-phone"></i> Impressum</a></li>
-            <li><a href="News.html"><i class="fa fa-newspaper-o"></i> News</a></li>
-            <li><a href="Links.html"><i class="fa fa-external-link"></i> Links</a></li>
-            <li><a href="#">Weiteres <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="#">Test1</a></li>
-                        <li><a href="#">Test2</a></li>
-                        <div class="drop-menu">
-                            <li><a href="#">Games JS +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a href="snake.html" target="_blank">Snake JS</a></li>
-                                    <li><a href="Quiz.html" target="_blank">Quiz JS</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Startseite.html">Startseite</a></li>
+                </li>
+                <li class="nav-item active"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> Impressum</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
+                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Weiteres <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="quiz.html" class="dropdown-link">Test Quiz</a></li>
+                        <li class="dropdown-item">
+                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="index.html" class="dropdown-link">Startseite</a></li>
                     </ul>
+                </li>
+            </ul>
+            
+            <div class="nav-controls">
+                <div class="search-container">
+                    <label for="searchbar" class="sr-only">Karten filtern</label>
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-            </li>
-            <li><input id="searchbar" onkeyup="search()" type="text" name="suche" placeholder=" Suche..."><i
-                    class="fa fa-search"></i></li>
-        </ul>
-    </div>
-
-
-    <!---------------------------Haupttext--------------------------------->
-
-    <div class="row">
-        <div class="leftcolumn"><!-----------Linke Seite------------------->
-
-
-            <!----------------------------Haupttext 1------------------------------>
-            <div class="card">
-                <h1>Kontakt</h1>
-                <h4>Ich freue mich über Rückmeldungen und Anregungen!</h4>
-                <p>Wenn du noch weitere Fragen oder Anregungen haben, benutz bitte das Kontaktformular oder
-                    alternativ kontaktieren Sie mich bitte per E-Mail oder Telefon</p>
-                <hr>
-                <p>info@Max-Schenk.de</p>
-                <p>Tel.:01743275961</p>
-            </div>
-
-
-            <!-----------------------------Haupttext 2----------------------------->
-            <div class="card">
-                <h1>Postanschrift</h1>
-                <p>
-                    Maximilian<br>
-                    Rüdesheimer Str.14<br>
-                    53175 Bonn<br>
-                    Germany<br>
-                </p>
-                <!----------------------------Karte--------------------------------------->
-                <div class="Karte">
-                    <p>Hier findest du meine Adresse: </p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5054.46808144908!2d7.132505293668065!
-            3d50.69704129851722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee3f119f2ffc1%3A0xc9c318a1fed01d18!2sR%C3%BCdesheimer%20Str.
-            %2014%2C%2053175%20Bonn!5e0!3m2!1sde!2sde!4v1713951947205!5m2!1sde!2sde" ; allowfullscreen=""
-                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>"
-                </div>
-            </div>
-
-
-            <!-------------------------------Haupttext 3------------------------------------->
-            <div class="card">
-                <h3>Alternative Anschrift:</h3>
-                <p>
-                    Maximilian Schenk<br>
-                    Hacheneyer Straße 180.<br>
-                    44265 Dortmund<br>
-                    Germany<br>
-                </p>
-                <!-------------------------Karte-------------------------------------------->
-                <div class="Karte2">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.058468615845!2d7.472410677201505!3d51.
-            475441071806124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b91790e93f208d%3A0x39303511b2287d4!2sHacheneyer
-            %20Str.%20180%2C%2044265%20Dortmund!5e0!3m2!1sde!2sde!4v1713958104968!5m2!1sde!2sde" allowfullscreen=""
-                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
+    </nav>
 
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div class="layout-grid">
+            <!-- Left Column -->
+            <div class="left-col">
+                <article class="card" aria-labelledby="contact-title">
+                    <h2 id="contact-title">Kontakt & Impressum</h2>
+                    <p>Ich freue mich über Rückmeldungen, Fragen und Anregungen zu meiner Umschulung und diesem Web-Portfolio!</p>
+                    <hr>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <strong>E-Mail:</strong> <a href="mailto:info@Max-Schenk.de">info@Max-Schenk.de</a></p>
+                    <p><i class="fa fa-phone" aria-hidden="true"></i> <strong>Telefon:</strong> <a href="tel:+491743275961">0174 3275961</a></p>
+                </article>
 
-        <!------------------------------rechte Seite Nebentext--------------------------->
-        <div class="rightcolumn">
-            <div class="card2">
-                <h2>Neuigkeiten</h2>
-                <p>Hier werden immer die aktuellsten Neuigkeiten geteilt.</p>
-                <p>Bei irgendwelchen Änderungen oder ähnliches kannst du dich hier informieren.</p>
-                <p>Ich bin immer für Verbesserungsvorschläge offen :)</p>
-                <hr>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
+                <article class="card" aria-labelledby="addr-bonn">
+                    <h2 id="addr-bonn">Wohnort / Postanschrift Bonn</h2>
+                    <p>
+                        Maximilian Schenk<br>
+                        Rüdesheimer Str. 14<br>
+                        53175 Bonn<br>
+                        Germany
+                    </p>
+                    <div class="map-container">
+                        <iframe title="Google Maps Standort Bonn" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5054.46808144908!2d7.132505293668065!3d50.69704129851722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee3f119f2ffc1%3A0xc9c318a1fed01d18!2sR%C3%BCdesheimer%20Str.%2014%2C%2053175%20Bonn!5e0!3m2!1sde!2sde!4v1713951947205!5m2!1sde!2sde" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </article>
+
+                <article class="card" aria-labelledby="addr-dortmund">
+                    <h2 id="addr-dortmund">Ausbildungsstätte / BFW Dortmund</h2>
+                    <p>
+                        Maximilian Schenk<br>
+                        Hacheneyer Straße 180<br>
+                        44265 Dortmund<br>
+                        Germany
+                    </p>
+                    <div class="map-container">
+                        <iframe title="Google Maps Standort Dortmund" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.058468615845!2d7.472410677201505!3d51.475441071806124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b91790e93f208d%3A0x39303511b2287d4!2sHacheneyer%20Str.%20180%2C%2044265%20Dortmund!5e0!3m2!1sde!2sde!4v1713958104968!5m2!1sde!2sde" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </article>
             </div>
+
+            <!-- Right Column -->
+            <aside class="right-col">
+                <section class="card" aria-labelledby="form-title">
+                    <h3 id="form-title">Schreibe mir</h3>
+                    
+                    <form id="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-feedback').style.display='block'; this.reset();" style="margin-top: 1rem;">
+                        <div class="form-group">
+                            <label for="contact-name">Name</label>
+                            <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-email">E-Mail</label>
+                            <input type="email" id="contact-email" class="form-control" required placeholder="deine@mail.de">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-message">Nachricht</label>
+                            <textarea id="contact-message" class="form-control" rows="5" required placeholder="Deine Nachricht an mich..." style="resize: vertical; font-family: var(--font-sans);"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">Nachricht senden</button>
+                    </form>
+                    
+                    <div id="form-feedback" class="card" style="display: none; margin-top: 1rem; background-color: #d1fae5; border-color: #10b981; color: #065f46; padding: 1rem;">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i> Nachricht wurde simuliert gesendet! Vielen Dank.
+                    </div>
+                </section>
+            </aside>
         </div>
+    </main>
 
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-------------------------------------------------------Fußzeile----------------------------------------------------->
-    <div class="footer">
-        <p>&copy; copyright Maximilian Schenk; Rüdesheimer Str.14; 53175 Bonn; Germany</p>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
         <div class="icons">
-            <i class="fa fa-facebook"></i>
-            <i class="fa fa-twitter"></i>
-            <i class="fa fa-instagram"></i>
-            <i class="fa fa-linkedin"></i>
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
         </div>
-    </div>
+    </footer>
 
-
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

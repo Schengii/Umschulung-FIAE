@@ -1,161 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <title>Kontakt</title>
-    <!--Link zur CSS-Datei-->
-    <link rel="stylesheet" href="News.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Blog - Umschulung IT</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
-
-    <!----------------------------------------Überschrift---------------------------------->
-    <div class="header">
+    <header>
         <h1>Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</h1>
-    </div>
+    </header>
 
-    <!-----------------------------------------Menü Bar----------------------------------------->
-    <div class="topnav">
-        <ul>
-            <li><a href="Home.html"><i class="fa fa-home"></i> Home</a></li>
-
-            <!-------------------------------Ausbildung Dropdown Menü----------------------------------->
-            <li><a href="#"><i class="fa fa-university"> Ausbildung </i> <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="Ausbildungsablauf.html">Ablauf Ausbildung</a></li>
-                        <li><a href="Berufsförderungswerk.html">Berufsförderungswerk Dortmund</a></li>
-                        <div class="drop-menu">
-                            <li><a href="Kostenträger.html">Kostenträger +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a
-                                            href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html">Rentenversicherung</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation">Berufsgenossenschaften</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation">Agentur
-                                            für Arbeit</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Praktikumsbetrieb.html">Praktikumsbetrieb</a></li>
+    <!-- Navigation -->
+    <nav class="topnav" aria-label="Hauptnavigation">
+        <div class="nav-wrapper">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ausbildung <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link">Ablauf Ausbildung</a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link">Berufsförderungswerk Dortmund</a></li>
+                        <li class="dropdown-item">
+                            <a href="kostentraeger.html" class="dropdown-link">Kostenträger <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link">Rentenversicherung</a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Berufsgenossenschaften</a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Agentur für Arbeit</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link">Praktikumsbetrieb</a></li>
                     </ul>
-                </div>
-            </li>
-            <li><a href="Impressum.html"><i class="fa fa-phone"></i> Impressum</a></li>
-            <li class="active"><a href="News.html"><i class="fa fa-newspaper-o"></i> News</a></li>
-            <li><a href="Links.html"><i class="fa fa-external-link"></i> Links</a></li>
-            <li><a href="#">Weiteres <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="#">Test1</a></li>
-                        <li><a href="#">Test2</a></li>
-                        <div class="drop-menu">
-                            <li><a href="#">Games JS +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a href="snake.html" target="_blank">Snake JS</a></li>
-                                    <li><a href="Quiz.html" target="_blank">Quiz</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Startseite.html">Startseite</a></li>
+                </li>
+                <li class="nav-item"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> Impressum</a></li>
+                <li class="nav-item active"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
+                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Weiteres <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="quiz.html" class="dropdown-link">Test Quiz</a></li>
+                        <li class="dropdown-item">
+                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="index.html" class="dropdown-link">Startseite</a></li>
                     </ul>
+                </li>
+            </ul>
+            
+            <div class="nav-controls">
+                <div class="search-container">
+                    <label for="searchbar" class="sr-only">Karten filtern</label>
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-            </li>
-            <li><input id="searchbar" onkeyup="search()" type="text" name="suche" placeholder=" Suche..."><i
-                    class="fa fa-search"></i></li>
-        </ul>
-    </div>
-
-
-    <!---------------------------Haupttext--------------------------------->
-
-    <div class="row">
-        <div class="leftcolumn"><!-----------Linke Seite------------------->
-
-
-            <!----------------------------Haupttext 1------------------------------>
-            <div class="card">
-                <h1>Hier werden alle Neuigkeiten angezeigt</h1>
-                <p>lkdasjlaksjdlfjsaöfjaslkdjflöjdflkjsdljksdlfjasljfalkjf
-                    alskdfjalöfj alöjsfdljfdlkjsdaljasdf
-                    aölsdkjfalöjkflökjsfalkjd f</p>
-            </div>
-
-
-            <!-----------------------------Haupttext 2----------------------------->
-            <div class="card">
-                <h1>Weitere Neuigkeiten</h1>
-                <p>jdlökfjöaskjdf jdlöfajksd j
-                    asdfj alökfjd lajksd lkjsdlöfjsadfja
-                    df asdflökjasdfjaölsfj alsdkfjlökjfdlökjsdflöjkdlöfjd
-                    afdo ölakj eflksjd ljd flkjdl aljf a</p>
-            </div>
-
-
-            <!-------------------------------Haupttext 3------------------------------------->
-            <div class="card">
-                <h3>Alternative Anschrift:</h3>
-                <p>ldjkslfajlödkjfölskjdfö alsdfjalökjsfd jsdlakdflj aöksdjlasdf
-                    adfasld jfalöjfdlöasjfdlösfjlaösdfjalsfjdlkjfslkjsdla
-                    adf aölsdfja lkdjf lkjfd jkadlfjsdljfalkajlföakjsdljkdl ajdfljkfsd a
-                    lkfjd ljfdlöksdj ljsf ljf ks</p>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
+    </nav>
 
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div class="layout-grid">
+            <!-- Left Column -->
+            <div class="left-col">
+                <article class="card" aria-labelledby="news1-title">
+                    <h2 id="news1-title">Start des Fachpraktikums bei der DFG</h2>
+                    <h5>Veröffentlicht am: 02. Mai 2024</h5>
+                    <p>Heute ging es endlich los! Mein Praktikum bei der Deutschen Forschungsgemeinschaft (DFG) in Bonn hat begonnen. Nach einer freundlichen Begrüßung durch das 8-köpfige Webentwicklungs-Team wurde mir mein Arbeitsplatz eingerichtet.</p>
+                    <p>In den ersten Wochen werde ich mich intensiv mit den internen Systemarchitekturen und den eingesetzten Web-Frameworks vertraut machen. Ich freue mich riesig auf die kommenden 18 Monate praxisnahe Entwicklung und die enge Zusammenarbeit mit erfahrenen Entwicklern.</p>
+                </article>
 
-        <!------------------------------rechte Seite Nebentext--------------------------->
-        <div class="rightcolumn">
-            <div class="card2">
-                <h2>Hier werden ältere Neuigkeiten angezeigt</h2>
-                <p>Hier werden immer die älteren Neuigkeiten geteilt.</p>
-                <p>Bei irgendwelchen Änderungen oder ähnliches kannst du dich hier informieren.</p>
-                <p>Ich bin immer für Verbesserungsvorschläge offen :)</p>
-                <hr>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
-                <p>**************************************************</p><br>
+                <article class="card" aria-labelledby="news2-title">
+                    <h2 id="news2-title">Erstes Semester am BFW Dortmund abgeschlossen</h2>
+                    <h5>Veröffentlicht am: 15. Februar 2024</h5>
+                    <p>Das erste Semester meiner Umschulung im Berufsförderungswerk Dortmund ist erfolgreich beendet. In den letzten Monaten standen vor allem theoretische Grundlagen auf dem Lehrplan: Einführung in die Softwareentwicklung mit Java und Javascript, relationale Datenbanksysteme (SQL) sowie Grundlagen der IT-Systemtechnik.</p>
+                    <p>Die Prüfungen sind alle gut gelaufen und es war eine tolle Erfahrung, mit so vielen motivierten Umschülern aus ganz Deutschland zusammenzuarbeiten.</p>
+                </article>
+
+                <article class="card" aria-labelledby="news3-title">
+                    <h2 id="news3-title">Beginn der Umschulung in Dortmund</h2>
+                    <h5>Veröffentlicht am: 01. November 2023</h5>
+                    <p>Der große Schritt ist getan: Meine zweijährige Umschulung zum Fachinformatiker für Anwendungsentwicklung hat offiziell begonnen! Die erste Woche am BFW Dortmund stand ganz im Zeichen des Kennenlernens der Räumlichkeiten, des Internats und natürlich der Dozenten.</p>
+                    <p>Da mein Kostenträger, die Deutsche Rentenversicherung Bund, die Umschulung in Kooperation mit der Praxis genehmigt hat, werde ich bereits frühzeitig Theoriephasen in Dortmund und Praxisblöcke im Betrieb abwechseln.</p>
+                </article>
             </div>
+
+            <!-- Right Column -->
+            <aside class="right-col">
+                <section class="card" aria-labelledby="archive-title">
+                    <h3 id="archive-title">Archiv & Updates</h3>
+                    <p>Hier findest du ältere Meilensteine und Updates rund um meine berufliche Rehabilitation.</p>
+                    <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        <li>Oktober 2023: Zusage & Bewilligung der LTA durch die DRV Bund</li>
+                        <li>September 2023: Eignungsfeststellung (Reha-Assessment) im BFW</li>
+                        <li>Juni 2021: Medizinische Rehabilitation und berufliche Umorientierung</li>
+                    </ul>
+                </section>
+                
+                <section class="card" aria-labelledby="feedback-title">
+                    <h3 id="feedback-title">Feedback willkommen</h3>
+                    <p>Ich bin immer offen für Verbesserungsvorschläge, Anregungen oder einfach einen kollegialen Austausch im IT-Bereich. Nutze dafür gerne mein Kontaktformular im Impressum!</p>
+                </section>
+            </aside>
         </div>
+    </main>
 
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-------------------------------------------------------Fußzeile----------------------------------------------------->
-    <div class="footer">
-        <p>&copy; copyright Maximilian Schenk; Rüdesheimer Str.14; 53175 Bonn; Germany</p>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
         <div class="icons">
-            <i class="fa fa-facebook"></i>
-            <i class="fa fa-twitter"></i>
-            <i class="fa fa-instagram"></i>
-            <i class="fa fa-linkedin"></i>
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
         </div>
-    </div>
+    </footer>
 
-
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

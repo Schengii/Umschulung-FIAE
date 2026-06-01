@@ -1,88 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <title>Games JavaScript</title>
-    <link rel="stylesheet" href="Home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Games - Umschulung IT</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
 
-    <!----------------------------------------Überschrift------------------------------------------------------>
-    <div class="header">
+    <header>
         <h1>Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</h1>
-    </div>
+    </header>
 
-
-    <!--------------------------------------------Menü Bar----------------------------------------------------->
-    <div class="topnav">
-        <ul>
-            <li><a href="Home.html"><i class="fa fa-home"></i> Home</a></li>
-
-            <!----------------------------------------Ausbildung Dropdown Menü---------------------------------------->
-            <li><a href="#"><i class="fa fa-university"> Ausbildung</i><i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="Ausbildungsablauf.html">Ablauf Ausbildung</a></li>
-                        <li><a href="Berufsförderungswerk.html">Berufsförderungswerk Dortmund</a></li>
-                        <div class="drop-menu">
-                            <li><a href="Kostenträger.html">Kostenträger +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a
-                                            href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html">Rentenversicherung</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation">Beurfsgenossenschaften</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation">Agentur
-                                            für Arbeit</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Praktikumsbetrieb.html">Praktikumsbetrieb</a></li>
+    <!-- Navigation -->
+    <nav class="topnav" aria-label="Hauptnavigation">
+        <div class="nav-wrapper">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ausbildung <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link">Ablauf Ausbildung</a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link">Berufsförderungswerk Dortmund</a></li>
+                        <li class="dropdown-item">
+                            <a href="kostentraeger.html" class="dropdown-link">Kostenträger <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link">Rentenversicherung</a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Berufsgenossenschaften</a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Agentur für Arbeit</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link">Praktikumsbetrieb</a></li>
                     </ul>
-                </div>
-            </li>
-            <li><a href="Impressum.html"><i class="fa fa-phone"></i> Impressum</a></li>
-            <li><a href="News.html"><i class="fa fa-newspaper-o"></i> News</a></li>
-            <li><a href="Links.html"><i class="fa fa-external-link"></i> Links</a></li>
-            <li><a href="#">Weiteres <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <ul>
-                        <li><a href="#">Test 1</a></li>
-                        <li><a href="#">Test 2</a></li>
-                        <div class="drop-menu">
-                            <li><a href="#">Games JS +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a href="snake.html" target="_blank">Snake JS</a></li>
-                                    <li><a href="Quiz.html" target="_blank">Quiz JS</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Startseite.html">Startseite</a></li>
+                </li>
+                <li class="nav-item"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> Impressum</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
+                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
+                <li class="nav-item active"><a href="#" class="nav-link">Weiteres <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="quiz.html" class="dropdown-link">Test Quiz</a></li>
+                        <li class="dropdown-item">
+                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="index.html" class="dropdown-link">Startseite</a></li>
                     </ul>
+                </li>
+            </ul>
+            
+            <div class="nav-controls">
+                <div class="search-container">
+                    <label for="searchbar" class="sr-only">Karten filtern</label>
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-            </li>
-            <li><input id="searchbar" onkeyup="search()" type="text" name="suche" placeholder=" Suche..."><i
-                    class="fa fa-search"></i></li>
-        </ul>
-    </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div class="card">
+            <h2>JavaScript Mini-Games</h2>
+            <p>Zur Auflockerung und Demonstration meiner Frontend-Programmierkenntnisse habe ich zwei kleine JavaScript-Spiele implementiert. Teste dein Wissen im IT-Quiz oder jage den Highscore in der Retro-Spiele-Klasse Snake!</p>
+        </div>
+        
+        <div class="layout-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <!-- Game 1: Snake -->
+            <section class="card" style="display: flex; flex-direction: column; justify-content: space-between; text-align: center;">
+                <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem; color: var(--primary);">🐍</div>
+                    <h3>Snake JS</h3>
+                    <p>Der zeitlose Arcade-Klassiker direkt im Browser! Steuere die Schlange mit den Pfeiltasten (oder W, A, S, D), sammle rote Äpfel ein und wackle dich zum neuen Highscore. Achte darauf, nicht in die Wände oder in deinen eigenen Körper zu beißen!</p>
+                </div>
+                <a href="snake.html" class="btn-primary" style="display: block; text-decoration: none; padding: 0.75rem 1.5rem; margin-top: 1.5rem;">Jetzt spielen</a>
+            </section>
 
+            <!-- Game 2: Quiz -->
+            <section class="card" style="display: flex; flex-direction: column; justify-content: space-between; text-align: center;">
+                <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem; color: var(--accent);">💡</div>
+                    <h3>Umschulungs-Quiz</h3>
+                    <p>Hast du die Inhalte auf meiner Webseite aufmerksam durchgelesen? Stelle dein Wissen über Umschulungen, Kostenträger und das Berufsförderungswerk in diesem interaktiven Quiz auf die Probe. Erreiche die volle Punktzahl!</p>
+                </div>
+                <a href="quiz.html" class="btn-primary" style="display: block; text-decoration: none; padding: 0.75rem 1.5rem; margin-top: 1.5rem;">Quiz starten</a>
+            </section>
+        </div>
+    </main>
 
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
+        <div class="icons">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+        </div>
+    </footer>
 
-
-
-
-
-
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

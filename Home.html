@@ -1,223 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <title>Umschulung IT</title>
-    <!---------------------------------Link zur CSS-Datei-------------------------->
-    <link rel="stylesheet" href="Home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Umschulung IT</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <!----------------------------------------Überschrift---------------------------------->
-    <div class="header">
+    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+
+    <header>
         <h1>Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</h1>
-    </div>
+    </header>
 
-
-    <!-----------------------------------------Menü Bar----------------------------------------->
-    <div class="topnav">
-        <ul>
-            <li class="active"><a href="Home.html"><i class="fa fa-home"></i> Home</a></li>
-
-            <!-------------------------------Ausbildung Dropdown Menü----------------------------------->
-            <li><a href="#"><i class="fa fa-university"> Ausbildung </i> <i class="fa fa-caret-down"></i></a>
-                <div class="dropdown_menu">
-                    <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-                    <ul>
-                        <li><a href="Ausbildungsablauf.html">Ablauf Ausbildung</a></li>
-                        <li><a href="Berufsförderungswerk.html">Berufsförderungswerk Dortmund</a></li>
-                        <div class="drop-menu">
-                            <li><a href="Kostenträger.html">Kostenträger +</a></li>
-                            <div class="drop-menu2">
-                                <ul>
-                                    <li><a
-                                            href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html">Rentenversicherung</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation">Berufsgenossenschaften</a>
-                                    </li>
-                                    <li><a
-                                            href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation">Agentur
-                                            für Arbeit</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <li><a href="Praktikumsbetrieb.html">Praktikumsbetrieb</a></li>
+    <!-- Navigation -->
+    <nav class="topnav" aria-label="Hauptnavigation">
+        <div class="nav-wrapper">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item active"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ausbildung <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link">Ablauf Ausbildung</a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link">Berufsförderungswerk Dortmund</a></li>
+                        <li class="dropdown-item">
+                            <a href="kostentraeger.html" class="dropdown-link">Kostenträger <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link">Rentenversicherung</a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Berufsgenossenschaften</a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link">Agentur für Arbeit</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link">Praktikumsbetrieb</a></li>
                     </ul>
+                </li>
+                <li class="nav-item"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> Impressum</a></li>
+                <li class="nav-item"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
+                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Weiteres <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="quiz.html" class="dropdown-link">Test Quiz</a></li>
+                        <li class="dropdown-item">
+                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu">
+                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="index.html" class="dropdown-link">Startseite</a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="nav-controls">
+                <div class="search-container">
+                    <label for="searchbar" class="sr-only">Karten filtern</label>
+                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-            </li>
-            <li><a href="Impressum.html"><i class="fa fa-phone"></i> Impressum</a></li>
-            <li><a href="News.html"><i class="fa fa-newspaper-o"></i> News</a></li>
-            <li><a href="Links.html"><i class="fa fa-external-link"></i> Links</a></li>
-            <li><a href="#"> Weiteres <i class="fa fa-caret-down"></i><a />
-                    <div id="myDropdown" class="dropdown-content">
-                        <ul>
-                            <li><a href="Quiz.html">Test Quiz</a></li>
-                            <li><a href="#">Test 2</a></li>
-                            <div class="drop-menu">
-                                <li><a href="#">Games JS +</a></li>
-                                <div class="drop-menu2">
-                                    <ul>
-                                        <li><a href="snake.html">Snake JS</a></li>
-                                        <li><a href="Quiz.html">Quiz JS</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <li><a href="Startseite.html">Startseite</a></li>
-                        </ul>
-                    </div>
-            </li>
-            <li><input id="searchbar" onkeyup="search()" type="text" name="suche" placeholder=" Suche..."><i
-                    class="fa fa-search"></i></li>
-        </ul>
-    </div>
-
-
-
-
-    <!----------------------------------------------Haupttext----------------------------------------------->
-    <div class="row">
-        <div class="leftcolumn"><!-------------------linke Seite --------------------------------------------->
-            <div class="card">
-
-                <!---------------------------------Haupttext 1----------------------------------------------->
-                <h2>Was ist ein Fachinformatiker?</h2>
-                <h5>Quelle: Berufe.net, aktualisiert: 11. April 2024</h5>
-                <img src="https://www.sul.de/wp-content/uploads/2016/06/AusbildungInDerIT.jpg" alt="IT-Ausbildung">
-                <p><strong>Aufgaben und Tätigkeiten:</strong></p>
-                <p>Fachinformatiker/innen der Fachrichtung Anwendungsentwicklung entwickeln und programmieren Software
-                    für den eigenen Betrieb oder für Kundenunternehmen. Beispielsweise erweitern sie betriebseigene
-                    Programme oder entwickeln neue Lösungen, die auf die eigenen betrieblichen Bedürfnisse bzw. die
-                    Kundenanforderungen zugeschnitten sind. Sie installieren Softwareanwendungen, nehmen sie in Betrieb
-                    und weisen ggf. die Anwender in die Bedienung ein. Auch die regelmäßige Aktualisierung und Wartung,
-                    der IT-Support, ggf. auch Beratungsleistungen, z.B. bezüglich Fragen der IT-Sicherheit, können zu
-                    ihrem Aufgabengebiet gehören.</p>
-            </div>
-            <div class="card">
-
-                <!---------------------------------Haupttext 2-------------------------------------------------------->
-                <h2>Berufsförderungswerk Dortmund BFW </h2>
-                <h5>Quelle: Wikipedia, aktualisiert: 11. April 2024</h5>
-                <img src="http://www.abload.de/img/bfw1m1ri.jpg" alt="BFW Dortmund">
-
-                <p><strong>Was ist ein Berufsförderungswerk?</strong></p>
-                <p>Es gibt in Deutschland 28 Berufsförderungswerke an zahlreichen Standorten. Sie bilden ein
-                    flächendeckendes
-                    Netzwerk für Arbeit und Gesundheit. Ihr oberstes Ziel ist es, Menschen mit gesundheitlichen
-                    Einschränkungen nach
-                    Krankheit oder Unfall auf ihrem Weg zurück ins Arbeitsleben zu begleiten. Sie arbeiten eng mit den
-                    Reha-Trägern
-                    wie Deutscher Rentenversicherung und Berufsgenossenschaften sowie Kooperationen mit der Agentur für
-                    Arbeit.</p>
-                <p>Zu den Ausbildungen gehören diverse <strong>Käufmännische Berufe</strong>wie z.B. Bürokaufleute,
-                    Industriekaufleute etc, zu den
-                    <strong>IT Berufe</strong> wie Fachinformatiker, Mediengestalter etc und
-                    <strong>gewerblich-technische Berufe</strong>
-                    wie Bauzeichner, Zerspanungsmechaniker, Mechatroniker und vieles mehr.
-                </p>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
+    </nav>
 
-        <!------------------------------------------rechte Seite--------------------------------------------------------->
-        <div class="rightcolumn">
-            <!--Nebentext 1-->
-            <div class="card">
-                <h2><u>Über mich</u></h2>
-                <p><em>Informationen zu mir:</em></p>
-                <p>Mein Name ist Max Schenk ich bin 21 Jahre alt und wohne aktuell in Bonn. Ich bin in Vietnam (Saigon)
-                    geboren
-                    und wurde mit paar Monaten adoptiert und kam nach Deutschland. 2018 machte ich meinen
-                    Realschulabschluss und
-                    startete anschließend eine Ausbildung zum Elektroniker für Betriebstechnik bei Haribo. Nach 3,5
-                    Jahren schloss
-                    ich die Ausbildung erfolgreich ab und wechselte die Firma und mein Tätigkeitsbereich. Die nächsten
-                    1,5 jahre
-                    arbeitete ich als Prüftechniker im Außendienst deutschlandweit und machte die DGUV-V3 Prüfung von
-                    orts-
-                    veränderlichen und ortsfesten Geräten, Maschinen und Anlagen.</p>
-            </div>
-            <!------------------------------------------Nebentext 2-------------------------------------------------------->
-            <div class="card">
-                <h3><u>Wie läuft die 2 jährige Umschulung ab?</u></h3>
-                <p>Wie ich vorhin schon erwähnt hatte, mache ich eine Umschulung zum Fachinformatiker. Meine Umschulung
-                    dauert
-                    nur insgesamt 2 Jahre und wird über das BFW Dortmund geleitet. Weitere Infos zum BFW Dortund finden
-                    Sie <a href="https://www.bfw-dortmund.de/index.html">hier</a>.
-                    Die Kosten für die Umschulung übernimmt in meinem Falle die Deutsche Rentenversicherung Bund.
-                    Darunter fallen
-                    u. a. Internatskosten, Essenszuschüsse, Materialkosten etc. Die Kosten für eine Umschulung belaufen
-                    sich schnell
-                    auf über 100.000€. Diese Umschulung funktioniert in KOOP mit einem Praktikumsbetrieb seiner Wahl.
-                    Dieses Praktikum
-                    geht über 18 Monate und findet wöchentlich 2-3 Tage statt. OHNE Prakikumsbetrieb ist die Teilnahme
-                    an der
-                    Abschlussprüfung <strong>nicht</strong> möglich. Insgesamt gibt es eine Abschlussprüfung Teil 1 und
-                    Teil 2 vor der IHK.
-                    Mehr zur IHK Dortmund <a href="https://www.ihk.de/dortmund/"
-                        target="_blank"><strong>hier</strong>.</a></p>
-            </div>
-            <!--------------------------------------------Nebentext 3----------------------------------------------------->
-            <div class="card">
-                <h3><u>Mein Praktikumsbetrieb:</u></h3>
-                <p>Jeder darf sich sein Praktikumsberieb selbst aussuchen und bewerben. In meinem Fall ist es die <a
-                        href="https://www.dfg.de/">Deutsche
-                        Forschungsgemeinschaft (DFG)</a> geworden. Diese hat ihren Hauptsitz in Bonn, nur 15 min zu Fuß
-                    von meinem Zuhause entfernt.</p>
-                <p>Die Deutsche Forschungsgemeinschaft (DFG) ist eine fachübergreifende Einrichtung zur Förderung der
-                    Wissenschaft und Forschung
-                    in Deutschland. Die Fördergelder werden zu zwei Dritteln vom Bund und zu einem Drittel von anderen
-                    Ländern getragen.
-                    Dort bin ich in einem 8 köpfigen Entwicklerteam spezialisierung auf Website developer mit
-                    überwiegend HTML, CSS
-                    und JavaScript</p>
-            </div>
-            <!----------------------------------------------Nebentext 4---------------------------------------------------->
-            <div class="card2">
-                <h3>Quellen</h3><i class="fa fa-external-link"></i>
-                <p><a href="https://web.arbeitsagentur.de/berufenet/beruf/7856" target="_blank">Infos Fachinformatiker,
-                        Berufe.net:<br>
-                        https://web.arbeitsagentur.de/berufenet/beruf/7856</a>
-                    <hr>
-                    <a href="https://www.sul.de/wp-content/uploads/2016/06/AusbildungInDerIT.jpg" target="_blank">Bild 1
-                        IT-Ausbildung:<br>
-                        https://www.sul.de/wp-content/uploads/2016/06/AusbildungInDerIT.jpg</a>
-                    <hr>
-                    <a href="https://de.wikipedia.org/wiki/Berufsf%C3%B6rderungswerk" target="_blank">Infos BFW:<br>
-                        https://de.wikipedia.org/wiki/Berufsf%C3%B6rderungswerk </a>
-                    <hr>
-                    <a href=">http://www.abload.de/img/bfw1m1ri.jpg" target="_blank">Bild 2 BFW:<br>
-                        http://www.abload.de/img/bfw1m1ri.jpg</a>
-                    <hr>
-                    <a href="https://de.wikipedia.org/wiki/Deutsche_Forschungsgemeinschaft" target="_blank"> Infos
-                        DFG:<br>
-                        https://de.wikipedia.org/wiki/Deutsche_Forschungsgemeinschaft</a>
-                    <hr>
-            </div>
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div style="margin-bottom: 1.5rem; font-size: 1.25rem;">
+            Hallo<span id="welcome-user"></span>! Willkommen auf meinem Umschulungs-Portfolio.
         </div>
-    </div>
+        
+        <div class="layout-grid">
+            <!-- Left Column -->
+            <div class="left-col">
+                <article class="card" aria-labelledby="card-fi">
+                    <h2 id="card-fi">Was ist ein Fachinformatiker?</h2>
+                    <h5>Quelle: Berufe.net, aktualisiert: 11. April 2024</h5>
+                    <img src="https://www.sul.de/wp-content/uploads/2016/06/AusbildungInDerIT.jpg" alt="IT-Ausbildung im Betrieb">
+                    <p><strong>Aufgaben und Tätigkeiten:</strong></p>
+                    <p>Fachinformatiker/innen der Fachrichtung Anwendungsentwicklung entwickeln und programmieren Software für den eigenen Betrieb oder für Kundenunternehmen. Beispielsweise erweitern sie betriebseigene Programme oder entwickeln neue Lösungen, die auf die eigenen betrieblichen Bedürfnisse bzw. die Kundenanforderungen zugeschnitten sind.</p>
+                    <p>Sie installieren Softwareanwendungen, nehmen sie in Betrieb und weisen ggf. die Anwender in die Bedienung ein. Auch die regelmäßige Aktualisierung und Wartung, der IT-Support, ggf. auch Beratungsleistungen, z.B. bezüglich Fragen der IT-Sicherheit, können zu ihrem Aufgabengebiet gehören.</p>
+                </article>
 
+                <article class="card" aria-labelledby="card-bfw">
+                    <h2 id="card-bfw">Berufsförderungswerk Dortmund BFW</h2>
+                    <h5>Quelle: Wikipedia, aktualisiert: 11. April 2024</h5>
+                    <img src="http://www.abload.de/img/bfw1m1ri.jpg" alt="Hauptgebäude des Berufsförderungswerks BFW Dortmund">
+                    <p><strong>Was ist ein Berufsförderungswerk?</strong></p>
+                    <p>Es gibt in Deutschland 28 Berufsförderungswerke an zahlreichen Standorten. Sie bilden ein flächendeckendes Netzwerk für Arbeit und Gesundheit. Ihr oberstes Ziel ist es, Menschen mit gesundheitlichen Einschränkungen nach Krankheit oder Unfall auf ihrem Weg zurück ins Arbeitsleben zu begleiten. Sie arbeiten eng mit den Reha-Trägern wie Deutscher Rentenversicherung und Berufsgenossenschaften sowie Kooperationen mit der Agentur für Arbeit.</p>
+                    <p>Zu den Ausbildungen gehören diverse <strong>Kaufmännische Berufe</strong> wie z.B. Bürokaufleute, Industriekaufleute etc, zu den <strong>IT Berufe</strong> wie Fachinformatiker, Mediengestalter etc und <strong>gewerblich-technische Berufe</strong> wie Bauzeichner, Zerspanungsmechaniker, Mechatroniker und vieles mehr.</p>
+                </article>
+            </div>
 
-    <!-------------------------------------------------------Fußzeile----------------------------------------------------->
-    <div class="footer">
-        <p>&copy; copyright Maximilian Schenk; Rüdesheimer Str.14; 53175 Bonn; Germany</p>
+            <!-- Right Column -->
+            <aside class="right-col">
+                <section class="card" aria-labelledby="card-aboutme">
+                    <h3 id="card-aboutme">Über mich</h3>
+                    <p>Mein Name ist Max Schenk, ich bin 21 Jahre alt und wohne aktuell in Bonn. Ich bin in Vietnam (Saigon) geboren und wurde mit ein paar Monaten adoptiert und kam nach Deutschland.</p>
+                    <p>2018 machte ich meinen Realschulabschluss und startete anschließend eine Ausbildung zum Elektroniker für Betriebstechnik bei Haribo. Nach 3,5 Jahren schloss ich die Ausbildung erfolgreich ab und wechselte die Firma und mein Tätigkeitsbereich. Die nächsten 1,5 Jahre arbeitete ich als Prüftechniker im Außendienst deutschlandweit und machte die DGUV-V3 Prüfung von ortsveränderlichen und ortsfesten Geräten, Maschinen und Anlagen.</p>
+                </section>
+
+                <section class="card" aria-labelledby="card-howruns">
+                    <h3 id="card-howruns">Wie läuft die 2-jährige Umschulung ab?</h3>
+                    <p>Wie ich vorhin schon erwähnt hatte, mache ich eine Umschulung zum Fachinformatiker. Meine Umschulung dauert nur insgesamt 2 Jahre und wird über das BFW Dortmund geleitet. Weitere Infos zum BFW Dortmund finden Sie <a href="https://www.bfw-dortmund.de/index.html" target="_blank" rel="noopener">hier</a>.</p>
+                    <p>Die Kosten für die Umschulung übernimmt in meinem Falle die Deutsche Rentenversicherung Bund. Darunter fallen u. a. Internatskosten, Essenszuschüsse, Materialkosten etc. Die Kosten für eine Umschulung belaufen sich schnell auf über 100.000€.</p>
+                    <p>Diese Umschulung funktioniert in KOOP mit einem Praktikumsbetrieb seiner Wahl. Dieses Praktikum geht über 18 Monate und findet wöchentlich 2-3 Tage statt. OHNE Praktikumsbetrieb ist die Teilnahme an der Abschlussprüfung <strong>nicht</strong> möglich. Insgesamt gibt es eine Abschlussprüfung Teil 1 und Teil 2 vor der IHK. Mehr zur IHK Dortmund erfahren Sie <a href="https://www.ihk.de/dortmund/" target="_blank" rel="noopener">hier</a>.</p>
+                </section>
+
+                <section class="card" aria-labelledby="card-praktikum-side">
+                    <h3 id="card-praktikum-side">Mein Praktikumsbetrieb:</h3>
+                    <p>Jeder darf sich sein Praktikumsbetrieb selbst aussuchen und bewerben. In meinem Fall ist es die <a href="https://www.dfg.de/" target="_blank" rel="noopener">Deutsche Forschungsgemeinschaft (DFG)</a> geworden. Diese hat ihren Hauptsitz in Bonn, nur 15 min zu Fuß von meinem Zuhause entfernt.</p>
+                    <p>Die Deutsche Forschungsgemeinschaft (DFG) ist eine fachübergreifende Einrichtung zur Förderung der Wissenschaft und Forschung in Deutschland. Die Fördergelder werden zu zwei Dritteln vom Bund und zu einem Drittel von anderen Ländern getragen. Dort bin ich in einem 8-köpfigen Entwicklerteam spezialisiert auf Webentwicklung mit überwiegend HTML, CSS und JavaScript.</p>
+                </section>
+
+                <section class="card" aria-labelledby="card-sources">
+                    <h3 id="card-sources">Quellen</h3>
+                    <ul style="font-size: 0.85rem; padding-left: 1.25rem;">
+                        <li><a href="https://web.arbeitsagentur.de/berufenet/beruf/7856" target="_blank" rel="noopener">Infos Fachinformatiker, Berufe.net</a></li>
+                        <li><a href="https://www.sul.de/wp-content/uploads/2016/06/AusbildungInDerIT.jpg" target="_blank" rel="noopener">Bild IT-Ausbildung</a></li>
+                        <li><a href="https://de.wikipedia.org/wiki/Berufsf%C3%B6rderungswerk" target="_blank" rel="noopener">Infos BFW (Wikipedia)</a></li>
+                        <li><a href="http://www.abload.de/img/bfw1m1ri.jpg" target="_blank" rel="noopener">Bild BFW</a></li>
+                        <li><a href="https://de.wikipedia.org/wiki/Deutsche_Forschungsgemeinschaft" target="_blank" rel="noopener">Infos DFG</a></li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
         <div class="icons">
-            <i class="fa fa-facebook"></i>
-            <i class="fa fa-twitter"></i>
-            <i class="fa fa-instagram"></i>
-            <i class="fa fa-linkedin"></i>
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
         </div>
-    </div>
+    </footer>
 
-
-
-
-
-
-
-
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
