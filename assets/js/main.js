@@ -249,7 +249,7 @@ function applyFilters() {
    5. IHK EXAM COUNTDOWN TIMER (Ziel: 25. Nov 2026 10:00:00 Uhr)
    ========================================================================== */
 function initCountdown() {
-    const targetDate = new Date('2026-11-25T10:00:00+01:00').getTime();
+    const targetDate = new Date('2026-06-08T10:00:00+02:00').getTime();
     
     const daysVal = document.getElementById('cd-days');
     const hoursVal = document.getElementById('cd-hours');

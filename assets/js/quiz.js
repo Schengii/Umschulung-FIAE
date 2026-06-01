@@ -41,7 +41,7 @@ const questionsDE = [
         answers: [
             { text: "6 Monate lang bei Haribo", correct: false },
             { text: "3 Jahre lang direkt im BFW", correct: false },
-            { text: "1,5 Jahre (18 Monate) lang bei der DFG in Bonn", correct: true },
+            { text: "2 Jahre (24 Monate) lang bei der DFG in Bonn", correct: true },
             { text: "Er macht kein Praktikum", correct: false },
         ]
     }
@@ -89,7 +89,7 @@ const questionsEN = [
         answers: [
             { text: "6 months at Haribo", correct: false },
             { text: "3 years inside the BFW", correct: false },
-            { text: "1.5 years (18 months) at DFG in Bonn", correct: true },
+            { text: "2 years (24 months) at DFG in Bonn", correct: true },
             { text: "He is not doing any internship", correct: false },
         ]
     }
