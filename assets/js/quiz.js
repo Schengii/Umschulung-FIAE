@@ -1,5 +1,5 @@
-// Fragen für das Quiz mit Antworten
-const questions = [
+// Fragen für das Quiz auf Deutsch und Englisch
+const questionsDE = [
     {
         question: "Was ist der Unterschied zwischen einer Umschulung und einer Ausbildung?",
         answers: [
@@ -47,6 +47,54 @@ const questions = [
     }
 ];
 
+const questionsEN = [
+    {
+        question: "What is the main difference between retraining (Umschulung) and a regular apprenticeship (Ausbildung)?",
+        answers: [
+            { text: "There is no difference", correct: false },
+            { text: "The training duration", correct: true },
+            { text: "The final exam", correct: false },
+            { text: "None of the above", correct: false },
+        ]
+    },
+    {
+        question: "How many BFW vocational retraining centers are there in Germany?",
+        answers: [
+            { text: "5", correct: false },
+            { text: "12", correct: false },
+            { text: "28", correct: true },
+            { text: "None of the above", correct: false },
+        ]
+    },
+    {
+        question: "Who are the sponsors covering retraining costs?",
+        answers: [
+            { text: "Employment Agency", correct: false },
+            { text: "Trade Associations", correct: false },
+            { text: "Pension Insurance", correct: false },
+            { text: "All of the above are correct", correct: true },
+        ]
+    },
+    {
+        question: "When are you allowed to undergo retraining at BFW?",
+        answers: [
+            { text: "Upon approval of LTA (rehab benefit for participation in working life)", correct: true },
+            { text: "Anyone can do it at any time", correct: false },
+            { text: "Due to a minor car accident without rehabilitation needs", correct: false },
+            { text: "None of the above", correct: false },
+        ]
+    },
+    {
+        question: "Where and for how long is Maximilian completing his internship?",
+        answers: [
+            { text: "6 months at Haribo", correct: false },
+            { text: "3 years inside the BFW", correct: false },
+            { text: "1.5 years (18 months) at DFG in Bonn", correct: true },
+            { text: "He is not doing any internship", correct: false },
+        ]
+    }
+];
+
 // DOM Elemente
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
@@ -57,23 +105,32 @@ const quizProgress = document.getElementById("quiz-progress");
 let currentQuestionIndex = 0;
 let score = 0;
 
+function getActiveQuestions() {
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    return lang === 'de' ? questionsDE : questionsEN;
+}
+
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
-    nextButton.innerHTML = 'Nächste Frage <i class="fa fa-arrow-right"></i>';
+    
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    nextButton.innerHTML = lang === 'de' ? 'Nächste Frage <i class="fa fa-arrow-right"></i>' : 'Next Question <i class="fa fa-arrow-right"></i>';
     nextButton.className = "btn-primary";
+    
     showQuestion();
 }
 
 function showQuestion() {
     resetState();
+    const questions = getActiveQuestions();
     let currentQuestion = questions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
     
     // Setzen der Frage
     questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;
     
-    // Fortschrittsanzeige aktualisieren
+    // Fortschrittsanzeige
     if (quizProgress) {
         const percent = ((currentQuestionIndex) / questions.length) * 100;
         quizProgress.style.width = `${percent}%`;
@@ -125,39 +182,66 @@ function selectAnswer(e) {
 
 function showScore() {
     resetState();
+    const questions = getActiveQuestions();
     
     if (quizProgress) {
         quizProgress.style.width = "100%";
     }
     
     const percentage = Math.round((score / questions.length) * 100);
+    const lang = document.documentElement.getAttribute('lang') || 'de';
     let feedback = "";
     
-    if (percentage === 100) {
-        feedback = "Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉";
-    } else if (percentage >= 60) {
-        feedback = "Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍";
+    if (lang === 'de') {
+        if (percentage === 100) {
+            feedback = "Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉";
+        } else if (percentage >= 60) {
+            feedback = "Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍";
+        } else {
+            feedback = "Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚";
+        }
+        
+        questionElement.innerHTML = `
+            <div style="text-align: center; padding: 1rem 0;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                <h3>Quiz beendet!</h3>
+                <p style="font-size: 1.2rem; margin: 1rem 0; font-weight: bold; color: var(--primary);">
+                    Du hast ${score} von ${questions.length} Punkten erreicht (${percentage}%).
+                </p>
+                <p style="color: var(--text-secondary);">${feedback}</p>
+            </div>
+        `;
+        
+        nextButton.innerHTML = '<i class="fa fa-refresh"></i> Quiz neu starten';
     } else {
-        feedback = "Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚";
+        if (percentage === 100) {
+            feedback = "Excellent! You answered all questions perfectly! 🎉";
+        } else if (percentage >= 60) {
+            feedback = "Well done! You answered most questions correctly. 👍";
+        } else {
+            feedback = "Too bad! Please read the website content again and try once more. 📚";
+        }
+        
+        questionElement.innerHTML = `
+            <div style="text-align: center; padding: 1rem 0;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                <h3>Quiz Finished!</h3>
+                <p style="font-size: 1.2rem; margin: 1rem 0; font-weight: bold; color: var(--primary);">
+                    You scored ${score} out of ${questions.length} points (${percentage}%).
+                </p>
+                <p style="color: var(--text-secondary);">${feedback}</p>
+            </div>
+        `;
+        
+        nextButton.innerHTML = '<i class="fa fa-refresh"></i> Restart Quiz';
     }
     
-    questionElement.innerHTML = `
-        <div style="text-align: center; padding: 1rem 0;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
-            <h3>Quiz beendet!</h3>
-            <p style="font-size: 1.2rem; margin: 1rem 0; font-weight: bold; color: var(--primary);">
-                Du hast ${score} von ${questions.length} Punkten erreicht (${percentage}%).
-            </p>
-            <p style="color: var(--text-secondary);">${feedback}</p>
-        </div>
-    `;
-    
-    nextButton.innerHTML = '<i class="fa fa-refresh"></i> Quiz neu starten';
     nextButton.className = "btn-primary";
     nextButton.style.display = "block";
 }
 
 function handleNextButton() {
+    const questions = getActiveQuestions();
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
         showQuestion();
@@ -167,11 +251,17 @@ function handleNextButton() {
 }
 
 nextButton.addEventListener("click", () => {
+    const questions = getActiveQuestions();
     if (currentQuestionIndex < questions.length) {
         handleNextButton();
     } else {
         startQuiz();
     }
+});
+
+// Bei Sprachwechsel das Quiz sofort neu laden/übersetzen
+document.addEventListener('langchange', () => {
+    startQuiz();
 });
 
 // Quiz beim Laden starten

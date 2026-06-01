@@ -10,28 +10,54 @@
 </head>
 
 <body>
-    <a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
 
-    <header>
-        <h1>Portfolio Umschulung zum Fachinformatiker</h1>
+    <header style="position: relative;">
+        <span lang="de">Portfolio Umschulung zum Fachinformatiker</span>
+        <span lang="en">Portfolio Retraining - Application Development</span>
+        
+        <button id="lang-toggle" class="theme-toggle" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
     </header>
 
     <main id="main-content" class="main-container">
         <div class="welcome-container card">
-            <h1 id="myH1">Willkommen</h1>
-            <p>Bitte gib deinen Namen ein, um das Dashboard zu personalisieren.</p>
+            <h1 id="myH1">
+                <span lang="de">Willkommen</span>
+                <span lang="en">Welcome</span>
+            </h1>
+            
+            <p lang="de">Bitte gib deinen Namen ein, um das Dashboard zu personalisieren.</p>
+            <p lang="en">Please enter your name to personalize the dashboard.</p>
             
             <div class="form-group" style="margin-top: 1.5rem;">
-                <label for="myText">Name / Benutzername</label>
+                <label for="myText">
+                    <span lang="de">Name / Benutzername</span>
+                    <span lang="en">Name / Username</span>
+                </label>
                 <input type="text" id="myText" class="form-control" placeholder="z. B. Max Mustermann" autocomplete="name">
             </div>
             
-            <button id="mySubmit" class="btn-primary" style="margin-bottom: 1.5rem;">Eintreten</button>
+            <button id="mySubmit" class="btn-primary" style="margin-bottom: 1.5rem;">
+                <span lang="de">Eintreten</span>
+                <span lang="en">Enter</span>
+            </button>
             
             <div class="card" style="margin-top: 2rem; background: var(--bg-page); border-style: dashed; padding: 1rem;">
-                <h3>Direkt zum Dashboard</h3>
-                <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Du kannst die Personalisierung auch überspringen.</p>
-                <a href="home.html" class="btn-primary" style="display: block; text-decoration: none; padding: 0.5rem 1rem; text-align: center; background-color: var(--text-secondary);">Dashboard öffnen</a>
+                <h3>
+                    <span lang="de">Direkt zum Dashboard</span>
+                    <span lang="en">Directly to Dashboard</span>
+                </h3>
+                <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">
+                    <span lang="de">Du kannst die Personalisierung auch überspringen.</span>
+                    <span lang="en">You can also skip the personalization.</span>
+                </p>
+                <a href="home.html" class="btn-primary" style="display: block; text-decoration: none; padding: 0.5rem 1rem; text-align: center; background-color: var(--text-secondary);">
+                    <span lang="de">Dashboard öffnen</span>
+                    <span lang="en">Open Dashboard</span>
+                </a>
             </div>
         </div>
     </main>

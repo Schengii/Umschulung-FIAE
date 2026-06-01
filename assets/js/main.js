@@ -1,12 +1,18 @@
 /**
  * Main application JS for Umschulung Portfolio
- * Handles Theme Toggle, Mobile Navigation, Accessibility, and Dynamic Card Search
+ * Handles Theme Toggle, Mobile Navigation, Accessibility, Combined Search/Category Filter,
+ * IHK Countdown Timer, and Multilingual Language Switcher (DE/EN).
  */
+
+let currentSearchQuery = "";
+let currentCategory = "all";
 
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initNavigation();
-    initSearch();
+    initTranslation();
+    initSearchAndFilter();
+    initCountdown();
     initUsernameGreeting();
 });
 
@@ -17,7 +23,6 @@ function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
 
-    // Read stored preference or system preference
     const storedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
@@ -39,10 +44,10 @@ function updateThemeIcon(theme) {
     const icon = document.querySelector('#theme-toggle i');
     if (!icon) return;
     if (theme === 'dark') {
-        icon.className = 'fa fa-sun-o'; // Sun icon to switch to light
+        icon.className = 'fa fa-sun-o';
         icon.setAttribute('title', 'Zu hellem Design wechseln');
     } else {
-        icon.className = 'fa fa-moon-o'; // Moon icon to switch to dark
+        icon.className = 'fa fa-moon-o';
         icon.setAttribute('title', 'Zu dunklem Design wechseln');
     }
 }
@@ -62,19 +67,15 @@ function initNavigation() {
         });
     }
 
-    // Accessible keyboard and touch handling for dropdowns on mobile/tablet
     const dropdownItems = document.querySelectorAll('.nav-item');
     dropdownItems.forEach(item => {
         const link = item.querySelector('.nav-link');
         const dropdown = item.querySelector('.dropdown-menu');
 
-        // Only add interactive logic if a dropdown actually exists
         if (dropdown && link) {
-            // Add accessibility attributes
             link.setAttribute('aria-haspopup', 'true');
             link.setAttribute('aria-expanded', 'false');
 
-            // Toggle dropdown on click for touch screens / mobile
             link.addEventListener('click', (e) => {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
@@ -83,7 +84,6 @@ function initNavigation() {
                 }
             });
 
-            // Handle sub-dropdowns in navigation
             const subItems = dropdown.querySelectorAll('.dropdown-item');
             subItems.forEach(subItem => {
                 const subLink = subItem.querySelector('.dropdown-link');
@@ -105,7 +105,6 @@ function initNavigation() {
         }
     });
 
-    // Close mobile menu or dropdowns on ESC key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (navMenu && navMenu.classList.contains('open')) {
@@ -125,13 +124,50 @@ function initNavigation() {
 }
 
 /* ==========================================================================
-   3. DYNAMIC SEARCH FUNCTION
+   3. TRANSLATION (DE/EN) SYSTEM
    ========================================================================== */
-function initSearch() {
-    const searchBar = document.getElementById('searchbar');
-    if (!searchBar) return;
+function initTranslation() {
+    const langToggle = document.getElementById('lang-toggle');
+    if (!langToggle) return;
+    
+    const storedLang = localStorage.getItem('lang') || 'de';
+    document.documentElement.setAttribute('lang', storedLang);
+    updateLangToggleButton(storedLang);
+    
+    langToggle.addEventListener('click', () => {
+        const currentLang = document.documentElement.getAttribute('lang') || 'de';
+        const newLang = currentLang === 'de' ? 'en' : 'de';
+        
+        document.documentElement.setAttribute('lang', newLang);
+        localStorage.setItem('lang', newLang);
+        updateLangToggleButton(newLang);
+        
+        // Notify other widgets
+        document.dispatchEvent(new CustomEvent('langchange', { detail: newLang }));
+    });
+}
 
-    // Create a "No Results" message container if it doesn't exist
+function updateLangToggleButton(lang) {
+    const langToggle = document.getElementById('lang-toggle');
+    if (!langToggle) return;
+    
+    if (lang === 'de') {
+        langToggle.innerHTML = '<i class="fa fa-globe" aria-hidden="true"></i> DE | <strong>EN</strong>';
+        langToggle.setAttribute('aria-label', 'Switch to English');
+    } else {
+        langToggle.innerHTML = '<i class="fa fa-globe" aria-hidden="true"></i> <strong>DE</strong> | EN';
+        langToggle.setAttribute('aria-label', 'Auf Deutsch umstellen');
+    }
+}
+
+/* ==========================================================================
+   4. COMBINED DYNAMIC SEARCH & BLOG CATEGORY FILTER
+   ========================================================================== */
+function initSearchAndFilter() {
+    const searchBar = document.getElementById('searchbar');
+    const filterButtons = document.querySelectorAll('.btn-filter');
+    
+    // 4a. Create a "No Results" message container if it doesn't exist
     let noResultsContainer = document.querySelector('.no-results');
     if (!noResultsContainer) {
         const main = document.querySelector('main');
@@ -139,69 +175,167 @@ function initSearch() {
             noResultsContainer = document.createElement('div');
             noResultsContainer.className = 'no-results';
             noResultsContainer.innerHTML = `
-                <i class="fa fa-search"></i>
-                <h2>Keine Ergebnisse gefunden</h2>
-                <p>Versuche es mit einem anderen Suchbegriff.</p>
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <h2 lang="de">Keine Ergebnisse gefunden</h2>
+                <h2 lang="en">No results found</h2>
+                <p lang="de">Versuche es mit einem anderen Suchbegriff oder Filter.</p>
+                <p lang="en">Try another search term or filter.</p>
             `;
             main.appendChild(noResultsContainer);
         }
     }
 
-    // Attach search keyup handler
-    searchBar.addEventListener('input', () => {
-        const query = searchBar.value.toLowerCase().trim();
-        const cards = document.querySelectorAll('.card, .card2');
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-            // Skip cards inside layouts that are not direct article contents (like rightcolumn side boxes on some templates)
-            // But usually we want to search all cards
-            const text = card.textContent.toLowerCase();
-            const shouldShow = text.includes(query);
-            
-            card.style.display = shouldShow ? '' : 'none';
-            if (shouldShow) {
-                visibleCount++;
-            }
+    // 4b. Event listener for search bar
+    if (searchBar) {
+        searchBar.addEventListener('input', () => {
+            currentSearchQuery = searchBar.value.toLowerCase().trim();
+            applyFilters();
         });
+    }
 
-        // Toggle visibility of the "No Results" feedback container
-        if (noResultsContainer) {
-            noResultsContainer.style.display = (visibleCount === 0 && query !== '') ? 'block' : 'none';
+    // 4c. Event listener for category filters (News page)
+    if (filterButtons) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Toggle active classes
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                currentCategory = button.getAttribute('data-filter') || 'all';
+                applyFilters();
+            });
+        });
+    }
+}
+
+function applyFilters() {
+    const cards = document.querySelectorAll('.card, .card2');
+    const isWelcomePage = !!document.getElementById('mySubmit');
+    let visibleCount = 0;
+    
+    cards.forEach(card => {
+        if (isWelcomePage) return; // Skip welcome screen card
+        
+        // Check Category
+        let matchesCategory = true;
+        if (currentCategory !== 'all') {
+            matchesCategory = card.classList.contains(`filter-${currentCategory}`);
+        }
+        
+        // Check Search Query (matches text in active language to be precise)
+        let matchesSearch = true;
+        if (currentSearchQuery !== '') {
+            // Get visible elements content only, or check full text content
+            const text = card.textContent.toLowerCase();
+            matchesSearch = text.includes(currentSearchQuery);
+        }
+        
+        const shouldShow = matchesCategory && matchesSearch;
+        card.style.display = shouldShow ? '' : 'none';
+        
+        if (shouldShow) {
+            visibleCount++;
         }
     });
+    
+    const noResultsContainer = document.querySelector('.no-results');
+    if (noResultsContainer) {
+        const queryActive = currentSearchQuery !== '' || currentCategory !== 'all';
+        noResultsContainer.style.display = (visibleCount === 0 && queryActive) ? 'block' : 'none';
+    }
 }
 
 /* ==========================================================================
-   4. USERNAME GREETING LOGIC
+   5. IHK EXAM COUNTDOWN TIMER (Ziel: 25. Nov 2026 10:00:00 Uhr)
+   ========================================================================== */
+function initCountdown() {
+    const targetDate = new Date('2026-11-25T10:00:00+01:00').getTime();
+    
+    const daysVal = document.getElementById('cd-days');
+    const hoursVal = document.getElementById('cd-hours');
+    const minsVal = document.getElementById('cd-minutes');
+    const secsVal = document.getElementById('cd-seconds');
+    
+    if (!daysVal || !hoursVal || !minsVal || !secsVal) return;
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const difference = targetDate - now;
+        
+        if (difference <= 0) {
+            daysVal.textContent = '00';
+            hoursVal.textContent = '00';
+            minsVal.textContent = '00';
+            secsVal.textContent = '00';
+            return;
+        }
+        
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        
+        daysVal.textContent = String(days).padStart(2, '0');
+        hoursVal.textContent = String(hours).padStart(2, '0');
+        minsVal.textContent = String(minutes).padStart(2, '0');
+        secsVal.textContent = String(seconds).padStart(2, '0');
+    }
+    
+    function updateLabels() {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const labels = {
+            de: { days: 'Tage', hours: 'Stunden', mins: 'Minuten', secs: 'Sekunden' },
+            en: { days: 'Days', hours: 'Hours', mins: 'Minutes', secs: 'Seconds' }
+        };
+        
+        const currentLabels = labels[lang] || labels.de;
+        
+        const lDays = document.getElementById('cd-label-days');
+        const lHours = document.getElementById('cd-label-hours');
+        const lMins = document.getElementById('cd-label-mins');
+        const lSecs = document.getElementById('cd-label-secs');
+        
+        if (lDays) lDays.textContent = currentLabels.days;
+        if (lHours) lHours.textContent = currentLabels.hours;
+        if (lMins) lMins.textContent = currentLabels.mins;
+        if (lSecs) lSecs.textContent = currentLabels.secs;
+    }
+    
+    updateCountdown();
+    updateLabels();
+    setInterval(updateCountdown, 1000);
+    
+    document.addEventListener('langchange', updateLabels);
+}
+
+/* ==========================================================================
+   6. USERNAME GREETING LOGIC (Zweisprachig)
    ========================================================================== */
 function initUsernameGreeting() {
-    // 4a. Handler for username input page (index.html / Startseite)
     const mySubmit = document.getElementById('mySubmit');
     const myText = document.getElementById('myText');
     const myH1 = document.getElementById('myH1');
 
     if (mySubmit && myText) {
-        // Retrieve and pre-fill name if exists
         const storedName = localStorage.getItem('username');
         if (storedName) {
             myText.value = storedName;
-            if (myH1) myH1.textContent = `Willkommen zurück, ${storedName}!`;
+            updateWelcomeH1(storedName);
         }
 
         mySubmit.addEventListener('click', () => {
             const username = myText.value.trim();
             if (username) {
                 localStorage.setItem('username', username);
-                if (myH1) myH1.textContent = `Willkommen, ${username}!`;
+                updateWelcomeH1(username);
                 
-                // Add a small positive feedback effect
-                mySubmit.style.backgroundColor = '#10b981'; // Green
-                mySubmit.textContent = 'Gespeichert!';
+                const lang = document.documentElement.getAttribute('lang') || 'de';
+                mySubmit.style.backgroundColor = '#10b981';
+                mySubmit.textContent = lang === 'de' ? 'Gespeichert!' : 'Saved!';
+                
                 setTimeout(() => {
                     mySubmit.style.backgroundColor = '';
                     mySubmit.textContent = 'Submit';
-                    // Redirect to home dashboard after a short delay
                     window.location.href = 'home.html';
                 }, 800);
             } else {
@@ -209,20 +343,44 @@ function initUsernameGreeting() {
             }
         });
 
-        // Allow submitting via Enter key
         myText.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 mySubmit.click();
             }
         });
+        
+        document.addEventListener('langchange', () => {
+            updateWelcomeH1(myText.value.trim());
+        });
     }
 
-    // 4b. Welcome banner greeting on Home page (home.html)
-    const welcomeUser = document.getElementById('welcome-user');
-    if (welcomeUser) {
-        const username = localStorage.getItem('username');
-        if (username) {
-            welcomeUser.textContent = `, ${username}`;
-        }
+    // Welcomes the user on dashboard pages (e.g. home.html)
+    updateDashboardGreeting();
+    document.addEventListener('langchange', updateDashboardGreeting);
+}
+
+function updateWelcomeH1(username) {
+    const myH1 = document.getElementById('myH1');
+    if (!myH1) return;
+    
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    if (username) {
+        myH1.textContent = lang === 'de' ? `Willkommen zurück, ${username}!` : `Welcome back, ${username}!`;
+    } else {
+        myH1.textContent = lang === 'de' ? 'Willkommen' : 'Welcome';
+    }
+}
+
+function updateDashboardGreeting() {
+    const welcomeText = document.getElementById('welcome-text');
+    if (!welcomeText) return;
+    
+    const username = localStorage.getItem('username') || '';
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    
+    if (lang === 'de') {
+        welcomeText.innerHTML = `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`;
+    } else {
+        welcomeText.innerHTML = `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
     }
 }

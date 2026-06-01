@@ -1,5 +1,5 @@
 /**
- * Modern Accessible Snake Game
+ * Modern Accessible Snake Game with DE/EN Translation
  */
 
 const canvas = document.getElementById('canvas');
@@ -17,23 +17,24 @@ let cellHeight = canvas.height / rows;
 let snake = [{ x: 10, y: 10 }];
 let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
-let nextDirection = 'RIGHT'; // Queue next direction to prevent rapid double-taps causing self-collision
+let nextDirection = 'RIGHT';
 let score = 0;
 let highscore = parseInt(localStorage.getItem('snake_highscore')) || 0;
 let gameInterval;
 let isPlaying = false;
 let isPaused = false;
-const speed = 150; // ms per tick
+const speed = 150;
 
-// Update highscore UI initially
 if (highscoreEl) highscoreEl.textContent = highscore;
 
-// Event Listeners
 document.addEventListener('keydown', handleKeyDown);
 if (startBtn) startBtn.addEventListener('click', startGame);
 if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
 
-// Resize handler to ensure Canvas is sharp
+function getLang() {
+    return document.documentElement.getAttribute('lang') || 'de';
+}
+
 function resizeCanvas() {
     cellWidth = canvas.width / cols;
     cellHeight = canvas.height / rows;
@@ -45,14 +46,12 @@ function startGame() {
     if (isPlaying && !isPaused) return;
     
     if (isPaused) {
-        // Resume
         isPaused = false;
         gameInterval = setInterval(gameStep, speed);
         updateButtons();
         return;
     }
 
-    // Reset game state
     snake = [
         { x: 10, y: 10 },
         { x: 9, y: 10 },
@@ -76,11 +75,9 @@ function togglePause() {
     if (!isPlaying) return;
     
     if (isPaused) {
-        // Resume
         isPaused = false;
         gameInterval = setInterval(gameStep, speed);
     } else {
-        // Pause
         isPaused = true;
         clearInterval(gameInterval);
     }
@@ -89,12 +86,22 @@ function togglePause() {
 }
 
 function updateButtons() {
+    const lang = getLang();
     if (startBtn) {
-        startBtn.innerHTML = isPlaying ? '<i class="fa fa-refresh"></i> Reset' : '<i class="fa fa-play"></i> Start';
+        const startText = lang === 'de' ? '<i class="fa fa-refresh"></i> Reset' : '<i class="fa fa-refresh"></i> Reset';
+        const initialStartText = lang === 'de' ? '<i class="fa fa-play"></i> Start' : '<i class="fa fa-play"></i> Start';
+        startBtn.innerHTML = isPlaying ? startText : initialStartText;
     }
     if (pauseBtn) {
         pauseBtn.disabled = !isPlaying;
-        pauseBtn.innerHTML = isPaused ? '<i class="fa fa-play"></i> Fortsetzen' : '<i class="fa fa-pause"></i> Pause';
+        
+        let pauseText = '';
+        if (isPaused) {
+            pauseText = lang === 'de' ? '<i class="fa fa-play"></i> Fortsetzen' : '<i class="fa fa-play"></i> Resume';
+        } else {
+            pauseText = lang === 'de' ? '<i class="fa fa-pause"></i> Pause' : '<i class="fa fa-pause"></i> Pause';
+        }
+        pauseBtn.innerHTML = pauseText;
     }
 }
 
@@ -103,7 +110,6 @@ function gameOver() {
     isPaused = false;
     clearInterval(gameInterval);
     
-    // Check highscore
     if (score > highscore) {
         highscore = score;
         localStorage.setItem('snake_highscore', highscore);
@@ -112,25 +118,29 @@ function gameOver() {
     
     updateButtons();
     
-    // Draw Game Over Screen
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+    const lang = getLang();
+    
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    ctx.fillStyle = '#ef4444'; // Red
+    ctx.fillStyle = '#ef4444';
     ctx.font = 'bold 30px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
     
     ctx.fillStyle = '#ffffff';
     ctx.font = '16px Inter, sans-serif';
-    ctx.fillText(`Punkte: ${score} | Highscore: ${highscore}`, canvas.width / 2, canvas.height / 2 + 20);
-    ctx.fillText('Klicke Start für eine neue Runde', canvas.width / 2, canvas.height / 2 + 50);
+    
+    const scoreText = lang === 'de' ? `Punkte: ${score} | Highscore: ${highscore}` : `Score: ${score} | High Score: ${highscore}`;
+    const restartText = lang === 'de' ? 'Klicke Reset für eine neue Runde' : 'Click Reset for a new round';
+    
+    ctx.fillText(scoreText, canvas.width / 2, canvas.height / 2 + 20);
+    ctx.fillText(restartText, canvas.width / 2, canvas.height / 2 + 50);
 }
 
 function gameStep() {
     direction = nextDirection;
     
-    // Calculate new head position
     const head = { x: snake[0].x, y: snake[0].y };
     switch (direction) {
         case 'LEFT': head.x--; break;
@@ -139,13 +149,11 @@ function gameStep() {
         case 'DOWN': head.y++; break;
     }
     
-    // Wall Collision Check
     if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         gameOver();
         return;
     }
     
-    // Self Collision Check
     for (let i = 0; i < snake.length; i++) {
         if (snake[i].x === head.x && snake[i].y === head.y) {
             gameOver();
@@ -153,16 +161,13 @@ function gameStep() {
         }
     }
     
-    // Move snake head forward
     snake.unshift(head);
     
-    // Food eaten check
     if (head.x === food.x && head.y === food.y) {
         score += 10;
         if (scoreEl) scoreEl.textContent = score;
         placeFood();
     } else {
-        // Remove tail if no food eaten
         snake.pop();
     }
     
@@ -192,11 +197,9 @@ function placeFood() {
 }
 
 function draw() {
-    // 1. Draw Canvas background with subtle grid
-    ctx.fillStyle = '#0f172a'; // Deep slate blue
+    ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Subtle grid lines
     ctx.strokeStyle = '#1e293b';
     ctx.lineWidth = 1;
     for (let i = 0; i <= cols; i++) {
@@ -212,7 +215,6 @@ function draw() {
         ctx.stroke();
     }
 
-    // 2. Draw Food (Glowing Red Apple)
     ctx.fillStyle = '#ef4444';
     ctx.shadowBlur = 10;
     ctx.shadowColor = '#ef4444';
@@ -226,26 +228,22 @@ function draw() {
         2 * Math.PI
     );
     ctx.fill();
-    ctx.shadowBlur = 0; // Reset shadow
+    ctx.shadowBlur = 0;
 
-    // 3. Draw Snake (Indigo Gradient Theme)
     snake.forEach((part, index) => {
-        // Draw head differently
         const isHead = index === 0;
-        ctx.fillStyle = isHead ? '#3b82f6' : '#60a5fa'; // Bright blue head, lighter blue body
+        ctx.fillStyle = isHead ? '#3b82f6' : '#60a5fa';
         
-        // Slightly round corners for a premium feel
         const x = part.x * cellWidth + 2;
         const y = part.y * cellHeight + 2;
         const w = cellWidth - 4;
         const h = cellHeight - 4;
-        const r = 4; // Corner radius
+        const r = 4;
         
         ctx.beginPath();
         ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h);
         ctx.fill();
         
-        // Eyes for the snake head
         if (isHead) {
             ctx.fillStyle = '#ffffff';
             let eyeX1, eyeY1, eyeX2, eyeY2;
@@ -269,9 +267,10 @@ function draw() {
         }
     });
 
-    // 4. Draw Pause screen overlay if paused
+    const lang = getLang();
+
     if (isPaused) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         ctx.fillStyle = '#f8fafc';
@@ -280,20 +279,20 @@ function draw() {
         ctx.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
     }
     
-    // 5. Ready state before playing
     if (!isPlaying && !isPaused) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.4)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.5)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         ctx.fillStyle = '#60a5fa';
         ctx.font = '16px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Klicke Start zum Spielen', canvas.width / 2, canvas.height / 2);
+        
+        const startText = lang === 'de' ? 'Klicke Start zum Spielen' : 'Click Start to play';
+        ctx.fillText(startText, canvas.width / 2, canvas.height / 2);
     }
 }
 
 function handleKeyDown(e) {
-    // Prevent scrolling default behavior for arrow keys
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
     }
@@ -329,5 +328,10 @@ function handleKeyDown(e) {
     }
 }
 
-// Initial draw
+// Bei Sprachwechsel das Interface anpassen
+document.addEventListener('langchange', () => {
+    updateButtons();
+    draw();
+});
+
 draw();
