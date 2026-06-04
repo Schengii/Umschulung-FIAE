@@ -1,7 +1,8 @@
 /**
  * Main application JS for Umschulung Portfolio
  * Handles Theme Toggle, Mobile Navigation, Accessibility, Combined Search/Category Filter,
- * IHK Countdown Timer, and Multilingual Language Switcher (DE/EN).
+ * IHK Countdown Timer, Multilingual Language Switcher (DE/EN), Scroll Animations,
+ * Back-to-Top Button, Cookie Banner, and Contact Form.
  */
 
 let currentSearchQuery = "";
@@ -14,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearchAndFilter();
     initCountdown();
     initUsernameGreeting();
+    initScrollAnimations();
+    initBackToTop();
+    initCookieBanner();
+    initContactForm();
+    initSkillBars();
 });
 
 /* ==========================================================================
@@ -246,7 +252,7 @@ function applyFilters() {
 }
 
 /* ==========================================================================
-   5. IHK EXAM COUNTDOWN TIMER (Ziel: 25. Nov 2026 10:00:00 Uhr)
+   5. IHK EXAM COUNTDOWN TIMER (Ziel: 08. Jun 2026 10:00:00 Uhr)
    ========================================================================== */
 function initCountdown() {
     const targetDate = new Date('2026-06-08T10:00:00+02:00').getTime();
@@ -383,4 +389,130 @@ function updateDashboardGreeting() {
     } else {
         welcomeText.innerHTML = `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
     }
+}
+
+/* ==========================================================================
+   7. SCROLL REVEAL ANIMATIONS (Intersection Observer)
+   ========================================================================== */
+function initScrollAnimations() {
+    const cards = document.querySelectorAll('.card');
+    if (!cards.length) return;
+
+    // Don't animate the welcome card on index.html
+    const isWelcomePage = !!document.getElementById('mySubmit');
+    if (isWelcomePage) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px'
+    });
+
+    cards.forEach(card => {
+        card.classList.add('fade-in');
+        observer.observe(card);
+    });
+}
+
+/* ==========================================================================
+   8. BACK-TO-TOP BUTTON
+   ========================================================================== */
+function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    const toggleVisibility = () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    };
+
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
+    toggleVisibility();
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+/* ==========================================================================
+   9. COOKIE CONSENT BANNER
+   ========================================================================== */
+function initCookieBanner() {
+    const banner = document.getElementById('cookie-banner');
+    const acceptBtn = document.getElementById('cookie-accept');
+    if (!banner || !acceptBtn) return;
+
+    acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'true');
+        banner.style.animation = 'slideUp 0.3s ease reverse forwards';
+        setTimeout(() => banner.remove(), 300);
+    });
+}
+
+/* ==========================================================================
+   10. IMPROVED CONTACT FORM
+   ========================================================================== */
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    // Remove inline onsubmit if present
+    form.removeAttribute('onsubmit');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('contact-name');
+        const email = document.getElementById('contact-email');
+        const message = document.getElementById('contact-message');
+        const feedback = document.getElementById('form-feedback');
+
+        // Basic validation
+        if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
+            return;
+        }
+
+        // Show success feedback
+        if (feedback) {
+            feedback.style.display = 'block';
+        }
+
+        // Reset form
+        form.reset();
+
+        // Auto-hide feedback after 5 seconds
+        if (feedback) {
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 5000);
+        }
+    });
+}
+
+/* ==========================================================================
+   11. ANIMATED SKILL BARS (Intersection Observer)
+   ========================================================================== */
+function initSkillBars() {
+    const skillFills = document.querySelectorAll('.skill-fill');
+    if (!skillFills.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    skillFills.forEach(fill => observer.observe(fill));
 }
