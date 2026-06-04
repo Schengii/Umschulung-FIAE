@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Umschulung IT</title>
+    <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
+    <meta name="description" content="Meine Programmierprojekte: EcoChef (IHK-Abschlussprojekt), Snake-Spiel, IT-Quiz und dieses Portfolio — mit Java, Spring Boot, JavaScript und mehr.">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 
 <body>
@@ -15,77 +19,8 @@
         <span lang="en">Skip to content</span>
     </a>
 
-    <header>
-        <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
-        <span lang="en">My Retraining as an IT Specialist in Application Development</span>
-    </header>
-
-    <!-- Navigation -->
-    <nav class="topnav" aria-label="Hauptnavigation">
-        <div class="nav-wrapper">
-            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </button>
-            <ul class="nav-menu" id="nav-menu">
-                <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="ausbildungsablauf.html" class="dropdown-link" lang="de">Ablauf Ausbildung</a></li>
-                        <li><a href="ausbildungsablauf.html" class="dropdown-link" lang="en">Training Process</a></li>
-                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link" lang="de">Berufsförderungswerk Dortmund</a></li>
-                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link" lang="en">BFW Dortmund Center</a></li>
-                        <li class="dropdown-item">
-                            <a href="kostentraeger.html" class="dropdown-link"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu">
-                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" lang="de">Rentenversicherung</a></li>
-                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" lang="en">Pension Insurance</a></li>
-                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="de">Berufsgenossenschaften</a></li>
-                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="en">Trade Associations</a></li>
-                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="de">Agentur für Arbeit</a></li>
-                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="en">Employment Agency</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="praktikumsbetrieb.html" class="dropdown-link" lang="de">Praktikumsbetrieb</a></li>
-                        <li><a href="praktikumsbetrieb.html" class="dropdown-link" lang="en">Internship Company</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item active"><a href="portfolio.html" class="nav-link"><i class="fa fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
-                <li class="nav-item"><a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Impressum</span><span lang="en">Contact</span></a></li>
-                <li class="nav-item"><a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a></li>
-                <li class="nav-item"><a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="quiz.html" class="dropdown-link" lang="de">Test Quiz</a></li>
-                        <li><a href="quiz.html" class="dropdown-link" lang="en">Quiz Test</a></li>
-                        <li class="dropdown-item">
-                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu">
-                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
-                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="index.html" class="dropdown-link" lang="de">Startseite</a></li>
-                        <li><a href="index.html" class="dropdown-link" lang="en">Welcome Page</a></li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <div class="nav-controls">
-                <div class="search-container">
-                    <label for="searchbar" class="sr-only">
-                        <span lang="de">Karten filtern</span>
-                        <span lang="en">Filter cards</span>
-                    </label>
-                    <i class="fa fa-search search-icon" aria-hidden="true"></i>
-                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
-                </div>
-                <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
-                    <i class="fa fa-moon-o" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
@@ -99,21 +34,39 @@
                     <p lang="en">As an aspiring IT Specialist in Application Development, I regularly build practical projects. This portfolio website itself is part of this development work. Here is a selection of my applications:</p>
                 </div>
 
+                <!-- Project: EcoChef (Abschlussprojekt) -->
+                <article class="card">
+                    <h3 lang="de">🍳 EcoChef — Nachhaltiges Koch- &amp; Rezeptportal (Abschlussprojekt)</h3>
+                    <h3 lang="en">🍳 EcoChef — Sustainable Cooking &amp; Recipe Portal (Capstone Project)</h3>
+                    
+                    <div class="tech-tags">
+                        <span class="tech-tag">Java / Spring Boot</span>
+                        <span class="tech-tag">REST API</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Thymeleaf / CSS3</span>
+                        <span class="tech-tag">IHK Abschlussprojekt</span>
+                    </div>
+
+                    <div style="margin: 1.25rem 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="assets/images/ecochef_showcase.png" alt="EcoChef - Nachhaltiges Rezeptportal Dashboard" loading="lazy" style="width: 100%; height: auto; display: block; max-height: 350px; object-fit: cover; margin-bottom: 0;">
+                    </div>
+
+                    <p lang="de">EcoChef ist mein IHK-Abschlussprojekt. Die Webanwendung unterstützt Nutzer*innen dabei, gesunde und umweltfreundliche Mahlzeiten zu planen. EcoChef berechnet basierend auf den Zutaten automatisch einen ökologischen Fußabdruck (CO₂-Emissionen, Wasserverbrauch), schlägt regionale/saisonale Alternativen vor und bietet praktische Tipps zur Vermeidung von Lebensmittelverschwendung sowie zur energiesparenden Zubereitung.</p>
+                    <p lang="en">EcoChef is my IHK capstone project. The web application helps users plan healthy and environmentally friendly meals. Based on the ingredients, EcoChef automatically calculates an ecological footprint (CO₂ emissions, water consumption), suggests regional/seasonal alternatives, and provides practical tips to avoid food waste and energy-saving cooking methods.</p>
+                </article>
+
                 <!-- Project 1: Snake -->
                 <article class="card">
                     <h3 lang="de">🐍 Retro-Klassiker Snake (Javascript)</h3>
                     <h3 lang="en">🐍 Retro Classic Snake (Javascript)</h3>
-                    
                     <div class="tech-tags">
                         <span class="tech-tag">HTML5 Canvas</span>
                         <span class="tech-tag">CSS3</span>
                         <span class="tech-tag">Vanilla JS (ES6)</span>
                         <span class="tech-tag">LocalStorage</span>
                     </div>
-
-                    <p lang="de">Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung (Sperrung entgegengesetzter Richtungen, um Selbstkollisionen durch schnelle Tastenfolgen zu vermeiden), Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.</p>
-                    <p lang="en">A responsive browser game rendered on an HTML5 canvas. Features precise movement controls (locking opposite directions to prevent self-collision on rapid keyboard presses), start/pause/restart functions, and persistent high score storage using LocalStorage.</p>
-                    
+                    <p lang="de">Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.</p>
+                    <p lang="en">A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.</p>
                     <div style="margin-top: 1rem;">
                         <a href="snake.html" class="btn-primary" style="display: inline-block; width: auto; text-decoration: none; padding: 0.5rem 1rem;">
                             <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Ausprobieren</span>
@@ -126,17 +79,14 @@
                 <article class="card">
                     <h3 lang="de">💡 Interaktives IT-Wissens-Quiz</h3>
                     <h3 lang="en">💡 Interactive IT Knowledge Quiz</h3>
-                    
                     <div class="tech-tags">
                         <span class="tech-tag">DOM Manipulation</span>
                         <span class="tech-tag">Dynamic HTML</span>
                         <span class="tech-tag">UX Design</span>
                         <span class="tech-tag">Accessibility</span>
                     </div>
-
-                    <p lang="de">Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Fragen und Antworten werden dynamisch geladen. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung mit Feedback.</p>
-                    <p lang="en">An accessible web quiz with a dynamic user interface. Questions and answers are dynamically injected. The system provides instant visual UX feedback (green/red colors), locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard with dynamic feedback at the end.</p>
-                    
+                    <p lang="de">Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.</p>
+                    <p lang="en">An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.</p>
                     <div style="margin-top: 1rem;">
                         <a href="quiz.html" class="btn-primary" style="display: inline-block; width: auto; text-decoration: none; padding: 0.5rem 1rem;">
                             <span lang="de"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Quiz Starten</span>
@@ -145,24 +95,42 @@
                     </div>
                 </article>
 
-                <!-- Project 3: Portfolio -->
+                <!-- Project 3: Memory -->
                 <article class="card">
-                    <h3 lang="de">💻 Modernes Web-Portfolio & Dashboard</h3>
-                    <h3 lang="en">💻 Modern Web Portfolio & Dashboard</h3>
-                    
+                    <h3 lang="de">🧠 Memory — Finde die Paare</h3>
+                    <h3 lang="en">🧠 Memory — Find the Pairs</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">CSS 3D Transforms</span>
+                        <span class="tech-tag">IntersectionObserver</span>
+                        <span class="tech-tag">Game Logic</span>
+                        <span class="tech-tag">LocalStorage</span>
+                    </div>
+                    <p lang="de">Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.</p>
+                    <p lang="en">A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="memory.html" class="btn-primary" style="display: inline-block; width: auto; text-decoration: none; padding: 0.5rem 1rem;">
+                            <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Spielen</span>
+                            <span lang="en"><i class="fa fa-play" aria-hidden="true"></i> Play</span>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Project 4: Portfolio -->
+                <article class="card">
+                    <h3 lang="de">💻 Modernes Web-Portfolio &amp; Dashboard</h3>
+                    <h3 lang="en">💻 Modern Web Portfolio &amp; Dashboard</h3>
                     <div class="tech-tags">
                         <span class="tech-tag">CSS Grid / Flexbox</span>
                         <span class="tech-tag">Dark Mode API</span>
                         <span class="tech-tag">Client-side Filters</span>
                         <span class="tech-tag">Zweisprachiges System</span>
                     </div>
-
-                    <p lang="de">Diese Web-Applikation dient als mein persönliches Portfolio. Sie vereint moderne Ästhetik (Glaseffekte, sanfte Schatten) mit technischer Raffinesse: ein dynamischer Suchfilter koordiniert mit Blog-Kategorie-Filtern, ein duales Theme-System (Dark/Light) und ein CSS-basiertes Togglesystem für nahtlose Mehrsprachigkeit (DE/EN) ohne redundante HTML-Seiten.</p>
-                    <p lang="en">This web application serves as my personal portfolio. It combines modern design aesthetics (glassmorphism, soft shadows) with technical polish: a dynamic real-time keyword search coordinated with blog filters, a system dark/light mode toggle, and a CSS-based toggle system for seamless translations (DE/EN) without duplicate pages.</p>
+                    <p lang="de">Diese Web-Applikation dient als mein persönliches Portfolio. Sie vereint moderne Ästhetik mit technischer Raffinesse: ein dynamischer Suchfilter, ein duales Theme-System (Dark/Light), Scroll-Animationen, wiederverwendbare JS-Komponenten und ein CSS-basiertes Togglesystem für nahtlose Mehrsprachigkeit (DE/EN).</p>
+                    <p lang="en">This web application serves as my personal portfolio. It combines modern design aesthetics with technical polish: a dynamic real-time keyword search, a system dark/light mode toggle, scroll animations, reusable JS components, and a CSS-based toggle system for seamless translations (DE/EN).</p>
                 </article>
             </div>
 
-            <!-- Right Column: Sidebar with Countdown -->
+            <!-- Right Column: Sidebar -->
             <aside class="right-col">
                 <section class="card countdown-widget" aria-labelledby="cd-title">
                     <h3 id="cd-title">
@@ -174,53 +142,47 @@
                         <span lang="en">Until the oral AP2 final exam</span>
                     </p>
                     <div class="countdown-grid">
-                        <div class="countdown-box">
-                            <div id="cd-days" class="countdown-value">00</div>
-                            <div id="cd-label-days" class="countdown-label">Tage</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div id="cd-hours" class="countdown-value">00</div>
-                            <div id="cd-label-hours" class="countdown-label">Stunden</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div id="cd-minutes" class="countdown-value">00</div>
-                            <div id="cd-label-mins" class="countdown-label">Minuten</div>
-                        </div>
-                        <div class="countdown-box">
-                            <div id="cd-seconds" class="countdown-value">00</div>
-                            <div id="cd-label-secs" class="countdown-label">Sekunden</div>
-                        </div>
+                        <div class="countdown-box"><div id="cd-days" class="countdown-value">00</div><div id="cd-label-days" class="countdown-label">Tage</div></div>
+                        <div class="countdown-box"><div id="cd-hours" class="countdown-value">00</div><div id="cd-label-hours" class="countdown-label">Stunden</div></div>
+                        <div class="countdown-box"><div id="cd-minutes" class="countdown-value">00</div><div id="cd-label-mins" class="countdown-label">Minuten</div></div>
+                        <div class="countdown-box"><div id="cd-seconds" class="countdown-value">00</div><div id="cd-label-secs" class="countdown-label">Sekunden</div></div>
                     </div>
                 </section>
 
+                <!-- ANIMATED SKILL BARS -->
                 <section class="card" aria-labelledby="tech-skills-title">
                     <h3 id="tech-skills-title">
                         <span lang="de">Meine IT-Skills</span>
                         <span lang="en">My IT Skills</span>
                     </h3>
-                    <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary);">
-                        <li>HTML5 / CSS3 / Grid & Flexbox</li>
-                        <li>JavaScript (ES6+) / DOM Manipulation</li>
-                        <li>Java / OOP Grundlagen</li>
-                        <li>SQL / Relationale Datenbanken</li>
-                        <li>Git / GitHub Versionierung</li>
-                    </ul>
+                    <div class="skill-bar">
+                        <div class="skill-header"><span class="skill-name">HTML5 / CSS3</span><span class="skill-percent">85%</span></div>
+                        <div class="skill-track"><div class="skill-fill" style="--skill-level: 85%"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-header"><span class="skill-name">JavaScript (ES6+)</span><span class="skill-percent">75%</span></div>
+                        <div class="skill-track"><div class="skill-fill" style="--skill-level: 75%"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-header"><span class="skill-name">Java / OOP</span><span class="skill-percent">70%</span></div>
+                        <div class="skill-track"><div class="skill-fill" style="--skill-level: 70%"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-header"><span class="skill-name">SQL / Datenbanken</span><span class="skill-percent">65%</span></div>
+                        <div class="skill-track"><div class="skill-fill" style="--skill-level: 65%"></div></div>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-header"><span class="skill-name">Git / GitHub</span><span class="skill-percent">80%</span></div>
+                        <div class="skill-track"><div class="skill-fill" style="--skill-level: 80%"></div></div>
+                    </div>
                 </section>
             </aside>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Maximilian Schenk; Rüdesheimer Str. 14; 53175 Bonn; Germany</p>
-        <div class="icons">
-            <a href="#" aria-label="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-        </div>
-    </footer>
+    <div id="site-footer"></div>
 
+    <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 

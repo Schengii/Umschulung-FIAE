@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Spiel - Umschulung IT</title>
+    <meta name="description" content="Memory-Kartenspiel mit Programmierungssymbolen — teste dein Gedächtnis und finde alle Paare!">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <div class="card game-layout">
+            <h2>
+                <span lang="de">🧠 Memory — Finde die Paare</span>
+                <span lang="en">🧠 Memory — Find the Pairs</span>
+            </h2>
+            <p style="text-align: center; max-width: 500px;">
+                <span lang="de">Klicke auf die Karten, um sie umzudrehen. Finde alle 8 Paare mit möglichst wenigen Zügen!</span>
+                <span lang="en">Click the cards to flip them. Find all 8 pairs with as few moves as possible!</span>
+            </p>
+
+            <!-- Stats -->
+            <div class="memory-stats">
+                <div>
+                    <span lang="de">Züge:</span><span lang="en">Moves:</span>
+                    <span id="memory-moves">0</span>
+                </div>
+                <div>
+                    <span lang="de">Zeit:</span><span lang="en">Time:</span>
+                    <span id="memory-timer">0:00</span>
+                </div>
+            </div>
+
+            <!-- Game Grid -->
+            <div id="memory-grid" class="memory-grid"></div>
+
+            <!-- Result -->
+            <div id="memory-result" class="card" style="display: none; margin-top: 1rem; text-align: center; background: var(--primary-light); border-color: var(--primary);"></div>
+
+            <!-- Controls -->
+            <div class="game-controls" style="margin-top: 1.5rem;">
+                <button id="memory-restart" class="btn-game">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                    <span lang="de">Neustarten</span>
+                    <span lang="en">Restart</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/memory.js"></script>
+</body>
+
+</html>

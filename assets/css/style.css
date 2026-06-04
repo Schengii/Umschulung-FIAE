@@ -82,6 +82,13 @@ body {
     flex-direction: column;
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Page-load animation */
+    animation: pageLoad 0.5s ease-out;
+}
+
+@keyframes pageLoad {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 a {
@@ -519,6 +526,206 @@ nav.topnav {
 }
 
 /* ==========================================================================
+   SCROLL REVEAL ANIMATIONS
+   ========================================================================== */
+.card.fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.card.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delay for grid children */
+.layout-grid .left-col .card.fade-in:nth-child(2) { transition-delay: 0.1s; }
+.layout-grid .left-col .card.fade-in:nth-child(3) { transition-delay: 0.2s; }
+.layout-grid .left-col .card.fade-in:nth-child(4) { transition-delay: 0.3s; }
+.layout-grid .right-col .card.fade-in:nth-child(2) { transition-delay: 0.15s; }
+.layout-grid .right-col .card.fade-in:nth-child(3) { transition-delay: 0.25s; }
+
+/* ==========================================================================
+   BACK-TO-TOP BUTTON
+   ========================================================================== */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background-color 0.3s;
+    z-index: 40;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   BREADCRUMB NAVIGATION
+   ========================================================================== */
+.breadcrumb {
+    margin-bottom: 1.25rem;
+}
+
+.breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb li {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb li:not(:last-child)::after {
+    content: '›';
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.breadcrumb li:last-child {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   ANIMATED SKILL BARS
+   ========================================================================== */
+.skill-bar {
+    margin-bottom: 1rem;
+}
+
+.skill-bar:last-child {
+    margin-bottom: 0;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.skill-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.skill-percent {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.skill-track {
+    width: 100%;
+    height: 8px;
+    background-color: var(--bg-page);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: var(--radius-full);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skill-fill.animated {
+    width: var(--skill-level);
+}
+
+/* ==========================================================================
+   COOKIE CONSENT BANNER
+   ========================================================================== */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-nav);
+    color: var(--text-on-nav);
+    padding: 1rem 1.5rem;
+    z-index: 999;
+    box-shadow: 0 -4px 12px rgb(0 0 0 / 0.15);
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+.cookie-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.cookie-content p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cookie-content a {
+    color: var(--primary);
+}
+
+@media (max-width: 600px) {
+    .cookie-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ==========================================================================
    GAMES & INTERACTIVE PAGES
    ========================================================================== */
 
@@ -701,6 +908,88 @@ nav.topnav {
     margin-top: 1rem;
 }
 
+/* Memory Game */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 1.5rem auto;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    perspective: 800px;
+}
+
+.memory-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front,
+.memory-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 2px solid var(--border);
+    transition: border-color 0.3s;
+}
+
+.memory-card-front {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-size: 1.5rem;
+}
+
+.memory-card-back {
+    background-color: var(--bg-page);
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-back {
+    border-color: #10b981;
+    background-color: #d1fae5;
+}
+
+[data-theme="dark"] .memory-card.matched .memory-card-back {
+    background-color: #064e3b;
+    border-color: #10b981;
+}
+
+.memory-card:hover:not(.flipped):not(.matched) .memory-card-front {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+}
+
+.memory-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.memory-stats span {
+    color: var(--primary);
+}
+
 /* Map frames container */
 .map-container {
     position: relative;
@@ -774,6 +1063,11 @@ footer .icons a:hover {
     
     header h1 {
         font-size: 1.5rem;
+    }
+
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
     }
 }
 
@@ -885,6 +1179,11 @@ footer .icons a:hover {
 
     .search-input:focus {
         width: 170px;
+    }
+
+    .back-to-top {
+        bottom: 1.25rem;
+        right: 1.25rem;
     }
 }
 
@@ -1057,3 +1356,85 @@ html[lang="en"] [lang="de"] {
     color: var(--text-secondary);
 }
 
+/* ==========================================================================
+   404 PAGE
+   ========================================================================== */
+.error-page {
+    text-align: center;
+    padding: 4rem 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   PRINT STYLESHEET
+   ========================================================================== */
+@media print {
+    body {
+        background: white;
+        color: black;
+        animation: none;
+    }
+
+    nav.topnav,
+    .nav-controls,
+    .back-to-top,
+    .cookie-banner,
+    .skip-link,
+    .theme-toggle,
+    #lang-toggle,
+    .game-controls,
+    .search-container,
+    .btn-primary,
+    footer .icons {
+        display: none !important;
+    }
+
+    header {
+        border-bottom: 2px solid #333;
+        padding: 1rem;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    a[href^="#"]::after,
+    a[href^="javascript"]::after {
+        content: "";
+    }
+
+    footer {
+        background: white;
+        color: #333;
+        border-top: 1px solid #ccc;
+    }
+
+    footer p {
+        color: #333;
+    }
+}
