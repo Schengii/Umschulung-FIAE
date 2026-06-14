@@ -180,7 +180,7 @@ function renderBreadcrumb(items) {
 /* ============================================================
    AUTO-INJECT ON LOAD
    ============================================================ */
-(function injectComponents() {
+document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
@@ -191,6 +191,15 @@ function renderBreadcrumb(items) {
     // Navigation (not on index.html)
     const navEl = document.getElementById('site-nav');
     if (navEl) navEl.outerHTML = renderNav(currentPage);
+
+    // Hide search bar on pages where search is not needed
+    const searchablePages = ['news.html', 'portfolio.html', 'home.html'];
+    if (!searchablePages.includes(currentPage)) {
+        const searchContainer = document.querySelector('.search-container');
+        if (searchContainer) {
+            searchContainer.style.display = 'none';
+        }
+    }
 
     // Footer
     const footerEl = document.getElementById('site-footer');
@@ -205,4 +214,4 @@ function renderBreadcrumb(items) {
     if (!localStorage.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
         document.body.insertAdjacentHTML('beforeend', renderCookieBanner());
     }
-})();
+});

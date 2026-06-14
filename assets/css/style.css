@@ -1377,6 +1377,100 @@ html[lang="en"] [lang="de"] {
     margin-bottom: 1rem;
 }
 
+
+/* ==========================================================================
+   INTERACTION & ANIMATION ENHANCEMENTS
+   ========================================================================== */
+
+/* Card Hover & Liftoff Effects */
+.left-col .card,
+.right-col .card,
+.layout-single .card,
+.welcome-container.card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.left-col .card:hover,
+.right-col .card:hover,
+.layout-single .card:hover,
+.welcome-container.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+/* Keep main game container stable on hover */
+.game-layout.card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border);
+}
+
+/* Timeline Hover badge effects */
+.timeline-item {
+    transition: var(--transition);
+}
+
+.timeline-item:hover .timeline-badge {
+    background-color: var(--primary);
+    color: white;
+    transform: scale(1.25);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Mobile Snake D-Pad Styles */
+.mobile-dpad {
+    display: none; /* Hidden on desktop */
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    touch-action: manipulation;
+}
+
+.dpad-row {
+    display: flex;
+    gap: 2rem;
+}
+
+.dpad-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-card);
+    border: 2px solid var(--border);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.dpad-btn:hover {
+    border-color: var(--primary);
+}
+
+.dpad-btn:active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(0.92);
+}
+
+/* Show D-Pad only on touch screens or small viewports */
+@media (max-width: 768px), (pointer: coarse) {
+    .mobile-dpad {
+        display: flex;
+    }
+}
+
 /* ==========================================================================
    PRINT STYLESHEET
    ========================================================================== */

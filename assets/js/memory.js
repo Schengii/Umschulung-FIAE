@@ -16,8 +16,17 @@ function initMemoryGame() {
 
     if (!grid) return;
 
-    // 8 pairs of programming-related symbols
-    const symbols = ['🌐', '☕', '🐍', '🗄️', '⚛️', '🔧', '📱', '💻'];
+    // 8 pairs of programming-related symbols (Font Awesome icons)
+    const symbols = [
+        { name: 'js', icon: 'fa-brands fa-js', color: '#f7df1e' },
+        { name: 'java', icon: 'fa-brands fa-java', color: '#f89820' },
+        { name: 'python', icon: 'fa-brands fa-python', color: '#3776ab' },
+        { name: 'database', icon: 'fa-solid fa-database', color: '#0064a5' },
+        { name: 'react', icon: 'fa-brands fa-react', color: '#61dafb' },
+        { name: 'git', icon: 'fa-brands fa-git-alt', color: '#f05032' },
+        { name: 'html5', icon: 'fa-brands fa-html5', color: '#e34f26' },
+        { name: 'css3', icon: 'fa-brands fa-css3-alt', color: '#1572b6' }
+    ];
     let cards = [];
     let flippedCards = [];
     let matchedCount = 0;
@@ -54,16 +63,16 @@ function initMemoryGame() {
         deck.forEach((symbol, index) => {
             const card = document.createElement('div');
             card.className = 'memory-card';
-            card.dataset.symbol = symbol;
+            card.dataset.symbol = symbol.name;
             card.dataset.index = index;
 
             card.innerHTML = `
                 <div class="memory-card-inner">
                     <div class="memory-card-front">
-                        <i class="fa fa-question" aria-hidden="true"></i>
+                        <i class="fa fa-code" aria-hidden="true"></i>
                     </div>
                     <div class="memory-card-back">
-                        <span style="font-size: 2.2rem;">${symbol}</span>
+                        <i class="${symbol.icon}" style="color: ${symbol.color}; font-size: 2.2rem;" aria-hidden="true"></i>
                     </div>
                 </div>
             `;

@@ -334,4 +334,57 @@ document.addEventListener('langchange', () => {
     draw();
 });
 
+function initMobileControls() {
+    const upBtn = document.getElementById('dpad-up');
+    const leftBtn = document.getElementById('dpad-left');
+    const rightBtn = document.getElementById('dpad-right');
+    const downBtn = document.getElementById('dpad-down');
+
+    if (!upBtn || !leftBtn || !rightBtn || !downBtn) return;
+
+    const handlePress = (dir) => {
+        if (!isPlaying) {
+            startGame();
+            return;
+        }
+        if (isPaused) {
+            togglePause();
+            return;
+        }
+
+        switch (dir) {
+            case 'UP':
+                if (direction !== 'DOWN') nextDirection = 'UP';
+                break;
+            case 'LEFT':
+                if (direction !== 'RIGHT') nextDirection = 'LEFT';
+                break;
+            case 'RIGHT':
+                if (direction !== 'LEFT') nextDirection = 'RIGHT';
+                break;
+            case 'DOWN':
+                if (direction !== 'UP') nextDirection = 'DOWN';
+                break;
+        }
+    };
+
+    const addControlListener = (btn, dir) => {
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handlePress(dir);
+        }, { passive: false });
+
+        btn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            handlePress(dir);
+        });
+    };
+
+    addControlListener(upBtn, 'UP');
+    addControlListener(leftBtn, 'LEFT');
+    addControlListener(rightBtn, 'RIGHT');
+    addControlListener(downBtn, 'DOWN');
+}
+
+initMobileControls();
 draw();
