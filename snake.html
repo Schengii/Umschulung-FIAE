@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link"><span lang="de">Zum Inhalt springen</span><span lang="en">Skip to content</span></a>
@@ -32,6 +33,15 @@
                 <button id="start-btn" class="btn-game"><i class="fa fa-play" aria-hidden="true"></i> <span lang="de">Start</span><span lang="en">Start</span></button>
                 <button id="pause-btn" class="btn-game" disabled><i class="fa fa-pause" aria-hidden="true"></i> <span lang="de">Pause</span><span lang="en">Pause</span></button>
             </div>
+            <!-- Mobile Control D-Pad -->
+            <div class="mobile-dpad" id="mobile-dpad">
+                <button class="dpad-btn" id="dpad-up" aria-label="Steuerung Oben"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                <div class="dpad-row">
+                    <button class="dpad-btn" id="dpad-left" aria-label="Steuerung Links"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                    <button class="dpad-btn" id="dpad-right" aria-label="Steuerung Rechts"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                </div>
+                <button class="dpad-btn" id="dpad-down" aria-label="Steuerung Unten"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+            </div>
             <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
                 <p><strong><span lang="de">Steuerung:</span><span lang="en">Controls:</span></strong> <span lang="de">Pfeiltasten / W, A, S, D | <strong>Pause:</strong> Leertaste</span><span lang="en">Arrow keys / W, A, S, D | <strong>Pause:</strong> Spacebar</span></p>
             </div>
@@ -39,7 +49,6 @@
     </main>
 
     <div id="site-footer"></div>
-    <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/snake.js"></script>
 </body>

@@ -215,6 +215,15 @@ function initSearchAndFilter() {
 }
 
 function applyFilters() {
+    const path = window.location.pathname;
+    const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    const searchablePages = ['news.html', 'portfolio.html', 'home.html'];
+    
+    // Only apply card filtering on allowed searchable pages
+    if (!searchablePages.includes(currentPage)) {
+        return;
+    }
+
     const cards = document.querySelectorAll('.card, .card2');
     const isWelcomePage = !!document.getElementById('mySubmit');
     let visibleCount = 0;
