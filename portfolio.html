@@ -35,6 +35,88 @@
                     <p lang="en">As an aspiring IT Specialist in Application Development, I regularly build practical projects. This portfolio website itself is part of this development work. Here is a selection of my applications:</p>
                 </div>
 
+                <!-- Project Manager Admin Form (Collapsible) -->
+                <div class="card admin-card">
+                    <div class="admin-header">
+                        <h3 style="margin-bottom: 0;">
+                            <span lang="de"><i class="fa fa-cogs" aria-hidden="true"></i> Projekt-Manager</span>
+                            <span lang="en"><i class="fa fa-cogs" aria-hidden="true"></i> Project Manager</span>
+                        </h3>
+                        <button id="toggle-admin-btn" class="btn-admin-toggle" aria-expanded="false">
+                            <span lang="de"><i class="fa fa-plus" aria-hidden="true"></i> Neues Projekt</span>
+                            <span lang="en"><i class="fa fa-plus" aria-hidden="true"></i> New Project</span>
+                        </button>
+                    </div>
+
+                    <div id="admin-form-container" class="admin-form-container collapsed">
+                        <form id="project-form" class="project-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="proj-title-de"><span lang="de">Titel (DE) *</span><span lang="en">Title (DE) *</span></label>
+                                    <input type="text" id="proj-title-de" class="form-control" required placeholder="z. B. 🍳 EcoChef">
+                                </div>
+                                <div class="form-group">
+                                    <label for="proj-title-en"><span lang="de">Titel (EN) *</span><span lang="en">Title (EN) *</span></label>
+                                    <input type="text" id="proj-title-en" class="form-control" required placeholder="e.g. 🍳 EcoChef Capstone">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="proj-tags"><span lang="de">Technologien (Komma-separiert)</span><span lang="en">Technologies (Comma-separated)</span></label>
+                                    <input type="text" id="proj-tags" class="form-control" placeholder="Java / Spring Boot, REST API, SQL">
+                                </div>
+                                <div class="form-group">
+                                    <label for="proj-image"><span lang="de">Bild-Pfad oder URL</span><span lang="en">Image Path or URL</span></label>
+                                    <input type="text" id="proj-image" class="form-control" placeholder="assets/images/ecochef_showcase.png">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-desc-de"><span lang="de">Beschreibung (DE) *</span><span lang="en">Description (DE) *</span></label>
+                                <textarea id="proj-desc-de" class="form-control" rows="3" required placeholder="Beschreibung des Projekts auf Deutsch..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-desc-en"><span lang="de">Beschreibung (EN) *</span><span lang="en">Description (EN) *</span></label>
+                                <textarea id="proj-desc-en" class="form-control" rows="3" required placeholder="Description of the project in English..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-link"><span lang="de">Projekt-Link (Optional)</span><span lang="en">Project Link (Optional)</span></label>
+                                <input type="text" id="proj-link" class="form-control" placeholder="https://...">
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="width: auto; padding: 0.75rem 2rem;">
+                                <span lang="de">Projekt erstellen</span><span lang="en">Create Project</span>
+                            </button>
+                        </form>
+
+                        <div class="preview-title" style="margin-top: 2rem; margin-bottom: 1rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                            <span lang="de"><i class="fa fa-eye" aria-hidden="true"></i> Live-Vorschau:</span>
+                            <span lang="en"><i class="fa fa-eye" aria-hidden="true"></i> Live Preview:</span>
+                        </div>
+                        
+                        <!-- Real-time Live Preview Card Container -->
+                        <div id="live-preview-container"></div>
+
+                        <div id="export-section" class="export-section" style="display: none; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                            <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem;">
+                                <span lang="de">📋 HTML-Code für dein Portfolio:</span>
+                                <span lang="en">📋 HTML Code for your Portfolio:</span>
+                            </h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-muted);">
+                                <span lang="de">Kopiere diesen Code und füge ihn in deine <code>portfolio.html</code> ein, um das Projekt dauerhaft im Quellcode zu speichern.</span>
+                                <span lang="en">Copy this code and paste it into your <code>portfolio.html</code> to permanently store the project in your source code.</span>
+                            </p>
+                            <div class="code-export-box" style="position: relative;">
+                                <pre style="background: var(--bg-page); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-md); overflow-x: auto; margin-bottom: 1rem;"><code id="html-export-code" style="font-family: monospace; font-size: 0.85rem; color: var(--text-primary);"></code></pre>
+                                <button id="copy-code-btn" class="btn-game" style="font-size: 0.85rem; width: auto;"><i class="fa fa-copy"></i> Kopieren / Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Project: EcoChef (Abschlussprojekt) -->
                 <article class="card">
                     <h3 lang="de">🍳 EcoChef — Nachhaltiges Koch- &amp; Rezeptportal (Abschlussprojekt)</h3>
@@ -129,6 +211,9 @@
                     <p lang="de">Diese Web-Applikation dient als mein persönliches Portfolio. Sie vereint moderne Ästhetik mit technischer Raffinesse: ein dynamischer Suchfilter, ein duales Theme-System (Dark/Light), Scroll-Animationen, wiederverwendbare JS-Komponenten und ein CSS-basiertes Togglesystem für nahtlose Mehrsprachigkeit (DE/EN).</p>
                     <p lang="en">This web application serves as my personal portfolio. It combines modern design aesthetics with technical polish: a dynamic real-time keyword search, a system dark/light mode toggle, scroll animations, reusable JS components, and a CSS-based toggle system for seamless translations (DE/EN).</p>
                 </article>
+
+                <!-- Custom projects dynamically injected here -->
+                <div id="custom-projects-container"></div>
             </div>
 
             <!-- Right Column: Sidebar -->
@@ -182,6 +267,7 @@
     <div id="site-footer"></div>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/portfolio.js"></script>
 </body>
 
 </html>
