@@ -140,13 +140,13 @@ function initMemoryGame() {
         clearInterval(timerInterval);
 
         // Save best score
-        const bestMoves = localStorage.getItem('memoryBestMoves');
-        const bestTime = localStorage.getItem('memoryBestTime');
+        const bestMoves = StorageManager.getItem('memoryBestMoves');
+        const bestTime = StorageManager.getItem('memoryBestTime');
         let isNewBest = false;
 
         if (!bestMoves || moves < parseInt(bestMoves)) {
-            localStorage.setItem('memoryBestMoves', moves);
-            localStorage.setItem('memoryBestTime', seconds);
+            StorageManager.setItem('memoryBestMoves', moves);
+            StorageManager.setItem('memoryBestTime', seconds);
             isNewBest = true;
         }
 

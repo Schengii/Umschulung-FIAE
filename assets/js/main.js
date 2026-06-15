@@ -29,7 +29,7 @@ function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
 
-    const storedTheme = localStorage.getItem('theme');
+    const storedTheme = StorageManager.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
@@ -41,7 +41,7 @@ function initTheme() {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         
         document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        StorageManager.setItem('theme', newTheme);
         updateThemeIcon(newTheme);
     });
 }
@@ -136,7 +136,7 @@ function initTranslation() {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;
     
-    const storedLang = localStorage.getItem('lang') || 'de';
+    const storedLang = StorageManager.getItem('lang', 'de');
     document.documentElement.setAttribute('lang', storedLang);
     updateLangToggleButton(storedLang);
     
@@ -145,7 +145,7 @@ function initTranslation() {
         const newLang = currentLang === 'de' ? 'en' : 'de';
         
         document.documentElement.setAttribute('lang', newLang);
-        localStorage.setItem('lang', newLang);
+        StorageManager.setItem('lang', newLang);
         updateLangToggleButton(newLang);
         
         // Notify other widgets
@@ -332,7 +332,7 @@ function initUsernameGreeting() {
     const myH1 = document.getElementById('myH1');
 
     if (mySubmit && myText) {
-        const storedName = localStorage.getItem('username');
+        const storedName = StorageManager.getItem('username');
         if (storedName) {
             myText.value = storedName;
             updateWelcomeH1(storedName);
@@ -341,7 +341,7 @@ function initUsernameGreeting() {
         mySubmit.addEventListener('click', () => {
             const username = myText.value.trim();
             if (username) {
-                localStorage.setItem('username', username);
+                StorageManager.setItem('username', username);
                 updateWelcomeH1(username);
                 
                 const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -390,7 +390,7 @@ function updateDashboardGreeting() {
     const welcomeText = document.getElementById('welcome-text');
     if (!welcomeText) return;
     
-    const username = localStorage.getItem('username') || '';
+    const username = StorageManager.getItem('username', '');
     const lang = document.documentElement.getAttribute('lang') || 'de';
     
     if (lang === 'de') {
@@ -461,7 +461,7 @@ function initCookieBanner() {
     if (!banner || !acceptBtn) return;
 
     acceptBtn.addEventListener('click', () => {
-        localStorage.setItem('cookieConsent', 'true');
+        StorageManager.setItem('cookieConsent', 'true');
         banner.style.animation = 'slideUp 0.3s ease reverse forwards';
         setTimeout(() => banner.remove(), 300);
     });
