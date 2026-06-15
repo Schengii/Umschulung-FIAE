@@ -19,8 +19,8 @@ let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
 let score = 0;
-let highscore = parseInt(localStorage.getItem('snake_highscore')) || 0;
-let gameInterval;
+let highscore = parseInt(StorageManager.getItem('snake_highscore', 0)) || 0;
+let lastFrameTime = 0;
 let isPlaying = false;
 let isPaused = false;
 const speed = 150;
@@ -42,12 +42,31 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 
+function gameLoop(timestamp) {
+    if (!isPlaying) return;
+    
+    if (!isPaused) {
+        if (!lastFrameTime) lastFrameTime = timestamp;
+        const elapsed = timestamp - lastFrameTime;
+        
+        if (elapsed >= speed) {
+            gameStep();
+            lastFrameTime = timestamp;
+        }
+    } else {
+        lastFrameTime = 0;
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+
 function startGame() {
     if (isPlaying && !isPaused) return;
     
     if (isPaused) {
         isPaused = false;
-        gameInterval = setInterval(gameStep, speed);
+        lastFrameTime = 0;
+        requestAnimationFrame(gameLoop);
         updateButtons();
         return;
     }
@@ -65,8 +84,8 @@ function startGame() {
     
     isPlaying = true;
     isPaused = false;
-    clearInterval(gameInterval);
-    gameInterval = setInterval(gameStep, speed);
+    lastFrameTime = 0;
+    requestAnimationFrame(gameLoop);
     
     updateButtons();
 }
@@ -76,10 +95,10 @@ function togglePause() {
     
     if (isPaused) {
         isPaused = false;
-        gameInterval = setInterval(gameStep, speed);
+        lastFrameTime = 0;
+        requestAnimationFrame(gameLoop);
     } else {
         isPaused = true;
-        clearInterval(gameInterval);
     }
     updateButtons();
     draw();
@@ -108,11 +127,11 @@ function updateButtons() {
 function gameOver() {
     isPlaying = false;
     isPaused = false;
-    clearInterval(gameInterval);
+    lastFrameTime = 0;
     
     if (score > highscore) {
         highscore = score;
-        localStorage.setItem('snake_highscore', highscore);
+        StorageManager.setItem('snake_highscore', highscore);
         if (highscoreEl) highscoreEl.textContent = highscore;
     }
     
@@ -137,6 +156,8 @@ function gameOver() {
     ctx.fillText(scoreText, canvas.width / 2, canvas.height / 2 + 20);
     ctx.fillText(restartText, canvas.width / 2, canvas.height / 2 + 50);
 }
+
+
 
 function gameStep() {
     direction = nextDirection;

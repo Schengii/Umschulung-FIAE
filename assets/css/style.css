@@ -195,6 +195,7 @@ nav.topnav {
     top: 0;
     z-index: 50;
     box-shadow: var(--shadow-md);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .nav-wrapper {
@@ -1016,7 +1017,7 @@ footer {
     padding: 2rem 1rem;
     text-align: center;
     border-top: 1px solid var(--border);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-top-color 0.3s ease;
 }
 
 footer p {

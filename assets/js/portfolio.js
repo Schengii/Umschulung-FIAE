@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyCodeBtn = document.getElementById('copy-code-btn');
 
     // Load and render existing custom projects from LocalStorage
-    let customProjects = JSON.parse(localStorage.getItem('portfolio_custom_projects')) || [];
+    let customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
     renderCustomProjects();
 
     // 1. Toggle Admin Card
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Save to array
             customProjects.push(project);
-            localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+            StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
             
             // Update container
             renderCustomProjects();
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmDe = confirm('Möchtest du dieses Projekt wirklich aus deinem lokalen Speicher löschen?\n\nDo you really want to delete this project from your local storage?');
                 if (confirmDe) {
                     customProjects.splice(idx, 1);
-                    localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                    StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
                     renderCustomProjects();
                     if (exportSection) exportSection.style.display = 'none';
                 }

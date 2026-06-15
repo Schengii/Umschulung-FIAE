@@ -4,6 +4,44 @@
  * Auto-detects the current page and applies the active navigation state.
  */
 
+const StorageManager = {
+    isAvailable() {
+        try {
+            const key = '__storage_test__';
+            localStorage.setItem(key, key);
+            localStorage.removeItem(key);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    },
+    getItem(key, defaultValue = null) {
+        if (this.isAvailable()) {
+            const val = localStorage.getItem(key);
+            return val !== null ? val : defaultValue;
+        }
+        return defaultValue;
+    },
+    setItem(key, value) {
+        if (this.isAvailable()) {
+            try {
+                localStorage.setItem(key, value);
+                return true;
+            } catch (e) {
+                console.warn('StorageManager: Failed to write to localStorage:', e);
+            }
+        }
+        return false;
+    },
+    removeItem(key) {
+        if (this.isAvailable()) {
+            localStorage.removeItem(key);
+            return true;
+        }
+        return false;
+    }
+};
+
 /* ============================================================
    HEADER
    ============================================================ */
@@ -211,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cookie banner (only if not already accepted)
-    if (!localStorage.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
+    if (!StorageManager.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
         document.body.insertAdjacentHTML('beforeend', renderCookieBanner());
     }
 });
