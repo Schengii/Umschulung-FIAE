@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OfficeTrack | Arbeitszeiterfassung</title>
+  <meta name="description" content="Verfolge automatisch und manuell deine Arbeitszeit im Büro mittels GPS-Geofencing. Cross-Plattform PWA.">
+  <meta name="theme-color" content="#0b0f19">
+  
+  <!-- PWA Manifest & iOS Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OfficeTrack">
+  
+  <!-- Favicons / Icons (PWA fallbacks) -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3858/3858694.png">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3858/3858694.png">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app-container">
+    
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="logo-icon">
+          <i data-lucide="clock"></i>
+        </div>
+        <div>
+          <h1>OfficeTrack</h1>
+          <span class="sub-text">Arbeitszeit-Tracker</span>
+        </div>
+      </div>
+      <div class="status-indicator-badge" id="global-status-badge">
+        <span class="pulse-dot"></span>
+        <span class="badge-text" id="global-status-text">Ortet...</span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-main-content">
+      
+      <!-- Tab 1: Dashboard -->
+      <section id="tab-dashboard" class="tab-pane active">
+        <div class="dashboard-grid">
+          
+          <!-- Circular Progress Card -->
+          <div class="card circular-progress-card">
+            <div class="progress-circle-wrapper">
+              <svg class="progress-circle" viewBox="0 0 100 100">
+                <circle class="circle-bg" cx="50" cy="50" r="42" />
+                <circle class="circle-fg" id="daily-progress-ring" cx="50" cy="50" r="42" />
+              </svg>
+              <div class="circle-content">
+                <span class="circle-label">Heute im Büro</span>
+                <span class="circle-value" id="dashboard-timer">00:00:00</span>
+                <span class="circle-target" id="dashboard-target-label">Ziel: 08:00 Std.</span>
+                <span class="circle-pause hidden" id="dashboard-pause-label">Pause: 00:00:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-Time Info / Manual Controls -->
+          <div class="card tracking-status-card">
+            <h3>Aktueller Status</h3>
+            <div class="status-details">
+              <div class="status-row">
+                <span class="label">Standort:</span>
+                <span class="value" id="status-location-name">Kein Büro hinterlegt</span>
+              </div>
+              <div class="status-row">
+                <span class="label">Entfernung:</span>
+                <span class="value" id="status-distance-value">- m</span>
+              </div>
+              <div class="status-row">
+                <span class="label">Auto-Tracking:</span>
+                <span class="value status-active" id="status-geofence-status">Inaktiv</span>
+              </div>
+            </div>
+            
+            <div class="control-actions">
+              <button class="btn btn-primary" id="btn-manual-checkin">
+                <i data-lucide="log-in"></i> Jetzt einchecken
+              </button>
+              <div class="tracking-action-group hidden" id="tracking-action-group">
+                <button class="btn btn-danger" id="btn-manual-checkout">
+                  <i data-lucide="log-out"></i> Auschecken
+                </button>
+                <button class="btn btn-warning" id="btn-pause-start">
+                  <i data-lucide="coffee"></i> Pause
+                </button>
+                <button class="btn btn-primary hidden" id="btn-pause-stop">
+                  <i data-lucide="play"></i> Weiter
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Stats Cards -->
+          <div class="stats-summary-grid">
+            <div class="card mini-card">
+              <div class="mini-card-icon accent-violet">
+                <i data-lucide="calendar"></i>
+              </div>
+              <div class="mini-card-info">
+                <span class="label">Monatsgesamt</span>
+                <span class="value" id="stats-monthly-total">0.0 Std.</span>
+              </div>
+            </div>
+
+            <div class="card mini-card">
+              <div class="mini-card-icon accent-green">
+                <i data-lucide="award"></i>
+              </div>
+              <div class="mini-card-info">
+                <span class="label">Soll Erreicht</span>
+                <span class="value" id="stats-days-completed">0 / 0 Tage</span>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Tab 2: Standort-Einstellungen -->
+      <section id="tab-location" class="tab-pane">
+        <div class="location-container">
+          <div class="card search-card">
+            <h3>Büro-Standort konfigurieren</h3>
+            <p class="description">Suche nach deiner Adresse oder tippe direkt auf die Karte, um deinen Arbeitsort festzulegen. Sobald du den Radius betrittst, trackt die App im Hintergrund.</p>
+            
+            <div class="search-bar">
+              <input type="text" id="map-search-input" placeholder="Adresse suchen (z.B. Office Street 10)...">
+              <button class="btn btn-icon btn-search" id="btn-map-search" aria-label="Adresse suchen">
+                <i data-lucide="search"></i>
+              </button>
+            </div>
+            <div id="search-suggestions" class="search-suggestions-box hidden"></div>
+          </div>
+
+          <!-- Map Container -->
+          <div class="card map-card">
+            <div id="map"></div>
+          </div>
+
+          <!-- Configuration Card -->
+          <div class="card config-card">
+            <div class="form-group">
+              <label for="location-name-input">Name des Standorts:</label>
+              <input type="text" id="location-name-input" value="Büro" placeholder="z. B. Hauptbüro">
+            </div>
+
+            <div class="form-group">
+              <label>Geofence-Radius (Erfassungsbereich):</label>
+              <div class="radius-selector">
+                <button class="btn-radius active" data-radius="50">50m</button>
+                <button class="btn-radius" data-radius="100">100m</button>
+                <button class="btn-radius" data-radius="200">200m</button>
+                <button class="btn-radius" data-radius="500">500m</button>
+              </div>
+            </div>
+            
+            <div class="location-details-row">
+              <div class="coords-col">
+                <span class="label">Breitengrad:</span>
+                <span class="value" id="val-lat">-</span>
+              </div>
+              <div class="coords-col">
+                <span class="label">Längengrad:</span>
+                <span class="value" id="val-lng">-</span>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btn-save-location">
+              <i data-lucide="save"></i> Standort speichern
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Verlauf -->
+      <section id="tab-history" class="tab-pane">
+        <div class="history-container">
+          
+          <!-- Add Manual Log Card -->
+          <div class="card manual-log-card">
+            <div class="card-header-toggle" id="manual-log-toggle">
+              <h3><i data-lucide="plus-circle"></i> Arbeitszeit manuell nachtragen</h3>
+              <i data-lucide="chevron-down" class="toggle-icon"></i>
+            </div>
+            <div class="manual-log-form hidden" id="manual-log-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="manual-log-date">Datum:</label>
+                  <input type="date" id="manual-log-date">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="manual-log-start">Kommen (Uhrzeit):</label>
+                  <input type="time" id="manual-log-start">
+                </div>
+                <div class="form-group">
+                  <label for="manual-log-end">Gehen (Uhrzeit):</label>
+                  <input type="time" id="manual-log-end">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-block" id="btn-add-manual-log">
+                Eintrag speichern
+              </button>
+            </div>
+          </div>
+
+          <!-- History Logs List -->
+          <div class="card history-list-card">
+            <div class="card-header-actions">
+              <h3>Erfassungsprotokoll</h3>
+              <button class="btn-text-danger" id="btn-clear-history">
+                <i data-lucide="trash-2"></i> Alles löschen
+              </button>
+            </div>
+            <div class="history-list" id="history-items-container">
+              <!-- Logs will be rendered dynamically -->
+              <div class="empty-state">
+                <i data-lucide="info" class="empty-icon"></i>
+                <p>Keine Einträge für die Vergangenheit gefunden. Verwende den Simulator oder trage Zeiten manuell nach.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Tab 4: Statistiken -->
+      <section id="tab-stats" class="tab-pane">
+        <div class="stats-container">
+          
+          <!-- Summary Cards -->
+          <div class="stats-overview-grid">
+            <div class="card stat-box">
+              <span class="stat-label">Durchschnitt/Tag</span>
+              <span class="stat-value" id="stats-avg-hours">0.0 Std.</span>
+            </div>
+            <div class="card stat-box">
+              <span class="stat-label">Gesamtstunden</span>
+              <span class="stat-value" id="stats-total-hours">0.0 Std.</span>
+            </div>
+            <div class="card stat-box">
+              <span class="stat-label">Aktivster Tag</span>
+              <span class="stat-value" id="stats-best-day">-</span>
+            </div>
+          </div>
+
+          <!-- Weekly Chart Card -->
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>Wochenbericht (letzte 7 Tage)</h3>
+              <span class="sub-text">Arbeitsstunden im Büro</span>
+            </div>
+            <div class="chart-container-wrapper">
+              <div class="chart-svg-container" id="weekly-chart-container">
+                <!-- SVG Chart will be rendered here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Chart Card -->
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>Monatsverlauf (Stunden)</h3>
+              <span class="sub-text">Historische Tendenz der Tage</span>
+            </div>
+            <div class="chart-container-wrapper">
+              <div class="chart-svg-container" id="monthly-chart-container">
+                <!-- SVG Line Chart will be rendered here -->
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="app-navbar">
+      <button class="nav-item active" data-tab="tab-dashboard" id="nav-btn-dashboard">
+        <i data-lucide="home"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-tab="tab-location" id="nav-btn-location">
+        <i data-lucide="map-pin"></i>
+        <span>Standort</span>
+      </button>
+      <button class="nav-item" data-tab="tab-history" id="nav-btn-history">
+        <i data-lucide="list"></i>
+        <span>Verlauf</span>
+      </button>
+      <button class="nav-item" data-tab="tab-stats" id="nav-btn-stats">
+        <i data-lucide="bar-chart-2"></i>
+        <span>Statistiken</span>
+      </button>
+    </nav>
+
+    <!-- Floating Simulator Drawer / Controls -->
+    <div class="simulator-drawer" id="simulator-drawer">
+      <div class="simulator-header" id="simulator-header">
+        <div class="header-title">
+          <i data-lucide="terminal"></i>
+          <h4>GPS & Zeit Simulator (Entwickler)</h4>
+        </div>
+        <i data-lucide="chevron-up" class="sim-toggle-icon" id="sim-drawer-icon"></i>
+      </div>
+      
+      <div class="simulator-body" id="simulator-body">
+        
+        <div class="sim-row font-sm text-muted">
+          Verwende diese Steuerung, um das Geofencing und historische Berichte direkt am Schreibtisch zu testen.
+        </div>
+
+        <div class="sim-form-group">
+          <div class="toggle-control">
+            <span class="sim-label">Simulationsmodus aktivieren</span>
+            <label class="switch-toggle">
+              <input type="checkbox" id="sim-active-toggle">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="sim-section disabled" id="sim-controls-section">
+          <h5>Virtueller Standort</h5>
+          
+          <div class="sim-actions-grid">
+            <button class="btn btn-sm btn-outline" id="btn-sim-teleport-office">
+              <i data-lucide="map-pin"></i> Im Büro (0m)
+            </button>
+            <button class="btn btn-sm btn-outline" id="btn-sim-teleport-border">
+              <i data-lucide="navigation"></i> Grenze (90m)
+            </button>
+            <button class="btn btn-sm btn-outline" id="btn-sim-teleport-home">
+              <i data-lucide="home"></i> Zu Hause (2km)
+            </button>
+          </div>
+          
+          <div class="sim-form-group mt-2">
+            <div class="slider-label-row">
+              <span>Virtuelle Distanz:</span>
+              <span id="val-sim-distance">2000 m</span>
+            </div>
+            <input type="range" id="sim-distance-slider" min="0" max="2500" step="10" value="2000">
+          </div>
+
+          <hr class="sim-divider">
+
+          <h5>Zeitsteuerung</h5>
+          <div class="sim-form-group">
+            <div class="slider-label-row">
+              <span>Zeitraffer-Geschwindigkeit:</span>
+              <span id="val-sim-speed">1x (Echtzeit)</span>
+            </div>
+            <input type="range" id="sim-speed-slider" min="1" max="120" step="5" value="1">
+            <span class="slider-help">120x beschleunigt 1 Minute auf 0,5 Sekunden Realzeit.</span>
+          </div>
+
+          <hr class="sim-divider">
+          
+          <h5>Testdaten-Generator</h5>
+          <div class="sim-actions-grid single-col">
+            <button class="btn btn-sm btn-accent" id="btn-sim-generate-data">
+              <i data-lucide="database"></i> 14 Tage Demo-Daten erstellen
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leaflet Map Script -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Lucide Icons Script -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti for Achievements -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/geo.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

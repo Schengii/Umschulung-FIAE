@@ -1450,6 +1450,7 @@ html[lang="en"] [lang="de"] {
     justify-content: center;
     box-shadow: var(--shadow-md);
     transition: var(--transition);
+    -webkit-user-select: none;
     user-select: none;
     touch-action: manipulation;
 }
@@ -1649,3 +1650,15 @@ html[lang="en"] [lang="de"] {
         color: #333;
     }
 }
+
+/* Custom classes extracted from inline styles */
+.admin-header-title { margin-bottom: 0; }
+.btn-primary.custom-size { width: auto; padding: 0.75rem 2rem; }
+.preview-title { margin-top: 2rem; margin-bottom: 1rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+.export-section { display: none; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+.small-muted { font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-muted); }
+.code-pre { background: var(--bg-page); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-md); overflow-x: auto; margin-bottom: 1rem; }
+.btn-game.small-btn { font-size: 0.85rem; width: auto; }
+.status-widget { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.status-text { font-size: 0.95rem; margin-bottom: 1rem; color: #ecfdf5; line-height: 1.4; }
+.status-badge { background-color: rgba(255,255,255,0.2); display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; }
