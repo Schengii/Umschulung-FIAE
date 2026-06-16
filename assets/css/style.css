@@ -1662,3 +1662,30 @@ html[lang="en"] [lang="de"] {
 .status-widget { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 .status-text { font-size: 0.95rem; margin-bottom: 1rem; color: #ecfdf5; line-height: 1.4; }
 .status-badge { background-color: rgba(255,255,255,0.2); display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; }
+
+/* Dashboard and BFW Helper Classes to replace inline styles */
+.dashboard-placeholder {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: var(--bg-page);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    color: var(--text-muted);
+}
+.dashboard-placeholder i.dashboard-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+.bfw-campus-img {
+    max-height: 480px;
+    width: 100%;
+    object-fit: cover;
+}
+.section-spacing {
+    margin-top: 2rem;
+}
+.list-styled {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
