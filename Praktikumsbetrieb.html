@@ -8,7 +8,6 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/v4-shims.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
 </head>
 
@@ -22,11 +21,7 @@
     <div id="site-nav"></div>
 
     <main id="main-content" class="main-container">
-        <script>document.write(renderBreadcrumb([
-            {label_de:'Home', label_en:'Home', href:'home.html'},
-            {label_de:'Ausbildung', label_en:'Education', href:'#'},
-            {label_de:'Praktikumsbetrieb', label_en:'Internship Company'}
-        ]));</script>
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Ausbildung","label_en":"Education","href":"#"},{"label_de":"Praktikumsbetrieb","label_en":"Internship Company"}]'></div>
         <div class="layout-grid">
             <!-- Left Column -->
             <div class="left-col">
@@ -131,8 +126,6 @@
     </main>
 
     <div id="site-footer"></div>
-
-    <script src="assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
-
 </html>

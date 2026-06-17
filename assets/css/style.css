@@ -675,8 +675,24 @@ nav.topnav {
 }
 
 .skill-fill.animated {
-    width: var(--skill-level);
+    width: var(--skill-level, 0%);
 }
+
+/* Skill-Level Prozentsätze */
+.skill-85 { --skill-level: 85%; }
+.skill-80 { --skill-level: 80%; }
+.skill-75 { --skill-level: 75%; }
+.skill-70 { --skill-level: 70%; }
+.skill-65 { --skill-level: 65%; }
+.skill-60 { --skill-level: 60%; }
+.skill-55 { --skill-level: 55%; }
+.skill-50 { --skill-level: 50%; }
+.skill-45 { --skill-level: 45%; }
+.skill-40 { --skill-level: 40%; }
+.skill-35 { --skill-level: 35%; }
+.skill-30 { --skill-level: 30%; }
+.skill-25 { --skill-level: 25%; }
+.skill-20 { --skill-level: 20%; }
 
 /* ==========================================================================
    COOKIE CONSENT BANNER
