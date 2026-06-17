@@ -216,9 +216,24 @@ function renderBreadcrumb(items) {
 }
 
 /* ============================================================
+   BREADCRUMB RENDERER (statt document.write)
+   ============================================================ */
+function initBreadcrumbs() {
+    const container = document.getElementById('breadcrumb-container');
+    if (!container) return;
+    try {
+        const items = JSON.parse(container.getAttribute('data-items'));
+        container.innerHTML = renderBreadcrumb(items);
+    } catch (e) {
+        console.warn('Breadcrumb data-items parse error:', e);
+    }
+}
+
+/* ============================================================
    AUTO-INJECT ON LOAD
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+    initBreadcrumbs();
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
