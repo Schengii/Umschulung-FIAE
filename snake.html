@@ -10,6 +10,51 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
+    <style>
+        .snake-intro {
+            text-align: center;
+            max-width: 500px;
+        }
+        .snake-controls-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .snake-highscore-board {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            background: var(--card-bg-light);
+        }
+        .snake-highscore-title {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .snake-highscore-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .snake-highscore-header-row {
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .snake-highscore-cell {
+            padding: 0.5rem 0.25rem;
+        }
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link"><span lang="de">Zum Inhalt springen</span><span lang="en">Skip to content</span></a>
@@ -19,7 +64,7 @@
     <main id="main-content" class="main-container">
         <div class="card game-layout">
             <h2><span lang="de">Snake Klassiker (Javascript)</span><span lang="en">Classic Snake Game (Javascript)</span></h2>
-            <p style="text-align: center; max-width: 500px;">
+            <p class="snake-intro">
                 <span lang="de">Bewege die Schlange über das Feld. Jeder gegessene Apfel macht dich länger und bringt Punkte. Vermeide Zusammenstöße mit den Außenwänden und deinem eigenen Körper!</span>
                 <span lang="en">Move the snake across the field. Eating apples makes you longer and increases your score. Avoid hitting walls and your own body!</span>
             </p>
@@ -41,8 +86,29 @@
                 </div>
                 <button class="dpad-btn" id="dpad-down" aria-label="Steuerung Unten"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
             </div>
-            <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
+            <div class="snake-controls-info">
                 <p><strong><span lang="de">Steuerung:</span><span lang="en">Controls:</span></strong> <span lang="de">Pfeiltasten / W, A, S, D | <strong>Pause:</strong> Leertaste</span><span lang="en">Arrow keys / W, A, S, D | <strong>Pause:</strong> Spacebar</span></p>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="highscore-board snake-highscore-board">
+                <h3 class="snake-highscore-title">
+                    <i class="fa fa-trophy"></i>
+                    <span lang="de">Bestenliste (Top 5)</span>
+                    <span lang="en">Leaderboard (Top 5)</span>
+                </h3>
+                <table class="snake-highscore-table">
+                    <thead>
+                        <tr class="snake-highscore-header-row">
+                            <th class="snake-highscore-cell">#</th>
+                            <th class="snake-highscore-cell"><span lang="de">Datum</span><span lang="en">Date</span></th>
+                            <th class="snake-highscore-cell" style="text-align: right;"><span lang="de">Punkte</span><span lang="en">Score</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="highscore-list-body">
+                        <!-- Dynamic list -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>

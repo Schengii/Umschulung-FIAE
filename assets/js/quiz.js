@@ -110,6 +110,24 @@ function getActiveQuestions() {
     return lang === 'de' ? questionsDE : questionsEN;
 }
 
+function renderBestScore() {
+    const bestScoreEl = document.getElementById('quiz-best-score');
+    if (!bestScoreEl) return;
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    const bestScore = StorageManager.getItem('quiz_best_score');
+    const totalQuestions = getActiveQuestions().length;
+    
+    if (bestScore !== null) {
+        bestScoreEl.innerHTML = lang === 'de'
+            ? `Persönliche Bestleistung: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Richtige</span>`
+            : `Personal Best: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Correct</span>`;
+    } else {
+        bestScoreEl.innerHTML = lang === 'de'
+            ? 'Persönliche Bestleistung: noch keine'
+            : 'Personal Best: none yet';
+    }
+}
+
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
@@ -118,6 +136,7 @@ function startQuiz() {
     nextButton.innerHTML = lang === 'de' ? 'Nächste Frage <i class="fa fa-arrow-right"></i>' : 'Next Question <i class="fa fa-arrow-right"></i>';
     nextButton.className = "btn-primary";
     
+    renderBestScore();
     showQuestion();
 }
 
@@ -195,6 +214,16 @@ function showScore() {
     }
     
     const percentage = Math.round((score / questions.length) * 100);
+
+    const bestScore = parseInt(StorageManager.getItem('quiz_best_score') || -1);
+    if (score > bestScore) {
+        StorageManager.setItem('quiz_best_score', score);
+        renderBestScore();
+    }
+
+    if (percentage === 100 && typeof Confetti !== 'undefined') {
+        Confetti.start();
+    }
     
     // Sound play
     if (typeof GameAudio !== 'undefined') {

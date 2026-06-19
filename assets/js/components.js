@@ -59,7 +59,7 @@ function renderHeader() {
 function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html'];
+    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html'];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -117,6 +117,8 @@ function renderNav(currentPage) {
                         <li><a href="interview-trainer.html" class="dropdown-link" lang="en">Interview Trainer</a></li>
                         <li><a href="playground.html" class="dropdown-link" lang="de">Code Playground</a></li>
                         <li><a href="playground.html" class="dropdown-link" lang="en">Code Playground</a></li>
+                        <li><a href="architecture.html" class="dropdown-link" lang="de">Architektur &amp; API</a></li>
+                        <li><a href="architecture.html" class="dropdown-link" lang="en">Architecture &amp; API</a></li>
                         <li><a href="flashcards.html" class="dropdown-link" lang="de">IHK Lernkarten</a></li>
                         <li><a href="flashcards.html" class="dropdown-link" lang="en">IHK Flashcards</a></li>
                         <li><a href="quiz.html" class="dropdown-link" lang="de">Test Quiz</a></li>

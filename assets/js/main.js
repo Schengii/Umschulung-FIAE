@@ -19,6 +19,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/contact-form.js',
     'assets/js/modules/skill-bars.js',
     'assets/js/modules/roadmap.js',
+    'assets/js/modules/confetti.js',
     'assets/js/modules/project-slideshow.js',
     'assets/js/modules/game-audio.js',
 ];

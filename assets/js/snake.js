@@ -20,12 +20,40 @@ let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
 let score = 0;
 let highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
+let highscoreList = JSON.parse(StorageManager.getItem('snake_highscore_list', '[]')) || [];
 let lastFrameTime = 0;
 let isPlaying = false;
 let isPaused = false;
 const speed = 150;
 
 if (highscoreEl) highscoreEl.textContent = highscore;
+
+function renderHighscores() {
+    const listBody = document.getElementById('highscore-list-body');
+    if (!listBody) return;
+    listBody.innerHTML = '';
+    const lang = getLang();
+
+    // Pad list with placeholders if less than 5 entries
+    const displayList = [...highscoreList];
+    while (displayList.length < 5) {
+        displayList.push({ score: '-', date: '-' });
+    }
+
+    displayList.forEach((entry, idx) => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid var(--border)';
+        row.innerHTML = `
+            <td style="padding: 0.4rem 0.25rem; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-secondary)'};">${idx + 1}</td>
+            <td style="padding: 0.4rem 0.25rem; color: var(--text-muted);">${entry.date}</td>
+            <td style="padding: 0.4rem 0.25rem; text-align: right; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-primary)'};">${entry.score}</td>
+        `;
+        listBody.appendChild(row);
+    });
+}
+
+// Initial render
+renderHighscores();
 
 document.addEventListener('keydown', handleKeyDown);
 if (startBtn) startBtn.addEventListener('click', startGame);
@@ -136,6 +164,26 @@ function gameOver() {
     // Add live commit on score >= 30
     if (score >= 30 && typeof window.addLiveCommit === 'function') {
         window.addLiveCommit();
+    }
+    
+    const lang = getLang();
+
+    // Highscore list update
+    if (score > 0) {
+        const currentDate = new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
+            day: '2-digit', month: '2-digit', year: '2-digit'
+        });
+        highscoreList.push({ score: score, date: currentDate });
+        highscoreList.sort((a, b) => b.score - a.score);
+        
+        const indexInTop5 = highscoreList.slice(0, 5).findIndex(entry => entry.score === score && entry.date === currentDate);
+        highscoreList = highscoreList.slice(0, 5);
+        StorageManager.setItem('snake_highscore_list', JSON.stringify(highscoreList));
+        renderHighscores();
+
+        if (indexInTop5 !== -1 && typeof Confetti !== 'undefined') {
+            Confetti.start();
+        }
     }
     
     if (score > highscore) {
@@ -367,6 +415,7 @@ function handleKeyDown(e) {
 document.addEventListener('langchange', () => {
     updateButtons();
     draw();
+    renderHighscores();
 });
 
 function initMobileControls() {
