@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Playground &amp; Web Sandbox | Maximilian Schenk</title>
+    <meta name="description" content="Interaktiver Code-Playground für HTML, CSS und JavaScript. Lerne, editiere und teste Frontend-Code live im Browser.">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+    <style>
+        /* Sandbox Workspace Layout */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Editor Section */
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg-light);
+            border-bottom: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: var(--border);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            background: var(--card-bg);
+            border-color: var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .code-input {
+            width: 100%;
+            height: 480px;
+            border: none;
+            padding: 1.25rem;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            background: #09090b;
+            color: #e4e4e7;
+            resize: none;
+            outline: none;
+            line-height: 1.6;
+        }
+
+        /* Preview & Console Section */
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-pane {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 320px;
+        }
+
+        .preview-header {
+            background: #f4f4f5;
+            border-bottom: 1px solid #e4e4e7;
+            padding: 0.5rem 1rem;
+            color: #3f3f46;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            flex: 1;
+            border: none;
+            background: #ffffff;
+        }
+
+        /* Mock Console log */
+        .console-pane {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #09090b;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 220px;
+        }
+
+        .console-header {
+            background: #18181b;
+            border-bottom: 1px solid #27272a;
+            padding: 0.5rem 1rem;
+            color: #a1a1aa;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .console-log-box {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .console-entry {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .console-entry.log {
+            color: #10b981; /* green */
+        }
+
+        .console-entry.error {
+            color: #ef4444; /* red */
+        }
+
+        .console-entry.system {
+            color: #3b82f6; /* blue */
+            font-style: italic;
+        }
+
+        .collapsed {
+            display: none !important;
+        }
+
+        .templates-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            align-items: center;
+        }
+
+        .template-select-btn {
+            background: var(--card-bg-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.35rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .template-select-btn:hover {
+            border-color: var(--primary);
+            background: var(--border);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <!-- Breadcrumbs Container -->
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Code Playground","label_en":"Code Playground","href":"playground.html"}]'></div>
+
+        <div class="card">
+            <h2 lang="de"><i class="fa fa-code-fork" aria-hidden="true"></i> Live Code Playground &amp; Web Sandbox</h2>
+            <h2 lang="en"><i class="fa fa-code-fork" aria-hidden="true"></i> Live Code Playground &amp; Web Sandbox</h2>
+            
+            <p lang="de">Ein interaktiver Frontend-Spielplatz! Wähle eine Vorlage oder schreibe deinen eigenen HTML-, CSS- und JavaScript-Code. Die Ausgaben und Fehler deines Codes werden direkt in der Vorschau-Box und der simulierten Konsole gerendert.</p>
+            <p lang="en">An interactive frontend playground! Choose a template or write your own HTML, CSS, and JavaScript. Your code updates in real-time inside the preview iframe, and logs output directly into the simulated console.</p>
+
+            <div class="templates-bar">
+                <strong style="font-size:0.85rem; margin-right: 0.5rem;">
+                    <span lang="de"><i class="fa fa-folder-open" aria-hidden="true"></i> Vorlagen:</span>
+                    <span lang="en"><i class="fa fa-folder-open" aria-hidden="true"></i> Templates:</span>
+                </strong>
+                <button class="template-select-btn" data-template="counter">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    <span lang="de">Zähler-Button</span>
+                    <span lang="en">Counter Button</span>
+                </button>
+                <button class="template-select-btn" data-template="flexbox">
+                    <i class="fa fa-columns" aria-hidden="true"></i>
+                    <span lang="de">Flexbox Switcher</span>
+                    <span lang="en">Flexbox Switcher</span>
+                </button>
+                <button class="template-select-btn" data-template="canvas">
+                    <i class="fa fa-gamepad" aria-hidden="true"></i>
+                    <span lang="de">Canvas Ball-Physik</span>
+                    <span lang="en">Canvas Ball Physics</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sandbox Workspace Grid -->
+        <div class="workspace-grid">
+            <!-- Left Side: Editors -->
+            <div class="editor-container">
+                <div class="editor-header">
+                    <div class="tab-buttons">
+                        <button id="btn-tab-html" class="tab-btn active">HTML</button>
+                        <button id="btn-tab-css" class="tab-btn">CSS</button>
+                        <button id="btn-tab-js" class="tab-btn">JavaScript</button>
+                    </div>
+                    <div>
+                        <button id="run-code-btn" class="btn-primary small-btn" style="width: auto; padding: 0.35rem 1rem;">
+                            <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Ausführen</span>
+                            <span lang="en"><i class="fa fa-play" aria-hidden="true"></i> Run Code</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Textarea Inputs -->
+                <textarea id="editor-html" class="code-input" spellcheck="false" aria-label="HTML Code"></textarea>
+                <textarea id="editor-css" class="code-input collapsed" spellcheck="false" aria-label="CSS Code"></textarea>
+                <textarea id="editor-js" class="code-input collapsed" spellcheck="false" aria-label="JavaScript Code"></textarea>
+            </div>
+
+            <!-- Right Side: Preview & Console -->
+            <div class="preview-container">
+                <!-- Live Preview Pane -->
+                <div class="preview-pane">
+                    <div class="preview-header">
+                        <i class="fa fa-desktop" aria-hidden="true"></i>
+                        <span lang="de">Live-Vorschau</span>
+                        <span lang="en">Live Preview</span>
+                    </div>
+                    <iframe id="preview-iframe" class="preview-iframe" sandbox="allow-scripts" title="Preview Frame"></iframe>
+                </div>
+
+                <!-- Terminal Mock Console -->
+                <div class="console-pane">
+                    <div class="console-header">
+                        <div>
+                            <i class="fa fa-terminal" aria-hidden="true"></i>
+                            <span lang="de">Sandbox-Konsole</span>
+                            <span lang="en">Sandbox Console</span>
+                        </div>
+                        <button id="clear-console-btn" class="tab-btn small-btn" style="padding: 0.2rem 0.5rem; color:#a1a1aa;">
+                            <span lang="de">Löschen</span>
+                            <span lang="en">Clear</span>
+                        </button>
+                    </div>
+                    <div id="console-log-box" class="console-log-box">
+                        <!-- console.logs are output here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/playground.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewerbungs-Trainer &amp; Mock-Interview | Maximilian Schenk</title>
+    <meta name="description" content="Interaktiver Bewerbungstrainer für Fachinformatiker für Anwendungsentwicklung. Teste dein Wissen in Fachfragen, Projektfragen und Verhaltensfragen.">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+    <style>
+        /* Chat Interface Custom Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 550px;
+            background: var(--card-bg-light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            background-image: radial-gradient(var(--border) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .chat-message-wrapper {
+            display: flex;
+            width: 100%;
+        }
+
+        .bot-wrapper {
+            justify-content: flex-start;
+        }
+
+        .user-wrapper {
+            justify-content: flex-end;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            animation: bubbleSlideIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        @keyframes bubbleSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-bubble {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border-top-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: #ffffff;
+            border-top-right-radius: 4px;
+        }
+
+        /* Feedback Bubbles (Special types of Bot bubbles) */
+        .feedback-bubble {
+            margin-top: 0.5rem;
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .feedback-excellent {
+            background-color: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: var(--text-primary);
+        }
+
+        .feedback-good {
+            background-color: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.25);
+            color: var(--text-primary);
+        }
+
+        .feedback-fair {
+            background-color: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.25);
+            color: var(--text-primary);
+        }
+
+        .feedback-poor {
+            background-color: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.25);
+            color: var(--text-primary);
+        }
+
+        .badge-match {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            margin: 0.15rem;
+        }
+
+        .feedback-bubble .badge-match {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        /* Typing Indicator */
+        .typing-bubble {
+            padding: 0.8rem 1.25rem;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 18px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            display: inline-block;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* Input Panel */
+        .chat-input-panel {
+            display: flex;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .chat-textarea {
+            flex: 1;
+            resize: none;
+            height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 0.75rem 1.25rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: var(--card-bg-light);
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .chat-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+
+        .send-btn-round {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: background-color 0.25s, transform 0.15s;
+        }
+
+        .send-btn-round:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .send-btn-round:disabled {
+            background-color: var(--border);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Config / Setup Screen */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .category-box {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            background: var(--card-bg-light);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .category-box:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-box input[type="checkbox"] {
+            margin-top: 0.25rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .category-label {
+            cursor: pointer;
+        }
+
+        .category-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        /* Results Screen */
+        .result-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+        }
+
+        .result-ring-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .result-ring-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 10px;
+        }
+
+        .result-ring-fill {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 10px;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .result-score-val {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .collapsed {
+            display: none !important;
+        }
+
+        .small-btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <!-- Breadcrumbs Container -->
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Bewerbungs-Trainer","label_en":"Interview Simulator","href":"interview-trainer.html"}]'></div>
+
+        <div class="card">
+            <h2 lang="de"><i class="fa fa-comments" aria-hidden="true"></i> Bewerbungs-Trainer &amp; Mock-Interview</h2>
+            <h2 lang="en"><i class="fa fa-comments" aria-hidden="true"></i> Job Interview Trainer &amp; Simulator</h2>
+            
+            <p lang="de">Bereite dich interaktiv auf deine Vorstellungsgespräche als Anwendungsentwickler vor! Wähle deine Kategorien und antworte dem Simulator. Deine Eingaben werden auf Kernkompetenzen und Fachbegriffe geprüft, um dir ein direktes Feedback samt professioneller Musterlösung zu liefern.</p>
+            <p lang="en">Prepare interactively for software developer interviews! Choose your categories and chat with the simulator. Your answers will be analyzed for core technical concepts and terms to provide live feedback along with professional model answers.</p>
+        </div>
+
+        <!-- CONFIGURATION / SETUP CARD -->
+        <div class="card" id="setup-card">
+            <h3 lang="de"><i class="fa fa-sliders" aria-hidden="true"></i> Interview-Konfiguration</h3>
+            <h3 lang="en"><i class="fa fa-sliders" aria-hidden="true"></i> Interview Configuration</h3>
+            
+            <form id="setup-form">
+                <p lang="de" class="small-muted">Wähle die Themenbereiche aus, die im Interview abgefragt werden sollen:</p>
+                <p lang="en" class="small-muted">Select the topics you want to practice in the interview:</p>
+
+                <div class="category-grid">
+                    <!-- Category: Tech -->
+                    <label class="category-box">
+                        <input type="checkbox" name="category" value="tech" checked>
+                        <div class="category-label">
+                            <div class="category-title">
+                                <span lang="de">💻 Fachfragen (FIAE)</span>
+                                <span lang="en">💻 Technical Questions</span>
+                            </div>
+                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                                <span lang="de">OOP, Clean Code, Relationale Datenbanken, Git Workflows</span>
+                                <span lang="en">OOP, Clean Code, Relational DBs, Git Workflows</span>
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Category: Projects -->
+                    <label class="category-box">
+                        <input type="checkbox" name="category" value="project" checked>
+                        <div class="category-label">
+                            <div class="category-title">
+                                <span lang="de">📂 Projekt-Deepdives</span>
+                                <span lang="en">📂 Project Deepdives</span>
+                            </div>
+                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                                <span lang="de">Technologien und Konzepte von EcoChef &amp; ElektroCheck AI</span>
+                                <span lang="en">Tech and concepts of EcoChef &amp; ElektroCheck AI</span>
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Category: Personal -->
+                    <label class="category-box">
+                        <input type="checkbox" name="category" value="personal" checked>
+                        <div class="category-label">
+                            <div class="category-title">
+                                <span lang="de">🤝 Personal- &amp; Verhalten</span>
+                                <span lang="en">🤝 HR &amp; Behavioral</span>
+                            </div>
+                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                                <span lang="de">Umschulungsmotivation, Stärken, Konfliktlösung im Team</span>
+                                <span lang="en">Career change motivation, strengths, team conflicts</span>
+                            </p>
+                        </div>
+                    </label>
+
+                    <!-- Category: IHK -->
+                    <label class="category-box">
+                        <input type="checkbox" name="category" value="ihk" checked>
+                        <div class="category-label">
+                            <div class="category-title">
+                                <span lang="de">🎓 IHK Abschlussprüfung</span>
+                                <span lang="en">🎓 IHK Final Exams</span>
+                            </div>
+                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                                <span lang="de">Fachgespräch, Präsentationsstruktur, Amortisationsrechnung</span>
+                                <span lang="en">Oral exam, presentation structure, amortization analysis</span>
+                            </p>
+                        </div>
+                    </label>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn-primary custom-size">
+                        <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Interview starten</span>
+                        <span lang="en"><i class="fa fa-play" aria-hidden="true"></i> Start Interview</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- CHAT AREA CARD -->
+        <div class="card collapsed" id="chat-card">
+            <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+                <h3 style="margin:0;">
+                    <span lang="de"><i class="fa fa-microphone" aria-hidden="true"></i> Interview im Gange...</span>
+                    <span lang="en"><i class="fa fa-microphone" aria-hidden="true"></i> Interview in progress...</span>
+                </h3>
+                <span class="badge-match" style="background: rgba(13, 110, 253, 0.15); color: var(--primary);">
+                    <span lang="de">💡 Fleißpunkte: Commits steigen bei Antworten!</span>
+                    <span lang="en">💡 practice reward: Answer questions to make commits!</span>
+                </span>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div class="chat-history" id="chat-history">
+                    <!-- Dynamic chat bubbles go here -->
+                </div>
+
+                <!-- Input area -->
+                <div class="chat-input-panel">
+                    <textarea id="user-input-text" class="chat-textarea" placeholder="Schreibe deine Antwort hier..." disabled></textarea>
+                    <button id="send-btn" class="send-btn-round" aria-label="Antwort senden" disabled>
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS CARD -->
+        <div class="card collapsed" id="result-card">
+            <div class="result-layout">
+                <h3 lang="de">🎉 Interview abgeschlossen!</h3>
+                <h3 lang="en">🎉 Interview Completed!</h3>
+
+                <!-- radial percentage indicator -->
+                <div class="result-ring-container">
+                    <svg width="140" height="140" viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="55" class="result-ring-bg"></circle>
+                        <circle cx="70" cy="70" r="55" class="result-ring-fill" id="result-ring-fill"></circle>
+                    </svg>
+                    <div class="result-score-val" id="result-score-val">0%</div>
+                </div>
+
+                <p id="result-summary-de" lang="de" style="font-weight: 500; max-width: 600px; margin: 0 auto;"></p>
+                <p id="result-summary-en" lang="en" style="font-weight: 500; max-width: 600px; margin: 0 auto;"></p>
+
+                <!-- Practice Commits note -->
+                <p class="small-muted" style="margin-top: -0.5rem;">
+                    <span lang="de"><i class="fa fa-github" aria-hidden="true"></i> Deine Aktivität wurde im GitHub Activity Grid auf dem Dashboard gutgeschrieben!</span>
+                    <span lang="en"><i class="fa fa-github" aria-hidden="true"></i> Your practice activity has been logged in the GitHub Activity Grid on your Dashboard!</span>
+                </p>
+
+                <div style="width: 100%; text-align: left; margin-top: 1.5rem;">
+                    <h4 lang="de" style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📋 Antwort-Auswertung im Detail:</h4>
+                    <h4 lang="en" style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📋 Detail Review:</h4>
+                    <div id="result-review-container" style="margin-top: 1rem;">
+                        <!-- Review list -->
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button id="restart-btn" class="btn-primary">
+                        <span lang="de"><i class="fa fa-refresh" aria-hidden="true"></i> Erneut versuchen</span>
+                        <span lang="en"><i class="fa fa-refresh" aria-hidden="true"></i> Try Again</span>
+                    </button>
+                    <a href="dashboard.html" class="btn-primary" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1.5rem;">
+                        <span lang="de"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard ansehen</span>
+                        <span lang="en"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> View Dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/interview.js"></script>
+</body>
+
+</html>
