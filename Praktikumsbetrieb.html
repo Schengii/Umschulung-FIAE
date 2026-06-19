@@ -95,6 +95,108 @@
                         </li>
                     </ul>
                 </article>
+
+                <!-- IHK-Abschlossprojekt Showcase -->
+                <article class="card" aria-labelledby="ihk-project-title">
+                    <h2 id="ihk-project-title">
+                        <span lang="de">🎓 Mein IHK-Abschlossprojekt: ElektroCheck AI</span>
+                        <span lang="en">🎓 My IHK Final Project: ElektroCheck AI</span>
+                    </h2>
+                    <p lang="de">Mein Abschlussprojekt befasst sich mit der Konzeption und Entwicklung eines KI-gestützten Analyse-Tools zur automatischen Bewertung von DGUV V3 Prüfberichten. Unten findest du die Folien meiner IHK-Präsentation.</p>
+                    <p lang="en">My final project covers the conception and engineering of an AI-driven analysis tool for the automated evaluation of safety reports. Below are the slides of my oral IHK presentation.</p>
+
+                    <!-- Interactive Slideshow -->
+                    <div class="slide-viewer" id="slide-viewer">
+                        <div class="slide-container" id="slide-container">
+                            <!-- Slide 1 -->
+                            <div class="slide active">
+                                <h3 class="slide-title">
+                                    <span lang="de">ElektroCheck AI — Projektvorstellung</span>
+                                    <span lang="en">ElektroCheck AI — Project Presentation</span>
+                                </h3>
+                                <div class="slide-body">
+                                    <p lang="de"><strong>Ausgangslage:</strong> Händische Kontrollen von Elektro-Prüfprotokollen dauern lang und sind fehleranfällig.</p>
+                                    <p lang="en"><strong>Initial Situation:</strong> Manual inspections of electrical test protocols are slow and error-prone.</p>
+                                    <p lang="de"><strong>Lösung:</strong> Automatisierte Berichts-Extraktion mit OCR und nachgelagerter KI-Risikoanalyse.</p>
+                                    <p lang="en"><strong>Solution:</strong> Automated report extraction using OCR followed by AI risk evaluation.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Slide 2 -->
+                            <div class="slide">
+                                <h3 class="slide-title">
+                                    <span lang="de">Ziele &amp; Fachkonzept</span>
+                                    <span lang="en">Goals &amp; Concept</span>
+                                </h3>
+                                <div class="slide-body">
+                                    <ul lang="de">
+                                        <li>Reduzierung der Prüfzeit pro Bericht von 15 Minuten auf unter 10 Sekunden.</li>
+                                        <li>Automatische Erkennung kritischer Mängel (z.B. Isolationswiderstand zu gering).</li>
+                                        <li>Standardisierter CSV/JSON-Export für bestehende ERP-Systeme.</li>
+                                    </ul>
+                                    <ul lang="en">
+                                        <li>Reduction of processing time per report from 15 minutes to under 10 seconds.</li>
+                                        <li>Automatic detection of critical defects (e.g., low insulation resistance).</li>
+                                        <li>Standardized CSV/JSON export for legacy ERP environments.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="slide">
+                                <h3 class="slide-title">
+                                    <span lang="de">Systemarchitektur</span>
+                                    <span lang="en">System Architecture</span>
+                                </h3>
+                                <div class="slide-body">
+                                    <p lang="de"><strong>Frontend:</strong> Responsive Single-Page Application (HTML5, CSS3 Grid/Flexbox, Vanilla JS).</p>
+                                    <p lang="en"><strong>Frontend:</strong> Responsive Single Page Application (HTML5, CSS3 Grid/Flexbox, Vanilla JS).</p>
+                                    <p lang="de"><strong>Backend &amp; Parser:</strong> Node.js-Dienst mit integriertem OCR-Prozessor und NLP-Klassifizierungs-Modell.</p>
+                                    <p lang="en"><strong>Backend &amp; Parser:</strong> Node.js service containing OCR processor and NLP classification model.</p>
+                                </div>
+                            </div>
+
+                            <!-- Slide 4 -->
+                            <div class="slide">
+                                <h3 class="slide-title">
+                                    <span lang="de">Wirtschaftlichkeitsanalyse</span>
+                                    <span lang="en">Economic Analysis</span>
+                                </h3>
+                                <div class="slide-body">
+                                    <p lang="de"><strong>Zeiteinsparung:</strong> Ca. 98% Zeiteinsparung bei der Validierung eingehender Berichte.</p>
+                                    <p lang="en"><strong>Time savings:</strong> Approx. 98% time savings during incoming report verification.</p>
+                                    <p lang="de"><strong>Amortisationszeit (RoI):</strong> Vollständige Amortisierung der Entwicklungskosten nach nur 4,5 Monaten im Live-Betrieb.</p>
+                                    <p lang="en"><strong>Amortization Period (RoI):</strong> Full amortization of development costs achieved after only 4.5 months of production run.</p>
+                                </div>
+                            </div>
+
+                            <!-- Slide 5 -->
+                            <div class="slide">
+                                <h3 class="slide-title">
+                                    <span lang="de">Projektergebnis &amp; Fazit</span>
+                                    <span lang="en">Project Result &amp; Summary</span>
+                                </h3>
+                                <div class="slide-body">
+                                    <p lang="de"><strong>Ergebnis:</strong> Erfolgreiche IHK-Zulassung und überragende Resonanz im Praktikumsbetrieb.</p>
+                                    <p lang="en"><strong>Result:</strong> Successful IHK validation and outstanding feedback from the DFG teams.</p>
+                                    <p lang="de"><strong>Zukunft:</strong> Erweiterung um eine Vorhersage-Komponente für zukünftige Geräteausfälle (Predictive Maintenance).</p>
+                                    <p lang="en"><strong>Outlook:</strong> Upgrading with a predictive component for hardware failures (Predictive Maintenance).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation -->
+                        <div class="slide-nav-controls">
+                            <button class="btn-slide-nav" id="slide-prev" aria-label="Vorherige Folie / Previous slide">
+                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </button>
+                            <span class="slide-indicator" id="slide-indicator">1 / 5</span>
+                            <button class="btn-slide-nav" id="slide-next" aria-label="Nächste Folie / Next slide">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
             </div>
 
             <!-- Right Column -->

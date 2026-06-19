@@ -59,7 +59,7 @@ function renderHeader() {
 function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html'];
+    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html'];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -113,6 +113,8 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(weiteresPages)}">
                     <a href="#" class="nav-link"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
+                        <li><a href="flashcards.html" class="dropdown-link" lang="de">IHK Lernkarten</a></li>
+                        <li><a href="flashcards.html" class="dropdown-link" lang="en">IHK Flashcards</a></li>
                         <li><a href="quiz.html" class="dropdown-link" lang="de">Test Quiz</a></li>
                         <li><a href="quiz.html" class="dropdown-link" lang="en">Quiz Test</a></li>
                         <li class="dropdown-item">
@@ -139,6 +141,7 @@ function renderNav(currentPage) {
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
+                <button id="audio-mute-toggle" class="theme-toggle mute-toggle-btn" aria-label="Ton umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
                     <i class="fa fa-moon-o" aria-hidden="true"></i>
                 </button>

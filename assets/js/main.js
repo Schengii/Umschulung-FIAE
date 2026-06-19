@@ -18,6 +18,9 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/cookie-banner.js',
     'assets/js/modules/contact-form.js',
     'assets/js/modules/skill-bars.js',
+    'assets/js/modules/roadmap.js',
+    'assets/js/modules/project-slideshow.js',
+    'assets/js/modules/game-audio.js',
 ];
 
 (function loadModules() {
@@ -35,6 +38,8 @@ const __MODULE_SCRIPTS = [
             initCookieBanner();
             initContactForm();
             initSkillBars();
+            initRoadmap();
+            initSlideshow();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

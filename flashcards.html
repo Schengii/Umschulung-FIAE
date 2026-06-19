@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernkarten - Umschulung IT | Maximilian Schenk</title>
+    <meta name="description" content="Interaktive IHK-Lernkarten — lerne wichtige Fachbegriffe für die Abschlussprüfung zum Fachinformatiker für Anwendungsentwicklung.">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <main id="main-content" class="main-container">
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Weiteres","label_en":"More","href":"#"},{"label_de":"IHK Lernkarten","label_en":"IHK Flashcards"}]'></div>
+
+        <div class="card">
+            <h2 lang="de">🎓 IHK-Prüfungs-Lernkarten</h2>
+            <h2 lang="en">🎓 IHK Exam Flashcards</h2>
+            <p lang="de">Bereite dich interaktiv auf die schriftliche Abschlussprüfung vor. Klicke auf eine Karte, um sie umzudrehen, und markiere deinen Erfolg!</p>
+            <p lang="en">Prepare interactively for the written final exams. Click on a card to flip it and mark your success!</p>
+        </div>
+
+        <div class="flashcards-layout">
+            <!-- Category Tabs -->
+            <div class="category-tabs" id="category-tabs">
+                <button class="category-tab active" data-cat="all">
+                    <span lang="de">Alle</span><span lang="en">All</span>
+                </button>
+                <button class="category-tab" data-cat="software">
+                    <span lang="de">Softwaretechnik</span><span lang="en">Software Eng.</span>
+                </button>
+                <button class="category-tab" data-cat="database">
+                    <span lang="de">Datenbanken</span><span lang="en">Databases</span>
+                </button>
+                <button class="category-tab" data-cat="network">
+                    <span lang="de">Netzwerke / IT-Systeme</span><span lang="en">Networks</span>
+                </button>
+                <button class="category-tab" data-cat="wiso">
+                    <span lang="de">WiSo</span><span lang="en">Economics</span>
+                </button>
+                <button class="category-tab" data-cat="marked">
+                    <span lang="de">Merkliste ⭐</span><span lang="en">Starred ⭐</span>
+                </button>
+            </div>
+
+            <!-- Flashcard Frame -->
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <div class="flashcard-hint" id="card-hint">Kategorie</div>
+                        <div class="flashcard-question" id="card-question">Frage...</div>
+                        <button id="star-card-btn" style="position: absolute; top: 1.25rem; right: 1.25rem; background:none; border:none; font-size:1.6rem; color:#f59e0b; cursor:pointer;" aria-label="Markieren">
+                            <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-answer" id="card-answer">Antwort...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flashcard-controls">
+                <button class="btn-card-action wrong" id="btn-wrong" disabled>
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span lang="de">Nochmal lernen</span><span lang="en">Study again</span>
+                </button>
+                <div class="flashcard-deck-status" id="deck-status">0 / 0</div>
+                <button class="btn-card-action correct" id="btn-correct" disabled>
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <span lang="de">Gewusst</span><span lang="en">Got it</span>
+                </button>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; width: 100%; margin-top: 0.5rem;">
+                <button class="btn-primary" id="btn-prev" style="width: auto; flex: 1;">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> <span lang="de">Zurück</span><span lang="en">Back</span>
+                </button>
+                <button class="btn-primary" id="btn-next" style="width: auto; flex: 1;">
+                    <span lang="de">Nächste</span><span lang="en">Next</span> <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/flashcards.js" defer></script>
+</body>
+</html>

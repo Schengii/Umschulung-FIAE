@@ -124,10 +124,17 @@ function initMemoryGame() {
             flippedCards = [];
             matchedCount++;
 
+            if (typeof GameAudio !== 'undefined') {
+                GameAudio.play('match');
+            }
+
             if (matchedCount === symbols.length) {
                 gameWon();
             }
         } else {
+            if (typeof GameAudio !== 'undefined') {
+                GameAudio.play('fail');
+            }
             setTimeout(() => {
                 card1.classList.remove('flipped');
                 card2.classList.remove('flipped');
@@ -139,14 +146,23 @@ function initMemoryGame() {
     function gameWon() {
         clearInterval(timerInterval);
 
+        if (typeof GameAudio !== 'undefined') {
+            GameAudio.play('win');
+        }
+
+        // Add live commit on victory!
+        if (typeof window.addLiveCommit === 'function') {
+            window.addLiveCommit();
+        }
+
         // Save best score
-        const bestMoves = StorageManager.getItem('memoryBestMoves');
-        const bestTime = StorageManager.getItem('memoryBestTime');
+        const bestMoves = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES);
+        const bestTime = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
         let isNewBest = false;
 
         if (!bestMoves || moves < parseInt(bestMoves)) {
-            StorageManager.setItem('memoryBestMoves', moves);
-            StorageManager.setItem('memoryBestTime', seconds);
+            StorageManager.setItem(STORAGE_KEYS.MEMORY_BEST_MOVES, moves);
+            StorageManager.setItem(STORAGE_KEYS.MEMORY_BEST_TIME, seconds);
             isNewBest = true;
         }
 
