@@ -214,6 +214,18 @@
             background: var(--border);
             transform: translateY(-1px);
         }
+        .template-title {
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        #run-code-btn {
+            width: auto;
+            padding: 0.35rem 1rem;
+        }
+        #clear-console-btn {
+            padding: 0.2rem 0.5rem;
+            color: #a1a1aa;
+        }
     </style>
 </head>
 
@@ -239,7 +251,7 @@
             <p lang="en">An interactive frontend playground! Choose a template or write your own HTML, CSS, and JavaScript. Your code updates in real-time inside the preview iframe, and logs output directly into the simulated console.</p>
 
             <div class="templates-bar">
-                <strong style="font-size:0.85rem; margin-right: 0.5rem;">
+                <strong class="template-title">
                     <span lang="de"><i class="fa fa-folder-open" aria-hidden="true"></i> Vorlagen:</span>
                     <span lang="en"><i class="fa fa-folder-open" aria-hidden="true"></i> Templates:</span>
                 </strong>
@@ -272,7 +284,7 @@
                         <button id="btn-tab-js" class="tab-btn">JavaScript</button>
                     </div>
                     <div>
-                        <button id="run-code-btn" class="btn-primary small-btn" style="width: auto; padding: 0.35rem 1rem;">
+                        <button id="run-code-btn" class="btn-primary small-btn">
                             <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Ausführen</span>
                             <span lang="en"><i class="fa fa-play" aria-hidden="true"></i> Run Code</span>
                         </button>
@@ -305,7 +317,7 @@
                             <span lang="de">Sandbox-Konsole</span>
                             <span lang="en">Sandbox Console</span>
                         </div>
-                        <button id="clear-console-btn" class="tab-btn small-btn" style="padding: 0.2rem 0.5rem; color:#a1a1aa;">
+                        <button id="clear-console-btn" class="tab-btn small-btn">
                             <span lang="de">Löschen</span>
                             <span lang="en">Clear</span>
                         </button>

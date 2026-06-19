@@ -311,6 +311,63 @@
             font-size: 0.85rem;
             padding: 0.4rem 1rem;
         }
+
+        .category-desc {
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        .start-btn-container {
+            margin-top: 1.5rem;
+        }
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+        .chat-header-title {
+            margin: 0;
+        }
+        .practiced-commit-badge {
+            background: rgba(13, 110, 253, 0.15);
+            color: var(--primary);
+        }
+        .result-summary-text {
+            font-weight: 500;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .result-commits-note {
+            margin-top: -0.5rem;
+        }
+        .result-review-header {
+            width: 100%;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+        .result-review-title {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .result-review-list {
+            margin-top: 1rem;
+        }
+        .result-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .dashboard-btn-alt {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.5rem;
+        }
     </style>
 </head>
 
@@ -354,7 +411,7 @@
                                 <span lang="de">💻 Fachfragen (FIAE)</span>
                                 <span lang="en">💻 Technical Questions</span>
                             </div>
-                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                            <p class="small-muted category-desc">
                                 <span lang="de">OOP, Clean Code, Relationale Datenbanken, Git Workflows</span>
                                 <span lang="en">OOP, Clean Code, Relational DBs, Git Workflows</span>
                             </p>
@@ -369,7 +426,7 @@
                                 <span lang="de">📂 Projekt-Deepdives</span>
                                 <span lang="en">📂 Project Deepdives</span>
                             </div>
-                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                            <p class="small-muted category-desc">
                                 <span lang="de">Technologien und Konzepte von EcoChef &amp; ElektroCheck AI</span>
                                 <span lang="en">Tech and concepts of EcoChef &amp; ElektroCheck AI</span>
                             </p>
@@ -384,7 +441,7 @@
                                 <span lang="de">🤝 Personal- &amp; Verhalten</span>
                                 <span lang="en">🤝 HR &amp; Behavioral</span>
                             </div>
-                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                            <p class="small-muted category-desc">
                                 <span lang="de">Umschulungsmotivation, Stärken, Konfliktlösung im Team</span>
                                 <span lang="en">Career change motivation, strengths, team conflicts</span>
                             </p>
@@ -399,7 +456,7 @@
                                 <span lang="de">🎓 IHK Abschlussprüfung</span>
                                 <span lang="en">🎓 IHK Final Exams</span>
                             </div>
-                            <p class="small-muted" style="margin: 0; font-size: 0.8rem;">
+                            <p class="small-muted category-desc">
                                 <span lang="de">Fachgespräch, Präsentationsstruktur, Amortisationsrechnung</span>
                                 <span lang="en">Oral exam, presentation structure, amortization analysis</span>
                             </p>
@@ -407,7 +464,7 @@
                     </label>
                 </div>
 
-                <div style="margin-top: 1.5rem;">
+                <div class="start-btn-container">
                     <button type="submit" class="btn-primary custom-size">
                         <span lang="de"><i class="fa fa-play" aria-hidden="true"></i> Interview starten</span>
                         <span lang="en"><i class="fa fa-play" aria-hidden="true"></i> Start Interview</span>
@@ -418,12 +475,12 @@
 
         <!-- CHAT AREA CARD -->
         <div class="card collapsed" id="chat-card">
-            <div style="display:flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
-                <h3 style="margin:0;">
+            <div class="chat-header">
+                <h3 class="chat-header-title">
                     <span lang="de"><i class="fa fa-microphone" aria-hidden="true"></i> Interview im Gange...</span>
                     <span lang="en"><i class="fa fa-microphone" aria-hidden="true"></i> Interview in progress...</span>
                 </h3>
-                <span class="badge-match" style="background: rgba(13, 110, 253, 0.15); color: var(--primary);">
+                <span class="badge-match practiced-commit-badge">
                     <span lang="de">💡 Fleißpunkte: Commits steigen bei Antworten!</span>
                     <span lang="en">💡 practice reward: Answer questions to make commits!</span>
                 </span>
@@ -460,29 +517,29 @@
                     <div class="result-score-val" id="result-score-val">0%</div>
                 </div>
 
-                <p id="result-summary-de" lang="de" style="font-weight: 500; max-width: 600px; margin: 0 auto;"></p>
-                <p id="result-summary-en" lang="en" style="font-weight: 500; max-width: 600px; margin: 0 auto;"></p>
+                <p id="result-summary-de" lang="de" class="result-summary-text"></p>
+                <p id="result-summary-en" lang="en" class="result-summary-text"></p>
 
                 <!-- Practice Commits note -->
-                <p class="small-muted" style="margin-top: -0.5rem;">
+                <p class="small-muted result-commits-note">
                     <span lang="de"><i class="fa fa-github" aria-hidden="true"></i> Deine Aktivität wurde im GitHub Activity Grid auf dem Dashboard gutgeschrieben!</span>
                     <span lang="en"><i class="fa fa-github" aria-hidden="true"></i> Your practice activity has been logged in the GitHub Activity Grid on your Dashboard!</span>
                 </p>
 
-                <div style="width: 100%; text-align: left; margin-top: 1.5rem;">
-                    <h4 lang="de" style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📋 Antwort-Auswertung im Detail:</h4>
-                    <h4 lang="en" style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">📋 Detail Review:</h4>
-                    <div id="result-review-container" style="margin-top: 1rem;">
+                <div class="result-review-header">
+                    <h4 lang="de" class="result-review-title">📋 Antwort-Auswertung im Detail:</h4>
+                    <h4 lang="en" class="result-review-title">📋 Detail Review:</h4>
+                    <div id="result-review-container" class="result-review-list">
                         <!-- Review list -->
                     </div>
                 </div>
 
-                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <div class="result-actions">
                     <button id="restart-btn" class="btn-primary">
                         <span lang="de"><i class="fa fa-refresh" aria-hidden="true"></i> Erneut versuchen</span>
                         <span lang="en"><i class="fa fa-refresh" aria-hidden="true"></i> Try Again</span>
                     </button>
-                    <a href="dashboard.html" class="btn-primary" style="background: transparent; color: var(--text-primary); border: 1px solid var(--border); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1.5rem;">
+                    <a href="dashboard.html" class="btn-primary dashboard-btn-alt">
                         <span lang="de"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard ansehen</span>
                         <span lang="en"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> View Dashboard</span>
                     </a>

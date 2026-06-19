@@ -58,7 +58,7 @@
                     <div class="flashcard-front">
                         <div class="flashcard-hint" id="card-hint">Kategorie</div>
                         <div class="flashcard-question" id="card-question">Frage...</div>
-                        <button id="star-card-btn" style="position: absolute; top: 1.25rem; right: 1.25rem; background:none; border:none; font-size:1.6rem; color:#f59e0b; cursor:pointer;" aria-label="Markieren">
+                        <button id="star-card-btn" aria-label="Markieren">
                             <i class="fa-regular fa-star" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -81,11 +81,11 @@
                 </button>
             </div>
             
-            <div style="display: flex; gap: 1rem; width: 100%; margin-top: 0.5rem;">
-                <button class="btn-primary" id="btn-prev" style="width: auto; flex: 1;">
+            <div class="flashcard-nav-container">
+                <button class="btn-primary btn-flashcard-nav" id="btn-prev">
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> <span lang="de">Zurück</span><span lang="en">Back</span>
                 </button>
-                <button class="btn-primary" id="btn-next" style="width: auto; flex: 1;">
+                <button class="btn-primary btn-flashcard-nav" id="btn-next">
                     <span lang="de">Nächste</span><span lang="en">Next</span> <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </button>
             </div>
