@@ -184,34 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Trigger language switcher alignment
         document.dispatchEvent(new CustomEvent('langchange', { detail: document.documentElement.getAttribute('lang') || 'de' }));
     }
-    // New: Render folder projects from assets/data/projects.json
-    function renderFolderProjects() {
-        const container = document.getElementById('folder-projects-container');
-        if (!container) return;
-        fetch('assets/data/projects.json')
-            .then(r => r.json())
-            .then(projects => {
-                container.innerHTML = '';
-                projects.forEach(proj => {
-                    const cardHTML = `
-    <article class="card fade-in visible" style="position: relative;">
-        <h3 lang="de">${proj.title}</h3>
-        <h3 lang="en">${proj.title}</h3>
-        <a href="${proj.link}" class="btn-primary custom-size">
-            <span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Projekt öffnen</span>
-            <span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> Open Project</span>
-        </a>
-    </article>`;
-                    container.insertAdjacentHTML('beforeend', cardHTML);
-                });
-                // Trigger language visibility for new cards
-                document.dispatchEvent(new CustomEvent('langchange', { detail: document.documentElement.getAttribute('lang') || 'de' }));
-            })
-            .catch(err => console.warn('Failed to load folder projects:', err));
-    }
     // Initial rendering of projects
     renderCustomProjects();
-    renderFolderProjects();
 
     // 5. Copy Code button
     if (copyCodeBtn && htmlExportCode) {
