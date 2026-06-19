@@ -2413,8 +2413,80 @@ html[lang="en"] [lang="de"] {
     color: var(--text-secondary);
     background-color: var(--bg-page);
 }
-
 .leaderboard-table tr:last-child td {
     border-bottom: none;
 }
 
+/* Custom Utility Classes to clean up inline styles */
+.aside-image-card {
+    padding: 1rem;
+    text-align: center;
+}
+.aside-image-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0;
+}
+
+/* DFG Image */
+.dfg-image {
+    max-height: 300px;
+    width: 100%;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+}
+
+/* Tasks list styles */
+.tasks-list {
+    list-style: none;
+    padding-left: 0;
+}
+.task-item {
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+}
+.task-item.primary {
+    border-left: 4px solid var(--primary);
+}
+.task-item.accent {
+    border-left: 4px solid var(--accent);
+}
+.task-item.secondary {
+    border-left: 4px solid var(--text-secondary);
+    margin-bottom: 0;
+}
+.task-desc {
+    margin-top: 0.25rem;
+}
+
+/* Utility Margin Classes */
+.mt-1rem {
+    margin-top: 1rem;
+}
+.mt-2rem {
+    margin-top: 2rem;
+}
+
+/* Star button on flashcards */
+#star-card-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    color: #f59e0b;
+    cursor: pointer;
+}
+
+/* Flashcard navigation buttons container */
+.flashcard-nav-container {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+.btn-flashcard-nav {
+    width: auto;
+    flex: 1;
+}
