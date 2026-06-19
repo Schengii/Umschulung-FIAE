@@ -16,6 +16,39 @@ function initMemoryGame() {
 
     if (!grid) return;
 
+    let memoryLeaderboard = JSON.parse(StorageManager.getItem('memory_highscore_list', '[]')) || [];
+
+    function renderMemoryHighscores() {
+        const listBody = document.getElementById('memory-highscore-list-body');
+        if (!listBody) return;
+        listBody.innerHTML = '';
+
+        const displayList = [...memoryLeaderboard];
+        while (displayList.length < 5) {
+            displayList.push({ moves: '-', time: '-' });
+        }
+
+        displayList.forEach((entry, idx) => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid var(--border)';
+            let timeStr = '-';
+            if (entry.time !== '-') {
+                const mins = Math.floor(entry.time / 60);
+                const secs = entry.time % 60;
+                timeStr = `${mins}:${String(secs).padStart(2, '0')}`;
+            }
+            row.innerHTML = `
+                <td style="padding: 0.4rem 0.25rem; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-secondary)'};">${idx + 1}</td>
+                <td style="padding: 0.4rem 0.25rem; color: var(--text-primary); font-weight: 500;">${entry.moves}</td>
+                <td style="padding: 0.4rem 0.25rem; text-align: right; color: var(--text-muted); font-family: monospace;">${timeStr}</td>
+            `;
+            listBody.appendChild(row);
+        });
+    }
+
+    // Initial render
+    renderMemoryHighscores();
+
     // 8 pairs of programming-related symbols (Font Awesome icons)
     const symbols = [
         { name: 'js', icon: 'fa-brands fa-js', color: '#f7df1e' },
@@ -153,6 +186,23 @@ function initMemoryGame() {
         // Add live commit on victory!
         if (typeof window.addLiveCommit === 'function') {
             window.addLiveCommit();
+        }
+
+        // Save to leaderboard
+        memoryLeaderboard.push({ moves: moves, time: seconds });
+        memoryLeaderboard.sort((a, b) => {
+            if (a.moves !== b.moves) {
+                return a.moves - b.moves;
+            }
+            return a.time - b.time;
+        });
+        const indexInTop5 = memoryLeaderboard.slice(0, 5).findIndex(entry => entry.moves === moves && entry.time === seconds);
+        memoryLeaderboard = memoryLeaderboard.slice(0, 5);
+        StorageManager.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
+        renderMemoryHighscores();
+
+        if (typeof Confetti !== 'undefined') {
+            Confetti.start();
         }
 
         // Save best score

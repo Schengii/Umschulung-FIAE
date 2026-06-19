@@ -10,6 +10,33 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
+    <style>
+        .quiz-intro-text {
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .quiz-best-score-display {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .quiz-question-heading {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .quiz-next-button {
+            display: none;
+            margin-top: 1.5rem;
+            width: auto;
+            float: right;
+        }
+        .quiz-clear-floats {
+            clear: both;
+        }
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link"><span lang="de">Zum Inhalt springen</span><span lang="en">Skip to content</span></a>
@@ -19,22 +46,25 @@
     <main id="main-content" class="main-container">
         <div class="quiz-container card">
             <h2><span lang="de">Wissens-Quiz: Umschulung IT</span><span lang="en">Knowledge Quiz: IT Retraining</span></h2>
-            <p style="margin-bottom: 1.5rem; font-size: 0.95rem;">
+            <p class="quiz-intro-text">
                 <span lang="de">Bevor du mit dem Quiz startest, solltest du meine Website aufmerksam durchgelesen haben!</span>
                 <span lang="en">Before starting the quiz, make sure to read my website content carefully!</span>
             </p>
-            <div class="quiz-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div id="quiz-best-score" class="quiz-best-score-display">
+                <!-- Dynamic text -->
+            </div>
+            <div class="quiz-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz-Fortschritt / Quiz Progress">
                 <div id="quiz-progress" class="quiz-progress"></div>
             </div>
             <section aria-live="polite">
-                <h3 id="question" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Frage wird geladen... / Loading question...</h3>
+                <h3 id="question" class="quiz-question-heading">Frage wird geladen... / Loading question...</h3>
                 <div id="answer-buttons" class="quiz-buttons"></div>
             </section>
-            <button id="next-btn" class="btn-primary" style="display: none; margin-top: 1.5rem; width: auto; float: right;">
+            <button id="next-btn" class="btn-primary quiz-next-button">
                 <span lang="de">Nächste Frage <i class="fa fa-arrow-right"></i></span>
                 <span lang="en">Next Question <i class="fa fa-arrow-right"></i></span>
             </button>
-            <div style="clear: both;"></div>
+            <div class="quiz-clear-floats"></div>
         </div>
     </main>
 

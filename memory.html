@@ -11,6 +11,55 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
+    <style>
+        .memory-intro {
+            text-align: center;
+            max-width: 500px;
+        }
+        .memory-result-card {
+            display: none;
+            margin-top: 1rem;
+            text-align: center;
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .memory-game-controls {
+            margin-top: 1.5rem;
+        }
+        .memory-highscore-board {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            background: var(--card-bg-light);
+        }
+        .memory-highscore-title {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .memory-highscore-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .memory-highscore-header-row {
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .memory-highscore-cell {
+            padding: 0.5rem 0.25rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,7 +78,7 @@
                 <span lang="de">🧠 Memory — Finde die Paare</span>
                 <span lang="en">🧠 Memory — Find the Pairs</span>
             </h2>
-            <p style="text-align: center; max-width: 500px;">
+            <p class="memory-intro">
                 <span lang="de">Klicke auf die Karten, um sie umzudrehen. Finde alle 8 Paare mit möglichst wenigen Zügen!</span>
                 <span lang="en">Click the cards to flip them. Find all 8 pairs with as few moves as possible!</span>
             </p>
@@ -50,15 +99,36 @@
             <div id="memory-grid" class="memory-grid"></div>
 
             <!-- Result -->
-            <div id="memory-result" class="card" style="display: none; margin-top: 1rem; text-align: center; background: var(--primary-light); border-color: var(--primary);"></div>
+            <div id="memory-result" class="card memory-result-card"></div>
 
             <!-- Controls -->
-            <div class="game-controls" style="margin-top: 1.5rem;">
+            <div class="game-controls memory-game-controls">
                 <button id="memory-restart" class="btn-game">
                     <i class="fa fa-refresh" aria-hidden="true"></i>
                     <span lang="de">Neustarten</span>
                     <span lang="en">Restart</span>
                 </button>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="highscore-board memory-highscore-board">
+                <h3 class="memory-highscore-title">
+                    <i class="fa fa-trophy"></i>
+                    <span lang="de">Bestenliste (Top 5)</span>
+                    <span lang="en">Leaderboard (Top 5)</span>
+                </h3>
+                <table class="memory-highscore-table">
+                    <thead>
+                        <tr class="memory-highscore-header-row">
+                            <th class="memory-highscore-cell">#</th>
+                            <th class="memory-highscore-cell"><span lang="de">Züge</span><span lang="en">Moves</span></th>
+                            <th class="memory-highscore-cell" style="text-align: right;"><span lang="de">Zeit</span><span lang="en">Time</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="memory-highscore-list-body">
+                        <!-- Dynamic list -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architektur &amp; API-Explorer | Maximilian Schenk</title>
+    <meta name="description" content="Interaktiver Systemarchitektur-Visualisierer und REST-API Swagger-Simulator für EcoChef und ElektroCheck AI.">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+    <style>
+        /* Tab Bar Styles */
+        .arch-tabs-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .arch-tab-btn:hover {
+            color: var(--text-primary);
+            background: var(--card-bg-light);
+        }
+
+        .arch-tab-btn.active {
+            color: var(--primary);
+            background: var(--card-bg);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* SVG Architecture Diagrams Wrapper */
+        .diagram-wrapper {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 992px) {
+            .diagram-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .diagram-container {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+        }
+
+        /* SVG Hotspot styles */
+        .hotspot {
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .hotspot rect {
+            fill: var(--card-bg-light);
+            stroke: var(--border);
+            stroke-width: 2px;
+            transition: fill 0.25s, stroke 0.25s, filter 0.25s;
+        }
+
+        .hotspot:hover rect {
+            fill: var(--primary-light);
+            stroke: var(--primary);
+            filter: drop-shadow(0px 2px 6px rgba(13, 110, 253, 0.2));
+        }
+
+        .active-hotspot rect {
+            fill: var(--primary-light) !important;
+            stroke: var(--primary) !important;
+            stroke-width: 3px !important;
+        }
+
+        .hotspot text {
+            fill: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .arrow-line {
+            stroke: var(--text-muted);
+            stroke-width: 2px;
+            fill: none;
+            marker-end: url(#arrow);
+        }
+
+        /* Swagger API Explorer Layout */
+        .api-explorer-grid {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 1.5rem;
+            min-height: 480px;
+        }
+
+        @media (max-width: 992px) {
+            .api-explorer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .api-routes-pane {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            background: var(--card-bg-light);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            overflow-y: auto;
+            max-height: 520px;
+        }
+
+        .api-details-pane {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.75rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Route Badges */
+        .api-route-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--card-bg);
+        }
+
+        .api-route-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .api-route-item.active {
+            border-width: 2px;
+        }
+
+        .route-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        /* GET badge */
+        .method-get .route-badge, .route-badge.get {
+            background-color: #3b82f6; /* Blue */
+        }
+        .api-route-item.method-get.active {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* POST badge */
+        .method-post .route-badge, .route-badge.post {
+            background-color: #10b981; /* Green */
+        }
+        .api-route-item.method-post.active {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .route-path {
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .code-textarea {
+            width: 100%;
+            height: 120px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            background: #09090b;
+            color: #e4e4e7;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            outline: none;
+            resize: none;
+        }
+
+        .api-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .collapsed {
+            display: none !important;
+        }
+
+        .small-btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+        }
+
+        .details-title-heading {
+            margin-top: 0;
+        }
+        .details-tech-heading {
+            margin-bottom: 0.5rem;
+        }
+        .details-tech-badge {
+            background: rgba(13, 110, 253, 0.15);
+            color: var(--primary);
+        }
+        .details-divider {
+            margin: 1rem 0;
+        }
+        .details-pane-hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <!-- Breadcrumbs Container -->
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Weiteres","label_en":"More","href":"#"},{"label_de":"Architektur &amp; API","label_en":"Architecture &amp; API","href":"architecture.html"}]'></div>
+
+        <div class="card">
+            <h2 lang="de"><i class="fa fa-sitemap" aria-hidden="true"></i> Systemarchitektur &amp; API-Explorer</h2>
+            <h2 lang="en"><i class="fa fa-sitemap" aria-hidden="true"></i> System Architecture &amp; API Explorer</h2>
+            
+            <p lang="de">Analysiere die Funktionsweise meiner größten Programmierprojekte! Klicke in den Diagrammen auf die einzelnen Komponenten, um deren Details einzusehen, oder nutze den API-Explorer, um REST-Endpunkte simuliert im Swagger-Stil live abzufragen.</p>
+            <p lang="en">Analyze how my major software projects function! Click components in the diagrams to inspect their architectures, or use the API Explorer to submit simulated requests to mock endpoints Swagger-style.</p>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div class="arch-tabs-bar">
+            <button class="arch-tab-btn active" id="tab-btn-ecochef">
+                <i class="fa fa-leaf" aria-hidden="true"></i> EcoChef (Java Stack)
+            </button>
+            <button class="arch-tab-btn" id="tab-btn-elektrocheck">
+                <i class="fa fa-bolt" aria-hidden="true"></i> ElektroCheck AI (React &amp; AI Stack)
+            </button>
+            <button class="arch-tab-btn" id="tab-btn-api">
+                <i class="fa fa-gears" aria-hidden="true"></i> REST API-Explorer (Swagger Mock)
+            </button>
+        </div>
+
+        <!-- TAB 1: ECOCHEF DIAGRAM -->
+        <div class="diagram-wrapper" id="panel-ecochef">
+            <div class="diagram-container">
+                <svg width="100%" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Arrow Head Marker -->
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Web Client -->
+                    <g class="hotspot active-hotspot" data-project="ecochef" data-component="client">
+                        <rect x="20" y="130" width="130" height="60" rx="8" />
+                        <text x="85" y="165" text-anchor="middle">Web Frontend</text>
+                    </g>
+
+                    <!-- Controller -->
+                    <g class="hotspot" data-project="ecochef" data-component="controller">
+                        <rect x="220" y="40" width="140" height="60" rx="8" />
+                        <text x="290" y="75" text-anchor="middle">API Controller</text>
+                    </g>
+
+                    <!-- Services -->
+                    <g class="hotspot" data-project="ecochef" data-component="service">
+                        <rect x="220" y="220" width="140" height="60" rx="8" />
+                        <text x="290" y="255" text-anchor="middle">Business Services</text>
+                    </g>
+
+                    <!-- Repository -->
+                    <g class="hotspot" data-project="ecochef" data-component="repo">
+                        <rect x="440" y="130" width="140" height="60" rx="8" />
+                        <text x="510" y="165" text-anchor="middle">JPA Repositories</text>
+                    </g>
+
+                    <!-- Database -->
+                    <g class="hotspot" data-project="ecochef" data-component="database">
+                        <rect x="330" y="130" width="80" height="60" rx="8" />
+                        <text x="370" y="165" text-anchor="middle">PostgreSQL</text>
+                    </g>
+
+                    <!-- Flows & Arrows -->
+                    <!-- Client <-> Controller -->
+                    <path d="M 85 130 C 85 70, 220 70, 220 70" class="arrow-line" />
+                    <!-- Controller <-> Service -->
+                    <path d="M 290 100 L 290 220" class="arrow-line" />
+                    <!-- Service <-> Repo -->
+                    <path d="M 360 250 C 510 250, 510 190, 510 190" class="arrow-line" />
+                    <!-- Repo <-> DB -->
+                    <path d="M 440 160 L 410 160" class="arrow-line" />
+                    <!-- DB <-> Client -->
+                    <path d="M 330 160 L 150 160" class="arrow-line" />
+                </svg>
+            </div>
+            
+            <!-- Details Panel -->
+            <div class="card" id="details-pane">
+                <h3 id="details-title" class="details-title-heading">Web-Frontend (Thymeleaf &amp; CSS3)</h3>
+                <h5 class="details-tech-heading"><span lang="de">Technologie-Stack:</span><span lang="en">Technology Stack:</span></h5>
+                <span class="badge-match details-tech-badge" id="details-tech">HTML5, CSS3, JavaScript (ES6), Thymeleaf Templates</span>
+                <hr class="details-divider">
+                <p id="details-desc" class="small-muted">Die Benutzeroberfläche stellt die Rezepte, den ökologischen Fußabdruck und die Saisonalitätskalender dar. Thymeleaf rendert die Daten serverseitig in HTML. JavaScript fügt Interaktionen hinzu (wie die CO2-Ringe).</p>
+            </div>
+        </div>
+
+        <!-- TAB 2: ELEKTROCHECK DIAGRAM -->
+        <div class="diagram-wrapper collapsed" id="panel-elektrocheck">
+            <div class="diagram-container">
+                <svg width="100%" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <marker id="arrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
+                        </marker>
+                    </defs>
+
+                    <!-- React Client -->
+                    <g class="hotspot" data-project="elektrocheck" data-component="client">
+                        <rect x="20" y="130" width="120" height="60" rx="8" />
+                        <text x="80" y="165" text-anchor="middle">React Frontend</text>
+                    </g>
+
+                    <!-- PDF Parser -->
+                    <g class="hotspot" data-project="elektrocheck" data-component="pdf_parser">
+                        <rect x="200" y="130" width="110" height="60" rx="8" />
+                        <text x="255" y="165" text-anchor="middle">PDF Parser</text>
+                    </g>
+
+                    <!-- OpenAI Node -->
+                    <g class="hotspot" data-project="elektrocheck" data-component="ai_node">
+                        <rect x="360" y="130" width="100" height="60" rx="8" />
+                        <text x="410" y="165" text-anchor="middle">OpenAI API</text>
+                    </g>
+
+                    <!-- Action Generator -->
+                    <g class="hotspot" data-project="elektrocheck" data-component="plans_creator">
+                        <rect x="500" y="130" width="80" height="60" rx="8" />
+                        <text x="540" y="165" text-anchor="middle">Action Planner</text>
+                    </g>
+
+                    <!-- Arrows -->
+                    <path d="M 140 160 L 200 160" class="arrow-line" />
+                    <path d="M 310 160 L 360 160" class="arrow-line" />
+                    <path d="M 460 160 L 500 160" class="arrow-line" />
+                    <!-- Feedback Loop -->
+                    <path d="M 540 130 C 540 50, 80 50, 80 130" class="arrow-line" />
+                </svg>
+            </div>
+            
+            <!-- Details Panel (reused) -->
+            <div class="card details-pane-hidden" id="details-pane-reused"></div>
+        </div>
+
+        <!-- TAB 3: API EXPLORER -->
+        <div class="card collapsed" id="panel-api">
+            <h3 lang="de"><i class="fa fa-gears" aria-hidden="true"></i> REST API-Endpunkte Simulator (Swagger Mock)</h3>
+            <h3 lang="en"><i class="fa fa-gears" aria-hidden="true"></i> REST API Endpoint Simulator (Swagger Mock)</h3>
+            <p lang="de" class="small-muted">Wähle eine Route aus, bearbeite den Anfrage-Body bei Bedarf und klicke auf "Ausführen", um die Server-Antworten der Microservices zu simulieren.</p>
+            <p lang="en" class="small-muted">Select a route, edit the request body if needed, and click "Execute" to mock the server responses of the microservices.</p>
+
+            <div class="api-explorer-grid">
+                <!-- Routes List -->
+                <div class="api-routes-pane" id="api-routes-list">
+                    <!-- Dynamic route items list -->
+                </div>
+
+                <!-- Swagger details client -->
+                <div class="api-details-pane" id="api-details-container">
+                    <!-- Dynamic route details client -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/architecture.js"></script>
+</body>
+
+</html>
