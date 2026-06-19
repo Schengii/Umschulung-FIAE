@@ -1707,3 +1707,714 @@ html[lang="en"] [lang="de"] {
     padding-left: 1.5rem;
     margin-bottom: 1rem;
 }
+
+/* ==========================================================================
+   FEATURE 1: NOTENRECHNER & GITHUB COMMIT GRID
+   ========================================================================== */
+.notenrechner-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .notenrechner-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.notenrechner-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-page);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
+/* Radial SVG Progress Circle */
+.radial-progress {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 1rem;
+}
+
+.radial-progress svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.radial-progress circle {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.radial-progress .bg-ring {
+    stroke: var(--border);
+}
+
+.radial-progress .fill-ring {
+    stroke: var(--primary);
+    stroke-dasharray: 439.8; /* 2 * pi * r (r=70) */
+    stroke-dashoffset: 439.8;
+    transition: stroke-dashoffset 0.5s ease-out, stroke 0.5s ease;
+}
+
+.radial-progress .percent-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+}
+
+.radial-progress .percent-text span.grade-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 0.2rem;
+}
+
+.grade-alert {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+.grade-alert.success {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.grade-alert.warning {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+.grade-alert.danger {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* GitHub Commit Grid Styling */
+.commit-grid-wrapper {
+    overflow-x: auto;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.commit-grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.commit-grid-scroller {
+    overflow-x: auto;
+}
+
+.commit-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 10px);
+    grid-auto-flow: column;
+    grid-auto-columns: 10px;
+    gap: 3px;
+    min-width: max-content;
+    padding-bottom: 0.5rem;
+}
+
+.commit-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: var(--border);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.1s ease;
+}
+
+.commit-cell:hover {
+    transform: scale(1.3);
+    z-index: 10;
+}
+
+.commit-cell.level-0 { background-color: var(--border); }
+.commit-cell.level-1 { background-color: #9be9a8; }
+.commit-cell.level-2 { background-color: #40c463; }
+.commit-cell.level-3 { background-color: #30a14e; }
+.commit-cell.level-4 { background-color: #216e39; }
+
+[data-theme="dark"] .commit-cell.level-1 { background-color: #0e4429; }
+[data-theme="dark"] .commit-cell.level-2 { background-color: #006d32; }
+[data-theme="dark"] .commit-cell.level-3 { background-color: #26a641; }
+[data-theme="dark"] .commit-cell.level-4 { background-color: #39d353; }
+
+.commit-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.commit-legend-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+/* Custom Tooltip */
+.grid-tooltip {
+    position: absolute;
+    background: var(--bg-nav);
+    color: var(--text-on-nav);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: var(--shadow-md);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+/* ==========================================================================
+   FEATURE 2: INTERAKTIVE LERNROADMAP
+   ========================================================================== */
+.roadmap-timeline {
+    position: relative;
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+}
+
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+}
+
+.roadmap-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 55px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.roadmap-item:hover {
+    transform: translateX(5px);
+}
+
+.roadmap-badge {
+    position: absolute;
+    top: 2px;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-card);
+    border: 3px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: var(--transition);
+}
+
+.roadmap-item:hover .roadmap-badge {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.roadmap-badge i {
+    font-size: 0.7rem;
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+.roadmap-item:hover .roadmap-badge i {
+    color: white;
+}
+
+/* Detail Drawer (Roadmap) */
+.roadmap-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    max-width: 90vw;
+    height: 100vh;
+    background-color: var(--bg-card);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.roadmap-drawer.open {
+    right: 0;
+}
+
+.roadmap-drawer-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roadmap-drawer-content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.roadmap-drawer-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.roadmap-drawer-close:hover {
+    color: var(--primary);
+}
+
+.roadmap-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.roadmap-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Code Snippet Box */
+.code-snippet-wrapper {
+    position: relative;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-top: 0.5rem;
+}
+
+.code-snippet-wrapper pre {
+    margin: 0;
+    padding: 1.25rem 1rem 1rem 1rem;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.code-copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.code-copy-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* ==========================================================================
+   FEATURE 3: FLASHCARDS
+   ========================================================================== */
+.flashcards-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.category-tab {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.category-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.category-tab.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* 3D Flashcard Structure */
+.flashcard {
+    width: 100%;
+    aspect-ratio: 1.8 / 1;
+    min-height: 250px;
+    cursor: pointer;
+    perspective: 1000px;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    background-color: var(--bg-card);
+    transition: border-color 0.3s;
+}
+
+.flashcard-front {
+    color: var(--text-primary);
+}
+
+.flashcard-front::after {
+    content: 'Klicken zum Umdrehen / Click to flip';
+    position: absolute;
+    bottom: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.flashcard-back {
+    background-color: var(--bg-page);
+    transform: rotateY(180deg);
+    color: var(--text-primary);
+}
+
+.flashcard:hover .flashcard-front,
+.flashcard:hover .flashcard-back {
+    border-color: var(--primary);
+}
+
+.flashcard-hint {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.flashcard-question {
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.flashcard-answer {
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+.flashcard-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.btn-card-action {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.btn-card-action.wrong:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.btn-card-action.correct:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.btn-card-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.flashcard-deck-status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   FEATURE 4: IHK-PROJEKT SLIDESHOW / SHOWCASE
+   ========================================================================== */
+.slide-viewer {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background-color: #0f172a; /* Dark presentation background */
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    box-shadow: var(--shadow-lg);
+    margin: 1.5rem 0;
+}
+
+.slide-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    padding: 3rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #f8fafc;
+    text-align: center;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #38bdf8; /* Light blue accent */
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.slide-body {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    color: #cbd5e1;
+}
+
+.slide-body ul {
+    text-align: left;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.slide-body li {
+    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+}
+
+.slide-nav-controls {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 10;
+}
+
+.btn-slide-nav {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.btn-slide-nav:hover:not(:disabled) {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-slide-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.slide-indicator {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+}
+
+/* ==========================================================================
+   FEATURE 5: SPILLETÖNE & BESTENLISTE
+   ========================================================================== */
+.mute-indicator-btn {
+    font-size: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.mute-indicator-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.mute-indicator-btn.muted {
+    color: var(--text-muted);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.leaderboard-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    background-color: var(--bg-page);
+}
+
+.leaderboard-table tr:last-child td {
+    border-bottom: none;
+}
+

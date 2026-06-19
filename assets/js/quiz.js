@@ -165,8 +165,14 @@ function selectAnswer(e) {
     if (isCorrect) {
         selectedBtn.classList.add("correct");
         score++;
+        if (typeof GameAudio !== 'undefined') {
+            GameAudio.play('match');
+        }
     } else {
         selectedBtn.classList.add("incorrect");
+        if (typeof GameAudio !== 'undefined') {
+            GameAudio.play('fail');
+        }
     }
     
     // Alle Knöpfe deaktivieren und die richtige Antwort markieren
@@ -189,6 +195,23 @@ function showScore() {
     }
     
     const percentage = Math.round((score / questions.length) * 100);
+    
+    // Sound play
+    if (typeof GameAudio !== 'undefined') {
+        if (percentage === 100) {
+            GameAudio.play('win');
+        } else if (percentage >= 60) {
+            GameAudio.play('success');
+        } else {
+            GameAudio.play('die');
+        }
+    }
+
+    // Trigger commit on score >= 3
+    if (score >= 3 && typeof window.addLiveCommit === 'function') {
+        window.addLiveCommit();
+    }
+
     const lang = document.documentElement.getAttribute('lang') || 'de';
     let feedback = "";
     

@@ -61,6 +61,82 @@
                     <p lang="de">Zusätzlich absolvieren die Rehabilitanden gewöhnlich ein Praktikum (in meinem Fall ein 2-jähriges Kooperationspraktikum vom 20.03.2024 bis zum 20.03.2026) in einem Betrieb in der Nähe des eigenen Wohnstandortes, um einen Praxisbezug zu ihrer Ausbildung herzustellen und möglicherweise bereits den zukünftigen Arbeitgeber kennenzulernen.</p>
                     <p lang="en">Additionally, rehabilitation trainees complete an internship (in my case a 2-year cooperative internship from March 20, 2024 to March 20, 2026) in a local business near their home to gain actual industry experience and potentially meet their future employer.</p>
                 </article>
+
+                <article class="card" aria-labelledby="roadmap-title">
+                    <h2 id="roadmap-title">
+                        <span lang="de">📌 Interaktiver FIAE-Lernpfad</span>
+                        <span lang="en">📌 Interactive FIAE Learning Path</span>
+                    </h2>
+                    <p lang="de">Klicke auf die einzelnen Lernphasen, um wichtige Lehrplaninhalte, Codebeispiele und die Verknüpfung zu meinen Projekten einzusehen.</p>
+                    <p lang="en">Click on the individual learning phases to view core curriculum topics, code examples, and related projects.</p>
+                    
+                    <div class="roadmap-timeline">
+                        <div class="roadmap-item" data-phase="1">
+                            <div class="roadmap-badge"><i class="fa fa-book" aria-hidden="true"></i></div>
+                            <div class="roadmap-date">Q1 2024</div>
+                            <div class="roadmap-title">
+                                <span lang="de">Phase 1: Grundlagen &amp; Algorithmen</span>
+                                <span lang="en">Phase 1: Fundamentals &amp; Algorithms</span>
+                            </div>
+                            <div class="roadmap-desc">
+                                <span lang="de">Einführung in prozedurale Logik, Variablen, Schleifen und Datenstrukturen.</span>
+                                <span lang="en">Introduction to procedural logic, variables, loops, and data structures.</span>
+                            </div>
+                        </div>
+
+                        <div class="roadmap-item" data-phase="2">
+                            <div class="roadmap-badge"><i class="fa fa-database" aria-hidden="true"></i></div>
+                            <div class="roadmap-date">Q2 - Q3 2024</div>
+                            <div class="roadmap-title">
+                                <span lang="de">Phase 2: OOP &amp; Datenbanken</span>
+                                <span lang="en">Phase 2: OOP &amp; Databases</span>
+                            </div>
+                            <div class="roadmap-desc">
+                                <span lang="de">Klassen, Vererbung und Polymorphismus in Java/C# sowie relationale Datenbanken (SQL).</span>
+                                <span lang="en">Classes, inheritance, and polymorphism in Java/C#, and relational databases (SQL).</span>
+                            </div>
+                        </div>
+
+                        <div class="roadmap-item" data-phase="3">
+                            <div class="roadmap-badge"><i class="fa fa-globe" aria-hidden="true"></i></div>
+                            <div class="roadmap-date">Q4 2024 - Q2 2025</div>
+                            <div class="roadmap-title">
+                                <span lang="de">Phase 3: Web-Development &amp; APIs</span>
+                                <span lang="en">Phase 3: Web Development &amp; APIs</span>
+                            </div>
+                            <div class="roadmap-desc">
+                                <span lang="de">Frontend-Design mit HTML/CSS/JS und Backend-Anbindungen (APIs, REST).</span>
+                                <span lang="en">Frontend design with HTML/CSS/JS and backend connections (APIs, REST).</span>
+                            </div>
+                        </div>
+
+                        <div class="roadmap-item" data-phase="4">
+                            <div class="roadmap-badge"><i class="fa fa-users" aria-hidden="true"></i></div>
+                            <div class="roadmap-date">Q3 - Q4 2025</div>
+                            <div class="roadmap-title">
+                                <span lang="de">Phase 4: Software-Engineering &amp; agile Methoden</span>
+                                <span lang="en">Phase 4: Software Engineering &amp; Agile Methods</span>
+                            </div>
+                            <div class="roadmap-desc">
+                                <span lang="de">Entwurfsmuster (MVC), Clean Code, Softwaretests (Unit Testing) und Scrum.</span>
+                                <span lang="en">Design patterns (MVC), Clean Code, software testing (Unit Testing), and Scrum.</span>
+                            </div>
+                        </div>
+
+                        <div class="roadmap-item" data-phase="5">
+                            <div class="roadmap-badge"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
+                            <div class="roadmap-date">Q1 - Q2 2026</div>
+                            <div class="roadmap-title">
+                                <span lang="de">Phase 5: IHK-Projekt &amp; Abschluss</span>
+                                <span lang="en">Phase 5: IHK Project &amp; Final Exam</span>
+                            </div>
+                            <div class="roadmap-desc">
+                                <span lang="de">Konzeption, Durchführung, Dokumentation und Präsentation der IHK-Abschlussarbeit.</span>
+                                <span lang="en">Concept, execution, documentation, and presentation of the IHK final project.</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
 
             <aside class="right-col">
@@ -70,6 +146,18 @@
             </aside>
         </div>
     </main>
+
+    <!-- Roadmap Detail Drawer & Overlay -->
+    <div id="roadmap-overlay" class="roadmap-overlay"></div>
+    <div id="roadmap-drawer" class="roadmap-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <div class="roadmap-drawer-header">
+            <h3 id="drawer-title">Phase Details</h3>
+            <button id="roadmap-drawer-close" class="roadmap-drawer-close" aria-label="Schließen / Close">&times;</button>
+        </div>
+        <div id="roadmap-drawer-content" class="roadmap-drawer-content">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
 
     <div id="site-footer"></div>
     <script src="assets/js/main.js"></script>

@@ -19,7 +19,7 @@ let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
 let score = 0;
-let highscore = parseInt(StorageManager.getItem('snake_highscore', 0)) || 0;
+let highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
 let lastFrameTime = 0;
 let isPlaying = false;
 let isPaused = false;
@@ -129,9 +129,18 @@ function gameOver() {
     isPaused = false;
     lastFrameTime = 0;
     
+    if (typeof GameAudio !== 'undefined') {
+        GameAudio.play('die');
+    }
+    
+    // Add live commit on score >= 30
+    if (score >= 30 && typeof window.addLiveCommit === 'function') {
+        window.addLiveCommit();
+    }
+    
     if (score > highscore) {
         highscore = score;
-        StorageManager.setItem('snake_highscore', highscore);
+        StorageManager.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
         if (highscoreEl) highscoreEl.textContent = highscore;
     }
     
@@ -187,6 +196,11 @@ function gameStep() {
     if (head.x === food.x && head.y === food.y) {
         score += 10;
         if (scoreEl) scoreEl.textContent = score;
+        
+        if (typeof GameAudio !== 'undefined') {
+            GameAudio.play('eat');
+        }
+        
         placeFood();
     } else {
         snake.pop();

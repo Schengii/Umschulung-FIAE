@@ -30,11 +30,105 @@
                     <h2 lang="en">Dashboard</h2>
                     <p lang="de">Willkommen im interaktiven Dashboard. Hier können Sie wichtige Kennzahlen und Projektstatistiken einsehen.</p>
                     <p lang="en">Welcome to the interactive dashboard. Here you can view key metrics and project statistics.</p>
-                    <!-- Placeholder for future widgets -->
-                    <div class="dashboard-placeholder">
-                        <i class="fa fa-tools dashboard-icon" aria-hidden="true"></i>
-                        <p lang="de">Widgets werden hier bald erscheinen.</p>
-                        <p lang="en">Widgets will appear here soon.</p>
+                    <!-- GitHub Commit Grid Widget -->
+                    <div style="margin-top: 2rem;">
+                        <h3>
+                            <span lang="de"><i class="fa fa-code-fork" aria-hidden="true"></i> Umschulungs-Beiträge (Simuliert)</span>
+                            <span lang="en"><i class="fa fa-code-fork" aria-hidden="true"></i> Retraining Contributions (Simulated)</span>
+                        </h3>
+                        <p lang="de">Simulierter Verlauf meiner Beiträge von 2024 bis 2026. Aktionen und Spielsiege auf der Website hinterlassen hier live neue Einträge!</p>
+                        <p lang="en">Simulated history of my contributions from 2024 to 2026. Actions and game victories on this site leave live new entries here!</p>
+                        <div class="commit-grid-wrapper">
+                            <div class="commit-grid-header">
+                                <span id="commit-grid-total">0 Commits</span>
+                                <span id="commit-grid-streak">Streak: 0 Tage / Days</span>
+                            </div>
+                            <div class="commit-grid-scroller">
+                                <div id="commit-grid" class="commit-grid"></div>
+                            </div>
+                            <div class="commit-legend">
+                                <span>Less</span>
+                                <div class="commit-legend-box level-0"></div>
+                                <div class="commit-legend-box level-1"></div>
+                                <div class="commit-legend-box level-2"></div>
+                                <div class="commit-legend-box level-3"></div>
+                                <div class="commit-legend-box level-4"></div>
+                                <span>More</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Notenrechner Widget -->
+                    <div style="margin-top: 2rem;">
+                        <h3>
+                            <span lang="de"><i class="fa fa-calculator" aria-hidden="true"></i> IHK-Notenrechner (AP1 & AP2)</span>
+                            <span lang="en"><i class="fa fa-calculator" aria-hidden="true"></i> IHK Grade Calculator (AP1 & AP2)</span>
+                        </h3>
+                        <p lang="de">Berechne deine Gesamtbewertung nach den offiziellen IHK-Gewichtungsregeln und Sperrklauseln der Prüfungsordnung.</p>
+                        <p lang="en">Calculate your overall grade according to official IHK weighting rules and final exam exclusion regulations.</p>
+                        
+                        <div class="notenrechner-container">
+                            <form id="notenrechner-form" class="project-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ihk-ap1">
+                                            <span lang="de">Teil 1 (AP1) - 20%</span>
+                                            <span lang="en">Part 1 (AP1) - 20%</span>
+                                        </label>
+                                        <input type="number" id="ihk-ap1" class="form-control" min="0" max="100" placeholder="Punkte" value="85">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ihk-ap2-projekt">
+                                            <span lang="de">Projektarbeit (AP2) - 50%</span>
+                                            <span lang="en">Project Work (AP2) - 50%</span>
+                                        </label>
+                                        <input type="number" id="ihk-ap2-projekt" class="form-control" min="0" max="100" placeholder="Punkte" value="88">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="ihk-ap2-planen">
+                                            <span lang="de">Planung (AP2) - 10%</span>
+                                            <span lang="en">Planning (AP2) - 10%</span>
+                                        </label>
+                                        <input type="number" id="ihk-ap2-planen" class="form-control" min="0" max="100" placeholder="Punkte" value="80">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ihk-ap2-entwickeln">
+                                            <span lang="de">Entwicklung (AP2) - 10%</span>
+                                            <span lang="en">Development (AP2) - 10%</span>
+                                        </label>
+                                        <input type="number" id="ihk-ap2-entwickeln" class="form-control" min="0" max="100" placeholder="Punkte" value="82">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ihk-ap2-wiso">
+                                        <span lang="de">WiSo (AP2) - 10%</span>
+                                        <span lang="en">WiSo (AP2) - 10%</span>
+                                    </label>
+                                    <input type="number" id="ihk-ap2-wiso" class="form-control" min="0" max="100" placeholder="Punkte" value="78">
+                                </div>
+                            </form>
+                            
+                            <div class="notenrechner-results">
+                                <div class="radial-progress">
+                                    <svg>
+                                        <circle class="bg-ring" cx="75" cy="75" r="65"></circle>
+                                        <circle id="grade-progress-ring" class="fill-ring" cx="75" cy="75" r="65"></circle>
+                                    </svg>
+                                    <div class="percent-text">
+                                        <span id="overall-percentage">0%</span>
+                                        <span id="overall-grade-label" class="grade-label">Note / Grade</span>
+                                    </div>
+                                </div>
+                                <div id="grade-status-badge" class="grade-alert">
+                                    <span lang="de">Berechne...</span>
+                                    <span lang="en">Calculating...</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
