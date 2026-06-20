@@ -1,5 +1,5 @@
 /**
- * Contact Form Module — simulated submission
+ * Contact Form Module — triggers mailto
  */
 function initContactForm() {
     const form = document.getElementById('contact-form');
@@ -17,7 +17,15 @@ function initContactForm() {
 
         if (!name.value.trim() || !email.value.trim() || !message.value.trim()) return;
 
+        // Show feedback message
         if (feedback) feedback.style.display = 'block';
+
+        // Trigger mailto
+        const subject = encodeURIComponent(`Portfolio Kontakt: ${name.value}`);
+        const body = encodeURIComponent(`${message.value}\n\n--\nGesendet von: ${name.value} (${email.value})`);
+        window.location.href = `mailto:info@Max-Schenk.de?subject=${subject}&body=${body}`;
+
+        // Reset the form
         form.reset();
 
         if (feedback) {

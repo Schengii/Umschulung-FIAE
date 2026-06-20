@@ -116,8 +116,24 @@
                     </div>
                 </div>
 
+                <!-- Portfolio Filters -->
+                <div class="portfolio-filters" style="margin-bottom: 2rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn-filter active" data-filter="all">
+                        <span lang="de">Alle Projekte</span><span lang="en">All Projects</span>
+                    </button>
+                    <button class="btn-filter" data-filter="web">
+                        <span lang="de">Web Apps</span><span lang="en">Web Apps</span>
+                    </button>
+                    <button class="btn-filter" data-filter="ai">
+                        <span lang="de">KI & Data</span><span lang="en">AI & Data</span>
+                    </button>
+                    <button class="btn-filter" data-filter="games">
+                        <span lang="de">Spiele</span><span lang="en">Games</span>
+                    </button>
+                </div>
+
                 <!-- Project: EcoChef (Abschlussprojekt) -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">🍳 EcoChef — Nachhaltiges Koch- &amp; Rezeptportal (Abschlussprojekt)</h3>
                     <h3 lang="en">🍳 EcoChef — Sustainable Cooking &amp; Recipe Portal (Capstone Project)</h3>
                     
@@ -144,7 +160,7 @@
                 </article>
 
                 <!-- Project: ElektroCheck AI -->
-                <article class="card">
+                <article class="card filter-ai">
                     <h3 lang="de">⚡ ElektroCheck AI — Intelligente Prüfberichtsanalyse</h3>
                     <h3 lang="en">⚡ ElektroCheck AI — Intelligent Inspection Report Analytics</h3>
                     
@@ -171,7 +187,7 @@
                 </article>
 
                 <!-- Project: Wohnungssuche KI -->
-                <article class="card">
+                <article class="card filter-ai filter-web">
                     <h3 lang="de">🏠 Wohnungssuche KI — Intelligenter Such-Assistent</h3>
                     <h3 lang="en">🏠 Wohnungssuche KI — Intelligent Apartment Finder</h3>
                     
@@ -198,7 +214,7 @@
                 </article>
 
                 <!-- Project: Glücksspiel -->
-                <article class="card">
+                <article class="card filter-games">
                     <h3 lang="de">🎰 Glücksspiel — Casual Games Plattform</h3>
                     <h3 lang="en">🎰 Glücksspiel — Casual Mini Games Suite</h3>
                     
@@ -225,7 +241,7 @@
                 </article>
 
                 <!-- Project: Jobsuche -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">💼 Jobsuche — PWA Stellenportal</h3>
                     <h3 lang="en">💼 Jobsuche — PWA Job Board</h3>
                     
@@ -252,24 +268,24 @@
                 </article>
 
                 <!-- Project: ManuFAKTUR Schenk -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">🎨 ManuFAKTUR Schenk — Kunst- &amp; Bildergalerie</h3>
                     <h3 lang="en">🎨 ManuFAKTUR Schenk — Art Portfolio &amp; Gallery</h3>
                     
                     <div class="tech-tags">
                         <span class="tech-tag">HTML5 / CSS3</span>
                         <span class="tech-tag">Vanilla JS</span>
-                        <span class="tech-tag">Responsives Design</span>
+                        <span class="tech-tag">LocalStorage</span>
                         <span class="tech-tag">Bildergalerie</span>
-                        <span class="tech-tag">DSGVO-Konform</span>
+                        <span class="tech-tag">Merkliste</span>
                     </div>
 
                     <div class="project-image-container">
                         <img src="assets/images/manufaktur_showcase.png" alt="ManuFAKTUR Schenk Kunstgalerie" loading="lazy" class="project-image">
                     </div>
 
-                    <p lang="de">Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt sowie ein individuelles Anfrage- und Kontaktformular.</p>
-                    <p lang="en">An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, and a custom order/contact form.</p>
+                    <p lang="de">Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt, ein individuelles Kontaktformular sowie eine neue, persistente <b>Favoriten/Merkliste</b> (LocalStorage) für interessierte Käufer.</p>
+                    <p lang="en">An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, a custom order form, and a newly integrated persistent <b>Favorites Wishlist</b> (LocalStorage) for potential buyers.</p>
                     <div class="mt-1rem">
                         <a href="Projekte/ManuFaktur/index.html" class="btn-primary custom-size" target="_blank" rel="noopener">
                             <span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Galerie ansehen</span>
@@ -279,14 +295,14 @@
                 </article>
 
                 <!-- Project: Arbeitszeiterfassung -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">⏱️ Arbeitszeiterfassung — PWA Zeiterfassung</h3>
                     <h3 lang="en">⏱️ Arbeitszeiterfassung — Time Tracker PWA</h3>
                     
                     <div class="tech-tags">
                         <span class="tech-tag">PWA / Mobile First</span>
-                        <span class="tech-tag">LocalStorage</span>
-                        <span class="tech-tag">Chart.js</span>
+                        <span class="tech-tag">Firebase Cloud-Sync</span>
+                        <span class="tech-tag">Chart.js & SVG Analytics</span>
                         <span class="tech-tag">Vanilla JS</span>
                         <span class="tech-tag">Productivity</span>
                     </div>
@@ -295,8 +311,8 @@
                         <img src="assets/images/arbeitszeit_showcase.png" alt="Arbeitszeiterfassung Dashboard" loading="lazy" class="project-image">
                     </div>
 
-                    <p lang="de">Eine mobile-optimierte PWA zur einfachen Erfassung der täglichen Arbeitsstunden, Pausen und Überstunden. Bietet grafische Monatsübersichten mit Diagrammen, CSV-Export und läuft dank Service Worker komplett offline.</p>
-                    <p lang="en">A mobile-optimized PWA to track daily working hours, breaks, and overtime. Features interactive monthly charts, CSV export, and works fully offline thanks to Service Worker integration.</p>
+                    <p lang="de">Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.</p>
+                    <p lang="en">An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.</p>
                     <div class="mt-1rem">
                         <a href="Projekte/arbeitszeiterfassung/index.html" class="btn-primary custom-size" target="_blank" rel="noopener">
                             <span lang="de"><i class="fa fa-clock" aria-hidden="true"></i> Zeiterfassung starten</span>
@@ -306,7 +322,7 @@
                 </article>
 
                 <!-- Project: Finance AI Bot -->
-                <article class="card">
+                <article class="card filter-ai filter-web">
                     <h3 lang="de">🤖 Finance AI Bot — Finanzplaner &amp; Chatbot</h3>
                     <h3 lang="en">🤖 Finance AI Bot — Financial Assistant &amp; Chatbot</h3>
                     
@@ -333,7 +349,7 @@
                 </article>
 
                 <!-- Project: CoOpVersusGame -->
-                <article class="card">
+                <article class="card filter-games">
                     <h3 lang="de">🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototyp</h3>
                     <h3 lang="en">🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototype</h3>
                     
@@ -360,7 +376,7 @@
                 </article>
 
                 <!-- Project: OrbitalScrap -->
-                <article class="card">
+                <article class="card filter-games">
                     <h3 lang="de">🚀 OrbitalScrap — Sci-Fi Clicker- &amp; Idle-Game</h3>
                     <h3 lang="en">🚀 OrbitalScrap — Sci-Fi Clicker &amp; Idle Game</h3>
                     
@@ -387,7 +403,7 @@
                 </article>
 
                 <!-- Project 1: Snake -->
-                <article class="card">
+                <article class="card filter-games">
                     <h3 lang="de">🐍 Retro-Klassiker Snake (Javascript)</h3>
                     <h3 lang="en">🐍 Retro Classic Snake (Javascript)</h3>
                     <div class="tech-tags">
@@ -407,7 +423,7 @@
                 </article>
 
                 <!-- Project 2: Quiz -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">💡 Interaktives IT-Wissens-Quiz</h3>
                     <h3 lang="en">💡 Interactive IT Knowledge Quiz</h3>
                     <div class="tech-tags">
@@ -427,7 +443,7 @@
                 </article>
 
                 <!-- Project 3: Memory -->
-                <article class="card">
+                <article class="card filter-games">
                     <h3 lang="de">🧠 Memory — Finde die Paare</h3>
                     <h3 lang="en">🧠 Memory — Find the Pairs</h3>
                     <div class="tech-tags">
@@ -447,7 +463,7 @@
                 </article>
 
                 <!-- Project 4: Portfolio -->
-                <article class="card">
+                <article class="card filter-web">
                     <h3 lang="de">💻 Modernes Web-Portfolio &amp; Dashboard</h3>
                     <h3 lang="en">💻 Modern Web Portfolio &amp; Dashboard</h3>
                     <div class="tech-tags">
@@ -468,6 +484,37 @@
                 <div id="custom-projects-container"></div>
                 <!-- Folder projects dynamically injected here -->
                 <div id="folder-projects-container"></div>
+
+                <!-- Kontakt & Hire Me -->
+                <article class="card filter-all" id="contact">
+                    <h3 lang="de">📬 Kontakt & Hire Me</h3>
+                    <h3 lang="en">📬 Contact & Hire Me</h3>
+                    <p lang="de">Interesse an einer Zusammenarbeit? Ich bin ab sofort auf der Suche nach einer Junior-Position als Softwareentwickler. Schreib mir einfach eine Nachricht!</p>
+                    <p lang="en">Interested in working together? I am currently looking for a junior software developer position. Feel free to drop me a message!</p>
+                    
+                    <form id="contact-form" class="project-form mt-1rem">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact-name"><span lang="de">Name *</span><span lang="en">Name *</span></label>
+                                <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name / Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email"><span lang="de">E-Mail *</span><span lang="en">Email *</span></label>
+                                <input type="email" id="contact-email" class="form-control" required placeholder="name@domain.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message"><span lang="de">Nachricht *</span><span lang="en">Message *</span></label>
+                            <textarea id="contact-message" class="form-control" rows="4" required placeholder="..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary custom-size">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i> <span lang="de">Nachricht senden</span><span lang="en">Send Message</span>
+                        </button>
+                        <div id="form-feedback" style="display:none; color: var(--color-green); margin-top: 1rem; font-weight: bold;">
+                            <i class="fa fa-check"></i> <span lang="de">E-Mail Programm wird geöffnet...</span><span lang="en">Opening email client...</span>
+                        </div>
+                    </form>
+                </article>
             </div>
 
             <!-- Right Column: Sidebar -->
@@ -485,6 +532,36 @@
                         <span lang="de">🚀 Status: Sofort verfügbar für Festanstellung</span>
                         <span lang="en">🚀 Status: Available immediately for full-time roles</span>
                     </div>
+                </section>
+
+                <!-- CV & Timeline -->
+                <section class="card" aria-labelledby="cv-timeline-title">
+                    <h3 id="cv-timeline-title">
+                        <span lang="de"><i class="fa fa-history"></i> Werdegang</span>
+                        <span lang="en"><i class="fa fa-history"></i> Career Timeline</span>
+                    </h3>
+                    
+                    <div class="timeline" style="border-left: 2px solid var(--primary-color); margin-left: 10px; padding-left: 15px; margin-bottom: 20px;">
+                        <div class="timeline-item" style="margin-bottom: 15px; position: relative;">
+                            <div style="position: absolute; left: -22px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--primary-color);"></div>
+                            <h4 style="margin:0; font-size: 0.95rem;">IHK Abschluss AP2</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Juni 2026</span>
+                        </div>
+                        <div class="timeline-item" style="margin-bottom: 15px; position: relative;">
+                            <div style="position: absolute; left: -22px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--text-secondary);"></div>
+                            <h4 style="margin:0; font-size: 0.95rem;">Praktikum (EcoChef)</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Nov 2025 - Mai 2026</span>
+                        </div>
+                        <div class="timeline-item" style="position: relative;">
+                            <div style="position: absolute; left: -22px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--text-secondary);"></div>
+                            <h4 style="margin:0; font-size: 0.95rem;">Umschulung FIAE</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">2024 - 2026</span>
+                        </div>
+                    </div>
+
+                    <a href="assets/Lebenslauf.pdf" class="btn-primary" style="display: block; text-align: center; background: var(--secondary-color);" download>
+                        <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span lang="en">Download CV</span>
+                    </a>
                 </section>
 
                 <!-- ANIMATED SKILL BARS -->
