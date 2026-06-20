@@ -1,0 +1,12 @@
+# Godot-spezifische Cache- und Import-Ordner
+.godot/
+
+# Falls du später C# nutzt
+.mono/
+data_*/
+mono_crash*.log
+
+# Allgemeine Systemdateien
+.DS_Store
+Thumbs.db
+*.tmp

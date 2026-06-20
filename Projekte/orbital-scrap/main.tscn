@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bvghm22nn3jd7"]
+
+[ext_resource type="Script" uid="uid://bikrgl87hlh3" path="res://main.gd" id="1_ig7tw"]
+
+[node name="Main" type="Control" unique_id=538428542]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = -1141.0
+offset_bottom = -624.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ig7tw")
+
+[node name="ScrapButton" type="Button" parent="." unique_id=1547861649]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 300.0
+offset_bottom = 100.0
+text = "Weltraumschrott sammeln"
+
+[node name="ScrapLabel" type="Label" parent="." unique_id=937525106]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 60.0
+offset_right = 620.0
+offset_bottom = 90.0
+text = "Schrott: 0"
+
+[node name="BuyDroneButton" type="Button" parent="." unique_id=15381316]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 130.0
+offset_right = 300.0
+offset_bottom = 180.0
+text = "Drohne kaufen"
+
+[node name="DroneLabel" type="Label" parent="." unique_id=735208768]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 140.0
+offset_right = 620.0
+offset_bottom = 189.0
+text = "Drohnen: 0 (Kosten: 10)
+"
+
+[node name="SpsLabel" type="Label" parent="." unique_id=983314844]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 90.0
+offset_right = 620.0
+offset_bottom = 120.0
+
+[connection signal="pressed" from="ScrapButton" to="." method="_on_scrap_button_pressed"]
+[connection signal="pressed" from="BuyDroneButton" to="." method="_on_buy_drone_button_pressed"]
