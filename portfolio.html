@@ -8,7 +8,7 @@
     <meta name="description" content="Meine Programmierprojekte: EcoChef (IHK-Abschlussprojekt), Snake-Spiel, IT-Quiz und dieses Portfolio — mit Java, Spring Boot, JavaScript und mehr.">
     <meta name="author" content="Maximilian Schenk">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/portfolio-enhancements.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
 </head>
@@ -21,6 +21,7 @@
 
     <div id="site-header"></div>
     <div id="site-nav"></div>
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode" class="toggle-btn" style="position:absolute;right:1rem;top:1rem;font-size:1.2rem;">🌙</button>
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
@@ -140,7 +141,7 @@
                 </div>
 
                 <!-- Dynamic projects dynamically injected here -->
-                <div id="github-loading" class="github-loading" style="display:none;"></div>
+                <div id="github-loading" class="github-loading"></div>
                     <div id="github-error" class="github-error" style="display:none;"></div>
                     <div id="dynamic-projects-container"></div>
 
@@ -261,8 +262,13 @@
 
     <div id="site-footer"></div>
 
-    <script src="assets/js/main.js"></script>
     <script src="assets/js/portfolio.js"></script>
-</body>
+    <script src="assets/js/main.js"></script>
+<div id="project-modal" class="modal hidden" aria-hidden="true" aria-modal="true" role="dialog">
+    <div class="modal-content">
+        <button class="modal-close" aria-label="Close Modal">&times;</button>
+        <div id="modal-body-content"></div>
+    </div>
+</div>
 
 </html>

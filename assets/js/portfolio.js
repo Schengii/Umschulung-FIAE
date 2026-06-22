@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Re-apply searches and filters if search-filter.js is loaded
             if (typeof applyFilters === 'function') {
                 applyFilters();
+        attachCardListeners();
             }
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return `
-        <article class="card fade-in visible ${categoryClass}">
+        <article class="card project-card fade-in visible ${categoryClass}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags='${JSON.stringify(project.tags)}'>
             ${starsHTML}
             <h3 lang="de">${project.titleDe}</h3>
             <h3 lang="en">${project.titleEn}</h3>
@@ -313,6 +314,39 @@ document.addEventListener('DOMContentLoaded', () => {
             <p lang="en">${project.descEn}</p>
             ${buttonsHTML}
         </article>`;
+    }
+
+    // Modal handling functions
+    function openProjectModal(card) {
+        const modal = document.getElementById('project-modal');
+        const body = document.getElementById('modal-body-content');
+        if (!modal || !body) return;
+        const titleDe = card.dataset.titleDe || '';
+        const titleEn = card.dataset.titleEn || '';
+        const descDe = card.dataset.descDe || '';
+        const descEn = card.dataset.descEn || '';
+        const image = card.dataset.image;
+        const link = card.dataset.link;
+        const github = card.dataset.github;
+        const tags = JSON.parse(card.dataset.tags || '[]');
+        const tagsHTML = tags.map(tag => `<span class="tech-tag">${tag}</span>`).join(' ');
+        body.innerHTML = `
+            <h2 lang="de">${titleDe}</h2>
+            <h2 lang="en">${titleEn}</h2>
+            <div class="tech-tags">${tagsHTML}</div>
+            ${image ? `<img src="${image}" alt="${titleDe}">` : ''}
+            <p lang="de">${descDe}</p>
+            <p lang="en">${descEn}</p>
+            <div class="modal-buttons" style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                ${link ? `<a href="${link}" target="_blank" rel="noopener" class="btn-primary custom-size"><span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Projekt öffnen</span><span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> Open Project</span></a>` : ''}
+                ${github ? `<a href="${github}" target="_blank" rel="noopener" class="btn-primary custom-size" style="background-color:var(--bg-nav); border-color:var(--bg-nav);"><span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span><span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span></a>` : ''}
+            </div>`;
+        modal.classList.add('show');
+    }
+
+    function closeProjectModal() {
+        const modal = document.getElementById('project-modal');
+        if (modal) modal.classList.remove('show');
     }
 
     // ============================================================
@@ -484,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Trigger language switcher alignment
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
+        attachCardListeners();
     }
 
     // Copy Code button
@@ -500,6 +535,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Dark mode initialization
+    function initDarkMode() {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        if (toggleBtn) {
+            toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            toggleBtn.addEventListener('click', () => {
+                const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = newTheme;
+                localStorage.setItem('theme', newTheme);
+                toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            });
+        }
+    }
+
+    initDarkMode();
 
     // Listen to global language change to keep previews in sync
     document.addEventListener('langchange', () => {
