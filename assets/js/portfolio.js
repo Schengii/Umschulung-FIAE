@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleAdminBtn = document.getElementById('toggle-admin-btn');
     const adminFormContainer = document.getElementById('admin-form-container');
     const projectForm = document.getElementById('project-form');
+    const githubLoading = document.getElementById('github-loading');
+    const githubError = document.getElementById('github-error');
     
     const inputTitleDe = document.getElementById('proj-title-de');
     const inputTitleEn = document.getElementById('proj-title-en');
@@ -25,13 +27,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyCodeBtn = document.getElementById('copy-code-btn');
 
     // GitHub API Configuration & Caching
-    const GITHUB_USERNAME = window.APP?.GITHUB_USERNAME || 'Schengii';
+    const GITHUB_USERNAME = document.getElementById('github-username')?.value?.trim() || 'Schengii';
     const CACHE_KEY = 'github_projects_cache';
     const CACHE_TIME_KEY = 'github_projects_cache_time';
     const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+    const SORT_KEY = 'portfolio_sort_order';
+    const DEFAULT_SORT_ORDER = 'desc'; // default most stars first
 
     // Load and render existing custom projects from LocalStorage
     let customProjects = [];
+    let allProjects = [];
+    // Load persisted sort order
+    const persistedSort = localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+        sortSelect.value = persistedSort;
+        sortSelect.addEventListener('change', () => {
+            const order = sortSelect.value;
+            localStorage.setItem(SORT_KEY, order);
+            if (allProjects.length) renderProjects(sortProjects(allProjects, order));
+        });
+    }
     try {
         if (typeof StorageManager !== 'undefined') {
             customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
@@ -48,28 +64,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch repositories from GitHub API with caching
     async function fetchGitHubRepos() {
-        try {
-            const cachedData = localStorage.getItem(CACHE_KEY);
-            const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-            
-            if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
-                return JSON.parse(cachedData);
+        const maxAttempts = 3;
+        const delay = 500; // ms
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                const cachedData = localStorage.getItem(CACHE_KEY);
+                const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+                if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
+                    return JSON.parse(cachedData);
+                }
+                const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
+                if (response.status === 403) {
+                    // Rate limit or forbidden
+                    const errorMsg = 'GitHub rate limit exceeded or access forbidden.';
+                    showError(githubError, errorMsg);
+                    throw new Error(errorMsg);
+                }
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+                const repos = await response.json();
+                localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
+                localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+                return repos;
+            } catch (e) {
+                if (attempt < maxAttempts) {
+                    await new Promise(res => setTimeout(res, delay * Math.pow(2, attempt - 1)));
+                } else {
+                    console.warn('Failed to fetch from GitHub API after retries, falling back to cache:', e);
+                    const cachedData = localStorage.getItem(CACHE_KEY);
+                    return cachedData ? JSON.parse(cachedData) : [];
+                }
             }
-            
-            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-            if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.status}`);
-            }
-            const repos = await response.json();
-            
-            localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
-            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-            return repos;
-        } catch (e) {
-            console.warn('Failed to fetch from GitHub API, falling back to cache:', e);
-            const cachedData = localStorage.getItem(CACHE_KEY);
-            return cachedData ? JSON.parse(cachedData) : [];
         }
+    }
+
+    // Utility to show error messages
+    function showError(container, message) {
+        if (!container) return;
+        container.innerHTML = `<div class="github-error"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ${message}</div>`;
+        container.style.display = 'block';
     }
 
     // Merge static and dynamic project data and render them
@@ -78,13 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!dynamicContainer) return;
 
         // Show loading spinner
-        dynamicContainer.innerHTML = `
-            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        githubLoading.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                 <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
-                <p style="margin-top: 1rem;" lang="de">Projekte werden geladen...</p>
-                <p style="margin-top: 1rem;" lang="en">Loading projects...</p>
+                <p style="margin-top: 0.5rem;" lang="de">GitHub‑Projekte werden geladen...</p>
+                <p style="margin-top: 0.5rem;" lang="en">Loading GitHub projects...</p>
             </div>
         `;
+        githubLoading.style.display = 'block';
+        githubLoading.style.display = 'block';
 
         try {
             const response = await fetch('assets/data/projects.json');
@@ -95,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const githubRepos = await fetchGitHubRepos();
             
             const mergedProjects = [];
+            // after merging, store globally
+            allProjects = mergedProjects;
             const claimedRepos = new Set();
             
             // 1. Process static projects from projects.json
@@ -169,6 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             // Render the full merged project list
+            githubLoading.style.display = 'none';
+            githubError.style.display = 'none';
             dynamicContainer.innerHTML = mergedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
             
             // Trigger translation alignment for new elements
@@ -181,14 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
-            dynamicContainer.innerHTML = `
-                <div class="card" style="text-align: center; padding: 2rem; border-color: #ef4444;">
-                    <h3 style="color: #ef4444;" lang="de"><i class="fa fa-exclamation-triangle"></i> Fehler beim Laden</h3>
-                    <h3 style="color: #ef4444;" lang="en"><i class="fa fa-exclamation-triangle"></i> Loading Error</h3>
-                    <p lang="de">Projekte konnten nicht geladen werden. Bitte lade die Seite neu.</p>
-                    <p lang="en">Projects could not be loaded. Please refresh the page.</p>
-                </div>
-            `;
+            githubError.innerHTML = `<div class="github-error">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <span lang="de">GitHub‑Projekte konnten nicht geladen werden.</span>
+                <span lang="en">GitHub projects could not be loaded.</span>
+            </div>`;
+            githubError.style.display = 'block';
+            githubLoading.style.display = 'none';
         }
     }
 

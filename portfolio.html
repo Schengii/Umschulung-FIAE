@@ -36,6 +36,7 @@
 
                 <!-- Project Manager Admin Form (Collapsible) -->
                 <div class="card admin-card">
+                <input type="hidden" id="github-username" value="Schengii">
                     <div class="admin-header">
                          <h3 class="admin-header-title">
                             <span lang="de"><i class="fa fa-cogs" aria-hidden="true"></i> Projekt-Manager</span>
@@ -118,6 +119,12 @@
 
                 <!-- Portfolio Filters -->
                 <div class="portfolio-filters">
+                    <select id="sort-select" class="sort-select" aria-label="Sort projects">
+                        <option value="desc" lang="de">⭐ Sterne ↓</option>
+                        <option value="asc" lang="de">⭐ Sterne ↑</option>
+                        <option value="desc" lang="en">⭐ Stars ↓</option>
+                        <option value="asc" lang="en">⭐ Stars ↑</option>
+                    </select>
                     <button class="btn-filter active" data-filter="all">
                         <span lang="de">Alle Projekte</span><span lang="en">All Projects</span>
                     </button>
@@ -133,7 +140,9 @@
                 </div>
 
                 <!-- Dynamic projects dynamically injected here -->
-                <div id="dynamic-projects-container"></div>
+                <div id="github-loading" class="github-loading" style="display:none;"></div>
+                    <div id="github-error" class="github-error" style="display:none;"></div>
+                    <div id="dynamic-projects-container"></div>
 
                 <!-- Custom projects dynamically injected here -->
                 <div id="custom-projects-container"></div>
