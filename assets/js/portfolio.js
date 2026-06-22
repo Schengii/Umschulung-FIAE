@@ -1,7 +1,8 @@
 /**
  * Portfolio Project Manager JS
- * Handles dynamic project addition, LocalStorage persistence,
- * real-time live preview rendering, HTML code export, and custom project removal.
+ * Handles dynamic project addition, fetching projects from local projects.json and GitHub API,
+ * LocalStorage caching for GitHub data, real-time live preview rendering,
+ * HTML code export, and custom project removal.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,11 +24,263 @@ document.addEventListener('DOMContentLoaded', () => {
     const htmlExportCode = document.getElementById('html-export-code');
     const copyCodeBtn = document.getElementById('copy-code-btn');
 
+    // GitHub API Configuration & Caching
+    const GITHUB_USERNAME = window.APP?.GITHUB_USERNAME || 'Schengii';
+    const CACHE_KEY = 'github_projects_cache';
+    const CACHE_TIME_KEY = 'github_projects_cache_time';
+    const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+
     // Load and render existing custom projects from LocalStorage
-    let customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
+    let customProjects = [];
+    try {
+        if (typeof StorageManager !== 'undefined') {
+            customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
+        } else {
+            customProjects = JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]');
+        }
+    } catch (e) {
+        console.warn('Failed to parse custom projects:', e);
+    }
     renderCustomProjects();
 
-    // 1. Toggle Admin Card
+    // Load dynamic projects (projects.json + GitHub API)
+    loadAndRenderProjects();
+
+    // Fetch repositories from GitHub API with caching
+    async function fetchGitHubRepos() {
+        try {
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+            
+            if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
+                return JSON.parse(cachedData);
+            }
+            
+            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
+            if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status}`);
+            }
+            const repos = await response.json();
+            
+            localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
+            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            return repos;
+        } catch (e) {
+            console.warn('Failed to fetch from GitHub API, falling back to cache:', e);
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            return cachedData ? JSON.parse(cachedData) : [];
+        }
+    }
+
+    // Merge static and dynamic project data and render them
+    async function loadAndRenderProjects() {
+        const dynamicContainer = document.getElementById('dynamic-projects-container');
+        if (!dynamicContainer) return;
+
+        // Show loading spinner
+        dynamicContainer.innerHTML = `
+            <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+                <p style="margin-top: 1rem;" lang="de">Projekte werden geladen...</p>
+                <p style="margin-top: 1rem;" lang="en">Loading projects...</p>
+            </div>
+        `;
+
+        try {
+            const response = await fetch('assets/data/projects.json');
+            if (!response.ok) {
+                throw new Error(`Failed to load projects.json: ${response.status}`);
+            }
+            const staticProjects = await response.json();
+            const githubRepos = await fetchGitHubRepos();
+            
+            const mergedProjects = [];
+            const claimedRepos = new Set();
+            
+            // 1. Process static projects from projects.json
+            staticProjects.forEach(staticProj => {
+                const proj = { ...staticProj };
+                
+                if (proj.repoName) {
+                    const matchedRepo = githubRepos.find(repo => 
+                        repo.name.toLowerCase() === proj.repoName.toLowerCase()
+                    );
+                    
+                    if (matchedRepo) {
+                        claimedRepos.add(matchedRepo.name.toLowerCase());
+                        proj.stars = matchedRepo.stargazers_count || 0;
+                        proj.githubUrl = matchedRepo.html_url;
+                        proj.updatedAt = matchedRepo.updated_at;
+                        // Use GitHub Pages URL if set on GitHub and not empty
+                        if (matchedRepo.homepage && matchedRepo.homepage.trim() !== '') {
+                            proj.link = matchedRepo.homepage;
+                        }
+                    } else {
+                        proj.stars = 0;
+                        proj.updatedAt = new Date().toISOString();
+                    }
+                } else {
+                    proj.stars = 0;
+                    proj.updatedAt = new Date().toISOString();
+                }
+                
+                mergedProjects.push(proj);
+            });
+            
+            // 2. Append new repositories from GitHub that are not in projects.json
+            githubRepos.forEach(repo => {
+                const nameLower = repo.name.toLowerCase();
+                
+                // Skip the portfolio repository itself, forks, and already claimed repositories
+                if (nameLower === 'umschulung-fiae' || claimedRepos.has(nameLower) || repo.fork) {
+                    return;
+                }
+                
+                // Infer category based on topics
+                let category = 'web';
+                const topics = repo.topics || [];
+                if (topics.some(t => ['game', 'games', 'godot', 'unity'].includes(t.toLowerCase()))) {
+                    category = 'games';
+                } else if (topics.some(t => ['ai', 'artificial-intelligence', 'machine-learning', 'data'].includes(t.toLowerCase()))) {
+                    category = 'ai';
+                }
+                
+                // Clean up name for title (e.g. "my-project-name" -> "My Project Name")
+                const cleanTitle = repo.name
+                    .replace(/[-_]/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
+                    
+                const dynamicProj = {
+                    repoName: repo.name,
+                    titleDe: cleanTitle,
+                    titleEn: cleanTitle,
+                    tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
+                    image: null,
+                    link: repo.homepage || repo.html_url,
+                    githubUrl: repo.html_url,
+                    descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
+                    descEn: repo.description || 'No description provided on GitHub.',
+                    category: category,
+                    stars: repo.stargazers_count || 0,
+                    updatedAt: repo.updated_at
+                };
+                
+                mergedProjects.push(dynamicProj);
+            });
+            
+            // Render the full merged project list
+            dynamicContainer.innerHTML = mergedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
+            
+            // Trigger translation alignment for new elements
+            const activeLang = document.documentElement.getAttribute('lang') || 'de';
+            document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
+            
+            // Re-apply searches and filters if search-filter.js is loaded
+            if (typeof applyFilters === 'function') {
+                applyFilters();
+            }
+        } catch (e) {
+            console.error('Error loading or rendering projects:', e);
+            dynamicContainer.innerHTML = `
+                <div class="card" style="text-align: center; padding: 2rem; border-color: #ef4444;">
+                    <h3 style="color: #ef4444;" lang="de"><i class="fa fa-exclamation-triangle"></i> Fehler beim Laden</h3>
+                    <h3 style="color: #ef4444;" lang="en"><i class="fa fa-exclamation-triangle"></i> Loading Error</h3>
+                    <p lang="de">Projekte konnten nicht geladen werden. Bitte lade die Seite neu.</p>
+                    <p lang="en">Projects could not be loaded. Please refresh the page.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Dynamic Card Generator
+    function generateDynamicCardHTML(project) {
+        const isGame = project.category && project.category.includes('games');
+        const isAi = project.category && project.category.includes('ai');
+        
+        // Build tags
+        const tagsHTML = project.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('\n        ');
+        
+        // Build image
+        let imageHTML = '';
+        if (project.image) {
+            imageHTML = `
+            <div class="project-image-container">
+                <img src="${project.image}" alt="${project.titleDe}" loading="lazy" class="project-image">
+            </div>`;
+        }
+        
+        // Build stars badge
+        let starsHTML = '';
+        if (project.stars > 0) {
+            starsHTML = `
+            <span class="stars-badge" title="${project.stars} Stars on GitHub" style="display: inline-flex; align-items: center; background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0.25rem 0.6rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-left: 0.5rem; float: right;">
+                <i class="fa fa-star" aria-hidden="true" style="color: #eab308; margin-right: 0.25rem;"></i> ${project.stars}
+            </span>`;
+        }
+
+        // Build buttons
+        let buttonsHTML = '<div class="mt-1rem" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">';
+        
+        if (project.link) {
+            let btnTextDe = 'Projekt starten';
+            let btnTextEn = 'Launch Project';
+            let btnIcon = 'fa-external-link';
+            
+            if (isGame) {
+                btnTextDe = 'Spielen';
+                btnTextEn = 'Play Game';
+                btnIcon = 'fa-play';
+            } else if (isAi) {
+                btnTextDe = 'Ausprobieren';
+                btnTextEn = 'Try Out';
+            }
+            
+            buttonsHTML += `
+            <a href="${project.link}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
+                <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
+            </a>`;
+        }
+        
+        if (project.githubUrl) {
+            buttonsHTML += `
+            <a href="${project.githubUrl}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: var(--bg-nav); border-color: var(--bg-nav);">
+                <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span>
+                <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
+            </a>`;
+        }
+        
+        buttonsHTML += '</div>';
+
+        // Set category class for filtering
+        let categoryClass = '';
+        if (project.category) {
+            categoryClass = project.category.split(' ').map(c => `filter-${c}`).join(' ');
+        } else {
+            categoryClass = 'filter-web';
+        }
+
+        return `
+        <article class="card fade-in visible ${categoryClass}">
+            ${starsHTML}
+            <h3 lang="de">${project.titleDe}</h3>
+            <h3 lang="en">${project.titleEn}</h3>
+            
+            <div class="tech-tags">
+                ${tagsHTML}
+            </div>
+            ${imageHTML}
+            <p lang="de">${project.descDe}</p>
+            <p lang="en">${project.descEn}</p>
+            ${buttonsHTML}
+        </article>`;
+    }
+
+    // ============================================================
+    // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
+    // ============================================================
+
+    // Toggle Admin Card
     if (toggleAdminBtn && adminFormContainer) {
         toggleAdminBtn.addEventListener('click', () => {
             const isCollapsed = adminFormContainer.classList.contains('collapsed');
@@ -44,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Real-time Live Preview listeners
+    // Real-time Live Preview listeners
     const inputFields = [inputTitleDe, inputTitleEn, inputTags, inputImage, inputDescDe, inputDescEn, inputLink];
     inputFields.forEach(field => {
         if (field) {
@@ -129,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. Form submit to save
+    // Form submit to save
     if (projectForm) {
         projectForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -138,7 +391,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Save to array
             customProjects.push(project);
-            StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+            if (typeof StorageManager !== 'undefined') {
+                StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+            } else {
+                localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+            }
             
             // Update container
             renderCustomProjects();
@@ -156,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Render Saved Projects
+    // Render Saved Custom Projects
     function renderCustomProjects() {
         if (!customProjectsContainer) return;
         customProjectsContainer.innerHTML = '';
@@ -174,7 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmDe = confirm('Möchtest du dieses Projekt wirklich aus deinem lokalen Speicher löschen?\n\nDo you really want to delete this project from your local storage?');
                 if (confirmDe) {
                     customProjects.splice(idx, 1);
-                    StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                    if (typeof StorageManager !== 'undefined') {
+                        StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                    } else {
+                        localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                    }
                     renderCustomProjects();
                     if (exportSection) exportSection.style.display = 'none';
                 }
@@ -182,12 +443,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Trigger language switcher alignment
-        document.dispatchEvent(new CustomEvent('langchange', { detail: document.documentElement.getAttribute('lang') || 'de' }));
+        const activeLang = document.documentElement.getAttribute('lang') || 'de';
+        document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
-    // Initial rendering of projects
-    renderCustomProjects();
 
-    // 5. Copy Code button
+    // Copy Code button
     if (copyCodeBtn && htmlExportCode) {
         copyCodeBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(htmlExportCode.textContent).then(() => {
