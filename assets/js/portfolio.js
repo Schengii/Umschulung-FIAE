@@ -189,19 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     .replace(/\b\w/g, c => c.toUpperCase());
                     
                 const dynamicProj = {
-                    repoName: repo.name,
-                    titleDe: cleanTitle,
-                    titleEn: cleanTitle,
-                    tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
-                    image: null,
-                    link: repo.homepage || repo.html_url,
-                    githubUrl: repo.html_url,
-                    descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
-                    descEn: repo.description || 'No description provided on GitHub.',
-                    category: category,
-                    stars: repo.stargazers_count || 0,
-                    updatedAt: repo.updated_at
-                };
+                      repoName: repo.name,
+                      titleDe: cleanTitle,
+                      titleEn: cleanTitle,
+                      tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
+                      // Use the repository owner's avatar as a preview image placeholder when no custom image is defined
+                      image: repo.owner?.avatar_url || 'assets/images/default_project.png',
+                      // Prefer a GitHub Pages homepage if set; otherwise fall back to the GitHub repo URL
+                      link: repo.homepage && repo.homepage.trim() !== '' ? repo.homepage : repo.html_url,
+                      githubUrl: repo.html_url,
+                      descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
+                      descEn: repo.description || 'No description provided on GitHub.',
+                      category: category,
+                      stars: repo.stargazers_count || 0,
+                      updatedAt: repo.updated_at
+                  };
                 
                 mergedProjects.push(dynamicProj);
             });
@@ -218,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Re-apply searches and filters if search-filter.js is loaded
             if (typeof applyFilters === 'function') {
                 applyFilters();
-        attachCardListeners();
+                attachCardListeners();
             }
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
@@ -348,7 +350,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('project-modal');
         if (modal) modal.classList.remove('show');
     }
+function attachCardListeners() {
+    // Card click opens modal (excluding inner links/buttons)
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('a')) return; // ignore clicks on buttons/links
+            openProjectModal(card);
+        });
+    });
 
+    // Modal close button
+    const closeBtn = document.querySelector('.modal-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeProjectModal);
+    }
+
+    // Click outside modal content to close
+    const modal = document.getElementById('project-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeProjectModal();
+        });
+    }
+}
     // ============================================================
     // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
     // ============================================================
@@ -545,11 +570,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const toggleBtn = document.getElementById('dark-mode-toggle');
         if (toggleBtn) {
             toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            // Add rotation class based on theme
+            toggleBtn.classList.toggle('rotate', theme === 'dark');
             toggleBtn.addEventListener('click', () => {
                 const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
                 document.documentElement.dataset.theme = newTheme;
                 localStorage.setItem('theme', newTheme);
                 toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                toggleBtn.classList.toggle('rotate', newTheme === 'dark');
             });
         }
     }
