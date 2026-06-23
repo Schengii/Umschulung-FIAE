@@ -28,6 +28,14 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
+.project-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    object-fit: cover;
+    max-height: 200px;
+}
 
 /* Modal styling */
 .modal {
