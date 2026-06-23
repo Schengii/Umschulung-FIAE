@@ -131,8 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const githubRepos = await fetchGitHubRepos();
             
             const mergedProjects = [];
-            // after merging, store globally
-            allProjects = mergedProjects;
             const claimedRepos = new Set();
             
             // 1. Process static projects from projects.json
@@ -208,19 +206,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 mergedProjects.push(dynamicProj);
             });
             
+            // Store globally so sort works
+            allProjects = mergedProjects;
+
             // Render the full merged project list
             githubLoading.style.display = 'none';
             githubError.style.display = 'none';
             dynamicContainer.innerHTML = mergedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
             
+            // Always attach listeners after render
+            attachCardListeners();
+
             // Trigger translation alignment for new elements
             const activeLang = document.documentElement.getAttribute('lang') || 'de';
             document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
             
-            // Re-apply searches and filters if search-filter.js is loaded
+            // Re-apply category filters if search-filter.js is loaded
             if (typeof applyFilters === 'function') {
                 applyFilters();
-                attachCardListeners();
             }
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
@@ -302,8 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
             categoryClass = 'filter-web';
         }
 
+        const safeTagsAttr = encodeURIComponent(JSON.stringify(project.tags));
         return `
-        <article class="card project-card fade-in visible ${categoryClass}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags='${JSON.stringify(project.tags)}'>
+        <article class="card project-card fade-in visible ${categoryClass}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
             ${starsHTML}
             <h3 lang="de">${project.titleDe}</h3>
             <h3 lang="en">${project.titleEn}</h3>
@@ -330,13 +334,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const image = card.dataset.image;
         const link = card.dataset.link;
         const github = card.dataset.github;
-        const tags = JSON.parse(card.dataset.tags || '[]');
+        let tags = [];
+        try {
+            tags = JSON.parse(decodeURIComponent(card.dataset.tags || '%5B%5D'));
+        } catch(e) { tags = []; }
         const tagsHTML = tags.map(tag => `<span class="tech-tag">${tag}</span>`).join(' ');
         body.innerHTML = `
             <h2 lang="de">${titleDe}</h2>
             <h2 lang="en">${titleEn}</h2>
             <div class="tech-tags">${tagsHTML}</div>
-            ${image ? `<img src="${image}" alt="${titleDe}">` : ''}
+            ${image ? `<img src="${image}" alt="${titleDe}" style="width:100%;border-radius:8px;margin:1rem 0;">` : ''}
             <p lang="de">${descDe}</p>
             <p lang="en">${descEn}</p>
             <div class="modal-buttons" style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
@@ -344,36 +351,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${github ? `<a href="${github}" target="_blank" rel="noopener" class="btn-primary custom-size" style="background-color:var(--bg-nav); border-color:var(--bg-nav);"><span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span><span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span></a>` : ''}
             </div>`;
         modal.classList.add('show');
+        modal.removeAttribute('aria-hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeProjectModal() {
         const modal = document.getElementById('project-modal');
-        if (modal) modal.classList.remove('show');
-    }
-function attachCardListeners() {
-    // Card click opens modal (excluding inner links/buttons)
-    const cards = document.querySelectorAll('.project-card');
-    cards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('a')) return; // ignore clicks on buttons/links
-            openProjectModal(card);
-        });
-    });
-
-    // Modal close button
-    const closeBtn = document.querySelector('.modal-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeProjectModal);
+        if (modal) {
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
     }
 
-    // Click outside modal content to close
-    const modal = document.getElementById('project-modal');
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeProjectModal();
+    function attachCardListeners() {
+        // Card click opens modal (excluding inner links/buttons)
+        // Use a flag to avoid adding duplicate listeners on re-renders
+        const cards = document.querySelectorAll('.project-card:not([data-listener-attached])');
+        cards.forEach(card => {
+            card.setAttribute('data-listener-attached', 'true');
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('a') || e.target.closest('button')) return;
+                openProjectModal(card);
+            });
         });
+
+        // Modal close button (only attach once)
+        const closeBtn = document.querySelector('.modal-close:not([data-listener-attached])');
+        if (closeBtn) {
+            closeBtn.setAttribute('data-listener-attached', 'true');
+            closeBtn.addEventListener('click', closeProjectModal);
+        }
+
+        // Click outside modal content to close (only attach once)
+        const modal = document.getElementById('project-modal');
+        if (modal && !modal.dataset.backdropListener) {
+            modal.dataset.backdropListener = 'true';
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeProjectModal();
+            });
+        }
+
+        // Escape key to close modal (only attach once)
+        if (!document._escListenerAttached) {
+            document._escListenerAttached = true;
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeProjectModal();
+            });
+        }
     }
-}
     // ============================================================
     // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
     // ============================================================
@@ -561,28 +588,29 @@ function attachCardListeners() {
         });
     }
 
-    // Dark mode initialization
-    function initDarkMode() {
+    // Dark mode button – theme.js handles the actual init;
+    // here we just sync the portfolio-page toggle button if theme.js isn't available
+    function initDarkModeToggleFallback() {
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        if (!toggleBtn) return;
+        // Only attach if theme.js hasn't already done it (check for data attribute set by theme.js)
+        if (toggleBtn.dataset.themeInitialized) return;
         const stored = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = stored || (prefersDark ? 'dark' : 'light');
         document.documentElement.dataset.theme = theme;
-        const toggleBtn = document.getElementById('dark-mode-toggle');
-        if (toggleBtn) {
-            toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-            // Add rotation class based on theme
-            toggleBtn.classList.toggle('rotate', theme === 'dark');
-            toggleBtn.addEventListener('click', () => {
-                const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-                document.documentElement.dataset.theme = newTheme;
-                localStorage.setItem('theme', newTheme);
-                toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-                toggleBtn.classList.toggle('rotate', newTheme === 'dark');
-            });
-        }
+        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        toggleBtn.classList.toggle('rotate', theme === 'dark');
+        toggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = newTheme;
+            localStorage.setItem('theme', newTheme);
+            toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            toggleBtn.classList.toggle('rotate', newTheme === 'dark');
+        });
     }
 
-    initDarkMode();
+    initDarkModeToggleFallback();
 
     // Listen to global language change to keep previews in sync
     document.addEventListener('langchange', () => {
