@@ -108,9 +108,7 @@
 }
 
 /* Stars badge */
-.stars-badge {
-    float: right;
-    clear: right;
+.stars-badge { /* Changed from float to flex for modern layout */
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -118,6 +116,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-full);
     padding: 0.2rem 0.55rem;
+    margin-left: auto; /* Pushes the badge to the right */
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-secondary);
