@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
+    <link rel="stylesheet" href="assets/css/impressum.css">
 </head>
 
 <body>
@@ -80,7 +81,7 @@
                         <span lang="en">Message me</span>
                     </h3>
                     
-                    <form id="contact-form" style="margin-top: 1rem;">
+                    <form id="contact-form" class="contact-form-styled">
                         <div class="form-group">
                             <label for="contact-name">Name</label>
                             <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name">
@@ -96,7 +97,7 @@
                                 <span lang="de">Nachricht</span>
                                 <span lang="en">Message</span>
                             </label>
-                            <textarea id="contact-message" class="form-control" rows="5" required placeholder="..." style="resize: vertical; font-family: var(--font-sans);"></textarea>
+                            <textarea id="contact-message" class="form-control contact-message-textarea" rows="5" required placeholder="..."></textarea>
                         </div>
                         
                         <button type="submit" class="btn-primary">
@@ -105,7 +106,7 @@
                         </button>
                     </form>
                     
-                    <div id="form-feedback" class="card" style="display: none; margin-top: 1rem; background-color: #d1fae5; border-color: #10b981; color: #065f46; padding: 1rem;">
+                    <div id="form-feedback" class="card form-feedback-styled">
                         <i class="fa fa-check-circle" aria-hidden="true"></i> 
                         <span lang="de">Nachricht wurde simuliert gesendet! Vielen Dank.</span>
                         <span lang="en">Message successfully sent (simulated). Thank you!</span>

@@ -1,0 +1,43 @@
+.snake-intro {
+    text-align: center;
+    max-width: 500px;
+}
+.snake-controls-info {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+.snake-highscore-board {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--card-bg-light);
+}
+.snake-highscore-title {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.snake-highscore-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+.snake-highscore-header-row {
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.snake-highscore-cell {
+    padding: 0.5rem 0.25rem;
+}

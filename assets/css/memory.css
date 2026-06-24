@@ -1,0 +1,47 @@
+.memory-intro {
+    text-align: center;
+    max-width: 500px;
+}
+.memory-result-card {
+    display: none;
+    margin-top: 1rem;
+    text-align: center;
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+.memory-game-controls {
+    margin-top: 1.5rem;
+}
+.memory-highscore-board {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--card-bg-light);
+}
+.memory-highscore-title {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.memory-highscore-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+.memory-highscore-header-row {
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.memory-highscore-cell {
+    padding: 0.5rem 0.25rem;
+}

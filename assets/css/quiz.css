@@ -1,0 +1,25 @@
+.quiz-intro-text {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+.quiz-best-score-display {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.quiz-question-heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+.quiz-next-button {
+    display: none;
+    margin-top: 1.5rem;
+    width: auto;
+    float: right;
+}
+.quiz-clear-floats {
+    clear: both;
+}

@@ -1,0 +1,17 @@
+.contact-form-styled {
+    margin-top: 1rem;
+}
+
+.contact-message-textarea {
+    resize: vertical;
+    font-family: var(--font-sans);
+}
+
+.form-feedback-styled {
+    display: none;
+    margin-top: 1rem;
+    background-color: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+    padding: 1rem;
+}
