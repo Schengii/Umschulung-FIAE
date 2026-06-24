@@ -1073,6 +1073,7 @@ footer .icons a:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+// Media queries are ordered from larger to smaller breakpoints, which is a common and effective practice.
 @media screen and (max-width: 900px) {
     .layout-grid {
         grid-template-columns: 1fr;
