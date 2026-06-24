@@ -1,0 +1,214 @@
+/* Sandbox Workspace Layout */
+.workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 992px) {
+    .workspace-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Editor Section */
+.editor-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg-light);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--border);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    background: var(--card-bg);
+    border-color: var(--border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.code-input {
+    width: 100%;
+    height: 480px;
+    border: none;
+    padding: 1.25rem;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    background: #09090b;
+    color: #e4e4e7;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+}
+
+/* Preview & Console Section */
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.preview-pane {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: 320px;
+}
+
+.preview-header {
+    background: #f4f4f5;
+    border-bottom: 1px solid #e4e4e7;
+    padding: 0.5rem 1rem;
+    color: #3f3f46;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.preview-iframe {
+    width: 100%;
+    flex: 1;
+    border: none;
+    background: #ffffff;
+}
+
+/* Mock Console log */
+.console-pane {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #09090b;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+}
+
+.console-header {
+    background: #18181b;
+    border-bottom: 1px solid #27272a;
+    padding: 0.5rem 1rem;
+    color: #a1a1aa;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.console-log-box {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.console-entry {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.console-entry.log {
+    color: #10b981; /* green */
+}
+
+.console-entry.error {
+    color: #ef4444; /* red */
+}
+
+.console-entry.system {
+    color: #3b82f6; /* blue */
+    font-style: italic;
+}
+
+.collapsed {
+    display: none !important;
+}
+
+.templates-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    align-items: center;
+}
+
+.template-select-btn {
+    background: var(--card-bg-light);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.template-select-btn:hover {
+    border-color: var(--primary);
+    background: var(--border);
+    transform: translateY(-1px);
+}
+.template-title {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+}
+#run-code-btn {
+    width: auto;
+    padding: 0.35rem 1rem;
+}
+#clear-console-btn {
+    padding: 0.2rem 0.5rem;
+    color: #a1a1aa;
+}

@@ -1,0 +1,45 @@
+.kostentraeger-section {
+    margin: 2rem 0;
+}
+
+.kostentraeger-list {
+    padding-left: 1.5rem;
+    margin-top: 0.75rem;
+}
+
+.bfw-logo-container {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.bfw-logo-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    padding: 1.25rem 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+.bfw-logo-text {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    border-right: 2px solid rgba(255,255,255,0.2);
+    padding-right: 1rem;
+}
+.bfw-logo-description {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    max-width: 200px;
+}

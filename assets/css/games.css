@@ -1,0 +1,25 @@
+.layout-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.game-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.game-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+.game-icon-accent {
+    color: var(--accent);
+}
+.game-card-btn {
+    display: block;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+}
