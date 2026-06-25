@@ -123,16 +123,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             let staticProjects = [];
-            if (window.projectsData && Array.isArray(window.projectsData)) {
-                staticProjects = window.projectsData;
-            } else {
-                const response = await fetch('./assets/data/projects.json');
-                if (!response.ok) {
-                    throw new Error(`Failed to load projects.json: ${response.status}`);
-                }
-                staticProjects = await response.json();
+        // Load static projects from window.projectsData if available
+        if (window.projectsData && Array.isArray(window.projectsData)) {
+            staticProjects = window.projectsData;
+        } else {
+            // Fallback to fetch projects.json
+            const response = await fetch('./assets/data/projects.json');
+            if (!response.ok) {
+                throw new Error(`Failed to load projects.json: ${response.status}`);
             }
-            const githubRepos = await fetchGitHubRepos();
+            staticProjects = await response.json();
+        }
+        // Additionally load folder projects (generated from local Projekt folders)
+        try {
+            const folderResponse = await fetch('./assets/data/folder_projects.json');
+            if (folderResponse.ok) {
+                const folderProjects = await folderResponse.json();
+                staticProjects = staticProjects.concat(folderProjects);
+            }
+        } catch (e) {
+            console.warn('Failed to load folder_projects.json', e);
+        }
+        const githubRepos = await fetchGitHubRepos();
             
             const mergedProjects = [];
             const claimedRepos = new Set();
