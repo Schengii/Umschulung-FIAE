@@ -239,11 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic Card Generator
     function generateDynamicCardHTML(project) {
-        // Skip blacklisted projects
-        const blacklist = ['About me', 'Projekte Developer Akademie', 'EcoChef', 'meine eigene Webseite'];
-        if (blacklist.includes(project.titleDe) || blacklist.includes(project.titleEn)) {
-            return '';
-        }
+    // Build language/framework badges if available
+    let techBadge = '';
+    if (project.language || project.framework) {
+        const lang = project.language ? `${project.language}` : '';
+        const fw = project.framework ? ` / ${project.framework}` : '';
+        techBadge = `\n            <p class="project-tech" style="margin: 0.5rem 0; font-weight: 500; color: var(--text-primary);"><strong>Tech:</strong> ${lang}${fw}</p>`;
+    }
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
         
@@ -322,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             ${imageHTML}
             <p lang="de">${project.descDe}</p>
+            ${techBadge}
             <p lang="en">${project.descEn}</p>
             ${buttonsHTML}
         </article>`;
@@ -373,22 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function attachCardListeners() {
         // Card click opens modal (excluding inner links/buttons)
         // Use a flag to avoid adding duplicate listeners on re-renders
-        // Skip blacklisted projects
-        const blacklist = [
-            'About me',
-            'Projekte Developer Akademie',
-            'EcoChef',
-            'meine eigene Webseite'
-        ];
-        if (blacklist.includes(project.titleDe) || blacklist.includes(project.titleEn)) {
-            return '';
-        }
+        // No blacklist – show all projects
+        const cards = document.querySelectorAll('.project-card');
         cards.forEach(card => {
-            card.setAttribute('data-listener-attached', 'true');
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('a') || e.target.closest('button')) return;
-                openProjectModal(card);
-            });
+            if (!card.dataset.listenerAttached) {
+                card.dataset.listenerAttached = 'true';
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a') || e.target.closest('button')) return;
+                    openProjectModal(card);
+                });
+            }
         });
 
         // Modal close button (only attach once)
