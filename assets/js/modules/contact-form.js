@@ -1,8 +1,16 @@
 /**
  * Contact Form Module — triggers mailto
+ * Handles both #contact-form (impressum.html) and #hire-me-form (portfolio.html).
  */
 function initContactForm() {
-    const form = document.getElementById('contact-form');
+    // Handle main contact form (impressum.html)
+    _bindContactForm('contact-form', 'contact-name', 'contact-email', 'contact-message', 'form-feedback');
+    // Handle hire-me form (portfolio.html) — uses distinct IDs to avoid conflicts
+    _bindContactForm('hire-me-form', 'hire-me-name', 'hire-me-email', 'hire-me-message', 'hire-me-feedback');
+}
+
+function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
+    const form = document.getElementById(formId);
     if (!form) return;
 
     form.removeAttribute('onsubmit');
@@ -10,11 +18,12 @@ function initContactForm() {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const name = document.getElementById('contact-name');
-        const email = document.getElementById('contact-email');
-        const message = document.getElementById('contact-message');
-        const feedback = document.getElementById('form-feedback');
+        const name = document.getElementById(nameId);
+        const email = document.getElementById(emailId);
+        const message = document.getElementById(messageId);
+        const feedback = document.getElementById(feedbackId);
 
+        if (!name || !email || !message) return;
         if (!name.value.trim() || !email.value.trim() || !message.value.trim()) return;
 
         // Show feedback message
