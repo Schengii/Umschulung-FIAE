@@ -22,6 +22,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/confetti.js',
     'assets/js/modules/project-slideshow.js',
     'assets/js/modules/game-audio.js',
+    'assets/js/generate_local_projects.js',
 ];
 
 (function loadModules() {
