@@ -41,6 +41,8 @@ const __MODULE_SCRIPTS = [
             initSkillBars();
             initRoadmap();
             initSlideshow();
+            initConfetti();
+            initGameAudio();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

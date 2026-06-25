@@ -59,7 +59,7 @@ function renderHeader() {
 function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html'];
+    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html'];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -79,23 +79,17 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(ausbildungPages)}">
                     <a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="ausbildungsablauf.html" class="dropdown-link" lang="de">Ablauf Ausbildung</a></li>
-                        <li><a href="ausbildungsablauf.html" class="dropdown-link" lang="en">Training Process</a></li>
-                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link" lang="de">Berufsförderungswerk Dortmund</a></li>
-                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link" lang="en">BFW Dortmund Center</a></li>
+                        <li><a href="ausbildungsablauf.html" class="dropdown-link"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
+                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
                         <li class="dropdown-item">
                             <a href="kostentraeger.html" class="dropdown-link"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu">
-                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" lang="de">Rentenversicherung</a></li>
-                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" lang="en">Pension Insurance</a></li>
-                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="de">Berufsgenossenschaften</a></li>
-                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="en">Trade Associations</a></li>
-                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="de">Agentur für Arbeit</a></li>
-                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" lang="en">Employment Agency</a></li>
+                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
+                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
+                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="praktikumsbetrieb.html" class="dropdown-link" lang="de">Praktikumsbetrieb</a></li>
-                        <li><a href="praktikumsbetrieb.html" class="dropdown-link" lang="en">Internship Company</a></li>
+                        <li><a href="praktikumsbetrieb.html" class="dropdown-link"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('portfolio.html')}">
@@ -113,16 +107,12 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(weiteresPages)}">
                     <a href="#" class="nav-link"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="interview-trainer.html" class="dropdown-link" lang="de">Bewerbungs-Trainer</a></li>
-                        <li><a href="interview-trainer.html" class="dropdown-link" lang="en">Interview Trainer</a></li>
-                        <li><a href="playground.html" class="dropdown-link" lang="de">Code Playground</a></li>
-                        <li><a href="playground.html" class="dropdown-link" lang="en">Code Playground</a></li>
-                        <li><a href="architecture.html" class="dropdown-link" lang="de">Architektur &amp; API</a></li>
-                        <li><a href="architecture.html" class="dropdown-link" lang="en">Architecture &amp; API</a></li>
-                        <li><a href="flashcards.html" class="dropdown-link" lang="de">IHK Lernkarten</a></li>
-                        <li><a href="flashcards.html" class="dropdown-link" lang="en">IHK Flashcards</a></li>
-                        <li><a href="quiz.html" class="dropdown-link" lang="de">Test Quiz</a></li>
-                        <li><a href="quiz.html" class="dropdown-link" lang="en">Quiz Test</a></li>
+                        <li><a href="interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
+                        <li><a href="playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
+                        <li><a href="architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
+                        <li><a href="flashcards.html" class="dropdown-link"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
+                        <li><a href="dashboard.html" class="dropdown-link"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
+                        <li><a href="quiz.html" class="dropdown-link"><span lang="de">Test Quiz</span><span lang="en">Quiz Test</span></a></li>
                         <li class="dropdown-item">
                             <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu">
@@ -131,8 +121,7 @@ function renderNav(currentPage) {
                                 <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
                             </ul>
                         </li>
-                        <li><a href="index.html" class="dropdown-link" lang="de">Startseite</a></li>
-                        <li><a href="index.html" class="dropdown-link" lang="en">Welcome Page</a></li>
+                        <li><a href="index.html" class="dropdown-link"><span lang="de">Startseite</span><span lang="en">Welcome Page</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -160,17 +149,17 @@ function renderNav(currentPage) {
    FOOTER
    ============================================================ */
 function renderFooter() {
+    const year = new Date().getFullYear();
     return `
     <footer>
-        <p>&copy; 2026 Maximilian Schenk &middot; Rüdesheimer Str. 14 &middot; 53175 Bonn &middot; Germany &middot;
+        <p>&copy; ${year} Maximilian Schenk &middot; R&uuml;desheimer Str. 14 &middot; 53175 Bonn &middot; Germany &middot;
             <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: underline;">
                 <span lang="de">Datenschutz</span><span lang="en">Privacy</span>
             </a>
         </p>
         <div class="icons">
-            <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>
+            <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
             <a href="mailto:info@Max-Schenk.de" aria-label="E-Mail"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         </div>
     </footer>`;

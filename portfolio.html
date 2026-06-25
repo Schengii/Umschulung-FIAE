@@ -10,7 +10,7 @@
     <meta property="og:title" content="Portfolio - Maximilian Schenk">
     <meta property="og:description" content="Meine Programmierprojekte als angehender Fachinformatiker Anwendungsentwicklung.">
     <meta property="og:image" content="assets/images/ecochef_showcase.png">
-    <meta property="og:url" content="https://schengii.github.io/Umschulung-FIAE/portfolio.html">
+    <meta property="og:url" content="https://max-schenk.de/portfolio.html">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -164,25 +164,25 @@
                     <p lang="de">Interesse an einer Zusammenarbeit? Ich bin ab sofort auf der Suche nach einer Junior-Position als Softwareentwickler. Schreib mir einfach eine Nachricht!</p>
                     <p lang="en">Interested in working together? I am currently looking for a junior software developer position. Feel free to drop me a message!</p>
                     
-                    <form id="contact-form" class="project-form mt-1rem">
+                    <form id="hire-me-form" class="project-form mt-1rem">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="contact-name"><span lang="de">Name *</span><span lang="en">Name *</span></label>
-                                <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name / Your Name">
+                                <label for="hire-me-name"><span lang="de">Name *</span><span lang="en">Name *</span></label>
+                                <input type="text" id="hire-me-name" class="form-control" required placeholder="Dein Name / Your Name">
                             </div>
                             <div class="form-group">
-                                <label for="contact-email"><span lang="de">E-Mail *</span><span lang="en">Email *</span></label>
-                                <input type="email" id="contact-email" class="form-control" required placeholder="name@domain.com">
+                                <label for="hire-me-email"><span lang="de">E-Mail *</span><span lang="en">Email *</span></label>
+                                <input type="email" id="hire-me-email" class="form-control" required placeholder="name@domain.com">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="contact-message"><span lang="de">Nachricht *</span><span lang="en">Message *</span></label>
-                            <textarea id="contact-message" class="form-control" rows="4" required placeholder="..."></textarea>
+                            <label for="hire-me-message"><span lang="de">Nachricht *</span><span lang="en">Message *</span></label>
+                            <textarea id="hire-me-message" class="form-control" rows="4" required placeholder="..."></textarea>
                         </div>
                         <button type="submit" class="btn-primary custom-size">
                             <i class="fa fa-paper-plane" aria-hidden="true"></i> <span lang="de">Nachricht senden</span><span lang="en">Send Message</span>
                         </button>
-                        <div id="form-feedback" class="form-feedback">
+                        <div id="hire-me-feedback" class="form-feedback">
                             <i class="fa fa-check"></i> <span lang="de">E-Mail Programm wird geöffnet...</span><span lang="en">Opening email client...</span>
                         </div>
                     </form>
@@ -221,9 +221,13 @@
                         <div class="timeline-item timeline-item-tertiary"><h4 class="timeline-title">Umschulung FIAE</h4><span class="timeline-meta">2024 - 2026</span></div>
                     </div>
 
-                    <a href="assets/Lebenslauf.pdf" class="btn-primary btn-primary-block" download>
+                    <a href="assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download title="Lebenslauf als PDF herunterladen">
                         <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span lang="en">Download CV</span>
                     </a>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                        <span lang="de"><i class="fa fa-info-circle"></i> PDF wird aktualisiert</span>
+                        <span lang="en"><i class="fa fa-info-circle"></i> PDF being updated</span>
+                    </p>
                 </section>
 
                 <!-- ANIMATED SKILL BARS -->
@@ -259,13 +263,15 @@
 
     <div id="site-footer"></div>
 
+    <div id="project-modal" class="modal" aria-hidden="true" aria-modal="true" role="dialog">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close Modal">&times;</button>
+            <div id="modal-body-content"></div>
+        </div>
+    </div>
+
     <script src="assets/js/portfolio.js"></script>
     <script src="assets/js/main.js"></script>
-<div id="project-modal" class="modal" aria-hidden="true" aria-modal="true" role="dialog">
-    <div class="modal-content">
-        <button class="modal-close" aria-label="Close Modal">&times;</button>
-        <div id="modal-body-content"></div>
-    </div>
-</div>
+</body>
 
 </html>

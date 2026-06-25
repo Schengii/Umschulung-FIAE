@@ -12,6 +12,8 @@
     <meta property="og:description"
         content="Dashboard mit Werdegang, IHK-Countdown und Infos zur Umschulung als Fachinformatiker.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://max-schenk.de/home.html">
+    <meta property="og:image" content="https://max-schenk.de/assets/images/it_workspace.png">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -37,12 +39,23 @@
                 <span lang="de">Über mich — Maximilian Schenk</span>
                 <span lang="en">About Me — Maximilian Schenk</span>
             </h2>
-            <p lang="de">Ich bin <strong>24 Jahre alt</strong> und wohne in <strong>Bonn</strong>. Aktuell mache ich
+            <p lang="de">Ich bin <strong id="my-age">24</strong> Jahre alt und wohne in <strong>Bonn</strong>. Aktuell mache ich
                 meine Umschulung zum Fachinformatiker für Anwendungsentwicklung. Dieses Portfolio dient dazu, meinen
                 Werdegang, meine Umschulungsinhalte und meine Programmierprojekte vorzustellen.</p>
-            <p lang="en">I am <strong>24 years old</strong> and live in <strong>Bonn</strong>. I am currently undergoing
+            <p lang="en">I am <strong id="my-age-en">24</strong> years old and live in <strong>Bonn</strong>. I am currently undergoing
                 retraining as an IT Specialist in Application Development. This portfolio highlights my career journey,
                 retraining modules, and programming projects.</p>
+            <script>
+                // Dynamically calculate age from birth year 2002
+                (function() {
+                    const birthYear = 2002, birthMonth = 3, birthDay = 15; // ~March 2002
+                    const today = new Date();
+                    let age = today.getFullYear() - birthYear;
+                    if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
+                    const els = document.querySelectorAll('#my-age, #my-age-en');
+                    els.forEach(el => { if (el) el.textContent = age; });
+                })();
+            </script>
         </section>
 
         <div class="layout-grid">
