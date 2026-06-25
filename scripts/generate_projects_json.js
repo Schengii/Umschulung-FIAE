@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const projectsDir = path.resolve(__dirname, '..', '..', 'Projekte');
-const outputFile = path.resolve(__dirname, '..', '..', 'assets', 'data', 'projects.json');
+const outputFile = path.resolve(__dirname, '..', '..', 'assets', 'data', 'folder_projects.json');
 
 function getProjects() {
   const entries = fs.readdirSync(projectsDir, { withFileTypes: true });
@@ -11,9 +11,17 @@ function getProjects() {
     .filter(e => e.isDirectory())
     .map(dir => {
       const name = dir.name;
-      const title = name.replace(/_/g, ' ');
-      const link = `Projekte/${name}/index.html`;
-      return { title, link };
+      const cleanTitle = name.replace(/_/g, ' ');
+      return {
+        titleDe: cleanTitle,
+        titleEn: cleanTitle,
+        link: `Projekte/${name}/index.html`,
+        image: null,
+        descDe: '',
+        descEn: '',
+        tags: [],
+        category: 'web'
+      };
     });
   return projects;
 }
