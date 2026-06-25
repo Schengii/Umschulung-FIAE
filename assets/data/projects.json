@@ -1,15 +1,4 @@
-[
-  {
-    "repoName": "EcoChef",
-    "titleDe": "🍳 EcoChef — Nachhaltiges Koch- & Rezeptportal (Abschlussprojekt)",
-    "titleEn": "🍳 EcoChef — Sustainable Cooking & Recipe Portal (Capstone Project)",
-    "tags": ["Java / Spring Boot", "REST API", "PostgreSQL", "Thymeleaf / CSS3", "IHK Abschlussprojekt"],
-    "image": "assets/images/ecochef_showcase.png",
-    "link": "Projekte/EcoChef/www/index.html",
-    "descDe": "EcoChef ist mein IHK-Abschlussprojekt. Die Webanwendung unterstützt Nutzer*innen dabei, gesunde und umweltfreundliche Mahlzeiten zu planen. EcoChef berechnet basierend auf den Zutaten automatisch einen ökologischen Fußabdruck (CO₂-Emissionen, Wasserverbrauch), schlägt regionale/saisonale Alternativen vor und bietet praktische Tipps zur Vermeidung von Lebensmittelverschwendung sowie zur energiesparenden Zubereitung.",
-    "descEn": "EcoChef is my IHK capstone project. The web application helps users plan healthy and environmentally friendly meals. Based on the ingredients, EcoChef automatically calculates an ecological footprint (CO₂ emissions, water consumption), suggests regional/seasonal alternatives, and provides practical tips to avoid food waste and energy-saving cooking methods.",
-    "category": "web"
-  },
+
   {
     "repoName": "ElektroCheck-AI",
     "titleDe": "⚡ ElektroCheck AI — Intelligente Prüfberichtsanalyse",
