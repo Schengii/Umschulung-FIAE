@@ -120,14 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         githubLoading.style.display = 'block';
-        githubLoading.style.display = 'block';
 
         try {
-            const response = await fetch('assets/data/projects.json');
-            if (!response.ok) {
-                throw new Error(`Failed to load projects.json: ${response.status}`);
+            let staticProjects = [];
+            if (window.projectsData && Array.isArray(window.projectsData)) {
+                staticProjects = window.projectsData;
+            } else {
+                const response = await fetch('./assets/data/projects.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load projects.json: ${response.status}`);
+                }
+                staticProjects = await response.json();
             }
-            const staticProjects = await response.json();
             const githubRepos = await fetchGitHubRepos();
             
             const mergedProjects = [];
