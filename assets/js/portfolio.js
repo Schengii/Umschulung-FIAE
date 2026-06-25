@@ -239,6 +239,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic Card Generator
     function generateDynamicCardHTML(project) {
+        // Skip blacklisted projects
+        const blacklist = ['About me', 'Projekte Developer Akademie', 'EcoChef', 'meine eigene Webseite'];
+        if (blacklist.includes(project.titleDe) || blacklist.includes(project.titleEn)) {
+            return '';
+        }
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
         
@@ -368,7 +373,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function attachCardListeners() {
         // Card click opens modal (excluding inner links/buttons)
         // Use a flag to avoid adding duplicate listeners on re-renders
-        const cards = document.querySelectorAll('.project-card:not([data-listener-attached])');
+        // Skip blacklisted projects
+        const blacklist = [
+            'About me',
+            'Projekte Developer Akademie',
+            'EcoChef',
+            'meine eigene Webseite'
+        ];
+        if (blacklist.includes(project.titleDe) || blacklist.includes(project.titleEn)) {
+            return '';
+        }
         cards.forEach(card => {
             card.setAttribute('data-listener-attached', 'true');
             card.addEventListener('click', (e) => {
