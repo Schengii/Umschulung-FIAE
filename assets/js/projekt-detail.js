@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const detailContainer = document.getElementById('project-detail-container');
     const breadcrumbCurrent = document.getElementById('breadcrumb-current-project');
+    const relatedSection = document.getElementById('related-projects-section');
+    const relatedContainer = document.getElementById('related-projects-container');
     const GITHUB_USERNAME = 'Schengii';
     const CACHE_KEY = 'github_projects_cache';
     const CACHE_TIME_KEY = 'github_projects_cache_time';
@@ -59,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             enriched.stars = ghRepo.stargazers_count || 0;
                             enriched.githubUrl = ghRepo.html_url;
                             enriched.updatedAt = ghRepo.updated_at;
+                            enriched.tags = [...new Set([...(enriched.tags || []), ...(ghRepo.topics || [])])];
                             if (ghRepo.homepage && ghRepo.homepage.trim() !== '') {
                                 enriched.link = ghRepo.homepage;
                             }
@@ -77,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (project) {
                 renderProjectDetails(project);
+                renderRelatedProjects(project, allProjects);
             } else {
                 throw new Error('Projekt nicht gefunden.');
             }
@@ -139,6 +143,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Ensure correct language is displayed
         document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+    }
+
+    function renderRelatedProjects(currentProject, allProjects) {
+        if (!relatedSection || !relatedContainer) return;
+
+        const currentTags = new Set((currentProject.tags || []).map(t => t.toLowerCase()));
+        const currentId = currentProject.repoName || currentProject.titleDe;
+
+        const related = allProjects
+            .filter(p => (p.repoName || p.titleDe) !== currentId) // Exclude self
+            .map(p => {
+                const otherTags = new Set((p.tags || []).map(t => t.toLowerCase()));
+                const commonTags = new Set([...currentTags].filter(tag => otherTags.has(tag)));
+                return { project: p, score: commonTags.size };
+            })
+            .filter(item => item.score > 0) // Only include projects with at least one common tag
+            .sort((a, b) => b.score - a.score) // Sort by most common tags
+            .slice(0, 3); // Take top 3
+
+        if (related.length > 0) {
+            relatedContainer.innerHTML = related.map(item => generateRelatedCard(item.project)).join('');
+            relatedSection.style.display = 'block';
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+        }
+    }
+
+    function generateRelatedCard(project) {
+        const url = project.repoName 
+            ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
+            : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;
+
+        return `
+            <a href="${url}" class="related-project-card">
+                ${project.image ? `<img src="${project.image}" alt="" loading="lazy">` : ''}
+                <div class="related-project-info">
+                    <h4 lang="de">${project.titleDe}</h4>
+                    <h4 lang="en">${project.titleEn}</h4>
+                    <p lang="de">${(project.tags || []).slice(0, 3).join(', ')}</p>
+                    <p lang="en">${(project.tags || []).slice(0, 3).join(', ')}</p>
+                </div>
+            </a>
+        `;
     }
 
     loadAndDisplayProject();

@@ -1,0 +1,47 @@
+/* assets/css/skeletons.css */
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.skeleton {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.skeleton-line {
+    height: 1em;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-page);
+    background-image: linear-gradient(to right, var(--bg-page) 0%, var(--border) 20%, var(--bg-page) 40%, var(--bg-page) 100%);
+    background-repeat: no-repeat;
+    background-size: 2000px 100%;
+    animation: shimmer 2s linear infinite;
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-line.heading {
+    width: 60%;
+    height: 1.2em;
+    margin-bottom: 1rem;
+}
+
+.skeleton-line.tag {
+    display: inline-block;
+    width: 60px;
+    margin-right: 0.5rem;
+}
+
+.skeleton-line.image {
+    aspect-ratio: 16 / 9;
+    margin: 1rem 0;
+}
