@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load dynamic projects (projects.json + GitHub API)
-    loadAndRenderProjects();
+    // Note: only called once here; removed duplicate call at line ~677
 
     // Fetch repositories from GitHub API with caching
     async function fetchGitHubRepos() {
@@ -148,12 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (githubError) githubError.style.display = 'none';
     
         try {
-            const [staticProjects, githubRepos] = await Promise.all([
-            const [staticProjects, githubRepos, folderProjects] = await Promise.all([
-                fetch('./assets/data/projects.json').then(res => res.ok ? res.json() : []),
-                fetchGitHubRepos()
+            // Use pre-loaded window.projectsData to avoid fetch CORS issues with file:// protocol
+            const staticProjects = (window.projectsData && Array.isArray(window.projectsData)) ? window.projectsData : [];
+            const [githubRepos, folderProjects] = await Promise.all([
                 fetchGitHubRepos(),
-                fetch('./assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => [])
+                fetch('assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => [])
             ]);
     
             const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
@@ -213,23 +212,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
     
+            // Filter out folder projects that are already covered by enrichedStaticProjects
+            // Also filter out folder projects with no description (they're empty/placeholder entries)
+            const enrichedRepoNames = new Set(enrichedStaticProjects.map(p => (p.titleDe || '').toLowerCase()));
+            const filteredFolderProjects = folderProjects.filter(fp => {
+                const fpTitle = (fp.titleDe || '').toLowerCase();
+                const isDuplicate = enrichedRepoNames.has(fpTitle);
+                const hasDescription = fp.descDe && fp.descDe.trim() !== '';
+                return !isDuplicate && hasDescription;
+            });
+
             // Store all fetched projects
-            allProjects = [...enrichedStaticProjects, ...newGithubProjects, ...customProjects];
-            allProjects = [...enrichedStaticProjects, ...folderProjects, ...newGithubProjects, ...customProjects];
+            allProjects = [...enrichedStaticProjects, ...filteredFolderProjects, ...newGithubProjects, ...customProjects];
     
             // Render everything
             renderAllProjects();
     
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
-            githubError.innerHTML = `<div class="github-error">
             if (githubError) {
                 githubError.innerHTML = `<div class="github-error">
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 <span lang="de">GitHub‑Projekte konnten nicht geladen werden.</span>
                 <span lang="en">GitHub projects could not be loaded.</span>
             </div>`;
-            githubError.style.display = 'block';
                 githubError.style.display = 'block';
             }
         } finally {
@@ -242,8 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
         
-        // Build tags
-        const tagsHTML = project.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('\n        ');
+        // Build tags (guard against null/empty)
+        const tags = Array.isArray(project.tags) ? project.tags : [];
+        const tagsHTML = tags.length > 0
+            ? tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('\n        ')
+            : '';
         
         // Build image
         let imageHTML = '';
@@ -256,17 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Build stars badge
         let starsHTML = '';
-        if (project.stars > 0) {
-            starsHTML = `
-            <span class="stars-badge" title="${project.stars} Stars on GitHub" style="display: inline-flex; align-items: center; background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0.25rem 0.6rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-left: 0.5rem; float: right;">
-                <i class="fa fa-star" aria-hidden="true" style="color: #eab308; margin-right: 0.25rem;"></i> ${project.stars}
-            </span>`;
         if (project.stars !== undefined && project.stars > 0) {
             starsHTML = `<span class="stars-badge" title="${project.stars} Stars on GitHub"><i class="fa fa-star" aria-hidden="true"></i> ${project.stars}</span>`;
         }
 
         // Build buttons
-        let buttonsHTML = '<div class="mt-1rem" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">';
         let buttonsHTML = '<div class="project-buttons">';
         
         if (project.link) {
@@ -284,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             buttonsHTML += `
-            <a href="${project.link}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
             <a href="${project.link}" class="btn-primary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
@@ -293,8 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (project.githubUrl) {
             buttonsHTML += `
-            <a href="${project.githubUrl}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: var(--bg-nav); border-color: var(--bg-nav);">
-            <a href="${project.githubUrl}" class="btn-primary btn-project secondary" target="_blank" rel="noopener">
+            <a href="${project.githubUrl}" class="btn-primary btn-project btn-github" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span>
                 <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
             </a>`;
@@ -314,10 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const safeTagsAttr = encodeURIComponent(JSON.stringify(project.tags));
         return `
         <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
-            ${starsHTML}
-            <h3 lang="de">${project.titleDe}</h3>
-            <h3 lang="en">${project.titleEn}</h3>
-            
             <div class="project-card-header">
                 <h3 lang="de">${project.titleDe}</h3>
                 <h3 lang="en">${project.titleEn}</h3>
@@ -392,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPagination(sorted.length);
         attachCardListeners();
         attachAdminListeners(); // Re-attach delete/edit listeners
-        attachAdminListeners();
 
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
@@ -430,25 +426,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Note: Card click-to-open-modal is handled by modal.js to avoid duplicate listeners
     function attachCardListeners() {
-        const cards = document.querySelectorAll('.project-card');
-        cards.forEach(card => {
-            if (!card.dataset.listenerAttached) {
-                card.dataset.listenerAttached = 'true';
-                card.addEventListener('click', (e) => {
-                    if (e.target.closest('a') || e.target.closest('button')) return;
-                    
-                    const repoName = card.dataset.repoName;
-                    const titleDe = card.dataset.titleDe;
-
-                    if (repoName) {
-                        window.location.href = `projekt-detail.html?repo=${encodeURIComponent(repoName)}`;
-                    } else if (titleDe) {
-                        window.location.href = `projekt-detail.html?title=${encodeURIComponent(titleDe)}`;
-                    }
-                });
-            }
-        });
+        // Modal.js handles project card clicks via event delegation
+        // This function is kept for compatibility but does nothing active
     }
     // ============================================================
     // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
@@ -570,7 +551,6 @@ document.addEventListener('DOMContentLoaded', () => {
         projectForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const project = getFormValues();
             const project = { ...getFormValues(), isCustom: true };
             const editIndex = projectForm.dataset.editIndex;
 
@@ -587,10 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const projectsToStore = customProjects.map(({ isCustom, ...rest }) => rest);
             if (typeof StorageManager !== 'undefined') {
                 StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-                StorageManager.setItem('portfolio_custom_projects', JSON.stringify(projectsToStore));
             } else {
                 localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-                localStorage.setItem('portfolio_custom_projects', JSON.stringify(projectsToStore));
             }
             
             renderCustomProjects();
@@ -631,7 +609,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Add delete listeners
-        const deleteButtons = customProjectsContainer.querySelectorAll('.btn-delete-project');
         const deleteButtons = document.querySelectorAll('#custom-projects-container .btn-delete-project');
         deleteButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -656,10 +633,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Add edit listeners
-        const editButtons = customProjectsContainer.querySelectorAll('.btn-edit-project');
         const editButtons = document.querySelectorAll('#custom-projects-container .btn-edit-project');
         editButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const idx = parseInt(btn.getAttribute('data-index'));
@@ -691,7 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
 
-    // Initial Load
+    // Initial Load (called once at top of DOMContentLoaded)
     loadAndRenderProjects();
 
     // Copy Code button
@@ -708,33 +683,167 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-    // Dark mode button – theme.js handles the actual init;
-    // here we just sync the portfolio-page toggle button if theme.js isn't available
-    function initDarkModeToggleFallback() {
-        const toggleBtn = document.getElementById('dark-mode-toggle');
-        if (!toggleBtn) return;
-        // Only attach if theme.js hasn't already done it (check for data attribute set by theme.js)
-        if (toggleBtn.dataset.themeInitialized) return;
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = stored || (prefersDark ? 'dark' : 'light');
-        document.documentElement.dataset.theme = theme;
-        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        toggleBtn.classList.toggle('rotate', theme === 'dark');
-        toggleBtn.addEventListener('click', () => {
-            const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.dataset.theme = newTheme;
-            localStorage.setItem('theme', newTheme);
-            toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-            toggleBtn.classList.toggle('rotate', newTheme === 'dark');
-        });
-    }
-
-    initDarkModeToggleFallback();
+     // Dark mode button – now uses #theme-toggle id and handles theme switching.
+function initDarkModeToggle() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored || (prefersDark ? 'dark' : 'light');
+    document.documentElement.dataset.theme = theme;
+    toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    toggleBtn.classList.toggle('rotate', theme === 'dark');
+    toggleBtn.addEventListener('click', () => {
+        const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = newTheme;
+        localStorage.setItem('theme', newTheme);
+        toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        toggleBtn.classList.toggle('rotate', newTheme === 'dark');
+    });
+}
+initDarkModeToggle();
 
     // Listen to global language change to keep previews in sync
     document.addEventListener('langchange', () => {
         updateLivePreview();
     });
+
+    // Back-to-Top Button
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }, { passive: true });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('project-modal');
+            if (modal && modal.classList.contains('show')) {
+                modal.classList.remove('show');
+                modal.classList.add('hidden');
+            }
+        }
+    });
+
+    // Hire-Me Form
+    const hireMeForm = document.getElementById('hire-me-form');
+    if (hireMeForm) {
+        hireMeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('hire-me-name')?.value.trim() || '';
+            const email = document.getElementById('hire-me-email')?.value.trim() || '';
+            const msg = document.getElementById('hire-me-message')?.value.trim() || '';
+            const feedback = document.getElementById('hire-me-feedback');
+            const subject = encodeURIComponent(`Portfolio Kontakt von ${name}`);
+            const body = encodeURIComponent(`${msg}\n\nAbsender: ${name} <${email}>`);
+            window.location.href = `mailto:max@max-schenk.de?subject=${subject}&body=${body}`;
+            if (feedback) {
+                feedback.style.display = 'flex';
+                setTimeout(() => { feedback.style.display = 'none'; }, 4000);
+            }
+        });
+    }
+
+    // Testimonial Carousel
+    const testimonialDots = document.querySelectorAll('.testimonial-dot');
+    const testimonialItems = document.querySelectorAll('.testimonial-item');
+    if (testimonialDots.length && testimonialItems.length) {
+        testimonialDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const idx = parseInt(dot.dataset.index);
+                testimonialItems.forEach(item => item.classList.remove('active'));
+                testimonialDots.forEach(d => d.classList.remove('active'));
+                if (testimonialItems[idx]) testimonialItems[idx].classList.add('active');
+                dot.classList.add('active');
+            });
+        });
+        // Auto-rotate every 6 seconds
+        let currentTestimonial = 0;
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonialItems.length;
+            testimonialItems.forEach(item => item.classList.remove('active'));
+            testimonialDots.forEach(d => d.classList.remove('active'));
+            testimonialItems[currentTestimonial].classList.add('active');
+            testimonialDots[currentTestimonial].classList.add('active');
+        }, 6000);
+    }
+
+    // Skill bar animation on scroll — uses .animated class + --skill-level CSS var
+    const skillFills = document.querySelectorAll('.skill-fill');
+    if (skillFills.length) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        skillFills.forEach(fill => observer.observe(fill));
+    }
+
+    // Radar Chart (SVG-based)
+    const radarContainer = document.getElementById('skill-radar-container');
+    if (radarContainer) {
+        const skills = [
+            { label: 'HTML/CSS', value: 85 },
+            { label: 'JavaScript', value: 75 },
+            { label: 'Java', value: 70 },
+            { label: 'SQL', value: 65 },
+            { label: 'Git', value: 80 },
+            { label: 'React', value: 60 }
+        ];
+        const size = 200;
+        const center = size / 2;
+        const radius = 80;
+        const angleStep = (2 * Math.PI) / skills.length;
+
+        const points = skills.map((s, i) => {
+            const angle = i * angleStep - Math.PI / 2;
+            const r = (s.value / 100) * radius;
+            return {
+                x: center + r * Math.cos(angle),
+                y: center + r * Math.sin(angle),
+                lx: center + (radius + 20) * Math.cos(angle),
+                ly: center + (radius + 20) * Math.sin(angle),
+                label: s.label
+            };
+        });
+
+        const gridLines = [0.25, 0.5, 0.75, 1].map(pct => {
+            const gridPts = skills.map((_, i) => {
+                const angle = i * angleStep - Math.PI / 2;
+                const r = pct * radius;
+                return `${center + r * Math.cos(angle)},${center + r * Math.sin(angle)}`;
+            }).join(' ');
+            return `<polygon points="${gridPts}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+        }).join('');
+
+        const spokeLines = skills.map((_, i) => {
+            const angle = i * angleStep - Math.PI / 2;
+            return `<line x1="${center}" y1="${center}" x2="${center + radius * Math.cos(angle)}" y2="${center + radius * Math.sin(angle)}" stroke="var(--border)" stroke-width="1"/>`;
+        }).join('');
+
+        const dataPoints = points.map(p => `${p.x},${p.y}`).join(' ');
+        const labels = points.map(p => {
+            const anchor = p.lx > center + 5 ? 'start' : p.lx < center - 5 ? 'end' : 'middle';
+            return `<text x="${p.lx}" y="${p.ly + 4}" text-anchor="${anchor}" font-size="9" fill="var(--text-secondary)" font-family="var(--font-sans)">${p.label}</text>`;
+        }).join('');
+
+        radarContainer.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+            ${gridLines}
+            ${spokeLines}
+            <polygon points="${dataPoints}" fill="rgba(37,99,235,0.25)" stroke="var(--primary)" stroke-width="2"/>
+            ${labels}
+        </svg>`;
+    }
 });
