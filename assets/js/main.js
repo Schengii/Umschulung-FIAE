@@ -18,10 +18,18 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/cookie-banner.js',
     'assets/js/modules/contact-form.js',
     'assets/js/modules/skill-bars.js',
+    'assets/js/modules/skill-radar.js',
     'assets/js/modules/roadmap.js',
     'assets/js/modules/confetti.js',
     'assets/js/modules/project-slideshow.js',
     'assets/js/modules/game-audio.js',
+    'assets/js/modules/age-calculator.js',
+    'assets/js/modules/hero-section.js',
+    'assets/js/modules/keyboard-shortcuts.js',
+    'assets/js/modules/easter-eggs.js',
+    'assets/js/modules/achievements.js',
+    'assets/js/modules/blog-enhancements.js',
+    'assets/js/modules/learning-progress.js',
     'assets/js/generate_local_projects.js',
 ];
 
@@ -40,10 +48,18 @@ const __MODULE_SCRIPTS = [
             initCookieBanner();
             initContactForm();
             initSkillBars();
+            initSkillRadar();
             initRoadmap();
             initSlideshow();
             initConfetti();
             initGameAudio();
+            initAgeCalculator();
+            initHeroSection();
+            initKeyboardShortcuts();
+            initEasterEggs();
+            initAchievements();
+            initBlogEnhancements();
+            initLearningProgress();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

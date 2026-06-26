@@ -7,19 +7,33 @@
     <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
     <meta name="description" content="Portfolio von Maximilian Schenk – IHK-Abschlussprojekt EcoChef, Snake, IT-Quiz, KI-Projekte und mehr. Gebaut mit Java, Spring Boot, JavaScript und React.">
     <meta name="author" content="Maximilian Schenk">
+    <link rel="canonical" href="https://max-schenk.de/portfolio.html">
     <meta property="og:title" content="Portfolio - Maximilian Schenk">
     <meta property="og:description" content="Meine Programmierprojekte als angehender Fachinformatiker Anwendungsentwicklung.">
     <meta property="og:image" content="assets/images/ecochef_showcase.png">
-    <meta property="og:url" content="https://max-schenk.developerakademie.net/Umschulung-FIAE/Projekte">
+    <meta property="og:url" content="https://max-schenk.de/portfolio.html">
     <meta property="og:type" content="website">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "mainEntity": {
+            "@type": "Person",
+            "name": "Maximilian Schenk",
+            "jobTitle": "Fachinformatiker für Anwendungsentwicklung",
+            "url": "https://max-schenk.de",
+            "sameAs": ["https://github.com/Schengii", "https://linkedin.com/in/maximilian-schenk"],
+            "knowsAbout": ["Java", "Spring Boot", "JavaScript", "HTML", "CSS", "SQL", "Git", "React"]
+        }
+    }
+    </script>
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/portfolio-enhancements.css">
     <link rel="stylesheet" href="assets/css/print.css" media="print">
-<script src="assets/js/components.js"></script>
-
+    <script src="assets/js/components.js"></script>
 </head>
 
 <body>
@@ -31,7 +45,7 @@
     <div id="site-header"><button id="dark-mode-toggle" class="btn-primary" aria-label="Toggle Light/Dark mode">🌙</button> <button id="print-portfolio" class="btn-primary" aria-label="Print Portfolio">🖨️</button></div>
 
     <div id="site-nav"></div>
-    <input type="text" id="searchbar" placeholder="🔍 Search projects..." class="project-search-input" style="margin: 1rem 0; padding: 0.5rem; width: 100%; max-width: 300px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-page); color: var(--text);">
+    <input type="text" id="portfolio-searchbar" placeholder="🔍 Search projects..." class="project-search-input" style="margin: 1rem 0; padding: 0.5rem; width: 100%; max-width: 300px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-page); color: var(--text-primary);">
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
@@ -143,7 +157,7 @@
                         <span lang="de">Web Apps</span><span lang="en">Web Apps</span>
                     </button>
                     <button class="btn-filter" data-filter="ai">
-                        <span lang="de">KI & Data</span><span lang="en">AI & Data</span>
+                        <span lang="de">KI &amp; Data</span><span lang="en">AI &amp; Data</span>
                     </button>
                     <button class="btn-filter" data-filter="games">
                         <span lang="de">Spiele</span><span lang="en">Games</span>
@@ -162,8 +176,8 @@
 
                 <!-- Kontakt & Hire Me -->
                 <article class="card filter-all" id="contact">
-                    <h3 lang="de">📬 Kontakt & Hire Me</h3>
-                    <h3 lang="en">📬 Contact & Hire Me</h3>
+                    <h3 lang="de">📬 Kontakt &amp; Hire Me</h3>
+                    <h3 lang="en">📬 Contact &amp; Hire Me</h3>
                     <p lang="de">Interesse an einer Zusammenarbeit? Ich bin ab sofort auf der Suche nach einer Junior-Position als Softwareentwickler. Schreib mir einfach eine Nachricht!</p>
                     <p lang="en">Interested in working together? I am currently looking for a junior software developer position. Feel free to drop me a message!</p>
                     
@@ -217,7 +231,6 @@
                     </h3>
                     
                     <div class="timeline">
-                        <!-- Timeline items are now dynamically generated or styled via CSS classes -->
                         <div class="timeline-item timeline-item-primary">
                             <h4 class="timeline-title">IHK Abschluss AP2</h4><span class="timeline-meta">Juni 2026</span></div>
                         <div class="timeline-item timeline-item-secondary"><h4 class="timeline-title">Praktikum (EcoChef)</h4><span class="timeline-meta">Nov 2025 - Mai 2026</span></div>
@@ -258,6 +271,52 @@
                     <div class="skill-bar">
                         <div class="skill-header"><span class="skill-name">Git / GitHub</span><span class="skill-percent">80%</span></div>
                         <div class="skill-track"><div class="skill-fill skill-80"></div></div>
+                    </div>
+                </section>
+
+                <!-- SKILL RADAR CHART -->
+                <section class="card" aria-labelledby="skill-radar-title">
+                    <h3 id="skill-radar-title">
+                        <span lang="de"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill-Radar</span>
+                        <span lang="en"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill Radar</span>
+                    </h3>
+                    <div id="skill-radar-container" style="display: flex; justify-content: center; margin-top: 0.5rem;"></div>
+                </section>
+
+                <!-- TESTIMONIALS -->
+                <section class="card" aria-labelledby="testimonials-title">
+                    <h3 id="testimonials-title">
+                        <span lang="de"><i class="fa fa-quote-left" aria-hidden="true"></i> Referenzen</span>
+                        <span lang="en"><i class="fa fa-quote-left" aria-hidden="true"></i> Testimonials</span>
+                    </h3>
+
+                    <div class="testimonial-carousel">
+                        <div class="testimonial-item active">
+                            <blockquote class="testimonial-quote">
+                                <span lang="de">„Maximilian hat sich sehr schnell in unser Team integriert und hat eigenständig Frontend-Aufgaben übernommen. Sein Engagement und seine Lernbereitschaft sind vorbildlich."</span>
+                                <span lang="en">"Maximilian integrated very quickly into our team and independently took on frontend tasks. His commitment and willingness to learn are exemplary."</span>
+                            </blockquote>
+                            <div class="testimonial-author">
+                                <strong>Team Webentwicklung</strong>
+                                <span class="testimonial-role">Deutsche Forschungsgemeinschaft (DFG), Bonn</span>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-item">
+                            <blockquote class="testimonial-quote">
+                                <span lang="de">„Ein herausragender Umschüler, der stets über den Tellerrand hinausschaut und mit seinen Projekten wie EcoChef und ElektroCheck AI beeindruckende Ergebnisse liefert."</span>
+                                <span lang="en">"An outstanding retrainee who consistently goes above and beyond, delivering impressive results with projects like EcoChef and ElektroCheck AI."</span>
+                            </blockquote>
+                            <div class="testimonial-author">
+                                <strong>BFW Dortmund</strong>
+                                <span class="testimonial-role"><span lang="de">Dozent IT-Fachbereich</span><span lang="en">IT Department Instructor</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-nav" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.75rem;">
+                        <button class="testimonial-dot active" data-index="0" aria-label="Testimonial 1"></button>
+                        <button class="testimonial-dot" data-index="1" aria-label="Testimonial 2"></button>
                     </div>
                 </section>
             </aside>

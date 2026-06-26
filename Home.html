@@ -33,6 +33,39 @@
     <!-- Main Content -->
     <main id="main-content" class="main-container">
 
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span lang="de">Maximilian Schenk</span>
+                    <span lang="en">Maximilian Schenk</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span id="hero-typing" class="hero-typing"></span><span class="hero-cursor">|</span>
+                </div>
+                <p class="hero-description">
+                    <span lang="de">Frisch geprüfter Fachinformatiker für Anwendungsentwicklung — leidenschaftlich für Clean Code, moderne Web-Technologien und innovative Softwarelösungen.</span>
+                    <span lang="en">Freshly certified IT Specialist in Application Development — passionate about clean code, modern web technologies, and innovative software solutions.</span>
+                </p>
+                <div class="hero-cta">
+                    <a href="portfolio.html" class="btn-primary hero-btn">
+                        <i class="fa fa-code" aria-hidden="true"></i>
+                        <span lang="de">Meine Projekte</span>
+                        <span lang="en">My Projects</span>
+                    </a>
+                    <a href="#contact-section" class="btn-secondary hero-btn">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <span lang="de">Kontakt aufnehmen</span>
+                        <span lang="en">Get in Touch</span>
+                    </a>
+                </div>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="fa fa-check-circle" aria-hidden="true"></i> <span lang="de">IHK geprüft</span><span lang="en">IHK Certified</span></span>
+                    <span class="hero-badge"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, DE</span>
+                    <span class="hero-badge"><i class="fa fa-rocket" aria-hidden="true"></i> <span lang="de">Sofort verfügbar</span><span lang="en">Available now</span></span>
+                </div>
+            </div>
+        </section>
         <!-- Über mich Card (Maximilian Schenk Profil) -->
         <section class="card" aria-labelledby="card-aboutme-header">
             <h2 id="card-aboutme-header">
@@ -45,17 +78,6 @@
             <p lang="en">I am <strong id="my-age-en">24</strong> years old and live in <strong>Bonn</strong>. I am currently undergoing
                 retraining as an IT Specialist in Application Development. This portfolio highlights my career journey,
                 retraining modules, and programming projects.</p>
-            <script>
-                // Dynamically calculate age from birth year 2002
-                (function() {
-                    const birthYear = 2002, birthMonth = 3, birthDay = 15; // ~March 2002
-                    const today = new Date();
-                    let age = today.getFullYear() - birthYear;
-                    if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) age--;
-                    const els = document.querySelectorAll('#my-age, #my-age-en');
-                    els.forEach(el => { if (el) el.textContent = age; });
-                })();
-            </script>
         </section>
 
         <div class="layout-grid">
@@ -233,8 +255,7 @@
                                     Anwendungsentwicklung</span><span lang="en">Fachinformatiker für
                                     Anwendungsentwicklung</span></div>
                             <div class="timeline-content"><span lang="de">Die Umschulung erfolgreich vor der IHK
-                                    Dortmund abgeschlossen</span><span lang="en">Final oral exam and project
-                                    presentation (Part 2).</span></div>
+                                    Dortmund abgeschlossen</span><span lang="en">Successfully completed retraining as IT Specialist certified by IHK Dortmund.</span></div>
                         </div>
                     </div>
                 </section>

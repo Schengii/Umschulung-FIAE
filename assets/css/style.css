@@ -2491,3 +2491,416 @@ html[lang="en"] [lang="de"] {
     width: auto;
     flex: 1;
 }
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero-section {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--primary-light, #eff6ff) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 3rem 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: heroFadeIn 1s ease-out;
+}
+
+[data-theme="dark"] .hero-section {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #1a1f3a 100%);
+}
+
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    min-height: 1.8rem;
+}
+
+.hero-typing {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.hero-cursor {
+    color: var(--primary);
+    animation: cursorBlink 0.7s infinite;
+    font-weight: 200;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.hero-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: var(--transition);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+}
+
+.hero-badges {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   SKILL RADAR CHART
+   ========================================================================== */
+.skill-radar-svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.radar-polygon {
+    opacity: 0;
+}
+
+@keyframes radarFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.radar-dot {
+    transition: r 0.2s ease;
+}
+
+.radar-dot:hover {
+    r: 6;
+}
+
+/* ==========================================================================
+   TESTIMONIALS
+   ========================================================================== */
+.testimonial-carousel {
+    position: relative;
+    min-height: 180px;
+}
+
+.testimonial-item {
+    display: none;
+    animation: testimonialFade 0.5s ease-out;
+}
+
+.testimonial-item.active {
+    display: block;
+}
+
+@keyframes testimonialFade {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.testimonial-quote {
+    font-style: italic;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+    margin: 0.75rem 0;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.testimonial-role {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.testimonial-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 0;
+}
+
+.testimonial-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ==========================================================================
+   ACHIEVEMENT TOAST NOTIFICATIONS
+   ========================================================================== */
+.achievement-toast {
+    position: fixed;
+    bottom: -120px;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid #f59e0b;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 360px;
+}
+
+.achievement-toast.show {
+    bottom: 1.5rem;
+}
+
+.achievement-toast.hide {
+    bottom: -120px;
+}
+
+.achievement-toast-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.achievement-toast-title {
+    font-size: 0.75rem;
+    color: #f59e0b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.achievement-toast-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.achievement-toast-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   BLOG ENHANCEMENTS
+   ========================================================================== */
+.reading-time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    background: var(--primary-light, #eff6ff);
+    color: var(--primary);
+    border-radius: var(--radius-full);
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .reading-time-badge {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.social-share-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.share-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-page);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.share-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   FOCUS-VISIBLE ACCESSIBILITY
+   ========================================================================== */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   DARK MODE TRANSITION ANIMATION
+   ========================================================================== */
+html {
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html .card,
+html header,
+html footer,
+html nav {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+/* ==========================================================================
+   EASTER EGG POPUP ANIMATION
+   ========================================================================== */
+@keyframes easterEggPop {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   KEYBOARD SHORTCUTS MODAL
+   ========================================================================== */
+#shortcuts-help-modal {
+    z-index: 99998;
+}
+
+#shortcuts-help-modal .modal-content {
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   RESPONSIVE: HERO SECTION
+   ========================================================================== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-badges {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .achievement-toast {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+}
