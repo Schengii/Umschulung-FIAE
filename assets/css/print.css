@@ -1,0 +1,125 @@
+/* ==========================================================================
+   PRINT STYLESHEET — Portfolio Print-Optimierung
+   ========================================================================== */
+
+@media print {
+    /* Hide non-essential UI elements */
+    header,
+    nav,
+    .topnav,
+    footer,
+    .back-to-top,
+    .cookie-banner,
+    .skip-link,
+    .theme-toggle,
+    .menu-toggle,
+    .nav-controls,
+    .search-container,
+    .btn-filter,
+    .portfolio-filters,
+    .admin-card,
+    .sort-select,
+    #dark-mode-toggle,
+    #print-portfolio,
+    #site-header,
+    #site-nav,
+    #site-footer,
+    #cookie-banner,
+    #back-to-top,
+    #portfolio-searchbar,
+    .project-search-input,
+    .modal,
+    .btn-admin-toggle,
+    .hire-me-form,
+    #hire-me-form,
+    .status-widget {
+        display: none !important;
+    }
+
+    /* Reset background and colors for print */
+    * {
+        background: white !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        font-size: 11pt;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Cards in print mode */
+    .card {
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+
+    /* Layout — single column for print */
+    .layout-grid {
+        display: block !important;
+    }
+
+    .left-col,
+    .right-col {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Links — show URL after link text */
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #555 !important;
+    }
+
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after {
+        content: "";
+    }
+
+    /* Images */
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+
+    /* Skill bars in print */
+    .skill-fill {
+        background: #333 !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .skill-track {
+        border: 1px solid #ccc !important;
+    }
+
+    /* Page breaks */
+    h2, h3 {
+        page-break-after: avoid;
+    }
+
+    /* Timeline print */
+    .timeline-badge {
+        border: 1px solid #333 !important;
+    }
+
+    /* Language — show only active language */
+    [lang="en"] {
+        display: none !important;
+    }
+
+    html[lang="en"] [lang="en"] {
+        display: inline !important;
+    }
+
+    html[lang="en"] [lang="de"] {
+        display: none !important;
+    }
+}
