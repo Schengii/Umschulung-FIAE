@@ -30,8 +30,6 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/portfolio-enhancements.css">
     <link rel="stylesheet" href="assets/css/print.css" media="print">
     <link rel="stylesheet" href="assets/css/skeletons.css">
     <script src="assets/js/components.js"></script>
@@ -43,17 +41,17 @@
         <span lang="en">Skip to content</span>
     </a>
 
-    <div id="site-header"><button id="dark-mode-toggle" class="btn-primary" aria-label="Toggle Light/Dark mode">🌙</button> <button id="print-portfolio" class="btn-primary" aria-label="Print Portfolio">🖨️</button></div>
+    <header class="header"><h1>Portfolio</h1><button id="theme-toggle" aria-label="Dark‑Mode umschalten" class="theme-toggle">🌙</button></header>
 
     <div id="site-nav"></div>
-    <input type="text" id="portfolio-searchbar" placeholder="🔍 Search projects..." class="project-search-input" style="margin: 1rem 0; padding: 0.5rem; width: 100%; max-width: 300px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-page); color: var(--text-primary);">
+
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
         <div class="layout-grid">
             <!-- Left Column: Projects -->
             <div class="left-col">
-                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." lang="de" class="project-search-input"><input type="text" id="portfolio-searchbar-en" placeholder="🔍 Search projects..." lang="en" class="project-search-input">
+                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." lang="de" class="project-search-input">
                 <div class="card">
                     <h2 lang="de">Projekt-Showcase</h2>
                     <h2 lang="en">Project Showcase</h2>
@@ -234,7 +232,6 @@
                         </div>
                     </form>
                 </article>
-            </input>
 
             <!-- Right Column: Sidebar -->
             <aside class="right-col">
@@ -353,10 +350,26 @@
         </div>
     </main>
 
+  <!-- Modal für Projekt‑Detail -->
+  <div id="project-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Schließen">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Back‑to‑Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang">⬆︎</button>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
     <div id="site-footer"></div>
 
     <script src="assets/js/projects_data.js"></script>
-    <script src="assets/js/portfolio.js"></script>
+    <script src="assets/js/modal.js"></script>
+<script src="assets/js/toast.js"></script>
+<script src="assets/js/portfolio.js"></script>
 </body>
 
 </html>
