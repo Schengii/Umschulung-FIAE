@@ -162,6 +162,21 @@
                     <button class="btn-filter" data-filter="games">
                         <span lang="de">Spiele</span><span lang="en">Games</span>
                     </button>
+                    <button class="btn-filter" data-filter="java">
+                        <span lang="de">Java</span><span lang="en">Java</span>
+                    </button>
+                    <button class="btn-filter" data-filter="javascript">
+                        <span lang="de">JavaScript</span><span lang="en">JavaScript</span>
+                    </button>
+                </div>
+
+                <!-- No Results Message -->
+                <div id="no-results-container" style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                    <i class="fa fa-search fa-3x" style="margin-bottom: 1rem;"></i>
+                    <h3 lang="de">Keine Projekte gefunden</h3>
+                    <h3 lang="en">No Projects Found</h3>
+                    <p lang="de">Deine Suche oder Filterkombination ergab keine Treffer.</p>
+                    <p lang="en">Your search or filter combination yielded no results.</p>
                 </div>
 
                 <!-- Dynamic projects dynamically injected here -->
@@ -171,6 +186,10 @@
 
                 <!-- Custom projects dynamically injected here -->
                 <div id="custom-projects-container"></div>
+
+                <!-- Pagination Controls -->
+                <nav id="pagination-container" class="pagination-nav" aria-label="Project navigation"></nav>
+
                 <!-- Folder projects dynamically injected here -->
                 <div id="folder-projects-container"></div>
 
@@ -324,13 +343,6 @@
     </main>
 
     <div id="site-footer"></div>
-
-    <div id="project-modal" class="modal" aria-hidden="true" aria-modal="true" role="dialog">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close Modal">&times;</button>
-            <div id="modal-body-content"></div>
-        </div>
-    </div>
 
     <script src="assets/js/projects_data.js"></script>
     <script src="assets/js/portfolio.js"></script>

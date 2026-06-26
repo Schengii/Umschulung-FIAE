@@ -1,5 +1,5 @@
 /**
- * Portfolio Project Manager JS
+ * Portfolio Page Logic
  * Handles dynamic project addition, fetching projects from local projects.json and GitHub API,
  * LocalStorage caching for GitHub data, real-time live preview rendering,
  * HTML code export, and custom project removal.
@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminFormContainer = document.getElementById('admin-form-container');
     const projectForm = document.getElementById('project-form');
     const githubLoading = document.getElementById('github-loading');
+    const dynamicContainer = document.getElementById('dynamic-projects-container');
     const githubError = document.getElementById('github-error');
     
     const inputTitleDe = document.getElementById('proj-title-de');
@@ -32,22 +33,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const CACHE_TIME_KEY = 'github_projects_cache_time';
     const CACHE_DURATION = 3600000; // 1 hour in milliseconds
     const SORT_KEY = 'portfolio_sort_order';
-    const DEFAULT_SORT_ORDER = 'desc'; // default most stars first
+    const DEFAULT_SORT_ORDER = 'desc';
+
+    // State for filtering and pagination
+    let allProjects = [];
+    let customProjects = [];
+    let currentPage = 1;
+    const projectsPerPage = 6;
+    let currentSearchTerm = '';
+    let currentCategory = 'all';
 
     // Load and render existing custom projects from LocalStorage
-    let customProjects = [];
-    let allProjects = [];
-    // Load persisted sort order
     const persistedSort = localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
     const sortSelect = document.getElementById('sort-select');
+    const searchInput = document.getElementById('portfolio-searchbar');
+    const filterButtons = document.querySelectorAll('.portfolio-filters .btn-filter');
+    const noResultsContainer = document.getElementById('no-results-container');
+    const paginationContainer = document.getElementById('pagination-container');
+
     if (sortSelect) {
         sortSelect.value = persistedSort;
         sortSelect.addEventListener('change', () => {
             const order = sortSelect.value;
             localStorage.setItem(SORT_KEY, order);
-            if (allProjects.length) renderProjects(sortProjects(allProjects, order));
+            if (allProjects.length) renderAllProjects();
         });
     }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value.toLowerCase().trim();
+            currentPage = 1; // Reset to first page on new search
+            renderAllProjects();
+        });
+    }
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentCategory = button.getAttribute('data-filter') || 'all';
+            currentPage = 1; // Reset to first page on filter change
+            renderAllProjects();
+        });
+    });
+
     try {
         if (typeof StorageManager !== 'undefined') {
             customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
@@ -57,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
         console.warn('Failed to parse custom projects:', e);
     }
-    renderCustomProjects();
 
     // Load dynamic projects (projects.json + GitHub API)
     loadAndRenderProjects();
@@ -108,11 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Merge static and dynamic project data and render them
     async function loadAndRenderProjects() {
-        const dynamicContainer = document.getElementById('dynamic-projects-container');
         if (!dynamicContainer) return;
-
-        // Show loading spinner
-        githubLoading.innerHTML = `
+        if (githubLoading) {
+            githubLoading.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
                 <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
                 <p style="margin-top: 0.5rem;" lang="de">GitHub‑Projekte werden geladen...</p>
@@ -120,75 +147,45 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         githubLoading.style.display = 'block';
-
-        try {
-            let staticProjects = [];
-        // Load static projects from window.projectsData if available
-        if (window.projectsData && Array.isArray(window.projectsData)) {
-            staticProjects = window.projectsData;
-        } else {
-            // Fallback to fetch projects.json
-            const response = await fetch('./assets/data/projects.json');
-            if (!response.ok) {
-                throw new Error(`Failed to load projects.json: ${response.status}`);
-            }
-            staticProjects = await response.json();
+            githubLoading.style.display = 'block';
         }
-        // Additionally load folder projects (generated from local Projekt folders)
+    
         try {
-            const folderResponse = await fetch('./assets/data/folder_projects.json');
-            if (folderResponse.ok) {
-                const folderProjects = await folderResponse.json();
-                staticProjects = staticProjects.concat(folderProjects);
-            }
-        } catch (e) {
-            console.warn('Failed to load folder_projects.json', e);
-        }
-        const githubRepos = await fetchGitHubRepos();
-            
-            const mergedProjects = [];
-            const claimedRepos = new Set();
-            
-            // 1. Process static projects from projects.json
-            staticProjects.forEach(staticProj => {
-                const proj = { ...staticProj };
-                
-                if (proj.repoName) {
-                    const matchedRepo = githubRepos.find(repo => 
-                        repo.name.toLowerCase() === proj.repoName.toLowerCase()
-                    );
-                    
-                    if (matchedRepo) {
-                        claimedRepos.add(matchedRepo.name.toLowerCase());
-                        proj.stars = matchedRepo.stargazers_count || 0;
-                        proj.githubUrl = matchedRepo.html_url;
-                        proj.updatedAt = matchedRepo.updated_at;
-                        // Use GitHub Pages URL if set on GitHub and not empty
-                        if (matchedRepo.homepage && matchedRepo.homepage.trim() !== '') {
-                            proj.link = matchedRepo.homepage;
+            const [staticProjects, githubRepos] = await Promise.all([
+                fetch('./assets/data/projects.json').then(res => res.ok ? res.json() : []),
+                fetchGitHubRepos()
+            ]);
+    
+            const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
+            const processedRepoNames = new Set();
+    
+            // 1. Process and enrich static projects from projects.json
+            const enrichedStaticProjects = staticProjects.map(proj => {
+                const enriched = { ...proj };
+                if (enriched.repoName) {
+                    const repoNameLower = enriched.repoName.toLowerCase();
+                    processedRepoNames.add(repoNameLower);
+                    const ghRepo = githubRepoMap.get(repoNameLower);
+                    if (ghRepo) {
+                        enriched.stars = ghRepo.stargazers_count || 0;
+                        enriched.githubUrl = ghRepo.html_url;
+                        enriched.updatedAt = ghRepo.updated_at;
+                        if (ghRepo.homepage && ghRepo.homepage.trim() !== '') {
+                            enriched.link = ghRepo.homepage;
                         }
-                    } else {
-                        proj.stars = 0;
-                        proj.updatedAt = new Date().toISOString();
                     }
-                } else {
-                    proj.stars = 0;
-                    proj.updatedAt = new Date().toISOString();
                 }
-                
-                mergedProjects.push(proj);
+                return enriched;
             });
-            
-            // 2. Append new repositories from GitHub that are not in projects.json
+    
+            // 2. Add new, unprocessed repos from GitHub
+            const newGithubProjects = [];
             githubRepos.forEach(repo => {
-                const nameLower = repo.name.toLowerCase();
-                
-                // Skip the portfolio repository itself, forks, and already claimed repositories
-                if (nameLower === 'umschulung-fiae' || claimedRepos.has(nameLower) || repo.fork) {
-                    return;
+                const repoNameLower = repo.name.toLowerCase();
+                if (repo.fork || repoNameLower === 'umschulung-fiae' || processedRepoNames.has(repoNameLower)) {
+                    return; // Skip forks, the portfolio repo itself, and already processed repos
                 }
-                
-                // Infer category based on topics
+    
                 let category = 'web';
                 const topics = repo.topics || [];
                 if (topics.some(t => ['game', 'games', 'godot', 'unity'].includes(t.toLowerCase()))) {
@@ -196,72 +193,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (topics.some(t => ['ai', 'artificial-intelligence', 'machine-learning', 'data'].includes(t.toLowerCase()))) {
                     category = 'ai';
                 }
-                
-                // Clean up name for title (e.g. "my-project-name" -> "My Project Name")
-                const cleanTitle = repo.name
-                    .replace(/[-_]/g, ' ')
-                    .replace(/\b\w/g, c => c.toUpperCase());
-                    
-                const dynamicProj = {
-                      repoName: repo.name,
-                      titleDe: cleanTitle,
-                      titleEn: cleanTitle,
-                      tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
-                      // Use the repository owner's avatar as a preview image placeholder when no custom image is defined
-                      image: repo.owner?.avatar_url || 'assets/images/default_project.png',
-                      // Prefer a GitHub Pages homepage if set; otherwise fall back to the GitHub repo URL
-                      link: repo.homepage && repo.homepage.trim() !== '' ? repo.homepage : repo.html_url,
-                      githubUrl: repo.html_url,
-                      descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
-                      descEn: repo.description || 'No description provided on GitHub.',
-                      category: category,
-                      stars: repo.stargazers_count || 0,
-                      updatedAt: repo.updated_at
-                  };
-                
-                mergedProjects.push(dynamicProj);
+    
+                const cleanTitle = repo.name.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    
+                newGithubProjects.push({
+                    repoName: repo.name,
+                    titleDe: cleanTitle,
+                    titleEn: cleanTitle,
+                    tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
+                    image: repo.owner?.avatar_url || 'assets/images/default_project.png',
+                    link: repo.homepage && repo.homepage.trim() !== '' ? repo.homepage : repo.html_url,
+                    githubUrl: repo.html_url,
+                    descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
+                    descEn: repo.description || 'No description provided on GitHub.',
+                    category: category,
+                    stars: repo.stargazers_count || 0,
+                    updatedAt: repo.updated_at
+                });
             });
-            
-            // Store globally so sort works
-            allProjects = mergedProjects;
-
-            // Render the full merged project list
-            githubLoading.style.display = 'none';
-            githubError.style.display = 'none';
-            dynamicContainer.innerHTML = mergedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
-            
-            // Always attach listeners after render
-            attachCardListeners();
-
-            // Trigger translation alignment for new elements
-            const activeLang = document.documentElement.getAttribute('lang') || 'de';
-            document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
-            
-            // Re-apply category filters if search-filter.js is loaded
-            if (typeof applyFilters === 'function') {
-                applyFilters();
-            }
+    
+            // Store all fetched projects
+            allProjects = [...enrichedStaticProjects, ...newGithubProjects, ...customProjects];
+    
+            // Render everything
+            renderAllProjects();
+    
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
             githubError.innerHTML = `<div class="github-error">
+            if (githubError) {
+                githubError.innerHTML = `<div class="github-error">
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 <span lang="de">GitHub‑Projekte konnten nicht geladen werden.</span>
                 <span lang="en">GitHub projects could not be loaded.</span>
             </div>`;
             githubError.style.display = 'block';
-            githubLoading.style.display = 'none';
+            }
+        } finally {
+            if (githubLoading) githubLoading.style.display = 'none';
         }
     }
 
     // Dynamic Card Generator
     function generateDynamicCardHTML(project) {
-    // Build language/framework badges if available
-    let techBadge = '';
-    if (project.language || project.framework) {
-        const lang = project.language ? `${project.language}` : '';
-        const fw = project.framework ? ` / ${project.framework}` : '';
-        techBadge = `\n            <p class="project-tech" style="margin: 0.5rem 0; font-weight: 500; color: var(--text-primary);"><strong>Tech:</strong> ${lang}${fw}</p>`;
-    }
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
         
@@ -321,16 +295,17 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonsHTML += '</div>';
 
         // Set category class for filtering
+        const languageClass = project.language ? `filter-${project.language.toLowerCase()}` : '';
         let categoryClass = '';
         if (project.category) {
             categoryClass = project.category.split(' ').map(c => `filter-${c}`).join(' ');
         } else {
             categoryClass = 'filter-web';
         }
-
+        
         const safeTagsAttr = encodeURIComponent(JSON.stringify(project.tags));
         return `
-        <article class="card project-card fade-in visible ${categoryClass}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+        <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
             ${starsHTML}
             <h3 lang="de">${project.titleDe}</h3>
             <h3 lang="en">${project.titleEn}</h3>
@@ -340,93 +315,125 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             ${imageHTML}
             <p lang="de">${project.descDe}</p>
-            ${techBadge}
             <p lang="en">${project.descEn}</p>
             ${buttonsHTML}
         </article>`;
     }
 
-    // Modal handling functions
-    function openProjectModal(card) {
-        const modal = document.getElementById('project-modal');
-        const body = document.getElementById('modal-body-content');
-        if (!modal || !body) return;
-        const titleDe = card.dataset.titleDe || '';
-        const titleEn = card.dataset.titleEn || '';
-        const descDe = card.dataset.descDe || '';
-        const descEn = card.dataset.descEn || '';
-        const image = card.dataset.image;
-        const link = card.dataset.link;
-        const github = card.dataset.github;
-        let tags = [];
-        try {
-            tags = JSON.parse(decodeURIComponent(card.dataset.tags || '%5B%5D'));
-        } catch(e) { tags = []; }
-        const tagsHTML = tags.map(tag => `<span class="tech-tag">${tag}</span>`).join(' ');
-        body.innerHTML = `
-            <h2 lang="de">${titleDe}</h2>
-            <h2 lang="en">${titleEn}</h2>
-            <div class="tech-tags">${tagsHTML}</div>
-            ${image ? `<img src="${image}" alt="${titleDe}" style="width:100%;border-radius:8px;margin:1rem 0;">` : ''}
-            <p lang="de">${descDe}</p>
-            <p lang="en">${descEn}</p>
-            <div class="modal-buttons" style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                ${link ? `<a href="${link}" target="_blank" rel="noopener" class="btn-primary custom-size"><span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Projekt öffnen</span><span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> Open Project</span></a>` : ''}
-                ${github ? `<a href="${github}" target="_blank" rel="noopener" class="btn-primary custom-size" style="background-color:var(--bg-nav); border-color:var(--bg-nav);"><span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span><span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span></a>` : ''}
-            </div>`;
-        modal.classList.add('show');
-        modal.removeAttribute('aria-hidden');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+    function renderAllProjects() {
+        if (!dynamicContainer || !customProjectsContainer) return;
+
+        // 1. Filter
+        const filteredProjects = allProjects.filter(proj => {
+            const matchesCategory = currentCategory === 'all' || (proj.category && proj.category.includes(currentCategory)) || (proj.language && proj.language.toLowerCase() === currentCategory);
+            
+            if (!matchesCategory) return false;
+
+            if (currentSearchTerm) {
+                const titleDe = (proj.titleDe || '').toLowerCase();
+                const titleEn = (proj.titleEn || '').toLowerCase();
+                const descDe = (proj.descDe || '').toLowerCase();
+                const descEn = (proj.descEn || '').toLowerCase();
+                const tags = (proj.tags || []).map(t => t.toLowerCase());
+
+                return titleDe.includes(currentSearchTerm) ||
+                       titleEn.includes(currentSearchTerm) ||
+                       descDe.includes(currentSearchTerm) ||
+                       descEn.includes(currentSearchTerm) ||
+                       tags.some(tag => tag.includes(currentSearchTerm));
+            }
+            return true;
+        });
+
+        // 2. Sort
+        const sorted = sortProjects(filteredProjects, localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER);
+
+        // 3. Handle No Results
+        if (sorted.length === 0) {
+            dynamicContainer.innerHTML = '';
+            customProjectsContainer.innerHTML = '';
+            if (noResultsContainer) noResultsContainer.style.display = 'block';
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+        if (noResultsContainer) noResultsContainer.style.display = 'none';
+
+        // 4. Paginate
+        const startIndex = (currentPage - 1) * projectsPerPage;
+        const endIndex = startIndex + projectsPerPage;
+        const paginatedProjects = sorted.slice(startIndex, endIndex);
+
+        // 5. Render
+        dynamicContainer.innerHTML = paginatedProjects
+            .filter(p => !customProjects.some(cp => cp.titleDe === p.titleDe)) // Exclude custom projects from dynamic render
+            .map(proj => generateDynamicCardHTML(proj)).join('\n');
+
+        customProjectsContainer.innerHTML = paginatedProjects
+            .filter(p => customProjects.some(cp => cp.titleDe === p.titleDe)) // Only render custom projects for this page
+            .map(proj => {
+                const originalIndex = customProjects.findIndex(cp => cp.titleDe === proj.titleDe);
+                return generateCardHTML(proj, false, originalIndex);
+            })
+            .join('\n');
+
+        renderPagination(sorted.length);
+        attachCardListeners();
+        attachAdminListeners(); // Re-attach delete/edit listeners
+
+        const activeLang = document.documentElement.getAttribute('lang') || 'de';
+        document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
 
-    function closeProjectModal() {
-        const modal = document.getElementById('project-modal');
-        if (modal) {
-            modal.classList.remove('show');
-            modal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
+    function renderPagination(totalProjects) {
+        if (!paginationContainer) return;
+        paginationContainer.innerHTML = '';
+        const totalPages = Math.ceil(totalProjects / projectsPerPage);
+
+        if (totalPages <= 1) return;
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            pageBtn.className = 'btn-pagination';
+            if (i === currentPage) {
+                pageBtn.classList.add('active');
+            }
+            pageBtn.addEventListener('click', () => {
+                currentPage = i;
+                renderAllProjects();
+                window.scrollTo({ top: document.getElementById('portfolio-searchbar').offsetTop, behavior: 'smooth' });
+            });
+            paginationContainer.appendChild(pageBtn);
         }
     }
 
+    function sortProjects(projects, order) {
+        return [...projects].sort((a, b) => {
+            const starsA = a.stars || 0;
+            const starsB = b.stars || 0;
+            return order === 'asc' ? starsA - starsB : starsB - starsA;
+        });
+    }
+
     function attachCardListeners() {
-        // Card click opens modal (excluding inner links/buttons)
-        // Use a flag to avoid adding duplicate listeners on re-renders
-        // No blacklist – show all projects
         const cards = document.querySelectorAll('.project-card');
         cards.forEach(card => {
             if (!card.dataset.listenerAttached) {
                 card.dataset.listenerAttached = 'true';
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('a') || e.target.closest('button')) return;
-                    openProjectModal(card);
+                    
+                    const repoName = card.dataset.repoName;
+                    const titleDe = card.dataset.titleDe;
+
+                    if (repoName) {
+                        window.location.href = `projekt-detail.html?repo=${encodeURIComponent(repoName)}`;
+                    } else if (titleDe) {
+                        window.location.href = `projekt-detail.html?title=${encodeURIComponent(titleDe)}`;
+                    }
                 });
             }
         });
-
-        // Modal close button (only attach once)
-        const closeBtn = document.querySelector('.modal-close:not([data-listener-attached])');
-        if (closeBtn) {
-            closeBtn.setAttribute('data-listener-attached', 'true');
-            closeBtn.addEventListener('click', closeProjectModal);
-        }
-
-        // Click outside modal content to close (only attach once)
-        const modal = document.getElementById('project-modal');
-        if (modal && !modal.dataset.backdropListener) {
-            modal.dataset.backdropListener = 'true';
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeProjectModal();
-            });
-        }
-
-        // Escape key to close modal (only attach once)
-        if (!document._escListenerAttached) {
-            document._escListenerAttached = true;
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeProjectModal();
-            });
-        }
     }
     // ============================================================
     // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
@@ -493,6 +500,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let deleteBtnHTML = '';
+        let editBtnHTML = '';
+        if (!isPreview && index !== null) {
+            editBtnHTML = `
+            <button class="btn-edit-project" data-index="${index}" title="Projekt bearbeiten" aria-label="Projekt bearbeiten" style="position: absolute; top: 10px; right: 45px; z-index: 10; background: #f59e0b; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>`;
+        }
+
         if (!isPreview && index !== null) {
             deleteBtnHTML = `
             <button class="btn-delete-project" data-index="${index}" title="Projekt löschen" aria-label="Projekt löschen">
@@ -501,7 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return `
-<article class="card fade-in visible" style="position: relative;">
+<article class="card fade-in visible project-card" style="position: relative;" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="" data-tags="${encodeURIComponent(JSON.stringify(project.tags))}">
+    ${editBtnHTML}
     ${deleteBtnHTML}
     <h3 lang="de">${project.titleDe}</h3>
     <h3 lang="en">${project.titleEn}</h3>
@@ -534,34 +550,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Form submit to save
+    // Form submit to save custom project
     if (projectForm) {
         projectForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const project = getFormValues();
+            const editIndex = projectForm.dataset.editIndex;
+
+            if (editIndex !== undefined && editIndex !== null) {
+                // Update mode
+                customProjects[parseInt(editIndex)] = project;
+                delete projectForm.dataset.editIndex; // Reset mode
+                projectForm.querySelector('button[type="submit"]').innerHTML = '<span lang="de">Projekt erstellen</span><span lang="en">Create Project</span>';
+            } else {
+                // Create mode
+                customProjects.push(project);
+            }
             
-            // Save to array
-            customProjects.push(project);
             if (typeof StorageManager !== 'undefined') {
                 StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
             } else {
                 localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
             }
             
-            // Update container
             renderCustomProjects();
             
             // Show Export section
-            if (exportSection && htmlExportCode) {
+            if (exportSection && htmlExportCode && editIndex === undefined) {
                 const rawHTML = generateCardHTML(project, true).trim();
                 htmlExportCode.textContent = rawHTML;
                 exportSection.style.display = 'block';
+            } else if (exportSection) {
+                exportSection.style.display = 'none';
             }
             
             // Reset form
             projectForm.reset();
             updateLivePreview();
+
+            // Re-trigger language for button text
+            const activeLang = document.documentElement.getAttribute('lang') || 'de';
+            document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
         });
     }
 
@@ -569,10 +599,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCustomProjects() {
         if (!customProjectsContainer) return;
         customProjectsContainer.innerHTML = '';
+        
+        // This function is now mostly for initial setup and attaching listeners.
+        // The main rendering is handled by renderAllProjects.
+        attachAdminListeners();
+    }
 
+    function attachAdminListeners() {
         customProjects.forEach((proj, idx) => {
-            const cardHTML = generateCardHTML(proj, false, idx);
-            customProjectsContainer.insertAdjacentHTML('beforeend', cardHTML);
+            // Listeners are attached based on the full customProjects array, not the paginated view
         });
 
         // Add delete listeners
@@ -594,10 +629,37 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Add edit listeners
+        const editButtons = customProjectsContainer.querySelectorAll('.btn-edit-project');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-index'));
+                const projectToEdit = customProjects[idx];
+                
+                if (inputTitleDe) inputTitleDe.value = projectToEdit.titleDe;
+                if (inputTitleEn) inputTitleEn.value = projectToEdit.titleEn;
+                if (inputTags) inputTags.value = projectToEdit.tags.join(', ');
+                if (inputImage) inputImage.value = projectToEdit.image;
+                if (inputDescDe) inputDescDe.value = projectToEdit.descDe;
+                if (inputDescEn) inputDescEn.value = projectToEdit.descEn;
+                if (inputLink) inputLink.value = projectToEdit.link;
+                
+                if (adminFormContainer.classList.contains('collapsed')) {
+                    toggleAdminBtn.click();
+                }
+                
+                projectForm.dataset.editIndex = idx;
+                projectForm.querySelector('button[type="submit"]').innerHTML = '<span lang="de">Projekt aktualisieren</span><span lang="en">Update Project</span>';
+                
+                inputTitleDe.focus();
+                const activeLang = document.documentElement.getAttribute('lang') || 'de';
+                document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
+            });
+        });
+
         // Trigger language switcher alignment
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
-        attachCardListeners();
     }
 
     // Copy Code button
