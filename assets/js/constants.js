@@ -11,6 +11,8 @@ const STORAGE_KEYS = Object.freeze({
     MEMORY_BEST_MOVES: 'memoryBestMoves',
     MEMORY_BEST_TIME: 'memoryBestTime',
     PORTFOLIO_CUSTOM_PROJECTS: 'portfolio_custom_projects',
+    LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES: 'learning_recommendations_quiz_weak_categories',
+    LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS: 'learning_recommendations_flashcards_wrong_counts',
     GITHUB_PROJECTS_CACHE: 'github_projects_cache',
     GITHUB_PROJECTS_CACHE_TIME: 'github_projects_cache_time',
 });

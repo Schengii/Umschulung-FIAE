@@ -306,6 +306,14 @@ document.addEventListener('DOMContentLoaded', () => {
         btnWrong.addEventListener('click', (e) => {
             e.stopPropagation();
             if (!isFlipped) return;
+
+            // Record the category of the current card as "wrong"
+            const currentCard = filteredDeck[currentIndex];
+            if (currentCard) {
+                let wrongCounts = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}'));
+                wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
+                StorageManager.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, JSON.stringify(wrongCounts));
+            }
             
             // Auto flip card back to retry
             setTimeout(() => {

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProjectCount();
     renderRecentProjects();
     initNotenrechner();
+    renderLearningRecommendations(); // New call
     initCommitGrid();
 });
 
@@ -198,6 +199,69 @@ function initNotenrechner() {
 }
 
 /* ==========================================================================
+   LEARNING RECOMMENDATIONS LOGIC
+   ========================================================================== */
+function renderLearningRecommendations() {
+    const container = document.querySelector('.right-col');
+    if (!container) return;
+
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+
+    const weakQuizCategories = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]'));
+    const flashcardsWrongCounts = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}'));
+
+    const recommendations = {};
+
+    // Process quiz recommendations
+    weakQuizCategories.forEach(cat => {
+        recommendations[cat] = (recommendations[cat] || 0) + 2; // Higher weight for quiz
+    });
+
+    // Process flashcard recommendations
+    for (const cat in flashcardsWrongCounts) {
+        recommendations[cat] = (recommendations[cat] || 0) + flashcardsWrongCounts[cat];
+    }
+
+    // Sort recommendations by weight (descending)
+    const sortedRecommendations = Object.entries(recommendations)
+        .sort(([, a], [, b]) => b - a)
+        .map(([cat]) => cat);
+
+    let recommendationsHtml = '';
+    if (sortedRecommendations.length > 0) {
+        recommendationsHtml = sortedRecommendations.map(cat => {
+            let categoryName = cat; // Default to category key
+            // Map internal category keys to user-friendly names
+            switch (cat) {
+                case 'tech': categoryName = lang === 'de' ? 'Technische Fragen' : 'Technical Questions'; break;
+                case 'project': categoryName = lang === 'de' ? 'Projektfragen' : 'Project Questions'; break;
+                case 'personal': categoryName = lang === 'de' ? 'Persönliche Fragen' : 'Personal Questions'; break;
+                case 'ihk': categoryName = lang === 'de' ? 'IHK-Fragen' : 'IHK Questions'; break;
+                case 'software': categoryName = lang === 'de' ? 'Softwareentwicklung' : 'Software Development'; break;
+                case 'database': categoryName = lang === 'de' ? 'Datenbanken' : 'Databases'; break;
+                case 'network': categoryName = lang === 'de' ? 'Netzwerke & Sicherheit' : 'Networking & Security'; break;
+                case 'wiso': categoryName = lang === 'de' ? 'Wirtschaft & Soziales' : 'Business & Society'; break;
+                // Add more mappings as needed
+            }
+            return `<li><a href="${getRecommendationLink(cat)}">${categoryName}</a></li>`;
+        }).join('');
+    } else {
+        recommendationsHtml = `<li><span lang="de">Keine spezifischen Empfehlungen. Mach ein Quiz oder lerne Lernkarten!</span><span lang="en">No specific recommendations yet. Take a quiz or study flashcards!</span></li>`;
+    }
+
+    const recommendationCard = document.createElement('section');
+    recommendationCard.className = 'card fade-in visible';
+    recommendationCard.setAttribute('aria-labelledby', 'recommendations-title');
+    recommendationCard.innerHTML = `
+        <h3 id="recommendations-title"><span lang="de">📚 Lernempfehlungen</span><span lang="en">📚 Learning Recommendations</span></h3>
+        <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary);">
+            ${recommendationsHtml}
+        </ul>
+    `;
+    container.appendChild(recommendationCard);
+}
+
+/* ==========================================================================
    GITHUB ACTIVITY GRID LOGIC
    ========================================================================== */
 function initCommitGrid() {
@@ -328,6 +392,33 @@ function initCommitGrid() {
     }
 }
 
+function getRecommendationLink(category) {
+    // Map categories to relevant pages
+    switch (category) {
+        case 'tech':
+        case 'project':
+        case 'personal':
+        case 'ihk':
+            return 'interview-trainer.html'; // Interview Trainer covers these
+        case 'software':
+        case 'database':
+        case 'network':
+        case 'wiso':
+            return 'flashcards.html'; // Flashcards cover these
+        default:
+            return 'quiz.html'; // Fallback to quiz
+    }
+}
+
+// Listen to global language change to keep recommendations in sync
+document.addEventListener('langchange', () => {
+    const existingRecCard = document.querySelector('.right-col .card[aria-labelledby="recommendations-title"]');
+    if (existingRecCard) {
+        existingRecCard.remove();
+    }
+    renderLearningRecommendations();
+});
+
 // Global function to trigger a live commit on the dashboard from games/other areas
 window.addLiveCommit = function() {
     let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
@@ -337,4 +428,3 @@ window.addLiveCommit = function() {
     // Re-initialize if we are on dashboard
     initCommitGrid();
 };
-
