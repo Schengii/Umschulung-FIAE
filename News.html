@@ -39,36 +39,7 @@
 
         <div class="layout-grid">
             <!-- Left Column: Filterable Blog Posts -->
-            <div class="left-col">
-                <article class="card filter-dfg">
-                    <h2 lang="de">Start des Fachpraktikums bei der DFG</h2>
-                    <h2 lang="en">Start of Internship at the DFG</h2>
-                    <h5><span lang="de">Veröffentlicht am: 20. März 2024</span><span lang="en">Published on: March 20, 2024</span></h5>
-                    <p lang="de">Heute ging es endlich los! Mein Praktikum bei der Deutschen Forschungsgemeinschaft (DFG) in Bonn hat begonnen. Nach einer freundlichen Begrüßung durch das 8-köpfige Webentwicklungs-Team wurde mir mein Arbeitsplatz eingerichtet.</p>
-                    <p lang="en">Today was finally the day! My internship at the German Research Foundation (DFG) in Bonn began. After a warm welcome by the 8-member web team, my workspace was set up.</p>
-                    <p lang="de">In den ersten Wochen werde ich mich intensiv mit den internen Systemarchitekturen und den eingesetzten Web-Frameworks vertraut machen. Ich freue mich riesig auf die kommenden 24 Monate praxisnahe Entwicklung und die enge Zusammenarbeit mit erfahrenen Entwicklern.</p>
-                    <p lang="en">During the first weeks, I will familiarize myself with internal system architectures and active web frameworks. I am highly looking forward to the next 24 months of practical software engineering and working closely with senior developers.</p>
-                </article>
-
-                <article class="card filter-bfw">
-                    <h2 lang="de">Erstes Semester am BFW Dortmund abgeschlossen</h2>
-                    <h2 lang="en">First Semester at BFW Dortmund Completed</h2>
-                    <h5><span lang="de">Veröffentlicht am: 15. Februar 2024</span><span lang="en">Published on: February 15, 2024</span></h5>
-                    <p lang="de">Das erste Semester meiner Umschulung im Berufsförderungswerk Dortmund ist erfolgreich beendet. In den letzten Monaten standen vor allem theoretische Grundlagen auf dem Lehrplan: Einführung in die Softwareentwicklung mit Java und Javascript, relationale Datenbanksysteme (SQL) sowie Grundlagen der IT-Systemtechnik.</p>
-                    <p lang="en">The first semester of my retraining program at BFW Dortmund is successfully completed. Over the past months, theoretical foundations dominated the curriculum: Intro to programming in Java and Javascript, relational database management (SQL), and IT system architectures.</p>
-                    <p lang="de">Die Prüfungen sind alle gut gelaufen und es war eine tolle Erfahrung, mit so vielen motivierten Umschülern aus ganz Deutschland zusammenzuarbeiten.</p>
-                    <p lang="en">All exams went well, and it has been an amazing experience collaborating with so many motivated students from across Germany.</p>
-                </article>
-
-                <article class="card filter-milestone">
-                    <h2 lang="de">Beginn der Umschulung in Dortmund</h2>
-                    <h2 lang="en">Start of Retraining in Dortmund</h2>
-                    <h5><span lang="de">Veröffentlicht am: 08. Januar 2024</span><span lang="en">Published on: January 08, 2024</span></h5>
-                    <p lang="de">Der große Schritt ist getan: Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung hat offiziell begonnen! Die erste Woche am BFW Dortmund stand ganz im Zeichen des Kennenlernens der Räumlichkeiten, des Internats und natürlich der Dozenten.</p>
-                    <p lang="en">The big step is made: My retraining program to become an IT Specialist in Application Development has officially begun! The first week at BFW Dortmund was focused on onboarding, discovering the dormitories, and meeting the lecturers.</p>
-                    <p lang="de">Da mein Kostenträger, die Deutsche Rentenversicherung Bund, die Umschulung in Kooperation mit der Praxis genehmigt hat, werde ich bereits frühzeitig Theoriephasen in Dortmund und Praxisblöcke im Betrieb abwechseln.</p>
-                    <p lang="en">Since my sponsor, the German Pension Insurance, approved the program in cooperation with industry practice, I will alternate theoretical modules in Dortmund with practical phases at the host company.</p>
-                </article>
+            <div class="left-col" id="news-articles-container">
             </div>
 
             <!-- Right Column -->
@@ -96,6 +67,8 @@
     <div id="site-footer"></div>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/news_data.js"></script>
+    <script src="assets/js/news.js" defer></script>
 </body>
 
 </html>
