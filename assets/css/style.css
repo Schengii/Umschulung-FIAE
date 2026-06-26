@@ -1606,6 +1606,29 @@ html[lang="en"] [lang="de"] {
     box-shadow: var(--shadow-sm);
 }
 
+.btn-edit-project {
+    position: absolute;
+    top: 1rem;
+    right: 3.5rem; /* 1rem (delete) + 32px (delete) + 0.5rem gap */
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    z-index: 10;
+}
+.btn-edit-project:hover {
+    background-color: #f59e0b;
+    color: white;
+    transform: scale(1.1);
+}
+
 /* ==========================================================================
    PRINT STYLESHEET
    ========================================================================== */

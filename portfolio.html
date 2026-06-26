@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/portfolio-enhancements.css">
     <link rel="stylesheet" href="assets/css/print.css" media="print">
+    <link rel="stylesheet" href="assets/css/skeletons.css">
     <script src="assets/js/components.js"></script>
 </head>
 
@@ -52,6 +53,7 @@
         <div class="layout-grid">
             <!-- Left Column: Projects -->
             <div class="left-col">
+                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." lang="de" class="project-search-input"><input type="text" id="portfolio-searchbar-en" placeholder="🔍 Search projects..." lang="en" class="project-search-input">
                 <div class="card">
                     <h2 lang="de">Projekt-Showcase</h2>
                     <h2 lang="en">Project Showcase</h2>
@@ -180,7 +182,16 @@
                 </div>
 
                 <!-- Dynamic projects dynamically injected here -->
-                <div id="github-loading" class="github-loading"></div>
+                <div id="skeleton-loader" class="skeleton-grid">
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                </div>
+
+                <div id="github-loading" class="github-loading" style="display: none;"></div>
                     <div id="github-error" class="github-error" style="display:none;"></div>
                     <div id="dynamic-projects-container"></div>
 
@@ -223,7 +234,7 @@
                         </div>
                     </form>
                 </article>
-            </div>
+            </input>
 
             <!-- Right Column: Sidebar -->
             <aside class="right-col">

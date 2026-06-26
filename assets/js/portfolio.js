@@ -8,7 +8,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const toggleAdminBtn = document.getElementById('toggle-admin-btn');
     const adminFormContainer = document.getElementById('admin-form-container');
-    const projectForm = document.getElementById('project-form');
+    const projectForm = document.getElementById('project-form');    
     const githubLoading = document.getElementById('github-loading');
     const dynamicContainer = document.getElementById('dynamic-projects-container');
     const githubError = document.getElementById('github-error');
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportSection = document.getElementById('export-section');
     const htmlExportCode = document.getElementById('html-export-code');
     const copyCodeBtn = document.getElementById('copy-code-btn');
+    const skeletonLoader = document.getElementById('skeleton-loader');
 
     // GitHub API Configuration & Caching
     const GITHUB_USERNAME = document.getElementById('github-username')?.value?.trim() || 'Schengii';
@@ -81,11 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof StorageManager !== 'undefined') {
             customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
+            const stored = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
+            customProjects = stored.map(p => ({ ...p, isCustom: true }));
         } else {
             customProjects = JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]');
+            const stored = JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]');
+            customProjects = stored.map(p => ({ ...p, isCustom: true }));
         }
     } catch (e) {
         console.warn('Failed to parse custom projects:', e);
+        customProjects = [];
     }
 
     // Load dynamic projects (projects.json + GitHub API)
@@ -138,22 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Merge static and dynamic project data and render them
     async function loadAndRenderProjects() {
         if (!dynamicContainer) return;
-        if (githubLoading) {
-            githubLoading.innerHTML = `
-            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
-                <p style="margin-top: 0.5rem;" lang="de">GitHub‑Projekte werden geladen...</p>
-                <p style="margin-top: 0.5rem;" lang="en">Loading GitHub projects...</p>
-            </div>
-        `;
-        githubLoading.style.display = 'block';
-            githubLoading.style.display = 'block';
-        }
+        if (skeletonLoader) skeletonLoader.style.display = 'grid';
+        if (githubError) githubError.style.display = 'none';
     
         try {
             const [staticProjects, githubRepos] = await Promise.all([
+            const [staticProjects, githubRepos, folderProjects] = await Promise.all([
                 fetch('./assets/data/projects.json').then(res => res.ok ? res.json() : []),
                 fetchGitHubRepos()
+                fetchGitHubRepos(),
+                fetch('./assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => [])
             ]);
     
             const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         enriched.stars = ghRepo.stargazers_count || 0;
                         enriched.githubUrl = ghRepo.html_url;
                         enriched.updatedAt = ghRepo.updated_at;
+                        enriched.language = ghRepo.language;
                         if (ghRepo.homepage && ghRepo.homepage.trim() !== '') {
                             enriched.link = ghRepo.homepage;
                         }
@@ -214,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Store all fetched projects
             allProjects = [...enrichedStaticProjects, ...newGithubProjects, ...customProjects];
+            allProjects = [...enrichedStaticProjects, ...folderProjects, ...newGithubProjects, ...customProjects];
     
             // Render everything
             renderAllProjects();
@@ -228,9 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span lang="en">GitHub projects could not be loaded.</span>
             </div>`;
             githubError.style.display = 'block';
+                githubError.style.display = 'block';
             }
         } finally {
-            if (githubLoading) githubLoading.style.display = 'none';
+            if (skeletonLoader) skeletonLoader.style.display = 'none';
         }
     }
 
@@ -258,10 +261,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="stars-badge" title="${project.stars} Stars on GitHub" style="display: inline-flex; align-items: center; background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0.25rem 0.6rem; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-left: 0.5rem; float: right;">
                 <i class="fa fa-star" aria-hidden="true" style="color: #eab308; margin-right: 0.25rem;"></i> ${project.stars}
             </span>`;
+        if (project.stars !== undefined && project.stars > 0) {
+            starsHTML = `<span class="stars-badge" title="${project.stars} Stars on GitHub"><i class="fa fa-star" aria-hidden="true"></i> ${project.stars}</span>`;
         }
 
         // Build buttons
         let buttonsHTML = '<div class="mt-1rem" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">';
+        let buttonsHTML = '<div class="project-buttons">';
         
         if (project.link) {
             let btnTextDe = 'Projekt starten';
@@ -279,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             buttonsHTML += `
             <a href="${project.link}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <a href="${project.link}" class="btn-primary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
             </a>`;
@@ -287,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (project.githubUrl) {
             buttonsHTML += `
             <a href="${project.githubUrl}" class="btn-primary custom-size" target="_blank" rel="noopener" style="flex: 1; min-width: 130px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: var(--bg-nav); border-color: var(--bg-nav);">
+            <a href="${project.githubUrl}" class="btn-primary btn-project secondary" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span>
                 <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
             </a>`;
@@ -310,6 +318,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3 lang="de">${project.titleDe}</h3>
             <h3 lang="en">${project.titleEn}</h3>
             
+            <div class="project-card-header">
+                <h3 lang="de">${project.titleDe}</h3>
+                <h3 lang="en">${project.titleEn}</h3>
+                ${starsHTML}
+            </div>
             <div class="tech-tags">
                 ${tagsHTML}
             </div>
@@ -379,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPagination(sorted.length);
         attachCardListeners();
         attachAdminListeners(); // Re-attach delete/edit listeners
+        attachAdminListeners();
 
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
@@ -395,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
             pageBtn.className = 'btn-pagination';
+            pageBtn.className = 'btn-filter btn-pagination';
             if (i === currentPage) {
                 pageBtn.classList.add('active');
             }
@@ -556,6 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const project = getFormValues();
+            const project = { ...getFormValues(), isCustom: true };
             const editIndex = projectForm.dataset.editIndex;
 
             if (editIndex !== undefined && editIndex !== null) {
@@ -568,10 +584,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 customProjects.push(project);
             }
             
+            const projectsToStore = customProjects.map(({ isCustom, ...rest }) => rest);
             if (typeof StorageManager !== 'undefined') {
                 StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                StorageManager.setItem('portfolio_custom_projects', JSON.stringify(projectsToStore));
             } else {
                 localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
+                localStorage.setItem('portfolio_custom_projects', JSON.stringify(projectsToStore));
             }
             
             renderCustomProjects();
@@ -588,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset form
             projectForm.reset();
             updateLivePreview();
+            if (exportSection) exportSection.style.display = 'none';
 
             // Re-trigger language for button text
             const activeLang = document.documentElement.getAttribute('lang') || 'de';
@@ -612,8 +632,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add delete listeners
         const deleteButtons = customProjectsContainer.querySelectorAll('.btn-delete-project');
+        const deleteButtons = document.querySelectorAll('#custom-projects-container .btn-delete-project');
         deleteButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const idx = parseInt(btn.getAttribute('data-index'));
                 const confirmDe = confirm('Möchtest du dieses Projekt wirklich aus deinem lokalen Speicher löschen?\n\nDo you really want to delete this project from your local storage?');
                 if (confirmDe) {
@@ -624,6 +646,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
                     }
                     renderCustomProjects();
+                    // Re-build allProjects and re-render
+                    const projectToDelete = customProjects[idx];
+                    allProjects = allProjects.filter(p => p.titleDe !== projectToDelete.titleDe);
+                    renderAllProjects();
                     if (exportSection) exportSection.style.display = 'none';
                 }
             });
@@ -631,8 +657,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add edit listeners
         const editButtons = customProjectsContainer.querySelectorAll('.btn-edit-project');
+        const editButtons = document.querySelectorAll('#custom-projects-container .btn-edit-project');
         editButtons.forEach(btn => {
             btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const idx = parseInt(btn.getAttribute('data-index'));
                 const projectToEdit = customProjects[idx];
                 
@@ -661,6 +690,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
+
+    // Initial Load
+    loadAndRenderProjects();
 
     // Copy Code button
     if (copyCodeBtn && htmlExportCode) {
