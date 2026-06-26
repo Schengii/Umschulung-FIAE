@@ -104,6 +104,7 @@ const quizProgress = document.getElementById("quiz-progress");
 // Spielvariablen
 let currentQuestionIndex = 0;
 let score = 0;
+let questionCorrectness = []; // Tracks correctness for each question
 
 function getActiveQuestions() {
     const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -131,6 +132,7 @@ function renderBestScore() {
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+    questionCorrectness = new Array(getActiveQuestions().length).fill(false); // Reset correctness tracking
     
     const lang = document.documentElement.getAttribute('lang') || 'de';
     nextButton.innerHTML = lang === 'de' ? 'Nächste Frage <i class="fa fa-arrow-right"></i>' : 'Next Question <i class="fa fa-arrow-right"></i>';
@@ -180,16 +182,19 @@ function resetState() {
 function selectAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
+    const questionIndex = currentQuestionIndex; // Capture current question index
     
     if (isCorrect) {
         selectedBtn.classList.add("correct");
         score++;
+        questionCorrectness[questionIndex] = true; // Mark as correct
         if (typeof GameAudio !== 'undefined') {
             GameAudio.play('match');
         }
     } else {
         selectedBtn.classList.add("incorrect");
         if (typeof GameAudio !== 'undefined') {
+            questionCorrectness[questionIndex] = false; // Mark as incorrect
             GameAudio.play('fail');
         }
     }
@@ -211,6 +216,17 @@ function showScore() {
     
     if (quizProgress) {
         quizProgress.style.width = "100%";
+    }
+    
+    // Determine weak categories from quiz
+    const weakCategories = new Set();
+    questions.forEach((q, index) => {
+        if (!questionCorrectness[index]) { // If question was answered incorrectly
+            weakCategories.add(q.category);
+        }
+    });
+    if (weakCategories.size > 0) {
+        StorageManager.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, JSON.stringify([...weakCategories]));
     }
     
     const percentage = Math.round((score / questions.length) * 100);
