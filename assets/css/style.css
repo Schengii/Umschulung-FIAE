@@ -3360,7 +3360,7 @@ html nav {
     margin: 0;
 }
 
-.theme-toggle {
+.header .theme-toggle {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -3375,13 +3375,13 @@ html nav {
     flex-shrink: 0;
 }
 
-.theme-toggle:hover {
+.header .theme-toggle:hover {
     background: var(--primary);
     border-color: var(--primary);
     transform: rotate(20deg);
 }
 
-.theme-toggle.rotate {
+.header .theme-toggle.rotate {
     transform: rotate(180deg);
 }
 
