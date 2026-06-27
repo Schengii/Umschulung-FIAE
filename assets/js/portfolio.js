@@ -59,91 +59,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Fetch repositories from GitHub API with caching
-    async function fetchGitHubRepos() {
-        const maxAttempts = 3;
-        const delay = 500; // ms
-        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-            try {
-                const cachedData = localStorage.getItem(CACHE_KEY);
-                const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-                if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
-                    return JSON.parse(cachedData);
+    let hashHandled = false;
+    function handleDeepLink() {
+        if (hashHandled) return;
+        const hash = decodeURIComponent(window.location.hash.substring(1)).trim();
+        if (!hash) return;
+        
+        // Find project in allProjects
+        const index = allProjects.findIndex(proj => {
+            const titleDe = (proj.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            const titleEn = (proj.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            const repoName = (proj.repoName || '').toLowerCase();
+            const cleanHash = hash.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            
+            return titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash;
+        });
+        
+        if (index !== -1) {
+            currentPage = Math.floor(index / projectsPerPage) + 1;
+            hashHandled = true;
+            renderAllProjects(); // Render the correct page
+            
+            // Find card in DOM and open it after render
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.project-card');
+                const cleanHash = hash.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                for (const card of cards) {
+                    const titleDe = (card.dataset.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    const titleEn = (card.dataset.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    if (titleDe.includes(cleanHash) || titleEn.includes(cleanHash)) {
+                        if (typeof window.openProjectModal === 'function') {
+                            window.openProjectModal(card);
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        break;
+                    }
                 }
-                const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-                if (response.status === 403) {
-                    const errorMsg = 'GitHub rate limit exceeded or access forbidden.';
-                    showError(githubError, errorMsg);
-                    throw new Error(errorMsg);
-                }
-                if (!response.ok) {
-                    throw new Error(`GitHub API error: ${response.status}`);
-                }
-                const repos = await response.json();
-                localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
-                localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-                return repos;
-            } catch (e) {
-                if (attempt < maxAttempts) {
-                    await new Promise(res => setTimeout(res, delay * Math.pow(2, attempt - 1)));
-                } else {
-                    console.warn('Failed to fetch from GitHub API after retries, falling back to cache:', e);
-                    const cachedData = localStorage.getItem(CACHE_KEY);
-                    return cachedData ? JSON.parse(cachedData) : [];
-                }
-            }
+            }, 250);
         }
     }
 
-    // Utility to show error messages
-    function showError(container, message) {
-        if (!container) return;
-        container.innerHTML = `<div class="github-error"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ${message}</div>`;
-        container.style.display = 'block';
-    }
-
-    // Merge static and dynamic project data and render them
+    // Load and render projects statically (without runtime GitHub API requests)
     async function loadAndRenderProjects() {
         if (!dynamicContainer) return;
         if (skeletonLoader) skeletonLoader.style.display = 'grid';
-        if (githubError) githubError.style.display = 'none';
     
         try {
-            // Use pre-loaded window.projectsData to avoid fetch CORS issues with file:// protocol
+            // Load pre-loaded static projects from projects_data.js
             const staticProjects = (window.projectsData && Array.isArray(window.projectsData)) ? window.projectsData : [];
-            const [githubRepos, folderProjects] = await Promise.all([
-                fetchGitHubRepos(),
-                fetch('assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => [])
-            ]);
-    
-            const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
-            const processedRepoNames = new Set();
-    
-            // 1. Process and enrich static projects from projects_data.js
-            const enrichedStaticProjects = staticProjects.map(proj => {
-                const enriched = { ...proj };
-                if (enriched.repoName) {
-                    const repoNameLower = enriched.repoName.toLowerCase();
-                    processedRepoNames.add(repoNameLower);
-                    const ghRepo = githubRepoMap.get(repoNameLower);
-                    if (ghRepo) {
-                        enriched.stars = ghRepo.stargazers_count || 0;
-                        enriched.githubUrl = ghRepo.html_url;
-                        enriched.updatedAt = ghRepo.updated_at;
-                        enriched.language = ghRepo.language;
-                        if (ghRepo.homepage && ghRepo.homepage.trim() !== '') {
-                            enriched.link = ghRepo.homepage;
-                        }
-                    }
-                }
-                return enriched;
-            });
-    
-            // 2. Add new, unprocessed repos from GitHub (disabled - user wants individual integration)
-            const newGithubProjects = [];
-    
-            // Filter out folder projects that are already covered by enrichedStaticProjects
-            const enrichedRepoNames = new Set(enrichedStaticProjects.map(p => (p.titleDe || '').toLowerCase()));
+            const folderProjects = await fetch('assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => []);
+ 
+            // Filter out folder projects that are already covered by staticProjects
+            const enrichedRepoNames = new Set(staticProjects.map(p => (p.titleDe || '').toLowerCase()));
             const filteredFolderProjects = folderProjects.filter(fp => {
                 const fpTitle = (fp.titleDe || '').toLowerCase();
                 const isDuplicate = enrichedRepoNames.has(fpTitle);
@@ -151,22 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return !isDuplicate && hasDescription;
             });
  
-            // Store all fetched projects
-            allProjects = [...enrichedStaticProjects, ...filteredFolderProjects, ...newGithubProjects];
+            // Store all projects
+            allProjects = [...staticProjects, ...filteredFolderProjects];
+            
+            // Handle deep link
+            handleDeepLink();
     
             // Render everything
             renderAllProjects();
     
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
-            if (githubError) {
-                githubError.innerHTML = `<div class="github-error">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                <span lang="de">GitHub‑Projekte konnten nicht geladen werden.</span>
-                <span lang="en">GitHub projects could not be loaded.</span>
-            </div>`;
-                githubError.style.display = 'block';
-            }
         } finally {
             if (skeletonLoader) skeletonLoader.style.display = 'none';
         }
@@ -401,4 +363,22 @@ document.addEventListener('DOMContentLoaded', () => {
             testimonialDots[currentTestimonial].classList.add('active');
         }, 6000);
     }
+
+    // Handle radar chart click filtering
+    document.addEventListener('radarfilter', (e) => {
+        const rawSkill = e.detail;
+        let searchWord = rawSkill;
+        if (rawSkill === 'Java/OOP') searchWord = 'Java';
+        else if (rawSkill === 'SQL/DB') searchWord = 'SQL';
+        else if (rawSkill === 'HTML/CSS') searchWord = 'HTML';
+        
+        if (searchInput) {
+            searchInput.value = searchWord;
+            currentSearchTerm = searchWord.toLowerCase().trim();
+            currentPage = 1;
+            renderAllProjects();
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            searchInput.focus();
+        }
+    });
 });

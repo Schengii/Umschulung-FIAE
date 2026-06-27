@@ -265,4 +265,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!StorageManager.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
         document.body.insertAdjacentHTML('beforeend', renderCookieBanner());
     }
+
+    // Register Service Worker & Manifest link for PWA (only on http/https protocols)
+    if (window.location.protocol.startsWith('http')) {
+        if (!document.querySelector('link[rel="manifest"]')) {
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = '/manifest.json';
+            document.head.appendChild(link);
+        }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+                .catch(err => console.warn('PWA Service Worker failed:', err));
+        }
+    }
 });

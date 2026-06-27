@@ -93,11 +93,19 @@
     modal.offsetHeight;
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
+
+    // Set URL hash for deep linking
+    const cleanTitle = (titleDe || titleEn).replace(/[^a-zA-Z0-9]/g, '');
+    window.location.hash = encodeURIComponent(cleanTitle);
   }
 
   function closeModal() {
     modal.classList.remove('show');
     document.body.style.overflow = '';
+    // Clear URL hash
+    if (window.location.hash) {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
     // After transition, hide completely
     setTimeout(() => {
       if (!modal.classList.contains('show')) {

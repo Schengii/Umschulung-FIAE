@@ -42,7 +42,7 @@ function initSkillRadar() {
         // Label position (slightly outside)
         const labelX = center + Math.cos(angle) * (maxRadius + 22);
         const labelY = center + Math.sin(angle) * (maxRadius + 22);
-        svg += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" fill="var(--text-secondary)" font-size="10" font-family="var(--font-sans)">${skill.name}</text>`;
+        svg += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" fill="var(--text-secondary)" font-size="10" font-family="var(--font-sans)" class="radar-label" style="cursor:pointer;" data-skill="${skill.name}">${skill.name}</text>`;
     });
 
     // Draw skill polygon
@@ -63,7 +63,7 @@ function initSkillRadar() {
         const r = (skill.value / 100) * maxRadius;
         const x = center + Math.cos(angle) * r;
         const y = center + Math.sin(angle) * r;
-        svg += `<circle cx="${x}" cy="${y}" r="4" fill="var(--primary)" stroke="white" stroke-width="1.5" class="radar-dot">
+        svg += `<circle cx="${x}" cy="${y}" r="4" fill="var(--primary)" stroke="white" stroke-width="1.5" class="radar-dot" style="cursor:pointer;" data-skill="${skill.name}">
             <title>${skill.name}: ${skill.value}%</title>
         </circle>`;
     });
@@ -71,6 +71,17 @@ function initSkillRadar() {
     svg += `</svg>`;
 
     container.innerHTML = svg;
+
+    // Attach interaction listener
+    container.addEventListener('click', (e) => {
+        const target = e.target.closest('.radar-label, .radar-dot');
+        if (target) {
+            const skillName = target.getAttribute('data-skill');
+            if (skillName) {
+                document.dispatchEvent(new CustomEvent('radarfilter', { detail: skillName }));
+            }
+        }
+    });
 
     // Animate radar on scroll
     const observer = new IntersectionObserver((entries) => {
