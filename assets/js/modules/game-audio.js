@@ -121,3 +121,7 @@ const GameAudio = {
 document.addEventListener('DOMContentLoaded', () => {
     GameAudio.init();
 });
+
+function initGameAudio() {
+    // GameAudio initializes itself via DOMContentLoaded
+}

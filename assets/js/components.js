@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navEl) navEl.outerHTML = renderNav(currentPage);
 
     // Hide search bar on pages where search is not needed
-    const searchablePages = ['news.html', 'portfolio.html', 'home.html'];
+    const searchablePages = ['news.html', 'home.html'];
     if (!searchablePages.includes(currentPage)) {
         const searchContainer = document.querySelector('.search-container');
         if (searchContainer) {
