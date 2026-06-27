@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
-    <meta name="description" content="Portfolio von Maximilian Schenk – IHK-Abschlussprojekt EcoChef, Snake, IT-Quiz, KI-Projekte und mehr. Gebaut mit Java, Spring Boot, JavaScript und React.">
+    <meta name="description"
+        content="Portfolio von Maximilian Schenk – IHK-Abschlussprojekt EcoChef, Snake, IT-Quiz, KI-Projekte und mehr. Gebaut mit Java, Spring Boot, JavaScript und React.">
     <meta name="author" content="Maximilian Schenk">
     <link rel="canonical" href="https://max-schenk.de/portfolio.html">
     <meta property="og:title" content="Portfolio - Maximilian Schenk">
-    <meta property="og:description" content="Meine Programmierprojekte als angehender Fachinformatiker Anwendungsentwicklung.">
+    <meta property="og:description"
+        content="Meine Programmierprojekte als angehender Fachinformatiker Anwendungsentwicklung.">
     <meta property="og:image" content="assets/images/ecochef_showcase.png">
     <meta property="og:url" content="https://max-schenk.de/portfolio.html">
     <meta property="og:type" content="website">
@@ -29,7 +31,8 @@
     </script>
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="assets/css/print.css" media="print">
     <link rel="stylesheet" href="assets/css/skeletons.css">
     <script src="assets/js/components.js"></script>
@@ -41,22 +44,41 @@
         <span lang="en">Skip to content</span>
     </a>
 
-    <header class="header"><h1>Portfolio</h1></header>
+    <header class="header">
+        <h1>Portfolio</h1>
+    </header>
 
     <div id="site-nav"></div>
 
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
+        <noscript>
+            <div class="card"
+                style="margin-bottom: 2rem; background-color: var(--warning-bg); border-color: var(--warning-border);">
+                <h3 lang="de">JavaScript erforderlich</h3>
+                <p lang="de">Für die volle Funktionalität dieser Seite (wie das Laden von Projekten, interaktive Filter
+                    und Dashboards) ist JavaScript notwendig. Bitte aktivieren Sie JavaScript in Ihrem Browser.</p>
+                <h3 lang="en">JavaScript Required</h3>
+                <p lang="en">This site requires JavaScript for full functionality (like loading projects, interactive
+                    filters, and dashboards). Please enable JavaScript in your browser.</p>
+            </div>
+        </noscript>
+
         <div class="layout-grid">
             <!-- Left Column: Projects -->
             <div class="left-col">
-                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." lang="de" class="project-search-input">
+                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." lang="de"
+                    class="project-search-input">
                 <div class="card">
                     <h2 lang="de">Projekt-Showcase</h2>
                     <h2 lang="en">Project Showcase</h2>
-                    <p lang="de">Als angehender Fachinformatiker für Anwendungsentwicklung baue ich regelmäßig praktische Projekte. Diese Portfolio-Website ist selbst Teil dieser Entwicklungsarbeit. Hier ist eine Auswahl meiner Applikationen:</p>
-                    <p lang="en">As an aspiring IT Specialist in Application Development, I regularly build practical projects. This portfolio website itself is part of this development work. Here is a selection of my applications:</p>
+                    <p lang="de">Als angehender Fachinformatiker für Anwendungsentwicklung baue ich regelmäßig
+                        praktische Projekte. Diese Portfolio-Website ist selbst Teil dieser Entwicklungsarbeit. Hier ist
+                        eine Auswahl meiner Applikationen:</p>
+                    <p lang="en">As an aspiring IT Specialist in Application Development, I regularly build practical
+                        projects. This portfolio website itself is part of this development work. Here is a selection of
+                        my applications:</p>
                 </div>
 
                 <input type="hidden" id="github-username" value="Schengii">
@@ -90,7 +112,8 @@
                 </div>
 
                 <!-- No Results Message -->
-                <div id="no-results-container" style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                <div id="no-results-container"
+                    style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
                     <i class="fa fa-search fa-3x" style="margin-bottom: 1rem;"></i>
                     <h3 lang="de">Keine Projekte gefunden</h3>
                     <h3 lang="en">No Projects Found</h3>
@@ -100,17 +123,59 @@
 
                 <!-- Dynamic projects dynamically injected here -->
                 <div id="skeleton-loader" class="skeleton-grid">
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
-                    <div class="skeleton"><div class="skeleton-line heading"></div><div class="skeleton-line tag"></div><div class="skeleton-line tag"></div><div class="skeleton-line image"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width: 80%;"></div></div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
+                    <div class="skeleton">
+                        <div class="skeleton-line heading"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line tag"></div>
+                        <div class="skeleton-line image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                    </div>
                 </div>
 
                 <div id="github-loading" class="github-loading" style="display: none;"></div>
-                    <div id="github-error" class="github-error" style="display:none;"></div>
-                    <div id="dynamic-projects-container"></div>
+                <div id="github-error" class="github-error" style="display:none;"></div>
+                <div id="dynamic-projects-container"></div>
 
 
 
@@ -124,163 +189,167 @@
                 <article class="card filter-all" id="contact">
                     <h3 lang="de">📬 Kontakt &amp; Hire Me</h3>
                     <h3 lang="en">📬 Contact &amp; Hire Me</h3>
-                    <p lang="de">Interesse an einer Zusammenarbeit? Ich bin ab sofort auf der Suche nach einer Junior-Position als Softwareentwickler. Schreib mir einfach eine Nachricht!</p>
-                    <p lang="en">Interested in working together? I am currently looking for a junior software developer position. Feel free to drop me a message!</p>
-                    
+                    <p lang="de">Interesse an einer Zusammenarbeit? Ich bin ab sofort auf der Suche nach einer
+                        Junior-Position als Softwareentwickler. Schreib mir einfach eine Nachricht!</p>
+                    <p lang="en">Interested in working together? I am currently looking for a junior software developer
+                        position. Feel free to drop me a message!</p>
+
                     <form id="hire-me-form" class="project-form mt-1rem">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="hire-me-name"><span lang="de">Name *</span><span lang="en">Name *</span></label>
-                                <input type="text" id="hire-me-name" class="form-control" required placeholder="Dein Name / Your Name">
+                                <label for="hire-me-name"><span lang="de">Name *</span><span lang="en">Name
+                                        *</span></label>
+                                <input type="text" id="hire-me-name" class="form-control" required
+                                    placeholder="Dein Name / Your Name">
                             </div>
                             <div class="form-group">
-                                <label for="hire-me-email"><span lang="de">E-Mail *</span><span lang="en">Email *</span></label>
-                                <input type="email" id="hire-me-email" class="form-control" required placeholder="name@domain.com">
+                                <label for="hire-me-email"><span lang="de">E-Mail *</span><span lang="en">Email
+                                        *</span></label>
+                                <input type="email" id="hire-me-email" class="form-control" required
+                                    placeholder="name@domain.com">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="hire-me-message"><span lang="de">Nachricht *</span><span lang="en">Message *</span></label>
-                            <textarea id="hire-me-message" class="form-control" rows="4" required placeholder="..."></textarea>
+                            <label for="hire-me-message"><span lang="de">Nachricht *</span><span lang="en">Message
+                                    *</span></label>
+                            <textarea id="hire-me-message" class="form-control" rows="4" required
+                                placeholder="..."></textarea>
                         </div>
                         <button type="submit" class="btn-primary custom-size">
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i> <span lang="de">Nachricht senden</span><span lang="en">Send Message</span>
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i> <span lang="de">Nachricht
+                                senden</span><span lang="en">Send Message</span>
                         </button>
                         <div id="hire-me-feedback" class="form-feedback">
-                            <i class="fa fa-check"></i> <span lang="de">E-Mail Programm wird geöffnet...</span><span lang="en">Opening email client...</span>
+                            <i class="fa fa-check"></i> <span lang="de">E-Mail Programm wird geöffnet...</span><span
+                                lang="en">Opening email client...</span>
                         </div>
                     </form>
                 </article>
 
-            <!-- Right Column: Sidebar -->
-            <aside class="right-col">
-                 <section class="card status-widget" aria-labelledby="portfolio-status-title">
-                    <h3 id="portfolio-status-title" class="status-title">
-                        <span lang="de"><i class="fa fa-check-circle" aria-hidden="true"></i> Umschulung abgeschlossen!</span>
-                        <span lang="en"><i class="fa fa-check-circle" aria-hidden="true"></i> Retraining Completed!</span>
-                    </h3>
-                     <p class="status-text">
-                        <span lang="de">Die mündliche AP2-Abschlussprüfung vor der IHK Dortmund am 08.06.2026 wurde erfolgreich absolviert.</span>
-                        <span lang="en">The oral AP2 final examination before the IHK Dortmund on June 8, 2026, was successfully completed.</span>
-                    </p>
-                     <div class="status-badge">
-                        <span lang="de">🚀 Status: Sofort verfügbar für Festanstellung</span>
-                        <span lang="en">🚀 Status: Available immediately for full-time roles</span>
-                    </div>
-                </section>
+                <!-- Right Column: Sidebar -->
+                <aside class="right-col">
+                    <section class="card status-widget" aria-labelledby="portfolio-status-title">
+                        <h3 id="portfolio-status-title" class="status-title">
+                            <span lang="de"><i class="fa fa-check-circle" aria-hidden="true"></i> Umschulung
+                                abgeschlossen!</span>
+                            <span lang="en"><i class="fa fa-check-circle" aria-hidden="true"></i> Retraining
+                                Completed!</span>
+                        </h3>
+                        <p class="status-text">
+                            <span lang="de">Die mündliche AP2-Abschlussprüfung vor der IHK Dortmund am 08.06.2026 wurde
+                                erfolgreich absolviert.</span>
+                            <span lang="en">The oral AP2 final examination before the IHK Dortmund on June 8, 2026, was
+                                successfully completed.</span>
+                        </p>
+                        <div class="status-badge">
+                            <span lang="de">🚀 Status: Sofort verfügbar für Festanstellung</span>
+                            <span lang="en">🚀 Status: Available immediately for full-time roles</span>
+                        </div>
+                    </section>
 
-                <!-- CV & Timeline -->
-                <section class="card" aria-labelledby="cv-timeline-title">
-                    <h3 id="cv-timeline-title">
-                        <span lang="de"><i class="fa fa-history"></i> Werdegang</span>
-                        <span lang="en"><i class="fa fa-history"></i> Career Timeline</span>
-                    </h3>
-                    
-                    <div class="timeline">
-                        <div class="timeline-item timeline-item-primary">
-                            <h4 class="timeline-title">IHK Abschluss AP2</h4><span class="timeline-meta">Juni 2026</span></div>
-                        <div class="timeline-item timeline-item-secondary"><h4 class="timeline-title">Praktikum (EcoChef)</h4><span class="timeline-meta">Nov 2025 - Mai 2026</span></div>
-                        <div class="timeline-item timeline-item-tertiary"><h4 class="timeline-title">Umschulung FIAE</h4><span class="timeline-meta">2024 - 2026</span></div>
-                    </div>
+                    <!-- CV & Timeline -->
+                    <section class="card" aria-labelledby="cv-timeline-title">
+                        <h3 id="cv-timeline-title">
+                            <span lang="de"><i class="fa fa-history"></i> Werdegang</span>
+                            <span lang="en"><i class="fa fa-history"></i> Career Timeline</span>
+                        </h3>
 
-                    <a href="assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download title="Lebenslauf als PDF herunterladen">
-                        <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span lang="en">Download CV</span>
-                    </a>
-                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
-                        <span lang="de"><i class="fa fa-info-circle"></i> PDF wird aktualisiert</span>
-                        <span lang="en"><i class="fa fa-info-circle"></i> PDF being updated</span>
-                    </p>
-                </section>
-
-                <!-- ANIMATED SKILL BARS -->
-                <section class="card" aria-labelledby="tech-skills-title">
-                    <h3 id="tech-skills-title">
-                        <span lang="de">Meine IT-Skills</span>
-                        <span lang="en">My IT Skills</span>
-                    </h3>
-                    <div class="skill-bar">
-                        <div class="skill-header"><span class="skill-name">HTML5 / CSS3</span><span class="skill-percent">85%</span></div>
-                        <div class="skill-track"><div class="skill-fill skill-85"></div></div>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-header"><span class="skill-name">JavaScript (ES6+)</span><span class="skill-percent">75%</span></div>
-                        <div class="skill-track"><div class="skill-fill skill-75"></div></div>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-header"><span class="skill-name">Java / OOP</span><span class="skill-percent">70%</span></div>
-                        <div class="skill-track"><div class="skill-fill skill-70"></div></div>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-header"><span class="skill-name">SQL / Datenbanken</span><span class="skill-percent">65%</span></div>
-                        <div class="skill-track"><div class="skill-fill skill-65"></div></div>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-header"><span class="skill-name">Git / GitHub</span><span class="skill-percent">80%</span></div>
-                        <div class="skill-track"><div class="skill-fill skill-80"></div></div>
-                    </div>
-                </section>
-
-                <!-- SKILL RADAR CHART -->
-                <section class="card" aria-labelledby="skill-radar-title">
-                    <h3 id="skill-radar-title">
-                        <span lang="de"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill-Radar</span>
-                        <span lang="en"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill Radar</span>
-                    </h3>
-                    <div id="skill-radar-container" style="display: flex; justify-content: center; margin-top: 0.5rem;"></div>
-                </section>
-
-                <!-- TESTIMONIALS -->
-                <section class="card" aria-labelledby="testimonials-title">
-                    <h3 id="testimonials-title">
-                        <span lang="de"><i class="fa fa-quote-left" aria-hidden="true"></i> Referenzen</span>
-                        <span lang="en"><i class="fa fa-quote-left" aria-hidden="true"></i> Testimonials</span>
-                    </h3>
-
-                    <div class="testimonial-carousel">
-                        <div class="testimonial-item active">
-                            <blockquote class="testimonial-quote">
-                                <span lang="de">„Maximilian hat sich sehr schnell in unser Team integriert und hat eigenständig Frontend-Aufgaben übernommen. Sein Engagement und seine Lernbereitschaft sind vorbildlich."</span>
-                                <span lang="en">"Maximilian integrated very quickly into our team and independently took on frontend tasks. His commitment and willingness to learn are exemplary."</span>
-                            </blockquote>
-                            <div class="testimonial-author">
-                                <strong>Team Webentwicklung</strong>
-                                <span class="testimonial-role">Deutsche Forschungsgemeinschaft (DFG), Bonn</span>
+                        <div class="timeline">
+                            <div class="timeline-item timeline-item-primary">
+                                <h4 class="timeline-title">IHK Abschluss AP2</h4><span class="timeline-meta">Juni
+                                    2026</span>
+                            </div>
+                            <div class="timeline-item timeline-item-secondary">
+                                <h4 class="timeline-title">Praktikum (EcoChef)</h4><span class="timeline-meta">Nov 2025
+                                    - Mai 2026</span>
+                            </div>
+                            <div class="timeline-item timeline-item-tertiary">
+                                <h4 class="timeline-title">Umschulung FIAE</h4><span class="timeline-meta">2024 -
+                                    2026</span>
                             </div>
                         </div>
 
-                        <div class="testimonial-item">
-                            <blockquote class="testimonial-quote">
-                                <span lang="de">„Ein herausragender Umschüler, der stets über den Tellerrand hinausschaut und mit seinen Projekten wie EcoChef und ElektroCheck AI beeindruckende Ergebnisse liefert."</span>
-                                <span lang="en">"An outstanding retrainee who consistently goes above and beyond, delivering impressive results with projects like EcoChef and ElektroCheck AI."</span>
-                            </blockquote>
-                            <div class="testimonial-author">
-                                <strong>BFW Dortmund</strong>
-                                <span class="testimonial-role"><span lang="de">Dozent IT-Fachbereich</span><span lang="en">IT Department Instructor</span></span>
+                        <a href="assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download
+                            title="Lebenslauf als PDF herunterladen">
+                            <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span
+                                lang="en">Download CV</span>
+                        </a>
+                        <p
+                            style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                            <span lang="de"><i class="fa fa-info-circle"></i> PDF wird aktualisiert</span>
+                            <span lang="en"><i class="fa fa-info-circle"></i> PDF being updated</span>
+                        </p>
+                    </section>
+
+                    <!-- ANIMATED SKILL BARS -->
+                    <section class="card" aria-labelledby="tech-skills-title">
+                        <h3 id="tech-skills-title">
+                            <span lang="de">Meine IT-Skills</span>
+                            <span lang="en">My IT Skills</span>
+                        </h3>
+                        <div class="skill-bar">
+                            <div class="skill-header"><span class="skill-name">HTML5 / CSS3</span><span
+                                    class="skill-percent">85%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill skill-85"></div>
                             </div>
                         </div>
-                    </div>
+                        <div class="skill-bar">
+                            <div class="skill-header"><span class="skill-name">JavaScript (ES6+)</span><span
+                                    class="skill-percent">75%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill skill-75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-header"><span class="skill-name">Java / OOP</span><span
+                                    class="skill-percent">70%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill skill-70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-header"><span class="skill-name">SQL / Datenbanken</span><span
+                                    class="skill-percent">65%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill skill-65"></div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-header"><span class="skill-name">Git / GitHub</span><span
+                                    class="skill-percent">80%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill skill-80"></div>
+                            </div>
+                        </div>
+                    </section>
 
-                    <div class="testimonial-nav" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.75rem;">
-                        <button class="testimonial-dot active" data-index="0" aria-label="Testimonial 1"></button>
-                        <button class="testimonial-dot" data-index="1" aria-label="Testimonial 2"></button>
-                    </div>
-                </section>
-            </aside>
-        </div>
+                    <!-- SKILL RADAR CHART -->
+                    <section class="card" aria-labelledby="skill-radar-title">
+                        <h3 id="skill-radar-title">
+                            <span lang="de"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill-Radar</span>
+                            <span lang="en"><i class="fa fa-bullseye" aria-hidden="true"></i> Skill Radar</span>
+                        </h3>
+                        <div id="skill-radar-container"
+                            style="display: flex; justify-content: center; margin-top: 0.5rem;"></div>
+                    </section>
+                </aside>
+            </div>
     </main>
 
-  <!-- Modal für Projekt‑Detail -->
-  <div id="project-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-content">
-      <button class="modal-close" aria-label="Schließen">&times;</button>
-      <div id="modal-body"></div>
+    <!-- Modal für Projekt‑Detail -->
+    <div id="project-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Schließen">&times;</button>
+            <div id="modal-body"></div>
+        </div>
     </div>
-  </div>
 
-  <!-- Back‑to‑Top Button -->
-  <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang">⬆︎</button>
+    <!-- Back‑to‑Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang">⬆︎</button>
 
-  <!-- Toast Container -->
-  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <div id="site-footer"></div>
 
