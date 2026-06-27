@@ -5,6 +5,10 @@ let currentSearchQuery = '';
 let currentCategory = 'all';
 
 function initSearchAndFilter() {
+    const path = window.location.pathname;
+    const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    if (!APP.SEARCHABLE_PAGES.includes(currentPage)) return;
+
     const searchBar = document.getElementById('searchbar');
     const filterButtons = document.querySelectorAll('.btn-filter');
     

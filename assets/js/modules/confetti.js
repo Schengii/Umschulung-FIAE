@@ -126,3 +126,7 @@ const Confetti = {
         this.particles = [];
     }
 };
+
+function initConfetti() {
+    // Confetti is initialized dynamically via Confetti.start()
+}

@@ -19,7 +19,7 @@ const STORAGE_KEYS = Object.freeze({
 
 const APP = Object.freeze({
     DEFAULT_LANG: 'de',
-    SEARCHABLE_PAGES: ['news.html', 'portfolio.html', 'home.html'],
+    SEARCHABLE_PAGES: ['news.html', 'home.html'],
     IHK_TARGET_DATE: '2026-06-08T10:00:00+02:00',
     SCROLL_THRESHOLD: 300,
     SKILL_OBSERVER_THRESHOLD: 0.5,

@@ -41,7 +41,7 @@
         <span lang="en">Skip to content</span>
     </a>
 
-    <header class="header"><h1>Portfolio</h1><button id="theme-toggle" aria-label="Dark‑Mode umschalten" class="theme-toggle">🌙</button></header>
+    <header class="header"><h1>Portfolio</h1></header>
 
     <div id="site-nav"></div>
 
@@ -59,88 +59,7 @@
                     <p lang="en">As an aspiring IT Specialist in Application Development, I regularly build practical projects. This portfolio website itself is part of this development work. Here is a selection of my applications:</p>
                 </div>
 
-                <!-- Project Manager Admin Form (Collapsible) -->
-                <div class="card admin-card">
                 <input type="hidden" id="github-username" value="Schengii">
-                    <div class="admin-header">
-                         <h3 class="admin-header-title">
-                            <span lang="de"><i class="fa fa-cogs" aria-hidden="true"></i> Projekt-Manager</span>
-                            <span lang="en"><i class="fa fa-cogs" aria-hidden="true"></i> Project Manager</span>
-                        </h3>
-                        <button id="toggle-admin-btn" class="btn-admin-toggle" aria-expanded="false">
-                            <span lang="de"><i class="fa fa-plus" aria-hidden="true"></i> Neues Projekt</span>
-                            <span lang="en"><i class="fa fa-plus" aria-hidden="true"></i> New Project</span>
-                        </button>
-                    </div>
-
-                    <div id="admin-form-container" class="admin-form-container collapsed">
-                        <form id="project-form" class="project-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="proj-title-de"><span lang="de">Titel (DE) *</span><span lang="en">Title (DE) *</span></label>
-                                    <input type="text" id="proj-title-de" class="form-control" required placeholder="z. B. 🍳 EcoChef">
-                                </div>
-                                <div class="form-group">
-                                    <label for="proj-title-en"><span lang="de">Titel (EN) *</span><span lang="en">Title (EN) *</span></label>
-                                    <input type="text" id="proj-title-en" class="form-control" required placeholder="e.g. 🍳 EcoChef Capstone">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="proj-tags"><span lang="de">Technologien (Komma-separiert)</span><span lang="en">Technologies (Comma-separated)</span></label>
-                                    <input type="text" id="proj-tags" class="form-control" placeholder="Java / Spring Boot, REST API, SQL">
-                                </div>
-                                <div class="form-group">
-                                    <label for="proj-image"><span lang="de">Bild-Pfad oder URL</span><span lang="en">Image Path or URL</span></label>
-                                    <input type="text" id="proj-image" class="form-control" placeholder="assets/images/ecochef_showcase.png">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="proj-desc-de"><span lang="de">Beschreibung (DE) *</span><span lang="en">Description (DE) *</span></label>
-                                <textarea id="proj-desc-de" class="form-control" rows="3" required placeholder="Beschreibung des Projekts auf Deutsch..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="proj-desc-en"><span lang="de">Beschreibung (EN) *</span><span lang="en">Description (EN) *</span></label>
-                                <textarea id="proj-desc-en" class="form-control" rows="3" required placeholder="Description of the project in English..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="proj-link"><span lang="de">Projekt-Link (Optional)</span><span lang="en">Project Link (Optional)</span></label>
-                                <input type="text" id="proj-link" class="form-control" placeholder="https://...">
-                            </div>
-
-                             <button type="submit" class="btn-primary custom-size">
-                                <span lang="de">Projekt erstellen</span><span lang="en">Create Project</span>
-                            </button>
-                        </form>
-
-                         <div class="preview-title" style="margin-top: 2rem; margin-bottom: 1rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                            <span lang="de"><i class="fa fa-eye" aria-hidden="true"></i> Live-Vorschau:</span>
-                            <span lang="en"><i class="fa fa-eye" aria-hidden="true"></i> Live Preview:</span>
-                        </div>
-                        
-                        <!-- Real-time Live Preview Card Container -->
-                        <div id="live-preview-container"></div>
-
-                         <div id="export-section" class="export-section" style="display:none;">
-                            <h4>
-                                <span lang="de">📋 HTML-Code für dein Portfolio:</span>
-                                <span lang="en">📋 HTML Code for your Portfolio:</span>
-                            </h4>
-                             <p class="small-muted">
-                                <span lang="de">Kopiere diesen Code und füge ihn in deine <code>portfolio.html</code> ein, um das Projekt dauerhaft im Quellcode zu speichern.</span>
-                                <span lang="en">Copy this code and paste it into your <code>portfolio.html</code> to permanently store the project in your source code.</span>
-                            </p>
-                            <div class="code-export-box">
-                                 <pre class="code-pre"><code id="html-export-code"></code></pre>
-                                 <button id="copy-code-btn" class="btn-game small-btn"><i class="fa fa-copy"></i> Kopieren / Copy</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Portfolio Filters -->
                 <div class="portfolio-filters">
@@ -193,8 +112,7 @@
                     <div id="github-error" class="github-error" style="display:none;"></div>
                     <div id="dynamic-projects-container"></div>
 
-                <!-- Custom projects dynamically injected here -->
-                <div id="custom-projects-container"></div>
+
 
                 <!-- Pagination Controls -->
                 <nav id="pagination-container" class="pagination-nav" aria-label="Project navigation"></nav>
@@ -368,8 +286,9 @@
 
     <script src="assets/js/projects_data.js"></script>
     <script src="assets/js/modal.js"></script>
-<script src="assets/js/toast.js"></script>
-<script src="assets/js/portfolio.js"></script>
+    <script src="assets/js/toast.js"></script>
+    <script src="assets/js/portfolio.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

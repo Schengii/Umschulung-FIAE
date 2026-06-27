@@ -1,32 +1,19 @@
 /**
  * Portfolio Page Logic
- * Handles dynamic project addition, fetching projects from local projects.json and GitHub API,
- * LocalStorage caching for GitHub data, real-time live preview rendering,
- * HTML code export, and custom project removal.
+ * Handles dynamic project loading from static projectsData and GitHub API,
+ * LocalStorage caching for GitHub data, search, filtering, pagination,
+ * testimonial carousel, contact form submission, and language changes.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const toggleAdminBtn = document.getElementById('toggle-admin-btn');
-    const adminFormContainer = document.getElementById('admin-form-container');
-    const projectForm = document.getElementById('project-form');    
-    const githubLoading = document.getElementById('github-loading');
+    const searchInput = document.getElementById('portfolio-searchbar');
+    const sortSelect = document.getElementById('sort-select');
+    const filterButtons = document.querySelectorAll('.portfolio-filters .btn-filter');
+    const noResultsContainer = document.getElementById('no-results-container');
+    const paginationContainer = document.getElementById('pagination-container');
     const dynamicContainer = document.getElementById('dynamic-projects-container');
-    const githubError = document.getElementById('github-error');
-    
-    const inputTitleDe = document.getElementById('proj-title-de');
-    const inputTitleEn = document.getElementById('proj-title-en');
-    const inputTags = document.getElementById('proj-tags');
-    const inputImage = document.getElementById('proj-image');
-    const inputDescDe = document.getElementById('proj-desc-de');
-    const inputDescEn = document.getElementById('proj-desc-en');
-    const inputLink = document.getElementById('proj-link');
-    
-    const livePreviewContainer = document.getElementById('live-preview-container');
-    const customProjectsContainer = document.getElementById('custom-projects-container');
-    const exportSection = document.getElementById('export-section');
-    const htmlExportCode = document.getElementById('html-export-code');
-    const copyCodeBtn = document.getElementById('copy-code-btn');
     const skeletonLoader = document.getElementById('skeleton-loader');
+    const githubError = document.getElementById('github-error');
 
     // GitHub API Configuration & Caching
     const GITHUB_USERNAME = document.getElementById('github-username')?.value?.trim() || 'Schengii';
@@ -38,20 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State for filtering and pagination
     let allProjects = [];
-    let customProjects = [];
     let currentPage = 1;
     const projectsPerPage = 6;
     let currentSearchTerm = '';
     let currentCategory = 'all';
 
-    // Load and render existing custom projects from LocalStorage
+    // Event Listeners for Filters & Sorting
     const persistedSort = localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
-    const sortSelect = document.getElementById('sort-select');
-    const searchInput = document.getElementById('portfolio-searchbar');
-    const filterButtons = document.querySelectorAll('.portfolio-filters .btn-filter');
-    const noResultsContainer = document.getElementById('no-results-container');
-    const paginationContainer = document.getElementById('pagination-container');
-
     if (sortSelect) {
         sortSelect.value = persistedSort;
         sortSelect.addEventListener('change', () => {
@@ -64,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearchTerm = e.target.value.toLowerCase().trim();
-            currentPage = 1; // Reset to first page on new search
+            currentPage = 1; // Reset to first page on search
             renderAllProjects();
         });
     }
@@ -79,24 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    try {
-        if (typeof StorageManager !== 'undefined') {
-            customProjects = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
-            const stored = JSON.parse(StorageManager.getItem('portfolio_custom_projects', '[]')) || [];
-            customProjects = stored.map(p => ({ ...p, isCustom: true }));
-        } else {
-            customProjects = JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]');
-            const stored = JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]');
-            customProjects = stored.map(p => ({ ...p, isCustom: true }));
-        }
-    } catch (e) {
-        console.warn('Failed to parse custom projects:', e);
-        customProjects = [];
-    }
-
-    // Load dynamic projects (projects.json + GitHub API)
-    // Note: only called once here; removed duplicate call at line ~677
-
     // Fetch repositories from GitHub API with caching
     async function fetchGitHubRepos() {
         const maxAttempts = 3;
@@ -110,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
                 if (response.status === 403) {
-                    // Rate limit or forbidden
                     const errorMsg = 'GitHub rate limit exceeded or access forbidden.';
                     showError(githubError, errorMsg);
                     throw new Error(errorMsg);
@@ -158,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
             const processedRepoNames = new Set();
     
-            // 1. Process and enrich static projects from projects.json
+            // 1. Process and enrich static projects from projects_data.js
             const enrichedStaticProjects = staticProjects.map(proj => {
                 const enriched = { ...proj };
                 if (enriched.repoName) {
@@ -178,42 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return enriched;
             });
     
-            // 2. Add new, unprocessed repos from GitHub
+            // 2. Add new, unprocessed repos from GitHub (disabled - user wants individual integration)
             const newGithubProjects = [];
-            githubRepos.forEach(repo => {
-                const repoNameLower = repo.name.toLowerCase();
-                if (repo.fork || repoNameLower === 'umschulung-fiae' || processedRepoNames.has(repoNameLower)) {
-                    return; // Skip forks, the portfolio repo itself, and already processed repos
-                }
-    
-                let category = 'web';
-                const topics = repo.topics || [];
-                if (topics.some(t => ['game', 'games', 'godot', 'unity'].includes(t.toLowerCase()))) {
-                    category = 'games';
-                } else if (topics.some(t => ['ai', 'artificial-intelligence', 'machine-learning', 'data'].includes(t.toLowerCase()))) {
-                    category = 'ai';
-                }
-    
-                const cleanTitle = repo.name.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    
-                newGithubProjects.push({
-                    repoName: repo.name,
-                    titleDe: cleanTitle,
-                    titleEn: cleanTitle,
-                    tags: topics.length > 0 ? topics.slice(0, 5) : (repo.language ? [repo.language] : ['GitHub']),
-                    image: repo.owner?.avatar_url || 'assets/images/default_project.png',
-                    link: repo.homepage && repo.homepage.trim() !== '' ? repo.homepage : repo.html_url,
-                    githubUrl: repo.html_url,
-                    descDe: repo.description || 'Keine Beschreibung auf GitHub hinterlegt.',
-                    descEn: repo.description || 'No description provided on GitHub.',
-                    category: category,
-                    stars: repo.stargazers_count || 0,
-                    updatedAt: repo.updated_at
-                });
-            });
     
             // Filter out folder projects that are already covered by enrichedStaticProjects
-            // Also filter out folder projects with no description (they're empty/placeholder entries)
             const enrichedRepoNames = new Set(enrichedStaticProjects.map(p => (p.titleDe || '').toLowerCase()));
             const filteredFolderProjects = folderProjects.filter(fp => {
                 const fpTitle = (fp.titleDe || '').toLowerCase();
@@ -221,9 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hasDescription = fp.descDe && fp.descDe.trim() !== '';
                 return !isDuplicate && hasDescription;
             });
-
+ 
             // Store all fetched projects
-            allProjects = [...enrichedStaticProjects, ...filteredFolderProjects, ...newGithubProjects, ...customProjects];
+            allProjects = [...enrichedStaticProjects, ...filteredFolderProjects, ...newGithubProjects];
     
             // Render everything
             renderAllProjects();
@@ -331,11 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAllProjects() {
-        if (!dynamicContainer || !customProjectsContainer) return;
+        if (!dynamicContainer) return;
 
         // 1. Filter
         const filteredProjects = allProjects.filter(proj => {
-            const matchesCategory = currentCategory === 'all' || (proj.category && proj.category.includes(currentCategory)) || (proj.language && proj.language.toLowerCase() === currentCategory);
+            const matchesCategory = currentCategory === 'all' || 
+                                   (proj.category && proj.category.includes(currentCategory)) || 
+                                   (proj.language && proj.language.toLowerCase() === currentCategory);
             
             if (!matchesCategory) return false;
 
@@ -361,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Handle No Results
         if (sorted.length === 0) {
             dynamicContainer.innerHTML = '';
-            customProjectsContainer.innerHTML = '';
             if (noResultsContainer) noResultsContainer.style.display = 'block';
             if (paginationContainer) paginationContainer.innerHTML = '';
             return;
@@ -374,21 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const paginatedProjects = sorted.slice(startIndex, endIndex);
 
         // 5. Render
-        dynamicContainer.innerHTML = paginatedProjects
-            .filter(p => !customProjects.some(cp => cp.titleDe === p.titleDe)) // Exclude custom projects from dynamic render
-            .map(proj => generateDynamicCardHTML(proj)).join('\n');
-
-        customProjectsContainer.innerHTML = paginatedProjects
-            .filter(p => customProjects.some(cp => cp.titleDe === p.titleDe)) // Only render custom projects for this page
-            .map(proj => {
-                const originalIndex = customProjects.findIndex(cp => cp.titleDe === proj.titleDe);
-                return generateCardHTML(proj, false, originalIndex);
-            })
-            .join('\n');
+        dynamicContainer.innerHTML = paginatedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
 
         renderPagination(sorted.length);
-        attachCardListeners();
-        attachAdminListeners(); // Re-attach delete/edit listeners
 
         const activeLang = document.documentElement.getAttribute('lang') || 'de';
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
@@ -404,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
-            pageBtn.className = 'btn-pagination';
             pageBtn.className = 'btn-filter btn-pagination';
             if (i === currentPage) {
                 pageBtn.classList.add('active');
@@ -426,315 +343,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Note: Card click-to-open-modal is handled by modal.js to avoid duplicate listeners
-    function attachCardListeners() {
-        // Modal.js handles project card clicks via event delegation
-        // This function is kept for compatibility but does nothing active
-    }
-    // ============================================================
-    // ADMIN PROJECT FORM & PREVIEW (LOCAL ONLY)
-    // ============================================================
-
-    // Toggle Admin Card
-    if (toggleAdminBtn && adminFormContainer) {
-        toggleAdminBtn.addEventListener('click', () => {
-            const isCollapsed = adminFormContainer.classList.contains('collapsed');
-            if (isCollapsed) {
-                adminFormContainer.classList.remove('collapsed');
-                toggleAdminBtn.setAttribute('aria-expanded', 'true');
-                toggleAdminBtn.innerHTML = '<i class="fa fa-minus" aria-hidden="true"></i> Schließen / Close';
-                updateLivePreview(); // Init preview
-            } else {
-                adminFormContainer.classList.add('collapsed');
-                toggleAdminBtn.setAttribute('aria-expanded', 'false');
-                toggleAdminBtn.innerHTML = '<i class="fa fa-plus" aria-hidden="true"></i> Neues Projekt / New Project';
-            }
-        });
-    }
-
-    // Real-time Live Preview listeners
-    const inputFields = [inputTitleDe, inputTitleEn, inputTags, inputImage, inputDescDe, inputDescEn, inputLink];
-    inputFields.forEach(field => {
-        if (field) {
-            field.addEventListener('input', updateLivePreview);
-        }
-    });
-
-    function getFormValues() {
-        const titleDe = (inputTitleDe ? inputTitleDe.value.trim() : '') || '🍳 Projekt-Titel';
-        const titleEn = (inputTitleEn ? inputTitleEn.value.trim() : '') || '🍳 Project Title';
-        const tagsRaw = inputTags ? inputTags.value.trim() : '';
-        const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(t => t) : ['HTML5', 'CSS3', 'JS'];
-        const image = (inputImage ? inputImage.value.trim() : '') || 'assets/images/career_mentoring.png';
-        const descDe = (inputDescDe ? inputDescDe.value.trim() : '') || 'Hier steht deine deutsche Projektbeschreibung...';
-        const descEn = (inputDescEn ? inputDescEn.value.trim() : '') || 'Your English project description goes here...';
-        const link = inputLink ? inputLink.value.trim() : '';
-
-        return { titleDe, titleEn, tags, image, descDe, descEn, link };
-    }
-
-    function generateCardHTML(project, isPreview = false, index = null) {
-        const tagsHTML = project.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('\n        ');
-        
-        let imageHTML = '';
-        if (project.image) {
-            imageHTML = `
-    <div style="margin: 1.25rem 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
-        <img src="${project.image}" alt="${project.titleDe}" loading="lazy" style="width: 100%; height: auto; display: block; max-height: 350px; object-fit: cover; margin-bottom: 0;">
-    </div>`;
-        }
-
-        let linkHTML = '';
-        if (project.link) {
-            linkHTML = `
-    <div style="margin-top: 1rem;">
-        <a href="${project.link}" target="_blank" rel="noopener" class="btn-primary" style="display: inline-block; width: auto; text-decoration: none; padding: 0.5rem 1rem;">
-            <span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Link öffnen</span>
-            <span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> View Link</span>
-        </a>
-    </div>`;
-        }
-
-        let deleteBtnHTML = '';
-        let editBtnHTML = '';
-        if (!isPreview && index !== null) {
-            editBtnHTML = `
-            <button class="btn-edit-project" data-index="${index}" title="Projekt bearbeiten" aria-label="Projekt bearbeiten" style="position: absolute; top: 10px; right: 45px; z-index: 10; background: #f59e0b; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </button>`;
-        }
-
-        if (!isPreview && index !== null) {
-            deleteBtnHTML = `
-            <button class="btn-delete-project" data-index="${index}" title="Projekt löschen" aria-label="Projekt löschen">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </button>`;
-        }
-
-        return `
-<article class="card fade-in visible project-card" style="position: relative;" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="" data-tags="${encodeURIComponent(JSON.stringify(project.tags))}">
-    ${editBtnHTML}
-    ${deleteBtnHTML}
-    <h3 lang="de">${project.titleDe}</h3>
-    <h3 lang="en">${project.titleEn}</h3>
-    <div class="tech-tags">
-        ${tagsHTML}
-    </div>
-    ${imageHTML}
-    <p lang="de">${project.descDe}</p>
-    <p lang="en">${project.descEn}</p>
-    ${linkHTML}
-</article>`;
-    }
-
-    function updateLivePreview() {
-        if (!livePreviewContainer) return;
-        const project = getFormValues();
-        livePreviewContainer.innerHTML = generateCardHTML(project, true);
-        
-        // Reinforce translation rules in preview
-        const activeLang = document.documentElement.getAttribute('lang') || 'de';
-        const deEl = livePreviewContainer.querySelectorAll('[lang="de"]');
-        const enEl = livePreviewContainer.querySelectorAll('[lang="en"]');
-        
-        if (activeLang === 'de') {
-            enEl.forEach(el => el.style.setProperty('display', 'none', 'important'));
-            deEl.forEach(el => el.style.removeProperty('display'));
-        } else {
-            deEl.forEach(el => el.style.setProperty('display', 'none', 'important'));
-            enEl.forEach(el => el.style.removeProperty('display'));
-        }
-    }
-
-    // Form submit to save custom project
-    if (projectForm) {
-        projectForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const project = { ...getFormValues(), isCustom: true };
-            const editIndex = projectForm.dataset.editIndex;
-
-            if (editIndex !== undefined && editIndex !== null) {
-                // Update mode
-                customProjects[parseInt(editIndex)] = project;
-                delete projectForm.dataset.editIndex; // Reset mode
-                projectForm.querySelector('button[type="submit"]').innerHTML = '<span lang="de">Projekt erstellen</span><span lang="en">Create Project</span>';
-            } else {
-                // Create mode
-                customProjects.push(project);
-            }
-            
-            const projectsToStore = customProjects.map(({ isCustom, ...rest }) => rest);
-            if (typeof StorageManager !== 'undefined') {
-                StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-            } else {
-                localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-            }
-            
-            renderCustomProjects();
-            
-            // Show Export section
-            if (exportSection && htmlExportCode && editIndex === undefined) {
-                const rawHTML = generateCardHTML(project, true).trim();
-                htmlExportCode.textContent = rawHTML;
-                exportSection.style.display = 'block';
-            } else if (exportSection) {
-                exportSection.style.display = 'none';
-            }
-            
-            // Reset form
-            projectForm.reset();
-            updateLivePreview();
-            if (exportSection) exportSection.style.display = 'none';
-
-            // Re-trigger language for button text
-            const activeLang = document.documentElement.getAttribute('lang') || 'de';
-            document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
-        });
-    }
-
-    // Render Saved Custom Projects
-    function renderCustomProjects() {
-        if (!customProjectsContainer) return;
-        customProjectsContainer.innerHTML = '';
-        
-        // This function is now mostly for initial setup and attaching listeners.
-        // The main rendering is handled by renderAllProjects.
-        attachAdminListeners();
-    }
-
-    function attachAdminListeners() {
-        customProjects.forEach((proj, idx) => {
-            // Listeners are attached based on the full customProjects array, not the paginated view
-        });
-
-        // Add delete listeners
-        const deleteButtons = document.querySelectorAll('#custom-projects-container .btn-delete-project');
-        deleteButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const idx = parseInt(btn.getAttribute('data-index'));
-                const confirmDe = confirm('Möchtest du dieses Projekt wirklich aus deinem lokalen Speicher löschen?\n\nDo you really want to delete this project from your local storage?');
-                if (confirmDe) {
-                    customProjects.splice(idx, 1);
-                    if (typeof StorageManager !== 'undefined') {
-                        StorageManager.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-                    } else {
-                        localStorage.setItem('portfolio_custom_projects', JSON.stringify(customProjects));
-                    }
-                    renderCustomProjects();
-                    // Re-build allProjects and re-render
-                    const projectToDelete = customProjects[idx];
-                    allProjects = allProjects.filter(p => p.titleDe !== projectToDelete.titleDe);
-                    renderAllProjects();
-                    if (exportSection) exportSection.style.display = 'none';
-                }
-            });
-        });
-
-        // Add edit listeners
-        const editButtons = document.querySelectorAll('#custom-projects-container .btn-edit-project');
-        editButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const idx = parseInt(btn.getAttribute('data-index'));
-                const projectToEdit = customProjects[idx];
-                
-                if (inputTitleDe) inputTitleDe.value = projectToEdit.titleDe;
-                if (inputTitleEn) inputTitleEn.value = projectToEdit.titleEn;
-                if (inputTags) inputTags.value = projectToEdit.tags.join(', ');
-                if (inputImage) inputImage.value = projectToEdit.image;
-                if (inputDescDe) inputDescDe.value = projectToEdit.descDe;
-                if (inputDescEn) inputDescEn.value = projectToEdit.descEn;
-                if (inputLink) inputLink.value = projectToEdit.link;
-                
-                if (adminFormContainer.classList.contains('collapsed')) {
-                    toggleAdminBtn.click();
-                }
-                
-                projectForm.dataset.editIndex = idx;
-                projectForm.querySelector('button[type="submit"]').innerHTML = '<span lang="de">Projekt aktualisieren</span><span lang="en">Update Project</span>';
-                
-                inputTitleDe.focus();
-                const activeLang = document.documentElement.getAttribute('lang') || 'de';
-                document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
-            });
-        });
-
-        // Trigger language switcher alignment
-        const activeLang = document.documentElement.getAttribute('lang') || 'de';
-        document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
-    }
-
-    // Initial Load (called once at top of DOMContentLoaded)
+    // Initial Load
     loadAndRenderProjects();
 
-    // Copy Code button
-    if (copyCodeBtn && htmlExportCode) {
-        copyCodeBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(htmlExportCode.textContent).then(() => {
-                const origText = copyCodeBtn.innerHTML;
-                copyCodeBtn.innerHTML = '<i class="fa fa-check"></i> Kopiert! / Copied!';
-                copyCodeBtn.style.backgroundColor = '#10b981';
-                setTimeout(() => {
-                    copyCodeBtn.innerHTML = origText;
-                    copyCodeBtn.style.backgroundColor = '';
-                }, 1500);
-            });
-        });
-    }
-     // Dark mode button – now uses #theme-toggle id and handles theme switching.
-function initDarkModeToggle() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (!toggleBtn) return;
-    const stored = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = stored || (prefersDark ? 'dark' : 'light');
-    document.documentElement.dataset.theme = theme;
-    toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    toggleBtn.classList.toggle('rotate', theme === 'dark');
-    toggleBtn.addEventListener('click', () => {
-        const newTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = newTheme;
-        localStorage.setItem('theme', newTheme);
-        toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-        toggleBtn.classList.toggle('rotate', newTheme === 'dark');
-    });
-}
-initDarkModeToggle();
+    // Dynamic Searchbar Placeholder translation
+    const initialLang = document.documentElement.getAttribute('lang') || 'de';
+    updateSearchbarPlaceholder(initialLang);
 
-    // Listen to global language change to keep previews in sync
-    document.addEventListener('langchange', () => {
-        updateLivePreview();
+    document.addEventListener('langchange', (e) => {
+        updateSearchbarPlaceholder(e.detail || 'de');
     });
 
-    // Back-to-Top Button
-    const backToTopBtn = document.getElementById('back-to-top');
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        }, { passive: true });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+    function updateSearchbarPlaceholder(lang) {
+        if (!searchInput) return;
+        searchInput.placeholder = lang === 'de' ? '🔍 Projekte durchsuchen...' : '🔍 Search projects...';
     }
 
-    // Close modal with Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const modal = document.getElementById('project-modal');
-            if (modal && modal.classList.contains('show')) {
-                modal.classList.remove('show');
-                modal.classList.add('hidden');
-            }
-        }
-    });
-
-    // Hire-Me Form
+    // Hire-Me Form handler
     const hireMeForm = document.getElementById('hire-me-form');
     if (hireMeForm) {
         hireMeForm.addEventListener('submit', (e) => {
@@ -753,7 +378,7 @@ initDarkModeToggle();
         });
     }
 
-    // Testimonial Carousel
+    // Testimonial Carousel handler
     const testimonialDots = document.querySelectorAll('.testimonial-dot');
     const testimonialItems = document.querySelectorAll('.testimonial-item');
     if (testimonialDots.length && testimonialItems.length) {
@@ -766,7 +391,7 @@ initDarkModeToggle();
                 dot.classList.add('active');
             });
         });
-        // Auto-rotate every 6 seconds
+        
         let currentTestimonial = 0;
         setInterval(() => {
             currentTestimonial = (currentTestimonial + 1) % testimonialItems.length;
@@ -775,75 +400,5 @@ initDarkModeToggle();
             testimonialItems[currentTestimonial].classList.add('active');
             testimonialDots[currentTestimonial].classList.add('active');
         }, 6000);
-    }
-
-    // Skill bar animation on scroll — uses .animated class + --skill-level CSS var
-    const skillFills = document.querySelectorAll('.skill-fill');
-    if (skillFills.length) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-        skillFills.forEach(fill => observer.observe(fill));
-    }
-
-    // Radar Chart (SVG-based)
-    const radarContainer = document.getElementById('skill-radar-container');
-    if (radarContainer) {
-        const skills = [
-            { label: 'HTML/CSS', value: 85 },
-            { label: 'JavaScript', value: 75 },
-            { label: 'Java', value: 70 },
-            { label: 'SQL', value: 65 },
-            { label: 'Git', value: 80 },
-            { label: 'React', value: 60 }
-        ];
-        const size = 200;
-        const center = size / 2;
-        const radius = 80;
-        const angleStep = (2 * Math.PI) / skills.length;
-
-        const points = skills.map((s, i) => {
-            const angle = i * angleStep - Math.PI / 2;
-            const r = (s.value / 100) * radius;
-            return {
-                x: center + r * Math.cos(angle),
-                y: center + r * Math.sin(angle),
-                lx: center + (radius + 20) * Math.cos(angle),
-                ly: center + (radius + 20) * Math.sin(angle),
-                label: s.label
-            };
-        });
-
-        const gridLines = [0.25, 0.5, 0.75, 1].map(pct => {
-            const gridPts = skills.map((_, i) => {
-                const angle = i * angleStep - Math.PI / 2;
-                const r = pct * radius;
-                return `${center + r * Math.cos(angle)},${center + r * Math.sin(angle)}`;
-            }).join(' ');
-            return `<polygon points="${gridPts}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
-        }).join('');
-
-        const spokeLines = skills.map((_, i) => {
-            const angle = i * angleStep - Math.PI / 2;
-            return `<line x1="${center}" y1="${center}" x2="${center + radius * Math.cos(angle)}" y2="${center + radius * Math.sin(angle)}" stroke="var(--border)" stroke-width="1"/>`;
-        }).join('');
-
-        const dataPoints = points.map(p => `${p.x},${p.y}`).join(' ');
-        const labels = points.map(p => {
-            const anchor = p.lx > center + 5 ? 'start' : p.lx < center - 5 ? 'end' : 'middle';
-            return `<text x="${p.lx}" y="${p.ly + 4}" text-anchor="${anchor}" font-size="9" fill="var(--text-secondary)" font-family="var(--font-sans)">${p.label}</text>`;
-        }).join('');
-
-        radarContainer.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-            ${gridLines}
-            ${spokeLines}
-            <polygon points="${dataPoints}" fill="rgba(37,99,235,0.25)" stroke="var(--primary)" stroke-width="2"/>
-            ${labels}
-        </svg>`;
     }
 });

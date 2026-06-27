@@ -131,16 +131,5 @@
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
     "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
     "category": "games"
-  },
-  {
-    "repoName": null,
-    "titleDe": "💻 Modernes Web-Portfolio & Dashboard",
-    "titleEn": "💻 Modern Web Portfolio & Dashboard",
-    "tags": ["CSS Grid / Flexbox", "Dark Mode API", "Client-side Filters", "Zweisprachiges System"],
-    "image": null,
-    "link": "dashboard.html",
-    "descDe": "Diese Web-Applikation dient als mein persönliches Portfolio. Sie vereint moderne Ästhetik mit technischer Raffinesse: ein dynamischer Suchfilter, ein duales Theme-System (Dark/Light), Scroll-Animationen, wiederverwendbare JS-Komponenten und ein CSS-basiertes Togglesystem für nahtlose Mehrsprachigkeit (DE/EN).",
-    "descEn": "This web application serves as my personal portfolio. It combines modern design aesthetics with technical polish: a dynamic real-time keyword search, a system dark/light mode toggle, scroll animations, reusable JS components and a CSS-based toggles system for seamless translations (DE/EN).",
-    "category": "web"
   }
 ]

@@ -31,7 +31,6 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/blog-enhancements.js',
     'assets/js/modules/learning-progress.js',
     'assets/js/elektrocheck_overlay.js', // New module for ElektroCheck AI bounding boxes
-    'assets/js/generate_local_projects.js',
 ];
 
 (function loadModules() {
