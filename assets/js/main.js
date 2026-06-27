@@ -25,7 +25,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/game-audio.js',
     'assets/js/modules/age-calculator.js',
     'assets/js/modules/hero-section.js',
-    'assets/js/modules/keyboard-shortcuts.js',
+    'assets/js/modules/keyboard-shortcuts.js', // This was already here
     'assets/js/modules/easter-eggs.js',
     'assets/js/modules/achievements.js',
     'assets/js/modules/blog-enhancements.js',
