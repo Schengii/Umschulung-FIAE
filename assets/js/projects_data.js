@@ -17,7 +17,7 @@ window.projectsData = [
     "category": "ai",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-06-27T10:48:06.259Z"
+    "updatedAt": "2026-06-27T10:54:27.986Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -37,7 +37,7 @@ window.projectsData = [
     "category": "ai filter-web",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-06-27T10:48:06.277Z"
+    "updatedAt": "2026-06-27T10:54:28.156Z"
   },
   {
     "repoName": "Glücksspiel",
@@ -57,7 +57,7 @@ window.projectsData = [
     "category": "games",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-06-27T10:48:06.295Z"
+    "updatedAt": "2026-06-27T10:54:28.174Z"
   },
   {
     "repoName": "Jobsuche",
@@ -77,7 +77,7 @@ window.projectsData = [
     "category": "web",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-06-27T10:48:06.356Z"
+    "updatedAt": "2026-06-27T10:54:28.384Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -97,7 +97,7 @@ window.projectsData = [
     "category": "web",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-06-27T10:48:06.373Z"
+    "updatedAt": "2026-06-27T10:54:28.558Z"
   },
   {
     "repoName": "arbeitszeiterfassung",
@@ -117,7 +117,7 @@ window.projectsData = [
     "category": "web",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-06-27T10:48:06.392Z"
+    "updatedAt": "2026-06-27T10:54:28.730Z"
   },
   {
     "repoName": "finance-ai-bot",
@@ -137,7 +137,7 @@ window.projectsData = [
     "category": "ai filter-web",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-06-27T10:48:06.410Z"
+    "updatedAt": "2026-06-27T10:54:28.911Z"
   },
   {
     "repoName": "CoOpVersusGame",
@@ -151,13 +151,13 @@ window.projectsData = [
       "Game Design"
     ],
     "image": "assets/images/coopgame_showcase.png",
-    "link": "Projekte/Games/CoOpVersusGame/",
+    "link": null,
     "descDe": "Ein plattformübergreifender Multiplayer-Prototyp, entwickelt mit Godot 4.6. Das Spiel bietet ein integriertes Lobby-System für LAN- und Netzwerkverbindungen, kooperative Missionen und Versus-Modi, Boss- und Gegner-KIs, Power-ups sowie interaktive Druckplatten-Rätsel.",
     "descEn": "A cross-platform multiplayer game prototype built in Godot 4.6. It features a local/network lobby system, cooperative missions, versus modes, intelligent boss/enemy AI, power-ups, and interactive pressure-plate puzzles.",
     "category": "games",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-06-27T10:48:06.431Z"
+    "updatedAt": "2026-06-27T10:54:29.073Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -171,13 +171,13 @@ window.projectsData = [
       "UI & Game Loop"
     ],
     "image": "assets/images/orbital_scrap_showcase.png",
-    "link": "Projekte/orbital-scrap/",
+    "link": null,
     "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
     "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",
     "category": "games",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-06-27T10:48:06.450Z"
+    "updatedAt": "2026-06-27T10:54:29.271Z"
   },
   {
     "repoName": null,
