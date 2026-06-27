@@ -1,0 +1,17 @@
+{
+  "name": "Maximilian Schenk Umschulung IT",
+  "short_name": "Max Umschulung",
+  "description": "Portfolio und Ausbildungsweg von Maximilian Schenk - Fachinformatiker Anwendungsentwicklung",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/images/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}
