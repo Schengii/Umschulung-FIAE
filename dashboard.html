@@ -139,20 +139,20 @@
                         <span lang="de"><i class="fa fa-bolt" aria-hidden="true"></i> Schnellzugriff</span>
                         <span lang="en"><i class="fa fa-bolt" aria-hidden="true"></i> Quick Links</span>
                     </h3>
-                    <div class="quick-links-grid" style="display: grid; gap: 0.5rem; margin-top: 0.75rem;">
-                        <a href="portfolio.html" class="btn-primary btn-primary-block" style="font-size: 0.85rem;">
+                    <div class="quick-links-grid">
+                        <a href="portfolio.html" class="btn-primary btn-primary-block">
                             <i class="fa fa-code" aria-hidden="true"></i>
                             <span lang="de">Projekte</span><span lang="en">Projects</span>
                         </a>
-                        <a href="flashcards.html" class="btn-primary btn-primary-block" style="font-size: 0.85rem;">
+                        <a href="flashcards.html" class="btn-primary btn-primary-block">
                             <i class="fa fa-clone" aria-hidden="true"></i>
                             <span lang="de">Lernkarten</span><span lang="en">Flashcards</span>
                         </a>
-                        <a href="interview-trainer.html" class="btn-primary btn-primary-block" style="font-size: 0.85rem;">
+                        <a href="interview-trainer.html" class="btn-primary btn-primary-block">
                             <i class="fa fa-comments" aria-hidden="true"></i>
                             <span lang="de">Interview-Trainer</span><span lang="en">Interview Trainer</span>
                         </a>
-                        <a href="playground.html" class="btn-primary btn-primary-block" style="font-size: 0.85rem;">
+                        <a href="playground.html" class="btn-primary btn-primary-block">
                             <i class="fa fa-code-fork" aria-hidden="true"></i>
                             <span lang="de">Code Playground</span><span lang="en">Code Playground</span>
                         </a>
@@ -165,27 +165,27 @@
                         <span lang="de"><i class="fa fa-line-chart" aria-hidden="true"></i> Lernfortschritt</span>
                         <span lang="en"><i class="fa fa-line-chart" aria-hidden="true"></i> Learning Progress</span>
                     </h3>
-                    <div id="learning-progress-container" style="margin-top: 0.75rem;">
+                    <div id="learning-progress-container" class="dashboard-widget-content">
                         <div class="skill-bar">
                             <div class="skill-header">
                                 <span class="skill-name"><span lang="de">Flashcards gemeistert</span><span lang="en">Flashcards mastered</span></span>
                                 <span class="skill-percent" id="progress-flashcards">0%</span>
                             </div>
-                            <div class="skill-track"><div class="skill-fill" id="progress-flashcards-bar" style="width: 0%;"></div></div>
+                            <div class="skill-track"><div class="skill-fill" id="progress-flashcards-bar"></div></div>
                         </div>
                         <div class="skill-bar">
                             <div class="skill-header">
                                 <span class="skill-name"><span lang="de">Quiz Highscore</span><span lang="en">Quiz Highscore</span></span>
                                 <span class="skill-percent" id="progress-quiz">0%</span>
                             </div>
-                            <div class="skill-track"><div class="skill-fill" id="progress-quiz-bar" style="width: 0%;"></div></div>
+                            <div class="skill-track"><div class="skill-fill" id="progress-quiz-bar"></div></div>
                         </div>
                         <div class="skill-bar">
                             <div class="skill-header">
                                 <span class="skill-name"><span lang="de">Interview Score</span><span lang="en">Interview Score</span></span>
                                 <span class="skill-percent" id="progress-interview">0%</span>
                             </div>
-                            <div class="skill-track"><div class="skill-fill" id="progress-interview-bar" style="width: 0%;"></div></div>
+                            <div class="skill-track"><div class="skill-fill" id="progress-interview-bar"></div></div>
                         </div>
                     </div>
                 </section>
@@ -196,16 +196,16 @@
                         <span lang="de"><i class="fa fa-trophy" aria-hidden="true"></i> Highscores</span>
                         <span lang="en"><i class="fa fa-trophy" aria-hidden="true"></i> Highscores</span>
                     </h3>
-                    <div id="highscores-container" style="margin-top: 0.75rem; font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                    <div id="highscores-container" class="highscore-list">
+                        <div class="highscore-item">
                             <span>🐍 Snake</span>
                             <strong id="hs-snake">—</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                        <div class="highscore-item">
                             <span>🧠 Memory</span>
                             <strong id="hs-memory">—</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                        <div class="highscore-item">
                             <span>❓ Quiz</span>
                             <strong id="hs-quiz">—</strong>
                         </div>
