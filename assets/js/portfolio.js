@@ -204,6 +204,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const safeTagsAttr = encodeURIComponent(JSON.stringify(project.tags));
+        
+        if (project.repoName === 'EcoChef') {
+            const highlightBadgeHTML = `
+            <div class="highlight-badge">
+                <span lang="de"><i class="fa fa-trophy" aria-hidden="true"></i> Abschlussprojekt IHK</span>
+                <span lang="en"><i class="fa fa-trophy" aria-hidden="true"></i> IHK Graduation Project</span>
+            </div>`;
+            return `
+            <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+                ${imageHTML}
+                <div class="highlight-content-wrapper">
+                    ${highlightBadgeHTML}
+                    <div class="project-card-header">
+                        <h3 lang="de">${project.titleDe}</h3>
+                        <h3 lang="en">${project.titleEn}</h3>
+                        ${starsHTML}
+                    </div>
+                    <div class="tech-tags">
+                        ${tagsHTML}
+                    </div>
+                    <p lang="de">${project.descDe}</p>
+                    <p lang="en">${project.descEn}</p>
+                    ${buttonsHTML}
+                </div>
+            </article>`;
+        }
+
         return `
         <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
             <div class="project-card-header">
@@ -299,6 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function sortProjects(projects, order) {
         return [...projects].sort((a, b) => {
+            if (a.repoName === 'EcoChef') return -1;
+            if (b.repoName === 'EcoChef') return 1;
             const starsA = a.stars || 0;
             const starsB = b.stars || 0;
             return order === 'asc' ? starsA - starsB : starsB - starsA;
