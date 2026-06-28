@@ -12,9 +12,9 @@ function initHeroSection() {
     const typingEl = document.getElementById('hero-typing');
     if (!typingEl) return;
 
-    const phrases = lang === 'de' 
-        ? ['Fachinformatiker für Anwendungsentwicklung', 'Webentwickler', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀']
-        : ['IT Specialist — Application Development', 'Web Developer', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀'];
+    const phrases = lang === 'de'
+        ? ['Fachinformatiker für Anwendungsentwicklung', 'Frontend Webentwickler', 'KI-Nutzung und -Automatisierung', 'JavaScript & TypeScript', 'Open for Work 🚀']
+        : ['IT Specialist — Application Development', 'Frontend Web Developer', 'AI Use and Automation', 'JavaScript & TypeScript', 'Open for Work 🚀'];
 
     let phraseIndex = 0;
     let charIndex = 0;
@@ -40,7 +40,7 @@ function initHeroSection() {
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             phraseIndex = (phraseIndex + 1) % phrases.length;
-            typingSpeed = 300; // Pause before next phrase
+            typingSpeed = 350; // Pause before next phrase
         }
 
         setTimeout(typeWriter, typingSpeed);

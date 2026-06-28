@@ -1163,7 +1163,7 @@ footer .icons a:hover {
     }
 }
 
-// Media queries are ordered from larger to smaller breakpoints, which is a common and effective practice.
+/* Media queries are ordered from larger to smaller breakpoints, which is a common and effective practice.*/
 @media screen and (max-width: 900px) {
     .layout-grid {
         grid-template-columns: 1fr;
@@ -2729,7 +2729,7 @@ html[lang="en"] [lang="de"] {
    ========================================================================== */
 .hero-section {
     background: linear-gradient(135deg, var(--bg-card) 0%, var(--primary-light, #eff6ff) 100%);
-    border: 1px solid var(--border);
+    border: 3px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 3rem 2rem;
     margin-bottom: 1.5rem;
@@ -2820,12 +2820,26 @@ html[lang="en"] [lang="de"] {
 .hero-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
     text-decoration: none;
     border-radius: var(--radius-full);
     transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
 }
 
 .btn-secondary {
@@ -3714,7 +3728,7 @@ html nav {
 .project-card.highlight-project {
     border: 2px solid transparent;
     background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
-                linear-gradient(135deg, var(--primary), var(--accent)) border-box;
+        linear-gradient(135deg, var(--primary), var(--accent)) border-box;
     box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
 }
 
@@ -3746,7 +3760,7 @@ html nav {
         gap: 1.5rem;
         align-items: stretch;
     }
-    
+
     .project-card.highlight-project .project-image-container {
         margin: 0;
         height: 100%;
@@ -3769,29 +3783,29 @@ html nav {
     header {
         padding: 1rem 0.5rem;
     }
-    
+
     header span {
         font-size: 0.9rem;
         display: block;
         line-height: 1.4;
     }
-    
+
     .header {
         padding: 0.5rem 1rem;
     }
-    
+
     .header h1 {
         font-size: 1.25rem;
     }
-    
+
     .search-input {
         width: 100px;
     }
-    
+
     .search-input:focus {
         width: 130px;
     }
-    
+
     .welcome-container {
         margin: 3rem auto;
     }
@@ -3801,97 +3815,99 @@ html nav {
     :root {
         --radius-lg: 0.5rem;
     }
-    
+
     body {
         font-size: 0.85rem;
     }
-    
+
     .main-container {
         padding: 0.75rem 0.5rem;
     }
-    
+
     .card {
         padding: 1rem;
         margin-bottom: 1rem;
     }
-    
+
     .project-card {
         padding: 1rem;
     }
-    
+
     /* Header & Titles scaling */
-    h1, .hero-title {
+    h1,
+    .hero-title {
         font-size: 1.3rem !important;
     }
-    
+
     h2 {
         font-size: 1.15rem !important;
     }
-    
+
     h3 {
         font-size: 1.05rem !important;
     }
-    
+
     header {
         padding: 0.75rem 0.5rem !important;
     }
-    
+
     header span {
         font-size: 0.8rem !important;
         line-height: 1.3;
     }
-    
+
     .header {
         padding: 0.5rem 0.75rem !important;
     }
-    
+
     .header h1 {
         font-size: 1.1rem !important;
     }
-    
+
     /* Hide search bar on extremely small viewports to save space */
     .search-container {
         display: none !important;
     }
-    
+
     /* Navigation Bar Controls */
     .nav-controls {
         gap: 0.35rem;
     }
-    
+
     .theme-toggle {
         font-size: 0.95rem;
         padding: 0.35rem;
     }
-    
+
     #lang-toggle {
         min-width: 60px !important;
         font-size: 0.75rem !important;
     }
-    
+
     /* Project Buttons layout fix */
     .project-buttons {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .btn-project {
         width: 100%;
         justify-content: center;
         text-align: center;
     }
-    
+
     /* Forms & Buttons adjustments */
     .form-control {
         padding: 0.5rem 0.75rem;
         font-size: 0.85rem;
     }
-    
-    .btn-primary, .btn-secondary {
+
+    .btn-primary,
+    .btn-secondary {
         padding: 0.5rem 1rem;
         font-size: 0.85rem;
     }
-    
+
     /* Index welcome container spacing */
     .welcome-container {
         margin: 2rem auto;
@@ -3899,60 +3915,61 @@ html nav {
 }
 
 @media (max-width: 280px) {
+
     /* Extreme layout fixes for smartwatches & miniature devices down to 250px */
     header span {
         font-size: 0.75rem !important;
     }
-    
+
     .header h1 {
         font-size: 1rem !important;
     }
-    
+
     .layout-grid {
         gap: 0.75rem;
     }
-    
+
     .topnav .nav-wrapper {
         padding: 0 0.25rem;
         height: 56px;
     }
-    
+
     .menu-toggle {
         font-size: 1.25rem;
     }
-    
+
     .nav-controls {
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.25rem;
     }
-    
+
     .nav-controls .theme-toggle {
         padding: 0.25rem;
         font-size: 0.85rem;
     }
-    
+
     #lang-toggle {
         min-width: 50px !important;
         font-size: 0.7rem !important;
     }
-    
+
     /* Timeline items left border indentation adjustment */
     .timeline-item {
         padding-left: 1.25rem;
     }
-    
+
     .timeline-item::before {
         left: 0.4rem;
     }
-    
+
     /* Skill bars labels stacking */
     .skill-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.15rem;
     }
-    
+
     .skill-percent {
         align-self: flex-end;
     }
