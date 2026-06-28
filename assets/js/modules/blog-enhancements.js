@@ -55,12 +55,8 @@ function initSocialShare() {
                 <span lang="de"><i class="fa fa-share-alt" aria-hidden="true"></i> Teilen:</span>
                 <span lang="en"><i class="fa fa-share-alt" aria-hidden="true"></i> Share:</span>
             </span>
-            <a href="https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}" target="_blank" rel="noopener" class="share-btn share-linkedin" aria-label="Share on LinkedIn">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-            </a>
-            <a href="https://twitter.com/intent/tweet?text=${titleText}&url=${pageUrl}" target="_blank" rel="noopener" class="share-btn share-twitter" aria-label="Share on X/Twitter">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-            </a>
+            <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+            <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
             <button class="share-btn share-copy" aria-label="Copy Link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.innerHTML='<i class=\\'fa fa-check\\'></i>';setTimeout(()=>this.innerHTML='<i class=\\'fa fa-link\\'></i>',2000)})">
                 <i class="fa fa-link" aria-hidden="true"></i>
             </button>

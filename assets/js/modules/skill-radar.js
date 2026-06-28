@@ -14,7 +14,8 @@ function initSkillRadar() {
         { name: 'Git', value: 80 },
         { name: 'Spring Boot', value: 60 },
         { name: 'React', value: 55 },
-        { name: 'Testing', value: 50 }
+        { name: 'Testing', value: 50 },
+        { name: 'KI/AI', value: 70 }
     ];
 
     const size = 280;

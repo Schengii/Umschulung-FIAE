@@ -22,8 +22,8 @@ function initCountdown() {
             const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
             wrapper.innerHTML = `<div class="countdown-done" style="text-align:center; padding: 1rem; font-size: 1.1rem; font-weight: 600; color: var(--primary);">
                 <i class="fa fa-check-circle" aria-hidden="true"></i>
-                <span lang="de"> IHK-Prüfung am 08.06.2026 erfolgreich abgeschlossen! 🎉</span>
-                <span lang="en"> IHK exam on June 8, 2026 successfully completed! 🎉</span>
+                <span lang="de"> IHK-Prüfung am 07.07.2026 erfolgreich abgeschlossen! 🎉</span>
+                <span lang="en"> IHK exam on June 7, 2026 successfully completed! 🎉</span>
             </div>`;
         } else {
             daysVal.textContent = '✓';
