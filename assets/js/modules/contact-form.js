@@ -32,7 +32,7 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
         // Trigger mailto
         const subject = encodeURIComponent(`Portfolio Kontakt: ${name.value}`);
         const body = encodeURIComponent(`${message.value}\n\n--\nGesendet von: ${name.value} (${email.value})`);
-        window.location.href = `mailto:info@Max-Schenk.de?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:sche-max@web.de?subject=${subject}&body=${body}`;
 
         // Reset the form
         form.reset();

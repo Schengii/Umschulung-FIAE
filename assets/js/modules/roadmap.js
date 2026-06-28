@@ -62,11 +62,11 @@ function initRoadmap() {
             title_en: "Phase 5: IHK Project & Final Exam",
             topics_de: ["Konzeptionierung und Wirtschaftlichkeitsanalyse", "Dokumentation nach IHK-Vorgaben (Fachbericht)", "Entwickeln eines Software-Projekts", "Vorbereitung auf das Fachgespräch & Präsentation", "AP2 Prüfungsabschluss Juni 2026"],
             topics_en: ["Conceptualization & Economic Feasibility", "Project Documentation (IHK Guidelines)", "Developing a Software Capstone Project", "Oral Exam & Presentation Preparation", "AP2 Final Examination June 2026"],
-            code: `// IHK Projekt: ElektroCheck AI\n// KI-gestützte Fehleranalyse von DGUV V3 Prüfberichten\nconst analyzer = new ElektroCheckAI();\nconst result = analyzer.analyzeReport(rawDguvData);\nconsole.log(\`Risk Score: \${result.riskScore}%\`);`,
+            code: `// IHK-Projekt: EcoChef (Gemini AI Integration)\nconst chef = new EcoChefMealPlanner();\nconst recipes = await chef.generateRecipes({\n    ingredients: ["Tomaten", "Nudeln", "Käse"],\n    preferences: "vegan"\n});\nconsole.log(recipes[0].title);`,
             codeLang: "javascript",
-            project_title_de: "ElektroCheck AI (IHK)",
-            project_title_en: "ElektroCheck AI (IHK)",
-            project_link: "Projekte/ElektroCheck%20AI/index.html"
+            project_title_de: "EcoChef (IHK)",
+            project_title_en: "EcoChef (IHK)",
+            project_link: "Projekte/EcoChef/www/index.html"
         }
     };
 

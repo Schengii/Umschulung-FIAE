@@ -71,11 +71,11 @@ const newsData = [
         "title_de": "🚀 Start des Fachpraktikums bei der DFG",
         "title_en": "🚀 Start of Internship at the DFG",
         "content_de": [
-            "Heute ging es endlich los! Mein Praktikum bei der Deutschen Forschungsgemeinschaft (DFG) in Bonn hat begonnen. Nach einer freundlichen Begrüßung durch das 8-köpfige Webentwicklungs-Team wurde mir mein Arbeitsplatz eingerichtet.",
+            "Heute ging es endlich los! Mein Praktikum bei der Deutschen Forschungsgemeinschaft (DFG) in Bonn hat begonnen. Nach einer freundlichen Begrüßung durch das 9-köpfige Webentwicklungs-Team wurde mir mein Arbeitsplatz eingerichtet.",
             "In den ersten Wochen werde ich mich intensiv mit den internen Systemarchitekturen und den eingesetzten Web-Frameworks vertraut machen. Ich freue mich riesig auf die kommenden 24 Monate praxisnahe Entwicklung und die enge Zusammenarbeit mit erfahrenen Entwicklern."
         ],
         "content_en": [
-            "Today was finally the day! My internship at the German Research Foundation (DFG) in Bonn began. After a warm welcome by the 8-member web team, my workspace was set up.",
+            "Today was finally the day! My internship at the German Research Foundation (DFG) in Bonn began. After a warm welcome by the 9-member web team, my workspace was set up.",
             "During the first weeks, I will familiarize myself with internal system architectures and active web frameworks. I am highly looking forward to the next 24 months of practical software engineering and working closely with senior developers."
         ]
     },

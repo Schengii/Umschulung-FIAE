@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const feedback = document.getElementById('hire-me-feedback');
             const subject = encodeURIComponent(`Portfolio Kontakt von ${name}`);
             const body = encodeURIComponent(`${msg}\n\nAbsender: ${name} <${email}>`);
-            window.location.href = `mailto:max@max-schenk.de?subject=${subject}&body=${body}`;
+            window.location.href = `mailto:sche-max@web.de?subject=${subject}&body=${body}`;
             if (feedback) {
                 feedback.style.display = 'flex';
                 setTimeout(() => { feedback.style.display = 'none'; }, 4000);

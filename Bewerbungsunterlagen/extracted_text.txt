@@ -1,0 +1,109 @@
+Fehler! Textmarke nicht definiert.Fehler! Textmarke nicht definiert.Fehler! Textmarke nicht definiert.Fehler! Textmarke nicht definiert.
+
+25. Juni 2026
+Initiativbewerbung als Fachinformatiker Fachrichtung AnwendungsentwicklungRef. XXXSehr geehrte Damen und Herren,
+
+…
+
+Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung habe ich im Juni 2026 erfolgreich vor der IHK abgeschlossen. Während meines zweijährigen Betriebspraktikums bei der Deutschen Forschungsgemeinschaft (DFG) in Bonn konnte ich mich von Beginn an in einem professionellen Entwicklungsumfeld einbringen. Mein technischer Schwerpunkt lag hierbei auf der modernen Frontend-Entwicklung mit HTML5, CSS3 und JavaScript, gefolgt von einer intensiven Spezialisierung auf TypeScript und modulare Frontend-Architekturen mit Lit.Dev. Erste fundierte Grundlagen in der Backend-Entwicklung mit Java und C# runden mein Profil ab.
+Wie zielgerichtet ich neue Technologien kombiniere, zeigt mein eigenständig realisiertes Abschlussprojekt „EcoChef“, eine mobile-first Web- und App-Anwendung zur Vermeidung von Lebensmittelverschwendung. Hierbei habe ich die Google Gemini-API via REST-Schnittstelle angebunden, um basierend auf flexiblen Benutzereingaben dynamisch KI-gestützte Rezepte, strukturierte Kochanleitungen und interaktive Kochmodi zu generieren. (siehe Portfolio: https://max-schenk.developerakademie.net/Umschulung-FIAE/index.html)
+Als gelernter Elektroniker für Betriebstechnik arbeitete ich mit Word, Excel und Gimp und programmierte im Tia-Portal und in Grafcet für eine speicherprogrammierbare Steuerung (SPS). Nach der Ausbildung wechselte ich den Betrieb sowie die Tätigkeit und war für fast 1,5 Jahre als Prüftechniker im Außendienst deutschlandweit unterwegs. Von Druckern und Monitoren bis zu großen Produktionsanlagen und Maschinen prüfte ich nach der DGUV-V3-Prüfung die elektronische Sicherheit. Diese DGUV-Prüfung ist für alle Unternehmen in Deutschland verpflichtend und erfordert seitens des Prüftechnikers viel Verantwortung, gute Kommunikation, fachliche Kompetenz und vieles mehr.
+Für den Einstieg in Ihre Projekte stehe ich Ihnen ab dem 01.07.2026 zur Verfügung. 
+Ich freue mich auf die Gelegenheit, mich Ihnen in einem persönlichen Gespräch vorzustellen.
+
+Mit freundlichen GrüßenMaximilian Schenk
+
+Werdegang
+
+Maximilian Schenk
+
+
+Geb. am 10.05.2002 Ho-Chi-Minh-Stadt, Vietnamdeutsche Staatsangehörigkeitledig
+
+
+
+
+
+
+01/2024 – 06/2026medizinische & berufliche RehabilitationUmschulung Fachinformatiker Fachrichtung AnwendungsentwicklungBerufsförderungswerk Dortmund e. V.in Kooperation mit der Deutschen Forschungsgemeinschaft e.V.Erfolgreicher Abschluss vor der IHK Juni 2026
+06/2023 – 01/2024Antragsverfahren auf Ausbildung zum FachinformatikerIn dieser Zeit: Arbeitserprobung und Assessmentim Berufsförderungswerk Köln e. V.
+
+
+03/2023 – 05/2023Physiotherapie zur Stabilisierung der WirbelsäuleMedian Kinzigtal Klinik, Bad Soden-Salmünster 
+
+
+02/2022 – 05/2023Prüftechniker im AußendienstElektro-Service-Gesellschaft GmbH, FrechenDGUV-V3-Prüfung bei Kunden von ortsveränderlichen und ortsfesten Geräten und Maschinen deutschlandweit
+08/2018 – 01/2022Ausbildung Elektroniker Fachrichtung BetriebstechnikHaribo Produktions-GmbH & Co. AG, BonnErfolgreicher Abschluss vor der IHK Januar 2022
+
+
+04/2021 – 07/2021Pizzafahrer Mini-JobPizzamann, Bonnwährend der Ausbildung als Nebentätigkeit
+
+
+2017 – 2018Gesamtschule, Bonn Bad-GodesbergAbschluss: RealschulabschlussMittlere Reife Notendurchschnitt: 2,0
+
+
+2012 – 2017Gymnasium und RealschuleBonn Bad Godesberg
+
+
+
+
+
+
+
+
+🗺Kontakt
+ Rüdesheimer Str. 14,       53175 Bonn 017624921897 sche-max@web.de
+Weiterbildung 
+
+
+2022 – 2023Regelmäßige Schulungen in der ElektrotechnikWeiterbildungen in der DGUV-V3 Prüfungen
+
+
+2017 – 2018Nachhilfe für die Unterstufe in Mathe, Deutsch, Englisch
+
+
+Digitale Kompetenzen
+
+
+Frontend-Entwicklung: HTML5, CSS3, JavaScript, TypeScript, Lit.Dev (Modular Webcomponents), Apache CordovaBackend-Grundlagen: Java, C#Tools und Schnittstellen: REST-APIs, Google Gemini API, IntelliJ Ultimate, Git, Visual Studio Code, Visual Studio, Android StudioAutomatisierungstechnik: SPS-Programmierung (TIA-Portal, Grafcet)Zusatzqualifikationen: SAP-Anwenderkenntnisse, fundierte Kenntnisse im Bereich IT-Infrastruktur, PC-Komponenten und Serversysteme, zertifizierte Weiterbildungen im Bereich DGUV-V3-PrüfungenSprachen: Deutsch (C2), Englisch(B2) und Französisch(B1)
+
+
+Mobilität
+
+
+Führerschein-Klasse BPKW vorhanden
+
+
+Freizeitaktivitäten
+
+
+Investments (Aktien, ETFs, Kryptowährungen)Sport, Wandern, Hunde-training
+Kleine Programmieranwendungen mit KI-FunktionenWebseiten mit HTML, CSS, JavaScript
+Hier geht’s zu meinem Projektportfolio: https://max-schenk.developerakademie.net/Umschulung-FIAE/index.html
+
+🗺Kontakt
+ Rüdesheimer Str. 14     53175 Bonn 017624921897 sche-max@web.de
+Bonn, den 25.06.2026  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
