@@ -27,10 +27,10 @@ function updateThemeIcon(theme) {
     const icon = document.querySelector('#theme-toggle i');
     if (!icon) return;
     if (theme === 'dark') {
-        icon.className = 'fa fa-sun-o';
+        icon.className = 'fa-solid fa-sun';
         icon.setAttribute('title', 'Zu hellem Design wechseln');
     } else {
-        icon.className = 'fa fa-moon-o';
+        icon.className = 'fa-solid fa-moon';
         icon.setAttribute('title', 'Zu dunklem Design wechseln');
     }
 }
