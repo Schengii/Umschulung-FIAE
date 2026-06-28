@@ -1,5 +1,26 @@
 window.projectsData = [
   {
+    "repoName": "EcoChef",
+    "titleDe": "🍳 EcoChef — Dein intelligenter KI-Rezept-Zauberer",
+    "titleEn": "🍳 EcoChef — Your Intelligent AI Recipe Wizard",
+    "tags": [
+      "Lit / TypeScript",
+      "Gemini API",
+      "Cordova PWA",
+      "LocalStorage",
+      "Speech Synthesis"
+    ],
+    "image": "assets/images/ecochef_showcase.png",
+    "link": "Projekte/EcoChef/www/index.html",
+    "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
+    "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
+    "category": "ai filter-web",
+    "stars": 0,
+    "language": "JavaScript",
+    "githubUrl": "https://github.com/Schengii/EcoChef",
+    "updatedAt": "2026-01-15T08:40:14Z"
+  },
+  {
     "repoName": "ElektroCheck-AI",
     "titleDe": "⚡ ElektroCheck AI — Intelligente Prüfberichtsanalyse",
     "titleEn": "⚡ ElektroCheck AI — Intelligent Inspection Report Analytics",
@@ -15,9 +36,10 @@ window.projectsData = [
     "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
     "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
     "category": "ai",
-    "stars": 0,
+    "stars": 4,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-06-27T10:54:27.986Z"
+    "updatedAt": "2026-06-28T09:36:34.494Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -35,9 +57,10 @@ window.projectsData = [
     "descDe": "Eine KI-gestützte Komplettlösung zur automatisierten Wohnungssuche. Das System scannt Immobilienportale per Web-Scraper und E-Mail-Postfächer per IMAP, analysiert Angebote mit GPT-Modellen, berechnet Entfernungen zu POIs und generiert fertige Bewerbungs-PDFs.",
     "descEn": "An AI-powered system designed to automate apartment searching. It scrapes real estate portals via Puppeteer, scans inbox folders using IMAP, evaluates listings using OpenAI's API, calculates POI proximity, and generates custom tenant disclosure PDFs.",
     "category": "ai filter-web",
-    "stars": 0,
+    "stars": 5,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-06-27T10:54:28.156Z"
+    "updatedAt": "2026-06-28T09:36:34.511Z"
   },
   {
     "repoName": "Glücksspiel",
@@ -55,9 +78,10 @@ window.projectsData = [
     "descDe": "Eine bunte, animierte Casino-Spiele-Plattform mit klassischen Casual-Mini-Spielen wie Spielautomaten (Slots), Roulette, Plinko, Mines und dem Zauberkessel (Cauldron). Das Projekt zeichnet sich durch flüssige CSS-Animationen, Soundeffekte und ein lokales Guthaben-Management aus.",
     "descEn": "A vibrant casino mini-games platform featuring slots, roulette, plinko, mines, and cauldron. The project features smooth CSS animations, retro sound effects, and persistent local balance tracking.",
     "category": "games",
-    "stars": 0,
+    "stars": 3,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-06-27T10:54:28.174Z"
+    "updatedAt": "2026-06-28T09:36:34.527Z"
   },
   {
     "repoName": "Jobsuche",
@@ -75,9 +99,10 @@ window.projectsData = [
     "descDe": "Jobsuche ist ein PWA-basiertes Stellenportal für Webentwickler. Es ermöglicht das Suchen, Filtern und Speichern von Jobangeboten. Dank PWA-Technologie können gemerkte Stellen offline eingesehen werden, und Push-Benachrichtigungen informieren über neue Angebote.",
     "descEn": "Jobsuche is a PWA job board for web developers. It allows users to search, filter, and save job postings. Thanks to PWA technologies, saved jobs are readable offline, and push notifications alert you about new listings.",
     "category": "web",
-    "stars": 0,
+    "stars": 2,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-06-27T10:54:28.384Z"
+    "updatedAt": "2026-06-28T09:36:34.601Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -95,9 +120,10 @@ window.projectsData = [
     "descDe": "Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt, ein individuelles Kontaktformular sowie eine neue, persistente Favoriten/Merkliste (LocalStorage) für interessierte Käufer.",
     "descEn": "An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, a custom order form, and a newly integrated persistent Favorites Wishlist (LocalStorage) for potential buyers.",
     "category": "web",
-    "stars": 0,
+    "stars": 2,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-06-27T10:54:28.558Z"
+    "updatedAt": "2026-06-28T09:36:34.624Z"
   },
   {
     "repoName": "arbeitszeiterfassung",
@@ -115,9 +141,10 @@ window.projectsData = [
     "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
     "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
     "category": "web",
-    "stars": 0,
+    "stars": 4,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-06-27T10:54:28.730Z"
+    "updatedAt": "2026-06-28T09:36:34.646Z"
   },
   {
     "repoName": "finance-ai-bot",
@@ -135,9 +162,10 @@ window.projectsData = [
     "descDe": "Finance AI Bot ist ein interaktiver Finanzplaner-Assistent. Der Chatbot verarbeitet natürliche Sprache, analysiert persönliche Einnahmen und Ausgaben, berechnet Sparraten und hilft Nutzern dabei, ein monatliches Budget spielerisch zu planen.",
     "descEn": "Finance AI Bot is an interactive financial assistant chatbot. It processes natural language queries to analyze personal income and expenses, calculate savings rates, and help users set and achieve monthly budget targets.",
     "category": "ai filter-web",
-    "stars": 0,
+    "stars": 3,
+    "language": "JavaScript",
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-06-27T10:54:28.911Z"
+    "updatedAt": "2026-06-28T09:36:34.666Z"
   },
   {
     "repoName": "CoOpVersusGame",
@@ -155,9 +183,10 @@ window.projectsData = [
     "descDe": "Ein plattformübergreifender Multiplayer-Prototyp, entwickelt mit Godot 4.6. Das Spiel bietet ein integriertes Lobby-System für LAN- und Netzwerkverbindungen, kooperative Missionen und Versus-Modi, Boss- und Gegner-KIs, Power-ups sowie interaktive Druckplatten-Rätsel.",
     "descEn": "A cross-platform multiplayer game prototype built in Godot 4.6. It features a local/network lobby system, cooperative missions, versus modes, intelligent boss/enemy AI, power-ups, and interactive pressure-plate puzzles.",
     "category": "games",
-    "stars": 0,
+    "stars": 2,
+    "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-06-27T10:54:29.073Z"
+    "updatedAt": "2026-06-28T09:36:34.686Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -175,9 +204,10 @@ window.projectsData = [
     "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
     "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",
     "category": "games",
-    "stars": 0,
+    "stars": 3,
+    "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-06-27T10:54:29.271Z"
+    "updatedAt": "2026-06-28T09:36:34.719Z"
   },
   {
     "repoName": null,
@@ -193,7 +223,8 @@ window.projectsData = [
     "link": "snake.html",
     "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
     "descEn": "A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.",
-    "category": "games"
+    "category": "games",
+    "language": "JavaScript"
   },
   {
     "repoName": null,
@@ -209,7 +240,8 @@ window.projectsData = [
     "link": "quiz.html",
     "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
     "descEn": "An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.",
-    "category": "web"
+    "category": "web",
+    "language": "JavaScript"
   },
   {
     "repoName": null,
@@ -225,6 +257,25 @@ window.projectsData = [
     "link": "memory.html",
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
     "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
-    "category": "games"
+    "category": "games",
+    "language": "JavaScript"
+  },
+  {
+    "repoName": null,
+    "titleDe": "☕ Java OOP & Spring Boot — Übungsprojekte",
+    "titleEn": "☕ Java OOP & Spring Boot — Practice Projects",
+    "tags": [
+      "Java SE",
+      "OOP",
+      "Spring Boot",
+      "JDBC / SQL",
+      "Unit Testing"
+    ],
+    "image": null,
+    "link": null,
+    "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",
+    "descEn": "A collection of Java practice applications from my retraining program. Includes command-line tools, advanced OOP design patterns, JUnit test suites, and a Spring Boot REST API for managing course and student databases.",
+    "category": "web",
+    "language": "Java"
   }
 ];
