@@ -49,8 +49,10 @@ function renderHeader(currentPage) {
     return `
     <header class="app-header">
         <div class="header-banner">
-            <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
-            <span lang="en">My Retraining as an IT Specialist in Application Development</span>
+            <h1 class="header-title">
+                <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
+                <span lang="en">My Retraining as an IT Specialist in Application Development</span>
+            </h1>
         </div>
         ${renderNav(currentPage)}
     </header>`;
@@ -78,6 +80,9 @@ function renderNav(currentPage) {
             <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item${active('home.html')}">
                     <a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+                </li>
+                <li class="nav-item${active('ueber-mich.html')}">
+                    <a href="ueber-mich.html" class="nav-link"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span></a>
                 </li>
                 <li class="nav-item${active(ausbildungPages)}">
                     <a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
