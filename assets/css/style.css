@@ -3443,6 +3443,7 @@ html nav {
     inset: 0;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.65);
+    -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
@@ -4053,8 +4054,8 @@ html nav {
 
 .app-header.scrolled nav.topnav {
     background-color: var(--bg-nav-scrolled-light);
-    backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
     color: var(--text-primary);
     border-bottom: 1px solid var(--border);
 }
@@ -4495,4 +4496,232 @@ html nav {
     .footer-bottom p {
         font-size: 0.7rem;
     }
+}
+
+/* ==========================================================================
+   ABOUT ME PAGE CLASSES (.timeline, info lists, etc.)
+   ========================================================================== */
+.lead-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.timeline {
+    position: relative;
+    padding-left: 20px;
+    border-left: 2px solid var(--border);
+    margin-top: 1.5rem;
+}
+
+.timeline-item {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background-color: var(--primary);
+    border: 2px solid var(--bg-card);
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+.info-list li {
+    line-height: 1.4;
+}
+
+.languages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.contact-sidebar-list li i {
+    margin-right: 0.5rem;
+    color: var(--primary);
+}
+
+.social-sidebar-container {
+    display: flex;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    justify-content: center;
+}
+
+.social-sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.social-sidebar-link:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Download Center Classes */
+.download-item-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    transition: var(--transition);
+}
+
+.download-item-box:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-download {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--primary);
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-download:hover {
+    background: var(--primary-hover);
+    text-decoration: none;
+}
+
+.btn-view {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--border);
+    color: var(--text-primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-view:hover {
+    background: var(--border-hover);
+    text-decoration: none;
+}
+
+/* Dashboard Specific Classes */
+.quick-links-grid {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.quick-links-grid .btn-primary {
+    font-size: 0.85rem;
+}
+
+.dashboard-widget-content {
+    margin-top: 0.75rem;
+}
+
+.highscore-list {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.highscore-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.highscore-item:last-child {
+    border-bottom: none;
+}
+
+/* Portfolio Specific Classes */
+.no-results-box {
+    display: none;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.no-results-box i {
+    margin-bottom: 1rem;
+}
+
+.skeleton-line.w-80 {
+    width: 80%;
+}
+
+.pdf-update-notice {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.skill-radar-container-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+#github-loading,
+#github-error {
+    display: none;
 }
