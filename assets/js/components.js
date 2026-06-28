@@ -45,11 +45,14 @@ const StorageManager = {
 /* ============================================================
    HEADER
    ============================================================ */
-function renderHeader() {
+function renderHeader(currentPage) {
     return `
-    <header>
-        <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
-        <span lang="en">My Retraining as an IT Specialist in Application Development</span>
+    <header class="app-header">
+        <div class="header-banner">
+            <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
+            <span lang="en">My Retraining as an IT Specialist in Application Development</span>
+        </div>
+        ${renderNav(currentPage)}
     </header>`;
 }
 
@@ -99,7 +102,7 @@ function renderNav(currentPage) {
                     <a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Impressum</span><span lang="en">Contact</span></a>
                 </li>
                 <li class="nav-item${active('news.html')}">
-                    <a href="news.html" class="nav-link"><i class="fa fa-newspaper-o" aria-hidden="true"></i> News</a>
+                    <a href="news.html" class="nav-link"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> News</a>
                 </li>
                 <li class="nav-item${active('links.html')}">
                     <a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a>
@@ -151,16 +154,68 @@ function renderNav(currentPage) {
 function renderFooter() {
     const year = new Date().getFullYear();
     return `
-    <footer>
-        <p>&copy; ${year} Maximilian Schenk &middot; R&uuml;desheimer Str. 14 &middot; 53175 Bonn &middot; Germany &middot;
-            <a href="datenschutz.html" style="color: var(--text-secondary); text-decoration: underline;">
-                <span lang="de">Datenschutz</span><span lang="en">Privacy</span>
-            </a>
-        </p>
-        <div class="icons">
-            <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
-            <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
-            <a href="mailto:sche-max@web.de" aria-label="E-Mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+    <footer class="app-footer">
+        <!-- SVG wave decoration at the top of the footer (Parallax gentle waves) -->
+        <div class="footer-wave-container">
+            <svg class="footer-waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax-waves">
+                    <use href="#gentle-wave" x="48" y="0" class="wave-layer-1" />
+                    <use href="#gentle-wave" x="48" y="3" class="wave-layer-2" />
+                    <use href="#gentle-wave" x="48" y="5" class="wave-layer-3" />
+                    <use href="#gentle-wave" x="48" y="7" class="wave-layer-4" />
+                </g>
+            </svg>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-grid">
+                <!-- Column 1: Personal Brand -->
+                <div class="footer-col col-brand">
+                    <h3>Maximilian Schenk</h3>
+                    <p lang="de" class="brand-desc">Umschulung zum Fachinformatiker für Anwendungsentwicklung. Erfolgreich abgeschlossen vor der IHK im Juni 2026.</p>
+                    <p lang="en" class="brand-desc">Retraining as an IT Specialist in Application Development. Successfully completed before the IHK in June 2026.</p>
+                    <div class="footer-socials">
+                        <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                        <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="mailto:sche-max@web.de" aria-label="E-Mail" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Navigation Links -->
+                <div class="footer-col col-links">
+                    <h4 lang="de">Navigation</h4>
+                    <h4 lang="en">Navigation</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="home.html" class="footer-link">Home</a></li>
+                        <li><a href="portfolio.html" class="footer-link"><span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
+                        <li><a href="news.html" class="footer-link">News</a></li>
+                        <li><a href="impressum.html" class="footer-link"><span lang="de">Impressum &amp; Kontakt</span><span lang="en">Contact</span></a></li>
+                        <li><a href="datenschutz.html" class="footer-link"><span lang="de">Datenschutz</span><span lang="en">Privacy</span></a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3: Status Info Widget -->
+                <div class="footer-col col-status">
+                    <h4 lang="de">Status Umschulung</h4>
+                    <h4 lang="en">Retraining Status</h4>
+                    <div class="status-widget">
+                        <div class="status-indicator">
+                            <span class="status-dot pulsing"></span>
+                            <span lang="de">Ausbildung abgeschlossen (IHK)</span>
+                            <span lang="en">Graduated successfully (IHK)</span>
+                        </div>
+                        <p class="status-text">BFW Dortmund &amp; DFG Bonn</p>
+                        <p class="status-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Bonn / Dortmund, Germany</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; ${year} Maximilian Schenk &middot; Rüdesheimer Str. 14 &middot; 53175 Bonn &middot; Germany</p>
+            </div>
         </div>
     </footer>`;
 }
@@ -235,13 +290,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
-    // Header (not on index.html which has its own header)
+    // Header & Navigation Loader (not on index.html)
     const headerEl = document.getElementById('site-header');
-    if (headerEl) headerEl.outerHTML = renderHeader();
-
-    // Navigation (not on index.html)
     const navEl = document.getElementById('site-nav');
-    if (navEl) navEl.outerHTML = renderNav(currentPage);
+
+    if (headerEl) {
+        headerEl.outerHTML = renderHeader(currentPage);
+        if (navEl) navEl.remove();
+    } else if (navEl) {
+        navEl.outerHTML = renderNav(currentPage);
+    }
+
+    // Scroll-based Header Shrink Animation
+    const appHeader = document.querySelector('.app-header');
+    if (appHeader) {
+        const toggleHeaderScroll = () => {
+            if (window.scrollY > 20) {
+                appHeader.classList.add('scrolled');
+            } else {
+                appHeader.classList.remove('scrolled');
+            }
+        };
+        window.addEventListener('scroll', toggleHeaderScroll, { passive: true });
+        toggleHeaderScroll();
+    }
 
     // Hide search bar on pages where search is not needed
     const searchablePages = ['news.html', 'home.html'];

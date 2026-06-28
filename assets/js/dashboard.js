@@ -3,8 +3,8 @@
  * Loaded dynamically as a module.
  */
 function initDashboard() {
-    const container = document.querySelector('.left-col .card');
-    if (!container) return;
+    const isDashboardPage = window.location.pathname.endsWith('dashboard.html') || document.getElementById('commit-grid');
+    if (!isDashboardPage) return;
 
     renderStats();
     renderProjectCount();
