@@ -2827,19 +2827,7 @@ html[lang="en"] [lang="de"] {
     text-decoration: none;
     border-radius: var(--radius-full);
     transition: var(--transition);
-}
-
-.btn-primary {
-    background-color: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    cursor: pointer;
-}
-
-.btn-primary:hover {
-    background: var(--primary);
-    color: white;
-    text-decoration: none;
+    width: auto;
 }
 
 .btn-secondary {
