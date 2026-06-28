@@ -3705,3 +3705,202 @@ html nav {
         max-width: none;
     }
 }
+
+/* ==========================================================================
+   PORTFOLIO — ECOCHEF HIGHLIGHT & RESPONSIVE DESIGN (DOWN TO 250PX)
+   ========================================================================== */
+
+/* Highlight Project (EcoChef) styling */
+.project-card.highlight-project {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                linear-gradient(135deg, var(--primary), var(--accent)) border-box;
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="dark"] .project-card.highlight-project {
+    box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.3);
+}
+
+.highlight-badge {
+    align-self: flex-start;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (min-width: 768px) {
+    .project-card.highlight-project {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+    
+    .project-card.highlight-project .project-image-container {
+        margin-bottom: 0;
+        height: 100%;
+        min-height: 250px;
+    }
+
+    .project-card.highlight-project .highlight-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   TINY SCREENS RESPONSIVE STYLES (< 380px & down to 250px)
+   ========================================================================== */
+
+@media (max-width: 380px) {
+    :root {
+        --radius-lg: 0.5rem;
+    }
+    
+    body {
+        font-size: 0.85rem;
+    }
+    
+    .main-container {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .project-card {
+        padding: 1rem;
+    }
+    
+    /* Header & Titles scaling */
+    h1, .hero-title {
+        font-size: 1.4rem !important;
+    }
+    
+    h2 {
+        font-size: 1.2rem !important;
+    }
+    
+    h3 {
+        font-size: 1.05rem !important;
+    }
+    
+    /* Navigation Bar Controls */
+    .nav-controls {
+        gap: 0.35rem;
+    }
+    
+    .theme-toggle {
+        font-size: 0.95rem;
+        padding: 0.35rem;
+    }
+    
+    #lang-toggle {
+        min-width: 60px !important;
+        font-size: 0.75rem !important;
+    }
+    
+    /* Project Buttons layout fix */
+    .project-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-project {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    /* Forms & Buttons adjustments */
+    .form-control {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Index welcome container spacing */
+    .welcome-container {
+        margin: 2rem auto;
+    }
+}
+
+@media (max-width: 280px) {
+    /* Extreme layout fixes for smartwatches & miniature devices down to 250px */
+    .layout-grid {
+        gap: 0.75rem;
+    }
+    
+    .topnav .nav-wrapper {
+        padding: 0 0.25rem;
+    }
+    
+    .nav-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+    
+    /* Timeline items left border indentation adjustment */
+    .timeline-item {
+        padding-left: 1.25rem;
+    }
+    
+    .timeline-item::before {
+        left: 0.4rem;
+    }
+    
+    /* Skill bars labels stacking */
+    .skill-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+    }
+    
+    .skill-percent {
+        align-self: flex-end;
+    }
+}
+
+/* Premium footer styling improvements */
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+footer p {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+footer .icons a {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+footer .icons a:hover {
+    color: white;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
