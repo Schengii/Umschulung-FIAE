@@ -138,7 +138,7 @@ function renderNav(currentPage) {
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
                 <button id="audio-mute-toggle" class="theme-toggle mute-toggle-btn" aria-label="Ton umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
-                    <i class="fa fa-moon-o" aria-hidden="true"></i>
+                    <i class="fa-solid fa-moon" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
