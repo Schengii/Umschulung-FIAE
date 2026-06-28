@@ -160,7 +160,7 @@ function renderFooter() {
         <div class="icons">
             <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
             <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
-            <a href="mailto:info@Max-Schenk.de" aria-label="E-Mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+            <a href="mailto:sche-max@web.de" aria-label="E-Mail"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
         </div>
     </footer>`;
 }

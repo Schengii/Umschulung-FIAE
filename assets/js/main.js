@@ -31,6 +31,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/blog-enhancements.js',
     'assets/js/modules/learning-progress.js',
     'assets/js/elektrocheck_overlay.js', // New module for ElektroCheck AI bounding boxes
+    'assets/js/dashboard.js',
 ];
 
 (function loadModules() {
@@ -60,6 +61,7 @@ const __MODULE_SCRIPTS = [
             initAchievements();
             initBlogEnhancements();
             initLearningProgress();
+            if (typeof initDashboard === 'function') initDashboard();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

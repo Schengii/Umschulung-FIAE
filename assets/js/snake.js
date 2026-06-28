@@ -19,14 +19,23 @@ let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
 let score = 0;
-let highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
-let highscoreList = JSON.parse(StorageManager.getItem('snake_highscore_list', '[]')) || [];
+let highscore = 0;
+let highscoreList = [];
 let lastFrameTime = 0;
 let isPlaying = false;
 let isPaused = false;
 const speed = 150;
 
-if (highscoreEl) highscoreEl.textContent = highscore;
+document.addEventListener('DOMContentLoaded', () => {
+    highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
+    highscoreList = JSON.parse(StorageManager.getItem('snake_highscore_list', '[]')) || [];
+    if (highscoreEl) highscoreEl.textContent = highscore;
+    renderHighscores();
+
+    document.addEventListener('keydown', handleKeyDown);
+    if (startBtn) startBtn.addEventListener('click', startGame);
+    if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
+});
 
 function renderHighscores() {
     const listBody = document.getElementById('highscore-list-body');
@@ -52,12 +61,6 @@ function renderHighscores() {
     });
 }
 
-// Initial render
-renderHighscores();
-
-document.addEventListener('keydown', handleKeyDown);
-if (startBtn) startBtn.addEventListener('click', startGame);
-if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
 
 function getLang() {
     return document.documentElement.getAttribute('lang') || 'de';
@@ -193,8 +196,6 @@ function gameOver() {
     }
     
     updateButtons();
-    
-    const lang = getLang();
     
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);

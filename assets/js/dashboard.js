@@ -1,15 +1,18 @@
 /**
  * Dashboard — Stats, Projektübersicht, interaktive Widgets
- * Wird von dashboard.html geladen.
+ * Loaded dynamically as a module.
  */
-document.addEventListener('DOMContentLoaded', () => {
+function initDashboard() {
+    const container = document.querySelector('.left-col .card');
+    if (!container) return;
+
     renderStats();
     renderProjectCount();
     renderRecentProjects();
     initNotenrechner();
-    renderLearningRecommendations(); // New call
+    renderLearningRecommendations();
     initCommitGrid();
-});
+}
 
 function renderStats() {
     const container = document.querySelector('.left-col .card');
