@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const newsArticlesContainer = document.getElementById('news-articles-container');
     const filterButtons = document.querySelectorAll('.btn-filter');
-    let currentLanguage = localStorage.getItem('language') || 'de'; // Get current language from localStorage
+    let currentLanguage = 'de';
+    if (typeof StorageManager !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
+        currentLanguage = StorageManager.getItem(STORAGE_KEYS.LANG, 'de');
+    } else {
+        currentLanguage = document.documentElement.getAttribute('lang') || 'de';
+    }
 
     function renderNews(filter = 'all') {
+        if (!newsArticlesContainer) return;
         newsArticlesContainer.innerHTML = ''; // Clear existing articles
 
         // newsData is assumed to be globally available from news_data.js
@@ -29,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 newsArticlesContainer.appendChild(articleElement);
             }
         });
+
+        // Trigger blog enhancements (reading time, social share) on the rendered news cards
+        if (typeof initBlogEnhancements === 'function') {
+            initBlogEnhancements();
+        }
     }
 
     filterButtons.forEach(button => {
@@ -41,9 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial render and listen for language changes
     renderNews();
-    window.addEventListener('languageChanged', (event) => {
-        currentLanguage = event.detail.language;
-        const activeFilter = document.querySelector('.btn-filter.active').dataset.filter;
+    
+    document.addEventListener('langchange', (event) => {
+        currentLanguage = event.detail;
+        const activeFilterBtn = document.querySelector('.btn-filter.active');
+        const activeFilter = activeFilterBtn ? activeFilterBtn.dataset.filter : 'all';
         renderNews(activeFilter);
     });
-});
+});
