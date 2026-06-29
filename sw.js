@@ -1,28 +1,28 @@
 const CACHE_NAME = 'umschulung-fiae-v9';
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/home.html',
-    '/portfolio.html',
-    '/ausbildungsablauf.html',
-    '/berufsfoerderungswerk.html',
-    '/kostentraeger.html',
-    '/praktikumsbetrieb.html',
-    '/links.html',
-    '/news.html',
-    '/impressum.html',
-    '/datenschutz.html',
-    '/dashboard.html',
-    '/assets/css/style.css',
-    '/assets/css/skeletons.css',
-    '/assets/js/components.js',
-    '/assets/js/main.js',
-    '/assets/js/portfolio.js',
-    '/assets/js/projects_data.js',
-    '/assets/js/modal.js',
-    '/assets/js/toast.js',
-    '/assets/images/favicon.svg',
-    '/assets/images/academy_campus.png'
+    './',
+    'index.html',
+    'home.html',
+    'portfolio.html',
+    'ausbildungsablauf.html',
+    'berufsfoerderungswerk.html',
+    'kostentraeger.html',
+    'praktikumsbetrieb.html',
+    'links.html',
+    'news.html',
+    'impressum.html',
+    'datenschutz.html',
+    'dashboard.html',
+    'assets/css/style.css',
+    'assets/css/skeletons.css',
+    'assets/js/components.js',
+    'assets/js/main.js',
+    'assets/js/portfolio.js',
+    'assets/js/projects_data.js',
+    'assets/js/modal.js',
+    'assets/js/toast.js',
+    'assets/images/favicon.svg',
+    'assets/images/academy_campus.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -74,7 +74,7 @@ self.addEventListener('fetch', (e) => {
                 return networkResponse;
             }).catch(() => {
                 if (e.request.headers.get('accept')?.includes('text/html')) {
-                    return caches.match('/index.html');
+                    return caches.match('index.html');
                 }
             });
         })

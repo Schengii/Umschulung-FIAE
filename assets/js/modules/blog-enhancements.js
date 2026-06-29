@@ -62,8 +62,11 @@ function initSocialShare() {
                 <span lang="de"><i class="fa fa-share-alt" aria-hidden="true"></i> Teilen:</span>
                 <span lang="en"><i class="fa fa-share-alt" aria-hidden="true"></i> Share:</span>
             </span>
-            <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
-            <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a href="https://linkedin.com/in/maximilian-schenk" class="share-btn" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+            <a href="https://github.com/Schengii" class="share-btn" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a href="https://instagram.com/schengii" class="share-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://facebook.com" class="share-btn" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://wa.me/4917624921897" class="share-btn" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
             <button class="share-btn share-copy" aria-label="Copy Link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.innerHTML='<i class=\\'fa fa-check\\'></i>';setTimeout(()=>this.innerHTML='<i class=\\'fa fa-link\\'></i>',2000)})">
                 <i class="fa fa-link" aria-hidden="true"></i>
             </button>

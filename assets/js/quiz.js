@@ -322,19 +322,21 @@ function handleNextButton() {
     }
 }
 
-nextButton.addEventListener("click", () => {
-    const questions = getActiveQuestions();
-    if (currentQuestionIndex < questions.length) {
-        handleNextButton();
-    } else {
+if (questionElement && answerButtons && nextButton) {
+    nextButton.addEventListener("click", () => {
+        const questions = getActiveQuestions();
+        if (currentQuestionIndex < questions.length) {
+            handleNextButton();
+        } else {
+            startQuiz();
+        }
+    });
+
+    // Bei Sprachwechsel das Quiz sofort neu laden/übersetzen
+    document.addEventListener('langchange', () => {
         startQuiz();
-    }
-});
+    });
 
-// Bei Sprachwechsel das Quiz sofort neu laden/übersetzen
-document.addEventListener('langchange', () => {
+    // Quiz beim Laden starten
     startQuiz();
-});
-
-// Quiz beim Laden starten
-startQuiz();
+}

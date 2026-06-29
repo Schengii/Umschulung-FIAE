@@ -2,8 +2,8 @@ const newsData = [
     {
         "id": "dfg-ihk-graduation",
         "category": "milestone",
-        "date_de": "25. Juni 2026",
-        "date_en": "June 25, 2026",
+        "date_de": "07. Juni 2026",
+        "date_en": "June 07, 2026",
         "title_de": "🏆 IHK-Abschlussprüfung erfolgreich bestanden!",
         "title_en": "🏆 Successfully Passed IHK Final Exams!",
         "content_de": [

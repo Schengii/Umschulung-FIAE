@@ -1,7 +1,7 @@
 /* ==========================================================================
    DESIGN SYSTEM & CORE VARIABLES
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
     /* Color Palette - Light Mode (Default) */
@@ -11,21 +11,21 @@
     --accent: #4f46e5;
     --accent-light: #f5f3ff;
 
-    --bg-page: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-header: #ffffff;
-    --bg-nav: rgba(15, 23, 42, 0.85);
-    --bg-nav-item-hover: #1e293b;
-    --bg-nav-active: #2563eb;
-
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --text-on-nav: #f8fafc;
-    --text-on-primary: #ffffff;
-
-    --border: #e2e8f0;
-    --border-hover: #cbd5e1;
+     --bg-page: #f8fafc;
+     --bg-card: rgba(255, 255, 255, 0.65);
+     --bg-header: rgba(255, 255, 255, 0.65);
+     --bg-nav: rgba(15, 23, 42, 0.75);
+     --bg-nav-item-hover: #1e293b;
+     --bg-nav-active: #2563eb;
+ 
+     --text-primary: #0f172a;
+     --text-secondary: #475569;
+     --text-muted: #64748b;
+     --text-on-nav: #f8fafc;
+     --text-on-primary: #ffffff;
+ 
+     --border: rgba(226, 232, 240, 0.5);
+     --border-hover: rgba(203, 213, 225, 0.7);
 
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -38,29 +38,33 @@
 
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font-sans: 'Inter', sans-serif;
+    --font-heading: 'Outfit', sans-serif;
 
     --max-width: 1440px;
     --primary-light: #eff6ff;
     --accent-light: #f5f3ff;
+    --bg-grid-color: rgba(148, 163, 184, 0.03);
+    --bg-glow-1: rgba(37, 99, 235, 0.04);
+    --bg-glow-2: rgba(79, 70, 229, 0.04);
 }
 
 /* Dark Mode Theme Variables */
 [data-theme="dark"] {
     --max-width: 1440px;
     --bg-page: #0b0f19;
-    --bg-card: #151c2c;
-    --bg-header: #111827;
-    --bg-nav: rgba(17, 24, 39, 0.85);
+    --bg-card: rgba(21, 28, 44, 0.65);
+    --bg-header: rgba(17, 24, 39, 0.65);
+    --bg-nav: rgba(17, 24, 39, 0.75);
     --bg-nav-item-hover: #1f2937;
     --bg-nav-active: #2563eb;
-
+ 
     --text-primary: #f3f4f6;
     --text-secondary: #9ca3af;
     --text-muted: #6b7280;
     --text-on-nav: #f3f4f6;
-
-    --border: #1f2937;
-    --border-hover: #374151;
+ 
+    --border: rgba(31, 41, 85, 0.4);
+    --border-hover: rgba(55, 65, 81, 0.6);
 
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
@@ -68,6 +72,9 @@
 
     --primary-light: rgba(37, 99, 235, 0.15);
     --accent-light: rgba(79, 70, 229, 0.15);
+    --bg-grid-color: rgba(255, 255, 255, 0.015);
+    --bg-glow-1: rgba(37, 99, 235, 0.07);
+    --bg-glow-2: rgba(79, 70, 229, 0.07);
 }
 
 /* ==========================================================================
@@ -79,9 +86,21 @@
     padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+}
+
 body {
     font-family: var(--font-sans);
     background-color: var(--bg-page);
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--bg-glow-1) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, var(--bg-glow-2) 0%, transparent 45%),
+        linear-gradient(var(--bg-grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bg-grid-color) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
     display: flex;
@@ -167,6 +186,8 @@ header {
     border-bottom: 1px solid var(--border);
     padding: 1.5rem 1rem;
     text-align: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -435,6 +456,8 @@ nav.topnav {
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition: var(--transition);
 }
 
@@ -890,8 +913,8 @@ nav.topnav {
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .btn-primary:active {
@@ -1514,9 +1537,9 @@ html[lang="en"] [lang="de"] {
 .right-col .card:hover,
 .layout-single .card:hover,
 .welcome-container.card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary);
+    transform: translateY(-6px) scale(1.008) translateZ(0);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px 2px rgba(37, 99, 235, 0.08);
+    border-color: rgba(37, 99, 235, 0.45);
 }
 
 /* Keep main game container stable on hover */

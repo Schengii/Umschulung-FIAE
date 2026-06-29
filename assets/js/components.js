@@ -144,7 +144,6 @@ function renderNav(currentPage) {
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
-                <button id="audio-mute-toggle" class="theme-toggle mute-toggle-btn" aria-label="Ton umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>
                 </button>
@@ -350,11 +349,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!document.querySelector('link[rel="manifest"]')) {
             const link = document.createElement('link');
             link.rel = 'manifest';
-            link.href = '/manifest.json';
+            link.href = 'manifest.json';
             document.head.appendChild(link);
         }
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('PWA Service Worker registered:', reg.scope))
                 .catch(err => console.warn('PWA Service Worker failed:', err));
         }
