@@ -86,7 +86,7 @@ function initKeyboardShortcuts() {
             helpModal.style.display = 'none';
             helpModal.innerHTML = `
                 <div class="modal-content" style="max-width: 480px;">
-                    <button class="modal-close" aria-label="Close" onclick="document.getElementById('shortcuts-help-modal').style.display='none'">&times;</button>
+                    <button class="modal-close" aria-label="Close" id="shortcuts-help-close">&times;</button>
                     <h3 style="margin-bottom: 1rem;">
                         <i class="fa fa-keyboard-o" aria-hidden="true"></i>
                         <span lang="de">Tastaturkürzel</span>
@@ -127,6 +127,13 @@ function initKeyboardShortcuts() {
                 </div>
             `;
             document.body.appendChild(helpModal);
+
+            const closeBtn = helpModal.querySelector('#shortcuts-help-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    helpModal.style.display = 'none';
+                });
+            }
         }
 
         helpModal.style.display = helpModal.style.display === 'none' ? 'flex' : 'none';
