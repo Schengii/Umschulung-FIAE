@@ -3639,12 +3639,14 @@ html nav {
     margin: 0;
 }
 
-.header .theme-toggle {
+.topnav #theme-toggle,
+.topnav #audio-mute-toggle {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: var(--bg-page);
+    background: var(--bg-card);
+    color: var(--text-primary);
     cursor: pointer;
     font-size: 1.1rem;
     display: flex;
@@ -3654,14 +3656,40 @@ html nav {
     flex-shrink: 0;
 }
 
-.header .theme-toggle:hover {
+.topnav #theme-toggle:hover,
+.topnav #audio-mute-toggle:hover {
     background: var(--primary);
     border-color: var(--primary);
+    color: #ffffff;
+}
+
+.topnav #theme-toggle:hover {
     transform: rotate(20deg);
 }
 
-.header .theme-toggle.rotate {
+.topnav #theme-toggle.rotate {
     transform: rotate(180deg);
+}
+
+.topnav #lang-toggle {
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topnav #lang-toggle:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
 }
 
 /* ==========================================================================

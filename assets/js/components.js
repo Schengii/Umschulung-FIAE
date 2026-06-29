@@ -185,6 +185,8 @@ function renderFooter() {
                     <div class="footer-socials">
                         <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
                         <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://instagram.com/schengii" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://wa.me/4917624921897" target="_blank" rel="noopener" aria-label="WhatsApp" class="social-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
                         <a href="mailto:sche-max@web.de" aria-label="E-Mail" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
