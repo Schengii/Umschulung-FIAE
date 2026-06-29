@@ -163,6 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build buttons
         let buttonsHTML = '<div class="project-buttons">';
         
+        // Primary: Details
+        buttonsHTML += `
+        <button class="btn-primary btn-project btn-details">
+            <span lang="de"><i class="fa fa-info-circle" aria-hidden="true"></i> Details</span>
+            <span lang="en"><i class="fa fa-info-circle" aria-hidden="true"></i> Details</span>
+        </button>`;
+        
         if (project.link) {
             let btnTextDe = 'Projekt starten';
             let btnTextEn = 'Launch Project';
@@ -178,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             buttonsHTML += `
-            <a href="${project.link}" class="btn-primary btn-project" target="_blank" rel="noopener">
+            <a href="${project.link}" class="btn-secondary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
             </a>`;
@@ -186,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (project.githubUrl) {
             buttonsHTML += `
-            <a href="${project.githubUrl}" class="btn-primary btn-project btn-github" target="_blank" rel="noopener">
+            <a href="${project.githubUrl}" class="btn-secondary btn-project btn-github" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span>
                 <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
             </a>`;

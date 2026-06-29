@@ -23,10 +23,12 @@
       return;
     }
 
-    // Only open on project card click — but NOT when clicking a link or button inside the card
+    // Only open on project card click — but NOT when clicking a link or button inside the card (except the Details button)
     const card = e.target.closest('.project-card');
     if (!card) return;
-    if (e.target.closest('a') || e.target.closest('button')) return;
+    if (e.target.closest('a')) return;
+    const button = e.target.closest('button');
+    if (button && !button.classList.contains('btn-details')) return;
 
     openModal(card);
   });
