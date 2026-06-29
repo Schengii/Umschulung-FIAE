@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v6';
+const CACHE_NAME = 'umschulung-fiae-v7';
 const ASSETS = [
     '/',
     '/index.html',

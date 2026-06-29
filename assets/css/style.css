@@ -4786,6 +4786,87 @@ html nav {
     margin-top: 0.5rem;
 }
 
+/* ==========================================================================
+   UEBER MICH — LAYOUT & DOWNLOADS
+   ========================================================================== */
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.section-subtitle {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.section-divider {
+    margin: 1.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+.downloads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.download-item-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.download-icon {
+    font-size: 1.5rem;
+}
+
+.download-icon.word {
+    color: #2b579a;
+}
+
+.download-icon.image {
+    color: var(--primary);
+}
+
+.download-item-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.download-item-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.profile-portrait {
+    width: 100%;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.25rem;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 2/3;
+}
+
+.profile-name {
+    margin-bottom: 0.75rem;
+}
+
 #github-loading,
 #github-error {
     display: none;
