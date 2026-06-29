@@ -71,7 +71,7 @@ function initKeyboardShortcuts() {
                 helpModal.style.display = 'none';
             }
             const projectModal = document.getElementById('project-modal');
-            if (projectModal && !projectModal.getAttribute('aria-hidden')) {
+            if (projectModal && projectModal.classList.contains('show')) {
                 const closeBtn = projectModal.querySelector('.modal-close');
                 if (closeBtn) closeBtn.click();
             }
