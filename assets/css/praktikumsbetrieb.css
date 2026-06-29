@@ -1,0 +1,363 @@
+/* ==========================================================================
+   Praktikumsbetrieb Media Styles (Galleries, Video Players, PPTX Downloads)
+   Ensuring WCAG AA compliance, clear outlines, and mobile responsiveness.
+   ========================================================================== */
+
+/* PowerPoint Download Widget */
+.download-card-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+    .download-card-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.ppt-download-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.ppt-download-card:hover,
+.ppt-download-card:focus {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.ppt-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: rgba(210, 71, 38, 0.1); /* PPT brand color with transparency */
+    border-radius: var(--radius-md);
+    color: #d24726; /* Darker orange for clear contrast on light background */
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+[data-theme="dark"] .ppt-icon-wrapper {
+    background-color: rgba(243, 114, 83, 0.15);
+    color: #ff8a65; /* Accessible orange in dark mode */
+}
+
+.ppt-info {
+    flex-grow: 1;
+}
+
+.ppt-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: var(--text);
+}
+
+.ppt-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.ppt-btn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    background: var(--primary);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Tabbed Image Gallery */
+.media-gallery-section {
+    margin: 2rem 0;
+}
+
+.gallery-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+}
+
+.gallery-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.75rem;
+}
+
+.gallery-tab-btn {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gallery-tab-btn:hover,
+.gallery-tab-btn:focus {
+    color: var(--text);
+    border-color: var(--text-muted);
+    outline: 2px solid var(--primary);
+}
+
+.gallery-tab-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
+
+/* Support rot-grün-blindheit (Color blind friendly): add structural underline or indicator */
+.gallery-tab-btn.active::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    margin-left: 0.25rem;
+}
+
+.gallery-viewer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .gallery-viewer {
+        grid-template-columns: 3fr 2fr;
+    }
+}
+
+.gallery-image-panel {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.gallery-image-panel img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-description-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gallery-img-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    color: var(--text);
+}
+
+.gallery-img-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0;
+}
+
+/* Video Playlist Component */
+.video-gallery-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 992px) {
+    .video-gallery-container {
+        grid-template-columns: 2.5fr 1.5fr;
+    }
+}
+
+.video-player-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.video-wrapper {
+    position: relative;
+    background: #000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+}
+
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.video-meta-info {
+    padding: 0.25rem;
+}
+
+.video-current-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--text);
+}
+
+.video-current-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0;
+}
+
+/* Playlist Panel */
+.video-playlist-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.playlist-header {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.playlist-tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.playlist-track-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-page);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    color: var(--text);
+}
+
+.playlist-track-btn:hover,
+.playlist-track-btn:focus {
+    border-color: var(--primary);
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+.playlist-track-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
+
+/* Focus and active styles for accessibility (no exclusive colors) */
+.playlist-track-btn.active .track-icon {
+    color: #ffffff;
+}
+
+.playlist-track-btn .track-icon {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.playlist-track-btn .track-title-wrapper {
+    flex-grow: 1;
+}
+
+.playlist-track-btn .track-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.15rem;
+}
+
+.playlist-track-btn .track-duration {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* DSGVO Note Card */
+.dsgvo-note-card {
+    background-color: rgba(0, 123, 255, 0.05);
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.dsgvo-note-card i {
+    color: var(--primary);
+    margin-top: 0.15rem;
+}
