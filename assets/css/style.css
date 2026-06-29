@@ -14,7 +14,7 @@
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --bg-header: #ffffff;
-    --bg-nav: #0f172a;
+    --bg-nav: rgba(15, 23, 42, 0.85);
     --bg-nav-item-hover: #1e293b;
     --bg-nav-active: #2563eb;
 
@@ -50,7 +50,7 @@
     --bg-page: #0b0f19;
     --bg-card: #151c2c;
     --bg-header: #111827;
-    --bg-nav: #111827;
+    --bg-nav: rgba(17, 24, 39, 0.85);
     --bg-nav-item-hover: #1f2937;
     --bg-nav-active: #2563eb;
 
@@ -172,7 +172,7 @@ header {
 
 
 header h1 {
-    font-size: 1.75rem;
+    font-size: clamp(1.4rem, 2.5vw + 0.5rem, 1.85rem);
     font-weight: 700;
     color: var(--text-primary);
     max-width: var(--max-width);
@@ -205,6 +205,8 @@ header h1 {
    ========================================================================== */
 nav.topnav {
     background-color: var(--bg-nav);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text-on-nav);
     position: sticky;
     top: 0;
@@ -451,17 +453,17 @@ nav.topnav {
 }
 
 .card h1 {
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 3vw + 0.5rem, 1.8rem);
     letter-spacing: -0.02em;
 }
 
 .card h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 2.5vw + 0.5rem, 1.5rem);
     letter-spacing: -0.015em;
 }
 
 .card h3 {
-    font-size: 1.25rem;
+    font-size: clamp(1.1rem, 2vw + 0.5rem, 1.25rem);
 }
 
 .card h5 {
@@ -2767,7 +2769,7 @@ html[lang="en"] [lang="de"] {
 }
 
 .hero-title {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 5vw + 0.5rem, 3rem);
     font-weight: 800;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
@@ -4954,4 +4956,33 @@ html nav {
         bottom: 12px;
         max-width: calc(100% - 24px);
     }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & PREFERS-REDUCED-MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
+    
+    .hero-cursor {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* ==========================================================================
+   CROSS-DOCUMENT VIEW TRANSITIONS
+   ========================================================================== */
+@view-transition {
+    navigation: auto;
 }
