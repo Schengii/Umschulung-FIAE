@@ -12,11 +12,14 @@ function initReadingTime() {
     const articles = document.querySelectorAll('article.card');
     if (!articles.length) return;
 
-    const lang = document.documentElement.getAttribute('lang') || 'de';
     const wordsPerMinute = 200;
 
     articles.forEach(article => {
-        const text = article.textContent || '';
+        // Clear any existing badge to prevent duplicates
+        const existingBadge = article.querySelector('.reading-time-badge');
+        if (existingBadge) existingBadge.remove();
+
+        const text = article.innerText || '';
         const wordCount = text.trim().split(/\s+/).length;
         const readTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
@@ -43,10 +46,14 @@ function initSocialShare() {
     const pageUrl = encodeURIComponent(window.location.href);
 
     articles.forEach(article => {
+        // Clear any existing share buttons to prevent duplicates
+        const existingShare = article.querySelector('.social-share-buttons');
+        if (existingShare) existingShare.remove();
+
         const title = article.querySelector('h2');
         if (!title) return;
 
-        const titleText = encodeURIComponent(title.textContent.trim());
+        const titleText = encodeURIComponent(title.innerText.trim());
 
         const shareContainer = document.createElement('div');
         shareContainer.className = 'social-share-buttons';
@@ -65,3 +72,4 @@ function initSocialShare() {
         article.appendChild(shareContainer);
     });
 }
+

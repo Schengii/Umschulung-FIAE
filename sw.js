@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v2';
+const CACHE_NAME = 'umschulung-fiae-v4';
 const ASSETS = [
     '/',
     '/index.html',
@@ -26,6 +26,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+    self.skipWaiting();
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(ASSETS).catch(err => {
@@ -51,7 +52,7 @@ self.addEventListener('activate', (e) => {
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim())
     );
 });
 
