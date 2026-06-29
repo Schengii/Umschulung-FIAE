@@ -24,4 +24,5 @@ const APP = Object.freeze({
     SCROLL_THRESHOLD: 300,
     SKILL_OBSERVER_THRESHOLD: 0.5,
     GITHUB_USERNAME: 'Schengii',
+    WEB3FORMS_KEY: '', // Trage hier deinen Web3Forms Access Key ein, um direkte Mail-Zustellung zu aktivieren!
 });

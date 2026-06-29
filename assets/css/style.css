@@ -4871,3 +4871,87 @@ html nav {
 #github-error {
     display: none;
 }
+
+/* ==========================================================================
+   PWA INSTALL BANNER
+   ========================================================================== */
+.pwa-install-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 10100;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 1.25rem;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    transform: translateY(150px);
+    opacity: 0;
+}
+
+.pwa-install-banner.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.pwa-install-banner.hidden {
+    display: none !important;
+}
+
+.pwa-install-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.pwa-install-content i {
+    font-size: 1.75rem;
+    color: var(--primary);
+    margin-top: 0.1rem;
+    background: rgba(var(--primary-rgb, 59, 130, 246), 0.1);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+}
+
+.pwa-install-text strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.pwa-install-text p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.pwa-install-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.pwa-install-actions button {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+@media (max-width: 480px) {
+    .pwa-install-banner {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        max-width: calc(100% - 24px);
+    }
+}

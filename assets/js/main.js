@@ -16,6 +16,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/scroll-animations.js',
     'assets/js/modules/backtotop.js',
     'assets/js/modules/cookie-banner.js',
+    'assets/js/modules/pwa-installer.js',
     'assets/js/modules/contact-form.js',
     'assets/js/modules/skill-bars.js',
     'assets/js/modules/skill-radar.js',
@@ -47,6 +48,7 @@ const __MODULE_SCRIPTS = [
             initScrollAnimations();
             initBackToTop();
             initCookieBanner();
+            initPwaInstaller();
             initContactForm();
             initSkillBars();
             initSkillRadar();
