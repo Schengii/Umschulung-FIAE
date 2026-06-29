@@ -1,5 +1,37 @@
 const newsData = [
     {
+        "id": "ecochef-media-release",
+        "category": "milestone",
+        "date_de": "15. Juni 2026",
+        "date_en": "June 15, 2026",
+        "title_de": "🎬 EcoChef: Live-Demos & IHK-Vortragsfolien veröffentlicht!",
+        "title_en": "🎬 EcoChef: Live Demos & IHK Slides Published!",
+        "content_de": [
+            "Für mein IHK-Abschlossprojekt EcoChef habe ich fünf kurze Demonstrationsvideos hochgeladen! Diese veranschaulichen die Kernfunktionen wie den interaktiven Kochmodus mit Sprachausgabe (TTS), den virtuellen Kühlschrank, die dynamische Rezeptanpassung durch die Gemini-KI sowie das LocalStorage-Management.",
+            "Zusätzlich steht ab sofort meine vollständige Präsentationsdatei (PPTX), die ich vor dem IHK-Prüfungsausschuss gehalten habe, zum Download bereit. Du findest die Videos und Downloads sowohl im Projektdetail als auch im Bereich Praktikumsbetrieb."
+        ],
+        "content_en": [
+            "For my IHK graduation project EcoChef, I have published five short demonstration clips! These show core features like the hands-free cooking mode with speech synthesis (TTS), the virtual pantry, custom AI-driven recipe edits, and offline storage options.",
+            "Furthermore, my official examination slides (PowerPoint) are now open for download. You can inspect the videos and slides both on the project detail page and in the internship section."
+        ]
+    },
+    {
+        "id": "dfg-media-release",
+        "category": "dfg",
+        "date_de": "15. März 2026",
+        "date_en": "March 15, 2026",
+        "title_de": "📊 DFG-Betriebsstruktur & Präsentation online",
+        "title_en": "📊 DFG Structural Insights & Slides Online",
+        "content_de": [
+            "Um einen besseren Einblick in meinen Praktikumsbetrieb – die Deutsche Forschungsgemeinschaft (DFG) in Bonn – zu geben, habe ich eine informative Unternehmenspräsentation zum Download bereitgestellt.",
+            "Ergänzend dazu gibt es nun interaktive Strukturdiagramme, die das Web-Entwicklungsteam (Z-INF), die fachlichen Zuständigkeiten, den agilen Scrum-Entwicklungszyklus und die Verteilung der Förderaktivitäten visualisieren."
+        ],
+        "content_en": [
+            "To provide better insight into my host company – the German Research Foundation (DFG) in Bonn – I have published a corporate PowerPoint presentation.",
+            "In addition, I integrated interactive diagrams displaying the web development department (Z-INF) structure, functional areas, the agile Scrum sprint cycle, and general funding statistics."
+        ]
+    },
+    {
         "id": "dfg-ihk-graduation",
         "category": "milestone",
         "date_de": "07. Juni 2026",

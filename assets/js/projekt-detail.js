@@ -121,6 +121,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         buttonsHTML += '</div>';
 
+        let mediaHTML = '';
+
+        // 1. Render PPT Downloads
+        if (project.downloadPpts && project.downloadPpts.length > 0) {
+            mediaHTML += `
+                <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
+                <h3 lang="de"><i class="fa-solid fa-file-powerpoint" style="color: #d24726;"></i> Projekt-Präsentationen</h3>
+                <h3 lang="en"><i class="fa-solid fa-file-powerpoint" style="color: #d24726;"></i> Project Presentations</h3>
+                <div class="download-card-container">
+            `;
+            project.downloadPpts.forEach(ppt => {
+                const pptTitle = lang === 'de' ? ppt.titleDe : ppt.titleEn;
+                mediaHTML += `
+                    <a href="${ppt.url}" class="ppt-download-card" download aria-label="Download ${pptTitle}">
+                        <div class="ppt-icon-wrapper">
+                            <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
+                        </div>
+                        <div class="ppt-info">
+                            <div class="ppt-title">
+                                <span lang="de">${ppt.titleDe}</span>
+                                <span lang="en">${ppt.titleEn}</span>
+                            </div>
+                            <div class="ppt-meta">
+                                <span>PowerPoint (.pptx)</span>
+                                <span>Größe / Size: ${ppt.size}</span>
+                            </div>
+                        </div>
+                        <div class="ppt-btn">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            <span lang="de">Herunterladen</span>
+                            <span lang="en">Download</span>
+                        </div>
+                    </a>
+                `;
+            });
+            mediaHTML += `</div>`;
+        }
+
+        // 2. Render Video Playlist Player
+        if (project.videoPlaylist && project.videoPlaylist.length > 0) {
+            mediaHTML += `
+                <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
+                <h3 lang="de"><i class="fa-solid fa-video"></i> Video-Demonstrationen</h3>
+                <h3 lang="en"><i class="fa-solid fa-video"></i> Video Demonstrations</h3>
+                <div class="video-gallery-container" id="project-video-gallery">
+                    <div class="video-player-pane">
+                        <div class="video-wrapper">
+                            <video id="project-video-player" controls preload="metadata"></video>
+                        </div>
+                        <div class="video-meta-info">
+                            <h4 class="video-current-title" id="project-video-current-title"></h4>
+                            <p class="video-current-desc" id="project-video-current-desc"></p>
+                        </div>
+                    </div>
+                    <div class="video-playlist-pane">
+                        <h4 class="playlist-header">
+                            <span lang="de"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video-Auswahl</span>
+                            <span lang="en"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video Playlist</span>
+                        </h4>
+                        <div class="playlist-tracks" id="project-video-tracks" role="tablist"></div>
+                        <div class="dsgvo-note-card">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                            <div>
+                                <strong lang="de">DSGVO-konform:</strong>
+                                <span lang="de">Die Videos werden lokal vom Server abgespielt. Keine Tracking-Cookies.</span>
+                                <strong lang="en">GDPR Compliant:</strong>
+                                <span lang="en">Videos are streamed locally. No tracking cookies are used.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         detailContainer.innerHTML = `
             ${project.image ? `<img src="${project.image}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);">` : ''}
             
@@ -138,11 +212,94 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p lang="en">${description}</p>
             </div>
 
+            ${mediaHTML}
+
             ${buttonsHTML}
         `;
 
+        // Initialize video player if present
+        if (project.videoPlaylist && project.videoPlaylist.length > 0) {
+            initProjectVideoPlayer(project);
+        }
+
         // Ensure correct language is displayed
         document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+    }
+
+    function initProjectVideoPlayer(project) {
+        const videoEl = document.getElementById('project-video-player');
+        const tracksContainer = document.getElementById('project-video-tracks');
+        const currentTitleEl = document.getElementById('project-video-current-title');
+        const currentDescEl = document.getElementById('project-video-current-desc');
+
+        if (!videoEl || !tracksContainer || !currentTitleEl || !currentDescEl) return;
+
+        let activeIndex = 0;
+
+        function updateVideoUI(shouldPlay = false) {
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            const videoItem = project.videoPlaylist[activeIndex];
+
+            const wasPaused = videoEl.paused;
+            videoEl.src = videoItem.url;
+            videoEl.load();
+
+            if (shouldPlay && !wasPaused) {
+                videoEl.play().catch(err => console.log('Autoplay blocked:', err));
+            }
+
+            currentTitleEl.textContent = lang === 'de' ? videoItem.titleDe : videoItem.titleEn;
+            currentDescEl.textContent = lang === 'de' ? videoItem.descDe : videoItem.descEn;
+
+            const buttons = tracksContainer.querySelectorAll('.playlist-track-btn');
+            buttons.forEach((btn, index) => {
+                if (index === activeIndex) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-current', 'true');
+                } else {
+                    btn.classList.remove('active');
+                    btn.removeAttribute('aria-current');
+                }
+            });
+        }
+
+        tracksContainer.innerHTML = '';
+        project.videoPlaylist.forEach((videoItem, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'playlist-track-btn';
+            btn.setAttribute('aria-label', `Play video: ${videoItem.titleDe}`);
+            
+            btn.innerHTML = `
+                <div class="track-icon">
+                    <i class="fa fa-play-circle" aria-hidden="true"></i>
+                </div>
+                <div class="track-title-wrapper">
+                    <div class="track-title">
+                        <span lang="de">${videoItem.titleDe}</span>
+                        <span lang="en">${videoItem.titleEn}</span>
+                    </div>
+                    <div class="track-duration">${videoItem.duration} Min</div>
+                </div>
+            `;
+
+            btn.addEventListener('click', () => {
+                activeIndex = index;
+                updateVideoUI(true);
+            });
+
+            tracksContainer.appendChild(btn);
+        });
+
+        // Listen for language changes
+        const langChangeHandler = () => updateVideoUI(false);
+        document.addEventListener('langchange', langChangeHandler);
+
+        // Clean up listeners if project changes
+        videoEl.addEventListener('destroy', () => {
+            document.removeEventListener('langchange', langChangeHandler);
+        });
+
+        updateVideoUI(false);
     }
 
     function renderRelatedProjects(currentProject, allProjects) {
