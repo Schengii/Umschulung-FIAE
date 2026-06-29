@@ -237,6 +237,10 @@ function showScore() {
         renderBestScore();
     }
 
+    if (percentage === 100 && typeof Achievements !== 'undefined') {
+        Achievements.unlock('quiz_perfect');
+    }
+
     if (percentage === 100 && typeof Confetti !== 'undefined') {
         Confetti.start();
     }

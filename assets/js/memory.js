@@ -179,6 +179,10 @@ function initMemoryGame() {
     function gameWon() {
         clearInterval(timerInterval);
 
+        if (seconds < 60 && typeof Achievements !== 'undefined') {
+            Achievements.unlock('memory_fast');
+        }
+
         if (typeof GameAudio !== 'undefined') {
             GameAudio.play('win');
         }

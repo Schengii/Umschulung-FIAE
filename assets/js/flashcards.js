@@ -293,6 +293,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Trigger dashboard contribution tick!
             if (window.addLiveCommit) window.addLiveCommit();
             
+            const currentCard = filteredDeck[currentIndex];
+            if (currentCard) {
+                const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+                if (!knownCards.includes(currentCard.id)) {
+                    knownCards.push(currentCard.id);
+                    StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                }
+                
+                const totalCards = cardsDatabase.length;
+                if (knownCards.length >= totalCards && typeof Achievements !== 'undefined') {
+                    Achievements.unlock('flashcard_master');
+                }
+            }
+            
             // Auto navigate to next card after a small delay
             if (filteredDeck.length > 1) {
                 setTimeout(() => {

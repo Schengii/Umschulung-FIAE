@@ -246,6 +246,10 @@ function gameStep() {
         score += 10;
         if (scoreEl) scoreEl.textContent = score;
         
+        if (score >= 50 && typeof Achievements !== 'undefined') {
+            Achievements.unlock('snake_50');
+        }
+        
         if (typeof GameAudio !== 'undefined') {
             GameAudio.play('eat');
         }

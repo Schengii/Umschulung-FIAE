@@ -394,6 +394,9 @@ class InterviewSimulator {
         if (overallPercentage >= 80) {
             deSummaryText = "Exzellente Leistung! Du hast fast alle wichtigen Fachausdrücke und Kriterien in deinen Antworten abgedeckt. Du bist hervorragend auf deine Vorstellungsgespräche vorbereitet!";
             enSummaryText = "Excellent performance! You covered almost all core keywords and concepts. You are fully prepared to impress recruiters!";
+            if (typeof Achievements !== 'undefined') {
+                Achievements.unlock('interview_ace');
+            }
             if (typeof GameAudio !== 'undefined') GameAudio.play('win');
         } else if (overallPercentage >= 55) {
             deSummaryText = "Gute Arbeit! Deine Antworten zeigen solides Verständnis. Wenn du noch ein paar mehr fachspezifische Begriffe integrierst, wird dein Auftritt perfekt.";

@@ -21,11 +21,19 @@ function initUsernameGreeting() {
                 
                 const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
                 mySubmit.style.backgroundColor = '#10b981';
-                mySubmit.textContent = lang === 'de' ? 'Gespeichert!' : 'Saved!';
+                mySubmit.innerHTML = `
+                    <span lang="de">Gespeichert!</span>
+                    <span lang="en">Saved!</span>
+                `;
+                document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
                 
                 setTimeout(() => {
                     mySubmit.style.backgroundColor = '';
-                    mySubmit.textContent = 'Submit';
+                    mySubmit.innerHTML = `
+                        <span lang="de">Eintreten</span>
+                        <span lang="en">Enter</span>
+                    `;
+                    document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
                     window.location.href = 'home.html';
                 }, 800);
             } else {
