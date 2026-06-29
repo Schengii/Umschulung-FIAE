@@ -165,9 +165,9 @@ function initNotenrechner() {
         } else if (ap2Score < 50) {
             passed = false;
             failReason = lang === 'de' ? 'Teil 2 der Prüfung unter 50 Punkte' : 'Part 2 below 50 points';
-        } else if (countSufficientAP2 < 2) {
+        } else if (countSufficientAP2 < 3) {
             passed = false;
-            failReason = lang === 'de' ? 'Weniger als zwei Bereiche in Teil 2 ausreichend (>= 50)' : 'Less than two Part 2 fields >= 50';
+            failReason = lang === 'de' ? 'Weniger als drei Bereiche in Teil 2 ausreichend (>= 50)' : 'Less than three Part 2 fields >= 50';
         } else if (hasUngenuegendAP2) {
             passed = false;
             failReason = lang === 'de' ? 'Ein Bereich in Teil 2 ungenügend (< 30)' : 'A Part 2 field is < 30';

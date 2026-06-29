@@ -86,7 +86,10 @@
       <div class="modal-buttons">
         ${linkHTML}
         ${githubHTML}
-        <button class="btn-project" id="modal-close-inner" aria-label="Schließen" style="background:#6b7280;flex:0;">✕ Schließen</button>
+        <button class="btn-project" id="modal-close-inner" style="background:#6b7280;flex:0;">
+          <span lang="de">✕ Schließen</span>
+          <span lang="en">✕ Close</span>
+        </button>
       </div>
     `;
 
