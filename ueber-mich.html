@@ -144,10 +144,10 @@
                         <span lang="en">IT Competences &amp; Qualifications</span>
                     </h2>
 
-                    <div class="grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="grid-columns skills-grid">
                         <!-- Col 1: Frontend & APIs -->
                         <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-code"
+                            <h4 class="section-subtitle"><i class="fa-solid fa-code"
                                     aria-hidden="true"></i> Frontend &amp; Mobile</h4>
                             <ul class="list-styled">
                                 <li>HTML5 &amp; CSS3</li>
@@ -159,7 +159,7 @@
                         </div>
                         <!-- Col 2: Backend & Tools -->
                         <div>
-                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-gears"
+                            <h4 class="section-subtitle"><i class="fa-solid fa-gears"
                                     aria-hidden="true"></i> Backend &amp; Tools</h4>
                             <ul class="list-styled">
                                 <li>Java / OOP-Grundlagen</li>
@@ -170,9 +170,9 @@
                             </ul>
                         </div>
                     </div>
-                    <hr style="margin: 1.5rem 0;">
+                    <hr class="section-divider">
                     <div>
-                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-certificate"
+                        <h4 class="section-subtitle"><i class="fa-solid fa-certificate"
                                 aria-hidden="true"></i> <span lang="de">Zusatzqualifikationen</span><span
                                 lang="en">Additional Credentials</span></h4>
                         <ul class="list-styled">
@@ -205,16 +205,15 @@
                         Here you can access my complete application files, certificates, and qualifications:
                     </p>
 
-                    <div
-                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div class="downloads-grid">
                         <!-- Doc 1: CV Docx -->
                         <div class="download-item-box">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <i class="fa-regular fa-file-word" style="font-size: 1.5rem; color: #2b579a;"></i>
+                            <div class="download-item-header">
+                                <i class="fa-regular fa-file-word download-icon word"></i>
                                 <div>
-                                    <div style="font-weight: 600; font-size: 0.9rem;"><span
+                                    <div class="download-item-title"><span
                                             lang="de">Bewerbungsmappe</span><span lang="en">Application CV</span></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Word (Docx)</div>
+                                    <div class="download-item-meta">Word (Docx)</div>
                                 </div>
                             </div>
                             <a href="Bewerbungsunterlagen/2026-06-24_Bewerbungsunterlagen_Maximilian-Schenk.docx"
@@ -224,14 +223,13 @@
 
                         <!-- Doc 2: IHK Zeugnis -->
                         <div class="download-item-box">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <i class="fa-regular fa-file-image"
-                                    style="font-size: 1.5rem; color: var(--primary);"></i>
+                            <div class="download-item-header">
+                                <i class="fa-regular fa-file-image download-icon image"></i>
                                 <div>
-                                    <div style="font-weight: 600; font-size: 0.9rem;"><span
+                                    <div class="download-item-title"><span
                                             lang="de">IHK-Zeugnis</span><span lang="en">IHK Certificate</span>
                                     </div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Fachinformatiker (2026)
+                                    <div class="download-item-meta">Fachinformatiker (2026)
                                     </div>
                                 </div>
                             </div>
@@ -241,14 +239,13 @@
 
                         <!-- Doc 3: Haribo Zeugnis -->
                         <div class="download-item-box">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <i class="fa-regular fa-file-image"
-                                    style="font-size: 1.5rem; color: var(--primary);"></i>
+                            <div class="download-item-header">
+                                <i class="fa-regular fa-file-image download-icon image"></i>
                                 <div>
-                                    <div style="font-weight: 600; font-size: 0.9rem;"><span
+                                    <div class="download-item-title"><span
                                             lang="de">IHK-Gesellenbrief</span><span lang="en">Electronics
                                             Certificate</span></div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Elektroniker (2022)</div>
+                                    <div class="download-item-meta">Elektroniker (2022)</div>
                                 </div>
                             </div>
                             <a href="Bewerbungsunterlagen/extracted_images/image3.png" target="_blank"
@@ -259,13 +256,13 @@
             </div>
 
             <!-- Right Column: Sidebar -->
-            <aside class="right-col" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <aside class="right-col sidebar-column">
                 <!-- Profile Image Card -->
                 <section class="card" aria-label="Steckbrief">
                     <img src="assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk Portrait"
-                        style="width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); margin-bottom: 1.25rem; display: block; object-fit: cover; aspect-ratio: 2/3;">
+                        class="profile-portrait">
 
-                    <h3 style="margin-bottom: 0.75rem;">Maximilian Schenk</h3>
+                    <h3 class="profile-name">Maximilian Schenk</h3>
 
                     <ul class="info-list">
                         <li>
