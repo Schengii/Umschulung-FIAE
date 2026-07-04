@@ -15,12 +15,89 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ig7tw")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.05, 0.12, 1)
+
+[node name="Panel" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 680.0
+offset_bottom = 720.0
+color = Color(0.07, 0.1, 0.18, 0.9)
+
+[node name="Background2" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -200.0
+offset_top = 80.0
+offset_right = 600.0
+offset_bottom = 240.0
+color = Color(0.15, 0.25, 0.4, 0.25)
+
+[node name="Background3" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -100.0
+offset_top = 160.0
+offset_right = 700.0
+offset_bottom = 320.0
+color = Color(0.2, 0.35, 0.5, 0.2)
+
+[node name="PopupLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 340.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 28
+text = "Orbital Scrap"
+
+[node name="InfoLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 75.0
+offset_right = 640.0
+offset_bottom = 110.0
+autowrap_mode = 2
+text = "Sammle Schrott, baue Drohnen und starte neue Runden mit Prestige."
+
+[node name="PrestigeProgressLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 110.0
+offset_right = 640.0
+offset_bottom = 130.0
+text = "Prestige-Fortschritt: 0/1000"
+
+[node name="PrestigeProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 130.0
+offset_right = 640.0
+offset_bottom = 155.0
+max_value = 1000.0
+show_percentage = false
+
 [node name="ScrapButton" type="Button" parent="." unique_id=1547861649]
 layout_mode = 1
 offset_left = 50.0
-offset_top = 50.0
+offset_top = 130.0
 offset_right = 300.0
-offset_bottom = 100.0
+offset_bottom = 180.0
 text = "Weltraumschrott sammeln"
 
 [node name="ScrapLabel" type="Label" parent="." unique_id=937525106]
@@ -42,11 +119,27 @@ text = "Drohne kaufen"
 [node name="DroneLabel" type="Label" parent="." unique_id=735208768]
 layout_mode = 1
 offset_left = 320.0
-offset_top = 140.0
+offset_top = 180.0
 offset_right = 620.0
-offset_bottom = 189.0
+offset_bottom = 229.0
 text = "Drohnen: 0 (Kosten: 10)
 "
+
+[node name="BuyMineButton" type="Button" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 250.0
+offset_right = 300.0
+offset_bottom = 300.0
+text = "Mine kaufen"
+
+[node name="MineLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 260.0
+offset_right = 620.0
+offset_bottom = 290.0
+text = "Minen: 0"
 
 [node name="SpsLabel" type="Label" parent="." unique_id=983314844]
 layout_mode = 1
@@ -55,5 +148,83 @@ offset_top = 90.0
 offset_right = 620.0
 offset_bottom = 120.0
 
+[node name="ClickUpgradeButton" type="Button" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 330.0
+offset_right = 300.0
+offset_bottom = 380.0
+text = "Klick-Upgrade kaufen"
+
+[node name="ClickUpgradeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 340.0
+offset_right = 620.0
+offset_bottom = 370.0
+text = "Klick-Power: 1x"
+
+[node name="DroneUpgradeButton" type="Button" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 410.0
+offset_right = 300.0
+offset_bottom = 460.0
+text = "Drohnen-Upgrade kaufen"
+
+[node name="DroneUpgradeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 420.0
+offset_right = 620.0
+offset_bottom = 450.0
+text = "Drohnen-Effizienz: 0.2 /s pro Drohne"
+
+[node name="PrestigeButton" type="Button" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 490.0
+offset_right = 300.0
+offset_bottom = 540.0
+text = "Prestige starten"
+
+[node name="PrestigeLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 500.0
+offset_right = 620.0
+offset_bottom = 530.0
+text = "Prestige-Punkte: 0"
+
+[node name="AchievementsLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 50.0
+offset_top = 570.0
+offset_right = 620.0
+offset_bottom = 710.0
+text = "Erfolge"
+autowrap_mode = 3
+
+[node name="OfflineLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 320.0
+offset_top = 170.0
+offset_right = 620.0
+offset_bottom = 200.0
+text = ""
+
+[node name="SaveStatusLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 340.0
+offset_top = 150.0
+offset_right = 640.0
+offset_bottom = 170.0
+theme_override_colors/font_color = Color(0.7, 0.9, 0.7, 1)
+text = ""
+
 [connection signal="pressed" from="ScrapButton" to="." method="_on_scrap_button_pressed"]
 [connection signal="pressed" from="BuyDroneButton" to="." method="_on_buy_drone_button_pressed"]
+[connection signal="pressed" from="BuyMineButton" to="." method="_on_buy_mine_button_pressed"]
+[connection signal="pressed" from="ClickUpgradeButton" to="." method="_on_click_upgrade_button_pressed"]
+[connection signal="pressed" from="DroneUpgradeButton" to="." method="_on_drone_upgrade_button_pressed"]
+[connection signal="pressed" from="PrestigeButton" to="." method="_on_prestige_button_pressed"]

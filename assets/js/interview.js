@@ -131,7 +131,12 @@ class InterviewSimulator {
         this.resultCard = document.getElementById('result-card');
         this.inputText = document.getElementById('user-input-text');
         this.sendBtn = document.getElementById('send-btn');
-        
+        this.micBtn = document.getElementById('mic-btn');
+        this.ttsToggleBtn = document.getElementById('tts-toggle-btn');
+        this.ttsEnabled = StorageManager.getItem('interview_tts_enabled', 'true') === 'true';
+        this.recognition = null;
+        this.isRecording = false;
+
         this.init();
     }
 
@@ -153,12 +158,95 @@ class InterviewSimulator {
             });
         }
 
+        if (this.ttsToggleBtn) {
+            this.updateTtsButtonIcon();
+            this.ttsToggleBtn.addEventListener('click', () => {
+                this.ttsEnabled = !this.ttsEnabled;
+                StorageManager.setItem('interview_tts_enabled', this.ttsEnabled ? 'true' : 'false');
+                this.updateTtsButtonIcon();
+                if (!this.ttsEnabled && window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            });
+        }
+
+        // Initialize Speech Recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition && this.micBtn) {
+            this.recognition = new SpeechRecognition();
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+
+            this.recognition.onstart = () => {
+                this.isRecording = true;
+                if (this.micBtn) {
+                    this.micBtn.classList.add('recording');
+                    const micIcon = this.micBtn.querySelector('i');
+                    if (micIcon) micIcon.className = 'fa-solid fa-square';
+                }
+                if (this.inputText) {
+                    this.inputText.placeholder = this.selectedLanguage === 'de' 
+                        ? 'Spreche jetzt...' 
+                        : 'Listening now...';
+                }
+            };
+
+            this.recognition.onend = () => {
+                this.isRecording = false;
+                if (this.micBtn) {
+                    this.micBtn.classList.remove('recording');
+                    const micIcon = this.micBtn.querySelector('i');
+                    if (micIcon) micIcon.className = 'fa fa-microphone';
+                }
+                this.updateLabels();
+            };
+
+            this.recognition.onresult = (e) => {
+                const transcript = e.results[0][0].transcript;
+                if (this.inputText) {
+                    const currentVal = this.inputText.value.trim();
+                    this.inputText.value = currentVal ? `${currentVal} ${transcript}` : transcript;
+                    // Trigger input event to update textarea size or state if needed
+                    this.inputText.dispatchEvent(new Event('input'));
+                }
+            };
+
+            this.recognition.onerror = (e) => {
+                console.warn('Speech recognition error:', e.error);
+                this.isRecording = false;
+            };
+
+            this.micBtn.addEventListener('click', () => {
+                if (this.isRecording) {
+                    this.recognition.stop();
+                } else {
+                    this.recognition.lang = this.selectedLanguage === 'de' ? 'de-DE' : 'en-US';
+                    this.recognition.start();
+                }
+            });
+        } else if (this.micBtn) {
+            this.micBtn.style.display = 'none';
+        }
+
         // Listen for global language toggle to adapt current setup screen if visible
         document.addEventListener('langchange', (e) => {
             this.selectedLanguage = e.detail || 'de';
             this.updateLabels();
+            this.updateTtsButtonIcon();
         });
         this.selectedLanguage = document.documentElement.getAttribute('lang') || 'de';
+    }
+
+    updateTtsButtonIcon() {
+        if (!this.ttsToggleBtn) return;
+        const icon = this.ttsToggleBtn.querySelector('i');
+        if (icon) {
+            icon.className = this.ttsEnabled ? 'fa fa-volume-up' : 'fa fa-volume-mute';
+        }
+        this.ttsToggleBtn.setAttribute('title', this.ttsEnabled 
+            ? (this.selectedLanguage === 'de' ? 'Sprachausgabe stummschalten' : 'Mute speech output')
+            : (this.selectedLanguage === 'de' ? 'Sprachausgabe aktivieren' : 'Enable speech output')
+        );
     }
 
     updateLabels() {
@@ -171,6 +259,9 @@ class InterviewSimulator {
     }
 
     startSimulator() {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
         // Collect choices
         const checkedBoxes = document.querySelectorAll('input[name="category"]:checked');
         this.selectedCategories = Array.from(checkedBoxes).map(cb => cb.value);
@@ -207,6 +298,31 @@ class InterviewSimulator {
         this.sendBotQuestion();
     }
 
+    speak(text) {
+        if (!this.ttsEnabled || !window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel(); // Stop current speech
+        
+        const cleanText = text.replace(/<\/?[^>]+(>|$)/g, ""); // Strip any HTML tags
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = this.selectedLanguage === 'de' ? 'de-DE' : 'en-US';
+
+        const voices = window.speechSynthesis.getVoices();
+        let voice = null;
+        if (voices.length > 0) {
+            if (this.selectedLanguage === 'de') {
+                voice = voices.find(v => v.lang.startsWith('de') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.startsWith('de'));
+            } else {
+                voice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.startsWith('en'));
+            }
+        }
+        if (voice) utterance.voice = voice;
+
+        window.speechSynthesis.speak(utterance);
+    }
+
     sendBotQuestion() {
         if (this.currentIndex >= this.currentQuestions.length) {
             this.showResults();
@@ -225,12 +341,19 @@ class InterviewSimulator {
             this.inputText.disabled = false;
             this.inputText.focus();
             this.sendBtn.disabled = false;
+            if (this.micBtn) this.micBtn.disabled = false;
+
+            this.speak(questionText);
         }, 1200);
     }
 
     handleUserSubmit() {
         const text = this.inputText.value.trim();
         if (!text) return;
+
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
 
         this.inputText.value = '';
         this.inputText.disabled = true;

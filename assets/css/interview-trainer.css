@@ -204,6 +204,45 @@
     opacity: 0.6;
 }
 
+.mic-btn-round {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: background-color 0.25s, transform 0.15s, color 0.25s, border-color 0.25s;
+}
+
+.mic-btn-round:hover:not(:disabled) {
+    background-color: var(--border);
+    transform: scale(1.05);
+}
+
+.mic-btn-round.recording {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+    animation: micPulse 1.5s infinite;
+}
+
+.mic-btn-round:disabled {
+    background-color: var(--border);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+@keyframes micPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
 /* Config / Setup Screen */
 .category-grid {
     display: grid;

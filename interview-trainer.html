@@ -123,10 +123,15 @@
                     <span lang="de"><i class="fa fa-microphone" aria-hidden="true"></i> Interview im Gange...</span>
                     <span lang="en"><i class="fa fa-microphone" aria-hidden="true"></i> Interview in progress...</span>
                 </h3>
-                <span class="badge-match practiced-commit-badge">
-                    <span lang="de">💡 Fleißpunkte: Commits steigen bei Antworten!</span>
-                    <span lang="en">💡 practice reward: Answer questions to make commits!</span>
-                </span>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button id="tts-toggle-btn" class="theme-toggle" style="border: 1px solid var(--border); padding: 0.25rem 0.5rem; border-radius: var(--radius-md); font-size: 0.85rem;" title="Laut vorlesen / Read aloud">
+                        <i class="fa fa-volume-up" aria-hidden="true"></i>
+                    </button>
+                    <span class="badge-match practiced-commit-badge">
+                        <span lang="de">💡 Fleißpunkte: Commits steigen bei Antworten!</span>
+                        <span lang="en">💡 practice reward: Answer questions to make commits!</span>
+                    </span>
+                </div>
             </div>
 
             <!-- Chat Container -->
@@ -138,6 +143,9 @@
                 <!-- Input area -->
                 <div class="chat-input-panel">
                     <textarea id="user-input-text" class="chat-textarea" placeholder="Schreibe deine Antwort hier..." disabled></textarea>
+                    <button id="mic-btn" class="mic-btn-round" aria-label="Antwort einsprechen" disabled>
+                        <i class="fa fa-microphone" aria-hidden="true"></i>
+                    </button>
                     <button id="send-btn" class="send-btn-round" aria-label="Antwort senden" disabled>
                         <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>

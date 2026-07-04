@@ -1,0 +1,18 @@
+{
+  "repoName": "arbeitszeiterfassung",
+  "titleDe": "⏱️ Arbeitszeiterfassung — PWA Zeiterfassung",
+  "titleEn": "⏱️ Arbeitszeiterfassung — Time Tracker PWA",
+  "tags": [
+    "PWA / Mobile First",
+    "Firebase Cloud-Sync",
+    "Chart.js & SVG Analytics",
+    "Vanilla JS",
+    "Productivity"
+  ],
+  "image": "assets/images/arbeitszeit_showcase.png",
+  "link": "Projekte/arbeitszeiterfassung/index.html",
+  "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
+  "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
+  "category": "web",
+  "language": "JavaScript"
+}

@@ -5,112 +5,10 @@ const https = require('https');
 
 const projectsDataFile = path.resolve(__dirname, '..', 'assets', 'js', 'projects_data.js');
 const projectsJsonFile = path.resolve(__dirname, '..', 'assets', 'data', 'projects.json');
+const projectsBaseDir = path.resolve(__dirname, '..', 'Projekte');
 
-const baseProjects = [
-  {
-    "repoName": "EcoChef",
-    "titleDe": "🍳 EcoChef — Dein intelligenter KI-Rezept-Zauberer",
-    "titleEn": "🍳 EcoChef — Your Intelligent AI Recipe Wizard",
-    "tags": ["Lit / TypeScript", "Gemini API", "Cordova PWA", "LocalStorage", "Speech Synthesis"],
-    "image": "assets/images/ecochef_showcase.png",
-    "link": "Projekte/EcoChef/www/index.html",
-    "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
-    "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
-    "category": "ai filter-web",
-    "stars": 5,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "ElektroCheck-AI",
-    "titleDe": "⚡ ElektroCheck AI — Intelligente Prüfberichtsanalyse",
-    "titleEn": "⚡ ElektroCheck AI — Intelligent Inspection Report Analytics",
-    "tags": ["React / Vite", "OpenAI API", "PDF Parsing", "TailwindCSS", "AI Integration"],
-    "image": "assets/images/elektrocheck_showcase.png",
-    "link": "Projekte/ElektroCheck%20AI/dist/index.html",
-    "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
-    "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
-    "category": "ai",
-    "stars": 4,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "Wohnungssuche-KI",
-    "titleDe": "🏠 Wohnungssuche KI — Intelligenter Such-Assistent",
-    "titleEn": "🏠 Wohnungssuche KI — Intelligent Apartment Finder",
-    "tags": ["React / Vite", "Node.js / Express", "Puppeteer / Scraper", "OpenAI API", "Capacitor PWA"],
-    "image": "assets/images/wohnungssuche_showcase.png",
-    "link": "Projekte/Wohnungssuche%20KI/frontend/dist/index.html",
-    "descDe": "Eine KI-gestützte Komplettlösung zur automatisierten Wohnungssuche. Das System scannt Immobilienportale per Web-Scraper und E-Mail-Postfächer per IMAP, analysiert Angebote mit GPT-Modellen, berechnet Entfernungen zu POIs und generiert fertige Bewerbungs-PDFs.",
-    "descEn": "An AI-powered system designed to automate apartment searching. It scrapes real estate portals via Puppeteer, scans inbox folders using IMAP, evaluates listings using OpenAI's API, calculates POI proximity, and generates custom tenant disclosure PDFs.",
-    "category": "ai filter-web",
-    "stars": 5,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "Glücksspiel",
-    "titleDe": "🎰 Glücksspiel — Casual Games Plattform",
-    "titleEn": "🎰 Glücksspiel — Casual Mini Games Suite",
-    "tags": ["Vanilla JavaScript", "Web Audio API", "LocalStorage", "CSS3 Animations", "Game Design"],
-    "image": "assets/images/gluecksspiel_showcase.png",
-    "link": "Projekte/Glücksspiel/index.html",
-    "descDe": "Eine bunte, animierte Casino-Spiele-Plattform mit klassischen Casual-Mini-Spielen wie Spielautomaten (Slots), Roulette, Plinko, Mines und dem Zauberkessel (Cauldron). Das Projekt zeichnet sich durch flüssige CSS-Animationen, Soundeffekte und ein lokales Guthaben-Management aus.",
-    "descEn": "A vibrant casino mini-games platform featuring slots, roulette, plinko, mines, and cauldron. The project features smooth CSS animations, retro sound effects, and persistent local balance tracking.",
-    "category": "games",
-    "stars": 3,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "Jobsuche",
-    "titleDe": "💼 Jobsuche — PWA Stellenportal",
-    "titleEn": "💼 Jobsuche — PWA Job Board",
-    "tags": ["HTML5 / CSS3", "Vanilla JS", "REST Integration", "PWA / Offline", "Job Board"],
-    "image": "assets/images/jobsuche_showcase.png",
-    "link": "Projekte/Jobbsuche/index.html",
-    "descDe": "Jobsuche ist ein PWA-basiertes Stellenportal für Webentwickler. Es ermöglicht das Suchen, Filtern und Speichern von Jobangeboten. Dank PWA-Technologie können gemerkte Stellen offline eingesehen werden, und Push-Benachrichtigungen informieren über neue Angebote.",
-    "descEn": "Jobsuche is a PWA job board for web developers. It allows users to search, filter, and save job postings. Thanks to PWA technologies, saved jobs are readable offline, and push notifications alert you about new listings.",
-    "category": "web",
-    "stars": 2,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "ManuFaktur",
-    "titleDe": "🎨 ManuFAKTUR Schenk — Kunst- & Bildergalerie",
-    "titleEn": "🖼️ ManuFAKTUR Schenk — Art Portfolio & Gallery",
-    "tags": ["HTML5 / CSS3", "Vanilla JS", "LocalStorage", "Bildergalerie", "Merkliste"],
-    "image": "assets/images/manufaktur_showcase.png",
-    "link": "Projekte/ManuFaktur/index.html",
-    "descDe": "Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt, ein individuelles Kontaktformular sowie eine neue, persistente Favoriten/Merkliste (LocalStorage) für interessierte Käufer.",
-    "descEn": "An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, a custom order form, and a newly integrated persistent Favorites Wishlist (LocalStorage) for potential buyers.",
-    "category": "web",
-    "stars": 2,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "arbeitszeiterfassung",
-    "titleDe": "⏱️ Arbeitszeiterfassung — PWA Zeiterfassung",
-    "titleEn": "⏱️ Arbeitszeiterfassung — Time Tracker PWA",
-    "tags": ["PWA / Mobile First", "Firebase Cloud-Sync", "Chart.js & SVG Analytics", "Vanilla JS", "Productivity"],
-    "image": "assets/images/arbeitszeit_showcase.png",
-    "link": "Projekte/arbeitszeiterfassung/index.html",
-    "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
-    "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
-    "category": "web",
-    "stars": 4,
-    "language": "JavaScript"
-  },
-  {
-    "repoName": "finance-ai-bot",
-    "titleDe": "🤖 Finance AI Bot — Finanzplaner & Chatbot",
-    "titleEn": "🤖 Finance AI Bot — Financial Assistant & Chatbot",
-    "tags": ["NLP / AI Bot", "JavaScript (ES6+)", "Financial Analytics", "Conversational UI", "Flexbox / CSS3"],
-    "image": "assets/images/finance_bot_showcase.png",
-    "link": "Projekte/finance-ai-bot/frontend/index.html",
-    "descDe": "Finance AI Bot ist ein interaktiver Finanzplaner-Assistent. Der Chatbot verarbeitet natürliche Sprache, analysiert persönliche Einnahmen und Ausgaben, berechnet Sparraten und hilft Nutzern dabei, ein monatliches Budget spielerisch zu planen.",
-    "descEn": "Finance AI Bot is an interactive financial assistant chatbot. It processes natural language queries to analyze personal income and expenses, calculate savings rates, and help users set and achieve monthly budget targets.",
-    "category": "ai filter-web",
-    "stars": 3,
-    "language": "JavaScript"
-  },
+// Static projects that are not scanned (either root HTML files or external GitHub projects not cloned locally)
+const staticProjects = [
   {
     "repoName": "CoOpVersusGame",
     "titleDe": "🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototyp",
@@ -122,19 +20,6 @@ const baseProjects = [
     "descEn": "A cross-platform multiplayer game prototype built in Godot 4.6. It features a local/network lobby system, cooperative missions, versus modes, intelligent boss/enemy AI, power-ups, and interactive pressure-plate puzzles.",
     "category": "games",
     "stars": 2,
-    "language": "GDScript"
-  },
-  {
-    "repoName": "orbital-scrap",
-    "titleDe": "🚀 OrbitalScrap — Sci-Fi Clicker- & Idle-Game",
-    "titleEn": "🚀 OrbitalScrap — Sci-Fi Clicker & Idle Game",
-    "tags": ["Godot Engine 4", "GDScript", "Incremental Game", "Jolt 3D Physics", "UI & Game Loop"],
-    "image": "assets/images/orbital_scrap_showcase.png",
-    "link": null,
-    "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
-    "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",
-    "category": "games",
-    "stars": 3,
     "language": "GDScript"
   },
   {
@@ -187,6 +72,36 @@ const baseProjects = [
   }
 ];
 
+// Scan local folders for portfolio-metadata.json
+function scanLocalProjects() {
+  const scanned = [];
+  if (!fs.existsSync(projectsBaseDir)) {
+    console.warn(`Base projects directory not found: ${projectsBaseDir}`);
+    return scanned;
+  }
+
+  const entries = fs.readdirSync(projectsBaseDir, { withFileTypes: true });
+  entries.forEach(entry => {
+    if (entry.isDirectory()) {
+      const metadataPath = path.join(projectsBaseDir, entry.name, 'portfolio-metadata.json');
+      if (fs.existsSync(metadataPath)) {
+        try {
+          const raw = fs.readFileSync(metadataPath, 'utf-8');
+          const data = JSON.parse(raw);
+          // Set standard defaults if missing
+          data.link = data.link || `Projekte/${entry.name}/index.html`;
+          scanned.push(data);
+          console.log(`Scanned project metadata from: ${entry.name}`);
+        } catch (e) {
+          console.error(`Error reading metadata for folder ${entry.name}:`, e.message);
+        }
+      }
+    }
+  });
+
+  return scanned;
+}
+
 function fetchRepoInfo(repoName) {
   return new Promise((resolve) => {
     if (!repoName) return resolve(null);
@@ -218,10 +133,17 @@ function fetchRepoInfo(repoName) {
 }
 
 async function build() {
+  console.log('Scanning local projects...');
+  const localProjects = scanLocalProjects();
+  
+  // Combine scanned projects and static/root projects
+  const combinedProjects = [...localProjects, ...staticProjects];
+
+  console.log(`Total projects to process: ${combinedProjects.length}`);
   console.log('Fetching GitHub repository data...');
   const enriched = [];
 
-  for (const project of baseProjects) {
+  for (const project of combinedProjects) {
     if (project.repoName) {
       const info = await fetchRepoInfo(project.repoName);
       if (info) {

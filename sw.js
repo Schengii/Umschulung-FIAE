@@ -59,24 +59,40 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
     if (!e.request.url.startsWith(self.location.origin)) return;
     
-    e.respondWith(
-        caches.match(e.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-            return fetch(e.request).then((networkResponse) => {
-                if (networkResponse.status === 200) {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(e.request, responseClone);
-                    });
-                }
-                return networkResponse;
-            }).catch(() => {
-                if (e.request.headers.get('accept')?.includes('text/html')) {
-                    return caches.match('index.html');
-                }
-            });
-        })
-    );
+    const url = new URL(e.request.url);
+
+    // 1. Network-First strategy for HTML documents and navigation
+    if (e.request.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html') || url.pathname === '/') {
+        e.respondWith(
+            fetch(e.request)
+                .then((networkResponse) => {
+                    if (networkResponse.status === 200) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseClone));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => caches.match(e.request).then((cachedResponse) => {
+                    return cachedResponse || caches.match('index.html');
+                }))
+        );
+    } 
+    // 2. Stale-While-Revalidate strategy for static assets (CSS, JS, fonts, images)
+    else {
+        e.respondWith(
+            caches.match(e.request).then((cachedResponse) => {
+                const fetchPromise = fetch(e.request)
+                    .then((networkResponse) => {
+                        if (networkResponse.status === 200) {
+                            const responseClone = networkResponse.clone();
+                            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseClone));
+                        }
+                        return networkResponse;
+                    })
+                    .catch(() => {/* Ignore offline network failure for assets */});
+
+                return cachedResponse || fetchPromise;
+            })
+        );
+    }
 });
