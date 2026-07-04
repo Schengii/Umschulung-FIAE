@@ -64,6 +64,7 @@ function renderHeader(currentPage) {
 function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
+    const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
     const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html'];
 
     const active = (pages) => {
@@ -81,8 +82,12 @@ function renderNav(currentPage) {
                 <li class="nav-item${active('home.html')}">
                     <a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 </li>
-                <li class="nav-item${active('ueber-mich.html')}">
-                    <a href="ueber-mich.html" class="nav-link"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span></a>
+                <li class="nav-item${active(ueberMichPages)}">
+                    <a href="#" class="nav-link"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="ueber-mich.html" class="dropdown-link"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
+                        <li><a href="lebenslauf.html" class="dropdown-link"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
+                    </ul>
                 </li>
                 <li class="nav-item${active(ausbildungPages)}">
                     <a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>

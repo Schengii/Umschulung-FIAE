@@ -1,0 +1,600 @@
+/* CSS custom styling for the print-optimized HTML Resume */
+
+.resume-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.resume-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Sidebar Styling */
+.resume-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-card {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+}
+
+.profile-card {
+    text-align: center;
+}
+
+.profile-image-wrapper {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.25rem auto;
+    border: 3px solid var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.profile-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.profile-title {
+    font-size: 0.9rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.profile-personal-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.contact-list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.contact-list li i {
+    color: var(--primary);
+    width: 16px;
+    text-align: center;
+}
+
+.contact-list li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact-list li a:hover {
+    color: var(--primary);
+}
+
+/* Skills Section */
+.skills-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.skills-section {
+    margin-bottom: 1.25rem;
+}
+
+.skills-section:last-child {
+    margin-bottom: 0;
+}
+
+.skill-group-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.tech-tag {
+    font-size: 0.75rem;
+    background: var(--card-bg-light);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+.languages-list-flat {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* QR Code Section */
+.qr-intro-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.qr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.qr-item {
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.qr-image {
+    width: 100%;
+    height: auto;
+    max-width: 100px;
+    margin: 0 auto 0.25rem auto;
+    display: block;
+}
+
+.qr-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Resume Main Column */
+.resume-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.main-card {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.main-card h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.main-card h2 i {
+    color: var(--primary);
+}
+
+/* Timeline v2 Styling */
+.timeline-v2 {
+    position: relative;
+    border-left: 2px solid var(--border);
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.timeline-v2-item {
+    position: relative;
+}
+
+.timeline-v2-marker {
+    position: absolute;
+    left: calc(-1.5rem - 6px);
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--card-bg);
+    transition: background-color 0.2s;
+}
+
+.timeline-v2-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-v2-date {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.15rem;
+}
+
+.timeline-v2-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.timeline-v2-company {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.timeline-v2-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.timeline-v2-content p {
+    margin: 0;
+}
+
+/* Interests Grid */
+.interests-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.interest-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--card-bg-light);
+    border: 1px solid var(--border);
+}
+
+.interest-item i {
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-top: 0.1rem;
+    background: var(--card-bg);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.interest-item h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.interest-item p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Hidden Print Header default state */
+.print-header {
+    display: none;
+}
+
+/* Responsive adjustment */
+@media (max-width: 850px) {
+    .resume-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   PRINT STYLES (@media print)
+   Optimized for high-quality grayscale/color PDF rendering on A4 paper.
+   ========================================================================== */
+@media print {
+    /* Set page margins */
+    @page {
+        size: A4;
+        margin: 1.2cm;
+    }
+
+    /* Standard reset for white background and black text in print */
+    body {
+        background: #ffffff !important;
+        color: #1f2937 !important;
+        font-size: 10.5pt;
+        line-height: 1.5;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
+
+    /* Hide screen-only items */
+    .no-print,
+    #site-header,
+    #site-nav,
+    #site-footer,
+    .cv-download-card,
+    .skip-link {
+        display: none !important;
+    }
+
+    .main-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Print Header (name, title, contact details horizontally) */
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: 2px solid #1f2937;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .print-header-left h1 {
+        font-size: 24pt;
+        font-weight: 800;
+        margin: 0 0 4px 0;
+        color: #111827;
+    }
+
+    .print-header-left h3 {
+        font-size: 12pt;
+        color: #3b82f6;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .print-header-right {
+        text-align: right;
+        font-size: 8.5pt;
+        color: #4b5563;
+        line-height: 1.4;
+    }
+
+    .print-header-right p {
+        margin: 0;
+    }
+
+    /* Resume Print Layout (Two Columns) */
+    .resume-grid {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 20px;
+        background: transparent !important;
+    }
+
+    .resume-sidebar {
+        gap: 15px;
+    }
+
+    /* Convert sidebar cards into light layout */
+    .sidebar-card,
+    .main-card {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+    }
+
+    /* Hide Profile Portrait Image in Print (takes too much space) */
+    .profile-card {
+        display: none !important;
+    }
+
+    /* Adjust sidebar titles for print */
+    .skills-card h3,
+    .qr-card h3 {
+        font-size: 11pt !important;
+        border-bottom: 1.5px solid #d1d5db !important;
+        color: #111827 !important;
+        padding-bottom: 4px !important;
+        margin-bottom: 8px !important;
+        font-weight: 700 !important;
+    }
+
+    .skill-group-title {
+        font-size: 8pt !important;
+        color: #6b7280 !important;
+        margin-bottom: 4px !important;
+        margin-top: 8px !important;
+    }
+
+    .skills-section {
+        margin-bottom: 8px !important;
+    }
+
+    .tech-tags {
+        gap: 3px !important;
+    }
+
+    .tech-tag {
+        background: #f3f4f6 !important;
+        color: #1f2937 !important;
+        border: 1px solid #e5e7eb !important;
+        font-size: 7.5pt !important;
+        padding: 1px 4px !important;
+    }
+
+    .languages-list-flat {
+        font-size: 8pt !important;
+        gap: 2px !important;
+    }
+
+    /* Main Column */
+    .resume-main {
+        gap: 20px;
+    }
+
+    .main-card h2 {
+        font-size: 12pt !important;
+        border-bottom: 1.5px solid #1f2937 !important;
+        color: #111827 !important;
+        padding-bottom: 4px !important;
+        margin-bottom: 12px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Timeline Print Styling */
+    .timeline-v2 {
+        border-left: 1.5px solid #d1d5db !important;
+        padding-left: 12px !important;
+        margin-left: 4px !important;
+        gap: 15px !important;
+    }
+
+    .timeline-v2-marker {
+        left: calc(-12px - 5px) !important;
+        width: 8px !important;
+        height: 8px !important;
+        background: #3b82f6 !important;
+        border: 1.5px solid #ffffff !important;
+        top: 4px !important;
+    }
+
+    .timeline-v2-title {
+        font-size: 10pt !important;
+        color: #111827 !important;
+    }
+
+    .timeline-v2-date {
+        font-size: 8pt !important;
+        color: #3b82f6 !important;
+    }
+
+    .timeline-v2-company {
+        font-size: 8pt !important;
+        color: #4b5563 !important;
+    }
+
+    .timeline-v2-content {
+        font-size: 8.5pt !important;
+        color: #374151 !important;
+    }
+
+    /* Hobbies/Interests in Print */
+    .interests-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px !important;
+    }
+
+    .interest-item {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        gap: 8px !important;
+    }
+
+    .interest-item i {
+        display: none !important; /* Hide icon circles in print */
+    }
+
+    .interest-item h4 {
+        font-size: 9pt !important;
+        color: #111827 !important;
+    }
+
+    .interest-item p {
+        font-size: 8pt !important;
+        color: #4b5563 !important;
+    }
+
+    /* QR Code formatting in print */
+    .qr-intro-text {
+        font-size: 7.5pt !important;
+        margin-bottom: 6px !important;
+    }
+
+    .qr-grid {
+        grid-template-columns: 1fr;
+        gap: 10px !important;
+    }
+
+    .qr-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        text-align: left;
+    }
+
+    .qr-image {
+        width: 45px !important;
+        max-width: 45px !important;
+        margin: 0 !important;
+    }
+
+    .qr-label {
+        font-size: 7.5pt !important;
+        color: #374151 !important;
+        line-height: 1.2;
+    }
+
+    /* Prevent page breaks inside key sections */
+    .timeline-v2-item,
+    .interest-item,
+    .main-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
