@@ -5519,3 +5519,128 @@ button.welcome-theme-toggle {
     font-size: 0.9rem;
     margin-bottom: 0.75rem;
 }
+
+/* Recruiter Application Status Tracker (Stepper) */
+.recruiter-tracker-card {
+    display: none; /* Controlled dynamically by JS username-greeting.js */
+    margin-bottom: 2rem;
+    overflow: visible;
+}
+
+.tracker-intro {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.tracker-steps-container {
+    position: relative;
+    margin: 2.5rem 0;
+    padding: 0 1rem;
+}
+
+.tracker-line {
+    position: absolute;
+    top: 22px; /* Center of the bubble (44px/2) */
+    left: 8%;
+    right: 8%;
+    height: 4px;
+    background: var(--border);
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.tracker-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 66%; /* Default highlight up to Step 3 */
+    height: 100%;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width 0.5s ease-in-out;
+}
+
+.tracker-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.tracker-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    text-align: center;
+}
+
+.tracker-bubble {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 3px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.tracker-step.completed .tracker-bubble {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.tracker-step.active .tracker-bubble {
+    background: var(--bg-card);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+    animation: pulse-step 2s infinite ease-in-out;
+}
+
+.tracker-label {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.tracker-step.completed .tracker-label,
+.tracker-step.active .tracker-label {
+    color: var(--text-primary);
+}
+
+.tracker-footer-note {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tracker-footer-note i {
+    color: var(--primary);
+}
+
+@keyframes pulse-step {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(37, 99, 235, 0.25);
+    }
+    50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 16px rgba(37, 99, 235, 0.5);
+    }
+}

@@ -84,6 +84,7 @@ function updateWelcomeH1(username) {
 function updateDashboardGreeting() {
     const welcomeText = document.getElementById('welcome-text');
     const recruiterBanner = document.getElementById('recruiter-greeting-banner');
+    const trackerCard = document.getElementById('recruiter-tracker-card');
     const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
 
     const company = sessionStorage.getItem('recruiter_company');
@@ -132,6 +133,32 @@ function updateDashboardGreeting() {
             }
         }
         
+        // Populate and display the application status tracker widget if company is known
+        if (trackerCard) {
+            if (company) {
+                trackerCard.style.display = 'block';
+                const companySpans = trackerCard.querySelectorAll('.tracker-company-name');
+                companySpans.forEach(span => {
+                    span.textContent = company;
+                });
+
+                const footerNote = trackerCard.querySelector('.tracker-footer-note');
+                if (footerNote) {
+                    if (name) {
+                        footerNote.style.display = 'flex';
+                        const contactSpan = footerNote.querySelector('.tracker-contact-name');
+                        if (contactSpan) {
+                            contactSpan.textContent = name;
+                        }
+                    } else {
+                        footerNote.style.display = 'none';
+                    }
+                }
+            } else {
+                trackerCard.style.display = 'none';
+            }
+        }
+        
         // Soft welcome text
         if (welcomeText) {
             welcomeText.innerHTML = lang === 'de'
@@ -143,6 +170,9 @@ function updateDashboardGreeting() {
     else {
         if (recruiterBanner) {
             recruiterBanner.style.display = 'none';
+        }
+        if (trackerCard) {
+            trackerCard.style.display = 'none';
         }
         if (welcomeText) {
             const username = StorageManager.getItem(STORAGE_KEYS.USERNAME, '');

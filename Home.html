@@ -85,6 +85,69 @@
             <p class="recruiter-desc"></p>
         </div>
 
+        <!-- Recruiter Application Status Tracker -->
+        <div id="recruiter-tracker-card" class="card recruiter-tracker-card">
+            <h3 id="tracker-title-heading">
+                <span lang="de"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Bewerbungsstatus bei <strong><span class="tracker-company-name"></span></strong></span>
+                <span lang="en"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Application Status at <strong><span class="tracker-company-name"></span></strong></span>
+            </h3>
+            <p lang="de" class="tracker-intro">Hier können Sie den aktuellen Stand meiner Bewerbung in Ihrem Unternehmen einsehen:</p>
+            <p lang="en" class="tracker-intro">Here you can track the current status of my application at your company:</p>
+            
+            <div class="tracker-steps-container">
+                <div class="tracker-line">
+                    <div class="tracker-line-fill"></div>
+                </div>
+                <div class="tracker-steps">
+                    <!-- Step 1: Received -->
+                    <div class="tracker-step completed">
+                        <div class="tracker-bubble" title="Erhalten / Received">
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        </div>
+                        <div class="tracker-label">
+                            <span lang="de">Eingegangen</span>
+                            <span lang="en">Received</span>
+                        </div>
+                    </div>
+                    <!-- Step 2: Under Review -->
+                    <div class="tracker-step completed">
+                        <div class="tracker-bubble" title="In Prüfung / Under Review">
+                            <i class="fa-solid fa-file-signature" aria-hidden="true"></i>
+                        </div>
+                        <div class="tracker-label">
+                            <span lang="de">Sichtung</span>
+                            <span lang="en">Review</span>
+                        </div>
+                    </div>
+                    <!-- Step 3: Interview -->
+                    <div class="tracker-step active">
+                        <div class="tracker-bubble" title="Gespräch / Interview">
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                        </div>
+                        <div class="tracker-label">
+                            <span lang="de">Interview</span>
+                            <span lang="en">Interview</span>
+                        </div>
+                    </div>
+                    <!-- Step 4: Decision -->
+                    <div class="tracker-step">
+                        <div class="tracker-bubble" title="Entscheidung / Decision">
+                            <i class="fa-solid fa-award" aria-hidden="true"></i>
+                        </div>
+                        <div class="tracker-label">
+                            <span lang="de">Ergebnis</span>
+                            <span lang="en">Result</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tracker-footer-note">
+                <span lang="de"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Ansprechpartner im Portal hinterlegt: <strong><span class="tracker-contact-name"></span></strong></span>
+                <span lang="en"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Contact person linked: <strong><span class="tracker-contact-name"></span></strong></span>
+            </div>
+        </div>
+
         <!-- Über mich Card (Maximilian Schenk Profil) -->
         <section class="card" aria-labelledby="card-aboutme-header">
             <h2 id="card-aboutme-header">
