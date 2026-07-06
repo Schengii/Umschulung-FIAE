@@ -186,8 +186,8 @@ header {
     border-bottom: 1px solid var(--border);
     padding: 1.5rem 1rem;
     text-align: center;
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -226,8 +226,8 @@ header h1 {
    ========================================================================== */
 nav.topnav {
     background-color: var(--bg-nav);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     color: var(--text-on-nav);
     position: sticky;
     top: 0;
@@ -458,8 +458,8 @@ nav.topnav {
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     transition: var(--transition);
 }
 
@@ -5382,4 +5382,140 @@ html nav {
     font-size: 0.85rem;
     color: var(--text-secondary);
     max-width: 250px;
+}
+
+/* ==========================================================================
+   HELPER STYLES FOR CLEAN HTML (NO INLINE STYLES)
+   ========================================================================== */
+
+/* Recruiter Welcome Banner Styles */
+.recruiter-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(79, 70, 229, 0.06) 100%);
+    border: 1px dashed var(--primary);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.recruiter-banner-bg-icon {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    opacity: 0.05;
+    font-size: 8rem;
+    pointer-events: none;
+}
+
+.recruiter-title {
+    margin-top: 0;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.recruiter-desc {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+/* Notenrechner Range Styles */
+.form-range {
+    width: 100%;
+    margin-top: 0.5rem;
+    accent-color: var(--primary);
+}
+
+#generate-certificate-btn {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Cert Modal Specific Styles */
+.cert-modal-content {
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.modal-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.btn-width-auto {
+    width: auto !important;
+}
+
+/* Links and Sources Specific Styles */
+.links-section {
+    margin-top: 2rem;
+}
+
+.links-section:first-of-type {
+    margin-top: 1.5rem;
+}
+
+.links-section h3 {
+    margin-bottom: 1rem;
+}
+
+.links-section .link-list {
+    margin-top: 1rem;
+}
+
+.links-intro-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* Index / Welcome Page Helper Styles */
+.header-nav-controls {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.welcome-theme-toggle {
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    min-width: 75px;
+    cursor: pointer;
+}
+
+button.welcome-theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 0.25rem;
+    min-width: unset;
+}
+
+.welcome-form-group {
+    margin-top: 1.5rem;
+}
+
+.welcome-skip-desc {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
 }

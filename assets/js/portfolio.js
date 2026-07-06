@@ -106,20 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         try {
             // Load pre-loaded static projects from projects_data.js
-            const staticProjects = (window.projectsData && Array.isArray(window.projectsData)) ? window.projectsData : [];
-            const folderProjects = await fetch('assets/data/folder_projects.json').then(res => res.ok ? res.json() : []).catch(() => []);
- 
-            // Filter out folder projects that are already covered by staticProjects
-            const enrichedRepoNames = new Set(staticProjects.map(p => (p.titleDe || '').toLowerCase()));
-            const filteredFolderProjects = folderProjects.filter(fp => {
-                const fpTitle = (fp.titleDe || '').toLowerCase();
-                const isDuplicate = enrichedRepoNames.has(fpTitle);
-                const hasDescription = fp.descDe && fp.descDe.trim() !== '';
-                return !isDuplicate && hasDescription;
-            });
- 
-            // Store all projects
-            allProjects = [...staticProjects, ...filteredFolderProjects];
+            allProjects = (window.projectsData && Array.isArray(window.projectsData)) ? window.projectsData : [];
             
             // Handle deep link
             handleDeepLink();

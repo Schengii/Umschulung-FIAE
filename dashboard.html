@@ -77,7 +77,7 @@
                                             <span lang="en">Part 1 (AP1) - 20%</span>
                                         </label>
                                         <input type="number" id="ihk-ap1" class="form-control" min="0" max="100" placeholder="Punkte" value="85">
-                                        <input type="range" id="ihk-ap1-range" class="form-range" min="0" max="100" value="85" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
+                                        <input type="range" id="ihk-ap1-range" class="form-range" min="0" max="100" value="85" aria-label="Teil 1 Punkte Regler" title="Teil 1 Punkte Regler">
                                     </div>
                                     <div class="form-group">
                                         <label for="ihk-ap2-projekt">
@@ -85,7 +85,7 @@
                                             <span lang="en">Project Work (AP2) - 50%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-projekt" class="form-control" min="0" max="100" placeholder="Punkte" value="88">
-                                        <input type="range" id="ihk-ap2-projekt-range" class="form-range" min="0" max="100" value="88" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
+                                        <input type="range" id="ihk-ap2-projekt-range" class="form-range" min="0" max="100" value="88" aria-label="Projektarbeit Punkte Regler" title="Projektarbeit Punkte Regler">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -95,7 +95,7 @@
                                             <span lang="en">Planning (AP2) - 10%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-planen" class="form-control" min="0" max="100" placeholder="Punkte" value="80">
-                                        <input type="range" id="ihk-ap2-planen-range" class="form-range" min="0" max="100" value="80" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
+                                        <input type="range" id="ihk-ap2-planen-range" class="form-range" min="0" max="100" value="80" aria-label="Planung Punkte Regler" title="Planung Punkte Regler">
                                     </div>
                                     <div class="form-group">
                                         <label for="ihk-ap2-entwickeln">
@@ -103,7 +103,7 @@
                                             <span lang="en">Development (AP2) - 10%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-entwickeln" class="form-control" min="0" max="100" placeholder="Punkte" value="82">
-                                        <input type="range" id="ihk-ap2-entwickeln-range" class="form-range" min="0" max="100" value="82" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
+                                        <input type="range" id="ihk-ap2-entwickeln-range" class="form-range" min="0" max="100" value="82" aria-label="Entwicklung Punkte Regler" title="Entwicklung Punkte Regler">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -112,7 +112,7 @@
                                         <span lang="en">WiSo (AP2) - 10%</span>
                                     </label>
                                     <input type="number" id="ihk-ap2-wiso" class="form-control" min="0" max="100" placeholder="Punkte" value="78">
-                                    <input type="range" id="ihk-ap2-wiso-range" class="form-range" min="0" max="100" value="78" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
+                                    <input type="range" id="ihk-ap2-wiso-range" class="form-range" min="0" max="100" value="78" aria-label="WiSo Punkte Regler" title="WiSo Punkte Regler">
                                 </div>
                             </form>
                             
@@ -131,7 +131,7 @@
                                     <span lang="de">Berechne...</span>
                                     <span lang="en">Calculating...</span>
                                 </div>
-                                <button type="button" id="generate-certificate-btn" class="btn-primary" style="margin-top: 1rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <button type="button" id="generate-certificate-btn" class="btn-primary">
                                     <i class="fa fa-file-pdf" aria-hidden="true"></i>
                                     <span lang="de">Zeugnis simulieren</span>
                                     <span lang="en">Simulate Certificate</span>
@@ -246,8 +246,8 @@
     </main>
 
     <!-- Certificate Simulation Modal -->
-    <div id="cert-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cert-modal-title" style="display: none;">
-        <div class="modal-content cert-modal-content" style="max-width: 800px; padding: 2rem;">
+    <div id="cert-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cert-modal-title">
+        <div class="modal-content cert-modal-content">
             <button id="close-cert-btn" class="modal-close" aria-label="Schließen">&times;</button>
             
             <div id="printable-certificate" class="ihk-certificate-container">
@@ -342,8 +342,8 @@
                 </div>
             </div>
             
-            <div class="modal-actions" style="margin-top: 1.5rem; display: flex; gap: 0.5rem; justify-content: flex-end;">
-                <button id="print-cert-btn" class="btn-primary" style="width: auto;">
+            <div class="modal-actions">
+                <button id="print-cert-btn" class="btn-primary btn-width-auto">
                     <i class="fa fa-print"></i>
                     <span lang="de">Drucken</span>
                     <span lang="en">Print</span>

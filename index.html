@@ -26,9 +26,9 @@
         <span lang="de">Portfolio Umschulung zum Fachinformatiker</span>
         <span lang="en">Portfolio Retraining - Application Development</span>
         
-        <div style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); display: flex; gap: 0.5rem; align-items: center;">
-            <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px; color: var(--text-primary); border: 1px solid var(--border); background: var(--bg-card); padding: 0.25rem 0.5rem; border-radius: var(--radius-md);" aria-label="Sprache umschalten"></button>
-            <button id="theme-toggle" class="theme-toggle" style="color: var(--text-primary); border: 1px solid var(--border); background: var(--bg-card); padding: 0.25rem; width: 32px; height: 32px; border-radius: var(--radius-md);" aria-label="Design umschalten">
+        <div class="header-nav-controls">
+            <button id="lang-toggle" class="theme-toggle welcome-theme-toggle" aria-label="Sprache umschalten"></button>
+            <button id="theme-toggle" class="theme-toggle welcome-theme-toggle" aria-label="Design umschalten">
                 <i class="fa-solid fa-moon" aria-hidden="true"></i>
             </button>
         </div>
@@ -44,7 +44,7 @@
             <p lang="de">Bitte gib deinen Namen ein, um das Dashboard zu personalisieren.</p>
             <p lang="en">Please enter your name to personalize the dashboard.</p>
             
-            <div class="form-group" style="margin-top: 1.5rem;">
+            <div class="form-group welcome-form-group">
                 <label for="myText">
                     <span lang="de">Name / Benutzername</span>
                     <span lang="en">Name / Username</span>
@@ -62,7 +62,7 @@
                     <span lang="de">Direkt zum Dashboard</span>
                     <span lang="en">Directly to Dashboard</span>
                 </h3>
-                <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">
+                <p class="welcome-skip-desc">
                     <span lang="de">Du kannst die Personalisierung auch überspringen.</span>
                     <span lang="en">You can also skip the personalization.</span>
                 </p>
