@@ -24,8 +24,20 @@ function initNavigation() {
             link.setAttribute('aria-expanded', 'false');
 
             link.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768) {
+                const href = link.getAttribute('href');
+                if (href === '#' || href === '') {
                     e.preventDefault();
+                    e.stopPropagation();
+
+                    // Close all other dropdowns
+                    dropdownItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('open');
+                            const otherLink = otherItem.querySelector('.nav-link');
+                            if (otherLink) otherLink.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
                     const isOpen = item.classList.toggle('open');
                     link.setAttribute('aria-expanded', isOpen);
                 }
@@ -41,13 +53,36 @@ function initNavigation() {
                     subLink.setAttribute('aria-expanded', 'false');
 
                     subLink.addEventListener('click', (e) => {
-                        if (window.innerWidth <= 768) {
+                        const href = subLink.getAttribute('href');
+                        if (href === '#' || href === '') {
                             e.preventDefault();
+                            e.stopPropagation();
+
+                            // Close other sub-dropdowns in the same parent
+                            subItems.forEach(otherSub => {
+                                if (otherSub !== subItem) {
+                                    otherSub.classList.remove('open');
+                                    const otherLink = otherSub.querySelector('.dropdown-link');
+                                    if (otherLink) otherLink.setAttribute('aria-expanded', 'false');
+                                }
+                            });
+
                             const isSubOpen = subItem.classList.toggle('open');
                             subLink.setAttribute('aria-expanded', isSubOpen);
                         }
                     });
                 }
+            });
+        }
+    });
+
+    // Close dropdowns on clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-item')) {
+            dropdownItems.forEach(item => {
+                item.classList.remove('open');
+                const link = item.querySelector('.nav-link');
+                if (link) link.setAttribute('aria-expanded', 'false');
             });
         }
     });

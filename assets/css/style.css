@@ -351,15 +351,17 @@ nav.topnav {
     z-index: 101;
 }
 
-/* Display sub-dropdown on hover / focus-within */
+/* Display sub-dropdown on hover / focus-within / click open */
 .dropdown-item:hover>.sub-dropdown-menu,
-.dropdown-item:focus-within>.sub-dropdown-menu {
+.dropdown-item:focus-within>.sub-dropdown-menu,
+.dropdown-item.open>.sub-dropdown-menu {
     display: block;
 }
 
-/* Standard Dropdown Toggle (Desktop) */
+/* Standard Dropdown Toggle (Desktop & Click support) */
 .nav-item:hover>.dropdown-menu,
-.nav-item:focus-within>.dropdown-menu {
+.nav-item:focus-within>.dropdown-menu,
+.nav-item.open>.dropdown-menu {
     display: block;
 }
 
@@ -4780,6 +4782,75 @@ html nav {
 
 .highscore-item:last-child {
     border-bottom: none;
+}
+
+/* Achievements Widget Styles */
+.achievements-widget-progress {
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.achievements-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+}
+
+.achievements-grid-widget {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.achievement-badge-box {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.achievement-badge-box:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+}
+
+.achievement-badge-box.locked {
+    filter: grayscale(1);
+    opacity: 0.45;
+}
+
+.achievement-badge-box.locked:hover {
+    filter: grayscale(0.8);
+    opacity: 0.65;
+    border-color: var(--border-hover);
+}
+
+.achievement-badge-box .lock-overlay-icon {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    font-size: 0.65rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
 }
 
 /* Portfolio Specific Classes */

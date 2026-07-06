@@ -93,6 +93,7 @@ const Achievements = {
         StorageManager.setItem('achievements', JSON.stringify(unlocked));
 
         this.showNotification(id);
+        document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
     },
 
     showNotification(id) {

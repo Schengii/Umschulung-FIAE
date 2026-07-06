@@ -12,6 +12,11 @@ function initDashboard() {
     initNotenrechner();
     renderLearningRecommendations();
     initCommitGrid();
+    renderAchievementsWidget();
+
+    // Event listeners for achievements update
+    document.addEventListener('langchange', renderAchievementsWidget);
+    document.addEventListener('achievementunlocked', renderAchievementsWidget);
 }
 
 function renderStats() {
@@ -561,3 +566,105 @@ window.addLiveCommit = function() {
     // Re-initialize if we are on dashboard
     initCommitGrid();
 };
+
+/* ==========================================================================
+   ACHIEVEMENTS WIDGET LOGIC
+   ========================================================================= */
+function renderAchievementsWidget() {
+    const gridContainer = document.getElementById('achievements-widget-grid');
+    if (!gridContainer) return;
+
+    const progressText = document.getElementById('achievements-progress-text');
+    const progressBar = document.getElementById('achievements-progress-bar');
+    const progressPercent = document.getElementById('achievements-progress-percent');
+
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+
+    if (typeof Achievements === 'undefined') {
+        console.warn('Achievements module not loaded.');
+        return;
+    }
+
+    const definitions = Achievements.definitions;
+    const unlockedIds = Achievements.getUnlocked();
+    const totalCount = Object.keys(definitions).length;
+    const unlockedCount = unlockedIds.length;
+    const percentage = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0;
+
+    // Update Progress UI
+    if (progressText) {
+        progressText.textContent = lang === 'de'
+            ? `${unlockedCount} von ${totalCount} freigeschaltet`
+            : `${unlockedCount} of ${totalCount} unlocked`;
+    }
+    if (progressBar) {
+        progressBar.style.width = `${percentage}%`;
+    }
+    if (progressPercent) {
+        progressPercent.textContent = `${percentage}%`;
+    }
+
+    // Build grid
+    gridContainer.innerHTML = '';
+    
+    // Create or reuse tooltip
+    let tooltip = document.getElementById('grid-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'grid-tooltip';
+        tooltip.className = 'grid-tooltip';
+        document.body.appendChild(tooltip);
+    }
+
+    Object.keys(definitions).forEach(id => {
+        const def = definitions[id];
+        const isUnlocked = unlockedIds.includes(id);
+
+        const badgeBox = document.createElement('div');
+        badgeBox.className = 'achievement-badge-box';
+        if (!isUnlocked) {
+            badgeBox.classList.add('locked');
+        }
+
+        badgeBox.innerHTML = `
+            <span>${def.icon}</span>
+            ${!isUnlocked ? `<span class="lock-overlay-icon"><i class="fa fa-lock" aria-hidden="true"></i></span>` : ''}
+        `;
+
+        // Tooltip hover actions
+        badgeBox.style.position = 'relative'; // Ensure tooltip coordinates are absolute based on page
+        
+        const showTooltip = () => {
+            const title = lang === 'de' ? def.title_de : def.title_en;
+            const desc = lang === 'de' ? def.desc_de : def.desc_en;
+            const statusText = isUnlocked 
+                ? (lang === 'de' ? '🏅 Freigeschaltet' : '🏅 Unlocked') 
+                : (lang === 'de' ? '🔒 Gesperrt' : '🔒 Locked');
+            
+            tooltip.innerHTML = `
+                <div style="font-weight: 700; font-family: var(--font-heading); color: var(--primary); margin-bottom: 2px;">${title}</div>
+                <div style="color: var(--text-primary); font-size: 0.8rem; margin-bottom: 4px; max-width: 220px; white-space: normal;">${desc}</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">${statusText}</div>
+            `;
+            tooltip.style.opacity = 1;
+
+            const rect = badgeBox.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + window.scrollX - tooltip.offsetWidth / 2 + rect.width / 2}px`;
+            tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 8}px`;
+        };
+
+        const hideTooltip = () => {
+            tooltip.style.opacity = 0;
+        };
+
+        badgeBox.addEventListener('mouseenter', showTooltip);
+        badgeBox.addEventListener('mouseleave', hideTooltip);
+        // Added accessibility click for touch devices
+        badgeBox.addEventListener('click', () => {
+            showTooltip();
+            setTimeout(hideTooltip, 3000);
+        });
+
+        gridContainer.appendChild(badgeBox);
+    });
+}
