@@ -34,6 +34,7 @@ const __MODULE_SCRIPTS = [
     'assets/js/modules/praktikumsbetrieb-media.js', // Interactive DFG and EcoChef Media Module
     'assets/js/elektrocheck_overlay.js', // New module for ElektroCheck AI bounding boxes
     'assets/js/dashboard.js',
+    'assets/js/modules/qr-generator.js',
 ];
 
 (function loadModules() {
@@ -66,6 +67,7 @@ const __MODULE_SCRIPTS = [
             if (typeof initLearningProgress === 'function') initLearningProgress();
             if (typeof initPraktikumsbetriebMedia === 'function') initPraktikumsbetriebMedia();
             if (typeof initDashboard === 'function') initDashboard();
+            if (typeof initQrGenerator === 'function') initQrGenerator();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

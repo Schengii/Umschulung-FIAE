@@ -61,6 +61,88 @@
                 </ul>
             </section>
         </article>
+
+        <!-- QR-Code- & Link-Generator für Bewerbungen -->
+        <article class="card" aria-labelledby="qr-generator-title" style="margin-top: 2rem;">
+            <h2 id="qr-generator-title">
+                <span lang="de"><i class="fa fa-qrcode" aria-hidden="true"></i> QR-Code- &amp; Link-Generator für Bewerbungen</span>
+                <span lang="en"><i class="fa fa-qrcode" aria-hidden="true"></i> QR-Code &amp; Link Generator for Applications</span>
+            </h2>
+            <p lang="de">Erstelle personalisierte Anschreiben-Links mit Firmen- oder Personennamen. Der passende QR-Code wird live generiert und kann heruntergeladen oder kopiert werden.</p>
+            <p lang="en">Generate personalized links containing company or recruiter names for cover letters. The matching QR code is generated live and can be downloaded or copied.</p>
+            
+            <hr>
+            
+            <div class="qr-generator-workspace" style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 1.5rem;">
+                <!-- Left Panel: Inputs -->
+                <div class="qr-inputs-panel" style="flex: 1 1 350px;">
+                    <form id="qr-generator-form" class="project-form" onsubmit="event.preventDefault();">
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="qr-company-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                                <span lang="de">Firmenname</span>
+                                <span lang="en">Company Name</span>
+                            </label>
+                            <input type="text" id="qr-company-input" class="form-control" placeholder="z.B. Haribo, DFG, Google..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-page); color: var(--text-primary); outline: none; transition: border-color 0.3s ease;">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="qr-name-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                                <span lang="de">Ansprechpartner (optional)</span>
+                                <span lang="en">Contact Person (optional)</span>
+                            </label>
+                            <input type="text" id="qr-name-input" class="form-control" placeholder="z.B. Herr Müller, Frau Schmidt..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-page); color: var(--text-primary); outline: none; transition: border-color 0.3s ease;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="qr-target-select" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                                <span lang="de">Zielseite</span>
+                                <span lang="en">Target Page</span>
+                            </label>
+                            <select id="qr-target-select" class="form-control" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-page); color: var(--text-primary); cursor: pointer; outline: none; transition: border-color 0.3s ease;">
+                                <option value="home.html" selected>Home / Dashboard (Empfohlen)</option>
+                                <option value="portfolio.html">Projekte / Projects</option>
+                                <option value="interview-trainer.html">Bewerbungs-Trainer / Interview Trainer</option>
+                                <option value="ueber-mich.html">Über mich / Profile</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Right Panel: Preview -->
+                <div class="qr-preview-panel" style="flex: 1 1 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-lg); position: relative; min-height: 250px;">
+                    <div id="qr-code-placeholder" style="font-size: 4rem; color: var(--text-muted); opacity: 0.3; margin-bottom: 1rem;">
+                        <i class="fa fa-qrcode" aria-hidden="true"></i>
+                    </div>
+                    <div id="qr-code-image-container" style="display: none; background: white; padding: 1rem; border-radius: var(--radius-md); box-shadow: var(--shadow-md); margin-bottom: 1rem; border: 1px solid var(--border);">
+                        <!-- Injected Image -->
+                    </div>
+                    <div id="qr-result-details" style="width: 100%; display: none; margin-top: 0.5rem;">
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.25rem;">
+                            <span lang="de">Generierter Link:</span>
+                            <span lang="en">Generated Link:</span>
+                        </div>
+                        <input type="text" id="qr-generated-link" readonly style="width: 100%; text-align: center; padding: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.8rem; background: var(--bg-card); color: var(--primary); margin-bottom: 1rem; font-family: monospace;" onclick="this.select();">
+                        
+                        <div style="display: flex; gap: 0.5rem; justify-content: center; width: 100%;">
+                            <button id="qr-copy-btn" class="btn-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem; width: auto; display: flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa fa-copy" aria-hidden="true"></i>
+                                <span lang="de">Kopieren</span>
+                                <span lang="en">Copy</span>
+                            </button>
+                            <button id="qr-download-btn" class="btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem; width: auto; display: flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                                <span lang="de">Download</span>
+                                <span lang="en">Download</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="qr-instruction-text" style="font-size: 0.85rem; color: var(--text-secondary); max-width: 250px;">
+                        <span lang="de">Trage links einen Namen ein, um den QR-Code live zu erzeugen.</span>
+                        <span lang="en">Enter a name on the left to generate the QR code live.</span>
+                    </div>
+                </div>
+            </div>
+        </article>
     </main>
 
     <div id="site-footer"></div>

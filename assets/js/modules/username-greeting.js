@@ -11,13 +11,17 @@ function initUsernameGreeting() {
     const companyParam = urlParams.get('c') || urlParams.get('company');
     const nameParam = urlParams.get('n') || urlParams.get('name');
 
-    if (companyParam) {
-        sessionStorage.setItem('recruiter_company', companyParam.trim());
-        sessionStorage.removeItem('recruiter_name'); // Clear conflicts
-    }
-    if (nameParam) {
-        sessionStorage.setItem('recruiter_name', nameParam.trim());
-        sessionStorage.removeItem('recruiter_company'); // Clear conflicts
+    if (companyParam || nameParam) {
+        // Clear previous session greeting to prevent mixing old company with new name
+        sessionStorage.removeItem('recruiter_company');
+        sessionStorage.removeItem('recruiter_name');
+        
+        if (companyParam) {
+            sessionStorage.setItem('recruiter_company', companyParam.trim());
+        }
+        if (nameParam) {
+            sessionStorage.setItem('recruiter_name', nameParam.trim());
+        }
     }
 
     if (mySubmit && myText) {
@@ -92,7 +96,18 @@ function updateDashboardGreeting() {
             const welcomeTitle = recruiterBanner.querySelector('.recruiter-title');
             const welcomeDesc = recruiterBanner.querySelector('.recruiter-desc');
 
-            if (company) {
+            if (company && name) {
+                if (welcomeTitle) {
+                    welcomeTitle.innerHTML = lang === 'de'
+                        ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong> vom Team <strong>${escapeHTML(company)}</strong>!`
+                        : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong> from the team at <strong>${escapeHTML(company)}</strong>!`;
+                }
+                if (welcomeDesc) {
+                    welcomeDesc.innerHTML = lang === 'de'
+                        ? `Schön, dass Sie da sind! Auf dieser Website finden Sie interaktive Einblicke in meine Umschulung, Projekte (wie „EcoChef“) und meinen Werdegang.`
+                        : `Great to have you here! On this website, you will find interactive details regarding my retraining journey, projects (such as "EcoChef"), and career path.`;
+                }
+            } else if (company) {
                 if (welcomeTitle) {
                     welcomeTitle.innerHTML = lang === 'de'
                         ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, Team von <strong>${escapeHTML(company)}</strong>!`
