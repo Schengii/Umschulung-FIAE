@@ -63,18 +63,44 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-.code-input {
-    width: 100%;
+.editor-wrapper {
+    display: flex;
+    background: #09090b;
+    position: relative;
     height: 480px;
-    border: none;
-    padding: 1.25rem;
+    width: 100%;
+}
+
+.line-numbers {
+    width: 44px;
+    background: #121214;
+    color: #52525b;
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
     font-size: 0.9rem;
-    background: #09090b;
+    line-height: 1.6;
+    padding: 1.25rem 0.5rem 1.25rem 0;
+    text-align: right;
+    border-right: 1px solid #222;
+    user-select: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+}
+
+.code-input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    padding: 1.25rem 1rem;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    background: transparent;
     color: #e4e4e7;
     resize: none;
     outline: none;
     line-height: 1.6;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 /* Preview & Console Section */

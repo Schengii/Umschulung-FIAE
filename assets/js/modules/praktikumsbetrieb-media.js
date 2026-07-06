@@ -130,6 +130,7 @@ function initPraktikumsbetriebMedia() {
 
     setupDfgGallery();
     setupEcoChefVideoPlayer();
+    setupElektroCheckScanner();
 }
 
 // 1. Setup DFG Interactive Gallery
@@ -281,6 +282,151 @@ function setupEcoChefVideoPlayer() {
 
     // Initialize UI
     updateVideoUI(false);
+}
+
+// 3. Setup ElektroCheck AI Live Defect Scanner
+function setupElektroCheckScanner() {
+    const runBtn = document.getElementById('run-scanner-btn');
+    const clearBtn = document.getElementById('clear-scanner-btn');
+    const laser = document.getElementById('scanner-laser');
+    const spinner = document.getElementById('scanner-spinner');
+    const playIcon = document.getElementById('scanner-play-icon');
+    const statusBox = document.getElementById('scanner-status');
+    const resultsCard = document.getElementById('scanner-results-card');
+    const resultsList = document.getElementById('scanner-results-list');
+
+    if (!runBtn || !clearBtn || !laser || !statusBox || !resultsCard || !resultsList) return;
+
+    let bboxRenderer = null;
+
+    const defects = [
+        {
+            x: 0.45,
+            y: 0.68,
+            width: 0.18,
+            height: 0.22,
+            label: "Isolationsfehler / Cable damage",
+            color: "#ef4444",
+            titleDe: "⚠️ Kabel beschädigt (Isolationsfehler)",
+            titleEn: "⚠️ Damaged Cable (Insulation fault)",
+            risk: "CRITICAL",
+            descDe: "Das Netzkabel der Kaffeemaschine weist eine mechanische Beschädigung mit freiliegenden Adern auf. Gefahr von Kurzschluss und elektrischem Schlag.",
+            descEn: "The power cord shows mechanical damage with exposed copper wires. Risk of short circuit and electric shock.",
+            actionDe: "Maßnahme: Sofort außer Betrieb nehmen, Plakette 'Gesperrt' anbringen und Kabel tauschen.",
+            actionEn: "Action: Decommission immediately, attach 'Locked' label, and replace power cord."
+        },
+        {
+            x: 0.72,
+            y: 0.22,
+            width: 0.08,
+            height: 0.1,
+            label: "Prüffrist überfällig / Overdue",
+            color: "#f97316",
+            titleDe: "⏱️ Prüffrist abgelaufen (DGUV V3)",
+            titleEn: "⏱️ Testing Period Overdue (DGUV V3)",
+            risk: "MEDIUM",
+            descDe: "Die regelmäßige Sicherheitsprüfung nach DGUV Vorschrift 3 für diese Kaffeemaschine ist seit Mai 2026 abgelaufen.",
+            descEn: "The regular safety inspection according to DGUV regulation 3 for this coffee machine is overdue since May 2026.",
+            actionDe: "Maßnahme: Wiederholungsprüfung durch befähigte Person unverzüglich durchführen lassen.",
+            actionEn: "Action: Schedule re-testing by a qualified inspector immediately."
+        }
+    ];
+
+    function renderResultsList() {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        resultsList.innerHTML = defects.map(d => `
+            <div class="scanner-result-item ${d.risk.toLowerCase()}">
+                <div class="scanner-result-title">
+                    <span>${lang === 'de' ? d.titleDe : d.titleEn}</span>
+                    <span class="badge-match" style="background:${d.color}; color:white; font-size:0.7rem; padding:0.1rem 0.4rem;">${d.risk}</span>
+                </div>
+                <div class="scanner-result-desc">${lang === 'de' ? d.descDe : d.descEn}</div>
+                <div class="scanner-result-action">${lang === 'de' ? d.actionDe : d.actionEn}</div>
+            </div>
+        `).join('');
+    }
+
+    runBtn.addEventListener('click', () => {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+
+        // Lazy instantiate BoundingBoxRenderer
+        if (!bboxRenderer && typeof BoundingBoxRenderer !== 'undefined') {
+            bboxRenderer = new BoundingBoxRenderer('uploaded-image', 'bounding-box-overlay');
+        }
+
+        // Start scanning state
+        runBtn.disabled = true;
+        clearBtn.disabled = true;
+        if (spinner) spinner.style.display = 'inline-block';
+        if (playIcon) playIcon.style.display = 'none';
+        laser.classList.add('active');
+
+        statusBox.innerHTML = lang === 'de' 
+            ? `<span><i class="fa fa-sync fa-spin"></i> KI analysiert Bild auf Mängel...</span>`
+            : `<span><i class="fa fa-sync fa-spin"></i> AI analyzing image for anomalies...</span>`;
+
+        resultsCard.classList.add('collapsed');
+
+        // Simulate AI response delay
+        setTimeout(() => {
+            laser.classList.remove('active');
+            if (spinner) spinner.style.display = 'none';
+            if (playIcon) playIcon.style.display = 'inline-block';
+            clearBtn.disabled = false;
+
+            statusBox.innerHTML = lang === 'de'
+                ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
+                : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
+
+            // Draw bounding boxes
+            if (bboxRenderer) {
+                bboxRenderer.renderBoundingBoxes(defects);
+            }
+
+            // Fill results list and show
+            renderResultsList();
+            resultsCard.classList.remove('collapsed');
+
+            // Log dynamic commit grid increment (Punkte sammeln!)
+            if (typeof window.addLiveCommit === 'function') {
+                window.addLiveCommit();
+            }
+        }, 2200);
+    });
+
+    clearBtn.addEventListener('click', () => {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+
+        if (bboxRenderer) {
+            bboxRenderer.clearBoundingBoxes();
+        }
+
+        resultsCard.classList.add('collapsed');
+        clearBtn.disabled = true;
+        runBtn.disabled = false;
+
+        statusBox.innerHTML = lang === 'de'
+            ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
+            : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
+    });
+
+    // Listen for language changes to update existing details
+    document.addEventListener('langchange', () => {
+        if (!resultsCard.classList.contains('collapsed')) {
+            renderResultsList();
+            
+            // Re-render status text
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            statusBox.innerHTML = lang === 'de'
+                ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
+                : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
+        } else {
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            statusBox.innerHTML = lang === 'de'
+                ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
+                : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
+        }
+    });
 }
 
 // Register initialization

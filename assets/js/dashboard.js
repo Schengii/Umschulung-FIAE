@@ -95,12 +95,28 @@ function renderRecentProjects() {
 /* ==========================================================================
    IHK NOTENRECHNER LOGIC
    ========================================================================== */
+function getIhkGrade(score) {
+    if (score >= 92) return 1;
+    if (score >= 81) return 2;
+    if (score >= 67) return 3;
+    if (score >= 50) return 4;
+    if (score >= 30) return 5;
+    return 6;
+}
+
 function initNotenrechner() {
     const ap1Input = document.getElementById('ihk-ap1');
     const ap2ProjektInput = document.getElementById('ihk-ap2-projekt');
     const ap2PlanenInput = document.getElementById('ihk-ap2-planen');
     const ap2EntwickelnInput = document.getElementById('ihk-ap2-entwickeln');
     const ap2WisoInput = document.getElementById('ihk-ap2-wiso');
+
+    // Ranges
+    const ap1Range = document.getElementById('ihk-ap1-range');
+    const ap2ProjektRange = document.getElementById('ihk-ap2-projekt-range');
+    const ap2PlanenRange = document.getElementById('ihk-ap2-planen-range');
+    const ap2EntwickelnRange = document.getElementById('ihk-ap2-entwickeln-range');
+    const ap2WisoRange = document.getElementById('ihk-ap2-wiso-range');
 
     if (!ap1Input || !ap2ProjektInput || !ap2PlanenInput || !ap2EntwickelnInput || !ap2WisoInput) return;
 
@@ -109,10 +125,124 @@ function initNotenrechner() {
     const gradeText = document.getElementById('overall-grade-label');
     const badge = document.getElementById('grade-status-badge');
 
-    const inputs = [ap1Input, ap2ProjektInput, ap2PlanenInput, ap2EntwickelnInput, ap2WisoInput];
-    inputs.forEach(input => {
-        input.addEventListener('input', calculateGrade);
+    // Bind inputs to ranges bidirectionally
+    const mappings = [
+        { num: ap1Input, range: ap1Range },
+        { num: ap2ProjektInput, range: ap2ProjektRange },
+        { num: ap2PlanenInput, range: ap2PlanenRange },
+        { num: ap2EntwickelnInput, range: ap2EntwickelnRange },
+        { num: ap2WisoInput, range: ap2WisoRange }
+    ];
+
+    mappings.forEach(pair => {
+        if (!pair.range) return;
+        
+        pair.num.addEventListener('input', () => {
+            pair.range.value = pair.num.value;
+            calculateGrade();
+        });
+
+        pair.range.addEventListener('input', () => {
+            pair.num.value = pair.range.value;
+            calculateGrade();
+        });
     });
+
+    // Certificate Modal handlers
+    const certBtn = document.getElementById('generate-certificate-btn');
+    const certModal = document.getElementById('cert-modal');
+    const closeCertBtn = document.getElementById('close-cert-btn');
+    const printCertBtn = document.getElementById('print-cert-btn');
+
+    if (certBtn && certModal) {
+        certBtn.addEventListener('click', () => {
+            const username = StorageManager.getItem('username') || '';
+            const cleanName = username.trim() !== '' ? username : 'Besucher';
+            const cleanNameEn = username.trim() !== '' ? username : 'Visitor';
+
+            document.getElementById('cert-user-name').textContent = cleanName;
+            document.getElementById('cert-user-name-en').textContent = cleanNameEn;
+
+            const ap1 = parseFloat(ap1Input.value) || 0;
+            const ap2Proj = parseFloat(ap2ProjektInput.value) || 0;
+            const ap2Plan = parseFloat(ap2PlanenInput.value) || 0;
+            const ap2Entw = parseFloat(ap2EntwickelnInput.value) || 0;
+            const ap2Wiso = parseFloat(ap2WisoInput.value) || 0;
+
+            const overallScore = (ap1 * 0.2) + (ap2Proj * 0.5) + (ap2Plan * 0.1) + (ap2Entw * 0.1) + (ap2Wiso * 0.1);
+
+            // Set scores
+            document.getElementById('cert-p-ap1').textContent = Math.round(ap1);
+            document.getElementById('cert-p-ap2-proj').textContent = Math.round(ap2Proj);
+            document.getElementById('cert-p-ap2-plan').textContent = Math.round(ap2Plan);
+            document.getElementById('cert-p-ap2-entw').textContent = Math.round(ap2Entw);
+            document.getElementById('cert-p-ap2-wiso').textContent = Math.round(ap2Wiso);
+            document.getElementById('cert-p-total').textContent = Math.round(overallScore);
+
+            // Set subgrades
+            document.getElementById('cert-g-ap1').textContent = getIhkGrade(ap1);
+            document.getElementById('cert-g-ap2-proj').textContent = getIhkGrade(ap2Proj);
+            document.getElementById('cert-g-ap2-plan').textContent = getIhkGrade(ap2Plan);
+            document.getElementById('cert-g-ap2-entw').textContent = getIhkGrade(ap2Entw);
+            document.getElementById('cert-g-ap2-wiso').textContent = getIhkGrade(ap2Wiso);
+            document.getElementById('cert-g-total').textContent = getIhkGrade(overallScore);
+
+            // Check if passed (Exclusion criteria matching calculateGrade)
+            const subAreasAP2 = [ap2Proj, ap2Plan, ap2Entw, ap2Wiso];
+            const ap2Score = (ap2Proj * 0.5 + ap2Plan * 0.1 + ap2Entw * 0.1 + ap2Wiso * 0.1) / 0.8;
+            const countSufficientAP2 = subAreasAP2.filter(v => v >= 50).length;
+            const hasUngenuegendAP2 = subAreasAP2.some(v => v < 30);
+
+            let passed = true;
+            if (overallScore < 50 || ap2Score < 50 || countSufficientAP2 < 3 || hasUngenuegendAP2) {
+                passed = false;
+            }
+
+            const decisionDe = document.getElementById('cert-status-decision');
+            const decisionEn = document.getElementById('cert-status-decision-en');
+            if (passed) {
+                decisionDe.textContent = "BESTANDEN";
+                decisionDe.style.color = "#10b981";
+                decisionEn.textContent = "PASSED";
+                decisionEn.style.color = "#10b981";
+            } else {
+                decisionDe.textContent = "NICHT BESTANDEN";
+                decisionDe.style.color = "#ef4444";
+                decisionEn.textContent = "FAILED";
+                decisionEn.style.color = "#ef4444";
+            }
+
+            // Open Modal
+            certModal.style.display = 'flex';
+            certModal.classList.add('show');
+
+            // Log dynamic commit grid increment (Punkte sammeln!)
+            if (typeof window.addLiveCommit === 'function') {
+                window.addLiveCommit();
+            }
+        });
+
+        if (closeCertBtn) {
+            closeCertBtn.addEventListener('click', () => {
+                certModal.style.display = 'none';
+                certModal.classList.remove('show');
+            });
+        }
+
+        // Close on clicking overlay background
+        certModal.addEventListener('click', (e) => {
+            if (e.target === certModal) {
+                certModal.style.display = 'none';
+                certModal.classList.remove('show');
+            }
+        });
+
+        if (printCertBtn) {
+            printCertBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+    }
 
     document.addEventListener('langchange', calculateGrade);
 

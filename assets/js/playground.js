@@ -621,6 +621,198 @@ s0Btn.addEventListener('touchend', () => { S0 = true; updatePLC(); });
 updatePLC();
 console.log('SPS-Selbsthalteschaltungs-Simulator initialisiert.');
 console.log('Ausgang Q0.0 = (Start S1 ODER Selbsthaltung Q0.0) UND Stopp S0');`
+    },
+    "canvas-particles": {
+        titleDe: "Interaktives Partikel-System (Canvas)",
+        titleEn: "Interactive Particle System (Canvas)",
+        html: `<div class="particles-container">
+    <h3>Interactive Particle System</h3>
+    <canvas id="particles-canvas" width="460" height="280"></canvas>
+    <p class="desc">Bewege die Maus über das Canvas-Feld, um Partikel zu erzeugen.</p>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #09090b;
+    color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+.particles-container {
+    text-align: center;
+}
+canvas {
+    background: #111;
+    border: 2px solid #27272a;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    cursor: crosshair;
+}
+.desc {
+    font-size: 0.8rem;
+    color: #a1a1aa;
+    margin-top: 0.5rem;
+}`,
+        js: `const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+const particles = [];
+let mouse = { x: null, y: null };
+
+canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    
+    // Spawn particles
+    for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(mouse.x, mouse.y));
+    }
+});
+
+canvas.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+});
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 2;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * -3 - 1;
+        this.color = \`hsl(\${Math.random() * 360}, 100%, 60%)\`;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.2) this.size -= 0.08;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function animate() {
+    ctx.fillStyle = 'rgba(17, 17, 17, 0.15)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        
+        if (particles[i].size <= 0.2) {
+            particles.splice(i, 1);
+            i--;
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+console.log('Partikel-Simulation gestartet. Bewege die Maus über das Canvas!');
+animate();`
+    },
+    "api-fetch": {
+        titleDe: "Live REST API Fetcher (JSONPlaceholder)",
+        titleEn: "Live REST API Fetcher (JSONPlaceholder)",
+        html: `<div class="api-container">
+    <h3>Live REST API Fetcher (JSONPlaceholder)</h3>
+    <div class="search-bar">
+        <input type="number" id="post-id" min="1" max="100" value="1" placeholder="Post ID (1-100)">
+        <button id="fetch-btn">Fetch Post</button>
+    </div>
+    <div id="api-output" class="api-output">Klicke auf den Button, um Daten abzurufen...</div>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #18181b;
+    color: #e4e4e7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.api-container {
+    background: #27272a;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid #3f3f46;
+}
+h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #f4f4f5;
+}
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+input {
+    flex: 1;
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    outline: none;
+}
+button {
+    background: #a855f7;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+button:hover {
+    opacity: 0.9;
+}
+.api-output {
+    background: #09090b;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    border: 1px solid #27272a;
+    white-space: pre-wrap;
+    min-height: 120px;
+    max-height: 160px;
+    overflow-y: auto;
+}` ,
+        js: `const fetchBtn = document.getElementById('fetch-btn');
+const inputId = document.getElementById('post-id');
+const output = document.getElementById('api-output');
+
+fetchBtn.addEventListener('click', async () => {
+    const id = inputId.value || 1;
+    output.innerHTML = 'Lade Daten... / Fetching...';
+    console.log('FETCH: Sende Request an JSONPlaceholder für Post ID: ' + id);
+    
+    try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts/' + id);
+        if (!res.ok) throw new Error('HTTP Fehler: ' + res.status);
+        const data = await res.json();
+        
+        console.log('FETCH ERFOLG: Datensatz empfangen. Titel: "' + data.title.substring(0,25) + '..."');
+        output.innerHTML = JSON.stringify(data, null, 2);
+    } catch (err) {
+        console.log('FETCH FEHLER: ' + err.message);
+        output.innerHTML = '<span style="color:#ef4444;">Error: ' + err.message + '</span>';
+    }
+});`
     }
 };
 
@@ -632,6 +824,15 @@ class CodePlayground {
         this.htmlEditor = document.getElementById('editor-html');
         this.cssEditor = document.getElementById('editor-css');
         this.jsEditor = document.getElementById('editor-js');
+
+        this.htmlWrapper = document.getElementById('wrapper-html');
+        this.cssWrapper = document.getElementById('wrapper-css');
+        this.jsWrapper = document.getElementById('wrapper-js');
+
+        this.htmlLines = document.getElementById('line-numbers-html');
+        this.cssLines = document.getElementById('line-numbers-css');
+        this.jsLines = document.getElementById('line-numbers-js');
+
         this.previewIframe = document.getElementById('preview-iframe');
         this.consoleLogBox = document.getElementById('console-log-box');
         
@@ -651,15 +852,72 @@ class CodePlayground {
         if (this.btnCss) this.btnCss.addEventListener('click', () => this.switchTab('css'));
         if (this.btnJs) this.btnJs.addEventListener('click', () => this.switchTab('js'));
 
-        // Input listeners for Auto-run (debounced)
-        const editors = [this.htmlEditor, this.cssEditor, this.jsEditor];
-        editors.forEach(ed => {
-            if (ed) {
-                ed.addEventListener('input', () => {
-                    clearTimeout(this.runTimeout);
-                    this.runTimeout = setTimeout(() => this.runCode(), 1000);
-                });
+        const updateLineNumbers = (editor, linesEl) => {
+            if (!editor || !linesEl) return;
+            const linesCount = editor.value.split('\n').length;
+            let linesHtml = '';
+            for (let i = 1; i <= linesCount; i++) {
+                linesHtml += i + '\n';
             }
+            linesEl.textContent = linesHtml;
+        };
+
+        const brackets = {
+            '{': '}',
+            '[': ']',
+            '(': ')',
+            '"': '"',
+            "'": "'"
+        };
+
+        const editorConfig = [
+            { ed: this.htmlEditor, wrapper: this.htmlWrapper, lines: this.htmlLines },
+            { ed: this.cssEditor, wrapper: this.cssWrapper, lines: this.cssLines },
+            { ed: this.jsEditor, wrapper: this.jsWrapper, lines: this.jsLines }
+        ];
+
+        editorConfig.forEach(item => {
+            const { ed, lines } = item;
+            if (!ed || !lines) return;
+
+            // Initial rendering of line numbers
+            updateLineNumbers(ed, lines);
+
+            // Sync scroll
+            ed.addEventListener('scroll', () => {
+                lines.scrollTop = ed.scrollTop;
+            });
+
+            // Debounced auto-run triggers
+            ed.addEventListener('input', () => {
+                updateLineNumbers(ed, lines);
+                clearTimeout(this.runTimeout);
+                this.runTimeout = setTimeout(() => this.runCode(), 1000);
+            });
+
+            // Bracket matching & indent
+            ed.addEventListener('keydown', (e) => {
+                const start = ed.selectionStart;
+                const end = ed.selectionEnd;
+                const val = ed.value;
+
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    ed.value = val.substring(0, start) + '    ' + val.substring(end);
+                    ed.selectionStart = ed.selectionEnd = start + 4;
+                    // Trigger input event
+                    ed.dispatchEvent(new Event('input'));
+                }
+
+                if (brackets[e.key] !== undefined) {
+                    e.preventDefault();
+                    const closing = brackets[e.key];
+                    ed.value = val.substring(0, start) + e.key + closing + val.substring(end);
+                    ed.selectionStart = ed.selectionEnd = start + 1;
+                    // Trigger input event
+                    ed.dispatchEvent(new Event('input'));
+                }
+            });
         });
 
         // Run button
@@ -711,14 +969,14 @@ class CodePlayground {
         if (tab === 'css') this.btnCss.classList.add('active');
         if (tab === 'js') this.btnJs.classList.add('active');
 
-        // Show active editor
-        this.htmlEditor.classList.add('collapsed');
-        this.cssEditor.classList.add('collapsed');
-        this.jsEditor.classList.add('collapsed');
+        // Show active editor wrapper
+        if (this.htmlWrapper) this.htmlWrapper.classList.add('collapsed');
+        if (this.cssWrapper) this.cssWrapper.classList.add('collapsed');
+        if (this.jsWrapper) this.jsWrapper.classList.add('collapsed');
 
-        if (tab === 'html') this.htmlEditor.classList.remove('collapsed');
-        if (tab === 'css') this.cssEditor.classList.remove('collapsed');
-        if (tab === 'js') this.jsEditor.classList.remove('collapsed');
+        if (tab === 'html' && this.htmlWrapper) this.htmlWrapper.classList.remove('collapsed');
+        if (tab === 'css' && this.cssWrapper) this.cssWrapper.classList.remove('collapsed');
+        if (tab === 'js' && this.jsWrapper) this.jsWrapper.classList.remove('collapsed');
     }
 
     loadTemplate(key) {

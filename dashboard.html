@@ -77,6 +77,7 @@
                                             <span lang="en">Part 1 (AP1) - 20%</span>
                                         </label>
                                         <input type="number" id="ihk-ap1" class="form-control" min="0" max="100" placeholder="Punkte" value="85">
+                                        <input type="range" id="ihk-ap1-range" class="form-range" min="0" max="100" value="85" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
                                     </div>
                                     <div class="form-group">
                                         <label for="ihk-ap2-projekt">
@@ -84,6 +85,7 @@
                                             <span lang="en">Project Work (AP2) - 50%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-projekt" class="form-control" min="0" max="100" placeholder="Punkte" value="88">
+                                        <input type="range" id="ihk-ap2-projekt-range" class="form-range" min="0" max="100" value="88" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -93,6 +95,7 @@
                                             <span lang="en">Planning (AP2) - 10%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-planen" class="form-control" min="0" max="100" placeholder="Punkte" value="80">
+                                        <input type="range" id="ihk-ap2-planen-range" class="form-range" min="0" max="100" value="80" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
                                     </div>
                                     <div class="form-group">
                                         <label for="ihk-ap2-entwickeln">
@@ -100,6 +103,7 @@
                                             <span lang="en">Development (AP2) - 10%</span>
                                         </label>
                                         <input type="number" id="ihk-ap2-entwickeln" class="form-control" min="0" max="100" placeholder="Punkte" value="82">
+                                        <input type="range" id="ihk-ap2-entwickeln-range" class="form-range" min="0" max="100" value="82" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -108,6 +112,7 @@
                                         <span lang="en">WiSo (AP2) - 10%</span>
                                     </label>
                                     <input type="number" id="ihk-ap2-wiso" class="form-control" min="0" max="100" placeholder="Punkte" value="78">
+                                    <input type="range" id="ihk-ap2-wiso-range" class="form-range" min="0" max="100" value="78" style="width: 100%; margin-top: 0.5rem; accent-color: var(--primary);">
                                 </div>
                             </form>
                             
@@ -126,6 +131,11 @@
                                     <span lang="de">Berechne...</span>
                                     <span lang="en">Calculating...</span>
                                 </div>
+                                <button type="button" id="generate-certificate-btn" class="btn-primary" style="margin-top: 1rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                    <i class="fa fa-file-pdf" aria-hidden="true"></i>
+                                    <span lang="de">Zeugnis simulieren</span>
+                                    <span lang="en">Simulate Certificate</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -214,6 +224,113 @@
             </aside>
         </div>
     </main>
+
+    <!-- Certificate Simulation Modal -->
+    <div id="cert-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cert-modal-title" style="display: none;">
+        <div class="modal-content cert-modal-content" style="max-width: 800px; padding: 2rem;">
+            <button id="close-cert-btn" class="modal-close" aria-label="Schließen">&times;</button>
+            
+            <div id="printable-certificate" class="ihk-certificate-container">
+                <div class="cert-header">
+                    <div class="cert-logo-badge">IHK</div>
+                    <div class="cert-header-titles">
+                        <h2>INDUSTRIE- UND HANDELSKAMMER</h2>
+                        <h3>PRÜFUNGSZEUGNIS</h3>
+                    </div>
+                </div>
+                
+                <div class="cert-body">
+                    <p class="cert-intro">
+                        <span lang="de">Herr/Frau <strong><span id="cert-user-name">Besucher</span></strong> hat die Abschlussprüfung im Ausbildungsberuf</span>
+                        <span lang="en">Mr./Ms. <strong><span id="cert-user-name-en">Visitor</span></strong> has successfully completed the final examination in the occupation</span>
+                    </p>
+                    <h3 class="cert-profession">
+                        <span lang="de">Fachinformatiker / Fachinformatikerin<br>Fachrichtung: Anwendungsentwicklung</span>
+                        <span lang="en">IT Specialist<br>Subject Area: Application Development</span>
+                    </h3>
+                    <p class="cert-status-text">
+                        <span lang="de">vor dem zuständigen Prüfungsausschuss der IHK abgelegt und bestanden.</span>
+                        <span lang="en">before the responsible examination committee of the IHK and passed.</span>
+                    </p>
+                    
+                    <table class="cert-table">
+                        <thead>
+                            <tr>
+                                <th><span lang="de">Prüfungsbereich</span><span lang="en">Examination Area</span></th>
+                                <th><span lang="de">Gewichtung</span><span lang="en">Weight</span></th>
+                                <th><span lang="de">Punkte</span><span lang="en">Points</span></th>
+                                <th><span lang="de">Note</span><span lang="en">Grade</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong><span lang="de">Teil 1 (AP1):</span><span lang="en">Part 1 (AP1):</span></strong> <span lang="de">Einrichten eines IT-gestützten Arbeitsplatzes</span><span lang="en">Setup of an IT Workstation</span></td>
+                                <td>20%</td>
+                                <td id="cert-p-ap1">0</td>
+                                <td id="cert-g-ap1">-</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="cert-section-divider"><strong><span lang="de">Teil 2 (AP2)</span><span lang="en">Part 2 (AP2)</span></strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>1. <span lang="de">Projektarbeit und Fachgespräch</span><span lang="en">Project Work and Presentation</span></strong></td>
+                                <td>50%</td>
+                                <td id="cert-p-ap2-proj">0</td>
+                                <td id="cert-g-ap2-proj">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. <span lang="de">Planen eines Softwareprodukts</span><span lang="en">Planning a Software Product</span></strong></td>
+                                <td>10%</td>
+                                <td id="cert-p-ap2-plan">0</td>
+                                <td id="cert-g-ap2-plan">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. <span lang="de">Entwicklung eines Softwareprodukts</span><span lang="en">Development of a Software Product</span></strong></td>
+                                <td>10%</td>
+                                <td id="cert-p-ap2-entw">0</td>
+                                <td id="cert-g-ap2-entw">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. <span lang="de">Wirtschafts- und Sozialkunde</span><span lang="en">Economic and Social Studies</span></strong></td>
+                                <td>10%</td>
+                                <td id="cert-p-ap2-wiso">0</td>
+                                <td id="cert-g-ap2-wiso">-</td>
+                            </tr>
+                            <tr class="cert-total-row">
+                                <td><strong><span lang="de">GESAMTERGEBNIS</span><span lang="en">OVERALL SCORE</span></strong></td>
+                                <td>100%</td>
+                                <td id="cert-p-total">0</td>
+                                <td id="cert-g-total">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="cert-decision">
+                        <strong lang="de">Gesamtbewertung: <span id="cert-status-decision">BESTANDEN</span></strong>
+                        <strong lang="en">Overall Result: <span id="cert-status-decision-en">PASSED</span></strong>
+                    </div>
+                </div>
+                
+                <div class="cert-footer">
+                    <div class="cert-sign">
+                        <div class="signature-line">Prüfungsausschuss / Committee</div>
+                    </div>
+                    <div class="cert-date">
+                        <span lang="de">Datum: 07. Juni 2026</span>
+                        <span lang="en">Date: June 7, 2026</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions" style="margin-top: 1.5rem; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button id="print-cert-btn" class="btn-primary" style="width: auto;">
+                    <i class="fa fa-print"></i>
+                    <span lang="de">Drucken</span>
+                    <span lang="en">Print</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="site-footer"></div>
 

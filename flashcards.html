@@ -22,72 +22,183 @@
     <main id="main-content" class="main-container">
         <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Weiteres","label_en":"More","href":"#"},{"label_de":"IHK Lernkarten","label_en":"IHK Flashcards"}]'></div>
 
-        <div class="card">
-            <h2 lang="de">🎓 IHK-Prüfungs-Lernkarten</h2>
-            <h2 lang="en">🎓 IHK Exam Flashcards</h2>
-            <p lang="de">Bereite dich interaktiv auf die schriftliche Abschlussprüfung vor. Klicke auf eine Karte, um sie umzudrehen, und markiere deinen Erfolg!</p>
-            <p lang="en">Prepare interactively for the written final exams. Click on a card to flip it and mark your success!</p>
-        </div>
+        <div class="layout-grid">
+            <!-- Left Column: Flashcards -->
+            <div class="left-col">
+                <div class="card">
+                    <h2 lang="de">🎓 IHK-Prüfungs-Lernkarten</h2>
+                    <h2 lang="en">🎓 IHK Exam Flashcards</h2>
+                    <p lang="de">Bereite dich interaktiv auf die schriftliche Abschlussprüfung vor. Klicke auf eine Karte, um sie umzudrehen, und markiere deinen Erfolg!</p>
+                    <p lang="en">Prepare interactively for the written final exams. Click on a card to flip it and mark your success!</p>
+                </div>
 
-        <div class="flashcards-layout">
-            <!-- Category Tabs -->
-            <div class="category-tabs" id="category-tabs">
-                <button class="category-tab active" data-cat="all">
-                    <span lang="de">Alle</span><span lang="en">All</span>
-                </button>
-                <button class="category-tab" data-cat="software">
-                    <span lang="de">Softwaretechnik</span><span lang="en">Software Eng.</span>
-                </button>
-                <button class="category-tab" data-cat="database">
-                    <span lang="de">Datenbanken</span><span lang="en">Databases</span>
-                </button>
-                <button class="category-tab" data-cat="network">
-                    <span lang="de">Netzwerke / IT-Systeme</span><span lang="en">Networks</span>
-                </button>
-                <button class="category-tab" data-cat="wiso">
-                    <span lang="de">WiSo</span><span lang="en">Economics</span>
-                </button>
-                <button class="category-tab" data-cat="marked">
-                    <span lang="de">Merkliste ⭐</span><span lang="en">Starred ⭐</span>
-                </button>
-            </div>
-
-            <!-- Flashcard Frame -->
-            <div class="flashcard" id="flashcard">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <div class="flashcard-hint" id="card-hint">Kategorie</div>
-                        <div class="flashcard-question" id="card-question">Frage...</div>
-                        <button id="star-card-btn" aria-label="Markieren">
-                            <i class="fa-regular fa-star" aria-hidden="true"></i>
+                <div class="flashcards-layout">
+                    <!-- Category Tabs -->
+                    <div class="category-tabs" id="category-tabs">
+                        <button class="category-tab active" data-cat="all">
+                            <span lang="de">Alle</span><span lang="en">All</span>
+                        </button>
+                        <button class="category-tab" data-cat="software">
+                            <span lang="de">Softwaretechnik</span><span lang="en">Software Eng.</span>
+                        </button>
+                        <button class="category-tab" data-cat="database">
+                            <span lang="de">Datenbanken</span><span lang="en">Databases</span>
+                        </button>
+                        <button class="category-tab" data-cat="network">
+                            <span lang="de">Netzwerke / IT-Systeme</span><span lang="en">Networks</span>
+                        </button>
+                        <button class="category-tab" data-cat="wiso">
+                            <span lang="de">WiSo</span><span lang="en">Economics</span>
+                        </button>
+                        <button class="category-tab" data-cat="custom">
+                            <span lang="de">Eigene</span><span lang="en">Custom</span>
+                        </button>
+                        <button class="category-tab" data-cat="marked">
+                            <span lang="de">Merkliste ⭐</span><span lang="en">Starred ⭐</span>
                         </button>
                     </div>
-                    <div class="flashcard-back">
-                        <div class="flashcard-answer" id="card-answer">Antwort...</div>
+
+                    <!-- Flashcard Frame -->
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-hint" id="card-hint">Kategorie</div>
+                                <div class="flashcard-question" id="card-question">Frage...</div>
+                                <button id="star-card-btn" aria-label="Markieren">
+                                    <i class="fa-regular fa-star" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-answer" id="card-answer">Antwort...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Controls -->
+                    <div class="flashcard-controls">
+                        <button class="btn-card-action wrong" id="btn-wrong" disabled>
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <span lang="de">Nochmal (Box 1)</span><span lang="en">Retry (Box 1)</span>
+                        </button>
+                        <div class="flashcard-deck-status" id="deck-status">0 / 0</div>
+                        <button class="btn-card-action correct" id="btn-correct" disabled>
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                            <span lang="de">Gewusst (+Box)</span><span lang="en">Got it (+Box)</span>
+                        </button>
+                    </div>
+                    
+                    <div class="flashcard-nav-container">
+                        <button class="btn-primary btn-flashcard-nav" id="btn-prev">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i> <span lang="de">Zurück</span><span lang="en">Back</span>
+                        </button>
+                        <button class="btn-primary btn-flashcard-nav" id="btn-next">
+                            <span lang="de">Nächste</span><span lang="en">Next</span> <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Navigation Controls -->
-            <div class="flashcard-controls">
-                <button class="btn-card-action wrong" id="btn-wrong" disabled>
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                    <span lang="de">Nochmal lernen</span><span lang="en">Study again</span>
-                </button>
-                <div class="flashcard-deck-status" id="deck-status">0 / 0</div>
-                <button class="btn-card-action correct" id="btn-correct" disabled>
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                    <span lang="de">Gewusst</span><span lang="en">Got it</span>
-                </button>
-            </div>
-            
-            <div class="flashcard-nav-container">
-                <button class="btn-primary btn-flashcard-nav" id="btn-prev">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i> <span lang="de">Zurück</span><span lang="en">Back</span>
-                </button>
-                <button class="btn-primary btn-flashcard-nav" id="btn-next">
-                    <span lang="de">Nächste</span><span lang="en">Next</span> <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </button>
+            <!-- Right Column: Stats & Creator -->
+            <div class="right-col">
+                <!-- Spaced Repetition Stats Card -->
+                <section class="card" aria-labelledby="leitner-stats-title">
+                    <h3 id="leitner-stats-title">
+                        <span lang="de">📦 Lernboxen (Leitner-System)</span>
+                        <span lang="en">📦 Study Boxes (Leitner System)</span>
+                    </h3>
+                    <p lang="de" class="small-muted">
+                        Karten steigen auf, wenn du sie weißt. Falsche Antworten setzen sie in Box 1 zurück.
+                    </p>
+                    <p lang="en" class="small-muted">
+                        Cards advance to higher boxes when guessed correctly. Wrong answers return them to Box 1.
+                    </p>
+                    
+                    <div class="leitner-stats-grid" style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+                        <div class="leitner-box-stat">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:bold;">
+                                <span>Box 1 (Lernen / Learning)</span>
+                                <span id="box1-count">0</span>
+                            </div>
+                            <div class="skill-track" style="height:8px; width:100%;"><div id="box1-bar" class="skill-fill" style="width:0%; background:#ef4444;"></div></div>
+                        </div>
+                        <div class="leitner-box-stat">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:bold;">
+                                <span>Box 2 (Wiederholung / Review)</span>
+                                <span id="box2-count">0</span>
+                            </div>
+                            <div class="skill-track" style="height:8px; width:100%;"><div id="box2-bar" class="skill-fill" style="width:0%; background:#f97316;"></div></div>
+                        </div>
+                        <div class="leitner-box-stat">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:bold;">
+                                <span>Box 3 (Meister / Mastered 🏆)</span>
+                                <span id="box3-count">0</span>
+                            </div>
+                            <div class="skill-track" style="height:8px; width:100%;"><div id="box3-bar" class="skill-fill" style="width:0%; background:#10b981;"></div></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Custom Card Card -->
+                <section class="card" aria-labelledby="create-card-title">
+                    <h3 id="create-card-title">
+                        <span lang="de">📝 Eigene Lernkarte erstellen</span>
+                        <span lang="en">📝 Create Custom Flashcard</span>
+                    </h3>
+                    <form id="create-card-form" class="project-form" style="margin-top:1rem;">
+                        <div class="form-group">
+                            <label for="new-card-cat">
+                                <span lang="de">Kategorie</span>
+                                <span lang="en">Category</span>
+                            </label>
+                            <select id="new-card-cat" class="form-control" required style="width:100%;">
+                                <option value="software" lang="de">Softwaretechnik</option>
+                                <option value="software" lang="en">Software Engineering</option>
+                                <option value="database" lang="de">Datenbanken</option>
+                                <option value="database" lang="en">Databases</option>
+                                <option value="network" lang="de">Netzwerke / IT-Systeme</option>
+                                <option value="network" lang="en">Networking / IT Systems</option>
+                                <option value="wiso" lang="de">Wirtschaft & Soziales</option>
+                                <option value="wiso" lang="en">Economics & Social Studies</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-card-hint">
+                                <span lang="de">Stichwort / Thema</span>
+                                <span lang="en">Topic Hint</span>
+                            </label>
+                            <input type="text" id="new-card-hint" class="form-control" required placeholder="z.B. Scrum oder REST">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-card-question">
+                                <span lang="de">Frage</span>
+                                <span lang="en">Question</span>
+                            </label>
+                            <textarea id="new-card-question" class="form-control" required placeholder="Schreibe deine Frage..." rows="2" style="resize:none; width:100%;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-card-answer">
+                                <span lang="de">Antwort</span>
+                                <span lang="en">Answer</span>
+                            </label>
+                            <textarea id="new-card-answer" class="form-control" required placeholder="Schreibe die Antwort..." rows="3" style="resize:none; width:100%;"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;">
+                            <span lang="de">Karte hinzufügen</span>
+                            <span lang="en">Add Flashcard</span>
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Custom Cards Manager -->
+                <section class="card" id="custom-cards-manager-card" aria-labelledby="manage-cards-title">
+                    <h3 id="manage-cards-title">
+                        <span lang="de">⚙️ Eigene Karten verwalten</span>
+                        <span lang="en">⚙️ Manage Custom Cards</span>
+                    </h3>
+                    <div id="custom-cards-list" style="margin-top:1rem; max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
+                        <!-- List of custom cards with delete btn -->
+                    </div>
+                </section>
             </div>
         </div>
     </main>

@@ -140,18 +140,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const deckStatusEl = document.getElementById('deck-status');
     const tabContainer = document.getElementById('category-tabs');
 
+    // Custom Cards & Spaced Repetition selectors
+    const createForm = document.getElementById('create-card-form');
+    const newCat = document.getElementById('new-card-cat');
+    const newHint = document.getElementById('new-card-hint');
+    const newQuestion = document.getElementById('new-card-question');
+    const newAnswer = document.getElementById('new-card-answer');
+    const customListEl = document.getElementById('custom-cards-list');
+
+    const box1Count = document.getElementById('box1-count');
+    const box2Count = document.getElementById('box2-count');
+    const box3Count = document.getElementById('box3-count');
+    const box1Bar = document.getElementById('box1-bar');
+    const box2Bar = document.getElementById('box2-bar');
+    const box3Bar = document.getElementById('box3-bar');
+
     if (!cardEl || !hintEl || !questionEl || !answerEl) return;
 
-    // Load starred/marked card IDs from LocalStorage
+    // Load data from LocalStorage
     let starredIds = JSON.parse(StorageManager.getItem('flashcards_starred', '[]')) || [];
+    let customCards = JSON.parse(StorageManager.getItem('flashcards_custom', '[]')) || [];
+    let boxLevels = JSON.parse(StorageManager.getItem('flashcards_box_levels', '{}')) || {};
+
     let currentCategory = 'all';
-    let filteredDeck = [...cardsDatabase];
+    let filteredDeck = [];
     let currentIndex = 0;
     let isFlipped = false;
 
+    // Combine database and custom cards
+    function getFullDatabase() {
+        return [...cardsDatabase, ...customCards];
+    }
+
     // 1. Flip card logic
     cardEl.addEventListener('click', (e) => {
-        // Prevent flipping if clicked on the Star button
         if (starBtn && starBtn.contains(e.target)) return;
 
         isFlipped = !isFlipped;
@@ -181,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 starredIds.splice(idx, 1);
                 starIcon.className = 'fa-regular fa-star';
                 
-                // If we are currently in the Starred/Marked tab, we might need to remove it from view
                 if (currentCategory === 'marked') {
                     setTimeout(() => {
                         filterDeck();
@@ -205,17 +226,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterDeck() {
+        const fullDatabase = getFullDatabase();
+
         if (currentCategory === 'all') {
-            filteredDeck = [...cardsDatabase];
+            filteredDeck = [...fullDatabase];
         } else if (currentCategory === 'marked') {
-            filteredDeck = cardsDatabase.filter(c => starredIds.includes(c.id));
+            filteredDeck = fullDatabase.filter(c => starredIds.includes(c.id));
+        } else if (currentCategory === 'custom') {
+            filteredDeck = [...customCards];
         } else {
-            filteredDeck = cardsDatabase.filter(c => c.category === currentCategory);
+            filteredDeck = fullDatabase.filter(c => c.category === currentCategory);
         }
 
         currentIndex = 0;
         resetCardState();
         renderCard();
+        renderStats();
     }
 
     // 4. Render active card
@@ -242,10 +268,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const card = filteredDeck[currentIndex];
         
-        // Populate front/back details
-        hintEl.textContent = lang === 'de' ? card.hint_de : card.hint_en;
-        questionEl.innerHTML = lang === 'de' ? card.question_de : card.question_en;
-        answerEl.innerHTML = lang === 'de' ? card.answer_de : card.answer_en;
+        // Populate front/back details (multilingual fallback for custom cards)
+        hintEl.textContent = lang === 'de' ? (card.hint_de || card.hint_en) : (card.hint_en || card.hint_de);
+        questionEl.innerHTML = lang === 'de' ? (card.question_de || card.question_en) : (card.question_en || card.question_de);
+        answerEl.innerHTML = lang === 'de' ? (card.answer_de || card.answer_en) : (card.answer_en || card.answer_de);
+
+        // Render card box indicator on question
+        const currentLevel = boxLevels[card.id] || 1;
+        hintEl.innerHTML += ` <span style="font-size:0.75rem; background:rgba(138, 115, 85, 0.15); padding:0.1rem 0.4rem; border-radius:3px; margin-left:0.5rem; font-weight:bold; border: 1px solid var(--border)">Box ${currentLevel}</span>`;
 
         // Check if starred
         if (starIcon) {
@@ -284,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // "Gewusst" (Known) & "Nochmal lernen" (Study again) buttons
+    // Leitner system correction: Correct advances card, Wrong resets to box 1
     if (btnCorrect) {
         btnCorrect.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -295,23 +325,44 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
+                // Leitner box level upgrade
+                const currentLevel = boxLevels[currentCard.id] || 1;
+                const nextLevel = Math.min(3, currentLevel + 1);
+                boxLevels[currentCard.id] = nextLevel;
+                StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+
+                // If level is 3, count as known (mastered)
                 const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
-                if (!knownCards.includes(currentCard.id)) {
-                    knownCards.push(currentCard.id);
-                    StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                if (nextLevel === 3) {
+                    if (!knownCards.includes(currentCard.id)) {
+                        knownCards.push(currentCard.id);
+                        StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                    }
+                } else {
+                    // Remove if dropped below level 3
+                    const kidx = knownCards.indexOf(currentCard.id);
+                    if (kidx !== -1) {
+                        knownCards.splice(kidx, 1);
+                        StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                    }
                 }
                 
-                const totalCards = cardsDatabase.length;
+                const totalCards = getFullDatabase().length;
                 if (knownCards.length >= totalCards && typeof Achievements !== 'undefined') {
                     Achievements.unlock('flashcard_master');
                 }
             }
+            
+            renderStats();
             
             // Auto navigate to next card after a small delay
             if (filteredDeck.length > 1) {
                 setTimeout(() => {
                     btnNext.click();
                 }, 300);
+            } else {
+                resetCardState();
+                renderCard();
             }
         });
     }
@@ -321,13 +372,27 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             if (!isFlipped) return;
 
-            // Record the category of the current card as "wrong"
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
+                // Reset box level to 1
+                boxLevels[currentCard.id] = 1;
+                StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+
+                // Remove from known cards list
+                const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+                const kidx = knownCards.indexOf(currentCard.id);
+                if (kidx !== -1) {
+                    knownCards.splice(kidx, 1);
+                    StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                }
+
+                // Record learning recommendations
                 let wrongCounts = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}'));
                 wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
                 StorageManager.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, JSON.stringify(wrongCounts));
             }
+
+            renderStats();
             
             // Auto flip card back to retry
             setTimeout(() => {
@@ -335,13 +400,137 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardEl.classList.remove('flipped');
                 if (btnWrong) btnWrong.disabled = true;
                 if (btnCorrect) btnCorrect.disabled = true;
+                renderCard();
             }, 300);
         });
     }
 
+    // 6. Custom Card Manager / Form logic
+    if (createForm) {
+        createForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const category = newCat.value;
+            const hint = newHint.value.trim();
+            const question = newQuestion.value.trim();
+            const answer = newAnswer.value.trim();
+
+            if (!hint || !question || !answer) return;
+
+            const newCard = {
+                id: 'custom_' + Date.now(),
+                category: category,
+                hint_de: hint,
+                hint_en: hint,
+                question_de: question,
+                question_en: question,
+                answer_de: answer,
+                answer_en: answer
+            };
+
+            customCards.push(newCard);
+            StorageManager.setItem('flashcards_custom', JSON.stringify(customCards));
+
+            // Set Leitner Box Level 1
+            boxLevels[newCard.id] = 1;
+            StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+
+            // Clear inputs
+            newHint.value = '';
+            newQuestion.value = '';
+            newAnswer.value = '';
+
+            // Update deck and list
+            filterDeck();
+            renderCustomList();
+
+            // Trigger dashboard contribution tick!
+            if (window.addLiveCommit) window.addLiveCommit();
+        });
+    }
+
+    function renderCustomList() {
+        if (!customListEl) return;
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+
+        if (customCards.length === 0) {
+            customListEl.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">${lang === 'de' ? 'Keine eigenen Karten erstellt.' : 'No custom cards created.'}</span>`;
+            return;
+        }
+
+        customListEl.innerHTML = customCards.map(c => `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.5rem; font-size:0.8rem;">
+                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">
+                    <strong>[${c.category.toUpperCase()}]</strong> ${c.hint_de}
+                </div>
+                <button class="btn-secondary" onclick="deleteCustomCard('${c.id}')" style="width:auto; padding:0.25rem 0.5rem; font-size:0.75rem; border-color:#ef4444; color:#ef4444;">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    // Global custom card delete handle
+    window.deleteCustomCard = function(id) {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        if (!confirm(lang === 'de' ? 'Möchtest du diese Karte wirklich löschen?' : 'Are you sure you want to delete this card?')) return;
+
+        customCards = customCards.filter(c => c.id !== id);
+        StorageManager.setItem('flashcards_custom', JSON.stringify(customCards));
+
+        // Clean stats level
+        if (boxLevels[id]) {
+            delete boxLevels[id];
+            StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+        }
+        const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+        const kidx = knownCards.indexOf(id);
+        if (kidx !== -1) {
+            knownCards.splice(kidx, 1);
+            StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+        }
+
+        filterDeck();
+        renderCustomList();
+    };
+
+    // 7. Leitner Box Stats calculation
+    function renderStats() {
+        const fullDatabase = getFullDatabase();
+        const total = fullDatabase.length;
+
+        let b1 = 0;
+        let b2 = 0;
+        let b3 = 0;
+
+        fullDatabase.forEach(c => {
+            const level = boxLevels[c.id] || 1;
+            if (level === 1) b1++;
+            else if (level === 2) b2++;
+            else if (level === 3) b3++;
+        });
+
+        // Set counts
+        if (box1Count) box1Count.textContent = b1;
+        if (box2Count) box2Count.textContent = b2;
+        if (box3Count) box3Count.textContent = b3;
+
+        // Set bars width
+        if (box1Bar) box1Bar.style.width = total > 0 ? `${(b1 / total) * 100}%` : '0%';
+        if (box2Bar) box2Bar.style.width = total > 0 ? `${(b2 / total) * 100}%` : '0%';
+        if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
+
+        // Sync with dashboard progress (Box 3 count / total count)
+        StorageManager.setItem('flashcard_total_count', total);
+        StorageManager.setItem('flashcard_correct_count', b3);
+    }
+
     // i18n support alignment
-    document.addEventListener('langchange', renderCard);
+    document.addEventListener('langchange', () => {
+        renderCard();
+        renderCustomList();
+    });
 
     // Initial load
     filterDeck();
+    renderCustomList();
 });

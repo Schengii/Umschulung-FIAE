@@ -55,6 +55,16 @@
                     <span lang="de">Canvas Ball-Physik</span>
                     <span lang="en">Canvas Ball Physics</span>
                 </button>
+                <button class="template-select-btn" data-template="canvas-particles">
+                    <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                    <span lang="de">Partikel-System</span>
+                    <span lang="en">Particle System</span>
+                </button>
+                <button class="template-select-btn" data-template="api-fetch">
+                    <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+                    <span lang="de">REST API Fetcher</span>
+                    <span lang="en">REST API Fetcher</span>
+                </button>
                 <button class="template-select-btn" data-template="sps-logic">
                     <i class="fa-solid fa-microchip" aria-hidden="true"></i>
                     <span lang="de">SPS Logik-Simulator</span>
@@ -81,10 +91,19 @@
                     </div>
                 </div>
 
-                <!-- Textarea Inputs -->
-                <textarea id="editor-html" class="code-input" spellcheck="false" aria-label="HTML Code"></textarea>
-                <textarea id="editor-css" class="code-input collapsed" spellcheck="false" aria-label="CSS Code"></textarea>
-                <textarea id="editor-js" class="code-input collapsed" spellcheck="false" aria-label="JavaScript Code"></textarea>
+                <!-- Wrapped Editors with line-numbers -->
+                <div class="editor-wrapper" id="wrapper-html">
+                    <div class="line-numbers" id="line-numbers-html">1</div>
+                    <textarea id="editor-html" class="code-input" spellcheck="false" aria-label="HTML Code"></textarea>
+                </div>
+                <div class="editor-wrapper collapsed" id="wrapper-css">
+                    <div class="line-numbers" id="line-numbers-css">1</div>
+                    <textarea id="editor-css" class="code-input" spellcheck="false" aria-label="CSS Code"></textarea>
+                </div>
+                <div class="editor-wrapper collapsed" id="wrapper-js">
+                    <div class="line-numbers" id="line-numbers-js">1</div>
+                    <textarea id="editor-js" class="code-input" spellcheck="false" aria-label="JavaScript Code"></textarea>
+                </div>
             </div>
 
             <!-- Right Side: Preview & Console -->

@@ -383,6 +383,55 @@
                         </div>
                     </section>
                 </article>
+
+                <article class="card" aria-labelledby="elektrocheck-demo-title" style="margin-top: 2rem;">
+                    <h2 id="elektrocheck-demo-title">
+                        <span lang="de">⚡ ElektroCheck AI: Live-Mängelscanner</span>
+                        <span lang="en">⚡ ElektroCheck AI: Live Defect Scanner</span>
+                    </h2>
+                    <p lang="de">
+                        Erlebe die automatische Mängelerkennung im Einsatz! Klicke unten auf "KI-Analyse simulieren", um eine DGUV V3 Sicherheitsprüfung eines Arbeitsmittels (Kaffeemaschine) zu simulieren. Die KI markiert gefundene Mängel direkt im Bild mit interaktiven Bounding Boxes.
+                    </p>
+                    <p lang="en">
+                        Experience automated defect detection in action! Click "Simulate AI Scan" below to simulate a DGUV V3 safety inspection on a piece of equipment (coffee machine). The AI highlights detected anomalies directly on the image with interactive bounding boxes.
+                    </p>
+
+                    <div class="scanner-container">
+                        <div class="scanner-image-wrapper">
+                            <img id="uploaded-image" src="assets/images/kaffeemaschine_defekt.png" alt="Zustand Kaffeemaschine / Coffee machine hazard inspection" class="scanner-image">
+                            <div id="bounding-box-overlay" class="scanner-overlay"></div>
+                            <div id="scanner-laser" class="scanner-laser"></div>
+                        </div>
+
+                        <div class="scanner-details-pane">
+                            <div class="scanner-controls">
+                                <button id="run-scanner-btn" class="btn-primary" style="width: auto;">
+                                    <i class="fa fa-sync fa-spin" style="display:none;" id="scanner-spinner"></i>
+                                    <i class="fa fa-play" id="scanner-play-icon"></i>
+                                    <span lang="de">KI-Analyse simulieren</span>
+                                    <span lang="en">Simulate AI Scan</span>
+                                </button>
+                                <button id="clear-scanner-btn" class="btn-secondary" style="width: auto;" disabled>
+                                    <span lang="de"><i class="fa fa-trash"></i> Zurücksetzen</span>
+                                    <span lang="en"><i class="fa fa-trash"></i> Reset</span>
+                                </button>
+                            </div>
+
+                            <div id="scanner-status" class="scanner-status-box">
+                                <span lang="de"><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>
+                                <span lang="en"><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>
+                            </div>
+
+                            <div id="scanner-results-card" class="scanner-results-card collapsed">
+                                <h4 style="margin-top: 0; color: var(--primary);">
+                                    <span lang="de">Gefundene Mängel:</span>
+                                    <span lang="en">Detected Defects:</span>
+                                </h4>
+                                <div id="scanner-results-list" class="scanner-results-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
 
             <!-- Right Column -->

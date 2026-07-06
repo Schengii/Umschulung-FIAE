@@ -361,3 +361,182 @@
     color: var(--primary);
     margin-top: 0.15rem;
 }
+
+/* ==========================================================================
+   ElektroCheck AI Live-Mängelscanner Demo Styles
+   ========================================================================== */
+.scanner-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .scanner-container {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+.scanner-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.scanner-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.scanner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Bounding box styling matching class definition */
+.bounding-box {
+    position: absolute;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.bounding-box:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+.bounding-box-label {
+    position: absolute;
+    color: white;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Scanner laser line */
+.scanner-laser {
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+    z-index: 10;
+    pointer-events: none;
+}
+
+@keyframes scanLineAnimation {
+    0% { top: 0%; }
+    50% { top: 100%; }
+    100% { top: 0%; }
+}
+
+.scanner-laser.active {
+    display: block;
+    animation: scanLineAnimation 2s linear infinite;
+}
+
+.scanner-details-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scanner-controls {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.scanner-status-box {
+    padding: 0.75rem;
+    background: var(--bg-page);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.scanner-status-box i {
+    color: var(--primary);
+}
+
+.scanner-results-card {
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.scanner-results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.scanner-result-item {
+    padding: 0.75rem;
+    background: var(--bg-card);
+    border-left: 4px solid var(--border);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.scanner-result-item.critical {
+    border-left-color: #ef4444;
+}
+
+.scanner-result-item.medium {
+    border-left-color: #f97316;
+}
+
+.scanner-result-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.scanner-result-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.scanner-result-action {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
