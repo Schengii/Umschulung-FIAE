@@ -1,0 +1,195 @@
+/* Skills Matrix Styling */
+
+.skills-filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.skills-tab {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skills-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--bg-page);
+}
+
+.skills-tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* Layout Grid for SVG & Cards */
+.skills-matrix-workspace {
+    display: grid;
+    grid-template-columns: 1.2fr 1.8fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+@media (max-width: 992px) {
+    .skills-matrix-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+.skills-radar-chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-page);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    min-height: 320px;
+}
+
+.skills-radar-svg {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    overflow: visible;
+}
+
+/* Radar Path Animations */
+.skills-radar-svg polygon.radar-poly {
+    fill: rgba(37, 99, 235, 0.15);
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    transition: points 0.6s cubic-bezier(0.4, 0, 0.2, 1), fill 0.6s, stroke 0.6s;
+    filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.2));
+}
+
+[data-theme="dark"] .skills-radar-svg polygon.radar-poly {
+    fill: rgba(59, 130, 246, 0.18);
+    stroke: #3b82f6;
+}
+
+.skills-radar-svg circle.radar-dot {
+    fill: var(--bg-card);
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    transition: cx 0.6s cubic-bezier(0.4, 0, 0.2, 1), cy 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.skills-radar-svg circle.radar-dot:hover {
+    fill: var(--primary);
+    r: 6;
+}
+
+.skills-radar-svg .grid-line {
+    stroke: var(--border);
+    stroke-width: 1;
+    stroke-dasharray: 2 2;
+}
+
+.skills-radar-svg .axis-line {
+    stroke: var(--border);
+    stroke-width: 1.2;
+}
+
+.skills-radar-svg .axis-label {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    fill: var(--text-primary);
+    text-anchor: middle;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Skills Progress Cards */
+.skills-list-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.skill-matrix-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.skill-matrix-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary);
+}
+
+.skill-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-card-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.skill-card-badge {
+    font-size: 0.7rem;
+    background: var(--border);
+    color: var(--text-secondary);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.skill-card-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.skill-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.skill-card-link {
+    font-size: 0.75rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: opacity 0.2s;
+}
+
+.skill-card-link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
