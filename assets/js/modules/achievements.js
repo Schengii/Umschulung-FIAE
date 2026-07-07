@@ -73,6 +73,13 @@ const Achievements = {
             title_en: 'Explorer',
             desc_de: 'Mindestens 5 verschiedene Seiten besucht.',
             desc_en: 'Visited at least 5 different pages.'
+        },
+        cv_downloaded: {
+            icon: '📄',
+            title_de: 'Bewerbungsmappe geöffnet',
+            title_en: 'Application Opened',
+            desc_de: 'Den Lebenslauf oder die Bewerbungsmappe heruntergeladen!',
+            desc_en: 'Downloaded the CV or application folder!'
         }
     },
 

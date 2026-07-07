@@ -215,9 +215,11 @@
                                     <div class="download-item-meta">Word (Docx)</div>
                                 </div>
                             </div>
-                            <a href="Bewerbungsunterlagen/2026-06-24_Bewerbungsunterlagen_Maximilian-Schenk.docx"
-                                download class="btn-download"><i class="fa-solid fa-download" aria-hidden="true"></i>
-                                Download</a>
+                        <a href="Bewerbungsunterlagen/2026-06-24_Bewerbungsunterlagen_Maximilian-Schenk.docx"
+                                download class="btn-download"
+                                onclick="if(typeof Achievements!=='undefined') Achievements.unlock('cv_downloaded')">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            Download</a>
                         </div>
 
                         <!-- Doc 2: FIAE Gesellenbrief -->
@@ -252,7 +254,77 @@
                         </div>
                     </div>
                 </section>
-            </div>
+
+                <!-- 5. Zertifikate & Online-Kurse -->
+                <section class="card" aria-labelledby="certs-title">
+                    <h2 id="certs-title">
+                        <span lang="de"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Zertifikate &amp; Online-Kurse</span>
+                        <span lang="en"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Certificates &amp; Online Courses</span>
+                    </h2>
+                    <p lang="de" style="margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        Vertiefende Lernprojekte neben der Umschulung — alle mit externen Nachweisen verifizierbar.
+                    </p>
+                    <p lang="en" style="margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.9rem;">
+                        Self-directed learning projects alongside my retraining — all verifiable via external links.
+                    </p>
+                    <div class="downloads-grid">
+
+                        <div class="download-item-box">
+                            <div class="download-item-header">
+                                <i class="fa-brands fa-github download-icon" style="color: var(--text-primary);"></i>
+                                <div>
+                                    <div class="download-item-title">GitHub Portfolio</div>
+                                    <div class="download-item-meta"><span lang="de">13+ Projekte &bull; Schengii</span><span lang="en">13+ projects &bull; Schengii</span></div>
+                                </div>
+                            </div>
+                            <a href="https://github.com/Schengii" target="_blank" rel="noopener" class="btn-view">
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> GitHub
+                            </a>
+                        </div>
+
+                        <div class="download-item-box">
+                            <div class="download-item-header">
+                                <i class="fa-brands fa-linkedin download-icon" style="color: #0a66c2;"></i>
+                                <div>
+                                    <div class="download-item-title">LinkedIn Profil</div>
+                                    <div class="download-item-meta"><span lang="de">Berufsnetzwerk &bull; Referenzen</span><span lang="en">Professional network &bull; References</span></div>
+                                </div>
+                            </div>
+                            <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" class="btn-view">
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> LinkedIn
+                            </a>
+                        </div>
+
+                        <div class="download-item-box">
+                            <div class="download-item-header">
+                                <i class="fa-solid fa-code download-icon" style="color: var(--primary);"></i>
+                                <div>
+                                    <div class="download-item-title">freeCodeCamp</div>
+                                    <div class="download-item-meta"><span lang="de">Responsive Web Design</span><span lang="en">Responsive Web Design</span></div>
+                                </div>
+                            </div>
+                            <a href="https://www.freecodecamp.org/" target="_blank" rel="noopener" class="btn-view">
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Verifizieren
+                            </a>
+                        </div>
+
+                        <div class="download-item-box">
+                            <div class="download-item-header">
+                                <i class="fa-solid fa-graduation-cap download-icon" style="color: #e37400;"></i>
+                                <div>
+                                    <div class="download-item-title">Google &amp; Coursera</div>
+                                    <div class="download-item-meta">IT Support Professional</div>
+                                </div>
+                            </div>
+                            <a href="https://www.coursera.org/professional-certificates/google-it-support" target="_blank" rel="noopener" class="btn-view">
+                                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Kurs
+                            </a>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div><!-- end .left-col -->
 
             <!-- Right Column: Sidebar -->
             <aside class="right-col sidebar-column">

@@ -4466,6 +4466,36 @@ html nav {
     color: var(--text-muted);
 }
 
+.footer-meta-row {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Social Icon Links in Nav (GitHub, LinkedIn) */
+.nav-social-icon {
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: var(--radius-full);
+    transition: var(--transition);
+}
+
+.nav-social-icon:hover {
+    background-color: var(--bg-nav-item-hover);
+    color: white !important;
+}
+
+
 /* ==========================================================================
    RESPONSIVENESS UP TO 200PX (EXCELLENCE UNDER EXTREME SIZES)
    ========================================================================== */

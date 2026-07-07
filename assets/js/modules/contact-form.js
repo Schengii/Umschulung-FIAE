@@ -89,18 +89,30 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                 }
             });
         } else {
-            // No key, trigger mailto directly
+            // No Web3Forms key configured — show email address prominently instead of blind mailto
             if (feedback) {
                 feedback.style.display = 'block';
                 feedback.className = 'form-feedback info';
-                feedback.innerHTML = '<span lang="de">E-Mail-Programm wird geöffnet...</span><span lang="en">Opening mail client...</span>';
+                feedback.innerHTML = `
+                    <span lang="de">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        Direkt per E-Mail kontaktieren:
+                        <a href="mailto:sche-max@web.de?subject=${encodeURIComponent('Portfolio Kontakt von ' + name.value)}&body=${encodeURIComponent(message.value + '\n\n-- \nVon: ' + name.value + ' (' + email.value + ')')}" style="font-weight:bold;">
+                            sche-max@web.de
+                        </a>
+                        &nbsp;(Klick öffnet E-Mail-Programm oder Adresse kopieren)
+                    </span>
+                    <span lang="en">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        Contact directly via email:
+                        <a href="mailto:sche-max@web.de?subject=${encodeURIComponent('Portfolio Contact from ' + name.value)}&body=${encodeURIComponent(message.value + '\n\n-- \nFrom: ' + name.value + ' (' + email.value + ')')}" style="font-weight:bold;">
+                            sche-max@web.de
+                        </a>
+                        &nbsp;(Click to open email client or copy address)
+                    </span>`;
                 const currentLang = document.documentElement.getAttribute('lang') || 'de';
                 document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
-            }
-            _triggerMailto(name.value, email.value, message.value);
-            form.reset();
-            if (feedback) {
-                setTimeout(() => { feedback.style.display = 'none'; }, 5000);
+                // Do NOT auto-dismiss — user needs time to copy/click the email
             }
         }
     });

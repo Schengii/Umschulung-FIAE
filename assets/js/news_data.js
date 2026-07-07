@@ -1,5 +1,53 @@
 const newsData = [
     {
+        "id": "job-search-start",
+        "category": "milestone",
+        "date_de": "06. Juli 2026",
+        "date_en": "July 06, 2026",
+        "title_de": "🚀 Auf Jobsuche — jetzt bereit für den ersten Job als Entwickler!",
+        "title_en": "🚀 Job Search Begins — Ready for My First Developer Role!",
+        "content_de": [
+            "Die Umschulung ist erfolgreich abgeschlossen und ich bin ab sofort aktiv auf der Suche nach meiner ersten Festanstellung als Fachinformatiker für Anwendungsentwicklung im Raum Bonn und deutschlandweit remote. Mein Fokus liegt auf modernen Web-Technologien, Java/Spring Boot und KI-gestützter Entwicklung.",
+            "Falls du Recruiter oder Entwickler bist und einen motivierten, frisch ausgebildeten FIAE suchst: Schau dir gerne mein Portfolio an und melde dich über das Kontaktformular. Ich freue mich auf spannende Projekte und ein starkes Team!"
+        ],
+        "content_en": [
+            "My retraining is officially completed and I am now actively searching for my first permanent role as an IT Specialist in Application Development — in the Bonn area and nationwide remote. My focus is on modern web technologies, Java/Spring Boot, and AI-assisted development.",
+            "If you are a recruiter or a developer looking for a motivated, freshly certified FIAE: Check out my portfolio and feel free to reach out using the contact form. Looking forward to exciting projects and a great team!"
+        ]
+    },
+    {
+        "id": "portfolio-relaunch-2026",
+        "category": "milestone",
+        "date_de": "25. Juni 2026",
+        "date_en": "June 25, 2026",
+        "title_de": "🌐 Portfolio-Relaunch: Recruiter-Features, Achievements & Keyboard-Shortcuts",
+        "title_en": "🌐 Portfolio Relaunch: Recruiter Features, Achievements & Keyboard Shortcuts",
+        "content_de": [
+            "Das Portfolio wurde mit einem umfangreichen Update ausgeliefert! Neu sind: personalisierte Recruiter-Willkommenskarten (via URL-Parameter), ein Gamification-System mit freischaltbaren Achievements, vollständige Dark-Mode & Zweisprachigkeit (DE/EN), ein IHK-Notenrechner im Dashboard sowie interaktive Lernkarten für die FIAE-Prüfungsthemen.",
+            "Außerdem wurden Keyboard-Shortcuts (Strg+K, T, L, ?) für Power-User integriert und die Performance durch den Service Worker für Offline-Fähigkeit (PWA) optimiert. Das Portfolio ist auch als App auf dem Smartphone installierbar!"
+        ],
+        "content_en": [
+            "The portfolio has shipped a major update! New features include: personalized recruiter welcome cards (via URL parameters), a gamification system with unlockable achievements, full dark mode and bilingual support (DE/EN), an IHK grade calculator in the dashboard, and interactive flashcards for FIAE exam topics.",
+            "Keyboard shortcuts (Ctrl+K, T, L, ?) for power users were added and performance was improved via a Service Worker for offline capability (PWA). The portfolio can also be installed as an app on mobile devices!"
+        ]
+    },
+    {
+        "id": "ihk-exam-recap",
+        "category": "milestone",
+        "date_de": "10. Juni 2026",
+        "date_en": "June 10, 2026",
+        "title_de": "🎓 Rückblick: Mündliche IHK-AP2 und das Fachgespräch",
+        "title_en": "🎓 Recap: Oral IHK AP2 Final Exam and Expert Interview",
+        "content_de": [
+            "Ein paar Tage nach dem Prüfungstag möchte ich kurz reflektieren: Die mündliche AP2-Prüfung am 07. Juni 2026 vor dem IHK-Prüfungsausschuss Dortmund war intensiv, aber lehrreich. Nach meiner 15-minütigen Projektpräsentation zu 'EcoChef' folgte ein 15-minütiges Fachgespräch zu Themen wie Softwarearchitektur, Datenbankdesign und IT-Sicherheit.",
+            "Besonders spannend waren die Rückfragen zu meiner Entscheidung für das Cordova-Framework und zur Amortisationsberechnung. Das Prüfungsteam war fair und professionell — ein tolles Erlebnis, das ich jedem empfehle, der vor seiner AP2 steht. Vorbereitung ist alles!"
+        ],
+        "content_en": [
+            "A few days after the exam, I want to briefly reflect: The oral AP2 exam on June 7, 2026, before the IHK examination board in Dortmund was intense but highly educational. Following my 15-minute project presentation of 'EcoChef,' a 15-minute expert discussion covered topics like software architecture, database design, and IT security.",
+            "Especially interesting were the follow-up questions on my choice of the Cordova framework and the amortization calculation. The examining board was fair and professional — a great experience I would recommend to anyone preparing for their AP2. Preparation is everything!"
+        ]
+    },
+    {
         "id": "ecochef-media-release",
         "category": "milestone",
         "date_de": "15. Juni 2026",

@@ -148,6 +148,12 @@ function renderNav(currentPage) {
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
+                <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub Profil" class="theme-toggle nav-social-icon" title="GitHub">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                </a>
+                <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn Profil" class="theme-toggle nav-social-icon" title="LinkedIn" style="color: #0a66c2;">
+                    <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+                </a>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>
@@ -226,6 +232,12 @@ function renderFooter() {
             
             <div class="footer-bottom">
                 <p class="copyright">&copy; ${year} Maximilian Schenk &middot; Rüdesheimer Str. 14 &middot; 53175 Bonn &middot; Germany</p>
+                <p class="footer-meta-row">
+                    <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
+                    <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
+                    &nbsp;&middot;&nbsp;
+                    <span title="Tastaturkürzel" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
+                </p>
             </div>
         </div>
     </footer>`;

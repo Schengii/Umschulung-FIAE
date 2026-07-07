@@ -110,8 +110,51 @@ const INTERVIEW_QUESTIONS = [
         keywordsEn: ["costs", "savings", "development costs", "timeframe", "investment", "economic"],
         modelAnswerDe: "Die Amortisationsrechnung ermittelt den Zeitpunkt, ab dem die finanziellen Einsparungen oder Erlöse einer Software die Entwicklungskosten übersteigen. Dazu berechnet man die initialen Kosten (Entwicklerstunden, Lizenzen, Hardware) und stellt diese den laufenden Einsparungen (z.B. Zeitersparnis durch Automatisierung, Lizenzkosten-Einsparung) pro Monat/Jahr gegenüber.",
         modelAnswerEn: "An amortization calculation determines the break-even point where the project's cumulative savings or revenue exceed its total development costs. You calculate initial expenditures (hours, licenses, infrastructure) and offset them against recurring monthly or annual cost reductions."
+    },
+
+    // --- NEUE IHK-FACHFRAGEN (IT-Sicherheit, Netzwerke, DB-Design, Agile) ---
+    {
+        id: "ihk_itsecurity",
+        category: "ihk",
+        questionDe: "Welche Maßnahmen zur IT-Sicherheit kennen Sie und was ist der Unterschied zwischen symmetrischer und asymmetrischer Verschlüsselung?",
+        questionEn: "What IT security measures do you know and what is the difference between symmetric and asymmetric encryption?",
+        keywordsDe: ["verschlüsselung", "symmetrisch", "asymmetrisch", "ssl", "tls", "https", "firewall", "authentifizierung", "passwort", "rsa", "aes"],
+        keywordsEn: ["encryption", "symmetric", "asymmetric", "ssl", "tls", "https", "firewall", "authentication", "password", "rsa", "aes"],
+        modelAnswerDe: "IT-Sicherheitsmaßnahmen umfassen: Firewalls (Netzwerkkontrolle), Verschlüsselung (Datenschutz), starke Authentifizierung (MFA), regelmäßige Updates und Backups sowie Zugriffsrechte-Management. Symmetrische Verschlüsselung (z.B. AES) nutzt denselben Schlüssel zum Ver- und Entschlüsseln – schnell, aber der Schlüsselaustausch ist problematisch. Asymmetrische Verschlüsselung (z.B. RSA) nutzt ein Schlüsselpaar (Public/Private Key) – sicherer für den Schlüsselaustausch, aber langsamer. HTTPS kombiniert beide: asymmetrisch für den Handshake, symmetrisch für die Datenübertragung.",
+        modelAnswerEn: "IT security measures include: firewalls, encryption, strong authentication (MFA), regular updates, backups, and access rights management. Symmetric encryption (e.g. AES) uses the same key for encryption and decryption — fast but key exchange is a challenge. Asymmetric encryption (e.g. RSA) uses a key pair (public/private) — safer for key exchange but slower. HTTPS combines both: asymmetric for the handshake, symmetric for data transfer."
+    },
+    {
+        id: "ihk_osi",
+        category: "ihk",
+        questionDe: "Erklären Sie das OSI-Schichtenmodell und nennen Sie Protokolle für mindestens drei Schichten.",
+        questionEn: "Explain the OSI layer model and name protocols for at least three layers.",
+        keywordsDe: ["osi", "schicht", "physical", "transport", "anwendung", "tcp", "ip", "http", "ethernet", "protokoll"],
+        keywordsEn: ["osi", "layer", "physical", "transport", "application", "tcp", "ip", "http", "ethernet", "protocol"],
+        modelAnswerDe: "Das OSI-Modell beschreibt Netzwerkkommunikation in 7 Schichten: 1. Bitübertragung (Physical) – z.B. Ethernet-Kabel, WLAN-Signal. 2. Sicherung (Data Link) – z.B. Ethernet, MAC-Adressen. 3. Vermittlung (Network) – z.B. IP (IPv4/IPv6). 4. Transport – z.B. TCP (zuverlässig), UDP (schnell, unzuverlässig). 5. Sitzung (Session), 6. Darstellung (Presentation) – z.B. TLS/SSL. 7. Anwendung (Application) – z.B. HTTP, HTTPS, FTP, SMTP.",
+        modelAnswerEn: "The OSI model breaks network communication into 7 layers: 1. Physical (e.g., Ethernet cables, WLAN). 2. Data Link (e.g., Ethernet, MAC addresses). 3. Network (e.g., IP). 4. Transport (e.g., TCP for reliability, UDP for speed). 5. Session. 6. Presentation (e.g., TLS/SSL). 7. Application (e.g., HTTP, HTTPS, FTP, SMTP)."
+    },
+    {
+        id: "ihk_erd",
+        category: "ihk",
+        questionDe: "Was ist ein Entity-Relationship-Diagramm (ERD) und wie modelliert man eine Viele-zu-Viele-Beziehung?",
+        questionEn: "What is an Entity-Relationship Diagram (ERD) and how do you model a many-to-many relationship?",
+        keywordsDe: ["entity", "relation", "kardinalität", "viele-zu-viele", "n:m", "zwischentabelle", "fremdschlüssel", "primärschlüssel", "attribut"],
+        keywordsEn: ["entity", "relation", "cardinality", "many-to-many", "n:m", "junction table", "foreign key", "primary key", "attribute"],
+        modelAnswerDe: "Ein ERD modelliert Entitäten (z.B. Student, Kurs) mit ihren Attributen und Beziehungen (Relationen) inkl. Kardinalitäten (1:1, 1:N, N:M). Eine N:M-Beziehung (z.B. Student belegt mehrere Kurse, Kurs hat mehrere Studenten) lässt sich in relationalen Datenbanken nicht direkt abbilden. Sie wird durch eine Zwischentabelle (z.B. 'Belegung') aufgelöst, die die Primärschlüssel beider Entitäten als Fremdschlüssel enthält.",
+        modelAnswerEn: "An ERD models entities (e.g. Student, Course) with their attributes and relationships (including cardinalities: 1:1, 1:N, N:M). An N:M relationship (e.g. a student takes multiple courses, a course has multiple students) cannot be stored directly in relational databases. It requires a junction/bridge table (e.g. 'Enrollment') containing the primary keys of both entities as foreign keys."
+    },
+    {
+        id: "ihk_scrum",
+        category: "ihk",
+        questionDe: "Wie unterscheidet sich Scrum von klassischem Projektmanagement (Wasserfall) und welche Rollen gibt es im Scrum?",
+        questionEn: "How does Scrum differ from classical project management (Waterfall) and what roles exist in Scrum?",
+        keywordsDe: ["scrum", "sprint", "backlog", "waterfall", "wasserfall", "iterativ", "product owner", "scrum master", "daily", "retrospektive"],
+        keywordsEn: ["scrum", "sprint", "backlog", "waterfall", "iterative", "product owner", "scrum master", "daily", "retrospective"],
+        modelAnswerDe: "Wasserfall ist sequenziell: Anforderungen → Design → Implementierung → Test → Abnahme. Änderungen im Nachhinein sind schwer. Scrum ist iterativ: Entwicklung erfolgt in Sprints (1-4 Wochen), am Ende jedes Sprints gibt es ein lauffähiges Inkrement. Rollen: Product Owner (definiert Anforderungen im Backlog), Scrum Master (moderiert, beseitigt Hindernisse), Entwicklungsteam. Zeremonien: Sprint Planning, Daily Stand-up, Sprint Review, Retrospektive.",
+        modelAnswerEn: "Waterfall is sequential: requirements → design → implementation → testing → delivery. Changes afterwards are costly. Scrum is iterative: development happens in Sprints (1-4 weeks), delivering a working increment each time. Roles: Product Owner (manages backlog), Scrum Master (facilitates, removes blockers), Development Team. Ceremonies: Sprint Planning, Daily Stand-up, Sprint Review, Retrospective."
     }
 ];
+
 
 class InterviewSimulator {
     constructor() {
