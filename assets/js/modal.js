@@ -58,10 +58,47 @@
       : '';
 
     const imageHTML = image
-      ? `<div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;">
+      ? `<div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
            <img src="${image}" alt="${titleDe}" class="project-image" loading="lazy">
          </div>`
       : '';
+
+    // Check if there is a video playlist in window.projectsData
+    const repoName = card.dataset.repoName;
+    const projectData = (window.projectsData && Array.isArray(window.projectsData)) 
+        ? window.projectsData.find(p => p.repoName === repoName) 
+        : null;
+
+    let mediaHTML = imageHTML;
+    let hasPlaylist = false;
+
+    if (projectData && Array.isArray(projectData.videoPlaylist) && projectData.videoPlaylist.length > 0) {
+        hasPlaylist = true;
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const playlist = projectData.videoPlaylist;
+        
+        const playlistOptions = playlist.map((vid, idx) => {
+            const title = lang === 'de' ? vid.titleDe : vid.titleEn;
+            return `<button type="button" class="video-select-btn${idx === 0 ? ' active' : ''}" data-index="${idx}" data-url="${vid.url}" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; border-radius: var(--radius-sm); font-weight: 600; color: var(--text-secondary); transition: var(--transition);">${title}</button>`;
+        }).join('\n');
+
+        const initialVideo = playlist[0];
+        const initialDesc = lang === 'de' ? initialVideo.descDe : initialVideo.descEn;
+
+        mediaHTML = `
+            <div class="modal-media-wrapper" style="margin-bottom: 1rem;">
+                <div class="video-container" style="background: #000; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/9; max-height: 300px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                    <video id="modal-video-player" controls src="${initialVideo.url}" style="width: 100%; height: 100%; object-fit: contain;"></video>
+                </div>
+                <div class="video-playlist-selector" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                    ${playlistOptions}
+                </div>
+                <p id="modal-video-description" class="small-muted" style="margin-top: 0.5rem; font-size: 0.8rem; font-style: italic; border-left: 2px solid var(--primary); padding-left: 0.5rem;">
+                    ${initialDesc}
+                </p>
+            </div>
+        `;
+    }
 
     const linkHTML = link
       ? `<a href="${link}" target="_blank" rel="noopener" class="btn-project">
@@ -79,7 +116,7 @@
     modalBody.innerHTML = `
       <h2 id="modal-title" lang="de" style="margin-bottom:0.25rem;">${titleDe}</h2>
       <h2 lang="en" style="margin-bottom:1rem;">${titleEn}</h2>
-      ${imageHTML}
+      ${mediaHTML}
       ${tagsHTML}
       <p lang="de" style="margin:1rem 0;">${descDe}</p>
       <p lang="en" style="margin:1rem 0;">${descEn}</p>
@@ -92,6 +129,47 @@
         </button>
       </div>
     `;
+
+    // Bind click listeners for video selector buttons
+    if (hasPlaylist) {
+        const videoSelectButtons = modalBody.querySelectorAll('.video-select-btn');
+        const player = modalBody.querySelector('#modal-video-player');
+        const videoDesc = modalBody.querySelector('#modal-video-description');
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+
+        if (videoSelectButtons.length && player && projectData) {
+            videoSelectButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    videoSelectButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.style.color = '';
+                        b.style.background = '';
+                        b.style.borderColor = '';
+                    });
+                    btn.classList.add('active');
+                    btn.style.color = 'var(--primary)';
+                    btn.style.borderColor = 'var(--primary)';
+                    btn.style.background = 'var(--primary-light)';
+                    
+                    const idx = parseInt(btn.dataset.index);
+                    const item = projectData.videoPlaylist[idx];
+                    player.src = item.url;
+                    player.play().catch(() => {});
+                    
+                    if (videoDesc) {
+                        videoDesc.textContent = lang === 'de' ? item.descDe : item.descEn;
+                    }
+                });
+            });
+
+            const activeBtn = modalBody.querySelector('.video-select-btn.active');
+            if (activeBtn) {
+                activeBtn.style.color = 'var(--primary)';
+                activeBtn.style.borderColor = 'var(--primary)';
+                activeBtn.style.background = 'var(--primary-light)';
+            }
+        }
+    }
 
     modal.classList.remove('hidden');
     // Force reflow then add show class for animation

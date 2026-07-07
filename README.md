@@ -101,6 +101,15 @@ Ein interaktiver Quelltext-Betrachter ermöglicht es technischen Entscheidern, r
 ### 11. Interaktive Skill-Filter (`skill-bars.js` & `portfolio.js`)
 Die Skill-Balken auf der Portfolio-Seite reagieren interaktiv auf Klicks. Der Klick filtert die Projektgalerie automatisch nach Projekten, die diesen Skill verwenden (z. B. "Java" oder "SQL").
 
+### 12. Mehrwert-Steckbrief („Warum ich?“) (`ueber-mich.html`)
+Ein interdisziplinäres Kärtchen beschreibt den Brückenschlag zwischen deiner Elektroniker-Vergangenheit und deiner neuen Entwickler-Tätigkeit (Troubleshooting, SPS-Zustände, SecOps/Vorschriften).
+
+### 13. Zertifikate-Bühne (`lebenslauf.html`)
+Eine kompakte Badgeliste im Lebenslauf-Sidebar zeigt deine Abschlüsse (IHK Fachinformatiker, Elektroniker, DGUV V3 Prüfer) auf einen Blick.
+
+### 14. Video-Playlist-Player im Detail-Modal (`modal.js`)
+Das Projekt-Modal scannt `window.projectsData`. Wenn eine Playlist vorliegt (wie bei EcoChef), bettet es einen Videoplayer mit Clip-Auswahl-Menü ein, damit Recruiter Democlips (Kochmodus, TTS etc.) direkt im Browser abspielen können.
+
 ---
 
 ## 🚀 Entwicklung & Lokales Testen
