@@ -180,6 +180,130 @@
                 <!-- Folder projects dynamically injected here -->
                 <div id="folder-projects-container"></div>
 
+                <!-- Code-Qualität & Programmier-Snippets Showcase -->
+                <article class="card filter-all code-showcase-card" id="code-showcase">
+                    <h3 lang="de"><i class="fa fa-code" aria-hidden="true"></i> Code-Qualität &amp; Programmier-Snippets</h3>
+                    <h3 lang="en"><i class="fa fa-code" aria-hidden="true"></i> Code Quality &amp; Programming Snippets</h3>
+                    <p lang="de">Hier findest du Beispiele für sauberen, modularen und wartungsfreundlichen Code, den ich in meinen Projekten einsetze.</p>
+                    <p lang="en">Here you can explore examples of clean, modular, and maintainable code used throughout my projects.</p>
+
+                    <!-- Tabs to select snippets -->
+                    <div class="code-tabs">
+                        <button type="button" class="code-tab-btn active" data-target="snippet-react">React Hook</button>
+                        <button type="button" class="code-tab-btn" data-target="snippet-java">Java Pattern</button>
+                        <button type="button" class="code-tab-btn" data-target="snippet-js">Async Fetch</button>
+                    </div>
+
+                    <!-- Code Container -->
+                    <div class="code-container">
+                        <!-- Snippet 1: React Hook -->
+                        <div id="snippet-react" class="code-snippet active">
+<pre><code><span class="token keyword">import</span> { useState, useEffect, useRef } <span class="token keyword">from</span> <span class="token string">'react'</span>;
+
+<span class="token keyword">export function</span> <span class="token function">useFetch</span>(url, options = {}) {
+  <span class="token keyword">const</span> [data, setData] = <span class="token function">useState</span>(<span class="token keyword">null</span>);
+  <span class="token keyword">const</span> [loading, setLoading] = <span class="token function">useState</span>(<span class="token keyword">true</span>);
+  <span class="token keyword">const</span> [error, setError] = <span class="token function">useState</span>(<span class="token keyword">null</span>);
+  <span class="token keyword">const</span> cache = <span class="token function">useRef</span>({});
+
+  <span class="token function">useEffect</span>(() => {
+    <span class="token keyword">if</span> (!url) <span class="token keyword">return</span>;
+    <span class="token keyword">if</span> (cache.current[url]) {
+      <span class="token function">setData</span>(cache.current[url]);
+      <span class="token function">setLoading</span>(<span class="token keyword">false</span>);
+      <span class="token keyword">return</span>;
+    }
+
+    <span class="token keyword">const</span> controller = <span class="token keyword">new</span> <span class="token classname">AbortController</span>();
+    <span class="token function">setLoading</span>(<span class="token keyword">true</span>);
+
+    <span class="token function">fetch</span>(url, { ...options, signal: controller.signal })
+      .then(res => {
+        <span class="token keyword">if</span> (!res.ok) <span class="token keyword">throw new</span> <span class="token classname">Error</span>(<span class="token string">`HTTP error: ${res.status}`</span>);
+        <span class="token keyword">return</span> res.json();
+      })
+      .then(jsonData => {
+        cache.current[url] = jsonData;
+        <span class="token function">setData</span>(jsonData);
+      })
+      .catch(err => {
+        <span class="token keyword">if</span> (err.name !== <span class="token string">'AbortError'</span>) <span class="token function">setError</span>(err);
+      })
+      .finally(() => <span class="token function">setLoading</span>(<span class="token keyword">false</span>));
+
+    <span class="token keyword">return</span> () => controller.abort();
+  }, [url]);
+
+  <span class="token keyword">return</span> { data, loading, error };
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>React Custom Hook (`useFetch`):</strong> Implementiert autom. Caching zur Reduzierung von API-Calls, AbortController zur Vermeidung von Race Conditions bei unvollständigen Anfragen und sauberes Laden/Fehler-State-Management.</p>
+                            <p lang="en" class="code-desc"><strong>React Custom Hook (`useFetch`):</strong> Implements automatic client-side memory caching, AbortController request cancelation to prevent race conditions on component unmount, and structured loading/error state management.</p>
+                        </div>
+
+                        <!-- Snippet 2: Java Pattern -->
+                        <div id="snippet-java" class="code-snippet">
+<pre><code><span class="token comment">// Strategy Pattern für Rabattberechnungen</span>
+<span class="token keyword">public interface</span> <span class="token classname">DiscountStrategy</span> {
+    <span class="token keyword">double</span> <span class="token function">applyDiscount</span>(<span class="token keyword">double</span> price);
+}
+
+<span class="token comment">// Konkrete Implementierung: Prozentualer Rabatt</span>
+<span class="token keyword">public class</span> <span class="token classname">PercentageDiscount</span> <span class="token keyword">implements</span> <span class="token classname">DiscountStrategy</span> {
+    <span class="token keyword">private final double</span> rate;
+
+    <span class="token keyword">public</span> <span class="token classname">PercentageDiscount</span>(<span class="token keyword">double</span> rate) {
+        <span class="token keyword">this</span>.rate = rate;
+    }
+
+    <span class="token annotation">@Override</span>
+    <span class="token keyword">public double</span> <span class="token function">applyDiscount</span>(<span class="token keyword">double</span> price) {
+        <span class="token keyword">return</span> price * (<span class="token number">1.0</span> - rate);
+    }
+}
+
+<span class="token comment">// Kontext-Klasse (Warenkorb)</span>
+<span class="token keyword">public class</span> <span class="token classname">ShoppingCart</span> {
+    <span class="token keyword">private</span> <span class="token classname">DiscountStrategy</span> strategy;
+
+    <span class="token keyword">public void</span> <span class="token function">setDiscountStrategy</span>(<span class="token classname">DiscountStrategy</span> strategy) {
+        <span class="token keyword">this</span>.strategy = strategy;
+    }
+
+    <span class="token keyword">public double</span> <span class="token function">calculateTotal</span>(<span class="token keyword">double</span> subtotal) {
+        <span class="token keyword">if</span> (strategy == <span class="token keyword">null</span>) <span class="token keyword">return</span> subtotal;
+        <span class="token keyword">return</span> strategy.applyDiscount(subtotal);
+    }
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>Java Strategy Pattern:</strong> Demonstriert das Open-Closed-Prinzip (SOLID). Neue Rabattarten können ohne Modifikation des bestehenden Warenkorbs über neue Klassen erweitert werden.</p>
+                            <p lang="en" class="code-desc"><strong>Java Strategy Pattern:</strong> Demonstrates the Open-Closed Principle (SOLID). New discount algorithms can be easily added by creating new strategy implementations without changing the shopping cart context class.</p>
+                        </div>
+
+                        <!-- Snippet 3: JS Fetch Wrapper -->
+                        <div id="snippet-js" class="code-snippet">
+<pre><code><span class="token comment">// Fetch-Abfrage mit automatischem Offline-Fallback</span>
+<span class="token keyword">async function</span> <span class="token function">fetchWithFallback</span>(url, fallbackFile) {
+  <span class="token keyword">try</span> {
+    <span class="token keyword">const</span> response = <span class="token keyword">await</span> <span class="token function">fetch</span>(url);
+    <span class="token keyword">if</span> (!response.ok) {
+      <span class="token keyword">throw new</span> <span class="token classname">Error</span>(<span class="token string">`Server returned status: ${response.status}`</span>);
+    }
+    <span class="token keyword">return await</span> response.json();
+  } <span class="token keyword">catch</span> (error) {
+    <span class="token comment">// Fallback im Offline-Modus</span>
+    console.warn(<span class="token string">"Backend unreachable. Loading offline mock-data..."</span>, error);
+    <span class="token keyword">const</span> mockRes = <span class="token keyword">await</span> <span class="token function">fetch</span>(fallbackFile);
+    <span class="token keyword">if</span> (!mockRes.ok) {
+      <span class="token keyword">throw new</span> <span class="token classname">Error</span>(<span class="token string">"Failed to load mock fallback file."</span>);
+    }
+    <span class="token keyword">return await</span> mockRes.json();
+  }
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>JS Async Fetcher mit Offline Fallback:</strong> Sichert die Funktionsfähigkeit der Applikation bei Netzwerkausfällen oder inaktivem Server, indem lokale Mock-Daten geladen werden (Showcase-Modus).</p>
+                            <p lang="en" class="code-desc"><strong>JS Async Fetcher with Offline Fallback:</strong> Resolves fetch failures during network timeouts or inactive servers by falling back to local static JSON mock datasets to guarantee application usability.</p>
+                        </div>
+                    </div>
+                </article>
+
                 <!-- Kontakt & Hire Me -->
                 <article class="card filter-all" id="contact">
                     <h3 lang="de">📬 Kontakt &amp; Hire Me</h3>

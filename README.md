@@ -92,6 +92,15 @@ Das Dashboard auf `dashboard.html` bietet einen interaktiven QA-Simulator:
 ### 8. Änderungshistorie (`CHANGELOG.md`)
 Alle Verbesserungen, Anpassungen und behobenen Fehler werden chronologisch in der [CHANGELOG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/CHANGELOG.md) im Hauptverzeichnis festgehalten.
 
+### 9. Recruiter-Steckbrief (`home.html`)
+Ein kompaktes Info-Widget auf der Startseite fasst für Personalabteilungen die Kernfakten zusammen (Zielposition, Stack, Verfügbarkeit, Highlights), um Zeit beim Screening zu sparen.
+
+### 10. Code-Showcase-Sektion (`portfolio.html` & `portfolio.js`)
+Ein interaktiver Quelltext-Betrachter ermöglicht es technischen Entscheidern, repräsentative Code-Snippets (wie React Hooks, Java Entwurfsmuster und robuste Fetch-Wrapper) mit integriertem Syntax-Highlighting und Designkommentaren direkt im Browser zu bewerten.
+
+### 11. Interaktive Skill-Filter (`skill-bars.js` & `portfolio.js`)
+Die Skill-Balken auf der Portfolio-Seite reagieren interaktiv auf Klicks. Der Klick filtert die Projektgalerie automatisch nach Projekten, die diesen Skill verwenden (z. B. "Java" oder "SQL").
+
 ---
 
 ## 🚀 Entwicklung & Lokales Testen

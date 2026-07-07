@@ -571,4 +571,30 @@ document.addEventListener('DOMContentLoaded', () => {
             openGameModal(href, titleDe);
         }
     });
+
+    // Code Showcase Tab Switcher
+    const codeTabButtons = document.querySelectorAll('.code-tab-btn');
+    const codeSnippets = document.querySelectorAll('.code-snippet');
+    if (codeTabButtons.length && codeSnippets.length) {
+        codeTabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.target;
+                
+                // Toggle active button
+                codeTabButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Toggle active snippet
+                codeSnippets.forEach(snip => {
+                    if (snip.id === targetId) {
+                        snip.classList.add('active');
+                        snip.style.display = 'block';
+                    } else {
+                        snip.classList.remove('active');
+                        snip.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
 });
