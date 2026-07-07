@@ -37,7 +37,8 @@ const __MODULE_SCRIPTS = [
     'assets/js/dashboard.js',
     'assets/js/modules/qr-generator.js',
     'assets/js/modules/document-preview.js',
-    'assets/js/modules/faq-accordion.js'
+    'assets/js/modules/faq-accordion.js',
+    'assets/js/modules/token-auth.js'
 ];
 
 (function loadModules() {
@@ -73,6 +74,7 @@ const __MODULE_SCRIPTS = [
             if (typeof initQrGenerator === 'function') initQrGenerator();
             if (typeof initDocumentPreview === 'function') initDocumentPreview();
             if (typeof initFaqAccordion === 'function') initFaqAccordion();
+            if (typeof initTokenAuth === 'function') initTokenAuth();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

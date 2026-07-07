@@ -9,7 +9,7 @@ function initDashboard() {
     renderStats();
     renderProjectCount();
     renderRecentProjects();
-    initNotenrechner();
+    initQaMetrics();
     renderLearningRecommendations();
     initCommitGrid();
     renderAchievementsWidget();
@@ -109,34 +109,29 @@ function getIhkGrade(score) {
     return 6;
 }
 
-function initNotenrechner() {
-    const ap1Input = document.getElementById('ihk-ap1');
-    const ap2ProjektInput = document.getElementById('ihk-ap2-projekt');
-    const ap2PlanenInput = document.getElementById('ihk-ap2-planen');
-    const ap2EntwickelnInput = document.getElementById('ihk-ap2-entwickeln');
-    const ap2WisoInput = document.getElementById('ihk-ap2-wiso');
+function initQaMetrics() {
+    const coverageInput = document.getElementById('qa-test-coverage');
+    const cleanCodeInput = document.getElementById('qa-clean-code');
+    const docsInput = document.getElementById('qa-documentation');
+    const securityInput = document.getElementById('qa-security-scan');
 
     // Ranges
-    const ap1Range = document.getElementById('ihk-ap1-range');
-    const ap2ProjektRange = document.getElementById('ihk-ap2-projekt-range');
-    const ap2PlanenRange = document.getElementById('ihk-ap2-planen-range');
-    const ap2EntwickelnRange = document.getElementById('ihk-ap2-entwickeln-range');
-    const ap2WisoRange = document.getElementById('ihk-ap2-wiso-range');
+    const coverageRange = document.getElementById('qa-test-coverage-range');
+    const cleanCodeRange = document.getElementById('qa-clean-code-range');
+    const docsRange = document.getElementById('qa-documentation-range');
+    const securityRange = document.getElementById('qa-security-scan-range');
 
-    if (!ap1Input || !ap2ProjektInput || !ap2PlanenInput || !ap2EntwickelnInput || !ap2WisoInput) return;
+    if (!coverageInput || !cleanCodeInput || !docsInput || !securityInput) return;
 
     const ring = document.getElementById('grade-progress-ring');
     const percentText = document.getElementById('overall-percentage');
-    const gradeText = document.getElementById('overall-grade-label');
     const badge = document.getElementById('grade-status-badge');
 
-    // Bind inputs to ranges bidirectionally
     const mappings = [
-        { num: ap1Input, range: ap1Range },
-        { num: ap2ProjektInput, range: ap2ProjektRange },
-        { num: ap2PlanenInput, range: ap2PlanenRange },
-        { num: ap2EntwickelnInput, range: ap2EntwickelnRange },
-        { num: ap2WisoInput, range: ap2WisoRange }
+        { num: coverageInput, range: coverageRange },
+        { num: cleanCodeInput, range: cleanCodeRange },
+        { num: docsInput, range: docsRange },
+        { num: securityInput, range: securityRange }
     ];
 
     mappings.forEach(pair => {
@@ -144,193 +139,71 @@ function initNotenrechner() {
         
         pair.num.addEventListener('input', () => {
             pair.range.value = pair.num.value;
-            calculateGrade();
+            calculateQuality();
         });
 
         pair.range.addEventListener('input', () => {
             pair.num.value = pair.range.value;
-            calculateGrade();
+            calculateQuality();
         });
     });
 
-    // Certificate Modal handlers
-    const certBtn = document.getElementById('generate-certificate-btn');
-    const certModal = document.getElementById('cert-modal');
-    const closeCertBtn = document.getElementById('close-cert-btn');
-    const printCertBtn = document.getElementById('print-cert-btn');
-
-    if (certBtn && certModal) {
-        certBtn.addEventListener('click', () => {
-            const username = StorageManager.getItem('username') || '';
-            const cleanName = username.trim() !== '' ? username : 'Besucher';
-            const cleanNameEn = username.trim() !== '' ? username : 'Visitor';
-
-            document.getElementById('cert-user-name').textContent = cleanName;
-            document.getElementById('cert-user-name-en').textContent = cleanNameEn;
-
-            const ap1 = parseFloat(ap1Input.value) || 0;
-            const ap2Proj = parseFloat(ap2ProjektInput.value) || 0;
-            const ap2Plan = parseFloat(ap2PlanenInput.value) || 0;
-            const ap2Entw = parseFloat(ap2EntwickelnInput.value) || 0;
-            const ap2Wiso = parseFloat(ap2WisoInput.value) || 0;
-
-            const overallScore = (ap1 * 0.2) + (ap2Proj * 0.5) + (ap2Plan * 0.1) + (ap2Entw * 0.1) + (ap2Wiso * 0.1);
-
-            // Set scores
-            document.getElementById('cert-p-ap1').textContent = Math.round(ap1);
-            document.getElementById('cert-p-ap2-proj').textContent = Math.round(ap2Proj);
-            document.getElementById('cert-p-ap2-plan').textContent = Math.round(ap2Plan);
-            document.getElementById('cert-p-ap2-entw').textContent = Math.round(ap2Entw);
-            document.getElementById('cert-p-ap2-wiso').textContent = Math.round(ap2Wiso);
-            document.getElementById('cert-p-total').textContent = Math.round(overallScore);
-
-            // Set subgrades
-            document.getElementById('cert-g-ap1').textContent = getIhkGrade(ap1);
-            document.getElementById('cert-g-ap2-proj').textContent = getIhkGrade(ap2Proj);
-            document.getElementById('cert-g-ap2-plan').textContent = getIhkGrade(ap2Plan);
-            document.getElementById('cert-g-ap2-entw').textContent = getIhkGrade(ap2Entw);
-            document.getElementById('cert-g-ap2-wiso').textContent = getIhkGrade(ap2Wiso);
-            document.getElementById('cert-g-total').textContent = getIhkGrade(overallScore);
-
-            // Check if passed (Exclusion criteria matching calculateGrade)
-            const subAreasAP2 = [ap2Proj, ap2Plan, ap2Entw, ap2Wiso];
-            const ap2Score = (ap2Proj * 0.5 + ap2Plan * 0.1 + ap2Entw * 0.1 + ap2Wiso * 0.1) / 0.8;
-            const countSufficientAP2 = subAreasAP2.filter(v => v >= 50).length;
-            const hasUngenuegendAP2 = subAreasAP2.some(v => v < 30);
-
-            let passed = true;
-            if (overallScore < 50 || ap2Score < 50 || countSufficientAP2 < 3 || hasUngenuegendAP2) {
-                passed = false;
-            }
-
-            const decisionDe = document.getElementById('cert-status-decision');
-            const decisionEn = document.getElementById('cert-status-decision-en');
-            if (passed) {
-                decisionDe.textContent = "BESTANDEN";
-                decisionDe.style.color = "#10b981";
-                decisionEn.textContent = "PASSED";
-                decisionEn.style.color = "#10b981";
-            } else {
-                decisionDe.textContent = "NICHT BESTANDEN";
-                decisionDe.style.color = "#ef4444";
-                decisionEn.textContent = "FAILED";
-                decisionEn.style.color = "#ef4444";
-            }
-
-            // Open Modal
-            certModal.style.display = 'flex';
-            certModal.classList.add('show');
-
-            // Log dynamic commit grid increment (Punkte sammeln!)
-            if (typeof window.addLiveCommit === 'function') {
-                window.addLiveCommit();
-            }
-        });
-
-        if (closeCertBtn) {
-            closeCertBtn.addEventListener('click', () => {
-                certModal.style.display = 'none';
-                certModal.classList.remove('show');
-            });
-        }
-
-        // Close on clicking overlay background
-        certModal.addEventListener('click', (e) => {
-            if (e.target === certModal) {
-                certModal.style.display = 'none';
-                certModal.classList.remove('show');
-            }
-        });
-
-        if (printCertBtn) {
-            printCertBtn.addEventListener('click', () => {
-                window.print();
-            });
-        }
-    }
-
-    document.addEventListener('langchange', calculateGrade);
+    document.addEventListener('langchange', calculateQuality);
 
     // Initial calculation
-    calculateGrade();
+    calculateQuality();
 
-    function calculateGrade() {
+    function calculateQuality() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
-        const ap1 = Math.min(100, Math.max(0, parseFloat(ap1Input.value) || 0));
-        const ap2Proj = Math.min(100, Math.max(0, parseFloat(ap2ProjektInput.value) || 0));
-        const ap2Plan = Math.min(100, Math.max(0, parseFloat(ap2PlanenInput.value) || 0));
-        const ap2Entw = Math.min(100, Math.max(0, parseFloat(ap2EntwickelnInput.value) || 0));
-        const ap2Wiso = Math.min(100, Math.max(0, parseFloat(ap2WisoInput.value) || 0));
+        const coverage = Math.min(100, Math.max(0, parseFloat(coverageInput.value) || 0));
+        const cleanCode = Math.min(100, Math.max(0, parseFloat(cleanCodeInput.value) || 0));
+        const docs = Math.min(100, Math.max(0, parseFloat(docsInput.value) || 0));
+        const security = Math.min(100, Math.max(0, parseFloat(securityInput.value) || 0));
 
         // Weightings:
-        // AP1 = 20%
-        // AP2 Projekt = 50%
-        // AP2 Planen = 10%
-        // AP2 Entwickeln = 10%
-        // AP2 WiSo = 10%
-        const overallScore = (ap1 * 0.2) + (ap2Proj * 0.5) + (ap2Plan * 0.1) + (ap2Entw * 0.1) + (ap2Wiso * 0.1);
-        const ap2Score = (ap2Proj * 0.5 + ap2Plan * 0.1 + ap2Entw * 0.1 + ap2Wiso * 0.1) / 0.8;
-
-        // IHK Grade Scale
-        let grade = 6;
-        let gradeName = '';
-        if (overallScore >= 92) { grade = 1; gradeName = lang === 'de' ? 'Sehr gut' : 'Very good'; }
-        else if (overallScore >= 81) { grade = 2; gradeName = lang === 'de' ? 'Gut' : 'Good'; }
-        else if (overallScore >= 67) { grade = 3; gradeName = lang === 'de' ? 'Befriedigend' : 'Satisfactory'; }
-        else if (overallScore >= 50) { grade = 4; gradeName = lang === 'de' ? 'Ausreichend' : 'Sufficient'; }
-        else if (overallScore >= 30) { grade = 5; gradeName = lang === 'de' ? 'Mangelhaft' : 'Poor'; }
-        else { grade = 6; gradeName = lang === 'de' ? 'Ungenügend' : 'Inadequate'; }
-
-        // Exclusion criteria (Sperrklauseln)
-        // 1. Overall Score >= 50
-        // 2. AP2 weighted total >= 50 (i.e. sufficient)
-        // 3. At least 2 sub-areas of AP2 must be >= 50
-        // 4. No sub-area of AP2 must be < 30 (ungenügend)
-        const subAreasAP2 = [ap2Proj, ap2Plan, ap2Entw, ap2Wiso];
-        const countSufficientAP2 = subAreasAP2.filter(v => v >= 50).length;
-        const hasUngenuegendAP2 = subAreasAP2.some(v => v < 30);
-
-        let passed = true;
-        let failReason = '';
-
-        if (overallScore < 50) {
-            passed = false;
-            failReason = lang === 'de' ? 'Gesamtnote unter 50 Punkte' : 'Total points below 50';
-        } else if (ap2Score < 50) {
-            passed = false;
-            failReason = lang === 'de' ? 'Teil 2 der Prüfung unter 50 Punkte' : 'Part 2 below 50 points';
-        } else if (countSufficientAP2 < 3) {
-            passed = false;
-            failReason = lang === 'de' ? 'Weniger als drei Bereiche in Teil 2 ausreichend (>= 50)' : 'Less than three Part 2 fields >= 50';
-        } else if (hasUngenuegendAP2) {
-            passed = false;
-            failReason = lang === 'de' ? 'Ein Bereich in Teil 2 ungenügend (< 30)' : 'A Part 2 field is < 30';
-        }
+        // Coverage = 40%
+        // Clean Code = 30%
+        // Documentation = 15%
+        // Security = 15%
+        const overallScore = (coverage * 0.4) + (cleanCode * 0.3) + (docs * 0.15) + (security * 0.15);
 
         // Update UI
         percentText.textContent = `${Math.round(overallScore)}%`;
-        gradeText.textContent = `${lang === 'de' ? 'Note' : 'Grade'}: ${grade} (${gradeName})`;
 
         // Update SVG circle gauge
-        // Circumference = 2 * Math.PI * 65 = ~408.4
         const circ = 2 * Math.PI * 65;
         ring.style.strokeDasharray = circ;
         const offset = circ - (overallScore / 100) * circ;
         ring.style.strokeDashoffset = offset;
 
-        // Ring Color
-        if (passed) {
-            ring.style.stroke = 'var(--primary)';
+        // Status determinations
+        if (overallScore >= 90) {
+            ring.style.stroke = '#10b981'; // Green
             if (badge) {
                 badge.className = 'grade-alert success';
-                badge.innerHTML = `<span><i class="fa fa-check-circle"></i> ${lang === 'de' ? 'Bestanden!' : 'Passed!'}</span>`;
+                badge.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                badge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+                badge.style.color = '#10b981';
+                badge.innerHTML = `<span><i class="fa fa-check-circle"></i> ${lang === 'de' ? 'Produktionsbereit!' : 'Production Ready!'}</span>`;
+            }
+        } else if (overallScore >= 75) {
+            ring.style.stroke = '#f59e0b'; // Amber
+            if (badge) {
+                badge.className = 'grade-alert warning';
+                badge.style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
+                badge.style.borderColor = 'rgba(245, 158, 11, 0.2)';
+                badge.style.color = '#f59e0b';
+                badge.innerHTML = `<span><i class="fa fa-info-circle"></i> ${lang === 'de' ? 'Freigabe-Kandidat' : 'Release Candidate'}</span>`;
             }
         } else {
-            ring.style.stroke = '#ef4444';
+            ring.style.stroke = '#ef4444'; // Red
             if (badge) {
                 badge.className = 'grade-alert danger';
-                badge.innerHTML = `<span><i class="fa fa-exclamation-circle"></i> ${lang === 'de' ? 'Nicht bestanden' : 'Failed'}<br><small style="font-size:0.75rem;">${failReason}</small></span>`;
+                badge.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                badge.style.borderColor = 'rgba(239, 68, 68, 0.2)';
+                badge.style.color = '#ef4444';
+                badge.innerHTML = `<span><i class="fa fa-exclamation-circle"></i> ${lang === 'de' ? 'Refactoring empfohlen' : 'Refactoring Recommended'}</span>`;
             }
         }
     }

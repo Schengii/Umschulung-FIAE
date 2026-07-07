@@ -79,6 +79,19 @@ Das Portfolio lädt seine Projektkarten dynamisch.
 - Lokale Ordner unter `Projekte/` müssen eine `portfolio-metadata.json` enthalten.
 - Durch Ausführen des Befehls `node scripts/generate_projects_data.js` scannt das Skript alle Unterordner, reichert diese mit GitHub-API-Daten (Stars, Update-Zeitpunkte) an und exportiert sie konsolidiert nach [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) und `assets/js/projects_data.js` (als globaler Fallback).
 
+### 6. Token-Schutz für sensible Bewerbungsdaten (`token-auth.js`)
+Zum Schutz vertraulicher Daten (z. B. Gehaltsvorstellung, Arbeitszeugnis-Downloads) besitzt die Website auf `lebenslauf.html` einen passwortgeschützten Bereich.
+- **Freischaltung**: Erfolgt durch Eingabe des Tokens **fiae2026** im Seitenmenü oder durch Anhängen des URL-Parameters `?token=fiae2026`.
+- **Speicherung**: Nach erfolgreicher Eingabe wird der Zugriff über `sessionStorage` für die Dauer des Browser-Tabs persistiert.
+
+### 7. Code-Qualitätsmetriken & QA-Dashboard (`dashboard.js`)
+Das Dashboard auf `dashboard.html` bietet einen interaktiven QA-Simulator:
+- Zeigt simulated Metriken wie Testabdeckung, Clean Code Compliance, Dokumentation und Security.
+- Der Gesamtwert beeinflusst dynamisch die berechnete Release-Bereitschaft (Production Ready / Release Candidate / Refactoring Recommended).
+
+### 8. Änderungshistorie (`CHANGELOG.md`)
+Alle Verbesserungen, Anpassungen und behobenen Fehler werden chronologisch in der [CHANGELOG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/CHANGELOG.md) im Hauptverzeichnis festgehalten.
+
 ---
 
 ## 🚀 Entwicklung & Lokales Testen

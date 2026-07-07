@@ -73,6 +73,27 @@
                         <li><i class="fa fa-globe" aria-hidden="true"></i> <a href="home.html">max-schenk.de</a></li>
                     </ul>
                 </div>
+ 
+                <!-- Token Lock Card -->
+                <div class="card sidebar-card token-card no-print">
+                    <h3>
+                        <span lang="de"><i class="fa fa-lock" aria-hidden="true"></i> Sensibler Bereich</span>
+                        <span lang="en"><i class="fa fa-lock" aria-hidden="true"></i> Secured Area</span>
+                    </h3>
+                    <p lang="de" style="font-size: 0.85rem; line-height: 1.3;">Geben Sie das Token aus dem Anschreiben ein (z. B. <strong>fiae2026</strong>), um Gehaltswunsch und Zeugnisse freizuschalten.</p>
+                    <p lang="en" style="font-size: 0.85rem; line-height: 1.3;">Enter the token from the cover letter (e.g., <strong>fiae2026</strong>) to unlock salary expectations and references.</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input type="text" id="token-input" class="form-control" placeholder="Token" style="padding: 0.4rem; font-size: 0.9rem; flex-grow: 1; min-width: 0;">
+                        <button id="token-submit" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; white-space: nowrap;">
+                            <span lang="de">Freischalten</span>
+                            <span lang="en">Unlock</span>
+                        </button>
+                    </div>
+                    <div id="token-error" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.4rem; display: none;">
+                        <span lang="de"><i class="fa fa-exclamation-circle"></i> Ungültiges Token</span>
+                        <span lang="en"><i class="fa fa-exclamation-circle"></i> Invalid Token</span>
+                    </div>
+                </div>
 
                 <!-- Technical Skills Card -->
                 <div class="card sidebar-card skills-card">
@@ -252,7 +273,61 @@
                             </div>
                             <div class="timeline-v2-content">
                                 <p lang="de">Erfolgreicher Realschulabschluss (Notenschnitt 2,0).</p>
-                                <p lang="en">Finished secondary school with the Realschulabschluss qualification (GPA 2.0).</p>
+                        <p lang="en">Finished secondary school with the Realschulabschluss qualification (GPA 2.0).</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Token-Secured Area -->
+                <section class="card main-card no-print">
+                    <h2>
+                        <span lang="de"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Sensible Bewerbungsdaten</span>
+                        <span lang="en"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Secured Applicant Data</span>
+                    </h2>
+                    
+                    <!-- Locked State Placeholder -->
+                    <div class="token-locked-placeholder">
+                        <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.02); border: 1px dashed var(--border); border-radius: 8px;">
+                            <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🔒</span>
+                            <h4 lang="de" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Inhalte gesperrt</h4>
+                            <h4 lang="en" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Content Locked</h4>
+                            <p lang="de" style="font-size: 0.85rem; margin-bottom: 0;">Bitte geben Sie das passende Token im linken Seitenmenü ein, um diese Daten anzuzeigen.</p>
+                            <p lang="en" style="font-size: 0.85rem; margin-bottom: 0;">Please enter the matching token in the left sidebar card to access this information.</p>
+                        </div>
+                    </div>
+
+                    <!-- Unlocked State Content -->
+                    <div class="token-secured hidden-secured" style="display: none;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start;">
+                            <div>
+                                <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
+                                    <span lang="de"><i class="fa fa-euro-sign" aria-hidden="true"></i> Gehaltsvorstellung</span>
+                                    <span lang="en"><i class="fa fa-euro-sign" aria-hidden="true"></i> Salary Expectation</span>
+                                </h3>
+                                <p style="font-size: 1.35rem; font-weight: bold; color: var(--primary); margin: 0.5rem 0;">
+                                    45.000 € – 52.000 € <span style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted);">p.a. (verhandelbar)</span>
+                                </p>
+                                <p lang="de" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">Abhängig von Zusatzleistungen, Arbeitszeitmodell und konkretem Aufgabengebiet.</p>
+                                <p lang="en" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">Depending on benefits, work-time model, and concrete field of tasks.</p>
+                            </div>
+                            <div>
+                                <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
+                                    <span lang="de"><i class="fa fa-file-pdf" aria-hidden="true"></i> Zeugnisse &amp; Nachweise</span>
+                                    <span lang="en"><i class="fa fa-file-pdf" aria-hidden="true"></i> Certificates &amp; References</span>
+                                </h3>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <a href="assets/pdf/IHK_Zeugnis_Dummy.pdf" class="btn-secondary" download style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        <span lang="de">IHK-Zeugnis (Simuliert)</span>
+                                        <span lang="en">IHK Certificate (Simulated)</span>
+                                    </a>
+                                    <a href="assets/pdf/Praktikumszeugnis_DFG_Dummy.pdf" class="btn-secondary" download style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        <span lang="de">Praktikumszeugnis DFG</span>
+                                        <span lang="en">Internship Reference DFG</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
