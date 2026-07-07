@@ -404,4 +404,171 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.focus();
         }
     });
+
+    // Handle tag clicking in cards
+    document.addEventListener('click', (e) => {
+        const tagEl = e.target.closest('.tech-tag');
+        if (!tagEl) return;
+        
+        const tagName = tagEl.textContent.trim();
+        if (searchInput) {
+            searchInput.value = tagName;
+            currentSearchTerm = tagName.toLowerCase();
+            currentPage = 1;
+            renderAllProjects();
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            searchInput.focus();
+        }
+    });
+
+    // Game Modal Functions
+    function openGameModal(gameUrl, gameTitle) {
+        let modal = document.getElementById('game-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'game-modal';
+            modal.className = 'game-modal hidden';
+            modal.innerHTML = `
+                <div class="game-modal-backdrop"></div>
+                <div class="game-modal-content">
+                    <div class="game-modal-header">
+                        <h3 class="game-modal-title">${gameTitle}</h3>
+                        <button class="game-modal-close" aria-label="Schließen / Close">✕</button>
+                    </div>
+                    <div class="game-modal-body">
+                        <iframe id="game-modal-iframe" src="" style="width: 100%; height: 65vh; border: none; background: #000;"></iframe>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Inject game modal styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .game-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.3s ease;
+                }
+                .game-modal.show {
+                    opacity: 1;
+                    pointer-events: all;
+                }
+                .game-modal-backdrop {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.85);
+                    backdrop-filter: blur(5px);
+                }
+                .game-modal-content {
+                    position: relative;
+                    width: 95%;
+                    max-width: 950px;
+                    background: var(--bg-card);
+                    border: 1px solid var(--border);
+                    border-radius: var(--radius-lg, 12px);
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                    overflow: hidden;
+                    transform: scale(0.95);
+                    transition: transform 0.3s ease;
+                }
+                .game-modal.show .game-modal-content {
+                    transform: scale(1);
+                }
+                .game-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.75rem 1.25rem;
+                    border-bottom: 1px solid var(--border);
+                }
+                .game-modal-title {
+                    margin: 0;
+                    font-size: 1.15rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                }
+                .game-modal-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    color: var(--text-muted);
+                    transition: color 0.2s;
+                }
+                .game-modal-close:hover {
+                    color: var(--primary);
+                }
+                .game-modal-body {
+                    padding: 0;
+                    background: #000;
+                }
+            `;
+            document.head.appendChild(style);
+
+            modal.querySelector('.game-modal-close').addEventListener('click', closeGameModal);
+            modal.querySelector('.game-modal-backdrop').addEventListener('click', closeGameModal);
+        }
+
+        const iframe = document.getElementById('game-modal-iframe');
+        if (iframe) iframe.src = gameUrl;
+        
+        modal.classList.remove('hidden');
+        modal.offsetHeight; // force reflow
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+
+        // Keyboard handler for Game Modal Escape
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                closeGameModal();
+                document.removeEventListener('keydown', handleEsc);
+            }
+        };
+        document.addEventListener('keydown', handleEsc);
+    }
+
+    function closeGameModal() {
+        const modal = document.getElementById('game-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            const iframe = document.getElementById('game-modal-iframe');
+            if (iframe) iframe.src = 'about:blank'; // unload game audio/scripts
+            setTimeout(() => {
+                if (!modal.classList.contains('show')) {
+                    modal.classList.add('hidden');
+                }
+            }, 320);
+        }
+    }
+
+    // Intercept game launch clicks
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href') || '';
+        const isGameLink = href === 'snake.html' || href === 'memory.html' || href === 'quiz.html';
+
+        if (isGameLink) {
+            e.preventDefault();
+            const card = link.closest('.project-card');
+            const titleDe = card?.dataset.titleDe || card?.querySelector('h3')?.textContent || 'Game';
+            openGameModal(href, titleDe);
+        }
+    });
 });

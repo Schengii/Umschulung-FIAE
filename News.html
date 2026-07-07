@@ -29,12 +29,21 @@
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
-        <!-- Category Filter Bar -->
-        <div class="filter-bar">
-            <button class="btn-filter active" data-filter="all"><span lang="de">Alle</span><span lang="en">All Posts</span></button>
-            <button class="btn-filter" data-filter="milestone"><span lang="de">Meilensteine</span><span lang="en">Milestones</span></button>
-            <button class="btn-filter" data-filter="bfw"><span lang="de">Theorie (BFW)</span><span lang="en">Theory (BFW)</span></button>
-            <button class="btn-filter" data-filter="dfg"><span lang="de">Praxis (DFG)</span><span lang="en">Practice (DFG)</span></button>
+        <!-- Controls Bar with filters and live search -->
+        <div class="news-controls-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+            <!-- Category Filter Bar -->
+            <div class="filter-bar" style="margin-bottom: 0;">
+                <button class="btn-filter active" data-filter="all"><span lang="de">Alle</span><span lang="en">All Posts</span></button>
+                <button class="btn-filter" data-filter="milestone"><span lang="de">Meilensteine</span><span lang="en">Milestones</span></button>
+                <button class="btn-filter" data-filter="bfw"><span lang="de">Theorie (BFW)</span><span lang="en">Theory (BFW)</span></button>
+                <button class="btn-filter" data-filter="dfg"><span lang="de">Praxis (DFG)</span><span lang="en">Practice (DFG)</span></button>
+            </div>
+
+            <!-- News Search container -->
+            <div class="search-container" style="position: relative; display: flex; align-items: center; max-width: 300px; width: 100%;">
+                <i class="fa fa-search search-icon" aria-hidden="true" style="position: absolute; left: 1rem; color: var(--text-muted);"></i>
+                <input type="text" id="news-searchbar" class="search-input" placeholder="News durchsuchen..." style="padding-left: 2.5rem; height: 38px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); outline: none; font-size: 0.9rem; width: 100%;" aria-label="News durchsuchen">
+            </div>
         </div>
 
         <div class="layout-grid">

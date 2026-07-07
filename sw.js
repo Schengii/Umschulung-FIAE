@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v13';
+const CACHE_NAME = 'umschulung-fiae-v15';
 const ASSETS = [
     './',
     'index.html',
@@ -78,6 +78,8 @@ const ASSETS = [
     'assets/js/modules/project-slideshow.js',
     'assets/js/modules/pwa-installer.js',
     'assets/js/modules/qr-generator.js',
+    'assets/js/modules/document-preview.js',
+    'assets/js/modules/faq-accordion.js',
     'assets/js/modules/roadmap.js',
     'assets/js/modules/scroll-animations.js',
     'assets/js/modules/search-filter.js',

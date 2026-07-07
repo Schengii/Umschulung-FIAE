@@ -148,12 +148,6 @@ function renderNav(currentPage) {
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-                <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub Profil" class="theme-toggle nav-social-icon" title="GitHub">
-                    <i class="fa-brands fa-github" aria-hidden="true"></i>
-                </a>
-                <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn Profil" class="theme-toggle nav-social-icon" title="LinkedIn" style="color: #0a66c2;">
-                    <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
-                </a>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>

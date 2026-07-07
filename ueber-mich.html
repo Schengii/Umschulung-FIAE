@@ -153,23 +153,38 @@
                         Select a category to filter my qualifications and reference projects in the radar chart and details grid.
                     </p>
 
-                    <!-- Filter Tabs -->
-                    <div class="skills-filter-tabs" id="skills-filter-tabs">
-                        <button class="skills-tab active" data-cat="all">
-                            <span lang="de">Alle</span><span lang="en">All</span>
-                        </button>
-                        <button class="skills-tab" data-cat="frontend">
-                            <span lang="de">Frontend / Mobile</span><span lang="en">Frontend / Mobile</span>
-                        </button>
-                        <button class="skills-tab" data-cat="backend">
-                            <span lang="de">Backend / Datenbanken</span><span lang="en">Backend / Databases</span>
-                        </button>
-                        <button class="skills-tab" data-cat="tools">
-                            <span lang="de">Tools / DevOps</span><span lang="en">Tools / DevOps</span>
-                        </button>
-                        <button class="skills-tab" data-cat="electronics">
-                            <span lang="de">Elektronik / SPS</span><span lang="en">Electronics / PLC</span>
-                        </button>
+                    <!-- Filter Tabs & Sort controls wrapper -->
+                    <div class="skills-controls-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div class="skills-filter-tabs" id="skills-filter-tabs" style="margin-bottom: 0;">
+                            <button class="skills-tab active" data-cat="all">
+                                <span lang="de">Alle</span><span lang="en">All</span>
+                            </button>
+                            <button class="skills-tab" data-cat="frontend">
+                                <span lang="de">Frontend / Mobile</span><span lang="en">Frontend / Mobile</span>
+                            </button>
+                            <button class="skills-tab" data-cat="backend">
+                                <span lang="de">Backend / Datenbanken</span><span lang="en">Backend / Databases</span>
+                            </button>
+                            <button class="skills-tab" data-cat="tools">
+                                <span lang="de">Tools / DevOps</span><span lang="en">Tools / DevOps</span>
+                            </button>
+                            <button class="skills-tab" data-cat="electronics">
+                                <span lang="de">Elektronik / SPS</span><span lang="en">Electronics / PLC</span>
+                            </button>
+                        </div>
+
+                        <!-- Sort dropdown -->
+                        <div class="skills-sort-container" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label for="skills-sort-select" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">
+                                <span lang="de">Sortierung:</span><span lang="en">Sort by:</span>
+                            </label>
+                            <select id="skills-sort-select" class="theme-toggle" style="font-size: 0.85rem; height: 36px; border-radius: 20px; padding: 0 1rem; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; color: var(--text-primary); outline: none;">
+                                <option value="default">Standard / Default</option>
+                                <option value="alpha">A-Z</option>
+                                <option value="level-desc">Level: Hoch ➔ Tief / High ➔ Low</option>
+                                <option value="level-asc">Level: Tief ➔ Hoch / Low ➔ High</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Skills Matrix Flex/Grid Container -->

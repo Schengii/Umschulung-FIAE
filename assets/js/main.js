@@ -7,6 +7,7 @@
 // Scripts to load before initialization (in order)
 const __MODULE_SCRIPTS = [
     'assets/js/constants.js',
+    'assets/js/toast.js',
     'assets/js/modules/theme.js',
     'assets/js/modules/navigation.js',
     'assets/js/modules/translation.js',
@@ -35,6 +36,8 @@ const __MODULE_SCRIPTS = [
     'assets/js/elektrocheck_overlay.js', // New module for ElektroCheck AI bounding boxes
     'assets/js/dashboard.js',
     'assets/js/modules/qr-generator.js',
+    'assets/js/modules/document-preview.js',
+    'assets/js/modules/faq-accordion.js'
 ];
 
 (function loadModules() {
@@ -68,6 +71,8 @@ const __MODULE_SCRIPTS = [
             if (typeof initPraktikumsbetriebMedia === 'function') initPraktikumsbetriebMedia();
             if (typeof initDashboard === 'function') initDashboard();
             if (typeof initQrGenerator === 'function') initQrGenerator();
+            if (typeof initDocumentPreview === 'function') initDocumentPreview();
+            if (typeof initFaqAccordion === 'function') initFaqAccordion();
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

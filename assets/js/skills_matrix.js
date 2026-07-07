@@ -295,6 +295,17 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredSkills = SKILLS_DATA.filter(s => s.category === activeCategory);
         }
 
+        // Apply sorting
+        const sortSelect = document.getElementById('skills-sort-select');
+        const sortVal = sortSelect ? sortSelect.value : 'default';
+        if (sortVal === 'alpha') {
+            filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortVal === 'level-desc') {
+            filteredSkills.sort((a, b) => b.score - a.score);
+        } else if (sortVal === 'level-asc') {
+            filteredSkills.sort((a, b) => a.score - b.score);
+        }
+
         listGrid.innerHTML = filteredSkills.map(s => `
             <div class="skill-matrix-card">
                 <div class="skill-card-header">
@@ -339,6 +350,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Bind sorting change event
+    const sortSelect = document.getElementById('skills-sort-select');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', renderDetailsGrid);
+    }
 
     // Listen for language changes to update labels/descriptions
     document.addEventListener('langchange', () => {
