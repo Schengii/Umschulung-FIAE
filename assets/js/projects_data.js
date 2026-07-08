@@ -144,7 +144,7 @@ window.projectsData = [
       "TailwindCSS",
       "Recharts"
     ],
-    "image": null,
+    "image": "assets/images/finanzenportfolio_showcase.png",
     "link": "Projekte/Finanzenportfolio/dist/index.html",
     "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
     "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
@@ -248,8 +248,8 @@ window.projectsData = [
       "Image Processing",
       "CSS Grid"
     ],
-    "image": null,
-    "link": "Projekte/Urlaubsfotos/index.html",
+    "image": "assets/images/urlaubsfotos_showcase.png",
+    "link": "Projekte/Urlaubsfotos/dist/index.html",
     "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
     "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
     "category": "web",
@@ -268,7 +268,7 @@ window.projectsData = [
       "PDF Generation",
       "LocalStorage"
     ],
-    "image": null,
+    "image": "assets/images/verkaufsvorlagen_showcase.png",
     "link": "Projekte/VerkaufsVorlagen/dist/index.html",
     "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
     "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
@@ -330,7 +330,7 @@ window.projectsData = [
       "Vanilla JS (ES6)",
       "LocalStorage"
     ],
-    "image": null,
+    "image": "assets/images/snake_showcase.png",
     "link": "snake.html",
     "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
     "descEn": "A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.",
@@ -347,7 +347,7 @@ window.projectsData = [
       "UX Design",
       "Accessibility"
     ],
-    "image": null,
+    "image": "assets/images/quiz_showcase.png",
     "link": "quiz.html",
     "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
     "descEn": "An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.",
@@ -364,7 +364,7 @@ window.projectsData = [
       "Game Logic",
       "LocalStorage"
     ],
-    "image": null,
+    "image": "assets/images/memory_showcase.png",
     "link": "memory.html",
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
     "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
@@ -382,11 +382,12 @@ window.projectsData = [
       "JDBC / SQL",
       "Unit Testing"
     ],
-    "image": null,
-    "link": null,
+    "image": "assets/images/it_workspace.png",
+    "link": "https://github.com/Schengii",
     "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",
     "descEn": "A collection of Java practice applications from my retraining program. Includes command-line tools, advanced OOP design patterns, JUnit test suites, and a Spring Boot REST API for managing course and student databases.",
     "category": "web",
-    "language": "Java"
+    "language": "Java",
+    "githubUrl": "https://github.com/Schengii"
   }
 ];
