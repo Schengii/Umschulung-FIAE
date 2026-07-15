@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Architektur &amp; API-Explorer | Maximilian Schenk</title>
-    <meta name="description" content="Interaktiver Systemarchitektur-Visualisierer und REST-API Swagger-Simulator für EcoChef und ElektroCheck AI.">
+    <meta name="description"
+        content="Interaktiver Systemarchitektur-Visualisierer und REST-API Swagger-Simulator für EcoChef und ElektroCheck AI.">
     <meta name="author" content="Maximilian Schenk">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
     <link rel="stylesheet" href="assets/css/architecture.css">
 </head>
@@ -26,40 +28,49 @@
     <!-- Main Content -->
     <main id="main-content" class="main-container">
         <!-- Breadcrumbs Container -->
-        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Weiteres","label_en":"More","href":"#"},{"label_de":"Architektur &amp; API","label_en":"Architecture &amp; API","href":"architecture.html"}]'></div>
+        <div id="breadcrumb-container"
+            data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Weiteres","label_en":"More","href":"#"},{"label_de":"Architektur &amp; API","label_en":"Architecture &amp; API","href":"architecture.html"}]'>
+        </div>
 
         <div class="card">
             <h2 lang="de"><i class="fa fa-sitemap" aria-hidden="true"></i> Systemarchitektur &amp; API-Explorer</h2>
             <h2 lang="en"><i class="fa fa-sitemap" aria-hidden="true"></i> System Architecture &amp; API Explorer</h2>
-            
-            <p lang="de">Analysiere die Funktionsweise meiner größten Programmierprojekte! Klicke in den Diagrammen auf die einzelnen Komponenten, um deren Details einzusehen, oder nutze den API-Explorer, um REST-Endpunkte simuliert im Swagger-Stil live abzufragen.</p>
-            <p lang="en">Analyze how my major software projects function! Click components in the diagrams to inspect their architectures, or use the API Explorer to submit simulated requests to mock endpoints Swagger-style.</p>
+
+            <p lang="de">Analysiere die Funktionsweise meiner größten Programmierprojekte! Klicke in den Diagrammen auf
+                die einzelnen Komponenten, um deren Details einzusehen, oder nutze den API-Explorer, um REST-Endpunkte
+                simuliert im Swagger-Stil live abzufragen.</p>
+            <p lang="en">Analyze how my major software projects function! Click components in the diagrams to inspect
+                their architectures, or use the API Explorer to submit simulated requests to mock endpoints
+                Swagger-style.</p>
         </div>
 
         <!-- Navigation Tabs Bar -->
-        <div class="arch-tabs-bar">
-            <button class="arch-tab-btn active" id="tab-btn-ecochef">
+        <div class="arch-tabs-bar" role="tablist" aria-label="Architektur-Ansichten">
+            <button class="arch-tab-btn active" id="tab-btn-ecochef" role="tab" aria-selected="true"
+                aria-controls="panel-ecochef">
                 <i class="fa fa-leaf" aria-hidden="true"></i> EcoChef (Java Stack)
             </button>
-            <button class="arch-tab-btn" id="tab-btn-elektrocheck">
+            <button class="arch-tab-btn" id="tab-btn-elektrocheck" role="tab" aria-selected="false"
+                aria-controls="panel-elektrocheck">
                 <i class="fa fa-bolt" aria-hidden="true"></i> ElektroCheck AI (React &amp; AI Stack)
             </button>
-            <button class="arch-tab-btn" id="tab-btn-api">
+            <button class="arch-tab-btn" id="tab-btn-api" role="tab" aria-selected="false" aria-controls="panel-api">
                 <i class="fa fa-gears" aria-hidden="true"></i> REST API-Explorer (Swagger Mock)
             </button>
         </div>
 
         <!-- TAB 1: ECOCHEF DIAGRAM -->
-        <div class="diagram-wrapper" id="panel-ecochef">
+        <div class="diagram-wrapper" id="panel-ecochef" role="tabpanel" aria-labelledby="tab-btn-ecochef">
             <div class="diagram-container">
                 <svg width="100%" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <!-- Arrow Head Marker -->
-                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)" />
                         </marker>
                     </defs>
-                    
+
                     <!-- Web Client -->
                     <g class="hotspot active-hotspot" data-project="ecochef" data-component="client">
                         <rect x="20" y="130" width="130" height="60" rx="8" />
@@ -103,24 +114,30 @@
                     <path d="M 330 160 L 150 160" class="arrow-line" />
                 </svg>
             </div>
-            
+
             <!-- Details Panel -->
             <div class="card" id="details-pane">
                 <h3 id="details-title" class="details-title-heading">Web-Frontend (Thymeleaf &amp; CSS3)</h3>
-                <h5 class="details-tech-heading"><span lang="de">Technologie-Stack:</span><span lang="en">Technology Stack:</span></h5>
-                <span class="badge-match details-tech-badge" id="details-tech">HTML5, CSS3, JavaScript (ES6), Thymeleaf Templates</span>
+                <h5 class="details-tech-heading"><span lang="de">Technologie-Stack:</span><span lang="en">Technology
+                        Stack:</span></h5>
+                <span class="badge-match details-tech-badge" id="details-tech">HTML5, CSS3, JavaScript (ES6), Thymeleaf
+                    Templates</span>
                 <hr class="details-divider">
-                <p id="details-desc" class="small-muted">Die Benutzeroberfläche stellt die Rezepte, den ökologischen Fußabdruck und die Saisonalitätskalender dar. Thymeleaf rendert die Daten serverseitig in HTML. JavaScript fügt Interaktionen hinzu (wie die CO2-Ringe).</p>
+                <p id="details-desc" class="small-muted">Die Benutzeroberfläche stellt die Rezepte, den ökologischen
+                    Fußabdruck und die Saisonalitätskalender dar. Thymeleaf rendert die Daten serverseitig in HTML.
+                    JavaScript fügt Interaktionen hinzu (wie die CO2-Ringe).</p>
             </div>
         </div>
 
         <!-- TAB 2: ELEKTROCHECK DIAGRAM -->
-        <div class="diagram-wrapper collapsed" id="panel-elektrocheck">
+        <div class="diagram-wrapper collapsed" id="panel-elektrocheck" role="tabpanel"
+            aria-labelledby="tab-btn-elektrocheck">
             <div class="diagram-container">
                 <svg width="100%" height="340" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <marker id="arrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
+                        <marker id="arrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)" />
                         </marker>
                     </defs>
 
@@ -156,17 +173,20 @@
                     <path d="M 540 130 C 540 50, 80 50, 80 130" class="arrow-line" />
                 </svg>
             </div>
-            
+
             <!-- Details Panel (reused) -->
             <div class="card details-pane-hidden" id="details-pane-reused"></div>
         </div>
 
         <!-- TAB 3: API EXPLORER -->
-        <div class="card collapsed" id="panel-api">
-            <h3 lang="de"><i class="fa fa-gears" aria-hidden="true"></i> REST API-Endpunkte Simulator (Swagger Mock)</h3>
+        <div class="card collapsed" id="panel-api" role="tabpanel" aria-labelledby="tab-btn-api">
+            <h3 lang="de"><i class="fa fa-gears" aria-hidden="true"></i> REST API-Endpunkte Simulator (Swagger Mock)
+            </h3>
             <h3 lang="en"><i class="fa fa-gears" aria-hidden="true"></i> REST API Endpoint Simulator (Swagger Mock)</h3>
-            <p lang="de" class="small-muted">Wähle eine Route aus, bearbeite den Anfrage-Body bei Bedarf und klicke auf "Ausführen", um die Server-Antworten der Microservices zu simulieren.</p>
-            <p lang="en" class="small-muted">Select a route, edit the request body if needed, and click "Execute" to mock the server responses of the microservices.</p>
+            <p lang="de" class="small-muted">Wähle eine Route aus, bearbeite den Anfrage-Body bei Bedarf und klicke auf
+                "Ausführen", um die Server-Antworten der Microservices zu simulieren.</p>
+            <p lang="en" class="small-muted">Select a route, edit the request body if needed, and click "Execute" to
+                mock the server responses of the microservices.</p>
 
             <div class="api-explorer-grid">
                 <!-- Routes List -->

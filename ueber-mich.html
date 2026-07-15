@@ -204,20 +204,21 @@
                     <!-- Filter Tabs & Sort controls wrapper -->
                     <div class="skills-controls-container"
                         style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div class="skills-filter-tabs" id="skills-filter-tabs" style="margin-bottom: 0;">
-                            <button class="skills-tab active" data-cat="all">
+                        <div class="skills-filter-tabs" id="skills-filter-tabs" style="margin-bottom: 0;" role="tablist"
+                            aria-label="Skills-Kategorien">
+                            <button class="skills-tab active" data-cat="all" role="tab" aria-selected="true">
                                 <span lang="de">Alle</span><span lang="en">All</span>
                             </button>
-                            <button class="skills-tab" data-cat="frontend">
+                            <button class="skills-tab" data-cat="frontend" role="tab" aria-selected="false">
                                 <span lang="de">Frontend / Mobile</span><span lang="en">Frontend / Mobile</span>
                             </button>
-                            <button class="skills-tab" data-cat="backend">
+                            <button class="skills-tab" data-cat="backend" role="tab" aria-selected="false">
                                 <span lang="de">Backend / Datenbanken</span><span lang="en">Backend / Databases</span>
                             </button>
-                            <button class="skills-tab" data-cat="tools">
+                            <button class="skills-tab" data-cat="tools" role="tab" aria-selected="false">
                                 <span lang="de">Tools / DevOps</span><span lang="en">Tools / DevOps</span>
                             </button>
-                            <button class="skills-tab" data-cat="electronics">
+                            <button class="skills-tab" data-cat="electronics" role="tab" aria-selected="false">
                                 <span lang="de">Elektronik / SPS</span><span lang="en">Electronics / PLC</span>
                             </button>
                         </div>
