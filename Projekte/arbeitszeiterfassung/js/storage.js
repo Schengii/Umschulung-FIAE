@@ -16,10 +16,45 @@ const DEFAULT_LOCATION = {
 
 // Default Settings
 const DEFAULT_SETTINGS = {
-  dailyTarget: 8 // in hours
+  dailyTarget: 8, // in hours
+  arbzgBreaksEnabled: true // Default: ArbZG Pausen aktiv
 };
 
 window.storageService = {
+  // --- CLOUD SYNC HELPERS ---
+  async syncToCloud() {
+    if (window.firebaseMock && window.firebaseMock.auth.currentUser) {
+      const data = {
+        history: this.getHistory(),
+        settings: this.getSettings(),
+        location: this.getLocation()
+      };
+      await window.firebaseMock.firestore.syncData(data);
+    }
+  },
+
+  async loadFromCloud() {
+    if (window.firebaseMock && window.firebaseMock.auth.currentUser) {
+      const data = await window.firebaseMock.firestore.loadData();
+      if (data) {
+        if (data.history) localStorage.setItem(KEYS.HISTORY, JSON.stringify(data.history));
+        if (data.settings) localStorage.setItem(KEYS.SETTINGS, JSON.stringify(data.settings));
+        if (data.location) localStorage.setItem(KEYS.OFFICE_LOCATION, JSON.stringify(data.location));
+        
+        // Reload global variables
+        window.history = this.getHistory();
+        window.settings = this.getSettings();
+        window.officeLocation = this.getLocation();
+        
+        // Re-render UI if applicable
+        if (typeof renderHistoryList === 'function') renderHistoryList();
+        if (typeof updateDashboardStats === 'function') updateDashboardStats();
+        
+        console.log("Cloud data loaded and applied.");
+      }
+    }
+  },
+
   // --- LOCATION STORAGE ---
   getLocation() {
     const loc = localStorage.getItem(KEYS.OFFICE_LOCATION);
@@ -28,6 +63,7 @@ window.storageService = {
 
   saveLocation(location) {
     localStorage.setItem(KEYS.OFFICE_LOCATION, JSON.stringify(location));
+    this.syncToCloud();
   },
 
   // --- ACTIVE SESSION STORAGE ---
@@ -52,6 +88,7 @@ window.storageService = {
 
   saveHistory(history) {
     localStorage.setItem(KEYS.HISTORY, JSON.stringify(history));
+    this.syncToCloud();
   },
 
   addHistoryEntry(entry) {
@@ -74,6 +111,7 @@ window.storageService = {
 
   clearHistory() {
     localStorage.removeItem(KEYS.HISTORY);
+    this.syncToCloud();
   },
 
   // --- SETTINGS STORAGE ---
@@ -84,5 +122,6 @@ window.storageService = {
 
   saveSettings(settings) {
     localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
+    this.syncToCloud();
   }
 };

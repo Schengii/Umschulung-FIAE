@@ -1,0 +1,945 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvghm22nn3jd7"]
+
+[ext_resource type="Script" uid="uid://bikrgl87hlh3" path="res://scripts/main.gd" id="1_ig7tw"]
+[ext_resource type="Script" path="res://scripts/orbit_visuals.gd" id="2_orbit"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ig7tw")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.1, 1)
+
+[node name="SpaceDust" type="CPUParticles2D" parent="."]
+position = Vector2(1150, 400)
+amount = 80
+lifetime = 10.0
+preprocess = 10.0
+emission_shape = 3
+emission_rect_extents = Vector2(1, 400)
+direction = Vector2(-1, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 100.0
+scale_amount_min = 1.0
+scale_amount_max = 3.0
+color = Color(1, 1, 1, 0.25)
+
+[node name="SpaceDustFar" type="CPUParticles2D" parent="."]
+position = Vector2(1150, 400)
+amount = 120
+lifetime = 15.0
+preprocess = 15.0
+emission_shape = 3
+emission_rect_extents = Vector2(1, 400)
+direction = Vector2(-1, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 35.0
+scale_amount_min = 0.5
+scale_amount_max = 1.8
+color = Color(1, 1, 1, 0.12)
+
+[node name="ClickParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(0, -1)
+spread = 60.0
+gravity = Vector2(0, 400)
+initial_velocity_min = 120.0
+initial_velocity_max = 240.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(1, 0.85, 0.2, 1)
+
+[node name="DebrisParticles" type="CPUParticles2D" parent="."]
+unique_name_in_owner = true
+emitting = false
+amount = 25
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.9
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 60.0
+initial_velocity_max = 150.0
+scale_amount_min = 2.0
+scale_amount_max = 4.5
+color = Color(0.9, 0.6, 0.2, 1)
+
+[node name="Background2" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -200.0
+offset_top = 80.0
+offset_right = 600.0
+offset_bottom = 240.0
+color = Color(0.12, 0.2, 0.32, 0.2)
+
+[node name="Background3" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -100.0
+offset_top = 160.0
+offset_right = 700.0
+offset_bottom = 320.0
+color = Color(0.18, 0.3, 0.45, 0.15)
+
+[node name="OrbitVisuals" type="Control" parent="."]
+layout_mode = 1
+offset_left = 700.0
+offset_top = 120.0
+offset_right = 1130.0
+offset_bottom = 780.0
+script = ExtResource("2_orbit")
+
+[node name="PirateClickOverlay" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = 700.0
+offset_top = 120.0
+offset_right = 1130.0
+offset_bottom = 780.0
+
+[node name="PopupLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 340.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 28
+text = "Orbital Scrap"
+
+[node name="SoundControls" type="HBoxContainer" parent="."]
+layout_mode = 1
+offset_left = 340.0
+offset_top = 30.0
+offset_right = 560.0
+offset_bottom = 70.0
+theme_override_constants/separation = 10
+
+[node name="MuteButton" type="Button" parent="SoundControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "🔊 Mute"
+
+[node name="VolumeSlider" type="HSlider" parent="SoundControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 0.5
+
+[node name="InfoLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 75.0
+offset_right = 680.0
+offset_bottom = 110.0
+autowrap_mode = 2
+text = "Errichte eine gigantische orbitale Flotte, meistere Weltraumereignisse und erbe Prestige!"
+
+[node name="EventStatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 40.0
+offset_top = 5.0
+offset_right = 1112.0
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="TabContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 20.0
+offset_top = 120.0
+offset_right = 680.0
+offset_bottom = 755.0
+
+[node name="Produktion" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Produktion"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Produktion/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="ScrapRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ScrapButton" type="Button" parent="Panel/Produktion/Scroll/VBox/ScrapRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Weltraumschrott sammeln"
+
+[node name="ScrapLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/ScrapRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Schrott: 0"
+vertical_alignment = 1
+
+[node name="ComboLabel" type="Label" parent="Panel/Produktion/Scroll/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = ""
+horizontal_alignment = 1
+
+[node name="SpsLabel" type="Label" parent="Panel/Produktion/Scroll/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Produktion: 0 /s"
+
+[node name="DroneRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyDroneButton" type="Button" parent="Panel/Produktion/Scroll/VBox/DroneRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Drohne kaufen"
+
+[node name="DroneLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/DroneRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Drohnen: 0 (Kosten: 10)"
+vertical_alignment = 1
+
+[node name="MineRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyMineButton" type="Button" parent="Panel/Produktion/Scroll/VBox/MineRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Mine kaufen"
+
+[node name="MineLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/MineRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Minen: 0"
+vertical_alignment = 1
+
+[node name="SatelliteRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuySatelliteButton" type="Button" parent="Panel/Produktion/Scroll/VBox/SatelliteRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Satellit kaufen"
+
+[node name="SatelliteLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/SatelliteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Satelliten: 0"
+vertical_alignment = 1
+
+[node name="DysonRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyDysonButton" type="Button" parent="Panel/Produktion/Scroll/VBox/DysonRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Dyson-Teil kaufen"
+
+[node name="DysonLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/DysonRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Dyson-Schwarm: 0"
+vertical_alignment = 1
+
+[node name="WarpGateRow" type="HBoxContainer" parent="Panel/Produktion/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyWarpGateButton" type="Button" parent="Panel/Produktion/Scroll/VBox/WarpGateRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Warp-Tor kaufen"
+
+[node name="WarpGateLabel" type="Label" parent="Panel/Produktion/Scroll/VBox/WarpGateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Warp-Tore: 0"
+vertical_alignment = 1
+
+[node name="Verbesserungen" type="MarginContainer" parent="Panel"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Verbesserungen"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Verbesserungen/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="ClickUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ClickUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/ClickUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Klick-Upgrade kaufen"
+
+[node name="ClickUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/ClickUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Klick-Power: 1x"
+vertical_alignment = 1
+
+[node name="DroneUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="DroneUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/DroneUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Drohnen-Upgrade kaufen"
+
+[node name="DroneUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/DroneUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Drohnen-Effizienz: 0.2 /s"
+vertical_alignment = 1
+
+[node name="MineUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyMineUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/MineUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Minen-Upgrade kaufen"
+
+[node name="MineUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/MineUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Minen-Effizienz: 2.0 /s"
+vertical_alignment = 1
+
+[node name="SatelliteUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuySatelliteUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/SatelliteUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Satelliten-Upgrade kaufen"
+
+[node name="SatelliteUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/SatelliteUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Satelliten-Effizienz: 15 /s"
+vertical_alignment = 1
+
+[node name="DysonUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyDysonUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/DysonUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Dyson-Upgrade kaufen"
+
+[node name="DysonUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/DysonUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Dyson-Effizienz: 250 /s"
+vertical_alignment = 1
+
+[node name="WarpGateUpgradeRow" type="HBoxContainer" parent="Panel/Verbesserungen/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyWarpGateUpgradeButton" type="Button" parent="Panel/Verbesserungen/Scroll/VBox/WarpGateUpgradeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Warp-Tor Upgrade kaufen"
+
+[node name="WarpGateUpgradeLabel" type="Label" parent="Panel/Verbesserungen/Scroll/VBox/WarpGateUpgradeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Warp-Tor Effizienz: 1500 /s"
+vertical_alignment = 1
+
+[node name="Prestige" type="MarginContainer" parent="Panel"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Prestige"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Prestige/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="PrestigeRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="PrestigeButton" type="Button" parent="Panel/Prestige/Scroll/VBox/PrestigeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Prestige starten"
+
+[node name="PrestigeLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/PrestigeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Prestige-Punkte: 0"
+vertical_alignment = 1
+
+[node name="PrestigeProgressLabel" type="Label" parent="Panel/Prestige/Scroll/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Prestige-Fortschritt: 0/1000"
+
+[node name="PrestigeProgressBar" type="ProgressBar" parent="Panel/Prestige/Scroll/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+show_percentage = false
+
+[node name="HSeparator" type="HSeparator" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+
+[node name="PrestigeShopLabel" type="Label" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Prestige-Shop (Permanente Upgrades):"
+
+[node name="AutoCollectorRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyAutoCollectorButton" type="Button" parent="Panel/Prestige/Scroll/VBox/AutoCollectorRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Auto-Sammler kaufen"
+
+[node name="AutoCollectorLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/AutoCollectorRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Auto-Sammler: Stufe 0"
+vertical_alignment = 1
+
+[node name="CostReductionRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyCostReductionButton" type="Button" parent="Panel/Prestige/Scroll/VBox/CostReductionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Rabatt kaufen"
+
+[node name="CostReductionLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/CostReductionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Preisnachlass: 0%"
+vertical_alignment = 1
+
+[node name="ScrapMagnetRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyScrapMagnetButton" type="Button" parent="Panel/Prestige/Scroll/VBox/ScrapMagnetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Schrott-Magnet kaufen"
+
+[node name="ScrapMagnetLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/ScrapMagnetRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Schrott-Magnet: Stufe 0"
+vertical_alignment = 1
+
+[node name="CritClickRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyCritClickButton" type="Button" parent="Panel/Prestige/Scroll/VBox/CritClickRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Kritische Klicks"
+
+[node name="CritClickLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/CritClickRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Krit-Chance: 0%"
+vertical_alignment = 1
+
+[node name="AsteroidScannerRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyAsteroidScannerButton" type="Button" parent="Panel/Prestige/Scroll/VBox/AsteroidScannerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Asteroiden-Scanner"
+
+[node name="AsteroidScannerLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/AsteroidScannerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Scanner: Stufe 0"
+vertical_alignment = 1
+
+[node name="OfflineCompensatorRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyOfflineCompensatorButton" type="Button" parent="Panel/Prestige/Scroll/VBox/OfflineCompensatorRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Offline-Kompensator"
+
+[node name="OfflineCompensatorLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/OfflineCompensatorRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Offline-Effizienz: 50%"
+vertical_alignment = 1
+
+[node name="DefenseLaserRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyDefenseLaserButton" type="Button" parent="Panel/Prestige/Scroll/VBox/DefenseLaserRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Abwehrlaser"
+
+[node name="DefenseLaserLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/DefenseLaserRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Abwehrlaser: Stufe 0"
+vertical_alignment = 1
+
+[node name="ResearchBoosterRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyResearchBoosterButton" type="Button" parent="Panel/Prestige/Scroll/VBox/ResearchBoosterRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Forschungs-Booster"
+
+[node name="ResearchBoosterLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/ResearchBoosterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Forschungs-Booster: Stufe 0"
+vertical_alignment = 1
+
+[node name="AutoBuilderRow" type="HBoxContainer" parent="Panel/Prestige/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyAutoBuilderButton" type="Button" parent="Panel/Prestige/Scroll/VBox/AutoBuilderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Auto-Werft kaufen"
+
+[node name="AutoBuilderLabel" type="Label" parent="Panel/Prestige/Scroll/VBox/AutoBuilderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Auto-Werft: Stufe 0"
+vertical_alignment = 1
+
+[node name="Forschung" type="MarginContainer" parent="Panel"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Forschung"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Forschung/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="HeaderRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="DataDisksLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Daten-Disks: 0"
+
+[node name="DataDisksSpsLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Forschungsrate: 0 /s"
+horizontal_alignment = 2
+
+[node name="ConvertRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ConvertScrapButton" type="Button" parent="Panel/Forschung/Scroll/VBox/ConvertRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Schrott umwandeln"
+
+[node name="ConvertScrapLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/ConvertRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wandelt 10.000 Schrott in 1 Daten-Disk um"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+
+[node name="SkillsLabel" type="Label" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Fähigkeiten-Aktivierung:"
+
+[node name="SkillsRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BtnActivateOverdrive" type="Button" parent="Panel/Forschung/Scroll/VBox/SkillsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 45)
+layout_mode = 2
+text = "OVERDRIVE"
+
+[node name="BtnActivateSupercharge" type="Button" parent="Panel/Forschung/Scroll/VBox/SkillsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 45)
+layout_mode = 2
+text = "SUPERCHARGE"
+
+[node name="ScannerRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BtnScanOrbit" type="Button" parent="Panel/Forschung/Scroll/VBox/ScannerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 45)
+layout_mode = 2
+text = "Scanner starten (Kosten: 500)"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+
+[node name="TechLabel" type="Label" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Technologie-Forschungsbaum:"
+
+[node name="TechIonRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechIonButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechIonRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechIonLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechIonRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ionentriebwerke"
+vertical_alignment = 1
+
+[node name="TechDrillingRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechDrillingButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechDrillingRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechDrillingLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechDrillingRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tiefenbohrung"
+vertical_alignment = 1
+
+[node name="TechOverdriveRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechOverdriveButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechOverdriveRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechOverdriveLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechOverdriveRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Overdrive-Fähigkeit"
+vertical_alignment = 1
+
+[node name="TechSuperchargeRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechSuperchargeButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechSuperchargeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechSuperchargeLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechSuperchargeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharge-Fähigkeit"
+vertical_alignment = 1
+
+[node name="TechMagnetRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechMagnetButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechMagnetRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechMagnetLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechMagnetRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Asteroiden-Magnet"
+vertical_alignment = 1
+
+[node name="TechShieldRow" type="HBoxContainer" parent="Panel/Forschung/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyTechShieldButton" type="Button" parent="Panel/Forschung/Scroll/VBox/TechShieldRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+text = "Erforschen"
+
+[node name="TechShieldLabel" type="Label" parent="Panel/Forschung/Scroll/VBox/TechShieldRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Schild-Generator"
+vertical_alignment = 1
+
+[node name="Statistiken" type="MarginContainer" parent="Panel"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Statistiken"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StatsLabel" type="Label" parent="Panel/Statistiken/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Statistiken:"
+autowrap_mode = 3
+
+[node name="AchievementsScroll" type="ScrollContainer" parent="Panel/Statistiken/VBox"]
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AchievementsGrid" type="GridContainer" parent="Panel/Statistiken/VBox/AchievementsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="HardResetButton" type="Button" parent="Panel/Statistiken/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "Spielstand zurücksetzen"
+
+[node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 20.0
+offset_top = 758.0
+offset_right = 555.0
+offset_bottom = 793.0
+theme_override_constants/separation = 12
+
+[node name="HelpButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 562.0
+offset_top = 758.0
+offset_right = 680.0
+offset_bottom = 793.0
+text = "⌨️ Hilfe"
+
+[node name="OfflineLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 320.0
+offset_top = 30.0
+offset_right = 680.0
+offset_bottom = 60.0
+
+[node name="SaveStatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 340.0
+offset_top = 10.0
+offset_right = 640.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.7, 0.9, 0.7, 1)
+text = ""
+
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/ScrapRow/ScrapButton" to="." method="_on_scrap_button_pressed"]
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/DroneRow/BuyDroneButton" to="." method="_on_buy_drone_button_pressed"]
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/MineRow/BuyMineButton" to="." method="_on_buy_mine_button_pressed"]
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/SatelliteRow/BuySatelliteButton" to="." method="_on_buy_satellite_button_pressed"]
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/DysonRow/BuyDysonButton" to="." method="_on_buy_dyson_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/ClickUpgradeRow/ClickUpgradeButton" to="." method="_on_click_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/DroneUpgradeRow/DroneUpgradeButton" to="." method="_on_drone_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/MineUpgradeRow/BuyMineUpgradeButton" to="." method="_on_buy_mine_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/SatelliteUpgradeRow/BuySatelliteUpgradeButton" to="." method="_on_buy_satellite_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/DysonUpgradeRow/BuyDysonUpgradeButton" to="." method="_on_buy_dyson_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/PrestigeRow/PrestigeButton" to="." method="_on_prestige_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/AutoCollectorRow/BuyAutoCollectorButton" to="." method="_on_buy_auto_collector_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/CostReductionRow/BuyCostReductionButton" to="." method="_on_buy_cost_reduction_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/ScrapMagnetRow/BuyScrapMagnetButton" to="." method="_on_buy_scrap_magnet_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/CritClickRow/BuyCritClickButton" to="." method="_on_buy_crit_click_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/AsteroidScannerRow/BuyAsteroidScannerButton" to="." method="_on_buy_asteroid_scanner_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/OfflineCompensatorRow/BuyOfflineCompensatorButton" to="." method="_on_buy_offline_compensator_button_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/DefenseLaserRow/BuyDefenseLaserButton" to="." method="_on_buy_defense_laser_button_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/ConvertRow/ConvertScrapButton" to="." method="_on_convert_scrap_button_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/SkillsRow/BtnActivateOverdrive" to="." method="_on_activate_overdrive_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/SkillsRow/BtnActivateSupercharge" to="." method="_on_activate_supercharge_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechIonRow/BuyTechIonButton" to="." method="_on_buy_tech_ion_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechDrillingRow/BuyTechDrillingButton" to="." method="_on_buy_tech_drilling_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechOverdriveRow/BuyTechOverdriveButton" to="." method="_on_buy_tech_overdrive_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechSuperchargeRow/BuyTechSuperchargeButton" to="." method="_on_buy_tech_supercharge_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechMagnetRow/BuyTechMagnetButton" to="." method="_on_buy_tech_magnet_pressed"]
+[connection signal="pressed" from="Panel/Statistiken/VBox/HardResetButton" to="." method="_on_hard_reset_button_pressed"]
+[connection signal="pressed" from="SoundControls/MuteButton" to="." method="_on_mute_button_pressed"]
+[connection signal="value_changed" from="SoundControls/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/ResearchBoosterRow/BuyResearchBoosterButton" to="." method="_on_buy_research_booster_button_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/TechShieldRow/BuyTechShieldButton" to="." method="_on_buy_tech_shield_pressed"]
+[connection signal="pressed" from="Panel/Produktion/Scroll/VBox/WarpGateRow/BuyWarpGateButton" to="." method="_on_buy_warp_gate_button_pressed"]
+[connection signal="pressed" from="Panel/Verbesserungen/Scroll/VBox/WarpGateUpgradeRow/BuyWarpGateUpgradeButton" to="." method="_on_buy_warp_gate_upgrade_button_pressed"]
+[connection signal="pressed" from="Panel/Forschung/Scroll/VBox/ScannerRow/BtnScanOrbit" to="." method="_on_scan_orbit_pressed"]
+[connection signal="pressed" from="Panel/Prestige/Scroll/VBox/AutoBuilderRow/BuyAutoBuilderButton" to="." method="_on_buy_auto_builder_button_pressed"]
+[connection signal="pressed" from="HelpButton" to="." method="_on_help_button_pressed"]

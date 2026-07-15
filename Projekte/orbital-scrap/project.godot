@@ -13,7 +13,12 @@ config_version=5
 config/name="OrbitalScrap"
 run/main_scene="uid://bvghm22nn3jd7"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon.svg"
+
+[display]
+window/size/viewport_width=1152
+window/size/viewport_height=800
+window/size/resizable=false
 
 [physics]
 

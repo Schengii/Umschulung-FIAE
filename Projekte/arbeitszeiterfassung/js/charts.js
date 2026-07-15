@@ -226,6 +226,94 @@ const chartService = {
 
     svg += `</svg>`;
     container.innerHTML = svg;
+  },
+
+  /**
+   * Renders the project donut chart
+   */
+  renderProjectDonutChart(containerId, projectsData) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!projectsData || projectsData.length === 0) {
+      container.innerHTML = '<div class="text-muted" style="text-align:center;">Keine Projektzeiten erfasst</div>';
+      return;
+    }
+
+    let totalMs = 0;
+    projectsData.forEach(p => totalMs += (p.totalMs || 0));
+
+    if (totalMs === 0) {
+      container.innerHTML = '<div class="text-muted" style="text-align:center;">Keine Projektzeiten erfasst</div>';
+      return;
+    }
+
+    const width = 250;
+    const height = 250;
+    const cx = width / 2;
+    const cy = height / 2;
+    const radius = 80;
+    const strokeWidth = 30;
+
+    const colors = ['#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#ec4899', '#14b8a6'];
+
+    let svg = `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">`;
+
+    let currentAngle = 0;
+    let legendHtml = '<div style="display:flex; flex-wrap:wrap; justify-content:center; margin-top:10px; gap:10px;">';
+
+    projectsData.forEach((p, index) => {
+      if (!p.totalMs) return;
+
+      const slicePercentage = p.totalMs / totalMs;
+      const sliceAngle = slicePercentage * 360;
+
+      // Start and end points of the arc
+      const startX = cx + radius * Math.cos((currentAngle - 90) * Math.PI / 180);
+      const startY = cy + radius * Math.sin((currentAngle - 90) * Math.PI / 180);
+      const endX = cx + radius * Math.cos((currentAngle + sliceAngle - 90) * Math.PI / 180);
+      const endY = cy + radius * Math.sin((currentAngle + sliceAngle - 90) * Math.PI / 180);
+
+      const largeArcFlag = sliceAngle > 180 ? 1 : 0;
+      const color = colors[index % colors.length];
+
+      // Only draw if percentage > 0.001 to prevent SVG path errors
+      if (slicePercentage > 0.001) {
+        if (slicePercentage >= 0.999) {
+          // Draw full circle
+          svg += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`;
+        } else {
+          // Draw arc slice
+          const d = `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`;
+          svg += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" />`;
+        }
+      }
+
+      currentAngle += sliceAngle;
+
+      // Legend Item
+      const hrs = (p.totalMs / 3600000).toFixed(1);
+      legendHtml += `
+        <div style="display:flex; align-items:center; font-size:12px; color:var(--text-secondary);">
+          <div style="width:12px; height:12px; border-radius:50%; background-color:${color}; margin-right:5px;"></div>
+          ${p.name} (${hrs}h)
+        </div>
+      `;
+    });
+
+    // Center text
+    const totalHrs = (totalMs / 3600000).toFixed(1);
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="20" font-weight="bold" fill="var(--text-primary)">${totalHrs}h</text>`;
+    svg += `<text x="${cx}" y="${cy + 20}" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="var(--text-muted)">Gesamt</text>`;
+
+    svg += `</svg>`;
+    
+    legendHtml += '</div>';
+
+    container.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+      <div style="width:${width}px; height:${height}px;">${svg}</div>
+      ${legendHtml}
+    </div>`;
   }
 };
 

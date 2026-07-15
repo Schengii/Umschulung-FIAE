@@ -37,6 +37,7 @@ const DOM = {
   dashboardPauseLabel: document.getElementById('dashboard-pause-label'),
   statsMonthlyTotal: document.getElementById('stats-monthly-total'),
   statsDaysCompleted: document.getElementById('stats-days-completed'),
+  statsOvertime: document.getElementById('stats-overtime'),
   
   // Location tab
   mapSearchInput: document.getElementById('map-search-input'),
@@ -55,6 +56,13 @@ const DOM = {
   manualLogStart: document.getElementById('manual-log-start'),
   manualLogEnd: document.getElementById('manual-log-end'),
   btnAddManualLog: document.getElementById('btn-add-manual-log'),
+  
+  absenceLogToggle: document.getElementById('absence-log-toggle'),
+  absenceLogForm: document.getElementById('absence-log-form'),
+  absenceLogDate: document.getElementById('absence-log-date'),
+  absenceLogType: document.getElementById('absence-log-type'),
+  btnAddAbsenceLog: document.getElementById('btn-add-absence-log'),
+  
   btnClearHistory: document.getElementById('btn-clear-history'),
   historyItemsContainer: document.getElementById('history-items-container'),
   
@@ -92,6 +100,10 @@ function initApp() {
   activeSession = storageService.getActiveSession();
   history = storageService.getHistory();
   settings = storageService.getSettings();
+
+  if (settings && settings.theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
 
   // Initialize UI Values
   DOM.locationNameInput.value = officeLocation.name;
@@ -353,6 +365,22 @@ function triggerCheckout() {
     activeSession.pauseStart = null;
   }
 
+  // ArbZG Automatic Break Deduction
+  if (settings && settings.arbzgBreaksEnabled !== false) {
+    let requiredPause = 0;
+    const grossDuration = endTime - startTime;
+
+    if (grossDuration > 32400000) { // > 9 hours
+      requiredPause = 45 * 60000;
+    } else if (grossDuration > 21600000) { // > 6 hours
+      requiredPause = 30 * 60000;
+    }
+
+    if (activeSession.totalPauseDuration < requiredPause) {
+      activeSession.totalPauseDuration = requiredPause;
+    }
+  }
+
   const duration = (endTime - startTime) - activeSession.totalPauseDuration;
   const todayDateString = new Date(startTime).toISOString().split('T')[0];
 
@@ -525,12 +553,32 @@ function updateDashboardStats() {
 
   let completedDaysCount = 0;
   let totalTrackedDays = Object.keys(logsByDate).length;
+  let totalLoggedMsAllTime = 0;
   
   Object.values(logsByDate).forEach(dayMs => {
     if (dayMs >= targetMs) completedDaysCount++;
+    totalLoggedMsAllTime += dayMs;
   });
 
   DOM.statsDaysCompleted.textContent = `${completedDaysCount} / ${totalTrackedDays} Tage`;
+
+  // Overtime Calculation
+  if (DOM.statsOvertime) {
+    const requiredMsAllTime = totalTrackedDays * targetMs;
+    const overtimeMs = totalLoggedMsAllTime - requiredMsAllTime;
+    const overtimeHrs = (overtimeMs / 3600000).toFixed(1);
+    
+    if (overtimeMs > 0) {
+      DOM.statsOvertime.textContent = `+${overtimeHrs} Std.`;
+      DOM.statsOvertime.style.color = 'var(--accent-green)';
+    } else if (overtimeMs < 0) {
+      DOM.statsOvertime.textContent = `${overtimeHrs} Std.`;
+      DOM.statsOvertime.style.color = 'var(--accent-red)';
+    } else {
+      DOM.statsOvertime.textContent = `0.0 Std.`;
+      DOM.statsOvertime.style.color = 'var(--text-primary)';
+    }
+  }
 }
 
 function fireGoalConfetti() {
@@ -666,11 +714,19 @@ async function executeAddressSearch() {
 // HISTORY LIST HANDLERS
 // ==========================================================================
 function setupHistoryEvents() {
-  // Collapsible toggle
+  // Collapsible toggle manual
   DOM.manualLogToggle.addEventListener('click', () => {
     DOM.manualLogToggle.classList.toggle('active');
     DOM.manualLogForm.classList.toggle('hidden');
   });
+
+  // Collapsible toggle absence
+  if (DOM.absenceLogToggle) {
+    DOM.absenceLogToggle.addEventListener('click', () => {
+      DOM.absenceLogToggle.classList.toggle('active');
+      DOM.absenceLogForm.classList.toggle('hidden');
+    });
+  }
 
   // Add Manual Log
   DOM.btnAddManualLog.addEventListener('click', () => {
@@ -723,6 +779,50 @@ function setupHistoryEvents() {
     
     alert('Arbeitszeit erfolgreich nachgetragen!');
   });
+
+  // Add Absence Log
+  if (DOM.btnAddAbsenceLog) {
+    DOM.btnAddAbsenceLog.addEventListener('click', () => {
+      const dateVal = DOM.absenceLogDate.value;
+      const typeVal = DOM.absenceLogType.value; // urlaub oder krankheit
+
+      if (!dateVal) {
+        alert('Bitte wähle ein Datum aus.');
+        return;
+      }
+
+      // 8 Stunden als Standard für Urlaub/Krankheit eintragen (oder das target)
+      const targetHours = settings.dailyTarget || 8;
+      const durationMs = targetHours * 3600000;
+
+      const startDate = new Date(dateVal);
+      startDate.setHours(8, 0, 0, 0); // Start um 8 Uhr
+      const endDate = new Date(startDate.getTime() + durationMs);
+
+      const entry = {
+        date: dateVal,
+        checkIn: startDate.getTime(),
+        checkOut: endDate.getTime(),
+        duration: durationMs,
+        locationName: typeVal === 'urlaub' ? 'Urlaub' : 'Krankheit',
+        manual: true,
+        isAbsence: true,
+        absenceType: typeVal
+      };
+
+      storageService.addHistoryEntry(entry);
+      history = storageService.getHistory();
+      
+      DOM.absenceLogDate.value = '';
+      DOM.absenceLogForm.classList.add('hidden');
+      DOM.absenceLogToggle.classList.remove('active');
+
+      renderHistoryList();
+      updateDashboardStats();
+      
+      alert('Abwesenheit erfolgreich eingetragen!');
+    });
+  }
 
   // Clear History
   DOM.btnClearHistory.addEventListener('click', () => {
@@ -792,12 +892,17 @@ function renderHistoryList() {
       pauseHtml = ` • Pause: ${pauseMins} Min.`;
     }
 
+    let timeStrHtml = `${formatTime(log.checkIn)} - ${formatTime(log.checkOut)} ${log.manual ? '(Manuell)' : ''}${pauseHtml}`;
+    if (log.isAbsence) {
+      timeStrHtml = log.absenceType === 'urlaub' ? 'Urlaubstag (Erfüllt)' : 'Krankheitstag (Erfüllt)';
+    }
+
     html += `
       <div class="history-item">
         <div class="history-item-left">
           <span class="history-item-date">${dateStr}</span>
           <span class="history-item-times">
-            ${formatTime(log.checkIn)} - ${formatTime(log.checkOut)} ${log.manual ? '(Manuell)' : ''}${pauseHtml}
+            ${timeStrHtml}
           </span>
           <span class="history-item-loc">${log.locationName || 'Büro'}</span>
         </div>
@@ -851,9 +956,18 @@ function renderStatsTab() {
     DOM.statsBestDay.textContent = '-';
   }
 
-  // Draw SVG Charts
-  chartService.renderWeeklyChart('weekly-chart-container', history);
-  chartService.renderMonthlyChart('monthly-chart-container', history);
+  if (window.chartService) {
+    chartService.renderWeeklyChart('weekly-chart-container', history);
+    chartService.renderMonthlyChart('monthly-chart-container', history);
+    if (window.projects) {
+      chartService.renderProjectDonutChart('project-chart-container', window.projects);
+    } else {
+      const p = localStorage.getItem('officetrack_projects');
+      if (p) {
+        chartService.renderProjectDonutChart('project-chart-container', JSON.parse(p));
+      }
+    }
+  }
 }
 
 // ==========================================================================

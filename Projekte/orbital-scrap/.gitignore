@@ -1,3 +1,14 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Godot/Mono C# files
+.mono/
+data_*/
+mono_crash*.log
+
+# System files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

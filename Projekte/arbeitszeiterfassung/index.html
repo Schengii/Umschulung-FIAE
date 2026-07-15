@@ -128,6 +128,16 @@
                 <span class="value" id="stats-days-completed">0 / 0 Tage</span>
               </div>
             </div>
+
+            <div class="card mini-card" style="grid-column: span 2;">
+              <div class="mini-card-icon accent-amber">
+                <i data-lucide="clock"></i>
+              </div>
+              <div class="mini-card-info">
+                <span class="label">Überstundenkonto (Gesamt)</span>
+                <span class="value" id="stats-overtime">0.0 Std.</span>
+              </div>
+            </div>
           </div>
           
         </div>
@@ -222,6 +232,34 @@
             </div>
           </div>
 
+          <!-- Add Absence Card -->
+          <div class="card manual-log-card">
+            <div class="card-header-toggle" id="absence-log-toggle">
+              <h3><i data-lucide="sun"></i> Urlaub / Krankheit eintragen</h3>
+              <i data-lucide="chevron-down" class="toggle-icon"></i>
+            </div>
+            <div class="manual-log-form hidden" id="absence-log-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="absence-log-date">Datum:</label>
+                  <input type="date" id="absence-log-date">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="absence-log-type">Art der Abwesenheit:</label>
+                  <select id="absence-log-type" style="width:100%; padding: 10px; background-color: rgba(7, 11, 20, 0.5); border: 1px solid var(--card-border); color: var(--text-primary); border-radius: var(--border-radius-sm);">
+                    <option value="urlaub">Urlaub</option>
+                    <option value="krankheit">Krankheit</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-warning btn-block" id="btn-add-absence-log">
+                Abwesenheit speichern
+              </button>
+            </div>
+          </div>
+
           <!-- History Logs List -->
           <div class="card history-list-card">
             <div class="card-header-actions">
@@ -287,21 +325,117 @@
               </div>
             </div>
           </div>
+
+          <!-- Project Donut Chart Card -->
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>Projekt-Verteilung</h3>
+              <span class="sub-text">Zeit pro Aufgabe (Gesamt)</span>
+            </div>
+            <div class="chart-container-wrapper" style="height:250px;">
+              <div class="chart-svg-container" id="project-chart-container" style="display:flex; justify-content:center; align-items:center;">
+                <!-- SVG Donut Chart will be rendered here -->
+              </div>
+            </div>
+          </div>
           
+        </div>
+      </section>
+
+      <!-- Tab 5: Projekte -->
+      <section id="tab-projects" class="tab-pane">
+        <div class="projects-container">
+          <div class="card">
+            <div class="card-header-actions">
+              <h3>Projekt-Timer</h3>
+              <button class="btn-text-primary" id="btn-add-project">
+                <i data-lucide="plus"></i> Neues Projekt
+              </button>
+            </div>
+            <div class="projects-list" id="projects-list-container">
+              <!-- Projects will be rendered dynamically -->
+              <div class="empty-state">
+                <i data-lucide="folder" class="empty-icon"></i>
+                <p>Keine Projekte vorhanden. Erstelle ein Projekt, um aufgabenbasiert Zeit zu erfassen.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 6: Einstellungen -->
+      <section id="tab-settings" class="tab-pane">
+        <div class="settings-container">
+          
+          <div class="card">
+            <h3><i data-lucide="cloud"></i> Cloud-Sync (Firebase)</h3>
+            <div id="auth-status-container">
+              <p class="text-muted mb-2">Sichere deine Daten in der Cloud.</p>
+              <div class="form-group">
+                <input type="email" id="auth-email" placeholder="E-Mail">
+              </div>
+              <div class="form-group">
+                <input type="password" id="auth-password" placeholder="Passwort">
+              </div>
+              <button class="btn btn-primary btn-block mb-1" id="btn-login">Anmelden</button>
+            </div>
+            <div id="auth-logged-in-container" class="hidden">
+              <p class="text-success mb-2">Angemeldet als <span id="auth-user-email"></span></p>
+              <button class="btn btn-outline btn-block" id="btn-logout">Abmelden</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><i data-lucide="settings"></i> Pausenregelung (ArbZG)</h3>
+            <p class="text-muted mb-2 text-sm">Automatisch 30 Min. Pause ab 6 Std. und 45 Min. ab 9 Std. abziehen, falls nicht manuell erfasst.</p>
+            <div class="form-group toggle-control">
+              <span class="sim-label">ArbZG Automatik aktiv</span>
+              <label class="switch-toggle">
+                <input type="checkbox" id="setting-arbzg-toggle" checked>
+                <span class="slider-round"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><i data-lucide="sun"></i> Erscheinungsbild (Theme)</h3>
+            <p class="text-muted mb-2 text-sm">Wechsle zwischen Dark- und Light-Mode.</p>
+            <div class="form-group toggle-control">
+              <span class="sim-label">Heller Modus aktiv</span>
+              <label class="switch-toggle">
+                <input type="checkbox" id="setting-theme-toggle">
+                <span class="slider-round"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3><i data-lucide="download"></i> Daten-Export</h3>
+            <p class="text-muted mb-2 text-sm">Exportiere deine Arbeitszeiten für den aktuellen Monat.</p>
+            <div class="sim-actions-grid">
+              <button class="btn btn-outline" id="btn-export-csv"><i data-lucide="file-text"></i> CSV Export</button>
+              <button class="btn btn-outline" id="btn-export-pdf"><i data-lucide="file"></i> PDF Timesheet</button>
+            </div>
+          </div>
+
         </div>
       </section>
 
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="app-navbar">
+    <nav class="app-navbar scrollable-nav">
       <button class="nav-item active" data-tab="tab-dashboard" id="nav-btn-dashboard">
         <i data-lucide="home"></i>
-        <span>Dashboard</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-tab="tab-projects" id="nav-btn-projects">
+        <i data-lucide="folder"></i>
+        <span>Projekte</span>
       </button>
       <button class="nav-item" data-tab="tab-location" id="nav-btn-location">
         <i data-lucide="map-pin"></i>
-        <span>Standort</span>
+        <span>Ort</span>
       </button>
       <button class="nav-item" data-tab="tab-history" id="nav-btn-history">
         <i data-lucide="list"></i>
@@ -309,7 +443,11 @@
       </button>
       <button class="nav-item" data-tab="tab-stats" id="nav-btn-stats">
         <i data-lucide="bar-chart-2"></i>
-        <span>Statistiken</span>
+        <span>Stats</span>
+      </button>
+      <button class="nav-item" data-tab="tab-settings" id="nav-btn-settings">
+        <i data-lucide="settings"></i>
+        <span>Setup</span>
       </button>
     </nav>
 
@@ -398,12 +536,20 @@
   <!-- Canvas Confetti for Achievements -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+  <!-- jsPDF & autoTable for Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
   <!-- App Scripts -->
+  <script type="module" src="js/firebase-config.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/geo.js"></script>
   <script src="js/map.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/simulator.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/export.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
