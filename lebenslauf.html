@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lebenslauf - Umschulung IT | Maximilian Schenk</title>
-    <meta name="description" content="Professioneller, interaktiver und druckoptimierter Lebenslauf von Maximilian Schenk — Fachinformatiker für Anwendungsentwicklung.">
+    <meta name="description"
+        content="Professioneller, interaktiver und druckoptimierter Lebenslauf von Maximilian Schenk — Fachinformatiker für Anwendungsentwicklung.">
     <meta name="author" content="Maximilian Schenk">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/lebenslauf.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
 </head>
 
@@ -24,7 +26,7 @@
     <div id="site-nav" class="no-print"></div>
 
     <main id="main-content" class="main-container resume-container">
-        
+
         <!-- Print Header (Hidden on Screen, visible on A4 Print) -->
         <div class="print-header">
             <div class="print-header-left">
@@ -40,14 +42,19 @@
         </div>
 
         <div class="resume-grid">
-            
+
             <!-- LEFT COLUMN: Profile info, contact, skills, and QR codes -->
             <aside class="resume-sidebar">
-                
+
                 <!-- Profile Image Card -->
                 <div class="card sidebar-card profile-card">
                     <div class="profile-image-wrapper">
-                        <img src="assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk Portrait" class="profile-img">
+                        <picture>
+                            <source srcset="assets/images/maximilian_schenk_portrait.webp" type="image/webp">
+                            <source srcset="assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
+                            <img src="assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk Portrait"
+                                class="profile-img">
+                        </picture>
                     </div>
                     <h2 class="profile-name">Maximilian Schenk</h2>
                     <p class="profile-title">
@@ -55,8 +62,11 @@
                         <span lang="en">IT Specialist in App Development</span>
                     </p>
                     <ul class="profile-personal-info">
-                        <li><strong><span lang="de">Geboren:</span><span lang="en">Born:</span></strong> 10.05.2002 (Bonn / Vietnam)</li>
-                        <li><strong><span lang="de">Status:</span><span lang="en">Status:</span></strong> <span lang="de">IHK geprüft, sofort verfügbar</span><span lang="en">IHK certified, ready to start</span></li>
+                        <li><strong><span lang="de">Geboren:</span><span lang="en">Born:</span></strong> 10.05.2002
+                            (Bonn / Vietnam)</li>
+                        <li><strong><span lang="de">Status:</span><span lang="en">Status:</span></strong> <span
+                                lang="de">IHK geprüft, sofort verfügbar</span><span lang="en">IHK certified, ready to
+                                start</span></li>
                     </ul>
                 </div>
 
@@ -67,24 +77,31 @@
                         <span lang="en"><i class="fa fa-address-book" aria-hidden="true"></i> Contact</span>
                     </h3>
                     <ul class="contact-list">
-                        <li><i class="fa fa-envelope" aria-hidden="true"></i> <a href="mailto:sche-max@web.de">sche-max@web.de</a></li>
-                        <li><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:+4917624921897">0176 24921897</a></li>
-                        <li><i class="fa fa-map-marker" aria-hidden="true"></i> <span>Rüdesheimer Str. 14,<br>53175 Bonn</span></li>
+                        <li><i class="fa fa-envelope" aria-hidden="true"></i> <a
+                                href="mailto:sche-max@web.de">sche-max@web.de</a></li>
+                        <li><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:+4917624921897">0176
+                                24921897</a></li>
+                        <li><i class="fa fa-map-marker" aria-hidden="true"></i> <span>Rüdesheimer Str. 14,<br>53175
+                                Bonn</span></li>
                         <li><i class="fa fa-globe" aria-hidden="true"></i> <a href="home.html">max-schenk.de</a></li>
                     </ul>
                 </div>
- 
+
                 <!-- Token Lock Card -->
                 <div class="card sidebar-card token-card no-print">
                     <h3>
                         <span lang="de"><i class="fa fa-lock" aria-hidden="true"></i> Sensibler Bereich</span>
                         <span lang="en"><i class="fa fa-lock" aria-hidden="true"></i> Secured Area</span>
                     </h3>
-                    <p lang="de" style="font-size: 0.85rem; line-height: 1.3;">Geben Sie das Token aus dem Anschreiben ein (z. B. <strong>fiae2026</strong>), um Gehaltswunsch und Zeugnisse freizuschalten.</p>
-                    <p lang="en" style="font-size: 0.85rem; line-height: 1.3;">Enter the token from the cover letter (e.g., <strong>fiae2026</strong>) to unlock salary expectations and references.</p>
+                    <p lang="de" style="font-size: 0.85rem; line-height: 1.3;">Geben Sie das Token aus dem Anschreiben
+                        ein (z. B. <strong>fiae2026</strong>), um Gehaltswunsch und Zeugnisse freizuschalten.</p>
+                    <p lang="en" style="font-size: 0.85rem; line-height: 1.3;">Enter the token from the cover letter
+                        (e.g., <strong>fiae2026</strong>) to unlock salary expectations and references.</p>
                     <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <input type="text" id="token-input" class="form-control" placeholder="Token" style="padding: 0.4rem; font-size: 0.9rem; flex-grow: 1; min-width: 0;">
-                        <button id="token-submit" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; white-space: nowrap;">
+                        <input type="text" id="token-input" class="form-control" placeholder="Token"
+                            style="padding: 0.4rem; font-size: 0.9rem; flex-grow: 1; min-width: 0;">
+                        <button id="token-submit" class="btn-primary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; white-space: nowrap;">
                             <span lang="de">Freischalten</span>
                             <span lang="en">Unlock</span>
                         </button>
@@ -133,7 +150,8 @@
                         </div>
                     </div>
                     <div class="skills-section">
-                        <h4 class="skill-group-title"><span lang="de">Sprachen</span><span lang="en">Languages</span></h4>
+                        <h4 class="skill-group-title"><span lang="de">Sprachen</span><span lang="en">Languages</span>
+                        </h4>
                         <ul class="languages-list-flat">
                             <li><strong>DE:</strong> Muttersprache (C2)</li>
                             <li><strong>EN:</strong> Gut (B2)</li>
@@ -145,29 +163,43 @@
                 <!-- Certificates Card -->
                 <div class="card sidebar-card certificates-card">
                     <h3>
-                        <span lang="de"><i class="fa fa-certificate" aria-hidden="true"></i> Zertifikate &amp; Abschlüsse</span>
-                        <span lang="en"><i class="fa fa-certificate" aria-hidden="true"></i> Credentials &amp; Certs</span>
+                        <span lang="de"><i class="fa fa-certificate" aria-hidden="true"></i> Zertifikate &amp;
+                            Abschlüsse</span>
+                        <span lang="en"><i class="fa fa-certificate" aria-hidden="true"></i> Credentials &amp;
+                            Certs</span>
                     </h3>
-                    <ul class="certificates-list" style="list-style: none; padding: 0; font-size: 0.85rem; line-height: 1.4; margin-top: 0.5rem;">
-                        <li style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
+                    <ul class="certificates-list"
+                        style="list-style: none; padding: 0; font-size: 0.85rem; line-height: 1.4; margin-top: 0.5rem;">
+                        <li
+                            style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
                             <span style="font-size: 1.1rem; color: #fbbf24;">🎓</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">IHK Fachinformatiker</span><span lang="en">IHK certified FIAE</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span lang="de">Anwendungsentwicklung / Juni 2026</span><span lang="en">Application Development / June 2026</span></div>
+                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">IHK
+                                        Fachinformatiker</span><span lang="en">IHK certified FIAE</span></div>
+                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span
+                                        lang="de">Anwendungsentwicklung / Juni 2026</span><span lang="en">Application
+                                        Development / June 2026</span></div>
                             </div>
                         </li>
-                        <li style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
+                        <li
+                            style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
                             <span style="font-size: 1.1rem; color: #60a5fa;">⚡</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">Elektroniker Betriebstechnik</span><span lang="en">Industrial Electronics Tech</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span lang="de">Januar 2022 / IHK Bonn/Rhein-Sieg</span><span lang="en">January 2022 / IHK Bonn</span></div>
+                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">Elektroniker
+                                        Betriebstechnik</span><span lang="en">Industrial Electronics Tech</span></div>
+                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span lang="de">Januar
+                                        2022 / IHK Bonn/Rhein-Sieg</span><span lang="en">January 2022 / IHK Bonn</span>
+                                </div>
                             </div>
                         </li>
                         <li style="display: flex; gap: 0.5rem; align-items: start;">
                             <span style="font-size: 1.1rem; color: #34d399;">🛡️</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">DGUV V3 Prüftechniker</span><span lang="en">DGUV V3 Inspector</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span lang="de">Sicherheitsprüfung elektr. Anlagen</span><span lang="en">Electrical Safety Regulations</span></div>
+                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">DGUV V3
+                                        Prüftechniker</span><span lang="en">DGUV V3 Inspector</span></div>
+                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span
+                                        lang="de">Sicherheitsprüfung elektr. Anlagen</span><span lang="en">Electrical
+                                        Safety Regulations</span></div>
                             </div>
                         </li>
                     </ul>
@@ -181,18 +213,28 @@
                     </h3>
                     <p class="qr-intro-text">
                         <span lang="de">Scanne diese Codes, um die interaktiven Online-Inhalte direkt aufzurufen!</span>
-                        <span lang="en">Scan these codes to launch interactive parts directly on your mobile device!</span>
+                        <span lang="en">Scan these codes to launch interactive parts directly on your mobile
+                            device!</span>
                     </p>
                     <div class="qr-grid">
                         <div class="qr-item">
-                            <img src="assets/images/qr_portfolio.png" alt="QR-Code Portfolio" class="qr-image">
+                            <picture>
+                                <source srcset="assets/images/qr_portfolio.webp" type="image/webp">
+                                <source srcset="assets/images/qr_portfolio.png" type="image/png">
+                                <img src="assets/images/qr_portfolio.png" alt="QR-Code Portfolio" class="qr-image">
+                            </picture>
                             <div class="qr-label">
                                 <span lang="de">Projekt‑Portfolio</span>
                                 <span lang="en">Project Showcase</span>
                             </div>
                         </div>
                         <div class="qr-item">
-                            <img src="assets/images/qr_interview.png" alt="QR-Code Interview Simulator" class="qr-image">
+                            <picture>
+                                <source srcset="assets/images/qr_interview.webp" type="image/webp">
+                                <source srcset="assets/images/qr_interview.png" type="image/png">
+                                <img src="assets/images/qr_interview.png" alt="QR-Code Interview Simulator"
+                                    class="qr-image">
+                            </picture>
                             <div class="qr-label">
                                 <span lang="de">Bewerbungs‑Trainer</span>
                                 <span lang="en">Interview Simulator</span>
@@ -204,14 +246,14 @@
 
             <!-- RIGHT COLUMN: Experience, Education, and Career -->
             <div class="resume-main">
-                
+
                 <!-- Career Section (Berufserfahrung) -->
                 <section class="card main-card" aria-labelledby="experience-title">
                     <h2 id="experience-title">
                         <span lang="de"><i class="fa fa-briefcase" aria-hidden="true"></i> Werdegang</span>
                         <span lang="en"><i class="fa fa-briefcase" aria-hidden="true"></i> Experience</span>
                     </h2>
-                    
+
                     <div class="timeline-v2">
                         <!-- Umschulung -->
                         <div class="timeline-v2-item">
@@ -225,8 +267,13 @@
                                 <span class="timeline-v2-company">Berufsförderungswerk Dortmund e.V.</span>
                             </div>
                             <div class="timeline-v2-content">
-                                <p lang="de">Fokus: <strong>Anwendungsentwicklung</strong>. Zweijähriges betriebliches Kooperationspraktikum bei der <strong>Deutschen Forschungsgemeinschaft (DFG)</strong> in Bonn im Webentwicklungsteam (Frontend-Schwerpunkt). Erfolgreicher Abschluss vor der IHK Dortmund im Juni 2026.</p>
-                                <p lang="en">Focus: **Application Development**. Parallel cooperative 2-year internship at the **German Research Foundation (DFG)** in Bonn inside the web engineering team. Graduated certified by IHK Dortmund in June 2026.</p>
+                                <p lang="de">Fokus: <strong>Anwendungsentwicklung</strong>. Zweijähriges betriebliches
+                                    Kooperationspraktikum bei der <strong>Deutschen Forschungsgemeinschaft
+                                        (DFG)</strong> in Bonn im Webentwicklungsteam (Frontend-Schwerpunkt).
+                                    Erfolgreicher Abschluss vor der IHK Dortmund im Juni 2026.</p>
+                                <p lang="en">Focus: **Application Development**. Parallel cooperative 2-year internship
+                                    at the **German Research Foundation (DFG)** in Bonn inside the web engineering team.
+                                    Graduated certified by IHK Dortmund in June 2026.</p>
                             </div>
                         </div>
 
@@ -242,8 +289,11 @@
                                 <span class="timeline-v2-company">Elektro-Service-Gesellschaft GmbH, Frechen</span>
                             </div>
                             <div class="timeline-v2-content">
-                                <p lang="de">Verantwortliche Durchführung gesetzlicher Sicherheitsprüfungen elektrischer Geräte, Betriebsmittel und Maschinen nach <strong>DGUV-V3</strong> bei Kunden deutschlandweit.</p>
-                                <p lang="en">Managed electrical safety testing of industrial devices and machinery in compliance with **DGUV-V3** regulations for corporate clients nationwide.</p>
+                                <p lang="de">Verantwortliche Durchführung gesetzlicher Sicherheitsprüfungen elektrischer
+                                    Geräte, Betriebsmittel und Maschinen nach <strong>DGUV-V3</strong> bei Kunden
+                                    deutschlandweit.</p>
+                                <p lang="en">Managed electrical safety testing of industrial devices and machinery in
+                                    compliance with **DGUV-V3** regulations for corporate clients nationwide.</p>
                             </div>
                         </div>
 
@@ -259,8 +309,13 @@
                                 <span class="timeline-v2-company">Haribo Produktions-GmbH &amp; Co. AG, Bonn</span>
                             </div>
                             <div class="timeline-v2-content">
-                                <p lang="de">3,5-jährige fundierte Berufsausbildung zum <strong>Elektroniker für Betriebstechnik</strong>. Schwerpunkt: Automatisierungstechnik, SPS-Steuerungen (TIA-Portal, Grafcet) und Instandhaltung von Großproduktionsanlagen. Erfolgreicher IHK-Abschluss Januar 2022.</p>
-                                <p lang="en">Vocational training as **Electronics Technician for Industrial Engineering**. Key focus: automation systems, PLC logic design, and hardware maintenance at major Haribo candy factories. Completed January 2022.</p>
+                                <p lang="de">3,5-jährige fundierte Berufsausbildung zum <strong>Elektroniker für
+                                        Betriebstechnik</strong>. Schwerpunkt: Automatisierungstechnik, SPS-Steuerungen
+                                    (TIA-Portal, Grafcet) und Instandhaltung von Großproduktionsanlagen. Erfolgreicher
+                                    IHK-Abschluss Januar 2022.</p>
+                                <p lang="en">Vocational training as **Electronics Technician for Industrial
+                                    Engineering**. Key focus: automation systems, PLC logic design, and hardware
+                                    maintenance at major Haribo candy factories. Completed January 2022.</p>
                             </div>
                         </div>
                     </div>
@@ -269,10 +324,11 @@
                 <!-- Education Section (Schulbildung & Rehabilitation) -->
                 <section class="card main-card" aria-labelledby="education-title">
                     <h2 id="education-title">
-                        <span lang="de"><i class="fa fa-university" aria-hidden="true"></i> Rehabilitation &amp; Ausbildung</span>
+                        <span lang="de"><i class="fa fa-university" aria-hidden="true"></i> Rehabilitation &amp;
+                            Ausbildung</span>
                         <span lang="en"><i class="fa fa-university" aria-hidden="true"></i> Rehab &amp; Education</span>
                     </h2>
-                    
+
                     <div class="timeline-v2">
                         <!-- Reha Assessment -->
                         <div class="timeline-v2-item">
@@ -286,8 +342,12 @@
                                 <span class="timeline-v2-company">BFW Köln e.V.</span>
                             </div>
                             <div class="timeline-v2-content">
-                                <p lang="de">Arbeitserprobung und Berufsfeldanalyse nach Wirbelsäulenverletzung (Autounfall 2021). Bewilligung einer LTA (Leistung zur Teilhabe) durch die DRV Bund für den Quereinstieg in die Informatik.</p>
-                                <p lang="en">Vocational rehabilitation testing and career re-routing due to a spinal injury from a car crash in 2021. LTA retraining program sponsored by the DRV Bund.</p>
+                                <p lang="de">Arbeitserprobung und Berufsfeldanalyse nach Wirbelsäulenverletzung
+                                    (Autounfall 2021). Bewilligung einer LTA (Leistung zur Teilhabe) durch die DRV Bund
+                                    für den Quereinstieg in die Informatik.</p>
+                                <p lang="en">Vocational rehabilitation testing and career re-routing due to a spinal
+                                    injury from a car crash in 2021. LTA retraining program sponsored by the DRV Bund.
+                                </p>
                             </div>
                         </div>
 
@@ -304,7 +364,8 @@
                             </div>
                             <div class="timeline-v2-content">
                                 <p lang="de">Erfolgreicher Realschulabschluss (Notenschnitt 2,0).</p>
-                        <p lang="en">Finished secondary school with the Realschulabschluss qualification (GPA 2.0).</p>
+                                <p lang="en">Finished secondary school with the Realschulabschluss qualification (GPA
+                                    2.0).</p>
                             </div>
                         </div>
                     </div>
@@ -313,47 +374,66 @@
                 <!-- Token-Secured Area -->
                 <section class="card main-card no-print">
                     <h2>
-                        <span lang="de"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Sensible Bewerbungsdaten</span>
-                        <span lang="en"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Secured Applicant Data</span>
+                        <span lang="de"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Sensible
+                            Bewerbungsdaten</span>
+                        <span lang="en"><i class="fa-solid fa-file-shield" aria-hidden="true"></i> Secured Applicant
+                            Data</span>
                     </h2>
-                    
+
                     <!-- Locked State Placeholder -->
                     <div class="token-locked-placeholder">
-                        <div style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.02); border: 1px dashed var(--border); border-radius: 8px;">
+                        <div
+                            style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.02); border: 1px dashed var(--border); border-radius: 8px;">
                             <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🔒</span>
                             <h4 lang="de" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Inhalte gesperrt</h4>
                             <h4 lang="en" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Content Locked</h4>
-                            <p lang="de" style="font-size: 0.85rem; margin-bottom: 0;">Bitte geben Sie das passende Token im linken Seitenmenü ein, um diese Daten anzuzeigen.</p>
-                            <p lang="en" style="font-size: 0.85rem; margin-bottom: 0;">Please enter the matching token in the left sidebar card to access this information.</p>
+                            <p lang="de" style="font-size: 0.85rem; margin-bottom: 0;">Bitte geben Sie das passende
+                                Token im linken Seitenmenü ein, um diese Daten anzuzeigen.</p>
+                            <p lang="en" style="font-size: 0.85rem; margin-bottom: 0;">Please enter the matching token
+                                in the left sidebar card to access this information.</p>
                         </div>
                     </div>
 
                     <!-- Unlocked State Content -->
                     <div class="token-secured hidden-secured" style="display: none;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start;">
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start;">
                             <div>
                                 <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
-                                    <span lang="de"><i class="fa fa-euro-sign" aria-hidden="true"></i> Gehaltsvorstellung</span>
-                                    <span lang="en"><i class="fa fa-euro-sign" aria-hidden="true"></i> Salary Expectation</span>
+                                    <span lang="de"><i class="fa fa-euro-sign" aria-hidden="true"></i>
+                                        Gehaltsvorstellung</span>
+                                    <span lang="en"><i class="fa fa-euro-sign" aria-hidden="true"></i> Salary
+                                        Expectation</span>
                                 </h3>
-                                <p style="font-size: 1.35rem; font-weight: bold; color: var(--primary); margin: 0.5rem 0;">
-                                    45.000 € – 52.000 € <span style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted);">p.a. (verhandelbar)</span>
+                                <p
+                                    style="font-size: 1.35rem; font-weight: bold; color: var(--primary); margin: 0.5rem 0;">
+                                    45.000 € – 52.000 € <span
+                                        style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted);">p.a.
+                                        (verhandelbar)</span>
                                 </p>
-                                <p lang="de" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">Abhängig von Zusatzleistungen, Arbeitszeitmodell und konkretem Aufgabengebiet.</p>
-                                <p lang="en" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">Depending on benefits, work-time model, and concrete field of tasks.</p>
+                                <p lang="de"
+                                    style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
+                                    Abhängig von Zusatzleistungen, Arbeitszeitmodell und konkretem Aufgabengebiet.</p>
+                                <p lang="en"
+                                    style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
+                                    Depending on benefits, work-time model, and concrete field of tasks.</p>
                             </div>
                             <div>
                                 <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
-                                    <span lang="de"><i class="fa fa-file-pdf" aria-hidden="true"></i> Zeugnisse &amp; Nachweise</span>
-                                    <span lang="en"><i class="fa fa-file-pdf" aria-hidden="true"></i> Certificates &amp; References</span>
+                                    <span lang="de"><i class="fa fa-file-pdf" aria-hidden="true"></i> Zeugnisse &amp;
+                                        Nachweise</span>
+                                    <span lang="en"><i class="fa fa-file-pdf" aria-hidden="true"></i> Certificates &amp;
+                                        References</span>
                                 </h3>
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                                    <a href="assets/pdf/IHK_Zeugnis_Dummy.pdf" class="btn-secondary" download style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
+                                    <a href="assets/pdf/IHK_Zeugnis_Dummy.pdf" class="btn-secondary" download
+                                        style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
                                         <i class="fa fa-download" aria-hidden="true"></i>
                                         <span lang="de">IHK-Zeugnis (Simuliert)</span>
                                         <span lang="en">IHK Certificate (Simulated)</span>
                                     </a>
-                                    <a href="assets/pdf/Praktikumszeugnis_DFG_Dummy.pdf" class="btn-secondary" download style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
+                                    <a href="assets/pdf/Praktikumszeugnis_DFG_Dummy.pdf" class="btn-secondary" download
+                                        style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
                                         <i class="fa fa-download" aria-hidden="true"></i>
                                         <span lang="de">Praktikumszeugnis DFG</span>
                                         <span lang="en">Internship Reference DFG</span>
@@ -376,8 +456,10 @@
                             <div>
                                 <h4 lang="de">KI &amp; Code-Experimente</h4>
                                 <h4 lang="en">AI &amp; Coding Hacks</h4>
-                                <p lang="de">Entwicklung kleiner Web-Apps mit Anbindungen an LLMs wie OpenAI und Gemini.</p>
-                                <p lang="en">Building side-projects using REST integrations to LLMs like OpenAI or Gemini.</p>
+                                <p lang="de">Entwicklung kleiner Web-Apps mit Anbindungen an LLMs wie OpenAI und Gemini.
+                                </p>
+                                <p lang="en">Building side-projects using REST integrations to LLMs like OpenAI or
+                                    Gemini.</p>
                             </div>
                         </div>
                         <div class="interest-item">
@@ -385,8 +467,10 @@
                             <div>
                                 <h4 lang="de">Finanzen &amp; Investments</h4>
                                 <h4 lang="en">Finance &amp; Investing</h4>
-                                <p lang="de">Analysen und Portfoliostrukturierungen von ETFs, Aktien und digitalen Werten.</p>
-                                <p lang="en">Tracking market valuations and asset allocations across stocks and digital coins.</p>
+                                <p lang="de">Analysen und Portfoliostrukturierungen von ETFs, Aktien und digitalen
+                                    Werten.</p>
+                                <p lang="en">Tracking market valuations and asset allocations across stocks and digital
+                                    coins.</p>
                             </div>
                         </div>
                         <div class="interest-item">
@@ -404,15 +488,21 @@
         </div>
 
         <!-- Call to action (Screen only) -->
-        <div class="card cv-download-card no-print" style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+        <div class="card cv-download-card no-print"
+            style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
             <div>
-                <h3 lang="de" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Bereit zum Drucken?</h3>
-                <h3 lang="en" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Ready for Print?</h3>
-                <p lang="de" style="margin-bottom: 0;">Du kannst diesen Lebenslauf direkt aus dem Browser als formatiertes PDF ausdrucken oder speichern. Alle Menüs werden automatisch ausgeblendet.</p>
-                <p lang="en" style="margin-bottom: 0;">You can print this resume directly from your browser as a perfectly formatted PDF. Menus and footers are automatically hidden.</p>
+                <h3 lang="de" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Bereit zum
+                    Drucken?</h3>
+                <h3 lang="en" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Ready for Print?
+                </h3>
+                <p lang="de" style="margin-bottom: 0;">Du kannst diesen Lebenslauf direkt aus dem Browser als
+                    formatiertes PDF ausdrucken oder speichern. Alle Menüs werden automatisch ausgeblendet.</p>
+                <p lang="en" style="margin-bottom: 0;">You can print this resume directly from your browser as a
+                    perfectly formatted PDF. Menus and footers are automatically hidden.</p>
             </div>
             <div>
-                <button class="btn-primary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <button class="btn-primary" onclick="window.print()"
+                    style="display: inline-flex; align-items: center; gap: 0.5rem;">
                     <i class="fa fa-print" aria-hidden="true"></i>
                     <span lang="de">PDF drucken / speichern</span>
                     <span lang="en">Print / Save as PDF</span>
