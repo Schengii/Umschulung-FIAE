@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v16';
+const CACHE_NAME = 'umschulung-fiae-v18';
 const ASSETS = [
     './',
     'index.html',
@@ -100,15 +100,21 @@ self.addEventListener('install', (e) => {
     self.skipWaiting();
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS).catch(err => {
-                console.warn('Cache pre-addAll failed, caching assets individually:', err);
-                // Attempt caching individually to prevent failure of whole installation on single missing asset
-                return Promise.all(
-                    ASSETS.map(asset => {
-                        return cache.add(asset).catch(e => console.warn(`Failed to cache ${asset}:`, e));
-                    })
-                );
-            });
+            return Promise.all(
+                ASSETS.map(asset => {
+                    return fetch(new Request(asset, { cache: 'reload' }))
+                        .then(response => {
+                            if (response.ok) {
+                                return cache.put(asset, response);
+                            }
+                            throw new Error(`Response not OK for ${asset}`);
+                        })
+                        .catch(err => {
+                            console.warn(`Failed to cache ${asset} with reload request, falling back to standard cache add:`, err);
+                            return cache.add(asset).catch(e => console.error(`Standard cache fallback failed for ${asset}:`, e));
+                        });
+                })
+            );
         })
     );
 });

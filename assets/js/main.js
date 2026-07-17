@@ -68,9 +68,10 @@ function bootstrap() {
     }
 }
 
-// Run bootstrap logic once the DOM is ready.
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootstrap);
-} else {
+// Always wait for DOMContentLoaded to guarantee components.js has injected all templates.
+// If the document is already fully loaded, bootstrap immediately.
+if (document.readyState === 'complete') {
     bootstrap();
+} else {
+    document.addEventListener('DOMContentLoaded', bootstrap);
 }
