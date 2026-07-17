@@ -51,19 +51,14 @@ export function initHeroSection() {
     // Particle background
     initHeroParticles(heroContainer);
 
-    // Update phrases on language change
     document.addEventListener('langchange', (e) => {
         const newLang = e.detail;
-        const newPhrases = newLang === 'de'
-            ? ['Fachinformatiker für Anwendungsentwicklung', 'Webentwickler', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀']
-            : ['IT Specialist — Application Development', 'Web Developer', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀'];
         const newPhrases = newLang === 'de' ? 
             ['Fachinformatiker für Anwendungsentwicklung', 'Frontend Webentwickler', 'KI-Nutzung und -Automatisierung', 'JavaScript & TypeScript', 'Open for Work 🚀'] : 
             ['IT Specialist — Application Development', 'Frontend Web Developer', 'AI Use and Automation', 'JavaScript & TypeScript', 'Open for Work 🚀'];
         
         phrases.length = 0;
         phrases.push(...newPhrases);
-        Array.prototype.push.apply(phrases, newPhrases);
         phraseIndex = 0;
         charIndex = 0;
         isDeleting = false;

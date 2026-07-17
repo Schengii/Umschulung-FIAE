@@ -18,7 +18,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-07-07T13:59:35.734Z"
+    "updatedAt": "2026-07-17T18:41:40.091Z"
   },
   {
     "repoName": "EcoChef",
@@ -49,7 +49,7 @@ window.projectsData = [
       {
         "titleDe": "Hauptclip — Übersicht & Navigation",
         "titleEn": "Main Clip — Overview & Navigation",
-        "url": "assets/videos/V1 - Hauptclip.mp4",
+        "url": "assets/videos/V1_Hauptclip.mp4",
         "duration": "1:06",
         "descDe": "Der Hauptclip zeigt das grundlegende Konzept von EcoChef: Zutateneingabe im Kühlschrank, Absenden an Gemini, Rezeptgenerierung mit Nährwert- und CO2-Ersparnis-Berechnung.",
         "descEn": "The main clip highlights the core concept of EcoChef: entering ingredients, submitting to Gemini AI, and generating custom recipes with nutrition and carbon savings data."
@@ -57,7 +57,7 @@ window.projectsData = [
       {
         "titleDe": "Kochmodus & Sprachausgabe (TTS)",
         "titleEn": "Cooking Mode & Text-to-Speech (TTS)",
-        "url": "assets/videos/V2 - Kochmodusclip.mp4",
+        "url": "assets/videos/V2_Kochmodusclip.mp4",
         "duration": "0:22",
         "descDe": "Demonstration des interaktiven Kochmodus. Dank Sprachausgabe liest der intelligente Assistent die Zubereitungsschritte vor, damit man beim Kochen die Hände frei hat.",
         "descEn": "Demonstration of the interactive cooking mode. Thanks to speech synthesis, the assistant reads out the cooking steps hands-free."
@@ -65,7 +65,7 @@ window.projectsData = [
       {
         "titleDe": "Rezept anpassen per KI",
         "titleEn": "Customize Recipe via AI",
-        "url": "assets/videos/V3 - Rezept anpassen clip.mp4",
+        "url": "assets/videos/V3_Rezept_anpassen_clip.mp4",
         "duration": "1:16",
         "descDe": "Zeigt die Flexibilität von EcoChef: Ein generiertes Rezept lässt sich nachträglich anpassen (z. B. schärfer oder vegan), woraufhin Gemini das Rezept neu ausgibt.",
         "descEn": "Shows the app flexibility: Any generated recipe can be modified on the fly (e.g. spicier or vegan), and Gemini adjusts it instantly."
@@ -73,7 +73,7 @@ window.projectsData = [
       {
         "titleDe": "Rezept im LocalStorage speichern",
         "titleEn": "Save Recipe in LocalStorage",
-        "url": "assets/videos/V4 - Rezept speichern im lokalstorage.mp4",
+        "url": "assets/videos/V4_Rezept_speichern_im_lokalstorage.mp4",
         "duration": "1:33",
         "descDe": "EcoChef speichert Lieblingsrezepte dauerhaft lokal ab. Dieser Clip zeigt das Speichern, Abrufen und Verwalten der erstellten Rezepte.",
         "descEn": "EcoChef stores favorite recipes permanently in local storage. This clip shows saving, loading, and managing custom recipes."
@@ -81,7 +81,7 @@ window.projectsData = [
       {
         "titleDe": "Farbschema-Wechsel (Dark/Light Mode)",
         "titleEn": "Theme Toggle (Dark/Light Mode)",
-        "url": "assets/videos/V5 - Dark Light Mode Wechsel.mp4",
+        "url": "assets/videos/V5_Dark_Light_Mode_Wechsel.mp4",
         "duration": "0:50",
         "descDe": "Veranschaulichung des flüssigen und barrierefreien Wechsels zwischen Dark und Light Mode in der EcoChef-App.",
         "descEn": "Demonstration of the smooth and accessible transition between dark and light modes in the EcoChef application."
@@ -110,7 +110,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-07-07T13:59:36.188Z"
+    "updatedAt": "2026-07-17T18:41:40.557Z"
   },
   {
     "repoName": "finance-ai-bot",
@@ -131,7 +131,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-07-07T13:59:36.383Z"
+    "updatedAt": "2026-07-17T18:41:40.734Z"
   },
   {
     "repoName": "Finanzenportfolio",
@@ -144,7 +144,7 @@ window.projectsData = [
       "TailwindCSS",
       "Recharts"
     ],
-    "image": "assets/images/finanzenportfolio_showcase.png",
+    "image": null,
     "link": "Projekte/Finanzenportfolio/dist/index.html",
     "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
     "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
@@ -152,7 +152,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-07-07T13:59:36.577Z"
+    "updatedAt": "2026-07-17T18:41:40.900Z"
   },
   {
     "repoName": "Glücksspiel",
@@ -173,7 +173,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-07-07T13:59:36.605Z"
+    "updatedAt": "2026-07-17T18:41:40.928Z"
   },
   {
     "repoName": "Jobsuche",
@@ -194,7 +194,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-07-07T13:59:36.828Z"
+    "updatedAt": "2026-07-17T18:41:41.156Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -215,7 +215,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-07-07T13:59:37.012Z"
+    "updatedAt": "2026-07-17T18:41:41.336Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -236,7 +236,7 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-07-07T13:59:37.190Z"
+    "updatedAt": "2026-07-17T18:41:41.522Z"
   },
   {
     "repoName": "Urlaubsfotos",
@@ -248,15 +248,15 @@ window.projectsData = [
       "Image Processing",
       "CSS Grid"
     ],
-    "image": "assets/images/urlaubsfotos_showcase.png",
-    "link": "Projekte/Urlaubsfotos/dist/index.html",
+    "image": null,
+    "link": "Projekte/Urlaubsfotos/index.html",
     "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
     "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
     "category": "web",
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-07-07T13:59:37.372Z"
+    "updatedAt": "2026-07-17T18:41:41.689Z"
   },
   {
     "repoName": "VerkaufsVorlagen",
@@ -268,7 +268,7 @@ window.projectsData = [
       "PDF Generation",
       "LocalStorage"
     ],
-    "image": "assets/images/verkaufsvorlagen_showcase.png",
+    "image": null,
     "link": "Projekte/VerkaufsVorlagen/dist/index.html",
     "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
     "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
@@ -276,7 +276,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-07-07T13:59:37.569Z"
+    "updatedAt": "2026-07-17T18:41:41.957Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -297,7 +297,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-07-07T13:59:37.744Z"
+    "updatedAt": "2026-07-17T18:41:42.161Z"
   },
   {
     "repoName": "CoOpVersusGame",
@@ -318,7 +318,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-07-07T13:59:37.947Z"
+    "updatedAt": "2026-07-17T18:41:42.349Z"
   },
   {
     "repoName": null,
@@ -330,7 +330,7 @@ window.projectsData = [
       "Vanilla JS (ES6)",
       "LocalStorage"
     ],
-    "image": "assets/images/snake_showcase.png",
+    "image": null,
     "link": "snake.html",
     "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
     "descEn": "A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.",
@@ -347,7 +347,7 @@ window.projectsData = [
       "UX Design",
       "Accessibility"
     ],
-    "image": "assets/images/quiz_showcase.png",
+    "image": null,
     "link": "quiz.html",
     "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
     "descEn": "An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.",
@@ -364,7 +364,7 @@ window.projectsData = [
       "Game Logic",
       "LocalStorage"
     ],
-    "image": "assets/images/memory_showcase.png",
+    "image": null,
     "link": "memory.html",
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
     "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
@@ -382,12 +382,11 @@ window.projectsData = [
       "JDBC / SQL",
       "Unit Testing"
     ],
-    "image": "assets/images/it_workspace.png",
-    "link": "https://github.com/Schengii",
+    "image": null,
+    "link": null,
     "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",
     "descEn": "A collection of Java practice applications from my retraining program. Includes command-line tools, advanced OOP design patterns, JUnit test suites, and a Spring Boot REST API for managing course and student databases.",
     "category": "web",
-    "language": "Java",
-    "githubUrl": "https://github.com/Schengii"
+    "language": "Java"
   }
 ];

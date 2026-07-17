@@ -1,0 +1,12 @@
+{
+  "name": "umschulung-fiae",
+  "version": "1.0.0",
+  "description": "Portfolio Maximilian Schenk",
+  "scripts": {
+    "test": "playwright test",
+    "generate-data": "node scripts/generate_projects_data.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0"
+  }
+}

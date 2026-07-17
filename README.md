@@ -8,7 +8,7 @@ Diese Anleitung beschreibt den strukturellen Aufbau des Projekts, die Software-A
 
 ## 📂 Projektstruktur & Ordneraufteilung
 
-Das Projekt ist als **moderne, statische Web-App (PWA)** ohne schwerfällige Backend-Frameworks konzipiert. Alle Funktionalitäten basieren auf nativem HTML5, CSS3 und Vanilla JavaScript (ES6+).
+Das Projekt ist als **moderne, statische Web-App (PWA)** ohne schwerfällige Backend-Frameworks konzipiert. Alle Funktionalitäten basieren auf nativem HTML5, CSS3 und Vanilla JavaScript (ES6+), das als ES-Module (`type="module"`) geladen wird.
 
 ```text
 Umschulung-FIAE/
@@ -20,6 +20,8 @@ Umschulung-FIAE/
 ├── links.html                   # Quellen-Sammlung & QR-Code-Generator für Recruiter
 ├── ...                          # Weitere Inhaltsseiten (ausbildungsablauf.html, ueber-mich.html, etc.)
 │
+├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten
+├── playwright.config.js         # Playwright E2E Testkonfiguration
 ├── sw.js                        # Service Worker für Offline-Caching & PWA-Fähigkeit
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
@@ -53,76 +55,57 @@ Umschulung-FIAE/
 
 ---
 
-## 🛠 Kern-Architektur & Funktionsweise
+## 🛠 Kern-Architektur & Funktionsweise (Modul- & Funktions-Mapping)
 
-### 1. Dynamischer JavaScript Modul-Loader (`main.js`)
-Anstelle von dutzenden `<script>`-Tags in jeder HTML-Datei verwendet das Projekt ein modulares Ladesystem. In der [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) ist das globale Array `__MODULE_SCRIPTS` definiert:
-- Die registrierten JavaScript-Module (z. B. `qr-generator.js`, `achievements.js`) werden sequentiell nachgeladen.
-- Nach erfolgreichem Laden führt das System die jeweiligen Initialisierungsfunktionen (z. B. `initQrGenerator()`, `initAchievements()`) aus.
-- Dies verhindert Namenskonflikte und sorgt für minimale Ladezeiten auf Mobilgeräten.
+### 1. Einstiegspunkt & Bootstrapping (`main.js` & HTML-Integration)
+Jede HTML-Seite lädt den zentralen Einstiegspunkt als ES-Modul:
+```html
+<script type="module" src="assets/js/main.js"></script>
+```
+Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) importiert alle Feature-Module und führt sequentiell deren Initialisierungsfunktionen (z. B. `initTheme()`, `initNavigation()`) beim Laden aus. Dies verhindert Namenskonflikte und sorgt für saubere Kapselung.
 
-### 2. Header & Footer Komponenten (`components.js`)
-Um HTML-Redundanzen zu vermeiden, werden der globale Header (mit Navigation und Sprach-/Farbumschaltung) und der Footer über die [components.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/components.js) dynamisch in die DOM-Elemente `<div id="site-header">` und `<div id="site-footer">` geladen.
+### 2. Globale Konstanten & scope-übergreifender Zugriff (`constants.js`)
+Die Datei [constants.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/constants.js) definiert die globalen Key-Konstanten (`STORAGE_KEYS`, `APP`) und macht sie über das `window`-Objekt sowohl für ES6-Module als auch für klassische Scripts (wie `playground.js`, `quiz.js`) global zugänglich.
 
-### 3. PWA-Offline-Caching (`sw.js`)
-Die Datei [sw.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/sw.js) implementiert einen Service Worker.
-- **Wichtig bei Änderungen**: Wird an JavaScript-Dateien oder Stylesheets gearbeitet, muss in der `sw.js` der `CACHE_NAME` erhöht werden (z. B. von `umschulung-fiae-v10` auf `umschulung-fiae-v11`), da der Browser sonst alte Versionen aus dem Cache lädt.
+### 3. Header, Footer & Speicherverwaltung (`components.js`)
+- **Header & Footer**: Werden dynamisch in die DOM-Elemente `#site-header` und `#site-footer` geladen, um HTML-Redundanzen zu vermeiden (DRY-Prinzip).
+- **StorageManager**: Bietet eine sichere Schnittstelle für den Zugriff auf den `localStorage` mit automatischem Fallback bei blockiertem Speicher.
 
-### 4. Recruiter-Personalisierung (`username-greeting.js`)
-Das System personalisiert das Dashboard automatisch, wenn Recruiter die Seite über einen QR-Code oder benutzerdefinierten Link aufrufen:
-- **Parameter**: `?c=Company` (Firmenname) und/oder `?n=RecruiterName` (Name des Ansprechpartners).
-- Die Parameter werden im `sessionStorage` persistiert.
-- Bei Vorhandensein beider Parameter wird auf der Startseite eine kombinierte Begrüßungskarte generiert (*„Herzlich willkommen, [Name] vom Team [Firma]!“*).
+### 4. PWA-Offline-Caching (`sw.js`)
+Der Service Worker in [sw.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/sw.js) cached alle statischen Dateien (HTML, CSS, JS, Bilder) für die Offline-Nutzung.
+- **Wichtig**: Bei Änderungen an Assets muss der `CACHE_NAME` erhöht werden (z. B. von `umschulung-fiae-v16` auf `umschulung-fiae-v17`), um Browsern die Aktualisierung zu signalisieren.
 
-### 5. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
-Das Portfolio lädt seine Projektkarten dynamisch.
-- Lokale Ordner unter `Projekte/` müssen eine `portfolio-metadata.json` enthalten.
-- Durch Ausführen des Befehls `node scripts/generate_projects_data.js` scannt das Skript alle Unterordner, reichert diese mit GitHub-API-Daten (Stars, Update-Zeitpunkte) an und exportiert sie konsolidiert nach [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) und `assets/js/projects_data.js` (als globaler Fallback).
+### 5. Recruiter-Personalisierung (`username-greeting.js`)
+Wertet URL-Parameter (z. B. `?c=Company` und `?n=Name`) aus, speichert sie in der Session und generiert auf der Startseite ein personalisiertes Begrüßungsbanner.
 
-### 6. Token-Schutz für sensible Bewerbungsdaten (`token-auth.js`)
-Zum Schutz vertraulicher Daten (z. B. Gehaltsvorstellung, Arbeitszeugnis-Downloads) besitzt die Website auf `lebenslauf.html` einen passwortgeschützten Bereich.
-- **Freischaltung**: Erfolgt durch Eingabe des Tokens **fiae2026** im Seitenmenü oder durch Anhängen des URL-Parameters `?token=fiae2026`.
-- **Speicherung**: Nach erfolgreicher Eingabe wird der Zugriff über `sessionStorage` für die Dauer des Browser-Tabs persistiert.
+### 6. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
+Scannt die Ordner unter `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) sowie `assets/js/projects_data.js`.
+- Befehl zum Ausführen: `npm run generate-data`
 
-### 7. Code-Qualitätsmetriken & QA-Dashboard (`dashboard.js`)
-Das Dashboard auf `dashboard.html` bietet einen interaktiven QA-Simulator:
-- Zeigt simulated Metriken wie Testabdeckung, Clean Code Compliance, Dokumentation und Security.
-- Der Gesamtwert beeinflusst dynamisch die berechnete Release-Bereitschaft (Production Ready / Release Candidate / Refactoring Recommended).
-
-### 8. Änderungshistorie (`CHANGELOG.md`)
-Alle Verbesserungen, Anpassungen und behobenen Fehler werden chronologisch in der [CHANGELOG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/CHANGELOG.md) im Hauptverzeichnis festgehalten.
-
-### 9. Recruiter-Steckbrief (`home.html`)
-Ein kompaktes Info-Widget auf der Startseite fasst für Personalabteilungen die Kernfakten zusammen (Zielposition, Stack, Verfügbarkeit, Highlights), um Zeit beim Screening zu sparen.
-
-### 10. Code-Showcase-Sektion (`portfolio.html` & `portfolio.js`)
-Ein interaktiver Quelltext-Betrachter ermöglicht es technischen Entscheidern, repräsentative Code-Snippets (wie React Hooks, Java Entwurfsmuster und robuste Fetch-Wrapper) mit integriertem Syntax-Highlighting und Designkommentaren direkt im Browser zu bewerten.
-
-### 11. Interaktive Skill-Filter (`skill-bars.js` & `portfolio.js`)
-Die Skill-Balken auf der Portfolio-Seite reagieren interaktiv auf Klicks. Der Klick filtert die Projektgalerie automatisch nach Projekten, die diesen Skill verwenden (z. B. "Java" oder "SQL").
-
-### 12. Mehrwert-Steckbrief („Warum ich?“) (`ueber-mich.html`)
-Ein interdisziplinäres Kärtchen beschreibt den Brückenschlag zwischen deiner Elektroniker-Vergangenheit und deiner neuen Entwickler-Tätigkeit (Troubleshooting, SPS-Zustände, SecOps/Vorschriften).
-
-### 13. Zertifikate-Bühne (`lebenslauf.html`)
-Eine kompakte Badgeliste im Lebenslauf-Sidebar zeigt deine Abschlüsse (IHK Fachinformatiker, Elektroniker, DGUV V3 Prüfer) auf einen Blick.
-
-### 14. Video-Playlist-Player im Detail-Modal (`modal.js`)
-Das Projekt-Modal scannt `window.projectsData`. Wenn eine Playlist vorliegt (wie bei EcoChef), bettet es einen Videoplayer mit Clip-Auswahl-Menü ein, damit Recruiter Democlips (Kochmodus, TTS etc.) direkt im Browser abspielen können.
+### 7. Token-Schutz für sensible Bewerbungsdaten (`token-auth.js`)
+Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** im Seitenmenü oder per Parameter `?token=fiae2026` freigeschaltet.
 
 ---
 
 ## 🚀 Entwicklung & Lokales Testen
 
-1. **Lokalen Server starten**:
-   Da die PWA Module nachlädt und AJAX-Anfragen (`fetch`) nutzt, können die Dateien nicht per Doppelklick (`file://`) im Browser geöffnet werden. Starte stattdessen einen lokalen Server im Hauptverzeichnis:
-   ```bash
-   # Mit Python (Standard auf Windows/Mac)
-   python -m http.server 8000
-   
-   # Alternativ mit Node.js (falls http-server global installiert ist)
-   npx http-server -p 8000
-   ```
-2. **Aufrufen**: Öffne anschließend [http://localhost:8000](http://localhost:8000) im Browser.
-3. **Erfolge freischalten (Entwickler-Tipp)**:
-   In der Konsole des Browsers lässt sich das Achievement-System über `window.unlockAchievement('achievement_id')` testen. Alle verfügbaren IDs sind in [achievements.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/modules/achievements.js) aufgelistet.
+### 1. Abhängigkeiten installieren
+Installiere die benötigten E2E-Test-Abhängigkeiten (Playwright) lokal im Projektverzeichnis:
+```bash
+npm install
+npx playwright install chromium
+```
+
+### 2. Lokalen Server starten
+Da das Projekt ES-Module verwendet, muss es über einen Server ausgeführt werden:
+```bash
+# Startet einen cachingfreien Entwicklungsserver auf Port 8080
+npx http-server . -p 8080 -c-1
+```
+
+### 3. Tests ausführen
+Verifiziere die Funktionalität aller 23 Einzelseiten und Kernfeatures automatisch:
+```bash
+npm test
+```
+Die Tests prüfen die Seiten auf Fehlerfreiheit beim Laden, fehlende 404-Ressourcen sowie korrekte Funktionalität von Dark Mode und Formularweiterleitungen.

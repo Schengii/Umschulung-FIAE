@@ -81,7 +81,7 @@ const ECOCHEF_VIDEO_DATA = [
         id: 'v1',
         titleDe: 'Hauptclip — Übersicht & Navigation',
         titleEn: 'Main Clip — Overview & Navigation',
-        src: 'assets/videos/V1 - Hauptclip.mp4',
+        src: 'assets/videos/V1_Hauptclip.mp4',
         duration: '1:06',
         descDe: 'Der Hauptclip zeigt das grundlegende Konzept von EcoChef: Zutateneingabe im virtuellen Kühlschrank, Absenden an die Gemini-KI, Generierung des Rezepts mit Nährwert- und CO2-Ersparnis-Berechnung.',
         descEn: 'The main clip highlights the core concept of EcoChef: entering ingredients in the virtual pantry, submitting to Gemini AI, and generating custom recipes with nutrition and carbon savings data.'
@@ -90,7 +90,7 @@ const ECOCHEF_VIDEO_DATA = [
         id: 'v2',
         titleDe: 'Kochmodus & Sprachausgabe (TTS)',
         titleEn: 'Cooking Mode & Text-to-Speech (TTS)',
-        src: 'assets/videos/V2 - Kochmodusclip.mp4',
+        src: 'assets/videos/V2_Kochmodusclip.mp4',
         duration: '0:22',
         descDe: 'Demonstration des interaktiven Kochmodus. Dank Sprachausgabe liest der intelligente Assistent die Zubereitungsschritte vor, damit man beim Kochen die Hände frei hat.',
         descEn: 'Demonstration of the interactive cooking mode. Thanks to speech synthesis, the assistant reads out the cooking steps hands-free.'
@@ -99,7 +99,7 @@ const ECOCHEF_VIDEO_DATA = [
         id: 'v3',
         titleDe: 'Rezept anpassen per KI',
         titleEn: 'Customize Recipe via AI',
-        src: 'assets/videos/V3 - Rezept anpassen clip.mp4',
+        src: 'assets/videos/V3_Rezept_anpassen_clip.mp4',
         duration: '1:16',
         descDe: 'Zeigt, wie flexibel die Anwendung ist: Ein generiertes Rezept lässt sich nachträglich anpassen (z. B. "mach es schärfer" oder "vegane Option"), woraufhin Gemini das Rezept neu ausgibt.',
         descEn: 'Shows the app flexibility: Any generated recipe can be modified on the fly (e.g. "make it spicier" or "vegan option"), and Gemini adjusts it instantly.'
@@ -109,7 +109,7 @@ const ECOCHEF_VIDEO_DATA = [
         titleDe: 'Rezept im LocalStorage speichern',
         titleEn: 'Save Recipe in LocalStorage',
         duration: '1:33',
-        src: 'assets/videos/V4 - Rezept speichern im lokalstorage.mp4',
+        src: 'assets/videos/V4_Rezept_speichern_im_lokalstorage.mp4',
         descDe: 'EcoChef speichert Lieblingsrezepte dauerhaft lokal ab. Dieser Clip zeigt das Speichern, Abrufen und Verwalten der erstellten Rezepte ohne Server-Zwang.',
         descEn: 'EcoChef stores favorite recipes permanently in local storage. This clip shows saving, loading, and managing custom recipes serverlessly.'
     },
@@ -118,7 +118,7 @@ const ECOCHEF_VIDEO_DATA = [
         titleDe: 'Farbschema-Wechsel (Dark/Light Mode)',
         titleEn: 'Theme Toggle (Dark/Light Mode)',
         duration: '0:50',
-        src: 'assets/videos/V5 - Dark Light Mode Wechsel.mp4',
+        src: 'assets/videos/V5_Dark_Light_Mode_Wechsel.mp4',
         descDe: 'Veranschaulichung des flüssigen und barrierefreien Wechsels zwischen Dark und Light Mode in der EcoChef-App, abgestimmt auf die Präferenzen des Benutzers.',
         descEn: 'Demonstration of the smooth and accessible transition between dark and light modes in the EcoChef application, tailored to user preferences.'
     }

@@ -26,3 +26,8 @@ const APP = Object.freeze({
     GITHUB_USERNAME: 'Schengii',
     WEB3FORMS_KEY: '', // Trage hier deinen Web3Forms Access Key ein, um direkte Mail-Zustellung zu aktivieren!
 });
+
+// Expose constants to global window scope for backwards compatibility with non-module scripts
+window.STORAGE_KEYS = STORAGE_KEYS;
+window.APP = APP;
+
