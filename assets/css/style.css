@@ -5677,3 +5677,286 @@ button.welcome-theme-toggle {
         box-shadow: 0 0 16px rgba(37, 99, 235, 0.5);
     }
 }
+
+/* ==========================================================================
+   INTERACTIVE PROJECTS BUNDLE (LIVE DEMOS, CODE EXPLORER, STEPPER)
+   ========================================================================== */
+
+/* 1. Code Explorer Widget */
+.code-explorer-widget {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-card);
+    overflow: hidden;
+    height: 480px;
+    margin-top: 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+.explorer-tree-pane {
+    width: 250px;
+    background-color: rgba(15, 23, 42, 0.03);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+[data-theme="dark"] .explorer-tree-pane {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.tree-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    user-select: none;
+}
+
+.tree-item:hover {
+    background-color: rgba(37, 99, 235, 0.08);
+    color: var(--primary);
+}
+
+.tree-item.active {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+.tree-item i {
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
+}
+
+.explorer-code-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #1e1e1e;
+}
+
+.code-pane-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background-color: #181818;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code-file-name {
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: #a3a3a3;
+}
+
+.btn-copy-code {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #d4d4d4;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-copy-code:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.explorer-code-pane pre {
+    flex: 1;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    background: #1e1e1e !important;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    padding: 1rem !important;
+}
+
+.explorer-code-pane code {
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+}
+
+@media (max-width: 768px) {
+    .code-explorer-widget {
+        flex-direction: column;
+        height: 600px;
+    }
+    .explorer-tree-pane {
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+}
+
+/* 2. IHK Stepper Presentation Widget */
+.ihk-stepper-widget {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-card);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.stepper-progress-bar {
+    height: 4px;
+    background-color: var(--border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.stepper-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    width: 0%;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepper-slides-container {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.stepper-slide {
+    width: 100%;
+    animation: slideFadeIn 0.3s ease-out;
+}
+
+.stepper-slide h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+@keyframes slideFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stepper-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.stepper-indicator {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* 3. Live Demo Fullscreen Modal */
+.live-demo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(11, 15, 25, 0.85);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(12px);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.demo-modal-header {
+    background-color: rgba(17, 24, 39, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    height: 60px;
+}
+
+.demo-project-title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-family: var(--font-heading);
+}
+
+.demo-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.demo-btn-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.demo-btn-control:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.demo-btn-control.close-btn {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+.demo-btn-control.close-btn:hover {
+    background-color: rgba(239, 68, 68, 0.4);
+    color: #ffffff;
+}
+
+.demo-modal-body {
+    flex: 1;
+    background-color: #000000;
+    position: relative;
+}
+
+.demo-modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #ffffff;
+}

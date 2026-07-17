@@ -114,16 +114,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let buttonsHTML = '<div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">';
         if (project.link) {
-            buttonsHTML += `<a href="${project.link}" class="btn-primary" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> <span lang="de">Live ansehen</span><span lang="en">View Live</span></a>`;
-        }
-        if (project.githubUrl) {
-            buttonsHTML += `<a href="${project.githubUrl}" class="btn-secondary" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <span lang="de">Quellcode</span><span lang="en">Source Code</span></a>`;
+            buttonsHTML += `
+                <button id="start-live-demo" class="btn-primary"><i class="fa fa-play-circle"></i> <span lang="de">Live-Demo starten 🚀</span><span lang="en">Start Live Demo 🚀</span></button>
+                <a href="${project.link}" class="btn-secondary" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> <span lang="de">Im neuen Tab öffnen</span><span lang="en">Open in New Tab</span></a>
+            `;
+        } else if (project.githubUrl) {
+            buttonsHTML += `<a href="${project.githubUrl}" class="btn-primary" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <span lang="de">Quellcode</span><span lang="en">Source Code</span></a>`;
         }
         buttonsHTML += '</div>';
 
         let mediaHTML = '';
 
-        // 1. Render PPT Downloads
+        // 1. Render IHK Presentation Stepper (EcoChef special)
+        if (project.ihkPresentation && project.ihkPresentation.length > 0) {
+            mediaHTML += `
+                <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
+                <h3 lang="de"><i class="fa-solid fa-person-chalkboard"></i> IHK-Präsentations-Bühne</h3>
+                <h3 lang="en"><i class="fa-solid fa-person-chalkboard"></i> IHK Presentation Stage</h3>
+                <div class="ihk-stepper-widget" id="ihk-stepper">
+                    <div class="stepper-progress-bar">
+                        <div class="stepper-progress-fill" id="stepper-progress-fill"></div>
+                    </div>
+                    <div class="stepper-slides-container" id="stepper-slides-container">
+                        <!-- Slide contents injected by JS -->
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-secondary" id="stepper-prev-btn"><i class="fa fa-chevron-left"></i> <span lang="de">Zurück</span><span lang="en">Back</span></button>
+                        <span class="stepper-indicator" id="stepper-indicator">Schritt 1</span>
+                        <button class="btn-primary" id="stepper-next-btn"><span lang="de">Weiter</span><span lang="en">Next</span> <i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 2. Render PPT Downloads
         if (project.downloadPpts && project.downloadPpts.length > 0) {
             mediaHTML += `
                 <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
@@ -159,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mediaHTML += `</div>`;
         }
 
-        // 2. Render Video Playlist Player
+        // 3. Render Video Playlist Player
         if (project.videoPlaylist && project.videoPlaylist.length > 0) {
             mediaHTML += `
                 <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
@@ -195,6 +219,25 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        // 4. Render Code Explorer
+        if (project.codeFiles && project.codeFiles.length > 0) {
+            mediaHTML += `
+                <hr style="margin: 2rem 0; border: 0; border-top: 2px solid var(--border);">
+                <h3 lang="de"><i class="fa-solid fa-folder-open"></i> Quellcode-Explorer</h3>
+                <h3 lang="en"><i class="fa-solid fa-folder-open"></i> Source Code Explorer</h3>
+                <div class="code-explorer-widget">
+                    <div class="explorer-tree-pane" id="explorer-tree"></div>
+                    <div class="explorer-code-pane">
+                        <div class="code-pane-header">
+                            <span class="code-file-name" id="explorer-active-file"></span>
+                            <button class="btn-copy-code" id="explorer-copy-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                        </div>
+                        <pre class="line-numbers"><code id="explorer-code-view" class="language-javascript">// Klicke links auf eine Datei, um den Code anzuzeigen</code></pre>
+                    </div>
+                </div>
+            `;
+        }
+
         detailContainer.innerHTML = `
             ${project.image ? `<img src="${project.image}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);">` : ''}
             
@@ -220,6 +263,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize video player if present
         if (project.videoPlaylist && project.videoPlaylist.length > 0) {
             initProjectVideoPlayer(project);
+        }
+
+        // Initialize IHK Presentation Stepper if present
+        if (project.ihkPresentation && project.ihkPresentation.length > 0) {
+            initIhkStepper(project);
+        }
+
+        // Initialize Code Explorer if present
+        if (project.codeFiles && project.codeFiles.length > 0) {
+            initCodeExplorer(project);
+        }
+
+        // Initialize Live Demo Modal if present
+        if (project.link) {
+            initLiveDemoModal(project);
         }
 
         // Ensure correct language is displayed
@@ -343,6 +401,193 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
         `;
+    }
+
+    function initIhkStepper(project) {
+        const prevBtn = document.getElementById('stepper-prev-btn');
+        const nextBtn = document.getElementById('stepper-next-btn');
+        const indicator = document.getElementById('stepper-indicator');
+        const progressFill = document.getElementById('stepper-progress-fill');
+        const container = document.getElementById('stepper-slides-container');
+
+        if (!prevBtn || !nextBtn || !indicator || !progressFill || !container) return;
+
+        let currentSlide = 0;
+        const slides = project.ihkPresentation;
+
+        function renderSlide() {
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            const slideItem = slides[currentSlide];
+
+            container.innerHTML = `
+                <div class="stepper-slide active">
+                    <h4>${lang === 'de' ? slideItem.titleDe : slideItem.titleEn}</h4>
+                    <p style="margin-top: 1rem; line-height: 1.6; color: var(--text-secondary);">${lang === 'de' ? slideItem.descDe : slideItem.descEn}</p>
+                </div>
+            `;
+
+            indicator.textContent = lang === 'de' 
+                ? `Schritt ${currentSlide + 1} von ${slides.length}`
+                : `Step ${currentSlide + 1} of ${slides.length}`;
+
+            progressFill.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                renderSlide();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                renderSlide();
+            }
+        });
+
+        document.addEventListener('langchange', renderSlide);
+        renderSlide();
+    }
+
+    function initCodeExplorer(project) {
+        const treeContainer = document.getElementById('explorer-tree');
+        const activeFileEl = document.getElementById('explorer-active-file');
+        const copyBtn = document.getElementById('explorer-copy-btn');
+
+        if (!treeContainer || !activeFileEl) return;
+
+        treeContainer.innerHTML = '';
+
+        project.codeFiles.forEach((fileItem, index) => {
+            const item = document.createElement('div');
+            item.className = 'tree-item';
+
+            let iconClass = 'fa-regular fa-file-code';
+            if (fileItem.type === 'html') iconClass = 'fa-brands fa-html5';
+            else if (fileItem.type === 'css') iconClass = 'fa-brands fa-css3-alt';
+            else if (fileItem.type === 'typescript') iconClass = 'fa-solid fa-code';
+
+            item.innerHTML = `
+                <i class="${iconClass}"></i>
+                <span>${fileItem.name}</span>
+            `;
+
+            item.addEventListener('click', () => {
+                const active = treeContainer.querySelector('.tree-item.active');
+                if (active) active.classList.remove('active');
+                item.classList.add('active');
+
+                activeFileEl.textContent = fileItem.name;
+                loadCodeFile(fileItem.path, fileItem.type);
+            });
+
+            treeContainer.appendChild(item);
+
+            if (index === 0) {
+                item.click();
+            }
+        });
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const codeView = document.getElementById('explorer-code-view');
+                if (!codeView) return;
+                navigator.clipboard.writeText(codeView.textContent).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fa fa-check"></i> Copied!';
+                    setTimeout(() => copyBtn.innerHTML = originalText, 2000);
+                });
+            });
+        }
+    }
+
+    async function loadCodeFile(filePath, fileType) {
+        const codeView = document.getElementById('explorer-code-view');
+        if (!codeView) return;
+
+        codeView.textContent = '// Lade Code...';
+        codeView.className = `language-${fileType}`;
+        if (window.Prism) {
+            Prism.highlightElement(codeView);
+        }
+
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) throw new Error('Datei konnte nicht geladen werden.');
+            const codeText = await response.text();
+            codeView.textContent = codeText;
+            codeView.className = `language-${fileType}`;
+            if (window.Prism) {
+                Prism.highlightElement(codeView);
+            }
+        } catch (e) {
+            codeView.textContent = `// Fehler beim Laden: ${e.message}`;
+        }
+    }
+
+    function initLiveDemoModal(project) {
+        const startBtn = document.getElementById('start-live-demo');
+        if (!startBtn) return;
+
+        let modal = document.getElementById('live-demo-modal');
+        if (!modal) {
+            const modalHTML = `
+                <div class="live-demo-modal" id="live-demo-modal" role="dialog" aria-modal="true" style="display: none;">
+                    <div class="demo-modal-header">
+                        <span class="demo-project-title" id="demo-project-title"></span>
+                        <div class="demo-controls">
+                            <button class="demo-btn-control" id="demo-reload-btn" title="Reload"><i class="fa-solid fa-rotate-right"></i></button>
+                            <button class="demo-btn-control" id="demo-fullscreen-btn" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
+                            <button class="demo-btn-control close-btn" id="demo-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="demo-modal-body">
+                        <iframe id="demo-iframe" src="" allow="geolocation; microphone; camera; midi"></iframe>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            modal = document.getElementById('live-demo-modal');
+        }
+
+        const iframe = document.getElementById('demo-iframe');
+        const titleSpan = document.getElementById('demo-project-title');
+        const closeBtn = document.getElementById('demo-close-btn');
+        const reloadBtn = document.getElementById('demo-reload-btn');
+        const fullscreenBtn = document.getElementById('demo-fullscreen-btn');
+
+        startBtn.addEventListener('click', () => {
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            titleSpan.textContent = lang === 'de' ? project.titleDe : project.titleEn;
+            iframe.src = project.link;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            iframe.src = '';
+            document.body.style.overflow = '';
+        });
+
+        reloadBtn.addEventListener('click', () => {
+            iframe.contentWindow.location.reload();
+        });
+
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                modal.requestFullscreen().catch(err => {
+                    console.warn(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
     }
 
     loadAndDisplayProject();

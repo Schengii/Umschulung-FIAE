@@ -18,7 +18,55 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-07-17T18:41:40.091Z"
+    "updatedAt": "2026-07-17T19:26:17.071Z"
+  },
+  {
+    "repoName": "BurgenGame",
+    "titleDe": "🏰 BurgenGame — Interaktives 2D-Aufbaustrategiespiel",
+    "titleEn": "🏰 BurgenGame — Interactive 2D Strategy Game",
+    "tags": [
+      "HTML5 Canvas",
+      "CSS3",
+      "Vanilla JS (ES6)",
+      "Game Loop",
+      "Persistence"
+    ],
+    "image": null,
+    "link": "Projekte/BurgenGame/index.html",
+    "descDe": "Ein vollständig im Browser spielbares 2D-Aufbaustrategiespiel mit Canvas-Rendering, dynamischen Ressourcen-Zyklen, Bau- und Upgradelogik für Gebäude, feindlichen Angriffswellen und persistenter Spielstand-Speicherung.",
+    "descEn": "A fully in-browser 2D city-builder strategy game featuring canvas rendering, dynamic resource cycles, building upgrade logic, enemy attack waves, and persistent save states.",
+    "category": "games",
+    "language": "JavaScript",
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/BurgenGame/index.html",
+        "type": "html"
+      },
+      {
+        "name": "main.js",
+        "path": "Projekte/BurgenGame/js/core/main.js",
+        "type": "javascript"
+      },
+      {
+        "name": "canvas.js",
+        "path": "Projekte/BurgenGame/js/core/canvas.js",
+        "type": "javascript"
+      },
+      {
+        "name": "state.js",
+        "path": "Projekte/BurgenGame/js/core/state.js",
+        "type": "javascript"
+      },
+      {
+        "name": "ui.js",
+        "path": "Projekte/BurgenGame/js/core/ui.js",
+        "type": "javascript"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/BurgenGame",
+    "updatedAt": "2026-07-17T19:26:17.256Z"
   },
   {
     "repoName": "EcoChef",
@@ -87,6 +135,77 @@ window.projectsData = [
         "descEn": "Demonstration of the smooth and accessible transition between dark and light modes in the EcoChef application."
       }
     ],
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/EcoChef/ui-src/index.html",
+        "type": "html"
+      },
+      {
+        "name": "eco-chef.ts",
+        "path": "Projekte/EcoChef/ui-src/eco-chef.ts",
+        "type": "typescript"
+      },
+      {
+        "name": "gemini.service.ts",
+        "path": "Projekte/EcoChef/ui-src/services/gemini.service.ts",
+        "type": "typescript"
+      },
+      {
+        "name": "speech.service.ts",
+        "path": "Projekte/EcoChef/ui-src/services/speech.service.ts",
+        "type": "typescript"
+      },
+      {
+        "name": "storage.service.ts",
+        "path": "Projekte/EcoChef/ui-src/services/storage.service.ts",
+        "type": "typescript"
+      }
+    ],
+    "ihkPresentation": [
+      {
+        "slide": 1,
+        "titleDe": "1. Problemstellung & Motivation",
+        "titleEn": "1. Problem & Motivation",
+        "descDe": "Lebensmittelverschwendung und mangelnde Kochideen sind alltägliche Probleme. Recruiter und Köche suchen nach Wegen, Ressourcen optimal zu nutzen und CO2-Emissionen beim Kochen zu reduzieren.",
+        "descEn": "Food waste and lack of recipe ideas are daily challenges. Users seek ways to optimize resources and reduce carbon footprints during cooking."
+      },
+      {
+        "slide": 2,
+        "titleDe": "2. Fachliche Anforderungen",
+        "titleEn": "2. Technical & Functional Requirements",
+        "descDe": "Die App muss Zutaten per Tastatur- und Spracheingabe erfassen, kreative Rezepte via Google Gemini Pro API erzeugen, Nährwerte und CO2-Ersparnis berechnen sowie einen barrierefreien Vorlese-Modus bieten.",
+        "descEn": "The app must capture ingredients via keyboard and voice, generate creative recipes using the Google Gemini Pro API, calculate carbon savings, and offer an accessible hands-free read-aloud mode."
+      },
+      {
+        "slide": 3,
+        "titleDe": "3. Software-Architektur (TypeScript)",
+        "titleEn": "3. Software Architecture",
+        "descDe": "Das Frontend basiert auf Lit-HTML/Lit-Element und TypeScript für komponentenbasierte, performante UI. Ein modularer Service-Layer kapselt API-Anfragen, lokale Datenpersistenz und Audio-Synthese ab.",
+        "descEn": "The frontend is built on Lit-HTML/Lit-Element and TypeScript for component-based, high-performance UI. Modular service layers handle APIs, local storage, and audio synthesis."
+      },
+      {
+        "slide": 4,
+        "titleDe": "4. Datenbank- & Datenmodell (JSON & LocalStorage)",
+        "titleEn": "4. Data Model & Persistence",
+        "descDe": "Da es sich um eine Offline-fähige PWA handelt, werden Rezepte und Benutzereinstellungen strukturiert als JSON-Dokumente im browserseitigen LocalStorage gespeichert und über einen Storage-Service validiert.",
+        "descEn": "As an offline-capable PWA, recipes and user settings are stored as structured JSON documents inside the browser's LocalStorage and validated via a dedicated storage service."
+      },
+      {
+        "slide": 5,
+        "titleDe": "5. Live-Demo & Video-Playlist",
+        "titleEn": "5. Video Walkthroughs",
+        "descDe": "Sehen Sie sich die oben eingebettete Video-Playlist an, um die App-Navigation, den interaktiven Kochmodus mit Text-to-Speech (TTS) sowie die dynamische Rezeptanpassung live in Aktion zu erleben.",
+        "descEn": "Review the video playlist above to see application navigation, interactive cooking mode with Text-to-Speech (TTS), and real-time recipe adjustments live in action."
+      },
+      {
+        "slide": 6,
+        "titleDe": "6. Fazit & IHK-Ergebnis",
+        "titleEn": "6. Conclusion & IHK Evaluation",
+        "descDe": "Das Projekt wurde als IHK-Abschlussarbeit eingereicht und mit hervorragenden Noten bewertet. Es demonstriert moderne Hybrid-App-Entwicklung (Cordova/PWA) und die praktische Nutzung von Generativer KI im Alltag.",
+        "descEn": "The project was submitted as a final graduation thesis and received excellent grades. It showcases modern hybrid app development (Cordova/PWA) and generative AI integration."
+      }
+    ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
     "updatedAt": "2026-01-15T08:40:14Z"
@@ -110,7 +229,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-07-17T18:41:40.557Z"
+    "updatedAt": "2026-07-17T19:26:17.679Z"
   },
   {
     "repoName": "finance-ai-bot",
@@ -131,7 +250,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-07-17T18:41:40.734Z"
+    "updatedAt": "2026-07-17T19:26:17.883Z"
   },
   {
     "repoName": "Finanzenportfolio",
@@ -152,7 +271,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-07-17T18:41:40.900Z"
+    "updatedAt": "2026-07-17T19:26:18.088Z"
   },
   {
     "repoName": "Glücksspiel",
@@ -173,7 +292,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-07-17T18:41:40.928Z"
+    "updatedAt": "2026-07-17T19:26:18.110Z"
   },
   {
     "repoName": "Jobsuche",
@@ -194,7 +313,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-07-17T18:41:41.156Z"
+    "updatedAt": "2026-07-17T19:26:18.358Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -215,7 +334,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-07-17T18:41:41.336Z"
+    "updatedAt": "2026-07-17T19:26:18.525Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -236,7 +355,7 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-07-17T18:41:41.522Z"
+    "updatedAt": "2026-07-17T19:26:18.702Z"
   },
   {
     "repoName": "Urlaubsfotos",
@@ -256,7 +375,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-07-17T18:41:41.689Z"
+    "updatedAt": "2026-07-17T19:26:18.872Z"
   },
   {
     "repoName": "VerkaufsVorlagen",
@@ -276,7 +395,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-07-17T18:41:41.957Z"
+    "updatedAt": "2026-07-17T19:26:19.054Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -297,7 +416,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-07-17T18:41:42.161Z"
+    "updatedAt": "2026-07-17T19:26:19.249Z"
   },
   {
     "repoName": "CoOpVersusGame",
@@ -318,7 +437,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-07-17T18:41:42.349Z"
+    "updatedAt": "2026-07-17T19:26:19.426Z"
   },
   {
     "repoName": null,
