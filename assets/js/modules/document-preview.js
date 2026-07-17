@@ -1,7 +1,7 @@
 /**
  * Document Preview Module — Interactive preview modals for images, DOCX, and PPTX files.
  */
-function initDocumentPreview() {
+export function initDocumentPreview() {
     // 1. Create and inject modal markup if not already present
     let modal = document.getElementById('doc-preview-modal');
     if (!modal) {
@@ -215,9 +215,9 @@ function initDocumentPreview() {
                 iconClass = 'fa-regular fa-file-powerpoint';
                 iconColorClass = 'powerpoint';
                 fileTypeLabel = 'PowerPoint Präsentation (PPTX)';
-                fileTitle = element.closest('li')?.querySelector('strong')?.textContent || 
-                            element.closest('.download-item-box')?.querySelector('.download-item-title')?.textContent || 
-                            'Präsentation';
+                fileTitle = element.closest('li')?.querySelector('strong')?.textContent ||
+                    element.closest('.download-item-box')?.querySelector('.download-item-title')?.textContent ||
+                    'Präsentation';
             }
 
             body.innerHTML = `
@@ -226,9 +226,9 @@ function initDocumentPreview() {
                     <div class="doc-preview-file-title">${fileTitle}</div>
                     <div class="doc-preview-file-meta">${fileTypeLabel}</div>
                     <p style="margin: 0; color: var(--text-secondary); max-width: 480px; font-size: 0.9rem;">
-                        ${lang === 'de' 
-                            ? 'Die direkte Vorschau dieses Dateiformats wird im Webbrowser nicht unterstützt. Bitte laden Sie die Datei herunter, um sie zu betrachten.' 
-                            : 'Direct preview of this file format is not supported in the web browser. Please download the file to view it.'}
+                        ${lang === 'de'
+                    ? 'Die direkte Vorschau dieses Dateiformats wird im Webbrowser nicht unterstützt. Bitte laden Sie die Datei herunter, um sie zu betrachten.'
+                    : 'Direct preview of this file format is not supported in the web browser. Please download the file to view it.'}
                     </p>
                     <div class="doc-preview-btn-row">
                         <a href="${fileUrl}" download class="btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.95rem;">
@@ -283,9 +283,9 @@ function initDocumentPreview() {
             e.preventDefault();
             openPreviewModal(link, href);
 
-            // Unlock achievement if CV downloaded / viewed
-            if (href.includes('Bewerbungsunterlagen') && typeof Achievements !== 'undefined') {
-                Achievements.unlock('cv_downloaded');
+            // Dispatch a custom event instead of calling the module directly
+            if (href.includes('Bewerbungsunterlagen')) {
+                document.dispatchEvent(new CustomEvent('achievement:unlock', { detail: 'cv_downloaded' }));
             }
         }
     });

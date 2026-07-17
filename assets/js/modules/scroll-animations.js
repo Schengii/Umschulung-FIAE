@@ -1,7 +1,7 @@
 /**
  * Scroll Animations Module — IntersectionObserver reveal
  */
-function initScrollAnimations() {
+export function initScrollAnimations() {
     const cards = document.querySelectorAll('.card');
     if (!cards.length) return;
 

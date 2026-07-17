@@ -1,7 +1,7 @@
 /**
  * PWA Installer Module — Shows custom floating install prompt banner
  */
-function initPwaInstaller() {
+export function initPwaInstaller() {
     let deferredPrompt = null;
 
     // Listen for beforeinstallprompt event
@@ -20,7 +20,7 @@ function initPwaInstaller() {
                 // Force reflow
                 banner.offsetHeight;
                 banner.classList.add('show');
-                
+
                 // Translate language tags
                 const currentLang = document.documentElement.getAttribute('lang') || 'de';
                 document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));

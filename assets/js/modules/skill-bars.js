@@ -2,7 +2,7 @@
  * Skill Bars Module — Animated skill bar fill via IntersectionObserver
  * Supports interactive filtering when clicked.
  */
-function initSkillBars() {
+export function initSkillBars() {
     const skillFills = document.querySelectorAll('.skill-fill');
     if (!skillFills.length) return;
 
@@ -24,7 +24,7 @@ function initSkillBars() {
         if (document.getElementById('portfolio-searchbar')) {
             bar.style.cursor = 'pointer';
             bar.title = 'Klicken, um Projekte nach dieser Technologie zu filtern / Click to filter projects';
-            
+
             // Add a small hover scale effect using JavaScript or CSS injection
             bar.addEventListener('mouseenter', () => {
                 bar.style.transform = 'translateX(4px)';
@@ -37,10 +37,10 @@ function initSkillBars() {
             bar.addEventListener('click', () => {
                 const nameEl = bar.querySelector('.skill-name');
                 if (!nameEl) return;
-                
+
                 const skillName = nameEl.textContent.trim();
                 let filterTerm = skillName;
-                
+
                 // Map display names to standard tags/search terms
                 if (skillName.includes('HTML')) filterTerm = 'HTML';
                 else if (skillName.includes('JavaScript')) filterTerm = 'JavaScript';

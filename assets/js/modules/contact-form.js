@@ -2,7 +2,7 @@
  * Contact Form Module — triggers mailto
  * Handles both #contact-form (impressum.html) and #hire-me-form (portfolio.html).
  */
-function initContactForm() {
+export function initContactForm() {
     // Handle main contact form (impressum.html)
     _bindContactForm('contact-form', 'contact-name', 'contact-email', 'contact-message', 'form-feedback');
     // Handle hire-me form (portfolio.html) — uses distinct IDs to avoid conflicts
@@ -52,42 +52,42 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                     subject: `Portfolio Kontakt: ${name.value}`
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        if (feedback) {
+                            feedback.style.display = 'block';
+                            feedback.className = 'form-feedback success';
+                            feedback.innerHTML = '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
+                        }
+                        form.reset();
+                    } else {
+                        throw new Error(data.message || 'Web3Forms error');
+                    }
+                })
+                .catch(err => {
+                    console.warn('Web3Forms failed, falling back to mailto:', err);
                     if (feedback) {
                         feedback.style.display = 'block';
-                        feedback.className = 'form-feedback success';
-                        feedback.innerHTML = '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
+                        feedback.className = 'form-feedback warning';
+                        feedback.innerHTML = '<span lang="de">Fehler beim Senden. Mail-Programm wird geöffnet...</span><span lang="en">Error sending. Opening mail client...</span>';
                     }
-                    form.reset();
-                } else {
-                    throw new Error(data.message || 'Web3Forms error');
-                }
-            })
-            .catch(err => {
-                console.warn('Web3Forms failed, falling back to mailto:', err);
-                if (feedback) {
-                    feedback.style.display = 'block';
-                    feedback.className = 'form-feedback warning';
-                    feedback.innerHTML = '<span lang="de">Fehler beim Senden. Mail-Programm wird geöffnet...</span><span lang="en">Error sending. Opening mail client...</span>';
-                }
-                setTimeout(() => {
-                    _triggerMailto(name.value, email.value, message.value);
-                }, 1000);
-            })
-            .finally(() => {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnHtml;
-                }
-                const currentLang = document.documentElement.getAttribute('lang') || 'de';
-                document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
-                
-                if (feedback) {
-                    setTimeout(() => { feedback.style.display = 'none'; }, 6000);
-                }
-            });
+                    setTimeout(() => {
+                        _triggerMailto(name.value, email.value, message.value);
+                    }, 1000);
+                })
+                .finally(() => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnHtml;
+                    }
+                    const currentLang = document.documentElement.getAttribute('lang') || 'de';
+                    document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
+
+                    if (feedback) {
+                        setTimeout(() => { feedback.style.display = 'none'; }, 6000);
+                    }
+                });
         } else {
             // No Web3Forms key configured — show email address prominently instead of blind mailto
             if (feedback) {

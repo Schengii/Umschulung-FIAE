@@ -1,97 +1,76 @@
 /**
- * Main entry point — dynamically loads modules, then bootstraps.
- * Works without modifying HTML: loads constants + all modules,
- * then initializes everything on DOMContentLoaded.
+ * Main entry point for the application.
+ * This file imports all necessary modules and initializes them,
+ * making it compatible with modern bundlers like Vite.
  */
 
-// Scripts to load before initialization (in order)
-const __MODULE_SCRIPTS = [
-    'assets/js/constants.js',
-    'assets/js/toast.js',
-    'assets/js/modules/theme.js',
-    'assets/js/modules/navigation.js',
-    'assets/js/modules/translation.js',
-    'assets/js/modules/search-filter.js',
-    'assets/js/modules/countdown.js',
-    'assets/js/modules/username-greeting.js',
-    'assets/js/modules/scroll-animations.js',
-    'assets/js/modules/backtotop.js',
-    'assets/js/modules/cookie-banner.js',
-    'assets/js/modules/pwa-installer.js',
-    'assets/js/modules/contact-form.js',
-    'assets/js/modules/skill-bars.js',
-    'assets/js/modules/skill-radar.js',
-    'assets/js/modules/roadmap.js',
-    'assets/js/modules/confetti.js',
-    'assets/js/modules/project-slideshow.js',
-    'assets/js/modules/game-audio.js',
-    'assets/js/modules/age-calculator.js',
-    'assets/js/modules/hero-section.js',
-    'assets/js/modules/keyboard-shortcuts.js', // This was already here
-    'assets/js/modules/easter-eggs.js',
-    'assets/js/modules/achievements.js',
-    'assets/js/modules/blog-enhancements.js',
-    'assets/js/modules/learning-progress.js',
-    'assets/js/modules/praktikumsbetrieb-media.js', // Interactive DFG and EcoChef Media Module
-    'assets/js/elektrocheck_overlay.js', // New module for ElektroCheck AI bounding boxes
-    'assets/js/dashboard.js',
-    'assets/js/modules/qr-generator.js',
-    'assets/js/modules/document-preview.js',
-    'assets/js/modules/faq-accordion.js',
-    'assets/js/modules/token-auth.js'
-];
+// Import core utilities and constants first.
+// These are assumed to set up global constants and functions.
+import './constants.js';
+import './toast.js';
 
-(function loadModules() {
-    let i = 0;
-    function boot() {
-        const fn = () => {
-            if (typeof initTheme === 'function') initTheme();
-            if (typeof initNavigation === 'function') initNavigation();
-            if (typeof initTranslation === 'function') initTranslation();
-            if (typeof initSearchAndFilter === 'function') initSearchAndFilter();
-            if (typeof initCountdown === 'function') initCountdown();
-            if (typeof initUsernameGreeting === 'function') initUsernameGreeting();
-            if (typeof initScrollAnimations === 'function') initScrollAnimations();
-            if (typeof initBackToTop === 'function') initBackToTop();
-            if (typeof initCookieBanner === 'function') initCookieBanner();
-            if (typeof initPwaInstaller === 'function') initPwaInstaller();
-            if (typeof initContactForm === 'function') initContactForm();
-            if (typeof initSkillBars === 'function') initSkillBars();
-            if (typeof initSkillRadar === 'function') initSkillRadar();
-            if (typeof initRoadmap === 'function') initRoadmap();
-            if (typeof initSlideshow === 'function') initSlideshow();
-            if (typeof initConfetti === 'function') initConfetti();
-            if (typeof initGameAudio === 'function') initGameAudio();
-            if (typeof initAgeCalculator === 'function') initAgeCalculator();
-            if (typeof initHeroSection === 'function') initHeroSection();
-            if (typeof initKeyboardShortcuts === 'function') initKeyboardShortcuts();
-            if (typeof initEasterEggs === 'function') initEasterEggs();
-            if (typeof initAchievements === 'function') initAchievements();
-            if (typeof initBlogEnhancements === 'function') initBlogEnhancements();
-            if (typeof initLearningProgress === 'function') initLearningProgress();
-            if (typeof initPraktikumsbetriebMedia === 'function') initPraktikumsbetriebMedia();
-            if (typeof initDashboard === 'function') initDashboard();
-            if (typeof initQrGenerator === 'function') initQrGenerator();
-            if (typeof initDocumentPreview === 'function') initDocumentPreview();
-            if (typeof initFaqAccordion === 'function') initFaqAccordion();
-            if (typeof initTokenAuth === 'function') initTokenAuth();
-        };
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', fn);
-        } else {
-            fn(); // DOM already ready
+// Import all feature modules.
+import { initTheme } from './modules/theme.js';
+import { initNavigation } from './modules/navigation.js';
+import { initTranslation } from './modules/translation.js';
+import { initSearchAndFilter } from './modules/search-filter.js';
+import { initCountdown } from './modules/countdown.js';
+import { initUsernameGreeting } from './modules/username-greeting.js';
+import { initScrollAnimations } from './modules/scroll-animations.js';
+import { initBackToTop } from './modules/backtotop.js';
+import { initCookieBanner } from './modules/cookie-banner.js';
+import { initPwaInstaller } from './modules/pwa-installer.js';
+import { initContactForm } from './modules/contact-form.js';
+import { initSkillBars } from './modules/skill-bars.js';
+import { initSkillRadar } from './modules/skill-radar.js';
+import { initRoadmap } from './modules/roadmap.js';
+import { initSlideshow } from './modules/project-slideshow.js';
+import { initConfetti } from './modules/confetti.js';
+import { initGameAudio } from './modules/game-audio.js';
+import { initAgeCalculator } from './modules/age-calculator.js';
+import { initHeroSection } from './modules/hero-section.js';
+import { initKeyboardShortcuts } from './modules/keyboard-shortcuts.js';
+import { initEasterEggs } from './modules/easter-eggs.js';
+import { initAchievements } from './modules/achievements.js';
+import { initBlogEnhancements } from './modules/blog-enhancements.js';
+import { initLearningProgress } from './modules/learning-progress.js';
+import { initPraktikumsbetriebMedia } from './modules/praktikumsbetrieb-media.js';
+import { initDashboard } from './dashboard.js';
+import { initQrGenerator } from './modules/qr-generator.js';
+import { initDocumentPreview } from './modules/document-preview.js';
+import { initFaqAccordion } from './modules/faq-accordion.js';
+import { initTokenAuth } from './modules/token-auth.js';
+
+/**
+ * Main bootstrap function to initialize all modules.
+ */
+function bootstrap() {
+    const initializers = [
+        initTheme, initNavigation, initTranslation, initSearchAndFilter,
+        initCountdown, initUsernameGreeting, initScrollAnimations, initBackToTop,
+        initCookieBanner, initPwaInstaller, initContactForm, initSkillBars,
+        initSkillRadar, initRoadmap, initSlideshow, initConfetti, initGameAudio,
+        initAgeCalculator, initHeroSection, initKeyboardShortcuts, initEasterEggs,
+        initAchievements, initBlogEnhancements, initLearningProgress,
+        initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
+        initDocumentPreview, initFaqAccordion, initTokenAuth
+    ];
+
+    // Sequentially call all initializer functions
+    for (const init of initializers) {
+        if (typeof init === 'function') {
+            try {
+                init();
+            } catch (e) {
+                console.error(`Error during initialization of ${init.name}:`, e);
+            }
         }
     }
-    function next() {
-        if (i >= __MODULE_SCRIPTS.length) {
-            boot();
-            return;
-        }
-        const script = document.createElement('script');
-        script.src = __MODULE_SCRIPTS[i++];
-        script.onload = next;
-        script.onerror = next;
-        document.head.appendChild(script);
-    }
-    next();
-})();
+}
+
+// Run bootstrap logic once the DOM is ready.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+    bootstrap();
+}

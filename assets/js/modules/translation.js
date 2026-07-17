@@ -1,24 +1,24 @@
 /**
  * Translation Module — DE/EN Language Switcher
  */
-function initTranslation() {
+export function initTranslation() {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;
-    
+
     const storedLang = StorageManager.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
     document.documentElement.setAttribute('lang', storedLang);
     updateLangToggleButton(storedLang);
     updateDynamicElementsTranslation(storedLang);
-    
+
     langToggle.addEventListener('click', () => {
         const currentLang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
         const newLang = currentLang === 'de' ? 'en' : 'de';
-        
+
         document.documentElement.setAttribute('lang', newLang);
         StorageManager.setItem(STORAGE_KEYS.LANG, newLang);
         updateLangToggleButton(newLang);
         updateDynamicElementsTranslation(newLang);
-        
+
         document.dispatchEvent(new CustomEvent('langchange', { detail: newLang }));
     });
 }
@@ -26,7 +26,7 @@ function initTranslation() {
 function updateLangToggleButton(lang) {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;
-    
+
     if (lang === 'de') {
         langToggle.innerHTML = '<i class="fa fa-globe" aria-hidden="true"></i> DE | <strong>EN</strong>';
         langToggle.setAttribute('aria-label', 'Switch to English');
@@ -80,4 +80,3 @@ function updateDynamicElementsTranslation(lang) {
         }
     }
 }
-

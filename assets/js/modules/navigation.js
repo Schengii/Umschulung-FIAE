@@ -1,10 +1,10 @@
 /**
  * Navigation Module — Mobile Menu, Accessible Dropdowns, Escape-Handling
  */
-function initNavigation() {
+export function initNavigation() {
     const menuToggle = document.getElementById('menu-toggle');
     const navMenu = document.getElementById('nav-menu');
-    
+
     if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
             const isOpen = navMenu.classList.toggle('open');

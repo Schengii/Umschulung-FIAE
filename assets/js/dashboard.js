@@ -2,7 +2,7 @@
  * Dashboard — Stats, Projektübersicht, interaktive Widgets
  * Loaded dynamically as a module.
  */
-function initDashboard() {
+export function initDashboard() {
     const isDashboardPage = window.location.pathname.endsWith('dashboard.html') || document.getElementById('commit-grid');
     if (!isDashboardPage) return;
 
@@ -62,7 +62,7 @@ function renderProjectCount() {
             const el = document.getElementById('stat-projects');
             if (el) el.textContent = projects.length;
         })
-        .catch(() => {});
+        .catch(() => { });
 }
 
 function renderRecentProjects() {
@@ -94,7 +94,7 @@ function renderRecentProjects() {
 
             container.after(card);
         })
-        .catch(() => {});
+        .catch(() => { });
 }
 
 /* ==========================================================================
@@ -136,7 +136,7 @@ function initQaMetrics() {
 
     mappings.forEach(pair => {
         if (!pair.range) return;
-        
+
         pair.num.addEventListener('input', () => {
             pair.range.value = pair.num.value;
             calculateQuality();
@@ -344,7 +344,7 @@ function initCommitGrid() {
 
     // Render cells
     gridContainer.innerHTML = '';
-    
+
     // Create Tooltip
     let tooltip = document.getElementById('grid-tooltip');
     if (!tooltip) {
@@ -357,7 +357,7 @@ function initCommitGrid() {
     cellsData.forEach(cell => {
         const cellEl = document.createElement('div');
         cellEl.className = 'commit-cell';
-        
+
         // Map commit counts to 5 levels (0 to 4)
         let level = 0;
         if (cell.commits > 0) {
@@ -368,7 +368,7 @@ function initCommitGrid() {
         }
 
         cellEl.classList.add(`level-${level}`);
-        
+
         // Tooltip listeners
         cellEl.addEventListener('mouseenter', (e) => {
             const formattedDate = cell.date.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
@@ -376,7 +376,7 @@ function initCommitGrid() {
             });
             tooltip.innerHTML = `<strong>${cell.commits} Commits</strong> am / on ${formattedDate}`;
             tooltip.style.opacity = 1;
-            
+
             // Position
             const rect = cellEl.getBoundingClientRect();
             tooltip.style.left = `${rect.left + window.scrollX - tooltip.offsetWidth / 2 + 5}px`;
@@ -392,8 +392,8 @@ function initCommitGrid() {
 
     // Update totals
     if (totalSpan) {
-        totalSpan.textContent = lang === 'de' 
-            ? `${totalCommits} Beiträge im letzten Jahr` 
+        totalSpan.textContent = lang === 'de'
+            ? `${totalCommits} Beiträge im letzten Jahr`
             : `${totalCommits} contributions in the last year`;
     }
     if (streakSpan) {
@@ -431,11 +431,11 @@ document.addEventListener('langchange', () => {
 });
 
 // Global function to trigger a live commit on the dashboard from games/other areas
-window.addLiveCommit = function() {
+window.addLiveCommit = function () {
     let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
     liveCommitsToday++;
     StorageManager.setItem('github_live_commits_today', liveCommitsToday);
-    
+
     // Re-initialize if we are on dashboard
     initCommitGrid();
 };
@@ -479,7 +479,7 @@ function renderAchievementsWidget() {
 
     // Build grid
     gridContainer.innerHTML = '';
-    
+
     // Create or reuse tooltip
     let tooltip = document.getElementById('grid-tooltip');
     if (!tooltip) {
@@ -506,14 +506,14 @@ function renderAchievementsWidget() {
 
         // Tooltip hover actions
         badgeBox.style.position = 'relative'; // Ensure tooltip coordinates are absolute based on page
-        
+
         const showTooltip = () => {
             const title = lang === 'de' ? def.title_de : def.title_en;
             const desc = lang === 'de' ? def.desc_de : def.desc_en;
-            const statusText = isUnlocked 
-                ? (lang === 'de' ? '🏅 Freigeschaltet' : '🏅 Unlocked') 
+            const statusText = isUnlocked
+                ? (lang === 'de' ? '🏅 Freigeschaltet' : '🏅 Unlocked')
                 : (lang === 'de' ? '🔒 Gesperrt' : '🔒 Locked');
-            
+
             tooltip.innerHTML = `
                 <div style="font-weight: 700; font-family: var(--font-heading); color: var(--primary); margin-bottom: 2px;">${title}</div>
                 <div style="color: var(--text-primary); font-size: 0.8rem; margin-bottom: 4px; max-width: 220px; white-space: normal;">${desc}</div>

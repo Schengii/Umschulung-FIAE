@@ -34,10 +34,10 @@ const Confetti = {
 
         // Spawn particles
         const colors = [
-            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', 
+            '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
             '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'
         ];
-        
+
         const count = 120;
         for (let i = 0; i < count; i++) {
             this.particles.push({
@@ -127,6 +127,6 @@ const Confetti = {
     }
 };
 
-function initConfetti() {
+export function initConfetti() {
     // Confetti is initialized dynamically via Confetti.start()
 }

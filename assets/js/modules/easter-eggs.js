@@ -2,7 +2,7 @@
  * Easter Egg Module — Konami Code + Hidden Features
  * ↑ ↑ ↓ ↓ ← → ← → B A triggers a secret celebration
  */
-function initEasterEggs() {
+export function initEasterEggs() {
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
 

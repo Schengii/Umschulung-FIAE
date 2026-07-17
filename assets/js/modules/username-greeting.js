@@ -2,10 +2,10 @@
  * Username & Recruiter Greeting Module — Welcome page and dashboard personalization
  * Supports session-based recruiter greetings via URL query parameters (?c=Company or ?n=Name).
  */
-function initUsernameGreeting() {
+export function initUsernameGreeting() {
     const mySubmit = document.getElementById('mySubmit');
     const myText = document.getElementById('myText');
-    
+
     // Parse URL parameters and store in sessionStorage for persistence during the session
     const urlParams = new URLSearchParams(window.location.search);
     const companyParam = urlParams.get('c') || urlParams.get('company');
@@ -15,7 +15,7 @@ function initUsernameGreeting() {
         // Clear previous session greeting to prevent mixing old company with new name
         sessionStorage.removeItem('recruiter_company');
         sessionStorage.removeItem('recruiter_name');
-        
+
         if (companyParam) {
             sessionStorage.setItem('recruiter_company', companyParam.trim());
         }
@@ -36,7 +36,7 @@ function initUsernameGreeting() {
             if (username) {
                 StorageManager.setItem(STORAGE_KEYS.USERNAME, username);
                 updateWelcomeH1(username);
-                
+
                 const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
                 mySubmit.style.backgroundColor = '#10b981';
                 mySubmit.innerHTML = `
@@ -44,7 +44,7 @@ function initUsernameGreeting() {
                     <span lang="en">Saved!</span>
                 `;
                 document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-                
+
                 setTimeout(() => {
                     mySubmit.style.backgroundColor = '';
                     mySubmit.innerHTML = `
@@ -62,7 +62,7 @@ function initUsernameGreeting() {
         myText.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') mySubmit.click();
         });
-        
+
         document.addEventListener('langchange', () => {
             updateWelcomeH1(myText.value.trim());
         });
@@ -132,7 +132,7 @@ function updateDashboardGreeting() {
                 }
             }
         }
-        
+
         // Populate and display the application status tracker widget if company is known
         if (trackerCard) {
             if (company) {
@@ -158,14 +158,14 @@ function updateDashboardGreeting() {
                 trackerCard.style.display = 'none';
             }
         }
-        
+
         // Soft welcome text
         if (welcomeText) {
             welcomeText.innerHTML = lang === 'de'
                 ? `Schön, dass Sie da sind! Schauen Sie sich gerne in Ruhe um.`
                 : `Great to have you here! Feel free to explore my dashboard.`;
         }
-    } 
+    }
     // 2. Regular user greetings
     else {
         if (recruiterBanner) {

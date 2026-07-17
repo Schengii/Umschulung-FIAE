@@ -1,7 +1,7 @@
 /**
  * Project Slideshow Module — Interactive IHK presentation slides viewer
  */
-function initSlideshow() {
+export function initSlideshow() {
     const viewer = document.getElementById('slide-viewer');
     if (!viewer) return;
 

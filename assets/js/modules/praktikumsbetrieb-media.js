@@ -124,7 +124,7 @@ const ECOCHEF_VIDEO_DATA = [
     }
 ];
 
-function initPraktikumsbetriebMedia() {
+export function initPraktikumsbetriebMedia() {
     const isInternshipPage = window.location.pathname.endsWith('praktikumsbetrieb.html') || document.getElementById('dfg-gallery-section');
     if (!isInternshipPage) return;
 
@@ -181,7 +181,7 @@ function setupDfgGallery() {
         btn.setAttribute('role', 'tab');
         btn.setAttribute('aria-controls', 'dfg-gallery-viewer');
         btn.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
-        
+
         // Language specific label inside button
         btn.innerHTML = `
             <i class="fa-solid fa-image" aria-hidden="true"></i>
@@ -253,7 +253,7 @@ function setupEcoChefVideoPlayer() {
         const btn = document.createElement('button');
         btn.className = 'playlist-track-btn';
         btn.setAttribute('aria-label', `Play video: ${videoItem.titleDe}`);
-        
+
         btn.innerHTML = `
             <div class="track-icon">
                 <i class="fa fa-play-circle" aria-hidden="true"></i>
@@ -361,7 +361,7 @@ function setupElektroCheckScanner() {
         if (playIcon) playIcon.style.display = 'none';
         laser.classList.add('active');
 
-        statusBox.innerHTML = lang === 'de' 
+        statusBox.innerHTML = lang === 'de'
             ? `<span><i class="fa fa-sync fa-spin"></i> KI analysiert Bild auf Mängel...</span>`
             : `<span><i class="fa fa-sync fa-spin"></i> AI analyzing image for anomalies...</span>`;
 
@@ -414,7 +414,7 @@ function setupElektroCheckScanner() {
     document.addEventListener('langchange', () => {
         if (!resultsCard.classList.contains('collapsed')) {
             renderResultsList();
-            
+
             // Re-render status text
             const lang = document.documentElement.getAttribute('lang') || 'de';
             statusBox.innerHTML = lang === 'de'

@@ -1,7 +1,7 @@
 /**
  * Cookie Consent Banner Module
  */
-function initCookieBanner() {
+export function initCookieBanner() {
     const banner = document.getElementById('cookie-banner');
     const acceptBtn = document.getElementById('cookie-accept');
     if (!banner || !acceptBtn) return;

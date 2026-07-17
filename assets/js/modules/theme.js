@@ -2,13 +2,13 @@
  * Theme Module — Light/Dark Mode
  * Nutzt STORAGE_KEYS aus constants.js
  */
-function initTheme() {
+export function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
 
     const storedTheme = StorageManager.getItem(STORAGE_KEYS.THEME);
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', initialTheme);
     updateThemeIcon(initialTheme);
@@ -16,7 +16,7 @@ function initTheme() {
     themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
+
         document.documentElement.setAttribute('data-theme', newTheme);
         StorageManager.setItem(STORAGE_KEYS.THEME, newTheme);
         updateThemeIcon(newTheme);

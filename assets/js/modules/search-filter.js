@@ -4,14 +4,14 @@
 let currentSearchQuery = '';
 let currentCategory = 'all';
 
-function initSearchAndFilter() {
+export function initSearchAndFilter() {
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
     if (!APP.SEARCHABLE_PAGES.includes(currentPage)) return;
 
     const searchBar = document.getElementById('searchbar');
     const filterButtons = document.querySelectorAll('.btn-filter');
-    
+
     let noResultsContainer = document.querySelector('.no-results');
     if (!noResultsContainer) {
         const main = document.querySelector('main');
@@ -51,31 +51,31 @@ function initSearchAndFilter() {
 function applyFilters() {
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    
+
     if (!APP.SEARCHABLE_PAGES.includes(currentPage)) return;
 
     const cards = document.querySelectorAll('.card, .card2');
     const isWelcomePage = !!document.getElementById('mySubmit');
     let visibleCount = 0;
-    
+
     cards.forEach(card => {
         if (isWelcomePage) return;
-        
+
         let matchesCategory = true;
         if (currentCategory !== 'all') {
             matchesCategory = card.classList.contains(`filter-${currentCategory}`);
         }
-        
+
         let matchesSearch = true;
         if (currentSearchQuery !== '') {
             matchesSearch = card.textContent.toLowerCase().includes(currentSearchQuery);
         }
-        
+
         const shouldShow = matchesCategory && matchesSearch;
         card.style.display = shouldShow ? '' : 'none';
         if (shouldShow) visibleCount++;
     });
-    
+
     const noResultsContainer = document.querySelector('.no-results');
     if (noResultsContainer) {
         const queryActive = currentSearchQuery !== '' || currentCategory !== 'all';

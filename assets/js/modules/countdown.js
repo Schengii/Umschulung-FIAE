@@ -2,7 +2,7 @@
  * Countdown Module — IHK Exam Countdown Timer
  * Shows completion message if the target date is in the past.
  */
-function initCountdown() {
+export function initCountdown() {
     const targetDate = new Date(APP.IHK_TARGET_DATE).getTime();
 
     const daysVal = document.getElementById('cd-days');

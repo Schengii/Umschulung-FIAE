@@ -7,11 +7,11 @@
 const VALID_TOKEN = 'fiae2026';
 const TOKEN_SESSION_KEY = 'recruiter_access_token';
 
-function initTokenAuth() {
+export function initTokenAuth() {
     // Parse URL parameter first
     const urlParams = new URLSearchParams(window.location.search);
     const urlToken = urlParams.get('token') || urlParams.get('t');
-    
+
     if (urlToken) {
         const cleanedToken = urlToken.trim().toLowerCase();
         if (cleanedToken === VALID_TOKEN) {
@@ -41,11 +41,11 @@ function initTokenAuth() {
             if (entered === VALID_TOKEN) {
                 sessionStorage.setItem(TOKEN_SESSION_KEY, entered);
                 if (tokenError) tokenError.style.display = 'none';
-                
+
                 // Trigger success visual feedback
                 tokenSubmit.style.backgroundColor = '#10b981';
                 tokenSubmit.innerHTML = '<i class="fa fa-unlock"></i> OK';
-                
+
                 setTimeout(() => {
                     tokenSubmit.style.backgroundColor = '';
                     tokenSubmit.innerHTML = `

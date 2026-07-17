@@ -1,7 +1,7 @@
 /**
  * Roadmap Module — Interactive FIAE learning path timeline
  */
-function initRoadmap() {
+export function initRoadmap() {
     const roadmapItems = document.querySelectorAll('.roadmap-item');
     const drawer = document.getElementById('roadmap-drawer');
     const overlay = document.getElementById('roadmap-overlay');
@@ -105,10 +105,10 @@ function initRoadmap() {
 
     function openDrawer(data) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
-        
+
         // Set Header
         drawerTitle.textContent = lang === 'de' ? data.title_de : data.title_en;
-        
+
         // Topics HTML
         const topics = lang === 'de' ? data.topics_de : data.topics_en;
         const topicsListHTML = topics.map(t => `<li><i class="fa fa-check" style="color:var(--primary); margin-right:0.5rem;" aria-hidden="true"></i> ${t}</li>`).join('');

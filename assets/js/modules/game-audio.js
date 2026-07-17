@@ -61,7 +61,7 @@ const GameAudio = {
 
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            
+
             osc.connect(gain);
             gain.connect(ctx.destination);
 
@@ -101,11 +101,11 @@ const GameAudio = {
                 const notes = [261.63, 329.63, 392, 523.25, 659.25, 783.99, 1046.5]; // C chord arpeggio
                 osc.type = 'sine';
                 gain.gain.setValueAtTime(0.15, now);
-                
+
                 notes.forEach((freq, idx) => {
                     osc.frequency.setValueAtTime(freq, now + idx * 0.08);
                 });
-                
+
                 gain.gain.setValueAtTime(0.15, now + notes.length * 0.08);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + notes.length * 0.08 + 0.4);
                 osc.start(now);
@@ -122,6 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     GameAudio.init();
 });
 
-function initGameAudio() {
+export function initGameAudio() {
     // GameAudio initializes itself via DOMContentLoaded
 }

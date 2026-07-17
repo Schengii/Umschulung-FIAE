@@ -1,7 +1,7 @@
 /**
  * FAQ Accordion Module — Accessible collapsible panels for Umschulung FAQs.
  */
-function initFaqAccordion() {
+export function initFaqAccordion() {
     const accordionContainer = document.getElementById('faq-accordion-container');
     if (!accordionContainer) return;
 
@@ -89,7 +89,7 @@ function initFaqAccordion() {
         if (trigger && panel) {
             trigger.addEventListener('click', () => {
                 const isOpen = item.classList.contains('open');
-                
+
                 // Close other items
                 faqItems.forEach(otherItem => {
                     if (otherItem !== item && otherItem.classList.contains('open')) {

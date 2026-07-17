@@ -144,7 +144,7 @@ const Achievements = {
     }
 };
 
-function initAchievements() {
+export function initAchievements() {
     // Track first visit
     if (!StorageManager.getItem('has_visited')) {
         StorageManager.setItem('has_visited', 'true');

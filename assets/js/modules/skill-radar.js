@@ -2,7 +2,7 @@
  * Skill Radar Chart Module — Interactive SVG radar visualization
  * Replaces/augments static skill bars with a visual radar chart.
  */
-function initSkillRadar() {
+export function initSkillRadar() {
     const container = document.getElementById('skill-radar-container');
     if (!container) return;
 

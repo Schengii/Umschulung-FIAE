@@ -2,7 +2,7 @@
  * QR-Code & Link Generator Module
  * Generates recruiter personalized landing page links and downloadable QR codes.
  */
-function initQrGenerator() {
+export function initQrGenerator() {
     const companyInput = document.getElementById('qr-company-input');
     const nameInput = document.getElementById('qr-name-input');
     const targetSelect = document.getElementById('qr-target-select');
@@ -48,10 +48,10 @@ function initQrGenerator() {
         const base = getBaseUrl();
         let targetUrl = `${base}/${targetPage}`;
         const params = [];
-        
+
         if (companyVal) params.push(`c=${encodeURIComponent(companyVal)}`);
         if (nameVal) params.push(`n=${encodeURIComponent(nameVal)}`);
-        
+
         if (params.length > 0) {
             targetUrl += '?' + params.join('&');
         }
@@ -108,7 +108,7 @@ function initQrGenerator() {
                     <span lang="de">Kopiert!</span>
                     <span lang="en">Copied!</span>
                 `;
-                
+
                 // Trigger translation listener just in case
                 if (typeof initTranslation === 'function') {
                     document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));

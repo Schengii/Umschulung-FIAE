@@ -2,7 +2,7 @@
  * Age Calculator Module — Dynamic age calculation from birth date
  * Replaces inline script from home.html
  */
-function initAgeCalculator() {
+export function initAgeCalculator() {
     const birthYear = 2002, birthMonth = 5, birthDay = 10;
     const today = new Date();
     let age = today.getFullYear() - birthYear;

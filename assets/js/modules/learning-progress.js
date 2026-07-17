@@ -2,7 +2,7 @@
  * Learning Progress Module — Tracks and displays progress across learning tools
  * Reads saved scores from localStorage and renders progress bars on the dashboard.
  */
-function initLearningProgress() {
+export function initLearningProgress() {
     // Flashcard progress
     const flashcardBar = document.getElementById('progress-flashcards-bar');
     const flashcardText = document.getElementById('progress-flashcards');

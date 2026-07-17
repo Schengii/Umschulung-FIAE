@@ -3,7 +3,7 @@
  * - Automatically calculates reading time per article
  * - Adds social sharing buttons (LinkedIn, X/Twitter)
  */
-function initBlogEnhancements() {
+export function initBlogEnhancements() {
     initReadingTime();
     initSocialShare();
 }
@@ -75,4 +75,3 @@ function initSocialShare() {
         article.appendChild(shareContainer);
     });
 }
-

@@ -6,7 +6,7 @@
  * Arrow keys: Flashcard navigation
  * ?: Show shortcuts help
  */
-function initKeyboardShortcuts() {
+export function initKeyboardShortcuts() {
     let helpModal = null;
 
     document.addEventListener('keydown', (e) => {

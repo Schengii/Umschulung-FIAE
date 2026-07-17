@@ -2,7 +2,7 @@
  * Hero Section Module — Animated typing effect and particle background
  * Adds a visually stunning hero section to the home page.
  */
-function initHeroSection() {
+export function initHeroSection() {
     const heroContainer = document.getElementById('hero-section');
     if (!heroContainer) return;
 
@@ -57,8 +57,13 @@ function initHeroSection() {
         const newPhrases = newLang === 'de'
             ? ['Fachinformatiker für Anwendungsentwicklung', 'Webentwickler', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀']
             : ['IT Specialist — Application Development', 'Web Developer', 'Java & Spring Boot', 'JavaScript & Frontend', 'Open for Work 🚀'];
+        const newPhrases = newLang === 'de' ? 
+            ['Fachinformatiker für Anwendungsentwicklung', 'Frontend Webentwickler', 'KI-Nutzung und -Automatisierung', 'JavaScript & TypeScript', 'Open for Work 🚀'] : 
+            ['IT Specialist — Application Development', 'Frontend Web Developer', 'AI Use and Automation', 'JavaScript & TypeScript', 'Open for Work 🚀'];
+        
         phrases.length = 0;
         phrases.push(...newPhrases);
+        Array.prototype.push.apply(phrases, newPhrases);
         phraseIndex = 0;
         charIndex = 0;
         isDeleting = false;

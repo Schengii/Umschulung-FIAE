@@ -1,7 +1,7 @@
 /**
  * Back-to-Top Button Module
  */
-function initBackToTop() {
+export function initBackToTop() {
     const btn = document.getElementById('back-to-top');
     if (!btn) return;
 
