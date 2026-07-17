@@ -13,16 +13,16 @@ test.describe('Landing Page Tests', () => {
         const themeToggleButton = page.locator('#theme-toggle');
         const html = page.locator('html');
 
-        // Überprüfen, ob der Light-Mode der Standard ist
-        await expect(html).not.toHaveAttribute('data-theme', 'dark');
-
-        // Klicke auf den Schalter und überprüfe, ob der Dark-Mode aktiv ist
-        await themeToggleButton.click();
+        // Überprüfen, ob der Dark-Mode der Standard ist
         await expect(html).toHaveAttribute('data-theme', 'dark');
 
-        // Klicke erneut und überprüfe, ob der Light-Mode wiederhergestellt ist
+        // Klicke auf den Schalter und überprüfe, ob der Light-Mode aktiv ist
         await themeToggleButton.click();
         await expect(html).not.toHaveAttribute('data-theme', 'dark');
+
+        // Klicke erneut und überprüfe, ob der Dark-Mode wiederhergestellt ist
+        await themeToggleButton.click();
+        await expect(html).toHaveAttribute('data-theme', 'dark');
     });
 
     test('sollte den Benutzernamen speichern und zur home.html weiterleiten', async ({ page }) => {

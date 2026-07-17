@@ -4,6 +4,23 @@
  * Auto-detects the current page and applies the active navigation state.
  */
 
+// Immediate Theme Bootstrapping to prevent white flashing
+(function() {
+    let initialTheme = 'dark';
+    try {
+        const storedTheme = localStorage.getItem('portfolio_theme');
+        if (storedTheme) {
+            initialTheme = storedTheme;
+        } else {
+            localStorage.setItem('portfolio_theme', 'dark');
+        }
+    } catch (e) {
+        // LocalStorage fallback
+    }
+    document.documentElement.setAttribute('data-theme', initialTheme);
+})();
+
+
 const StorageManager = {
     isAvailable() {
         try {

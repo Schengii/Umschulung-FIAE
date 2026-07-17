@@ -7,9 +7,8 @@ export function initTheme() {
     if (!themeToggle) return;
 
     const storedTheme = StorageManager.getItem(STORAGE_KEYS.THEME);
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = storedTheme || 'dark';
 
-    const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', initialTheme);
     updateThemeIcon(initialTheme);
 
