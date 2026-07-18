@@ -79,6 +79,92 @@
     --bg-glow-2: rgba(139, 92, 246, 0.07);
 }
 
+/* Accent Color Custom Properties Definitions */
+html[data-accent="blue"] {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #eff6ff;
+    --accent: #4f46e5;
+    --accent-light: #f5f3ff;
+    --bg-nav-active: #2563eb;
+}
+[data-theme="dark"][data-accent="blue"] {
+    --primary: #60a5fa;
+    --primary-hover: #93c5fd;
+    --primary-light: rgba(96, 165, 250, 0.15);
+    --accent: #8b5cf6;
+    --accent-light: rgba(139, 92, 246, 0.15);
+    --bg-nav-active: #3b82f6;
+}
+
+html[data-accent="emerald"] {
+    --primary: #10b981;
+    --primary-hover: #059669;
+    --primary-light: #ecfdf5;
+    --accent: #0d9488;
+    --accent-light: #f0fdfa;
+    --bg-nav-active: #10b981;
+}
+[data-theme="dark"][data-accent="emerald"] {
+    --primary: #34d399;
+    --primary-hover: #6ee7b7;
+    --primary-light: rgba(52, 211, 153, 0.15);
+    --accent: #14b8a6;
+    --accent-light: rgba(20, 184, 166, 0.15);
+    --bg-nav-active: #10b981;
+}
+
+html[data-accent="violet"] {
+    --primary: #8b5cf6;
+    --primary-hover: #7c3aed;
+    --primary-light: #f5f3ff;
+    --accent: #ec4899;
+    --accent-light: #fdf2f8;
+    --bg-nav-active: #8b5cf6;
+}
+[data-theme="dark"][data-accent="violet"] {
+    --primary: #a78bfa;
+    --primary-hover: #c4b5fd;
+    --primary-light: rgba(167, 139, 250, 0.15);
+    --accent: #f472b6;
+    --accent-light: rgba(244, 114, 182, 0.15);
+    --bg-nav-active: #8b5cf6;
+}
+
+html[data-accent="orange"] {
+    --primary: #f97316;
+    --primary-hover: #ea580c;
+    --primary-light: #fff7ed;
+    --accent: #e11d48;
+    --accent-light: #fff1f2;
+    --bg-nav-active: #f97316;
+}
+[data-theme="dark"][data-accent="orange"] {
+    --primary: #fb923c;
+    --primary-hover: #fdba74;
+    --primary-light: rgba(251, 146, 60, 0.15);
+    --accent: #fb7185;
+    --accent-light: rgba(251, 113, 133, 0.15);
+    --bg-nav-active: #f97316;
+}
+
+html[data-accent="rose"] {
+    --primary: #f43f5e;
+    --primary-hover: #e11d48;
+    --primary-light: #fff1f2;
+    --accent: #8b5cf6;
+    --accent-light: #f5f3ff;
+    --bg-nav-active: #f43f5e;
+}
+[data-theme="dark"][data-accent="rose"] {
+    --primary: #fb7185;
+    --primary-hover: #fda4af;
+    --primary-light: rgba(251, 113, 133, 0.15);
+    --accent: #a78bfa;
+    --accent-light: rgba(167, 139, 250, 0.15);
+    --bg-nav-active: #f43f5e;
+}
+
 /* ==========================================================================
    RESET & BASE STYLES
    ========================================================================== */

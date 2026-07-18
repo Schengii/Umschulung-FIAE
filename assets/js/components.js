@@ -4,9 +4,10 @@
  * Auto-detects the current page and applies the active navigation state.
  */
 
-// Immediate Theme Bootstrapping to prevent white flashing
+// Immediate Theme & Accent Bootstrapping to prevent white flashing / style shifts
 (function() {
     let initialTheme = 'dark';
+    let initialAccent = 'blue';
     try {
         const storedTheme = localStorage.getItem('portfolio_theme');
         if (storedTheme) {
@@ -14,10 +15,17 @@
         } else {
             localStorage.setItem('portfolio_theme', 'dark');
         }
+        const storedAccent = localStorage.getItem('portfolio_accent');
+        if (storedAccent) {
+            initialAccent = storedAccent;
+        } else {
+            localStorage.setItem('portfolio_accent', 'blue');
+        }
     } catch (e) {
         // LocalStorage fallback
     }
     document.documentElement.setAttribute('data-theme', initialTheme);
+    document.documentElement.setAttribute('data-accent', initialAccent);
 })();
 
 
@@ -164,6 +172,18 @@ function renderNav(currentPage) {
                     </label>
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
+                </div>
+                <div class="accent-customizer-container" style="position: relative;">
+                    <button id="accent-toggle" class="theme-toggle" aria-label="Akzentfarbe ändern" title="Akzentfarbe ändern">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                    </button>
+                    <div id="accent-dropdown" class="accent-dropdown" style="display: none;" role="menu">
+                        <button class="accent-dot-btn accent-blue" data-accent-val="blue" title="Classic Blue" aria-label="Classic Blue"></button>
+                        <button class="accent-dot-btn accent-emerald" data-accent-val="emerald" title="Emerald Green" aria-label="Emerald Green"></button>
+                        <button class="accent-dot-btn accent-violet" data-accent-val="violet" title="Royal Violet" aria-label="Royal Violet"></button>
+                        <button class="accent-dot-btn accent-orange" data-accent-val="orange" title="Sunset Orange" aria-label="Sunset Orange"></button>
+                        <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
+                    </div>
                 </div>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">

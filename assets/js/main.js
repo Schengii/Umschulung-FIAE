@@ -40,6 +40,7 @@ import { initQrGenerator } from './modules/qr-generator.js';
 import { initDocumentPreview } from './modules/document-preview.js';
 import { initFaqAccordion } from './modules/faq-accordion.js';
 import { initTokenAuth } from './modules/token-auth.js';
+import { initAccentColor } from './modules/accent-color.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -53,7 +54,7 @@ function bootstrap() {
         initAgeCalculator, initHeroSection, initKeyboardShortcuts, initEasterEggs,
         initAchievements, initBlogEnhancements, initLearningProgress,
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
-        initDocumentPreview, initFaqAccordion, initTokenAuth
+        initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor
     ];
 
     // Sequentially call all initializer functions
