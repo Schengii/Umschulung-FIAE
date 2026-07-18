@@ -41,6 +41,7 @@ import { initDocumentPreview } from './modules/document-preview.js';
 import { initFaqAccordion } from './modules/faq-accordion.js';
 import { initTokenAuth } from './modules/token-auth.js';
 import { initAccentColor } from './modules/accent-color.js';
+import { initGitSimulator } from './git-simulator.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -54,7 +55,8 @@ function bootstrap() {
         initAgeCalculator, initHeroSection, initKeyboardShortcuts, initEasterEggs,
         initAchievements, initBlogEnhancements, initLearningProgress,
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
-        initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor
+        initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor,
+        initGitSimulator
     ];
 
     // Sequentially call all initializer functions

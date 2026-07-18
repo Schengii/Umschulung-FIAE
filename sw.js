@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v18';
+const CACHE_NAME = 'umschulung-fiae-v19';
 const ASSETS = [
     './',
     'index.html',
@@ -23,6 +23,9 @@ const ASSETS = [
     'quiz.html',
     'snake.html',
     'memory.html',
+    'git-simulator.html',
+    'assets/css/git-simulator.css',
+    'assets/js/git-simulator.js',
     'assets/css/style.css',
     'assets/css/skeletons.css',
     'assets/css/skills_matrix.css',

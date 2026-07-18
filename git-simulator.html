@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktiver Git-Branching-Simulator | Maximilian Schenk</title>
+    <meta name="description" content="Lerne Git interaktiv! Ein visueller Sandbox-Simulator für Git-Branching, Commits, Merges und Rebases mit einer simulierten Terminal-Konsole.">
+    <meta name="author" content="Maximilian Schenk">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+    <link rel="stylesheet" href="assets/css/git-simulator.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <main id="main-content" class="main-container">
+        <!-- Breadcrumbs -->
+        <div id="breadcrumb-container" data-items='[{"label_de":"Home","label_en":"Home","href":"home.html"},{"label_de":"Games","label_en":"Games","href":"games.html"},{"label_de":"Git Simulator","label_en":"Git Simulator","href":"git-simulator.html"}]'></div>
+
+        <div class="simulator-layout">
+            <!-- Left Sidebar: Guide, Tutorial & Commands -->
+            <section class="card sidebar-panel" aria-labelledby="sidebar-title">
+                <h2 id="sidebar-title">
+                    <span lang="de"><i class="fa-solid fa-graduation-cap"></i> Anleitung &amp; Aufgaben</span>
+                    <span lang="en"><i class="fa-solid fa-graduation-cap"></i> Guide &amp; Challenges</span>
+                </h2>
+                
+                <!-- Tutorial Selector -->
+                <div class="tutorial-box">
+                    <label for="level-select"><strong>Level:</strong></label>
+                    <select id="level-select" class="level-dropdown">
+                        <option value="sandbox" lang="de">Freie Sandbox</option>
+                        <option value="sandbox" lang="en">Free Sandbox</option>
+                        <option value="lvl1" lang="de">Level 1: Erste Commits</option>
+                        <option value="lvl1" lang="en">Level 1: First Commits</option>
+                        <option value="lvl2" lang="de">Level 2: Branching erstellen</option>
+                        <option value="lvl2" lang="en">Level 2: Creating Branches</option>
+                        <option value="lvl3" lang="de">Level 3: Mergen &amp; Integrieren</option>
+                        <option value="lvl3" lang="en">Level 3: Merging &amp; Integration</option>
+                        <option value="lvl4" lang="de">Level 4: Rebase (Fortgeschritten)</option>
+                        <option value="lvl4" lang="en">Level 4: Rebase (Advanced)</option>
+                    </select>
+                </div>
+
+                <!-- Level Description -->
+                <div id="level-description" class="level-description">
+                    <p lang="de">Willkommen in der Git Sandbox! Du kannst frei Befehle eingeben oder die Buttons unten nutzen, um den Commit-Baum wachsen zu lassen.</p>
+                    <p lang="en">Welcome to the Git Sandbox! You can freely type commands or use the buttons below to grow the commit tree.</p>
+                </div>
+
+                <!-- Help / Command Reference Accordion -->
+                <div class="commands-ref">
+                    <h3>
+                        <span lang="de"><i class="fa-solid fa-book"></i> Befehlsreferenz</span>
+                        <span lang="en"><i class="fa-solid fa-book"></i> Command Reference</span>
+                    </h3>
+                    <ul class="cmd-list">
+                        <li><code>git commit -m "..."</code> <span lang="de">Erstellt neuen Commit</span><span lang="en">Creates new commit</span></li>
+                        <li><code>git branch &lt;name&gt;</code> <span lang="de">Erstellt neuen Branch</span><span lang="en">Creates new branch</span></li>
+                        <li><code>git checkout &lt;name&gt;</code> <span lang="de">Wechselt Branch/Commit</span><span lang="en">Switches branch/commit</span></li>
+                        <li><code>git checkout -b &lt;name&gt;</code> <span lang="de">Erstellt &amp; wechselt Branch</span><span lang="en">Creates &amp; switches branch</span></li>
+                        <li><code>git merge &lt;name&gt;</code> <span lang="de">Mergt Branch in aktuellen HEAD</span><span lang="en">Merges branch into HEAD</span></li>
+                        <li><code>git rebase &lt;name&gt;</code> <span lang="de">Rebaset HEAD auf Branch</span><span lang="en">Rebases HEAD onto branch</span></li>
+                        <li><code>git reset --hard &lt;hash&gt;</code> <span lang="de">Setzt Branch zurück</span><span lang="en">Resets branch back</span></li>
+                        <li><code>git log</code> <span lang="de">Zeigt Commit-Historie</span><span lang="en">Shows commit history</span></li>
+                        <li><code>clear</code> <span lang="de">Konsole leeren</span><span lang="en">Clear terminal console</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Right Area: Visualizer & Terminal -->
+            <div class="main-simulator-panel">
+                <!-- Visualizer Canvas -->
+                <section class="card visualizer-card" aria-label="Git Visualizer Canvas">
+                    <div class="visualizer-header">
+                        <h3>
+                            <span lang="de"><i class="fa-solid fa-diagram-project"></i> Commit-Graph (Live)</span>
+                            <span lang="en"><i class="fa-solid fa-diagram-project"></i> Commit Graph (Live)</span>
+                        </h3>
+                        <button id="reset-sim-btn" class="btn-secondary small-btn" title="Simulator zurücksetzen / Reset simulator">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span lang="de">Zurücksetzen</span><span lang="en">Reset</span>
+                        </button>
+                    </div>
+                    <div class="svg-container" id="svg-container">
+                        <svg id="git-svg" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Definitions for markers like arrows -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="18" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--text-muted)" />
+                                </marker>
+                            </defs>
+                            <!-- Grid / Background -->
+                            <g id="git-links"></g>
+                            <g id="git-nodes"></g>
+                            <g id="git-labels"></g>
+                        </svg>
+                    </div>
+                </section>
+
+                <!-- Quick Action Buttons & Terminal -->
+                <section class="card terminal-card" aria-label="Terminal Console">
+                    <!-- Quick Actions Bar -->
+                    <div class="quick-actions-bar">
+                        <button class="action-btn" id="btn-quick-commit">
+                            <i class="fa-solid fa-circle-plus"></i> Commit
+                        </button>
+                        <button class="action-btn" id="btn-quick-branch">
+                            <i class="fa-solid fa-code-branch"></i> Branch
+                        </button>
+                        <button class="action-btn" id="btn-quick-checkout">
+                            <i class="fa-solid fa-right-to-bracket"></i> Checkout
+                        </button>
+                        <button class="action-btn" id="btn-quick-merge">
+                            <i class="fa-solid fa-code-merge"></i> Merge
+                        </button>
+                        <button class="action-btn" id="btn-quick-rebase">
+                            <i class="fa-solid fa-code-compare"></i> Rebase
+                        </button>
+                    </div>
+
+                    <!-- Simulated Terminal -->
+                    <div class="terminal-shell" id="terminal-shell">
+                        <div class="terminal-output" id="terminal-output">
+                            <div class="terminal-line system-line">
+                                <span lang="de">*** Git Branching Simulator Sandbox geladen. Tippe 'help' für Infos oder nutze die Buttons. ***</span>
+                                <span lang="en">*** Git Branching Simulator Sandbox loaded. Type 'help' or use the buttons. ***</span>
+                            </div>
+                        </div>
+                        <div class="terminal-input-line">
+                            <span class="terminal-prompt">visitor@fiae-portfolio:~/git-sandbox$</span>
+                            <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Git command input">
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+
+</html>

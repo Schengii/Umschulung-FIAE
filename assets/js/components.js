@@ -90,7 +90,7 @@ function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
     const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html'];
+    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html', 'git-simulator.html'];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -157,6 +157,7 @@ function renderNav(currentPage) {
                                 <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
                                 <li><a href="memory.html" class="dropdown-link">Memory JS</a></li>
                                 <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
+                                <li><a href="git-simulator.html" class="dropdown-link">Git Simulator</a></li>
                             </ul>
                         </li>
                         <li><a href="index.html" class="dropdown-link"><span lang="de">Startseite</span><span lang="en">Welcome Page</span></a></li>
