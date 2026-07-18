@@ -35,3 +35,34 @@
   cursor: pointer;
   color: var(--text-muted);
 }
+
+/* Demo Modal Enhancements */
+.demo-modal-content {
+  max-width: 90%;
+  width: 960px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.demo-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.demo-modal-title {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+.demo-iframe-el {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: white;
+}
+
