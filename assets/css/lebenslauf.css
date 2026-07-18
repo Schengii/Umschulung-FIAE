@@ -34,10 +34,13 @@
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    overflow: hidden;
     margin: 0 auto 1.25rem auto;
-    border: 3px solid var(--primary);
-    box-shadow: var(--shadow-sm);
+    padding: 4px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-img {
@@ -45,6 +48,8 @@
     height: 100%;
     object-fit: cover;
     object-position: center top;
+    border-radius: 50%;
+    background: var(--bg-card);
 }
 
 .profile-name {
@@ -226,28 +231,34 @@
 /* Timeline v2 Styling */
 .timeline-v2 {
     position: relative;
-    border-left: 2px solid var(--border);
-    padding-left: 1.5rem;
+    border-left: 3px solid var(--border);
+    padding-left: 2rem;
     margin-left: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .timeline-v2-item {
     position: relative;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-v2-item:hover {
+    transform: translateX(6px);
 }
 
 .timeline-v2-marker {
     position: absolute;
-    left: calc(-1.5rem - 6px);
-    top: 5px;
-    width: 10px;
-    height: 10px;
+    left: calc(-2rem - 8px);
+    top: 4px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: var(--primary);
-    border: 2px solid var(--card-bg);
-    transition: background-color 0.2s;
+    background: var(--bg-page);
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 0 3px var(--border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timeline-v2-header {

@@ -74,6 +74,18 @@ function bootstrap() {
             }
         }
     }
+
+    // Optimized card mouse tracking hover glow effect
+    document.addEventListener('mousemove', (e) => {
+        const card = e.target.closest('.card');
+        if (card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        }
+    });
 }
 
 // Always wait for DOMContentLoaded to guarantee components.js has injected all templates.
