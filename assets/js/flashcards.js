@@ -234,6 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredDeck = fullDatabase.filter(c => starredIds.includes(c.id));
         } else if (currentCategory === 'custom') {
             filteredDeck = [...customCards];
+        } else if (currentCategory === 'box1') {
+            filteredDeck = fullDatabase.filter(c => (boxLevels[c.id] || 1) === 1);
+        } else if (currentCategory === 'box2') {
+            filteredDeck = fullDatabase.filter(c => boxLevels[c.id] === 2);
+        } else if (currentCategory === 'box3') {
+            filteredDeck = fullDatabase.filter(c => boxLevels[c.id] === 3);
         } else {
             filteredDeck = fullDatabase.filter(c => c.category === currentCategory);
         }

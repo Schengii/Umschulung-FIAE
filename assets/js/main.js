@@ -86,6 +86,18 @@ function bootstrap() {
             card.style.setProperty('--mouse-y', `${y}px`);
         }
     });
+
+    // Connection status change notifications (online/offline)
+    window.addEventListener('online', () => {
+        if (window.showToast) {
+            window.showToast('Du bist wieder online!', 'success');
+        }
+    });
+    window.addEventListener('offline', () => {
+        if (window.showToast) {
+            window.showToast('Verbindung verloren. Offline-Modus aktiv.', 'warning');
+        }
+    });
 }
 
 // Always wait for DOMContentLoaded to guarantee components.js has injected all templates.

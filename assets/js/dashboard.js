@@ -206,6 +206,29 @@ function initQaMetrics() {
                 badge.innerHTML = `<span><i class="fa fa-exclamation-circle"></i> ${lang === 'de' ? 'Refactoring empfohlen' : 'Refactoring Recommended'}</span>`;
             }
         }
+
+        const barChartSvg = document.getElementById('qa-bar-chart');
+        if (barChartSvg) {
+            const metrics = [
+                { name: lang === 'de' ? 'Coverage' : 'Coverage', val: coverage, color: '#3b82f6' },
+                { name: lang === 'de' ? 'Clean Code' : 'Clean Code', val: cleanCode, color: '#a855f7' },
+                { name: lang === 'de' ? 'Doku' : 'Docs', val: docs, color: '#10b981' },
+                { name: lang === 'de' ? 'Security' : 'Security', val: security, color: '#f43f5e' }
+            ];
+
+            let svgContent = '';
+            metrics.forEach((m, idx) => {
+                const y = 8 + idx * 25;
+                const widthPercent = Math.max(5, m.val);
+                svgContent += `
+                    <text x="5" y="${y + 11}" fill="var(--text-primary)" font-size="10" font-family="sans-serif">${m.name}</text>
+                    <rect x="75" y="${y}" width="160" height="13" rx="3" fill="var(--border)" />
+                    <rect x="75" y="${y}" width="${(widthPercent / 100) * 160}" height="13" rx="3" fill="${m.color}" />
+                    <text x="245" y="${y + 11}" fill="var(--text-secondary)" font-size="10" font-family="sans-serif" font-weight="bold">${Math.round(m.val)}%</text>
+                `;
+            });
+            barChartSvg.innerHTML = svgContent;
+        }
     }
 }
 

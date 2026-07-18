@@ -134,4 +134,11 @@ Folgende interaktive Features wurden hinzugefügt:
 6. **Suchhervorhebung & Likes (News)**:
    - **Such-Markierung**: Gefundene Suchbegriffe werden in Titeln und Texten gelb markiert (`<mark>`).
    - **Likes-Button**: News-Beiträge können geliked werden, wobei die Zähler persistiert werden.
+7. **Premium Styling, PWA, Lernboxen & SVG-Grafiken**:
+   - **Maus-Spotlight & Glassmorphismus**: Cards besitzen ein satteres Glasdesign. Ein dynamischer Mouse-Glow-Effekt folgt der Maus auf allen Cards.
+   - **Offline-Modus (`offline.html`)**: Fallback-Seite mit animierten WiFi-Icons und Toast-Warnungen, sobald die Verbindung getrennt wird.
+   - **Leitner-Box-Filterung (Flashcards)**: Lernkarten können direkt nach Boxen (Box 1, 2 und 3) gefiltert studiert werden.
+   - **Git-Level-Statusanzeige**: Level-Dropdown im Simulator zeigt nun ein interaktives Bestanden-Abzeichen (Status-Badge).
+   - **SVG-Qualitätsdiagramm**: Der Notenrechner rendert jetzt ein dynamisches Balkendiagramm im SVG-Format.
+
 

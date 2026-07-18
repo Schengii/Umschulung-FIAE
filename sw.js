@@ -1,8 +1,9 @@
-const CACHE_NAME = 'umschulung-fiae-v19';
+const CACHE_NAME = 'umschulung-fiae-v20';
 const ASSETS = [
     './',
     'index.html',
     'home.html',
+    'offline.html',
     'portfolio.html',
     'ausbildungsablauf.html',
     'berufsfoerderungswerk.html',
@@ -153,7 +154,7 @@ self.addEventListener('fetch', (e) => {
                     return networkResponse;
                 })
                 .catch(() => caches.match(e.request).then((cachedResponse) => {
-                    return cachedResponse || caches.match('index.html');
+                    return cachedResponse || caches.match('offline.html');
                 }))
         );
     } 

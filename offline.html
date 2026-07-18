@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Keine Verbindung</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="header-banner">
+            <h1 class="header-title">
+                <span lang="de">Keine Internetverbindung</span>
+                <span lang="en">No Internet Connection</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="main-container" style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+        <div class="welcome-container card text-center" style="max-width: 500px; padding: 3rem 2rem;">
+            <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; animation: pulse 2s infinite;">
+                <i class="fa-solid fa-wifi-slash"></i>
+            </div>
+            <h2 class="text-gradient" style="margin-bottom: 1rem;">
+                <span lang="de">Du bist offline</span>
+                <span lang="en">You are offline</span>
+            </h2>
+            <p lang="de" style="margin-bottom: 2rem; color: var(--text-secondary);">
+                Diese Seite benötigt eine aktive Internetverbindung oder eine im Cache gespeicherte Version, um geladen zu werden. Bitte überprüfe deine Verbindung und versuche es erneut.
+            </p>
+            <p lang="en" style="margin-bottom: 2rem; color: var(--text-secondary);">
+                This page requires an active internet connection or a cached version to load. Please check your connection and try again.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="window.location.reload();" class="btn-primary">
+                    <i class="fa-solid fa-rotate-right"></i> <span lang="de">Erneut versuchen</span><span lang="en">Try Again</span>
+                </button>
+                <a href="home.html" class="btn-primary" style="background-color: var(--text-secondary);">
+                    <i class="fa-solid fa-house"></i> <span lang="de">Dashboard</span><span lang="en">Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+    </style>
+</body>
+
+</html>

@@ -775,10 +775,18 @@ function handleLevelChange(levelId) {
 }
 
 function checkLevelProgress() {
-    if (currentLevelId === 'sandbox') return;
+    const badge = document.getElementById('level-status-badge');
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    if (currentLevelId === 'sandbox') {
+        if (badge) badge.innerHTML = '';
+        return;
+    }
     const currentLvlObj = LEVELS[currentLevelId];
     if (currentLvlObj && currentLvlObj.check()) {
-        const lang = document.documentElement.getAttribute('lang') || 'de';
+        if (badge) {
+            badge.style.color = '#10b981';
+            badge.innerHTML = `🏆 ${lang === 'de' ? 'Bestanden' : 'Passed'}`;
+        }
         writeSuccessLine(lang === 'de' ? 
             "🎉 Glückwunsch! Du hast die Challenge erfolgreich bestanden." : 
             "🎉 Congratulations! You successfully passed this challenge."
@@ -787,6 +795,11 @@ function checkLevelProgress() {
         // Trigger Konfetti & Achievement unlock
         triggerConfettiEffect();
         unlockSimulatorAchievement();
+    } else {
+        if (badge) {
+            badge.style.color = '#f97316';
+            badge.innerHTML = `⏳ ${lang === 'de' ? 'Offen' : 'Active'}`;
+        }
     }
 }
 
