@@ -46,6 +46,7 @@ import { initRecruiterFilter } from './modules/recruiter-filter.js';
 import { initAboutMeEnhancements } from './modules/about-me-enhancements.js';
 import { initProjectEnhancements } from './modules/project-enhancements.js';
 import { initImpressumEnhancements } from './modules/impressum-enhancements.js';
+import { initTimelineScroll } from './modules/timeline-scroll.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -61,7 +62,7 @@ function bootstrap() {
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
         initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor,
         initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
-        initImpressumEnhancements
+        initImpressumEnhancements, initTimelineScroll
     ];
 
     // Sequentially call all initializer functions

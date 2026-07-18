@@ -57,6 +57,24 @@
         }
         .method-get { background: #10b981; }
         .method-post { background: #3b82f6; }
+        .flex-column-gap-1-5 {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .margin-left-0-5 {
+            margin-left: 0.5rem;
+        }
+        .btn-small-send {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .margin-bottom-0-75 {
+            margin-bottom: 0.75rem;
+        }
+        #btn-run-tests {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -79,41 +97,41 @@
 
         <div class="split-container">
             <!-- Left Side: API Endpoints & Actions -->
-            <div style="display:flex; flex-direction:column; gap:1.5rem;">
+            <div class="flex-column-gap-1-5">
                 <div class="card">
                     <h3>API-Endpunkte</h3>
                     <div class="api-route">
                         <div>
                             <span class="api-method method-get">GET</span>
-                            <code style="margin-left:0.5rem;">/api/courses</code>
+                            <code class="margin-left-0-5">/api/courses</code>
                         </div>
-                        <button class="btn-primary" id="btn-get-courses" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                        <button class="btn-primary btn-small-send" id="btn-get-courses">Senden</button>
                     </div>
                     <div class="api-route">
                         <div>
                             <span class="api-method method-get">GET</span>
-                            <code style="margin-left:0.5rem;">/api/students</code>
+                            <code class="margin-left-0-5">/api/students</code>
                         </div>
-                        <button class="btn-primary" id="btn-get-students" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                        <button class="btn-primary btn-small-send" id="btn-get-students">Senden</button>
                     </div>
                     <div class="api-route">
                         <div>
                             <span class="api-method method-post">POST</span>
-                            <code style="margin-left:0.5rem;">/api/students</code>
+                            <code class="margin-left-0-5">/api/students</code>
                         </div>
-                        <button class="btn-primary" id="btn-post-student" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                        <button class="btn-primary btn-small-send" id="btn-post-student">Senden</button>
                     </div>
                 </div>
 
                 <div class="card">
                     <h3>Java JUnit Unit-Testing</h3>
-                    <p class="small-muted" style="margin-bottom:0.75rem;">Führe die JUnit-Tests aus, um das OOP-Datenmodell und die Entity-Zuordnungen zu prüfen.</p>
-                    <button class="btn-primary" id="btn-run-tests" style="width:100%;"><i class="fa fa-cogs"></i> Tests ausführen (mvn test)</button>
+                    <p class="small-muted margin-bottom-0-75">Führe die JUnit-Tests aus, um das OOP-Datenmodell und die Entity-Zuordnungen zu prüfen.</p>
+                    <button class="btn-primary" id="btn-run-tests"><i class="fa fa-cogs"></i> Tests ausführen (mvn test)</button>
                 </div>
             </div>
 
             <!-- Right Side: Terminal Log & Console JSON Response -->
-            <div style="display:flex; flex-direction:column; gap:1.5rem;">
+            <div class="flex-column-gap-1-5">
                 <div class="card">
                     <h3>JSON-API Response</h3>
                     <pre class="codebox" id="json-response">// Klicke links auf Senden, um eine API-Anfrage abzusetzen</pre>

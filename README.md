@@ -145,3 +145,6 @@ Folgende interaktive Features wurden hinzugefügt:
    - **Priorisierte Highlights**: `EcoChef` (IHK-Abschlussprojekt) und `ManuFaktur` sind dauerhaft als Top-Highlights an Position 1 und 2 gepinnt.
    - **100% Launch-Abdeckung**: Jedes Projekt im Portfolio ist direkt startfähig. Für Godot-Spiele (`CoOpVersusGame`) und Java-Backends (`Java OOP & Spring Boot`) wurden interaktive Web-Simulatoren / Sandboxes erstellt.
    - **Screenshot-Karussell**: Das Projektdetail-Modal verfügt über ein integriertes Bildkarussell mit Vor-/Zurück-Tasten und Navigationspunkten für Projekte mit mehreren Bildern.
+9. **Dynamischer Lebenslauf-Timeline-Pfad (Scroll-Linked SVG)**:
+   - **Interaktiver Scroll-Pfad**: Auf der Lebenslauf-Seite werden die statischen Ränder der Timeline-Container durch dynamische SVG-Pfad-Linien ersetzt, die sich beim Herunterscrollen flüssig einfärben.
+   - **Pulsierende Meilensteine**: Sobald eine berufliche oder schulische Station im Viewport erreicht wird, vergrößert sich die jeweilige Timeline-Kugel (Marker) und erhält einen weichen, pulsierenden Farb-Glow.

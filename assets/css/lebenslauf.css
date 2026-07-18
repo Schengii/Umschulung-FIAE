@@ -231,7 +231,6 @@
 /* Timeline v2 Styling */
 .timeline-v2 {
     position: relative;
-    border-left: 3px solid var(--border);
     padding-left: 2rem;
     margin-left: 0.5rem;
     display: flex;
@@ -256,9 +255,16 @@
     height: 14px;
     border-radius: 50%;
     background: var(--bg-page);
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 0 3px var(--border);
+    border: 3px solid var(--border);
+    box-shadow: 0 0 0 3px var(--bg-page);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-v2-marker.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary), 0 0 0 3px var(--bg-page);
+    transform: scale(1.2);
 }
 
 .timeline-v2-header {

@@ -5805,6 +5805,7 @@ button.welcome-theme-toggle {
     font-size: 0.85rem;
     color: var(--text-secondary);
     transition: var(--transition);
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -5973,6 +5974,7 @@ button.welcome-theme-toggle {
     z-index: 2000;
     display: flex;
     flex-direction: column;
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     animation: modalFadeIn 0.3s ease-out;
 }
@@ -6284,8 +6286,8 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border);
-    backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow: hidden;
