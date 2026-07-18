@@ -91,7 +91,7 @@ export function initRoadmap() {
             const data = phaseData[phaseId];
             if (!data) return;
 
-            openDrawer(data);
+            openDrawer(data, phaseId);
         });
     });
 
@@ -103,23 +103,32 @@ export function initRoadmap() {
         if (e.key === 'Escape') closeDrawer();
     });
 
-    function openDrawer(data) {
+    function openDrawer(data, phaseId) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
         // Set Header
         drawerTitle.textContent = lang === 'de' ? data.title_de : data.title_en;
 
-        // Topics HTML
+        // Topics HTML (Interactive Checklist)
         const topics = lang === 'de' ? data.topics_de : data.topics_en;
-        const topicsListHTML = topics.map(t => `<li><i class="fa fa-check" style="color:var(--primary); margin-right:0.5rem;" aria-hidden="true"></i> ${t}</li>`).join('');
+        const topicsListHTML = topics.map((t, idx) => {
+            const storageKey = `fiae_progress_phase_${phaseId}_topic_${idx}`;
+            const checked = localStorage.getItem(storageKey) === 'true' ? 'checked' : '';
+            return `
+                <li style="display:flex; align-items:center; gap:0.5rem; padding: 4px 0;">
+                    <input type="checkbox" id="${storageKey}" class="topic-checkbox" data-key="${storageKey}" ${checked} style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);">
+                    <label for="${storageKey}" style="cursor:pointer; user-select:none; font-size: 0.95rem;">${t}</label>
+                </li>
+            `;
+        }).join('');
 
         // Populate Content
         drawerContent.innerHTML = `
             <div>
                 <h4 style="margin-bottom:0.5rem; font-weight:600;">
-                    ${lang === 'de' ? '🔑 Kernkompetenzen' : '🔑 Core Competencies'}
+                    ${lang === 'de' ? '🔑 Kernkompetenzen (Checkliste)' : '🔑 Core Competencies (Checklist)'}
                 </h4>
-                <ul style="list-style:none; padding:0; margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.5rem;">
+                <ul style="list-style:none; padding:0; margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.25rem;">
                     ${topicsListHTML}
                 </ul>
             </div>
@@ -176,6 +185,15 @@ export function initRoadmap() {
                 });
             });
         }
+
+        // Add topic checkbox change listeners
+        const checkboxes = drawerContent.querySelectorAll('.topic-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const key = e.target.getAttribute('data-key');
+                localStorage.setItem(key, e.target.checked ? 'true' : 'false');
+            });
+        });
 
         // Show drawer and overlay
         drawer.classList.add('open');

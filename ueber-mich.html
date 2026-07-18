@@ -107,6 +107,28 @@
                                 perfect foundation for modern reactive web architectures and state management.</span>
                         </li>
                     </ul>
+                    
+                    <!-- Interactive Skill Transfer Bridge -->
+                    <div class="bridge-container" style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                        <h4 style="margin-top: 0; font-size: 0.95rem;">
+                            <span lang="de">🔌 Interaktiver Brücken-Transfer (Anklicken zum Vergleichen)</span>
+                            <span lang="en">🔌 Interactive Skill Transfer (Click to compare)</span>
+                        </h4>
+                        <div class="bridge-buttons" style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                            <button type="button" class="btn-filter active" data-bridge="trouble" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>Troubleshooting</span>
+                            </button>
+                            <button type="button" class="btn-filter" data-bridge="security" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>Security</span>
+                            </button>
+                            <button type="button" class="btn-filter" data-bridge="logic" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>Process Logic</span>
+                            </button>
+                        </div>
+                        <div id="bridge-display" class="card dashed-card" style="padding: 1rem; font-size: 0.9rem; background: var(--bg-page); border: 1px dashed var(--border);">
+                            <!-- Dynamically loaded by JS -->
+                        </div>
+                    </div>
                 </article>
 
                 <!-- 2. Career Card -->
@@ -183,6 +205,38 @@
                                     certification in January 2022. Initial PLC programming (TIA-Portal, Grafcet).</span>
                             </p>
                         </div>
+                    </div>
+                </section>
+
+                <!-- Qualifications & Certificates Carousel -->
+                <section class="card" aria-labelledby="carousel-title">
+                    <h2 id="carousel-title">
+                        <span lang="de">Zertifikate & Nachweise</span>
+                        <span lang="en">Certificates & Credentials</span>
+                    </h2>
+                    <div class="carousel-container" style="position: relative; display: flex; align-items: center; justify-content: center; margin-top: 1rem; min-height: 180px;">
+                        <button type="button" id="cert-prev" class="btn-filter" style="position: absolute; left: 0; z-index: 10; padding: 0.5rem; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">❮</button>
+                        <div class="carousel-track" style="overflow: hidden; width: 80%; display: flex; justify-content: center; text-align: center;">
+                            <!-- Slide 1 -->
+                            <div class="carousel-slide active" data-slide="0">
+                                <i class="fa-solid fa-graduation-cap fa-3x" style="color: var(--primary); margin-bottom: 0.5rem;"></i>
+                                <h4><span lang="de">IHK-Abschlusszeugnis</span><span lang="en">IHK Graduation Certificate</span></h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;"><span lang="de">Fachinformatiker Anwendungsentwicklung (Juni 2026)</span><span lang="en">IT Specialist Application Development (June 2026)</span></p>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="carousel-slide" data-slide="1" style="display: none;">
+                                <i class="fa-solid fa-building-columns fa-3x" style="color: var(--primary); margin-bottom: 0.5rem;"></i>
+                                <h4><span lang="de">Kooperationspraktikum DFG</span><span lang="en">Cooperative Internship DFG</span></h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;"><span lang="de">2 Jahre praktische Mitarbeit im Web-Team (Bonn)</span><span lang="en">2 years practical training in the web team (Bonn)</span></p>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="carousel-slide" data-slide="2" style="display: none;">
+                                <i class="fa-solid fa-award fa-3x" style="color: var(--primary); margin-bottom: 0.5rem;"></i>
+                                <h4><span lang="de">BFW Zertifikate</span><span lang="en">BFW Retraining Certificates</span></h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;"><span lang="de">Erfolgreiche Module in Java, C#, SQL und Web-Dev</span><span lang="en">Successful modules in Java, C#, SQL and Web Dev</span></p>
+                            </div>
+                        </div>
+                        <button type="button" id="cert-next" class="btn-filter" style="position: absolute; right: 0; z-index: 10; padding: 0.5rem; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">❯</button>
                     </div>
                 </section>
 

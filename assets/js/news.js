@@ -93,12 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let contentHtml = '';
                 content.forEach(paragraph => {
-                    contentHtml += `<p>${paragraph}</p>`;
+                    contentHtml += `<p>${highlightText(paragraph, query)}</p>`;
                 });
+
+                const likeKey = `news_likes_${article.id}`;
+                const liked = localStorage.getItem(likeKey) === 'true';
+                const likeCount = parseInt(localStorage.getItem(`${likeKey}_count`) || '0', 10) + (liked ? 1 : 0);
 
                 articleElement.innerHTML = `
                     <div class="news-card-header">
-                        <h2>${title}</h2>
+                        <h2>${highlightText(title, query)}</h2>
                         <button class="copy-article-btn" data-id="${article.id}" title="${currentLanguage === 'de' ? 'Link kopieren' : 'Copy link'}">
                             <i class="fa fa-share-alt" aria-hidden="true"></i>
                             <span lang="de">Teilen</span>
@@ -107,6 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <h5><span lang="${currentLanguage}">${date}</span></h5>
                     ${contentHtml}
+                    <div style="margin-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem;">
+                        <button type="button" class="like-article-btn" data-id="${article.id}" style="background: none; border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; cursor: pointer; color: ${liked ? 'var(--primary)' : 'var(--text-secondary)'}; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
+                            <i class="fa${liked ? '-solid' : '-regular'} fa-thumbs-up"></i>
+                            <span class="like-count">${likeCount}</span>
+                        </button>
+                    </div>
                 `;
                 newsArticlesContainer.appendChild(articleElement);
             }
@@ -211,4 +221,41 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     handleHash();
     window.addEventListener('hashchange', handleHash);
+
+    // Like button click handler
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.like-article-btn');
+        if (!btn) return;
+
+        const articleId = btn.getAttribute('data-id');
+        const likeKey = `news_likes_${articleId}`;
+        const liked = localStorage.getItem(likeKey) === 'true';
+
+        let baseCount = parseInt(localStorage.getItem(`${likeKey}_count`) || '0', 10);
+        if (liked) {
+            localStorage.setItem(likeKey, 'false');
+            btn.style.color = 'var(--text-secondary)';
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = 'fa-regular fa-thumbs-up';
+            const countSpan = btn.querySelector('.like-count');
+            if (countSpan) countSpan.textContent = baseCount;
+        } else {
+            localStorage.setItem(likeKey, 'true');
+            btn.style.color = 'var(--primary)';
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-thumbs-up';
+            const countSpan = btn.querySelector('.like-count');
+            if (countSpan) countSpan.textContent = baseCount + 1;
+        }
+    });
+
+    function highlightText(text, query) {
+        if (!query) return text;
+        const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+        return text.replace(regex, '<mark style="background: #fde047; color: black; border-radius: 2px; padding: 0 2px;">$1</mark>');
+    }
+
+    function escapeRegex(string) {
+        return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
 });

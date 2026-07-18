@@ -79,6 +79,34 @@
 
                 <input type="hidden" id="github-username" value="Schengii">
 
+                <!-- Project Matchmaker Wizard -->
+                <div class="card matchmaker-card" style="border-left: 4px solid var(--primary); margin-bottom: 1.5rem;">
+                    <h3 style="margin-top: 0; font-size: 1.1rem;">
+                        <span lang="de">🎯 Projekt-Matchmaker</span>
+                        <span lang="en">🎯 Project Matchmaker</span>
+                    </h3>
+                    <p lang="de" style="font-size: 0.85rem; margin-top: 0.25rem;">Finden Sie heraus, welches Projekt am besten zu Ihren Zielen passt!</p>
+                    <p lang="en" style="font-size: 0.85rem; margin-top: 0.25rem;">Find out which project matches your target goals best!</p>
+                    <div id="matchmaker-content" style="margin-top: 0.75rem;">
+                        <p lang="de" style="font-size: 0.9rem; margin-bottom: 0.5rem;">Welche Art von Projekt suchen Sie?</p>
+                        <p lang="en" style="font-size: 0.9rem; margin-bottom: 0.5rem;">What type of project are you looking for?</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button type="button" class="btn-filter btn-match" data-match="games" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>🎮 Games / Interactive</span>
+                            </button>
+                            <button type="button" class="btn-filter btn-match" data-match="web" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>⏱️ Productivity / Web Apps</span>
+                            </button>
+                            <button type="button" class="btn-filter btn-match" data-match="ai" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                                <span>🍳 AI &amp; Gemini API</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="matchmaker-result" style="margin-top: 1rem; display: none; padding: 12px; background: var(--bg-page); border-radius: 4px; border: 1px dashed var(--border); font-size: 0.9rem; line-height: 1.5;">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
                 <!-- Portfolio Filters -->
                 <div class="portfolio-filters">
                     <select id="sort-select" class="sort-select" aria-label="Sort projects">
@@ -487,6 +515,15 @@
         <div class="modal-content">
             <button class="modal-close" aria-label="Schließen">&times;</button>
             <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Modal für Live‑Demo (Iframe) -->
+    <div id="demo-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" style="z-index: 1100; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 90%; width: 960px; height: 80vh; display: flex; flex-direction: column; padding: 1.5rem; background: var(--bg-card); position: relative; border-radius: var(--radius-lg);">
+            <button id="demo-modal-close" class="modal-close" aria-label="Schließen" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; background: none; border: none; color: var(--text-primary); cursor: pointer;">&times;</button>
+            <h3 id="demo-modal-title" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem;">Live-Demo</h3>
+            <iframe id="demo-iframe" style="flex: 1; border: 1px solid var(--border); border-radius: 4px; background: white;" src="about:blank"></iframe>
         </div>
     </div>
 

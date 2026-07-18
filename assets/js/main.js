@@ -42,6 +42,10 @@ import { initFaqAccordion } from './modules/faq-accordion.js';
 import { initTokenAuth } from './modules/token-auth.js';
 import { initAccentColor } from './modules/accent-color.js';
 import { initGitSimulator } from './git-simulator.js';
+import { initRecruiterFilter } from './modules/recruiter-filter.js';
+import { initAboutMeEnhancements } from './modules/about-me-enhancements.js';
+import { initProjectEnhancements } from './modules/project-enhancements.js';
+import { initImpressumEnhancements } from './modules/impressum-enhancements.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -56,7 +60,8 @@ function bootstrap() {
         initAchievements, initBlogEnhancements, initLearningProgress,
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
         initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor,
-        initGitSimulator
+        initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
+        initImpressumEnhancements
     ];
 
     // Sequentially call all initializer functions

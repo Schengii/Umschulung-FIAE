@@ -259,19 +259,29 @@
                         <span lang="en"><i class="fa-solid fa-address-card" aria-hidden="true"></i> Candidate
                             Summary</span>
                     </h3>
+                    <div class="role-filter-container" style="margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn-filter active" data-role="all" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                            <span lang="de">Alle Profile</span><span lang="en">All Profiles</span>
+                        </button>
+                        <button class="btn-filter" data-role="frontend" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                            <span>Frontend</span>
+                        </button>
+                        <button class="btn-filter" data-role="backend" style="font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer;">
+                            <span>Backend</span>
+                        </button>
+                    </div>
                     <table class="steckbrief-table"
                         style="width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 0.5rem; line-height: 1.5;">
                         <tr style="border-bottom: 1px solid var(--border);">
                             <td style="padding: 6px 0; font-weight: bold; color: var(--text-secondary); width: 40%;">
                                 <span lang="de">Position</span><span lang="en">Target Role</span>
                             </td>
-                            <td style="padding: 6px 0; color: var(--text-primary);">Junior Software Developer / Web
-                                Developer</td>
+                            <td style="padding: 6px 0; color: var(--text-primary);" id="steckbrief-position">Junior Software Developer / Web Developer</td>
                         </tr>
                         <tr style="border-bottom: 1px solid var(--border);">
                             <td style="padding: 6px 0; font-weight: bold; color: var(--text-secondary);"><span
                                     lang="de">Schwerpunkte</span><span lang="en">Core Stack</span></td>
-                            <td style="padding: 6px 0; color: var(--text-primary);">React, TypeScript, Java SE, SQL</td>
+                            <td style="padding: 6px 0; color: var(--text-primary);" id="steckbrief-schwerpunkte">React, TypeScript, Java SE, SQL</td>
                         </tr>
                         <tr style="border-bottom: 1px solid var(--border);">
                             <td style="padding: 6px 0; font-weight: bold; color: var(--text-secondary);"><span
@@ -444,6 +454,18 @@
                             rel="noopener">German Research Foundation e.V. (DFG)</a> in Bonn. There I completed my
                         2-year
                         internship within a 9-member web team.</p>
+                </section>
+
+                <section class="card" aria-labelledby="card-git-live">
+                    <h3 id="card-git-live">
+                        <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Letzte Code-Aktivität</span>
+                        <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> Recent Code Activity</span>
+                    </h3>
+                    <div id="live-git-activity" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                        <ul style="list-style: none; padding: 0; margin: 0;" id="live-git-list">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
                 </section>
 
                 <section class="card" aria-labelledby="card-sources">

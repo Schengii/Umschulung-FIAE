@@ -109,3 +109,29 @@ Verifiziere die Funktionalität aller 23 Einzelseiten und Kernfeatures automatis
 npm test
 ```
 Die Tests prüfen die Seiten auf Fehlerfreiheit beim Laden, fehlende 404-Ressourcen sowie korrekte Funktionalität von Dark Mode und Formularweiterleitungen.
+
+---
+
+## 🚀 Neuheiten & Interaktive Erweiterungen (Juli 2026)
+
+Folgende interaktive Features wurden hinzugefügt:
+
+1. **Recruiter-Cockpit (Home)**:
+   - **Rollen-Filter**: Recruiter können Profile für *Frontend*, *Backend* oder *Alle* filtern, um Schwerpunkte und Stellenbezeichnungen dynamisch anzupassen.
+   - **Live GitHub-Aktivität**: Integrierter Feed zeigt die echten neuesten Commits des GitHub-Repositories an (mit automatischem Fallback-Mock).
+2. **Brücken-Transfer & Zertifikate (Über mich)**:
+   - **Elektroniker-Entwickler-Brücke**: Interaktiver Vergleich, der zeigt, wie elektrotechnische Fertigkeiten auf die Softwareentwicklung übertragen werden.
+   - **Zertifikate-Slider**: Visuelles Karussell für Zeugnisse und Leistungsnachweise.
+3. **Lernpfad-Checkliste & DFG-Praxis (Ausbildung)**:
+   - **Interaktiver Lernpfad**: Im Drawer jeder Phase können Themen nun abgehakt werden. Der Fortschritt wird im `localStorage` gespeichert.
+   - **DFG-Praxis-Card**: Detaillierte Statistiken und Highlights aus der zweijährigen Phase bei der Deutschen Forschungsgemeinschaft.
+4. **Projekt-Matchmaker & Iframe-Demos (Projekte)**:
+   - **Matchmaker-Wizard**: Hilft Recruitern, passende Projekte basierend auf deren Kriterien zu finden.
+   - **Live-Demos**: Direktes Testen einfacher Webprojekte in einem schicken In-Page Iframe-Modal ohne Tabwechsel.
+5. **Download-Center & Terminplaner (Impressum)**:
+   - **Terminplaner-Mock**: Interaktive Zeitschlitz-Auswahl zur Anfrage von Kennenlerngesprächen.
+   - **Modernisiertes Download-Zentrum**: Download-Präsentationen werden in einem sauberen Raster aus Info-Karten dargestellt.
+6. **Suchhervorhebung & Likes (News)**:
+   - **Such-Markierung**: Gefundene Suchbegriffe werden in Titeln und Texten gelb markiert (`<mark>`).
+   - **Likes-Button**: News-Beiträge können geliked werden, wobei die Zähler persistiert werden.
+
