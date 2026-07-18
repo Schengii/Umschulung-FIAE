@@ -205,8 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span lang="de"><i class="fa fa-trophy" aria-hidden="true"></i> Abschlussprojekt IHK</span>
                 <span lang="en"><i class="fa fa-trophy" aria-hidden="true"></i> IHK Graduation Project</span>
             </div>`;
+            const safeImagesAttr = encodeURIComponent(JSON.stringify(project.images || (project.image ? [project.image] : [])));
             return `
-            <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+            <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
                 ${imageHTML}
                 <div class="highlight-content-wrapper">
                     ${highlightBadgeHTML}
@@ -225,8 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </article>`;
         }
 
+        const safeImagesAttr = encodeURIComponent(JSON.stringify(project.images || (project.image ? [project.image] : [])));
         return `
-        <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+        <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
             <div class="project-card-header">
                 <h3 lang="de">${project.titleDe}</h3>
                 <h3 lang="en">${project.titleEn}</h3>
@@ -322,6 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return [...projects].sort((a, b) => {
             if (a.repoName === 'EcoChef') return -1;
             if (b.repoName === 'EcoChef') return 1;
+            if (a.repoName === 'ManuFaktur') return -1;
+            if (b.repoName === 'ManuFaktur') return 1;
             const starsA = a.stars || 0;
             const starsB = b.stars || 0;
             return order === 'asc' ? starsA - starsB : starsB - starsA;

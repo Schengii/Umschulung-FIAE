@@ -6454,3 +6454,90 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
     0% { transform: scale(1) translate(0, 0); opacity: 0.12; }
     100% { transform: scale(1.3) translate(20px, -20px); opacity: 0.22; }
 }
+
+/* Modal details image carousel */
+.modal-carousel-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+}
+.carousel-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.carousel-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+    transition: var(--transition);
+}
+.carousel-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+.carousel-btn.prev-btn {
+    left: 10px;
+}
+.carousel-btn.next-btn {
+    right: 10px;
+}
+.carousel-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.35rem;
+    z-index: 10;
+}
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: var(--transition);
+}
+.carousel-dot.active {
+    background: var(--primary);
+    transform: scale(1.2);
+}
+
+/* Responsive 3er-Reihen Portfolio Grid */
+@media (min-width: 1024px) {
+    #dynamic-projects-container,
+    #custom-projects-container {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    #dynamic-projects-container,
+    #custom-projects-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}

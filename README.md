@@ -140,5 +140,8 @@ Folgende interaktive Features wurden hinzugefügt:
    - **Leitner-Box-Filterung (Flashcards)**: Lernkarten können direkt nach Boxen (Box 1, 2 und 3) gefiltert studiert werden.
    - **Git-Level-Statusanzeige**: Level-Dropdown im Simulator zeigt nun ein interaktives Bestanden-Abzeichen (Status-Badge).
    - **SVG-Qualitätsdiagramm**: Der Notenrechner rendert jetzt ein dynamisches Balkendiagramm im SVG-Format.
-
-
+8. **3er-Reihen Portfolio, Simulator-Launcher & Screenshot-Karussell (Juli 2026 Part II)**:
+   - **Responsive 3er-Reihen**: Das Projekt-Raster passt sich auf Desktop-Monitoren fest in 3er-Reihen an (3 Spalten) und skaliert geschmeidig auf Mobilgeräten.
+   - **Priorisierte Highlights**: `EcoChef` (IHK-Abschlussprojekt) und `ManuFaktur` sind dauerhaft als Top-Highlights an Position 1 und 2 gepinnt.
+   - **100% Launch-Abdeckung**: Jedes Projekt im Portfolio ist direkt startfähig. Für Godot-Spiele (`CoOpVersusGame`) und Java-Backends (`Java OOP & Spring Boot`) wurden interaktive Web-Simulatoren / Sandboxes erstellt.
+   - **Screenshot-Karussell**: Das Projektdetail-Modal verfügt über ein integriertes Bildkarussell mit Vor-/Zurück-Tasten und Navigationspunkten für Projekte mit mehreren Bildern.

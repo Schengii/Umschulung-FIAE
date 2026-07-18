@@ -23,7 +23,9 @@ const pages = [
   'playground.html',
   'projekt-detail.html?repo=EcoChef',
   'quiz.html',
-  'snake.html'
+  'snake.html',
+  'Projekte/CoOpVersusGame/coop-versus-demo.html',
+  'Projekte/java-playground.html'
 ];
 
 test.describe('Global Pages Stability Verification', () => {

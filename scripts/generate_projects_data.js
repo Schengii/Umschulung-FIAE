@@ -15,7 +15,8 @@ const staticProjects = [
     "titleEn": "🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototype",
     "tags": ["Godot Engine 4", "GDScript", "Multiplayer / LAN", "2D Action", "Game Design"],
     "image": "assets/images/coopgame_showcase.png",
-    "link": null,
+    "images": ["assets/images/coopgame_showcase.png", "assets/images/game_leaderboard.png"],
+    "link": "Projekte/CoOpVersusGame/coop-versus-demo.html",
     "descDe": "Ein plattformübergreifender Multiplayer-Prototyp, entwickelt mit Godot 4.6. Das Spiel bietet ein integriertes Lobby-System für LAN- und Netzwerkverbindungen, kooperative Missionen und Versus-Modi, Boss- und Gegner-KIs, Power-ups sowie interaktive Druckplatten-Rätsel.",
     "descEn": "A cross-platform multiplayer game prototype built in Godot 4.6. It features a local/network lobby system, cooperative missions, versus modes, intelligent boss/enemy AI, power-ups, and interactive pressure-plate puzzles.",
     "category": "games",
@@ -27,7 +28,8 @@ const staticProjects = [
     "titleDe": "🐍 Retro-Klassiker Snake (Javascript)",
     "titleEn": "🐍 Retro Classic Snake (Javascript)",
     "tags": ["HTML5 Canvas", "CSS3", "Vanilla JS (ES6)", "LocalStorage"],
-    "image": null,
+    "image": "assets/images/snake_showcase.png",
+    "images": ["assets/images/snake_showcase.png", "assets/images/game_leaderboard.png"],
     "link": "snake.html",
     "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
     "descEn": "A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.",
@@ -39,7 +41,8 @@ const staticProjects = [
     "titleDe": "💡 Interaktives IT-Wissens-Quiz",
     "titleEn": "💡 Interactive IT Knowledge Quiz",
     "tags": ["DOM Manipulation", "Dynamic HTML", "UX Design", "Accessibility"],
-    "image": null,
+    "image": "assets/images/quiz_showcase.png",
+    "images": ["assets/images/quiz_showcase.png", "assets/images/game_leaderboard.png"],
     "link": "quiz.html",
     "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
     "descEn": "An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.",
@@ -51,7 +54,8 @@ const staticProjects = [
     "titleDe": "🧠 Memory — Finde die Paare",
     "titleEn": "🧠 Memory — Find the Pairs",
     "tags": ["CSS 3D Transforms", "IntersectionObserver", "Game Logic", "LocalStorage"],
-    "image": null,
+    "image": "assets/images/memory_showcase.png",
+    "images": ["assets/images/memory_showcase.png", "assets/images/game_leaderboard.png"],
     "link": "memory.html",
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
     "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
@@ -63,8 +67,9 @@ const staticProjects = [
     "titleDe": "☕ Java OOP & Spring Boot — Übungsprojekte",
     "titleEn": "☕ Java OOP & Spring Boot — Practice Projects",
     "tags": ["Java SE", "OOP", "Spring Boot", "JDBC / SQL", "Unit Testing"],
-    "image": null,
-    "link": null,
+    "image": "assets/images/java_showcase.png",
+    "images": ["assets/images/java_showcase.png", "assets/images/java_tests.png"],
+    "link": "Projekte/java-playground.html",
     "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",
     "descEn": "A collection of Java practice applications from my retraining program. Includes command-line tools, advanced OOP design patterns, JUnit test suites, and a Spring Boot REST API for managing course and student databases.",
     "category": "web",
@@ -162,9 +167,40 @@ async function build() {
         project.language = project.language || "";
         console.log(`Fallback for ${project.repoName} (No API info)`);
       }
-    } else {
-      project.language = project.language || "";
     }
+    
+    // Ensure every project has a valid images array containing at least 2 images
+    if (!project.images || !Array.isArray(project.images)) {
+      project.images = project.image ? [project.image] : [];
+    }
+    
+    // If we only have 1 image, add a category-appropriate second image
+    if (project.images.length === 1) {
+      const cat = (project.category || "").toLowerCase();
+      if (cat.includes("game")) {
+        project.images.push("assets/images/game_leaderboard.png");
+      } else if (cat.includes("ai")) {
+        project.images.push("assets/images/ai_chat_showcase.png");
+      } else {
+        project.images.push("assets/images/analytics_showcase.png");
+      }
+    }
+    
+    // If no images at all, add two default fallbacks
+    if (project.images.length === 0) {
+      const cat = (project.category || "").toLowerCase();
+      if (cat.includes("game")) {
+        project.images = ["assets/images/game_leaderboard.png", "assets/images/it_workspace.png"];
+      } else if (cat.includes("ai")) {
+        project.images = ["assets/images/ai_chat_showcase.png", "assets/images/it_workspace.png"];
+      } else {
+        project.images = ["assets/images/analytics_showcase.png", "assets/images/it_workspace.png"];
+      }
+    }
+    
+    // Ensure project.image matches the first slide
+    project.image = project.images[0];
+    
     enriched.push(project);
   }
 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java OOP & Spring Boot REST API Playground</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        .split-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        @media(max-width:768px) {
+            .split-container { grid-template-columns: 1fr; }
+        }
+        .codebox {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            max-height: 280px;
+        }
+        .log-box {
+            background: #000;
+            color: #10b981;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: monospace;
+            font-size: 0.8rem;
+            overflow-y: auto;
+            max-height: 220px;
+            border: 1px solid #10b981;
+        }
+        .api-route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .api-method {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .method-get { background: #10b981; }
+        .method-post { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-banner">
+            <h1 class="header-title">
+                <span lang="de">☕ Java OOP &amp; Spring Boot Web API Simulator</span>
+                <span lang="en">☕ Java OOP &amp; Spring Boot Web API Simulator</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="card">
+            <h2 lang="de">Spring Boot Backend Simulator</h2>
+            <h2 lang="en">Spring Boot Backend Simulator</h2>
+            <p lang="de">Da Backend-Anwendungen einen lokalen Server benötigen, simuliert dieser interaktive Playground eine laufende Spring Boot Applikation mit REST-Endpoints und JUnit-Tests.</p>
+            <p lang="en">Since backend apps require local servers, this playground simulates a running Spring Boot app with REST endpoints and JUnit test suite verification.</p>
+        </div>
+
+        <div class="split-container">
+            <!-- Left Side: API Endpoints & Actions -->
+            <div style="display:flex; flex-direction:column; gap:1.5rem;">
+                <div class="card">
+                    <h3>API-Endpunkte</h3>
+                    <div class="api-route">
+                        <div>
+                            <span class="api-method method-get">GET</span>
+                            <code style="margin-left:0.5rem;">/api/courses</code>
+                        </div>
+                        <button class="btn-primary" id="btn-get-courses" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                    </div>
+                    <div class="api-route">
+                        <div>
+                            <span class="api-method method-get">GET</span>
+                            <code style="margin-left:0.5rem;">/api/students</code>
+                        </div>
+                        <button class="btn-primary" id="btn-get-students" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                    </div>
+                    <div class="api-route">
+                        <div>
+                            <span class="api-method method-post">POST</span>
+                            <code style="margin-left:0.5rem;">/api/students</code>
+                        </div>
+                        <button class="btn-primary" id="btn-post-student" style="font-size:0.75rem; padding:0.25rem 0.5rem;">Senden</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Java JUnit Unit-Testing</h3>
+                    <p class="small-muted" style="margin-bottom:0.75rem;">Führe die JUnit-Tests aus, um das OOP-Datenmodell und die Entity-Zuordnungen zu prüfen.</p>
+                    <button class="btn-primary" id="btn-run-tests" style="width:100%;"><i class="fa fa-cogs"></i> Tests ausführen (mvn test)</button>
+                </div>
+            </div>
+
+            <!-- Right Side: Terminal Log & Console JSON Response -->
+            <div style="display:flex; flex-direction:column; gap:1.5rem;">
+                <div class="card">
+                    <h3>JSON-API Response</h3>
+                    <pre class="codebox" id="json-response">// Klicke links auf Senden, um eine API-Anfrage abzusetzen</pre>
+                </div>
+
+                <div class="card">
+                    <h3>Server Console / Build Logs</h3>
+                    <div class="log-box" id="log-console">
+                        [INFO] Spring Boot app boot complete on port 8080.<br>
+                        [INFO] Connected to In-Memory H2 Database.<br>
+                        [INFO] JPA entities automatically generated.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const jsonResponse = document.getElementById('json-response');
+        const logConsole = document.getElementById('log-console');
+
+        function appendLog(text, isError = false) {
+            const time = new Date().toLocaleTimeString();
+            const color = isError ? '#ef4444' : '#10b981';
+            logConsole.innerHTML += `<br><span style="color:${color};">[${time}] ${text}</span>`;
+            logConsole.scrollTop = logConsole.scrollHeight;
+        }
+
+        document.getElementById('btn-get-courses').addEventListener('click', () => {
+            appendLog('Received GET request: /api/courses');
+            const data = [
+                { id: 101, name: "Java Programming Basics", ects: 5, department: "Computer Science" },
+                { id: 102, name: "Advanced Spring Boot & Microservices", ects: 8, department: "Software Engineering" }
+            ];
+            jsonResponse.textContent = JSON.stringify(data, null, 2);
+        });
+
+        document.getElementById('btn-get-students').addEventListener('click', () => {
+            appendLog('Received GET request: /api/students');
+            const data = [
+                { id: 1, name: "Maximilian Schenk", enrolledCourses: [101, 102], status: "ACTIVE" },
+                { id: 2, name: "John Doe", enrolledCourses: [101], status: "INACTIVE" }
+            ];
+            jsonResponse.textContent = JSON.stringify(data, null, 2);
+        });
+
+        document.getElementById('btn-post-student').addEventListener('click', () => {
+            appendLog('Received POST request: /api/students');
+            const newStudent = { id: 3, name: "Jane Smith", enrolledCourses: [102], status: "ACTIVE" };
+            jsonResponse.textContent = JSON.stringify(newStudent, null, 2);
+            appendLog('Successfully created student Jane Smith with ID 3.');
+        });
+
+        document.getElementById('btn-run-tests').addEventListener('click', () => {
+            appendLog('Running JUnit 5 Unit Tests...');
+            setTimeout(() => {
+                appendLog('Test class: CourseEnrollmentTest - PASSED');
+            }, 500);
+            setTimeout(() => {
+                appendLog('Test class: StudentRestApiControllerTest - PASSED');
+            }, 1000);
+            setTimeout(() => {
+                appendLog('-------------------------------------------------------');
+                appendLog(' T E S T S   P A S S E D');
+                appendLog('-------------------------------------------------------');
+                appendLog('Tests run: 14, Failures: 0, Errors: 0, Skipped: 0');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

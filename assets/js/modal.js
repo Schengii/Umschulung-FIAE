@@ -57,20 +57,23 @@
       ? `<div class="tech-tags">${tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>`
       : '';
 
-    const imageHTML = image
-      ? `<div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
-           <img src="${image}" alt="${titleDe}" class="project-image" loading="lazy">
-         </div>`
-      : '';
-
     // Check if there is a video playlist in window.projectsData
     const repoName = card.dataset.repoName;
     const projectData = (window.projectsData && Array.isArray(window.projectsData)) 
         ? window.projectsData.find(p => p.repoName === repoName) 
         : null;
 
-    let mediaHTML = imageHTML;
+    let images = [];
+    try {
+      images = card.dataset.images ? JSON.parse(decodeURIComponent(card.dataset.images)) : [];
+      images = images.filter(img => img);
+    } catch (_) {
+      images = image ? [image] : [];
+    }
+
+    let mediaHTML = '';
     let hasPlaylist = false;
+    let hasCarousel = false;
 
     if (projectData && Array.isArray(projectData.videoPlaylist) && projectData.videoPlaylist.length > 0) {
         hasPlaylist = true;
@@ -98,6 +101,33 @@
                 </p>
             </div>
         `;
+    } else if (images.length > 1) {
+        hasCarousel = true;
+        const slides = images.map(img => `
+            <img src="${img}" class="carousel-slide-img" alt="${titleDe}">
+        `).join('\n');
+        
+        const dots = images.map((_, idx) => `
+            <button class="carousel-dot${idx === 0 ? ' active' : ''}" data-index="${idx}" aria-label="Slide ${idx+1}"></button>
+        `).join('\n');
+
+        mediaHTML = `
+            <div class="modal-carousel-container" style="aspect-ratio:16/9; max-height:240px; margin-bottom:1rem;">
+                <div class="carousel-track" id="modal-carousel-track">
+                    ${slides}
+                </div>
+                <button class="carousel-btn prev-btn" id="carousel-prev" aria-label="Vorheriges Bild">‹</button>
+                <button class="carousel-btn next-btn" id="carousel-next" aria-label="Nächstes Bild">›</button>
+                <div class="carousel-dots" id="carousel-dots-container">
+                    ${dots}
+                </div>
+            </div>
+        `;
+    } else if (images.length === 1) {
+        mediaHTML = `
+            <div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
+               <img src="${images[0]}" alt="${titleDe}" class="project-image" loading="lazy">
+            </div>`;
     }
 
     const linkHTML = link
@@ -169,6 +199,44 @@
                 activeBtn.style.background = 'var(--primary-light)';
             }
         }
+    }
+
+    // Bind carousel navigation click listeners
+    if (hasCarousel) {
+        const track = modalBody.querySelector('#modal-carousel-track');
+        const prevBtn = modalBody.querySelector('#carousel-prev');
+        const nextBtn = modalBody.querySelector('#carousel-next');
+        const carouselDots = modalBody.querySelectorAll('.carousel-dot');
+        let activeIdx = 0;
+        const maxIdx = images.length - 1;
+
+        const updateCarousel = (newIdx) => {
+            activeIdx = newIdx;
+            track.style.transform = `translateX(-${activeIdx * 100}%)`;
+            carouselDots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === activeIdx);
+            });
+        };
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const newIdx = activeIdx === 0 ? maxIdx : activeIdx - 1;
+            updateCarousel(newIdx);
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const newIdx = activeIdx === maxIdx ? 0 : activeIdx + 1;
+            updateCarousel(newIdx);
+        });
+
+        carouselDots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newIdx = parseInt(dot.dataset.index);
+                updateCarousel(newIdx);
+            });
+        });
     }
 
     modal.classList.remove('hidden');
