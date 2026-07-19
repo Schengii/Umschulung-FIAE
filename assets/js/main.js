@@ -48,6 +48,7 @@ import { initProjectEnhancements } from './modules/project-enhancements.js';
 import { initImpressumEnhancements } from './modules/impressum-enhancements.js';
 import { initTimelineScroll } from './modules/timeline-scroll.js';
 import { initPremiumEffects } from './modules/premium-effects.js';
+import { initPremiumEffectsP2 } from './modules/premium-effects-p2.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -63,7 +64,7 @@ function bootstrap() {
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
         initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor,
         initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
-        initImpressumEnhancements, initTimelineScroll, initPremiumEffects
+        initImpressumEnhancements, initTimelineScroll, initPremiumEffects, initPremiumEffectsP2
     ];
 
     // Sequentially call all initializer functions

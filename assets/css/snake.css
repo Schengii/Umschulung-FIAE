@@ -41,3 +41,17 @@
 .snake-highscore-cell {
     padding: 0.5rem 0.25rem;
 }
+
+/* Screenshake & Red Glow Crash Flash */
+.game-layout.crash-flash {
+    animation: screenshake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    border-color: #ff3333 !important;
+    box-shadow: 0 0 25px rgba(255, 51, 51, 0.4) !important;
+}
+
+@keyframes screenshake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(3.5px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-5.5px, 0, 0); }
+    40%, 60% { transform: translate3d(5.5px, 0, 0); }
+}

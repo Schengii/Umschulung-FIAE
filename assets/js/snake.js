@@ -160,6 +160,15 @@ function gameOver() {
     isPaused = false;
     lastFrameTime = 0;
     
+    // Trigger screenshake / red-glow flash on the game layout card
+    const container = document.querySelector('.game-layout');
+    if (container) {
+        container.classList.add('crash-flash');
+        setTimeout(() => {
+            container.classList.remove('crash-flash');
+        }, 500);
+    }
+    
     if (typeof GameAudio !== 'undefined') {
         GameAudio.play('die');
     }

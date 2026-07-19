@@ -186,6 +186,9 @@ function renderNav(currentPage) {
                         <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
                     </div>
                 </div>
+                <button id="audio-toggle" class="audio-toggle-btn" aria-label="Sound umschalten" title="Sound umschalten">
+                    <i class="fa-solid ${StorageManager.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
+                </button>
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>

@@ -153,3 +153,10 @@ Folgende interaktive Features wurden hinzugefügt:
     - **Ambient Mouse Spotlight Follower**: Ein weicher, themenfarbiger Lichtkreis folgt dem Mauszeiger im Seitenhintergrund und interagiert nahtlos mit den transluzenten Glaselementen.
     - **Verstärkter Glassmorphismus & Radial-Glow Borders**: Karten besitzen eine noch realistischere Glasstruktur (`backdrop-filter` & custom box-shadows) und erhalten beim Überfahren mit der Maus einen hochpräzisen, kreisförmigen Lichtrahmen (Hover Glow Border).
     - **Staggered-Entrance Ladeanimationen**: Dashboard-Karten und Listeninhalte blenden beim Seitenaufruf flüssig und leicht zeitversetzt nacheinander von unten nach oben ein.
+11. **Page Transitions, Synthesized Audio Cues & Retro CRT Simulator**:
+    - **Weiche Page-Transitions**: Interne Link-Navigationen werden durch eine ganzseitige, sanft ein- und ausblendende Glas-Overlay-Maske verzögert und animiert.
+    - **Web Audio API Synthesizer-Sounds**: Vollständig programmgesteuerte, dateilose Ton-Synthese für Klicks (präzise Dreieckwellen-Entladung) und Hover-Events (subtile Sinuswellen-Impulse). Inklusive persistentem Stummschalter in der Header-Navigationsleiste.
+    - **Hacker Retro-CRT Git Simulator**: Der Git-Simulator-Terminal hat eine realistische 3D-Monitorwölbung (CRT-Krümmung), Scanlines (Abtastzeilen), mikro-flackerndes grünes Phosphorglühen und einen passenden blinkenden Terminal-Cursor erhalten.
+    - **3D Skill-Radar-Chart**: Das SVG-Radardiagramm ist in einen transluzenten Glashintergrund mit einem sich im Hintergrund drehenden 3D-Rasterkreis eingebettet.
+    - **Spiel-Interaktions-Feedback**: Das Memory-Spiel besitzt echte 3D-Kartenwendemanimationen mit Match-Erfolgs-Glows, und das Snake-Spiel reagiert bei Wand- oder Körperkollisionen mit einem intensiven Screenshake und einem roten Warnungs-Glow.
+
