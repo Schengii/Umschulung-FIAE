@@ -92,20 +92,18 @@
                         <span lang="de"><i class="fa fa-lock" aria-hidden="true"></i> Sensibler Bereich</span>
                         <span lang="en"><i class="fa fa-lock" aria-hidden="true"></i> Secured Area</span>
                     </h3>
-                    <p lang="de" style="font-size: 0.85rem; line-height: 1.3;">Geben Sie das Token aus dem Anschreiben
+                    <p lang="de" class="token-card-description">Geben Sie das Token aus dem Anschreiben
                         ein (z. B. <strong>fiae2026</strong>), um Gehaltswunsch und Zeugnisse freizuschalten.</p>
-                    <p lang="en" style="font-size: 0.85rem; line-height: 1.3;">Enter the token from the cover letter
+                    <p lang="en" class="token-card-description">Enter the token from the cover letter
                         (e.g., <strong>fiae2026</strong>) to unlock salary expectations and references.</p>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <input type="text" id="token-input" class="form-control" placeholder="Token" aria-label="Token"
-                            style="padding: 0.4rem; font-size: 0.9rem; flex-grow: 1; min-width: 0;">
-                        <button id="token-submit" class="btn-primary"
-                            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; white-space: nowrap;">
+                    <div class="token-input-group">
+                        <input type="text" id="token-input" class="form-control token-input-field" placeholder="Token" aria-label="Token">
+                        <button id="token-submit" class="btn-primary token-submit-btn">
                             <span lang="de">Freischalten</span>
                             <span lang="en">Unlock</span>
                         </button>
                     </div>
-                    <div id="token-error" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.4rem; display: none;">
+                    <div id="token-error" class="token-error-message" style="display: none;">
                         <span lang="de"><i class="fa fa-exclamation-circle"></i> Ungültiges Token</span>
                         <span lang="en"><i class="fa fa-exclamation-circle"></i> Invalid Token</span>
                     </div>
@@ -167,36 +165,33 @@
                         <span lang="en"><i class="fa fa-certificate" aria-hidden="true"></i> Credentials &amp;
                             Certs</span>
                     </h3>
-                    <ul class="certificates-list"
-                        style="list-style: none; padding: 0; font-size: 0.85rem; line-height: 1.4; margin-top: 0.5rem;">
-                        <li
-                            style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
-                            <span style="font-size: 1.1rem; color: #fbbf24;">🎓</span>
+                    <ul class="certificates-list">
+                        <li class="certificates-list-item">
+                            <span class="cert-emoji">🎓</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">IHK
+                                <div class="cert-title"><span lang="de">IHK
                                         Fachinformatiker</span><span lang="en">IHK certified FIAE</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span
+                                <div class="cert-subtitle"><span
                                         lang="de">Anwendungsentwicklung / Juni 2026</span><span lang="en">Application
                                         Development / June 2026</span></div>
                             </div>
                         </li>
-                        <li
-                            style="margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: start;">
-                            <span style="font-size: 1.1rem; color: #60a5fa;">⚡</span>
+                        <li class="certificates-list-item">
+                            <span class="cert-emoji">⚡</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">Elektroniker
+                                <div class="cert-title"><span lang="de">Elektroniker
                                         Betriebstechnik</span><span lang="en">Industrial Electronics Tech</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span lang="de">Januar
+                                <div class="cert-subtitle"><span lang="de">Januar
                                         2022 / IHK Bonn/Rhein-Sieg</span><span lang="en">January 2022 / IHK Bonn</span>
                                 </div>
                             </div>
                         </li>
-                        <li style="display: flex; gap: 0.5rem; align-items: start;">
-                            <span style="font-size: 1.1rem; color: #34d399;">🛡️</span>
+                        <li class="certificates-list-item-last">
+                            <span class="cert-emoji">🛡️</span>
                             <div>
-                                <div style="font-weight: bold; color: var(--text-primary);"><span lang="de">DGUV V3
+                                <div class="cert-title"><span lang="de">DGUV V3
                                         Prüftechniker</span><span lang="en">DGUV V3 Inspector</span></div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;"><span
+                                <div class="cert-subtitle"><span
                                         lang="de">Sicherheitsprüfung elektr. Anlagen</span><span lang="en">Electrical
                                         Safety Regulations</span></div>
                             </div>
@@ -379,65 +374,19 @@
 
                     <!-- Locked State Placeholder -->
                     <div class="token-locked-placeholder">
-                        <div
-                            style="text-align: center; padding: 1.5rem; background: rgba(0,0,0,0.02); border: 1px dashed var(--border); border-radius: 8px;">
-                            <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🔒</span>
-                            <h4 lang="de" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Inhalte gesperrt</h4>
-                            <h4 lang="en" style="color: var(--text-muted); margin: 0 0 0.5rem 0;">Content Locked</h4>
-                            <p lang="de" style="font-size: 0.85rem; margin-bottom: 0;">Bitte geben Sie das passende
+                        <div class="locked-placeholder-box">
+                            <span class="locked-placeholder-icon">🔒</span>
+                            <h4 lang="de" class="locked-placeholder-title">Inhalte gesperrt</h4>
+                            <h4 lang="en" class="locked-placeholder-title">Content Locked</h4>
+                            <p lang="de" class="locked-placeholder-text">Bitte geben Sie das passende
                                 Token im linken Seitenmenü ein, um diese Daten anzuzeigen.</p>
-                            <p lang="en" style="font-size: 0.85rem; margin-bottom: 0;">Please enter the matching token
+                            <p lang="en" class="locked-placeholder-text">Please enter the matching token
                                 in the left sidebar card to access this information.</p>
                         </div>
                     </div>
 
                     <!-- Unlocked State Content -->
-                    <div class="token-secured hidden-secured" style="display: none;">
-                        <div
-                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start;">
-                            <div>
-                                <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
-                                    <span lang="de"><i class="fa fa-euro-sign" aria-hidden="true"></i>
-                                        Gehaltsvorstellung</span>
-                                    <span lang="en"><i class="fa fa-euro-sign" aria-hidden="true"></i> Salary
-                                        Expectation</span>
-                                </h3>
-                                <p
-                                    style="font-size: 1.35rem; font-weight: bold; color: var(--primary); margin: 0.5rem 0;">
-                                    45.000 € – 52.000 € <span
-                                        style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted);">p.a.
-                                        (verhandelbar)</span>
-                                </p>
-                                <p lang="de"
-                                    style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
-                                    Abhängig von Zusatzleistungen, Arbeitszeitmodell und konkretem Aufgabengebiet.</p>
-                                <p lang="en"
-                                    style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
-                                    Depending on benefits, work-time model, and concrete field of tasks.</p>
-                            </div>
-                            <div>
-                                <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--text-primary);">
-                                    <span lang="de"><i class="fa fa-file-pdf" aria-hidden="true"></i> Zeugnisse &amp;
-                                        Nachweise</span>
-                                    <span lang="en"><i class="fa fa-file-pdf" aria-hidden="true"></i> Certificates &amp;
-                                        References</span>
-                                </h3>
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                                    <a href="assets/pdf/IHK_Zeugnis_Dummy.pdf" class="btn-secondary" download
-                                        style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
-                                        <i class="fa fa-download" aria-hidden="true"></i>
-                                        <span lang="de">IHK-Zeugnis (Simuliert)</span>
-                                        <span lang="en">IHK Certificate (Simulated)</span>
-                                    </a>
-                                    <a href="assets/pdf/Praktikumszeugnis_DFG_Dummy.pdf" class="btn-secondary" download
-                                        style="display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; padding: 0.5rem; font-size: 0.9rem;">
-                                        <i class="fa fa-download" aria-hidden="true"></i>
-                                        <span lang="de">Praktikumszeugnis DFG</span>
-                                        <span lang="en">Internship Reference DFG</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="token-secured hidden-secured" style="display: none;" data-encrypted-content="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">
                     </div>
                 </section>
 
@@ -485,21 +434,19 @@
         </div>
 
         <!-- Call to action (Screen only) -->
-        <div class="card cv-download-card no-print"
-            style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+        <div class="card cv-download-card cv-download-card-custom no-print">
             <div>
-                <h3 lang="de" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Bereit zum
+                <h3 lang="de" class="cv-download-card-title"><i class="fa fa-file-pdf" aria-hidden="true"></i> Bereit zum
                     Drucken?</h3>
-                <h3 lang="en" style="margin-top: 0;"><i class="fa fa-file-pdf" aria-hidden="true"></i> Ready for Print?
+                <h3 lang="en" class="cv-download-card-title"><i class="fa fa-file-pdf" aria-hidden="true"></i> Ready for Print?
                 </h3>
-                <p lang="de" style="margin-bottom: 0;">Du kannst diesen Lebenslauf direkt aus dem Browser als
+                <p lang="de" class="cv-download-card-text">Du kannst diesen Lebenslauf direkt aus dem Browser als
                     formatiertes PDF ausdrucken oder speichern. Alle Menüs werden automatisch ausgeblendet.</p>
-                <p lang="en" style="margin-bottom: 0;">You can print this resume directly from your browser as a
+                <p lang="en" class="cv-download-card-text">You can print this resume directly from your browser as a
                     perfectly formatted PDF. Menus and footers are automatically hidden.</p>
             </div>
             <div>
-                <button class="btn-primary" onclick="window.print()"
-                    style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <button class="btn-primary cv-download-print-btn" onclick="window.print()">
                     <i class="fa fa-print" aria-hidden="true"></i>
                     <span lang="de">PDF drucken / speichern</span>
                     <span lang="en">Print / Save as PDF</span>

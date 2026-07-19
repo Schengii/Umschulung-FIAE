@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News & Blog - Umschulung IT | Maximilian Schenk</title>
     <meta property="og:title" content="News & Blog — Umschulung IT Portfolio">
@@ -16,6 +17,47 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="assets/js/components.js"></script>
+    <style>
+        .news-controls-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .filter-bar-news {
+            margin-bottom: 0;
+        }
+        .search-container-news {
+            position: relative;
+            display: flex;
+            align-items: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        .search-icon-news {
+            position: absolute;
+            left: 1rem;
+            color: var(--text-muted);
+        }
+        .search-input-news {
+            padding-left: 2.5rem;
+            height: 38px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            outline: none;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .archive-list-news {
+            padding-left: 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
 </head>
 
 <body>
@@ -30,9 +72,9 @@
     <!-- Main Content -->
     <main id="main-content" class="main-container">
         <!-- Controls Bar with filters and live search -->
-        <div class="news-controls-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+        <div class="news-controls-container">
             <!-- Category Filter Bar -->
-            <div class="filter-bar" style="margin-bottom: 0;">
+            <div class="filter-bar filter-bar-news">
                 <button class="btn-filter active" data-filter="all"><span lang="de">Alle</span><span lang="en">All Posts</span></button>
                 <button class="btn-filter" data-filter="milestone"><span lang="de">Meilensteine</span><span lang="en">Milestones</span></button>
                 <button class="btn-filter" data-filter="bfw"><span lang="de">Theorie (BFW)</span><span lang="en">Theory (BFW)</span></button>
@@ -40,9 +82,9 @@
             </div>
 
             <!-- News Search container -->
-            <div class="search-container" style="position: relative; display: flex; align-items: center; max-width: 300px; width: 100%;">
-                <i class="fa fa-search search-icon" aria-hidden="true" style="position: absolute; left: 1rem; color: var(--text-muted);"></i>
-                <input type="text" id="news-searchbar" class="search-input" placeholder="News durchsuchen..." style="padding-left: 2.5rem; height: 38px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); outline: none; font-size: 0.9rem; width: 100%;" aria-label="News durchsuchen">
+            <div class="search-container search-container-news">
+                <i class="fa fa-search search-icon search-icon-news" aria-hidden="true"></i>
+                <input type="text" id="news-searchbar" class="search-input search-input-news" placeholder="News durchsuchen..." aria-label="News durchsuchen">
             </div>
         </div>
 
@@ -57,7 +99,7 @@
                     <h3 id="archive-title"><span lang="de">Archiv &amp; Updates</span><span lang="en">Archive &amp; Updates</span></h3>
                     <p lang="de">Hier findest du ältere Meilensteine und Updates rund um meine berufliche Rehabilitation.</p>
                     <p lang="en">Here you will find older milestones and logs regarding my rehabilitation process.</p>
-                    <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary);">
+                    <ul class="archive-list-news">
                         <li><span lang="de">Oktober 2023: Zusage &amp; LTA-Bewilligung (DRV)</span><span lang="en">October 2023: Retraining approval (DRV)</span></li>
                         <li><span lang="de">September 2023: Arbeitserprobung &amp; Assessment im BFW Köln</span><span lang="en">September 2023: Work assessment &amp; testing at BFW Cologne</span></li>
                         <li><span lang="de">März 2023: Physiotherapie &amp; Reha (Kinzigtal Klinik)</span><span lang="en">March 2023: Physical therapy &amp; rehab (Kinzigtal Clinic)</span></li>

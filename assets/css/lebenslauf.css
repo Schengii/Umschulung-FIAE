@@ -359,6 +359,109 @@
     }
 }
 
+/* Token Card Screen Styles */
+.token-card-description {
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+.token-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.token-input-field {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    flex-grow: 1;
+    min-width: 0;
+}
+.token-submit-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+.token-error-message {
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+}
+
+/* Certificates List styles */
+.certificates-list {
+    list-style: none;
+    padding: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: 0.5rem;
+}
+.certificates-list-item {
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: start;
+}
+.certificates-list-item-last {
+    display: flex;
+    gap: 0.5rem;
+    align-items: start;
+}
+.cert-emoji {
+    font-size: 1.1rem;
+}
+.cert-title {
+    font-weight: bold;
+    color: var(--text-primary);
+}
+.cert-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Locked Placeholder box */
+.locked-placeholder-box {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.02);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+}
+.locked-placeholder-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.locked-placeholder-title {
+    color: var(--text-muted);
+    margin: 0 0 0.5rem 0;
+}
+.locked-placeholder-text {
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+/* CV Download Call to Action Card */
+.cv-download-card-custom {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+.cv-download-card-title {
+    margin-top: 0;
+}
+.cv-download-card-text {
+    margin-bottom: 0;
+}
+.cv-download-print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* ==========================================================================
    PRINT STYLES (@media print)
    Optimized for high-quality grayscale/color PDF rendering on A4 paper.

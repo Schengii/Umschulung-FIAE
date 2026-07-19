@@ -56,8 +56,8 @@
     justify-content: center;
     align-items: center;
     background: var(--bg-card) !important;
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     padding: 1.5rem;
@@ -142,6 +142,7 @@
     fill: var(--text-primary);
     text-anchor: middle;
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 

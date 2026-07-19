@@ -82,8 +82,10 @@ Wertet URL-Parameter (z. B. `?c=Company` und `?n=Name`) aus, speichert sie in de
 Scannt die Ordner unter `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) sowie `assets/js/projects_data.js`.
 - Befehl zum Ausführen: `npm run generate-data`
 
-### 7. Token-Schutz für sensible Bewerbungsdaten (`token-auth.js`)
-Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** im Seitenmenü oder per Parameter `?token=fiae2026` freigeschaltet.
+### 7. Kryptografischer Token-Schutz & DSGVO-Audits (`token-auth.js`)
+Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** im Seitenmenü oder per Parameter `?token=fiae2026` freigeschaltet. 
+- **Echte Client-Kryptografie**: Um zu verhindern, dass vertrauliche Daten durch das Einsehen der Quellcodedateien im Browser kopiert werden können, sind Gehaltswunsch und Zeugnislinks im HTML-Code als Base64-verschlüsselter XOR-Payload hinterlegt. Erst nach erfolgreicher Eingabe des Tokens wird der Payload im Browser mit dem Key entschlüsselt und im DOM gerendert.
+- **DSGVO & CSP**: Alle Seiten erzwingen eine strenge Content-Security-Policy (CSP) per Meta-Tag im Header. Zudem werden Google Fonts offline gehostet, um IP-Leaks zu Google-Servern zu verhindern.
 
 ---
 

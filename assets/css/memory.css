@@ -93,6 +93,7 @@
     background: var(--bg-card);
     color: var(--primary);
     font-size: 1.6rem;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 

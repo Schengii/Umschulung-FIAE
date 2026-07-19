@@ -71,6 +71,20 @@ export function initTokenAuth() {
     }
 }
 
+function decryptPayload(base64Payload, key) {
+    try {
+        const binary = atob(base64Payload);
+        let decrypted = '';
+        for (let i = 0; i < binary.length; i++) {
+            decrypted += String.fromCharCode(binary.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return decrypted;
+    } catch (e) {
+        console.error('XOR Decryption failed:', e);
+        return '';
+    }
+}
+
 function updateSecuredContentVisibility() {
     const activeToken = sessionStorage.getItem(TOKEN_SESSION_KEY);
     const isAuthorized = activeToken === VALID_TOKEN;
@@ -80,6 +94,21 @@ function updateSecuredContentVisibility() {
 
     securedElements.forEach(el => {
         if (isAuthorized) {
+            // Decrypt the payload on-demand if it hasn't been decrypted yet
+            if (!el.dataset.decrypted) {
+                const encryptedPayload = el.getAttribute('data-encrypted-content');
+                if (encryptedPayload) {
+                    const decryptedHtml = decryptPayload(encryptedPayload, VALID_TOKEN);
+                    if (decryptedHtml) {
+                        el.innerHTML = decryptedHtml;
+                        el.dataset.decrypted = 'true';
+                        
+                        // Retrigger language translations on newly injected content
+                        const currentLang = document.documentElement.getAttribute('lang') || 'de';
+                        document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
+                    }
+                }
+            }
             el.classList.remove('hidden-secured');
             el.style.display = '';
         } else {

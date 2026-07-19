@@ -364,6 +364,8 @@ function renderGraph() {
         rect.setAttribute('width', 70);
         rect.setAttribute('height', 18);
         rect.setAttribute('class', 'ref-rect');
+        rect.setAttribute('rx', '4');
+        rect.setAttribute('ry', '4');
         rect.setAttribute('fill', '#161b22');
         rect.setAttribute('stroke', BRANCH_COLORS[branchName] || BRANCH_COLORS.default);
         labelsGroup.appendChild(rect);
@@ -396,6 +398,8 @@ function renderGraph() {
             headRect.setAttribute('width', 50);
             headRect.setAttribute('height', 18);
             headRect.setAttribute('class', 'ref-rect');
+            headRect.setAttribute('rx', '4');
+            headRect.setAttribute('ry', '4');
             headRect.setAttribute('fill', '#161b22');
             headRect.setAttribute('stroke', '#ff7b72');
             labelsGroup.appendChild(headRect);
@@ -439,6 +443,8 @@ function renderGraph() {
             rect.setAttribute('width', 90);
             rect.setAttribute('height', 18);
             rect.setAttribute('class', 'ref-rect');
+            rect.setAttribute('rx', '4');
+            rect.setAttribute('ry', '4');
             rect.setAttribute('fill', '#161b22');
             rect.setAttribute('stroke', '#ff7b72');
             labelsGroup.appendChild(rect);
