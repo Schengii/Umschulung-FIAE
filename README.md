@@ -148,3 +148,8 @@ Folgende interaktive Features wurden hinzugefügt:
 9. **Dynamischer Lebenslauf-Timeline-Pfad (Scroll-Linked SVG)**:
    - **Interaktiver Scroll-Pfad**: Auf der Lebenslauf-Seite werden die statischen Ränder der Timeline-Container durch dynamische SVG-Pfad-Linien ersetzt, die sich beim Herunterscrollen flüssig einfärben.
    - **Pulsierende Meilensteine**: Sobald eine berufliche oder schulische Station im Viewport erreicht wird, vergrößert sich die jeweilige Timeline-Kugel (Marker) und erhält einen weichen, pulsierenden Farb-Glow.
+10. **Premium UI/UX Core & 3D Interactive Design**:
+    - **Globaler 3D-Card-Tilt**: Alle Haupt- und Detail-Karten neigen sich interaktiv in 3D in Richtung des Mauszeigers (mit Performance-Fallback für Mobilgeräte).
+    - **Ambient Mouse Spotlight Follower**: Ein weicher, themenfarbiger Lichtkreis folgt dem Mauszeiger im Seitenhintergrund und interagiert nahtlos mit den transluzenten Glaselementen.
+    - **Verstärkter Glassmorphismus & Radial-Glow Borders**: Karten besitzen eine noch realistischere Glasstruktur (`backdrop-filter` & custom box-shadows) und erhalten beim Überfahren mit der Maus einen hochpräzisen, kreisförmigen Lichtrahmen (Hover Glow Border).
+    - **Staggered-Entrance Ladeanimationen**: Dashboard-Karten und Listeninhalte blenden beim Seitenaufruf flüssig und leicht zeitversetzt nacheinander von unten nach oben ein.

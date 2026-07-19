@@ -6543,3 +6543,112 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
         grid-template-columns: repeat(2, 1fr) !important;
     }
 }
+
+/* ==========================================================================
+   PREMIUM EFFECTS (GLASSMORPHISM, 3D TILT, MOUSE SPOTLIGHT, STAGGERED INTROS)
+   ========================================================================== */
+
+/* Cursor spotlight follower element */
+.cursor-glow {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(79, 70, 229, 0.04) 50%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 0; /* behind cards/text but above layout grid/bg */
+    mix-blend-mode: screen;
+    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+body.cursor-active .cursor-glow {
+    opacity: 1;
+}
+/* Ensure dark mode has matching theme colors for cursor */
+[data-theme="dark"] .cursor-glow {
+    background: radial-gradient(circle, rgba(96, 165, 250, 0.14) 0%, rgba(139, 92, 246, 0.05) 50%, rgba(0, 0, 0, 0) 70%);
+}
+
+/* Premium Glassmorphism Cards */
+.card-glass {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05) !important;
+    position: relative;
+    overflow: hidden;
+}
+[data-theme="dark"] .card-glass {
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dynamic Radial Border Glow on Hover */
+.card-glow-border {
+    position: relative;
+}
+.card-glow-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px; /* width of border */
+    background: radial-gradient(
+        250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        rgba(37, 99, 235, 0.4),
+        transparent 60%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.card-glow-border:hover::before {
+    opacity: 1;
+}
+[data-theme="dark"] .card-glow-border::before {
+    background: radial-gradient(
+        250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        rgba(96, 165, 250, 0.5),
+        transparent 60%
+    );
+}
+
+/* 3D Tilt Card Base styling */
+.card-tilt-3d {
+    transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+.card-tilt-3d:hover {
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1) !important;
+}
+[data-theme="dark"] .card-tilt-3d:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+}
+/* Sub-elements within 3D card that lift up */
+.card-tilt-3d .lift-3d {
+    transform: translateZ(20px);
+    transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Premium Staggered Animations */
+@keyframes fadeInUpPremium {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.stagger-entrance {
+    opacity: 0;
+    animation: fadeInUpPremium 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
