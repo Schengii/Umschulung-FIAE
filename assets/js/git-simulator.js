@@ -73,6 +73,26 @@ const LEVELS = {
             }
             return false;
         }
+    },
+    lvl5: {
+        titleDe: "Level 5: Stash & Work-in-Progress",
+        titleEn: "Level 5: Stash & Work-in-Progress",
+        descDe: "Speichere unfertige Änderungen im Stash ab.<br>Führe <code>git stash</code> und anschließend <code>git stash pop</code> aus.",
+        descEn: "Stash uncommitted work-in-progress.<br>Run <code>git stash</code> and then <code>git stash pop</code>.",
+        check: () => {
+            const commits = Object.values(gitState.commits);
+            return commits.length >= 2;
+        }
+    },
+    lvl6: {
+        titleDe: "Level 6: Cherry-Pick (Profi)",
+        titleEn: "Level 6: Cherry-Pick (Pro)",
+        descDe: "Kopiere einen spezifischen Commit von einem anderen Branch.<br>1. Erstelle Branch <code>feature/hotfix</code> und mache einen Commit.<br>2. Wechsle auf <code>main</code> und kopiere den Commit mit <code>git cherry-pick &lt;hash&gt;</code>.",
+        descEn: "Copy a specific commit from another branch.<br>1. Create branch <code>feature/hotfix</code> and commit.<br>2. Switch to <code>main</code> and copy the commit via <code>git cherry-pick &lt;hash&gt;</code>.",
+        check: () => {
+            const commits = Object.values(gitState.commits);
+            return commits.some(c => c.message && c.message.includes('Cherry-picked'));
+        }
     }
 };
 

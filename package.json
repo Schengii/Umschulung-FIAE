@@ -4,7 +4,8 @@
   "description": "Portfolio Maximilian Schenk",
   "scripts": {
     "test": "playwright test",
-    "generate-data": "node scripts/generate_projects_data.js"
+    "generate-data": "node scripts/generate_projects_data.js",
+    "check-sync": "node scripts/check_data_sync.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.45.0"

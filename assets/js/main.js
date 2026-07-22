@@ -49,6 +49,13 @@ import { initImpressumEnhancements } from './modules/impressum-enhancements.js';
 import { initTimelineScroll } from './modules/timeline-scroll.js';
 import { initPremiumEffects } from './modules/premium-effects.js';
 import { initPremiumEffectsP2 } from './modules/premium-effects-p2.js';
+import { initSkillMatchmaker } from './modules/skill-matchmaker.js';
+import { initPdfExporter } from './modules/pdf-exporter.js';
+import { initIcalGenerator } from './modules/ical-generator.js';
+import { initIhkExamSimulator } from './modules/ihk-exam-simulator.js';
+import { initSqlPlayground } from './modules/sql-playground.js';
+import { initC4Architecture } from './modules/c4-architecture.js';
+import { initAudioPitch } from './modules/audio-pitch.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -64,7 +71,9 @@ function bootstrap() {
         initPraktikumsbetriebMedia, initDashboard, initQrGenerator,
         initDocumentPreview, initFaqAccordion, initTokenAuth, initAccentColor,
         initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
-        initImpressumEnhancements, initTimelineScroll, initPremiumEffects, initPremiumEffectsP2
+        initImpressumEnhancements, initTimelineScroll, initPremiumEffects, initPremiumEffectsP2,
+        initSkillMatchmaker, initPdfExporter, initIcalGenerator, initIhkExamSimulator,
+        initSqlPlayground, initC4Architecture, initAudioPitch
     ];
 
     // Sequentially call all initializer functions
