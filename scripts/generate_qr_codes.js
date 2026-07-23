@@ -11,19 +11,19 @@ const baseDomain = 'https://max-schenk.developerakademie.net/Umschulung-FIAE';
 const qrCodesToGenerate = [
   {
     filename: 'qr_portfolio.png',
-    url: `${baseDomain}/portfolio.html`
+    url: `${baseDomain}/pages/portfolio.html`
   },
   {
     filename: 'qr_interview.png',
-    url: `${baseDomain}/interview-trainer.html`
+    url: `${baseDomain}/pages/interview-trainer.html`
   },
   {
     filename: 'qr_playground.png',
-    url: `${baseDomain}/playground.html`
+    url: `${baseDomain}/pages/playground.html`
   },
   {
     filename: 'qr_home.png',
-    url: `${baseDomain}/home.html`
+    url: `${baseDomain}/pages/home.html`
   }
 ];
 

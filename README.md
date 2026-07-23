@@ -13,40 +13,42 @@ Das Projekt ist als **moderne, statische Web-App (PWA)** ohne schwerfällige Bac
 ```text
 Umschulung-FIAE/
 │
-├── index.html                   # Einstiegsseite (Namenseingabe für Personalisierung)
-├── home.html                    # Hauptseite / Landing-Dashboard
-├── dashboard.html               # Notenrechner & IHK-Notensimulation
-├── portfolio.html               # Projekt-Galerie (EcoChef, ElektroCheck AI, etc.)
-├── links.html                   # Quellen-Sammlung & QR-Code-Generator für Recruiter
-├── ...                          # Weitere Inhaltsseiten (ausbildungsablauf.html, ueber-mich.html, etc.)
-│
+├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen & Personalisierung)
 ├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten
 ├── playwright.config.js         # Playwright E2E Testkonfiguration
 ├── sw.js                        # Service Worker für Offline-Caching & PWA-Fähigkeit
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
+├── pages/                       # Aufgeräumter Ordner für alle Inhaltsseiten
+│   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
+│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (EcoChef, ElektroCheck AI, etc.)
+│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-geschützten Zeugnissen
+│   ├── ueber-mich.html          # Steckbrief & Elektroniker-FIAE-Transfermatrix
+│   ├── dashboard.html           # IHK-Notensimulation & Notenrechner
+│   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
+│   └── ...                      # Weitere Seiten (architecture.html, flashcards.html, impressum.html, etc.)
+│
 ├── assets/                      # Globale Web-Ressourcen
-│   ├── css/                     # Stylesheets (Kombiniertes style.css, modal.css, skeletons.css)
+│   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, darkmode.css)
 │   ├── js/                      # Script-Dateien
 │   │   ├── main.js              # Kern-Initialisierung & dynamischer Modul-Loader
 │   │   ├── components.js        # Header- und Footer-Komponenten (Templating)
+│   │   ├── constants.js         # Globale App-Konstanten & Pfadauflösung (resolveAssetPath)
 │   │   ├── dashboard.js         # Steuerungslogik für den IHK-Notenrechner
 │   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering
-│   │   └── modules/             # Abgekapselte JavaScript-Feature-Module
+│   │   └── modules/             # Abgekapselte JavaScript-Feature-Module & E2E-Tests
 │   │       ├── achievements.js  # Erfolge-Widget (Widget & Toast-Benachrichtigung)
 │   │       ├── qr-generator.js  # Interaktiver Recruiter QR-Code-Generator
-│   │       ├── username-greeting.js # URL-Parsing & Recruiter-Begrüßungsbanner
-│   │       └── ...              # Weitere Hilfs-Module (learning-progress.js, easter-eggs.js)
+      └── ...              # Weitere Hilfs-Module (learning-progress.js, all_pages.spec.js)
 │   │
-│   ├── data/                    # JSON-Datenspeicher
-│   │   └── projects.json        # Generierte Datenbank aller Projekte (wird per Script befüllt)
-│   └── images/                  # Bilder und Favicons
+│   ├── data/                    # JSON-Datenspeicher (projects.json)
+│   └── images/                  # Bilder, Screenshots & Favicons
 │
 ├── Projekte/                    # Unterordner für eigenständige IHK-Übungsprojekte
 │   ├── EcoChef/                 # IHK-Abschlussprojekt (HTML/JS/JSON)
 │   ├── ElektroCheck AI/         # Bounding-Box Objekterkennung (AI)
-│   └── ...                      # Weitere Übungen (Glücksspiel, Jobbsuche, etc.)
+│   └── ...                      # Weitere Übungen (Glücksspiel, Jobsuche, ManuFaktur, etc.)
 │
 └── scripts/                     # Automatisierungs- & Build-Skripte (Node.js)
     ├── generate_projects_data.js # Scannt Projekte und generiert assets/js/projects_data.js

@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch all project data sources
             const [staticProjects, githubRepos, customProjects] = await Promise.all([
-                fetch('./assets/data/projects.json').then(res => res.ok ? res.json() : []),
+                fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json')).then(res => res.ok ? res.json() : []),
                 fetchGitHubRepos(),
                 JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]')
             ]);
@@ -157,8 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             project.downloadPpts.forEach(ppt => {
                 const pptTitle = lang === 'de' ? ppt.titleDe : ppt.titleEn;
+                const pptUrl = (window.resolveAssetPath || (p => p))(ppt.url);
                 mediaHTML += `
-                    <a href="${ppt.url}" class="ppt-download-card" download aria-label="Download ${pptTitle}">
+                    <a href="${pptUrl}" class="ppt-download-card" download aria-label="Download ${pptTitle}">
                         <div class="ppt-icon-wrapper">
                             <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
                         </div>
@@ -238,8 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        const projectImgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
+
         detailContainer.innerHTML = `
-            ${project.image ? `<img src="${project.image}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);">` : ''}
+            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);">` : ''}
             
             <h2 lang="de">${project.titleDe}</h2>
             <h2 lang="en">${project.titleEn}</h2>
@@ -299,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const videoItem = project.videoPlaylist[activeIndex];
 
             const wasPaused = videoEl.paused;
-            videoEl.src = videoItem.url;
+            videoEl.src = (window.resolveAssetPath || (p => p))(videoItem.url);
             videoEl.load();
 
             if (shouldPlay && !wasPaused) {
@@ -390,9 +393,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
             : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;
 
+        const imgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
+
         return `
             <a href="${url}" class="related-project-card">
-                ${project.image ? `<img src="${project.image}" alt="" loading="lazy">` : ''}
+                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy">` : ''}
                 <div class="related-project-info">
                     <h4 lang="de">${project.titleDe}</h4>
                     <h4 lang="en">${project.titleEn}</h4>
@@ -517,7 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(filePath);
+            const resolvedPath = (window.resolveAssetPath || (p => p))(filePath);
+            const response = await fetch(resolvedPath);
             if (!response.ok) throw new Error('Datei konnte nicht geladen werden.');
             const codeText = await response.text();
             codeView.textContent = codeText;
@@ -564,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.addEventListener('click', () => {
             const lang = document.documentElement.getAttribute('lang') || 'de';
             titleSpan.textContent = lang === 'de' ? project.titleDe : project.titleEn;
-            iframe.src = project.link;
+            iframe.src = (window.resolveAssetPath || (p => p))(project.link);
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         });

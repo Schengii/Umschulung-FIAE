@@ -52,7 +52,9 @@ export function initUsernameGreeting() {
                         <span lang="en">Enter</span>
                     `;
                     document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-                    window.location.href = 'home.html';
+                    const path = window.location.pathname;
+                    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
+                    window.location.href = isPagesFolder ? 'home.html' : 'pages/home.html';
                 }, 800);
             } else {
                 myText.focus();

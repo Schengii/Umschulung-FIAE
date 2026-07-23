@@ -87,6 +87,11 @@ function renderHeader(currentPage) {
    NAVIGATION
    ============================================================ */
 function renderNav(currentPage) {
+    const path = window.location.pathname;
+    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
+    const pagePrefix = isPagesFolder ? '' : 'pages/';
+    const indexPath = isPagesFolder ? '../index.html' : 'index.html';
+
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
     const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
@@ -105,62 +110,62 @@ function renderNav(currentPage) {
             </button>
             <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item${active('home.html')}">
-                    <a href="home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+                    <a href="${pagePrefix}home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 </li>
                 <li class="nav-item${active(ueberMichPages)}">
                     <a href="#" class="nav-link"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="ueber-mich.html" class="dropdown-link"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
-                        <li><a href="lebenslauf.html" class="dropdown-link"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
+                        <li><a href="${pagePrefix}ueber-mich.html" class="dropdown-link"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
+                        <li><a href="${pagePrefix}lebenslauf.html" class="dropdown-link"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active(ausbildungPages)}">
                     <a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="ausbildungsablauf.html" class="dropdown-link"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
-                        <li><a href="berufsfoerderungswerk.html" class="dropdown-link"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
+                        <li><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
+                        <li><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
                         <li class="dropdown-item">
-                            <a href="kostentraeger.html" class="dropdown-link"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <a href="${pagePrefix}kostentraeger.html" class="dropdown-link"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu">
                                 <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
                                 <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
                                 <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="praktikumsbetrieb.html" class="dropdown-link"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
+                        <li><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('portfolio.html')}">
-                    <a href="portfolio.html" class="nav-link"><i class="fa fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a>
+                    <a href="${pagePrefix}portfolio.html" class="nav-link"><i class="fa fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a>
                 </li>
                 <li class="nav-item${active(['impressum.html', 'datenschutz.html'])}">
-                    <a href="impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Impressum</span><span lang="en">Contact</span></a>
+                    <a href="${pagePrefix}impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Impressum</span><span lang="en">Contact</span></a>
                 </li>
                 <li class="nav-item${active('news.html')}">
-                    <a href="news.html" class="nav-link"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> News</a>
+                    <a href="${pagePrefix}news.html" class="nav-link"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> News</a>
                 </li>
                 <li class="nav-item${active('links.html')}">
-                    <a href="links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a>
+                    <a href="${pagePrefix}links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a>
                 </li>
                 <li class="nav-item${active(weiteresPages)}">
                     <a href="#" class="nav-link"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
-                        <li><a href="playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
-                        <li><a href="architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
-                        <li><a href="flashcards.html" class="dropdown-link"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
-                        <li><a href="dashboard.html" class="dropdown-link"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
-                        <li><a href="quiz.html" class="dropdown-link"><span lang="de">Test Quiz</span><span lang="en">Quiz Test</span></a></li>
+                        <li><a href="${pagePrefix}interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
+                        <li><a href="${pagePrefix}playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
+                        <li><a href="${pagePrefix}architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
+                        <li><a href="${pagePrefix}flashcards.html" class="dropdown-link"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
+                        <li><a href="${pagePrefix}dashboard.html" class="dropdown-link"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
+                        <li><a href="${pagePrefix}quiz.html" class="dropdown-link"><span lang="de">Test Quiz</span><span lang="en">Quiz Test</span></a></li>
                         <li class="dropdown-item">
-                            <a href="games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <a href="${pagePrefix}games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu">
-                                <li><a href="snake.html" class="dropdown-link">Snake JS</a></li>
-                                <li><a href="memory.html" class="dropdown-link">Memory JS</a></li>
-                                <li><a href="quiz.html" class="dropdown-link">Quiz JS</a></li>
-                                <li><a href="git-simulator.html" class="dropdown-link">Git Simulator</a></li>
+                                <li><a href="${pagePrefix}snake.html" class="dropdown-link">Snake JS</a></li>
+                                <li><a href="${pagePrefix}memory.html" class="dropdown-link">Memory JS</a></li>
+                                <li><a href="${pagePrefix}quiz.html" class="dropdown-link">Quiz JS</a></li>
+                                <li><a href="${pagePrefix}git-simulator.html" class="dropdown-link">Git Simulator</a></li>
                             </ul>
                         </li>
-                        <li><a href="index.html" class="dropdown-link"><span lang="de">Startseite</span><span lang="en">Welcome Page</span></a></li>
+                        <li><a href="${indexPath}" class="dropdown-link"><span lang="de">Startseite</span><span lang="en">Welcome Page</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -203,6 +208,10 @@ function renderNav(currentPage) {
    ============================================================ */
 function renderFooter() {
     const year = new Date().getFullYear();
+    const path = window.location.pathname;
+    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
+    const pagePrefix = isPagesFolder ? '' : 'pages/';
+
     return `
     <footer class="app-footer">
         <!-- SVG wave decoration at the top of the footer (Parallax gentle waves) -->
@@ -241,11 +250,11 @@ function renderFooter() {
                     <h4 lang="de">Navigation</h4>
                     <h4 lang="en">Navigation</h4>
                     <ul class="footer-links-list">
-                        <li><a href="home.html" class="footer-link">Home</a></li>
-                        <li><a href="portfolio.html" class="footer-link"><span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
-                        <li><a href="news.html" class="footer-link">News</a></li>
-                        <li><a href="impressum.html" class="footer-link"><span lang="de">Impressum &amp; Kontakt</span><span lang="en">Contact</span></a></li>
-                        <li><a href="datenschutz.html" class="footer-link"><span lang="de">Datenschutz</span><span lang="en">Privacy</span></a></li>
+                        <li><a href="${pagePrefix}home.html" class="footer-link">Home</a></li>
+                        <li><a href="${pagePrefix}portfolio.html" class="footer-link"><span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
+                        <li><a href="${pagePrefix}news.html" class="footer-link">News</a></li>
+                        <li><a href="${pagePrefix}impressum.html" class="footer-link"><span lang="de">Impressum &amp; Kontakt</span><span lang="en">Contact</span></a></li>
+                        <li><a href="${pagePrefix}datenschutz.html" class="footer-link"><span lang="de">Datenschutz</span><span lang="en">Privacy</span></a></li>
                     </ul>
                 </div>
                 
@@ -292,12 +301,16 @@ function renderBackToTop() {
    COOKIE CONSENT BANNER
    ============================================================ */
 function renderCookieBanner() {
+    const path = window.location.pathname;
+    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
+    const datenschutzPath = isPagesFolder ? 'datenschutz.html' : 'pages/datenschutz.html';
+
     return `
     <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie-Hinweis">
         <div class="cookie-content">
             <p>
-                <span lang="de">Diese Website verwendet Local Storage für Theme- und Spracheinstellungen sowie externe Dienste (Google Maps, Font Awesome CDN). Mehr dazu in der <a href="datenschutz.html">Datenschutzerklärung</a>.</span>
-                <span lang="en">This website uses Local Storage for theme and language settings, and external services (Google Maps, Font Awesome CDN). Learn more in the <a href="datenschutz.html">Privacy Policy</a>.</span>
+                <span lang="de">Diese Website verwendet Local Storage für Theme- und Spracheinstellungen sowie externe Dienste (Google Maps, Font Awesome CDN). Mehr dazu in der <a href="${datenschutzPath}">Datenschutzerklärung</a>.</span>
+                <span lang="en">This website uses Local Storage for theme and language settings, and external services (Google Maps, Font Awesome CDN). Learn more in the <a href="${datenschutzPath}">Privacy Policy</a>.</span>
             </p>
             <button id="cookie-accept" class="btn-primary" style="width: auto; padding: 0.5rem 1.5rem; font-size: 0.9rem;">
                 <span lang="de">Verstanden</span>
@@ -347,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBreadcrumbs();
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
 
     // Header & Navigation Loader (not on index.html)
     const headerEl = document.getElementById('site-header');
@@ -398,14 +412,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Register Service Worker & Manifest link for PWA (only on http/https protocols)
     if (window.location.protocol.startsWith('http')) {
+        const manifestPath = isPagesFolder ? '../manifest.json' : 'manifest.json';
+        const swPath = isPagesFolder ? '../sw.js' : 'sw.js';
         if (!document.querySelector('link[rel="manifest"]')) {
             const link = document.createElement('link');
             link.rel = 'manifest';
-            link.href = 'manifest.json';
-            document.head.appendChild(link);
+            link.href = manifestPath;
         }
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register(swPath)
                 .then(reg => console.log('PWA Service Worker registered:', reg.scope))
                 .catch(err => console.warn('PWA Service Worker failed:', err));
         }

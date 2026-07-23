@@ -151,7 +151,7 @@ function setupDfgGallery() {
         // Update Image attributes (supporting WCAG Alt text)
         imageEl.style.opacity = '0';
         setTimeout(() => {
-            imageEl.src = item.src;
+            imageEl.src = (window.resolveAssetPath || (p => p))(item.src);
             imageEl.alt = lang === 'de' ? item.altDe : item.altEn;
             imageEl.style.opacity = '1';
         }, 150);
@@ -223,7 +223,7 @@ function setupEcoChefVideoPlayer() {
 
         // Update player source
         const wasPaused = videoEl.paused;
-        videoEl.src = videoItem.src;
+        videoEl.src = (window.resolveAssetPath || (p => p))(videoItem.src);
         videoEl.load();
 
         if (shouldPlay && !wasPaused) {

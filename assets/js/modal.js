@@ -87,11 +87,12 @@
 
         const initialVideo = playlist[0];
         const initialDesc = lang === 'de' ? initialVideo.descDe : initialVideo.descEn;
+        const initialVideoUrl = (window.resolveAssetPath || (p => p))(initialVideo.url);
 
         mediaHTML = `
             <div class="modal-media-wrapper" style="margin-bottom: 1rem;">
                 <div class="video-container" style="background: #000; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/9; max-height: 300px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
-                    <video id="modal-video-player" controls src="${initialVideo.url}" style="width: 100%; height: 100%; object-fit: contain;"></video>
+                    <video id="modal-video-player" controls src="${initialVideoUrl}" style="width: 100%; height: 100%; object-fit: contain;"></video>
                 </div>
                 <div class="video-playlist-selector" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
                     ${playlistOptions}
@@ -104,7 +105,7 @@
     } else if (images.length > 1) {
         hasCarousel = true;
         const slides = images.map(img => `
-            <img src="${img}" class="carousel-slide-img" alt="${titleDe}">
+            <img src="${(window.resolveAssetPath || (p => p))(img)}" class="carousel-slide-img" alt="${titleDe}">
         `).join('\n');
         
         const dots = images.map((_, idx) => `
@@ -124,9 +125,10 @@
             </div>
         `;
     } else if (images.length === 1) {
+        const singleImg = (window.resolveAssetPath || (p => p))(images[0]);
         mediaHTML = `
             <div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
-               <img src="${images[0]}" alt="${titleDe}" class="project-image" loading="lazy">
+               <img src="${singleImg}" alt="${titleDe}" class="project-image" loading="lazy">
             </div>`;
     }
 

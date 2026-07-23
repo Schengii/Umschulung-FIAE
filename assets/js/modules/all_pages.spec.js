@@ -2,28 +2,28 @@ import { test, expect } from '@playwright/test';
 
 const pages = [
   'index.html',
-  'home.html',
-  'dashboard.html',
-  'portfolio.html',
-  'links.html',
-  'ausbildungsablauf.html',
-  'ueber-mich.html',
-  'praktikumsbetrieb.html',
-  'berufsfoerderungswerk.html',
-  'impressum.html',
-  'datenschutz.html',
-  'architecture.html',
-  'flashcards.html',
-  'games.html',
-  'interview-trainer.html',
-  'kostentraeger.html',
-  'lebenslauf.html',
-  'memory.html',
-  'news.html',
-  'playground.html',
-  'projekt-detail.html?repo=EcoChef',
-  'quiz.html',
-  'snake.html',
+  'pages/home.html',
+  'pages/dashboard.html',
+  'pages/portfolio.html',
+  'pages/links.html',
+  'pages/ausbildungsablauf.html',
+  'pages/ueber-mich.html',
+  'pages/praktikumsbetrieb.html',
+  'pages/berufsfoerderungswerk.html',
+  'pages/impressum.html',
+  'pages/datenschutz.html',
+  'pages/architecture.html',
+  'pages/flashcards.html',
+  'pages/games.html',
+  'pages/interview-trainer.html',
+  'pages/kostentraeger.html',
+  'pages/lebenslauf.html',
+  'pages/memory.html',
+  'pages/news.html',
+  'pages/playground.html',
+  'pages/projekt-detail.html?repo=EcoChef',
+  'pages/quiz.html',
+  'pages/snake.html',
   'Projekte/CoOpVersusGame/coop-versus-demo.html',
   'Projekte/java-playground.html'
 ];
@@ -69,7 +69,7 @@ test.describe('Global Pages Stability Verification', () => {
 test.describe('EcoChef Project Detail Page Features', () => {
   test('sollte Code-Explorer, Stepper und Live-Demo steuern können', async ({ page }) => {
     // Navigiere zur EcoChef-Detailseite
-    await page.goto('/projekt-detail.html?repo=EcoChef');
+    await page.goto('/pages/projekt-detail.html?repo=EcoChef');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
 

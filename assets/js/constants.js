@@ -27,7 +27,25 @@ const APP = Object.freeze({
     WEB3FORMS_KEY: '', // Trage hier deinen Web3Forms Access Key ein, um direkte Mail-Zustellung zu aktivieren!
 });
 
+function resolveAssetPath(pathStr) {
+    if (!pathStr || typeof pathStr !== 'string') return pathStr;
+    if (pathStr.startsWith('http://') || pathStr.startsWith('https://') || pathStr.startsWith('data:') || pathStr.startsWith('blob:')) {
+        return pathStr;
+    }
+    const isPagesFolder = window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+    if (isPagesFolder) {
+        if (pathStr.startsWith('../')) return pathStr;
+        if (pathStr.startsWith('./')) return '../' + pathStr.substring(2);
+        return '../' + pathStr;
+    } else {
+        if (pathStr.startsWith('./')) return pathStr;
+        if (pathStr.startsWith('../')) return pathStr.replace(/^\.\.\//, '');
+        return './' + pathStr;
+    }
+}
+
 // Expose constants to global window scope for backwards compatibility with non-module scripts
 window.STORAGE_KEYS = STORAGE_KEYS;
 window.APP = APP;
+window.resolveAssetPath = resolveAssetPath;
 

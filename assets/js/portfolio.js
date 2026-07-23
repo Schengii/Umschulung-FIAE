@@ -135,9 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build image
         let imageHTML = '';
         if (project.image) {
+            const resolvedImg = (window.resolveAssetPath || (p => p))(project.image);
             imageHTML = `
             <div class="project-image-container">
-                <img src="${project.image}" alt="${project.titleDe}" loading="lazy" class="project-image">
+                <img src="${resolvedImg}" alt="${project.titleDe}" loading="lazy" class="project-image">
             </div>`;
         }
         
@@ -171,8 +172,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnTextEn = 'Try Out';
             }
             
+            const resolvedLink = (window.resolveAssetPath || (p => p))(project.link);
             buttonsHTML += `
-            <a href="${project.link}" class="btn-secondary btn-project" target="_blank" rel="noopener">
+            <a href="${resolvedLink}" class="btn-secondary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
             </a>`;

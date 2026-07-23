@@ -56,7 +56,7 @@ function renderStats() {
 }
 
 function renderProjectCount() {
-    fetch('assets/data/projects.json')
+    fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json'))
         .then(r => r.json())
         .then(projects => {
             const el = document.getElementById('stat-projects');
@@ -69,7 +69,7 @@ function renderRecentProjects() {
     const container = document.querySelector('.left-col .card');
     if (!container) return;
 
-    fetch('assets/data/projects.json')
+    fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json'))
         .then(r => r.json())
         .then(projects => {
             const lang = document.documentElement.getAttribute('lang') || 'de';

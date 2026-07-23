@@ -13,7 +13,7 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npx http-server . -p 8080',
+    command: 'npx http-server . -p 8080 -c-1',
     url: 'http://127.0.0.1:8080',
     reuseExistingServer: true,
     stdout: 'ignore',

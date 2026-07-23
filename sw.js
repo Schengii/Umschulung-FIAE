@@ -1,30 +1,30 @@
-const CACHE_NAME = 'umschulung-fiae-v21';
+const CACHE_NAME = 'umschulung-fiae-v22';
 const ASSETS = [
     './',
     'index.html',
-    'home.html',
-    'offline.html',
-    'portfolio.html',
-    'ausbildungsablauf.html',
-    'berufsfoerderungswerk.html',
-    'kostentraeger.html',
-    'praktikumsbetrieb.html',
-    'links.html',
-    'news.html',
-    'impressum.html',
-    'datenschutz.html',
-    'dashboard.html',
-    'ueber-mich.html',
-    'lebenslauf.html',
-    'architecture.html',
-    'flashcards.html',
-    'games.html',
-    'interview-trainer.html',
-    'playground.html',
-    'quiz.html',
-    'snake.html',
-    'memory.html',
-    'git-simulator.html',
+    'pages/home.html',
+    'pages/offline.html',
+    'pages/portfolio.html',
+    'pages/ausbildungsablauf.html',
+    'pages/berufsfoerderungswerk.html',
+    'pages/kostentraeger.html',
+    'pages/praktikumsbetrieb.html',
+    'pages/links.html',
+    'pages/news.html',
+    'pages/impressum.html',
+    'pages/datenschutz.html',
+    'pages/dashboard.html',
+    'pages/ueber-mich.html',
+    'pages/lebenslauf.html',
+    'pages/architecture.html',
+    'pages/flashcards.html',
+    'pages/games.html',
+    'pages/interview-trainer.html',
+    'pages/playground.html',
+    'pages/quiz.html',
+    'pages/snake.html',
+    'pages/memory.html',
+    'pages/git-simulator.html',
     'assets/css/git-simulator.css',
     'assets/js/git-simulator.js',
     'assets/css/style.css',
@@ -154,7 +154,7 @@ self.addEventListener('fetch', (e) => {
                     return networkResponse;
                 })
                 .catch(() => caches.match(e.request).then((cachedResponse) => {
-                    return cachedResponse || caches.match('offline.html');
+                    return cachedResponse || caches.match('pages/offline.html') || caches.match('offline.html');
                 }))
         );
     } 
