@@ -132,8 +132,9 @@
             </div>`;
     }
 
+    const resolvedLink = link ? (window.resolveAssetPath || (p => p))(link) : '';
     const linkHTML = link
-      ? `<a href="${link}" target="_blank" rel="noopener" class="btn-project">
+      ? `<a href="${resolvedLink}" target="_blank" rel="noopener" class="btn-project">
            <span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Projekt öffnen</span>
            <span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> Open Project</span>
          </a>`

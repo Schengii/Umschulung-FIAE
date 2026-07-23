@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrbitalScrap — Sci-Fi Clicker & Idle Game Sandbox</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        :root {
+            --scrap-primary: #8b5cf6;
+            --scrap-accent: #06b6d4;
+            --scrap-bg: #090d16;
+            --scrap-card: #131b2e;
+            --scrap-border: #1e293b;
+        }
+
+        body {
+            background-color: var(--scrap-bg);
+            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-wrapper {
+            max-width: 1000px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(19, 27, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--scrap-border);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+        }
+
+        .game-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .game-title i {
+            color: var(--scrap-accent);
+            font-size: 1.8rem;
+        }
+
+        .game-title h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            background: linear-gradient(135deg, #a78bfa, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scrap-stage {
+            background: #050811;
+            border: 2px solid var(--scrap-border);
+            border-radius: var(--radius-lg);
+            height: 380px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .scrap-hud {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #94a3b8;
+            z-index: 10;
+        }
+
+        .scrap-hud-val {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        #scrap-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .shop-card {
+            background: var(--scrap-card);
+            border: 1px solid var(--scrap-border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .shop-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--scrap-border);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .shop-item:hover {
+            border-color: var(--scrap-primary);
+            transform: translateY(-2px);
+        }
+
+        .shop-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .shop-item-name {
+            font-weight: 600;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shop-item-desc {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .shop-btn {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .shop-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .particle-text {
+            position: absolute;
+            color: #38bdf8;
+            font-weight: bold;
+            font-family: monospace;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+            font-size: 1.1rem;
+            z-index: 20;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <header class="game-header">
+            <div class="game-title">
+                <i class="fa-solid fa-shuttle-space"></i>
+                <div>
+                    <h1>OrbitalScrap — Sci-Fi Clicker &amp; Idle Sandbox</h1>
+                    <span style="font-size: 0.8rem; color: #94a3b8;">Inkrementelles Weltraum-Sammelspiel (Godot 4 Web-Simulation)</span>
+                </div>
+            </div>
+            <button class="btn-secondary" id="reset-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
+        </header>
+
+        <div class="game-grid">
+            <!-- Stage / Canvas Area -->
+            <div class="scrap-stage">
+                <div class="scrap-hud">
+                    <div>SCHROTT: <span class="scrap-hud-val" id="scrap-total">0</span></div>
+                    <div>PRO SEKUNDE (SPS): <span class="scrap-hud-val" id="sps-val">0</span></div>
+                </div>
+
+                <canvas id="scrap-canvas" width="460" height="380"></canvas>
+            </div>
+
+            <!-- Shop & Upgrades -->
+            <div class="shop-card">
+                <h3 style="margin: 0; font-size: 1.1rem; color: #a78bfa; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-microchip"></i> Sammel-Drohnen &amp; Upgrades
+                </h3>
+
+                <div class="shop-item">
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">
+                            <i class="fa-solid fa-hand-pointer" style="color: #38bdf8;"></i> Laser-Klicker (+1/Klick)
+                        </div>
+                        <div class="shop-item-desc">Erhöht die Ausbeute pro manueller Bergung.</div>
+                    </div>
+                    <button class="shop-btn" id="buy-clicker" data-cost="15">
+                        <span id="clicker-cost">15</span> Schrott
+                    </button>
+                </div>
+
+                <div class="shop-item">
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">
+                            <i class="fa-solid fa-robot" style="color: #a855f7;"></i> Scraper-Drohne (+2 SPS)
+                        </div>
+                        <div class="shop-item-desc">Autonome Bergungsdrohne im Orbit. (Besitz: <span id="count-drone">0</span>)</div>
+                    </div>
+                    <button class="shop-btn" id="buy-drone" data-cost="50">
+                        <span id="drone-cost">50</span> Schrott
+                    </button>
+                </div>
+
+                <div class="shop-item">
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">
+                            <i class="fa-solid fa-satellite" style="color: #ec4899;"></i> Quantum-Sammler (+10 SPS)
+                        </div>
+                        <div class="shop-item-desc">Orbital-Station mit Fangnetz. (Besitz: <span id="count-collector">0</span>)</div>
+                    </div>
+                    <button class="shop-btn" id="buy-collector" data-cost="250">
+                        <span id="collector-cost">250</span> Schrott
+                    </button>
+                </div>
+
+                <div class="shop-item">
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">
+                            <i class="fa-solid fa-meteor" style="color: #f59e0b;"></i> Harvester-Schlachtschiff (+50 SPS)
+                        </div>
+                        <div class="shop-item-desc">Schwerer Raumkreuzer zur Ressourcenzerlegung. (Besitz: <span id="count-cruiser">0</span>)</div>
+                    </div>
+                    <button class="shop-btn" id="buy-cruiser" data-cost="1000">
+                        <span id="cruiser-cost">1000</span> Schrott
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('scrap-canvas');
+        const ctx = canvas.getContext('2d');
+        const stage = document.querySelector('.scrap-stage');
+
+        const elScrap = document.getElementById('scrap-total');
+        const elSPS = document.getElementById('sps-val');
+        const elClickerCost = document.getElementById('clicker-cost');
+        const elDroneCost = document.getElementById('drone-cost');
+        const elCollectorCost = document.getElementById('collector-cost');
+        const elCruiserCost = document.getElementById('cruiser-cost');
+
+        const elCountDrone = document.getElementById('count-drone');
+        const elCountCollector = document.getElementById('count-collector');
+        const elCountCruiser = document.getElementById('count-cruiser');
+
+        const btnClicker = document.getElementById('buy-clicker');
+        const btnDrone = document.getElementById('buy-drone');
+        const btnCollector = document.getElementById('buy-collector');
+        const btnCruiser = document.getElementById('buy-cruiser');
+        const btnReset = document.getElementById('reset-btn');
+
+        // Game State
+        let scrap = parseInt(localStorage.getItem('orbital_scrap') || '0', 10);
+        let clickPower = parseInt(localStorage.getItem('orbital_clickPower') || '1', 10);
+        let countDrone = parseInt(localStorage.getItem('orbital_drones') || '0', 10);
+        let countCollector = parseInt(localStorage.getItem('orbital_collectors') || '0', 10);
+        let countCruiser = parseInt(localStorage.getItem('orbital_cruisers') || '0', 10);
+
+        let costClicker = Math.floor(15 * Math.pow(1.5, clickPower - 1));
+        let costDrone = Math.floor(50 * Math.pow(1.3, countDrone));
+        let costCollector = Math.floor(250 * Math.pow(1.3, countCollector));
+        let costCruiser = Math.floor(1000 * Math.pow(1.3, countCruiser));
+
+        // Floating debris items in canvas
+        let debrisList = [];
+        for (let i = 0; i < 8; i++) {
+            debrisList.push({
+                x: Math.random() * (canvas.width - 60) + 30,
+                y: Math.random() * (canvas.height - 60) + 30,
+                size: Math.random() * 12 + 10,
+                angle: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.04,
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8
+            });
+        }
+
+        function getSPS() {
+            return (countDrone * 2) + (countCollector * 10) + (countCruiser * 50);
+        }
+
+        function updateUI() {
+            const sps = getSPS();
+            elScrap.textContent = Math.floor(scrap);
+            elSPS.textContent = sps;
+
+            elClickerCost.textContent = costClicker;
+            elDroneCost.textContent = costDrone;
+            elCollectorCost.textContent = costCollector;
+            elCruiserCost.textContent = costCruiser;
+
+            elCountDrone.textContent = countDrone;
+            elCountCollector.textContent = countCollector;
+            elCountCruiser.textContent = countCruiser;
+
+            btnClicker.disabled = scrap < costClicker;
+            btnDrone.disabled = scrap < costDrone;
+            btnCollector.disabled = scrap < costCollector;
+            btnCruiser.disabled = scrap < costCruiser;
+
+            localStorage.setItem('orbital_scrap', Math.floor(scrap));
+            localStorage.setItem('orbital_clickPower', clickPower);
+            localStorage.setItem('orbital_drones', countDrone);
+            localStorage.setItem('orbital_collectors', countCollector);
+            localStorage.setItem('orbital_cruisers', countCruiser);
+        }
+
+        function spawnParticle(x, y, text) {
+            const rect = stage.getBoundingClientRect();
+            const p = document.createElement('div');
+            p.className = 'particle-text';
+            p.textContent = text;
+            p.style.left = `${x - rect.left - 10}px`;
+            p.style.top = `${y - rect.top - 15}px`;
+            stage.appendChild(p);
+            setTimeout(() => p.remove(), 800);
+        }
+
+        canvas.addEventListener('click', (e) => {
+            scrap += clickPower;
+            spawnParticle(e.clientX, e.clientY, `+${clickPower}`);
+            updateUI();
+        });
+
+        btnClicker.addEventListener('click', () => {
+            if (scrap >= costClicker) {
+                scrap -= costClicker;
+                clickPower += 1;
+                costClicker = Math.floor(15 * Math.pow(1.5, clickPower - 1));
+                updateUI();
+            }
+        });
+
+        btnDrone.addEventListener('click', () => {
+            if (scrap >= costDrone) {
+                scrap -= costDrone;
+                countDrone += 1;
+                costDrone = Math.floor(50 * Math.pow(1.3, countDrone));
+                updateUI();
+            }
+        });
+
+        btnCollector.addEventListener('click', () => {
+            if (scrap >= costCollector) {
+                scrap -= costCollector;
+                countCollector += 1;
+                costCollector = Math.floor(250 * Math.pow(1.3, countCollector));
+                updateUI();
+            }
+        });
+
+        btnCruiser.addEventListener('click', () => {
+            if (scrap >= costCruiser) {
+                scrap -= costCruiser;
+                countCruiser += 1;
+                costCruiser = Math.floor(1000 * Math.pow(1.3, countCruiser));
+                updateUI();
+            }
+        });
+
+        btnReset.addEventListener('click', () => {
+            if (confirm('Möchtest du deinen Spielstand in OrbitalScrap zurücksetzen?')) {
+                scrap = 0;
+                clickPower = 1;
+                countDrone = 0;
+                countCollector = 0;
+                countCruiser = 0;
+                costClicker = 15;
+                costDrone = 50;
+                costCollector = 250;
+                costCruiser = 1000;
+                updateUI();
+            }
+        });
+
+        // Main game loop (idle SPS & canvas animation)
+        let lastTime = performance.now();
+        function loop(now) {
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            scrap += getSPS() * dt;
+            updateUI();
+
+            // Render Canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Stars background
+            ctx.fillStyle = '#1e293b';
+            for (let i = 0; i < 30; i++) {
+                const sx = (i * 37) % canvas.width;
+                const sy = (i * 59) % canvas.height;
+                ctx.fillRect(sx, sy, 1.5, 1.5);
+            }
+
+            // Draw Debris
+            debrisList.forEach(d => {
+                d.x += d.vx;
+                d.y += d.vy;
+                d.angle += d.rotSpeed;
+
+                if (d.x < 20 || d.x > canvas.width - 20) d.vx *= -1;
+                if (d.y < 20 || d.y > canvas.height - 20) d.vy *= -1;
+
+                ctx.save();
+                ctx.translate(d.x, d.y);
+                ctx.rotate(d.angle);
+
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.1)';
+                ctx.beginPath();
+                ctx.rect(-d.size/2, -d.size/2, d.size, d.size);
+                ctx.stroke();
+                ctx.fill();
+
+                ctx.restore();
+            });
+
+            requestAnimationFrame(loop);
+        }
+
+        updateUI();
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>

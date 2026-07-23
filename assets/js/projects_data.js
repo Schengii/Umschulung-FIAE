@@ -18,7 +18,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-07-22T10:18:47.348Z",
+    "updatedAt": "2026-07-23T18:30:17.244Z",
     "images": [
       "assets/images/arbeitszeit_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -74,7 +74,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-07-22T10:18:47.546Z"
+    "updatedAt": "2026-07-23T18:30:17.441Z"
   },
   {
     "repoName": "EcoChef",
@@ -241,7 +241,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-07-22T10:18:48.045Z",
+    "updatedAt": "2026-07-23T18:30:17.877Z",
     "images": [
       "assets/images/elektrocheck_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -266,7 +266,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-07-22T10:18:48.251Z",
+    "updatedAt": "2026-07-23T18:30:18.066Z",
     "images": [
       "assets/images/finance_bot_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -291,7 +291,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-07-22T10:18:48.444Z",
+    "updatedAt": "2026-07-23T18:30:18.249Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -316,7 +316,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-07-22T10:18:48.465Z",
+    "updatedAt": "2026-07-23T18:30:18.270Z",
     "images": [
       "assets/images/gluecksspiel_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -341,7 +341,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-07-22T10:18:48.865Z",
+    "updatedAt": "2026-07-23T18:30:18.480Z",
     "images": [
       "assets/images/jobsuche_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -366,7 +366,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-07-22T10:18:49.059Z",
+    "updatedAt": "2026-07-23T18:30:18.656Z",
     "images": [
       "assets/images/manufaktur_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -391,7 +391,7 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-07-22T10:18:49.276Z",
+    "updatedAt": "2026-07-23T18:30:18.841Z",
     "images": [
       "assets/images/orbital_scrap_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -415,7 +415,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-07-22T10:18:49.479Z",
+    "updatedAt": "2026-07-23T18:30:19.020Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -439,7 +439,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-07-22T10:18:49.686Z",
+    "updatedAt": "2026-07-23T18:30:19.241Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -464,7 +464,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-07-22T10:18:49.889Z",
+    "updatedAt": "2026-07-23T18:30:19.436Z",
     "images": [
       "assets/images/wohnungssuche_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -493,7 +493,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-07-22T10:18:50.093Z"
+    "updatedAt": "2026-07-23T18:30:19.650Z"
   },
   {
     "repoName": null,
