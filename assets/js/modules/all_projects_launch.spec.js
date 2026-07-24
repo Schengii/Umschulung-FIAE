@@ -37,7 +37,7 @@ test.describe('All 18 Projects 1-Click Launch E2E Verification', () => {
         }
       });
 
-      const response = await projPage.goto(targetUrl, { waitUntil: 'domcontentloaded' });
+      const response = await projPage.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
       expect(response.status(), `Launch link ${rawLink} (${targetUrl}) returned status ${response.status()}`).toBe(200);
 
       // Wait 300ms for initial JS load

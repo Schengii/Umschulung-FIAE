@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Seite nicht gefunden | Maximilian Schenk Portfolio</title>
+    <meta name="description" content="Die angeforderte Seite wurde leider nicht gefunden. Zurück zum Portfolio von Maximilian Schenk.">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="assets/js/components.js"></script>
+    <style>
+        .error-container {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .error-code {
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent, #6366f1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-size: 1.75rem;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .error-text {
+            max-width: 500px;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">
+        <span lang="de">Zum Inhalt springen</span>
+        <span lang="en">Skip to content</span>
+    </a>
+
+    <div id="site-header"></div>
+
+    <main id="main-content">
+        <div class="container">
+            <div class="card error-container fade-in visible">
+                <div class="error-code">404</div>
+                <h1 class="error-title">
+                    <span lang="de">Seite nicht gefunden</span>
+                    <span lang="en">Page Not Found</span>
+                </h1>
+                <p class="error-text">
+                    <span lang="de">Die von dir aufgerufene Adresse existiert leider nicht oder wurde verschoben. Nutze die Navigation oder kehre zur Startseite zurück.</span>
+                    <span lang="en">The requested page does not exist or has been moved. Use the navigation or return to the home page.</span>
+                </p>
+                <div class="error-actions">
+                    <a href="pages/home.html" class="btn-primary">
+                        <span lang="de"><i class="fa fa-home" aria-hidden="true"></i> Zur Startseite</span>
+                        <span lang="en"><i class="fa fa-home" aria-hidden="true"></i> Back to Home</span>
+                    </a>
+                    <a href="pages/portfolio.html" class="btn-secondary">
+                        <span lang="de"><i class="fa fa-code" aria-hidden="true"></i> Projekte ansehen</span>
+                        <span lang="en"><i class="fa fa-code" aria-hidden="true"></i> View Projects</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+
+</html>

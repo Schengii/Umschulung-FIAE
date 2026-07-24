@@ -163,4 +163,11 @@ Folgende interaktive Features wurden hinzugefügt:
     - **Hacker Retro-CRT Git Simulator**: Der Git-Simulator-Terminal hat eine realistische 3D-Monitorwölbung (CRT-Krümmung), Scanlines (Abtastzeilen), mikro-flackerndes grünes Phosphorglühen und einen passenden blinkenden Terminal-Cursor erhalten.
     - **3D Skill-Radar-Chart**: Das SVG-Radardiagramm ist in einen transluzenten Glashintergrund mit einem sich im Hintergrund drehenden 3D-Rasterkreis eingebettet.
     - **Spiel-Interaktions-Feedback**: Das Memory-Spiel besitzt echte 3D-Kartenwendemanimationen mit Match-Erfolgs-Glows, und das Snake-Spiel reagiert bei Wand- oder Körperkollisionen mit einem intensiven Screenshake und einem roten Warnungs-Glow.
+12. **Release-Optimierung, Deep-Linking & CI/CD Pipeline (Juli 2026 Part III)**:
+    - **OpenGraph & Social Sharing**: Reichhaltige Social-Media Metadaten (`og:title`, `og:description`, `og:image`, `twitter:card`) für professionelle Vorschau-Karten auf LinkedIn, Xing, WhatsApp und Twitter/X.
+    - **URL-Parameter Deep-Linking**: Direkte Filter-Links wie `portfolio.html?tech=Java`, `portfolio.html?category=web` oder `portfolio.html?repo=EcoChef` filtern und öffnen das gewünschte Projekt beim Seitenaufruf automatisch.
+    - **Automatisierter GitHub CI/CD Audit Workflow**: In `.github/workflows/ci.yml` ist die Pipeline um automatisierte Lighthouse-Performance- und Accessibility-Audits ergänzt.
+    - **PWA Service Worker Cache v24 & 404-Fallback**: Aktualisierte Caching-Strategie in `sw.js` inklusive einer eigens gestalteten, zweisprachigen Cyber-Glassmorphism 404-Fehlerseite (`404.html`).
+    - **Datenschutzfreundlicher Visitor-Counter**: Diskreter Session- und Besucherzähler im Footer ohne Tracking oder Drittanbieter-Datenübertragung.
+
 

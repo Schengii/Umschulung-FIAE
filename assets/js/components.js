@@ -281,6 +281,8 @@ function renderFooter() {
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
                     &nbsp;&middot;&nbsp;
                     <span title="Tastaturkürzel" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
+                    &nbsp;&middot;&nbsp;
+                    <span id="visitor-session-counter" title="Datenschutzfreundliche Besucher-Statistik"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span id="visit-count-display">100% Privacy</span></span>
                 </p>
             </div>
         </div>

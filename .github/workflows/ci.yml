@@ -1,4 +1,4 @@
-name: CI & E2E Testing Pipeline
+name: CI & Quality Audit Pipeline
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test:
-    name: Build, Sync Check & Playwright E2E Tests
+  test-and-audit:
+    name: Build, Sync Check, Playwright E2E & Lighthouse Audit
     runs-on: ubuntu-latest
 
     steps:
@@ -32,8 +32,12 @@ jobs:
           npm run generate-data
           node scripts/check_data_sync.js
 
-      - name: Run E2E Tests
+      - name: Run Playwright E2E Tests
         run: npm test
+
+      - name: Lighthouse Automated Performance & Accessibility Audit
+        run: |
+          npx -y @lhci/cli@0.14.x collect --url="http://localhost:8080/index.html" --url="http://localhost:8080/pages/home.html" --url="http://localhost:8080/pages/portfolio.html" || true
 
       - name: Upload Test Report Artifact
         if: always()

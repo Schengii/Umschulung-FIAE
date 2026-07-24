@@ -62,15 +62,42 @@ document.addEventListener('DOMContentLoaded', () => {
     let hashHandled = false;
     function handleDeepLink() {
         if (hashHandled) return;
+
+        // Parse query parameters (e.g., ?category=web, ?tech=Java, ?search=EcoChef, ?repo=EcoChef)
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        const techParam = urlParams.get('tech');
+        const searchParam = urlParams.get('search');
+        const repoParam = urlParams.get('repo');
+
+        if (categoryParam) {
+            currentCategory = categoryParam.toLowerCase();
+            filterButtons.forEach(btn => {
+                const f = btn.getAttribute('data-filter') || 'all';
+                if (f === currentCategory) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        if (techParam || searchParam) {
+            const query = (techParam || searchParam).toLowerCase().trim();
+            if (searchInput) searchInput.value = query;
+            currentSearchTerm = query;
+        }
+
         const hash = decodeURIComponent(window.location.hash.substring(1)).trim();
-        if (!hash) return;
+        const targetQuery = repoParam || hash;
+        if (!targetQuery) return;
         
         // Find project in allProjects
         const index = allProjects.findIndex(proj => {
             const titleDe = (proj.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             const titleEn = (proj.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             const repoName = (proj.repoName || '').toLowerCase();
-            const cleanHash = hash.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            const cleanHash = targetQuery.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             
             return titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash;
         });
@@ -83,11 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Find card in DOM and open it after render
             setTimeout(() => {
                 const cards = document.querySelectorAll('.project-card');
-                const cleanHash = hash.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                const cleanHash = targetQuery.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
                 for (const card of cards) {
                     const titleDe = (card.dataset.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
                     const titleEn = (card.dataset.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    if (titleDe.includes(cleanHash) || titleEn.includes(cleanHash)) {
+                    const repoName = (card.dataset.repoName || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                    if (titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash) {
                         if (typeof window.openProjectModal === 'function') {
                             window.openProjectModal(card);
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
