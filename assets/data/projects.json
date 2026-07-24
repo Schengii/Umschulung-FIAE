@@ -408,7 +408,7 @@
       "CSS Grid"
     ],
     "image": "assets/images/analytics_showcase.png",
-    "link": "Projekte/Urlaubsfotos/index.html",
+    "link": "Projekte/Urlaubsfotos/dist/index.html",
     "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
     "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
     "category": "web",

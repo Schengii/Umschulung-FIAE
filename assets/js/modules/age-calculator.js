@@ -9,6 +9,6 @@ export function initAgeCalculator() {
     if (today.getMonth() + 1 < birthMonth || (today.getMonth() + 1 === birthMonth && today.getDate() < birthDay)) {
         age--;
     }
-    const els = document.querySelectorAll('#my-age, #my-age-en');
+    const els = document.querySelectorAll('#my-age, #my-age-en, #my-age-de');
     els.forEach(el => { if (el) el.textContent = age; });
 }

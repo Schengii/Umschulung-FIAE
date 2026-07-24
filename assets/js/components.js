@@ -113,26 +113,26 @@ function renderNav(currentPage) {
                     <a href="${pagePrefix}home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 </li>
                 <li class="nav-item${active(ueberMichPages)}">
-                    <a href="#" class="nav-link"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pagePrefix}ueber-mich.html" class="dropdown-link"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
-                        <li><a href="${pagePrefix}lebenslauf.html" class="dropdown-link"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a href="${pagePrefix}ueber-mich.html" class="dropdown-link" role="menuitem"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
+                        <li role="none"><a href="${pagePrefix}lebenslauf.html" class="dropdown-link" role="menuitem"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active(ausbildungPages)}">
-                    <a href="#" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
-                        <li><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
-                        <li class="dropdown-item">
-                            <a href="${pagePrefix}kostentraeger.html" class="dropdown-link"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu">
-                                <li><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
-                                <li><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
-                                <li><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link"><span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link" role="menuitem"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
+                        <li role="none"><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link" role="menuitem"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
+                        <li class="dropdown-item" role="none">
+                            <a href="${pagePrefix}kostentraeger.html" class="dropdown-link" aria-haspopup="true" aria-expanded="false" role="menuitem"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu" role="menu">
+                                <li role="none"><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
+                                <li role="none"><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
+                                <li role="none"><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
+                        <li role="none"><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link" role="menuitem"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('portfolio.html')}">
@@ -148,8 +148,8 @@ function renderNav(currentPage) {
                     <a href="${pagePrefix}links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a>
                 </li>
                 <li class="nav-item${active(weiteresPages)}">
-                    <a href="#" class="nav-link"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu">
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu" role="menu">
                         <li><a href="${pagePrefix}interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
                         <li><a href="${pagePrefix}playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
                         <li><a href="${pagePrefix}architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
@@ -418,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const link = document.createElement('link');
             link.rel = 'manifest';
             link.href = manifestPath;
+            document.head.appendChild(link); // Fix: Link muss dem DOM hinzugefügt werden
         }
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(swPath)
