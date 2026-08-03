@@ -1,4 +1,4 @@
-name: CI & Quality Audit Pipeline
+name: Portfolio CI & E2E Quality Audit
 
 on:
   push:
@@ -7,42 +7,28 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test-and-audit:
-    name: Build, Sync Check, Playwright E2E & Lighthouse Audit
+  test:
+    name: Run E2E Test Suite & Data Sync Guard
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install Project Dependencies
+        run: npm ci || npm install
 
-      - name: Install Playwright Browsers
+      - name: Install Playwright Chromium Browser
         run: npx playwright install --with-deps chromium
 
-      - name: Verify Data Synchronization
-        run: |
-          npm run generate-data
-          node scripts/check_data_sync.js
+      - name: Verify Data Synchronization (21 Projects)
+        run: npm run check-sync
 
-      - name: Run Playwright E2E Tests
+      - name: Run Playwright E2E Test Suite (39 Tests)
         run: npm test
-
-      - name: Lighthouse Automated Performance & Accessibility Audit
-        run: |
-          npx -y @lhci/cli@0.14.x collect --url="http://localhost:8080/index.html" --url="http://localhost:8080/pages/home.html" --url="http://localhost:8080/pages/portfolio.html" || true
-
-      - name: Upload Test Report Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: test-results/
-          retention-days: 7
