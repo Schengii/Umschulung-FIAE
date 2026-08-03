@@ -18,7 +18,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-07-23T18:30:17.244Z",
+    "updatedAt": "2026-08-03T11:15:25.074Z",
     "images": [
       "assets/images/arbeitszeit_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -74,7 +74,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-07-23T18:30:17.441Z"
+    "updatedAt": "2026-08-03T11:15:25.479Z"
   },
   {
     "repoName": "EcoChef",
@@ -241,7 +241,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-07-23T18:30:17.877Z",
+    "updatedAt": "2026-08-03T11:15:26.297Z",
     "images": [
       "assets/images/elektrocheck_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -266,7 +266,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-07-23T18:30:18.066Z",
+    "updatedAt": "2026-08-03T11:15:26.501Z",
     "images": [
       "assets/images/finance_bot_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -291,7 +291,7 @@
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-07-23T18:30:18.249Z",
+    "updatedAt": "2026-08-03T11:15:26.912Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -316,7 +316,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-07-23T18:30:18.270Z",
+    "updatedAt": "2026-08-03T11:15:27.009Z",
     "images": [
       "assets/images/gluecksspiel_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -341,7 +341,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-07-23T18:30:18.480Z",
+    "updatedAt": "2026-08-03T11:15:27.438Z",
     "images": [
       "assets/images/jobsuche_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -366,10 +366,86 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-07-23T18:30:18.656Z",
+    "updatedAt": "2026-08-03T11:15:27.646Z",
     "images": [
       "assets/images/manufaktur_showcase.png",
       "assets/images/analytics_showcase.png"
+    ]
+  },
+  {
+    "repoName": "Minecraft",
+    "titleDe": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+    "titleEn": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+    "tags": [
+      "C++20",
+      "OpenGL 4.5",
+      "CMake",
+      "Redstone Logic",
+      "3D Voxel Engine",
+      "Procedural Generation"
+    ],
+    "image": "assets/images/burgen_showcase.png",
+    "link": "Projekte/Minecraft/index.html",
+    "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
+    "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
+    "category": "games",
+    "language": "C++",
+    "codeFiles": [
+      {
+        "name": "CMakeLists.txt",
+        "path": "Projekte/Minecraft/CMakeLists.txt",
+        "type": "cmake"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Minecraft/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Minecraft",
+    "updatedAt": "2026-08-03T11:08:08Z",
+    "images": [
+      "assets/images/burgen_showcase.png",
+      "assets/images/game_leaderboard.png"
+    ]
+  },
+  {
+    "repoName": "Minecraft-Pokemon",
+    "titleDe": "🐉 Minecraft-Pokémon Voxel RPG (Godot 4 & C#)",
+    "titleEn": "🐉 Minecraft-Pokémon Voxel RPG (Godot 4 & C#)",
+    "tags": [
+      "Godot Engine 4",
+      "C# (.NET)",
+      "3D Voxel Engine",
+      "RPG Battle System",
+      "Breeding & Riding",
+      "Pokédex"
+    ],
+    "image": "assets/images/burgen_showcase.png",
+    "link": "Projekte/Minecraft-Pokemon/index.html",
+    "descDe": "Ein Crossover-RPG in Godot 4 mit C#: Vereint Voxel-Bau und Survival von Minecraft mit dem Pokémon-Sammelsystem. Features: 21 Spezies, Tag-/Nacht-Spawns (Nachtara & Psiana), Wesen & Natures, rundenbasierter Kampf, Mega-Evolutionen, Zucht-Pension, Land-/Flug-Reiten, Live-Minimap HUD und JSON-Savegames.",
+    "descEn": "A voxel crossover RPG built in Godot 4 with C#. Combines Minecraft building and survival with Pokémon capture mechanics. Features 21 species, day/night spawns (Umbreon & Espeon), nature stats, turn-based combat, mega evolutions, breeding pen, mount/flying mechanics, live minimap HUD, and JSON saves.",
+    "category": "games",
+    "language": "C#",
+    "codeFiles": [
+      {
+        "name": "project.godot",
+        "path": "Projekte/Minecraft-Pokemon/project.godot",
+        "type": "godot"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Minecraft-Pokemon/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
+    "updatedAt": "2026-08-03T11:15:28.117Z",
+    "images": [
+      "assets/images/burgen_showcase.png",
+      "assets/images/game_leaderboard.png"
     ]
   },
   {
@@ -391,9 +467,52 @@
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-07-23T18:30:18.841Z",
+    "updatedAt": "2026-08-03T11:15:28.320Z",
     "images": [
       "assets/images/orbital_scrap_showcase.png",
+      "assets/images/game_leaderboard.png"
+    ]
+  },
+  {
+    "repoName": "Sims",
+    "titleDe": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+    "titleEn": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+    "tags": [
+      "React",
+      "TypeScript",
+      "2.5D Isometric Engine",
+      "Simlish Audio Synth",
+      "Life Simulation",
+      "House Parties"
+    ],
+    "image": "assets/images/burgen_showcase.png",
+    "link": "Projekte/Sims/dist/index.html",
+    "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
+    "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
+    "category": "games web",
+    "language": "TypeScript",
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/Sims/index.html",
+        "type": "html"
+      },
+      {
+        "name": "package.json",
+        "path": "Projekte/Sims/package.json",
+        "type": "json"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Sims/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Sims",
+    "updatedAt": "2026-08-03T10:47:34Z",
+    "images": [
+      "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
     ]
   },
@@ -415,7 +534,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-07-23T18:30:19.020Z",
+    "updatedAt": "2026-08-03T11:15:28.740Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -439,7 +558,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-07-23T18:30:19.241Z",
+    "updatedAt": "2026-08-03T11:15:28.957Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -464,7 +583,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-07-23T18:30:19.436Z",
+    "updatedAt": "2026-08-03T11:15:29.181Z",
     "images": [
       "assets/images/wohnungssuche_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -493,7 +612,7 @@
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-07-23T18:30:19.650Z"
+    "updatedAt": "2026-08-03T11:15:29.399Z"
   },
   {
     "repoName": null,

@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('All 18 Projects 1-Click Launch E2E Verification', () => {
+test.describe('All Projects 1-Click Launch E2E Verification', () => {
 
-  test('sollte alle 18 Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
+  test('sollte alle Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
     // 1. Open portfolio page
     await page.goto('http://127.0.0.1:8080/pages/portfolio.html');
     await page.waitForSelector('.project-card');
 
     // 2. Extract window.projectsData
     const projects = await page.evaluate(() => window.projectsData);
-    expect(projects.length).toBe(18);
+    expect(projects.length).toBe(21);
 
     console.log(`Extracted ${projects.length} projects from projectsData.`);
 
