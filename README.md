@@ -148,3 +148,11 @@ Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 re
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
 - **39 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright.
+
+### ⚙️ Code-Refactoring & Qualitäts-Härtung (August 2026 Code Audit)
+- **Tastatursteuerung & Escape-Key Handling (`components.js`)**: Globale Unterstützung der `Esc`-Taste zum sofortigen Schließen geöffneter Barrierefreiheits-Dropdowns, Farb-Customizer und mobiler Hauptmenüs.
+- **Sanitizing von URL-Parametern (`portfolio.js`)**: Absicherung aller Deep-Link Such- und Technologie-Filter (`?search=...`, `?tech=...`) gegen Skript-Injektionen durch HTML-Bereinigung.
+- **Formularvalidierung (`contact-form.js`)**: Clientseitige Regex-Prüfung von E-Mail-Adressen und Meldungsfeedback vor der Übermittlung.
+- **Timer Teardown & Speicherleck-Schutz (`ihk-exam-simulator.js`)**: Automatische Deregistrierung von `setInterval`-Timern bei `beforeunload`-Events zum Schutz der Systemressourcen.
+- **Terminal Historie & Auto-Scroll (`git-simulator.js`)**: Befehlshistorie mit Pfeiltasten Rauf/Runter sowie synchronisiertes Auto-Scrollen bei langen Ausgaben im Git-Terminal.
+

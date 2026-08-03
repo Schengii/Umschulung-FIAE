@@ -314,6 +314,48 @@ html[data-reduced-motion="true"] ::after {
     outline-offset: 2px !important;
 }
 
+/* Accessibility Dropdown Classes (No inline styles) */
+.a11y-customizer-container {
+    position: relative;
+    display: inline-block;
+}
+.a11y-dropdown-menu {
+    display: none;
+    min-width: 220px;
+    padding: 0.75rem;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(12px);
+}
+.a11y-dropdown-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+.a11y-option-btn {
+    width: 100%;
+    margin-bottom: 0.35rem;
+    font-size: 0.8rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.a11y-option-btn:last-child {
+    margin-bottom: 0;
+}
+.card-margin-top {
+    margin-top: 1.5rem;
+}
+
 /* ==========================================================================
    RESET & BASE STYLES
    ========================================================================== */

@@ -198,22 +198,22 @@ function renderNav(currentPage) {
                         <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
                     </div>
                 </div>
-                <div class="a11y-customizer-container" style="position: relative;">
+                <div class="a11y-customizer-container">
                     <button id="a11y-toggle" class="theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" title="Barrierefreiheit & Lesehilfe">
                         <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
                     </button>
-                    <div id="a11y-dropdown" class="accent-dropdown" style="display: none; min-width: 220px; padding: 0.75rem; right: 0;" role="menu">
-                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;"><i class="fa-solid fa-universal-access"></i> Barrierefreiheit</div>
-                        <button id="btn-toggle-dyslexia" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                    <div id="a11y-dropdown" class="a11y-dropdown-menu" role="menu">
+                        <div class="a11y-dropdown-title"><i class="fa-solid fa-universal-access"></i> Barrierefreiheit</div>
+                        <button id="btn-toggle-dyslexia" class="btn-filter a11y-option-btn">
                             <i class="fa-solid fa-book-open-reader"></i> <span lang="de">Legasthenie-Hilfe</span><span lang="en">Dyslexia Mode</span>
                         </button>
-                        <button id="btn-toggle-colorblind" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                        <button id="btn-toggle-colorblind" class="btn-filter a11y-option-btn">
                             <i class="fa-solid fa-eye"></i> <span lang="de">Rot-Grün-Schutz</span><span lang="en">Colorblind Mode</span>
                         </button>
-                        <button id="btn-toggle-font-scale" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                        <button id="btn-toggle-font-scale" class="btn-filter a11y-option-btn">
                             <i class="fa-solid fa-text-height"></i> <span lang="de">Schriftgröße</span><span lang="en">Font Size</span>
                         </button>
-                        <button id="btn-toggle-high-contrast" class="btn-filter" style="width:100%; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                        <button id="btn-toggle-high-contrast" class="btn-filter a11y-option-btn">
                             <i class="fa-solid fa-circle-half-stroke"></i> <span lang="de">Hochkontrast (AAA)</span><span lang="en">High Contrast (AAA)</span>
                         </button>
                     </div>
@@ -474,6 +474,21 @@ function initAccessibilityControls() {
     document.addEventListener('click', (e) => {
         if (!a11yDropdown.contains(e.target) && e.target !== a11yToggle) {
             a11yDropdown.style.display = 'none';
+        }
+    });
+
+    // Close all open dropdowns when pressing Escape key (WCAG Keyboard Usability)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            a11yDropdown.style.display = 'none';
+            const accentDropdown = document.getElementById('accent-dropdown');
+            if (accentDropdown) accentDropdown.style.display = 'none';
+            const navMenu = document.getElementById('nav-menu');
+            if (navMenu && navMenu.classList.contains('open')) {
+                navMenu.classList.remove('open');
+                const menuToggle = document.getElementById('menu-toggle');
+                if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+            }
         }
     });
 

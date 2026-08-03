@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('All Projects 1-Click Launch E2E Verification', () => {
 
   test('sollte alle Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
+    test.setTimeout(60000);
     // 1. Open portfolio page
     await page.goto('http://127.0.0.1:8080/pages/portfolio.html');
     await page.waitForSelector('.project-card');

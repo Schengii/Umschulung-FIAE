@@ -83,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (techParam || searchParam) {
-            const query = (techParam || searchParam).toLowerCase().trim();
-            if (searchInput) searchInput.value = query;
-            currentSearchTerm = query;
+            const rawQuery = (techParam || searchParam);
+            const cleanQuery = rawQuery.replace(/<[^>]*>/g, '').toLowerCase().trim();
+            if (searchInput) searchInput.value = cleanQuery;
+            currentSearchTerm = cleanQuery;
         }
 
         const hash = decodeURIComponent(window.location.hash.substring(1)).trim();

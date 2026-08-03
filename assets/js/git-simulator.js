@@ -162,6 +162,9 @@ function writeTerminalLine(text, className = '') {
     line.innerHTML = text;
     terminalOutput.appendChild(line);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    if (terminalOutput.parentElement) {
+        terminalOutput.parentElement.scrollTop = terminalOutput.parentElement.scrollHeight;
+    }
 }
 
 function writeSystemLine(text) {
@@ -917,12 +920,35 @@ export function initGitSimulator() {
 
     if (!terminalInput || !gitSvg) return;
 
-    // Terminal Input events
+    // Command History State
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    // Terminal Input events with history navigation
     terminalInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const cmd = terminalInput.value;
+            if (cmd.trim()) {
+                commandHistory.push(cmd);
+                historyIndex = commandHistory.length;
+            }
             terminalInput.value = '';
             executeGitCommand(cmd);
+        } else if (e.key === 'ArrowUp') {
+            if (commandHistory.length > 0 && historyIndex > 0) {
+                historyIndex--;
+                terminalInput.value = commandHistory[historyIndex];
+                e.preventDefault();
+            }
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                terminalInput.value = commandHistory[historyIndex];
+            } else {
+                historyIndex = commandHistory.length;
+                terminalInput.value = '';
+            }
+            e.preventDefault();
         }
     });
 

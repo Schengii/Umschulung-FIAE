@@ -24,7 +24,25 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
         const feedback = document.getElementById(feedbackId);
 
         if (!name || !email || !message) return;
-        if (!name.value.trim() || !email.value.trim() || !message.value.trim()) return;
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'form-feedback warning';
+                feedback.innerHTML = '<span lang="de">Bitte füllen Sie alle Felder aus.</span><span lang="en">Please fill in all required fields.</span>';
+            }
+            return;
+        }
+
+        if (!emailRegex.test(email.value.trim())) {
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'form-feedback warning';
+                feedback.innerHTML = '<span lang="de">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span><span lang="en">Please enter a valid email address.</span>';
+            }
+            return;
+        }
 
         // Check if Web3Forms key is set
         if (typeof APP !== 'undefined' && APP.WEB3FORMS_KEY) {

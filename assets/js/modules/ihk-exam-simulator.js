@@ -84,6 +84,11 @@ export function initIhkExamSimulator() {
         }, 1000);
     }
 
+    // Teardown timer interval when user leaves page to prevent memory leak
+    window.addEventListener('beforeunload', () => {
+        if (timerInterval) clearInterval(timerInterval);
+    }, { once: true });
+
     function updateTimerText() {
         const mins = String(Math.floor(timeRemaining / 60)).padStart(2, '0');
         const secs = String(timeRemaining % 60).padStart(2, '0');
