@@ -1,58 +1,80 @@
-# Entwickler-Dokumentation & Projekt-Leitfaden
+# Entwickler-Dokumentation & Projekt-Leitfaden — Umschulung FIAE
 
-Herzlich willkommen im Portfolio-Repository zur Umschulung als **Fachinformatiker für Anwendungsentwicklung (FIAE)** von Maximilian Schenk.
+Herzlich willkommen im zentralen Portfolio-Repository zur Umschulung als **Fachinformatiker für Anwendungsentwicklung (FIAE)** von Maximilian Schenk.
 
-Diese Anleitung beschreibt den strukturellen Aufbau des Projekts, die Software-Architektur sowie die Kernfunktionen. Sie dient als Einstiegshilfe für andere Entwickler, um sich schnell im Projekt zurechtzufinden.
+Diese Anleitung beschreibt den strukturellen Aufbau des Projekts, die Software-Architektur, die Daten-Pipelines sowie die barrierefreien Kernfunktionen. Sie dient als Einstiegshilfe für Entwickler und Prüfer, um sich schnell im Projekt zurechtzufinden.
 
 ---
 
 ## 📂 Projektstruktur & Ordneraufteilung
 
-Das Projekt ist als **moderne, statische Web-App (PWA)** ohne schwerfällige Backend-Frameworks konzipiert. Alle Funktionalitäten basieren auf nativem HTML5, CSS3 und Vanilla JavaScript (ES6+), das als ES-Module (`type="module"`) geladen wird.
+Das Projekt ist als **moderne, statische Web-App (PWA)** ohne schwerfällige Backend-Frameworks konzipiert. Alle Funktionalitäten basieren auf nativem HTML5, CSS3 Custom Tokens und Vanilla JavaScript (ES6+), das als ES-Module (`type="module"`) geladen wird.
 
 ```text
 Umschulung-FIAE/
 │
-├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen & Personalisierung)
-├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten
+├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen, Personalisierung & Barrierefreiheit)
+├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten (Playwright, Build)
 ├── playwright.config.js         # Playwright E2E Testkonfiguration
-├── sw.js                        # Service Worker für Offline-Caching & PWA-Fähigkeit
-├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen)
+├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v25) & PWA-Fähigkeit
+├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
-├── pages/                       # Aufgeräumter Ordner für alle Inhaltsseiten
+├── pages/                       # Aufgeräumter Ordner für alle 23 Inhaltsseiten
 │   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
-│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (EcoChef, ElektroCheck AI, etc.)
-│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-geschützten Zeugnissen
+│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (21 registrierte Projekte)
+│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-geschützten Zeugnissen (Base64/XOR)
 │   ├── ueber-mich.html          # Steckbrief & Elektroniker-FIAE-Transfermatrix
-│   ├── dashboard.html           # IHK-Notensimulation & Notenrechner
+│   ├── dashboard.html           # IHK-Notensimulation & Notenrechner (AP1 & AP2)
 │   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
-│   └── ...                      # Weitere Seiten (architecture.html, flashcards.html, impressum.html, etc.)
+│   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName)
+│   ├── architecture.html       # Interaktives C4-Architekturdiagramm
+│   ├── flashcards.html         # IHK-Lernkarten mit Leitner-Box-System
+│   ├── interview-trainer.html  # Interaktiver Bewerbungs-Trainer für FIAE
+│   ├── playground.html         # In-Browser SQL & Code Playground
+│   ├── git-simulator.html      # Retro Hacker CRT Git-Befehlssimulator
+│   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, games.html, etc.)
 │
 ├── assets/                      # Globale Web-Ressourcen
-│   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, darkmode.css)
-│   ├── js/                      # Script-Dateien
+│   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, print.css)
+│   ├── js/                      # Script-Dateien & ES6-Module
 │   │   ├── main.js              # Kern-Initialisierung & dynamischer Modul-Loader
-│   │   ├── components.js        # Header- und Footer-Komponenten (Templating)
+│   │   ├── components.js        # Header, Footer, Accessibility Manager & Templating
 │   │   ├── constants.js         # Globale App-Konstanten & Pfadauflösung (resolveAssetPath)
-│   │   ├── dashboard.js         # Steuerungslogik für den IHK-Notenrechner
-│   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering
+│   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering & Matchmaker
+│   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (21 Projekte)
 │   │   └── modules/             # Abgekapselte JavaScript-Feature-Module & E2E-Tests
-│   │       ├── achievements.js  # Erfolge-Widget (Widget & Toast-Benachrichtigung)
-│   │       ├── qr-generator.js  # Interaktiver Recruiter QR-Code-Generator
-      └── ...              # Weitere Hilfs-Module (learning-progress.js, all_pages.spec.js)
+│   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite
+│   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 21 Projekte
+│   │       └── ...              # Weitere Module (achievements.js, qr-generator.js)
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
+│   ├── fonts/                   # Lokale WOFF2 Fonts (Inter & Outfit - 100% DSGVO-konform)
 │   └── images/                  # Bilder, Screenshots & Favicons
 │
-├── Projekte/                    # Unterordner für eigenständige IHK-Übungsprojekte
-│   ├── EcoChef/                 # IHK-Abschlussprojekt (HTML/JS/JSON)
-│   ├── ElektroCheck AI/         # Bounding-Box Objekterkennung (AI)
-│   └── ...                      # Weitere Übungen (Glücksspiel, Jobsuche, ManuFaktur, etc.)
+├── Projekte/                    # Unterordner für eigenständige IHK- & Praxis-Übungsprojekte
+│   ├── EcoChef/                 # IHK-Abschlussprojekt (Lit/TypeScript PWA mit Gemini KI)
+│   ├── ElektroCheck AI/         # Intelligente Prüfberichtsanalyse (React/Vite & OpenAI API)
+│   ├── Minecraft/               # 3D Voxel Engine (C++20 & OpenGL 4.5 mit Redstone & Biomen)
+│   ├── Minecraft-Pokemon/       # Voxel Crossover RPG (Godot 4.x & C# .NET)
+│   ├── Sims/                    # Next-Gen Sims 5 Web Experience (React 2.5D & Audio Synth)
+│   ├── BurgenGame/              # Interaktives 2D-Aufbaustrategiespiel (Canvas & JS)
+│   ├── CoOpVersusGame/          # Multiplayer Co-Op/Versus Game Prototype (Godot 4.6)
+│   ├── finance-ai-bot/          # Finanzplaner & Conversational Chatbot (NLP)
+│   ├── Finanzenportfolio/       # Vermögensplaner & Dashboard (React/Recharts)
+│   ├── Glücksspiel/             # Casual Mini Games Suite (Slots, Roulette, Plinko)
+│   ├── Jobbsuche/               # PWA Stellenportal für Entwickler
+│   ├── ManuFaktur/              # Kunst- & Bildergalerie mit Merkliste
+│   ├── orbital-scrap/           # Sci-Fi Clicker- & Idle-Game (Godot 4.6)
+│   ├── Urlaubsfotos/            # Fotogalerie & Filter-Organizer (React/Vite)
+│   ├── VerkaufsVorlagen/        # Rechnungs- & Beleg-Generator (React/PDF)
+│   ├── Wohnungssuche KI/        # Automatisiere Wohnungssuche mit Web-Scraper & KI
+│   ├── arbeitszeiterfassung/    # Enterprise PWA Zeiterfassung mit Firebase Cloud-Sync
+│   └── java-playground.html     # Java OOP & Spring Boot Übungsprojekte Showcase
 │
 └── scripts/                     # Automatisierungs- & Build-Skripte (Node.js)
-    ├── generate_projects_data.js # Scannt Projekte und generiert assets/js/projects_data.js
-    └── generate_qr_codes.js     # Hilfsskript zum Vorab-Rendern statischer QR-Codes
+    ├── generate_projects_data.js # Scannt Projekte/ und generiert projects.json & projects_data.js
+    └── check_data_sync.js       # Verifiziert 100%ige Synchronisation der Projektdaten
 ```
 
 ---
@@ -64,30 +86,30 @@ Jede HTML-Seite lädt den zentralen Einstiegspunkt als ES-Modul:
 ```html
 <script type="module" src="assets/js/main.js"></script>
 ```
-Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) importiert alle Feature-Module und führt sequentiell deren Initialisierungsfunktionen (z. B. `initTheme()`, `initNavigation()`) beim Laden aus. Dies verhindert Namenskonflikte und sorgt für saubere Kapselung.
+Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) importiert alle Feature-Module und führt sequentiell deren Initialisierungsfunktionen (z. B. `initTheme()`, `initNavigation()`, `initAccessibility()`) beim Laden aus. Dies verhindert Namenskonflikte und sorgt für saubere Kapselung.
 
-### 2. Globale Konstanten & scope-übergreifender Zugriff (`constants.js`)
-Die Datei [constants.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/constants.js) definiert die globalen Key-Konstanten (`STORAGE_KEYS`, `APP`) und macht sie über das `window`-Objekt sowohl für ES6-Module als auch für klassische Scripts (wie `playground.js`, `quiz.js`) global zugänglich.
-
-### 3. Header, Footer & Speicherverwaltung (`components.js`)
+### 2. Header, Footer & Barrierefreiheits-Assistent (`components.js`)
 - **Header & Footer**: Werden dynamisch in die DOM-Elemente `#site-header` und `#site-footer` geladen, um HTML-Redundanzen zu vermeiden (DRY-Prinzip).
-- **StorageManager**: Bietet eine sichere Schnittstelle für den Zugriff auf den `localStorage` mit automatischem Fallback bei blockiertem Speicher.
+- **Barrierefreiheits-Manager (`initAccessibilityControls`)**:
+  - 📖 **Legasthenie-Modus (`data-dyslexia="true"`)**: Aktiviert legasthenie-freundliche Typografie mit erhöhtem Zeilenabstand (`line-height: 1.8`) und Wortabstand.
+  - 🎨 **Rot-Grün-Schutz (`data-colorblind="deuteranopia"`)**: Schaltet auf eine farbfehlsichtigkeits-optimierte Palette (Okabe-Ito Palette) um.
+  - 🔍 **Schriftgrößen-Skalierung (`data-font-scale="large|xlarge"`)**: Stufenlose Schriftvergrößerung für Sehbeeinträchtigte.
+  - 👁️ **Hochkontrast-Modus (`data-contrast="high"`)**: Erfüllt das WCAG 2.1 AAA Kontrastverhältnis (7:1).
+  - Persistiert alle Benutzereinstellungen im `localStorage`.
 
-### 4. PWA-Offline-Caching (`sw.js`)
+### 3. PWA-Offline-Caching (`sw.js`)
 Der Service Worker in [sw.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/sw.js) cached alle statischen Dateien (HTML, CSS, JS, Bilder) für die Offline-Nutzung.
-- **Wichtig**: Bei Änderungen an Assets muss der `CACHE_NAME` erhöht werden (z. B. von `umschulung-fiae-v16` auf `umschulung-fiae-v17`), um Browsern die Aktualisierung zu signalisieren.
+- **Cache-Version**: `umschulung-fiae-v25` signalisiert allen Browsern automatisches Aktualisieren statischer Assets.
 
-### 5. Recruiter-Personalisierung (`username-greeting.js`)
-Wertet URL-Parameter (z. B. `?c=Company` und `?n=Name`) aus, speichert sie in der Session und generiert auf der Startseite ein personalisiertes Begrüßungsbanner.
-
-### 6. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
-Scannt die Ordner unter `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) sowie `assets/js/projects_data.js`.
+### 4. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
+Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) sowie `assets/js/projects_data.js`.
 - Befehl zum Ausführen: `npm run generate-data`
+- Prüfbefehl: `npm run check-sync`
 
-### 7. Kryptografischer Token-Schutz & DSGVO-Audits (`token-auth.js`)
-Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** im Seitenmenü oder per Parameter `?token=fiae2026` freigeschaltet. 
-- **Echte Client-Kryptografie**: Um zu verhindern, dass vertrauliche Daten durch das Einsehen der Quellcodedateien im Browser kopiert werden können, sind Gehaltswunsch und Zeugnislinks im HTML-Code als Base64-verschlüsselter XOR-Payload hinterlegt. Erst nach erfolgreicher Eingabe des Tokens wird der Payload im Browser mit dem Key entschlüsselt und im DOM gerendert.
-- **DSGVO & CSP**: Alle Seiten erzwingen eine strenge Content-Security-Policy (CSP) per Meta-Tag im Header. Zudem werden Google Fonts offline gehostet, um IP-Leaks zu Google-Servern zu verhindern.
+### 5. Kryptografischer Token-Schutz & DSGVO (`token-auth.js`)
+Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** freigeschaltet.
+- **Client-Kryptografie**: Gehaltswunsch und Zeugnislinks sind im HTML-Code als Base64-verschlüsselter XOR-Payload hinterlegt und werden erst nach Token-Eingabe im DOM entschlüsselt.
+- **DSGVO & CSP**: Strenge Content-Security-Policy (CSP) im Header aller HTML-Dateien. Lokale WOFF2 Fonts ohne Google-Server-Verbindungen.
 
 ---
 
@@ -100,74 +122,29 @@ npm install
 npx playwright install chromium
 ```
 
-### 2. Lokalen Server starten
-Da das Projekt ES-Module verwendet, muss es über einen Server ausgeführt werden:
+### 2. Projektdaten generieren & verifizieren
 ```bash
-# Startet einen cachingfreien Entwicklungsserver auf Port 8080
-npx http-server . -p 8080 -c-1
+npm run generate-data
+npm run check-sync
 ```
 
-### 3. Tests ausführen
-Verifiziere die Funktionalität aller 23 Einzelseiten und Kernfeatures automatisch:
+### 3. Lokalen Entwicklungsserver starten
+```bash
+npx http-server . -p 8080 -c-1
+```
+Öffne anschließend **[http://127.0.0.1:8080](http://127.0.0.1:8080)** im Browser.
+
+### 4. Automated E2E Testing (Playwright)
 ```bash
 npm test
 ```
-Die Tests prüfen die Seiten auf Fehlerfreiheit beim Laden, fehlende 404-Ressourcen sowie korrekte Funktionalität von Dark Mode und Formularweiterleitungen.
+Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 registrierten Projekte**, Git-Simulator-Befehle, Dark-Mode-Toggles und interaktive Features.
 
 ---
 
-## 🚀 Neuheiten & Interaktive Erweiterungen (Juli 2026)
+## 🌟 Veröffentlichungs-Zusammenfassung (August 2026 Release)
 
-Folgende interaktive Features wurden hinzugefügt:
-
-1. **Recruiter-Cockpit (Home)**:
-   - **Rollen-Filter**: Recruiter können Profile für *Frontend*, *Backend* oder *Alle* filtern, um Schwerpunkte und Stellenbezeichnungen dynamisch anzupassen.
-   - **Live GitHub-Aktivität**: Integrierter Feed zeigt die echten neuesten Commits des GitHub-Repositories an (mit automatischem Fallback-Mock).
-2. **Brücken-Transfer & Zertifikate (Über mich)**:
-   - **Elektroniker-Entwickler-Brücke**: Interaktiver Vergleich, der zeigt, wie elektrotechnische Fertigkeiten auf die Softwareentwicklung übertragen werden.
-   - **Zertifikate-Slider**: Visuelles Karussell für Zeugnisse und Leistungsnachweise.
-3. **Lernpfad-Checkliste & DFG-Praxis (Ausbildung)**:
-   - **Interaktiver Lernpfad**: Im Drawer jeder Phase können Themen nun abgehakt werden. Der Fortschritt wird im `localStorage` gespeichert.
-   - **DFG-Praxis-Card**: Detaillierte Statistiken und Highlights aus der zweijährigen Phase bei der Deutschen Forschungsgemeinschaft.
-4. **Projekt-Matchmaker & Iframe-Demos (Projekte)**:
-   - **Matchmaker-Wizard**: Hilft Recruitern, passende Projekte basierend auf deren Kriterien zu finden.
-   - **Live-Demos**: Direktes Testen einfacher Webprojekte in einem schicken In-Page Iframe-Modal ohne Tabwechsel.
-5. **Download-Center & Terminplaner (Impressum)**:
-   - **Terminplaner-Mock**: Interaktive Zeitschlitz-Auswahl zur Anfrage von Kennenlerngesprächen.
-   - **Modernisiertes Download-Zentrum**: Download-Präsentationen werden in einem sauberen Raster aus Info-Karten dargestellt.
-6. **Suchhervorhebung & Likes (News)**:
-   - **Such-Markierung**: Gefundene Suchbegriffe werden in Titeln und Texten gelb markiert (`<mark>`).
-   - **Likes-Button**: News-Beiträge können geliked werden, wobei die Zähler persistiert werden.
-7. **Premium Styling, PWA, Lernboxen & SVG-Grafiken**:
-   - **Maus-Spotlight & Glassmorphismus**: Cards besitzen ein satteres Glasdesign. Ein dynamischer Mouse-Glow-Effekt folgt der Maus auf allen Cards.
-   - **Offline-Modus (`offline.html`)**: Fallback-Seite mit animierten WiFi-Icons und Toast-Warnungen, sobald die Verbindung getrennt wird.
-   - **Leitner-Box-Filterung (Flashcards)**: Lernkarten können direkt nach Boxen (Box 1, 2 und 3) gefiltert studiert werden.
-   - **Git-Level-Statusanzeige**: Level-Dropdown im Simulator zeigt nun ein interaktives Bestanden-Abzeichen (Status-Badge).
-   - **SVG-Qualitätsdiagramm**: Der Notenrechner rendert jetzt ein dynamisches Balkendiagramm im SVG-Format.
-8. **3er-Reihen Portfolio, Simulator-Launcher & Screenshot-Karussell (Juli 2026 Part II)**:
-   - **Responsive 3er-Reihen**: Das Projekt-Raster passt sich auf Desktop-Monitoren fest in 3er-Reihen an (3 Spalten) und skaliert geschmeidig auf Mobilgeräten.
-   - **Priorisierte Highlights**: `EcoChef` (IHK-Abschlussprojekt) und `ManuFaktur` sind dauerhaft als Top-Highlights an Position 1 und 2 gepinnt.
-   - **100% Launch-Abdeckung**: Jedes Projekt im Portfolio ist direkt startfähig. Für Godot-Spiele (`CoOpVersusGame`) und Java-Backends (`Java OOP & Spring Boot`) wurden interaktive Web-Simulatoren / Sandboxes erstellt.
-   - **Screenshot-Karussell**: Das Projektdetail-Modal verfügt über ein integriertes Bildkarussell mit Vor-/Zurück-Tasten und Navigationspunkten für Projekte mit mehreren Bildern.
-9. **Dynamischer Lebenslauf-Timeline-Pfad (Scroll-Linked SVG)**:
-   - **Interaktiver Scroll-Pfad**: Auf der Lebenslauf-Seite werden die statischen Ränder der Timeline-Container durch dynamische SVG-Pfad-Linien ersetzt, die sich beim Herunterscrollen flüssig einfärben.
-   - **Pulsierende Meilensteine**: Sobald eine berufliche oder schulische Station im Viewport erreicht wird, vergrößert sich die jeweilige Timeline-Kugel (Marker) und erhält einen weichen, pulsierenden Farb-Glow.
-10. **Premium UI/UX Core & 3D Interactive Design**:
-    - **Globaler 3D-Card-Tilt**: Alle Haupt- und Detail-Karten neigen sich interaktiv in 3D in Richtung des Mauszeigers (mit Performance-Fallback für Mobilgeräte).
-    - **Ambient Mouse Spotlight Follower**: Ein weicher, themenfarbiger Lichtkreis folgt dem Mauszeiger im Seitenhintergrund und interagiert nahtlos mit den transluzenten Glaselementen.
-    - **Verstärkter Glassmorphismus & Radial-Glow Borders**: Karten besitzen eine noch realistischere Glasstruktur (`backdrop-filter` & custom box-shadows) und erhalten beim Überfahren mit der Maus einen hochpräzisen, kreisförmigen Lichtrahmen (Hover Glow Border).
-    - **Staggered-Entrance Ladeanimationen**: Dashboard-Karten und Listeninhalte blenden beim Seitenaufruf flüssig und leicht zeitversetzt nacheinander von unten nach oben ein.
-11. **Page Transitions, Synthesized Audio Cues & Retro CRT Simulator**:
-    - **Weiche Page-Transitions**: Interne Link-Navigationen werden durch eine ganzseitige, sanft ein- und ausblendende Glas-Overlay-Maske verzögert und animiert.
-    - **Web Audio API Synthesizer-Sounds**: Vollständig programmgesteuerte, dateilose Ton-Synthese für Klicks (präzise Dreieckwellen-Entladung) und Hover-Events (subtile Sinuswellen-Impulse). Inklusive persistentem Stummschalter in der Header-Navigationsleiste.
-    - **Hacker Retro-CRT Git Simulator**: Der Git-Simulator-Terminal hat eine realistische 3D-Monitorwölbung (CRT-Krümmung), Scanlines (Abtastzeilen), mikro-flackerndes grünes Phosphorglühen und einen passenden blinkenden Terminal-Cursor erhalten.
-    - **3D Skill-Radar-Chart**: Das SVG-Radardiagramm ist in einen transluzenten Glashintergrund mit einem sich im Hintergrund drehenden 3D-Rasterkreis eingebettet.
-    - **Spiel-Interaktions-Feedback**: Das Memory-Spiel besitzt echte 3D-Kartenwendemanimationen mit Match-Erfolgs-Glows, und das Snake-Spiel reagiert bei Wand- oder Körperkollisionen mit einem intensiven Screenshake und einem roten Warnungs-Glow.
-12. **Release-Optimierung, Deep-Linking & CI/CD Pipeline (Juli 2026 Part III)**:
-    - **OpenGraph & Social Sharing**: Reichhaltige Social-Media Metadaten (`og:title`, `og:description`, `og:image`, `twitter:card`) für professionelle Vorschau-Karten auf LinkedIn, Xing, WhatsApp und Twitter/X.
-    - **URL-Parameter Deep-Linking**: Direkte Filter-Links wie `portfolio.html?tech=Java`, `portfolio.html?category=web` oder `portfolio.html?repo=EcoChef` filtern und öffnen das gewünschte Projekt beim Seitenaufruf automatisch.
-    - **Automatisierter GitHub CI/CD Audit Workflow**: In `.github/workflows/ci.yml` ist die Pipeline um automatisierte Lighthouse-Performance- und Accessibility-Audits ergänzt.
-    - **PWA Service Worker Cache v24 & 404-Fallback**: Aktualisierte Caching-Strategie in `sw.js` inklusive einer eigens gestalteten, zweisprachigen Cyber-Glassmorphism 404-Fehlerseite (`404.html`).
-    - **Datenschutzfreundlicher Visitor-Counter**: Diskreter Session- und Besucherzähler im Footer ohne Tracking oder Drittanbieter-Datenübertragung.
-
-
+- **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
+- **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
+- **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
+- **39 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright.

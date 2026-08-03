@@ -4,23 +4,30 @@
  * Auto-detects the current page and applies the active navigation state.
  */
 
-// Immediate Theme & Accent Bootstrapping to prevent white flashing / style shifts
+// Immediate Theme, Accent & Accessibility Bootstrapping to prevent white flashing / style shifts
 (function() {
     let initialTheme = 'dark';
     let initialAccent = 'blue';
     try {
         const storedTheme = localStorage.getItem('portfolio_theme');
-        if (storedTheme) {
-            initialTheme = storedTheme;
-        } else {
-            localStorage.setItem('portfolio_theme', 'dark');
-        }
+        if (storedTheme) initialTheme = storedTheme;
+        else localStorage.setItem('portfolio_theme', 'dark');
+
         const storedAccent = localStorage.getItem('portfolio_accent');
-        if (storedAccent) {
-            initialAccent = storedAccent;
-        } else {
-            localStorage.setItem('portfolio_accent', 'blue');
-        }
+        if (storedAccent) initialAccent = storedAccent;
+        else localStorage.setItem('portfolio_accent', 'blue');
+
+        const dyslexia = localStorage.getItem('portfolio_dyslexia');
+        if (dyslexia === 'true') document.documentElement.setAttribute('data-dyslexia', 'true');
+
+        const colorblind = localStorage.getItem('portfolio_colorblind');
+        if (colorblind) document.documentElement.setAttribute('data-colorblind', colorblind);
+
+        const fontScale = localStorage.getItem('portfolio_font_scale');
+        if (fontScale) document.documentElement.setAttribute('data-font-scale', fontScale);
+
+        const contrast = localStorage.getItem('portfolio_contrast');
+        if (contrast === 'high') document.documentElement.setAttribute('data-contrast', 'high');
     } catch (e) {
         // LocalStorage fallback
     }
@@ -189,6 +196,26 @@ function renderNav(currentPage) {
                         <button class="accent-dot-btn accent-violet" data-accent-val="violet" title="Royal Violet" aria-label="Royal Violet"></button>
                         <button class="accent-dot-btn accent-orange" data-accent-val="orange" title="Sunset Orange" aria-label="Sunset Orange"></button>
                         <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
+                    </div>
+                </div>
+                <div class="a11y-customizer-container" style="position: relative;">
+                    <button id="a11y-toggle" class="theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" title="Barrierefreiheit & Lesehilfe">
+                        <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+                    </button>
+                    <div id="a11y-dropdown" class="accent-dropdown" style="display: none; min-width: 220px; padding: 0.75rem; right: 0;" role="menu">
+                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;"><i class="fa-solid fa-universal-access"></i> Barrierefreiheit</div>
+                        <button id="btn-toggle-dyslexia" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                            <i class="fa-solid fa-book-open-reader"></i> <span lang="de">Legasthenie-Hilfe</span><span lang="en">Dyslexia Mode</span>
+                        </button>
+                        <button id="btn-toggle-colorblind" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                            <i class="fa-solid fa-eye"></i> <span lang="de">Rot-Grün-Schutz</span><span lang="en">Colorblind Mode</span>
+                        </button>
+                        <button id="btn-toggle-font-scale" class="btn-filter" style="width:100%; margin-bottom: 0.35rem; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                            <i class="fa-solid fa-text-height"></i> <span lang="de">Schriftgröße</span><span lang="en">Font Size</span>
+                        </button>
+                        <button id="btn-toggle-high-contrast" class="btn-filter" style="width:100%; font-size: 0.8rem; text-align: left; justify-content: flex-start;">
+                            <i class="fa-solid fa-circle-half-stroke"></i> <span lang="de">Hochkontrast (AAA)</span><span lang="en">High Contrast (AAA)</span>
+                        </button>
                     </div>
                 </div>
                 <button id="audio-toggle" class="audio-toggle-btn" aria-label="Sound umschalten" title="Sound umschalten">
@@ -428,4 +455,108 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.warn('PWA Service Worker failed:', err));
         }
     }
+
+    // Initialize Accessibility Control Widget (Dyslexia, Colorblind, Font Scale, High Contrast)
+    initAccessibilityControls();
 });
+
+function initAccessibilityControls() {
+    const a11yToggle = document.getElementById('a11y-toggle');
+    const a11yDropdown = document.getElementById('a11y-dropdown');
+    if (!a11yToggle || !a11yDropdown) return;
+
+    a11yToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = a11yDropdown.style.display !== 'none';
+        a11yDropdown.style.display = isOpen ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!a11yDropdown.contains(e.target) && e.target !== a11yToggle) {
+            a11yDropdown.style.display = 'none';
+        }
+    });
+
+    // 1. Dyslexia Toggle
+    const btnDyslexia = document.getElementById('btn-toggle-dyslexia');
+    if (btnDyslexia) {
+        btnDyslexia.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-dyslexia') === 'true';
+            if (current) {
+                document.documentElement.removeAttribute('data-dyslexia');
+                StorageManager.setItem('portfolio_dyslexia', 'false');
+                btnDyslexia.classList.remove('active');
+            } else {
+                document.documentElement.setAttribute('data-dyslexia', 'true');
+                StorageManager.setItem('portfolio_dyslexia', 'true');
+                btnDyslexia.classList.add('active');
+            }
+        });
+        if (document.documentElement.getAttribute('data-dyslexia') === 'true') {
+            btnDyslexia.classList.add('active');
+        }
+    }
+
+    // 2. Colorblind Toggle
+    const btnColorblind = document.getElementById('btn-toggle-colorblind');
+    if (btnColorblind) {
+        btnColorblind.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-colorblind');
+            if (current === 'deuteranopia') {
+                document.documentElement.removeAttribute('data-colorblind');
+                StorageManager.setItem('portfolio_colorblind', '');
+                btnColorblind.classList.remove('active');
+            } else {
+                document.documentElement.setAttribute('data-colorblind', 'deuteranopia');
+                StorageManager.setItem('portfolio_colorblind', 'deuteranopia');
+                btnColorblind.classList.add('active');
+            }
+        });
+        if (document.documentElement.getAttribute('data-colorblind')) {
+            btnColorblind.classList.add('active');
+        }
+    }
+
+    // 3. Font Scale Toggle
+    const btnFontScale = document.getElementById('btn-toggle-font-scale');
+    if (btnFontScale) {
+        btnFontScale.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-font-scale');
+            if (!current) {
+                document.documentElement.setAttribute('data-font-scale', 'large');
+                StorageManager.setItem('portfolio_font_scale', 'large');
+                btnFontScale.classList.add('active');
+            } else if (current === 'large') {
+                document.documentElement.setAttribute('data-font-scale', 'xlarge');
+                StorageManager.setItem('portfolio_font_scale', 'xlarge');
+            } else {
+                document.documentElement.removeAttribute('data-font-scale');
+                StorageManager.setItem('portfolio_font_scale', '');
+                btnFontScale.classList.remove('active');
+            }
+        });
+        if (document.documentElement.getAttribute('data-font-scale')) {
+            btnFontScale.classList.add('active');
+        }
+    }
+
+    // 4. High Contrast Toggle
+    const btnContrast = document.getElementById('btn-toggle-high-contrast');
+    if (btnContrast) {
+        btnContrast.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-contrast') === 'high';
+            if (current) {
+                document.documentElement.removeAttribute('data-contrast');
+                StorageManager.setItem('portfolio_contrast', 'normal');
+                btnContrast.classList.remove('active');
+            } else {
+                document.documentElement.setAttribute('data-contrast', 'high');
+                StorageManager.setItem('portfolio_contrast', 'high');
+                btnContrast.classList.add('active');
+            }
+        });
+        if (document.documentElement.getAttribute('data-contrast') === 'high') {
+            btnContrast.classList.add('active');
+        }
+    }
+}

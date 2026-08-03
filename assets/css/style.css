@@ -194,6 +194,127 @@ html[data-accent="rose"] {
 }
 
 /* ==========================================================================
+   ACCESSIBILITY & WCAG 2.1 AAA ENHANCEMENTS
+   ========================================================================== */
+
+/* 1. Dyslexia / Legasthenie-Modus */
+html[data-dyslexia="true"] body,
+html[data-dyslexia="true"] button,
+html[data-dyslexia="true"] input,
+html[data-dyslexia="true"] select,
+html[data-dyslexia="true"] textarea {
+    font-family: 'OpenDyslexic', 'Inter', system-ui, -apple-system, sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.8 !important;
+}
+html[data-dyslexia="true"] p,
+html[data-dyslexia="true"] li,
+html[data-dyslexia="true"] span {
+    max-width: 75ch;
+}
+
+/* 2. Font Size Scaling (A / A+ / A++) */
+html[data-font-scale="large"] { font-size: 112.5% !important; }  /* ~18px */
+html[data-font-scale="xlarge"] { font-size: 125% !important; }   /* ~20px */
+
+/* 3. High Contrast Mode (WCAG 7:1 AAA) */
+html[data-contrast="high"] {
+    --primary: #004085 !important;
+    --primary-hover: #002752 !important;
+    --bg-page: #ffffff !important;
+    --bg-card: #ffffff !important;
+    --text-primary: #000000 !important;
+    --text-secondary: #111111 !important;
+    --text-muted: #222222 !important;
+    --border: #000000 !important;
+    --border-hover: #000000 !important;
+}
+[data-theme="dark"][data-contrast="high"],
+html[data-theme="dark"][data-contrast="high"] {
+    --primary: #ffff00 !important;
+    --primary-hover: #ffffff !important;
+    --bg-page: #000000 !important;
+    --bg-card: #000000 !important;
+    --text-primary: #ffffff !important;
+    --text-secondary: #eeeeee !important;
+    --text-muted: #dddddd !important;
+    --border: #ffffff !important;
+    --border-hover: #ffffff !important;
+}
+html[data-contrast="high"] button,
+html[data-contrast="high"] .card,
+html[data-contrast="high"] input,
+html[data-contrast="high"] select {
+    border: 2px solid currentColor !important;
+}
+
+/* 4. Rot-Grün-Schwäche & Colorblindness Modes (Okabe-Ito Color Palette) */
+html[data-colorblind="deuteranopia"],
+html[data-colorblind="protanopia"] {
+    --primary: #0072b2 !important;
+    --primary-hover: #005689 !important;
+    --accent: #d55e00 !important;
+    --success: #0072b2 !important;
+    --warning: #e69f00 !important;
+    --danger: #d55e00 !important;
+    --info: #56b4e9 !important;
+}
+html[data-colorblind="tritanopia"] {
+    --primary: #009e73 !important;
+    --accent: #cc79a7 !important;
+    --success: #009e73 !important;
+    --warning: #f0e442 !important;
+    --danger: #d55e00 !important;
+    --info: #cc79a7 !important;
+}
+
+/* 5. Reduced Motion Toggle */
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] ::before,
+html[data-reduced-motion="true"] ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* 6. Accessibility Widget Floating & Header Controls */
+.a11y-widget-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 0.25rem 0.6rem;
+    margin-left: 0.5rem;
+    box-shadow: var(--shadow-sm);
+}
+.a11y-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.45rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+.a11y-btn:hover,
+.a11y-btn.active {
+    color: var(--primary);
+    border-color: var(--border-hover);
+    background: var(--primary-light);
+}
+
+/* Accessible Keyboard Focus Ring */
+:focus-visible {
+    outline: 3px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* ==========================================================================
    RESET & BASE STYLES
    ========================================================================== */
 * {
