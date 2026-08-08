@@ -1,0 +1,31 @@
+{
+  "repoName": "Minecraft",
+  "titleDe": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+  "titleEn": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+  "tags": [
+    "C++20",
+    "OpenGL 4.5",
+    "CMake",
+    "Redstone Logic",
+    "3D Voxel Engine",
+    "Procedural Generation"
+  ],
+  "image": "assets/images/burgen_showcase.png",
+  "link": "Projekte/Minecraft/index.html",
+  "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
+  "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
+  "category": "games",
+  "language": "C++",
+  "codeFiles": [
+    {
+      "name": "CMakeLists.txt",
+      "path": "Projekte/Minecraft/CMakeLists.txt",
+      "type": "cmake"
+    },
+    {
+      "name": "README.md",
+      "path": "Projekte/Minecraft/README.md",
+      "type": "markdown"
+    }
+  ]
+}

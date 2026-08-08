@@ -1,0 +1,20 @@
+{
+  "name": "empire-classic",
+  "version": "1.2.0",
+  "description": "Empire Classic - Casual Castle Builder HTML5 Game",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "test": "node scripts/test.js",
+    "build": "echo 'Building Empire Classic PWA package...' && node -c js/core/main.js"
+  },
+  "keywords": [
+    "pwa",
+    "game",
+    "castle-builder",
+    "html5-canvas",
+    "isometric"
+  ],
+  "author": "Antigravity Dev Team",
+  "license": "MIT"
+}

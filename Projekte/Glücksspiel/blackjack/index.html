@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blei-Transmutation (Blackjack) - Alchemisten-Akademie</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default">
+
+    <!-- The floating HUD is injected by shared.js -->
+    
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <h1 class="game-title"><i class="fa-solid fa-code-merge"></i> Blei-Transmutation</h1>
+            <p class="game-subtitle">Transmutiere unedle Metalle zu reinem Gold (Wert 21) und schlage den Rektor Ignatius.</p>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Controls & Bets -->
+            <section class="panel control-panel" aria-label="Steuerung">
+                <h2 class="panel-title"><i class="fa-solid fa-coins"></i> Einsatz & Aktionen</h2>
+                <div class="balance-display" style="margin-bottom: 15px;">
+                    <span class="bal-label">Dein Guthaben:</span>
+                    <span class="bal-val"><span id="balance-amount">0.00</span> €</span>
+                </div>
+
+                <div class="bet-section">
+                    <label for="bet-input" class="input-label">Transmutations-Einsatz (€)</label>
+                    <input type="number" id="bet-input" class="bet-input-field" value="10.00" min="5.00" max="250.00" step="5.00">
+                    
+                    <div class="preset-buttons" style="display: flex; gap: 6px; margin-top: 8px;">
+                        <button type="button" class="btn btn-small" id="btn-bet-min">MIN</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-half">HÄLFTE</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-double">DOPPELT</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-max">MAX</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons-group" style="margin-top: 25px; display: flex; flex-direction: column; gap: 10px;">
+                    <button type="button" class="btn btn-large" id="btn-start" style="background: linear-gradient(135deg, #8a2be2, #4b0082); font-weight: 800; border: 1px solid rgba(255, 255, 255, 0.15);">
+                        DUELL STARTEN
+                    </button>
+                    
+                    <div class="game-play-buttons hidden" id="game-play-actions" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                        <div style="display: flex; gap: 8px; width: 100%;">
+                            <button type="button" class="btn btn-large" id="btn-hit" style="flex: 1; background: var(--color-cyan); color: #000; font-weight: 800;">
+                                <i class="fa-solid fa-plus"></i> ZIEHEN
+                            </button>
+                            <button type="button" class="btn btn-large" id="btn-stand" style="flex: 1; background: var(--color-gold); color: #000; font-weight: 800;">
+                                <i class="fa-solid fa-hand"></i> HALTEN
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 8px; width: 100%;">
+                            <button type="button" class="btn btn-secondary" id="btn-double-down" style="flex: 1; font-weight: 700; font-size: 0.85rem;" title="Einsatz verdoppeln & genau 1 Karte ziehen">
+                                <i class="fa-solid fa-angles-up"></i> VERDOPPELN
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btn-split" style="flex: 1; font-weight: 700; font-size: 0.85rem;" title="Paar in 2 Hände aufteilen">
+                                <i class="fa-solid fa-arrows-split-up-and-left"></i> SPALTEN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER PANEL: Table & Hands -->
+            <section class="panel board-panel" aria-label="Transmutations-Tisch" style="flex: 2; position: relative;">
+                <div class="table-felt" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 400px; padding: 20px;">
+                    <!-- DEALER HAND (Rektor Ignatius) -->
+                    <div class="hand-section dealer-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span class="hand-title">🧙‍♂️ Rektor Ignatius (Dealer)</span>
+                            <span class="hand-score" id="dealer-score-val">0</span>
+                        </div>
+                        <div class="cards-grid" id="dealer-cards">
+                            <!-- Dynamically loaded cards -->
+                        </div>
+                    </div>
+
+                    <!-- TABLE CENTER STATE -->
+                    <div class="table-center-msg" id="table-status">
+                        Platziere deinen Einsatz und starte die Transmutation.
+                    </div>
+
+                    <!-- PLAYER HAND -->
+                    <div class="hand-section player-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span class="hand-title">🧪 Deine Metalle (Spieler)</span>
+                            <span class="hand-score" id="player-score-val">0</span>
+                        </div>
+                        <div class="cards-grid" id="player-cards">
+                            <!-- Dynamically loaded cards -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

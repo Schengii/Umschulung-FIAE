@@ -1,0 +1,18 @@
+{
+  "repoName": "ElektroCheck-AI",
+  "titleDe": "⚡ ElektroCheck AI — Intelligente Prüfberichtsanalyse",
+  "titleEn": "⚡ ElektroCheck AI — Intelligent Inspection Report Analytics",
+  "tags": [
+    "React / Vite",
+    "OpenAI API",
+    "PDF Parsing",
+    "TailwindCSS",
+    "AI Integration"
+  ],
+  "image": "assets/images/elektrocheck_showcase.png",
+  "link": "Projekte/ElektroCheck%20AI/dist/index.html",
+  "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
+  "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
+  "category": "ai",
+  "language": "JavaScript"
+}

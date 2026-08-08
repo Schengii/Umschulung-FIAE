@@ -1,0 +1,159 @@
+/* BACCARAT STYLES */
+.baccarat-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.baccarat-table-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+}
+
+.baccarat-duellers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.dueller-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
+}
+
+.rubedo-side {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.albedo-side {
+    border-color: rgba(148, 163, 184, 0.4);
+}
+
+.side-badge {
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.rubedo-badge {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.albedo-badge {
+    background: rgba(148, 163, 184, 0.2);
+    color: #64748b;
+}
+
+.side-score {
+    font-size: 2.8rem;
+    font-weight: 900;
+    font-family: 'Cinzel', serif;
+    color: var(--color-gold);
+}
+
+.cards-container {
+    display: flex;
+    gap: 10px;
+    min-height: 90px;
+    align-items: center;
+}
+
+.baccarat-card {
+    width: 60px;
+    height: 85px;
+    background: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    animation: popIn 0.3s ease;
+}
+
+.baccarat-card.red {
+    color: #dc2626;
+}
+
+.baccarat-card.black {
+    color: #1e293b;
+}
+
+.versus-divider {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--color-gold);
+}
+
+.baccarat-result-banner {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    padding: 12px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+}
+
+.bet-selection-cards {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-bet-spot {
+    flex: 1;
+    max-width: 200px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-card);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.25s ease;
+}
+
+.btn-bet-spot.active {
+    border-color: var(--color-gold);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(180, 83, 9, 0.1));
+    box-shadow: 0 4px 15px rgba(180, 83, 9, 0.2);
+}
+
+.spot-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.spot-payout {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

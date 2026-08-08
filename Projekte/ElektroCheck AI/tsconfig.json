@@ -1,0 +1,23 @@
+{
+"compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true, 
+    "useDefineForClassFields": false, 
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "moduleResolution": "node",
+    "ignoreDeprecations": "5.0",
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts"]
+}

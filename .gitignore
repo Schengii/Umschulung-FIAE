@@ -1,6 +1,26 @@
+# Dependencies
 node_modules/
+**/node_modules/
+**/.venv/
+**/venv/
+**/__pycache__/
+*.pyc
+
+# Build outputs & C++ / Android build artifacts
+**/build/
+**/*.pdb
+**/*.ilk
+**/*.exe
+**/*.o
+**/*.obj
+**/*.bin
 test-results/
 playwright-report/
 .env
+.env.*
 .DS_Store
 Thumbs.db
+
+# Database & logs
+**/*.db
+**/*.log

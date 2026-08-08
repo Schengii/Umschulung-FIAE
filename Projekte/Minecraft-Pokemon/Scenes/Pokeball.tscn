@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cx6i8o8e2e2m2"]
+
+[ext_resource type="Script" path="res://Scripts/Pokeball.cs" id="1_pokeball"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.15
+
+[sub_resource type="BoxMesh" id="BoxMesh_red"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_red"]
+albedo_color = Color(1.0, 0.1, 0.1, 1)
+
+[node name="Pokeball" type="RigidBody3D"]
+script = ExtResource("1_pokeball")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_1")
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_red")
+surface_material_override/0 = SubResource("StandardMaterial3D_red")

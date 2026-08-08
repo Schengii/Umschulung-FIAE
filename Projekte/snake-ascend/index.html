@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Ascend: Block Royale</title>
+  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script>
+    window.addEventListener('error', function (e) {
+      console.error(e);
+      const errDiv = document.createElement('div');
+      errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:rgba(255,0,0,0.9);color:white;padding:12px;z-index:9999;font-size:12px;font-family:monospace;line-height:1.4;';
+      errDiv.innerText = 'Fehler: ' + e.message + '\nDatei: ' + e.filename.split('/').pop() + '\nZeile: ' + e.lineno;
+      document.body.appendChild(errDiv);
+    });
+  </script>
+</head>
+
+<body>
+  <div id="app-container">
+    <!-- Sound Toggle -->
+    <button id="sound-btn" class="icon-btn" aria-label="Sound stummschalten">🔊</button>
+    <button id="pause-btn" class="icon-btn" style="right: 65px;" aria-label="Spiel pausieren">⏸️</button>
+
+    <!-- Start Menu -->
+    <div id="start-menu" class="screen active">
+      <h1 class="logo">SNAKE ASCEND<br><span class="subtitle">BLOCK ROYALE</span></h1>
+
+      <!-- Coins Indicator -->
+      <div class="gold-indicator">
+        <span>Konto:</span> <span class="gold-val">0</span> 🪙
+      </div>
+
+      <div class="menu-tabs">
+        <button class="tab-btn active" data-tab="tab-rules">ANLEITUNG</button>
+        <button class="tab-btn" data-tab="tab-quests">MISSIONEN</button>
+        <button class="tab-btn" data-tab="tab-deck">DECK-EDITOR</button>
+        <button class="tab-btn" data-tab="tab-shop">SKIN-SHOP</button>
+      </div>
+
+      <!-- Tab Quests -->
+      <div id="tab-quests" class="tab-panel">
+        <div class="menu-card">
+          <h3>Aktive Session-Quests:</h3>
+          <div id="quests-list-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+            <!-- Quests injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 1: Rules -->
+      <div id="tab-rules" class="tab-panel active">
+        <div class="menu-card">
+          <h3>Wie man spielt:</h3>
+          <ul>
+            <li>🐍 Die Schlange klettert <strong>automatisch</strong> aufwärts.</li>
+            <li>⚡ Generiere <strong>Elixier</strong> (längere Schlangen generieren schneller!).</li>
+            <li>🃏 Spiele <strong>Karten</strong> aus, um Tetris-Plattformen zu platzieren.</li>
+            <li>🛡️ Nutze <strong>Spezialkarten</strong> (Schild, Frost, Kanone), um zu überleben.</li>
+            <li>🦟 Vorsicht vor Spinnen und Käfern, sie verletzen dich!</li>
+            <li>🏰 Zerstöre alle 100m den <strong>Boss-Turm</strong>, um weiterzukommen.</li>
+          </ul>
+          <button id="tutorial-btn" class="secondary-btn" style="margin-top: 15px; width: 100%;">TUTORIAL
+            ANSEHEN</button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Deck Editor -->
+      <div id="tab-deck" class="tab-panel">
+        <div class="menu-card">
+          <h3>Wähle genau 5 Karten:</h3>
+          <div id="deck-editor-grid" class="deck-editor-grid">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Shop -->
+      <div id="tab-shop" class="tab-panel">
+        <div class="menu-card">
+          <h3>Schlangen-Skins kaufen & ausrüsten:</h3>
+          <div id="shop-grid" class="shop-grid">
+            <!-- Shop items injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <button id="play-btn" class="primary-btn">SPIELEN</button>
+    </div>
+
+    <!-- Gameplay Overlay HUD -->
+    <div id="hud" class="hud-layer hidden">
+      <div class="hud-top">
+        <div class="hud-item">
+          <span class="hud-label">METER</span>
+          <span id="meters-val" class="hud-value">0m</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">PUNKTE</span>
+          <span id="score-val" class="hud-value">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">LÄNGE</span>
+          <span id="length-val" class="hud-value">🐍 x5</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">GOLD</span>
+          <span class="hud-value hud-gold"><span class="gold-val">0</span> 🪙</span>
+        </div>
+      </div>
+
+      <div id="pause-menu" class="screen hidden" style="z-index: 80;">
+        <h2 class="game-over-title" style="color: var(--neon-cyan); text-shadow: 0 0 15px rgba(0, 243, 255, 0.6);">PAUSE
+        </h2>
+        <div class="modal-body" style="margin-bottom: 30px;">
+          Nutze die Pause, um deine Taktik zu überdenken.
+        </div>
+        <button id="resume-btn" class="primary-btn">WEITERSPIELEN</button>
+      </div>
+
+      <!-- Tutorial Instruction Banner -->
+      <div id="tutorial-banner" class="hud-item hidden"
+        style="margin-top: 8px; width: 100%; max-width: 100%; border-color: var(--neon-cyan); background: rgba(12, 8, 19, 0.95); pointer-events: none; flex-direction: row; justify-content: center; gap: 8px; padding: 10px;">
+        <span id="tutorial-banner-text"
+          style="font-size: 0.85rem; font-weight: 600; color: var(--neon-cyan); text-align: center;"></span>
+      </div>
+
+      <!-- Quest Live Tracker HUD -->
+      <div id="quest-hud" class="boss-hud-container hidden"
+        style="margin-top: 8px; border-color: rgba(0, 243, 255, 0.3);">
+        <div class="boss-hp-label" style="color: var(--neon-cyan);">AKTIVE MISSIONEN</div>
+        <div id="quest-hud-list"
+          style="font-size: 0.75rem; width: 100%; text-align: left; display: flex; flex-direction: column; gap: 4px; color: var(--text-secondary);">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Boss Tower HP Banner -->
+      <div id="boss-hud" class="boss-hud-container hidden">
+        <div class="boss-hp-label">BOSS-TURM HP</div>
+        <div class="boss-hp-bar-outer">
+          <div id="boss-hp-bar-inner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Cards and Elixir Interface -->
+    <div id="action-bar" class="action-bar-layer hidden">
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 15px;">
+
+        <div class="elixir-container" style="flex-grow: 1; margin-bottom: 0;">
+          <div class="elixir-bar-outer">
+            <div id="elixir-bar-fill" class="elixir-bar-fill"></div>
+            <div class="elixir-grid">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="elixir-badge">
+            <span id="elixir-val">0</span>
+            <div class="elixir-droplet">💧</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button id="rotate-btn"
+            style="background: var(--panel-bg); border: 1px solid var(--border-color); color: white; border-radius: 8px; padding: 8px; cursor: pointer; font-size: 1.2rem; min-width: 55px; height: 45px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;" aria-label="Karte rotieren">↩️</button>
+          <button id="redraw-btn"
+            style="background: var(--panel-bg); border: 1px solid var(--border-color); color: white; border-radius: 8px; padding: 8px; cursor: pointer; font-size: 1.2rem; min-width: 55px; height: 45px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;" aria-label="Karten neu ziehen">🔄</button>
+        </div>
+      </div>
+
+      <div id="card-hand" class="card-hand">
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-menu" class="screen hidden">
+      <h2 class="game-over-title">GAME OVER</h2>
+
+      <div class="gold-indicator">
+        <span>Gesammeltes Gold:</span> <span class="gold-val">0</span> 🪙
+      </div>
+
+      <div class="stats-card">
+        <div class="stat-row">
+          <span>Erreichte Höhe:</span>
+          <span id="final-meters" class="stat-highlight">0m</span>
+        </div>
+        <div class="stat-row">
+          <span>Punkte:</span>
+          <span id="final-score" class="stat-highlight">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Highscore:</span>
+          <span id="highscore-val" class="stat-highlight">0</span>
+        </div>
+      </div>
+      <button id="restart-btn" class="primary-btn">NOCHMAL SPIELEN</button>
+    </div>
+
+    <!-- Tutorial Modal Overlay -->
+    <div id="tutorial-modal" class="modal-overlay">
+      <div class="modal-card">
+        <div id="tutorial-icon" class="modal-icon">🐍</div>
+        <h3 id="tutorial-title" class="modal-title">Willkommen!</h3>
+        <div id="tutorial-body" class="modal-body">
+          Lerne, wie du die Schlange sicher nach oben führst.
+        </div>
+        <div class="modal-btns">
+          <button id="tutorial-skip" class="secondary-btn">ÜBERSPRINGEN</button>
+          <button id="tutorial-next" class="primary-btn"
+            style="margin-top:0; padding:10px 24px; font-size:1rem;">WEITER</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Scripts -->
+  <script src="src/js/audio.js"></script>
+  <script src="src/js/cards.js"></script>
+  <script src="src/js/snake.js"></script>
+  <script src="src/js/game.js"></script>
+</body>
+
+</html>

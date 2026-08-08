@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ElectroCheck AI</string>
+    <string name="title_activity_main">ElectroCheck AI</string>
+    <string name="package_name">com.electrocheck.app</string>
+    <string name="custom_url_scheme">com.electrocheck.app</string>
+</resources>

@@ -1,0 +1,430 @@
+/* ==========================================================================
+   ALCHEMISTEN-AKADEMIE: RUNEN-MINEN MODERNIZED STYLE SHEET (style.css)
+   ========================================================================== */
+
+:root {
+    /* Color Palette */
+    --bg-main: #0b0616;
+    --panel-bg: rgba(22, 13, 38, 0.7);
+    --panel-border: rgba(138, 43, 226, 0.25);
+    
+    --color-cyan: #00f0ff;
+    --color-gold: #ffd700;
+    --color-danger: #ff0055;
+    --color-success: #00ff87;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #b5a9df;
+    
+    /* Interactive States */
+    --tile-bg: rgba(30, 18, 52, 0.6);
+    --tile-border: rgba(138, 43, 226, 0.35);
+    --tile-hover-border: var(--color-cyan);
+    --tile-hover-shadow: rgba(0, 240, 255, 0.3);
+    
+    /* Fonts */
+    --font-display: 'Cinzel', serif;
+    --font-sans: 'Outfit', sans-serif;
+}
+
+/* --- BASE & LAYOUT --- */
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.game-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.game-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr 280px;
+    gap: 24px;
+    align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- REUSABLE GLASS PANELS --- */
+.bet-panel, .grid-panel, .multiplier-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- CONTROL PANEL / BET PANEL --- */
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.control-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+}
+
+/* Input Fields */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--color-cyan);
+    font-size: 1rem;
+}
+
+.bet-input-field {
+    width: 100%;
+    background: rgba(10, 5, 18, 0.8);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 12px 14px 12px 40px;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.bet-input-field:focus {
+    outline: none;
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* Presets Multi-Buttons */
+.bet-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn-preset {
+    background: rgba(45, 25, 75, 0.5);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    padding: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-preset:hover {
+    background: rgba(138, 43, 226, 0.4);
+    color: #fff;
+    border-color: rgba(138, 43, 226, 0.6);
+}
+
+/* Slider Controls */
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mines-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(45, 25, 75, 0.6);
+    outline: none;
+}
+
+.mines-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-cyan);
+    box-shadow: 0 0 10px var(--color-cyan);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.mines-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Action Buttons */
+.btn-action {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    margin-top: auto;
+}
+
+.btn-action.primary {
+    background: linear-gradient(135deg, #8a2be2 0%, #4a00e0 100%);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-action.primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-action.success {
+    background: linear-gradient(135deg, #00ff87 0%, #60efff 100%);
+    color: #0b0616;
+}
+
+.btn-action.success:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 240, 255, 0.4);
+}
+
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* --- THE MINES GRID CONTROLS --- */
+.grid-panel {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.mines-grid-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1;
+}
+
+.mines-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Individual Tiles */
+.mine-tile {
+    background: var(--tile-bg);
+    border: 1px solid var(--tile-border);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 0 12px rgba(138, 43, 226, 0.1);
+    transform-style: preserve-3d;
+}
+
+.mine-tile:hover:not(:disabled):not(.revealed) {
+    border-color: var(--tile-hover-border);
+    box-shadow: 0 0 15px var(--tile-hover-shadow), 
+                inset 0 0 8px rgba(0, 240, 255, 0.2);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.mine-tile:active:not(:disabled):not(.revealed) {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.rune-symbol {
+    font-size: 1.6rem;
+    transition: transform 0.3s ease;
+    user-select: none;
+    color: rgba(181, 169, 223, 0.4); /* Subtle glow before reveal */
+}
+
+/* Tile Revealed States */
+.mine-tile.revealed {
+    cursor: default;
+    transform: rotateY(180deg);
+}
+
+.mine-tile.revealed .rune-symbol {
+    transform: rotateY(180deg); /* Counter-rotate text so it stays upright */
+    color: #fff;
+}
+
+.mine-tile.safe {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(138, 43, 226, 0.15) 100%);
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2), inset 0 0 10px rgba(0, 240, 255, 0.1);
+    animation: safePulse 2s infinite alternate;
+}
+
+.mine-tile.mine {
+    background: linear-gradient(135deg, rgba(255, 0, 85, 0.2) 0%, rgba(15, 5, 25, 0.6) 100%);
+    border-color: var(--color-danger);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+    animation: shake 0.4s ease-in-out;
+}
+
+/* --- MULTIPLIER SIDEBAR --- */
+.multiplier-list {
+    display: flex;
+    flex-direction: column-reverse; /* Keeps lower steps at the bottom, higher steps at the top */
+    gap: 6px;
+    overflow-y: auto;
+    max-height: 380px;
+    padding-right: 4px;
+}
+
+/* Custom Scrollbar for side list */
+.multiplier-list::-webkit-scrollbar {
+    width: 4px;
+}
+.multiplier-list::-webkit-scrollbar-thumb {
+    background: rgba(138, 43, 226, 0.3);
+    border-radius: 2px;
+}
+
+.multiplier-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(20, 10, 35, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+.multiplier-item.active {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(138, 43, 226, 0.05) 100%);
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+}
+
+.multiplier-item.next {
+    border-color: rgba(255, 215, 0, 0.4);
+    background: rgba(255, 215, 0, 0.02);
+}
+
+.multiplier-step {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.multiplier-val {
+    font-weight: 700;
+    color: #fff;
+}
+
+.multiplier-item.active .multiplier-step,
+.multiplier-item.active .multiplier-val {
+    color: var(--color-cyan);
+}
+
+.multiplier-item.next .multiplier-step,
+.multiplier-item.next .multiplier-val {
+    color: var(--color-gold);
+}
+
+/* --- INTERACTIVE OVERLAY MODAL --- */
+.grid-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 3, 15, 0.85);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.30s ease;
+    pointer-events: none;
+    padding: 20px;
+    text-align: center;
+}
+
+.grid-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.overlay-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.overlay-title.win {
+    color: var(--color-success);
+    text-shadow: 0 0 20px rgba(0, 255, 135, 0.4);
+}
+
+.overlay-title.loss {
+    color: var(--color-danger);
+    text-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+}
+
+.overlay-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 320px;
+}
+
+/* --- ANIMATIONS KEYS --- */
+@keyframes safePulse {
+    0% { box-shadow: 0 0 12px rgba(0, 240, 255, 0.15); }
+    100% { box-shadow: 0 0 22px rgba(0, 240, 255, 0.35); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) rotateY(180deg); }
+    20%, 60% { transform: translateX(-6px) rotateY(180deg); }
+    40%, 80% { transform: translateX(6px) rotateY(180deg); }
+}
+
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,17 @@
+{
+  "short_name": "Wohnung KI",
+  "name": "Wohnungssuche KI",
+  "icons": [
+    {
+      "src": "/app_icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#1a1a24",
+  "theme_color": "#1a1a24",
+  "display": "standalone",
+  "orientation": "portrait"
+}

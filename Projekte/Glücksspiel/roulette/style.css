@@ -1,0 +1,248 @@
+/* ==========================================================================
+   ALCHEMISTEN-AKADEMIE: ELEMENTEN-ROULETTE STYLES (roulette/style.css)
+   ========================================================================== */
+
+/* --- GAME LAYOUT --- */
+.game-layout {
+    display: grid;
+    grid-template-columns: 310px 1fr 270px;
+    gap: 20px;
+    align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- LEFT PANEL: CONTROL PANEL --- */
+.chip-selector-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.chip-selector {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.chip-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px dashed var(--border-color);
+    background: rgba(10, 6, 20, 0.8);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.chip-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--color-cyan);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.chip-btn.active {
+    border-style: solid;
+    border-color: var(--color-cyan);
+    color: #fff;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(10, 30, 50, 0.9) 100%);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* --- CENTER VIEWPORT: THE WHEEL & BET GRID --- */
+.wheel-viewport {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 10px;
+}
+
+.wheel-canvas-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 1;
+    background: rgba(10, 6, 20, 0.2);
+    border-radius: 50%;
+    padding: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.4);
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--color-gold);
+    font-size: 1.8rem;
+    z-index: 10;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    animation: tickPointer 0.15s ease infinite alternate paused;
+}
+
+@keyframes tickPointer {
+    0% { transform: translateX(-50%) rotate(0deg); }
+    100% { transform: translateX(-50%) rotate(-10deg); }
+}
+
+#wheel-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+}
+
+/* Elements Bet Grid */
+.elements-bet-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 720px;
+}
+
+@media (max-width: 600px) {
+    .elements-bet-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.bet-zone-card {
+    background: rgba(18, 10, 32, 0.65);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 12px 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.bet-zone-card:hover {
+    transform: translateY(-2px);
+    background: rgba(28, 16, 48, 0.85);
+}
+
+/* Hover border glows per element color */
+.card-water:hover { border-color: var(--color-cyan); box-shadow: 0 0 12px rgba(0, 240, 255, 0.25); }
+.card-fire:hover { border-color: var(--color-danger); box-shadow: 0 0 12px rgba(255, 45, 85, 0.25); }
+.card-earth:hover { border-color: var(--color-green); box-shadow: 0 0 12px rgba(57, 255, 20, 0.25); }
+.card-air:hover { border-color: var(--color-purple); box-shadow: 0 0 12px rgba(155, 89, 182, 0.25); }
+.card-aether:hover { border-color: var(--color-gold); box-shadow: 0 0 12px rgba(255, 215, 0, 0.25); }
+
+.bet-zone-icon {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+}
+
+.bet-zone-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.bet-zone-mult {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+.bet-zone-placed {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--color-gold);
+    margin-top: 4px;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
+}
+
+/* Placed bet styling if > 0 */
+.bet-zone-card.has-bet {
+    background: rgba(255, 215, 0, 0.03);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+.bet-zone-card.has-bet .bet-zone-mult {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--color-gold);
+}
+
+/* Winner flash classes */
+.bet-zone-card.winner-flash {
+    animation: flashWinBorder 0.6s ease infinite alternate;
+}
+
+@keyframes flashWinBorder {
+    0% { border-color: var(--border-color); box-shadow: none; }
+    100% { border-color: var(--color-gold); box-shadow: 0 0 15px var(--color-gold); }
+}
+
+/* --- RIGHT PANEL: DISTRIBUTION INFO --- */
+.distribution-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(10, 6, 20, 0.45);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.dist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.dist-color-block {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.dist-item.water .dist-color-block { background-color: var(--color-cyan); }
+.dist-item.fire .dist-color-block { background-color: var(--color-danger); }
+.dist-item.earth .dist-color-block { background-color: var(--color-green); }
+.dist-item.air .dist-color-block { background-color: var(--color-purple); }
+.dist-item.aether .dist-color-block { background-color: var(--color-gold); }
+
+.dist-mult {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+/* --- GENERAL UTILS --- */
+.bet-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}

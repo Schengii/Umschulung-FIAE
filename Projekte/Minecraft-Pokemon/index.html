@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft-Pokémon Voxel RPG | Portfolio Showcase</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 0; line-height: 1.6; }
+        .hero { background: linear-gradient(135deg, #312e81 0%, #0f172a 100%); border-bottom: 1px solid #4338ca; padding: 3rem 1.5rem; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #818cf8; }
+        .badge-list { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+        .badge { background: #1e1b4b; border: 1px solid #818cf8; color: #818cf8; padding: 0.3rem 0.8rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; padding: 1.5rem; }
+        .card h3 { color: #f1f5f9; margin-top: 0; border-bottom: 2px solid #818cf8; padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { border: 1px solid #334155; padding: 0.6rem 0.8rem; text-align: left; }
+        th { background: #0f172a; color: #818cf8; }
+        .btn-group { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: #4f46e5; color: #fff; }
+        .btn-primary:hover { background: #4338ca; }
+        .btn-secondary { background: #334155; color: #fff; }
+        .btn-secondary:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <h1>🐉 Minecraft-Pokémon Voxel RPG</h1>
+        <p>Ein 3D-Voxel Crossover RPG, entwickelt in Godot 4.x mit C# (.NET)</p>
+        <div class="badge-list">
+            <span class="badge">Godot Engine 4</span>
+            <span class="badge">C# (.NET)</span>
+            <span class="badge">21 Voxel Spezies</span>
+            <span class="badge">Mega-Evolutionen</span>
+            <span class="badge">Day/Night Spawns</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="grid-2">
+            <div class="card">
+                <h3><i class="fa-solid fa-dragon"></i> Gameplay Highlights</h3>
+                <ul>
+                    <li>🌙 <strong>Tag/Nacht-Spawns</strong>: Nachtara leuchtet nachts, Psiana spawnt am Tag</li>
+                    <li>💥 <strong>Mega-Evolutionen</strong>: Mega-Glurak X, Mega-Mewtu Y per M-Taste im Kampf</li>
+                    <li>🐣 <strong>Zucht & Pension</strong>: Ei-Ausbrüten mit Schrittzähler & Vererbung</li>
+                    <li>🌊 <strong>Reiten & Fliegen</strong>: Lapras, Glurak, Bisaflor & Garados besteigen (F-Taste)</li>
+                    <li>🗺️ <strong>Minimap & Radar</strong>: Live-Entfernungsmesser zu Dörfern, Arenen & Dungeons</li>
+                    <li>📖 <strong>3D Pokédex</strong>: Verfolgung des Fangfortschritts über 21 Voxel-Spezies</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-code"></i> Architektur & Scripts</h3>
+                <ul>
+                    <li><code>Player.cs</code>: Flug-, Reit- & Surfdynamik, Pokédex, Audio-Cries</li>
+                    <li><code>BattleManager.cs</code>: Rundenbasierte Formeln, Held-Items & Status-Effekte</li>
+                    <li><code>TerrainController.cs</code>: Prozedurale Voxel-Biome & Liga-Palast</li>
+                    <li><code>SaveSystem.cs</code>: Strukturierter JSON Save & Load (<code>user://savegame.json</code>)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card card-margin-top">
+            <h3><i class="fa-solid fa-gamepad"></i> Steuerung (Steuerung im Spiel)</h3>
+            <table>
+                <thead>
+                    <tr><th>Taste</th><th>Aktion</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>W / A / S / D</code></td><td>Bewegen / Surfen / Fliegen</td></tr>
+                    <tr><td><code>Q / R</code></td><td>Pokeball werfen / Begleiter-Pokémon rufen</td></tr>
+                    <tr><td><code>F</code></td><td>Auf Begleiter aufsteigen (Fliegen / Surfen) / Absteigen</td></tr>
+                    <tr><td><code>P / C / E</code></td><td>Pokédex / Crafting-Menü / Digitales PC-System</td></tr>
+                    <tr><td><code>B / M</code></td><td>Kampf starten / Mega-Evolution im Kampf auslösen</td></tr>
+                    <tr><td><code>F5 / F9</code></td><td>Spielstand speichern / Spielstand laden</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://github.com/Schengii/Minecraft-Pokemon" target="_blank" rel="noopener" class="btn btn-primary">
+                <i class="fa-brands fa-github"></i> GitHub Repository
+            </a>
+            <a href="../../pages/portfolio.html" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Zurück zum Portfolio
+            </a>
+        </div>
+    </main>
+</body>
+</html>

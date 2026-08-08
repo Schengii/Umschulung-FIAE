@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemie-Baccara | Alchemisten-Akademie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-crown magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMIE-BACCARA</h1>
+                    <span>RUBEDO VS. ALBEDO</span>
+                </div>
+            </div>
+            
+            <div class="header-stats">
+                <div class="balance-card">
+                    <span class="balance-label">GESAMTGUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN GAME AREA -->
+        <main class="baccarat-layout">
+            <section class="panel baccarat-table-panel">
+                <div class="baccarat-duellers">
+                    <!-- Rubedo (Player) -->
+                    <div class="dueller-side rubedo-side">
+                        <div class="side-badge rubedo-badge">🔴 RUBEDO (SPIELER)</div>
+                        <div class="side-score" id="rubedo-score">0</div>
+                        <div class="cards-container" id="rubedo-cards">
+                            <!-- Cards inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="versus-divider">VS</div>
+
+                    <!-- Albedo (Banker) -->
+                    <div class="dueller-side albedo-side">
+                        <div class="side-badge albedo-badge">⚪ ALBEDO (BANKIER)</div>
+                        <div class="side-score" id="albedo-score">0</div>
+                        <div class="cards-container" id="albedo-cards">
+                            <!-- Cards inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baccarat-result-banner" id="baccarat-status-msg">
+                    Wähle dein Wettelement und platziere deinen Einsatz!
+                </div>
+            </section>
+
+            <!-- BETTING CONTROLS -->
+            <section class="panel baccarat-controls-panel">
+                <div class="bet-selection-cards">
+                    <button type="button" class="btn-bet-spot bet-rubedo active" data-spot="rubedo">
+                        <span class="spot-title">🔴 RUBEDO</span>
+                        <span class="spot-payout">1:1 Auszahlung</span>
+                    </button>
+
+                    <button type="button" class="btn-bet-spot bet-tie" data-spot="tie">
+                        <span class="spot-title">⚖️ UNENTSCHIEDEN</span>
+                        <span class="spot-payout">8:1 Auszahlung</span>
+                    </button>
+
+                    <button type="button" class="btn-bet-spot bet-albedo" data-spot="albedo">
+                        <span class="spot-title">⚪ ALBEDO</span>
+                        <span class="spot-payout">0.95:1 Auszahlung</span>
+                    </button>
+                </div>
+
+                <div class="bet-input-row" style="margin-top: 20px; display:flex; justify-content:center; gap:15px; align-items:center;">
+                    <label style="font-weight:700;">Einsatz:</label>
+                    <input type="number" id="baccarat-bet-input" value="25.00" min="5" max="1000" step="5" style="padding:8px 12px; border-radius:8px; border:1px solid var(--border-color); font-weight:800; font-size:1rem; width:120px; text-align:center;">
+                    
+                    <button type="button" class="btn" id="btn-deal-baccarat" style="padding:12px 28px; background:linear-gradient(135deg, #ea580c, #c2410c); color:#fff; font-weight:800; font-size:1.1rem; border:none; border-radius:10px;">
+                        <i class="fa-solid fa-play"></i> TRANSMUTIEREN
+                    </button>
+
+                    <button type="button" class="btn btn-icon" id="btn-pf-verify" title="Provably Fair Verifizierung" style="background:rgba(255,215,0,0.1); border-color:rgba(255,215,0,0.3); color:var(--color-gold);">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

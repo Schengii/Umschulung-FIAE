@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoOpVersusGame – Live Demo Simulation</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        .demo-canvas-container {
+            width: 100%;
+            height: 360px;
+            background: #111827;
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--border);
+            margin-top: 1.5rem;
+        }
+        .hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            font-family: monospace;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+        .lobby-ui {
+            width: 80%;
+            max-width: 400px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            color: #fff;
+            z-index: 20;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        .lobby-members {
+            margin: 1rem 0;
+            text-align: left;
+        }
+        #btn-start-game {
+            width: 100%;
+        }
+        #game-hud {
+            display: none;
+        }
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .ready-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+        }
+        .game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-banner">
+            <h1 class="header-title">
+                <span lang="de">🎮 CoOpVersusGame Multiplayer Demo</span>
+                <span lang="en">🎮 CoOpVersusGame Multiplayer Demo</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="card">
+            <h2 lang="de">Multiplayer-Simulation &amp; Sandbox</h2>
+            <h2 lang="en">Multiplayer Simulation &amp; Sandbox</h2>
+            <p lang="de">Dies ist eine webbasierte Live-Simulation des Godot-Multiplayer-Spiels. Trete der Lobby bei, starte ein Match und simuliere ein Versus/Co-Op-Spiel direkt im Browser.</p>
+            <p lang="en">This is a web-based live simulation of the Godot multiplayer game. Join the lobby, launch a match, and simulate a versus/co-op game directly in your browser.</p>
+        </div>
+
+        <div class="demo-canvas-container">
+            <div class="hud" id="game-hud">
+                <div>SCORE: <span id="score-val">0</span></div>
+                <div>LOBBY: LAN-VERSUS</div>
+                <div>TIME: <span id="time-val">30</span>s</div>
+            </div>
+
+            <!-- Lobby UI -->
+            <div class="lobby-ui" id="lobby-panel">
+                <h3><i class="fa-solid fa-network-wired"></i> Game Lobby</h3>
+                <div class="lobby-members">
+                    <div class="player-row">
+                        <span>Maximilian (Host)</span>
+                        <span><span class="ready-dot"></span> Bereit</span>
+                    </div>
+                    <div class="player-row">
+                        <span>Recruiter_Guest</span>
+                        <span><span class="ready-dot"></span> Bereit</span>
+                    </div>
+                </div>
+                <button class="btn-primary" id="btn-start-game">
+                    <i class="fa-solid fa-play"></i> Match starten
+                </button>
+            </div>
+
+            <!-- Simple interactive canvas game -->
+            <canvas class="game-canvas" id="canvas-el" width="800" height="360"></canvas>
+        </div>
+    </main>
+
+    <script>
+        const lobbyPanel = document.getElementById('lobby-panel');
+        const canvas = document.getElementById('canvas-el');
+        const hud = document.getElementById('game-hud');
+        const btnStart = document.getElementById('btn-start-game');
+        const scoreVal = document.getElementById('score-val');
+        const timeVal = document.getElementById('time-val');
+
+        let score = 0;
+        let timeLeft = 30;
+        let gameActive = false;
+        let playerX = 100;
+        let playerY = 180;
+        let items = [];
+
+        btnStart.addEventListener('click', () => {
+            lobbyPanel.style.display = 'none';
+            canvas.style.display = 'block';
+            hud.style.display = 'flex';
+            gameActive = true;
+            score = 0;
+            timeLeft = 30;
+            scoreVal.textContent = score;
+            timeVal.textContent = timeLeft;
+            initGame();
+        });
+
+        function initGame() {
+            items = [];
+            for (let i = 0; i < 5; i++) {
+                items.push({
+                    x: Math.random() * 600 + 100,
+                    y: Math.random() * 260 + 50,
+                    radius: 12,
+                    collected: false
+                });
+            }
+            requestAnimationFrame(gameLoop);
+            
+            const timer = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(timer);
+                    return;
+                }
+                timeLeft--;
+                timeVal.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    gameActive = false;
+                    alert('Spiel beendet! Dein Score: ' + score);
+                    canvas.style.display = 'none';
+                    hud.style.display = 'none';
+                    lobbyPanel.style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        // Handle canvas click to jump player to click position to collect items
+        canvas.addEventListener('click', (e) => {
+            if (!gameActive) return;
+            const rect = canvas.getBoundingClientRect();
+            playerX = e.clientX - rect.left;
+            playerY = e.clientY - rect.top;
+
+            // Check collision
+            items.forEach(item => {
+                if (!item.collected) {
+                    const dist = Math.hypot(playerX - item.x, playerY - item.y);
+                    if (dist < 30) {
+                        item.collected = true;
+                        score += 100;
+                        scoreVal.textContent = score;
+                    }
+                }
+            });
+
+            // Replenish items
+            if (items.every(i => i.collected)) {
+                initGame();
+            }
+        });
+
+        function gameLoop() {
+            if (!gameActive) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(playerX, playerY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('PLAYER 1', playerX - 22, playerY - 26);
+
+            // Draw items
+            ctx.fillStyle = '#fbbf24';
+            items.forEach(item => {
+                if (!item.collected) {
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            // Text info
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.font = '12px sans-serif';
+            ctx.fillText('Klicke auf den Bildschirm, um dich zu bewegen und gelbe Power-ups einzusammeln!', 20, 330);
+
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>

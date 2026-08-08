@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Der Turm der Elemente - Alchemisten-Akademie</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default">
+
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <h1 class="game-title"><i class="fa-solid fa-gopuram"></i> Der Turm der Elemente</h1>
+            <p class="game-subtitle">Steige 10 Etagen im Zauberturm empor. Wähle auf jeder Etage eine Tür. Weiche den Mimics aus und sichere deinen Gewinn!</p>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Controls -->
+            <section class="panel control-panel" aria-label="Steuerung">
+                <h2 class="panel-title"><i class="fa-solid fa-coins"></i> Einsatz & Aufstieg</h2>
+                
+                <div class="balance-display" style="margin-bottom: 15px;">
+                    <span class="bal-label">Dein Guthaben:</span>
+                    <span class="bal-val"><span id="balance-amount">0.00</span> €</span>
+                </div>
+
+                <div class="bet-section">
+                    <label for="bet-input" class="input-label">Aufstiegs-Einsatz (€)</label>
+                    <input type="number" id="bet-input" class="bet-input-field" value="10.00" min="5.00" max="250.00" step="5.00">
+                    
+                    <div class="preset-buttons" style="display: flex; gap: 6px; margin-top: 8px;">
+                        <button type="button" class="btn btn-small" id="btn-bet-min">MIN</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-half">HÄLFTE</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-double">DOPPELT</button>
+                        <button type="button" class="btn btn-small" id="btn-bet-max">MAX</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                    <button type="button" class="btn btn-large" id="btn-start-climb" style="background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800;">
+                        <i class="fa-solid fa-shoe-prints"></i> TURM BETRETEN
+                    </button>
+                    <button type="button" class="btn btn-success hidden" id="btn-cashout" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; font-size: 1.05rem;">
+                        <i class="fa-solid fa-sack-dollar"></i> CASHOUT (<span id="cashout-val">0.00</span> €)
+                    </button>
+                </div>
+
+                <div class="status-msg-box" id="tower-status-msg" style="margin-top: 15px; text-align: center; font-size: 0.85rem; color: #a99ec6; line-height: 1.4;">
+                    Setze deinen Einsatz und betritt die 1. Etage des Turms.
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Tower View -->
+            <section class="panel tower-view-panel" aria-label="Turm-Ansicht" style="flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="tower-structure" id="tower-structure-container">
+                    <!-- 10 floors populated dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

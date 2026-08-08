@@ -1,0 +1,18 @@
+{
+  "repoName": "Wohnungssuche-KI",
+  "titleDe": "🏠 Wohnungssuche KI — Intelligenter Such-Assistent",
+  "titleEn": "🏠 Wohnungssuche KI — Intelligent Apartment Finder",
+  "tags": [
+    "React / Vite",
+    "Node.js / Express",
+    "Puppeteer / Scraper",
+    "OpenAI API",
+    "Capacitor PWA"
+  ],
+  "image": "assets/images/wohnungssuche_showcase.png",
+  "link": "Projekte/Wohnungssuche%20KI/frontend/dist/index.html",
+  "descDe": "Eine KI-gestützte Komplettlösung zur automatisierten Wohnungssuche. Das System scannt Immobilienportale per Web-Scraper und E-Mail-Postfächer per IMAP, analysiert Angebote mit GPT-Modellen, berechnet Entfernungen zu POIs und generiert fertige Bewerbungs-PDFs.",
+  "descEn": "An AI-powered system designed to automate apartment searching. It scrapes real estate portals via Puppeteer, scans inbox folders using IMAP, evaluates listings using OpenAI's API, calculates POI proximity, and generates custom tenant disclosure PDFs.",
+  "category": "ai web",
+  "language": "JavaScript"
+}

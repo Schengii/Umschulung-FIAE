@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Auftrags-Konfigurator von ManuFAKTUR – Wähle Motiv, Format und Technik und erhalte eine unverbindliche Preisschätzung für dein individuelles Kunstwerk.">
+  <title>Auftrag konfigurieren | ManuFAKTUR Schenk</title>
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="Auftrag konfigurieren – ManuFAKTUR Schenk">
+  <meta property="og:description" content="Konfiguriere in 4 Schritten dein individuelles handgemaltes Kunstwerk und erhalte eine unverbindliche Preisschätzung.">
+  <meta property="og:image" content="assets/images/artworks/bild18-eulen.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/images/logos/favicon.png" type="image/png">
+  <link rel="icon" href="assets/images/logos/favicon.svg" type="image/svg+xml">
+
+  <!-- Lokales Font Awesome für DSGVO-Konformität -->
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css">
+  <!-- CSS: alle Konfigurator-Styles jetzt in style.css (Abschnitt 10) -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation wird via Home.js injiziert -->
+  <header></header>
+
+  <main>
+    <h1 class="page-title">Auftrag konfigurieren</h1>
+    <p class="intro-text">In nur 4 Schritten zu deinem individuellen Kunstwerk – erhalte eine unverbindliche Preisschätzung und sende deine Anfrage direkt ab.</p>
+
+    <div class="configurator-wrapper">
+
+      <!-- Restore-Banner: wird via JS eingeblendet, wenn gespeicherter State vorhanden -->
+      <div id="restore-banner" class="config-restore-banner" style="display:none;">
+        <i class="fa fa-history" aria-hidden="true"></i>
+        <span>Du hast eine gespeicherte Konfiguration. <button onclick="restoreSavedConfig()" id="restore-btn">Wiederherstellen</button> oder <button onclick="clearSavedConfig()" id="clear-btn">Neu starten</button>.</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container" role="progressbar" aria-label="Konfigurationsfortschritt">
+        <div class="progress-step active" id="step-indicator-1">
+          <div class="step-circle">1</div>
+          <span class="step-label">Motiv</span>
+        </div>
+        <div class="progress-step" id="step-indicator-2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Format</span>
+        </div>
+        <div class="progress-step" id="step-indicator-3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Technik</span>
+        </div>
+        <div class="progress-step" id="step-indicator-4">
+          <div class="step-circle">4</div>
+          <span class="step-label">Zusammenfassung</span>
+        </div>
+      </div>
+
+      <!-- ====== SCHRITT 1: MOTIV ====== -->
+      <section class="config-panel active" id="panel-1" aria-labelledby="step1-title">
+        <h2 id="step1-title"><i class="fa fa-paw" aria-hidden="true"></i> Schritt 1: Wähle dein Motiv</h2>
+        <span class="config-subtitle">Was soll auf deinem einzigartigen Kunstwerk zu sehen sein?</span>
+
+        <div class="option-grid">
+          <div class="option-card" data-value="Tierportrait" data-multiplier="1.0" onclick="selectOption(this, 'motiv')" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-dog option-icon" aria-hidden="true"></i>
+            <h3>Tierportrait</h3>
+            <p>Hund, Katze, Pferd oder jedes andere Tier – als unvergängliches Gemälde.</p>
+            <span class="option-price-hint">ab 120 €</span>
+          </div>
+          <div class="option-card" data-value="Landschaft" data-multiplier="0.9" onclick="selectOption(this, 'motiv')" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-mountain option-icon" aria-hidden="true"></i>
+            <h3>Landschaft</h3>
+            <p>Ein besonderer Ort, eine Urlaubserinnerung oder eine traumhafte Szene.</p>
+            <span class="option-price-hint">ab 100 €</span>
+          </div>
+          <div class="option-card" data-value="Stillleben" data-multiplier="0.85" onclick="selectOption(this, 'motiv')" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-seedling option-icon" aria-hidden="true"></i>
+            <h3>Stillleben / Pflanzen</h3>
+            <p>Blumen, Früchte oder andere Objekte als dekoratives Gemälde.</p>
+            <span class="option-price-hint">ab 90 €</span>
+          </div>
+          <div class="option-card" data-value="Sonstiges" data-multiplier="1.1" onclick="selectOption(this, 'motiv')" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-star option-icon" aria-hidden="true"></i>
+            <h3>Sonstiges / Eigene Idee</h3>
+            <p>Du hast eine ganz eigene Idee? Ich male nach deinem Wunschmotiv.</p>
+            <span class="option-price-hint">Auf Anfrage</span>
+          </div>
+        </div>
+
+        <p class="selection-hint" id="hint-1"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Bitte wähle ein Motiv, um fortzufahren.</p>
+        <div class="config-nav">
+          <button class="btn-next" id="next-1" onclick="nextStep(1)" disabled>
+            Weiter: Format <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====== SCHRITT 2: FORMAT ====== -->
+      <section class="config-panel" id="panel-2" aria-labelledby="step2-title">
+        <h2 id="step2-title"><i class="fa fa-ruler-combined" aria-hidden="true"></i> Schritt 2: Wähle das Format</h2>
+        <span class="config-subtitle">Auf welcher Leinwandgröße soll dein Werk entstehen?</span>
+
+        <div class="format-grid">
+          <div class="format-card" data-value="20×30 cm" data-base-price="90" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--20x30"></div>
+            <strong>20 × 30 cm</strong>
+            <small>Klein · ideal als Geschenk</small>
+          </div>
+          <div class="format-card" data-value="30×40 cm" data-base-price="130" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--30x40"></div>
+            <strong>30 × 40 cm</strong>
+            <small>Beliebt · viele Details</small>
+          </div>
+          <div class="format-card" data-value="40×50 cm" data-base-price="175" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--40x50"></div>
+            <strong>40 × 50 cm</strong>
+            <small>Mittel · sehr ausdrucksstark</small>
+          </div>
+          <div class="format-card" data-value="50×70 cm" data-base-price="230" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--50x70"></div>
+            <strong>50 × 70 cm</strong>
+            <small>Groß · imposanter Blickfang</small>
+          </div>
+          <div class="format-card" data-value="60×80 cm" data-base-price="290" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--60x80"></div>
+            <strong>60 × 80 cm</strong>
+            <small>XL · für große Wände</small>
+          </div>
+          <div class="format-card" data-value="Individuell" data-base-price="0" onclick="selectFormat(this)" tabindex="0" role="button" aria-pressed="false">
+            <div class="format-visual format-visual--custom"></div>
+            <strong>Individuell</strong>
+            <small>Wunschformat · auf Anfrage</small>
+          </div>
+        </div>
+
+        <p class="selection-hint" id="hint-2"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Bitte wähle ein Format, um fortzufahren.</p>
+        <div class="config-nav">
+          <button class="btn-back" onclick="prevStep(2)"><i class="fa fa-arrow-left" aria-hidden="true"></i> Zurück</button>
+          <button class="btn-next" id="next-2" onclick="nextStep(2)" disabled>
+            Weiter: Technik <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====== SCHRITT 3: TECHNIK ====== -->
+      <section class="config-panel" id="panel-3" aria-labelledby="step3-title">
+        <h2 id="step3-title"><i class="fa fa-paintbrush" aria-hidden="true"></i> Schritt 3: Wähle die Maltechnik</h2>
+        <span class="config-subtitle">Beide Techniken ergeben wunderschöne, langlebige Unikate.</span>
+
+        <div class="technique-row">
+          <div class="technique-card" data-value="Acryl" data-multiplier="1.0" onclick="selectTechnique(this)" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-droplet" aria-hidden="true"></i>
+            <h3>Acrylfarben</h3>
+            <p>Schnelle Trocknungszeit, kräftige Farben und lebhafte Kontraste. Perfekt für detailreiche Portraits.</p>
+            <span class="option-price-hint technique-delivery-hint">Lieferung in ca. 2–3 Wochen</span>
+          </div>
+          <div class="technique-card" data-value="Öl" data-multiplier="1.2" onclick="selectTechnique(this)" tabindex="0" role="button" aria-pressed="false">
+            <i class="fa fa-palette" aria-hidden="true"></i>
+            <h3>Ölfarben</h3>
+            <p>Tiefe, samtige Farbübergänge und klassische Eleganz. Mehr Trocknungszeit, intensives Finish.</p>
+            <span class="option-price-hint technique-delivery-hint">Lieferung in ca. 4–6 Wochen</span>
+          </div>
+        </div>
+
+        <p class="selection-hint" id="hint-3"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Bitte wähle eine Technik, um fortzufahren.</p>
+        <div class="config-nav">
+          <button class="btn-back" onclick="prevStep(3)"><i class="fa fa-arrow-left" aria-hidden="true"></i> Zurück</button>
+          <button class="btn-next" id="next-3" onclick="nextStep(3)" disabled>
+            Zur Zusammenfassung <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====== SCHRITT 4: ZUSAMMENFASSUNG ====== -->
+      <section class="config-panel" id="panel-4" aria-labelledby="step4-title">
+        <h2 id="step4-title"><i class="fa fa-check-circle" aria-hidden="true"></i> Deine Konfiguration</h2>
+        <span class="config-subtitle">Hier ist deine unverbindliche Übersicht – schicke sie direkt als Anfrage ab.</span>
+
+        <div class="summary-card">
+          <h3>Dein Traumgemälde ✨</h3>
+
+          <div class="summary-row">
+            <span class="label"><i class="fa fa-paw" aria-hidden="true"></i> Motiv</span>
+            <span class="value" id="summary-motiv">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="label"><i class="fa fa-ruler-combined" aria-hidden="true"></i> Format</span>
+            <span class="value" id="summary-format">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="label"><i class="fa fa-paintbrush" aria-hidden="true"></i> Technik</span>
+            <span class="value" id="summary-technik">–</span>
+          </div>
+          <div class="summary-row">
+            <span class="label"><i class="fa fa-clock" aria-hidden="true"></i> Lieferzeit</span>
+            <span class="value" id="summary-lieferzeit">–</span>
+          </div>
+
+          <div class="price-estimate-box">
+            <div>
+              <div class="price-label">Unverbindliche Preisschätzung</div>
+              <div class="price-value" id="summary-preis">–</div>
+              <div class="price-note">* Endpreis nach individueller Absprache. Versand innerhalb DE kostenlos.</div>
+            </div>
+            <i class="fa fa-tag price-box-icon" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="config-nav">
+          <button class="btn-back" onclick="prevStep(4)"><i class="fa fa-arrow-left" aria-hidden="true"></i> Zurück</button>
+          <a href="#" id="anfrage-link" class="btn-submit">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i> Jetzt unverbindlich anfragen
+          </a>
+        </div>
+      </section>
+
+    </div><!-- /.configurator-wrapper -->
+  </main>
+
+  <!-- Footer wird via Home.js injiziert -->
+  <footer></footer>
+
+  <button onclick="topFunction()" class="back-to-top" title="Nach oben">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+  </button>
+
+  <div id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="Home.js"></script>
+  <script>
+    // ===== KONFIGURATOR LOGIK =====
+    const STORAGE_KEY = 'manufaktur_konfigurator_state';
+
+    const state = {
+      step: 1,
+      motiv: null,
+      motivMultiplier: 1,
+      format: null,
+      basePrice: 0,
+      technik: null,
+      technikMultiplier: 1,
+      lieferzeit: null
+    };
+
+    // ── localStorage: Speichern & Laden ──────────────────────────────────────
+
+    function saveConfig() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) { /* localStorage nicht verfügbar */ }
+    }
+
+    function loadSavedConfig() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+      } catch (e) { return null; }
+    }
+
+    function restoreSavedConfig() {
+      const saved = loadSavedConfig();
+      if (!saved) return;
+
+      // Zustand wiederherstellen
+      Object.assign(state, saved);
+      document.getElementById('restore-banner').style.display = 'none';
+
+      // Auswahl visuell wiederherstellen
+      if (state.motiv) {
+        const card = findCardByValue('#panel-1 .option-card', state.motiv);
+        if (card) { card.classList.add('selected'); card.setAttribute('aria-pressed', 'true'); }
+        document.getElementById('next-1').disabled = false;
+      }
+      if (state.format) {
+        const card = findCardByValue('#panel-2 .format-card', state.format);
+        if (card) { card.classList.add('selected'); card.setAttribute('aria-pressed', 'true'); }
+        document.getElementById('next-2').disabled = false;
+      }
+      if (state.technik) {
+        const card = findCardByValue('#panel-3 .technique-card', state.technik);
+        if (card) { card.classList.add('selected'); card.setAttribute('aria-pressed', 'true'); }
+        document.getElementById('next-3').disabled = false;
+      }
+
+      goToStep(state.step);
+    }
+
+    function clearSavedConfig() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* */ }
+      document.getElementById('restore-banner').style.display = 'none';
+    }
+
+    function findCardByValue(selector, value) {
+      return Array.from(document.querySelectorAll(selector))
+        .find(c => c.dataset.value === value) || null;
+    }
+
+    // ── Initialisierung: gespeicherten State prüfen ──────────────────────────
+    (function checkSavedState() {
+      const saved = loadSavedConfig();
+      if (saved && (saved.motiv || saved.format || saved.technik)) {
+        document.getElementById('restore-banner').style.display = 'flex';
+      }
+    })();
+
+    // ── Karten-Auswahl ────────────────────────────────────────────────────────
+
+    function selectOption(card, group) {
+      document.querySelectorAll('#panel-1 .option-card').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
+      state.motiv = card.dataset.value;
+      state.motivMultiplier = parseFloat(card.dataset.multiplier);
+      document.getElementById('next-1').disabled = false;
+      document.getElementById('hint-1').classList.remove('visible');
+      saveConfig();
+    }
+
+    function selectFormat(card) {
+      document.querySelectorAll('#panel-2 .format-card').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
+      state.format = card.dataset.value;
+      state.basePrice = parseInt(card.dataset.basePrice);
+      document.getElementById('next-2').disabled = false;
+      document.getElementById('hint-2').classList.remove('visible');
+      saveConfig();
+    }
+
+    function selectTechnique(card) {
+      document.querySelectorAll('#panel-3 .technique-card').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
+      state.technik = card.dataset.value;
+      state.technikMultiplier = parseFloat(card.dataset.multiplier);
+      state.lieferzeit = state.technik === 'Öl' ? 'ca. 4–6 Wochen' : 'ca. 2–3 Wochen';
+      document.getElementById('next-3').disabled = false;
+      document.getElementById('hint-3').classList.remove('visible');
+      saveConfig();
+    }
+
+    // ── Navigation ────────────────────────────────────────────────────────────
+
+    function nextStep(current) {
+      const hintEl = document.getElementById('hint-' + current);
+      if (current === 1 && !state.motiv)   { hintEl.classList.add('visible'); return; }
+      if (current === 2 && !state.format)  { hintEl.classList.add('visible'); return; }
+      if (current === 3 && !state.technik) { hintEl.classList.add('visible'); return; }
+
+      if (current === 3) buildSummary();
+      goToStep(current + 1);
+    }
+
+    function prevStep(current) {
+      goToStep(current - 1);
+    }
+
+    function goToStep(step) {
+      document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.progress-step').forEach((s, i) => {
+        s.classList.remove('active', 'completed');
+        if (i + 1 < step) s.classList.add('completed');
+        if (i + 1 === step) s.classList.add('active');
+      });
+      document.getElementById('panel-' + step).classList.add('active');
+      state.step = step;
+      saveConfig();
+      document.querySelector('.progress-bar-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── Zusammenfassung ───────────────────────────────────────────────────────
+
+    function buildSummary() {
+      document.getElementById('summary-motiv').textContent   = state.motiv;
+      document.getElementById('summary-format').textContent  = state.format;
+      document.getElementById('summary-technik').textContent = state.technik;
+      document.getElementById('summary-lieferzeit').textContent = state.lieferzeit;
+
+      let priceText;
+      if (state.basePrice === 0) {
+        priceText = 'Auf Anfrage';
+      } else {
+        const low  = Math.round(state.basePrice * state.motivMultiplier * state.technikMultiplier);
+        const high = Math.round(low * 1.25);
+        priceText  = `ca. ${low} – ${high} €*`;
+      }
+      document.getElementById('summary-preis').textContent = priceText;
+
+      // Prefilled Kontakt-Link mit allen Parametern (inkl. Preis für Formular-Vorausfüllung)
+      const params = new URLSearchParams({
+        motiv:   state.motiv,
+        format:  state.format,
+        technik: state.technik,
+        preis:   priceText.replace('*', '').trim()
+      });
+      document.getElementById('anfrage-link').href = `Kontakt.html?${params.toString()}`;
+
+      // State nach Anfrage-Klick löschen
+      document.getElementById('anfrage-link').addEventListener('click', function () {
+        clearSavedConfig();
+      }, { once: true });
+    }
+
+    // ── Tastaturunterstützung für Karten ─────────────────────────────────────
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const t = e.target;
+        if (t.classList.contains('option-card'))    { e.preventDefault(); t.click(); }
+        if (t.classList.contains('format-card'))    { e.preventDefault(); t.click(); }
+        if (t.classList.contains('technique-card')) { e.preventDefault(); t.click(); }
+      }
+    });
+  </script>
+</body>
+</html>

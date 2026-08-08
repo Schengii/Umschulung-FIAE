@@ -1,0 +1,2550 @@
+{
+  "preferences": {
+    "cities": [
+      "Bonn, 53175",
+      "Köln"
+    ],
+    "maxRentWarm": 600,
+    "minSqm": 20,
+    "minRooms": 1,
+    "wishes": "gute ÖPNV Anbindung, gerne in der Stadt, ruhige Umgebung, Balkon wünschenswert, Parkplatzmöglichkeit, Einkaufsmöglichkeiten in der Nähe, Park oder Garten oder Wald in der Nähe bevorzugt",
+    "aboutMe": "Ich bin 24 Jahre alt, habe eine abgeschlossene Ausbildung als Elektroniker für Betriebstechnik und Fachinformatiker für Anwendungsentwicklung und bin auf der Suche nach einer kleinen Wohnung im Umkreis von Bonn. Miete kann ich ca. 800€ zahlen. Ich habe eigene private Rücklagen als Altersvorsorge investiert.",
+    "geminiApiKey": "AIzaSyCI5pl0jM4F4CjXuRHYPqOEPuzG47yji3Q",
+    "scanIntervalHours": 12,
+    "lastScanTime": "2026-06-19T10:03:12.630Z",
+    "imapHost": "web.de",
+    "imapPort": 993,
+    "imapUser": "sche-max@web.de",
+    "imapPassword": "7&ur2qSnZp",
+    "imapEnabled": true,
+    "ebkRequired": false,
+    "balkonRequired": false,
+    "noGroundFloor": false,
+    "wbsStatus": "any",
+    "blacklistKeywords": "Tauschwohnungen, Kaufen, WG-Zimmer, unter 50qm2",
+    "targetAddress": "",
+    "maxDistanceKm": 25,
+    "targetLat": null,
+    "targetLon": null,
+    "wishCity": "Bonn ",
+    "wishCityRadiusKm": 20,
+    "learnedNegativePreferences": [
+      "Nachtspeicherheizung",
+      "Erdgeschoss",
+      "Haustiere verboten",
+      "Hauptstraße",
+      "Unklare Nebenkosten",
+      "Lage am Stadtrand",
+      "Mindestalter 45 Jahre",
+      "Stadtteil Heiderhof",
+      "Wohnung in Gelsenkirchen",
+      "Keine Tauschwohnungen",
+      "Kein Balkon",
+      "Tauschwohnung",
+      "WBS"
+    ],
+    "telegramEnabled": false,
+    "telegramBotToken": "",
+    "telegramChatId": "",
+    "telegramMinScore": 75,
+    "travelProfile": "driving",
+    "wishCityLat": 50.7352621,
+    "wishCityLon": 7.1024635,
+    "wishCityState": "Nordrhein-Westfalen",
+    "minRentWarm": 200,
+    "maxSqm": 40,
+    "minDistanceKm": 0,
+    "vapidKeys": {
+      "publicKey": "BDjPouJS9Dwx2gfQOk0Y7lQWSx-QtAwayIFniZyp_0OtH25DEt9vgbPbrxr_2tzxfzaK1bmqCI6fAqZoFLNbvsw",
+      "privateKey": "JcX60yuOh_5R4VtvNktj9qUGvwlTyVdpT-d-dtjN6gw"
+    },
+    "candidateName": "Maximilian Van Hai Schenk",
+    "candidateEmail": "sche-max@web.de",
+    "candidatePhone": "+4917624921897",
+    "candidatePhoto": "",
+    "smtpHost": "",
+    "smtpPort": 587,
+    "smtpUser": "",
+    "smtpPassword": "",
+    "smtpSecure": false,
+    "smtpSenderName": "",
+    "targetAddresses": [],
+    "searchRent": true,
+    "searchBuy": false,
+    "searchSwap": false,
+    "enabledPortals": {
+      "kleinanzeigen": true,
+      "immowelt": true,
+      "ohneMakler": true,
+      "wgGesucht": true,
+      "immoscout24": true,
+      "immonet": true
+    }
+  },
+  "listings": [
+    {
+      "id": "kleinanzeigen-3324970815",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/gemuetliches-apartment-in-troisdorf-bergheim-/3324970815-203-1798",
+      "title": "Gemütliches Apartment in Troisdorf-Bergheim !",
+      "priceKalt": 480,
+      "priceWarm": 480,
+      "sqm": 41,
+      "rooms": 1,
+      "location": "53844 Troisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (6 km)",
+      "description": "Objektbeschreibung\n\nDieses gemütliche Apartment befindet sich im Dachgeschoss eines 6...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/b4/b44ba524-9eaa-457a-9670-5d623346ca06?rule=$_1.AUTO"
+      ],
+      "scrapedAt": "2026-06-07T14:20:07.128Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.8153071,
+      "lon": 7.1593271,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 23.888427857s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"23s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3427170314",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/nachmieter-gesucht-zum-01-07-2026/3427170314-203-1697",
+      "title": "Nachmieter gesucht zum 01.07.2026",
+      "priceKalt": 510,
+      "priceWarm": 510,
+      "sqm": 47,
+      "rooms": 2,
+      "location": "53773 Hennef (Sieg)\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (14 km)",
+      "description": "Ich suche einen Nachmieter für meine gemütliche 2-Zimmer-Wohnung in zentraler Lage von...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/8d/8da1369c-80d5-4028-be48-403906447e9f?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-07T14:20:13.841Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7754417,
+      "lon": 7.2847945,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 13.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 5.93071873s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"5s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3426818274",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/1-zimmer-appartment-in-bonn-beuel/3426818274-203-23759",
+      "title": "1 Zimmer Appartment in Bonn Beuel",
+      "priceKalt": 265,
+      "priceWarm": 265,
+      "sqm": 31.6,
+      "rooms": 1,
+      "location": "53227 Küdinghoven\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Kleine Wohnung im UG eines Mehrfamilienhauses in Bonn - Johdorf.\n\nEinbauküche vorhanden, frisch...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/67/67257b5f-39d8-4830-9a81-0739f6e4f208?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-07T14:20:13.844Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7294567,
+      "lon": 7.1490936,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 3.3,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 48.125897385s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"48s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3425977796",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/2-zimmer-whohnung-in-poppelsdorf/3425977796-203-23699",
+      "title": "2_Zimmer Whohnung in Poppelsdorf",
+      "priceKalt": 570,
+      "priceWarm": 570,
+      "sqm": 42,
+      "rooms": 2,
+      "location": "53115 Poppelsdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Mit schwerem Herzen muss ich meine gemütliche Wohnung in Poppelsdorf aufgrund meiner Reise verlassen.Die Wohnung befindet sich im Erdgeschoss eine dreistöckige Wohnung mit sehr netten Bewohnern.Die Wohnung wird zum 01.07. frei.Die Möbel muss gegen Ablöse von 3.200 € übernehmen, alles neue erst im April 2026 gekauft wurden.Zu den Möbeln gehören:KücheKühlschrankBett mit neue MatratzeSchränkeSofaEsstischStühleWaschmaschineDer faire Gesamtpreis beträgt 3.200 €.Der Preis ist nicht verhandelbar.Die Besichtigung ist nur für Personen möglich, die bereit sind, die Möbel zu übernehmen.Keiene Haustiere.Bitte stellen Sie sich in Ihrer Anfrage kurz vor. Bitte nur Bewerber mit fester Anstellung bzw eigenem Einkommen.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 42 m²\n- Zimmer 2\n- Schlafzimmer 1\n- Badezimmer 1\n- Etage 0\n- Wohnungstyp Etagenwohnung\n- Verfügbar ab Juli 2026\n- Online-Besichtigung Nicht möglich\n- Tauschangebot Kein Tausch\n- Nebenkosten 110 €\n- Warmmiete 570 €\n- Kaution / Genoss.-Anteile 920 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/eb/eb9f3664-5b7e-4f11-aae1-9c64ffc91f10?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-07T14:20:13.847Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "lat": 50.7217199,
+      "lon": 7.0888433,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 37.200607155s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"37s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3425524456",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/zimmer-in-troisdorf-zu-vermieten/3425524456-203-1797",
+      "title": "Zimmer in Troisdorf zu vermieten",
+      "priceKalt": 500,
+      "priceWarm": 500,
+      "sqm": 50,
+      "rooms": 3,
+      "location": "53840 Troisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (10 km)",
+      "description": "Hallo,\n\nIch vermiete ein möbliertes Zimmer in einer gepflegten Wohnung.\n\nDas Zimmer ist mit einem...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/63/63055140-0487-4602-8031-d424f605aefa?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-07T14:20:13.850Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.8153071,
+      "lon": 7.1593271,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 18.588325451s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"18s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3430694776",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/schoene-singlewohnung-fuer-sie/3430694776-203-23732",
+      "title": "schöne Singlewohnung für Sie",
+      "priceKalt": 481,
+      "priceWarm": 481,
+      "sqm": 44.08,
+      "rooms": 1,
+      "location": "53123 Medinghoven\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Die Wohnanlage liegt umgeben von einer großen Grünfläche mit Baumbestand direkt am Waldrand und...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/20/20e474cb-0f8f-41e9-849b-493a81ca9a25?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:17.132Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7111564,
+      "lon": 7.0328502,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 5.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 7.009705133s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"7s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3430412020",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/2-zimmer-appartment-bonn-lengsdorf/3430412020-203-23718",
+      "title": "2 Zimmer Appartment Bonn Lengsdorf",
+      "priceKalt": 590,
+      "priceWarm": 590,
+      "sqm": 45,
+      "rooms": 2,
+      "location": "53127 Lengsdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (3 km)",
+      "description": "Objektbeschreibung:Bitte beachten Sie die nachfolgenden Hinweise zur Vergabe der Wohnung / des Hauses:Das Objekt wird von Privat ohne Maklerprovision vermietet. Anfragen von Maklern bleiben unbeantwortet. Besichtigungstermine werden nur telefonisch vergeben. Interessenten, die keine Telefonnummer angeben, können nicht zum Besichtigungstermin eingeladen werden.Das Haus liegt inmitten eines riesigen parkähnlichen Gartens mit Beeten, prächtigen Bäumen und Sträuchern sowie einem Gemüsegarten. Das Haus eignet sich sowohl für eine Einrichtungen (derzeit Gewerbeimmobilie) als Einfamilienhaus oder für eine Hausgemeinschaft von mehreren Parteien (bevorzugt ökologisch orientiert).Lage:Die Wohnung liegt im Erdgeschoss und hat zwei Zimmer nach Westen- davon ist eines ein Durchgangszimmer beim Eingang. Das Badezimmer ist mit Waschbecken, Toilette und Dusche ausgestattet. Es kann eine kleine Kochgelegenheit eingebaut werden. Die Wohnung verfügt über einen eigenen Garten an der Einfahrt des Hauses entlang.Die Wohnung hat keinen Abstellraum. Die Wohnung wird mit Holzpellets geheizt. Einzug: 15.09.2026Die Nebenkosten variiieren je nach Heizverhalten, Wasservebrauch und Eigenarbeit im Garten.Ausstattung:Die Bäder sind alle vor einiger Zeit neu gemacht worden. Sämtliche Wohn- und Schlafräume sind mit Parkettböden ausgestattet, die vor Einzug geschliffen werden.Die Holzfenster stammen aus dem Baujahr.Das Haus liegt in exklusiver Stadtlage am Landschaftsschutzgebiet am Hang des Kreuzberges am Rande der Ortschaft Lengsdorf. Nach Westen geht der Blick zum Hartberg und Richtung Alfter. Im Norden reicht der Blick von der Terrasse bis nach Köln. Kindergarten und Grundschule sind ca. 5 Min. Fußweg entfernt. Einkaufsmöglichkeiten sind ca. 10 Min. Fußweg entfernt.Sonstiges:HAUSTIERE NACH ABSPRACHEVergabeverfahren: Die Wohnung wird von Privat ohne Maklerprovision vermietet. Die Wohnung wird auch nicht „unter der Hand“ vermietet.Die Vergabe läuft wie folgt ab:1.INTERESSE BEKUNDEN: Wir benötigen folgende Angaben:-Name, Anzahl, Alter ALLER Personen, die im Haus leben möchten.-RÜCKRUFNUMMERN zur Kontaktaufnahme-Aussagekräftige Texte und Fotos!!2.BESICHTIGUNGSTERMINE: Diese werden nur telefonisch als Sammeltermine vergeben. Bitte geben Sie uns eine Telefonnummer, unter der Sie verlässlich erreichbar sind. OHNE TELEFONISCHE ERREICHBARKEIT KEINE BESICHTIGUNG! Wir bitten um Ihr Verständnis. Bei den Besichtigungen sind keine Fotos gestattet. Es ist keine Besichtigung mit Straßenschuhen möglich. Bitte lassen Sie Ihre Schuhe im Treppenhaus vor dem Haus. 3.BENÖTIGTE UNTERLAGEN IN PAPIERFORM: Für den Fall, dass Sie sich im Anschluss an die Besichtigung für das Haus interessieren, benötigen wir im nächsten Schritt von jedem Bewohner-Name-Geburtsdatum-Adresse-Foto-Name, Anschrift, Telefonnummer des letzten Vermieters-Haftpflichtpolice-Einkommensnachweise: Bei Angestellten sind dies Lohnbescheinigungen der letzten 12 Monate, bei Selbstständigen die Steuerbescheide der letzten drei Jahre.4. Anschließend gibt es weitere Kontakte und Einzelbesichtigungstermine.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 45 m²\n- Zimmer 2\n- Schlafzimmer 2\n- Badezimmer 1\n- Wohnungstyp Erdgeschosswohnung\n- Verfügbar ab September 2026\n- Online-Besichtigung Nicht möglich\n- Tauschangebot Kein Tausch\n- Nebenkosten 200 €\n- Warmmiete 840 €\n- Kaution / Genoss.-Anteile 1.770 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/02/0296e7d5-1d47-4117-85bf-999ae79e7bfe?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:17.134Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "lat": 50.7110585,
+      "lon": 7.0694542,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 3.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 53.141418ms. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"0s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3429991630",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/gemuetliches-apartment-mit-balkon-in-niederkassel-rheidt-/3429991630-203-1672",
+      "title": "Gemütliches Apartment mit Balkon in Niederkassel - Rheidt !",
+      "priceKalt": 560,
+      "priceWarm": 560,
+      "sqm": 40,
+      "rooms": 1,
+      "location": "53859 Niederkassel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (9 km)",
+      "description": "Objektbeschreibung:\n\nDieses gemütliche Apartment befindet sich in der zweiten Etage eines...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/20/202202c2-0cad-4cbb-a1c4-645f9cb22662?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:17.136Z",
+      "manualImport": false,
+      "status": "favorit",
+      "lat": 50.8137102,
+      "lon": 7.0351942,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.9,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 44.1213781s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"44s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3429339943",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wohnung-bonn/3429339943-203-23757",
+      "title": "Wohnung Bonn",
+      "priceKalt": 520,
+      "priceWarm": 520,
+      "sqm": 26,
+      "rooms": 1,
+      "location": "53179 Mehlem\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (10 km)",
+      "description": "Gemütliche 1-Zimmer-Wohnung mit Garten in Bonn-Mehlem zu vermietenZur Vermietung steht eine schöne und gemütliche 1-Zimmer-Wohnung mit einer Wohnfläche von 26 m² in ruhiger Lage von Bonn-Mehlem.Die Wohnung verfügt über:* ein helles Wohn-/Schlafzimmer,* eine separate Küche,* einen kleinen Flur,* ein Badezimmer,* sowie einen eigenen Garten, der zum Entspannen einlädt.Die Wohnung eignet sich ideal für eine Einzelperson oder ein Paar. Einkaufsmöglichkeiten, öffentliche Verkehrsmittel und weitere Einrichtungen des täglichen Bedarfs befinden sich in der Nähe.Bei Interesse freue ich mich über Ihre Kontaktaufnahme zur Vereinbarung eines Besichtigungstermins.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 26 m²\n- Zimmer 1\n- Schlafzimmer 1\n- Badezimmer 1\n- Etage 0\n- Wohnungstyp Terrassenwohnung\n- Verfügbar ab Juli 2026\n- Warmmiete 520 €\n- Kaution / Genoss.-Anteile 800 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/92/923fadc8-a4e7-40a4-a7df-6118cbb714d5?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:17.137Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "lat": 50.6615942,
+      "lon": 7.1908362,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 10.3,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 32.537022901s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"32s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3429309265",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/helle-2-zimmer-dg-wohnung-in-zentraler-lage-mit-ebk/3429309265-203-1797",
+      "title": "Helle 2 Zimmer DG Wohnung in zentraler Lage mit EBK",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 32,
+      "rooms": 2,
+      "location": "53840 Troisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (10 km)",
+      "description": "Ich biete eine helle 2-Zimmer-Dachgeschosswohnung in sehr zentraler Lage an.Die Wohnung befindet sich in der 3. Etage eines gepflegten Mehrfamilienhauses (ohne Aufzug) und verfügt über ein Wohnzimmer mit offener Küche, ein Schlafzimmer, einen Flur, ein Badezimmer sowie einen Kellerraum.Der offizielle Mietbeginn ist der 01.09.2026. Nach Absprache mit der aktuellen Mieterin wäre ein früherer Einzug jedoch bereits ab dem 01.07.2026 möglich.Kaltmiete 450 € + 100 € NK = 550 € Gesamtmiete. Gas + Strom sind nicht in den Nebenkosten enthalten und müssen vom Mieter separat gezahlt werden.In der Küche befindet sich eine Einbauküche mit Elektrogeräten, die dem Mieter kostenlos zur Nutzung überlassen wird.Zusätzlich besteht auf Wunsch die Möglichkeit, alle Möbel der aktuellen Mieterin zu übernehmen. Hierzu gehören unter anderem das Bett, der Kleiderschrank, das Sofa, ein Sideboard (ohne TV), Flurmöbel sowie ein silberner Kühlschrank und die Waschmaschine. Die Möbelübernahme ist freiwillig und kann individuell abgesprochen werden (Preisvorstellung der Mieterin für alles zusammen 850 €).Die Wohnung hat eine eigene Gas-Therme.Zusätzlich steht eine gemeinschaftliche Waschküche im Keller zur Verfügung. TV: Das Haus ist mit Satellitenanschluss ausgestattet.Die Innenstadt ist zu Fuß in ca. 10 Min. erreichbar. Der Bahnhof Troisdorf ist mit dem Auto in 4 Min. erreichbar. Es gibt viele Einkaufsmöglichkeiten in naher Umgebung z.B. Lidl (3 Min. zu Fuß), Edeka 1 Min. mit dem Auto), DM, Kaufland, Müller etc. 5 Min. mit dem Auto.Bei Interesse an der Wohnung freuen wir uns über eine Nachricht.Eine positive Schufa und ein geregeltes Einkommen werden für die Vermietung benötigt.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 32 m²\n- Zimmer 2\n- Schlafzimmer 1\n- Badezimmer 1\n- Etage 3\n- Wohnungstyp Dachgeschosswohnung\n- Verfügbar ab Juli 2026\n- Nebenkosten 100 €\n- Kaution / Genoss.-Anteile 900 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/29/29fb6fd6-2828-4894-bc8a-365f294e4201?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:23.003Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "lat": 50.8153071,
+      "lon": 7.1593271,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 20.921271844s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"20s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3429166336",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/helle-1-zimmer-wohnung-mit-balkon-in-bonn-friesdorf-top-anbindung/3429166336-203-23751",
+      "title": "Helle 1-Zimmer-Wohnung mit Balkon in Bonn Friesdorf Top Anbindung",
+      "priceKalt": 390,
+      "priceWarm": 390,
+      "sqm": 30,
+      "rooms": 1,
+      "location": "53175 Friesdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Zur Vermietung steht eine 1-Zimmer-Wohnung im 1. OG in Bonn-Friesdorf.Die Wohnung verfügt über:\t- Bad mit Dusche und WC\t- Singleküche vorhanden- eigenen Waschmaschienenstellplatz im Keller mit TrockenraumWohnfläche: ca. 30m²Zimmer: 1Miete:\t- 390 € Nettokaltmiete\t- 100 € NebenkostenLage:\t- Einkaufsmöglichkeiten in der Nähe\t- Bus und Bahn fußläufig erreichbar 150m ( Bahnhaltestelle Max-Löbner-Str. / Friesdorf )\t- Gute Autobahnanbindung an A562, A59 und A565Bei Interesse senden Sie bitte eine persönliche Nachricht mit vollständigem Namen, Alter und Beruf.Anfragen ohne diese Angaben können leider nicht berücksichtigt werden.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 30 m²\n- Zimmer 1\n- Badezimmer 1\n- Wohnungstyp Etagenwohnung\n- Verfügbar ab September 2026\n- Nebenkosten 100 €\n- Kaution / Genoss.-Anteile 780 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/61/61b326b3-36d8-490b-b17e-4da785265c83?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-09T12:04:23.004Z",
+      "manualImport": false,
+      "status": "favorit",
+      "lat": 50.6970132,
+      "lon": 7.1254191,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.5,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 14.639608001s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"14s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3433466026",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/schoenes-zimmer-in-zentraler-lage/3433466026-203-23712",
+      "title": "Schönes Zimmer in zentraler Lage",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 25,
+      "rooms": 1,
+      "location": "53119 Nordstadt \n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Es wird eine weibliche Person gesucht.\n\nMöbliertes Einzelzimmer ab 01.01.2026 zu...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/48/481178d8-87e7-42a1-ad91-bb415dba616b?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.468Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7388636,
+      "lon": 7.0841169,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 23.416392407s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"23s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3383092244",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/reinkommen-und-wohlfuehlen-1-zimmer-single-appartment/3383092244-203-23732",
+      "title": "Reinkommen und Wohlfühlen: 1-Zimmer-Single-Appartment",
+      "priceKalt": 411,
+      "priceWarm": 411,
+      "sqm": 24.86,
+      "rooms": 1,
+      "location": "53123 Medinghoven\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Die kleine und gemütliche Wohnung bietet ausreichend Wohnkomfort. Die Wohnung besticht durch die...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/52/52f6c36d-b3a3-4642-9d66-47c63fc021cd?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.473Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7111564,
+      "lon": 7.0328502,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 5.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 54.580401371s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"54s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3432542948",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/nachmieter-gesucht-1-zimmer-wohnung-in-auerberg-ab-01-07-2026/3432542948-203-23706",
+      "title": "Nachmieter gesucht – 1-Zimmer-Wohnung in Auerberg ab 01.07.2026",
+      "priceKalt": 445,
+      "priceWarm": 445,
+      "sqm": 23,
+      "rooms": 1,
+      "location": "53117 Auerberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (4 km)",
+      "description": "Zum 01.07.2026 suche ich durch meine Verlobung eine/n Nachmieter/in für meine gepflegte...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/2c/2cf6fb34-0465-416b-9f90-4fe4c507c3c1?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.474Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7561009,
+      "lon": 7.0731086,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 3.1,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 44.938205666s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"44s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3432251496",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/2-zimmerwohnung-in-euskirchen-zentral/3432251496-203-1664",
+      "title": "2 Zimmerwohnung in Euskirchen zentral",
+      "priceKalt": 540,
+      "priceWarm": 540,
+      "sqm": 44,
+      "rooms": 2,
+      "location": "53919 Weilerswist\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (19 km)",
+      "description": "Die Wohnung liegt in der zweiten Etage eines gepflegten Gebäudes und verfügt über eine Einbauküche...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/8b/8b66cf16-03ab-4115-ad90-218049386eb5?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.476Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7580669,
+      "lon": 6.8407873,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 18.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.515253931s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"30s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3432029599",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/appartement/3432029599-203-1799",
+      "title": "Appartement",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 42,
+      "rooms": 1,
+      "location": "53842 Troisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (13 km)",
+      "description": "Gepflegtes Souterrain-Appartement in Troisdorf-Spich – ideal für Wochenendpendler\n\nWir vermieten...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/67/6706b38b-6193-4807-a99e-2b1de61b412a?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.478Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.8153071,
+      "lon": 7.1593271,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 20.886955761s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"20s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3431671609",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/appartement-fuer-studentin-wochenendpendlerin-in-niederkassel/3431671609-203-1672",
+      "title": "Appartement für Studentin/Wochenendpendlerin in Niederkassel",
+      "priceKalt": 400,
+      "priceWarm": 400,
+      "sqm": 25,
+      "rooms": 1,
+      "location": "53859 Niederkassel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (9 km)",
+      "description": "Wochenendpendlerinnen aufgepasst:\nZu vermieten ist ein helles, freundliches Wohn-Schlafzimmer mit...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/1f/1f16751a-50d9-4dfb-bc24-f7c9f1dd1c3d?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:37.633Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.8137102,
+      "lon": 7.0351942,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.9,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 16.038275628s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"16s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "immowelt-39e5f33e-42e7-4376-a28d-55c3990579db",
+      "portal": "immowelt",
+      "url": "https://www.immowelt.de/expose/39e5f33e-42e7-4376-a28d-55c3990579db",
+      "title": "Wohnung zur Miete in Bonn",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 43,
+      "rooms": 2,
+      "location": "Noeggerathstraße 000, Zentrum, Bonn (53111)",
+      "description": "Aus Gründen der besseren Lesbarkeit wird auf die gleichzeitige Verwendung der Sprachform männlich, weiblich und divers verzichtet. Sämtliche Personenbezeichnungen gelten gleichermaßen für alle Geschlechter. MIETERPROFIL: Diese Wohnung soll auf Wunsch unseres Auftraggebers ausschließlich an berufstätige Interessenten vermietet werden. Hierbei sollte die im Haushalt lebenden Personen 1 nicht übersteigen. Bei Interesse würden wir Sie bitten, uns eine kurze Mail, mit ein paar Angaben zu Ihrer Perso.",
+      "images": [
+        "https://mms.immowelt.de/6/d/9/9/6d992b48-3bd3-499d-8634-1f55f4ea5050.jpg?ci_seal=2127b8c9dddb75e8caa7f5838c4bd7d0296c0d4a&h=50"
+      ],
+      "scrapedAt": "2026-06-13T10:00:51.389Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.734325,
+      "lon": 7.0928409,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.7,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 1.637068122s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"1s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "immowelt-6b10d079-ae0f-4e8a-a8e5-ac1ab49b53e4",
+      "portal": "immowelt",
+      "url": "https://www.immowelt.de/expose/6b10d079-ae0f-4e8a-a8e5-ac1ab49b53e4",
+      "title": "Studio zur Miete in Bonn",
+      "priceKalt": 506,
+      "priceWarm": 506,
+      "sqm": 36.5,
+      "rooms": 1,
+      "location": "Augustusring 12, Zentrum, Bonn (53111)",
+      "description": "Objektreferenz: 1.5301.2.19 Die Wohnung ist, bis auf Küche und Bad, mit Parkett ausgestattet. Die Böden in Küche und Bad sind gefliest. Die Wohnung verfügt über eine großzügige Südterrasse. Das Haus befindet sich in sehr zentraler Lage in Castell mit sehr guter Anbindung an den ÖPNV. Die Autobahn ist in wenigen Fahrminuten, der Rhein in wenigen Gehminuten zu erreichen. Einkaufsmöglichkeiten, Ärzte, Apotheken, Restaurants und Kneipen sind fußläufig erreichbar. Schulen und Kitas befinden sich ebe.",
+      "images": [
+        "https://mms.immowelt.de/c/8/c/8/c8c8a93d-4e21-447d-8ef4-6110923b0e57.jpg?ci_seal=c6fb41a2af1a584410941b8aee7bcb555ca12941&w=525&h=394"
+      ],
+      "scrapedAt": "2026-06-13T10:00:51.391Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7469081,
+      "lon": 7.0966946,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 56.802725129s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"56s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "ohne-makler-189942",
+      "portal": "ohne-makler",
+      "url": "https://www.ohne-makler.net/immobilie/189942/",
+      "title": "Andernach Zentrum 2 ZKB, Parkett",
+      "priceKalt": 572,
+      "priceWarm": 572,
+      "sqm": 52,
+      "rooms": 0,
+      "location": "Bonn",
+      "description": "Diese Seite wurde ausgedruckt von: https://www.ohne-makler.net/immobilie/189942/ Nachricht an Vermieter Ihr Name* Anrede * Anrede Frau Herr Divers Vorname * Nachname * Wohnort* Straße und Hausnummer * Postleitzahl * Ort * Kontaktdaten* E-Mail-Adresse * Telefon * Ihre Nachricht * Sicherheitsabfrage* 10 + 10 = * Die einfache Rechenaufgabe ist zu lösen und das Ergebnis einzugeben. Z.B. muss für 1+3 der Wert 4 eingegeben werden. Abbrechen Nachricht senden Mit dem Absenden des Buttons \"Nachricht senden\" erklären Sie sich mit der Verarbeitung Ihrer Daten zum Zweck der Bearbeitung Ihrer Kontaktanfrage einverstanden. Weitere Informationen zur Datenverarbeitung und Ihrem Widerrufsrecht finden Sie in der Datenschutzerklärung. Exposé drucken Jetzt kostenlos registrieren um die Merkliste zu verwenden E-Mail* Bitte geben Sie eine gültige E-Mail-Adresse ein. Passwort* Das Passwort muss mindestens 8 Zeichen lang sein. Ich möchte den kostenlosen Newsletter von ohne-makler erhalten Abbrechen OM-Account erstellen OM-Account gefunden Es existiert bereits ein OM-Account mit dieser E-Mail-Adresse. Schließen Jetzt einloggen Vielen Dank für Ihre Registrierung! Um die Registrierung abzuschließen ist es nötig, Ihre E-Mail-Adresse zu überprüfen. Wir haben Ihnen soeben eine E-Mail dafür zugeschickt. Bitte rufen Sie Ihre E-Mails ab und klicken Sie in der Mail auf den Bestätigungs-Button. Anschließend können Sie sofort mit dem Veröffentlichen Ihrer Immobilienanzeige beginnen. Noch keine E-Mail angekommen? Die E-Mail kommt normalerweise innerhalb weniger Sekunden an, nur in Ausnahmefällen kann es bis zu 10 Minuten dauern. Schauen Sie bitte auch in Ihrem Spam-Ordner nach, manchmal kommt es vor, dass die Mail dort landet. Falls Sie die Aktivierungsnachricht nicht erreicht, können Sie hier eine neue anfordern. Es kommt keine Mail an, oder es gibt sonstige Probleme? Kein Problem! Gerne helfen wir Ihnen persönlich weiter. Sie erreichen unseren Kundenservice direkt per Mail an info@ohne-makler.net oder telefonisch von Montag bis Freitag in der Zeit von 09:00 - 17:00 Uhr unter der Rufnummer 040 781 0206 10 (normaler Festnetztarif). Schließen Merken Teilen Facebook WhatsApp X E-Mail URL kopieren Kopiert Mehr... Andernach Zentrum 2 ZKB, Parkett Bahnhofstrasse 41, 56626 Andernach – Rheinland-Pfalz 572 € Kaltmiete (zzgl. NK) 2 Zimmer 52 m² Wohnfläche Privatangebot Wohnung Hochwertige Zweizimmerwohnung in kernsaniertem Mehrfamilienhaus. Interessieren Sie sich für diese Wohnung? Vermieter kontaktieren Objekt-Nr OM-189942 Objektart Wohnung Objekttyp Wohnung Übernahme ab 1. September 2026 Miete & Nebenkosten Kaltmiete 572 € (zzgl. NK) Summe Nebenkosten/Heizkosten 182 € Mietsicherheit 1.716 € Einzelheiten Zustand Neuwertig Anzahl Etagen 4 Stockwerk 2. OG Badezimmer (Anzahl) 1 Schlafzimmer (Anzahl) 1 Bodenbeläge Parkett, Fliesen Heizung Zentralheizung Baujahr 1914 Ausstattung Vollbad Infrastruktur Apotheke, Lebensmittel-Discount, Allgemeinmediziner, Kindergarten, Grundschule, Hauptschule, Realschule, Gymnasium, Gesamtschule, Öffentliche Verkehrsmittel Lage zentrumsnah, fussläufig 2 Minuten bis zur Einkaufsstrasse, direkte Anbindung an Bus und Bahn, Parkmöglichkeiten neben dem Haus, Erteilung eines Anwohnerparkausweises möglich. © OpenMapTiles / © OpenStreetMap contributors Lage-Check Natur 150m Einkaufen 50m Gesundheit 100m Gastronomie 100m Kinderfreundlich 200m Sport 50m Kultur 250m ÖPNV 50m Nachtleben 150m Mehr anzeigen Energie 0 25 50 75 100 125 150 175 200 225 ≥250 Endenergieverbrauch 97,00 kWh/(m²a) Energieeffizienzklasse C Energieausweistyp Verbrauchsausweis Wesentlicher Energieträger Gas PDF Energieausweis Sonstiges Mindestvertragslaufzeit 1 Jahr.Hunde und Katzen sind im Haus nicht gestattet.Die Nebenkosten verstehen sich als Vorausleistung und sind inklusive Heizkosten.Anmietung bei Interesse gegebenenfalls auch vor dem 01.09.2026 nach Absprache mit dem derzeitigen Mieter möglich. Makleranfragen unerwünscht! Nach § 7 UWG sind unaufgeforderte Kontaktaufnahmen durch Makler ohne ausdrückliche Einwilligung des Empfängers verboten! Themenportale Stadtzentrum Ähnliche Immobilien Wohnung in Andernach mieten Wohnung in Mayen-Koblenz (Kreis) mieten Wohnung in Rheinland-Pfalz mieten Haus in Andernach mieten Wohnung auf Zeit in Andernach mieten Nachricht direkt an den Vermieter senden Fragen zu dieser Wohnung? Interesse zeigen oder einen Besichtigungstermin vereinbaren? Klicken Sie hier, um dem Anbieter eine Nachricht zu senden: Vermieter kontaktieren Telefonnummer anzeigen Mobiltelefon: 0162 6186865 Angebot von: Jens Deinert Telefonnummer anzeigen Mobiltelefon: 0162 6186865 Vermieter kontaktieren Der OM-Lage-Check ist ein automatisch berechneter Richtwert, der die Attraktivität des Standorts einer Immobilie erfasst. Berücksichtigt werden dabei Geodaten und verschiedene Punkte in der näheren Umgebung, wie bspw. Ärzte, Supermärkte, U- und S-Bahn-Stationen usw. Dies ermöglicht eine erste grobe Einschätzung einer Lage, kann aber einen direkten Besuchs der Immobilie nicht ersetzen. Die Lagebewertung wird automatisch berechnet, kann nicht manuell beeinflusst werden, weder durch ohne-makler noch durch den Eigentümer. Er ist objektiv und neutral und berücksichtigt daher keine subjektive Einschätzungen von echten Personen (\"sooo weit weg ist der Supermarkt ja doch nicht\"). Datenquelle: GeoSci Sie können sich nicht selbst kontaktieren Es ist leider nicht möglich, eine Nachricht an sich selbst zu senden. Diese Seite wurde ausgedruckt von: https://www.ohne-makler.net/immobilie/189942/ <div style=\"display:inline;\"> <img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\" data-ccm-loader-group=\"ads\" data-ccm-loader-src=\"//googleads.g.doubleclick.net/pagead/viewthroughconversion/1061463388/?value=0&amp;label=BJAQCNiCuAMQ3MqS-gM&amp;guid=ON&amp;script=0\"/> </div> Nachricht an Vermieter Ihr Name* Anrede * Anrede Frau Herr Divers Vorname * Nachname * Wohnort* Straße und Hausnummer * Postleitzahl * Ort * Kontaktdaten* E-Mail-Adresse * Telefon * Ihre Nachricht * Sicherheitsabfrage* 10 + 10 = * Die einfache Rechenaufgabe ist zu lösen und das Ergebnis einzugeben. Z.B. muss für 1+3 der Wert 4 eingegeben werden. Abbrechen Nachricht senden Mit dem Absenden des Buttons \"Nachricht senden\" erklären Sie sich mit der Verarbeitung Ihrer Daten zum Zweck der Bearbeitung Ihrer Kontaktanfrage einverstanden. Weitere Informationen zur Datenverarbeitung und Ihrem Widerrufsrecht finden Sie in der Datenschutzerklärung. Jetzt kostenlos registrieren um die Merkliste zu verwenden E-Mail* Bitte geben Sie eine gültige E-Mail-Adresse ein. Passwort* Das Passwort muss mindestens 8 Zeichen lang sein. Ich möchte den kostenlosen Newsletter von ohne-makler erhalten Abbrechen OM-Account erstellen OM-Account gefunden Es existiert bereits ein OM-Account mit dieser E-Mail-Adresse. Schließen Jetzt einloggen Vielen Dank für Ihre Registrierung! Um die Registrierung abzuschließen ist es nötig, Ihre E-Mail-Adresse zu überprüfen. Wir haben Ihnen soeben eine E-Mail dafür zugeschickt. Bitte rufen Sie Ihre E-Mails ab und klicken Sie in der Mail auf den Bestätigungs-Button. Anschließend können Sie sofort mit dem Veröffentlichen Ihrer Immobilienanzeige beginnen. Noch keine E-Mail angekommen? Die E-Mail kommt normalerweise innerhalb weniger Sekunden an, nur in Ausnahmefällen kann es bis zu 10 Minuten dauern. Schauen Sie bitte auch in Ihrem Spam-Ordner nach, manchmal kommt es vor, dass die Mail dort landet. Falls Sie die Aktivierungsnachricht nicht erreicht, können Sie hier eine neue anfordern. Es kommt keine Mail an, oder es gibt sonstige Probleme? Kein Problem! Gerne helfen wir Ihnen persönlich weiter. Sie erreichen unseren Kundenservice direkt per Mail an info@ohne-makler.net oder telefonisch von Montag bis Freitag in der Zeit von 09:00 - 17:00 Uhr unter der Rufnummer 040 781 0206 10 (normaler Festnetztarif). Schließen Der OM-Lage-Check ist ein automatisch berechneter Richtwert, der die Attraktivität des Standorts einer Immobilie erfasst. Berücksichtigt werden dabei Geodaten und verschiedene Punkte in der näheren Umgebung, wie bspw. Ärzte, Supermärkte, U- und S-Bahn-Stationen usw. Dies ermöglicht eine erste grobe Einschätzung einer Lage, kann aber einen direkten Besuchs der Immobilie nicht ersetzen. Die Lagebewertung wird automatisch berechnet, kann nicht manuell beeinflusst werden, weder durch ohne-makler noch durch den Eigentümer. Er ist objektiv und neutral und berücksichtigt daher keine subjektive Einschätzungen von echten Personen (\"sooo weit weg ist der Supermarkt ja doch nicht\"). Datenquelle: GeoSci Sie können sich nicht selbst kontaktieren Es ist leider nicht möglich, eine Nachricht an sich selbst zu senden.",
+      "images": [
+        "https://media.ohne-makler.net/rs:fill:488:288/q:90/czM6Ly9vbS1saXN0aW5ncy91cGxvYWQvcGljdHVyZXMvT00vMTg5OTQyL3JyNmI1ajNn?sig=Tn9G27LIYcvCPPkWiTp3TrP6OuyxHvjLIIj05FslSWY&exp=1781388066"
+      ],
+      "scrapedAt": "2026-06-13T10:01:09.120Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "matchScore": 50,
+      "matchSummary": "Gemini API-Limit erreicht (429 Quota Exceeded). Die freie API-Nutzung ist auf 20 Anfragen pro Tag begrenzt. Bitte trage einen anderen API-Key ein oder versuche es später noch einmal.",
+      "pros": [],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3433941488",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/zimmer-frei-in-5er-wg-kessinich/3433941488-203-1055",
+      "title": "Zimmer frei in 5er Wg Kessinich",
+      "priceKalt": 436,
+      "priceWarm": 436,
+      "sqm": 1,
+      "rooms": 11,
+      "location": "53225 Beuel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (3 km)",
+      "description": "Bevor du mich anschreibst solltest du erstmal diese Punkte erfüllen (wird von der Vermietung...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/ff/ff0bcbcf-491c-469e-8d45-2f404b603c0a?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-13T10:00:31.464Z",
+      "manualImport": false,
+      "status": "neu",
+      "lat": 50.7386619,
+      "lon": 7.1245135,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 Too Many Requests] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 37.966262115s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"37s\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3408858601",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/sankt-augustin-neu-renoviert-voll-moebliert-charmante-wohnung-mit-ca-40-m-grosszuegigem-balkon/3408858601-203-1861",
+      "title": "Sankt Augustin: Neu renoviert & voll möbliert – charmante Wohnung mit ca. 40 m² & großzügigem Balkon",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 40,
+      "rooms": 1.5,
+      "location": "53757 Sankt Augustin\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (8 km)",
+      "description": "Diese charmante und hochwertig modernisierte 1,5-Zimmer-Wohnung überzeugt mit einem durchdachten...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/81/81a7d3b8-f2c4-435e-88c2-907a60ac661c?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-14T15:56:26.073Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7752776,
+      "lon": 7.1895507,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 7.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3434896526",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/souterrain-wohnung-in-gepflegtem-haus/3434896526-203-1688",
+      "title": "Souterrain Wohnung in gepflegtem Haus",
+      "priceKalt": 520,
+      "priceWarm": 520,
+      "sqm": 52,
+      "rooms": 2,
+      "location": "53797 Lohmar\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (18 km)",
+      "description": "Die Wohnung hat zusätzlich einen separaten Eingang.Die Einbauküche ist neuwertig.Großer PKW-Stellplatz 40€Zu vermieten an ruhige Einzelperson oder Paar.\n\n### Zusätzliche Ausstattungsmerkmale & Details:\n- Wohnfläche 52 m²\n- Zimmer 2\n- Badezimmer 1\n- Wohnungstyp Souterrain\n- Verfügbar ab September 2026\n- Online-Besichtigung Nicht möglich\n- Tauschangebot Kein Tausch\n- Nebenkosten 130 €\n- Kaution / Genoss.-Anteile 1.500 €",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/d8/d8621bd9-cc68-4e53-ab42-9dc16e789570?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-14T15:56:26.073Z",
+      "manualImport": false,
+      "status": "gelesen",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8402243,
+      "lon": 7.2127276,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 14,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": "",
+      "enriched": true
+    },
+    {
+      "id": "kleinanzeigen-3434619950",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/2-1-2-zimmer-wohnung-im-gruenen-bei-hennef/3434619950-203-1697",
+      "title": "2 1/2 Zimmer-Wohnung im Grünen bei Hennef",
+      "priceKalt": 580,
+      "priceWarm": 580,
+      "sqm": 57,
+      "rooms": 2,
+      "location": "53773 Hennef (Sieg)\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (14 km)",
+      "description": "Die angebotene 2,5 - Zimmer-Wohnung befindet sich in einem Haus mit drei Parteien und hat ca 57 qm...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/6f/6fe51195-1ae2-49f4-9e8d-e3f1772f9111?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-14T15:56:26.082Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7754417,
+      "lon": 7.2847945,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 13.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436824816",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/kellerwohnung-zu-mieten-wachtberg-arzdorf/3436824816-203-1039",
+      "title": "Kellerwohnung zu mieten Wachtberg, Arzdorf",
+      "priceKalt": 500,
+      "priceWarm": 500,
+      "sqm": 55,
+      "rooms": 2,
+      "location": "53179 Bad Godesberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (10 km)",
+      "description": "Für Ab sofort ca 55 Quadratmeter\nKaltmiete 500€\nNur an selbst Zahler zu vermieten!!\n\n53343...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/81/81904cfd-19fd-4d42-9bfd-466553fbb2b3?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:46.999Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.6850682,
+      "lon": 7.156323,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 6.7,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436573858",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/ein-zimmer-in-wg-nur-frauen-/3436573858-203-23745",
+      "title": "Ein zimmer in wg(nur Frauen)",
+      "priceKalt": 520,
+      "priceWarm": 520,
+      "sqm": 12,
+      "rooms": 3,
+      "location": "53173 Plittersdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (7 km)",
+      "description": "Ein gemütliches, möbliertes Zimmer in einer Wohngemeinschaft im Herzen von Bad Godesberg – ideal...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/45/45181958-9970-4b9a-af52-10ffafa2a9ec?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.003Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.6975862,
+      "lon": 7.1655601,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 6.1,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436375913",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/helle-freundliche-1-zimmer-wohnung-ruhiglage-bn-oberkassel/3436375913-203-1055",
+      "title": "Helle, freundliche 1-Zimmer-Wohnung, Ruhiglage BN-Oberkassel",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 42,
+      "rooms": 1,
+      "location": "53225 Beuel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (3 km)",
+      "description": "Lage:\nBonn-Oberkassel, Adrianstraße, ruhiges, gepflegtes Mehrparteienhaus, Park-ähnliches...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/e7/e7179be5-ee0a-482a-8bbe-aa03a84a7f95?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.004Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7386619,
+      "lon": 7.1245135,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436309523",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wg-zimmer-fuer-studentinnen/3436309523-203-1861",
+      "title": "WG ZIMMER FÜR STUDENTINNEN",
+      "priceKalt": 335,
+      "priceWarm": 335,
+      "sqm": 53.6,
+      "rooms": 17,
+      "location": "53757 Sankt Augustin\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (8 km)",
+      "description": "ch suche eine Nachmieterin für mein Halbappartment. DAS ZIMMER IST NUR FÜR WEIBLICHE...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/68/68ce26a0-748b-4706-b89d-e27308f12464?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.005Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7752776,
+      "lon": 7.1895507,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 7.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3355759844",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-tausche-1-zimmer-wohnung-in-koeln-porz/3355759844-203-962",
+      "title": "TAUSCHWOHNUNG Tausche 1-Zimmer-Wohnung in Köln Porz",
+      "priceKalt": 300,
+      "priceWarm": 300,
+      "sqm": 30,
+      "rooms": 1,
+      "location": "51149 Porz\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (20 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 404171)\nIch biete meine gemütliche...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/60/60ac1acb-2819-431a-8d9f-fd229235b67c?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.006Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.8855857,
+      "lon": 7.0578924,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 17,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436172527",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/frisch-renovierte-studentenwohnung-in-top-lage-ostwaldstrasse-8/3436172527-203-23693",
+      "title": "Frisch renovierte Studentenwohnung in Top-Lage – Ostwaldstraße 8",
+      "priceKalt": 400,
+      "priceWarm": 400,
+      "sqm": 23,
+      "rooms": 1,
+      "location": "53115 Endenich\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Ab sofort steht diese frisch renovierte 1-Zimmer-Wohnung in der Ostwaldstraße 8 in Bonn zur...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/87/87ceec70-f1d7-4acc-a33f-2a0c1474b5cd?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.007Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7269947,
+      "lon": 7.0738629,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 2.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3436017201",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/demnaechst-frei-2-zimmer-wohnung-in-siegburg-brueckberg/3436017201-203-1670",
+      "title": "Demnächst frei! 2-Zimmer-Wohnung in Siegburg Brückberg",
+      "priceKalt": 593,
+      "priceWarm": 593,
+      "sqm": 58.29,
+      "rooms": 2,
+      "location": "53721 Siegburg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (10 km)",
+      "description": "Diese Wohnanlage besteht aus kleinen, teils modernisierten Häusern, in denen jeweils 4-5...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/a4/a41c354a-7d50-4051-a057-395d6ad69b01?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.009Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7928332,
+      "lon": 7.2070774,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3115494464",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-charmante-1-zimmer-wohnung-in-bonn-friesdorf/3115494464-203-23751",
+      "title": "TAUSCHWOHNUNG Charmante 1-Zimmer-Wohnung in Bonn-Friesdorf",
+      "priceKalt": 510,
+      "priceWarm": 510,
+      "sqm": 40,
+      "rooms": 1,
+      "location": "53175 Friesdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 348846)\nIch biete meine ca. 40 m²...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/a9/a907fbe9-89d9-4aeb-adb0-b8f5c7ab896d?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.010Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.6970132,
+      "lon": 7.1254191,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.5,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3355709113",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-geraeumige-2-zimmer-wohnung-in-der-altstadt/3355709113-203-29390",
+      "title": "TAUSCHWOHNUNG Geräumige 2 Zimmer Wohnung in der Altstadt",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 45,
+      "rooms": 2,
+      "location": "53119 Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 358416)\nDie Wohnung zeichnet sich...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/74/74e2229b-7c19-4f0d-a034-ebdb1b221dd1?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.010Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3248452507",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-wunderschoene-maisonette-wohnung-in-endenich-abzugeben/3248452507-203-23694",
+      "title": "TAUSCHWOHNUNG Wunderschöne Maisonette Wohnung in Endenich abzugeben",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 35,
+      "rooms": 1.5,
+      "location": "53121 Endenich\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 391050)\nHallo zusammen,\nich biete...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/56/5617c0ef-1eba-4d5c-8f4b-5c0ea88380e5?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.017Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7269947,
+      "lon": 7.0738629,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 2.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3435638286",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wohnung-zu-vermieten-monteure-firmen-touristen/3435638286-203-1798",
+      "title": "WOHNUNG ZU VERMIETEN MONTEURE/FIRMEN/ TOURISTEN",
+      "priceKalt": 150,
+      "priceWarm": 150,
+      "sqm": 120,
+      "rooms": 5,
+      "location": "53844 Troisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (6 km)",
+      "description": "Guten Tag ,\n\nzur Vermietung steht eine schöne 5 Zimmer Wohnung.\nDie Wohnung liegt in zentraler Lage...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/dc/dcd730c8-e93c-44de-8bcb-2ad313c4f4dd?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.018Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8153071,
+      "lon": 7.1593271,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.8,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3218770450",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-1-zimmer-wohnung-mit-separater-kuechennische/3218770450-203-962",
+      "title": "TAUSCHWOHNUNG 1 Zimmer Wohnung mit separater Küchennische",
+      "priceKalt": 337,
+      "priceWarm": 337,
+      "sqm": 31,
+      "rooms": 1,
+      "location": "51149 Porz\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                            \n                                (ca. 20 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 383459)\nIch biete eine 1/1,5-Zimmer...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/68/687afeb5-19c8-40d4-abd4-3678317d4182?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.018Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.9050426,
+      "lon": 7.0464508,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 19.3,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-2796159404",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/1-zimmer-wohnung-in-bonn-kessenich/2796159404-203-23696",
+      "title": "1-Zimmer-Wohnung in Bonn Kessenich",
+      "priceKalt": 366,
+      "priceWarm": 366,
+      "sqm": 31,
+      "rooms": 1,
+      "location": "53129 Kessenich\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "# Objektbeschreibung\nDie Wohnanlage mit großen Grünflächen und Baumbestand, umfasst 61 Gebäude mit...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/13/13ae98cd-dba1-4562-9355-5617b391502c?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:47.019Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.712325,
+      "lon": 7.1085354,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 2.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3434775607",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wohnung-zu-vermieten/3434775607-203-1662",
+      "title": "wohnung zu vermieten",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 50,
+      "rooms": 2,
+      "location": "53343 Wachtberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (13 km)",
+      "description": "Habe eine zwei Zimmer Wohnung zu vermieten.\nNur für langfristig Mieter. Mindestens 3 Jahres...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/3d/3d8b9eed-1c52-4588-b771-a73be99f5dba?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.541Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.6435631,
+      "lon": 7.0882889,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 10.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3381841690",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/einzug-nach-renovierung-1-zimmer-wohnung-in-koeln-porz-/3381841690-203-962",
+      "title": "Einzug nach Renovierung! 1-Zimmer-Wohnung in Köln Porz!",
+      "priceKalt": 534,
+      "priceWarm": 534,
+      "sqm": 44.49,
+      "rooms": 1,
+      "location": "51149 Porz\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (18 km)",
+      "description": "Das 11-stöckige Wohnhaus wurde 1974 erbaut - In der 3. Etage liegt Ihre neue Wohnung. Ein...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/c5/c57d0084-5aeb-4183-9254-98766899fb84?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.542Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8855857,
+      "lon": 7.0578924,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 17,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3381431915",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-gemuetliche-3-zimmer-wohnung-in-koenigswinter/3381431915-203-1686",
+      "title": "TAUSCHWOHNUNG Gemütliche 3-Zimmer-Wohnung in Königswinter",
+      "priceKalt": 500,
+      "priceWarm": 500,
+      "sqm": 78,
+      "rooms": 3,
+      "location": "53639 Königswinter\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (9 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 436148)\nTausche meine geräumige...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/1d/1d490a87-18b1-4e2d-925d-2ea897033e57?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.542Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.6739719,
+      "lon": 7.1930989,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.3,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3433366658",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/ein-zimmer-in-maenner-wg-bis-450-euro/3433366658-203-23711",
+      "title": "Ein Zimmer in Männer-WG / bis 450 Euro",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 20,
+      "rooms": 1,
+      "location": "53111 Nordstadt \n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Ein schönes WG-Zimmer in Männer-WG ist ab sofort in der Nordstraße Bonn verfügbar. Die monatliche...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/40/409f9a47-65ea-4700-a30e-bfb6d1312d05?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.545Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7388636,
+      "lon": 7.0841169,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3433346439",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/2-zimmer-wohnung-sucht-mieter/3433346439-203-962",
+      "title": "2 Zimmer Wohnung sucht Mieter",
+      "priceKalt": 531,
+      "priceWarm": 531,
+      "sqm": 53,
+      "rooms": 2,
+      "location": "51149 Porz\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (18 km)",
+      "description": "Dieses attraktive Mietobjekt präsentiert sich als eine helle und gut geschnittene Wohnung im 3....",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/48/48c40f64-e984-4813-bf95-c60fefb3d6c3?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.545Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8855857,
+      "lon": 7.0578924,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 17,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3351520683",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-charmante-flat-mit-balkon-in-bonn-sucht-tauschpartner/3351520683-203-23748",
+      "title": "TAUSCHWOHNUNG Charmante Flat, mit Balkon in Bonn sucht Tauschpartner",
+      "priceKalt": 510,
+      "priceWarm": 510,
+      "sqm": 42,
+      "rooms": 1.5,
+      "location": "53173 Rüngsdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (7 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 425383)\nHallo! Ich biete meine...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/19/1910d1b1-5697-430b-ac15-effbe50e4850?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.546Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.6846568,
+      "lon": 7.1712873,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 7.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3244301473",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-3-zimmer-wohnung-zum-tausch-gegen-4-5-zimmer-wohnung-gesucht/3244301473-203-29390",
+      "title": "TAUSCHWOHNUNG 3-Zimmer-Wohnung zum Tausch gegen 4–5-Zimmer-Wohnung gesucht",
+      "priceKalt": 597,
+      "priceWarm": 597,
+      "sqm": 63.44,
+      "rooms": 3,
+      "location": "53119 Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 390604)\nIch biete eine helle, ruhige...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/6b/6bfd54f0-ed75-4e78-a96d-fcc25579720a?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.546Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3432142969",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-moeblierte-2-zimmer-wohnung-60-m-mit-parkplatz-in-koenigswi/3432142969-203-1686",
+      "title": "TAUSCHWOHNUNG Möblierte 2-Zimmer-Wohnung (60 m²) mit Parkplatz in Königswi",
+      "priceKalt": 550,
+      "priceWarm": 550,
+      "sqm": 60,
+      "rooms": 2,
+      "location": "53639 Königswinter\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (12 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 455452)\nGuten Tag,\nich biete eine...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/41/41f9c669-4507-490c-8935-d8f9f4895dcb?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.547Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.6739719,
+      "lon": 7.1930989,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.3,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3215309897",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-ich-ich-wird-wir/3215309897-203-23683",
+      "title": "TAUSCHWOHNUNG ICH+ICH wird WIR",
+      "priceKalt": 570,
+      "priceWarm": 570,
+      "sqm": 64,
+      "rooms": 2,
+      "location": "53111 Bonn-​Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 381487)\nIch biete eine gut...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/47/4737fe77-d31e-4af1-9845-e8043bc9da42?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.548Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3431644957",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wohnung-20qm-moebliert-in-bonn-duisdorf-580-kaltmiete-privat/3431644957-203-21650",
+      "title": "Wohnung 20qm möbliert in Bonn Duisdorf 580€ Kaltmiete privat",
+      "priceKalt": 580,
+      "priceWarm": 580,
+      "sqm": 20,
+      "rooms": 1,
+      "location": "53123 Duisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (4 km)",
+      "description": "Die zu vermietende Einzimmerwohnung verfügt über Einbauküche, TV, Klimaanlage, moderne Dusche,- und...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/aa/aa3a67ef-f6f6-4a84-9d8c-3e54aa957354?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-16T10:00:53.549Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7144905,
+      "lon": 7.0478279,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.5,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "immowelt-e5bb7aec-3148-4c54-baf0-24b084f12626",
+      "portal": "immowelt",
+      "url": "https://www.immowelt.de/expose/e5bb7aec-3148-4c54-baf0-24b084f12626",
+      "title": "Wohnung zur Miete in Bonn",
+      "priceKalt": 490,
+      "priceWarm": 490,
+      "sqm": 41,
+      "rooms": 2,
+      "location": "Steinerstraße00, Beuel, Bonn (53225)",
+      "description": "Aus Gründen der besseren Lesbarkeit wird auf die gleichzeitige Verwendung der Sprachform männlich, weiblich und divers verzichtet. Sämtliche Personenbezeichnungen gelten gleichermaßen für alle Geschlechter. Bevor wir Ihnen diese besondere Wohnung näher bringen, hier das Anforderungsprofil des Vermieters: Unser Auftraggeber ist auf der Suche nach einer verantwortungsvollen und ruhigen Einzelperson. Wer in einem gepflegten Ambiente wohnen möchte und nicht nur eine Wohnung sondern ein Zuhause such.",
+      "images": [
+        "https://mms.immowelt.de/6/d/9/9/6d992b48-3bd3-499d-8634-1f55f4ea5050.jpg?ci_seal=2127b8c9dddb75e8caa7f5838c4bd7d0296c0d4a&h=50"
+      ],
+      "scrapedAt": "2026-06-16T10:01:06.806Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "immowelt-26fy8z5gz2jx",
+      "portal": "immowelt",
+      "url": "https://www.immowelt.de/expose/26fy8z5gz2jx",
+      "title": "Wohnung zur Miete in Bonn",
+      "priceKalt": 359,
+      "priceWarm": 359,
+      "sqm": 21.5,
+      "rooms": 1,
+      "location": "Bornheimer Str. 30, Zentrum, Bonn (53111)",
+      "description": "ch vermiete meine möblierte 1-Zimmer-Wohnung (21,5 qm) in der Bonner Altstadt für den Zeitraum 01. September 2026 bis 05. März 2027 (befristet). Die Wohnung ist vollständig ausgestattet und bezugsfertig: Schlafcouch, Kleiderschrank, Schreibtisch, Bücherregal, Vorhänge sowie eine voll eingerichtete Küche mit Küchentisch sind inklusive. Stauraum ist vorhanden. Ein TV ist ebenfalls in der Wohnung. Internet und Strom sind in der NK-Pauschale enthalten — keine zusätzlichen Anmeldungen notwendig, ein.",
+      "images": [
+        "https://mms.immowelt.de/d/a/5/b/da5b594e-f834-4198-90e0-2a7c728bfa8a.jpg?ci_seal=03e72475e98590bff85de5a8005ee3aaf4f0ee73&w=525&h=394"
+      ],
+      "scrapedAt": "2026-06-16T10:01:06.811Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7358868,
+      "lon": 7.0932716,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.7,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "ohne-makler-465647",
+      "portal": "ohne-makler",
+      "url": "https://www.ohne-makler.net/immobilie/465647/",
+      "title": "Zauberhaftes Wohnen als Untermiete/Frauen WG in Gartenwohnung mit Pool",
+      "priceKalt": 500,
+      "priceWarm": 500,
+      "sqm": 80,
+      "rooms": 0,
+      "location": "Bonn",
+      "description": "500 € Zauberhaftes Wohnen als Untermiete/Frauen WG in Gartenwohnung mit Pool 50374 Erftstadt (Lechenich) 1 80m² Monatsrate ca.",
+      "images": [
+        "https://media.ohne-makler.net/rs:fill:488:288/q:90/czM6Ly9vbS1saXN0aW5ncy91cGxvYWQvcGljdHVyZXMvT00vNDY1NjQ3L2cxdnJiejZ4?sig=wPcbYZZH2BC3HCDpylsZ0BbGwRFTgeMcDZkiOPgqs7U&exp=1781647285"
+      ],
+      "scrapedAt": "2026-06-16T10:01:25.537Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "matchScore": 50,
+      "matchSummary": "Fehler bei AI-Bewertung: Gemini konnte den Text nicht analysieren: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438396492",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/bonn-endenich-1-zimmer-wohnung-im-3-obergeschoss-fuer-studenten/3438396492-203-23694",
+      "title": "Bonn-Endenich, 1-Zimmer-Wohnung im 3.Obergeschoss für Studenten",
+      "priceKalt": 405,
+      "priceWarm": 405,
+      "sqm": 23,
+      "rooms": 1,
+      "location": "53121 Endenich\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (3 km)",
+      "description": "Es handelt sich um ein 1-Zimmer Appartement.\nWohnung Nr. 46 im 3. Obergeschoss\nAufzug, inklusive...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/f3/f30adffc-e7fd-45a7-8864-45328a985f7f?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.699Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7269947,
+      "lon": 7.0738629,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 2.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438389427",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/suesse-3-zkb-in-bonn-holzlar-zur-miete-ab-august-september/3438389427-203-23780",
+      "title": "Süße 3 ZKB, in Bonn-Holzlar zur Miete ab August/September",
+      "priceKalt": 560,
+      "priceWarm": 560,
+      "sqm": 70,
+      "rooms": 3,
+      "location": "53229 Holzlar\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Süße Wohnung in ruhiger Lage in Bonn-Holzlar (Beuel) in einem 3 Parteien-Haus.\n\nGeeignet für 1...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/5b/5b7a28e4-07cb-4577-88d8-ddbed395368e?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.708Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7449103,
+      "lon": 7.1701657,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.9,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3412668196",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-tausche-meine-wohnung-in-bonn/3412668196-203-23694",
+      "title": "TAUSCHWOHNUNG Tausche meine Wohnung in Bonn",
+      "priceKalt": 250,
+      "priceWarm": 250,
+      "sqm": 34,
+      "rooms": 1.5,
+      "location": "53121 Endenich\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 446943)\nIch biete schweren Herzens...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/71/7134f84a-1f95-40be-a68b-29ea92b20745?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.709Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7269947,
+      "lon": 7.0738629,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 2.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3425767280",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/barrierefreies-eg-appartement-mit-terrasse-bodentiefen-fenstern-in-zentraler-lage-von-niederkassel/3425767280-203-1672",
+      "title": "Barrierefreies EG-Appartement mit Terrasse & bodentiefen Fenstern in zentraler Lage von Niederkassel",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 40,
+      "rooms": 1,
+      "location": "53859 Niederkassel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (12 km)",
+      "description": "Dieses gepflegte 1-Zimmer-Appartement in der Berliner Straße 54 in Niederkassel-Ranzel überzeugt...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/ed/ed8d5b63-0944-40d4-99c0-c3c567c90866?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.709Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8137102,
+      "lon": 7.0351942,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 9.9,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438243448",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wohnen-im-villenviertel-eigenes-apartment/3438243448-203-1697",
+      "title": "Wohnen im Villenviertel – eigenes Apartment",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 26,
+      "rooms": 1,
+      "location": "53773 Hennef (Sieg)\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (14 km)",
+      "description": "Objektbeschreibung\n\nAb sofort steht dieses vollständig renovierte 1-Zimmer-Apartment in begehrter...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/c7/c761923d-9e70-489e-9be6-21c46ac0ca39?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.710Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7754417,
+      "lon": 7.2847945,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 13.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438210334",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/renoviertes-buero-in-bad-godesberg-30m-mit-klima/3438210334-203-1040",
+      "title": "Renoviertes Büro in Bad Godesberg, 30m² mit Klima",
+      "priceKalt": 500,
+      "priceWarm": 500,
+      "sqm": 30,
+      "rooms": 1.5,
+      "location": "53175 Bad Godesberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (5 km)",
+      "description": "Ich biete ein frisch renoviertes Büro im Herzen von Bad Godesberg, Bonn, zur Miete an. Dieser helle...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/32/32fdbe46-5cee-4354-9a6b-d5ef4f2317b2?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.711Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.6850682,
+      "lon": 7.156323,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 6.7,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3437473669",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/ein-wg-zimmer-in-3er-wohngemeinschaft-inklusive-nebenkosten-450/3437473669-203-23711",
+      "title": "Ein WG Zimmer in 3er-Wohngemeinschaft - inklusive Nebenkosten 450",
+      "priceKalt": 450,
+      "priceWarm": 450,
+      "sqm": 15,
+      "rooms": 1,
+      "location": "53111 Nordstadt \n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Ein WG-Zimmer ist zur Miete verfügbar.\n\nNur an Berufstätige, Studenten oder Ausbildende zu...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/87/87c5c707-4422-4455-9c1a-d6fbcaf9c273?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.715Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7388636,
+      "lon": 7.0841169,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3384689152",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-suche-geraeumige-wohnung-in-duesseldorf/3384689152-203-1055",
+      "title": "TAUSCHWOHNUNG Suche geräumige Wohnung in Düsseldorf",
+      "priceKalt": 355,
+      "priceWarm": 355,
+      "sqm": 75,
+      "rooms": 3,
+      "location": "53225 Beuel\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (3 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 433742)\nHallo! Ich suche eine...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/a6/a613f109-c2b8-4293-b844-3bb9e03ff16f?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.715Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7386619,
+      "lon": 7.1245135,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 1.6,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3437433993",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/wunderschoene-1-zimmer-wohnung-fuer-studierende-in-bonn-duisdorf/3437433993-203-23683",
+      "title": "Wunderschöne 1 Zimmer Wohnung für Studierende in Bonn-Duisdorf",
+      "priceKalt": 540,
+      "priceWarm": 540,
+      "sqm": 25,
+      "rooms": 1,
+      "location": "53111 Bonn-​Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Diese wunderschöne möblierte Wohnung in einem Neubau in Bonn-Duisdorf ist ab dem 1.07.2026 zu...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/e1/e1a1117a-ee7a-401e-ae33-21fc0b5df099?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.716Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3355922084",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-tausche-2-zimmer-wohnung-in-bonn-gegen-wohnung-in-koeln/3355922084-203-23683",
+      "title": "TAUSCHWOHNUNG Tausche 2-Zimmer-Wohnung in Bonn gegen Wohnung in Köln",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 70,
+      "rooms": 2,
+      "location": "53111 Bonn-​Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 403318)\nHallo! Ich biete meine...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/82/825b9aef-1957-40b5-9fb6-0e65b731e0b0?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.718Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3327772739",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-gemuetliche-flat-in-bonn-duisdorf-zum-tausch/3327772739-203-21650",
+      "title": "TAUSCHWOHNUNG Gemütliche Flat in Bonn Duisdorf zum Tausch",
+      "priceKalt": 550,
+      "priceWarm": 550,
+      "sqm": 28,
+      "rooms": 1,
+      "location": "53123 Duisdorf\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (4 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 416707)\nIch biete meine gemütliche...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/fc/fc7e5376-721e-4635-8cf0-0812e0650a0b?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-18T10:00:51.718Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7144905,
+      "lon": 7.0478279,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.5,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3386974581",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-1-zimmer-souterrain-in-der-bonner-suedstadt/3386974581-203-23684",
+      "title": "TAUSCHWOHNUNG 1 Zimmer Souterrain in der Bonner Südstadt",
+      "priceKalt": 360,
+      "priceWarm": 360,
+      "sqm": 30,
+      "rooms": 1,
+      "location": "53113 Bonn-​Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (2 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 437868)\nIch biete meine gemütliche...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/18/1840a607-a0fe-48f2-a864-2ffbb237f729?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-19T10:00:31.412Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438935717",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/drei-zimmer-wohnung/3438935717-203-1158",
+      "title": "Drei Zimmer Wohnung",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 62,
+      "rooms": 3,
+      "location": "50321 Brühl\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (19 km)",
+      "description": "WG-Zimmer in zentraler Lage in Brühl zu vermieten\n\nIch vermiete Zimmer in einer gepflegten Wohnung...",
+      "images": [],
+      "scrapedAt": "2026-06-19T10:00:31.413Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.8291313,
+      "lon": 6.9037057,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 17.4,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438867295",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/moebliertes-apartment-in-bonn-auerberg/3438867295-203-23706",
+      "title": "Möbliertes Apartment in Bonn-Auerberg",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 25,
+      "rooms": 1,
+      "location": "53117 Auerberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (4 km)",
+      "description": "Voll möbliert - einfach einziehen!\nVermietet wird ein bezugsfertiges, voll möbliertes und kompakt...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/00/00cff2e0-4706-4378-bc08-ddbc9141f899?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-19T10:00:31.415Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7561009,
+      "lon": 7.0731086,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 3.1,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3194250681",
+      "portal": "kleinanzeigen",
+      "url": "https://www.kleinanzeigen.de/s-anzeige/tauschwohnung-kleine-altstadt-wohnung-gegen-2-zimmer-wohnung/3194250681-203-23683",
+      "title": "TAUSCHWOHNUNG kleine Altstadt Wohnung gegen 2 Zimmer Wohnung",
+      "priceKalt": 265,
+      "priceWarm": 265,
+      "sqm": 18.52,
+      "rooms": 2,
+      "location": "53111 Bonn-​Zentrum\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (1 km)",
+      "description": "Es handelt es sich hierbei um ein Tauschangebot. (Anbieter-ID: 375822)\nMein Name ist Marie, ich bin...",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/20/20a56f38-e6ee-42c2-a85e-501cd836ea59?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-19T10:00:31.415Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": true,
+      "lat": 50.7348187,
+      "lon": 7.0994747,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 0.2,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "kleinanzeigen-3438472391",
+      "portal": "kleinanzeigen",
+      "url": "",
+      "title": "",
+      "priceKalt": 600,
+      "priceWarm": 600,
+      "sqm": 18,
+      "rooms": 1,
+      "location": "53117 Auerberg\n                    \n                    \n                    \n                        \n                            \n                            \n                                \n                            \n                        \n                        \n                            \n                                (4 km)",
+      "description": "Teil mobiler Bonn Mitte.",
+      "images": [
+        "https://img.kleinanzeigen.de/api/v1/prod-ads/images/73/73dc9772-4d4c-45b4-8956-b0907f4c336f?rule=$_2.AUTO"
+      ],
+      "scrapedAt": "2026-06-19T10:00:31.418Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.7561009,
+      "lon": 7.0731086,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 3.1,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    },
+    {
+      "id": "immowelt-26wh3q2z1sth",
+      "portal": "immowelt",
+      "url": "https://www.immowelt.de/expose/26wh3q2z1sth",
+      "title": "Wohnung zur Miete in Bonn",
+      "priceKalt": 590,
+      "priceWarm": 590,
+      "sqm": 47.2,
+      "rooms": 2,
+      "location": "Friesdorf, Bonn (53175)",
+      "description": "Aus Gründen der besseren Lesbarkeit wird auf die gleichzeitige Verwendung der Sprachform männlich, weiblich und divers verzichtet. Sämtliche Personenbezeichnungen gelten gleichermaßen für alle Geschlechter. Die gepflegte und schicke 2 Zimmerwohnung befindet sich in der 1. Etage eines 2 Etagenwohnhauses in Bonn Friesdorf und bietet sich als ideale Singlewohnung an. Wer in einem gepflegten Ambiente wohnen möchte, ist hier genau richtig. Der neue Mieter sollte über ein regelmäßiges Einkommen verfü.",
+      "images": [
+        "https://mms.immowelt.de/3/1/a/a/31aa331e-84b2-4c56-b902-7fe870997aed.jpg?ci_seal=161599e2675d3464ee1049ba173ec8ee1beead9d&w=525&h=394"
+      ],
+      "scrapedAt": "2026-06-19T10:00:48.055Z",
+      "manualImport": false,
+      "status": "neu",
+      "isKauf": false,
+      "isTausch": false,
+      "lat": 50.6970132,
+      "lon": 7.1254191,
+      "state": "Nordrhein-Westfalen",
+      "targetTravelTimes": [],
+      "wishCityDistanceKm": 4.5,
+      "pois": {
+        "supermarkets": [],
+        "publicTransit": [],
+        "parks": []
+      },
+      "matchScore": 50,
+      "matchSummary": "Automatisierte Bewertung fehlgeschlagen: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [400 Bad Request] API Key not found. Please pass a valid API key. [{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",\"domain\":\"googleapis.com\",\"metadata\":{\"service\":\"generativelanguage.googleapis.com\"}},{\"@type\":\"type.googleapis.com/google.rpc.LocalizedMessage\",\"locale\":\"en-US\",\"message\":\"API Key not found. Please pass a valid API key.\"}]",
+      "pros": [
+        "Konnte nicht analysiert werden"
+      ],
+      "cons": [],
+      "coverLetter": ""
+    }
+  ],
+  "pushSubscriptions": [
+    {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ewUQ4hVy8po:APA91bHBe6iByCtK4r1He6XmXh6dhzJIqHrXpLtINuzoLTpT9mxFNWaqkH9rjl8Fyx4cFG8cD4j_gtegh5fpIiE2ywAtVT5KuWZVu9wvOP5tzdE-6o3WvwjucRHN_DWniJYgcHXZnTdO",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BN83AqfCiA7yDsrQBtQcRrtpr5jAEkNAdhBhZNC8O17As7LsomlYfPi_vglxdyp1_arfAz0Gx8VzPRXEncRiPLg",
+        "auth": "jKMwJwCrIpyYFik0UeKGuQ"
+      }
+    },
+    {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/edoxM0s5qRs:APA91bET690Jpz0PcSIY0bhYEvFvQeTaUVBoHO192DHGt5zTgDhhK2KJQMbjLdYfe-cbF6CQ7z4JfF0GCHKkMYHoECzcClea2hWfk7QYv1Sh4PzzFb2JEFC45qVjstIGo8TT2lJ-mL7x",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BKN7UgQ_fQooMRCXfqfRjRrccAbhG9P0P6jqvGfRhevvEpViAn0X1durZaotOTOIjBH9dlvGK1Ci3FBIFzbPayw",
+        "auth": "3ourLnTfMdoTEzcZsIWqmA"
+      }
+    }
+  ],
+  "scanHistory": [
+    {
+      "timestamp": "2026-06-16T10:05:56.264Z",
+      "newCount": 26,
+      "portalCounts": {
+        "kleinanzeigen": 23,
+        "immowelt": 2,
+        "ohneMakler": 1,
+        "wgGesucht": 0,
+        "immoscout24": 0,
+        "immonet": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:04:15.948Z",
+      "newCount": 11,
+      "portalCounts": {
+        "kleinanzeigen": 11,
+        "immowelt": 0,
+        "ohneMakler": 0,
+        "wgGesucht": 0,
+        "immoscout24": 0,
+        "immonet": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-19T10:03:12.630Z",
+      "newCount": 6,
+      "portalCounts": {
+        "kleinanzeigen": 5,
+        "immowelt": 1,
+        "ohneMakler": 0,
+        "wgGesucht": 0,
+        "immoscout24": 0,
+        "immonet": 0
+      }
+    }
+  ]
+}

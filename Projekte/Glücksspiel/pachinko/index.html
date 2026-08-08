@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athanor-Schmelze (Pachinko) | Alchemisten-Akademie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-gear magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ATHANOR-SCHMELZE</h1>
+                    <span>KINETISCHES DROP-DUELL</span>
+                </div>
+            </div>
+            
+            <div class="header-stats">
+                <div class="balance-card">
+                    <span class="balance-label">GESAMTGUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN GAME AREA -->
+        <main class="pachinko-layout">
+            <section class="panel pachinko-canvas-panel">
+                <div class="pachinko-stage">
+                    <canvas id="pachinko-canvas" width="460" height="520"></canvas>
+                </div>
+            </section>
+
+            <!-- BETTING & AUTO CONTROLS -->
+            <section class="panel pachinko-controls-panel">
+                <div class="control-row">
+                    <label>Einsatz pro Schmelzkugel:</label>
+                    <input type="number" id="pachinko-bet-input" value="10.00" min="2" max="500" step="2">
+                </div>
+
+                <div class="control-row" style="margin-top:15px;">
+                    <button type="button" class="btn" id="btn-drop-pachinko" style="width:100%; padding:14px; background:linear-gradient(135deg, #06b6d4, #0891b2); color:#fff; font-weight:800; font-size:1.1rem; border:none; border-radius:10px;">
+                        <i class="fa-solid fa-fire"></i> SCHMELZKUGEL DROPPEN
+                    </button>
+                </div>
+
+                <!-- Auto-Betting Subpanel -->
+                <div class="autobet-panel" style="margin-top:20px;">
+                    <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:var(--color-gold); font-size:0.9rem;"><i class="fa-solid fa-robot"></i> Auto-Play Steuerung</h4>
+                    <div class="autobet-row">
+                        <label>Runden (Drop-Anzahl):</label>
+                        <input type="number" id="autobet-rounds" value="10" min="1" max="100">
+                    </div>
+                    <div class="autobet-row">
+                        <label>Stop-Loss (€):</label>
+                        <input type="number" id="autobet-stoploss" value="100" min="10">
+                    </div>
+                    <div class="autobet-row">
+                        <label>Take-Profit (€):</label>
+                        <input type="number" id="autobet-takeprofit" value="200" min="20">
+                    </div>
+                    <button type="button" class="btn" id="btn-toggle-autobet" style="width:100%; margin-top:8px; background:rgba(124,58,237,0.15); border-color:rgba(124,58,237,0.3); color:var(--color-purple); font-weight:800;">
+                        AUTO-PLAY STARTEN
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

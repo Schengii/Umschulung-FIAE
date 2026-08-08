@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobMatch - Dein Bewerbungs-Companion</title>
+    <!-- Google Fonts for Accessibility and Design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PDF.js for CV Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configure PDF.js worker
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/neon/180/briefcase.png">
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/kanban.css">
+    <link rel="stylesheet" href="css/comparer.css">
+    <link rel="stylesheet" href="css/copilot.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon" aria-hidden="true">
+                    <i data-lucide="briefcase"></i>
+                </div>
+                <h2>JobMatch</h2>
+            </div>
+            
+            <nav class="sidebar-nav" role="tablist" aria-label="Hauptnavigation">
+                <button class="nav-item active" data-view="dashboard" aria-label="Dashboard Ansicht" role="tab" aria-selected="true">
+                    <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="kanban" aria-label="Kanban-Board Ansicht" role="tab" aria-selected="false">
+                    <i data-lucide="kanban-square" aria-hidden="true"></i>
+                    <span>Kanban-Board</span>
+                </button>
+                <button class="nav-item" data-view="comparer" aria-label="Job-Vergleicher Ansicht" role="tab" aria-selected="false">
+                    <i data-lucide="git-compare" aria-hidden="true"></i>
+                    <span>Job-Vergleicher</span>
+                </button>
+                <button class="nav-item" data-view="calendar" aria-label="Kalender Ansicht" role="tab" aria-selected="false">
+                    <i data-lucide="calendar" aria-hidden="true"></i>
+                    <span>Kalender</span>
+                </button>
+                <button class="nav-item" data-view="finder" aria-label="Job-Suche Ansicht" role="tab" aria-selected="false">
+                    <i data-lucide="compass" aria-hidden="true"></i>
+                    <span>Job-Suche</span>
+                </button>
+                <button class="nav-item" data-view="copilot" aria-label="Bewerbungs-Copilot Ansicht" role="tab" aria-selected="false">
+                    <i data-lucide="sparkles" aria-hidden="true"></i>
+                    <span>Bewerbungs-Copilot</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-secondary btn-full" id="btn-open-profile" aria-haspopup="dialog" aria-controls="profile-modal">
+                    <i data-lucide="user" aria-hidden="true"></i>
+                    <span>Mein Profil / Skills</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-search">
+                    <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+                    <input type="text" id="global-search" placeholder="Jobs, Firmen oder Skills suchen..." aria-label="Jobs, Firmen oder Skills suchen">
+                </div>
+                <div class="header-actions flex-row-center">
+                    <button class="btn btn-secondary btn-bell" id="btn-notifications-bell" title="Benachrichtigungen" aria-haspopup="true" aria-expanded="false">
+                        <i data-lucide="bell" aria-hidden="true"></i>
+                        <span id="bell-badge-indicator" class="bell-badge hide"></span>
+                    </button>
+                    <div id="bell-notifications-dropdown" class="bell-dropdown">
+                        <div class="bell-dropdown-title">Fristen-Erinnerungen</div>
+                        <div id="bell-dropdown-list" class="bell-dropdown-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-job-top" aria-haspopup="dialog" aria-controls="job-modal">
+                        <i data-lucide="plus" aria-hidden="true"></i>
+                        <span>Neuen Job hinzufügen</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-viewport">
+                <!-- Views will be dynamically shown/hidden here -->
+                
+                <!-- DASHBOARD VIEW -->
+                <section id="view-dashboard" class="app-view active" role="region" aria-label="Dashboard Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade JobMatch-Dashboard...</p>
+                    </div>
+                </section>
+
+                <!-- KANBAN VIEW -->
+                <section id="view-kanban" class="app-view" role="region" aria-label="Kanban-Board Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade Kanban-Board...</p>
+                    </div>
+                </section>
+
+                <!-- COMPARER VIEW -->
+                <section id="view-comparer" class="app-view" role="region" aria-label="Job-Vergleicher Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade Job-Vergleicher...</p>
+                    </div>
+                </section>
+
+                <!-- CALENDAR VIEW -->
+                <section id="view-calendar" class="app-view" role="region" aria-label="Kalender Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade Kalender...</p>
+                    </div>
+                </section>
+
+                <!-- FINDER VIEW -->
+                <section id="view-finder" class="app-view" role="region" aria-label="Job-Suche Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade Job-Suche...</p>
+                    </div>
+                </section>
+
+                <!-- COPILOT VIEW -->
+                <section id="view-copilot" class="app-view" role="region" aria-label="Bewerbungs-Copilot Ansicht">
+                    <div class="glass-card empty-state view-loading-card">
+                        <div class="ai-loader-spinner" aria-hidden="true"></div>
+                        <p class="view-loading-text">Lade Bewerbungs-Copilot...</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- GLOBAL MODAL: Add/Edit Job -->
+    <div class="modal-backdrop" id="job-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Neues Jobangebot eintragen</h3>
+                <button class="modal-close" id="btn-close-job-modal" aria-label="Schließen">&times;</button>
+            </div>
+            <form id="job-form" class="modal-form">
+                <input type="hidden" id="job-id">
+                
+                <!-- AI-Parser Section -->
+                <div class="form-group ai-parser-section">
+                    <label class="ai-parser-label" for="job-raw-text">
+                        <i data-lucide="sparkles" class="ai-parser-icon"></i>
+                        Stellenanzeige parsen (AI)
+                    </label>
+                    <span class="text-secondary ai-parser-sub">
+                        Kopiere den Text ODER gib die URL / E-Mail-Text ein, um die Formularfelder &amp; Status automatisch zu befüllen.
+                    </span>
+                    <div class="ai-parser-controls-container">
+                        <textarea id="job-raw-text" rows="2" class="ai-parser-input" placeholder="Hier Text einer Stellenbeschreibung ODER einer E-Mail (z.B. Einladung, Absage) einfügen..."></textarea>
+                        <div class="ai-parser-url-row">
+                            <input type="url" id="job-raw-url" placeholder="https://beispiel-jobseite.de/stelle-123" class="ai-parser-url-input" title="URL der Stellenanzeige">
+                            <button type="button" class="btn btn-primary ai-parser-btn btn-nowrap" id="btn-parse-job">
+                                <i data-lucide="wand-2"></i> Parsen
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-nowrap" id="btn-parse-email" title="E-Mail automatisch analysieren">
+                                <i data-lucide="mail"></i> E-Mail Import
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row two-cols">
+                    <div class="form-group">
+                        <label for="job-title">Stellentitel *</label>
+                        <input type="text" id="job-title" required placeholder="z. B. Frontend Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-company">Unternehmen *</label>
+                        <input type="text" id="job-company" required placeholder="z. B. Google Deutschland">
+                    </div>
+                </div>
+                
+                <div class="form-row three-cols">
+                    <div class="form-group">
+                        <label for="job-location">Standort</label>
+                        <input type="text" id="job-location" placeholder="z. B. München / Remote">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-work-mode">Arbeitsmodell</label>
+                        <select id="job-work-mode">
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Remote">100% Remote</option>
+                            <option value="Vor Ort">Vor Ort (Büro)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-salary">Gehalt (€ / Jahr)</label>
+                        <input type="number" id="job-salary" placeholder="z. B. 65000">
+                    </div>
+                </div>
+
+                <div class="form-row two-cols">
+                    <div class="form-group">
+                        <label for="job-url">Anzeigen-URL</label>
+                        <input type="url" id="job-url" placeholder="https://linkedin.com/jobs/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-deadline">Bewerbungsfrist</label>
+                        <input type="date" id="job-deadline">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="job-description">Jobbeschreibung / Anforderungen</label>
+                    <textarea id="job-description" rows="4" placeholder="Kopiere die Stellenbeschreibung hierhin. Der AI-Copilot analysiert die Anforderungen automatisch!"></textarea>
+                </div>
+
+                <div class="form-row three-cols">
+                    <div class="form-group">
+                        <label for="job-status">Bewerbungs-Status *</label>
+                        <select id="job-status" required>
+                            <option value="saved">Gespeichert (Interessant)</option>
+                            <option value="prepared">Unterlagen bereit</option>
+                            <option value="applied">Beworben</option>
+                            <option value="interviewing">Gespräch / Interview</option>
+                            <option value="offer">Angebot erhalten</option>
+                            <option value="rejected">Absage</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-contact">Kontaktperson / Recruiter</label>
+                        <input type="text" id="job-contact" placeholder="z. B. Frau Müller / HR Manager">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-tags">Tags / Schlagwörter</label>
+                        <input type="text" id="job-tags" placeholder="z. B. Remote, React, Prio1 (kommagetrennt)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="job-notes">Eigene Anmerkungen</label>
+                    <input type="text" id="job-notes" placeholder="z. B. 30 Tage Urlaub, Jobrad...">
+                </div>
+
+                <hr class="form-divider">
+                
+                <!-- Modal Tabs for Phase 2: Details vs. Todos vs. Interviews -->
+                <div class="modal-tabs modal-tab-group">
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom active" data-modal-tab="modal-tab-details">
+                        <i data-lucide="sliders"></i>
+                        Bewertung &amp; Verlauf
+                    </button>
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom" data-modal-tab="modal-tab-todos">
+                        <i data-lucide="check-square"></i>
+                        Aufgaben <span id="modal-todos-count" class="badge badge-count badge-primary">0</span>
+                    </button>
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom" data-modal-tab="modal-tab-interviews">
+                        <i data-lucide="calendar"></i>
+                        Tagebuch <span id="modal-interviews-count" class="badge badge-count badge-secondary">0</span>
+                    </button>
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom" data-modal-tab="modal-tab-history">
+                        <i data-lucide="mail"></i>
+                        Verlauf <span id="modal-history-count" class="badge badge-count badge-warning">0</span>
+                    </button>
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom" data-modal-tab="modal-tab-expenses">
+                        <i data-lucide="euro"></i>
+                        Kosten <span id="modal-expenses-count" class="badge badge-count badge-success">0</span>
+                    </button>
+                    <button type="button" class="modal-tab-btn modal-tab-btn-custom" data-modal-tab="modal-tab-documents">
+                        <i data-lucide="file"></i>
+                        Unterlagen <span id="modal-documents-count" class="badge badge-count badge-primary">0</span>
+                    </button>
+                </div>
+
+                <!-- Tab 1: Kriterien & Timeline -->
+                <div id="modal-tab-details" class="modal-tab-content modal-tab-active-content">
+                    <h4>Kriterien zur Job-Bewertung (für den Vergleich)</h4>
+                    <p class="form-subtitle">Bewerte das Angebot in den folgenden Kategorien (1 = Schlecht, 10 = Hervorragend)</p>
+
+                    <div class="rating-grid">
+                        <div class="rating-item">
+                            <label for="rate-salary">Gehalt &amp; Benefits</label>
+                            <div class="range-container">
+                                <input type="range" id="rate-salary" min="1" max="10" value="5">
+                                <span class="range-val" id="val-salary">5</span>
+                            </div>
+                        </div>
+                        <div class="rating-item">
+                            <label for="rate-commute">Pendelzeit / Weg</label>
+                            <div class="range-container">
+                                <input type="range" id="rate-commute" min="1" max="10" value="5">
+                                <span class="range-val" id="val-commute">5</span>
+                            </div>
+                        </div>
+                        <div class="rating-item">
+                            <label for="rate-remote">Homeoffice-Flexibilität</label>
+                            <div class="range-container">
+                                <input type="range" id="rate-remote" min="1" max="10" value="5">
+                                <span class="range-val" id="val-remote">5</span>
+                            </div>
+                        </div>
+                        <div class="rating-item">
+                            <label for="rate-culture">Unternehmenskultur</label>
+                            <div class="range-container">
+                                <input type="range" id="rate-culture" min="1" max="10" value="5">
+                                <span class="range-val" id="val-culture">5</span>
+                            </div>
+                        </div>
+                        <div class="rating-item">
+                            <label for="rate-tech">Tech-Stack / Aufgaben</label>
+                            <div class="range-container">
+                                <input type="range" id="rate-tech" min="1" max="10" value="5">
+                                <span class="range-val" id="val-tech">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline History Widget -->
+                    <div id="job-history-timeline" class="job-modal-timeline" style="display: none;">
+                        <div class="timeline-title">Bewerbungs-Verlauf (Status-Timeline)</div>
+                        <div class="timeline-items" id="job-timeline-nodes">
+                            <!-- Dynamically generated timeline nodes -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Aufgaben & Checkliste (To-Dos) -->
+                <div id="modal-tab-todos" class="modal-tab-content hide">
+                    <h4>To-Do Liste &amp; Bewerbungsaufgaben</h4>
+                    <p class="form-subtitle">Erstelle Aufgaben wie "Lebenslauf anpassen" oder "Arbeitsproben senden", um deine Bewerbung vorzubereiten.</p>
+                    
+                    <div class="todo-input-row todo-row">
+                        <input type="text" id="modal-todo-input" placeholder="Aufgabe hinzufügen..." class="todo-input-custom">
+                        <button type="button" class="btn btn-primary btn-todo-add" id="btn-modal-add-todo">
+                            <i data-lucide="plus"></i> Hinzufügen
+                        </button>
+                    </div>
+
+                    <div id="modal-todos-empty" class="text-secondary text-empty-center">
+                        Keine Aufgaben für diese Bewerbung angelegt.
+                    </div>
+
+                    <ul id="modal-todos-list" class="todo-list todo-list-scroll">
+                        <!-- Dynamically generated todo items -->
+                    </ul>
+                </div>
+
+                <!-- Tab 3: Interview-Tagebuch (Interviews) -->
+                <div id="modal-tab-interviews" class="modal-tab-content hide">
+                    <h4>Interview-Tagebuch &amp; Notizen</h4>
+                    <p class="form-subtitle">Dokumentiere Gesprächstermine, Runden, Ansprechpartner und Notizen.</p>
+                    
+                    <div class="interview-form card-section-bg">
+                        <div class="form-row two-cols mb-0">
+                            <div class="form-group mb-0">
+                                <label for="modal-interview-date" class="label-sm">Datum &amp; Uhrzeit</label>
+                                <input type="datetime-local" id="modal-interview-date" class="input-sm">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="modal-interview-round" class="label-sm">Gesprächsrunde</label>
+                                <input type="text" id="modal-interview-round" placeholder="z.B. Erstgespräch, Coding Interview" class="input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="modal-interview-interviewer" class="label-sm">Gesprächspartner / Ansprechpartner</label>
+                            <input type="text" id="modal-interview-interviewer" placeholder="z.B. Herr Müller (Teamlead) &amp; Frau Becker (HR)" class="input-sm">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="modal-interview-notes" class="label-sm">Notizen &amp; Eindrücke</label>
+                            <textarea id="modal-interview-notes" rows="2" placeholder="Was wurde besprochen? Wie war dein Eindruck? Welche Fragen wurden gestellt?" class="textarea-sm"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-add-entry" id="btn-modal-add-interview">
+                            <i data-lucide="plus"></i> Gespräch eintragen
+                        </button>
+                    </div>
+
+                    <div id="modal-interviews-empty" class="text-secondary text-empty-center">
+                        Noch keine Gespräche dokumentiert.
+                    </div>
+
+                    <div id="modal-interviews-list" class="interview-list list-scroll">
+                        <!-- Dynamically generated interview entries -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Kommunikationsverlauf -->
+                <div id="modal-tab-history" class="modal-tab-content hide">
+                    <h4>Kommunikationsverlauf (Mails, Telefonate, Notizen)</h4>
+                    <p class="form-subtitle">Hier siehst du alle gesendeten Mails oder kannst manuelle Einträge (z.B. Telefonate) protokollieren.</p>
+                    
+                    <div class="history-form card-section-bg">
+                        <div class="form-row two-cols mb-0">
+                            <div class="form-group mb-0">
+                                <label for="modal-history-date" class="label-sm">Datum &amp; Uhrzeit *</label>
+                                <input type="datetime-local" id="modal-history-date" class="input-sm">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="modal-history-type" class="label-sm">Kontakt-Typ</label>
+                                <select id="modal-history-type" class="input-sm">
+                                    <option value="E-Mail">E-Mail</option>
+                                    <option value="Telefonat">Telefonat</option>
+                                    <option value="Vor Ort">Vor-Ort-Gespräch</option>
+                                    <option value="LinkedIn/Xing">LinkedIn / Xing</option>
+                                    <option value="Sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="modal-history-subject" class="label-sm">Betreff / Thema *</label>
+                            <input type="text" id="modal-history-subject" placeholder="z. B. Nachgefragt wegen Bewerbung, Erstes Telefonat" class="input-sm">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="modal-history-content" class="label-sm">Inhalt / Notizen</label>
+                            <textarea id="modal-history-content" rows="3" placeholder="Zusammenfassung des Gesprächs oder E-Mail-Text..." class="textarea-sm"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-add-entry" id="btn-modal-add-history">
+                            <i data-lucide="plus"></i> Eintrag hinzufügen
+                        </button>
+                    </div>
+
+                    <div id="modal-history-empty" class="text-secondary text-empty-center">
+                        Noch kein Kommunikationsverlauf vorhanden.
+                    </div>
+
+                    <div id="modal-history-list" class="history-list list-scroll">
+                        <!-- Dynamically generated history entries -->
+                    </div>
+                </div>
+
+                <!-- Tab 5: Kosten & Budget-Tracker -->
+                <div id="modal-tab-expenses" class="modal-tab-content hide">
+                    <h4>Bewerbungs-Kosten &amp; Budget</h4>
+                    <p class="form-subtitle">Erfasse Ausgaben wie Fahrtkosten, Fotos oder Bewerbungsmappen. Diese sind steuerlich absetzbar!</p>
+                    
+                    <div class="expenses-form card-section-bg">
+                        <div class="form-row three-cols mb-0">
+                            <div class="form-group mb-0">
+                                <label for="modal-expense-date" class="label-sm">Datum *</label>
+                                <input type="date" id="modal-expense-date" class="input-sm">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="modal-expense-category" class="label-sm">Kategorie</label>
+                                <select id="modal-expense-category" class="input-sm">
+                                    <option value="Fahrtkosten">Fahrtkosten (Reise)</option>
+                                    <option value="Bewerbungsfoto">Bewerbungsfoto</option>
+                                    <option value="Unterlagen/Druck">Unterlagen / Druck</option>
+                                    <option value="Porto/Post">Porto / Post</option>
+                                    <option value="Zertifikat/Kurs">Zertifikat / Kurs</option>
+                                    <option value="Sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="modal-expense-amount" class="label-sm">Betrag (€) *</label>
+                                <input type="number" id="modal-expense-amount" placeholder="z. B. 15.50" step="0.01" class="input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="modal-expense-notes" class="label-sm">Anmerkungen / Notiz</label>
+                            <input type="text" id="modal-expense-notes" placeholder="z. B. Zugticket Hin- &amp; Rückfahrt München" class="input-sm">
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-add-entry" id="btn-modal-add-expense">
+                            <i data-lucide="plus"></i> Ausgabe hinzufügen
+                        </button>
+                    </div>
+
+                    <div id="modal-expenses-empty" class="text-secondary text-empty-center">
+                        Keine Ausgaben für diese Bewerbung erfasst.
+                    </div>
+
+                    <div id="modal-expenses-list" class="expenses-list list-scroll">
+                        <!-- Dynamically generated expense entries -->
+                    </div>
+                </div>
+
+                <!-- Tab 6: Dokumenten-Manager -->
+                <div id="modal-tab-documents" class="modal-tab-content hide">
+                    <h4>Bewerbungsunterlagen &amp; Dokumente</h4>
+                    <p class="form-subtitle">Lade spezifische Lebensläufe, Anschreiben oder Zertifikate für diese Stelle hoch. Sicherer lokaler Speicher.</p>
+                    
+                    <div class="documents-upload-zone upload-zone-custom">
+                        <input type="file" id="job-doc-upload" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" class="hide" title="Unterlagen hochladen" aria-label="Unterlagen hochladen">
+                        <i data-lucide="upload-cloud" class="upload-icon"></i>
+                        <h5 class="upload-title">Unterlagen hierher ziehen oder auswählen</h5>
+                        <p class="upload-sub">Maximal 10 MB (PDF, Word, Bilder)</p>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btn-trigger-doc-upload">
+                            <i data-lucide="file-plus"></i> Datei hochladen
+                        </button>
+                    </div>
+
+                    <div id="modal-documents-empty" class="text-secondary text-empty-center">
+                        Noch keine Dokumente hochgeladen.
+                    </div>
+
+                    <div id="modal-documents-list" class="documents-list list-scroll">
+                        <!-- Dynamically generated document entries -->
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-job-modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GLOBAL MODAL: Edit Profile / Skills -->
+    <div class="modal-backdrop" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="profile-modal-title">Mein Profil & Skills</h3>
+                <button class="modal-close" id="btn-close-profile-modal" aria-label="Schließen">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group profile-section-card">
+                    <label for="profile-select" class="fw-600">Aktives Bewerbungsprofil</label>
+                    <div class="flex-row-center mb-8">
+                        <select id="profile-select" class="select-profile-custom">
+                            <!-- Will be populated dynamically -->
+                        </select>
+                        <button type="button" class="btn btn-secondary btn-delete-profile-custom" id="btn-delete-current-profile" title="Dieses Profil löschen">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                    <div id="create-profile-row" class="flex-row-center">
+                        <input type="text" id="new-profile-name-input" placeholder="Neuer Profilname (z. B. Fullstack)" class="input-profile-name">
+                        <button type="button" class="btn btn-primary btn-create-profile-custom" id="btn-create-profile">Erstellen</button>
+                    </div>
+                </div>
+
+                <div class="form-group upload-profile-card">
+                    <label class="fw-600 flex-row-center color-primary">
+                        <i data-lucide="upload-cloud"></i> Lebenslauf importieren (PDF/TXT)
+                    </label>
+                    <span class="text-secondary label-sm display-block mb-8 line-height-14">
+                        Lade deinen Lebenslauf hoch, um deine Profildaten und Skills automatisch auszufüllen (erfordert API-Key für beste Ergebnisse).
+                    </span>
+                    <div class="flex-row-center">
+                        <input type="file" id="profile-cv-upload" accept=".pdf,.txt" class="hide" title="Lebenslauf hochladen" aria-label="Lebenslauf hochladen">
+                        <button type="button" class="btn btn-secondary btn-full btn-cv-upload-trigger" id="btn-trigger-cv-upload">
+                            <i data-lucide="file-up"></i> Datei auswählen
+                        </button>
+                        <span id="cv-upload-filename" class="text-secondary cv-filename-text">Keine Datei ausgewählt</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-name">Dein Name</label>
+                    <input type="text" id="profile-name" placeholder="z. B. Max Mustermann">
+                </div>
+                <div class="form-group">
+                    <label for="profile-title">Berufsbezeichnung / Fokus</label>
+                    <input type="text" id="profile-title" placeholder="z. B. Senior Web Developer">
+                </div>
+                <div class="form-group">
+                    <label for="new-skill-input">Meine Skills (Kommagetrennt oder einzeln hinzufügen)</label>
+                    <div class="skill-input-wrapper">
+                        <input type="text" id="new-skill-input" placeholder="z. B. React, CSS Grid, Node.js">
+                        <button class="btn btn-primary" id="btn-add-skill">Hinzufügen</button>
+                    </div>
+                    <div class="skills-tags-container" id="profile-skills-list">
+                        <!-- Dynamically added tags -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profile-experience">Kurzer Werdegang / Lebenslauf-Stichpunkte</label>
+                    <textarea id="profile-experience" rows="5" placeholder="Schreibe hier stichpunktartig deine Erfahrungen auf. Der AI-Copilot nutzt dies für Anschreiben."></textarea>
+                </div>
+
+                <hr class="form-divider">
+                <h4 id="ai-settings-title">AI Bewerbungs-Copilot</h4>
+                <div class="form-group">
+                    <label for="profile-api-key">Gemini API Key (Optional)</label>
+                    <div class="api-key-test-wrapper api-key-wrapper">
+                        <input type="password" id="profile-api-key" placeholder="AIzaSy..." aria-describedby="api-key-help" class="input-api-key">
+                        <button type="button" class="btn btn-secondary btn-create-profile-custom" id="btn-test-api-key">
+                            <i data-lucide="activity"></i> Testen
+                        </button>
+                    </div>
+                    <span class="text-secondary api-key-help" id="api-key-help">
+                        Trage deinen Google Gemini API-Key ein, um echte Anschreiben und Interviewfragen zu generieren. Ohne Key wird eine lokale Simulation genutzt.
+                    </span>
+                    <div id="api-key-test-feedback" class="hide"></div>
+                </div>
+
+                <div class="form-row two-cols">
+                    <div class="form-group">
+                        <label for="profile-gemini-model">Gemini Modell</label>
+                        <select id="profile-gemini-model">
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Standard)</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                            <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-gemini-temperature">Kreativität (Temperatur)</label>
+                        <div class="range-container">
+                            <input type="range" id="profile-gemini-temperature" min="0" max="1" step="0.1" value="0.7">
+                            <span class="range-val" id="val-gemini-temperature">0.7</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile-gemini-instructions">Persönlicher Schreibstil / System-Anweisungen</label>
+                    <textarea id="profile-gemini-instructions" rows="2" placeholder="z. B. Nutze die 'Du'-Form, klinge enthusiastisch aber professionell, betone meine Teamfähigkeit..."></textarea>
+                </div>
+
+                <hr class="form-divider">
+                <h4>Gehalts- &amp; Steuer-Einstellungen</h4>
+                <div class="form-row three-cols">
+                    <div class="form-group">
+                        <label for="profile-tax-class">Steuerklasse</label>
+                        <select id="profile-tax-class">
+                            <option value="1">Klasse I (Ledig)</option>
+                            <option value="2">Klasse II (Alleinerziehend)</option>
+                            <option value="3">Klasse III (Verheiratet, höherer Verdienst)</option>
+                            <option value="4">Klasse IV (Verheiratet, Gleichverteilung)</option>
+                            <option value="5">Klasse V (Verheiratet, geringerer Verdienst)</option>
+                            <option value="6">Klasse VI (Zweitjob)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-church-tax">Kirchensteuer</label>
+                        <select id="profile-church-tax">
+                            <option value="0">Keine</option>
+                            <option value="8">8% (Bay./BW)</option>
+                            <option value="9">9% (Andere)</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-row mt-25">
+                        <label for="profile-has-children" class="profile-notifications-label">Kinder vorhanden</label>
+                        <label class="switch">
+                            <input type="checkbox" id="profile-has-children" role="switch" aria-checked="false">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                <h4>Cloud-Synchronisation (Supabase)</h4>
+                <div class="form-row two-cols">
+                    <div class="form-group">
+                        <label for="profile-supabase-url">Supabase Project URL (Optional)</label>
+                        <input type="url" id="profile-supabase-url" placeholder="https://xxxxxx.supabase.co">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-supabase-key">Supabase Anon Key (Optional)</label>
+                        <input type="password" id="profile-supabase-key" placeholder="eyJhbGciOi...">
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                <h4>Design-Farbanpassung &amp; Presets</h4>
+                <div class="preset-buttons-container">
+                    <button type="button" class="btn btn-secondary btn-sm btn-preset-theme btn-preset-sm" data-primary="239" data-secondary="263">
+                        Indigo Violet (Default)
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-preset-theme btn-preset-sm" data-primary="160" data-secondary="190">
+                        Emerald Ocean
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-preset-theme btn-preset-sm" data-primary="340" data-secondary="280">
+                        Cyber Neon
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-preset-theme btn-preset-sm" data-primary="38" data-secondary="20">
+                        Warm Sunset
+                    </button>
+                </div>
+                <div class="form-row two-cols">
+                    <div class="form-group">
+                        <label for="profile-theme-primary">Primäre Akzentfarbe (Farbton: 0-360)</label>
+                        <div class="range-container">
+                            <input type="range" id="profile-theme-primary" min="0" max="360" value="239">
+                            <span class="range-val" id="val-theme-primary">239</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-theme-secondary">Sekundäre Akzentfarbe (Farbton: 0-360)</label>
+                        <div class="range-container">
+                            <input type="range" id="profile-theme-secondary" min="0" max="360" value="263">
+                            <span class="range-val" id="val-theme-secondary">263</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                <h4>Einstellungen &amp; Datenverwaltung</h4>
+                
+                <div class="form-group form-group-row">
+                    <div class="profile-notifications-label-group">
+                        <label for="profile-notifications" class="profile-notifications-label">Fristen-Erinnerungen</label>
+                        <span class="text-secondary profile-notifications-sub">Erhalte Desktop-Benachrichtigungen bei Fristablauf</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="profile-notifications" role="switch" aria-checked="false">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="form-group form-group-row">
+                    <div class="profile-notifications-label-group">
+                        <label for="profile-lrs" class="profile-notifications-label">LRS-Optimierung (Dyslexie-Modus)</label>
+                        <span class="text-secondary profile-notifications-sub">Erleichtert das Lesen durch spezielle Schriftart und vergrößerte Abstände</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="profile-lrs" role="switch" aria-checked="false">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="form-group form-group-row">
+                    <div class="profile-notifications-label-group">
+                        <label for="profile-rgs" class="profile-notifications-label">RGS-Kontrastmodus</label>
+                        <span class="text-secondary profile-notifications-sub">Farbkontrast-Modus optimiert für Rot-Grün-Schwäche</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="profile-rgs" role="switch" aria-checked="false">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="form-group form-group-margin">
+                    <label>Daten-Backup</label>
+                    <div class="backup-buttons-row">
+                        <button class="btn btn-secondary btn-full btn-sm" id="btn-export-data" type="button">
+                            <i data-lucide="download" aria-hidden="true"></i> Backup herunterladen (.json)
+                        </button>
+                        <button class="btn btn-secondary btn-full btn-sm" id="btn-import-data" type="button">
+                            <i data-lucide="upload" aria-hidden="true"></i> Backup wiederherstellen
+                        </button>
+                        <input type="file" id="import-file-input" class="hidden-input" accept=".json" title="Backup-Datei zum Importieren auswählen" aria-label="Backup-Datei zum Importieren auswählen">
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                <div class="privacy-notice-box">
+                    <h5 class="privacy-notice-title">Datenschutz-Hinweis (DSGVO)</h5>
+                    <p class="privacy-notice-text">
+                        JobMatch arbeitet <strong>zu 100% lokal in deinem Browser</strong>. Deine eingegebenen Daten (Jobs, Skills, Profil und auch dein optionaler Gemini API-Key) werden ausschließlich auf deinem Endgerät im sogenannten <code>localStorage</code> gespeichert. Es werden keine privaten Daten an Drittserver gesendet. Bei Nutzung des echten AI-Copilots werden Anfragen direkt verschlüsselt an die offizielle Google Gemini API gesendet, ohne Umwege über fremde Server.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer flex-row-center w-full">
+                <button class="btn btn-secondary btn-full" id="btn-export-cv" type="button">
+                    <i data-lucide="file-text" aria-hidden="true"></i> Lebenslauf exportieren
+                </button>
+                <button class="btn btn-primary btn-full" id="btn-save-profile">Profil speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- App Logic -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

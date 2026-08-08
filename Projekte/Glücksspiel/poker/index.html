@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elementar-Poker - Alchemisten-Akademie</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default">
+
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <h1 class="game-title"><i class="fa-solid fa-cards"></i> Elementar-Poker</h1>
+            <p class="game-subtitle">Alchemistisches Video Poker. Forme wertvolle Metall- & Elementar-Blätter gegen das Haus.</p>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- TOP BOARD: Paytable Board -->
+            <section class="panel paytable-panel" aria-label="Auszahlungstabelle" style="width: 100%; margin-bottom: 15px;">
+                <div class="paytable-grid" id="paytable-container">
+                    <div class="pay-row" data-hand="royal"><span class="hand-name">Urmaterie Royal Flush</span><span class="hand-mult">250x</span></div>
+                    <div class="pay-row" data-hand="str_flush"><span class="hand-name">Elementar Straight Flush</span><span class="hand-mult">50x</span></div>
+                    <div class="pay-row" data-hand="four"><span class="hand-name">Vierling (4x Metalle)</span><span class="hand-mult">25x</span></div>
+                    <div class="pay-row" data-hand="full"><span class="hand-name">Full House</span><span class="hand-mult">9x</span></div>
+                    <div class="pay-row" data-hand="flush"><span class="hand-name">Flush (Gleiches Element)</span><span class="hand-mult">6x</span></div>
+                    <div class="pay-row" data-hand="straight"><span class="hand-name">Straße</span><span class="hand-mult">4x</span></div>
+                    <div class="pay-row" data-hand="three"><span class="hand-name">Drilling</span><span class="hand-mult">3x</span></div>
+                    <div class="pay-row" data-hand="two_pair"><span class="hand-name">Zwei Paare</span><span class="hand-mult">2x</span></div>
+                    <div class="pay-row" data-hand="jacks"><span class="hand-name">Buben oder Besser (J+)</span><span class="hand-mult">1x</span></div>
+                </div>
+            </section>
+
+            <!-- CENTER FELT: 5 Cards Grid -->
+            <section class="panel board-panel" aria-label="Poker-Tisch" style="flex: 2; width: 100%;">
+                <div class="poker-cards-container" id="poker-cards-grid">
+                    <!-- 5 cards populated dynamically -->
+                </div>
+
+                <div class="game-status-text" id="poker-status-text" style="text-align: center; margin: 15px 0; font-size: 0.9rem; color: #a99ec6;">
+                    Wähle deinen Einsatz und klicke GEBEN.
+                </div>
+
+                <!-- CONTROLS -->
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <div class="balance-display" style="display: flex; gap: 15px;">
+                        <span>Guthaben: <strong id="balance-amount" style="color:#fff;">0.00</strong> €</span>
+                        <span>Einsatz: <strong id="bet-display" style="color:var(--color-gold);">10.00</strong> €</span>
+                    </div>
+
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="bet-input" class="bet-input-field" value="10.00" min="5.00" max="250.00" step="5.00" style="width: 90px; text-align: center;">
+                        <button type="button" class="btn btn-large" id="btn-deal" style="background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; padding: 10px 24px;">
+                            GEBEN
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

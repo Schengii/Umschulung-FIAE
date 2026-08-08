@@ -1,0 +1,8 @@
+# IDE / Local config
+.agents/
+.gemini/
+*.log
+
+# OS Metadata
+.DS_Store
+Thumbs.db

@@ -1,0 +1,156 @@
+/* --- BLACKJACK SPECIFIC STYLES --- */
+
+.board-panel {
+    background: radial-gradient(circle at center, rgba(30, 20, 50, 0.96) 0%, rgba(10, 5, 20, 0.98) 100%) !important;
+    border-color: rgba(138, 43, 226, 0.25) !important;
+}
+
+.table-felt {
+    position: relative;
+    border-radius: var(--border-radius-lg);
+}
+
+.hand-section {
+    width: 100%;
+}
+
+.hand-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #a99ec6;
+    letter-spacing: 0.5px;
+}
+
+.hand-score {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-cyan);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.cards-grid {
+    display: flex;
+    gap: 12px;
+    min-height: 120px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    align-items: center;
+    overflow-x: auto;
+}
+
+/* Alchemical Card Styles */
+.alchemist-card {
+    width: 80px;
+    height: 110px;
+    background: linear-gradient(135deg, #181124 0%, #0d0915 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    position: relative;
+    user-select: none;
+    animation: cardDeal 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+@keyframes cardDeal {
+    0% { transform: scale(0.5) translateY(50px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.alchemist-card.hidden-card {
+    background: repeating-linear-gradient(45deg, #221235, #221235 8px, #120722 8px, #120722 16px);
+    border-color: rgba(138, 43, 226, 0.4);
+}
+
+.alchemist-card.hidden-card::after {
+    content: "🔮";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #fff;
+}
+
+.card-center-symbol {
+    font-size: 2.2rem;
+    text-align: center;
+    margin: 4px 0;
+}
+
+.card-bottom-name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-align: center;
+    color: #a99ec6;
+    letter-spacing: 0.5px;
+}
+
+/* Metallic coloring helper classes */
+.card-blei { border-color: #555c68; }
+.card-blei .card-center-symbol { color: #555c68; }
+.card-zinn { border-color: #64748b; }
+.card-zinn .card-center-symbol { color: #8ba2c4; }
+.card-eisen { border-color: #b91c1c; }
+.card-eisen .card-center-symbol { color: #ef4444; }
+.card-kupfer { border-color: #ea580c; }
+.card-kupfer .card-center-symbol { color: #f97316; }
+.card-silber { border-color: #94a3b8; }
+.card-silber .card-center-symbol { color: #cbd5e1; }
+.card-gold { border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+.card-gold .card-center-symbol { color: #ffd700; }
+.card-prima { border-color: #8b5cf6; box-shadow: 0 0 12px rgba(139, 92, 246, 0.3); }
+.card-prima .card-center-symbol { color: #a78bfa; }
+
+/* Glowing hand at exactly 21 (Gold Transmutation) */
+.score-gold {
+    color: #ffd700 !important;
+    border-color: #ffd700 !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    animation: goldScorePulse 1.5s infinite alternate;
+}
+
+@keyframes goldScorePulse {
+    0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+    100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+}
+
+.table-center-msg {
+    text-align: center;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    color: #a99ec6;
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    line-height: 1.4;
+}
+
+.win-celebrate-flash {
+    animation: winFlash 1s ease-in-out infinite alternate;
+}
+
+@keyframes winFlash {
+    0% { border-color: rgba(57, 255, 20, 0.3); }
+    100% { border-color: rgba(57, 255, 20, 0.8); box-shadow: inset 0 0 15px rgba(57, 255, 20, 0.2); }
+}

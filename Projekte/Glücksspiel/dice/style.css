@@ -1,0 +1,487 @@
+/* ==========================================================================
+   ATHANOR-WÜRFELN: GAME STYLE SYSTEM (style.css)
+   ========================================================================== */
+
+/* --- LAYOUT CONFIG --- */
+.game-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- CONTROL PANEL UPDATES --- */
+.mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.mode-tab-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    padding: 8px 4px;
+    transition: var(--transition-smooth);
+}
+
+.mode-tab-btn:hover {
+    color: #fff;
+    border-color: rgba(138, 43, 226, 0.4);
+}
+
+.mode-tab-btn.active {
+    background: linear-gradient(135deg, #8a2be2, #4b0082);
+    border-color: rgba(0, 240, 255, 0.3);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.mode-options-container {
+    margin-top: 15px;
+    min-height: 80px;
+}
+
+.mode-desc-text {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.prediction-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.predict-btn {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 4px;
+    font-size: 0.78rem;
+    background: rgba(10, 6, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: var(--text-secondary);
+}
+
+.predict-btn:hover {
+    border-color: var(--color-cyan);
+    color: #fff;
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.predict-btn.active {
+    background: rgba(0, 240, 255, 0.15);
+    border-color: var(--color-cyan);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+}
+
+.predict-mult {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--color-gold);
+    margin-top: 4px;
+}
+
+/* --- CENTER PANEL: ATHANOR OVEN --- */
+.dice-chamber {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 480px;
+    position: relative;
+}
+
+.athanor-oven-visual {
+    width: 100%;
+    max-width: 580px;
+    height: 400px;
+    background: radial-gradient(circle at center, rgba(30, 15, 50, 0.8) 0%, rgba(10, 5, 20, 0.98) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.fire-glow {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 250px;
+    background: radial-gradient(ellipse at bottom, rgba(255, 140, 0, 0.25) 0%, rgba(255, 45, 85, 0.1) 50%, transparent 80%);
+    filter: blur(40px);
+    z-index: 1;
+    pointer-events: none;
+    animation: furnacePulsing 4s ease-in-out infinite alternate;
+}
+
+.athanor-oven-visual.heating .fire-glow {
+    background: radial-gradient(ellipse at bottom, rgba(255, 140, 0, 0.5) 0%, rgba(255, 45, 85, 0.25) 50%, transparent 80%);
+    animation: furnaceBoiling 0.3s ease infinite;
+}
+
+@keyframes furnacePulsing {
+    0% { opacity: 0.6; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes furnaceBoiling {
+    0% { transform: translateX(-50%) scale(1.0); }
+    50% { transform: translateX(-48%) scale(1.02); }
+    100% { transform: translateX(-50%) scale(1.0); }
+}
+
+/* Duel Layout */
+.duel-arena {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    z-index: 2;
+}
+
+.vs-divider {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--text-secondary);
+    opacity: 0.3;
+    letter-spacing: 2px;
+}
+
+/* Prediction Layout */
+.predict-arena {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    z-index: 2;
+}
+
+.die-box {
+    background: rgba(16, 9, 28, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--border-radius-md);
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: var(--transition-smooth);
+}
+
+.die-box.player-box {
+    border-color: rgba(0, 240, 255, 0.2);
+}
+
+.die-box.rector-box {
+    border-color: rgba(255, 140, 0, 0.2);
+}
+
+.die-box.predict-box {
+    width: 320px;
+    border-color: rgba(138, 43, 226, 0.3);
+}
+
+.box-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.dice-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.center-dice {
+    gap: 25px;
+}
+
+.roll-result-sum {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-top: 15px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.large-sum {
+    font-size: 3.2rem;
+    color: var(--color-cyan);
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+/* --- 3D DICE SYSTEM --- */
+.die-wrapper {
+    width: 60px;
+    height: 60px;
+    perspective: 300px;
+}
+
+.die-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 1.2s cubic-bezier(0.2, 0.85, 0.25, 1.05);
+}
+
+.die-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    background: rgba(18, 11, 34, 0.95);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: inset 0 0 12px rgba(138, 43, 226, 0.2);
+}
+
+/* Face positions on 3D Cube */
+.face-1 { transform: rotateY(0deg) translateZ(30px); }
+.face-2 { transform: rotateY(180deg) translateZ(30px); }
+.face-3 { transform: rotateY(90deg) translateZ(30px); }
+.face-4 { transform: rotateY(-90deg) translateZ(30px); }
+.face-5 { transform: rotateX(90deg) translateZ(30px); }
+.face-6 { transform: rotateX(-90deg) translateZ(30px); }
+
+/* Mystical Roman numerals on faces */
+.face-1::after { content: "I"; }
+.face-2::after { content: "II"; }
+.face-3::after { content: "III"; }
+.face-4::after { content: "IV"; }
+.face-5::after { content: "V"; }
+.face-6::after { content: "VI"; }
+
+/* Neon highlights based on team */
+.player-box .die-face {
+    border-color: rgba(0, 240, 255, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.15);
+    color: var(--color-cyan);
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
+}
+
+.rector-box .die-face {
+    border-color: rgba(255, 140, 0, 0.2);
+    box-shadow: inset 0 0 10px rgba(255, 140, 0, 0.15);
+    color: var(--color-orange);
+    text-shadow: 0 0 6px rgba(255, 140, 0, 0.6);
+}
+
+.predict-box .die-face {
+    border-color: rgba(138, 43, 226, 0.3);
+    box-shadow: inset 0 0 10px rgba(138, 43, 226, 0.2);
+    color: #d8b4fe;
+    text-shadow: 0 0 6px rgba(216, 180, 254, 0.6);
+}
+
+/* Rolling animation class */
+.die-3d.rolling {
+    animation: spinAnimation3D 1s cubic-bezier(0.1, 0.8, 0.1, 1) infinite;
+}
+
+@keyframes spinAnimation3D {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+}
+
+/* --- SIDE HISTORY PANEL --- */
+.history-panel-side {
+    max-height: 480px;
+}
+
+.stats-counter-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.stat-bubble {
+    background: rgba(10, 6, 20, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 10px 4px;
+    text-align: center;
+}
+
+.bubble-lbl {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.bubble-val {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.history-list-side {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 250px;
+    padding-right: 4px;
+}
+
+.history-item-side {
+    background: rgba(10, 6, 20, 0.6);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.76rem;
+    transition: var(--transition-smooth);
+}
+
+.history-item-side:hover {
+    background: rgba(10, 6, 20, 0.8);
+    border-color: rgba(138,43,226,0.15);
+}
+
+.hist-mode {
+    font-weight: 800;
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+}
+
+.hist-outcome {
+    font-weight: 800;
+}
+
+.hist-outcome.win { color: var(--color-green); }
+.hist-outcome.loss { color: var(--color-danger); }
+.hist-outcome.tie { color: var(--text-secondary); }
+
+.hist-details {
+    color: var(--text-primary);
+}
+
+.history-empty {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* --- OVERLAY STYLES --- */
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 2, 10, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.grid-overlay:not(.hidden) {
+    pointer-events: auto;
+}
+
+.grid-overlay.show {
+    opacity: 1;
+}
+
+.overlay-content {
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.grid-overlay.show .overlay-content {
+    transform: translateY(0);
+}
+
+.overlay-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.overlay-title.win {
+    color: var(--color-green);
+    text-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+}
+
+.overlay-title.loss {
+    color: var(--color-danger);
+    text-shadow: 0 0 15px rgba(255, 45, 85, 0.4);
+}
+
+.overlay-title.tie {
+    color: var(--text-secondary);
+    text-shadow: 0 0 15px rgba(169, 158, 198, 0.4);
+}
+
+.overlay-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Footer wisdom and adjustments */
+.footer-note {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+.note-label {
+    font-weight: 800;
+    color: var(--color-gold);
+    letter-spacing: 1px;
+    margin-right: 6px;
+}
+
+.note-content {
+    font-style: italic;
+}

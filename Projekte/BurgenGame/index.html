@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Empire Classic - Casual Castle Builder</title>
+  <meta name="description" content="Baue deine Burg, rekrutiere Ritter und erobere Raubritterburgen in diesem mittelalterlichen Aufbauspiel!">
+  
+  <!-- Premium Medieval and modern Typography Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+  
+  <!-- Link to Modularized Stylesheet -->
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Isometric & World Map Canvas Viewport -->
+    <div id="canvas-container">
+      <canvas id="game-canvas"></canvas>
+    </div>
+
+    <!-- UI Overlay Layer for HUD and Modals -->
+    <div id="ui-layer">
+      <div class="initial-loading">
+        <h1 style="font-family: 'Cinzel', serif; color: #d4af37;">Lade Königreich...</h1>
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Utilities -->
+  <script src="js/utils/theme.js"></script>
+  <script src="js/utils/i18n.js"></script>
+  <script src="js/utils/analytics.js"></script>
+
+  <!-- Game Configuration -->
+  <script src="js/core/config.js"></script>
+
+  <!-- Core Game Modules -->
+  <script src="js/core/persistence.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/features/sound.js"></script>
+  <script src="js/core/canvas.js"></script>
+  <script src="js/core/ui.js"></script>
+
+  <!-- Modular Game Features -->
+  <script src="js/features/marketplace.js"></script>
+  <script src="js/features/heroes.js"></script>
+  <script src="js/features/outposts.js"></script>
+  <script src="js/features/raids.js"></script>
+  <script src="js/features/seasons.js"></script>
+  <script src="js/features/dungeons.js"></script>
+  <script src="js/features/daily_quests.js"></script>
+  <script src="js/features/achievements.js"></script>
+  <script src="js/features/ai_bot.js"></script>
+  <script src="js/features/night_cycle.js"></script>
+  <script src="js/features/tutorial.js"></script>
+  <script src="js/features/leaderboard.js"></script>
+  <script src="js/features/population.js"></script>
+  <script src="js/features/diplomacy.js"></script>
+  <script src="js/features/prestige.js"></script>
+  <script src="js/features/statistics_dashboard.js"></script>
+  <script src="js/features/visual_enhancements.js"></script>
+  <script src="js/features/academy_research.js"></script>
+  <script src="js/features/tactical_combat.js"></script>
+  <script src="js/features/siege_defense.js"></script>
+  <script src="js/features/maritime_trade.js"></script>
+  <script src="js/features/milestone_events.js"></script>
+  <script src="js/features/campaign.js"></script>
+  <script src="js/features/bestiary.js"></script>
+  <script src="js/features/wonders.js"></script>
+  <script src="js/features/disasters.js"></script>
+  <script src="js/features/dungeon_prisoners.js"></script>
+  <script src="js/features/jukebox.js"></script>
+  <script src="js/features/espionage.js"></script>
+  <script src="js/features/regions.js"></script>
+  <script src="js/features/tournament.js"></script>
+  <script src="js/features/building_skins.js"></script>
+  <script src="js/features/villagers.js"></script>
+  <script src="js/features/techtree_ui.js"></script>
+  <script src="js/features/world_map_interactive.js"></script>
+  <script src="js/features/secondary_castles.js"></script>
+  <script src="js/features/async_pvp.js"></script>
+  <script src="js/features/guild_wonders.js"></script>
+  <script src="js/features/hero_transmutator.js"></script>
+  <script src="js/features/wall_editor.js"></script>
+  <script src="js/features/disaster_mitigation.js"></script>
+  <script src="js/features/dynasty.js"></script>
+  <script src="js/features/trade_fleet.js"></script>
+  <script src="js/features/dragon_mounts.js"></script>
+  <script src="js/features/throneroom.js"></script>
+  <script src="js/features/siege_artillery.js"></script>
+  <script src="js/features/story_events.js"></script>
+  <script src="js/features/jousting_arena.js"></script>
+  <script src="js/features/scenario_editor.js"></script>
+  <script src="js/features/decrees.js"></script>
+  <script src="js/features/shipyard.js"></script>
+  <script src="js/features/wizard_tower.js"></script>
+  <script src="js/features/pvp_league.js"></script>
+  <script src="js/features/fog_of_war.js"></script>
+  <script src="js/features/story_campaign.js"></script>
+
+
+
+  <!-- Main Game Loop & Bootstrapper -->
+  <script src="js/core/main.js"></script>
+</body>
+</html>

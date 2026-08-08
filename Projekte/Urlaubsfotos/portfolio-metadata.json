@@ -1,0 +1,12 @@
+{
+  "repoName": "Urlaubsfotos",
+  "titleDe": "📸 Urlaubsfotos Organizer — Fotogalerie & Filter",
+  "titleEn": "📸 Vacation Photo Organizer — Gallery & Filtering",
+  "tags": ["React", "Vite", "Image Processing", "CSS Grid"],
+  "image": null,
+  "link": "Projekte/Urlaubsfotos/dist/index.html",
+  "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
+  "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
+  "category": "web",
+  "language": "JavaScript"
+}

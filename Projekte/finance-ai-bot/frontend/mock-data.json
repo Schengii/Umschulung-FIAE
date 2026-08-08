@@ -1,0 +1,149 @@
+{
+  "last_updated": "Mock Data (Offline Modus)",
+  "predictions": {
+    "BTC": {
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "type": "crypto",
+      "price": 64230.50,
+      "price_change_1d": 2.45,
+      "recommendation": "Starker Kauf",
+      "confidence": 92,
+      "risk_level": "Hoch",
+      "sentiment_score": 0.85,
+      "rsi": 62.4,
+      "technical_trend": "Bullish",
+      "macd": 1250.45,
+      "ai_explanation": "Bitcoin zeigt ein enormes Momentum nach dem jüngsten Halving-Event. Institutionelle Zuflüsse in Spot-ETFs treiben den Preis weiter an, während das Angebot an den Börsen knapper wird.",
+      "key_drivers": ["Spot-ETF Zuflüsse", "Halving Supply-Shock", "Institutionelle Adoption"],
+      "key_risks": ["Makroökonomische Zinserhöhungen", "Regulatorische Unsicherheit in den USA"],
+      "news": [
+        {"publisher": "CryptoNews", "time": "Vor 1 Stunde", "title": "Bitcoin durchbricht 64k-Marke", "summary": "Starkes Momentum nach asiatischer Handelssession.", "link": "#"},
+        {"publisher": "CoinTelegraph", "time": "Vor 4 Stunden", "title": "Institutionelle Anleger akkumulieren weiter", "summary": "On-Chain Daten zeigen deutliche Abflüsse von Exchanges.", "link": "#"}
+      ],
+      "history": {
+        "30d": [
+          {"date": "2026-05-20", "price": 58000},
+          {"date": "2026-05-25", "price": 59500},
+          {"date": "2026-05-30", "price": 61200},
+          {"date": "2026-06-05", "price": 60500},
+          {"date": "2026-06-10", "price": 62800},
+          {"date": "2026-06-15", "price": 63900},
+          {"date": "2026-06-20", "price": 64230}
+        ]
+      }
+    },
+    "AAPL": {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "type": "stock",
+      "price": 195.20,
+      "price_change_1d": -0.85,
+      "recommendation": "Kauf",
+      "confidence": 75,
+      "risk_level": "Niedrig",
+      "sentiment_score": 0.45,
+      "rsi": 58.1,
+      "technical_trend": "Bullish",
+      "macd": 1.25,
+      "ai_explanation": "Apple profitiert weiterhin von einem starken Services-Sektor und stabilen Margen. Die neuen KI-Features (Apple Intelligence) treiben den Upgrade-Zyklus der iPhone-Sparte an.",
+      "key_drivers": ["Apple Intelligence Rollout", "Services Umsatzwachstum"],
+      "key_risks": ["Schwächelnder Absatz in China", "Kartellrechtliche Klagen"],
+      "news": [
+        {"publisher": "Bloomberg", "time": "Vor 3 Stunden", "title": "Apple Analysten heben Kursziel an", "summary": "Wall Street erwartet einen Superzyklus für das kommende iPhone.", "link": "#"}
+      ],
+      "history": {
+        "30d": [
+          {"date": "2026-05-20", "price": 180},
+          {"date": "2026-05-30", "price": 185},
+          {"date": "2026-06-10", "price": 190},
+          {"date": "2026-06-20", "price": 195.20}
+        ]
+      }
+    },
+    "ETH": {
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "type": "crypto",
+      "price": 3450.80,
+      "price_change_1d": 1.15,
+      "recommendation": "Halten",
+      "confidence": 60,
+      "risk_level": "Mittel",
+      "sentiment_score": 0.15,
+      "rsi": 52.4,
+      "technical_trend": "Neutral",
+      "macd": -15.4,
+      "ai_explanation": "Ethereum konsolidiert in einer engen Range. Die Layer-2 Skalierungslösungen ziehen zwar Volumen an, was jedoch zu sinkenden Gebühreneinnahmen auf der Mainchain führt (Geringerer Burn-Mechanismus).",
+      "key_drivers": ["Layer 2 Wachstum", "DeFi TVL Steigerung"],
+      "key_risks": ["Konkurrenz durch Solana (SOL)", "Sinkende Burn-Rate"],
+      "news": [
+        {"publisher": "Decrypt", "time": "Vor 2 Tagen", "title": "Ethereum Layer-2s erreichen neues Allzeithoch bei Transaktionen", "summary": "Base und Arbitrum dominieren das Volumen.", "link": "#"}
+      ],
+      "history": {
+        "30d": [
+          {"date": "2026-05-20", "price": 3200},
+          {"date": "2026-05-30", "price": 3500},
+          {"date": "2026-06-10", "price": 3400},
+          {"date": "2026-06-20", "price": 3450.80}
+        ]
+      }
+    },
+    "TSLA": {
+      "symbol": "TSLA",
+      "name": "Tesla Inc.",
+      "type": "stock",
+      "price": 178.50,
+      "price_change_1d": -3.20,
+      "recommendation": "Verkauf",
+      "confidence": 68,
+      "risk_level": "Sehr Hoch",
+      "sentiment_score": -0.65,
+      "rsi": 38.5,
+      "technical_trend": "Bearish",
+      "macd": -4.2,
+      "ai_explanation": "Tesla steht unter massivem Margendruck durch aggressive Preissenkungen in China und sinkende Nachfrage nach Elektroautos global. Full Self-Driving (FSD) Fortschritte konnten den Abwärtstrend bisher nicht stoppen.",
+      "key_drivers": ["Cybertruck Produktion", "FSD Version 13"],
+      "key_risks": ["Preiskampf in China", "Sinkende Gewinnmargen", "Management-Ablenkungen"],
+      "news": [
+        {"publisher": "Reuters", "time": "Vor 5 Stunden", "title": "Tesla senkt erneut Preise auf dem asiatischen Markt", "summary": "Der Preiskampf bei Elektroautos spitzt sich weiter zu.", "link": "#"}
+      ],
+      "history": {
+        "30d": [
+          {"date": "2026-05-20", "price": 205},
+          {"date": "2026-05-30", "price": 195},
+          {"date": "2026-06-10", "price": 185},
+          {"date": "2026-06-20", "price": 178.50}
+        ]
+      }
+    },
+    "GOLD": {
+      "symbol": "GOLD",
+      "name": "Gold (XAU)",
+      "type": "commodity",
+      "price": 2350.10,
+      "price_change_1d": 0.45,
+      "recommendation": "Kauf",
+      "confidence": 82,
+      "risk_level": "Niedrig",
+      "sentiment_score": 0.55,
+      "rsi": 65.2,
+      "technical_trend": "Bullish",
+      "macd": 12.8,
+      "ai_explanation": "Gold fungiert weiterhin als sicherer Hafen angesichts geopolitischer Spannungen und der fortlaufenden Entdollarisierungs-Bestrebungen einiger Zentralbanken.",
+      "key_drivers": ["Zentralbank-Käufe", "Geopolitische Unsicherheiten"],
+      "key_risks": ["Starker US-Dollar", "Länger hohe Zinsen"],
+      "news": [
+        {"publisher": "Financial Times", "time": "Gestern", "title": "Zentralbanken kaufen Gold auf Rekordniveau", "summary": "Asiatische Notenbanken diversifizieren ihre Reserven.", "link": "#"}
+      ],
+      "history": {
+        "30d": [
+          {"date": "2026-05-20", "price": 2280},
+          {"date": "2026-05-30", "price": 2310},
+          {"date": "2026-06-10", "price": 2335},
+          {"date": "2026-06-20", "price": 2350.10}
+        ]
+      }
+    }
+  }
+}

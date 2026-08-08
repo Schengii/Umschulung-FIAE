@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Akademie: Die Hallen des Schicksals</title>
+    <!-- Google Fonts for magical style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0518">
+    <!-- Shared & Local Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Title & Global Balance / Level -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-AKADEMIE</h1>
+                    <span>DIE HALLEN DES SCHICKSALS</span>
+                </div>
+            </div>
+            
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">AKADEMIE-STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GESAMTGUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+
+                <!-- Jukebox Widget -->
+                <div class="jukebox-header-widget">
+                    <i class="fa-solid fa-compact-disc" style="color:var(--color-gold);"></i>
+                    <select id="jukebox-select-track">
+                        <option value="0">🎵 Hallen der Meister</option>
+                        <option value="1">🎵 Mitternacht im Garten</option>
+                        <option value="2">🎵 Tanz der Elemente</option>
+                    </select>
+                </div>
+
+                <!-- Homunculus HUD Widget -->
+                <div class="homunculus-hud-card" id="homunculus-hud-badge">
+                    <span class="homunculus-avatar" id="homunculus-avatar-icon">🥚</span>
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-size:0.65rem; font-weight:800; color:var(--color-purple);" id="homunculus-name-label">Homunculus-Ei</span>
+                        <span style="font-size:0.7rem; font-weight:700; color:var(--color-gold);" id="homunculus-level-label">Stufe 1</span>
+                    </div>
+                </div>
+
+                <!-- Sound Control Panel -->
+                <div class="sound-control-panel-wrapper">
+                    <button type="button" class="btn btn-icon btn-sound-control-trigger" id="btn-sound-control-trigger" title="Lautstärke-Einstellungen">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <div class="sound-control-dropdown hidden" id="sound-control-dropdown">
+                        <div class="sound-control-row">
+                            <label for="music-vol-slider"><i class="fa-solid fa-music"></i> Musik</label>
+                            <input type="range" id="music-vol-slider" min="0" max="1" step="0.05" value="0.3">
+                            <span id="music-vol-display">30%</span>
+                        </div>
+                        <div class="sound-control-row">
+                            <label for="sfx-vol-slider"><i class="fa-solid fa-bell"></i> Effekte</label>
+                            <input type="range" id="sfx-vol-slider" min="0" max="1" step="0.05" value="0.5">
+                            <span id="sfx-vol-display">50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="lobby-layout">
+            
+            <!-- LEFT COLUMN: Profile stats, Trophies & Balance Chart -->
+            <section class="panel profile-panel" aria-label="Alchemisten-Profil">
+                <h2 class="panel-title" style="display: flex; align-items: center; width: 100%;">
+                    <i class="fa-solid fa-scroll"></i> Alchemisten-Profil
+                    <button type="button" class="btn btn-icon" id="btn-open-stats-book" title="Statistik-Buch öffnen" style="margin-left: auto; width: 32px; height: 32px; font-size: 0.8rem; background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.2); color: var(--color-gold);">
+                        <i class="fa-solid fa-book-open"></i>
+                    </button>
+                </h2>
+                <p class="panel-subtitle">Dein Fortschritt in der alchemistischen Akademie.</p>
+
+                <!-- Trophies grid -->
+                <div class="trophies-section">
+                    <h3 class="subsection-title"><i class="fa-solid fa-award"></i> Trophäen-Kabinett</h3>
+                    <div class="trophies-grid" id="lobby-achievements">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Diplomas / Prestige section -->
+                <div class="diploma-section" id="lobby-diploma-section" style="margin-top: 15px; padding: 12px; background: rgba(124, 58, 237, 0.05); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 10px;">
+                    <h3 class="subsection-title" style="margin-top: 0; color: var(--color-purple);"><i class="fa-solid fa-graduation-cap"></i> Diplom-Arbeiten</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.8rem; color: #a99ec6;">Diplome erworben: <strong id="lobby-diplomas-count">0</strong></span>
+                        <button type="button" class="btn" id="btn-prestige-action" style="font-size: 0.72rem; padding: 4px 10px; background: var(--color-purple); color: #fff; border: none; font-weight: 800; border-radius: 4px; cursor: pointer; display: none;">THESIS EINREICHEN</button>
+                    </div>
+                    <p id="prestige-req-info" style="font-size: 0.7rem; color: #7c3aed; margin: 4px 0 0 0; font-style: italic;">(Erfordert Stufe 10 für Abschlussarbeit)</p>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Combined Chart -->
+                <div class="chart-wrapper">
+                    <h3 class="subsection-title"><i class="fa-solid fa-chart-line"></i> Vermögenskurve</h3>
+                    <div class="canvas-chart-container">
+                        <canvas id="lobby-balance-chart" width="310" height="150"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER COLUMN: Game Portals & Marketplace (Tabbed Viewport) -->
+            <section class="portals-viewport" aria-label="Spiele-Portale">
+                <div class="lobby-tabs-nav">
+                    <button type="button" class="lobby-tab-nav-btn active" id="lobby-nav-portals">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Portale
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-market">
+                        <i class="fa-solid fa-store"></i> Marktplatz & Labor
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-garden">
+                        <i class="fa-solid fa-seedling"></i> Garten
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-guild">
+                        <i class="fa-solid fa-shield-cat"></i> Konvent (Gilden)
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-expeditions">
+                        <i class="fa-solid fa-compass"></i> Expeditionen & Werkbank
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-campaign">
+                        <i class="fa-solid fa-scroll"></i> Story-Kampagne
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-homunculus">
+                        <i class="fa-solid fa-egg"></i> Homunculus-Labor
+                    </button>
+                    <button type="button" class="lobby-tab-nav-btn" id="lobby-nav-tournament">
+                        <i class="fa-solid fa-trophy"></i> Akademie-Kelch
+                    </button>
+                </div>
+
+                <!-- Tab: Portals -->
+                <div class="lobby-tab-pane active" id="tab-pane-portals" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-wand-magic-sparkles"></i> Wähle dein Schicksal</h2>
+                    
+                    <div class="portals-grid">
+                        <!-- Portal 1: Cauldron (Crash) -->
+                        <div class="portal-card" id="portal-cauldron">
+                            <div class="portal-visual visual-cauldron">
+                                <div class="portal-vortex vortex-cauldron"></div>
+                                <span class="portal-icon">🔮</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Der Kessel des Schicksals</h3>
+                                <span class="portal-tag tag-crash">CRASH-GAME</span>
+                                <p>Braue wertvolle Tränke. Steigere den Multiplikator mit Zutaten, doch hüte dich vor der Kessel-Explosion!</p>
+                                <a href="cauldron/index.html" class="btn btn-portal-enter" id="btn-enter-cauldron">
+                                    <i class="fa-solid fa-fire-burner"></i> Kessel betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 2: Plinko -->
+                        <div class="portal-card" id="portal-plinko">
+                            <div class="portal-visual visual-plinko">
+                                <div class="portal-vortex vortex-plinko"></div>
+                                <span class="portal-icon">🧪</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Essenz-Plinko</h3>
+                                <span class="portal-tag tag-plinko">PHYSIK-GAME</span>
+                                <p>Lass Essenzen durch ein Labyrinth aus Runen-Pegs tropfen. Triff leuchtende Wildcards für Splits und Multiplikatoren!</p>
+                                <a href="plinko/index.html" class="btn btn-portal-enter" id="btn-enter-plinko">
+                                    <i class="fa-solid fa-circle-nodes"></i> Plinko betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 3: Slots -->
+                        <div class="portal-card" id="portal-slots">
+                            <div class="portal-visual visual-slots">
+                                <div class="portal-vortex vortex-slots"></div>
+                                <span class="portal-icon">🎰</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Alchemisten-Spins</h3>
+                                <span class="portal-tag tag-slots">5-ESSENZEN-SLOT</span>
+                                <p>Drehe die Walzen auf 10 Linien. Triggere Freispiele mit 3x Multiplikator oder das brandneue Elementen-Glücksrad!</p>
+                                <a href="slots/index.html" class="btn btn-portal-enter" id="btn-enter-slots">
+                                    <i class="fa-solid fa-arrow-rotate-right"></i> Spins betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 4: Runen-Minen -->
+                        <div class="portal-card" id="portal-mines">
+                            <div class="portal-visual visual-mines">
+                                <div class="portal-vortex vortex-mines"></div>
+                                <span class="portal-icon">💎</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Runen-Minen</h3>
+                                <span class="portal-tag tag-mines">MINEN-SPIEL</span>
+                                <p>Decke verborgene Runen in einer 5x5 Kammer auf. Jede sichere Rune erhöht den Gewinn, doch hüte dich vor Explosionen!</p>
+                                <a href="mines/index.html" class="btn btn-portal-enter" id="btn-enter-mines">
+                                    <i class="fa-solid fa-gem"></i> Kammer betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 5: Elementen-Roulette -->
+                        <div class="portal-card" id="portal-roulette">
+                            <div class="portal-visual visual-roulette">
+                                <div class="portal-vortex vortex-roulette"></div>
+                                <span class="portal-icon">🎡</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Elementen-Roulette</h3>
+                                <span class="portal-tag tag-roulette" style="background: rgba(255, 215, 0, 0.15); color: var(--color-gold); border: 1px solid rgba(255, 215, 0, 0.35);">RAD-SPIEL</span>
+                                <p>Mische deine Einsätze auf die alchemistischen Ur-Elemente. Drehe das Rad des Schicksals und gewinne bis zu 24x auf Äther!</p>
+                                <a href="roulette/index.html" class="btn btn-portal-enter" id="btn-enter-roulette">
+                                    <i class="fa-solid fa-spinner"></i> Rad betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 6: Athanor-Würfeln (Dice Duel) -->
+                        <div class="portal-card" id="portal-dice">
+                            <div class="portal-visual visual-dice">
+                                <div class="portal-vortex vortex-dice"></div>
+                                <span class="portal-icon">🎲</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Athanor-Würfeln</h3>
+                                <span class="portal-tag tag-dice" style="background: rgba(255, 140, 0, 0.15); color: #ff8c00; border: 1px solid rgba(255, 140, 0, 0.3);">WÜRFEL-DUELL</span>
+                                <p>Tritt im Elementen-Duell gegen den Rektor an oder treffe die richtige Vorhersage am Athanor-Ofen, um Gewinne zu verdoppeln!</p>
+                                <a href="dice/index.html" class="btn btn-portal-enter" id="btn-enter-dice">
+                                    <i class="fa-solid fa-dice"></i> Ofen betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 7: Arena der Prüfungen (Combat Arena) -->
+                        <div class="portal-card" id="portal-arena">
+                            <div class="portal-visual visual-arena">
+                                <div class="portal-vortex vortex-arena"></div>
+                                <span class="portal-icon">⚔️</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Arena der Prüfungen</h3>
+                                <span class="portal-tag tag-arena" style="background: rgba(124, 58, 237, 0.15); color: var(--color-purple); border: 1px solid rgba(124, 58, 237, 0.3);">RPG-KAMPF</span>
+                                <p>Nutze deine selbst gebrauten Tränke im rundenbasierten Überlebenskampf gegen magische Kreaturen der Akademie für legendäre Beute!</p>
+                                <a href="arena/index.html" class="btn btn-portal-enter" id="btn-enter-arena" style="background: linear-gradient(135deg, var(--color-purple), #6b21a8);">
+                                    <i class="fa-solid fa-shield-halved"></i> Arena betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 8: Blei-Transmutation (Blackjack) -->
+                        <div class="portal-card" id="portal-blackjack">
+                            <div class="portal-visual visual-blackjack" style="border-color: rgba(139, 92, 246, 0.45);">
+                                <div class="portal-vortex vortex-blackjack" style="background: radial-gradient(circle, rgba(139, 92, 246, 0.85) 0%, rgba(20, 10, 40, 0.98) 80%);"></div>
+                                <span class="portal-icon">🎴</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Blei-Transmutation</h3>
+                                <span class="portal-tag tag-blackjack" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3);">TRANSMUTATION</span>
+                                <p>Transmutiere unedle Metalle zu reinem Gold (Wert 21). Tritt im alchemistischen Kartenspiel gegen Rektor Ignatius an!</p>
+                                <a href="blackjack/index.html" class="btn btn-portal-enter" id="btn-enter-blackjack" style="background: linear-gradient(135deg, #8b5cf6, #4c1d95);">
+                                    <i class="fa-solid fa-code-merge"></i> Tisch betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 9: Klassisches Alchemisten-Roulette (Numbers Roulette) -->
+                        <div class="portal-card" id="portal-classic-roulette">
+                            <div class="portal-visual visual-classic-roulette" style="border-color: rgba(34, 197, 94, 0.45);">
+                                <div class="portal-vortex vortex-classic-roulette" style="background: radial-gradient(circle, rgba(34, 197, 94, 0.85) 0%, rgba(5, 10, 8, 0.99) 80%);"></div>
+                                <span class="portal-icon">🛞</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Alchemisten-Roulette</h3>
+                                <span class="portal-tag tag-classic-roulette" style="background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3);">ZAHLEN-ROULETTE</span>
+                                <p>Setze deine Chips auf alchemistische Farben Rubedo & Albedo oder transmutiere deine Gewinne auf präzise Zahlen!</p>
+                                <a href="classic_roulette/index.html" class="btn btn-portal-enter" id="btn-enter-classic-roulette" style="background: linear-gradient(135deg, #22c55e, #15803d);">
+                                    <i class="fa-solid fa-spinner"></i> Rad betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 10: Der Turm der Elemente -->
+                        <div class="portal-card" id="portal-tower">
+                            <div class="portal-visual visual-tower" style="border-color: rgba(255, 215, 0, 0.45);">
+                                <div class="portal-vortex vortex-tower" style="background: radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, rgba(20, 10, 30, 0.99) 80%);"></div>
+                                <span class="portal-icon">🏰</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Der Turm der Elemente</h3>
+                                <span class="portal-tag tag-tower" style="background: rgba(255, 215, 0, 0.15); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3);">ETAGEN-RISIKO</span>
+                                <p>Steige 10 Etagen im Zauberturm auf. Wähle klug zwischen den Türen, weiche den Mimics aus und kassiere hohe Multiplikatoren!</p>
+                                <a href="tower/index.html" class="btn btn-portal-enter" id="btn-enter-tower" style="background: linear-gradient(135deg, #ffd700, #b45309); color:#000; font-weight:800;">
+                                    <i class="fa-solid fa-gopuram"></i> Turm betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 11: Elementar-Poker -->
+                        <div class="portal-card" id="portal-poker">
+                            <div class="portal-visual visual-poker" style="border-color: rgba(239, 68, 68, 0.45);">
+                                <div class="portal-vortex vortex-poker" style="background: radial-gradient(circle, rgba(239, 68, 68, 0.85) 0%, rgba(20, 10, 30, 0.99) 80%);"></div>
+                                <span class="portal-icon">🃏</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Elementar-Poker</h3>
+                                <span class="portal-tag tag-poker" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">VIDEO POKER</span>
+                                <p>Forme wertvolle Metall- & Elementar-Blätter (Royal Flush, Vierlinge, Straßen), um Gewinne von bis zu 250x zu erzielen!</p>
+                                <a href="poker/index.html" class="btn btn-portal-enter" id="btn-enter-poker" style="background: linear-gradient(135deg, #ef4444, #991b1b);">
+                                    <i class="fa-solid fa-cards"></i> Poker betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 12: Alchemie-Baccara -->
+                        <div class="portal-card" id="portal-baccarat">
+                            <div class="portal-visual visual-baccarat" style="border-color: rgba(234, 88, 12, 0.45);">
+                                <div class="portal-vortex vortex-baccarat" style="background: radial-gradient(circle, rgba(234, 88, 12, 0.85) 0%, rgba(20, 10, 30, 0.99) 80%);"></div>
+                                <span class="portal-icon">👑</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Alchemie-Baccara</h3>
+                                <span class="portal-tag tag-baccarat" style="background: rgba(234, 88, 12, 0.15); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3);">PUNTO / BANCO</span>
+                                <p>Wette auf das Duell der Schulen: Rubedo vs. Albedo. Welches Element transmutiert näher an den Wert 9?</p>
+                                <a href="baccarat/index.html" class="btn btn-portal-enter" id="btn-enter-baccarat" style="background: linear-gradient(135deg, #ea580c, #c2410c);">
+                                    <i class="fa-solid fa-crown"></i> Baccara betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 13: Athanor-Schmelze (Pachinko) -->
+                        <div class="portal-card" id="portal-pachinko">
+                            <div class="portal-visual visual-pachinko" style="border-color: rgba(6, 182, 212, 0.45);">
+                                <div class="portal-vortex vortex-pachinko" style="background: radial-gradient(circle, rgba(6, 182, 212, 0.85) 0%, rgba(20, 10, 30, 0.99) 80%);"></div>
+                                <span class="portal-icon">⚙️</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Athanor-Schmelze</h3>
+                                <span class="portal-tag tag-pachinko" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3);">PACHINKO-KINETIK</span>
+                                <p>Schmelzkugeln fallen durch Zahnräder und Teleporter-Runen direkt in schiebende Alchemisten-Kessel!</p>
+                                <a href="pachinko/index.html" class="btn btn-portal-enter" id="btn-enter-pachinko" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                                    <i class="fa-solid fa-gear"></i> Schmelze betreten
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Portal 14: Keno der Elemente -->
+                        <div class="portal-card" id="portal-keno">
+                            <div class="portal-visual visual-keno" style="border-color: rgba(16, 185, 129, 0.45);">
+                                <div class="portal-vortex vortex-keno" style="background: radial-gradient(circle, rgba(16, 185, 129, 0.85) 0%, rgba(20, 10, 30, 0.99) 80%);"></div>
+                                <span class="portal-icon">🔥</span>
+                            </div>
+                            <div class="portal-details">
+                                <h3>Keno der Elemente</h3>
+                                <span class="portal-tag tag-keno" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">RUNEN-KENO</span>
+                                <p>Wähle 1 bis 10 alchemistische Runen aus 80 Feldern. 20 gezogene Runen bestimmen deinen Multiplikator-Gewinn!</p>
+                                <a href="keno/index.html" class="btn btn-portal-enter" id="btn-enter-keno" style="background: linear-gradient(135deg, #10b981, #047857);">
+                                    <i class="fa-solid fa-fire-flame-curved"></i> Keno betreten
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Marketplace / Labor -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-market" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-store"></i> Marktplatz & Laboratorium</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Verbessere deine Instrumente und schalte prachtvolle visuelle Stile für deine Laboratorien frei.</p>
+                    
+                    <div class="market-grid" id="lobby-market-grid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- NEW: Dynamic Market exchange & News ticker -->
+                    <h3 class="laboratory-title" style="margin-top: 35px;"><i class="fa-solid fa-chart-line"></i> Alchemistische Börse</h3>
+                    <p class="panel-subtitle">Rohstoffkurse schwanken je nach Nachrichtenlage. Nutze Preistiefs zum Kaufen und Spitzen zum Verkaufen!</p>
+
+                    <div class="market-news-ticker-container">
+                        <span class="ticker-label"><i class="fa-solid fa-bullhorn"></i> Ticker</span>
+                        <div class="ticker-text" id="market-news-text">Lade alchemistische Marktnachrichten...</div>
+                        <button type="button" class="btn" id="btn-refresh-market" style="margin-left: auto; font-size: 0.7rem; padding: 4px 8px; background: rgba(180, 83, 9, 0.1); border-color: rgba(180, 83, 9, 0.3); color: var(--color-gold);">
+                            <i class="fa-solid fa-rotate"></i> Aktualisieren
+                        </button>
+                    </div>
+
+                    <div class="market-exchange-panel" id="market-exchange-board">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- NEW: NPC Trading Post -->
+                    <div class="npc-trading-section">
+                        <h3 class="laboratory-title"><i class="fa-solid fa-handshake"></i> NPC-Handelsstand</h3>
+                        <p class="panel-subtitle">Akademie-Schüler und Dozenten suchen nach Tränken und bieten hervorragende Ankaufspreise.</p>
+                        
+                        <div class="npc-trade-card" id="lobby-npc-trade-card">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Laboratory Crafting & Ingredients UI -->
+                    <h3 class="laboratory-title"><i class="fa-solid fa-flask"></i> Alchemistisches Laboratorium</h3>
+                    <p class="panel-subtitle">Braue mächtige Tränke für deine Abenteuer mit deinen Rohstoffen.</p>
+                    
+                    <div class="lab-inventory-bar" id="lab-ingredients-inventory">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="lab-grid" id="lab-potions-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Alchemisten-Garten -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-garden" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-seedling"></i> Der Alchemisten-Garten</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 20px;">Pflanze magische Samen in deinen Töpfen. Während du Spiele spielst, reifen die Pflanzen zu wertvollen Zutaten heran!</p>
+                    
+                    <div class="garden-pots-grid" id="garden-pots-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                        <!-- 4 Pots populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Alchemisten-Konvent (Gilden) -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-guild" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-shield-cat"></i> Der Alchemisten-Konvent</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Wähle ab Stufe 5 deine Gilde im Konvent. Erhalte einzigartige Passiv-Boni für alle deine Spiele!</p>
+                    
+                    <div class="guilds-cards-grid" id="guilds-selection-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+                        <!-- 3 Guild cards populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Expeditionen & Werkbank -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-expeditions" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-compass"></i> Expeditionen, Werkbank & Auktionshaus</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Rüste mächtige Relikte aus, entsende Expeditionen und steigere deinen Laboratoriums-Rang.</p>
+                    
+                    <!-- Relics Equipment Header -->
+                    <h3 class="laboratory-title"><i class="fa-solid fa-gem"></i> Ausgerüstete Relikte</h3>
+                    <div class="relics-equipped-slots" id="relics-slots-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="relics-inventory-grid" id="relics-inventory-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Expeditions Section -->
+                    <h3 class="laboratory-title" style="margin-top:30px;"><i class="fa-solid fa-map-location-dot"></i> Gilden-Expeditionen</h3>
+                    <div class="expeditions-grid" id="expeditions-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Workbench Section -->
+                    <h3 class="laboratory-title" style="margin-top:30px;"><i class="fa-solid fa-hammer"></i> Labor-Werkbank</h3>
+                    <div class="workbench-card" id="workbench-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Auction House Section -->
+                    <h3 class="laboratory-title" style="margin-top:30px;"><i class="fa-solid fa-gavel"></i> Schatten-Auktionshaus</h3>
+                    <div class="auctions-grid" id="auctions-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Story-Kampagne -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-campaign" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-scroll"></i> Die Legende des Steins der Weisen</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Absolviere die 5 Kapitel der Akademie-Kampagne und schalte den Stein der Weisen frei.</p>
+                    <div class="campaign-chapters-list" id="campaign-chapters-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Homunculus-Labor -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-homunculus" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-egg"></i> Das Homunculus-Laboratorium</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Brüte deinen magischen Gefährten aus, füttere ihn mit Zutaten und ziehe eine mächtige Kreatur auf.</p>
+                    <div class="homunculus-card" id="homunculus-main-card">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Akademie-Kelch -->
+                <div class="lobby-tab-pane hidden" id="tab-pane-tournament" style="width: 100%;">
+                    <h2 class="lobby-title-centered"><i class="fa-solid fa-trophy"></i> Der Akademie-Kelch (Turnier)</h2>
+                    <p class="panel-subtitle" style="text-align: center; margin-top: -15px; margin-bottom: 25px;">Miss dich im wöchentlichen Punkte-Turnier in allen 13 Portalen gegen die besten Alchemisten.</p>
+                    <div class="tournament-standings-card" id="tournament-standings-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: Daily Quests & Rector's Favor -->
+            <section class="panel quest-panel" aria-label="Tägliche Aufgaben">
+                <h2 class="panel-title"><i class="fa-solid fa-book-sparkles"></i> Akademie-Aufträge</h2>
+                <p class="panel-subtitle">Schließe diese täglichen Prüfungen ab, um Gold und XP-Boni einzufahren.</p>
+                
+                <div class="legendary-quest-section" id="lobby-legendary-quest-container" style="margin-bottom: 20px;">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <div class="lobby-quests-list" id="lobby-quests-container">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <!-- Aura-Glücksrad Button Card -->
+                <div class="daily-spin-card" style="margin-top: 15px; background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 12px; padding: 15px; text-align: center;">
+                    <h4 style="font-family: 'Cinzel', serif; color: var(--color-gold); margin: 0 0 6px 0; font-size: 0.95rem; letter-spacing: 0.5px;"><i class="fa-solid fa-spinner"></i> Rad der Ur-Aura</h4>
+                    <p style="font-size: 0.78rem; color: #a99ec6; margin: 0 0 10px 0;">Drehe das Rad einmal täglich für magische Gewinne!</p>
+                    <button type="button" class="btn" id="btn-open-daily-spin" style="width: 100%; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; border: none;">
+                        RAD DREHEN
+                    </button>
+                    <span id="daily-spin-cooldown-text" style="font-size: 0.72rem; color: var(--color-danger); display: none; margin-top: 6px; font-weight: 700;"></span>
+                </div>
+
+                <!-- Alchemie-Quiz Card (Dozent Barnabas) -->
+                <div class="daily-quiz-card" style="margin-top: 15px; background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 12px; padding: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span style="font-size: 1.8rem;">👴</span>
+                        <div>
+                            <h4 style="font-family: 'Cinzel', serif; color: var(--color-purple); margin: 0; font-size: 0.95rem; letter-spacing: 0.5px;">Dozent Barnabas</h4>
+                            <p style="font-size: 0.72rem; color: #a99ec6; margin: 0;">Das tägliche Akademie-Quiz</p>
+                        </div>
+                    </div>
+                    <div id="quiz-question-box">
+                        <p id="quiz-question-text" style="font-size: 0.8rem; color: #fff; margin: 0 0 10px 0; font-weight: 700; line-height: 1.4;"></p>
+                        <div id="quiz-options-container" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                    </div>
+                    <div id="quiz-result-box" style="display: none; font-size: 0.78rem; text-align: center; line-height: 1.4;">
+                        <p id="quiz-result-text" style="font-weight: 800; margin: 0 0 4px 0;"></p>
+                        <p id="quiz-explanation-text" style="color: #a99ec6; margin: 0; font-style: italic;"></p>
+                    </div>
+                </div>
+
+                <!-- Gunst des Rektors Stipendium -->
+                <div class="rector-favor-box hidden" id="rector-favor-container">
+                    <h4><i class="fa-solid fa-hands-holding-child"></i> Gunst des Rektors</h4>
+                    <p>Du bist bankrott! Der Rektor gewährt dir ein Not-Stipendium, um deine Forschungen fortzusetzen.</p>
+                    <button type="button" class="btn" id="btn-rector-favor" style="width:100%; margin-top:10px; background:var(--color-gold); color:#000; font-weight:800;">
+                        100,00 € beanspruchen
+                    </button>
+                </div>
+
+                <div class="lobby-academy-note" style="margin-top: 15px;">
+                    <h4><i class="fa-solid fa-graduation-cap"></i> Das Gelübde der Alchemisten</h4>
+                    <p>Wähle eines der Portale und verwende deine Fähigkeiten weise. Erreichtes Level-UP schaltet wertvolle Upgrades und Boni frei.</p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER: Credits, Export/Import & Reset -->
+        <footer class="game-footer">
+            <div class="footer-credits">
+                <span>Alchemisten-Akademie v5.0 &copy; 2026. Alle Rechte vorbehalten.</span>
+            </div>
+            <div class="footer-controls">
+                <!-- Savegame Import / Export -->
+                <button type="button" class="btn btn-icon" id="btn-export-save" title="Spielstand exportieren" style="border-color: rgba(0, 240, 255, 0.3); color: var(--color-cyan);">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-import-save" title="Spielstand importieren" style="border-color: rgba(57, 255, 20, 0.3); color: var(--color-green);">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-reset-data" title="Akademie-Fortschritt zurücksetzen">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Statistik-Buch & Grimoire (Multi-Page Book) -->
+    <div class="modal hidden" id="stats-book-modal" role="dialog" aria-modal="true" aria-labelledby="stats-book-title">
+        <div class="book-container">
+            <button type="button" class="book-close" id="btn-close-stats-book" aria-label="Schließen">&times;</button>
+            <div class="book-spine"></div>
+            
+            <!-- Book internal tab selector -->
+            <div class="book-page-selector">
+                <button type="button" class="book-page-btn active" id="book-tab-stats-btn" title="Statistik-Register"><i class="fa-solid fa-chart-line"></i> Register</button>
+                <button type="button" class="book-page-btn" id="book-tab-grimoire-btn" title="Magisches Grimoire"><i class="fa-solid fa-book-sparkles"></i> Grimoire</button>
+                <button type="button" class="book-page-btn" id="book-tab-trophies-btn" title="Erfolgs-Logbuch"><i class="fa-solid fa-award"></i> Trophäen</button>
+                <button type="button" class="book-page-btn" id="book-tab-chronicle-btn" title="Chronik der großen Taten"><i class="fa-solid fa-scroll"></i> Chronik</button>
+                <button type="button" class="book-page-btn" id="book-tab-rivals-btn" title="Akademie-Rangliste"><i class="fa-solid fa-ranking-star"></i> Rangliste</button>
+            </div>
+
+            <!-- Page Left -->
+            <div class="book-page book-page-left" id="book-left-content">
+                <!-- Dynamically filled by JS -->
+            </div>
+
+            <!-- Page Right -->
+            <div class="book-page book-page-right" id="book-right-content">
+                <!-- Dynamically filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Rad der Ur-Aura (Daily Spin) -->
+    <div class="modal hidden" id="daily-spin-modal" role="dialog" aria-modal="true" aria-labelledby="daily-spin-title">
+        <div class="daily-spin-modal-box">
+            <button type="button" class="book-close" id="btn-close-daily-spin" aria-label="Schließen">&times;</button>
+            <h2 class="daily-spin-title" id="daily-spin-title"><i class="fa-solid fa-spinner"></i> Rad der Ur-Aura</h2>
+            <p class="daily-spin-subtitle">Fordere das alchemistische Glück heraus.</p>
+            
+            <div class="wheel-canvas-container" style="position: relative; width: 340px; height: 340px; margin: 15px auto;">
+                <canvas id="daily-spin-wheel" width="340" height="340" style="display: block;"></canvas>
+                <div class="wheel-pin" style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 24px solid var(--color-gold, #ffd700); z-index: 10;"></div>
+            </div>
+            
+            <button type="button" class="btn" id="btn-spin-wheel-action" style="width: 100%; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; padding: 12px; font-size: 1rem; border: none; border-radius: 10px; margin-top: 15px;">
+                <i class="fa-solid fa-play"></i> JETZT DREHEN
+            </button>
+        </div>
+    </div>
+
+    <!-- Script Referenz -->
+    <script src="shared.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW register error:', err));
+            });
+        }
+    </script>
+</body>
+</html>

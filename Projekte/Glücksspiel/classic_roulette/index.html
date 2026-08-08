@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Roulette - Alchemisten-Akademie</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../shared.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default">
+
+    <!-- The floating HUD is injected by shared.js -->
+    
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <h1 class="game-title"><i class="fa-solid fa-spinner"></i> Alchemisten-Roulette</h1>
+            <p class="game-subtitle">Klassisches 0-36 Zahlen-Roulette. Setze auf Rubedo (Rot) oder Albedo (Silber/Weiß) und starte das Rad.</p>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Wheel Canvas -->
+            <section class="panel board-panel" aria-label="Roulette-Rad" style="flex: 1.1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <div class="wheel-container-wrapper" style="position: relative; width: 340px; height: 340px; margin: 15px auto;">
+                    <div class="wheel-pointer" style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid var(--color-gold); z-index: 10;"></div>
+                    <canvas id="roulette-wheel" width="340" height="340"></canvas>
+                </div>
+                
+                <div class="game-status-text" id="game-status-text" style="text-align: center; margin-top: 15px; font-family: 'Outfit', sans-serif; font-size: 0.85rem; color: #a99ec6;">
+                    Wähle einen Chip und platziere deine Wetten auf dem Tisch.
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 15px;">
+                    <button type="button" class="btn" id="btn-spin" style="width: 100%; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; border: none; font-size: 1.05rem; padding: 12px;">
+                        <i class="fa-solid fa-play"></i> RAD DREHEN
+                    </button>
+                    <div style="display: flex; gap: 6px; width: 100%;">
+                        <button type="button" class="btn btn-secondary" id="btn-rebet" style="flex: 1; font-size: 0.8rem; padding: 8px;" title="Letzten Einsatz wiederholen">
+                            <i class="fa-solid fa-rotate-left"></i> Wiederholen
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btn-double-bet" style="flex: 1; font-size: 0.8rem; padding: 8px;" title="Alle Einsätze verdoppeln">
+                            <i class="fa-solid fa-angles-up"></i> x2 Verdoppeln
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btn-undo" style="flex: 1; font-size: 0.8rem; padding: 8px;" title="Letzten Chip zurücknehmen">
+                            <i class="fa-solid fa-reply"></i> Rückgängig
+                        </button>
+                        <button type="button" class="btn btn-danger" id="btn-clear" style="flex: 1; font-size: 0.8rem; padding: 8px;" title="Alle Einsätze zurücksetzen">
+                            <i class="fa-solid fa-trash-can"></i> Löschen
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Betting felt -->
+            <section class="panel felt-panel" aria-label="Betting Board" style="flex: 1.9; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h2 class="panel-title"><i class="fa-solid fa-table-cells"></i> Transmutations-Tisch</h2>
+                    <div class="balance-display" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.8rem; color: #a99ec6;">Guthaben: <strong id="balance-amount" style="color: #fff; font-size: 0.95rem;">0.00</strong> €</span>
+                        <span style="font-size: 0.8rem; color: #a99ec6;">Gesamteinsatz: <strong id="total-bet-amount" style="color: var(--color-gold); font-size: 0.95rem;">0.00</strong> €</span>
+                    </div>
+
+                    <!-- Chip Selector -->
+                    <div class="chip-selector" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                        <div class="chip active" data-val="5" style="background: #2563eb; color: #fff;">5</div>
+                        <div class="chip" data-val="10" style="background: #e11d48; color: #fff;">10</div>
+                        <div class="chip" data-val="25" style="background: #0d9488; color: #fff;">25</div>
+                        <div class="chip" data-val="100" style="background: #7c3aed; color: #fff;">100</div>
+                    </div>
+
+                    <!-- Interactive Betting Grid -->
+                    <div class="betting-grid-wrapper" style="overflow-x: auto; padding-bottom: 10px;">
+                        <div class="betting-board">
+                            <!-- 0 Cell -->
+                            <div class="bet-cell cell-0" data-bet="num-0">
+                                <span class="num-lbl">0</span>
+                                <div class="chip-on-cell hidden"></div>
+                            </div>
+                            
+                            <!-- 36 Numbers Grid -->
+                            <div class="numbers-grid" id="numbers-grid-container">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                            
+                            <!-- Columns bets -->
+                            <div class="columns-row">
+                                <div class="bet-cell cell-col" data-bet="col-1">2to1</div>
+                                <div class="bet-cell cell-col" data-bet="col-2">2to1</div>
+                                <div class="bet-cell cell-col" data-bet="col-3">2to1</div>
+                            </div>
+
+                            <!-- Dozens row -->
+                            <div class="dozens-row" style="display: flex; grid-column: span 12;">
+                                <div class="bet-cell cell-dozen" data-bet="dozen-1" style="flex: 1;">1st 12</div>
+                                <div class="bet-cell cell-dozen" data-bet="dozen-2" style="flex: 1;">2nd 12</div>
+                                <div class="bet-cell cell-dozen" data-bet="dozen-3" style="flex: 1;">3rd 12</div>
+                            </div>
+
+                            <!-- Outside bets (Low, Even, Red, White, Odd, High) -->
+                            <div class="outside-row" style="display: flex; grid-column: span 12;">
+                                <div class="bet-cell cell-outside" data-bet="outside-low" style="flex: 1;">1-18</div>
+                                <div class="bet-cell cell-outside" data-bet="outside-even" style="flex: 1;">Gerade</div>
+                                <div class="bet-cell cell-outside cell-rubedo" data-bet="outside-rubedo" style="flex: 1; background: #b91c1c; color:#fff;">Rubedo</div>
+                                <div class="bet-cell cell-outside cell-albedo" data-bet="outside-albedo" style="flex: 1; background: #94a3b8; color:#000;">Albedo</div>
+                                <div class="bet-cell cell-outside" data-bet="outside-odd" style="flex: 1;">Ungerade</div>
+                                <div class="bet-cell cell-outside" data-bet="outside-high" style="flex: 1;">19-36</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Last winning numbers history -->
+                <div class="history-bar" style="margin-top: 15px;">
+                    <span style="font-family: 'Cinzel', serif; font-size: 0.72rem; color: #a99ec6; margin-right: 10px;">Verlauf:</span>
+                    <div id="history-container" style="display: flex; gap: 6px; align-items: center; overflow-x: auto; flex-grow: 1; height: 30px;">
+                        <!-- Last numbers will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "repoName": "BurgenGame",
+  "titleDe": "🏰 BurgenGame — Interaktives 2D-Aufbaustrategiespiel",
+  "titleEn": "🏰 BurgenGame — Interactive 2D Strategy Game",
+  "tags": [
+    "HTML5 Canvas",
+    "CSS3",
+    "Vanilla JS (ES6)",
+    "Game Loop",
+    "Persistence"
+  ],
+  "image": "assets/images/burgen_showcase.png",
+  "images": [
+    "assets/images/burgen_showcase.png",
+    "assets/images/burgen_gameplay.png"
+  ],
+  "link": "Projekte/BurgenGame/index.html",
+  "descDe": "Ein vollständig im Browser spielbares 2D-Aufbaustrategiespiel mit Canvas-Rendering, dynamischen Ressourcen-Zyklen, Bau- und Upgradelogik für Gebäude, feindlichen Angriffswellen und persistenter Spielstand-Speicherung.",
+  "descEn": "A fully in-browser 2D city-builder strategy game featuring canvas rendering, dynamic resource cycles, building upgrade logic, enemy attack waves, and persistent save states.",
+  "category": "games",
+  "language": "JavaScript",
+  "codeFiles": [
+    { "name": "index.html", "path": "Projekte/BurgenGame/index.html", "type": "html" },
+    { "name": "main.js", "path": "Projekte/BurgenGame/js/core/main.js", "type": "javascript" },
+    { "name": "canvas.js", "path": "Projekte/BurgenGame/js/core/canvas.js", "type": "javascript" },
+    { "name": "state.js", "path": "Projekte/BurgenGame/js/core/state.js", "type": "javascript" },
+    { "name": "ui.js", "path": "Projekte/BurgenGame/js/core/ui.js", "type": "javascript" }
+  ]
+}

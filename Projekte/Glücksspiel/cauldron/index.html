@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Gold: Der Kessel des Schicksals (V4.0)</title>
+    <!-- Google Fonts for magical & modern style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-GOLD</h1>
+                    <span>DER KESSEL DES SCHICKSALS</span>
+                </div>
+            </div>
+
+            <!-- Navigation to other games -->
+            <nav class="game-nav" style="display: flex; gap: 10px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Zur Lobby</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Zu den Spins</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Zum Plinko</a>
+            </nav>
+            
+            <!-- Header Stats container for Balance and Level Progress -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Wett-Einstellungen & Spiel-Aktionen -->
+            <section class="panel bet-panel" aria-label="Wettsteuerung">
+                <!-- Modus Toggle -->
+                <div class="mode-toggle-wrapper" style="display:flex; justify-content:center; gap:8px; margin-bottom:15px; background:rgba(10,6,20,0.5); padding:4px; border-radius:10px; border:1px solid var(--border-color, rgba(138,43,226,0.25));">
+                    <button type="button" id="btn-mode-single" class="btn active" style="flex:1; padding:6px; font-size:0.75rem; font-weight:700; background:rgba(138,43,226,0.3); border:1px solid rgba(138,43,226,0.4); border-radius:8px; color:#fff;">Einzelspieler</button>
+                    <button type="button" id="btn-mode-duel" class="btn" style="flex:1; padding:6px; font-size:0.75rem; font-weight:700; background:none; border:none; border-radius:8px; color:var(--text-secondary, #a99ec6);">Duell-Modus</button>
+                </div>
+
+                <!-- NPC Duel Selector (Hidden by default) -->
+                <div id="duel-selector-container" class="hidden" style="margin-bottom: 15px; background:rgba(10,6,20,0.3); padding:10px; border-radius:8px; border:1px dashed rgba(255,215,0,0.2);">
+                    <label for="select-duel-npc" style="font-size:0.72rem; font-weight:800; color:var(--color-gold, #ffd700); display:block; margin-bottom:6px; letter-spacing:1px;">GEGNER ALCHEMIST:</label>
+                    <select id="select-duel-npc" style="width:100%; padding:8px; background:rgba(5,3,10,0.9); border:1px solid rgba(255,215,0,0.2); border-radius:6px; color:#fff; font-family:'Outfit'; font-size:0.8rem; font-weight:600; outline:none;">
+                        <option value="ignis">🔥 Novize Ignis (Risiko: Gering, Payout: ~1.5x)</option>
+                        <option value="aurelius">👑 Gildemeister Aurelius (Risiko: Mittel, Payout: ~3.5x)</option>
+                        <option value="shadow">🌌 Erz-Alchemistin Shadow (Risiko: Extrem, Payout: ~8.0x+)</option>
+                    </select>
+                </div>
+
+                <h2 class="panel-title"><i class="fa-solid fa-coins"></i> Einsatz</h2>
+                
+                <div class="bet-input-container">
+                    <label for="bet-input" class="sr-only">Wetteinsatz in Euro</label>
+                    <input type="number" id="bet-input" value="10.00" min="1.00" max="500.00" step="1.00" class="bet-input">
+                    <span class="bet-currency-tag">€</span>
+                </div>
+
+                <div class="bet-presets">
+                    <button type="button" class="btn btn-preset" id="btn-bet-min">MIN</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-half">½</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-double">2x</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-max">MAX</button>
+                </div>
+
+                <!-- Auto-Cashout Controls -->
+                <div class="auto-cashout-container">
+                    <div class="toggle-wrapper">
+                        <input type="checkbox" id="chk-auto-cashout" class="toggle-checkbox">
+                        <label for="chk-auto-cashout" class="toggle-label">Auto-Auszahlung</label>
+                    </div>
+                    <div class="auto-cashout-input-wrapper hidden" id="auto-cashout-input-group">
+                        <label for="auto-cashout-val" class="sr-only">Auto-Auszahlungs Multiplikator</label>
+                        <input type="number" id="auto-cashout-val" value="2.00" min="1.05" max="100.00" step="0.10" class="bet-input small-input">
+                        <span class="bet-currency-tag-small">x</span>
+                    </div>
+                </div>
+
+                <!-- Safety Valve Control -->
+                <div class="safety-valve-container" style="margin-top: 12px; display: flex; align-items: center; justify-content: space-between; background: rgba(255, 215, 0, 0.03); border: 1px dashed rgba(255, 215, 0, 0.15); padding: 8px 12px; border-radius: var(--border-radius-sm);">
+                    <div class="toggle-wrapper" style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="chk-safety-valve" class="toggle-checkbox">
+                        <label for="chk-safety-valve" class="toggle-label" style="font-size: 0.8rem; font-weight: 700; color: var(--color-gold, #ffd700);">Sicherheits-Ventil (+20%)</label>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-secondary);" id="safety-valve-cost">0.00 €</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Game Status (Before round vs. In round) -->
+                <div class="game-actions">
+                    <button type="button" class="btn btn-primary btn-large" id="btn-start">
+                        <i class="fa-solid fa-fire-burner"></i> BRAUEN STARTEN
+                    </button>
+                    
+                    <button type="button" class="btn btn-success btn-large btn-cashout hidden" id="btn-cashout" disabled>
+                        <span class="cashout-label">TRANK ABFÜLLEN</span>
+                        <span class="cashout-value" id="cashout-preview">0.00 €</span>
+                    </button>
+                </div>
+
+                <!-- Cauldron Health / Instability Meter -->
+                <div class="meter-container" aria-live="polite">
+                    <div class="meter-header">
+                        <span>Kessel-Instabilität</span>
+                        <span id="instability-value">0%</span>
+                    </div>
+                    <div class="meter-bar-outer">
+                        <div class="meter-bar-inner" id="instability-bar"></div>
+                        <div class="meter-danger-line"></div>
+                    </div>
+                    <p class="meter-warning-text" id="warning-text">Stabil & bereit</p>
+                </div>
+
+                <!-- Simulated Multiplayer Live-Ticker -->
+                <div class="ticker-container">
+                    <h3 class="ticker-title"><i class="fa-solid fa-users-viewfinder"></i> Live-Brauer</h3>
+                    <div class="ticker-feed" id="ticker-feed">
+                        <!-- Simulated entries feed -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER: Das Herzstück - Der Kessel (Canvas) -->
+            <section class="cauldron-viewport" aria-label="Kesselbereich">
+                <div class="canvas-wrapper">
+                    <canvas id="cauldron-canvas" width="600" height="600"></canvas>
+                    
+                    <!-- Overlay für Textanzeigen direkt auf dem Canvas -->
+                    <div class="cauldron-overlay" id="cauldron-overlay">
+                        <div class="multiplier-display hidden" id="multiplier-display">
+                            <span class="multiplier-number" id="current-multiplier">1.00x</span>
+                            <span class="multiplier-sub">Aktueller Wert</span>
+                        </div>
+                        <!-- Duel NPC status badge -->
+                        <div id="duel-status-badge" class="hidden" style="margin-top:10px; background:rgba(10,6,20,0.85); border:1.5px solid var(--color-gold, #ffd700); padding:6px 14px; border-radius:18px; font-size:0.8rem; font-weight:700; color:#fff; display:inline-flex; align-items:center; gap:8px;">
+                            <span id="duel-npc-icon">🔥</span> <strong id="duel-npc-name">Novize Ignis</strong>: <span id="duel-npc-multiplier" style="color:var(--color-gold, #ffd700);">1.00x</span> <span id="duel-npc-state" style="color:#00f0ff;">(Braut...)</span>
+                        </div>
+                        <div class="status-message" id="cauldron-status">Mische die Zutaten im Kessel</div>
+                    </div>
+
+                    <!-- Wildcard Notification Banner -->
+                    <div class="wildcard-banner hidden" id="wildcard-banner">
+                        <div class="wildcard-icon" id="wildcard-icon">❄️</div>
+                        <div class="wildcard-text">
+                            <h3 id="wildcard-title">FROST-SCHILD!</h3>
+                            <p id="wildcard-desc">0% zusätzliche Hitze bei der nächsten Zutat</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Die Zutatenregal / Labor / Erfolge -->
+            <section class="panel tabbed-panel" aria-label="Aktionsregal">
+                <!-- Panel Tabs Navigation -->
+                <div class="panel-tabs">
+                    <button type="button" class="tab-btn active" id="tab-btn-ing">
+                        <i class="fa-solid fa-mortar-pestle"></i> Zutaten
+                    </button>
+                    <button type="button" class="tab-btn" id="tab-btn-lab">
+                        <i class="fa-solid fa-flask-vial"></i> Labor
+                    </button>
+                    <button type="button" class="tab-btn" id="tab-btn-stats">
+                        <i class="fa-solid fa-book-skull"></i> Buch & Stats
+                    </button>
+                </div>
+
+                <!-- TAB CONTENT 1: ZUTATEN -->
+                <div class="tab-content" id="tab-content-ing">
+                    <p class="panel-subtitle">Füge Zutaten hinzu, um den Wert des Tranks zu steigern. Jede Zutat erhöht das Explosionsrisiko.</p>
+                    
+                    <div class="ingredients-grid">
+                        <!-- Zutat 1: Mondtau -->
+                        <button type="button" class="ingredient-card card-dew" id="ing-dew" disabled>
+                            <div class="ing-icon-container">
+                                <i class="fa-solid fa-droplet"></i>
+                            </div>
+                            <div class="ing-details">
+                                <h3>Mondtau</h3>
+                                <span class="ing-multiplier">+10% Wert</span>
+                                <div class="ing-risk-indicator">
+                                    <span>Geringes Risiko (+5% Instabilität)</span>
+                                    <div class="risk-dots"><span class="active"></span><span></span><span></span><span></span></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- Zutat 2: Phönixfeder -->
+                        <button type="button" class="ingredient-card card-feather" id="ing-feather" disabled>
+                            <div class="ing-icon-container">
+                                <i class="fa-solid fa-feather-pointed"></i>
+                            </div>
+                            <div class="ing-details">
+                                <h3>Phönixfeder</h3>
+                                <span class="ing-multiplier">+40% Wert</span>
+                                <div class="ing-risk-indicator">
+                                    <span>Mittleres Risiko (+15% Instabilität)</span>
+                                    <div class="risk-dots"><span class="active"></span><span class="active"></span><span></span><span></span></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- Zutat 3: Drachenblut -->
+                        <button type="button" class="ingredient-card card-blood" id="ing-blood" disabled>
+                            <div class="ing-icon-container">
+                                <i class="fa-solid fa-flask-vial"></i>
+                            </div>
+                            <div class="ing-details">
+                                <h3>Drachenblut</h3>
+                                <span class="ing-multiplier">+100% Wert</span>
+                                <div class="ing-risk-indicator">
+                                    <span>Hohes Risiko (+30% Instabilität)</span>
+                                    <div class="risk-dots"><span class="active"></span><span class="active"></span><span class="active"></span><span></span></div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- Zutat 4: Dunkle Materie -->
+                        <button type="button" class="ingredient-card card-matter" id="ing-matter" disabled>
+                            <div class="ing-icon-container">
+                                <i class="fa-solid fa-atom"></i>
+                            </div>
+                            <div class="ing-details">
+                                <h3>Dunkle Materie</h3>
+                                <span class="ing-multiplier">+300% Wert</span>
+                                <div class="ing-risk-indicator">
+                                    <span>Extreme Gefahr (+50% Instabilität)</span>
+                                    <div class="risk-dots"><span class="active"></span><span class="active"></span><span class="active"></span><span class="danger-dot active"></span></div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB CONTENT 2: LABOR (Designs & Upgrades) -->
+                <div class="tab-content hidden" id="tab-content-lab">
+                    <p class="panel-subtitle">Schalte magische Kessel-Skins frei und rüste passive Upgrades aus, um das Risiko zu senken oder Gewinne zu boosten.</p>
+                    
+                    <div class="labor-scroll-area">
+                        <!-- Designs Section -->
+                        <div class="labor-section">
+                            <h4 class="labor-title"><i class="fa-solid fa-palette"></i> Kessel-Designs</h4>
+                            <div class="themes-grid">
+                                <!-- Design 1: Default -->
+                                <div class="theme-card equipped" id="theme-card-default">
+                                    <div class="theme-preview theme-preview-default">🔮</div>
+                                    <div class="theme-details">
+                                        <h5>Gusskessel</h5>
+                                        <p>Dein eiserner Standardkessel.</p>
+                                        <button type="button" class="btn btn-theme" id="btn-theme-default">AUSGERÜSTET</button>
+                                    </div>
+                                </div>
+                                <!-- Design 2: Eis-Kelch -->
+                                <div class="theme-card locked" id="theme-card-ice">
+                                    <div class="theme-preview theme-preview-ice">❄️</div>
+                                    <div class="theme-details">
+                                        <h5>Eis-Kelch</h5>
+                                        <p>Kristalliner Frost-Kelch. (Stufe 2)</p>
+                                        <button type="button" class="btn btn-theme" id="btn-theme-ice" disabled><i class="fa-solid fa-lock"></i> SPERRE</button>
+                                    </div>
+                                </div>
+                                <!-- Design 3: Vulkan-Topf -->
+                                <div class="theme-card locked" id="theme-card-volcano">
+                                    <div class="theme-preview theme-preview-volcano">🌋</div>
+                                    <div class="theme-details">
+                                        <h5>Vulkan-Topf</h5>
+                                        <p>Glühende Magma-Struktur. (Stufe 4)</p>
+                                        <button type="button" class="btn btn-theme" id="btn-theme-volcano" disabled><i class="fa-solid fa-lock"></i> SPERRE</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Passive Upgrades Section -->
+                        <div class="labor-section">
+                            <h4 class="labor-title"><i class="fa-solid fa-circle-nodes"></i> Labor-Upgrades</h4>
+                            <div class="upgrades-list">
+                                <!-- Upgrade 1: Kupfer-Filter -->
+                                <div class="upgrade-card locked" id="up-card-copper">
+                                    <div class="up-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                                    <div class="up-details">
+                                        <h5>Kupfer-Filter (Stufe 3)</h5>
+                                        <p>-10% Instabilität bei jeder Zutat.</p>
+                                        <button type="button" class="btn btn-upgrade" id="btn-upgrade-copper" disabled><i class="fa-solid fa-lock"></i> SPERRE</button>
+                                    </div>
+                                </div>
+                                <!-- Upgrade 2: Katalysator-Kristall -->
+                                <div class="upgrade-card locked" id="up-card-crystal">
+                                    <div class="up-icon-box"><i class="fa-solid fa-gem"></i></div>
+                                    <div class="up-details">
+                                        <h5>Katalysator-Kristall (Stufe 5)</h5>
+                                        <p>+10% Bonus auf alle Payouts.</p>
+                                        <button type="button" class="btn btn-upgrade" id="btn-upgrade-crystal" disabled><i class="fa-solid fa-lock"></i> SPERRE</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB CONTENT 3: STATS & ERFOLGE -->
+                <div class="tab-content hidden" id="tab-content-stats">
+                    <div class="stats-dashboard">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-rounds">0</span>
+                                <span class="stat-lbl">Braugänge</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-wins">0%</span>
+                                <span class="stat-lbl">Erfolge</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-record">1.00x</span>
+                                <span class="stat-lbl">Rekord</span>
+                            </div>
+                        </div>
+
+                        <!-- Canvas-based line chart of balances -->
+                        <div class="chart-wrapper">
+                            <h4 class="chart-title">Guthaben-Entwicklung</h4>
+                            <div class="canvas-chart-container">
+                                <canvas id="stats-chart" width="330" height="130"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievements book -->
+                    <div class="achievements-section">
+                        <h4 class="achievements-title"><i class="fa-solid fa-medal"></i> Erfolge-Buch</h4>
+                        <div class="achievements-list" id="achievements-list">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER: Verlauf & Kontrollen -->
+        <footer class="game-footer">
+            <div class="history-panel">
+                <span class="history-label">LETZTE TRÄNKE:</span>
+                <div class="history-list" id="history-list">
+                    <!-- Dynamisch befüllt -->
+                    <div class="history-empty">Keine Tränke gebraut</div>
+                </div>
+            </div>
+            
+            <div class="footer-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Spielanleitung">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <!-- NEW: Admin control button V4.0 -->
+                <button type="button" class="btn btn-icon" id="btn-admin" title="Admin-Einstellungen">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Spielanleitung -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Spielanleitung</h2>
+            <div class="modal-body">
+                <p>Willkommen beim <strong>Alchemisten-Gold</strong>! Hier braust du wertvolle Tränke, um dein Guthaben zu vermehren. Doch Vorsicht: Magische Brauprozesse sind höchst instabil!</p>
+                
+                <h3>Ablauf des Spiels:</h3>
+                <ol>
+                    <li>Wähle deinen <strong>Wetteinsatz</strong> aus und klicke auf <strong>"Brauen starten"</strong>. Der Kessel wird erhitzt.</li>
+                    <li>Wähle nacheinander <strong>Zutaten</strong> aus dem Regal, um sie in den Kessel zu werfen.</li>
+                    <li>Jede Zutat erhöht deinen <strong>Trankwert-Multiplikator</strong>. Aber Achtung: Sie erhöhen auch die <strong>Kessel-Instabilität</strong>!</li>
+                    <li>Erreicht die Instabilität <strong>100%</strong>, explodiert der Kessel. Dein Trank geht verloren und der Einsatz ist verloren!</li>
+                    <li>Klicke jederzeit auf <strong>"Trank abfüllen"</strong>, um den aktuellen Multiplikator als Gewinn einzustreichen und die Runde siegreich zu beenden.</li>
+                </ol>
+
+                <h3>💡 Magische Phänomene (Wildcards):</h3>
+                <p>Bei jedem Hinzufügen einer Zutat besteht eine **10%-Chance**, ein zufälliges magisches Phänomen auszulösen:</p>
+                <ul>
+                    <li><strong class="color-dew">❄️ Frost-Schild:</strong> Gefriert den Kessel, sodass die Zutat **0% zusätzliche Instabilität** verursacht.</li>
+                    <li><strong class="color-green">🧪 Stabilitäts-Trank:</strong> Zieht sofort **-15% Instabilität** vom Kessel ab.</li>
+                    <li><strong class="color-gold">✨ Glücks-Katalysator:</strong> Erzeugt eine goldene Reaktion und **verdoppelt** den aktuellen Multiplikator!</li>
+                </ul>
+
+                <h3>💡 Auto-Auszahlung:</h3>
+                <p>Aktiviere die Auto-Auszahlung und stelle deinen Ziel-Wert ein. Das Spiel sichert deinen Trank automatisch ab, sobald der Multiplikator erreicht ist!</p>
+
+                <h3>🏆 Alchemisten-Level & Labor-Upgrades:</h3>
+                <p>Durch Brauvorgänge (+5 XP), Gewinne (+25 XP * Multiplikator) und Erfolge (+200 XP) sammelst du Erfahrungspunkte. Steige im Level auf, um exklusive Vorteile freizuschalten:</p>
+                <ul>
+                    <li><strong>Stufe 2:</strong> Eis-Kelch Design freischaltbar (Ändert das Canvas-Aussehen in ein blaues Kristallbad).</li>
+                    <li><strong>Stufe 3:</strong> Kupfer-Filter freischaltbar (Passive Reduzierung aller Kesselinstabilitäten um -10%).</li>
+                    <li><strong>Stufe 4:</strong> Vulkan-Topf Design freischaltbar (Ändert das Canvas-Aussehen in brodelndes Lava-Magma).</li>
+                    <li><strong>Stufe 5:</strong> Katalysator-Kristall freischaltbar (Ergibt einen dauerhaften +10% Bonus auf alle Gewinne).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: MODAL: Willkommens-Tutorial V4.0 -->
+    <div class="modal hidden" id="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcome-modal-title">
+        <div class="modal-content welcome-modal-content">
+            <h2 id="welcome-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Willkommen beim Alchemisten-Gold!</h2>
+            <div class="welcome-body">
+                <p class="welcome-intro">Ein revolutionäres Casino-Spiel, bei dem du das Schicksal selbst in die Hand nimmst. Braue goldene Tränke und vervielfache deinen Einsatz, doch halte die Explosionsgefahr im Auge!</p>
+                
+                <div class="tutorial-steps-grid">
+                    <div class="tut-step">
+                        <span class="step-num">1</span>
+                        <h5>Einsatz wählen</h5>
+                        <p>Lege deinen Wetteinsatz fest und klicke auf "Brauen starten". Der Kessel erhitzt sich.</p>
+                    </div>
+                    <div class="tut-step">
+                        <span class="step-num">2</span>
+                        <h5>Zutaten mischen</h5>
+                        <p>Wirf Zutaten ein. Jede Zutat steigert deinen Multiplikator, erhöht aber die Explosionsgefahr.</p>
+                    </div>
+                    <div class="tut-step">
+                        <span class="step-num">3</span>
+                        <h5>Abfüllen (Cashout)</h5>
+                        <p>Klicke rechtzeitig auf "Trank abfüllen", um den Gewinn zu sichern. Bei 100% explodiert der Kessel und der Einsatz ist verloren!</p>
+                    </div>
+                </div>
+
+                <div class="why-better-section">
+                    <h4><i class="fa-solid fa-sparkles"></i> Warum Alchemisten-Gold besser ist als klassische Crash-Spiele:</h4>
+                    <table class="comparison-table">
+                        <thead>
+                           <tr>
+                               <th>Feature</th>
+                               <th>Standard Crash (z.B. Aviator)</th>
+                               <th>Alchemisten-Gold 🧙‍♂️</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                               <td><strong>Entscheidung</strong></td>
+                               <td>Nur zuschauen & abwarten (Passiv)</td>
+                               <td>Zutaten selbst wählen & timen (Aktiv)</td>
+                           </tr>
+                           <tr>
+                               <td><strong>Überraschungen</strong></td>
+                               <td>Keine</td>
+                               <td>Zufällige Wildcards (z.B. Frost-Schild)</td>
+                           </tr>
+                           <tr>
+                               <td><strong>Langzeitmotivation</strong></td>
+                               <td>Gleichbleibend</td>
+                               <td>Stufen, Kessel-Skins & passive Upgrades</td>
+                           </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="welcome-footer">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="chk-hide-welcome">
+                        <label for="chk-hide-welcome">Diese Anleitung beim Start nicht mehr anzeigen</label>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-large" id="btn-welcome-close">LASS UNS BRAUEN!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: MODAL: Admin-Einstellungen V4.0 -->
+    <div class="modal hidden" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <div class="modal-content admin-modal-content">
+            <button type="button" class="modal-close" id="btn-close-admin" aria-label="Schließen">&times;</button>
+            <h2 id="admin-title"><i class="fa-solid fa-sliders"></i> Alchemisten-Kontrollzentrum</h2>
+            <p class="panel-subtitle">Justiere die Gewinnchancen und den Hausvorteil des Kessels in Echtzeit über mathematische Parameter.</p>
+            
+            <div class="admin-body">
+                <!-- Spielmodus Auswahl -->
+                <div class="control-group">
+                    <div class="slider-header">
+                        <label for="select-game-mode">Spielmodus:</label>
+                    </div>
+                    <select id="select-game-mode" class="admin-select" style="width: 100%; padding: 10px; background: rgba(5, 3, 10, 0.8); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: var(--transition-smooth);">
+                        <option value="standard">Standard (Kurvenbasiertes Risiko)</option>
+                        <option value="casino">Casino-Modus (Feste Gewinnquote)</option>
+                    </select>
+                    <p class="slider-note">Wähle, ob der Kessel nach der mathematischen Kurve oder einer festen Auszahlungsquote gesteuert wird.</p>
+                </div>
+
+                <!-- Regler 1: riskExponent -->
+                <div class="control-group" id="group-exponent">
+                    <div class="slider-header">
+                        <label for="slide-exponent">Risiko-Exponent (Kurvensteilheit): <span id="val-exponent">2.5</span></label>
+                    </div>
+                    <input type="range" id="slide-exponent" min="1.5" max="4.0" step="0.1" value="2.5" class="admin-slider">
+                    <p class="slider-note">Steuert die Formel: <strong>P = (Instabilität / 100)<sup>Exponent</sup> × Schwierigkeit</strong>. Ein höherer Exponent (z.B. 3.5) flacht die Risikokurve bei geringer Hitze ab und macht das Spiel leichter für den Spieler.</p>
+                </div>
+
+                <!-- Regler 2: difficultyMultiplier -->
+                <div class="control-group" id="group-multiplier">
+                    <div class="slider-header">
+                        <label for="slide-multiplier">Schwierigkeits-Multiplikator: <span id="val-multiplier">1.0</span></label>
+                    </div>
+                    <input type="range" id="slide-multiplier" min="0.5" max="2.0" step="0.1" value="1.0" class="admin-slider">
+                    <p class="slider-note">Skaliert die gesamte Explosionswahrscheinlichkeit linear. Kleinere Werte (z.B. 0.8) verringern das Gesamtrisiko des Kessels um 20%.</p>
+                </div>
+
+                <!-- Regler 3: Casino Gewinnquote -->
+                <div class="control-group hidden" id="group-win-rate">
+                    <div class="slider-header">
+                        <label for="slide-win-rate">Casino-Gewinnquote: <span id="val-win-rate">25%</span></label>
+                    </div>
+                    <input type="range" id="slide-win-rate" min="5" max="95" step="5" value="25" class="admin-slider">
+                    <p class="slider-note">Legt den Prozentsatz der Runden fest, die auf lange Sicht mit einer erfolgreichen Auszahlung enden sollen. Der Kessel erzwingt diese Quote im Casino-Modus im Hintergrund.</p>
+                </div>
+
+                <!-- Live Probability / Info Panel -->
+                <div class="live-math-panel">
+                    <h4 id="preview-title">📊 Berechnete Explosionswahrscheinlichkeiten (Live-Vorschau):</h4>
+                    <div class="live-math-grid" id="preview-math-grid">
+                        <div class="math-card">
+                            <span class="math-pct" id="math-pct-20">0.0%</span>
+                            <span class="math-lbl">Bei 20% Hitze</span>
+                        </div>
+                        <div class="math-card">
+                            <span class="math-pct" id="math-pct-50">0.0%</span>
+                            <span class="math-lbl">Bei 50% Hitze</span>
+                        </div>
+                        <div class="math-card">
+                            <span class="math-pct" id="math-pct-80">0.0%</span>
+                            <span class="math-lbl">Bei 80% Hitze</span>
+                        </div>
+                    </div>
+                    <div class="math-card hidden" id="preview-casino-info" style="width: 100%; border: 1px solid var(--border-color); background: rgba(10, 6, 20, 0.4); padding: 15px; text-align: left;">
+                        <span class="math-pct" id="casino-info-pct" style="color: var(--color-cyan); font-size: 1.4rem; display: block; margin-bottom: 5px;">25% Gewinn / 75% Verlust</span>
+                        <span class="math-lbl" style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Im Casino-Modus wird das Rundenergebnis beim Braustart vorentschieden, um die eingestellte Auszahlungsquote langfristig exakt zu sichern. Das Risiko steigt nicht stufenweise nach der Kurve an.</span>
+                    </div>
+                </div>
+                
+                <div class="admin-actions">
+                    <button type="button" class="btn btn-preset" id="btn-admin-reset">STANDARDWERTE</button>
+                    <button type="button" class="btn btn-primary" id="btn-admin-save">SPEICHERN & SCHLIESSEN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level-Up Congratulatory Modal -->
+    <div class="modal hidden" id="level-modal" role="dialog" aria-modal="true" aria-labelledby="level-modal-title">
+        <div class="modal-content level-up-content">
+            <h2 id="level-modal-title"><i class="fa-solid fa-circle-up"></i> STUFE UP!</h2>
+            <div class="level-up-body">
+                <div class="level-up-badge">
+                    <span class="level-up-num" id="modal-level-num">2</span>
+                </div>
+                <p class="level-up-congrats">Du hast Stufe <span id="modal-level-txt">2</span> im Alchemisten-Orden erreicht!</p>
+                <div class="level-up-unlocks">
+                    <h4>Neu freigeschaltet:</h4>
+                    <div class="unlock-item" id="modal-unlock-item">
+                        <span class="unlock-icon" id="modal-unlock-icon">❄️</span>
+                        <div class="unlock-details">
+                            <h5 id="modal-unlock-title">Eis-Kelch Design</h5>
+                            <p id="modal-unlock-desc">Passe das Aussehen deines Kessels im Labor-Tab an.</p>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-large" id="btn-level-close">WEITERBRAUEN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Script Referenz -->
+    <script src="app.js"></script>
+</body>
+</html>

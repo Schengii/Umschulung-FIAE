@@ -1,0 +1,59 @@
+{
+  "name": "electro-check-ai",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start-backend": "node backend/index.js",
+    "dev": "concurrently \"vite\" \"npm run start-backend\"",
+    "build": "tsc && vite build",
+    "lint": "eslint \"src/**/*.{ts,js}\" --max-warnings=0",
+    "prepare": "husky install",
+    "test": "npm run test --prefix backend",
+    "preview": "vite preview",
+    "cap:sync": "cap sync",
+    "cap:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/geolocation": "^8.2.0",
+    "@capacitor/network": "^8.0.1",
+    "@google/generative-ai": "^0.24.1",
+    "@vaadin/button": "^25.1.0",
+    "@vaadin/icons": "^25.1.0",
+    "@vaadin/progress-bar": "^25.1.0",
+    "@vaadin/text-area": "^25.1.0",
+    "@vaadin/text-field": "^25.1.0",
+    "@vaadin/vaadin-lumo-styles": "^25.1.0",
+    "@vaadin/vertical-layout": "^25.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "html5-qrcode": "^2.3.8",
+    "lit": "^3.3.2",
+    "pdfmake": "^0.3.7"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.3.0",
+    "@types/pdfmake": "^0.3.2",
+    "concurrently": "^8.2.2",
+    "eslint": "^10.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.20.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js,css,md}": [
+      "eslint --fix"
+    ]
+  },
+  "overrides": {
+    "lit": "$lit",
+    "@lit/reactive-element": "^2.0.4",
+    "lit-html": "^3.1.2",
+    "lit-element": "^4.0.4"
+  }
+}

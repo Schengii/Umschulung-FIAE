@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Akademie: Athanor-Würfeln</title>
+    <!-- Google Fonts for magical & modern style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-dice magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-GOLD</h1>
+                    <span>ATHANOR-WÜRFELN</span>
+                </div>
+            </div>
+
+            <!-- Navigation to other games -->
+            <nav class="game-nav" style="display: flex; gap: 8px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-cauldron"><i class="fa-solid fa-fire-burner"></i> Kessel</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Spins</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Plinko</a>
+                <a href="../mines/index.html" class="btn btn-nav-mines"><i class="fa-solid fa-gem"></i> Minen</a>
+                <a href="../roulette/index.html" class="btn btn-nav-roulette"><i class="fa-solid fa-spinner"></i> Roulette</a>
+            </nav>
+            
+            <!-- Header Stats container for Balance and Level Progress -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Bet & Mode Selection -->
+            <section class="panel bet-panel" aria-label="Steuerung">
+                <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Spielsteuerung</h2>
+                
+                <!-- Wetteinsatz -->
+                <div class="control-group">
+                    <label class="control-label" for="bet-input">Wetteinsatz</label>
+                    <div class="bet-input-container">
+                        <input type="number" id="bet-input" value="10.00" min="1.00" max="500.00" step="1.00" class="bet-input">
+                        <span class="bet-currency-tag">€</span>
+                    </div>
+                </div>
+
+                <div class="bet-presets">
+                    <button type="button" class="btn btn-preset" id="btn-bet-min">MIN</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-half">½</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-double">2x</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-max">MAX</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Modus-Wahl -->
+                <div class="control-group">
+                    <label class="control-label">Spielmodus</label>
+                    <div class="mode-tabs">
+                        <button type="button" class="btn mode-tab-btn active" id="btn-mode-duel">
+                            <i class="fa-solid fa-user-shield"></i> Element-Duell
+                        </button>
+                        <button type="button" class="btn mode-tab-btn" id="btn-mode-predict">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Vorhersage
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modus-spezifische Optionen -->
+                <div class="mode-options-container">
+                    <!-- Duel-Info -->
+                    <div class="mode-options-pane" id="pane-duel">
+                        <p class="mode-desc-text">Würfle im Athanor-Ofen gegen den Rektor. Der höhere Gesamtwert gewinnt. (Auszahlung: 1.90x. Bei Gleichstand wird der Einsatz erstattet.)</p>
+                    </div>
+                    
+                    <!-- Prediction-Optionen -->
+                    <div class="mode-options-pane hidden" id="pane-predict">
+                        <p class="mode-desc-text" style="margin-bottom: 10px;">Sage die Augensumme der zwei alchemistischen Würfel voraus:</p>
+                        <div class="prediction-buttons">
+                            <button type="button" class="btn predict-btn" data-predict="under" id="btn-predict-under">
+                                <span>Unter 7</span>
+                                <span class="predict-mult">2.00x</span>
+                            </button>
+                            <button type="button" class="btn predict-btn" data-predict="seven" id="btn-predict-seven">
+                                <span>Genau 7</span>
+                                <span class="predict-mult">5.00x</span>
+                            </button>
+                            <button type="button" class="btn predict-btn" data-predict="over" id="btn-predict-over">
+                                <span>Über 7</span>
+                                <span class="predict-mult">2.00x</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Würfeln Action Button -->
+                <div class="game-actions">
+                    <button type="button" class="btn btn-primary btn-large" id="btn-roll">
+                        <i class="fa-solid fa-dice"></i> ATHANOR HEIZEN & WÜRFELN
+                    </button>
+                </div>
+
+                <!-- Game Status Ticker -->
+                <div class="status-meter" aria-live="polite">
+                    <div class="status-header">
+                        <span>Aktueller Status</span>
+                        <span id="game-status-text" role="status">Platziere deine Wette</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER: Interactive Dice Chamber -->
+            <section class="grid-viewport" aria-label="Würfelkammer">
+                <div class="dice-chamber">
+                    <div class="athanor-oven-visual">
+                        <div class="fire-glow"></div>
+                        
+                        <!-- Duel Layout -->
+                        <div class="duel-arena" id="duel-arena">
+                            <!-- Player Box -->
+                            <div class="die-box player-box">
+                                <div class="box-label">ALCHEMIST (DU)</div>
+                                <div class="dice-container" id="player-dice">
+                                    <!-- Die 1 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="p-die-1">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Die 2 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="p-die-2">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roll-result-sum" id="player-sum">-</div>
+                            </div>
+
+                            <div class="vs-divider">VS</div>
+
+                            <!-- Rector Box -->
+                            <div class="die-box rector-box" id="rector-box">
+                                <div class="box-label">REKTOR</div>
+                                <div class="dice-container" id="rector-dice">
+                                    <!-- Die 1 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="r-die-1">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Die 2 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="r-die-2">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roll-result-sum" id="rector-sum">-</div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Layout (Faded background) -->
+                        <div class="predict-arena hidden" id="predict-arena">
+                            <div class="die-box predict-box">
+                                <div class="box-label">ALCHEMISTISCHES WÜRFELPAAR</div>
+                                <div class="dice-container center-dice" id="predict-dice">
+                                    <!-- Die 1 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="pr-die-1">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Die 2 -->
+                                    <div class="die-wrapper">
+                                        <div class="die-3d" id="pr-die-2">
+                                            <div class="die-face face-1"></div>
+                                            <div class="die-face face-2"></div>
+                                            <div class="die-face face-3"></div>
+                                            <div class="die-face face-4"></div>
+                                            <div class="die-face face-5"></div>
+                                            <div class="die-face face-6"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roll-result-sum large-sum" id="predict-sum">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overlay for results -->
+                    <div class="grid-overlay hidden" id="grid-overlay">
+                        <div class="overlay-content">
+                            <h2 class="overlay-title" id="overlay-title">SIEG!</h2>
+                            <p class="overlay-subtitle" id="overlay-subtitle">Du hast den Rektor im Duell bezwungen.</p>
+                            <button class="btn btn-primary" id="btn-overlay-close">WEITERKÄMPFEN</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: History & Stats -->
+            <section class="panel history-panel-side" aria-label="Verlauf">
+                <h2 class="panel-title"><i class="fa-solid fa-scroll"></i> Ofen-Protokoll</h2>
+                <p class="panel-subtitle">Aufzeichnungen der letzten alchemistischen Schmelzvorgänge an den Würfeln.</p>
+                
+                <div class="stats-counter-row">
+                    <div class="stat-bubble">
+                        <span class="bubble-lbl">Runden</span>
+                        <span class="bubble-val" id="stat-rounds">0</span>
+                    </div>
+                    <div class="stat-bubble">
+                        <span class="bubble-lbl">Siege</span>
+                        <span class="bubble-val" id="stat-wins">0</span>
+                    </div>
+                    <div class="stat-bubble">
+                        <span class="bubble-lbl">Erfolg %</span>
+                        <span class="bubble-val" id="stat-winrate">0%</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <h3 class="subsection-title"><i class="fa-solid fa-history"></i> Schmelz-Historie</h3>
+                <div class="history-list-side" id="history-list">
+                    <div class="history-empty">Keine Würfe verzeichnet</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER: Verlauf & Kontrollen -->
+        <footer class="game-footer">
+            <div class="footer-note">
+                <span class="note-label">REKTORS-WEISHEIT:</span>
+                <span class="note-content">"Das Schicksal rollt wie flüssiges Blei, doch der Verstand bändigt das Chaos."</span>
+            </div>
+            
+            <div class="footer-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Spielanleitung">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Spielanleitung -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-circle-question"></i> Spielanleitung</h2>
+            <div class="modal-body">
+                <p>Willkommen am <strong>Athanor-Ofen</strong>, dem heiligen Würfel-Chamber der Akademie!</p>
+                <p>Hier nutzen wir die Hitze des Feuers, um die Würfel des Schicksals in zwei Modi schmelzen zu lassen.</p>
+                
+                <h3>Die Spielmodi:</h3>
+                <ul>
+                    <li><strong>Element-Duell:</strong> 
+                        <p>Tritt direkt gegen den Rektor an. Beide Parteien rollen 2 Würfel. Die höhere Summe gewinnt. Bei Sieg wird dein Einsatz mit <strong>1.90x</strong> ausbezahlt. Steht es Unentschieden, erhältst du deinen Einsatz zurück.</p>
+                    </li>
+                    <li><strong>Vorhersage-Mischung:</strong> 
+                        <p>Platziere deine Wette auf das Ergebnis des alchemistischen Würfelpaars:</p>
+                        <ul>
+                            <li><strong>Unter 7</strong> (Summe 2, 3, 4, 5, 6) &rarr; Auszahlung <strong>2.00x</strong></li>
+                            <li><strong>Über 7</strong> (Summe 8, 9, 10, 11, 12) &rarr; Auszahlung <strong>2.00x</strong></li>
+                            <li><strong>Genau 7</strong> (Magische Zahl) &rarr; Auszahlung <strong>5.00x</strong></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Risiko-Mischen:</h3>
+                <p>Nach jedem Sieg kannst du entscheiden, das Gold im <strong>Risiko-Mischen</strong> (Rot/Blau-Reagenzien) zu vervielfachen oder es sicher auf dein Konto einzuzahlen!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

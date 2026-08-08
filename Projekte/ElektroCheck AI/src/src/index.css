@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Design Tokens - Light Mode (Optimiert für hohe Kontraste und Barrierefreiheit) */
+  --bg-app: #f1f5f9;       /* Etwas dunklerer Hintergrund, damit weiße Karten besser kontrastieren */
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;   /* Sehr dunkles Slate für optimalen Textkontrast */
+  --text-secondary: #334155; /* Slate 700 - erhöht von Slate 600 für bessere Lesbarkeit */
+  --text-muted: #475569;     /* Slate 600 - erhöht von Slate 500 */
+  
+  --primary: #0277bd;        /* Dunkleres Blau für besseren Kontrast auf weißem Grund */
+  --primary-hover: #01579b;
+  --primary-glow: rgba(2, 119, 189, 0.15);
+  
+  --success: #0b8a5a;        /* Dunkleres Grün für bessere Sichtbarkeit bei Rot-Grün-Schwäche */
+  --success-glow: rgba(11, 138, 90, 0.15);
+  
+  --warning: #d97706;        /* Dunkleres Orange/Amber für bessere Lesbarkeit */
+  --warning-glow: rgba(217, 119, 6, 0.15);
+  
+  --danger: #dc2626;         /* Signalrot für Gefahrenbereiche */
+  --danger-glow: rgba(220, 38, 38, 0.15);
+  
+  --border: #64748b;         /* Deutlich dunklerer Rahmen (Slate 500) für klare Abgrenzung der Felder */
+  --border-focus: #0277bd;
+  
+  --radius-s: 8px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px 0 rgba(2, 119, 189, 0.15);
+
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light dark;
+
+  /* Safe area insets (für Notch, Dynamic Island, Punch-Hole Kameras) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* Responsive spacing tokens */
+  --spacing-xs: 0.375rem;
+  --spacing-s: 0.5rem;
+  --spacing-m: 1rem;
+  --spacing-l: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Vaadin (Lumo Theme) Overrides für maximale Kontraste im Lightmode */
+  --lumo-contrast-10pct: #e2e8f0;      /* Sichtbarer Hintergrund für Felder */
+  --lumo-contrast-20pct: #cbd5e1;
+  --lumo-contrast-30pct: #475569;      /* Dunklerer, sichtbarer Rahmen */
+  --lumo-body-text-color: #0f172a;
+  --lumo-secondary-text-color: #334155;
+  --lumo-primary-color: #0277bd;
+  --lumo-primary-text-color: #0277bd;
+  --lumo-text-field-border-width: 2px; /* Dickere Ränder für Barrierefreiheit */
+  --lumo-border-radius-m: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([theme="light"]) {
+    /* Design Tokens - Dark Mode */
+    --bg-app: #090d16;
+    --bg-card: #151f32;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    
+    --primary: #38bdf8;
+    --primary-hover: #7dd3fc;
+    --primary-glow: rgba(56, 189, 248, 0.25);
+    
+    --success: #34d399;
+    --success-glow: rgba(52, 211, 153, 0.25);
+    
+    --warning: #fbbf24;
+    --warning-glow: rgba(251, 191, 36, 0.25);
+    
+    --danger: #f87171;
+    --danger-glow: rgba(248, 113, 113, 0.25);
+    
+    --border: #334155;
+    --border-focus: #38bdf8;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 25px 0 rgba(56, 189, 248, 0.2);
+
+    /* Vaadin (Lumo Theme) Overrides im Darkmode */
+    --lumo-contrast-10pct: rgba(255, 255, 255, 0.08);
+    --lumo-contrast-20pct: rgba(255, 255, 255, 0.15);
+    --lumo-contrast-30pct: #334155;
+    --lumo-body-text-color: #f8fafc;
+    --lumo-secondary-text-color: #cbd5e1;
+    --lumo-primary-color: #38bdf8;
+    --lumo-primary-text-color: #38bdf8;
+    --lumo-text-field-border-width: 1px;
+    --lumo-border-radius-m: 8px;
+  }
+}
+
+:root[theme="dark"] {
+  /* Design Tokens - Dark Mode */
+  --bg-app: #090d16;
+  --bg-card: #151f32;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  --primary: #38bdf8;
+  --primary-hover: #7dd3fc;
+  --primary-glow: rgba(56, 189, 248, 0.25);
+  
+  --success: #34d399;
+  --success-glow: rgba(52, 211, 153, 0.25);
+  
+  --warning: #fbbf24;
+  --warning-glow: rgba(251, 191, 36, 0.25);
+  
+  --danger: #f87171;
+  --danger-glow: rgba(248, 113, 113, 0.25);
+  
+  --border: #334155;
+  --border-focus: #38bdf8;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 25px 0 rgba(56, 189, 248, 0.2);
+
+  /* Vaadin (Lumo Theme) Overrides im Darkmode */
+  --lumo-contrast-10pct: rgba(255, 255, 255, 0.08);
+  --lumo-contrast-20pct: rgba(255, 255, 255, 0.15);
+  --lumo-contrast-30pct: #334155;
+  --lumo-body-text-color: #f8fafc;
+  --lumo-secondary-text-color: #cbd5e1;
+  --lumo-primary-color: #38bdf8;
+  --lumo-primary-text-color: #38bdf8;
+  --lumo-text-field-border-width: 1px;
+  --lumo-border-radius-m: 8px;
+}
+
+/* Handschuh-Modus (Glove-Friendly Touch Target Scaling) */
+:root[glove-mode="true"] button,
+:root[glove-mode="true"] vaadin-button,
+:root[glove-mode="true"] select,
+:root[glove-mode="true"] input {
+  min-height: 54px !important;
+  font-size: 1.15rem !important;
+  padding: 0.8rem 1.4rem !important;
+}
+
+/* High-Contrast Outdoor Theme (Optimiert für starkes Sonnenlicht) */
+:root[high-contrast="true"] {
+  --bg-app: #000000 !important;
+  --bg-card: #050505 !important;
+  --text-primary: #ffffff !important;
+  --text-secondary: #ffffff !important;
+  --border: #ffff00 !important;
+  --primary: #ffff00 !important;
+  --primary-hover: #e6e600 !important;
+}
+
+
+:root[theme="light"] {
+  /* Design Tokens - Light Mode */
+  --bg-app: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  
+  --primary: #0277bd;
+  --primary-hover: #01579b;
+  --primary-glow: rgba(2, 119, 189, 0.15);
+  
+  --success: #0b8a5a;
+  --success-glow: rgba(11, 138, 90, 0.15);
+  
+  --warning: #d97706;
+  --warning-glow: rgba(217, 119, 6, 0.15);
+  
+  --danger: #dc2626;
+  --danger-glow: rgba(220, 38, 38, 0.15);
+  
+  --border: #64748b;
+  --border-focus: #0277bd;
+
+  /* Vaadin (Lumo Theme) Overrides im Lightmode */
+  --lumo-contrast-10pct: #e2e8f0;
+  --lumo-contrast-20pct: #cbd5e1;
+  --lumo-contrast-30pct: #475569;
+  --lumo-body-text-color: #0f172a;
+  --lumo-secondary-text-color: #334155;
+  --lumo-primary-color: #0277bd;
+  --lumo-primary-text-color: #0277bd;
+  --lumo-text-field-border-width: 2px;
+  --lumo-border-radius-m: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Responsive Basis-Schriftgröße */
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* Safe Area Support für Notch-Geräte (Galaxy S24 Ultra, iPhone etc.) */
+  padding-top: var(--safe-top);
+  padding-right: var(--safe-right);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic Viewport Height für mobile Browser */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Prevent iOS bounce scroll */
+  overscroll-behavior-y: none;
+  /* Smooth scrolling für mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* WCAG accessibility: universal focus ring helper */
+*:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Ensure buttons have minimum size for touch inputs (Mobile App Richtlinien - WCAG 2.5.8) */
+button, 
+.klickbare-karte, 
+vaadin-button {
+  min-height: 44px;
+  min-width: 44px;
+  font-family: var(--font-sans);
+  /* Touch-Bereich für mobile: 48dp empfohlen */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   RESPONSIVE BREAKPOINTS
+   Mobile-First Approach:
+   - Small phones (320px - 374px): Galaxy S-Mini, SE
+   - Standard phones (375px - 411px): iPhone, Galaxy S
+   - Large phones (412px+): Galaxy S24 Ultra, Pixel
+   - Tablets (768px+): iPad, Galaxy Tab
+   - Desktop (1024px+)
+   ========================================= */
+
+/* === SMALL PHONES (320px - 374px) === */
+@media screen and (max-width: 374px) {
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    padding-left: max(var(--safe-left), 8px);
+    padding-right: max(var(--safe-right), 8px);
+  }
+}
+
+/* === STANDARD PHONES (375px - 411px) === */
+@media screen and (min-width: 375px) and (max-width: 411px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* === LARGE PHONES (412px+ z.B. Galaxy S24 Ultra: 412dp) === */
+@media screen and (min-width: 412px) and (max-width: 767px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* === TABLETS (768px+) === */
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* === DESKTOP (1024px+) === */
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* =========================================
+   LRS (Dyslexia / Lese-Hilfe) Accessibility Mode
+   ========================================= */
+:root.accessible-reading,
+body.accessible-reading {
+  font-size: 1.125rem !important;
+  word-spacing: 0.15em !important;
+  letter-spacing: 0.05em !important;
+}
+
+:root.accessible-reading p,
+body.accessible-reading p,
+:root.accessible-reading span,
+body.accessible-reading span,
+:root.accessible-reading div,
+body.accessible-reading div,
+:root.accessible-reading label,
+body.accessible-reading label {
+  line-height: 1.75 !important;
+}
+
+/* =========================================
+   GLOBAL RESPONSIVE HELPERS
+   ========================================= */
+
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Improve input appearance on mobile */
+input, textarea, select {
+  font-size: 16px !important; /* Prevents iOS auto-zoom on focus */
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+/* Vaadin-specific mobile adjustments */
+vaadin-text-field,
+vaadin-text-area {
+  --lumo-text-field-size: var(--lumo-size-l);
+}
+
+@media screen and (max-width: 767px) {
+  vaadin-text-field,
+  vaadin-text-area {
+    --lumo-text-field-size: var(--lumo-size-l);
+    font-size: 16px !important;
+  }
+}
+

@@ -1,0 +1,329 @@
+/* ==========================================================================
+   ALCHEMISTEN-GOLD: ARENA STYLE SYSTEM (arena/style.css)
+   ========================================================================== */
+
+/* --- LAYOUT GRID --- */
+.game-layout {
+    display: flex;
+    gap: 25px;
+    margin-top: 25px;
+    min-height: calc(100vh - 140px);
+}
+
+.control-panel, .log-panel {
+    flex: 1;
+    min-width: 320px;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+}
+
+.arena-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 0 !important;
+    overflow: hidden;
+    min-height: 480px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+}
+
+/* --- THE BATTLEGROUND --- */
+.battleground {
+    background: radial-gradient(circle, rgba(74, 59, 100, 0.03) 0%, rgba(31, 18, 53, 0.08) 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0l40 40-40 40L0 40z' fill='%23251c38' fill-opacity='0.02'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-color: var(--bg-card);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px;
+    position: relative;
+}
+
+/* --- FIGHTER CARDS --- */
+.fighter-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow);
+    width: 85%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.enemy-side {
+    align-self: flex-start;
+    border-left: 5px solid var(--color-danger);
+}
+
+.player-side {
+    align-self: flex-end;
+    border-left: 5px solid var(--color-purple);
+}
+
+/* Avatars */
+.avatar-container {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(31, 18, 53, 0.05);
+    border: 2px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+
+.fighter-stats .info {
+    flex-grow: 1;
+}
+
+.fighter-stats .name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+/* --- HEALTH & MANA BARS --- */
+.bar-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bar-outer {
+    height: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(31, 18, 53, 0.1);
+}
+
+.bar-inner {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hp-fill {
+    background: linear-gradient(to right, #16a34a, #22c55e);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.mp-fill {
+    background: linear-gradient(to right, #0284c7, #0ea5e9);
+    box-shadow: 0 0 8px rgba(14, 165, 233, 0.4);
+}
+
+/* Versus middle element */
+.vs-sign {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--border-color);
+    text-align: center;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin: 10px 0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* --- ARENA STATE OVERLAY --- */
+.arena-screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(251, 249, 244, 0.96);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.arena-screen-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.overlay-content {
+    max-width: 420px;
+    padding: 30px;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--bg-card);
+}
+
+.overlay-content h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--color-purple);
+    margin-bottom: 12px;
+}
+
+.overlay-content p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* --- CONTROL PANEL BUTTONS --- */
+.subsection-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin: 15px 0 8px 0;
+    border-left: 3px solid var(--color-purple);
+    padding-left: 8px;
+}
+
+.btn-action, .btn-spell {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 700;
+    padding: 10px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.btn-action:hover:not(:disabled), .btn-spell:hover:not(:disabled) {
+    border-color: var(--color-purple);
+    background: rgba(124, 58, 237, 0.05);
+    transform: translateY(-1px);
+}
+
+.btn-spell {
+    font-size: 0.78rem;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-spell .mp-cost {
+    font-size: 0.68rem;
+    color: var(--color-cyan);
+    font-weight: 800;
+}
+
+/* Potion inventory buttons */
+.btn-potion-use {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.btn-potion-use:hover:not(:disabled) {
+    border-color: var(--color-green);
+    background: rgba(22, 163, 74, 0.05);
+}
+
+.btn-potion-use .potion-count {
+    background: var(--color-purple);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 800;
+}
+
+/* Buff / Debuff Indicators */
+.buff-indicators {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.buff-badge {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.buff-badge.hermes { background: rgba(8, 145, 178, 0.1); color: var(--color-cyan); }
+.buff-badge.fortuna { background: rgba(22, 163, 74, 0.1); color: var(--color-green); }
+.buff-badge.aegis { background: rgba(124, 58, 237, 0.1); color: var(--color-purple); }
+.buff-badge.aether { background: rgba(180, 83, 9, 0.1); color: var(--color-gold); }
+
+/* --- LOG ENTRY STYLING --- */
+.log-entry {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed rgba(31, 18, 53, 0.06);
+}
+
+.log-entry.player { color: var(--color-purple); font-weight: 600; }
+.log-entry.enemy { color: var(--color-danger); font-weight: 600; }
+.log-entry.system { color: var(--text-secondary); font-style: italic; }
+.log-entry.win { color: var(--color-green); font-weight: 800; font-size: 0.85rem; }
+.log-entry.lose { color: var(--color-danger); font-weight: 800; font-size: 0.85rem; }
+
+/* --- DAMAGE/BUFF ANIMATIONS --- */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes flash {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.4) saturate(1.4); border-color: #fff; box-shadow: 0 0 25px rgba(255, 255, 255, 0.8); }
+}
+
+.attack-flash {
+    animation: flash 0.3s ease-out;
+}
+
+/* Loot elements */
+.loot-stat-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}

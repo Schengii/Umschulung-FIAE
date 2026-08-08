@@ -1,0 +1,370 @@
+﻿import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import Ajv from 'ajv';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+dotenv.config(); // Lädt Umgebungsvariablen aus .env
+
+const app = express();
+const port = process.env.PORT || 3000; // Port für den Backend-Server
+
+// Sicherheit: HTTP-Header härten
+app.use(helmet());
+
+// Einfaches Rate-Limiting für alle /api Aufrufe (InMemory, für Produktion Redis-Store empfehlen)
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 Minute
+  max: 30, // max 30 Anfragen pro IP pro Minute
+  standardHeaders: true,
+  legacyHeaders: false
+});
+app.use('/api/', apiLimiter);
+
+// JSON Schema Validator
+const ajv = new Ajv({ allErrors: true, removeAdditional: true });
+// Middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173' // Ersetze dies mit der tatsächlichen URL deiner Frontend-App im Produktionsmodus
+}));
+app.use(express.json({ limit: '50mb' })); // Erhöht das Limit für JSON-Payloads, um Base64-Bilder zu verarbeiten
+
+// Gemini API Key aus Umgebungsvariablen laden
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+if (GEMINI_API_KEY) {
+  console.log("GEMINI_API_KEY wurde erfolgreich geladen.");
+}
+
+if (!GEMINI_API_KEY) {
+  console.error("GEMINI_API_KEY ist in den Umgebungsvariablen nicht gesetzt!");
+  process.exit(1);
+}
+
+const getGenAIInstance = (req) => {
+  const userApiKey = req.headers['x-gemini-api-key'];
+  const apiKey = userApiKey || GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("API-Key nicht konfiguriert.");
+  }
+  return new GoogleGenerativeAI(apiKey);
+};
+
+// JSON-Schema für Fehlerdiagnose
+const diagnosisSchema = {
+  type: "object",
+  properties: {
+    deviceName: {
+      type: "string",
+      description: "Name des Geräts oder Bauteils"
+    },
+    identifiedDefect: {
+      type: "string",
+      description: "Kurze, präzise Beschreibung des Defekts"
+    },
+    recommendation: {
+      type: "string",
+      description: "Zusammenfassung der vorgeschlagenen Lösung"
+    },
+    actionSteps: {
+      type: "array",
+      description: "Schritt-für-Schritt-Anleitungen für die Reparatur, nummeriert und mit completed als false",
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "integer" },
+          text: { type: "string" },
+          completed: { type: "boolean" }
+        },
+        required: ["id", "text", "completed"]
+      }
+    },
+    estimatedRepairCost: {
+      type: "string",
+      description: "Geschätzte Kosten für die Reparatur"
+    },
+    repairDifficulty: {
+      type: "integer",
+      description: "Schwierigkeitsgrad von 1 (sehr leicht) bis 5 (Experte)"
+    },
+    safetyLevel: {
+      type: "string",
+      enum: ["SAFE", "WARNING", "DANGER"],
+      description: "Sicherheitsstufe basierend auf Gefahrenpotential"
+    },
+    additionalTips: {
+      type: "array",
+      items: { type: "string" },
+      description: "1-3 kurze Tipps zur Vermeidung oder Pflege"
+    },
+    sparePartSearchTerm: {
+      type: "string",
+      description: "Exakter Suchbegriff für benötigte Ersatzteile"
+    },
+    customerExperience: {
+      type: "string",
+      description: "Erfahrungswerte: Ist dies ein typischer Verschleißfehler?"
+    },
+    boundingBoxes: {
+      type: "array",
+      description: "Markierungen von identifizierten Defekten, Schäden oder Bauteilen auf dem Bild. Wenn kein Bild vorliegt oder nichts markiert werden kann, leeres Array zurückgeben.",
+      items: {
+        type: "object",
+        properties: {
+          label: { type: "string", description: "Bezeichnung des Bereichs, z.B. 'Beschädigte Isolierung' oder 'Aufgequollener Kondensator'" },
+          box_2d: {
+            type: "array",
+            description: "4 Ganzzahlen [ymin, xmin, ymax, xmax] normiert auf 0 bis 1000 relativ zum Bild",
+            items: { type: "integer" }
+          }
+        },
+        required: ["label", "box_2d"]
+      }
+    }
+  },
+  required: [
+    "deviceName",
+    "identifiedDefect",
+    "recommendation",
+    "actionSteps",
+    "estimatedRepairCost",
+    "repairDifficulty",
+    "safetyLevel",
+    "additionalTips",
+    "sparePartSearchTerm",
+    "customerExperience",
+    "boundingBoxes"
+  ]
+};
+
+// JSON-Schema für Typenschild OCR
+const scanSchema = {
+  type: "object",
+  properties: {
+    componentName: {
+      type: "string",
+      description: "Identifiziertes Bauteil oder Gerät"
+    },
+    extractedText: {
+      type: "string",
+      description: "Alle wichtigen Werte, Seriennummern und Spezifikationen vom Typenschild"
+    },
+    datasheetSearchUrl: {
+      type: "string",
+      description: "Eine Google-Such-URL zum Auffinden des Datenblatts"
+    }
+  },
+  required: ["componentName", "extractedText", "datasheetSearchUrl"]
+};
+
+// Endpoint für die KI-Diagnose
+app.post('/api/gemini/diagnosis', async (req, res) => {
+  try {
+    // Grundlegende Input-Validierung / Sanitization
+    const { imageBase64, description } = req.body || {};
+    if (description && typeof description !== 'string') {
+      return res.status(400).json({ error: 'Ungültiges description-Feld.' });
+    }
+    const safeDescription = (description || '').toString().slice(0, 2000);
+
+    if (imageBase64 && typeof imageBase64 === 'string') {
+      // einfache Größenbegrenzung: ~6MB Base64
+      if (imageBase64.length > 6_000_000) {
+        return res.status(413).json({ error: 'Bild ist zu groß.' });
+      }
+    }
+
+    const genAI = getGenAIInstance(req);
+
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      systemInstruction: 'Du bist ein erfahrener Elektroniker für Betriebstechnik. Analysiere das Problem basierend auf den verfügbaren Daten. Sollte ein Bild vorhanden sein, erkenne defekte oder relevante Bauteile/Schadstellen und gib deren Bounding Boxes an (normiert auf 0 bis 1000 im Format [ymin, xmin, ymax, xmax]). Antworte ausschließlich im vorgegebenen JSON-Format.',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: diagnosisSchema
+      }
+    });
+
+    const parts = [];
+    parts.push({
+      text: `Zusätzliche Fehlerbeschreibung des Nutzers: "${safeDescription || 'Keine Angaben gemacht.'}" ${imageBase64 ? 'Ein Bild des defekten Geräts wurde beigefügt. Analysiere das Bild und liefere Bounding-Boxes für auffällige Defekte, Beschädigungen oder markierte Bauteile.' : 'Es wurde KEIN Bild beigefügt. Stütze deine Diagnose ausschließlich auf die Textbeschreibung. Lass das boundingBoxes-Feld leer.'}`
+    });
+
+    if (imageBase64) {
+      const base64Data = imageBase64.replace(/^data:image\/(png|jpeg|webp);base64,/, '');
+      parts.push({
+        inlineData: {
+          data: base64Data,
+          mimeType: 'image/jpeg'
+        }
+      });
+    }
+
+    const result = await model.generateContent(parts);
+    const response = await result.response;
+    const text = response.text().trim();
+
+    // Optional: JSON-Schema-Validation bevor wir die Antwort durchreichen
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch (e) {
+      console.error('Ungültiges JSON von Gemini:', e);
+      return res.status(502).json({ error: 'Ungültige Antwort vom KI-Dienst.' });
+    }
+
+    const validate = ajv.compile(diagnosisSchema);
+    const valid = validate(parsed);
+    if (!valid) {
+      console.warn('Schema-Validation failed:', validate.errors);
+      // trotzdem die rohe Antwort zurückgeben mit Warnung
+      return res.status(502).json({ error: 'Antwort erfüllte nicht das erwartete Schema.', details: validate.errors, raw: parsed });
+    }
+
+    res.json(parsed);
+
+  } catch (error) {
+    console.error('Fehler bei der Gemini API Anfrage im Backend:', error);
+    res.status(500).json({ error: error.message || 'Fehler bei der Diagnoseanfrage.' });
+  }
+});
+
+// Endpoint für den Typenschild-Scan
+app.post('/api/gemini/scanTypePlate', async (req, res) => {
+  try {
+    const { imageBase64 } = req.body || {};
+    if (!imageBase64 || typeof imageBase64 !== 'string') {
+      return res.status(400).json({ error: 'Kein Bild empfangen.' });
+    }
+
+    if (imageBase64.length > 6_000_000) {
+      return res.status(413).json({ error: 'Bild ist zu groß.' });
+    }
+
+    const genAI = getGenAIInstance(req);
+
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      systemInstruction: 'Du bist ein Assistent für Elektrofachkräfte. Analysiere dieses Bild eines elektronischen Bauteils oder Typenschilds. Lies alle sichtbaren Texte, Seriennummern und Spezifikationen ab. Gib die Antwort strikt als JSON zurück.',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: scanSchema
+      }
+    });
+
+    const base64Data = imageBase64.replace(/^data:image\/(png|jpeg|webp);base64,/, '');
+
+    const parts = [
+      { text: 'Lies das Typenschild auf dem folgenden Bild aus.' },
+      { inlineData: { mimeType: 'image/jpeg', data: base64Data } }
+    ];
+
+    const result = await model.generateContent(parts);
+    const response = await result.response;
+    const rawText = response.text().trim();
+
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch (e) {
+      console.error('Ungültiges JSON von Gemini (scanTypePlate):', e);
+      return res.status(502).json({ error: 'Ungültige Antwort vom KI-Dienst.' });
+    }
+
+    const validate = ajv.compile(scanSchema);
+    const valid = validate(parsed);
+    if (!valid) {
+      console.warn('Schema-Validation failed (scanTypePlate):', validate.errors);
+      return res.status(502).json({ error: 'Antwort erfüllte nicht das erwartete Schema.', details: validate.errors, raw: parsed });
+    }
+
+    res.json(parsed);
+
+  } catch (error) {
+    console.error('Fehler bei der Typenschild-Scan-Anfrage im Backend:', error);
+    res.status(500).json({ error: error.message || 'Fehler beim Scannen des Typenschilds.' });
+  }
+});
+
+// Endpoint für Audio-Transkription
+app.post('/api/gemini/transcribe', async (req, res) => {
+  try {
+    const { audioBase64 } = req.body;
+    if (!audioBase64) {
+      return res.status(400).json({ error: "Keine Audio-Daten empfangen." });
+    }
+    const genAI = getGenAIInstance(req);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash"
+    });
+
+    const base64Data = audioBase64.replace(/^data:audio\/(webm|wav|ogg|mp4|m4a|mp3|3gpp);base64,/, "");
+
+    const parts = [
+      {
+        inlineData: {
+          mimeType: "audio/webm",
+          data: base64Data
+        }
+      },
+      { text: "Transkribiere das gesprochene Wort präzise in deutscher Sprache. Gib AUSSCHLIESSLICH den transkribierten Text zurück, ohne Kommentare, Metadaten oder Einleitungen." }
+    ];
+
+    const result = await model.generateContent(parts);
+    const response = await result.response;
+    const text = response.text().trim();
+
+    res.json({ text });
+
+  } catch (error) {
+    console.error("Fehler bei der Audio-Transkription im Backend:", error);
+    res.status(500).json({ error: error.message || "Fehler bei der Transkription." });
+  }
+});
+
+// Endpoint für Perplexity-Suche
+app.post('/api/perplexity/search', async (req, res) => {
+  try {
+    const { query } = req.body;
+    const userApiKey = req.headers['x-perplexity-api-key'];
+    const perplexityApiKey = userApiKey || process.env.PERPLEXITY_API_KEY;
+
+    if (!perplexityApiKey) {
+      return res.status(400).json({ error: "Perplexity API Key ist nicht konfiguriert." });
+    }
+
+    const response = await fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${perplexityApiKey}`
+      },
+      body: JSON.stringify({
+        model: "sonar",
+        messages: [
+          { role: "system", content: "Du bist ein Fachexperte für Elektrotechnik und VDE-Richtlinien. Beantworte die Frage präzise auf Deutsch. Nutze Markdown-Formatierung." },
+          { role: "user", content: query }
+        ],
+        max_tokens: 1000
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Perplexity API Fehler: ${errorText}`);
+    }
+
+    const data = await response.json();
+    const answer = data.choices[0].message.content;
+    res.json({ answer });
+
+  } catch (error) {
+    console.error("Fehler bei der Perplexity-Suche im Backend:", error);
+    res.status(500).json({ error: error.message || "Fehler bei der Suche." });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Backend-Proxy läuft auf http://localhost:${port}`);
+});

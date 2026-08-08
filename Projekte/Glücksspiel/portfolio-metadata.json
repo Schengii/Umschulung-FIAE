@@ -1,0 +1,18 @@
+{
+  "repoName": "Glücksspiel",
+  "titleDe": "🎰 Glücksspiel — Casual Games Plattform",
+  "titleEn": "🎰 Glücksspiel — Casual Mini Games Suite",
+  "tags": [
+    "Vanilla JavaScript",
+    "Web Audio API",
+    "LocalStorage",
+    "CSS3 Animations",
+    "Game Design"
+  ],
+  "image": "assets/images/gluecksspiel_showcase.png",
+  "link": "Projekte/Glücksspiel/index.html",
+  "descDe": "Eine bunte, animierte Casino-Spiele-Plattform mit klassischen Casual-Mini-Spielen wie Spielautomaten (Slots), Roulette, Plinko, Mines und dem Zauberkessel (Cauldron). Das Projekt zeichnet sich durch flüssige CSS-Animationen, Soundeffekte und ein lokales Guthaben-Management aus.",
+  "descEn": "A vibrant casino mini-games platform featuring slots, roulette, plinko, mines, and cauldron. The project features smooth CSS animations, retro sound effects, and persistent local balance tracking.",
+  "category": "games",
+  "language": "JavaScript"
+}

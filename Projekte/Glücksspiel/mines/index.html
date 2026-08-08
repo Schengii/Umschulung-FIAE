@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Akademie: Runen-Minen</title>
+    <!-- Google Fonts for magical & modern style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-gem magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-GOLD</h1>
+                    <span>RUNEN-MINEN</span>
+                </div>
+            </div>
+
+            <!-- Navigation to other games -->
+            <nav class="game-nav" style="display: flex; gap: 10px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Zur Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-cauldron"><i class="fa-solid fa-fire-burner"></i> Zum Kessel</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Zu den Spins</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Zum Plinko</a>
+            </nav>
+            
+            <!-- Header Stats container for Balance and Level Progress -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Bet & Mines Configuration -->
+            <section class="panel bet-panel" aria-label="Steuerung">
+                <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Spielsteuerung</h2>
+                
+                <!-- Wetteinsatz -->
+                <div class="control-group">
+                    <label class="control-label" for="bet-input">Wetteinsatz</label>
+                    <div class="bet-input-container">
+                        <input type="number" id="bet-input" value="10.00" min="1.00" max="500.00" step="1.00" class="bet-input">
+                        <span class="bet-currency-tag">€</span>
+                    </div>
+                </div>
+
+                <div class="bet-presets">
+                    <button type="button" class="btn btn-preset" id="btn-bet-min">MIN</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-half">½</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-double">2x</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-max">MAX</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Anzahl Minen -->
+                <div class="control-group">
+                    <div class="slider-header">
+                        <label class="control-label" for="mines-count-input">Instabile Runen (Minen):</label>
+                        <span id="mines-count-display" class="highlight-val">3</span>
+                    </div>
+                    <input type="range" id="mines-count-input" min="1" max="24" value="3" class="mines-slider">
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Game Status Buttons -->
+                <div class="game-actions">
+                    <button type="button" class="btn btn-primary btn-large" id="btn-start">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> KAMMER BETRETEN
+                    </button>
+                    
+                    <button type="button" class="btn btn-success btn-large btn-cashout hidden" id="btn-cashout" disabled>
+                        <span class="cashout-label">ABBRECHEN & AUSZAHLEN</span>
+                        <span class="cashout-value" id="cashout-preview">0.00 €</span>
+                    </button>
+                </div>
+
+                <!-- Game Status Ticker -->
+                <div class="status-meter">
+                    <div class="status-header">
+                        <span>Aktueller Status</span>
+                        <span id="game-status-text" role="status">Bereit</span>
+                    </div>
+                </div>
+
+                <div class="risk-summary" id="risk-summary" aria-live="polite">
+                    <span class="risk-pill">RISIKO</span>
+                    <strong id="risk-value">~ 88.0%</strong>
+                    <span class="risk-tip" id="risk-tip">3 instabile Runen · 22 sichere Runen</span>
+                </div>
+            </section>
+
+            <!-- CENTER: Interactive 5x5 Mines Grid -->
+            <section class="grid-viewport" aria-label="Runenfeld">
+                <div class="grid-wrapper">
+                    <div class="mines-grid" id="mines-grid">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+
+                    <!-- Overlay for game ends -->
+                    <div class="grid-overlay hidden" id="grid-overlay">
+                        <div class="overlay-content">
+                            <h2 class="overlay-title" id="overlay-title">EXPLOSION!</h2>
+                            <p class="overlay-subtitle" id="overlay-subtitle">Du hast eine instabile Rune getroffen.</p>
+                            <button class="btn btn-primary" id="btn-overlay-close">ERNEUT VERSUCHEN</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Multipliers & History -->
+            <section class="panel multiplier-panel" aria-label="Multiplikatoren">
+                <h2 class="panel-title"><i class="fa-solid fa-list-ol"></i> Auszahlungsschritte</h2>
+                <p class="panel-subtitle">Jede aufgedeckte sichere Rune erhöht deinen Multiplikator. Klicke rechtzeitig auf Auszahlen!</p>
+                
+                <div class="multiplier-list-wrapper">
+                    <div class="multiplier-list" id="multiplier-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER: Verlauf & Kontrollen -->
+        <footer class="game-footer">
+            <div class="history-panel">
+                <span class="history-label">LETZTE RUNDEN:</span>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">Keine Runden gespielt</div>
+                </div>
+            </div>
+            
+            <div class="footer-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Spielanleitung">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Spielanleitung -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-circle-question"></i> Spielanleitung</h2>
+            <div class="modal-body">
+                <p>Willkommen in den <strong>Runen-Minen</strong> der Alchemisten-Akademie!</p>
+                <p>Unter den 25 verdeckten Feldern befinden sich wertvolle, leuchtende alchemistische Runen und hochgradig instabile Spreng-Runen.</p>
+                
+                <h3>Spielregeln:</h3>
+                <ol>
+                    <li>Wähle deinen <strong>Wetteinsatz</strong> und die Anzahl der <strong>instabilen Runen (1-24)</strong> aus.</li>
+                    <li>Klicke auf <strong>"Kammer betreten"</strong>, um das Runenfeld zu sperren und die Runde zu starten.</li>
+                    <li>Decke Kacheln auf:
+                        <ul>
+                            <li>Triffst du eine <strong>sichere Rune</strong> (goldener/cyanfarbener Glanz), steigt dein Multiplikator. Du kannst jederzeit auszahlen!</li>
+                            <li>Triffst du eine <strong>instabile Rune</strong> (rote Explosion), verpufft dein gesamter aktueller Rundengewinn!</li>
+                        </ul>
+                    </li>
+                    <li>Sichere dir deinen Gewinn durch Klicken auf <strong>"Auszahlen"</strong>.</li>
+                    <li>Nach dem Auszahlen kannst du dich entscheiden, deinen Gewinn im <strong>Risiko-Mischen</strong> zu verdoppeln!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

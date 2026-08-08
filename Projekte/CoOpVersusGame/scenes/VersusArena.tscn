@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[ext_resource type="Script" path="res://scripts/VersusArena.gd" id=1]
+
+[node name="VersusArena" type="Node2D"]
+script = ExtResource( 1 )
+
+[child name="Label" type="Label" parent="."]
+rect_position = Vector2( 200, 200 )
+text = "Versus Arena Placeholder"

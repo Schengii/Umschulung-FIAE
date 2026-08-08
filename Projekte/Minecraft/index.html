@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft C++ Voxel Engine | Portfolio Showcase</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 0; line-height: 1.6; }
+        .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; padding: 3rem 1.5rem; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #38bdf8; }
+        .badge-list { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+        .badge { background: #1e293b; border: 1px solid #38bdf8; color: #38bdf8; padding: 0.3rem 0.8rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; padding: 1.5rem; }
+        .card h3 { color: #f1f5f9; margin-top: 0; border-bottom: 2px solid #38bdf8; padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { border: 1px solid #334155; padding: 0.6rem 0.8rem; text-align: left; }
+        th { background: #0f172a; color: #38bdf8; }
+        pre { background: #090d16; color: #38bdf8; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-family: monospace; }
+        .btn-group { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: #0284c7; color: #fff; }
+        .btn-primary:hover { background: #0369a1; }
+        .btn-secondary { background: #334155; color: #fff; }
+        .btn-secondary:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <h1>🧱 Minecraft C++ Voxel Engine</h1>
+        <p>Eine hoch-performante, modulare 3D-Voxel-Engine in C++20 und OpenGL 4.5</p>
+        <div class="badge-list">
+            <span class="badge">C++20</span>
+            <span class="badge">OpenGL 4.5</span>
+            <span class="badge">CMake 3.20+</span>
+            <span class="badge">Redstone Logik</span>
+            <span class="badge">Procedural Generation</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="grid-2">
+            <div class="card">
+                <h3><i class="fa-solid fa-microchip"></i> Engine Features</h3>
+                <ul>
+                    <li>🔴 <strong>Redstone Logik</strong>: Wires, Torches, Levers, Lamps mit Signal-Ausbreitung</li>
+                    <li>🌍 <strong>Multi-Biome System</strong>: Wüste, Schneeberg, Birkenwald & Höhlen</li>
+                    <li>🌊 <strong>Wasser-Physik</strong>: Auftrieb, Unterwasser-Nebel-Shader & Schwimmen</li>
+                    <li>☀️ <strong>Tag/Nacht-Zyklus</strong>: 24.000 Ticks mit flüssiger Farb-Interpolation</li>
+                    <li>🎒 <strong>Inventar & Crafting</strong>: 36 Slots, Drops & 2x2 Crafting Rezept-Manager</li>
+                    <li>💾 <strong>Chunk-Persistence</strong>: Binäre Serialisierung in `world_saves/`</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-terminal"></i> Build & Kompilierung</h3>
+                <p>Das Projekt wird mit CMake kompiliert:</p>
+                <pre><code># 1. Konfiguration
+cmake -B build -S .
+
+# 2. Kompilieren
+cmake --build build --config Release
+
+# 3. Spiel starten
+.\build\Release\Minecraft.exe</code></pre>
+            </div>
+        </div>
+
+        <div class="card card-margin-top">
+            <h3><i class="fa-solid fa-gamepad"></i> Steuerung & Keyboard Layout</h3>
+            <table>
+                <thead>
+                    <tr><th>Taste</th><th>Aktion</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>W / A / S / D</code></td><td>Vorwärts, links, rückwärts, rechts bewegen</td></tr>
+                    <tr><td><code>Space / L-Shift</code></td><td>Springen / Schwimmen / Flugmodus-Sinken</td></tr>
+                    <tr><td><code>E</code></td><td>Inventar & 2x2 Crafting-GUI öffnen / schließen</td></tr>
+                    <tr><td><code>F4 / T</code></td><td>Tageszeit wechseln / Vorspulen</td></tr>
+                    <tr><td><code>F</code></td><td>Flugmodus an/aus umschalten</td></tr>
+                    <tr><td><code>1 - 9</code></td><td>Hotbar Slot wählen (inkl. Redstone, Fackeln, Lampen)</td></tr>
+                    <tr><td><code>Linksklick / Rechtsklick</code></td><td>Block abbauen / Block platzieren & Hebel schalten</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://github.com/Schengii/Minecraft" target="_blank" rel="noopener" class="btn btn-primary">
+                <i class="fa-brands fa-github"></i> GitHub Repository
+            </a>
+            <a href="../../pages/portfolio.html" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Zurück zum Portfolio
+            </a>
+        </div>
+    </main>
+</body>
+</html>

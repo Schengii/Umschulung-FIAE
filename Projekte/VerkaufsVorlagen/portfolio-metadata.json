@@ -1,0 +1,12 @@
+{
+  "repoName": "VerkaufsVorlagen",
+  "titleDe": "📄 Verkaufs-Vorlagen — Rechnungs- & Beleg-Generator",
+  "titleEn": "📄 Sales Templates — Invoice & Receipt Generator",
+  "tags": ["React", "Vite", "PDF Generation", "LocalStorage"],
+  "image": null,
+  "link": "Projekte/VerkaufsVorlagen/dist/index.html",
+  "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
+  "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
+  "category": "web",
+  "language": "JavaScript"
+}

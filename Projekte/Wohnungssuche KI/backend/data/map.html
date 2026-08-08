@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wohnungs-Karte</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #1a1a24;
+    }
+    
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Custom Leaflet styling to match dark dashboard theme */
+    .leaflet-container {
+      background-color: #111118;
+    }
+    
+    /* Custom Popup Styling */
+    .leaflet-popup-content-wrapper {
+      background: #1e1e2f;
+      color: #f3f4f6;
+      border: 1px solid #3f3f46;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      padding: 6px;
+    }
+    
+    .leaflet-popup-tip {
+      background: #1e1e2f;
+      border: 1px solid #3f3f46;
+    }
+    
+    .popup-content {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .popup-title {
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      font-size: 15px;
+      line-height: 1.3;
+      border-bottom: 1px solid #3f3f46;
+      padding-bottom: 6px;
+    }
+    
+    .popup-details {
+      margin-bottom: 12px;
+    }
+    
+    .popup-detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      color: #9ca3af;
+    }
+    
+    .popup-detail-value {
+      color: #ffffff;
+      font-weight: 500;
+    }
+    
+    .popup-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      color: white !important;
+      text-decoration: none !important;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      box-sizing: border-box;
+    }
+    
+    .popup-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Custom DivIcon Markers for Listings */
+    .score-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: white;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 2px solid #ffffff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .score-marker:hover {
+      transform: scale(1.15);
+      z-index: 1000 !important;
+    }
+    
+    .score-marker-high {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+    
+    .score-marker-medium {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+    }
+    
+    .score-marker-low {
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    }
+
+    /* Pulsing ring for NEW status */
+    .score-marker-new::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #06b6d4; /* Cyan pulsing border */
+      top: -3px;
+      left: -3px;
+      animation: pulse 1.8s infinite;
+      box-sizing: content-box;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 1;
+      }
+      70% {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+    }
+
+    /* Workplace Marker */
+    .workplace-marker {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    .workplace-marker svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <script>
+    // Initialisiere die Karte
+    let map = L.map('map', {
+      zoomControl: true,
+      attributionControl: true
+    }).setView([51.1657, 10.4515], 6); // Deutschland Standard
+
+    // Add CartoDB Dark Matter Layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    let markersGroup = L.layerGroup().addTo(map);
+    let shapesGroup = L.layerGroup().addTo(map);
+
+    // Kommunikation mit dem React-Parent
+    function openListingDetails(listingId) {
+      window.parent.postMessage({ type: 'open-listing', id: listingId }, '*');
+    }
+
+    // Funktion zum Rendern der Karte mit übergebenen Daten
+    function renderMap(preferences, listings) {
+      markersGroup.clearLayers();
+      shapesGroup.clearLayers();
+
+      let fitBoundsCoords = [];
+
+      // 1. Wunschstadt & Radius einzeichnen
+      if (preferences && preferences.wishCityLat && preferences.wishCityLon) {
+        const wishCityCenter = [preferences.wishCityLat, preferences.wishCityLon];
+        const radiusMeters = (preferences.wishCityRadiusKm || 15) * 1000;
+        L.circle(wishCityCenter, {
+          color: '#3b82f6',
+          fillColor: '#3b82f6',
+          fillOpacity: 0.08,
+          weight: 1.5,
+          dashArray: '4, 4'
+        }).addTo(shapesGroup);
+        fitBoundsCoords.push(wishCityCenter);
+      }
+
+      // 2. Arbeitsplatz / Zieladresse einzeichnen
+      if (preferences && preferences.targetLat && preferences.targetLon) {
+        const workplaceCenter = [preferences.targetLat, preferences.targetLon];
+        const briefcaseIcon = L.divIcon({
+          className: 'workplace-marker',
+          html: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 .621-.504 1.125-1.125 1.125H4.875A1.125 1.125 0 013.75 18.4V14.15m16.5 0c0-.621-.504-1.125-1.125-1.125H18.75m-7.5-6h3.75m-3.75 3H7.5m9 3h3.75M20.25 9.75V4.875c0-.621-.504-1.125-1.125-1.125H4.875A1.125 1.125 0 003.75 4.875v4.875c0 .621.504 1.125 1.125 1.125h14.25c.621 0 1.125-.504 1.125-1.125z" />
+          </svg>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+
+        L.marker(workplaceCenter, { icon: briefcaseIcon })
+          .bindPopup(`<div class="popup-content">
+            <div class="popup-title">Arbeitsplatz / Zielort</div>
+            <div style="font-size: 13px; color:#e5e7eb;">${preferences.targetAddress}</div>
+          </div>`)
+          .addTo(shapesGroup);
+
+        if (preferences.maxDistanceKm) {
+          L.circle(workplaceCenter, {
+            color: '#ec4899',
+            fillColor: '#ec4899',
+            fillOpacity: 0.04,
+            weight: 1.2,
+            dashArray: '5, 5'
+          }).addTo(shapesGroup);
+        }
+        fitBoundsCoords.push(workplaceCenter);
+      }
+
+      // 3. Wohnungen einzeichnen
+      listings.forEach(listing => {
+        if (!listing.lat || !listing.lon) return;
+
+        const score = listing.matchScore || 50;
+        let scoreClass = 'score-marker-medium';
+        if (score >= 75) scoreClass = 'score-marker-high';
+        else if (score < 50) scoreClass = 'score-marker-low';
+
+        const isNew = listing.status === 'neu';
+        const newClass = isNew ? ' score-marker-new' : '';
+
+        const scoreIcon = L.divIcon({
+          className: `score-marker ${scoreClass}${newClass}`,
+          html: `<span>${score}%</span>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+
+        const priceSqmText = (listing.priceKalt && listing.sqm) 
+          ? `${(listing.priceKalt / listing.sqm).toFixed(2)} €/m²`
+          : 'N/A';
+
+        const distanceText = listing.distanceKm !== undefined && listing.distanceKm !== null
+          ? `${listing.distanceKm.toFixed(1)} km zum Arbeitsplatz`
+          : '';
+
+        const thumbnailHtml = (listing.images && listing.images.length > 0)
+          ? `<div style="width:100%; height:90px; border-radius:6px; overflow:hidden; margin-bottom:8px; border:1px solid #3f3f46; background:#0f0f16;">
+               <img src="${listing.images[0]}" style="width:100%; height:100%; object-fit:cover;" />
+             </div>`
+          : '';
+
+        let travelTimesHtml = '';
+        if (listing.travelTimeDrivingMin > 0 || listing.travelTimeBicycleMin > 0 || listing.travelTimeFootMin > 0) {
+          travelTimesHtml = `<div style="display:flex; gap:8px; font-size:11px; color:#a1a1aa; margin-top:4px; margin-bottom:8px; border-top:1px solid #3f3f46; padding-top:6px; flex-wrap:wrap;">`;
+          if (listing.travelTimeDrivingMin > 0) travelTimesHtml += `<span>🚗 <b>${listing.travelTimeDrivingMin} Min</b></span>`;
+          if (listing.travelTimeBicycleMin > 0) travelTimesHtml += `<span>🚲 <b>${listing.travelTimeBicycleMin} Min</b></span>`;
+          if (listing.travelTimeFootMin > 0) travelTimesHtml += `<span>🚶 <b>${listing.travelTimeFootMin} Min</b></span>`;
+          travelTimesHtml += `</div>`;
+        }
+
+        const popupHtml = `
+          <div class="popup-content" style="min-width: 200px;">
+            ${thumbnailHtml}
+            <div class="popup-title">${escapeHtml(listing.title)}</div>
+            <div class="popup-details">
+              <div class="popup-detail-row">
+                <span>Kaltmiete:</span>
+                <span class="popup-detail-value">${listing.priceKalt ? listing.priceKalt + ' €' : 'N/A'}</span>
+              </div>
+              <div class="popup-detail-row">
+                <span>Wohnfläche:</span>
+                <span class="popup-detail-value">${listing.sqm ? listing.sqm + ' m²' : 'N/A'} (${priceSqmText})</span>
+              </div>
+              <div class="popup-detail-row">
+                <span>Zimmer:</span>
+                <span class="popup-detail-value">${listing.rooms ? listing.rooms : 'N/A'}</span>
+              </div>
+              ${distanceText ? `
+              <div class="popup-detail-row">
+                <span>Entfernung:</span>
+                <span class="popup-detail-value" style="color: #ec4899;">${distanceText}</span>
+              </div>` : ''}
+              <div class="popup-detail-row" style="margin-bottom: 6px;">
+                <span>Match-Score:</span>
+                <span class="popup-detail-value" style="font-weight:bold; color: ${score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444'}">${score}%</span>
+              </div>
+            </div>
+            ${travelTimesHtml}
+            <button class="popup-btn" onclick="openListingDetails('${listing.id}')">Details anzeigen</button>
+          </div>
+        `;
+
+        L.marker([listing.lat, listing.lon], { icon: scoreIcon })
+          .bindPopup(popupHtml)
+          .addTo(markersGroup);
+
+        fitBoundsCoords.push([listing.lat, listing.lon]);
+      });
+
+      // Setze Kartenausschnitt
+      if (fitBoundsCoords.length > 0) {
+        map.fitBounds(fitBoundsCoords, { padding: [40, 40], maxZoom: 14 });
+      }
+    }
+
+    // Visualisiert eine einzelne Wohnung mit ihren POIs
+    function renderSingleListingMap(preferences, listing) {
+      markersGroup.clearLayers();
+      shapesGroup.clearLayers();
+
+      if (!listing.lat || !listing.lon) return;
+
+      const listingCoords = [listing.lat, listing.lon];
+      map.setView(listingCoords, 16);
+
+      // 1. Arbeitsplatz / Zielort einzeichnen
+      if (preferences && preferences.targetLat && preferences.targetLon) {
+        const workplaceCenter = [preferences.targetLat, preferences.targetLon];
+        const briefcaseIcon = L.divIcon({
+          className: 'workplace-marker',
+          html: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 .621-.504 1.125-1.125 1.125H4.875A1.125 1.125 0 013.75 18.4V14.15m16.5 0c0-.621-.504-1.125-1.125-1.125H18.75m-7.5-6h3.75m-3.75 3H7.5m9 3h3.75M20.25 9.75V4.875c0-.621-.504-1.125-1.125-1.125H4.875A1.125 1.125 0 003.75 4.875v4.875c0 .621.504 1.125 1.125 1.125h14.25c.621 0 1.125-.504 1.125-1.125z" />
+          </svg>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
+        L.marker(workplaceCenter, { icon: briefcaseIcon })
+          .bindPopup(`<div class="popup-content">
+            <div class="popup-title">Arbeitsplatz / Zielort</div>
+            <div style="font-size: 13px; color:#e5e7eb;">${preferences.targetAddress}</div>
+          </div>`)
+          .addTo(shapesGroup);
+      }
+
+      // 2. Wohnung einzeichnen
+      const score = listing.matchScore || 50;
+      let scoreClass = 'score-marker-medium';
+      if (score >= 75) scoreClass = 'score-marker-high';
+      else if (score < 50) scoreClass = 'score-marker-low';
+
+      const isNew = listing.status === 'neu';
+      const newClass = isNew ? ' score-marker-new' : '';
+
+      const scoreIcon = L.divIcon({
+        className: `score-marker ${scoreClass}${newClass}`,
+        html: `<span>${score}%</span>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+      });
+
+      const priceSqmText = (listing.priceKalt && listing.sqm) 
+        ? `${(listing.priceKalt / listing.sqm).toFixed(2)} €/m²`
+        : 'N/A';
+
+      const popupHtml = `
+        <div class="popup-content" style="min-width: 200px;">
+          <div class="popup-title">${escapeHtml(listing.title)}</div>
+          <div class="popup-details">
+            <div class="popup-detail-row">
+              <span>Kaltmiete:</span>
+              <span class="popup-detail-value">${listing.priceKalt ? listing.priceKalt + ' €' : 'N/A'}</span>
+            </div>
+            <div class="popup-detail-row">
+              <span>Wohnfläche:</span>
+              <span class="popup-detail-value">${listing.sqm ? listing.sqm + ' m²' : 'N/A'} (${priceSqmText})</span>
+            </div>
+            <div class="popup-detail-row">
+              <span>Zimmer:</span>
+              <span class="popup-detail-value">${listing.rooms ? listing.rooms : 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      L.marker(listingCoords, { icon: scoreIcon })
+        .bindPopup(popupHtml)
+        .addTo(markersGroup)
+        .openPopup();
+
+      // 3. POIs einzeichnen
+      if (listing.pois) {
+        // Supermärkte
+        if (listing.pois.supermarkets) {
+          listing.pois.supermarkets.forEach(poi => {
+            const icon = L.divIcon({
+              className: 'poi-marker poi-supermarket',
+              html: `<div style="background: #10b981; border: 2px solid white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">🛒</div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            L.marker([poi.lat, poi.lon], { icon })
+              .bindPopup(`<div class="popup-content"><b>${escapeHtml(poi.name)}</b><br>🛒 Supermarkt (${(poi.distanceKm * 1000).toFixed(0)}m)</div>`)
+              .addTo(markersGroup);
+          });
+        }
+
+        // ÖPNV
+        if (listing.pois.publicTransit) {
+          listing.pois.publicTransit.forEach(poi => {
+            let emoji = '🚌';
+            let color = '#3b82f6';
+            if (poi.type === 'Bahnhof') { emoji = '🚇'; color = '#1d4ed8'; }
+            else if (poi.type === 'U-Bahn') { emoji = '🚇'; color = '#4f46e5'; }
+            else if (poi.type === 'Straßenbahn') { emoji = '🚊'; color = '#06b6d4'; }
+
+            const icon = L.divIcon({
+              className: 'poi-marker poi-transit',
+              html: `<div style="background: ${color}; border: 2px solid white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">${emoji}</div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            L.marker([poi.lat, poi.lon], { icon })
+              .bindPopup(`<div class="popup-content"><b>${escapeHtml(poi.name)}</b><br>${poi.type} (${(poi.distanceKm * 1000).toFixed(0)}m)</div>`)
+              .addTo(markersGroup);
+          });
+        }
+
+        // Parks
+        if (listing.pois.parks) {
+          listing.pois.parks.forEach(poi => {
+            const icon = L.divIcon({
+              className: 'poi-marker poi-park',
+              html: `<div style="background: #047857; border: 2px solid white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">🌳</div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            L.marker([poi.lat, poi.lon], { icon })
+              .bindPopup(`<div class="popup-content"><b>${escapeHtml(poi.name)}</b><br>🌳 Park (${(poi.distanceKm * 1000).toFixed(0)}m)</div>`)
+              .addTo(markersGroup);
+          });
+        }
+      }
+    }
+
+    // Daten vom Server laden (Fallback / Erstes Laden)
+    async function loadMapData() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const listingId = urlParams.get('listingId');
+
+      try {
+        if (listingId) {
+          const [prefRes, listRes] = await Promise.all([
+            fetch('/api/preferences'),
+            fetch(`/api/listings/${listingId}`)
+          ]);
+          
+          if (!prefRes.ok || !listRes.ok) {
+            throw new Error('Fehler beim Abrufen der API-Daten für Einzelansicht');
+          }
+
+          const preferences = await prefRes.json();
+          const listing = await listRes.json();
+
+          renderSingleListingMap(preferences, listing);
+        } else {
+          const [prefRes, listRes] = await Promise.all([
+            fetch('/api/preferences'),
+            fetch('/api/listings')
+          ]);
+          
+          if (!prefRes.ok || !listRes.ok) {
+            throw new Error('Fehler beim Abrufen der API-Daten');
+          }
+
+          const preferences = await prefRes.json();
+          const listings = await listRes.json();
+
+          renderMap(preferences, listings);
+        }
+      } catch (err) {
+        console.error('Fehler beim Laden der Kartendaten:', err);
+      }
+    }
+
+    // Hilfsfunktion zum Escapen von HTML-Inhalten
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Aufrufen beim Laden
+    window.addEventListener('DOMContentLoaded', loadMapData);
+
+    // Horcht auf Nachrichten vom Parent zum Aktualisieren
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'set-data') {
+        // Nur verarbeiten, wenn wir nicht in der Einzelansicht sind
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.get('listingId')) {
+          renderMap(event.data.preferences, event.data.listings);
+        }
+      } else if (event.data && event.data.type === 'reload-map') {
+        loadMapData();
+      }
+    });
+  </script>
+</body>
+</html>

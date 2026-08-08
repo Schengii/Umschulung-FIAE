@@ -1,0 +1,112 @@
+namespace MinecraftPokemon;
+
+public enum BlockType : byte
+{
+    Air = 0,
+    Grass = 1,
+    Dirt = 2,
+    Stone = 3,
+    Wood = 4,
+    Leaves = 5,
+    PokeballOre = 6,
+    CoalOre = 7,
+    IronOre = 8,
+    Planks = 9,
+    CraftingTable = 10,
+    Water = 11,
+    Sand = 12,
+    HealStationBlock = 13,
+    TorchBlock = 14,
+    BreedingPenBlock = 15,
+    DungeonStone = 16,
+    Obsidian = 17,
+    Farmland = 18,
+    BerryBushBlock = 19,
+    SnowBlock = 20,
+    IceBlock = 21,
+    PokeStatueBlock = 22,
+    TrophyBlock = 23,
+    Basalt = 24,
+    Sandstone = 25,
+    Lava = 26,
+    CenterRoofBlock = 27,
+    JoyNpcBlock = 28,
+    GymBlock = 29,
+    CutBushBlock = 30,
+    SmashRockBlock = 31,
+    FossilBlock = 32,
+    ExtractorBlock = 33,
+    CrystalOre = 34,
+    JuicerBlock = 35,
+    TowerStone = 36,
+    SecretBaseDoorBlock = 37,
+    DecorationBlock = 38,
+    JukeboxBlock = 39,
+    SkyTowerStone = 40,
+    MasterTrophyBlock = 41,
+    BerrySproutBlock = 42,
+    ComposterBlock = 43,
+    MeteorBlock = 44,
+    ContestRibbonBlock = 45
+}
+
+public static class BlockInfo
+{
+    public static Godot.Color GetColor(BlockType type)
+    {
+        return type switch
+        {
+            BlockType.Grass => Godot.Colors.ForestGreen,
+            BlockType.Dirt => new Godot.Color(0.4f, 0.25f, 0.15f),
+            BlockType.Stone => Godot.Colors.LightSlateGray,
+            BlockType.Wood => new Godot.Color(0.3f, 0.18f, 0.08f),
+            BlockType.Leaves => Godot.Colors.DarkGreen,
+            BlockType.PokeballOre => Godot.Colors.Crimson,
+            BlockType.CoalOre => new Godot.Color(0.15f, 0.15f, 0.15f),
+            BlockType.IronOre => new Godot.Color(0.85f, 0.65f, 0.45f),
+            BlockType.Planks => new Godot.Color(0.7f, 0.5f, 0.25f),
+            BlockType.CraftingTable => new Godot.Color(0.5f, 0.35f, 0.15f),
+            BlockType.Water => new Godot.Color(0.15f, 0.45f, 0.9f, 0.75f),
+            BlockType.Sand => new Godot.Color(0.9f, 0.85f, 0.55f),
+            BlockType.HealStationBlock => new Godot.Color(0.95f, 0.2f, 0.35f),
+            BlockType.TorchBlock => new Godot.Color(1.0f, 0.7f, 0.2f),
+            BlockType.BreedingPenBlock => new Godot.Color(0.85f, 0.55f, 0.85f),
+            BlockType.DungeonStone => new Godot.Color(0.2f, 0.2f, 0.25f),
+            BlockType.Obsidian => new Godot.Color(0.1f, 0.05f, 0.15f),
+            BlockType.Farmland => new Godot.Color(0.3f, 0.2f, 0.1f),
+            BlockType.BerryBushBlock => new Godot.Color(0.8f, 0.1f, 0.3f),
+            BlockType.SnowBlock => new Godot.Color(0.95f, 0.95f, 1.0f),
+            BlockType.IceBlock => new Godot.Color(0.7f, 0.85f, 0.95f, 0.8f),
+            BlockType.PokeStatueBlock => new Godot.Color(0.95f, 0.75f, 0.1f),
+            BlockType.TrophyBlock => new Godot.Color(1.0f, 0.84f, 0.0f),
+            BlockType.Basalt => new Godot.Color(0.25f, 0.23f, 0.26f),
+            BlockType.Sandstone => new Godot.Color(0.82f, 0.73f, 0.52f),
+            BlockType.Lava => new Godot.Color(0.95f, 0.35f, 0.05f, 0.9f),
+            BlockType.CenterRoofBlock => new Godot.Color(0.9f, 0.15f, 0.2f),
+            BlockType.JoyNpcBlock => new Godot.Color(0.95f, 0.65f, 0.75f),
+            BlockType.GymBlock => new Godot.Color(0.3f, 0.5f, 0.85f),
+            BlockType.CutBushBlock => new Godot.Color(0.15f, 0.5f, 0.15f),
+            BlockType.SmashRockBlock => new Godot.Color(0.45f, 0.4f, 0.35f),
+            BlockType.FossilBlock => new Godot.Color(0.6f, 0.45f, 0.3f),
+            BlockType.ExtractorBlock => new Godot.Color(0.2f, 0.7f, 0.8f),
+            BlockType.CrystalOre => new Godot.Color(0.4f, 0.9f, 0.95f),
+            BlockType.JuicerBlock => new Godot.Color(0.85f, 0.45f, 0.15f),
+            BlockType.TowerStone => new Godot.Color(0.35f, 0.3f, 0.45f),
+            BlockType.SecretBaseDoorBlock => new Godot.Color(0.5f, 0.3f, 0.6f),
+            BlockType.DecorationBlock => new Godot.Color(0.95f, 0.4f, 0.7f),
+            BlockType.JukeboxBlock => new Godot.Color(0.3f, 0.2f, 0.15f),
+            BlockType.SkyTowerStone => new Godot.Color(0.9f, 0.95f, 1.0f),
+            BlockType.MasterTrophyBlock => new Godot.Color(1.0f, 0.9f, 0.2f),
+            BlockType.BerrySproutBlock => new Godot.Color(0.2f, 0.8f, 0.3f),
+            BlockType.ComposterBlock => new Godot.Color(0.4f, 0.3f, 0.1f),
+            BlockType.MeteorBlock => new Godot.Color(0.15f, 0.6f, 0.65f),
+            BlockType.ContestRibbonBlock => new Godot.Color(0.95f, 0.2f, 0.5f),
+            _ => Godot.Colors.Transparent
+        };
+    }
+
+    public static bool IsSolid(BlockType type)
+    {
+        return type != BlockType.Air && type != BlockType.Water && type != BlockType.IceBlock && type != BlockType.Lava && type != BlockType.BerrySproutBlock;
+    }
+}

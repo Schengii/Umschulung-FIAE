@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="de">
+<!-- VERSION 2.0: Autoplay, Turbo-Modus, Casino-Modus, Win-Counter -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Spins: Die 5 Essenzen</title>
+    <!-- Google Fonts for magical style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben (Synchronisiert mit Kessel-Gold) -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-SPINS</h1>
+                    <span>DIE 5 ESSENZEN</span>
+                </div>
+            </div>
+
+            <!-- Navigation between games -->
+            <nav class="game-nav" style="display: flex; gap: 10px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Zur Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-back"><i class="fa-solid fa-fire-burner"></i> Zum Kessel</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Zum Plinko</a>
+            </nav>
+            
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="slots-layout">
+            
+            <!-- Payline Indicators - Left side -->
+            <div class="payline-indicators left-side">
+                <div class="line-badge" data-line="1">1</div>
+                <div class="line-badge" data-line="2">2</div>
+                <div class="line-badge" data-line="3">3</div>
+                <div class="line-badge" data-line="4">4</div>
+                <div class="line-badge" data-line="5">5</div>
+                <div class="line-badge" data-line="6">6</div>
+                <div class="line-badge" data-line="7">7</div>
+                <div class="line-badge" data-line="8">8</div>
+                <div class="line-badge" data-line="9">9</div>
+                <div class="line-badge" data-line="10">10</div>
+            </div>
+
+            <!-- THE REELS SLOT MACHINE GRID (5 Reels, 3 Rows) -->
+            <section class="slot-viewport" aria-label="Spielautomat">
+                <!-- Canvas overlay for drawing winning lines -->
+                <canvas id="lines-canvas" width="850" height="420"></canvas>
+
+                <!-- Grid container for the 5 reels -->
+                <div class="reels-container" id="reels-container">
+                    <!-- Reel 1 -->
+                    <div class="reel" id="reel-0">
+                        <div class="reel-strip">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                    <!-- Reel 2 -->
+                    <div class="reel" id="reel-1">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <!-- Reel 3 -->
+                    <div class="reel" id="reel-2">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <!-- Reel 4 -->
+                    <div class="reel" id="reel-3">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <!-- Reel 5 -->
+                    <div class="reel" id="reel-4">
+                        <div class="reel-strip"></div>
+                    </div>
+                </div>
+
+                <!-- Free Spins overlay status -->
+                <div class="free-spins-overlay-banner hidden" id="free-spins-indicator">
+                    <span class="free-spins-text">FREISPIELE: <span id="fs-current-count">10</span> ÜBRIG</span>
+                    <span class="free-spins-multiplier">ALLE GEWINNE x3!</span>
+                </div>
+
+                <!-- Big Win Counter Overlay -->
+                <div class="win-counter-overlay hidden" id="win-counter-overlay">
+                    <div class="win-counter-content">
+                        <div class="win-counter-label">GEWINN!</div>
+                        <div class="win-counter-amount" id="win-counter-amount">0.00 €</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payline Indicators - Right side -->
+            <div class="payline-indicators right-side">
+                <div class="line-badge" data-line="1">1</div>
+                <div class="line-badge" data-line="2">2</div>
+                <div class="line-badge" data-line="3">3</div>
+                <div class="line-badge" data-line="4">4</div>
+                <div class="line-badge" data-line="5">5</div>
+                <div class="line-badge" data-line="6">6</div>
+                <div class="line-badge" data-line="7">7</div>
+                <div class="line-badge" data-line="8">8</div>
+                <div class="line-badge" data-line="9">9</div>
+                <div class="line-badge" data-line="10">10</div>
+            </div>
+
+        </main>
+
+        <!-- CONTROL BAR (Unterer Panel) -->
+        <footer class="control-bar">
+            <!-- Left Info Panel (Win display or messages) -->
+            <div class="info-panel-left">
+                <div class="info-label" id="info-status-label">SPIELBEREIT</div>
+                <div class="info-value" id="info-status-value">WÄHLE EINSATZ</div>
+            </div>
+
+            <!-- Center Betting / Spins controls -->
+            <div class="center-controls">
+                <!-- Bet Selector -->
+                <div class="control-box bet-box">
+                    <span class="control-label">EINSATZ</span>
+                    <div class="bet-adjuster">
+                        <button type="button" class="btn btn-adjust" id="btn-bet-dec">-</button>
+                        <input type="number" id="bet-input" value="1.00" min="0.10" max="50.00" step="0.50" class="bet-display-input">
+                        <span class="bet-currency">€</span>
+                        <button type="button" class="btn btn-adjust" id="btn-bet-inc">+</button>
+                    </div>
+                </div>
+
+                <!-- Spin Trigger button (Large and glowing) -->
+                <div class="spin-trigger-wrapper">
+                    <button type="button" class="btn btn-spin" id="btn-spin">
+                        <i class="fa-solid fa-arrow-rotate-right"></i> DREHEN
+                    </button>
+                </div>
+
+                <!-- Autoplay & Turbo Controls -->
+                <div class="control-box auto-box">
+                    <span class="control-label">AUTOPLAY</span>
+                    <div class="autoplay-controls">
+                        <button type="button" class="btn btn-auto-preset" data-spins="10">10</button>
+                        <button type="button" class="btn btn-auto-preset" data-spins="25">25</button>
+                        <button type="button" class="btn btn-auto-preset" data-spins="50">50</button>
+                        <button type="button" class="btn btn-auto-stop hidden" id="btn-auto-stop">
+                            <i class="fa-solid fa-stop"></i> STOP
+                        </button>
+                    </div>
+                    <div class="autoplay-counter hidden" id="autoplay-counter">
+                        <span id="autoplay-remaining">0</span> übrig
+                    </div>
+                </div>
+
+                <!-- Turbo Toggle -->
+                <div class="control-box turbo-box">
+                    <span class="control-label">TURBO</span>
+                    <label class="turbo-switch">
+                        <input type="checkbox" id="chk-turbo">
+                        <span class="turbo-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Right Gamble / Collect Actions -->
+            <div class="actions-panel-right">
+                <button type="button" class="btn btn-gamble hidden" id="btn-gamble">
+                    <i class="fa-solid fa-diamond"></i> RISIKO
+                </button>
+                <button type="button" class="btn btn-collect hidden" id="btn-collect">
+                    <i class="fa-solid fa-hand-holding-dollar"></i> NEHMEN
+                </button>
+            </div>
+        </footer>
+
+        <!-- BOTTOM TOOLBAR -->
+        <div class="bottom-toolbar">
+            <div class="toolbar-label">AKTIVE GEWINNLINIEN: 10 FESTE LINIEN</div>
+            <div class="toolbar-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Auszahlungstabelle">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-admin" title="Admin-Einstellungen">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: HELP / PAYTABLE -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-circle-question"></i> Auszahlungstabelle & Hilfe</h2>
+            <div class="modal-body">
+                <h3>Gewinnsymbole & Auszahlungen (Multiplikatoren auf Einsatz):</h3>
+                <div class="symbols-help-grid">
+                    <div class="symbol-help-card">
+                        <span class="sym-ico">💎</span>
+                        <div class="sym-desc">
+                            <h5>Stein der Weisen (Wild)</h5>
+                            <p>Ersetzt alle Symbole außer Kessel (Scatter).</p>
+                        </div>
+                    </div>
+                    <div class="symbol-help-card">
+                        <span class="sym-ico">🔮</span>
+                        <div class="sym-desc">
+                            <h5>Kessel (Scatter)</h5>
+                            <p>3+ Scatter triggern **10 Freispiele (x3 Gewinne)**.</p>
+                            <p>3x: 5x | 4x: 20x | 5x: 100x Einsatz.</p>
+                        </div>
+                    </div>
+                    <div class="symbol-help-card">
+                        <span class="sym-ico">🪶</span>
+                        <div class="sym-desc">
+                            <h5>Phönixfeder (Hoch)</h5>
+                            <p>3x: 10x | 4x: 40x | 5x: 200x Einsatz.</p>
+                        </div>
+                    </div>
+                    <div class="symbol-help-card">
+                        <span class="sym-ico">🧪</span>
+                        <div class="sym-desc">
+                            <h5>Blaues Elixier</h5>
+                            <p>3x: 5x | 4x: 20x | 5x: 100x Einsatz.</p>
+                        </div>
+                    </div>
+                    <div class="symbol-help-card">
+                        <span class="sym-ico">📖</span>
+                        <div class="sym-desc">
+                            <h5>Zauberbuch</h5>
+                            <p>3x: 4x | 4x: 15x | 5x: 75x Einsatz.</p>
+                        </div>
+                    </div>
+                    <div class="symbol-help-card">
+                        <span class="sym-ico" style="font-size:1.4rem;">🔥 💧 💨 🪨</span>
+                        <div class="sym-desc">
+                            <h5>Element-Runen (Niedrig)</h5>
+                            <p>3x: 1x | 4x: 5x | 5x: 25x Einsatz.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>💡 Risiko-Spiel (Karten-Risiko):</h3>
+                <p>Nach jedem Liniengewinn kannst du auf "RISIKO" klicken. Errate die richtige Kartenfarbe (Rot oder Schwarz), um deinen aktuellen Runden-Gewinn zu **verdoppeln**. Liegst du falsch, geht der Gewinn der Runde verloren.</p>
+
+                <h3>💡 Freispiele:</h3>
+                <p>Werden 3 oder mehr Kessel-Symbole verstreut auf den Walzen getroffen, starten **10 Freispiele**. Während der Freispiele leuchtet die Maschine violett und alle Gewinne werden **verdreifacht (x3)**! Freispiele können erneut ausgelöst werden.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: GAMBLE CARD GAME -->
+    <div class="modal hidden" id="gamble-modal" role="dialog" aria-modal="true" aria-labelledby="gamble-title">
+        <div class="modal-content gamble-modal-content">
+            <h2 id="gamble-title"><i class="fa-solid fa-diamond"></i> Karten-Risiko</h2>
+            <p class="panel-subtitle">Verdopple deinen Gewinn durch Erraten der nächsten Kartenfarbe. Auszahlungschance: 50% / 50%</p>
+            
+            <div class="gamble-body">
+                <!-- History of cards drawn -->
+                <div class="card-history" id="card-history">
+                    <!-- Dynamic history icons -->
+                </div>
+
+                <!-- Main Card Area (smooth flipping) -->
+                <div class="card-wrapper-gamble">
+                    <div class="gamble-card-inner" id="gamble-card-inner">
+                        <!-- Card Back -->
+                        <div class="card-face card-back">🔮</div>
+                        <!-- Card Front -->
+                        <div class="card-face card-front" id="card-front-face">♥️ A</div>
+                    </div>
+                </div>
+
+                <!-- Gamble Value Infos -->
+                <div class="gamble-info-grid">
+                    <div class="gamble-stat">
+                        <span class="gamble-lbl">AKTUELLER GEWINN</span>
+                        <span class="gamble-val text-gold" id="gamble-current-win">10.00 €</span>
+                    </div>
+                    <div class="gamble-stat">
+                        <span class="gamble-lbl">RISIKO GEWINN</span>
+                        <span class="gamble-val text-green" id="gamble-potential-win">20.00 €</span>
+                    </div>
+                </div>
+
+                <!-- Color selector buttons -->
+                <div class="gamble-buttons">
+                    <button type="button" class="btn btn-red" id="btn-gamble-red">
+                        <i class="fa-solid fa-heart"></i> ROT
+                    </button>
+                    <button type="button" class="btn btn-black" id="btn-gamble-black">
+                        <i class="fa-solid fa-clover"></i> SCHWARZ
+                    </button>
+                </div>
+
+                <!-- Action button to cashout/take current win -->
+                <div class="gamble-footer-actions">
+                    <button type="button" class="btn btn-collect-large" id="btn-gamble-collect">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> GEWINN NEHMEN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: FREE SPINS BANNER TRIGGER -->
+    <div class="modal hidden" id="fs-trigger-modal" role="dialog" aria-modal="true">
+        <div class="modal-content fs-trigger-content">
+            <div class="fs-icon">🔮</div>
+            <h2 id="fs-trigger-title">10 FREISPIELE FREIGESCHALTET!</h2>
+            <p>Die Kessel kochen über. Alle Gewinne in den Freispielen werden **dreifach** gutgeschrieben!</p>
+            <button type="button" class="btn btn-primary btn-large" id="btn-fs-start">STARTEN</button>
+        </div>
+    </div>
+
+    <!-- MODAL: ADMIN SETTINGS (Casino-Modus) -->
+    <div class="modal hidden" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <div class="modal-content admin-modal-content">
+            <button type="button" class="modal-close" id="btn-close-admin" aria-label="Schließen">&times;</button>
+            <h2 id="admin-title"><i class="fa-solid fa-sliders"></i> Slots-Kontrollzentrum</h2>
+            <p class="panel-subtitle">Justiere die Gewinnchancen der Slotmaschine.</p>
+            
+            <div class="admin-body">
+                <!-- Spielmodus Auswahl -->
+                <div class="control-group">
+                    <div class="slider-header">
+                        <label for="select-slots-mode">Spielmodus:</label>
+                    </div>
+                    <select id="select-slots-mode" class="admin-select">
+                        <option value="standard">Standard (Zufallsbasiert)</option>
+                        <option value="casino">Casino-Modus (Feste Gewinnquote)</option>
+                    </select>
+                    <p class="slider-note">Wähle ob die Walzen rein zufällig oder mit einer festen Auszahlungsquote gesteuert werden.</p>
+                </div>
+
+                <!-- Casino Gewinnquote -->
+                <div class="control-group hidden" id="group-slots-win-rate">
+                    <div class="slider-header">
+                        <label for="slide-slots-win-rate">Casino-Gewinnquote: <span id="val-slots-win-rate">25%</span></label>
+                    </div>
+                    <input type="range" id="slide-slots-win-rate" min="5" max="75" step="5" value="25" class="admin-slider">
+                    <p class="slider-note">Prozentsatz der Spins, die einen Gewinn erzielen sollen. 25% bedeutet: Jeder 4. Spin ist ein Gewinn.</p>
+                </div>
+
+                <!-- Win Size Limiter -->
+                <div class="control-group hidden" id="group-slots-max-multi">
+                    <div class="slider-header">
+                        <label for="slide-slots-max-multi">Max. Gewinn-Multiplikator: <span id="val-slots-max-multi">50x</span></label>
+                    </div>
+                    <input type="range" id="slide-slots-max-multi" min="5" max="250" step="5" value="50" class="admin-slider">
+                    <p class="slider-note">Begrenzt die maximale Symbolkombination pro Linie. Höhere Werte erlauben größere Gewinne.</p>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="live-math-panel">
+                    <h4>📊 Aktuelle Konfiguration:</h4>
+                    <div class="live-math-grid">
+                        <div class="math-card">
+                            <span class="math-pct" id="admin-mode-display">STANDARD</span>
+                            <span class="math-lbl">Spielmodus</span>
+                        </div>
+                        <div class="math-card">
+                            <span class="math-pct" id="admin-rate-display">Zufall</span>
+                            <span class="math-lbl">Gewinnquote</span>
+                        </div>
+                        <div class="math-card">
+                            <span class="math-pct" id="admin-lines-display">10</span>
+                            <span class="math-lbl">Gewinnlinien</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin-actions">
+                    <button type="button" class="btn btn-preset" id="btn-slots-admin-reset">STANDARDWERTE</button>
+                    <button type="button" class="btn btn-primary" id="btn-slots-admin-save">SPEICHERN & SCHLIESSEN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: WHEEL OF FORTUNE (Glücksrad der Elemente) -->
+    <div class="modal hidden" id="wheel-modal" role="dialog" aria-modal="true" aria-labelledby="wheel-title">
+        <div class="modal-content wheel-modal-content">
+            <h2 id="wheel-title"><i class="fa-solid fa-dharmachakra"></i> Glücksrad der Elemente</h2>
+            <p class="panel-subtitle">Du hast 3+ Glücksrad-Symbole getroffen! Drehe das Rad, um magische Belohnungen zu erhalten.</p>
+            
+            <div class="wheel-body">
+                <div class="wheel-container-wrapper">
+                    <!-- Indicator arrow at the top -->
+                    <div class="wheel-pointer"></div>
+                    <canvas id="wheel-canvas" width="320" height="320"></canvas>
+                </div>
+                
+                <div class="wheel-actions" style="display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%;">
+                    <button type="button" class="btn btn-spin btn-large" id="btn-wheel-spin" style="padding: 15px 40px; font-size: 1.2rem; min-width: 200px;">
+                        <i class="fa-solid fa-arrows-spin"></i> RAD DREHEN
+                    </button>
+                    <div id="wheel-result" class="wheel-result hidden"></div>
+                    <button type="button" class="btn btn-collect-large hidden" id="btn-wheel-collect">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> BELOHNUNG NEHMEN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Script Referenz -->
+    <script src="app.js"></script>
+</body>
+</html>

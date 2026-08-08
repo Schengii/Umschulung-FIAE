@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Akademie: Elementen-Roulette</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-spinner magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-GOLD</h1>
+                    <span>ELEMENTEN-ROULETTE</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="game-nav" style="display: flex; gap: 10px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Zur Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-cauldron"><i class="fa-solid fa-fire-burner"></i> Zum Kessel</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Zu den Spins</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Zum Plinko</a>
+                <a href="../mines/index.html" class="btn btn-nav-mines"><i class="fa-solid fa-gem"></i> Zu den Minen</a>
+            </nav>
+            
+            <!-- Stats HUD -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Chip Selection & Bet Actions -->
+            <section class="panel control-panel" aria-label="Chip-Auswahl">
+                <h2 class="panel-title"><i class="fa-solid fa-coins"></i> Wetteinsätze</h2>
+                <p class="panel-subtitle">Wähle einen Jetonwert und klicke auf die Elementenfelder im Zentrum, um Einsätze zu platzieren.</p>
+
+                <!-- Jeton Selector -->
+                <div class="chip-selector-title">Jeton-Wert wählen:</div>
+                <div class="chip-selector" id="chip-selector">
+                    <button type="button" class="chip-btn active" data-val="1">1€</button>
+                    <button type="button" class="chip-btn" data-val="5">5€</button>
+                    <button type="button" class="chip-btn" data-val="10">10€</button>
+                    <button type="button" class="chip-btn" data-val="50">50€</button>
+                    <button type="button" class="chip-btn" data-val="100">100€</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Bet Info summary -->
+                <div class="bet-summary">
+                    <div class="bet-summary-row">
+                        <span>Gesamteinsatz:</span>
+                        <span id="total-bet-val" class="highlight-val">0.00 €</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="game-actions">
+                    <button type="button" class="btn btn-primary btn-large" id="btn-spin" disabled>
+                        <i class="fa-solid fa-arrow-rotate-right"></i> RAD DREHEN
+                    </button>
+                    <button type="button" class="btn btn-preset" id="btn-clear-bets" style="margin-top: 10px;">
+                        <i class="fa-solid fa-trash-can"></i> EINSÄTZE LÖSCHEN
+                    </button>
+                </div>
+
+                <!-- Status Text Info -->
+                <div class="status-meter" aria-live="polite">
+                    <div class="status-header">
+                        <span>Status</span>
+                        <span id="game-status-text" role="status">Platziere deine Einsätze</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER: 2D Wheel Canvas & Betting Grid -->
+            <section class="wheel-viewport" aria-label="Roulette-Zentrum">
+                <!-- Interactive Roulette Wheel -->
+                <div class="wheel-canvas-container">
+                    <div class="wheel-pointer">▼</div>
+                    <canvas id="wheel-canvas" width="400" height="400"></canvas>
+                </div>
+
+                <!-- Element Betting Cards Layout -->
+                <div class="elements-bet-grid" id="bet-grid">
+                    <!-- Wasser -->
+                    <button type="button" class="bet-zone-card card-water" data-element="water">
+                        <span class="bet-zone-icon">💧</span>
+                        <span class="bet-zone-name">Wasser</span>
+                        <span class="bet-zone-mult">2x</span>
+                        <span class="bet-zone-placed" id="bet-placed-water">0€</span>
+                    </button>
+
+                    <!-- Feuer -->
+                    <button type="button" class="bet-zone-card card-fire" data-element="fire">
+                        <span class="bet-zone-icon">🔥</span>
+                        <span class="bet-zone-name">Feuer</span>
+                        <span class="bet-zone-mult">3x</span>
+                        <span class="bet-zone-placed" id="bet-placed-fire">0€</span>
+                    </button>
+
+                    <!-- Erde -->
+                    <button type="button" class="bet-zone-card card-earth" data-element="earth">
+                        <span class="bet-zone-icon">🌿</span>
+                        <span class="bet-zone-name">Erde</span>
+                        <span class="bet-zone-mult">6x</span>
+                        <span class="bet-zone-placed" id="bet-placed-earth">0€</span>
+                    </button>
+
+                    <!-- Luft -->
+                    <button type="button" class="bet-zone-card card-air" data-element="air">
+                        <span class="bet-zone-icon">💨</span>
+                        <span class="bet-zone-name">Luft</span>
+                        <span class="bet-zone-mult">12x</span>
+                        <span class="bet-zone-placed" id="bet-placed-air">0€</span>
+                    </button>
+
+                    <!-- Äther -->
+                    <button type="button" class="bet-zone-card card-aether" data-element="aether">
+                        <span class="bet-zone-icon">⚜️</span>
+                        <span class="bet-zone-name">Äther</span>
+                        <span class="bet-zone-mult">24x</span>
+                        <span class="bet-zone-placed" id="bet-placed-aether">0€</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Rules & Sector distribution -->
+            <section class="panel rules-panel" aria-label="Regeln & Sektoren">
+                <h2 class="panel-title"><i class="fa-solid fa-chart-pie"></i> Verteilung</h2>
+                <p class="panel-subtitle">Das Rad ist in 30 Sektoren der alchemistischen Elemente unterteilt:</p>
+
+                <div class="distribution-list">
+                    <div class="dist-item water">
+                        <span class="dist-color-block"></span>
+                        <span>Wasser (14 Sektoren)</span>
+                        <span class="dist-mult">2x Payout</span>
+                    </div>
+                    <div class="dist-item fire">
+                        <span class="dist-color-block"></span>
+                        <span>Feuer (9 Sektoren)</span>
+                        <span class="dist-mult">3x Payout</span>
+                    </div>
+                    <div class="dist-item earth">
+                        <span class="dist-color-block"></span>
+                        <span>Erde (4 Sektoren)</span>
+                        <span class="dist-mult">6x Payout</span>
+                    </div>
+                    <div class="dist-item air">
+                        <span class="dist-color-block"></span>
+                        <span>Luft (2 Sektoren)</span>
+                        <span class="dist-mult">12x Payout</span>
+                    </div>
+                    <div class="dist-item aether">
+                        <span class="dist-color-block"></span>
+                        <span>Äther (1 Sektor)</span>
+                        <span class="dist-mult">24x Payout</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER: History & Mute -->
+        <footer class="game-footer">
+            <div class="history-panel">
+                <span class="history-label">LETZTE SEKTOREN:</span>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">Noch keine Drehungen</div>
+                </div>
+            </div>
+            
+            <div class="footer-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Spielanleitung">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Help Guide -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-circle-question"></i> Spielanleitung</h2>
+            <div class="modal-body">
+                <p>Willkommen beim <strong>Elementen-Roulette</strong>!</p>
+                <p>Auf diesem alchemistischen Kreis befinden sich die 5 Urelemente des Kosmos. Setze deine Jetons weise, um das Schicksal herauszufordern.</p>
+                
+                <h3>Ablauf des Spiels:</h3>
+                <ol>
+                    <li>Wähle unten links einen <strong>Jeton-Wert (1€ bis 100€)</strong> aus.</li>
+                    <li>Klicke auf die <strong>Elementen-Karten</strong> im Zentrum, um deine Jetons dort zu platzieren. Du kannst auf mehrere Elemente gleichzeitig setzen.</li>
+                    <li>Klicke auf <strong>"Rad drehen"</strong>. Die Scheibe wird in Rotation versetzt und verlangsamt sich allmählich.</li>
+                    <li>Sobald der Zeiger oben auf einem Sektor stehenbleibt, werden alle Einsätze abgerechnet:
+                        <ul>
+                            <li>Hast du auf das getroffene Element gesetzt, gewinnst du deinen Einsatz multipliziert mit dem Wert des Elements.</li>
+                            <li>Alle ungetroffenen Elementeinsätze verpuffen.</li>
+                        </ul>
+                    </li>
+                    <li>Gewonnene Runden ermöglichen dir das **Risiko-Mischen** in einem Zusatz-Popup, um den Gewinn zu verdoppeln!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

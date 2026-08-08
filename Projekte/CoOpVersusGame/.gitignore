@@ -1,0 +1,17 @@
+# Godot project gitignore
+# Imported assets
+.import/
+# Godot-specific editor files
+.godot/
+# Mono / C# files (if ever used)
+mono/
+# IDE/project files
+.idea/
+.vscode/
+*.sln
+*.csproj
+# OS files
+.DS_Store
+Thumbs.db
+# Export presets (optional to keep locally)
+export_presets.cfg

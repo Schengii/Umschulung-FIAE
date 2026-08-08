@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essenz-Plinko: Das Tröpfel-Labor</title>
+    <!-- Google Fonts for magical & modern style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-flask magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ESSENZ-PLINKO</h1>
+                    <span>DAS TRÖPFEL-LABOR</span>
+                </div>
+            </div>
+
+            <!-- Navigation between games -->
+            <nav class="game-nav" style="display: flex; gap: 10px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Zur Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-back"><i class="fa-solid fa-fire-burner"></i> Zum Kessel</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Zu den Spins</a>
+            </nav>
+            
+            <!-- Header Stats container for Balance and Level Progress -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Wett-Einstellungen & Essenz-Auswahl -->
+            <section class="panel bet-panel" aria-label="Wettsteuerung">
+                <h2 class="panel-title"><i class="fa-solid fa-coins"></i> Einsatz</h2>
+                
+                <div class="bet-input-container">
+                    <label for="bet-input" class="sr-only">Wetteinsatz in Euro</label>
+                    <input type="number" id="bet-input" value="10.00" min="1.00" max="500.00" step="1.00" class="bet-input">
+                    <span class="bet-currency-tag">€</span>
+                </div>
+
+                <div class="bet-presets">
+                    <button type="button" class="btn btn-preset" id="btn-bet-min">MIN</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-half">½</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-double">2x</button>
+                    <button type="button" class="btn btn-preset" id="btn-bet-max">MAX</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <h2 class="panel-title"><i class="fa-solid fa-droplet"></i> Essenzen</h2>
+                <div class="essences-selector-grid">
+                    <!-- Essence 1: Mondwasser (Low Risk) -->
+                    <button type="button" class="essence-card card-water active" id="ess-water">
+                        <div class="ess-icon-container">🧪</div>
+                        <div class="ess-details">
+                            <h3>Mondwasser</h3>
+                            <span class="ess-desc">Geringes Risiko (8 Reihen)</span>
+                            <span class="ess-mults">Multiplikatoren: 0.5x bis 2.5x</span>
+                        </div>
+                    </button>
+
+                    <!-- Essence 2: Phönix-Asche (Medium Risk) -->
+                    <button type="button" class="essence-card card-ash" id="ess-ash">
+                        <div class="ess-icon-container">🪶</div>
+                        <div class="ess-details">
+                            <h3>Phönix-Asche</h3>
+                            <span class="ess-desc">Mittleres Risiko (10 Reihen)</span>
+                            <span class="ess-mults">Multiplikatoren: 0.2x bis 10.0x</span>
+                        </div>
+                    </button>
+
+                    <!-- Essence 3: Drachenblut (High Risk) -->
+                    <button type="button" class="essence-card card-dragon" id="ess-dragon">
+                        <div class="ess-icon-container">🩸</div>
+                        <div class="ess-details">
+                            <h3>Drachenblut</h3>
+                            <span class="ess-desc">Hohes Risiko (12 Reihen)</span>
+                            <span class="ess-mults">Multiplikatoren: 0.0x bis 50.0x</span>
+                        </div>
+                    </button>
+
+                    <!-- Essence 4: Dunkle Materie (Extreme Risk) -->
+                    <button type="button" class="essence-card card-matter" id="ess-matter">
+                        <div class="ess-icon-container">⚛️</div>
+                        <div class="ess-details">
+                            <h3>Dunkle Materie</h3>
+                            <span class="ess-desc">Extreme Gefahr (14 Reihen)</span>
+                            <span class="ess-mults">Multiplikatoren: 0.0x bis 150.0x</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Play Actions -->
+                <div class="game-actions">
+                    <button type="button" class="btn btn-primary btn-large" id="btn-drop">
+                        <i class="fa-solid fa-vial"></i> ESSENZ TROPFEN
+                    </button>
+                    
+                    <div class="auto-drop-container">
+                        <div class="toggle-wrapper">
+                            <input type="checkbox" id="chk-auto-drop" class="toggle-checkbox">
+                            <label for="chk-auto-drop" class="toggle-label">Auto-Modus (Schnelltropfen)</label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER: Das Board (Canvas) -->
+            <section class="board-viewport" aria-label="Plinko-Spielfeld">
+                <div class="canvas-wrapper">
+                    <canvas id="plinko-canvas" width="600" height="660"></canvas>
+                    
+                    <!-- Overlay for wildcards or events -->
+                    <div class="wildcard-banner hidden" id="wildcard-banner">
+                        <div class="wildcard-icon" id="wildcard-icon">⚡</div>
+                        <div class="wildcard-text">
+                            <h3 id="wildcard-title">BLITZ-TROPFEN!</h3>
+                            <p id="wildcard-desc">Der Tropfen teilt sich beim nächsten Peg-Treffer!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Labor & Statistiken -->
+            <section class="panel tabbed-panel" aria-label="Labor & Statistiken">
+                <div class="panel-tabs">
+                    <button type="button" class="tab-btn active" id="tab-btn-lab">
+                        <i class="fa-solid fa-flask-vial"></i> Labor
+                    </button>
+                    <button type="button" class="tab-btn" id="tab-btn-stats">
+                        <i class="fa-solid fa-book-skull"></i> Buch & Stats
+                    </button>
+                </div>
+
+                <!-- TAB CONTENT 1: LABOR (Passive Upgrades) -->
+                <div class="tab-content" id="tab-content-lab">
+                    <p class="panel-subtitle">Hier siehst du deine freigeschalteten Upgrades und Boni aus der alchemistischen Akademie.</p>
+                    
+                    <div class="labor-status-list">
+                        <!-- Upgrade 1: Kupfer-Filter -->
+                        <div class="upgrade-status-card locked" id="up-status-copper">
+                            <div class="up-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="up-details">
+                                <h5>Kupfer-Filter (Stufe 3)</h5>
+                                <p>Erzeugt passive Seitenwinde, um das Risiko der ganz schlechten Center-Slots zu verringern.</p>
+                                <span class="status-tag">Inaktiv</span>
+                            </div>
+                        </div>
+
+                        <!-- Upgrade 2: Katalysator-Kristall -->
+                        <div class="upgrade-status-card locked" id="up-status-crystal">
+                            <div class="up-icon-box"><i class="fa-solid fa-gem"></i></div>
+                            <div class="up-details">
+                                <h5>Katalysator-Kristall (Stufe 5)</h5>
+                                <p>Verleiht allen Trank-Gewinnen einen dauerhaften Multiplikator-Bonus von +10%.</p>
+                                <span class="status-tag">Inaktiv</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="academy-info-box">
+                        <h4><i class="fa-solid fa-graduation-cap"></i> Akademie-Hinweis</h4>
+                        <p>Steige im Hauptspiel (Kessel des Schicksals) im Alchemisten-Level auf, um diese Upgrades freizuschalten und auszurüsten. Einmal aktiviert, gelten sie für das gesamte Labor!</p>
+                    </div>
+                </div>
+
+                <!-- TAB CONTENT 2: STATISTIKEN -->
+                <div class="tab-content hidden" id="tab-content-stats">
+                    <div class="stats-dashboard">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-drops">0</span>
+                                <span class="stat-lbl">Gedropte Essenzen</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-high-mult">0.00x</span>
+                                <span class="stat-lbl">Bester Multiplikator</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-num" id="stat-wildcards">0</span>
+                                <span class="stat-lbl">Wildcards ausgelöst</span>
+                            </div>
+                        </div>
+
+                        <!-- Balance Chart Container -->
+                        <div class="chart-wrapper" style="margin-top: 20px;">
+                            <h4 class="chart-title">Guthaben-Entwicklung</h4>
+                            <div class="canvas-chart-container">
+                                <canvas id="plinko-chart" width="330" height="130"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER: Verlauf & Kontrollen -->
+        <footer class="game-footer">
+            <div class="history-panel">
+                <span class="history-label">LETZTE ESSENZEN:</span>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">Keine Tropfen gelandet</div>
+                </div>
+            </div>
+            
+            <div class="footer-controls">
+                <button type="button" class="btn btn-icon" id="btn-help" title="Spielanleitung">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-mute" title="Ton stummschalten">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button type="button" class="btn btn-icon" id="btn-admin" title="Admin-Einstellungen">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: Spielanleitung -->
+    <div class="modal hidden" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" id="btn-close-modal" aria-label="Schließen">&times;</button>
+            <h2 id="modal-title"><i class="fa-solid fa-circle-question"></i> Spielanleitung</h2>
+            <div class="modal-body">
+                <p>Willkommen im <strong>Tröpfel-Labor</strong>! Hier testest du die Reinheit alchemistischer Essenzen, indem du sie durch ein Gitter aus Runen-Pegs fallen lässt.</p>
+                
+                <h3>Ablauf des Spiels:</h3>
+                <ol>
+                    <li>Wähle deinen <strong>Wetteinsatz</strong> und die gewünschte <strong>Trank-Essenz</strong> aus. Die Essenz bestimmt das Risiko und die Multiplikatoren:
+                        <ul>
+                            <li><strong>Mondwasser:</strong> Geringes Risiko (8 Reihen). Du landest oft in der Mitte bei kleinen Gewinnen (0.5x bis 2.5x).</li>
+                            <li><strong>Phönix-Asche:</strong> Mittleres Risiko (10 Reihen). Auszahlungen von 0.2x bis 10.0x.</li>
+                            <li><strong>Drachenblut:</strong> Hohes Risiko (12 Reihen). Viele Nieten (0.0x), aber das Potenzial für gigantische Gewinne bis zu **50.0x**!</li>
+                        </ul>
+                    </li>
+                    <li>Klicke auf <strong>"Essenz tropfen"</strong>, um einen Tropfen der Essenz von oben in das Labyrinth fallen zu lassen.</li>
+                    <li>Der Tropfen prallt physikalisch an den Runen-Pegs ab und landet in einem der Sammelgläser am Boden.</li>
+                    <li>Dein Gewinn berechnet sich aus: **Einsatz × Multiplikator**.</li>
+                </ol>
+
+                <h3>🔮 Magische Peg-Ereignisse (Wildcards):</h3>
+                <p>Beim Spawnen eines Tropfens besteht eine **10%-Chance**, dass Runen-Pegs anfangen magisch zu leuchten:</p>
+                <ul>
+                    <li><strong class="color-cyan">⚡ Blitz-Peg (Splitter):</strong> Trifft ein Tropfen diesen Peg, teilt er sich in **zwei eigenständige Tropfen** auf! Beide Tropfen zahlen am Ende aus.</li>
+                    <li><strong class="color-gold">🔥 Feuer-Peg (Katalysator):</strong> Färbt den Tropfen rot-glühend. Der End-Multiplikator des Glases wird **verdoppelt**!</li>
+                    <li><strong class="color-dew">❄️ Frost-Peg (Gleiten):</strong> Gefriert die Umgebung. Die Schwerkraft wird für den Tropfen für 3 Sekunden **halbiert**, was ihn weiter nach außen driften lässt.</li>
+                </ul>
+
+                <h3>⚡ Auto-Modus:</h3>
+                <p>Aktiviere den Auto-Modus, um Tropfen kontinuierlich abzuwerfen, indem du den Drop-Button gedrückt hältst oder der Modus automatisch schnell tropft.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Admin-Einstellungen -->
+    <div class="modal hidden" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <div class="modal-content admin-modal-content">
+            <button type="button" class="modal-close" id="btn-close-admin" aria-label="Schließen">&times;</button>
+            <h2 id="admin-title"><i class="fa-solid fa-sliders"></i> Plinko-Kontrollzentrum</h2>
+            <p class="panel-subtitle">Justiere die Physik und steuere die Auszahlungslogik des Labyrinths in Echtzeit.</p>
+            
+            <div class="admin-body">
+                <!-- Spielmodus Auswahl -->
+                <div class="control-group">
+                    <div class="slider-header">
+                        <label for="select-plinko-mode">Spielmodus:</label>
+                    </div>
+                    <select id="select-plinko-mode" class="admin-select" style="width: 100%; padding: 10px; background: rgba(5, 3, 10, 0.8); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: var(--transition-smooth);">
+                        <option value="standard">Standard (Physikbasiert)</option>
+                        <option value="casino">Casino-Modus (Vorentschiedener Slot)</option>
+                    </select>
+                    <p class="slider-note">Im Standardmodus bestimmt die physikalische Kollision den Pfad. Im Casino-Modus wird das Ergebnis beim Start festgelegt und der Pfad unsichtbar gesteuert.</p>
+                </div>
+
+                <!-- Regler 1: Gravity -->
+                <div class="control-group" id="group-gravity">
+                    <div class="slider-header">
+                        <label for="slide-gravity">Schwerkraft: <span id="val-gravity">0.25</span></label>
+                    </div>
+                    <input type="range" id="slide-gravity" min="0.10" max="0.50" step="0.01" value="0.25" class="admin-slider">
+                    <p class="slider-note">Steuert, wie schnell die Tropfen nach unten beschleunigen.</p>
+                </div>
+
+                <!-- Regler 2: Bounce Elasticity -->
+                <div class="control-group" id="group-bounce">
+                    <div class="slider-header">
+                        <label for="slide-bounce">Abprall-Elastizität: <span id="val-bounce">0.50</span></label>
+                    </div>
+                    <input type="range" id="slide-bounce" min="0.20" max="0.80" step="0.02" value="0.50" class="admin-slider">
+                    <p class="slider-note">Steuert die Wucht, mit der Tropfen von den Pegs abprallen. Höhere Werte führen zu chaotischeren Bounces.</p>
+                </div>
+
+                <!-- Regler 3: Casino Gewinnquote -->
+                <div class="control-group hidden" id="group-win-rate">
+                    <div class="slider-header">
+                        <label for="slide-win-rate">Casino-Gewinnquote (RTP-Klassifizierung): <span id="val-win-rate">95%</span></label>
+                    </div>
+                    <input type="range" id="slide-win-rate" min="50" max="150" step="5" value="95" class="admin-slider">
+                    <p class="slider-note">Legt die langfristige theoretische Auszahlungsquote (RTP in %) fest. Der Casino-Modus steuert die Tropfen so, dass dieser Wert exakt getroffen wird.</p>
+                </div>
+
+                <div class="admin-actions">
+                    <button type="button" class="btn btn-preset" id="btn-admin-reset">STANDARDWERTE</button>
+                    <button type="button" class="btn btn-primary" id="btn-admin-save">SPEICHERN & SCHLIESSEN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Script Referenz -->
+    <script src="app.js"></script>
+</body>
+</html>

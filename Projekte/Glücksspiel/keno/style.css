@@ -1,0 +1,120 @@
+/* KENO STYLES */
+.keno-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 850px) {
+    .keno-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.keno-grid-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.keno-grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.keno-board-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 550px) {
+    .keno-board-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.rune-tile {
+    aspect-ratio: 1;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.rune-tile:hover {
+    border-color: var(--color-gold);
+    background: rgba(255, 215, 0, 0.08);
+}
+
+.rune-tile.selected {
+    border-color: var(--color-gold);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(180, 83, 9, 0.15));
+    color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(180, 83, 9, 0.2);
+}
+
+.rune-tile.drawn {
+    border-color: var(--color-purple);
+    background: rgba(124, 58, 237, 0.2);
+    color: var(--color-purple);
+}
+
+.rune-tile.hit {
+    border-color: var(--color-green);
+    background: linear-gradient(135deg, #10b981, #047857);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    transform: scale(1.05);
+}
+
+.keno-controls-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.keno-paytable {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.paytable-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.paytable-row.highlight {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-green);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}

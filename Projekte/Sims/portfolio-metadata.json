@@ -1,0 +1,36 @@
+{
+  "repoName": "Sims",
+  "titleDe": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+  "titleEn": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+  "tags": [
+    "React",
+    "TypeScript",
+    "2.5D Isometric Engine",
+    "Simlish Audio Synth",
+    "Life Simulation",
+    "House Parties"
+  ],
+  "image": "assets/images/burgen_showcase.png",
+  "link": "Projekte/Sims/dist/index.html",
+  "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
+  "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
+  "category": "games web",
+  "language": "TypeScript",
+  "codeFiles": [
+    {
+      "name": "index.html",
+      "path": "Projekte/Sims/index.html",
+      "type": "html"
+    },
+    {
+      "name": "package.json",
+      "path": "Projekte/Sims/package.json",
+      "type": "json"
+    },
+    {
+      "name": "README.md",
+      "path": "Projekte/Sims/README.md",
+      "type": "markdown"
+    }
+  ]
+}

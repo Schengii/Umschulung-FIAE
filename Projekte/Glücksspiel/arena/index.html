@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemisten-Akademie: Arena der Prüfungen</title>
+    <!-- Google Fonts for magical & modern style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Shared Styles & Scripts -->
+    <link rel="stylesheet" href="../shared.css">
+    <script src="../shared.js"></script>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <div class="game-container">
+        <!-- HEADER: Logo & Guthaben -->
+        <header class="game-header">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved magic-icon"></i>
+                <div class="logo-text">
+                    <h1>ALCHEMISTEN-GOLD</h1>
+                    <span>ARENA DER PRÜFUNGEN</span>
+                </div>
+            </div>
+
+            <!-- Navigation to other games -->
+            <nav class="game-nav" style="display: flex; gap: 8px;">
+                <a href="../index.html" class="btn btn-nav-lobby"><i class="fa-solid fa-house"></i> Lobby</a>
+                <a href="../cauldron/index.html" class="btn btn-nav-cauldron"><i class="fa-solid fa-fire-burner"></i> Kessel</a>
+                <a href="../slots/index.html" class="btn btn-nav-slots"><i class="fa-solid fa-arrow-rotate-right"></i> Spins</a>
+                <a href="../plinko/index.html" class="btn btn-nav-plinko"><i class="fa-solid fa-circle-nodes"></i> Plinko</a>
+                <a href="../mines/index.html" class="btn btn-nav-mines"><i class="fa-solid fa-gem"></i> Minen</a>
+                <a href="../roulette/index.html" class="btn btn-nav-roulette"><i class="fa-solid fa-spinner"></i> Roulette</a>
+                <a href="../dice/index.html" class="btn btn-nav-dice"><i class="fa-solid fa-dice"></i> Würfeln</a>
+            </nav>
+            
+            <!-- Header Stats -->
+            <div class="header-stats">
+                <!-- XP / Level Card -->
+                <div class="xp-card">
+                    <div class="xp-header-info">
+                        <span class="xp-level-label">STUFE <span id="xp-level-num">1</span></span>
+                        <span class="xp-value-label"><span id="xp-current-val">0</span> / <span id="xp-target-val">500</span> XP</span>
+                    </div>
+                    <div class="xp-bar-outer">
+                        <div class="xp-bar-inner" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <span class="balance-label">GUTHABEN</span>
+                    <div class="balance-value">
+                        <span id="balance-amount">1000.00</span>
+                        <span class="currency">€</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="game-layout">
+            <!-- LEFT PANEL: Actions -->
+            <section class="panel control-panel" aria-label="Kampf-Aktionen">
+                <h2 class="panel-title"><i class="fa-solid fa-hand-fist"></i> Kampf-Aktionen</h2>
+                
+                <!-- Spielbereitschaft / Kampfgebühr -->
+                <div class="control-group entry-fee-section" id="entry-fee-section">
+                    <label class="control-label" for="arena-stage-select">Akademie-Etage (Schwierigkeit)</label>
+                    <div class="stage-select-container" style="margin-bottom: 12px;">
+                        <select id="arena-stage-select" class="btn" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255, 215, 0, 0.3); color: var(--color-gold); font-family: 'Outfit', sans-serif; font-size: 0.9rem; padding: 8px; border-radius: 6px;">
+                            <option value="1" style="background:#120b26; color:#fff;">Etage 1: Schleim-Garten (Leicht - 1.5x Multiplikator)</option>
+                            <option value="2" style="background:#120b26; color:#fff;">Etage 2: Eis-Grotte (Normal - 2.2x Multiplikator)</option>
+                            <option value="3" style="background:#120b26; color:#fff;">Etage 3: Alraunen-Hain (Schwer - 3.2x Multiplikator)</option>
+                            <option value="4" style="background:#120b26; color:#fff;">Etage 4: Drachen-Schlucht (Sehr Schwer - 4.5x Multiplikator)</option>
+                            <option value="5" style="background:#120b26; color:#fff;">Etage 5: Turm des Rektors (Boss - 7.0x Multiplikator)</option>
+                        </select>
+                    </div>
+
+                    <label class="control-label" for="bet-input">Kampf-Einsatz</label>
+                    <div class="bet-input-container">
+                        <input type="number" id="bet-input" value="15.00" min="5.00" max="250.00" step="5.00" class="bet-input">
+                        <span class="bet-currency-tag">€</span>
+                    </div>
+                    <div class="bet-presets">
+                        <button type="button" class="btn btn-preset" id="btn-bet-min">MIN</button>
+                        <button type="button" class="btn btn-preset" id="btn-bet-half">½</button>
+                        <button type="button" class="btn btn-preset" id="btn-bet-double">2x</button>
+                        <button type="button" class="btn btn-preset" id="btn-bet-max">MAX</button>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btn-start-fight" style="width: 100%; margin-top: 15px; background: linear-gradient(135deg, var(--color-purple), #6b21a8); font-weight: 800; font-size: 1rem; color: #fff;">
+                        <i class="fa-solid fa-swords"></i> KAMPF STARTEN
+                    </button>
+                </div>
+
+                <!-- Kampf-Steuerung (während des Kampfes aktiv) -->
+                <div class="combat-actions-section hidden" id="combat-actions-section">
+                    <h3 class="subsection-title">Physischer Angriff</h3>
+                    <button type="button" class="btn btn-action" id="btn-attack" style="width: 100%; margin-bottom: 12px;">
+                        <i class="fa-solid fa-sword"></i> Standardangriff
+                    </button>
+
+                    <h3 class="subsection-title">Alchemistische Zauber (Mana-Kosten)</h3>
+                    <div class="spells-grid" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button type="button" class="btn btn-spell" id="btn-spell-fire" data-mp="15">
+                            <i class="fa-solid fa-fire" style="color: var(--color-danger);"></i> Feuerstoß <span class="mp-cost">(15 MP)</span>
+                        </button>
+                        <button type="button" class="btn btn-spell" id="btn-spell-earth" data-mp="25">
+                            <i class="fa-solid fa-hill-rockslide" style="color: var(--color-gold);"></i> Erdbeben <span class="mp-cost">(25 MP)</span>
+                        </button>
+                        <button type="button" class="btn btn-spell" id="btn-spell-wind" data-mp="10">
+                            <i class="fa-solid fa-wind" style="color: var(--color-orange);"></i> Windstoß <span class="mp-cost">(10 MP)</span>
+                        </button>
+                        <button type="button" class="btn btn-spell" id="btn-spell-ice" data-mp="20" style="display: none;">
+                            <i class="fa-solid fa-snowflake" style="color: var(--color-cyan);"></i> Eis-Splitter <span class="mp-cost">(20 MP)</span>
+                        </button>
+                    </div>
+
+                    <h3 class="subsection-title" style="margin-top: 15px;">Trank-Inventar</h3>
+                    <div class="potion-inventory-list" id="combat-potion-inventory" style="display: flex; flex-direction: column; gap: 6px;">
+                        <!-- Populated dynamically with potions from inventory -->
+                    </div>
+
+                    <div class="divider" style="margin: 15px 0;"></div>
+                    <button type="button" class="btn btn-danger" id="btn-flee" style="width: 100%;">
+                        <i class="fa-solid fa-person-running"></i> Fliehen
+                    </button>
+                </div>
+            </section>
+
+            <!-- CENTER PANEL: The Battle Ground -->
+            <section class="panel arena-panel" aria-label="Schlachtfeld" style="flex: 2; position: relative;">
+                <div class="battleground" id="battleground" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 400px; padding: 20px;">
+                    <!-- Enemy Stats -->
+                    <div class="fighter-stats enemy-side" id="enemy-card">
+                        <div class="avatar-container">
+                            <span class="avatar-icon" id="enemy-avatar">👾</span>
+                        </div>
+                        <div class="info">
+                            <h3 class="name" id="enemy-name">Wildes Golem</h3>
+                            <div class="bar-label">HP: <span id="enemy-hp-text">100 / 100</span></div>
+                            <div class="bar-outer hp-bar">
+                                <div class="bar-inner hp-fill" id="enemy-hp-bar" style="width: 100%;"></div>
+                            </div>
+                            <div class="buff-indicators" id="enemy-buffs"></div>
+                        </div>
+                    </div>
+
+                    <!-- Versus sign -->
+                    <div class="vs-sign" id="vs-sign">VS</div>
+
+                    <!-- Player Stats -->
+                    <div class="fighter-stats player-side" id="player-card">
+                        <div class="avatar-container">
+                            <span class="avatar-icon">🧙‍♂️</span>
+                        </div>
+                        <div class="info">
+                            <h3 class="name">Alchemist-Novize</h3>
+                            <div class="bar-label">HP: <span id="player-hp-text">100 / 100</span></div>
+                            <div class="bar-outer hp-bar">
+                                <div class="bar-inner hp-fill" id="player-hp-bar" style="width: 100%;"></div>
+                            </div>
+                            <div class="bar-label" style="margin-top: 6px;">MP: <span id="player-mp-text">50 / 50</span></div>
+                            <div class="bar-outer mp-bar">
+                                <div class="bar-inner mp-fill" id="player-mp-bar" style="width: 100%;"></div>
+                            </div>
+                            <div class="buff-indicators" id="player-buffs"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arena Screen States -->
+                <div class="arena-screen-overlay" id="arena-overlay">
+                    <div class="overlay-content">
+                        <h2 id="arena-overlay-title">Bereit zum Kampf?</h2>
+                        <p id="arena-overlay-subtitle">Wähle deinen Eintrittspreis links und beginne die Prüfung!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Log & Stats -->
+            <section class="panel log-panel" aria-label="Kampf-Berichte">
+                <h2 class="panel-title"><i class="fa-solid fa-scroll"></i> Kampf-Logbuch</h2>
+                <div class="combat-log" id="combat-log" style="height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-size: 0.8rem; background: rgba(0,0,0,0.01); line-height: 1.4;">
+                    <div class="log-entry system"><i class="fa-solid fa-info-circle"></i> Willkommen in der Arena der Prüfungen. Tränke, die du im Kampf trinkst, werden direkt aus deinem Labor-Inventar verbraucht.</div>
+                </div>
+
+                <div class="divider" style="margin: 15px 0;"></div>
+
+                <h3 class="subsection-title"><i class="fa-solid fa-trophy"></i> Arena-Statistiken</h3>
+                <div class="arena-stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+                    <div class="stat-box" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-card);">
+                        <span class="stat-num" id="stat-battles" style="display: block; font-size: 1.1rem; font-weight: 800; color: var(--color-purple);">0</span>
+                        <span class="stat-lbl" style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase;">Kämpfe</span>
+                    </div>
+                    <div class="stat-box" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-card);">
+                        <span class="stat-num" id="stat-wins" style="display: block; font-size: 1.1rem; font-weight: 800; color: var(--color-green);">0</span>
+                        <span class="stat-lbl" style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase;">Siege</span>
+                    </div>
+                    <div class="stat-box" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-card);">
+                        <span class="stat-num" id="stat-winrate" style="display: block; font-size: 1.1rem; font-weight: 800; color: var(--color-gold);">0%</span>
+                        <span class="stat-lbl" style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase;">Quote</span>
+                    </div>
+                </div>
+
+                <div class="arena-loot-display" style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h4 style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-weight: 700;"><i class="fa-solid fa-sack-dollar"></i> Erbeutete Zutaten (Gesamt)</h4>
+                    <div style="display: flex; justify-content: space-around; font-size: 0.78rem;" id="loot-stats-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script loading -->
+    <script src="app.js"></script>
+</body>
+</html>
