@@ -217,6 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
             </a>`;
         }
         
+        // Compare selection button
+        buttonsHTML += `
+        <button type="button" class="btn-compare-select" data-repo="${project.repoName || project.titleDe}" title="Mit anderen Projekten vergleichen">
+            <i class="fa-solid fa-code-compare"></i> <span>Vergleichen</span>
+        </button>`;
+
         buttonsHTML += '</div>';
 
         // Set category class for filtering

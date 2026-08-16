@@ -98,4 +98,61 @@ test.describe('New Interactive Features E2E Verification', () => {
     await expect(badge).toBeVisible();
   });
 
+  test('sollte die Command Palette (Strg+K) öffnen, suchen und navigieren', async ({ page }) => {
+    await page.goto('/pages/home.html');
+    await page.waitForLoadState('networkidle');
+
+    // Trigger via keyboard shortcut
+    await page.keyboard.press('Control+KeyK');
+    const overlay = page.locator('#command-palette-overlay');
+    await expect(overlay).toHaveClass(/open/);
+
+    const input = page.locator('#command-palette-input');
+    await input.fill('EcoChef');
+
+    const results = page.locator('.command-palette-item');
+    await expect(results.first()).toBeVisible();
+    await expect(results.first()).toContainText('EcoChef');
+
+    // Close via ESC
+    await page.keyboard.press('Escape');
+    await expect(overlay).not.toHaveClass(/open/);
+  });
+
+  test('sollte den Side-by-Side Projektvergleich auf portfolio.html bedienen können', async ({ page }) => {
+    await page.goto('/pages/portfolio.html');
+    await page.waitForLoadState('networkidle');
+
+    // Select first project to compare
+    const compareBtns = page.locator('.btn-compare-select');
+    await expect(compareBtns.first()).toBeVisible();
+    await compareBtns.nth(0).click();
+
+    // Floating bar appears
+    const floatingBar = page.locator('#compare-floating-bar');
+    await expect(floatingBar).toBeVisible();
+    await expect(floatingBar).toContainText('1 Projekt');
+
+    // Select second project
+    await compareBtns.nth(1).click();
+    await expect(floatingBar).toContainText('2 Projekte');
+
+    // Open drawer
+    await floatingBar.click();
+    const drawer = page.locator('#project-compare-drawer');
+    await expect(drawer).toHaveClass(/open/);
+
+    const columns = page.locator('.compare-column');
+    await expect(columns).toHaveCount(2);
+  });
+
+  test('sollte im Skill-Radar auf ueber-mich.html interaktive Filter-Links bereitstellen', async ({ page }) => {
+    await page.goto('/pages/ueber-mich.html');
+    await page.waitForLoadState('networkidle');
+
+    const radarDots = page.locator('.radar-dot');
+    await expect(radarDots.first()).toBeVisible();
+    await expect(radarDots.first()).toHaveAttribute('style', /cursor:\s*pointer/);
+  });
+
 });

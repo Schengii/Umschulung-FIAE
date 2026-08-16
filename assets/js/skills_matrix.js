@@ -245,6 +245,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             text.textContent = s.name;
+            text.style.cursor = 'pointer';
+            text.setAttribute('title', `Klicken für Portfolio-Filter: ${s.name}`);
+            text.addEventListener('click', () => {
+                window.location.href = `portfolio.html?search=${encodeURIComponent(s.name.split('/')[0].trim())}`;
+            });
             svgEl.appendChild(text);
         });
 
@@ -273,13 +278,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             dot.setAttribute('cx', px);
             dot.setAttribute('cy', py);
-            dot.setAttribute('r', '4');
+            dot.setAttribute('r', '5');
             dot.setAttribute('class', 'radar-dot');
+            dot.style.cursor = 'pointer';
 
-            // Interactive Tooltip Title
+            // Interactive Tooltip Title & Click Event
             const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-            title.textContent = `${s.name}: ${s.score}%`;
+            title.textContent = `${s.name}: ${s.score}% (Klicken zum Filtern)`;
             dot.appendChild(title);
+
+            dot.addEventListener('click', () => {
+                window.location.href = `portfolio.html?search=${encodeURIComponent(s.name.split('/')[0].trim())}`;
+            });
 
             svgEl.appendChild(dot);
         });

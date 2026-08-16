@@ -458,6 +458,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Accessibility Control Widget (Dyslexia, Colorblind, Font Scale, High Contrast)
     initAccessibilityControls();
+
+    // Dynamically load Command Palette if not already loaded
+    if (!document.querySelector('script[src*="command_palette.js"]')) {
+        const cmdScript = document.createElement('script');
+        cmdScript.src = isPagesFolder ? '../assets/js/modules/command_palette.js' : 'assets/js/modules/command_palette.js';
+        document.body.appendChild(cmdScript);
+    }
 });
 
 function initAccessibilityControls() {

@@ -147,15 +147,16 @@ Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 re
 - **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
-- **39 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright.
+- **42 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
 
-### ⚙️ Code-Refactoring & Qualitäts-Härtung (August 2026 Code Audit)
-- **Tastatursteuerung & Escape-Key Handling (`components.js`)**: Globale Unterstützung der `Esc`-Taste zum sofortigen Schließen geöffneter Barrierefreiheits-Dropdowns, Farb-Customizer und mobiler Hauptmenüs.
-- **Sanitizing von URL-Parametern (`portfolio.js`)**: Absicherung aller Deep-Link Such- und Technologie-Filter (`?search=...`, `?tech=...`) gegen Skript-Injektionen durch HTML-Bereinigung.
-- **Formularvalidierung (`contact-form.js`)**: Clientseitige Regex-Prüfung von E-Mail-Adressen und Meldungsfeedback vor der Übermittlung.
-- **Timer Teardown & Speicherleck-Schutz (`ihk-exam-simulator.js`)**: Automatische Deregistrierung von `setInterval`-Timern bei `beforeunload`-Events zum Schutz der Systemressourcen.
-- **Terminal Historie & Auto-Scroll (`git-simulator.js`)**: Befehlshistorie mit Pfeiltasten Rauf/Runter sowie synchronisiertes Auto-Scrollen bei langen Ausgaben im Git-Terminal.
-- **Projekt-Highlights & Key Learnings (`modal.js` & `projekt-detail.js`)**: Strukturierte Architektur-Badges sowie detaillierte Abschnitte zu technischen Herausforderungen und Lösungen für Top-Projekte (EcoChef, BurgenGame, Arbeitszeiterfassung).
-- **Interaktiver Code-Explorer & Snippets (`portfolio.html` & `projekt-detail.html`)**: Erweiterter Quellcode-Viewer mit Syntax-Highlighting für TypeScript Gemini Services, Web Worker AI Heuristiken, React Custom Hooks und Java Strategy Patterns.
+### ⚙️ Code-Refactoring & Neue Features (August 2026 Release)
+- **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle 23 Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
+- **Side-by-Side Projekt-Vergleichsmatrix (`project_compare.js`)**: Interaktive Gegenüberstellung von 2 bis 3 Projekten hinsichtlich Architektur-Badges, Tech-Stack, Key Learnings und Live-Demo Links im Bottom-Drawer.
+- **Interaktiver Skill-Radar Deep-Link (`skills_matrix.js`)**: Direktes Filtern der Portfolio-Projekte per Klick auf die Kompetenz-Punkte im 2D-SVG-Radar-Chart auf `ueber-mich.html`.
+- **Druckoptimierter PDF-OnePager (`portfolio_exporter.js`)**: 1-Klick-Export eines sauberen, standardkonformen Bewerber-Dossiers.
+- **Tastatursteuerung & Escape-Key Handling (`components.js`)**: Globale Unterstützung der `Esc`-Taste zum sofortigen Schließen aller Modale, Dropdowns und Menüs.
+- **Projekt-Highlights & Key Learnings (`modal.js` & `projekt-detail.js`)**: Farbcodierte Architektur-Badges und strukturierte Challenge/Solution Cards für alle Top-Projekte.
+- **Interaktiver In-Browser Code-Explorer (`portfolio.html` & `projekt-detail.html`)**: Quellcode-Browser mit Syntax-Highlighting (EcoChef Gemini Service, BurgenGame Worker AI Heuristics, React Hooks, Java Patterns).
+
 
 
