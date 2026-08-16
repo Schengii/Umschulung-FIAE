@@ -186,18 +186,8 @@ function renderNav(currentPage) {
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
                     <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
                 </div>
-                <div class="accent-customizer-container" style="position: relative;">
-                    <button id="accent-toggle" class="theme-toggle" aria-label="Akzentfarbe ändern" title="Akzentfarbe ändern">
-                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
-                    </button>
-                    <div id="accent-dropdown" class="accent-dropdown" style="display: none;" role="menu">
-                        <button class="accent-dot-btn accent-blue" data-accent-val="blue" title="Classic Blue" aria-label="Classic Blue"></button>
-                        <button class="accent-dot-btn accent-emerald" data-accent-val="emerald" title="Emerald Green" aria-label="Emerald Green"></button>
-                        <button class="accent-dot-btn accent-violet" data-accent-val="violet" title="Royal Violet" aria-label="Royal Violet"></button>
-                        <button class="accent-dot-btn accent-orange" data-accent-val="orange" title="Sunset Orange" aria-label="Sunset Orange"></button>
-                        <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
-                    </div>
-                </div>
+
+                <!-- Accessibility Customizer Dropdown -->
                 <div class="a11y-customizer-container">
                     <button id="a11y-toggle" class="theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" title="Barrierefreiheit & Lesehilfe">
                         <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
@@ -218,11 +208,29 @@ function renderNav(currentPage) {
                         </button>
                     </div>
                 </div>
-                <button id="audio-toggle" class="audio-toggle-btn" aria-label="Sound umschalten" title="Sound umschalten">
-                    <i class="fa-solid ${StorageManager.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
-                </button>
-                <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 75px;" aria-label="Sprache umschalten"></button>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten">
+
+                <!-- Unified Theme & Appearance Dropdown -->
+                <div class="accent-customizer-container" style="position: relative;">
+                    <button id="accent-toggle" class="theme-toggle" aria-label="Farbschema & Akzente" title="Farbschema & Akzente">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                    </button>
+                    <div id="accent-dropdown" class="accent-dropdown" style="display: none;" role="menu">
+                        <div class="a11y-dropdown-title" style="margin-bottom: 0.5rem; text-align: center;"><i class="fa-solid fa-palette"></i> Akzentfarbe</div>
+                        <div style="display: flex; gap: 0.35rem; justify-content: center; margin-bottom: 0.5rem;">
+                            <button class="accent-dot-btn accent-blue" data-accent-val="blue" title="Classic Blue" aria-label="Classic Blue"></button>
+                            <button class="accent-dot-btn accent-emerald" data-accent-val="emerald" title="Emerald Green" aria-label="Emerald Green"></button>
+                            <button class="accent-dot-btn accent-violet" data-accent-val="violet" title="Royal Violet" aria-label="Royal Violet"></button>
+                            <button class="accent-dot-btn accent-orange" data-accent-val="orange" title="Sunset Orange" aria-label="Sunset Orange"></button>
+                            <button class="accent-dot-btn accent-rose" data-accent-val="rose" title="Cyber Rose" aria-label="Cyber Rose"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Toggle -->
+                <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 65px;" aria-label="Sprache umschalten"></button>
+
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten" title="Dark / Light Mode">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>
                 </button>
             </div>
@@ -306,6 +314,11 @@ function renderFooter() {
                 <p class="footer-meta-row">
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
+                    &nbsp;&middot;&nbsp;
+                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Sound umschalten" title="Sound umschalten">
+                        <i class="fa-solid ${StorageManager.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
+                        <span>Audio</span>
+                    </button>
                     &nbsp;&middot;&nbsp;
                     <span title="Tastaturkürzel" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
                     &nbsp;&middot;&nbsp;

@@ -47,17 +47,17 @@
      --bg-nav-active: #2563eb;
  
      --text-primary: #0f172a;
-     --text-secondary: #475569;
-     --text-muted: #64748b;
+     --text-secondary: #334155;
+     --text-muted: #475569;
      --text-on-nav: #f8fafc;
      --text-on-primary: #ffffff;
  
-     --border: rgba(226, 232, 240, 0.5);
-     --border-hover: rgba(203, 213, 225, 0.7);
+     --border: rgba(203, 213, 225, 0.7);
+     --border-hover: rgba(148, 163, 184, 0.9);
 
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+    --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.12), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 10px 20px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.08);
 
     --radius-sm: 0.375rem;
     --radius-md: 0.5rem;
@@ -71,40 +71,40 @@
     --max-width: 1440px;
     --primary-light: #eff6ff;
     --accent-light: #f5f3ff;
-    --bg-grid-color: rgba(148, 163, 184, 0.03);
-    --bg-glow-1: rgba(37, 99, 235, 0.04);
-    --bg-glow-2: rgba(79, 70, 229, 0.04);
+    --bg-grid-color: rgba(148, 163, 184, 0.04);
+    --bg-glow-1: rgba(37, 99, 235, 0.05);
+    --bg-glow-2: rgba(79, 70, 229, 0.05);
 }
 
-/* Dark Mode Theme Variables */
+/* Dark Mode Theme Variables - Enhanced Contrast */
 [data-theme="dark"] {
     --max-width: 1440px;
     --primary: #60a5fa;
     --primary-hover: #93c5fd;
-    --bg-page: #0b0f19;
-    --bg-card: rgba(21, 28, 44, 0.65);
-    --bg-header: rgba(17, 24, 39, 0.65);
-    --bg-nav: rgba(17, 24, 39, 0.75);
-    --bg-nav-item-hover: #1f2937;
+    --bg-page: #080c16;
+    --bg-card: rgba(17, 24, 39, 0.85);
+    --bg-header: rgba(15, 23, 42, 0.85);
+    --bg-nav: rgba(15, 23, 42, 0.9);
+    --bg-nav-item-hover: #1e293b;
     --bg-nav-active: #3b82f6;
  
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-muted: #9ca3af;
-    --text-on-nav: #f3f4f6;
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-muted: #cbd5e1;
+    --text-on-nav: #f8fafc;
  
-    --border: rgba(55, 65, 81, 0.4);
-    --border-hover: rgba(75, 85, 99, 0.6);
+    --border: rgba(71, 85, 105, 0.65);
+    --border-hover: rgba(100, 116, 139, 0.85);
 
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
+    --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 20px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
 
-    --primary-light: rgba(96, 165, 250, 0.15);
-    --accent-light: rgba(139, 92, 246, 0.15);
-    --bg-grid-color: rgba(255, 255, 255, 0.015);
-    --bg-glow-1: rgba(96, 165, 250, 0.07);
-    --bg-glow-2: rgba(139, 92, 246, 0.07);
+    --primary-light: rgba(96, 165, 250, 0.18);
+    --accent-light: rgba(139, 92, 246, 0.18);
+    --bg-grid-color: rgba(255, 255, 255, 0.02);
+    --bg-glow-1: rgba(96, 165, 250, 0.08);
+    --bg-glow-2: rgba(139, 92, 246, 0.08);
 }
 
 /* Accent Color Custom Properties Definitions */

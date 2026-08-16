@@ -207,18 +207,6 @@
                 closePalette();
             }
         });
-
-        // Add Quick Trigger Button to Header Nav
-        const searchContainer = document.querySelector('.search-container');
-        if (searchContainer) {
-            const triggerBtn = document.createElement('button');
-            triggerBtn.className = 'cmd-k-trigger';
-            triggerBtn.type = 'button';
-            triggerBtn.setAttribute('aria-label', 'Befehlsmenü öffnen');
-            triggerBtn.innerHTML = `<i class="fa-solid fa-terminal"></i> <span>Strg+K</span>`;
-            triggerBtn.addEventListener('click', openPalette);
-            searchContainer.parentNode.insertBefore(triggerBtn, searchContainer);
-        }
     }
 
     if (document.readyState === 'loading') {
