@@ -238,3 +238,11 @@
     padding: 0.2rem 0.5rem;
     color: #a1a1aa;
 }
+
+.template-wasm-btn {
+    border-color: #38bdf8 !important;
+}
+
+.template-wasm-icon {
+    color: #38bdf8 !important;
+}

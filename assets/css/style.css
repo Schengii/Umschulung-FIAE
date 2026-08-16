@@ -6928,3 +6928,4 @@ textarea:focus-visible,
    ========================================================================== */
 @import url('modules/command_palette.css');
 @import url('modules/project_compare.css');
+@import url('modules/pwa_telemetry.css');

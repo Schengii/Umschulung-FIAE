@@ -1,0 +1,78 @@
+/* assets/css/modules/pwa_telemetry.css */
+
+.pwa-telemetry-status-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.pwa-telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.pwa-telemetry-card {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+[data-theme="dark"] .pwa-telemetry-card {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.pwa-telemetry-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.pwa-telemetry-value-cyan {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #38bdf8;
+    margin: 0.25rem 0;
+}
+
+.pwa-telemetry-value-green {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #10b981;
+    margin: 0.25rem 0;
+}
+
+.pwa-telemetry-value-purple {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #a855f7;
+    margin: 0.25rem 0;
+}
+
+.pwa-telemetry-subtext-green {
+    font-size: 0.75rem;
+    color: #10b981;
+}
+
+.pwa-telemetry-subtext-muted {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.pwa-telemetry-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pwa-telemetry-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+}
