@@ -1,3 +1,14 @@
 {
-    "svn.ignoreMissingSvnWarning": true
+    "svn.ignoreMissingSvnWarning": true,
+    "gradle.nestedProjects": false,
+    "gradle.autoDetect": "off",
+    "java.import.gradle.enabled": false,
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/cordova-android/templates": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/platforms/android": true
+    }
 }
