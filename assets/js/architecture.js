@@ -190,11 +190,13 @@ class ArchitectureExplorer {
         this.tabEcochefBtn = document.getElementById('tab-btn-ecochef');
         this.tabElektrocheckBtn = document.getElementById('tab-btn-elektrocheck');
         this.tabApiBtn = document.getElementById('tab-btn-api');
+        this.tab3dBtn = document.getElementById('tab-btn-3d');
 
         // View Panels
         this.panelEcochef = document.getElementById('panel-ecochef');
         this.panelElektrocheck = document.getElementById('panel-elektrocheck');
         this.panelApi = document.getElementById('panel-api');
+        this.panel3d = document.getElementById('panel-3d');
 
         // Details Side Pane
         this.detailsTitle = document.getElementById('details-title');
@@ -206,6 +208,15 @@ class ArchitectureExplorer {
         this.apiRoutesList = document.getElementById('api-routes-list');
         this.apiDetailsContainer = document.getElementById('api-details-container');
 
+        // 3D Canvas Engine
+        this.canvas3d = document.getElementById('arch-3d-canvas');
+        this.animId3d = null;
+        this.rotX = 0.3;
+        this.rotY = 0.5;
+        this.isDragging3d = false;
+        this.lastMouseX = 0;
+        this.lastMouseY = 0;
+
         this.init();
     }
 
@@ -214,6 +225,7 @@ class ArchitectureExplorer {
         if (this.tabEcochefBtn) this.tabEcochefBtn.addEventListener('click', () => this.switchTab('ecochef'));
         if (this.tabElektrocheckBtn) this.tabElektrocheckBtn.addEventListener('click', () => this.switchTab('elektrocheck'));
         if (this.tabApiBtn) this.tabApiBtn.addEventListener('click', () => this.switchTab('api'));
+        if (this.tab3dBtn) this.tab3dBtn.addEventListener('click', () => this.switchTab('3d'));
 
         // Language toggle listener
         document.addEventListener('langchange', (e) => {
@@ -238,6 +250,29 @@ class ArchitectureExplorer {
             });
         });
 
+        // 3D Canvas Event Listeners
+        if (this.canvas3d) {
+            this.canvas3d.addEventListener('mousedown', (e) => {
+                this.isDragging3d = true;
+                this.lastMouseX = e.clientX;
+                this.lastMouseY = e.clientY;
+                this.canvas3d.style.cursor = 'grabbing';
+            });
+            window.addEventListener('mouseup', () => {
+                this.isDragging3d = false;
+                if (this.canvas3d) this.canvas3d.style.cursor = 'grab';
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!this.isDragging3d) return;
+                const dx = e.clientX - this.lastMouseX;
+                const dy = e.clientY - this.lastMouseY;
+                this.rotY += dx * 0.01;
+                this.rotX += dy * 0.01;
+                this.lastMouseX = e.clientX;
+                this.lastMouseY = e.clientY;
+            });
+        }
+
         // Load initial details
         this.showComponentDetails('ecochef', 'client');
         this.renderApiRoutes();
@@ -247,20 +282,25 @@ class ArchitectureExplorer {
         this.activeTab = tab;
 
         // Manage active classes on tab buttons
-        [this.tabEcochefBtn, this.tabElektrocheckBtn, this.tabApiBtn].forEach(btn => {
+        [this.tabEcochefBtn, this.tabElektrocheckBtn, this.tabApiBtn, this.tab3dBtn].forEach(btn => {
             if (btn) btn.classList.remove('active');
         });
         if (tab === 'ecochef' && this.tabEcochefBtn) this.tabEcochefBtn.classList.add('active');
         if (tab === 'elektrocheck' && this.tabElektrocheckBtn) this.tabElektrocheckBtn.classList.add('active');
         if (tab === 'api' && this.tabApiBtn) this.tabApiBtn.classList.add('active');
+        if (tab === '3d' && this.tab3dBtn) this.tab3dBtn.classList.add('active');
 
         // Toggle panel visibility
-        [this.panelEcochef, this.panelElektrocheck, this.panelApi].forEach(p => {
+        [this.panelEcochef, this.panelElektrocheck, this.panelApi, this.panel3d].forEach(p => {
             if (p) p.classList.add('collapsed');
         });
         if (tab === 'ecochef' && this.panelEcochef) this.panelEcochef.classList.remove('collapsed');
         if (tab === 'elektrocheck' && this.panelElektrocheck) this.panelElektrocheck.classList.remove('collapsed');
         if (tab === 'api' && this.panelApi) this.panelApi.classList.remove('collapsed');
+        if (tab === '3d' && this.panel3d) {
+            this.panel3d.classList.remove('collapsed');
+            this.start3dEngine();
+        }
 
         // If switching to diagram tab, show initial details
         if (tab === 'ecochef') {
@@ -268,6 +308,96 @@ class ArchitectureExplorer {
         } else if (tab === 'elektrocheck') {
             this.showComponentDetails('elektrocheck', 'client');
         }
+    }
+
+    start3dEngine() {
+        if (!this.canvas3d) return;
+        const ctx = this.canvas3d.getContext('2d');
+        const nodes = [
+            { label: 'Client / PWA', x: -140, y: -40, z: 0, color: '#38bdf8' },
+            { label: 'API Gateway', x: 0, y: -70, z: 60, color: '#a855f7' },
+            { label: 'Spring Boot Services', x: 0, y: 50, z: -50, color: '#10b981' },
+            { label: 'PostgreSQL DB', x: 140, y: 60, z: 40, color: '#f59e0b' },
+            { label: 'OpenAI Cloud Node', x: 120, y: -80, z: -70, color: '#ec4899' },
+            { label: 'Redis Cache', x: -80, y: 90, z: 80, color: '#ef4444' }
+        ];
+
+        const edges = [
+            [0, 1], [1, 2], [2, 3], [1, 4], [2, 5]
+        ];
+
+        const render = () => {
+            if (this.activeTab !== '3d') {
+                if (this.animId3d) cancelAnimationFrame(this.animId3d);
+                return;
+            }
+
+            const w = this.canvas3d.clientWidth || 600;
+            const h = this.canvas3d.clientHeight || 380;
+            this.canvas3d.width = w;
+            this.canvas3d.height = h;
+
+            ctx.clearRect(0, 0, w, h);
+
+            if (!this.isDragging3d) {
+                this.rotY += 0.005;
+            }
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const fov = 400;
+
+            const projected = nodes.map(n => {
+                let x = n.x * Math.cos(this.rotY) - n.z * Math.sin(this.rotY);
+                let z = n.x * Math.sin(this.rotY) + n.z * Math.cos(this.rotY);
+                let y = n.y * Math.cos(this.rotX) - z * Math.sin(this.rotX);
+                z = n.y * Math.sin(this.rotX) + z * Math.cos(this.rotX);
+
+                const scale = fov / (fov + z + 200);
+                return {
+                    ...n,
+                    px: cx + x * scale,
+                    py: cy + y * scale,
+                    pz: z,
+                    scale: scale
+                };
+            });
+
+            // Draw Edges
+            ctx.lineWidth = 1.5;
+            edges.forEach(([i1, i2]) => {
+                const p1 = projected[i1];
+                const p2 = projected[i2];
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(p1.px, p1.py);
+                ctx.lineTo(p2.px, p2.py);
+                ctx.stroke();
+            });
+
+            // Draw Nodes
+            projected.sort((a, b) => b.pz - a.pz);
+            projected.forEach(p => {
+                const r = Math.max(6, 16 * p.scale);
+                ctx.beginPath();
+                ctx.arc(p.px, p.py, r, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = `${Math.round(11 * p.scale)}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText(p.label, p.px, p.py - r - 6);
+            });
+
+            this.animId3d = requestAnimationFrame(render);
+        };
+
+        if (this.animId3d) cancelAnimationFrame(this.animId3d);
+        this.animId3d = requestAnimationFrame(render);
     }
 
     showComponentDetails(project, component) {

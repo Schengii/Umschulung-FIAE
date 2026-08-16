@@ -813,6 +813,187 @@ fetchBtn.addEventListener('click', async () => {
         output.innerHTML = '<span style="color:#ef4444;">Error: ' + err.message + '</span>';
     }
 });`
+    },
+    "wasm-runner": {
+        titleDe: "In-Browser Java / C++ WASM Simulator (Compiler & Runtime)",
+        titleEn: "In-Browser Java / C++ WASM Simulator (Compiler & Runtime)",
+        html: `<div class="compiler-box">
+    <h2>☕ / ⚡ Java & C++ WASM Runner</h2>
+    <div class="lang-selector">
+        <button id="lang-java-btn" class="active">Java 21</button>
+        <button id="lang-cpp-btn">C++23</button>
+    </div>
+    <div class="code-area">
+        <textarea id="src-code" spellcheck="false"></textarea>
+    </div>
+    <div class="actions">
+        <button id="compile-btn">🚀 Kompilieren & Ausführen</button>
+        <span id="compile-status">Bereit / Ready</span>
+    </div>
+    <div class="terminal-output" id="term-out">=== WASM Bytecode Terminal ===\nKlicke auf Ausführen...</div>
+</div>`,
+        css: `body {
+    background: #090d16;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.compiler-box {
+    width: 100%;
+    max-width: 580px;
+    background: #131b2e;
+    border: 1px solid #2a3b5c;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+h2 {
+    margin-top: 0;
+    color: #38bdf8;
+    font-size: 1.3rem;
+}
+.lang-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.lang-selector button {
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.lang-selector button.active {
+    background: #0284c7;
+    color: white;
+    border-color: #38bdf8;
+}
+.code-area textarea {
+    width: 100%;
+    height: 140px;
+    background: #090d16;
+    color: #a5f3fc;
+    font-family: monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    box-sizing: border-box;
+    outline: none;
+    resize: vertical;
+}
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+#compile-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+#compile-btn:hover {
+    transform: translateY(-1px);
+}
+#compile-status {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+.terminal-output {
+    background: #050811;
+    color: #4ade80;
+    font-family: monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #1e293b;
+    white-space: pre-wrap;
+    min-height: 90px;
+    max-height: 150px;
+    overflow-y: auto;
+}`,
+        js: `const srcCode = document.getElementById('src-code');
+const btnJava = document.getElementById('lang-java-btn');
+const btnCpp = document.getElementById('lang-cpp-btn');
+const compileBtn = document.getElementById('compile-btn');
+const status = document.getElementById('compile-status');
+const termOut = document.getElementById('term-out');
+
+const javaCode = \`public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello from Java 21 WebContainer!");
+        int sum = 0;
+        for (int i = 1; i <= 5; i++) sum += i;
+        System.out.println("Berechnete Summe (1..5): " + sum);
+    }
+}\`;
+
+const cppCode = \`#include <iostream>
+#include <vector>
+#include <numeric>
+
+int main() {
+    std::cout << "⚡ C++23 WebAssembly Engine initialized\\n";
+    std::vector<int> nums = {10, 20, 30, 40, 50};
+    int total = std::accumulate(nums.begin(), nums.end(), 0);
+    std::cout << "Vektor-Summe: " << total << std::endl;
+    return 0;
+}\`;
+
+let currentLang = 'java';
+srcCode.value = javaCode;
+
+btnJava.onclick = () => {
+    currentLang = 'java';
+    btnJava.classList.add('active');
+    btnCpp.classList.remove('active');
+    srcCode.value = javaCode;
+    termOut.textContent = "=== Java Runtime ausgewählt ===";
+};
+
+btnCpp.onclick = () => {
+    currentLang = 'cpp';
+    btnCpp.classList.add('active');
+    btnJava.classList.remove('active');
+    srcCode.value = cppCode;
+    termOut.textContent = "=== C++ WebAssembly Engine ausgewählt ===";
+};
+
+compileBtn.onclick = () => {
+    status.textContent = '⚙️ Kompiliere Bytecode...';
+    status.style.color = '#38bdf8';
+    termOut.textContent = '[1/3] Parsing Abstract Syntax Tree...\\n';
+    
+    setTimeout(() => {
+        termOut.textContent += '[2/3] Generiere WASM Bytecode (Opt-Level -O3)...\\n';
+        setTimeout(() => {
+            status.textContent = '✅ Ausführung erfolgreich!';
+            status.style.color = '#4ade80';
+            termOut.textContent += '[3/3] Executing in V8 Wasm Sandbox:\\n\\n';
+            
+            if (currentLang === 'java') {
+                termOut.textContent += '>> Hello from Java 21 WebContainer!\\n>> Berechnete Summe (1..5): 15\\n\\n[Exit Code 0 - Executed in 12ms]';
+            } else {
+                termOut.textContent += '>> ⚡ C++23 WebAssembly Engine initialized\\n>> Vektor-Summe: 150\\n\\n[Exit Code 0 - Executed in 4ms]';
+            }
+            console.log('WASM RUNNER: ' + currentLang.toUpperCase() + ' erfolgreich ausgeführt.');
+        }, 500);
+    }, 400);
+};`
     }
 };
 

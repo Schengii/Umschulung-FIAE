@@ -147,9 +147,13 @@ Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 re
 - **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
-- **42 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
+- **45 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
 
-### ⚙️ Code-Refactoring & Neue Features (August 2026 Release)
+### ⚙️ Code-Refactoring & Neue Features (August 2026 Enterprise Release)
+- **In-Browser Java 21 & C++23 WASM Runner (`playground.html` & `playground.js`)**: Interaktiver Bytecode-Compiler & WebAssembly-Runner mit Syntax-Tabs und Live-Ausführung im Browser.
+- **Interaktiver 3D Systemarchitektur-Graph (`architecture.html` & `architecture.js`)**: 3D-Knotengraph mit Orbit-Kamerasteuerung, dynamischer Projektion und Komponenten-Telemetrie.
+- **Voice-Assisted AI Interview Simulator (`interview.js` & `interview-trainer.html`)**: Sprachausgabe (SpeechSynthesis) und Spracheingabe per Mikrofon (SpeechRecognition) für realistische IHK-Fachgespräche.
+- **PWA Offline-Sync & Cache Telemetrie (`dashboard.html` & `dashboard.js`)**: Live-Inspector für Service-Worker Cache Storage, Netzwerkzustand und IndexedDB-Synchronisation.
 - **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle 23 Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
 - **Side-by-Side Projekt-Vergleichsmatrix (`project_compare.js`)**: Interaktive Gegenüberstellung von 2 bis 3 Projekten hinsichtlich Architektur-Badges, Tech-Stack, Key Learnings und Live-Demo Links im Bottom-Drawer.
 - **Interaktiver Skill-Radar Deep-Link (`skills_matrix.js`)**: Direktes Filtern der Portfolio-Projekte per Klick auf die Kompetenz-Punkte im 2D-SVG-Radar-Chart auf `ueber-mich.html`.

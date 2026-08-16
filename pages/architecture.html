@@ -58,6 +58,11 @@
             <button class="arch-tab-btn" id="tab-btn-api" role="tab" aria-selected="false" aria-controls="panel-api">
                 <i class="fa fa-gears" aria-hidden="true"></i> REST API-Explorer (Swagger Mock)
             </button>
+            <button class="arch-tab-btn" id="tab-btn-3d" role="tab" aria-selected="false" aria-controls="panel-3d" style="border-color: #38bdf8;">
+                <i class="fa-solid fa-cube" aria-hidden="true" style="color: #38bdf8;"></i>
+                <span lang="de">3D System Graph</span>
+                <span lang="en">3D System Graph</span>
+            </button>
         </div>
 
         <!-- TAB 1: ECOCHEF DIAGRAM -->
@@ -198,6 +203,25 @@
                 <!-- Swagger details client -->
                 <div class="api-details-pane" id="api-details-container">
                     <!-- Dynamic route details client -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: 3D WEBGL SYSTEM GRAPH -->
+        <div class="card collapsed" id="panel-3d" role="tabpanel" aria-labelledby="tab-btn-3d">
+            <div class="flex-between align-center margin-bottom-1rem">
+                <h3 lang="de"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Interaktiver 3D Architektur-Graph (Canvas / WebGL Engine)</h3>
+                <h3 lang="en"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Interactive 3D Architecture Graph (Canvas / WebGL Engine)</h3>
+                <span class="badge badge-info" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                    3D Orbit Controls
+                </span>
+            </div>
+            <p lang="de" class="small-muted">Drehe den 3D-Graphen mit gedrückter Maustaste, um die Microservices, Relationalen DB-Knoten und Cloud-Schnittstellen im Raum zu betrachten. Klicke auf Knoten für Komponenten-Telemetrie.</p>
+            <p lang="en" class="small-muted">Drag to rotate the 3D graph in real-time. Inspect microservices, databases, and API gateways in 3D perspective. Click nodes for telemetry.</p>
+            <div style="position: relative; width: 100%; height: 380px; background: #060913; border-radius: 12px; border: 1px solid #1e293b; overflow: hidden;">
+                <canvas id="arch-3d-canvas" style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
+                <div id="arch-3d-info" style="position: absolute; bottom: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 8px; border: 1px solid #334155; font-size: 0.85rem; color: #38bdf8;">
+                    Knoten: <strong>EcoChef Core Cluster</strong> (Klicken zum Fokussieren)
                 </div>
             </div>
         </div>

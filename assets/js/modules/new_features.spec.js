@@ -155,4 +155,45 @@ test.describe('New Interactive Features E2E Verification', () => {
     await expect(radarDots.first()).toHaveAttribute('style', /cursor:\s*pointer/);
   });
 
+  test('sollte den Java & C++ WASM Runner auf playground.html laden', async ({ page }) => {
+    await page.goto('/pages/playground.html');
+    await page.waitForLoadState('networkidle');
+
+    const wasmBtn = page.locator('button[data-template="wasm-runner"]');
+    await expect(wasmBtn).toBeVisible();
+    await wasmBtn.click();
+    await page.waitForTimeout(500);
+
+    const frame = page.frameLocator('#preview-iframe');
+    const compileBtn = frame.locator('#compile-btn');
+    await expect(compileBtn).toBeVisible();
+    await compileBtn.click();
+    await expect(frame.locator('#term-out')).toContainText('Hello from Java 21 WebContainer!');
+  });
+
+  test('sollte den 3D Architektur-Graphen auf architecture.html initialisieren', async ({ page }) => {
+    await page.goto('/pages/architecture.html');
+    await page.waitForLoadState('networkidle');
+
+    const tab3d = page.locator('#tab-btn-3d');
+    await expect(tab3d).toBeVisible();
+    await tab3d.click();
+
+    const panel3d = page.locator('#panel-3d');
+    await expect(panel3d).toBeVisible();
+    const canvas3d = page.locator('#arch-3d-canvas');
+    await expect(canvas3d).toBeVisible();
+  });
+
+  test('sollte das PWA Offline-Sync Telemetrie Widget auf dashboard.html anzeigen', async ({ page }) => {
+    await page.goto('/pages/dashboard.html');
+    await page.waitForLoadState('networkidle');
+
+    const badge = page.locator('#pwa-sync-status-badge');
+    await expect(badge).toBeVisible();
+    const cacheSize = page.locator('#pwa-cache-size');
+    await expect(cacheSize).toContainText('48 Assets');
+  });
+
 });
+
