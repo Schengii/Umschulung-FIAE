@@ -12,6 +12,7 @@
 #include "../world/StructureGenerator.hpp"
 #include "../physics/PhysicsEngine.hpp"
 #include "../audio/AudioManager.hpp"
+#include "../inventory/FoodSystem.hpp"
 #include <iostream>
 
 namespace Minecraft {
@@ -34,6 +35,8 @@ Application::Application() {
     m_HUD = std::make_unique<HUD>(m_Window->getWidth(), m_Window->getHeight());
     m_InventoryGUI = std::make_unique<InventoryGUI>(m_Window->getWidth(), m_Window->getHeight());
     m_ContainerGUI = std::make_unique<ContainerGUI>(m_Window->getWidth(), m_Window->getHeight());
+    m_MenuGUI = std::make_unique<MenuGUI>(m_Window->getWidth(), m_Window->getHeight());
+    m_Skybox = std::make_unique<Skybox>();
     m_Inventory = std::make_unique<Inventory>();
     m_PlayerStats = std::make_unique<PlayerStats>();
 
@@ -92,13 +95,27 @@ void Application::run() {
 }
 
 void Application::processInput(float deltaTime) {
-    if (Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
-        if (m_IsInventoryOpen) {
-            m_IsInventoryOpen = false;
+    bool escPressedNow = Input::isKeyPressed(GLFW_KEY_ESCAPE);
+    if (escPressedNow && !m_EscPressedLast) {
+        if (m_State == GameState::Playing) {
+            if (m_IsInventoryOpen) {
+                m_IsInventoryOpen = false;
+                m_Window->setCursorCaptured(true);
+            } else {
+                m_State = GameState::Paused;
+                m_Window->setCursorCaptured(false);
+            }
+        } else if (m_State == GameState::Paused) {
+            m_State = GameState::Playing;
             m_Window->setCursorCaptured(true);
-        } else {
-            m_IsRunning = false;
+        } else if (m_State == GameState::SettingsMenu) {
+            m_State = GameState::MainMenu;
         }
+    }
+    m_EscPressedLast = escPressedNow;
+
+    if (m_State != GameState::Playing) {
+        return;
     }
 
     // Toggle Inventory with 'E' key
@@ -192,7 +209,25 @@ void Application::processInput(float deltaTime) {
         if (Input::isKeyPressed(GLFW_KEY_SPACE) && m_IsGrounded) {
             m_PlayerVelocity.y = 8.5f;
             m_IsGrounded = false;
+            if (m_PlayerStats) m_PlayerStats->addExhaustion(0.2f);
             AudioManager::playSound(SoundEffect::Jump);
+        }
+    }
+
+    // Add movement exhaustion & footstep sounds
+    if (!m_IsFlying && m_PlayerStats) {
+        float horizSpeed = glm::length(glm::vec2(m_PlayerVelocity.x, m_PlayerVelocity.z));
+        m_PlayerStats->addExhaustion(horizSpeed * deltaTime * (isSprinting ? 0.05f : 0.01f));
+
+        if (m_IsGrounded && horizSpeed > 0.8f) {
+            m_StepTimer += deltaTime;
+            float stepInterval = isSprinting ? 0.28f : 0.42f;
+            if (m_StepTimer >= stepInterval) {
+                m_StepTimer = 0.0f;
+                AudioManager::playSound(SoundEffect::Footstep);
+            }
+        } else {
+            m_StepTimer = 0.0f;
         }
     }
 
@@ -210,31 +245,44 @@ void Application::processInput(float deltaTime) {
     bool rightMouseNow = Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT);
 
     if (world && ((leftMouseNow && !m_LeftMousePressedLast) || (rightMouseNow && !m_RightMousePressedLast))) {
-        int damage = ToolSystem::getDamageDealt(m_SelectedBlock);
-        bool mobHit = m_MobEngine->checkPlayerAttack(m_Camera->getPosition(), m_Camera->getFront(), 4.5f, damage);
+        // Check for right-click food consumption
+        if (rightMouseNow && !m_RightMousePressedLast && FoodSystem::isFood(m_SelectedBlock)) {
+            if (m_PlayerStats && FoodSystem::eatFood(*m_PlayerStats, m_SelectedBlock)) {
+                auto& slot = m_Inventory->getSlot(m_SelectedSlot);
+                if (!slot.isEmpty()) {
+                    slot.count--;
+                    if (slot.count == 0) slot.clear();
+                }
+                m_SelectedBlock = m_Inventory->getSlot(m_SelectedSlot).type;
+            }
+        } else {
+            int damage = ToolSystem::getDamageDealt(m_SelectedBlock);
+            bool mobHit = m_MobEngine->checkPlayerAttack(m_Camera->getPosition(), m_Camera->getFront(), 4.5f, damage, m_ItemEntityManager.get());
 
-        if (!mobHit) {
-            RaycastResult hit = Raycast::raycast(*world, m_Camera->getPosition(), m_Camera->getFront(), 6.0f);
-            if (hit.hit) {
-                BlockType hitType = world->getBlock(hit.blockPos.x, hit.blockPos.y, hit.blockPos.z);
-                if (rightMouseNow && !m_RightMousePressedLast && hitType == BlockType::Lever) {
-                    RedstoneEngine::updateRedstoneNetwork(*world, hit.blockPos);
-                    AudioManager::playSound3D(SoundEffect::BlockPlace, glm::vec3(hit.blockPos), m_Camera->getPosition(), m_Camera->getFront());
-                } else if (rightMouseNow && !m_RightMousePressedLast && hitType == BlockType::TNT) {
-                    ExplosionEngine::createExplosion(*world, glm::vec3(hit.blockPos) + glm::vec3(0.5f), 4.0f, &m_PlayerVelocity, &m_Camera->getPosition());
-                } else if (leftMouseNow && !m_LeftMousePressedLast) {
-                    if (ToolSystem::canHarvest(hitType, m_SelectedBlock)) {
-                        m_ItemEntityManager->spawnItemDrop(hitType, 1, glm::vec3(hit.blockPos));
-                    }
-                    m_ParticleEngine->spawnBlockBreak(glm::vec3(hit.blockPos));
-                    world->setBlock(hit.blockPos.x, hit.blockPos.y, hit.blockPos.z, BlockType::Air);
-                    AudioManager::playSound3D(SoundEffect::BlockBreak, glm::vec3(hit.blockPos), m_Camera->getPosition(), m_Camera->getFront());
-                } else if (rightMouseNow && !m_RightMousePressedLast) {
-                    BlockType toPlace = m_SelectedBlock;
-                    if (toPlace != BlockType::Air) {
-                        world->setBlock(hit.previousPos.x, hit.previousPos.y, hit.previousPos.z, toPlace);
-                        RedstoneEngine::updateRedstoneNetwork(*world, hit.previousPos);
-                        AudioManager::playSound3D(SoundEffect::BlockPlace, glm::vec3(hit.previousPos), m_Camera->getPosition(), m_Camera->getFront());
+            if (!mobHit) {
+                RaycastResult hit = Raycast::raycast(*world, m_Camera->getPosition(), m_Camera->getFront(), 6.0f);
+                if (hit.hit) {
+                    BlockType hitType = world->getBlock(hit.blockPos.x, hit.blockPos.y, hit.blockPos.z);
+                    if (rightMouseNow && !m_RightMousePressedLast && hitType == BlockType::Lever) {
+                        RedstoneEngine::updateRedstoneNetwork(*world, hit.blockPos);
+                        AudioManager::playSound3D(SoundEffect::BlockPlace, glm::vec3(hit.blockPos), m_Camera->getPosition(), m_Camera->getFront());
+                    } else if (rightMouseNow && !m_RightMousePressedLast && hitType == BlockType::TNT) {
+                        ExplosionEngine::createExplosion(*world, glm::vec3(hit.blockPos) + glm::vec3(0.5f), 4.0f, &m_PlayerVelocity, &m_Camera->getPosition());
+                    } else if (leftMouseNow && !m_LeftMousePressedLast) {
+                        if (ToolSystem::canHarvest(hitType, m_SelectedBlock)) {
+                            m_ItemEntityManager->spawnItemDrop(hitType, 1, glm::vec3(hit.blockPos));
+                        }
+                        if (m_PlayerStats) m_PlayerStats->addExhaustion(0.05f);
+                        m_ParticleEngine->spawnBlockBreak(glm::vec3(hit.blockPos));
+                        world->setBlock(hit.blockPos.x, hit.blockPos.y, hit.blockPos.z, BlockType::Air);
+                        AudioManager::playSound3D(SoundEffect::BlockBreak, glm::vec3(hit.blockPos), m_Camera->getPosition(), m_Camera->getFront());
+                    } else if (rightMouseNow && !m_RightMousePressedLast) {
+                        BlockType toPlace = m_SelectedBlock;
+                        if (toPlace != BlockType::Air) {
+                            world->setBlock(hit.previousPos.x, hit.previousPos.y, hit.previousPos.z, toPlace);
+                            RedstoneEngine::updateRedstoneNetwork(*world, hit.previousPos);
+                            AudioManager::playSound3D(SoundEffect::BlockPlace, glm::vec3(hit.previousPos), m_Camera->getPosition(), m_Camera->getFront());
+                        }
                     }
                 }
             }
@@ -252,6 +300,10 @@ void Application::update(float deltaTime) {
 
     if (m_FurnaceManager) {
         m_FurnaceManager->update(deltaTime);
+    }
+
+    if (m_PlayerStats) {
+        m_PlayerStats->update(deltaTime);
     }
 
     World* world = m_DimensionManager->getCurrentWorld();
@@ -272,7 +324,7 @@ void Application::update(float deltaTime) {
         // Mob Engine update & AI
         if (m_MobEngine) {
             float playerHp = m_PlayerStats ? m_PlayerStats->getHealth() : 20.0f;
-            m_MobEngine->update(*world, currentPos, m_PlayerVelocity, playerHp, deltaTime);
+            m_MobEngine->update(*world, currentPos, m_PlayerVelocity, playerHp, deltaTime, m_ItemEntityManager.get());
             if (m_PlayerStats) m_PlayerStats->setHealth(playerHp);
         }
 
@@ -309,6 +361,8 @@ void Application::render() {
 
     if (m_DimensionManager->getCurrentDimension() == DimensionType::Nether) {
         skyColor = glm::vec3(0.18f, 0.04f, 0.04f);
+    } else if (m_DimensionManager->getCurrentDimension() == DimensionType::TheEnd) {
+        skyColor = glm::vec3(0.06f, 0.02f, 0.09f);
     }
 
     // 1. Shadow Map Pass
@@ -338,6 +392,10 @@ void Application::render() {
         glm::mat4 view = m_Camera->getViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
 
+        if (m_FrustumCuller) {
+            m_FrustumCuller->update(projection * view);
+        }
+
         m_BlockShader->setMat4("u_Projection", projection);
         m_BlockShader->setMat4("u_View", view);
         m_BlockShader->setMat4("u_Model", model);
@@ -348,6 +406,10 @@ void Application::render() {
         m_BlockShader->setFloat("u_AmbientLight", m_TimeManager->getAmbientLight());
         m_BlockShader->setBool("u_IsUnderwater", m_InWater);
 
+        bool holdingTorch = (m_SelectedBlock == BlockType::RedstoneTorch || m_SelectedBlock == BlockType::RedstoneWire);
+        m_BlockShader->setVec3("u_PlayerPos", m_Camera->getPosition());
+        m_BlockShader->setBool("u_HasHandheldLight", holdingTorch);
+
         if (m_ShadowMap && glActiveTexture) {
             glActiveTexture(GL_TEXTURE0 + 1);
             glBindTexture(GL_TEXTURE_2D, m_ShadowMap->getDepthMapTexture());
@@ -356,7 +418,13 @@ void Application::render() {
             m_BlockShader->setMat4("u_LightSpaceMatrix", lightSpaceMatrix);
         }
 
-        world->render();
+        world->render(m_FrustumCuller.get());
+
+        // Transparent pass (water, glass)
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        world->renderTransparent(m_FrustumCuller.get());
+        glDisable(GL_BLEND);
     }
 
     // Render screen quad with Post-Processing
@@ -365,13 +433,51 @@ void Application::render() {
     }
 
     // 4. Render 2D HUD Layer
-    if (m_HUD && m_Camera && !m_IsInventoryOpen) {
-        m_HUD->render(m_SelectedSlot, m_ShowDebugInfo, m_FPS, m_Camera->getPosition(), m_Camera->getFront(), m_IsFlying);
+    if (m_HUD && m_Camera && !m_IsInventoryOpen && m_State == GameState::Playing) {
+        float hp = m_PlayerStats ? m_PlayerStats->getHealth() : 20.0f;
+        float hunger = m_PlayerStats ? m_PlayerStats->getHunger() : 20.0f;
+        m_HUD->render(m_SelectedSlot, m_ShowDebugInfo, m_FPS, m_Camera->getPosition(), m_Camera->getFront(), m_IsFlying, hp, hunger);
     }
 
     // 5. Render 2D Inventory GUI Layer
-    if (m_InventoryGUI && m_Inventory) {
+    if (m_InventoryGUI && m_Inventory && m_State == GameState::Playing) {
         m_InventoryGUI->render(*m_Inventory, m_IsInventoryOpen);
+    }
+
+    // 6. Render Menu GUI Layer
+    if (m_MenuGUI) {
+        m_MenuGUI->resize(m_Window->getWidth(), m_Window->getHeight());
+        double mx = Input::getMouseX();
+        double my = Input::getMouseY();
+        bool mouseClicked = Input::isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT);
+
+        if (m_State == GameState::MainMenu) {
+            m_Window->setCursorCaptured(false);
+            MenuAction action = m_MenuGUI->renderMainMenu(mx, my, mouseClicked, m_WorldSeed);
+            if (action == MenuAction::StartNewWorld) {
+                m_State = GameState::Playing;
+                m_Window->setCursorCaptured(true);
+            } else if (action == MenuAction::OpenSettings) {
+                m_State = GameState::SettingsMenu;
+            } else if (action == MenuAction::QuitGame) {
+                m_IsRunning = false;
+            }
+        } else if (m_State == GameState::Paused) {
+            MenuAction action = m_MenuGUI->renderPauseMenu(mx, my, mouseClicked);
+            if (action == MenuAction::ResumeGame) {
+                m_State = GameState::Playing;
+                m_Window->setCursorCaptured(true);
+            } else if (action == MenuAction::OpenSettings) {
+                m_State = GameState::SettingsMenu;
+            } else if (action == MenuAction::QuitGame) {
+                m_State = GameState::MainMenu;
+            }
+        } else if (m_State == GameState::SettingsMenu) {
+            MenuAction action = m_MenuGUI->renderSettingsMenu(mx, my, mouseClicked, m_RenderDistance, m_FOV, m_VSync);
+            if (action == MenuAction::CloseSettings) {
+                m_State = GameState::MainMenu;
+            }
+        }
     }
 }
 

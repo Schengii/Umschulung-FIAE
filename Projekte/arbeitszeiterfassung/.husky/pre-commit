@@ -1,0 +1,7 @@
+# .husky/pre-commit
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Lint and format before commit
+npm run lint
+npm run format

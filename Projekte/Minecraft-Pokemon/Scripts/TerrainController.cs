@@ -63,6 +63,7 @@ public partial class TerrainController : Node3D
         GenerateSkyTowerStructure();
         GenerateSafariZoneStructure();
         GenerateContestHallStructure();
+        GenerateRaidDens();
         UpdateMesh();
         SpawnBiomedMonsters(grassPositions);
         SpawnNpcTrainer();
@@ -139,13 +140,15 @@ public partial class TerrainController : Node3D
                     else
                     {
                         float cVal = _caveNoise.GetNoise3D(x, y, z);
-                        if (cVal > 0.45f && y > 2) _blocks[x, y, z] = BlockType.Air;
+                        if (cVal > 0.35f && y > 2) _blocks[x, y, z] = BlockType.Air;
                         else
                         {
                             float oreRoll = GD.Randf();
                             if (oreRoll < 0.03f) _blocks[x, y, z] = BlockType.PokeballOre;
-                            else if (oreRoll < 0.08f) _blocks[x, y, z] = BlockType.IronOre;
-                            else if (oreRoll < 0.15f) _blocks[x, y, z] = BlockType.CoalOre;
+                            else if (oreRoll < 0.06f) _blocks[x, y, z] = BlockType.FossilBlock;
+                            else if (oreRoll < 0.09f) _blocks[x, y, z] = BlockType.CrystalOre;
+                            else if (oreRoll < 0.14f) _blocks[x, y, z] = BlockType.IronOre;
+                            else if (oreRoll < 0.20f) _blocks[x, y, z] = BlockType.CoalOre;
                             else _blocks[x, y, z] = BlockType.Stone;
                         }
                     }
@@ -153,13 +156,29 @@ public partial class TerrainController : Node3D
 
                 if (biome == "Wiese" && x >= 2 && x < ChunkSizeX - 2 && z >= 2 && z < ChunkSizeZ - 2)
                 {
-                    if (_blocks[x, baseHeight, z] == BlockType.Grass && GD.Randf() < 0.05f)
+                    if (_blocks[x, baseHeight, z] == BlockType.Grass)
                     {
-                        GenerateTree(x, baseHeight + 1, z);
+                        float roll = GD.Randf();
+                        if (roll < 0.04f) GenerateTree(x, baseHeight + 1, z);
+                        else if (roll < 0.07f) GenerateApricornTree(x, baseHeight + 1, z);
                     }
                 }
             }
         }
+    }
+
+    private void GenerateApricornTree(int x, int y, int z)
+    {
+        if (x < 1 || x >= ChunkSizeX - 1 || z < 1 || z >= ChunkSizeZ - 1 || y + 3 >= ChunkSizeY) return;
+        for (int ty = y; ty < y + 3; ty++)
+        {
+            _blocks[x, ty, z] = BlockType.ApricornTreeBlock;
+        }
+        _blocks[x, y + 3, z] = BlockType.ApricornFruitBlock;
+        _blocks[x + 1, y + 2, z] = BlockType.ApricornTreeBlock;
+        _blocks[x - 1, y + 2, z] = BlockType.ApricornTreeBlock;
+        _blocks[x, y + 2, z + 1] = BlockType.ApricornTreeBlock;
+        _blocks[x, y + 2, z - 1] = BlockType.ApricornTreeBlock;
     }
 
     private void GenerateArenaStructure()
@@ -549,6 +568,12 @@ public partial class TerrainController : Node3D
             titan.CurrentHp = 250;
             GetNode("/root").CallDeferred("add_child", titan);
         }
+
+        PackedScene trainerScene = GD.Load<PackedScene>("res://Scenes/NpcTrainer.tscn");
+        var red = trainerScene.Instantiate<NpcTrainer>();
+        red.GlobalPosition = new Vector3(20.0f, 26.0f, 22.0f);
+        red.SetupTrainerRed();
+        GetNode("/root").CallDeferred("add_child", red);
     }
 
     private void GenerateTree(int trunkX, int trunkY, int trunkZ)
@@ -767,6 +792,39 @@ public partial class TerrainController : Node3D
         indices.Add(indexCounter + 2);
 
         indexCounter += 4;
+    }
+
+    private void GenerateRaidDens()
+    {
+        // Place Raid Dens with glowing pillars in unique coordinates
+        Vector3I[] denCoords = new Vector3I[]
+        {
+            new Vector3I(12, 10, 12),
+            new Vector3I(45, 12, 48),
+            new Vector3I(28, 14, 52)
+        };
+
+        foreach (var coord in denCoords)
+        {
+            if (coord.X >= 0 && coord.X < ChunkSizeX && coord.Z >= 0 && coord.Z < ChunkSizeZ)
+            {
+                int surfaceY = 0;
+                for (int y = ChunkSizeY - 1; y >= 0; y--)
+                {
+                    if (_blocks[coord.X, y, coord.Z] != BlockType.Air)
+                    {
+                        surfaceY = y;
+                        break;
+                    }
+                }
+
+                _blocks[coord.X, surfaceY + 1, coord.Z] = BlockType.RaidDenBlock;
+                _blocks[coord.X + 1, surfaceY + 1, coord.Z] = BlockType.Obsidian;
+                _blocks[coord.X - 1, surfaceY + 1, coord.Z] = BlockType.Obsidian;
+                _blocks[coord.X, surfaceY + 1, coord.Z + 1] = BlockType.Obsidian;
+                _blocks[coord.X, surfaceY + 1, coord.Z - 1] = BlockType.Obsidian;
+            }
+        }
     }
 
     public bool SetBlock(Vector3I globalCoords, BlockType type)

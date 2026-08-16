@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Minecraft-Pokemon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6486f03b0d0291516fafc10d800b1eed8e01176f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf47ff790b02566c32a4936551b864c1b9618d61")]
 [assembly: System.Reflection.AssemblyProductAttribute("Minecraft-Pokemon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Minecraft-Pokemon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

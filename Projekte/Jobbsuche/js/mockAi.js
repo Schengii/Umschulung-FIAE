@@ -1236,6 +1236,64 @@ Setze in diesem Fall:
         if (!textResult) throw new Error("Keine Antwort erhalten.");
         
         return JSON.parse(textResult);
+    },
+
+    /**
+     * Generates a 360° Company Research Briefing
+     */
+    async generateCompanyResearch(companyName, jobTitle) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    company: companyName,
+                    overview: `${companyName} ist ein führender Anbieter im Bereich moderner Softwarelösungen und digitaler Produkte. Das Unternehmen zeichnet sich durch agile Teams und eine innovative Kultur aus.`,
+                    keyFacts: [
+                        'Fokus auf moderne Web-Technologien und User-Experience',
+                        'Flache Hierarchien und transparente Kommunikation',
+                        'Hoher Anspruch an Code-Qualität und kontinuierliche Weiterbildung'
+                    ],
+                    suggestedQuestions: [
+                        `Wie sieht ein typischer Sprint-Cycle im Team für die Rolle als ${jobTitle} aus?`,
+                        `Auf welche Herausforderung konzentriert sich die Abteilung in den nächsten 6 Monaten?`,
+                        `Welche Entwicklungs- und Weiterbildungsmöglichkeiten bietet ${companyName}?`
+                    ]
+                });
+            }, 800);
+        });
+    },
+
+    /**
+     * Parses raw incoming emails for application status updates
+     */
+    parseEmailStatusUpdate(emailContent) {
+        if (!emailContent) return null;
+        const text = emailContent.toLowerCase();
+
+        let detectedStatus = 'applied';
+        let statusLabel = 'Eingegangen / Unterlagen gesendet';
+        let confidence = 'mittel';
+
+        if (text.includes('einladung') || text.includes('gespräch') || text.includes('interview') || text.includes('termin')) {
+            detectedStatus = 'interviewing';
+            statusLabel = 'Einladung zum Vorstellungsgespräch';
+            confidence = 'hoch';
+        } else if (text.includes('angebot') || text.includes('zusage') || text.includes('freuen uns sehr Ihnen') || text.includes('vertrag')) {
+            detectedStatus = 'offer';
+            statusLabel = 'Angebot erhalten / Zusage';
+            confidence = 'hoch';
+        } else if (text.includes('absage') || text.includes('leider') || text.includes('nicht berücksichtigen') || text.includes('anderweitig entschieden')) {
+            detectedStatus = 'rejected';
+            statusLabel = 'Absage erhalten';
+            confidence = 'hoch';
+        }
+
+        return {
+            detectedStatus,
+            statusLabel,
+            confidence,
+            summary: emailContent.slice(0, 180) + '...'
+        };
     }
 };
+
 

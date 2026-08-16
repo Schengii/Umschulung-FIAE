@@ -1,6 +1,7 @@
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 #include "SaveSystem.hpp"
+#include "LightEngine.hpp"
 #include "Biome.hpp"
 #include "../vendor/FastNoiseLite.h"
 #include <cmath>
@@ -33,6 +34,38 @@ void Chunk::setBlock(int x, int y, int z, BlockType type) {
     if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return;
     m_Blocks[x][y][z] = type;
     m_IsDirty = true;
+}
+
+int Chunk::getSunlight(int x, int y, int z) const {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return 15;
+    return (m_Light[x][y][z] >> 4) & 0x0F;
+}
+
+void Chunk::setSunlight(int x, int y, int z, int val) {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return;
+    uint8_t cur = m_Light[x][y][z] & 0x0F;
+    m_Light[x][y][z] = (static_cast<uint8_t>(val & 0x0F) << 4) | cur;
+}
+
+int Chunk::getBlocklight(int x, int y, int z) const {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return 0;
+    return m_Light[x][y][z] & 0x0F;
+}
+
+void Chunk::setBlocklight(int x, int y, int z, int val) {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return;
+    uint8_t sun = m_Light[x][y][z] & 0xF0;
+    m_Light[x][y][z] = sun | static_cast<uint8_t>(val & 0x0F);
+}
+
+uint8_t Chunk::getRawLight(int x, int y, int z) const {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return 0xFF;
+    return m_Light[x][y][z];
+}
+
+void Chunk::setRawLight(int x, int y, int z, uint8_t val) {
+    if (x < 0 || x >= CHUNK_SIZE_X || y < 0 || y >= CHUNK_SIZE_Y || z < 0 || z >= CHUNK_SIZE_Z) return;
+    m_Light[x][y][z] = val;
 }
 
 void Chunk::generateTerrain() {
@@ -114,6 +147,31 @@ void Chunk::generateTerrain() {
                     for (int ch = 1; ch <= 3; ++ch) {
                         m_Blocks[x][height + ch][z] = BlockType::Cactus;
                     }
+                } else if (biome == BiomeType::Jungle) {
+                    // Jungle: Tall Rainforest Trees & Bamboo Groves
+                    if (treeChance > 0.65f) {
+                        int trunkHeight = 8;
+                        for (int th = 1; th <= trunkHeight; ++th) {
+                            m_Blocks[x][height + th][z] = BlockType::OakLog;
+                        }
+                        for (int lx = -2; lx <= 2; ++lx) {
+                            for (int lz = -2; lz <= 2; ++lz) {
+                                for (int ly = trunkHeight - 2; ly <= trunkHeight + 1; ++ly) {
+                                    if (m_Blocks[x + lx][height + ly][z + lz] == BlockType::Air) {
+                                        m_Blocks[x + lx][height + ly][z + lz] = BlockType::Leaves;
+                                    }
+                                }
+                            }
+                        }
+                    } else if (treeChance > 0.35f) {
+                        // Bamboo Grove
+                        int bambooHeight = 3 + static_cast<int>(treeChance * 8.0f) % 4;
+                        for (int bh = 1; bh <= bambooHeight; ++bh) {
+                            if (m_Blocks[x][height + bh][z] == BlockType::Air) {
+                                m_Blocks[x][height + bh][z] = BlockType::Bamboo;
+                            }
+                        }
+                    }
                 } else if ((biome == BiomeType::Forest || biome == BiomeType::Plains) && treeChance > 0.60f) {
                     // Oak or Birch Trees
                     BlockType logType = (biome == BiomeType::Forest && treeChance > 0.8f) ? BlockType::BirchLog : BlockType::OakLog;
@@ -132,8 +190,37 @@ void Chunk::generateTerrain() {
                     }
                 }
             }
+
+            // Cave Stalactite / Stalagmite Decoration
+            for (int cy = 10; cy < height - 6; ++cy) {
+                // Stalagmite on cave floor
+                if (m_Blocks[x][cy][z] == BlockType::Air && m_Blocks[x][cy - 1][z] == BlockType::Stone) {
+                    float caveDecorNoise = std::abs(caveNoise.GetNoise(worldX * 8.0f, static_cast<float>(cy), worldZ * 8.0f));
+                    if (caveDecorNoise > 0.65f) {
+                        int spikeHeight = 2;
+                        for (int sh = 0; sh < spikeHeight; ++sh) {
+                            if (m_Blocks[x][cy + sh][z] == BlockType::Air) {
+                                m_Blocks[x][cy + sh][z] = BlockType::Stone;
+                            }
+                        }
+                    }
+                }
+                // Stalactite on cave ceiling
+                if (m_Blocks[x][cy][z] == BlockType::Air && m_Blocks[x][cy + 1][z] == BlockType::Stone) {
+                    float caveDecorNoise = std::abs(caveNoise.GetNoise(worldX * 8.0f + 50.0f, static_cast<float>(cy), worldZ * 8.0f));
+                    if (caveDecorNoise > 0.65f) {
+                        int spikeHeight = 2;
+                        for (int sh = 0; sh < spikeHeight; ++sh) {
+                            if (m_Blocks[x][cy - sh][z] == BlockType::Air) {
+                                m_Blocks[x][cy - sh][z] = BlockType::Stone;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+    LightEngine::calculateChunkLighting(*this);
     m_IsDirty = true;
 }
 
@@ -150,6 +237,12 @@ void Chunk::render() {
     }
     if (m_Mesh) {
         m_Mesh->render();
+    }
+}
+
+void Chunk::renderTransparent() {
+    if (m_Mesh) {
+        m_Mesh->renderTransparent();
     }
 }
 

@@ -23,16 +23,14 @@ export function calculateGermanNetSalary(grossYearly, settings = {}) {
     const grossMonthly = grossYearly / 12;
     
     // --- 1. Sozialabgaben (Arbeitnehmeranteil ca. 20%) ---
-    // Beitragsbemessungsgrenzen 2026 (Schätzung)
     const limitKV_PV = 5175; // Kranken- und Pflegeversicherung
     const limitRV_AV = 7450; // Renten- und Arbeitslosenversicherung
     
-    // Beitragssätze Arbeitnehmeranteil (ca.)
     const socialRates = {
-        health: 0.081, // Krankenversicherung (inkl. Zusatzbeitrag)
-        care: hasChildren ? 0.017 : 0.022,   // Pflegeversicherung (kinderlos-Zuschlag vs. Kinder-Abschlag)
-        pension: 0.046, // Rentenversicherung
-        unemp: 0.013    // Arbeitslosenversicherung
+        health: 0.081,
+        care: hasChildren ? 0.017 : 0.022,
+        pension: 0.046,
+        unemp: 0.013
     };
     
     const basisKV_PV = Math.min(grossMonthly, limitKV_PV);
@@ -42,24 +40,20 @@ export function calculateGermanNetSalary(grossYearly, settings = {}) {
                           (basisRV_AV * (socialRates.pension + socialRates.unemp));
                           
     // --- 2. Einkommensteuer (Deutscher progressiver Tarif) ---
-    // Werbungskostenpauschale (1.230 €) & Sonderausgabenpauschale (36 €)
     const standardDeductions = 1266;
-    const socialDeductionsYearly = socialMonthly * 12 * 0.96; // Vorsorgeaufwendungen ca. 96% abziehbar
+    const socialDeductionsYearly = socialMonthly * 12 * 0.96;
     
-    // Zu versteuerndes Einkommen (zvE)
     const taxableYearly = Math.max(0, grossYearly - socialDeductionsYearly - standardDeductions);
     
-    // Grundfreibetrag & Progressionszone anpassen je nach Steuerklasse
     let basicAllowance = 11784;
-    if (taxClass === 2) basicAllowance = 16044; // Alleinerziehend
-    else if (taxClass === 3) basicAllowance = 23568; // Ehegatte (verdoppelt)
-    else if (taxClass === 5 || taxClass === 6) basicAllowance = 0; // Kein bzw. kaum Freibetrag
+    if (taxClass === 2) basicAllowance = 16044;
+    else if (taxClass === 3) basicAllowance = 23568;
+    else if (taxClass === 5 || taxClass === 6) basicAllowance = 0;
     
     let taxYearly = 0;
     const scaleFactor = basicAllowance / 11784;
     
     if (scaleFactor === 0) {
-        // Steuerklasse 5 oder 6 (Sehr hohe Abzüge ab dem 1. Euro)
         taxYearly = taxableYearly * (taxClass === 6 ? 0.35 : 0.28);
     } else {
         const adjustedBracket1 = 11784 * scaleFactor;
@@ -100,3 +94,80 @@ export function calculateGermanNetSalary(grossYearly, settings = {}) {
         taxMonthly: Math.round((taxYearly + soliYearly + churchTaxYearly) / 12)
     };
 }
+
+/**
+ * Berechnet das gesamte Vergütungspaket (Total Compensation / Total Comp)
+ * inklusive Boni, Aktien/ESOP, Dienstwagen, Homeoffice-Zuschuss und 13. Gehalt.
+ */
+export function calculateTotalCompensation(job, settings = {}) {
+    const baseSalary = parseFloat(job.salary) || 0;
+    const bonus = parseFloat(job.bonus) || 0;
+    const stockOptions = parseFloat(job.stockOptions) || 0;
+    const perksValue = parseFloat(job.perksValue) || 0; // Dienstwagen, Ticket, HO-Zuschuss
+    const month13 = job.has13thSalary ? (baseSalary / 12) : 0;
+
+    const totalGrossYearly = baseSalary + bonus + stockOptions + perksValue + month13;
+    const netCalc = calculateGermanNetSalary(totalGrossYearly, settings);
+
+    return {
+        baseSalary,
+        bonus,
+        stockOptions,
+        perksValue,
+        month13,
+        totalGrossYearly: Math.round(totalGrossYearly),
+        totalNetYearly: netCalc.netYearly,
+        totalNetMonthly: netCalc.netMonthly
+    };
+}
+
+/**
+ * Berechnet den effektiven Netto-Stundenlohn pro geleisteter Lebensstunde
+ * unter Berücksichtigung von Wochenarbeitszeit und wöchentlicher Pendelzeit.
+ */
+export function calculateNetHourlyRate(totalNetYearly, weeklyHours = 40, commuteHoursPerWeek = 0) {
+    const totalWeeklyHours = (parseFloat(weeklyHours) || 40) + (parseFloat(commuteHoursPerWeek) || 0);
+    const yearlyWorkHours = totalWeeklyHours * 52;
+    
+    if (yearlyWorkHours <= 0) return 0;
+    const hourlyNet = totalNetYearly / yearlyWorkHours;
+    return Math.round(hourlyNet * 100) / 100;
+}
+
+/**
+ * Berechnet die steuerlich absetzbaren Reisekosten für Vorstellungsgespräche
+ * inklusive Entfernungspauschale (0,30 € / km) und gesetzlichem Verpflegungsmehraufwand (14 € / 28 €).
+ * 
+ * @param {number} distanceKm - Einfache oder Hin-/Rückfahrt-Distanz in km
+ * @param {number} durationHours - Dauer der Abwesenheit von der Wohnung in Stunden
+ * @param {number} hotelExpenses - Tatsächliche Übernachtungskosten
+ * @returns {Object} Aufschlüsselung der abzugsfähigen Reisekosten
+ */
+export function calculateTravelAndMealAllowance(distanceKm = 0, durationHours = 0, hotelExpenses = 0) {
+    const km = Math.max(0, parseFloat(distanceKm) || 0);
+    const hours = Math.max(0, parseFloat(durationHours) || 0);
+    const hotel = Math.max(0, parseFloat(hotelExpenses) || 0);
+
+    // Fahrtkosten: 0,30 € pro gefahrenem Kilometer (Hin- und Rückfahrt)
+    const travelCost = km * 2 * 0.30;
+
+    // Verpflegungsmehraufwand (deutsche Pauschale):
+    // > 8 Stunden Abwesenheit: 14 €
+    // Ganztägig (24 Stunden): 28 €
+    let mealAllowance = 0;
+    if (hours >= 24) {
+        mealAllowance = 28;
+    } else if (hours >= 8) {
+        mealAllowance = 14;
+    }
+
+    const totalDeductible = travelCost + mealAllowance + hotel;
+
+    return {
+        travelCost: Math.round(travelCost * 100) / 100,
+        mealAllowance: mealAllowance,
+        hotelExpenses: hotel,
+        totalDeductible: Math.round(totalDeductible * 100) / 100
+    };
+}
+

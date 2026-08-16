@@ -78,6 +78,64 @@ GameStateManager.prototype.learnHeroSkill = function(skillId) {
   return true;
 };
 
+// HERO SKILL TREE BRANCHES
+const HERO_SKILL_TREE_BRANCHES = {
+  warlord: {
+    name: 'Kriegsherr (Warlord)',
+    nodes: [
+      { id: 'commander_aura', name: 'Kommandanten-Aura', req: null, val: 0.1, bonusType: 'troop_attack', icon: '⚔️' },
+      { id: 'furious_strike', name: 'Wutsturm', req: 'commander_aura', val: 0.15, bonusType: 'attack', icon: '💥' },
+      { id: 'battle_hardened', name: 'Schlachtenfestung', req: 'furious_strike', val: 0.2, bonusType: 'troop_defense', icon: '🛡️' }
+    ]
+  },
+  explorer: {
+    name: 'Erkunder (Explorer)',
+    nodes: [
+      { id: 'pathfinder', name: 'Pfadfinder', req: null, val: 0.15, bonusType: 'speed', icon: '🧭' },
+      { id: 'treasure_hunter', name: 'Schatzsucher', req: 'pathfinder', val: 0.25, bonusType: 'loot', icon: '💰' },
+      { id: 'dungeon_master', name: 'Dungeon-Meister', req: 'treasure_hunter', val: 0.3, bonusType: 'xp', icon: '📜' }
+    ]
+  },
+  paladin: {
+    name: 'Paladin (Paladin)',
+    nodes: [
+      { id: 'divine_shield', name: 'Göttlicher Schild', req: null, val: 50, bonusType: 'hero_max_hp', icon: '✨' },
+      { id: 'holy_aura', name: 'Heiliges Licht', req: 'divine_shield', val: 0.2, bonusType: 'defense', icon: '🌟' },
+      { id: 'bastion_of_hope', name: 'Bastion der Hoffnung', req: 'holy_aura', val: 0.25, bonusType: 'wall_defense', icon: '🏰' }
+    ]
+  }
+};
+
+// Mercenary Captain Contracts Manager
+GameStateManager.prototype.generateMercenaryContracts = function() {
+  if (!this.state.mercenaries) {
+    this.state.mercenaries = [
+      { id: 'merc_1', name: 'Kapitän Eisenhand', trait: 'Eiserne Faust', bonus: '+15% Nahkampf-Schaden', cost: 200, durationSec: 3600, active: false },
+      { id: 'merc_2', name: 'Meister-Spion Varis', trait: 'Schattenlauf', bonus: '+25% Spionage-Erfolg', cost: 150, durationSec: 3600, active: false },
+      { id: 'merc_3', name: 'Alchemist Nicolas', trait: 'Goldelixier', bonus: '+20% Steuereinnahmen', cost: 250, durationSec: 3600, active: false }
+    ];
+  }
+  return this.state.mercenaries;
+};
+
+GameStateManager.prototype.hireMercenary = function(mercId) {
+  this.generateMercenaryContracts();
+  const merc = this.state.mercenaries.find(m => m.id === mercId);
+  if (!merc) return { success: false, msg: 'Söldner nicht gefunden!' };
+  if (merc.active) return { success: false, msg: 'Söldner ist bereits angeworben!' };
+
+  if ((this.state.resources.gold || 0) < merc.cost) {
+    return { success: false, msg: 'Nicht genügend Gold!' };
+  }
+
+  this.state.resources.gold -= merc.cost;
+  merc.active = true;
+  merc.expiresAt = Date.now() + merc.durationSec * 1000;
+  this.save();
+  this.notifyListeners('mercenary_hired');
+  return { success: true, msg: `🍻 ${merc.name} (${merc.trait}) für 1 Stunde angeworben!` };
+};
+
 // Calculate active hero skill bonus
 GameStateManager.prototype.getHeroSkillBonus = function(bonusType) {
   if (!this.state.hero || !this.state.hero.skills) return 0;

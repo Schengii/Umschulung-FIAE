@@ -1,4 +1,51 @@
-// --- OUTPOSTS FEATURE ---
+// --- OUTPOSTS & FEUDAL VASSALS FEATURE ---
+
+GameStateManager.prototype.subjugateVassal = function(outpostId = 'op1') {
+  if (!this.state.vassals) this.state.vassals = [];
+  const existing = this.state.vassals.find(v => v.id === outpostId);
+  if (existing) return { success: false, msg: 'Dieser Außenposten ist bereits dein Vasall!' };
+
+  this.state.vassals.push({
+    id: outpostId,
+    subjugatedAt: Date.now(),
+    dailyTributeGold: 250,
+    dailyTributeStone: 100
+  });
+  this.save();
+  this.notifyListeners('vassal_subjugated');
+  return { success: true, msg: `🏰 Außenposten ${outpostId.toUpperCase()} wurde als Vasall unterworfen!` };
+};
+
+GameStateManager.prototype.collectVassalTribute = function() {
+  if (!this.state.vassals || this.state.vassals.length === 0) {
+    return { success: false, msg: 'Keine Vasallen vorhanden.' };
+  }
+  let totalGold = 0;
+  let totalStone = 0;
+  this.state.vassals.forEach(v => {
+    totalGold += v.dailyTributeGold || 250;
+    totalStone += v.dailyTributeStone || 100;
+  });
+
+  this.state.resources.gold = (this.state.resources.gold || 0) + totalGold;
+  this.state.resources.stone = (this.state.resources.stone || 0) + totalStone;
+  this.save();
+  this.notifyListeners('vassal_tribute');
+  return { success: true, msg: `👑 Vasallen-Tribut eingetrieben! (+${totalGold} Gold, +${totalStone} Stein)` };
+};
+
+GameStateManager.prototype.callVassalReinforcements = function() {
+  if (!this.state.vassals || this.state.vassals.length === 0) {
+    return { success: false, msg: 'Keine Vasallen vorhanden.' };
+  }
+  const reinforceTroops = { spearman: 5 * this.state.vassals.length, bowman: 3 * this.state.vassals.length };
+  Object.keys(reinforceTroops).forEach(t => {
+    this.state.troops[t] = (this.state.troops[t] || 0) + reinforceTroops[t];
+  });
+  this.save();
+  this.notifyListeners('vassal_reinforcements');
+  return { success: true, msg: `🛡️ Vasallen-Hilfstruppen eingetroffen! (+${reinforceTroops.spearman} Speerkämpfer, +${reinforceTroops.bowman} Bogenschützen)` };
+};
 
 // Extend GameStateManager with garrison withdrawal
 GameStateManager.prototype.withdrawGarrison = function(outpostId) {

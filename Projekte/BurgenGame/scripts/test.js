@@ -1,57 +1,71 @@
-// --- Cross-Platform Syntax & Integration Test Runner for BurgenGame ---
+// --- AUTOMATED REGRESSION TEST SUITE ---
+
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
-console.log('----------------------------------------------------');
-console.log('🛡️  BurgenGame - Starting Automated Suite & Diagnostics...');
-console.log('----------------------------------------------------');
+// Mock browser globals for Node env
+global.window = global;
+global.document = {
+  querySelectorAll: () => [],
+  activeElement: { tagName: 'BODY' },
+  getElementById: () => null
+};
 
-let totalFilesChecked = 0;
-let errorsFound = 0;
+let testsPassed = 0;
+let testsFailed = 0;
 
-function getAllJsFiles(dirPath, arrayOfFiles = []) {
-  if (!fs.existsSync(dirPath)) return arrayOfFiles;
-  const files = fs.readdirSync(dirPath);
-
-  files.forEach((file) => {
-    const fullPath = path.join(dirPath, file);
-    if (fs.statSync(fullPath).isDirectory()) {
-      arrayOfFiles = getAllJsFiles(fullPath, arrayOfFiles);
-    } else if (file.endsWith('.js')) {
-      arrayOfFiles.push(fullPath);
-    }
-  });
-
-  return arrayOfFiles;
+function assert(condition, message) {
+  if (condition) {
+    console.log(`  ✅ PASS: ${message}`);
+    testsPassed++;
+  } else {
+    console.error(`  ❌ FAIL: ${message}`);
+    testsFailed++;
+  }
 }
 
-const rootDir = path.resolve(__dirname, '..');
-const jsFiles = [
-  path.join(rootDir, 'service-worker.js'),
-  ...getAllJsFiles(path.join(rootDir, 'js'))
-];
+console.log("🚀 Starte BurgenGame Regressionstests...\n");
 
-console.log(`\n🔍 Checking JS syntax across ${jsFiles.length} JavaScript files...\n`);
+// Test 1: Noise Generator Check
+try {
+  const noiseCode = fs.readFileSync(path.join(__dirname, '../js/utils/noise.js'), 'utf8');
+  eval(noiseCode);
+  const gen = new PerlinNoise(42);
+  const val = gen.get(5, 5);
+  assert(val >= 0 && val <= 1, `Perlin Noise Wert (${val.toFixed(3)}) liegt im Bereich [0, 1]`);
+} catch(e) {
+  assert(false, "Perlin Noise Generator Absturz: " + e.message);
+}
 
-jsFiles.forEach((filePath) => {
-  const relPath = path.relative(rootDir, filePath);
-  try {
-    execSync(`node -c "${filePath}"`, { stdio: 'pipe' });
-    totalFilesChecked++;
-    console.log(`  ✅ OK: ${relPath}`);
-  } catch (err) {
-    errorsFound++;
-    console.error(`  ❌ Syntax Error in ${relPath}:\n`, err.stderr.toString());
-  }
-});
+// Test 2: Building Config Validity
+try {
+  let configCode = fs.readFileSync(path.join(__dirname, '../js/core/config.js'), 'utf8');
+  configCode = configCode.replace(/^const /gm, 'var ').replace(/^let /gm, 'var ');
+  eval(configCode);
+  assert(typeof BUILDINGS_CONFIG !== 'undefined', "BUILDINGS_CONFIG ist definiert");
+  assert(typeof TROOPS_CONFIG !== 'undefined', "TROOPS_CONFIG ist definiert");
+  assert(BUILDINGS_CONFIG.keep.levels[1].cost.wood >= 0, "Burgfried Stufe 1 hat valide Holzkosten");
+} catch(e) {
+  assert(false, "Config Test Fehler: " + e.message);
+}
 
-console.log('\n----------------------------------------------------');
-if (errorsFound > 0) {
-  console.error(`❌ Validation Failed: ${errorsFound} syntax error(s) detected across ${totalFilesChecked} files.`);
+// Test 3: Reactive Proxy Engine Test
+try {
+  const proxyCode = fs.readFileSync(path.join(__dirname, '../js/core/reactive_state.js'), 'utf8');
+  eval(proxyCode);
+  const state = { resources: { gold: 100 } };
+  const rState = new ReactiveState(state);
+  let updatedVal = 0;
+  rState.subscribe('resources.gold', (newVal) => { updatedVal = newVal; });
+  rState.state.resources.gold = 250;
+  assert(updatedVal === 250, "Reactive Proxy schlägt Subscriber an (250 Gold)");
+} catch(e) {
+  assert(false, "Reactive State Test Fehler: " + e.message);
+}
+
+console.log(`\n📊 Testergebnisse: ${testsPassed} bestanden, ${testsFailed} fehlgeschlagen.`);
+if (testsFailed > 0) {
   process.exit(1);
 } else {
-  console.log(`🎉 Validation Passed! All ${totalFilesChecked} JavaScript files compiled cleanly with 0 syntax errors.`);
-  console.log('----------------------------------------------------');
-  process.exit(0);
+  console.log("🎉 Alle Tests erfolgreich abgeschlossen!");
 }

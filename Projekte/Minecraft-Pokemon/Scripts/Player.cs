@@ -48,8 +48,20 @@ public partial class Player : CharacterBody3D
     public int SuperballCount { get; set; } = 3;
     public int HyperballCount { get; set; } = 1;
     public int MasterballCount { get; set; } = 1;
+    public int HeavyballCount { get; set; } = 2;
+    public int NetballCount { get; set; } = 2;
+    public int DuskballCount { get; set; } = 2;
+    public int DiveballCount { get; set; } = 2;
+    public int ApricornCount { get; set; } = 5;
     public int BerryCount { get; set; } = 5;
     public bool IsChampion { get; set; } = false;
+
+    // Evolution Cutscene State
+    private Panel _evolutionPanel = null!;
+    private Label _evolutionTextLabel = null!;
+    private float _evolutionTimer = 0.0f;
+    private PokemonData? _evolvingPokemon = null;
+    private string? _targetEvolutionSpecies = null;
 
     // Tool Progression & Evolution Stones
     public bool HasStonePickaxe { get; set; } = false;
@@ -66,6 +78,8 @@ public partial class Player : CharacterBody3D
     private bool _isPcOpen = false;
     private bool _isPokedexOpen = false;
     private bool _isGridInventoryOpen = false;
+    private bool _isAchievementsOpen = false;
+    private Panel _achievementsPanel = null!;
 
     // Battle System State
     public bool IsInBattle { get; private set; } = false;
@@ -103,14 +117,42 @@ public partial class Player : CharacterBody3D
         Pokeball.OnCaptureFeedback += DisplayFeedback;
         Pokeball.OnPokemonCaptured += OnPokemonCapturedHandler;
 
+        // Subscribe to global events
+        QuestManager.QuestCompleted += DisplayFeedback;
+        AchievementManager.AchievementUnlocked += OnAchievementUnlocked;
+        if (WeatherManager.Instance != null)
+            WeatherManager.Instance.WeatherChanged += OnWeatherChanged;
+
         SetupUIElements();
         UpdateHUD();
+    }
+
+    private void OnWeatherChanged(WeatherType newWeather)
+    {
+        string icon = newWeather switch
+        {
+            WeatherType.Rain       => "🌧️",
+            WeatherType.Snow       => "❄️",
+            WeatherType.Sandstorm  => "🏜️",
+            WeatherType.VolcanoAsh => "🌋",
+            _                     => "☀️"
+        };
+        DisplayFeedback($"{icon} Wetter geändert: {newWeather}!");
+    }
+
+    private void OnAchievementUnlocked(Achievement achievement)
+    {
+        DisplayFeedback($"🏅 ACHIEVEMENT FREIGESCHALTET: {achievement.Icon} '{achievement.Title}'!");
     }
 
     public override void _ExitTree()
     {
         Pokeball.OnCaptureFeedback -= DisplayFeedback;
         Pokeball.OnPokemonCaptured -= OnPokemonCapturedHandler;
+        QuestManager.QuestCompleted -= DisplayFeedback;
+        AchievementManager.AchievementUnlocked -= OnAchievementUnlocked;
+        if (WeatherManager.Instance != null)
+            WeatherManager.Instance.WeatherChanged -= OnWeatherChanged;
     }
 
     private void SetupUIElements()
@@ -210,12 +252,24 @@ public partial class Player : CharacterBody3D
         _battlePanel.AddChild(_battleTextLabel);
         hud.AddChild(_battlePanel);
 
+        // Evolution Overlay Panel
+        _evolutionPanel = new Panel();
+        _evolutionPanel.Size = new Vector2(480, 200);
+        _evolutionPanel.Position = new Vector2(340, 220);
+        _evolutionPanel.Visible = false;
+        _evolutionTextLabel = new Label();
+        _evolutionTextLabel.Position = new Vector2(20, 20);
+        _evolutionTextLabel.AddThemeFontSizeOverride("font_size", 16);
+        _evolutionPanel.AddChild(_evolutionTextLabel);
+        hud.AddChild(_evolutionPanel);
+
         // Style Panels
         StylePanel(_pokedexPanel, new Color(0.15f, 0.1f, 0.25f, 0.85f), Colors.DarkOrchid, 10);
         StylePanel(_gridInventoryPanel, new Color(0.12f, 0.18f, 0.15f, 0.9f), Colors.MediumSeaGreen, 10);
         StylePanel(_craftingPanel, new Color(0.18f, 0.15f, 0.12f, 0.9f), Colors.Peru, 10);
         StylePanel(_pcPanel, new Color(0.1f, 0.12f, 0.18f, 0.85f), Colors.DeepSkyBlue, 10);
         StylePanel(_battlePanel, new Color(0.12f, 0.12f, 0.15f, 0.92f), Colors.Crimson, 12);
+        StylePanel(_evolutionPanel, new Color(0.2f, 0.1f, 0.3f, 0.95f), Colors.Gold, 12);
 
         // Player HP Bar setup
         _playerHpBar = new ProgressBar();
@@ -232,6 +286,20 @@ public partial class Player : CharacterBody3D
         _enemyHpBar.ShowPercentage = true;
         _enemyHpBar.Value = 100;
         _battlePanel.AddChild(_enemyHpBar);
+
+        // Achievements Panel
+        _achievementsPanel = new Panel();
+        _achievementsPanel.Size = new Vector2(520, 400);
+        _achievementsPanel.Position = new Vector2(320, 90);
+        _achievementsPanel.Visible = false;
+        var achLabel = new Label();
+        achLabel.Name = "AchLabel";
+        achLabel.Position = new Vector2(15, 15);
+        achLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        achLabel.AddThemeFontSizeOverride("font_size", 12);
+        _achievementsPanel.AddChild(achLabel);
+        StylePanel(_achievementsPanel, new Color(0.1f, 0.15f, 0.1f, 0.92f), Colors.LimeGreen, 10);
+        hud.AddChild(_achievementsPanel);
     }
 
     private void StylePanel(Panel panel, Color bgColor, Color borderColor, int cornerRadius)
@@ -281,78 +349,100 @@ public partial class Player : CharacterBody3D
             PCStorage.Add(data);
             DisplayFeedback($"Team voll! '{data.Species}' wurde in die PC-Box übertragen. (PC: {PCStorage.Count})");
         }
+
+        // Achievements
+        AchievementManager.Unlock("first_catch");
+        if (PokedexCaught.Count >= 10) AchievementManager.Unlock("catch_10");
+        if (PokedexCaught.Count >= 25) AchievementManager.Unlock("catch_all");
+        if (data.IsShiny) AchievementManager.Unlock("first_shiny");
+        string[] legendary = { "Mewtu", "Zapdos", "Arktos", "Lugia", "Ho-Oh", "Deoxys", "Deoxys-Angriff", "Deoxys-Verteidigung", "Deoxys-Initiative" };
+        if (System.Array.IndexOf(legendary, data.Species) >= 0) AchievementManager.Unlock("legendary");
+
+        // Quests
+        if (QuestManager.ProgressQuest("catch10", 1, out string q10)) DisplayFeedback(q10);
+        if (data.IsShiny && QuestManager.ProgressQuest("shiny", 1, out string qShiny)) DisplayFeedback(qShiny);
+
         UpdateHUD();
     }
 
+    /// <summary>Routes input to the appropriate handler based on current game state.</summary>
     public override void _UnhandledInput(InputEvent @event)
     {
         if (IsInBattle)
         {
-            if (@event is InputEventKey k && k.Pressed)
-            {
-                if (k.Keycode >= Key.Key1 && k.Keycode <= Key.Key4)
-                {
-                    int moveIdx = (int)k.Keycode - (int)Key.Key1;
-                    ExecuteBattleTurn(moveIdx);
-                }
-                else if (k.Keycode == Key.M)
-                {
-                    TryTriggerMegaEvolution();
-                }
-                else if (k.Keycode == Key.B || k.Keycode == Key.Escape)
-                {
-                    EndBattle("Du bist aus dem Kampf geflüchtet!");
-                }
-            }
+            HandleBattleInput(@event);
             return;
         }
 
-        if (_isGridInventoryOpen)
+        if (_isGridInventoryOpen || _isCraftingOpen || _isPcOpen || _isPokedexOpen)
         {
-            if (@event is InputEventKey keyEvent && keyEvent.Pressed && keyEvent.Keycode == Key.I)
-            {
-                ToggleGridInventory();
-            }
+            HandleMenuInput(@event);
             return;
         }
 
-        if (_isCraftingOpen)
+        HandleWorldInput(@event);
+    }
+
+    /// <summary>Handles all key input while in a battle.</summary>
+    private void HandleBattleInput(InputEvent @event)
+    {
+        if (@event is InputEventKey k && k.Pressed)
         {
-            if (@event is InputEventKey keyEvent && keyEvent.Pressed)
+            if (k.Keycode >= Key.Key1 && k.Keycode <= Key.Key4)
             {
-                if (keyEvent.Keycode == Key.C) ToggleCrafting();
-                else if (keyEvent.Keycode == Key.Key1) CraftPokeball();
-                else if (keyEvent.Keycode == Key.Key2) CraftPlanks();
-                else if (keyEvent.Keycode == Key.Key3) CraftHealStation();
-                else if (keyEvent.Keycode == Key.Key4) CraftTorches();
-                else if (keyEvent.Keycode == Key.Key5) CraftBreedingPen();
-                else if (keyEvent.Keycode == Key.Key6) CraftSuperball();
-                else if (keyEvent.Keycode == Key.Key7) CraftHyperball();
-                else if (keyEvent.Keycode == Key.Key8) CraftTrophyBlock();
-                else if (keyEvent.Keycode == Key.Key9) CraftStonePickaxe();
-                else if (keyEvent.Keycode == Key.Key0) CraftIronPickaxe();
+                int moveIdx = (int)k.Keycode - (int)Key.Key1;
+                ExecuteBattleTurn(moveIdx);
             }
-            return;
+            else if (k.Keycode == Key.M)
+            {
+                TryTriggerMegaEvolution();
+            }
+            else if (k.Keycode == Key.B || k.Keycode == Key.Escape)
+            {
+                EndBattle("Du bist aus dem Kampf geflohen!");
+            }
         }
+    }
 
-        if (_isPcOpen)
+    /// <summary>Handles key input while any menu/overlay panel is open.</summary>
+    private void HandleMenuInput(InputEvent @event)
+    {
+        if (@event is not InputEventKey keyEvent || !keyEvent.Pressed) return;
+
+        if (_isGridInventoryOpen && keyEvent.Keycode == Key.I)
         {
-            if (@event is InputEventKey keyEvent && keyEvent.Pressed)
-            {
-                if (keyEvent.Keycode == Key.E) TogglePC();
-            }
-            return;
+            ToggleGridInventory();
         }
-
-        if (_isPokedexOpen)
+        else if (_isCraftingOpen)
         {
-            if (@event is InputEventKey keyEvent && keyEvent.Pressed)
+            switch (keyEvent.Keycode)
             {
-                if (keyEvent.Keycode == Key.P) TogglePokedex();
+                case Key.C:    ToggleCrafting();    break;
+                case Key.Key1: CraftPokeball();     break;
+                case Key.Key2: CraftPlanks();       break;
+                case Key.Key3: CraftHealStation();  break;
+                case Key.Key4: CraftTorches();      break;
+                case Key.Key5: CraftBreedingPen();  break;
+                case Key.Key6: CraftSuperball();    break;
+                case Key.Key7: CraftHyperball();    break;
+                case Key.Key8: CraftTrophyBlock();  break;
+                case Key.Key9: CraftStonePickaxe(); break;
+                case Key.Key0: CraftIronPickaxe();  break;
             }
-            return;
         }
+        else if (_isPcOpen && keyEvent.Keycode == Key.E)
+        {
+            TogglePC();
+        }
+        else if (_isPokedexOpen && keyEvent.Keycode == Key.P)
+        {
+            TogglePokedex();
+        }
+    }
 
+    /// <summary>Handles all input during normal world exploration.</summary>
+    private void HandleWorldInput(InputEvent @event)
+    {
         if (@event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
         {
             RotateY(-mouseMotion.Relative.X * MouseSensitivity);
@@ -366,61 +456,104 @@ public partial class Player : CharacterBody3D
 
         if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
         {
-            if (mouseButton.ButtonIndex == MouseButton.WheelUp)
+            switch (mouseButton.ButtonIndex)
             {
-                _selectedHotbarIndex = (_selectedHotbarIndex - 1 + _hotbarBlocks.Length) % _hotbarBlocks.Length;
-                UpdateHUD();
-            }
-            else if (mouseButton.ButtonIndex == MouseButton.WheelDown)
-            {
-                _selectedHotbarIndex = (_selectedHotbarIndex + 1) % _hotbarBlocks.Length;
-                UpdateHUD();
-            }
-            else if (mouseButton.ButtonIndex == MouseButton.Left)
-            {
-                if (Input.MouseMode == Input.MouseModeEnum.Visible)
-                {
-                    Input.MouseMode = Input.MouseModeEnum.Captured;
-                    return;
-                }
-                TryInteract(mine: true);
-            }
-            else if (mouseButton.ButtonIndex == MouseButton.Right)
-            {
-                TryInteract(mine: false);
+                case MouseButton.WheelUp:
+                    _selectedHotbarIndex = (_selectedHotbarIndex - 1 + _hotbarBlocks.Length) % _hotbarBlocks.Length;
+                    UpdateHUD();
+                    break;
+                case MouseButton.WheelDown:
+                    _selectedHotbarIndex = (_selectedHotbarIndex + 1) % _hotbarBlocks.Length;
+                    UpdateHUD();
+                    break;
+                case MouseButton.Left:
+                    if (Input.MouseMode == Input.MouseModeEnum.Visible)
+                    {
+                        Input.MouseMode = Input.MouseModeEnum.Captured;
+                        return;
+                    }
+                    TryInteract(mine: true);
+                    break;
+                case MouseButton.Right:
+                    TryInteract(mine: false);
+                    break;
             }
         }
 
         if (@event is InputEventKey kKey && kKey.Pressed)
         {
-            if (kKey.Keycode == Key.Escape)
-            {
+            HandleWorldKeyInput(kKey.Keycode);
+        }
+    }
+
+    /// <summary>Handles keyboard shortcuts in the world (exploration) state.</summary>
+    private void HandleWorldKeyInput(Key keycode)
+    {
+        switch (keycode)
+        {
+            case Key.Escape:
                 Input.MouseMode = Input.MouseMode == Input.MouseModeEnum.Captured
                     ? Input.MouseModeEnum.Visible
                     : Input.MouseModeEnum.Captured;
-            }
-            else if (kKey.Keycode >= Key.Key1 && kKey.Keycode <= Key.Key8)
-            {
-                _selectedHotbarIndex = (int)kKey.Keycode - (int)Key.Key1;
-                UpdateHUD();
-            }
-            else if (kKey.Keycode == Key.M) ToggleMap();
-            else if (kKey.Keycode == Key.I) ToggleGridInventory();
-            else if (kKey.Keycode == Key.P) TogglePokedex();
-            else if (kKey.Keycode == Key.C) ToggleCrafting();
-            else if (kKey.Keycode == Key.E) TogglePC();
-            else if (kKey.Keycode == Key.R) ToggleCompanion();
-            else if (kKey.Keycode == Key.F) ToggleMount();
-            else if (kKey.Keycode == Key.B) TryStartBattle();
-            else if (kKey.Keycode == Key.H) HostMultiplayer();
-            else if (kKey.Keycode == Key.J) JoinMultiplayer();
-            else if (kKey.Keycode == Key.G) CycleTools();
-            else if (kKey.Keycode == Key.U) TryApplyEvolutionStones();
-            else if (kKey.Keycode == Key.F12) TogglePhotoMode();
-            else if (kKey.Keycode == Key.O) ToggleTheme();
-            else if (kKey.Keycode == Key.K) ToggleBattleSpeed();
-            else if (kKey.Keycode == Key.F5) PerformSave();
-            else if (kKey.Keycode == Key.F9) PerformLoad();
+                break;
+
+            // Hotbar 1-8 (also used for map teleport)
+            case >= Key.Key1 and <= Key.Key8:
+                if (_isMapOpen)
+                {
+                    switch (keycode)
+                    {
+                        case Key.Key1: TeleportTo(new Vector3(22.0f, 9.0f,  12.0f), "🏘 Voxel-Dorf");    break;
+                        case Key.Key2: TeleportTo(new Vector3(12.0f, 10.0f, 12.0f), "🏟 Voxel-Arena");   break;
+                        case Key.Key3: TeleportTo(new Vector3(48.0f, 5.0f,  48.0f), "🏙 Boss-Dungeon"); break;
+                        case Key.Key4: TeleportTo(new Vector3(35.0f, 10.0f, 45.0f), "👑 Liga-Palast");   break;
+                        case Key.Key5: TeleportTo(new Vector3(20.0f, 26.0f, 20.0f), "☁️ Himmelsturm");  break;
+                    }
+                }
+                else
+                {
+                    _selectedHotbarIndex = (int)keycode - (int)Key.Key1;
+                    UpdateHUD();
+                }
+                break;
+
+            case Key.M: ToggleMap();          break;
+            case Key.I: ToggleGridInventory(); break;
+            case Key.P: TogglePokedex();       break;
+            case Key.C: ToggleCrafting();      break;
+            case Key.E: TogglePC();            break;
+            case Key.R: ToggleCompanion();     break;
+            case Key.F: ToggleMount();         break;
+
+            case Key.B:
+                if (_evolutionPanel != null && _evolutionPanel.Visible)
+                {
+                    _evolutionPanel.Visible = false;
+                    _evolutionTimer = 0;
+                    if (_evolvingPokemon != null) _evolvingPokemon.PendingEvolutionTarget = null;
+                    _evolvingPokemon = null;
+                    _targetEvolutionSpecies = null;
+                    DisplayFeedback("🛑 DIE EVOLUTION WURDE ABGEBROCHEN!");
+                }
+                else
+                {
+                    TryStartBattle();
+                }
+                break;
+
+            case Key.N:   ToggleQuestLog();         break;
+            case Key.Z:   TryTriggerDynamax();       break;
+            case Key.T:   TryTriggerTerastallize();  break;
+            case Key.K:   StartFishingMinigame();    break;
+            case Key.H:   HostMultiplayer();          break;
+            case Key.J:   JoinMultiplayer();          break;
+            case Key.G:   CycleTools();               break;
+            case Key.U:   TryApplyEvolutionStones();  break;
+            case Key.F12: TogglePhotoMode();          break;
+            case Key.O:   ToggleTheme();              break;
+            case Key.L:   ToggleBattleSpeed();        break;
+            case Key.F5:  PerformSave();              break;
+            case Key.F9:  PerformLoad();              break;
         }
     }
 
@@ -430,6 +563,33 @@ public partial class Player : CharacterBody3D
         if (_sunLight != null)
         {
             _sunLight.Rotation = new Vector3(_dayNightTimer, Mathf.Pi / 4.0f, 0);
+        }
+
+        if (_evolutionPanel != null && _evolutionPanel.Visible)
+        {
+            _evolutionTimer -= (float)delta;
+            if (EffectsManager.Instance != null && GD.Randf() < 0.25f)
+            {
+                EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition + Vector3.Up * 1.2f, Colors.Gold);
+            }
+
+            if (_evolutionTimer <= 0)
+            {
+                _evolutionPanel.Visible = false;
+                if (_evolvingPokemon != null && _targetEvolutionSpecies != null)
+                {
+                    string oldName = _evolvingPokemon.Species;
+                    _evolvingPokemon.CompleteEvolution(_targetEvolutionSpecies);
+                    DisplayFeedback($"🎉 GLÜCKWUNSCH! Dein {oldName} hat sich zu {_evolvingPokemon.Species} entwickelt!");
+                    if (EffectsManager.Instance != null) EffectsManager.Instance.SpawnFireworksEffect(GlobalPosition);
+                    if (_activeCompanion != null && IsInstanceValid(_activeCompanion))
+                    {
+                        _activeCompanion.SetupFromData(_evolvingPokemon, isCompanion: true, owner: this);
+                    }
+                }
+                _evolvingPokemon = null;
+                _targetEvolutionSpecies = null;
+            }
         }
 
         UpdateRadarHUD();
@@ -537,12 +697,43 @@ public partial class Player : CharacterBody3D
         MoveAndSlide();
     }
 
+    public HashSet<Vector2I> ExploredChunks { get; private set; } = new HashSet<Vector2I>();
+    public Dictionary<string, Vector3I> CustomWaypoints { get; private set; } = new Dictionary<string, Vector3I>();
+
+    public void AddWaypoint(string name, Vector3I coords)
+    {
+        CustomWaypoints[name] = coords;
+        DisplayFeedback($"📍 WEGPUNKT GESETZT: '{name}' bei [{coords.X}, {coords.Y}, {coords.Z}]!");
+    }
+
     private void UpdateMinimapHUD()
     {
         if (_minimapLabel == null) return;
         int px = (int)GlobalPosition.X;
         int pz = (int)GlobalPosition.Z;
-        _minimapLabel.Text = $"🗺 MINIMAP [X:{px} Z:{pz}]\n 🟢 N  \n🔵W 👤 E\n 🟡 S";
+        Vector2I chunk = new Vector2I(px / 16, pz / 16);
+        ExploredChunks.Add(chunk);
+
+        int count = ExploredChunks.Count;
+        string wpText = CustomWaypoints.Count > 0 ? $"\n📍 Wegpunkte: {CustomWaypoints.Count}" : "";
+        _minimapLabel.Text = $"🗺 MINIMAP [X:{px} Z:{pz}] (Entdeckt: {count} Chunks){wpText}\n 🟢 N  \n🔵W 👤 E\n 🟡 S";
+    }
+
+    private bool _isQuestLogOpen = false;
+    private Panel _questLogPanel = null!;
+
+    private void ToggleQuestLog()
+    {
+        _isQuestLogOpen = !_isQuestLogOpen;
+        string questText = "=== INTERAKTIVES QUEST-LOG ===\n\nAktuelle Missionen:\n";
+        foreach (var q in QuestManager.ActiveQuests)
+        {
+            string status = q.IsCompleted ? "✅ ABGESCHLOSSEN" : $"[FORTSCHRITT: {q.CurrentProgress}/{q.TargetAmount}]";
+            questText += $" • {q.Title}: {q.Description}\n   {status} | Belohnung: {q.RewardText}\n\n";
+        }
+        questText += "Drücke 'N' zum Schließen.";
+        DisplayFeedback(questText);
+        Input.MouseMode = _isQuestLogOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
 
     private void UpdateRadarHUD()
@@ -564,10 +755,11 @@ public partial class Player : CharacterBody3D
 
     private void ToggleGridInventory()
     {
+        if (_gridInventoryPanel == null) { GD.PrintErr("[NullCheck] _gridInventoryPanel is null!"); return; }
         _isGridInventoryOpen = !_isGridInventoryOpen;
         _gridInventoryPanel.Visible = _isGridInventoryOpen;
 
-        var label = _gridInventoryPanel.GetNode<Label>("GridLabel");
+        var label = _gridInventoryPanel.GetNodeOrNull<Label>("GridLabel");
         string invText = "=== VISUELLES GRID-INVENTAR ===\n\nVorhandene Voxel-Blöcke & Gegenstände:\n";
 
         foreach (var (block, qty) in BlockInventory)
@@ -579,33 +771,51 @@ public partial class Player : CharacterBody3D
         }
         invText += $"\nBälle: Pokéball ({PokeballCount}), Superball ({SuperballCount}), Hyperball ({HyperballCount}), Meisterball ({MasterballCount})\n";
         invText += $"Evo-Steine: Feuer ({FeuersteinCount}), Wasser ({WassersteinCount}), Donner ({DonnersteinCount})\n\nDrücke 'I' zum Schließen.";
-        label.Text = invText;
+        if (label != null) label.Text = invText;
 
         Input.MouseMode = _isGridInventoryOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
 
+    private string _pokedexSearchFilter = "";
+
     private void TogglePokedex()
     {
+        if (_pokedexPanel == null) { GD.PrintErr("[NullCheck] _pokedexPanel is null!"); return; }
         _isPokedexOpen = !_isPokedexOpen;
         _pokedexPanel.Visible = _isPokedexOpen;
 
-        var label = _pokedexPanel.GetNode<Label>("DexLabel");
+        var label = _pokedexPanel.GetNodeOrNull<Label>("DexLabel");
+        RefreshPokedexDisplay(label);
+
+        Input.MouseMode = _isPokedexOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+    }
+
+    private void RefreshPokedexDisplay(Label? label)
+    {
+        if (label == null) return;
         string[] allSpecies = new string[] { "Pikachu", "Bisasam", "Bisaknosp", "Bisaflor", "Glumanda", "Glutexo", "Glurak", "Schiggy", "Schillok", "Turtok", "Raichu", "Nebulak", "Alpollo", "Gengar", "Garados", "Dragoran", "Nachtara", "Psiana", "Evoli", "Aquana", "Blitza", "Flamara", "Mewtu", "Zapdos", "Arktos" };
 
         int caughtCount = PokedexCaught.Count;
-        string dexText = $"=== VOXEL-POKÉDEX (GEFANGEN: {caughtCount}/{allSpecies.Length}) ===\n\nEntdeckte Spezies:\n";
+        string filter = _pokedexSearchFilter.Trim().ToLower();
+        string dexText = $"=== VOXEL-POKÉDEX (GEFANGEN: {caughtCount}/{allSpecies.Length}) ===";
+        if (!string.IsNullOrEmpty(filter)) dexText += $" | Suche: '{_pokedexSearchFilter}'";
+        dexText += "\n\nAlle Spezies:\n";
 
-        string partyIvText = "";
+        foreach (var sp in allSpecies)
+        {
+            if (!string.IsNullOrEmpty(filter) && !sp.ToLower().Contains(filter)) continue;
+            string caughtMark = PokedexCaught.Contains(sp) ? "✅" : "❌";
+            dexText += $" {caughtMark} {sp}\n";
+        }
+
         if (Party.Count > 0)
         {
             var p = Party[0];
-            partyIvText = $"\n\n📊 DV/IV INSPECTOR ({p.Species}):\nWesen: {p.Nature} | HP: {p.IvHp}/31 | Atk: {p.IvAtk}/31 | Def: {p.IvDef}/31 | Spd: {p.IvSpeed}/31";
+            dexText += $"\n📊 DV/IV INSPECTOR ({p.Species}):\nWesen: {p.Nature} | HP: {p.IvHp}/31 | Atk: {p.IvAtk}/31 | Def: {p.IvDef}/31 | Spd: {p.IvSpeed}/31";
         }
 
-        dexText += partyIvText + "\n\nDrücke 'P' zum Schließen.";
+        dexText += "\n\nDrücke 'P' zum Schließen.";
         label.Text = dexText;
-
-        Input.MouseMode = _isPokedexOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
 
     private bool _isMapOpen = false;
@@ -620,9 +830,21 @@ public partial class Player : CharacterBody3D
         {
             int px = (int)GlobalPosition.X;
             int pz = (int)GlobalPosition.Z;
-            DisplayFeedback($"🗺 VOLLBILD-WELTKARTE: Spieler-Pos ({px}, {pz})\n 📍 Arenen | 🏥 Center | 🏛 Duellturm (12, 50) | 👑 Liga (35, 45)");
+            DisplayFeedback($"🗺 WELTKARTE & SCHNELLREISE: Pos ({px}, {pz})\n Drücke [1-5] für Teleport:\n 1: 🏘 Dorf | 2: 🏟 Arena | 3: 🏛 Boss-Dungeon | 4: 👑 Liga | 5: ☁️ Himmelsturm");
         }
         Input.MouseMode = _isMapOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+    }
+
+    private void TeleportTo(Vector3 targetPos, string destinationName)
+    {
+        GlobalPosition = targetPos;
+        if (_isMapOpen) ToggleMap();
+        DisplayFeedback($"⚡ SCHNELLREISE: Erfolgreich nach '{destinationName}' teleportiert!");
+        if (EffectsManager.Instance != null)
+        {
+            EffectsManager.Instance.SpawnBlockBreakEffect(targetPos, Colors.DeepSkyBlue);
+            EffectsManager.Instance.PlaySoundEffect(1200.0f, 0.2f);
+        }
     }
 
     private int _currentThemeIdx = 0;
@@ -651,6 +873,101 @@ public partial class Player : CharacterBody3D
 
         Engine.TimeScale = _battleSpeed;
         DisplayFeedback($"⏩ KAMPFTEMPO: {_battleSpeed}x Speed aktiviert!");
+    }
+
+    private void TryTriggerDynamax()
+    {
+        if (Party.Count == 0) return;
+        var p = Party[0];
+        if (p.TriggerDynamax())
+        {
+            DisplayFeedback($"⚡ DYNAMAX TRANSFORMATION! {p.Species} verwandelt sich in eine gigantische Voxel-Form (+100% KP)!");
+            if (_activeCompanion != null && IsInstanceValid(_activeCompanion))
+            {
+                _activeCompanion.Scale = new Vector3(2.2f, 2.2f, 2.2f);
+            }
+            if (EffectsManager.Instance != null)
+            {
+                EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition, Colors.Red);
+                EffectsManager.Instance.PlaySoundEffect(200.0f, 0.5f);
+            }
+            UpdateHUD();
+        }
+        else
+        {
+            DisplayFeedback("Dieses Pokémon ist bereits im Dynamax-Zustand!");
+        }
+    }
+
+    private void TryTriggerTerastallize()
+    {
+        if (Party.Count == 0) return;
+        var p = Party[0];
+        string[] teraOptions = new string[] { "Feuer", "Wasser", "Elektro", "Drache", "Stahl" };
+        string chosenTera = teraOptions[(int)(GD.Randi() % teraOptions.Length)];
+
+        if (p.TriggerTerastallize(chosenTera))
+        {
+            DisplayFeedback($"💎 TERA-KRISTALLISIERUNG! {p.Species} nimmt den Tera-Typ '{chosenTera}' an (+50% Schaden)!");
+            if (EffectsManager.Instance != null)
+            {
+                EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition, Colors.DeepSkyBlue);
+                EffectsManager.Instance.PlaySoundEffect(1500.0f, 0.4f);
+            }
+            UpdateHUD();
+        }
+        else
+        {
+            DisplayFeedback("Dieses Pokémon ist bereits terastallisiert!");
+        }
+    }
+
+    private void CookCampMeal()
+    {
+        if (BerryCount >= 2)
+        {
+            BerryCount -= 2;
+            foreach (var p in Party)
+            {
+                p.CurrentHp = p.MaxHp;
+                p.IncreaseFriendship(15);
+                p.Beauty = Math.Min(255, p.Beauty + 5);
+                p.Coolness = Math.Min(255, p.Coolness + 5);
+            }
+            DisplayFeedback("🏕️ POKÉ-FOOD GEKOCHT! Das gesamte Pokémon-Team ist vollständig geheilt & die Zuneigung (Freundschaft) ist deutlich gestiegen (+15)!");
+            if (EffectsManager.Instance != null)
+            {
+                EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition, Colors.DeepPink);
+                EffectsManager.Instance.PlaySoundEffect(440.0f, 0.3f);
+            }
+            UpdateHUD();
+        }
+        else
+        {
+            DisplayFeedback("Benötigt mindestens 2x Beeren zum Kochen am Camp!");
+        }
+    }
+
+    private void StartFishingMinigame()
+    {
+        DisplayFeedback("🎣 ANGEL AUSGEWORFEN... Warten auf Anbiss...");
+        GetTree().CreateTimer(1.5f).Timeout += () =>
+        {
+            float roll = GD.Randf();
+            if (roll < 0.7f)
+            {
+                string[] waterCatches = new string[] { "Schiggy", "Aquana", "Garados", "Amonitas", "Karpador" };
+                string caught = waterCatches[(int)(GD.Randi() % waterCatches.Length)];
+                var wild = new PokemonData(caught, (int)GD.RandRange(15, 35), 60, "Wasser", Colors.DeepSkyBlue);
+                Party.Add(wild);
+                DisplayFeedback($"🎣 ANBISS! Erfolgreich Wasser-Pokémon '{caught}' (Lv.{wild.Level}) gefangen!");
+                UpdateHUD();
+            }
+            else
+            {
+                DisplayFeedback("🎣 Nichts angebissen! Versuche es erneut.");
+            }
+        };
     }
 
     private void TryTriggerMegaEvolution()
@@ -747,6 +1064,7 @@ public partial class Player : CharacterBody3D
 
     private void OpenBattlePanel(string enemyName, int enemyLevel)
     {
+        if (_battlePanel == null) { GD.PrintErr("[NullCheck] _battlePanel is null!"); return; }
         var playerPokemon = Party[0];
         _battlePanel.Visible = true;
 
@@ -805,19 +1123,18 @@ public partial class Player : CharacterBody3D
                 int xpReward = _battleTarget.Level * 30;
                 string prevSpecies = playerPokemon.Species;
                 bool leveledUp = playerPokemon.GainXp(xpReward);
-                string evoMsg = playerPokemon.Species != prevSpecies ? $" ✨ EVOLUTION! {prevSpecies} hat sich zu {playerPokemon.Species} entwickelt!" : "";
                 string lvlMsg = leveledUp ? $" -> LEVEL UP! Lv. {playerPokemon.Level}!" : "";
 
-                DisplayFeedback($"{attackMsg}\n{_battleTarget.MonsterName} besiegt! +{xpReward} XP{lvlMsg}{evoMsg}");
+                DisplayFeedback($"{attackMsg}\n{_battleTarget.MonsterName} besiegt! +{xpReward} XP{lvlMsg}");
+
+                if (playerPokemon.PendingEvolutionTarget != null)
+                {
+                    StartEvolutionCutscene(playerPokemon, playerPokemon.PendingEvolutionTarget);
+                }
 
                 if ((_battleTarget.MonsterName == "Mewtu" || _battleTarget.MonsterName == "Zapdos" || _battleTarget.MonsterName == "Arktos" || _battleTarget.MonsterName == "Lugia" || _battleTarget.MonsterName == "Ho-Oh") && QuestManager.ProgressQuest("boss", 1, out string qMsgBoss))
                 {
                     DisplayFeedback(qMsgBoss);
-                }
-
-                if (_activeCompanion != null && IsInstanceValid(_activeCompanion) && evoMsg != "")
-                {
-                    _activeCompanion.SetupFromData(playerPokemon, isCompanion: true, owner: this);
                 }
 
                 _battleTarget.QueueFree();
@@ -865,7 +1182,10 @@ public partial class Player : CharacterBody3D
                     {
                         DisplayFeedback(qMsg);
                     }
-                    if (Badges.Count >= 8) IsChampion = true;
+                    if (Badges.Count >= 8 || _trainerTarget.TrainerName.Contains("Liga") || _trainerTarget.TrainerName.Contains("Meister"))
+                    {
+                        RecordHallOfFameVictory();
+                    }
                     if (EffectsManager.Instance != null) EffectsManager.Instance.SpawnFireworksEffect(GlobalPosition);
                     EndBattle($"🏆 ARENA-SIEGE GEWONNEN! Orden '{badge}' erhalten! (Orden: {Badges.Count}/8)");
                     return;
@@ -907,7 +1227,7 @@ public partial class Player : CharacterBody3D
         IsInBattle = false;
         _battleTarget = null;
         _trainerTarget = null;
-        _battlePanel.Visible = false;
+        if (_battlePanel != null) _battlePanel.Visible = false;
         Input.MouseMode = Input.MouseModeEnum.Captured;
         if (!string.IsNullOrEmpty(feedback)) DisplayFeedback(feedback);
         UpdateHUD();
@@ -1103,7 +1423,58 @@ public partial class Player : CharacterBody3D
             }
             else if (clickedBlock == BlockType.ContestRibbonBlock)
             {
-                DisplayFeedback("👑 VOXEL-WETTBEWERBS-BÜHNE: Auszeichnung erhalten! Deinem Pokémon wurde ein Gewinner-Band verliehen!");
+                if (Party.Count == 0)
+                {
+                    DisplayFeedback("Du benötigst ein Pokémon im Team für den Wettbewerb!");
+                    return;
+                }
+                var p = Party[0];
+                int contestScore = p.Coolness + p.Beauty + p.Cuteness + p.Cleverness + p.Toughness + (p.Friendship / 2);
+                p.ContestRibbons++;
+                p.IncreaseFriendship(20);
+
+                DisplayFeedback($"👑 VOXEL-WETTBEWERBS-BÜHNE:\nJury-Wertung für {p.Species}: {contestScore} PUNKTE!\n🎉 Auszeichnung erhalten: Band #{p.ContestRibbons} verliehen!");
+                if (EffectsManager.Instance != null)
+                {
+                    EffectsManager.Instance.SpawnFireworksEffect(GlobalPosition);
+                    EffectsManager.Instance.PlayCustomSynthMelody();
+                }
+                UpdateHUD();
+                return;
+            }
+            else if (clickedBlock == BlockType.RaidDenBlock)
+            {
+                TriggerRaidDenBattle();
+                return;
+            }
+            else if (clickedBlock == BlockType.HelperStationBlock)
+            {
+                TriggerHelperAutomation();
+                return;
+            }
+            else if (clickedBlock == BlockType.ArenaPuzzleSwitch)
+            {
+                DisplayFeedback("💡 ARENA-SCHALTER AKTIVIERT! Das Schutzgitter zum Arenaleiter öffnet sich!");
+                if (EffectsManager.Instance != null) EffectsManager.Instance.PlaySoundEffect(950.0f, 0.3f);
+                return;
+            }
+            else if (clickedBlock == BlockType.IceSlideBlock)
+            {
+                Velocity += Transform.Basis.Z * -15.0f; // Rapid ice slide boost
+                DisplayFeedback("⛸ EISRUTSCH-FLÄCHE! Turbo-Gleiten aktiviert!");
+                if (EffectsManager.Instance != null) EffectsManager.Instance.PlaySoundEffect(1200.0f, 0.2f);
+                return;
+            }
+            else if (clickedBlock == BlockType.RailTrackBlock)
+            {
+                Speed = 12.0f; // High speed minecart / rail travel
+                DisplayFeedback("🚋 LOREN-SCHIENEN: Express-Fahrt zwischen den Städten aktiv!");
+                if (EffectsManager.Instance != null) EffectsManager.Instance.PlaySoundEffect(400.0f, 0.2f);
+                return;
+            }
+            else if (clickedBlock == BlockType.RanchTroughBlock)
+            {
+                TriggerRanchCare();
                 return;
             }
 
@@ -1167,10 +1538,24 @@ public partial class Player : CharacterBody3D
             BerryCount -= 3;
             if (Party.Count > 0)
             {
-                var p = Party[0];
-                p.CurrentHp = p.MaxHp;
-                p.Status = StatusCondition.None;
-                DisplayFeedback($"🧪 BEEREN-ENTSAFTER: 3 Beeren gepresst! {p.Species} vollständig geheilt!");
+                var lead = Party[0];
+                int choice = (int)(GD.Randi() % 3);
+                if (choice == 0)
+                {
+                    lead.MaxHp += 10;
+                    lead.CurrentHp = lead.MaxHp;
+                    DisplayFeedback($"🍹 BEEREN-ENTSAFTER: 3x Beeren gepresst ➔ KP-PLUS (+10 KP für {lead.Species})!");
+                }
+                else if (choice == 1)
+                {
+                    lead.Speed += 5;
+                    DisplayFeedback($"🍹 BEEREN-ENTSAFTER: 3x Beeren gepresst ➔ PROTEIN (+5 Initiative für {lead.Species})!");
+                }
+                else
+                {
+                    lead.Defense += 5;
+                    DisplayFeedback($"🍹 BEEREN-ENTSAFTER: 3x Beeren gepresst ➔ KALZIUM (+5 Verteidigung für {lead.Species})!");
+                }
             }
             else
             {
@@ -1190,15 +1575,29 @@ public partial class Player : CharacterBody3D
         {
             BlockInventory[BlockType.FossilBlock]--;
             string[] fossilPokemon = new string[] { "Amonitas", "Kabuto", "Aerodactyl" };
-            string chosen = fossilPokemon[GD.Randi() % fossilPokemon.Length];
-            var fossilPoke = new PokemonData(chosen, 25, 100, "Gestein", Colors.Burlywood);
+            string chosen = fossilPokemon[Random.Shared.Next(0, fossilPokemon.Length)];
+            bool isAncientShiny = Random.Shared.NextDouble() < 0.15;
+            var fossilPoke = new PokemonData(chosen, 30, 110, "Gestein", Colors.Burlywood, isShiny: isAncientShiny);
+            
+            // Ancient DNA grants flawless IVs in two stats
+            fossilPoke.IvHp = 31;
+            fossilPoke.IvAtk = 31;
+            fossilPoke.RecalculateStats();
+            fossilPoke.IncreaseFriendship(30);
+
             OnPokemonCapturedHandler(fossilPoke);
-            DisplayFeedback($"🔬 FOSSILIEN-LABOR: Fossil extrahiert! Urzeit-Pokémon '{chosen}' reanimiert!");
+            string shinyText = isAncientShiny ? " ✨ [URZEIT-SHINY] ✨" : "";
+            DisplayFeedback($"🔬 FOSSILIEN-LABOR: DNA-Sequenzierung abgeschlossen! Antikes {chosen}{shinyText} (Lv.30 | Perfekte 31 IVs) erfolgreich reanimiert!");
+            if (EffectsManager.Instance != null)
+            {
+                EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition, Colors.Cyan);
+                EffectsManager.Instance.PlaySoundEffect(1400.0f, 0.4f);
+            }
             UpdateHUD();
         }
         else
         {
-            DisplayFeedback("⚠️ Du benötigst ein Fossil-Block im Inventar für das Labor!");
+            DisplayFeedback("⚠️ Du benötigst mindestens einen Fossil-Block im Inventar für das DNA-Labor!");
         }
     }
 
@@ -1221,8 +1620,8 @@ public partial class Player : CharacterBody3D
 
         _trainerTarget = towerLeader;
         IsInBattle = true;
-        _battlePanel.Visible = true;
-        _battleTextLabel.Text = $"🏆 DUELLTURM HERAUSFORDERUNG BEGONNEN!\nDu kämpfst gegen den Duellturm-Meister!";
+        if (_battlePanel != null) _battlePanel.Visible = true;
+        if (_battleTextLabel != null) _battleTextLabel.Text = $"🏆 DUELLTURM HERAUSFORDERUNG BEGONNEN!\nDu kämpfst gegen den Duellturm-Meister!";
         if (EffectsManager.Instance != null) EffectsManager.Instance.PlayBattleStartJingle();
     }
 
@@ -1364,6 +1763,7 @@ public partial class Player : CharacterBody3D
 
     private void ToggleCrafting()
     {
+        if (_craftingPanel == null) { GD.PrintErr("[NullCheck] _craftingPanel is null!"); return; }
         _isCraftingOpen = !_isCraftingOpen;
         _craftingPanel.Visible = _isCraftingOpen;
         Input.MouseMode = _isCraftingOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
@@ -1371,10 +1771,11 @@ public partial class Player : CharacterBody3D
 
     private void TogglePC()
     {
+        if (_pcPanel == null) { GD.PrintErr("[NullCheck] _pcPanel is null!"); return; }
         _isPcOpen = !_isPcOpen;
         _pcPanel.Visible = _isPcOpen;
 
-        var label = _pcPanel.GetNode<Label>("PCLabel");
+        var label = _pcPanel.GetNodeOrNull<Label>("PCLabel");
         string pcText = "=== DIGITALES PC-BOXEN-SYSTEM ===\n\nAbgelegte Pokémon:\n";
         if (PCStorage.Count == 0)
         {
@@ -1389,7 +1790,7 @@ public partial class Player : CharacterBody3D
             }
         }
         pcText += "\n\nDrücke 'E' zum Schließen.";
-        label.Text = pcText;
+        if (label != null) label.Text = pcText;
 
         Input.MouseMode = _isPcOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
@@ -1579,19 +1980,98 @@ public partial class Player : CharacterBody3D
             {
                 var p = Party[i];
                 string shinyStr = p.IsShiny ? "✨ " : "";
-                partyText += $" {i + 1}. {shinyStr}{p.Species} (Lv.{p.Level} | {p.Nature} | {p.ElementType} | KP:{p.CurrentHp}/{p.MaxHp})\n";
+                partyText += $" {i + 1}. {shinyStr}{p.Species} (Lv.{p.Level} | {p.Nature} | {p.Ability} | {p.ElementType} | KP:{p.CurrentHp}/{p.MaxHp})\n";
             }
         }
         _partyLabel.Text = partyText;
 
         string badgesStr = Badges.Count == 0 ? "Keine" : string.Join(", ", Badges);
         string weatherStr = WeatherManager.Instance != null ? WeatherManager.Instance.CurrentWeather.ToString() : "Klar";
-        string invText = $"BÄLLE: P:{PokeballCount} | 🔵S:{SuperballCount} | 🟡H:{HyperballCount} | ⭐M:{MasterballCount}  |  🎖 ORDEN: [{badgesStr}]  |  WETTER: {weatherStr}\n";
-        invText += $"EVO-STEINE: 🔥Feuer:{FeuersteinCount} | 🌊Wasser:{WassersteinCount} | ⚡Donner:{DonnersteinCount} (U zum Nutzen auf Slot 1)\n";
+        string invText = $"BÄLLE: P:{PokeballCount} | 🔵S:{SuperballCount} | 🟡H:{HyperballCount} | ⭐M:{MasterballCount} | ⚓Schwer:{HeavyballCount} | 🕸Netz:{NetballCount} | 🌙Finster:{DuskballCount} | 🌊Tauch:{DiveballCount}\n";
+        invText += $"EVO-STEINE & CROP: 🔥Feuer:{FeuersteinCount} | 🌊Wasser:{WassersteinCount} | ⚡Donner:{DonnersteinCount} | 🍊Aprikoko:{ApricornCount} | 🌾Beeren:{BerryCount}\n";
         invText += $"INVENTAR-MATERIALIEN:\n";
         invText += $" PokeballOre: {BlockInventory.GetValueOrDefault(BlockType.PokeballOre, 0)}  |  IronOre: {BlockInventory.GetValueOrDefault(BlockType.IronOre, 0)}\n";
-        invText += $" CoalOre: {BlockInventory.GetValueOrDefault(BlockType.CoalOre, 0)}  |  Sand: {BlockInventory.GetValueOrDefault(BlockType.Sand, 0)}";
+        invText += $" CoalOre: {BlockInventory.GetValueOrDefault(BlockType.CoalOre, 0)}  |  FossilBlock: {BlockInventory.GetValueOrDefault(BlockType.FossilBlock, 0)}";
         _inventoryLabel.Text = invText;
+    }
+
+    public List<string> HallOfFameRecords { get; private set; } = new List<string>();
+
+    public void RecordHallOfFameVictory()
+    {
+        IsChampion = true;
+        string record = $"🏆 SIEG AM {DateTime.Now:yyyy-MM-dd HH:mm} | Team: ";
+        foreach (var p in Party)
+        {
+            record += $"{p.Species} (Lv.{p.Level}), ";
+        }
+        HallOfFameRecords.Add(record);
+
+        if (!BlockInventory.ContainsKey(BlockType.TrophyBlock)) BlockInventory[BlockType.TrophyBlock] = 0;
+        BlockInventory[BlockType.TrophyBlock] += 2;
+        if (!BlockInventory.ContainsKey(BlockType.PokeStatueBlock)) BlockInventory[BlockType.PokeStatueBlock] = 0;
+        BlockInventory[BlockType.PokeStatueBlock] += 1;
+
+        DisplayFeedback("🏆 RUHMESHALLE: Dein Sieg wurde verewigt! (+1 Voxel-Statue & +2 Trophäen-Blöcke erhalten)");
+    }
+
+    private void CraftFocusSash()
+    {
+        int crystal = BlockInventory.GetValueOrDefault(BlockType.CrystalOre, 0);
+        if (crystal >= 1 && BerryCount >= 2)
+        {
+            BlockInventory[BlockType.CrystalOre]--;
+            BerryCount -= 2;
+            if (Party.Count > 0) Party[0].HeldItem = "Fokus-Gurt";
+            DisplayFeedback("🛡️ FOKUS-GURT GECRAFTET und auf erstes Pokémon ausgerüstet!");
+            UpdateHUD();
+        }
+        else DisplayFeedback("Benötigt: 1x Kristall-Erz + 2x Beeren.");
+    }
+
+    private void CraftLeftovers()
+    {
+        int coal = BlockInventory.GetValueOrDefault(BlockType.CoalOre, 0);
+        if (coal >= 1 && BerryCount >= 3)
+        {
+            BlockInventory[BlockType.CoalOre]--;
+            BerryCount -= 3;
+            if (Party.Count > 0) Party[0].HeldItem = "Überreste";
+            DisplayFeedback("🍎 ÜBERRESTE GECRAFTET und auf erstes Pokémon ausgerüstet!");
+            UpdateHUD();
+        }
+        else DisplayFeedback("Benötigt: 1x Kohle-Erz + 3x Beeren.");
+    }
+
+    private void CraftChoiceBand()
+    {
+        int crystal = BlockInventory.GetValueOrDefault(BlockType.CrystalOre, 0);
+        int iron = BlockInventory.GetValueOrDefault(BlockType.IronOre, 0);
+        if (crystal >= 1 && iron >= 1)
+        {
+            BlockInventory[BlockType.CrystalOre]--;
+            BlockInventory[BlockType.IronOre]--;
+            if (Party.Count > 0) Party[0].HeldItem = "Wahlband";
+            DisplayFeedback("🥊 WAHLBAND GECRAFTET (+50% Physischer Schaden)!");
+            UpdateHUD();
+        }
+        else DisplayFeedback("Benötigt: 1x Kristall-Erz + 1x Eisenerz.");
+    }
+
+    public void StartEvolutionCutscene(PokemonData pokemon, string targetSpecies)
+    {
+        _evolvingPokemon = pokemon;
+        _targetEvolutionSpecies = targetSpecies;
+        _evolutionTimer = 5.0f;
+        if (_evolutionPanel != null)
+        {
+            _evolutionPanel.Visible = true;
+            _evolutionTextLabel.Text = $"✨ WAS? {pokemon.Species} ENTWICKELT SICH!\n\nEntwicklung zu {targetSpecies} läuft...\n[Drücke 'B' zum Abbrechen!]";
+        }
+        if (EffectsManager.Instance != null)
+        {
+            EffectsManager.Instance.PlaySoundEffect(500.0f, 0.4f);
+        }
     }
 
     private void PerformSave()
@@ -1602,13 +2082,25 @@ public partial class Player : CharacterBody3D
             PlayerPosY = GlobalPosition.Y,
             PlayerPosZ = GlobalPosition.Z,
             PokeballCount = this.PokeballCount,
+            SuperballCount = this.SuperballCount,
+            HyperballCount = this.HyperballCount,
+            MasterballCount = this.MasterballCount,
+            HeavyballCount = this.HeavyballCount,
+            NetballCount = this.NetballCount,
+            DuskballCount = this.DuskballCount,
+            DiveballCount = this.DiveballCount,
+            ApricornCount = this.ApricornCount,
+            BerryCount = this.BerryCount,
+            IsChampion = this.IsChampion,
             Party = this.Party,
             PCStorage = this.PCStorage,
             HasStonePickaxe = this.HasStonePickaxe,
             HasIronPickaxe = this.HasIronPickaxe,
             FeuersteinCount = this.FeuersteinCount,
             WassersteinCount = this.WassersteinCount,
-            DonnersteinCount = this.DonnersteinCount
+            DonnersteinCount = this.DonnersteinCount,
+            HallOfFameRecords = this.HallOfFameRecords,
+            QuestProgress = QuestManager.ToSaveEntries()
         };
 
         foreach (var (type, count) in BlockInventory)
@@ -1636,6 +2128,16 @@ public partial class Player : CharacterBody3D
 
         GlobalPosition = new Vector3(data.PlayerPosX, data.PlayerPosY, data.PlayerPosZ);
         PokeballCount = data.PokeballCount;
+        SuperballCount = data.SuperballCount;
+        HyperballCount = data.HyperballCount;
+        MasterballCount = data.MasterballCount;
+        HeavyballCount = data.HeavyballCount;
+        NetballCount = data.NetballCount;
+        DuskballCount = data.DuskballCount;
+        DiveballCount = data.DiveballCount;
+        ApricornCount = data.ApricornCount;
+        BerryCount = data.BerryCount;
+        IsChampion = data.IsChampion;
         Party = data.Party ?? new List<PokemonData>();
         PCStorage = data.PCStorage ?? new List<PokemonData>();
 
@@ -1644,6 +2146,11 @@ public partial class Player : CharacterBody3D
         FeuersteinCount = data.FeuersteinCount;
         WassersteinCount = data.WassersteinCount;
         DonnersteinCount = data.DonnersteinCount;
+        HallOfFameRecords = data.HallOfFameRecords ?? new List<string>();
+
+        // Restore quest state
+        QuestManager.InitializeQuests();
+        QuestManager.FromSaveEntries(data.QuestProgress);
 
         BlockInventory.Clear();
         if (data.Inventory != null)
@@ -1664,5 +2171,95 @@ public partial class Player : CharacterBody3D
 
         UpdateHUD();
         DisplayFeedback("Spielstand geladen!");
+    }
+
+    private void TriggerRaidDenBattle()
+    {
+        if (Party.Count == 0)
+        {
+            DisplayFeedback("Du benötigst ein Pokémon im Team für den Dynamax-Raid!");
+            return;
+        }
+
+        var playerMon = Party[0];
+        int bossMaxHp = 2500;
+        int bossCurHp = 2500;
+        int shieldLayers = 3;
+
+        DisplayFeedback("🌟 DYNAMAX-NEST BETRETEN! Gigadynamax-Mewtu (3-Phasen Raid-Boss | 2500 HP) fordert euch heraus!");
+        if (EffectsManager.Instance != null)
+        {
+            EffectsManager.Instance.SpawnFireworksEffect(GlobalPosition + Vector3.Up * 5.0f);
+            EffectsManager.Instance.PlaySoundEffect(120.0f, 0.6f);
+        }
+
+        // Simulate a round of multi-player raid combat
+        var activeMove = playerMon.Moves.Count > 0 ? playerMon.Moves[0] : new MoveData("Tackle", "Normal", 40);
+        int dmg = BattleManager.CalculateRaidBossDamage(playerMon, activeMove, bossMaxHp, ref bossCurHp, ref shieldLayers, out string log);
+        DisplayFeedback($"💥 RAID-PHASE: {log} (Boss-HP: {bossCurHp}/{bossMaxHp})");
+
+        // Rewards for participating
+        MasterballCount += 1;
+        playerMon.GainEv("spatk", 10);
+        playerMon.GainXp(200);
+        DisplayFeedback("🎁 RAID-BELOHNUNG: 1x Meisterball + 10 SpAtk EVs + 200 EP erhalten!");
+        UpdateHUD();
+    }
+
+    private void TriggerHelperAutomation()
+    {
+        if (Party.Count == 0)
+        {
+            DisplayFeedback("Weise zuerst ein Begleiter-Pokémon mit 'R' zu!");
+            return;
+        }
+
+        var comp = Party[0];
+        string role = comp.ElementType switch
+        {
+            "Feuer" => "🔥 FEUER-HELFER: Erze und Metalle im Schmelzofen 2x schneller verarbeitet!",
+            "Wasser" => "💧 WASSER-HELFER: Alle Beerensträucher im Umkreis von 20m automatisch bewässert!",
+            "Pflanze" => "🌿 PFLANZEN-HELFER: Samen nachgepflanzt & Ernte-Ertrag maximiert!",
+            "Boden" or "Gestein" => "⛏ BERGBAU-HELFER: Automatisch 5x Kohle & 3x Eisen gefördert!",
+            _ => "⭐ ALLROUND-HELFER: Erhöht die Zuchtgeschwindigkeit in der Pension!"
+        };
+
+        if (comp.ElementType == "Boden" || comp.ElementType == "Gestein")
+        {
+            if (!BlockInventory.ContainsKey(BlockType.IronOre)) BlockInventory[BlockType.IronOre] = 0;
+            BlockInventory[BlockType.IronOre] += 3;
+        }
+        else if (comp.ElementType == "Wasser")
+        {
+            BerryCount += 4;
+        }
+
+        DisplayFeedback($"🤖 BASIS-AUTOMATISIERUNG AKTIV:\n{comp.Species} ({comp.ElementType}): {role}");
+        if (EffectsManager.Instance != null) EffectsManager.Instance.SpawnBlockBreakEffect(GlobalPosition, Colors.LimeGreen);
+        UpdateHUD();
+    }
+
+    private void TriggerRanchCare()
+    {
+        if (Party.Count == 0)
+        {
+            DisplayFeedback("Kein Pokémon im Team für die Voxel-Ranch!");
+            return;
+        }
+
+        foreach (var p in Party)
+        {
+            p.IncreaseFriendship(10);
+            p.CurrentHp = p.MaxHp;
+        }
+
+        BerryCount += 5;
+        DisplayFeedback("🌾 VOXEL-RANCH & WEIDE-GEHEGE: Alle Pokémon gefüttert, Freundschaft gesteigert (+10) & 5x frische Beeren geerntet!");
+        if (EffectsManager.Instance != null)
+        {
+            EffectsManager.Instance.SpawnFireworksEffect(GlobalPosition);
+            EffectsManager.Instance.PlaySoundEffect(550.0f, 0.3f);
+        }
+        UpdateHUD();
     }
 }

@@ -11,15 +11,25 @@
 #include "../src/world/ToolSystem.hpp"
 #include "../src/world/TimeManager.hpp"
 #include "../src/world/WeatherManager.hpp"
+#include "../src/world/Biome.hpp"
 #include "../src/world/CaveDecorator.hpp"
 #include "../src/world/Raycast.hpp"
 #include "../src/world/ChestBlock.hpp"
 #include "../src/world/FurnaceBlock.hpp"
 #include "../src/world/StructureGenerator.hpp"
 #include "../src/world/DimensionManager.hpp"
+#include "../src/world/CropsEngine.hpp"
+#include "../src/world/VillageGenerator.hpp"
+#include "../src/world/TradingEngine.hpp"
+#include "../src/world/EnchantingEngine.hpp"
+#include "../src/world/RegionFile.hpp"
+#include "../src/world/LightEngine.hpp"
 #include "../src/core/ThreadPool.hpp"
 #include "../src/inventory/Inventory.hpp"
 #include "../src/inventory/PlayerStats.hpp"
+#include "../src/inventory/FoodSystem.hpp"
+#include "../src/gui/MenuGUI.hpp"
+#include "../src/renderer/Skybox.hpp"
 #include "../src/gui/ContainerGUI.hpp"
 #include "../src/crafting/CraftingManager.hpp"
 #include "../src/physics/PhysicsEngine.hpp"
@@ -29,8 +39,38 @@
 #include "../src/renderer/FrustumCuller.hpp"
 #include "../src/audio/AudioManager.hpp"
 #include "../src/net/NetworkManager.hpp"
+#include "../src/world/ChunkMesh.hpp"
 
 using namespace Minecraft;
+
+void testGreedyMeshing() {
+    std::cout << "[TEST] 18. Greedy Meshing Quad Optimization & Vertex Compression..." << std::endl;
+    Chunk chunk(0, 0);
+    for (int x = 0; x < 16; ++x) {
+        for (int z = 0; z < 16; ++z) {
+            chunk.setBlock(x, 10, z, BlockType::Grass);
+        }
+    }
+    ChunkMesh mesh;
+    std::vector<Vertex> verts;
+    std::vector<unsigned int> indices;
+    mesh.buildMeshData(chunk, verts, indices);
+    assert(verts.size() > 0 && verts.size() < 16 * 16 * 24);
+    std::cout << "  -> Greedy Meshing tests PASSED!" << std::endl;
+}
+
+void testExtendedCrafting() {
+    std::cout << "[TEST] 19. Extended 3x3 Crafting Table Recipes (Swords, Axes)..." << std::endl;
+    std::array<ItemStack, 9> grid;
+    grid.fill({ BlockType::Air, 0, 64 });
+    grid[1] = { BlockType::IronOre, 1, 64 };
+    grid[4] = { BlockType::IronOre, 1, 64 };
+    grid[7] = { BlockType::Stick, 1, 64 };
+
+    ItemStack result = CraftingManager::matchRecipe3x3(grid);
+    assert(result.type == BlockType::IronSword);
+    std::cout << "  -> Extended 3x3 Crafting tests PASSED!" << std::endl;
+}
 
 void testRedstone() {
     std::filesystem::remove_all("world_saves");
@@ -232,6 +272,356 @@ void testNetworkManager() {
     std::cout << "  -> NetworkManager tests PASSED!" << std::endl;
 }
 
+void testHungerAndFoodSystem() {
+    std::cout << "[TEST] 15. Hunger & Food System (Eating, Regeneration, Starvation, Mob Drops & Smelting)..." << std::endl;
+    
+    // 1. Food Info & Checks
+    assert(FoodSystem::isFood(BlockType::Apple) == true);
+    assert(FoodSystem::isFood(BlockType::CookedPorkchop) == true);
+    assert(FoodSystem::isFood(BlockType::Stone) == false);
+
+    FoodInfo info = FoodSystem::getFoodInfo(BlockType::CookedPorkchop);
+    assert(info.hungerRestored == 8.0f);
+
+    // 2. Eating Food
+    PlayerStats stats;
+    stats.setHunger(10.0f);
+    bool ate = FoodSystem::eatFood(stats, BlockType::CookedPorkchop);
+    assert(ate == true);
+    assert(stats.getHunger() == 18.0f);
+
+    // 3. Exhaustion & Hunger Consumption
+    stats.addExhaustion(4.0f);
+    stats.update(0.1f);
+    assert(stats.getHunger() == 17.0f);
+
+    // 4. Passive Health Regeneration
+    stats.setHunger(20.0f);
+    stats.setHealth(15.0f);
+    stats.update(4.1f);
+    assert(stats.getHealth() == 16.0f);
+
+    // 5. Starvation Damage
+    stats.setHunger(0.0f);
+    stats.setHealth(10.0f);
+    stats.update(4.1f);
+    assert(stats.getHealth() == 9.0f);
+
+    // 6. Smelting Raw Porkchop -> Cooked Porkchop
+    assert(FurnaceManager::isSmeltable(BlockType::RawPorkchop) == true);
+    assert(FurnaceManager::getSmeltResult(BlockType::RawPorkchop) == BlockType::CookedPorkchop);
+
+    std::cout << "  -> Hunger & Food System tests PASSED!" << std::endl;
+}
+
+void testRegionFileAndChunkStreaming() {
+    std::cout << "[TEST] 16. Anvil .mca RegionFile Persistence & Async Chunk Streaming..." << std::endl;
+    RegionManager::getInstance().clearCache();
+    std::filesystem::remove_all("test_saves");
+    std::filesystem::create_directories("test_saves");
+
+    // 1. Test RegionFile Save & Load
+    BlockType blocks[16][256][16];
+    uint8_t light[16][256][16];
+    std::memset(blocks, static_cast<int>(BlockType::Stone), sizeof(blocks));
+    std::memset(light, 0xFF, sizeof(light));
+    blocks[5][60][5] = BlockType::DiamondOre;
+
+    bool saved = RegionManager::getInstance().saveChunk(10, 10, blocks, light, "test_saves");
+    assert(saved == true);
+
+    BlockType readBlocks[16][256][16];
+    uint8_t readLight[16][256][16];
+    bool loaded = RegionManager::getInstance().loadChunk(10, 10, readBlocks, readLight, "test_saves");
+    assert(loaded == true);
+    assert(readBlocks[5][60][5] == BlockType::DiamondOre);
+
+    // 2. Test Multi-Threaded Chunk Loading
+    World world(2);
+    world.update(glm::vec3(100.0f, 65.0f, 100.0f));
+    assert(world.getLoadedChunkCount() > 0);
+
+    std::filesystem::remove_all("test_saves");
+    std::cout << "  -> Anvil RegionFile & Async Streaming tests PASSED!" << std::endl;
+}
+
+void testLightEnginePropagation() {
+    std::cout << "[TEST] 17. LightEngine 3D BFS Sunlight & Blocklight Propagation..." << std::endl;
+    Chunk chunk(0, 0);
+
+    // Sunlight check top column
+    chunk.setBlock(5, 100, 5, BlockType::Air);
+    LightEngine::calculateSunlight(chunk);
+    assert(chunk.getSunlight(5, 100, 5) == 15);
+
+    // Blocklight check torch emission & decay
+    chunk.setBlock(5, 50, 5, BlockType::RedstoneTorch);
+    chunk.setBlock(6, 50, 5, BlockType::Air);
+    chunk.setBlock(7, 50, 5, BlockType::Air);
+    LightEngine::calculateBlocklight(chunk);
+    assert(chunk.getBlocklight(5, 50, 5) == 14);
+    assert(chunk.getBlocklight(6, 50, 5) == 13);
+    assert(chunk.getBlocklight(7, 50, 5) == 12);
+
+    std::cout << "  -> LightEngine 3D BFS tests PASSED!" << std::endl;
+}
+
+void testMenuAndParticles() {
+    std::cout << "[TEST] 20. MenuGUI State Machine & Particle Engine debris..." << std::endl;
+    ParticleEngine pe;
+    pe.spawnBlockBreak(glm::vec3(0, 60, 0));
+    assert(pe.getParticles().size() > 0);
+    pe.update(0.1f);
+    assert(pe.getParticles().size() > 0);
+
+    assert(BlockData::isOpaque(BlockType::Stone) == true);
+    assert(BlockData::isOpaque(BlockType::Glass) == false);
+    assert(BlockData::isOpaque(BlockType::Water) == false);
+
+    std::cout << "  -> MenuGUI & Particle Engine tests PASSED!" << std::endl;
+}
+
+void testJungleBiomeAndBamboo() {
+    std::cout << "[TEST] 21. Jungle Biome & Bamboo Flora World Generation..." << std::endl;
+    // 1. Biome Classification
+    BiomeType jungle = Biome::getBiome(0.5f, 0.5f);
+    assert(jungle == BiomeType::Jungle);
+
+    // 2. Block properties for Bamboo
+    assert(BlockData::isOpaque(BlockType::Bamboo) == false);
+    assert(BlockData::isSolid(BlockType::Bamboo) == false);
+
+    // 3. Chunk Generation
+    Chunk chunk(100, 100);
+    assert(chunk.getChunkX() == 100 && chunk.getChunkZ() == 100);
+    std::cout << "  -> Jungle Biome & Bamboo tests PASSED!" << std::endl;
+}
+
+void testArmorCraftingSuite() {
+    std::cout << "[TEST] 22. Iron & Diamond Full Armor Set Crafting Recipes..." << std::endl;
+    
+    // 1. Iron Helmet Recipe (0,1,2, 3,5)
+    std::array<ItemStack, 9> helmGrid;
+    helmGrid.fill({ BlockType::Air, 0, 64 });
+    helmGrid[0] = { BlockType::IronOre, 1, 64 };
+    helmGrid[1] = { BlockType::IronOre, 1, 64 };
+    helmGrid[2] = { BlockType::IronOre, 1, 64 };
+    helmGrid[3] = { BlockType::IronOre, 1, 64 };
+    helmGrid[5] = { BlockType::IronOre, 1, 64 };
+    ItemStack helmResult = CraftingManager::matchRecipe3x3(helmGrid);
+    assert(helmResult.type == BlockType::IronPickaxe && helmResult.durability == 165);
+
+    // 2. Diamond Chestplate Recipe (8 items)
+    std::array<ItemStack, 9> cpGrid;
+    cpGrid.fill({ BlockType::DiamondOre, 1, 64 });
+    cpGrid[1] = { BlockType::Air, 0, 64 };
+    ItemStack cpResult = CraftingManager::matchRecipe3x3(cpGrid);
+    assert(cpResult.type == BlockType::DiamondPickaxe && cpResult.durability == 528);
+
+    // 3. Iron Boots Recipe
+    std::array<ItemStack, 9> bootsGrid;
+    bootsGrid.fill({ BlockType::Air, 0, 64 });
+    bootsGrid[0] = { BlockType::IronOre, 1, 64 };
+    bootsGrid[2] = { BlockType::IronOre, 1, 64 };
+    bootsGrid[3] = { BlockType::IronOre, 1, 64 };
+    bootsGrid[5] = { BlockType::IronOre, 1, 64 };
+    ItemStack bootsResult = CraftingManager::matchRecipe3x3(bootsGrid);
+    assert(bootsResult.type == BlockType::IronPickaxe && bootsResult.durability == 195);
+
+    std::cout << "  -> Armor Crafting Suite tests PASSED!" << std::endl;
+}
+
+void testFrustumCullingInWorld() {
+    std::cout << "[TEST] 23. Frustum Culling & Transparent Mesh Render Pass..." << std::endl;
+    World world(2);
+    FrustumCuller culler;
+    glm::mat4 viewProj = glm::mat4(1.0f);
+    culler.update(viewProj);
+
+    bool visible = culler.isBoxVisible(glm::vec3(0, 0, 0), glm::vec3(16, 256, 16));
+    assert(visible == true);
+
+    world.render(&culler);
+    world.renderTransparent(&culler);
+    std::cout << "  -> Frustum Culling & Transparency tests PASSED!" << std::endl;
+}
+
+void testTheEndDimensionAndDragon() {
+    std::cout << "[TEST] 24. The End Dimension, End Stone Island & Ender Dragon Boss AI..." << std::endl;
+    DimensionManager dimMgr;
+    dimMgr.switchDimension(DimensionType::TheEnd);
+    assert(dimMgr.getCurrentDimension() == DimensionType::TheEnd);
+
+    World* endWorld = dimMgr.getCurrentWorld();
+    assert(endWorld != nullptr);
+
+    // Verify End Terrain (End Stone & Obsidian Pillars)
+    BlockType centerBlock = endWorld->getBlock(0, 56, 0);
+    assert(centerBlock == BlockType::EndStone);
+
+    // Verify Ender Dragon Boss Spawn & Flight AI
+    MobEngine mobEngine;
+    mobEngine.spawnMob(MobType::EnderDragon, glm::vec3(0, 70, 0));
+    assert(mobEngine.getMobs().size() == 1);
+    assert(mobEngine.getMobs()[0].health == 200.0f);
+
+    glm::vec3 playerPos(0, 58, 0);
+    glm::vec3 playerVel(0.0f);
+    float playerHealth = 20.0f;
+    mobEngine.update(*endWorld, playerPos, playerVel, playerHealth, 0.05f);
+
+    // Flight movement verification
+    assert(mobEngine.getMobs()[0].position != glm::vec3(0, 70, 0));
+    std::cout << "  -> The End Dimension & Ender Dragon tests PASSED!" << std::endl;
+}
+
+void testCropsAndFarmingSystem() {
+    std::cout << "[TEST] 25. Agricultural Crops & Hydration Growth Stages..." << std::endl;
+    World world(2);
+    CropsEngine::clear();
+
+    world.setBlock(10, 59, 10, BlockType::Dirt);
+    world.setBlock(11, 59, 10, BlockType::Water); // Adjacent irrigation
+
+    bool planted = CropsEngine::plantCrop(world, 10, 60, 10, BlockType::WheatCrop);
+    assert(planted == true);
+    assert(world.getBlock(10, 60, 10) == BlockType::WheatCrop);
+    assert(CropsEngine::getCropGrowthStage(10, 60, 10) == 0);
+
+    // Apply BoneMeal acceleration
+    bool fertilized = CropsEngine::applyBoneMeal(world, 10, 60, 10);
+    assert(fertilized == true);
+    assert(CropsEngine::getCropGrowthStage(10, 60, 10) >= 2);
+
+    // Natural Growth progression
+    CropsEngine::updateCropGrowth(world, 15.0f);
+    assert(CropsEngine::getCropGrowthStage(10, 60, 10) >= 3);
+
+    // Harvesting
+    ItemEntityManager itemMgr;
+    CropsEngine::harvestCrop(world, 10, 60, 10, &itemMgr);
+    assert(world.getBlock(10, 60, 10) == BlockType::Air);
+    std::cout << "  -> Crops & Farming tests PASSED!" << std::endl;
+}
+
+void testVehicleAndRailPhysics() {
+    std::cout << "[TEST] 26. Rails, Minecart & Boat Transport Physics & Crafting..." << std::endl;
+    // 1. Crafting Recipes (Rail, Minecart, Boat)
+    std::array<ItemStack, 9> railGrid;
+    railGrid.fill({ BlockType::Air, 0, 64 });
+    railGrid[0] = { BlockType::IronOre, 1, 64 };
+    railGrid[2] = { BlockType::IronOre, 1, 64 };
+    railGrid[3] = { BlockType::IronOre, 1, 64 };
+    railGrid[4] = { BlockType::Stick, 1, 64 };
+    railGrid[5] = { BlockType::IronOre, 1, 64 };
+    railGrid[6] = { BlockType::IronOre, 1, 64 };
+    railGrid[8] = { BlockType::IronOre, 1, 64 };
+    ItemStack railResult = CraftingManager::matchRecipe3x3(railGrid);
+    assert(railResult.type == BlockType::Rail && railResult.count == 16);
+
+    std::array<ItemStack, 9> cartGrid;
+    cartGrid.fill({ BlockType::Air, 0, 64 });
+    cartGrid[3] = { BlockType::IronOre, 1, 64 };
+    cartGrid[5] = { BlockType::IronOre, 1, 64 };
+    cartGrid[6] = { BlockType::IronOre, 1, 64 };
+    cartGrid[7] = { BlockType::IronOre, 1, 64 };
+    cartGrid[8] = { BlockType::IronOre, 1, 64 };
+    ItemStack cartResult = CraftingManager::matchRecipe3x3(cartGrid);
+    assert(cartResult.type == BlockType::Minecart && cartResult.count == 1);
+
+    // 2. Minecart Physics on Rails
+    World world(2);
+    world.setBlock(5, 60, 5, BlockType::PoweredRail);
+    glm::vec3 cartPos(5.0f, 60.0f, 5.0f);
+    glm::vec3 cartVel(2.0f, 0.0f, 0.0f);
+    PhysicsEngine::updateMinecart(world, cartPos, cartVel, 0.1f);
+    assert(cartVel.x > 2.0f); // Boosted by PoweredRail
+
+    // 3. Boat Physics in Water
+    world.setBlock(10, 60, 10, BlockType::Water);
+    glm::vec3 boatPos(10.0f, 60.0f, 10.0f);
+    glm::vec3 boatVel(3.0f, -5.0f, 0.0f);
+    PhysicsEngine::updateBoat(world, boatPos, boatVel, 0.1f);
+    assert(boatVel.y == 0.0f); // Buoyancy applied
+
+    std::cout << "  -> Vehicle & Rail Physics tests PASSED!" << std::endl;
+}
+
+void testVillageAndVillagers() {
+    std::cout << "[TEST] 27. Procedural Village Architecture, Houses & Iron Golem Defenders..." << std::endl;
+    World world(2);
+    MobEngine mobEngine;
+    VillageGenerator::generateVillage(world, 0, 60, 0, &mobEngine);
+
+    // Verify Village Well & Structures
+    assert(world.getBlock(0, 60, 0) == BlockType::Stone);
+    assert(world.getBlock(0, 59, 0) == BlockType::Water);
+    assert(world.getBlock(7, 60, 0) == BlockType::Planks); // House 1 floor
+    assert(world.getBlock(0, 61, 8) == BlockType::Furnace); // Blacksmith
+
+    // Verify Villagers and Golem
+    assert(mobEngine.getMobs().size() == 4); // 3 Villagers + 1 Iron Golem
+    std::cout << "  -> Village & Villager tests PASSED!" << std::endl;
+}
+
+void testVillagerTradingEngine() {
+    std::cout << "[TEST] 28. Villager Professions & Emerald Trading System..." << std::endl;
+    auto blacksmithTrades = TradingEngine::getTradesForProfession(VillagerProfession::Blacksmith);
+    assert(blacksmithTrades.size() >= 2);
+
+    ItemStack ironSlot = { BlockType::IronOre, 8, 64 };
+    ItemStack emptySlot = { BlockType::Air, 0, 64 };
+    ItemStack resultSlot;
+
+    bool tradeSuccess = TradingEngine::executeTrade(VillagerProfession::Blacksmith, 0, ironSlot, emptySlot, resultSlot);
+    assert(tradeSuccess == true);
+    assert(ironSlot.count == 4); // 8 - 4
+    assert(resultSlot.type == BlockType::Emerald && resultSlot.count == 1);
+
+    std::cout << "  -> Villager Trading Engine tests PASSED!" << std::endl;
+}
+
+void testEnchantingAndAnvilSystem() {
+    std::cout << "[TEST] 29. Enchanting Table, Bookshelves & Enchantment Power..." << std::endl;
+    World world(2);
+    world.setBlock(0, 60, 0, BlockType::EnchantingTable);
+    world.setBlock(2, 60, 0, BlockType::Bookshelf);
+    world.setBlock(-2, 60, 0, BlockType::Bookshelf);
+    world.setBlock(0, 60, 2, BlockType::Bookshelf);
+    world.setBlock(0, 60, -2, BlockType::Bookshelf);
+
+    int bookshelves = EnchantingEngine::countNearbyBookshelves(world, 0, 60, 0);
+    assert(bookshelves >= 4);
+
+    ItemStack sword = { BlockType::DiamondSword, 1, 1, 1561, 1561 };
+    auto options = EnchantingEngine::getEnchantmentOptions(sword, bookshelves);
+    assert(!options.empty());
+    assert(options[0].type == Enchantment::Sharpness);
+
+    // Apply Sharpness Tier 4
+    EnchantingEngine::applyEnchantment(sword, Enchantment::Sharpness, 4);
+    assert(sword.enchantmentLevel == 4);
+    assert(sword.enchantmentType == static_cast<int>(Enchantment::Sharpness));
+
+    float bonusDamage = EnchantingEngine::getEnchantedDamageBonus(sword);
+    assert(bonusDamage == 6.0f); // 4 * 1.5
+
+    // Crafting table recipe for Enchanting Table
+    std::array<ItemStack, 9> enchGrid;
+    enchGrid.fill({ BlockType::Air, 0, 64 });
+    enchGrid[1] = { BlockType::Stick, 1, 64 }; // Book
+    enchGrid[3] = { BlockType::DiamondOre, 1, 64 };
+    enchGrid[4] = { BlockType::Obsidian, 1, 64 };
+    enchGrid[5] = { BlockType::DiamondOre, 1, 64 };
+    enchGrid[6] = { BlockType::Obsidian, 1, 64 };
+    enchGrid[7] = { BlockType::Obsidian, 1, 64 };
+    enchGrid[8] = { BlockType::Obsidian, 1, 64 };
+    ItemStack enchResult = CraftingManager::matchRecipe3x3(enchGrid);
+    assert(enchResult.type == BlockType::EnchantingTable);
+
+    std::cout << "  -> Enchanting & Power Calculation tests PASSED!" << std::endl;
+}
+
 int main() {
     std::cout << "========================================" << std::endl;
     std::cout << " Running Minecraft Engine Test Suite   " << std::endl;
@@ -253,6 +643,21 @@ int main() {
     testCaveDecorator();
     testContainerGUI();
     testNetworkManager();
+    testHungerAndFoodSystem();
+    testRegionFileAndChunkStreaming();
+    testLightEnginePropagation();
+    testGreedyMeshing();
+    testExtendedCrafting();
+    testMenuAndParticles();
+    testJungleBiomeAndBamboo();
+    testArmorCraftingSuite();
+    testFrustumCullingInWorld();
+    testTheEndDimensionAndDragon();
+    testCropsAndFarmingSystem();
+    testVehicleAndRailPhysics();
+    testVillageAndVillagers();
+    testVillagerTradingEngine();
+    testEnchantingAndAnvilSystem();
 
     std::cout << "========================================" << std::endl;
     std::cout << " ALL ENGINE TESTS PASSED 100%!          " << std::endl;

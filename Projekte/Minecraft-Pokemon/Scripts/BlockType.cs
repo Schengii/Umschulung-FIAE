@@ -47,7 +47,20 @@ public enum BlockType : byte
     BerrySproutBlock = 42,
     ComposterBlock = 43,
     MeteorBlock = 44,
-    ContestRibbonBlock = 45
+    ContestRibbonBlock = 45,
+    ApricornTreeBlock = 46,
+    ApricornFruitBlock = 47,
+    WetFarmland = 48,
+    CampBlock = 49,
+    RaidDenBlock = 50,
+    VolcanicRock = 51,
+    CrystalSpire = 52,
+    HelperStationBlock = 53,
+    ArenaPuzzleSwitch = 54,
+    IceSlideBlock = 55,
+    RailTrackBlock = 56,
+    RanchTroughBlock = 57,
+    AutumnLeavesBlock = 58
 }
 
 public static class BlockInfo
@@ -101,6 +114,19 @@ public static class BlockInfo
             BlockType.ComposterBlock => new Godot.Color(0.4f, 0.3f, 0.1f),
             BlockType.MeteorBlock => new Godot.Color(0.15f, 0.6f, 0.65f),
             BlockType.ContestRibbonBlock => new Godot.Color(0.95f, 0.2f, 0.5f),
+            BlockType.ApricornTreeBlock => new Godot.Color(0.25f, 0.45f, 0.15f),
+            BlockType.ApricornFruitBlock => new Godot.Color(0.9f, 0.4f, 0.1f),
+            BlockType.WetFarmland => new Godot.Color(0.18f, 0.12f, 0.06f),
+            BlockType.CampBlock => new Godot.Color(0.6f, 0.35f, 0.15f),
+            BlockType.RaidDenBlock => new Godot.Color(0.85f, 0.15f, 0.85f),
+            BlockType.VolcanicRock => new Godot.Color(0.18f, 0.12f, 0.12f),
+            BlockType.CrystalSpire => new Godot.Color(0.3f, 0.85f, 1.0f, 0.9f),
+            BlockType.HelperStationBlock => new Godot.Color(0.4f, 0.7f, 0.3f),
+            BlockType.ArenaPuzzleSwitch => new Godot.Color(1.0f, 0.8f, 0.2f),
+            BlockType.IceSlideBlock => new Godot.Color(0.85f, 0.95f, 1.0f, 0.9f),
+            BlockType.RailTrackBlock => new Godot.Color(0.65f, 0.65f, 0.7f),
+            BlockType.RanchTroughBlock => new Godot.Color(0.55f, 0.35f, 0.2f),
+            BlockType.AutumnLeavesBlock => new Godot.Color(0.85f, 0.4f, 0.1f),
             _ => Godot.Colors.Transparent
         };
     }

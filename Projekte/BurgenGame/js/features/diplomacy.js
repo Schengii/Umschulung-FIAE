@@ -641,3 +641,41 @@ GameStateManager.prototype.tickDiplomacy = function(dt) {
   }
 };
 
+GameStateManager.prototype.hireMercenaries = function(nationId) {
+  this.initDiplomacy();
+  const dip = this.state.diplomacy[nationId];
+  if (!dip || dip.relation < 10) {
+    return { success: false, msg: 'Beziehung zu dieser Nation muss mindestens neutral (10+) sein!' };
+  }
+  const costGold = 300;
+  if ((this.state.resources.gold || 0) < costGold) {
+    return { success: false, msg: `Nicht genug Gold! Benötigt: ${costGold} Gold.` };
+  }
+
+  this.state.resources.gold -= costGold;
+  this.state.troops.swordsman = (this.state.troops.swordsman || 0) + 10;
+  this.state.troops.spearman = (this.state.troops.spearman || 0) + 10;
+  
+  if (window.SoundManager) window.SoundManager.playSuccess();
+  this.notifyListeners('troops');
+  return { success: true, msg: `⚔️ Söldner von ${nationId} angeworben! (+10 Schwertkämpfer, +10 Speerkämpfer)` };
+};
+
+GameStateManager.prototype.sendAidPackage = function(nationId) {
+  this.initDiplomacy();
+  const dip = this.state.diplomacy[nationId];
+  if (!dip) return { success: false, msg: 'Ungültige Nation.' };
+
+  const aid = { food: 200, wood: 200 };
+  if (!this.hasResources(aid)) {
+    return { success: false, msg: 'Nicht genug Nahrung und Holz für ein Hilfspaket!' };
+  }
+
+  this.deductResources(aid);
+  dip.relation = Math.min(100, (dip.relation || 0) + 15);
+  if (window.SoundManager) window.SoundManager.playSuccess();
+  this.notifyListeners('diplomacy');
+  return { success: true, msg: `📦 Hilfspaket an ${nationId} gesendet! Beziehung +15` };
+};
+
+

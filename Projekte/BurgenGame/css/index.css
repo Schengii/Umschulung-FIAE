@@ -20,6 +20,11 @@
   display: none !important;
 }
 
+.loading-title {
+  font-family: var(--font-header);
+  color: var(--color-gold-primary);
+}
+
 /* Reset and Layout */
 * {
   box-sizing: border-box;

@@ -116,6 +116,7 @@ public static class BattleManager
         }
 
         float mult = GetTypeMultiplier(move.ElementType, defender.ElementType);
+        if (defender.ElementType.ToLower() == "geist" && move.ElementType == "Boden") mult = 0.0f;
         if (mult == 0.0f)
         {
             resultMsg = $"{attacker.Species} setzt {move.Name} ein... hat aber keine Wirkung auf {defender.MonsterName}!";
@@ -126,6 +127,25 @@ public static class BattleManager
         if (attacker.Status == StatusCondition.Burned && move.Category == MoveCategory.Physical)
         {
             baseDmg *= 0.5f;
+        }
+
+        // Abilities (Notdünger, Großbrand, Sturzbach)
+        if (attacker.Ability == "Notdünger" && move.ElementType == "Pflanze" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
+        if (attacker.Ability == "Großbrand" && move.ElementType == "Feuer" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
+        if (attacker.Ability == "Sturzbach" && move.ElementType == "Wasser" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
+
+        // Dynamic Weather Damage Boosts
+        if (WeatherManager.Instance != null)
+        {
+            var w = WeatherManager.Instance.CurrentWeather;
+            if (w == WeatherType.Rain)
+            {
+                if (move.ElementType == "Wasser") baseDmg *= 1.5f;
+                if (move.ElementType == "Feuer") baseDmg *= 0.5f;
+            }
+            else if (w == WeatherType.Snow && move.ElementType == "Eis") baseDmg *= 1.5f;
+            else if (w == WeatherType.Sandstorm && (move.ElementType == "Gestein" || move.ElementType == "Boden")) baseDmg *= 1.5f;
+            else if (w == WeatherType.VolcanoAsh && move.ElementType == "Feuer") baseDmg *= 1.5f;
         }
 
         if (attacker.HeldItem == "Zauberwasser" && move.ElementType == "Wasser") baseDmg *= 1.25f;
@@ -192,6 +212,7 @@ public static class BattleManager
         }
 
         float mult = GetTypeMultiplier(move.ElementType, defender.ElementType);
+        if (defender.Ability == "Schwebe" && move.ElementType == "Boden") mult = 0.0f;
         if (mult == 0.0f)
         {
             resultMsg = $"{attacker.Species} setzt {move.Name} ein... hat aber keine Wirkung auf {defender.Species}!";
@@ -203,6 +224,11 @@ public static class BattleManager
         {
             baseDmg *= 0.5f;
         }
+
+        // Abilities (Notdünger, Großbrand, Sturzbach)
+        if (attacker.Ability == "Notdünger" && move.ElementType == "Pflanze" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
+        if (attacker.Ability == "Großbrand" && move.ElementType == "Feuer" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
+        if (attacker.Ability == "Sturzbach" && move.ElementType == "Wasser" && attacker.CurrentHp <= attacker.MaxHp / 3) baseDmg *= 1.5f;
 
         if (attacker.HeldItem == "Zauberwasser" && move.ElementType == "Wasser") baseDmg *= 1.25f;
         if (attacker.HeldItem == "Holzkohle" && move.ElementType == "Feuer") baseDmg *= 1.25f;
@@ -237,5 +263,85 @@ public static class BattleManager
         resultMsg = $"{attacker.Species} setzt {move.Name} ein! {finalDamage} Schaden{effText}";
 
         return finalDamage;
+    }
+
+    /// <summary>
+    /// Calculates multi-phase raid boss damage with dynamic shield and barrier mechanics.
+    /// </summary>
+    public static int CalculateRaidBossDamage(PokemonData attacker, MoveData move, int bossMaxHp, ref int bossCurrentHp, ref int bossShieldLayers, out string combatLog)
+    {
+        if (move.CurrentPp > 0) move.CurrentPp--;
+
+        if (bossShieldLayers > 0)
+        {
+            bossShieldLayers--;
+            combatLog = $"{attacker.Species} greift an! Die Raid-Boss-Barriere schwächt den Angriff ab! (Noch {bossShieldLayers} Schilde übrig)";
+            int chipped = Math.Max(5, (int)(move.Power * 0.2f));
+            bossCurrentHp = Math.Max(0, bossCurrentHp - chipped);
+            return chipped;
+        }
+
+        float mult = GetTypeMultiplier(move.ElementType, "Drache"); // Raid boss base type
+        int dmg = Math.Max(15, (int)((move.Power * 0.6f + attacker.Level * 1.2f) * mult));
+        
+        // Critical cheer/synergy bonus
+        if (attacker.HeldItem == "Wahlband") dmg = (int)(dmg * 1.5f);
+        
+        bossCurrentHp = Math.Max(0, bossCurrentHp - dmg);
+        
+        // Trigger barrier phase when crossing HP thresholds (75%, 50%, 25%)
+        float hpPercent = (float)bossCurrentHp / bossMaxHp;
+        if (hpPercent < 0.5f && hpPercent > 0.45f && bossShieldLayers == 0)
+        {
+            bossShieldLayers = 3;
+            combatLog = $"{attacker.Species} trifft kritisch für {dmg} Schaden! Der Raid-Boss errichtet eine energetische Schutzbarriere!";
+        }
+        else
+        {
+            combatLog = $"{attacker.Species} landet einen gewaltigen Treffer für {dmg} Schaden!";
+        }
+
+        return dmg;
+    }
+
+    /// <summary>
+    /// Tactical AI helper for trainer decision making (Potion use or switching)
+    /// </summary>
+    public static string EvaluateTrainerTactics(PokemonData currentMon, PokemonData playerMon, int potionsLeft)
+    {
+        if (currentMon.CurrentHp <= currentMon.MaxHp * 0.25f && potionsLeft > 0)
+        {
+            return "USE_POTION";
+        }
+
+        float incomingThreat = GetTypeMultiplier(playerMon.ElementType, currentMon.ElementType);
+        if (incomingThreat >= 2.0f && currentMon.CurrentHp < currentMon.MaxHp * 0.6f)
+        {
+            return "SWITCH_TACTIC";
+        }
+
+        return "ATTACK";
+    }
+
+    /// <summary>
+    /// Generates a randomised Battle Frontier challenge team tailored to specific rulesets.
+    /// </summary>
+    public static List<PokemonData> GenerateBattleFrontierTeam(int streak, string ruleType = "Standard")
+    {
+        var team = new List<PokemonData>();
+        string[] allSpecies = new string[] { "Glurak", "Turtok", "Bisaflor", "Gengar", "Lucario", "Knakrack", "Despotar", "Metagross", "Dragoran", "Raichu" };
+        int level = Math.Min(100, 50 + (streak * 2));
+
+        for (int i = 0; i < 3; i++)
+        {
+            string species = allSpecies[(streak + i * 3) % allSpecies.Length];
+            var poke = new PokemonData(species, level, 120 + level * 2, "Drache", Colors.Gold);
+            poke.IvHp = 31;
+            poke.IvAtk = 31;
+            poke.IvSpeed = 31;
+            poke.RecalculateStats();
+            team.Add(poke);
+        }
+        return team;
     }
 }

@@ -117,6 +117,78 @@ async function init() {
     if (typeof StoryCampaignManager === 'function' && typeof window.storyCampaignManager === 'undefined') {
       window.storyCampaignManager = new StoryCampaignManager(stateManager, gameUI);
     }
+    if (typeof SiegeMinigame === 'function' && typeof window.siegeMinigame === 'undefined') {
+      window.siegeMinigame = new SiegeMinigame(stateManager, gameUI, gameCanvas);
+      window.SiegeMinigame = window.siegeMinigame;
+      window.siegeMinigame.init();
+    }
+    if (typeof FamiliarManager === 'function' && typeof window.familiarManager === 'undefined') {
+      window.familiarManager = new FamiliarManager(stateManager, gameUI);
+      window.FamiliarManager = window.familiarManager;
+      window.familiarManager.init();
+    }
+    if (typeof BlueprintMultiUpgradeManager === 'function' && typeof window.blueprintMultiUpgradeManager === 'undefined') {
+      window.blueprintMultiUpgradeManager = new BlueprintMultiUpgradeManager(stateManager, gameUI);
+      window.BlueprintMultiUpgradeManager = window.blueprintMultiUpgradeManager;
+      window.blueprintMultiUpgradeManager.init();
+    }
+    if (typeof RulerTitleManager === 'function' && typeof window.rulerTitleManager === 'undefined') {
+      window.rulerTitleManager = new RulerTitleManager(stateManager, gameUI);
+      window.RulerTitleManager = window.rulerTitleManager;
+      window.rulerTitleManager.init();
+    }
+    if (typeof ModManager === 'function' && typeof window.modManager === 'undefined') {
+      window.modManager = new ModManager(stateManager, gameUI);
+      window.modManager.init();
+    }
+    if (typeof KeyboardInput === 'function' && typeof window.keyboardInput === 'undefined') {
+      window.keyboardInput = new KeyboardInput(gameCanvas, gameUI);
+      window.keyboardInput.init();
+    }
+    if (typeof GamepadInput === 'function' && typeof window.gamepadInput === 'undefined') {
+      window.gamepadInput = new GamepadInput(gameCanvas, gameUI);
+      window.gamepadInput.init();
+    }
+    if (typeof OnlineMultiplayer === 'function' && typeof window.onlineMultiplayer === 'undefined') {
+      window.onlineMultiplayer = new OnlineMultiplayer(stateManager, gameUI);
+      window.onlineMultiplayer.init();
+    }
+    if (typeof DynastyTree === 'function' && typeof window.dynastyTree === 'undefined') {
+      window.dynastyTree = new DynastyTree(stateManager, gameUI);
+      window.dynastyTree.init();
+    }
+    if (typeof MagicParticlesEngine === 'function' && typeof window.magicParticles === 'undefined') {
+      window.magicParticles = new MagicParticlesEngine(gameCanvas);
+    }
+    if (typeof ThreeRenderEngine === 'function' && typeof window.threeRender === 'undefined') {
+      window.threeRender = new ThreeRenderEngine(stateManager, gameUI);
+      window.threeRender.init();
+    }
+    if (typeof AdvancedDisastersEngine === 'function' && typeof window.advancedDisasters === 'undefined') {
+      window.advancedDisasters = new AdvancedDisastersEngine(stateManager, gameUI);
+      window.advancedDisasters.init();
+    }
+    if (typeof TournamentArenaEngine === 'function' && typeof window.tournamentArena === 'undefined') {
+      window.tournamentArena = new TournamentArenaEngine(stateManager, gameUI);
+    }
+    if (typeof GuildWarsEngine === 'function' && typeof window.guildWars === 'undefined') {
+      window.guildWars = new GuildWarsEngine(stateManager, gameUI);
+      window.guildWars.init();
+    }
+    if (typeof VisualMapEditor === 'function' && typeof window.mapEditor === 'undefined') {
+      window.mapEditor = new VisualMapEditor(stateManager, gameUI);
+    }
+    if (typeof StockMarketEngine === 'function' && typeof window.stockMarket === 'undefined') {
+      window.stockMarket = new StockMarketEngine(stateManager, gameUI);
+      window.stockMarket.init();
+    }
+
+    // Initialize Reactive State Proxy
+    if (typeof ReactiveState === 'function') {
+      window.reactiveState = new ReactiveState(stateManager.state);
+      window.reactiveState.bindDom();
+    }
+
 
     // 5. Tick loop every second
     setInterval(() => {

@@ -65,6 +65,22 @@ class GameSoundManager {
     localStorage.setItem('ec_sfx_volume', vol);
   }
 
+  playClick() {
+    this.playSFX('click');
+  }
+
+  playModalOpen() {
+    this.playSFX('upgrade');
+  }
+
+  playError() {
+    this.playSFX('error');
+  }
+
+  playSuccess() {
+    this.playSFX('victory');
+  }
+
   setTheme(themeName) {
     if (this.activeTheme === themeName) return;
     this.activeTheme = themeName;
@@ -109,6 +125,10 @@ class GameSoundManager {
     if (this.musicEnabled) {
       this.startMusic(this.currentTempo);
     }
+  }
+
+  playSfx(type) {
+    this.playSFX(type);
   }
 
   playSFX(type) {
@@ -210,6 +230,24 @@ class GameSoundManager {
 
         osc.start(now);
         osc.stop(now + 0.85);
+        break;
+      }
+      case 'magic': {
+        const notes = [440, 554.37, 659.25, 880];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gain.gain.setValueAtTime(0.12 * this.sfxVolume, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.4);
+        });
         break;
       }
       case 'quest': {
@@ -461,6 +499,46 @@ class GameSoundManager {
         osc.stop(now + 0.8);
       }
     } catch (e) {}
+  }
+
+  playAmbient(type = 'nature') {
+    if (!this.sfxEnabled || !this.audioCtx) return;
+    const ctx = this.audioCtx;
+    const now = ctx.currentTime;
+    if (type === 'rain' || type === 'wind') {
+      const bufferSize = ctx.sampleRate * 1.5;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = type === 'rain' ? 'lowpass' : 'bandpass';
+      filter.frequency.value = type === 'rain' ? 800 : 400;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.05 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(now);
+      noise.stop(now + 1.5);
+    } else if (type === 'bird') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1800, now);
+      osc.frequency.exponentialRampToValueAtTime(2400, now + 0.1);
+      osc.frequency.exponentialRampToValueAtTime(1500, now + 0.2);
+      gain.gain.setValueAtTime(0.08 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    }
   }
 
   playAmbientChirp() {

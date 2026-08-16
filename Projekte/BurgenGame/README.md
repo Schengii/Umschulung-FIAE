@@ -64,6 +64,94 @@ new game/
 
 ## ⚙️ Neue Features & Gameplay-Verbesserungen
 
+### 43. 🌍 Unendliche Prozedurale Weltkarte (Phase 1)
+- **Grenzenloses Entdecken:** Die Weltkarte ist nicht mehr auf 10x10 Felder beschränkt, sondern wird prozedural durch **Perlin Noise** generiert. Spieler können unendlich in alle Himmelsrichtungen scrollen und ihr Reich ausdehnen.
+- **Biom-Generation:** Die Landschaft formt sich organisch zu Seen, dichten Wäldern und unpassierbaren Gebirgsketten, berechnet auf Basis deines einzigartigen Map-Seeds.
+- **Dynamische Raubritter:** Anstatt fester Spawns erzeugen sich Banditenlager und Ruinen organisch in den unerforschten Weiten und stellen sich auf deine Erkundung ein.
+
+### 44. 🧩 Modding API & Plugin System (Option D)
+- **Erweiterbares Modding-System:** Ermöglicht das Hinzufügen eigener Gebäude, Truppen und Skripte über einfache JSON-Konfigurationen oder JS-Skripte im Spiel.
+- **In-Game Mod-Manager:** Neues UI-Panel unter `⚙️ Einstellungen -> 🧩 Modding`, über das benutzerdefinierte Mods hinzugefügt, geladen oder per Klick gelöscht werden können.
+- **Beispiel-Mod Inkludiert:** Ein integrierter "Drachenhort & Zauberer"-Beispiel-Mod demonstriert das Hinzufügen neuer Truppentypen und Gebäude per Knopfdruck.
+
+### 45. 🎮 Gamepad- & Tastatur-Steuerung (Option E)
+- **Gamepad Controller API:** Volle Unterstützung für Xbox-, PlayStation-Controller, Steam Deck und sonstige Web-Gamepads.
+  - **Linker Analogstick / D-Pad:** Reibungsloses Bewegen der isometrichen Kamera.
+  - **Rechter Analogstick:** Steuerung eines virtuellen goldenen Cursors auf dem Bildschirm.
+  - **Action-Buttons:** `A` / `Cross` zum Anklicken von Kacheln und Buttons, `B` zum Schließen von Modalen, `X` für das Baumenü, `Y` für die Weltkarte.
+- **Tastatur-Hotkeys:**
+  - `W, A, S, D` / `Pfeiltasten`: Kamera stufenlos verschieben.
+  - `B`: Baumenü schnell öffnen.
+  - `M`: Interaktive Weltkarte öffnen.
+  - `H`: Heldenaltar öffnen.
+  - `Leerzeichen`: Spiel pausieren oder fortsetzen.
+  - `Escape`: Geöffnete Fenster schließen.
+
+### 46. 🌐 Node.js Backend Server & Live-Weltchat (Option A)
+- **Dedicated Node.js/Express Server:** Integrierter Server im Verzeichnis `server/` (Startbar via `npm run server`).
+- **Cloud-Speicherung:** Sichert den Spielstand serverseitig in JSON-Dateien per REST API (`/api/save` & `/api/load`).
+- **In-Game Weltchat:** Live-Kommunikation für alle Herrscher über das `💬 Weltchat`-Panel im Einstellungen-Menü.
+- **Zentralisiertes Leaderboard:** Globale Highscores werden serverweit verglichen und synchronisiert.
+
+### 47. ⚡ Reaktive UI Proxy Engine (Option B)
+- **Automatische Data-Binding-Engine (`js/core/reactive_state.js`):** Verwandelt den Spielstatus `stateManager.state` in einen rekursiven Javascript `Proxy`.
+- **HTML-Binding via `data-bind`:** DOM-Elemente können nun z.B. per `data-bind="resources.gold"` ausgezeichnet werden. Änderungen am Status lösen sofort und automatisch ein Re-Rendering des betroffenen Elements aus, ohne manuelle DOM-Querys.
+
+### 48. 👑 Visuelles Stammbaum- & Dynastie-System (Option C)
+- **Grafischer Familienstammbaum (`js/features/dynasty_tree.js`):** Interaktiver Stammbaum zur Verwaltung des Königsgeschlechts (Monarch, Gemahlin, Prinzen, Prinzessinnen).
+- **Blutlinien-Traits & Vererbung:** Nachkommen erben mächtige Gene wie *Kriegerblut* (+15% Nahkampf), *Midas-Händchen* (+20% Gold) oder *Meisterarchitekt* (-15% Bauzeit).
+- **Strategische Eheschließungen & Thronfolge:** Arrangiere dynastische Hochzeiten für 300 Gold oder lege fest, wer den Thron erben wird.
+
+### 49. 🔮 Soundscape 2.0 & Canvas Partikel-Magie (Option D)
+- **Magie-Partikeleffekte (`js/features/magic_particles.js`):** Dynamische Partikel-Visualisierung für Zauber, Heilungs-Auren, Feuerbälle, Magie-Funken und Segnungen direkt auf dem isometrischen Canvas.
+- **Synthesizer SFX `magic`:** Web Audio API Erweiterung für magische Klangteppiche bei Heldenfähigkeiten und Zaubersprüchen.
+
+### 50. 🎲 3D-WebGL Perspective Renderer
+- **Echtes 3D-Canvas Rendering (`js/features/three_render.js`):** Ermöglicht das Umschalten von der klassischen 2D-Isometrie in einen drehbaren 3D-WebGL-Kamera-Modus (`🎲 3D-Ansicht`).
+- **3D Gebäude-Projektion & Licht:** Rendert Quaderstrukturen mit Raumtiefe, Schatten und dynamischer Perspektiven-Projektion.
+
+### 51. ⚡ Dynamische Naturkatastrophen & Wetter 3.0
+- **Wetterereignisse & Zerstörung (`js/features/disasters_advanced.js`):** Simuliert spontane Blitzeinschläge, Dürrewellen (-50% Erntemenge) und Erdbeben.
+- **Feuerwehrhaus & Katastrophenschutz:** Errichte Feuerwehrhäuser, um Brände an Gebäuden automatisch abzuwehren, oder erlässe den Evakuierungsbefehl (+20 Zufriedenheit).
+
+### 52. ⚔️ Ritter-Turnier-System & Helden-Arena
+- **Lanzenreiter- & Arenakampf (`js/features/tournament_arena.js`):** Schicke deinen Champion oder Helden in rundenbasierte Lanzenstechen-Duelle um Gold- und Edelstein-Preisgelder.
+- **Taktische Aktionen:** Wähle zwischen *Lanzenschlag*, *Ansturm* (+50% Schaden) und *Schild heben* (-60% Gegnerschaden).
+
+### 53. 🛡️ Gilden-System & Festungs-Belagerungskriege
+- **Gilden-Gründung & Kasse (`js/features/guild_wars.js`):** Gründe deine eigene Gilde (z.B. *Gilde der Drachenritter*), sammle Rohstoffe in der Gilden-Bank und skaliere die Festungsstufe.
+- **Kollektiver Belagerungskampf:** Belagere mächtige feindliche Drachenfestungen zusammen mit deinen Gildenmitgliedern für wöchentliches Gold und Rubine.
+
+### 54. 🗺️ Visueller Karten- & Szenario-Editor
+- **Map-Designer Tool (`js/features/map_editor.js`):** Zeichne per Klick individuelle 10x10 Map-Grids mit Wiesen, Burgen, Steinbrüchen, Flüssen und Banditenlagern.
+- **JSON-Export & Import:** Speichere erstellte Szenarien als JSON-Format in der Zwischenablage ab oder lade Custom-Karten der Community.
+
+### 55. 📈 Rohstoff-Börse & Aktienmarkt 2.0
+- **Aktien-Handelsplatz (`js/features/stock_market.js`):** Handle mit Aktienanteilen bekannter Handelsgesellschaften (*Nordholz AG*, *Eisenbergbau GmbH*, *Südgold Bankverein*).
+- **Passive Dividenden:** Kursveränderungen reagieren dynamisch alle 30 Sekunden; gehaltene Aktien werfen alle 30s automatische Gold-Dividenden ab.
+
+### 56. 🔷 TypeScript Strikte Typisierung (`js/types/game.d.ts`)
+- **Strikte Type-Safety:** Vollständige `.d.ts` Schnittstellen-Definitionen für `GameState`, `Resources`, `Building`, `TroopConfig` und `Mission` zur Vermeidung von Typfehlern bei künftigen Skalierungen.
+
+### 57. ⚡ Vite Build- & Bundling Pipeline (`vite.config.js`)
+- **Vite Setup:** Konfiguration für blitzschnelles HMR (Hot Module Replacement), Tree-Shaking und Produktion-Minifizierung unter `dist/`.
+
+### 58. 🧪 Automatisierte Regressionstest-Suite (`scripts/test.js`)
+- **Automatisierte Qualitätssicherung:** Test-Suite prüft Perlin Noise-Ränder, Konfigurations-Integrität und Reaktive-Proxy-State-Signale per `npm test` oder `node scripts/test.js`.
+
+### 59. 🗄️ Backend Datenbank-Adapter (`server/db.js`)
+- **Structured Database Adapter:** Strukturiertes Speichern von Benutzer-Spielständen auf dem Server mit Zeitstempeln und Datenvalidierung.
+
+### 60. 📱 Mobile Viewport & CSS Refactoring
+- **W3C Validierung:** Behebung von Viewport-Attribute-Warnungen (`maximum-scale`, `user-scalable`) und Auslagerung von Inline-Styles in `css/index.css`.
+
+
+
+
+
+
+
+
 ### 1. ⚔️ Premium 2D Kampf-Visualisierung
 Beim Ausführen von Angriffskämpfen startet eine Live-2D-Simulation der Schlacht:
 - Einheiten werden mit individuellen Waffensymbolen visualisiert (z. B. Schwerter für Schwertkämpfer, Bögen für Bogenschützen).
@@ -203,6 +291,72 @@ Die KI wurde drastisch verbessert und agiert nun als intelligenter Mitspieler:
 - **Kollaborative Armeehilfe**: Spieler können im Angriffsmenü für Gold und Ressourcen verbündete KI-Truppen anheuern (z. B. Ritter von Nordmark, Speerkämpfer von Südgold, Schwertkämpfer von Ostkaiserreich).
 - **Zufällige Allianz-Events**: Zwei neue diplomatische Szenarien erfordern taktische Hilfeleistungen (Senden von Truppen zur Verteidigung bedrängter Partner oder Rohstoffpakete) für Boni und Beziehungsaufbesserung.
 - **Epochen-Quests**: Neue Quests in der Hauptreihe belohnen die Ausrufung neuer Zeitalter und das Ausführen kooperativer Angriffe.
+
+### 26. 🌾 Produktionsketten & Bürgerbedürfnisse (Supply Chains & Needs)
+- **Mehrstufige Veredelung**:
+  - `Windmühle` & `Bäckerei`: Verarbeiten Getreide zu Mehl und nahrhaftem Brot, welches die Nahrungseffizienz steigert.
+  - `Hopfenfeld` & `Brauerei`: Brauen kühles Bier für Tavernen und heben die Zufriedenheit der Bürgerschaft.
+  - `Erzschmelze` & `Waffenschmiede`: Gießen Eisenbarren und schmieden hochwertige Waffen für Truppen.
+  - `Kapelle` & `Dorfbrunnen`: Erfüllen Glaubens- und Hygienebedürfnisse deiner Einwohner.
+- **Bauernaufstand & Streik-Mechanik**: Fällt die Gesamtzufriedenheit unter 20%, drohen spontane Bauernaufstände und Produktionsstopps, die diplomatisches Handeln oder Steuersenkungen erfordern.
+
+### 27. 🌐 WebRTC Realtime P2P Live-Duelle
+- **Live-P2P Multiplayer**: Erstelle einen eigenen Duell-Raumcode (`BURGEN-XXXXXX`) und fordere Mitspieler direkt in der Jousting-Arena oder im taktischen Rundenkampf zu einem 1v1-Echtzeit-Duell ohne Serverkosten heraus.
+
+### 28. ☁️ Verschlüsselter Cloud-Sync & Backups
+- **Automatische Cloud-Vault Sicherung**: Spielstände werden lokal und in einem verschlüsselten Cloud-Vault gesichert. Ein-Klick-Wiederherstellung erlaubt das nahtlose Laden von früheren Spielständen und Backups.
+
+### 29. 📈 Interaktive Wirtschafts-Charts & Dashboards
+- **Canvas-Liniendiagramme**: Visualisiere den 30-Tick-Verlauf von Holz, Stein, Eisen, Gold und Nahrung direkt im Statistik-Dashboard mit farbcodierten Datenkurven.
+
+### 30. 🗡️ Spionage-Sabotage & Brandstiftung
+- **Erweiterte Spionage-Aktionen**:
+  - `Brandstiftung`: Setze gegnerische Kornspeicher in Brand (-30% Nahrungsvorräte).
+  - `Tor-Sabotage`: Manipuliere Burgtor-Riegel für +25% Durchbruchschaden beim nächsten Angriff.
+
+### 31. 💍 Politische Dynastie-Heiraten
+- **Königliche Hochzeiten**: Verheirate Nachkommen deiner Dynastie mit Thronfolgern verbündeter KI-Nationen für dauerhafte Allianz-Garantien und höhere tägliche Tribute.
+
+### 32. 🏰 Burgtor- & Fallen-Verteidigung (Pitch & Trap Engine)
+- **Taktische Mauer-Fallen**:
+  - `Pechkessel`: Fügt Stürmern am Burgtor AoE-Brandschaden zu.
+  - `Siedendes Öl`: Ignoriert Rüstung feindlicher Nahkämpfer.
+  - `Fallgitter`: Blockiert Burgtordurchbrüche für 2 Kampfrunden.
+  - `Krähenfüße`: Verlangsamt vorrückende Infanterie-Ketten.
+
+### 33. 📜 Chronik des Reiches (Procedural History & Kingdom Chronicle)
+- **Historisches Logbuch**: Hält alle Meilensteine deines Reiches chronologisch fest (Thronwechsel, gewonnene Schlachten, bezwungene Bossdrachen, überstandene Aufstände).
+
+### 34. ⛵ Übersee-Handelsexpeditionen & Piraten-Seeschlachten
+- **Exotischer Fernhandel**: Schicke Handelsflotten auf See-Expeditionen zum Kalifat oder Ost-Kaiserreich, um seltene Gewürze, Seide und Edelsteine zu importieren.
+- **Piraten-Events**: Wehre Piratenüberfälle auf hoher See ab.
+
+### 35. 🧪 Alchemistenlabor & Trankbrauerei (Potion Crafting)
+- **Elixier-Brauerei**: Braue aus Rohstoffen und Dungeon-Dropzutaten mächtige Tränke wie *Marsch-Elixier*, *Heilbalsam* und *Griechisches Feuer*.
+
+### 36. 🗺️ Gilden-Territorialkampf (Guild Fortress Control)
+- **Megafestungen**: Erobere strategische Knotenpunkte (*Drachenpass*, *Eiserne Festung*, *Goldküste*) für tägliche Gilden-Tribute und Spezial-Buffs.
+
+### 37. 🌧️ Prozedurale Wetter-Soundscapes & Umgebungs-Audio
+- **Natur-Synthesizer**: Prozedural generierte Soundkulissen passend zur Jahreszeit (Regen, Donnergrollen, Vogelgezwitscher, Kriegshörner).
+
+### 38. 💥 Visuelle Burg-Zerstörung & Feuer-Ausbreitung
+- **Mauer-Trümmer**: Dynamische Gesteinspartikel zerplatzen bei Belagerungstreffern. Brände breiten sich spontan auf Nachbarkacheln aus, wenn keine Feuerwache vorhanden ist.
+
+### 39. 👑 Erlass-System & Finanzpolitik 2.0
+- **Politisches Management**:
+  - `Brot-Subvention`: Steigert Bürger-Zufriedenheit um +25%.
+  - `Kriegssteuer`: Bringt +45% mehr Gold auf Kosten der Stimmung.
+  - `Seidenzoll`: Erhöht Seehandelserträge.
+
+### 40. 🐉 Mythen-Tierzucht & Elementar-Drachen 2.0
+- **Drachenhort-Zucht**: Züchte *Feuerdrachen*, *Frostwyvern* und *Sturmgreifen* mit individuellen Elementar-Kampfauren.
+
+### 41. 🏆 Saisonale Liga-Ränge & Ranking 3.0
+- **Ranglisten-System**: Dynamische Einstufung von *Bronze* bis *Obsidian-Königreich* basierend auf Königreichs-Score und Burgwert.
+
+### 42. 📱 Touch-Gesten & Mobile Haptik-Overlay 2.0
+- **Haptisches Feedback**: Nuancierte Vibrationsmuster (Vibration API) bei Bauabschlüssen, Schwerthieben und Siegesfanfaren auf Mobilgeräten.
 
 ---
 

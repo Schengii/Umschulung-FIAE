@@ -21,11 +21,11 @@
         }
     </script>
     <!-- PWA Manifest -->
-    <link rel="manifest" href="./assets/manifest-BErOIUI5.webmanifest">
+    <link rel="manifest" href="/assets/manifest-BErOIUI5.webmanifest">
     <link rel="apple-touch-icon" href="https://img.icons8.com/neon/180/briefcase.png">
     <!-- CSS styles -->
-  <script type="module" crossorigin src="./assets/index-WTw1vDWT.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C-Q2Vncr.css">
+  <script type="module" crossorigin src="/assets/index-CAyRuAmw.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-r-1_kChS.css">
 </head>
 <body>
     <div class="app-container">
@@ -81,6 +81,12 @@
                     <input type="text" id="global-search" placeholder="Jobs, Firmen oder Skills suchen..." aria-label="Jobs, Firmen oder Skills suchen">
                 </div>
                 <div class="header-actions flex-row-center">
+                    <span id="sync-status-indicator" class="badge badge-saved" style="font-size: 0.72rem; cursor: pointer;" title="Lokale Speicherung & Snapshots aktiv"><i data-lucide="shield-check" style="width:12px; height:12px; display:inline;"></i> Offline-Sync</span>
+                    <button class="btn btn-secondary btn-lang-toggle" id="btn-lang-toggle" title="Sprache wechseln (DE / EN)">DE</button>
+
+                    <button class="btn btn-secondary" id="btn-theme-toggle" title="Theme wechseln (Dark / Light / OLED)">
+                        <i data-lucide="moon" aria-hidden="true"></i>
+                    </button>
                     <button class="btn btn-secondary btn-bell" id="btn-notifications-bell" title="Benachrichtigungen" aria-haspopup="true" aria-expanded="false">
                         <i data-lucide="bell" aria-hidden="true"></i>
                         <span id="bell-badge-indicator" class="bell-badge hide"></span>
@@ -331,7 +337,7 @@
                     </div>
 
                     <!-- Timeline History Widget -->
-                    <div id="job-history-timeline" class="job-modal-timeline" style="display: none;">
+                    <div id="job-history-timeline" class="job-modal-timeline hide">
                         <div class="timeline-title">Bewerbungs-Verlauf (Status-Timeline)</div>
                         <div class="timeline-items" id="job-timeline-nodes">
                             <!-- Dynamically generated timeline nodes -->
@@ -761,6 +767,71 @@
                     <i data-lucide="file-text" aria-hidden="true"></i> Lebenslauf exportieren
                 </button>
                 <button class="btn btn-primary btn-full" id="btn-save-profile">Profil speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar (< 768px) -->
+    <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+        <button class="mobile-nav-item active" data-view="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dash</span>
+        </button>
+        <button class="mobile-nav-item" data-view="kanban">
+            <i data-lucide="kanban-square"></i>
+            <span>Board</span>
+        </button>
+        <button class="mobile-nav-item" data-view="comparer">
+            <i data-lucide="git-compare"></i>
+            <span>Vergleich</span>
+        </button>
+        <button class="mobile-nav-item" data-view="finder">
+            <i data-lucide="compass"></i>
+            <span>Suche</span>
+        </button>
+        <button class="mobile-nav-item" data-view="copilot">
+            <i data-lucide="sparkles"></i>
+            <span>Copilot</span>
+        </button>
+    </nav>
+
+    <!-- PIN Lock Modal -->
+    <div id="pin-lock-modal" class="modal-overlay hide">
+        <div class="modal-content glass-card modal-pin-content">
+            <i data-lucide="lock" class="pin-lock-icon"></i>
+            <h3>Daten-Sperre (PIN)</h3>
+            <p class="text-secondary">Gib deine 4-stellige PIN ein, um deine Daten freizuschalten.</p>
+            <input type="password" id="pin-input-field" class="pin-input" maxlength="6" placeholder="••••" title="4-stellige PIN eingeben" aria-label="4-stellige PIN eingeben" autocomplete="off">
+            <button class="btn btn-primary btn-full" id="btn-unlock-pin">Entsperren</button>
+        </div>
+    </div>
+
+    <!-- Rejection Reason Modal -->
+    <div id="rejection-reason-modal" class="modal-overlay hide">
+        <div class="modal-content glass-card modal-rejection-content">
+            <div class="flex-row-center rejection-header-row">
+                <h3 class="text-danger rejection-modal-title"><i data-lucide="frown" aria-hidden="true"></i> Absage-Grund festhalten</h3>
+                <button class="btn btn-secondary btn-sm" id="btn-close-rejection-modal" title="Schließen" aria-label="Schließen">✕</button>
+            </div>
+            <p class="text-secondary rejection-subtitle">Erfasse den Grund für die Absage, um deine Skill-Gap-Analytik im Dashboard zu schärfen.</p>
+            <input type="hidden" id="rejection-job-id">
+            <div class="form-group">
+                <label for="rejection-reason-select">Hauptgrund der Absage:</label>
+                <select id="rejection-reason-select" class="select-profile-custom">
+                    <option value="skill_gap">Fehlende Qualifikation / Skill-Gap</option>
+                    <option value="salary">Gehaltsvorstellung zu hoch</option>
+                    <option value="no_response">Keine Rückmeldung nach Wartezeit</option>
+                    <option value="company_cancelled">Stelle intern gestrichen / Besetzt</option>
+                    <option value="other">Sonstiger Grund</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rejection-missing-skill">Fehlender Skill (optional):</label>
+                <input type="text" id="rejection-missing-skill" class="input-profile-name" placeholder="z. B. Docker, Kubernetes, AWS..." title="Fehlenden Skill eingeben">
+            </div>
+            <div class="flex-row-center rejection-footer-row">
+                <button class="btn btn-secondary" id="btn-skip-rejection-reason">Überspringen</button>
+                <button class="btn btn-primary" id="btn-save-rejection-reason">Speichern</button>
             </div>
         </div>
     </div>

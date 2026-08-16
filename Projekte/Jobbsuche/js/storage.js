@@ -365,5 +365,89 @@ export const storage = {
             console.error("Backup Import fehlgeschlagen", e);
             throw e;
         }
+    },
+
+    // --- EXPENSES STORAGE ---
+    getExpenses() {
+        const raw = localStorage.getItem('jobmatch_expenses');
+        if (!raw) return [];
+        try { return JSON.parse(raw); } catch(e) { return []; }
+    },
+
+    saveExpenses(expenses) {
+        localStorage.setItem('jobmatch_expenses', JSON.stringify(expenses));
+    },
+
+    addExpense(expense) {
+        const list = this.getExpenses();
+        const newExp = {
+            id: 'exp-' + Date.now(),
+            date: new Date().toISOString().split('T')[0],
+            amount: 0,
+            category: 'Sonstiges',
+            description: '',
+            kilometers: 0,
+            isFlatRate: false,
+            ...expense
+        };
+        list.push(newExp);
+        this.saveExpenses(list);
+        return newExp;
+    },
+
+    deleteExpense(id) {
+        const list = this.getExpenses().filter(e => e.id !== id);
+        this.saveExpenses(list);
+    },
+
+    // --- CUSTOM KANBAN COLUMNS ---
+    getCustomColumns() {
+        const defaultCols = [
+            { id: 'saved', title: 'Gespeichert', badgeClass: 'badge-saved', order: 1 },
+            { id: 'ready', title: 'Unterlagen bereit', badgeClass: 'badge-ready', order: 2 },
+            { id: 'applied', title: 'Beworben', badgeClass: 'badge-applied', order: 3 },
+            { id: 'interviewing', title: 'Gespräch', badgeClass: 'badge-interviewing', order: 4 },
+            { id: 'offer', title: 'Angebot erhalten', badgeClass: 'badge-offer', order: 5 },
+            { id: 'rejected', title: 'Absage', badgeClass: 'badge-rejected', order: 6 }
+        ];
+
+        const raw = localStorage.getItem('jobmatch_custom_columns');
+        if (!raw) return defaultCols;
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultCols;
+        } catch (e) {
+            return defaultCols;
+        }
+    },
+
+    saveCustomColumns(cols) {
+        localStorage.setItem('jobmatch_custom_columns', JSON.stringify(cols));
+    },
+
+    // --- REJECTION HISTORY ---
+    getRejectionHistory() {
+        const raw = localStorage.getItem('jobmatch_rejection_history');
+        if (!raw) return [];
+        try { return JSON.parse(raw); } catch(e) { return []; }
+    },
+
+    saveRejectionHistory(history) {
+        localStorage.setItem('jobmatch_rejection_history', JSON.stringify(history));
+    },
+
+    addRejectionReason(jobId, company, jobTitle, reasonCategory, notes = '') {
+        const history = this.getRejectionHistory();
+        history.push({
+            id: 'rej-' + Date.now(),
+            jobId,
+            company,
+            jobTitle,
+            reasonCategory, // e.g. 'Gehalt zu hoch', 'Fehlende Erfahrung in Tech X', 'Intern vergeben', 'Keine Angabe'
+            notes,
+            date: new Date().toISOString()
+        });
+        this.saveRejectionHistory(history);
     }
 };
+

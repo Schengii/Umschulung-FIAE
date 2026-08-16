@@ -4,6 +4,7 @@ project(Minecraft CXX C)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 
 include(FetchContent)
 
@@ -37,6 +38,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(entt)
 
+find_package(OpenGL REQUIRED)
+
 # Source files
 set(SOURCES
     src/main.cpp
@@ -51,11 +54,14 @@ set(SOURCES
     src/renderer/FrustumCuller.cpp
     src/renderer/ShadowMap.cpp
     src/renderer/PostProcessing.cpp
+    src/renderer/Skybox.cpp
     src/world/Chunk.cpp
     src/world/ChunkMesh.cpp
     src/world/World.cpp
     src/world/Raycast.cpp
     src/world/SaveSystem.cpp
+    src/world/RegionFile.cpp
+    src/world/LightEngine.cpp
     src/world/TimeManager.cpp
     src/world/WeatherManager.cpp
     src/world/CaveDecorator.cpp
@@ -68,13 +74,19 @@ set(SOURCES
     src/world/FurnaceBlock.cpp
     src/world/StructureGenerator.cpp
     src/world/DimensionManager.cpp
+    src/world/CropsEngine.cpp
+    src/world/VillageGenerator.cpp
+    src/world/TradingEngine.cpp
+    src/world/EnchantingEngine.cpp
     src/physics/PhysicsEngine.cpp
     src/gui/HUD.cpp
     src/gui/InventoryGUI.cpp
     src/gui/ContainerGUI.cpp
     src/gui/DebugGUI.cpp
+    src/gui/MenuGUI.cpp
     src/inventory/Inventory.cpp
     src/inventory/PlayerStats.cpp
+    src/inventory/FoodSystem.cpp
     src/crafting/CraftingManager.cpp
     src/ecs/MobEngine.cpp
     src/ecs/ItemEntity.cpp
@@ -94,11 +106,8 @@ target_include_directories(Minecraft PRIVATE
 target_link_libraries(Minecraft PRIVATE
     glfw
     glm::glm
+    OpenGL::GL
 )
-
-if(WIN32)
-    target_link_libraries(Minecraft PRIVATE opengl32)
-endif()
 
 # Test Engine Target
 set(TEST_SOURCES
@@ -114,11 +123,14 @@ set(TEST_SOURCES
     src/renderer/FrustumCuller.cpp
     src/renderer/ShadowMap.cpp
     src/renderer/PostProcessing.cpp
+    src/renderer/Skybox.cpp
     src/world/Chunk.cpp
     src/world/ChunkMesh.cpp
     src/world/World.cpp
     src/world/Raycast.cpp
     src/world/SaveSystem.cpp
+    src/world/RegionFile.cpp
+    src/world/LightEngine.cpp
     src/world/TimeManager.cpp
     src/world/WeatherManager.cpp
     src/world/CaveDecorator.cpp
@@ -131,13 +143,19 @@ set(TEST_SOURCES
     src/world/FurnaceBlock.cpp
     src/world/StructureGenerator.cpp
     src/world/DimensionManager.cpp
+    src/world/CropsEngine.cpp
+    src/world/VillageGenerator.cpp
+    src/world/TradingEngine.cpp
+    src/world/EnchantingEngine.cpp
     src/physics/PhysicsEngine.cpp
     src/gui/HUD.cpp
     src/gui/InventoryGUI.cpp
     src/gui/ContainerGUI.cpp
     src/gui/DebugGUI.cpp
+    src/gui/MenuGUI.cpp
     src/inventory/Inventory.cpp
     src/inventory/PlayerStats.cpp
+    src/inventory/FoodSystem.cpp
     src/crafting/CraftingManager.cpp
     src/ecs/MobEngine.cpp
     src/ecs/ItemEntity.cpp
@@ -151,10 +169,8 @@ target_include_directories(TestEngine PRIVATE
     ${glm_SOURCE_DIR}
     ${entt_SOURCE_DIR}/single_include
 )
-target_link_libraries(TestEngine PRIVATE glfw glm::glm)
-if(WIN32)
-    target_link_libraries(TestEngine PRIVATE opengl32)
-endif()
+target_link_libraries(TestEngine PRIVATE glfw glm::glm OpenGL::GL)
+
 
 # Copy assets folder to output executable directory
 add_custom_command(TARGET Minecraft POST_BUILD

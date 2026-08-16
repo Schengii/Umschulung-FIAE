@@ -26,7 +26,16 @@ class TacticalCombat {
     this.placementPhase = true;
     this.speedMultiplier = 1;
 
+    // Morale & Weather Integration
+    this.playerMorale = 100;
+    this.enemyMorale = 100;
+    this.formation = (this.stateManager && this.stateManager.state && this.stateManager.state.combatFormation) || 'standard';
+    this.weatherType = (this.stateManager && this.stateManager.state && this.stateManager.state.weather?.type) || 'sunny';
+
     this.initBattlefield();
+
+    // Apply Formations & Morale Effects
+    this.applyFormationAndWeatherModifiers();
 
     // Assign initiative to all units
     this.units.forEach(u => {
@@ -42,11 +51,65 @@ class TacticalCombat {
       else if (u.type === 'ram') init = 2;
       else if (u.type === 'catapult') init = 1;
       u.initiative = init;
+      u.morale = 100;
+      u.isRouting = false;
     });
     this.units.sort((a, b) => b.initiative - a.initiative);
     this.activeUnitIndex = 0;
 
     this.setupMouseListeners();
+  }
+
+  applyFormationAndWeatherModifiers() {
+    this.units.forEach(u => {
+      if (u.side === 'player') {
+        if (this.formation === 'phalanx') {
+          if (u.type === 'spearman' || u.type === 'swordsman') {
+            u.meleeDef = Math.round(u.meleeDef * 1.35);
+          }
+        } else if (this.formation === 'wedge') {
+          if (u.type === 'knight' || u.type === 'paladin') {
+            u.meleeAtk = Math.round(u.meleeAtk * 1.25);
+          }
+        } else if (this.formation === 'shield_wall') {
+          u.meleeDef = Math.round(u.meleeDef * 1.3);
+          u.rangeDef = Math.round(u.rangeDef * 1.3);
+        }
+      }
+
+      // Weather effects
+      if (this.weatherType === 'rain' || this.weatherType === 'storm') {
+        if (u.rangeAtk > 0) {
+          u.rangeAtk = Math.max(1, Math.round(u.rangeAtk * 0.75));
+        }
+      } else if (this.weatherType === 'snow') {
+        if (u.type === 'knight') {
+          u.meleeAtk = Math.max(1, Math.round(u.meleeAtk * 0.85));
+        }
+      }
+    });
+
+    if (this.formation && this.formation !== 'standard') {
+      this.actionLogs.push(`Taktische Formation aktiv: ${this.formation.toUpperCase()}`);
+    }
+    if (this.weatherType && this.weatherType !== 'sunny') {
+      this.actionLogs.push(`Wetterbedingungen auf dem Schlachtfeld: ${this.weatherType.toUpperCase()}`);
+    }
+  }
+
+  updateMoraleOnLoss(side, damageDealt) {
+    const moraleLoss = Math.min(25, Math.ceil(damageDealt / 8));
+    if (side === 'player') {
+      this.playerMorale = Math.max(0, this.playerMorale - moraleLoss);
+      if (this.playerMorale < 30) {
+        this.actionLogs.push('⚠️ WARNUNG: Die Moral deiner Truppen ist kritisch niedrig!');
+      }
+    } else {
+      this.enemyMorale = Math.max(0, this.enemyMorale - moraleLoss);
+      if (this.enemyMorale < 30) {
+        this.actionLogs.push('⚡ Die gegnerische Moral wankt!');
+      }
+    }
   }
 
   startBattleFromPlacement() {

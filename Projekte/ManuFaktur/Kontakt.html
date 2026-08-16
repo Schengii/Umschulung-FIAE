@@ -16,10 +16,32 @@
   <!-- Favicon -->
   <link rel="icon" href="assets/images/logos/favicon.png" type="image/png">
   <link rel="icon" href="assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/images/logos/favicon.png">
 
+  <link rel="manifest" href="manifest.json">
   <!-- Lokales Font Awesome für DSGVO-Konformität (kein externes Google Fonts) -->
   <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="style.css?v=3">
+
+  <!-- SEO Schema.org Strukturierte Daten -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Kontakt – ManuFAKTUR Schenk",
+    "mainEntity": {
+      "@type": "LocalBusiness",
+      "name": "ManuFAKTUR Schenk",
+      "email": "manufaktur-malerei@web.de",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bonn",
+        "postalCode": "53175",
+        "addressCountry": "DE"
+      }
+    }
+  }
+  </script>
 </head>
 
 <body>
@@ -138,6 +160,20 @@
       </form>
 
     </div>
+
+    <section class="map-section reveal margin-top-40">
+      <h2 class="centered"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Standorts-Karte (Bonn)</h2>
+      <div id="map-container" class="map-placeholder">
+        <div class="map-dsgvo-box text-center padding-30">
+          <i class="fa-solid fa-map-location-dot font-size-3rem color-primary margin-bottom-15" aria-hidden="true"></i>
+          <h3>Google Maps Standorts-Karte laden</h3>
+          <p class="font-size-09rem color-text-muted margin-bottom-20">Aus Datenschutzgründen wird die Karte erst geladen, wenn du auf den Button klickst. Dabei können Daten an Google übertragen werden.</p>
+          <button type="button" class="btn btn-primary" onclick="loadGoogleMap()">
+            <i class="fa-solid fa-check" aria-hidden="true"></i> Karte jetzt laden & anzeigen
+          </button>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer wird via Home.js injiziert -->

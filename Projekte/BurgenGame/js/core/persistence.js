@@ -143,8 +143,49 @@ class Persistence {
   static saveHighscores(scores) {
     localStorage.setItem(this.HIGHSCORES_KEY, JSON.stringify(scores));
   }
+
+  static generateCloudBackupCode(state) {
+    if (!state) return '';
+    try {
+      const payload = {
+        v: 2,
+        ts: Date.now(),
+        data: state
+      };
+      const json = JSON.stringify(payload);
+      return 'BURGEN_' + btoa(encodeURIComponent(json));
+    } catch (e) {
+      console.error("Failed to generate cloud code", e);
+      return '';
+    }
+  }
+
+  static importCloudBackupCode(code) {
+    if (!code || typeof code !== 'string') return null;
+    try {
+      let clean = code.trim();
+      if (clean.startsWith('BURGEN_')) {
+        clean = clean.replace('BURGEN_', '');
+      }
+      const json = decodeURIComponent(atob(clean));
+      const parsed = JSON.parse(json);
+      return parsed.data || parsed;
+    } catch (e) {
+      console.error("Failed to parse cloud backup code", e);
+      return null;
+    }
+  }
+
+  static async simulateCloudSync(state) {
+    if (!state) return { success: false, message: 'Keine Daten zum Synchronisieren' };
+    const code = this.generateCloudBackupCode(state);
+    state.cloudBackupCode = code;
+    await this.save(state);
+    return { success: true, code, syncedAt: Date.now() };
+  }
 }
 
 window.Persistence = Persistence;
+
 
 

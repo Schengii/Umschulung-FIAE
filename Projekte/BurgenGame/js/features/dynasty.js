@@ -78,11 +78,12 @@ class DynastyManager {
 
   marryRoyalFamily(npcName) {
     this.init();
-    if (stateManager.state.gold < 500) {
+    // BUG FIX: Verwende state.resources.gold statt state.gold
+    if ((stateManager.state.resources.gold || 0) < 500) {
       this.gameUI.showFloatingNotification('Nicht genug Gold (500 Gold benötigt) für die königliche Hochzeit!');
       return;
     }
-    stateManager.state.gold -= 500;
+    stateManager.state.resources.gold -= 500;
     stateManager.state.dynasty.marriages.push({
       partner: npcName,
       date: new Date().toLocaleDateString()
@@ -91,9 +92,35 @@ class DynastyManager {
     if (window.diplomacyManager) {
       window.diplomacyManager.improveRelations(npcName, 35);
     }
+    stateManager.save();
     this.gameUI.showFloatingNotification(`💍 Königliche Hochzeit gefeiert mit ${npcName}! Diplomatische Beziehungen drastisch gestiegen.`);
     if (window.gameSound) window.gameSound.playSFX('quest');
     this.showModal();
+  }
+
+  // ============================================================
+  // NEU: Gibt den aktiven Dynastietrait-Bonus zurück
+  // Wird von state.js, population.js, tactical_combat.js etc. aufgerufen
+  // ============================================================
+  getDynastyBonus(type) {
+    this.init();
+    const activeTrait = stateManager.state.dynasty?.activeTrait || 'builder';
+    switch(type) {
+      case 'gold_mult':    // greedy: +25% Steuereinnahmen
+        return activeTrait === 'greedy' ? 1.25 : 1.0;
+      case 'happiness_mod': // greedy: -10 Zufriedenheit; diplomat: +5
+        if (activeTrait === 'greedy') return -10;
+        if (activeTrait === 'diplomat') return 5;
+        return 0;
+      case 'build_cost_mult': // builder: -25% Baukosten
+        return activeTrait === 'builder' ? 0.75 : 1.0;
+      case 'melee_damage_mult': // warlord: +15% Nahkampf
+        return activeTrait === 'warlord' ? 1.15 : 1.0;
+      case 'diplomacy_mult': // diplomat: +30% Beziehungsverbesserung
+        return activeTrait === 'diplomat' ? 1.30 : 1.0;
+      default:
+        return 1.0;
+    }
   }
 }
 

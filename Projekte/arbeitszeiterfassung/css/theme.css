@@ -1,0 +1,81 @@
+/* css/theme.css */
+
+:root {
+  /* Primary palette */
+  --clr-primary-h: 260;
+  --clr-primary-s: 80%;
+  --clr-primary-l: 60%;
+  --clr-primary: hsl(var(--clr-primary-h), var(--clr-primary-s), var(--clr-primary-l));
+
+  /* Dark background */
+  --clr-bg-dark-h: 220;
+  --clr-bg-dark-s: 30%;
+  --clr-bg-dark-l: 15%;
+  --clr-bg-dark: hsl(var(--clr-bg-dark-h), var(--clr-bg-dark-s), var(--clr-bg-dark-l));
+
+  /* Light background */
+  --clr-bg-light-h: 0;
+  --clr-bg-light-s: 0%;
+  --clr-bg-light-l: 100%;
+  --clr-bg-light: hsl(var(--clr-bg-light-h), var(--clr-bg-light-s), var(--clr-bg-light-l));
+
+  /* Accent colors */
+  --clr-accent-violet: hsl(260, 80%, 60%);
+  --clr-accent-green: hsl(150, 70%, 45%);
+  --clr-accent-amber: hsl(45, 90%, 55%);
+
+  /* Text */
+  --clr-text-primary: #e0e0e0;
+  --clr-text-secondary: #b0b0b0;
+
+  /* Card background (glass) */
+  --clr-card-bg: rgba(255, 255, 255, 0.08);
+  --clr-card-border: rgba(255, 255, 255, 0.15);
+
+  /* Border radius, spacing */
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --clr-bg: var(--clr-bg-light);
+    --clr-text-primary: #202020;
+    --clr-text-secondary: #404040;
+    --clr-card-bg: rgba(255, 255, 255, 0.9);
+    --clr-card-border: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --clr-bg: var(--clr-bg-dark);
+    --clr-text-primary: var(--clr-text-primary);
+    --clr-text-secondary: var(--clr-text-secondary);
+    --clr-card-bg: rgba(0, 0, 0, 0.5);
+    --clr-card-border: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Utility classes */
+.hover-lift {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

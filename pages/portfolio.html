@@ -46,6 +46,7 @@
     </a>
 
     <div id="site-header"></div>
+    <div id="site-nav"></div>
 
 
     <!-- Main Content -->
@@ -225,16 +226,76 @@
 
                     <!-- Tabs to select snippets -->
                     <div class="code-tabs">
-                        <button type="button" class="code-tab-btn active" data-target="snippet-react">React
-                            Hook</button>
+                        <button type="button" class="code-tab-btn active" data-target="snippet-ecochef">EcoChef (Lit/TS)</button>
+                        <button type="button" class="code-tab-btn" data-target="snippet-burgengame">BurgenGame (Worker AI)</button>
+                        <button type="button" class="code-tab-btn" data-target="snippet-react">React Hook</button>
                         <button type="button" class="code-tab-btn" data-target="snippet-java">Java Pattern</button>
                         <button type="button" class="code-tab-btn" data-target="snippet-js">Async Fetch</button>
                     </div>
 
                     <!-- Code Container -->
                     <div class="code-container">
+                        <!-- Snippet EcoChef: Lit TypeScript AI Service -->
+                        <div id="snippet-ecochef" class="code-snippet active">
+                            <pre><code><span class="token comment">// EcoChef Gemini AI Service (TypeScript) mit JSON-Schema Guard</span>
+<span class="token keyword">export class</span> <span class="token classname">GeminiService</span> {
+  <span class="token keyword">private</span> apiKey: <span class="token keyword">string</span>;
+
+  <span class="token keyword">constructor</span>(apiKey: <span class="token keyword">string</span>) {
+    <span class="token keyword">this</span>.apiKey = apiKey;
+  }
+
+  <span class="token keyword">async</span> <span class="token function">generateRecipe</span>(ingredients: <span class="token keyword">string</span>[]): <span class="token classname">Promise</span>&lt;<span class="token classname">Recipe</span>&gt; {
+    <span class="token keyword">const</span> prompt = <span class="token string">`Erstelle ein nachhaltiges Rezept mit: ${ingredients.join(', ')}. Antworte strikt in JSON.`</span>;
+    <span class="token keyword">const</span> response = <span class="token keyword">await</span> <span class="token function">fetch</span>(<span class="token string">`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${this.apiKey}`</span>, {
+      method: <span class="token string">'POST'</span>,
+      headers: { <span class="token string">'Content-Type'</span>: <span class="token string">'application/json'</span> },
+      body: JSON.<span class="token function">stringify</span>({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    <span class="token keyword">const</span> result = <span class="token keyword">await</span> response.<span class="token function">json</span>();
+    <span class="token keyword">return this</span>.<span class="token function">validateRecipeSchema</span>(result);
+  }
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>EcoChef Gemini API Integration (TypeScript):</strong>
+                                Kapselt den Aufruf an Google Gemini 1.5 Pro im modularen Service-Layer ab, erzwingt Schema-Validierung und berechnet Nährwerte &amp; CO2-Einsparungen.</p>
+                            <p lang="en" class="code-desc"><strong>EcoChef Gemini API Integration (TypeScript):</strong>
+                                Encapsulates Google Gemini 1.5 Pro calls in a modular service layer with strict JSON schema validation and nutrition/carbon footprint analytics.</p>
+                        </div>
+
+                        <!-- Snippet BurgenGame: Web Worker AI -->
+                        <div id="snippet-burgengame" class="code-snippet">
+                            <pre><code><span class="token comment">// BurgenGame 2D Engine: Asynchroner AI Worker Hook</span>
+<span class="token keyword">class</span> <span class="token classname">AIBot</span> {
+  <span class="token keyword">constructor</span>(stateManager, ui) {
+    <span class="token keyword">this</span>.stateManager = stateManager;
+    <span class="token keyword">this</span>.ui = ui;
+    <span class="token keyword">this</span>.<span class="token function">initWorker</span>();
+  }
+
+  <span class="token function">initWorker</span>() {
+    <span class="token keyword">this</span>.worker = <span class="token keyword">new</span> <span class="token classname">Worker</span>(<span class="token string">'js/workers/ai_worker.js'</span>);
+    <span class="token keyword">this</span>.worker.postMessage({
+      type: <span class="token string">'INIT'</span>,
+      config: { personality: <span class="token string">'builder'</span>, autoAttack: <span class="token boolean">true</span> }
+    });
+
+    <span class="token keyword">this</span>.worker.onmessage = (e) => {
+      <span class="token keyword">const</span> { action, args, message } = e.data;
+      <span class="token keyword">if</span> (<span class="token keyword">typeof this</span>.stateManager[action] === <span class="token string">'function'</span>) {
+        <span class="token keyword">this</span>.stateManager[action](...args);
+        <span class="token keyword">this</span>.ui.<span class="token function">showFloatingNotification</span>(message);
+      }
+    };
+  }
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>BurgenGame Web Worker Bot Architecture:</strong>
+                                Entlastet den 60-FPS-Haupt-Renderthread, indem KI-Bot-Taktikentscheidungen in einem parallelen Web Worker asynchron berechnet und per Message-Channel ausgeführt werden.</p>
+                            <p lang="en" class="code-desc"><strong>BurgenGame Web Worker Bot Architecture:</strong>
+                                Keeps the 60 FPS main rendering thread silky-smooth by offloading bot decisions to a parallel Web Worker communicating via message-passing.</p>
+                        </div>
+
                         <!-- Snippet 1: React Hook -->
-                        <div id="snippet-react" class="code-snippet active">
+                        <div id="snippet-react" class="code-snippet">
                             <pre><code><span class="token keyword">import</span> { useState, useEffect, useRef } <span class="token keyword">from</span> <span class="token string">'react'</span>;
 
 <span class="token keyword">export function</span> <span class="token function">useFetch</span>(url, options = {}) {

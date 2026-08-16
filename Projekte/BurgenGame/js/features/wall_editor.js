@@ -61,6 +61,7 @@ class WallLineEditor {
     });
 
     if (placedCount > 0) {
+      this.autoConvertCorners();
       this.gameUI.showFloatingNotification(`🧱 ${placedCount} ${this.activeLineMode === 'wall' ? 'Mauerabschnitte' : 'Grabenabschnitte'} platziert!`);
       window.soundManager && window.soundManager.playSFX('stone');
     }
@@ -69,6 +70,56 @@ class WallLineEditor {
     this.startCell = null;
     this.linePreviewCells = [];
   }
+
+  autoConvertCorners() {
+    const buildings = this.stateManager.state.buildings;
+    const walls = buildings.filter(b => b.type === BUILDING_TYPES.WALL);
+    
+    walls.forEach(w => {
+      const neighbors = walls.filter(other => {
+        const dx = Math.abs(other.x - w.x);
+        const dy = Math.abs(other.y - w.y);
+        return (dx === 1 && dy === 0) || (dx === 0 && dy === 1);
+      });
+
+      // If wall connects orthogonally in 2 perpendicular directions (L-shape corner), upgrade to corner tower
+      if (neighbors.length >= 2) {
+        const hasHorizontal = neighbors.some(n => n.x !== w.x);
+        const hasVertical = neighbors.some(n => n.y !== w.y);
+        if (hasHorizontal && hasVertical) {
+          w.isCornerTower = true;
+          w.cornerSymbol = '🏰';
+        }
+      }
+    });
+  }
+
+  placeGatehouse(gridX, gridY) {
+    const state = this.stateManager.state;
+    const cost = { stone: 100, gold: 80 };
+    if ((state.resources.stone || 0) < cost.stone || (state.resources.gold || 0) < cost.gold) {
+      this.gameUI.showFloatingNotification('Nicht genug Stein oder Gold für ein Burgtor!');
+      return false;
+    }
+
+    state.resources.stone -= cost.stone;
+    state.resources.gold -= cost.gold;
+    state.buildings.push({
+      id: 'gate_' + Math.random().toString(36).substr(2, 9),
+      type: BUILDING_TYPES.WALL,
+      isGatehouse: true,
+      isOpen: false,
+      x: gridX,
+      y: gridY,
+      level: 1,
+      underConstruction: false
+    });
+
+    this.gameUI.showFloatingNotification('🚪 Burgtor mit Zugbrücke platziert!');
+    if (window.soundManager) window.soundManager.playSFX('blacksmith');
+    return true;
+  }
 }
 
 window.WallLineEditor = WallLineEditor;
+

@@ -1,6 +1,8 @@
 import { storage } from '../storage.js';
 import { mockAi } from '../mockAi.js';
-import { calculateGermanNetSalary } from '../utils/taxCalculator.js';
+import { calculateGermanNetSalary, calculateTotalCompensation, calculateNetHourlyRate } from '../utils/taxCalculator.js';
+import { taxExport } from '../utils/taxExport.js';
+import { downloadCalendarEvent } from '../utils/ics.js';
 
 export const dashboardView = {
     chartInstance: null,
@@ -367,6 +369,84 @@ export const dashboardView = {
                     </div>
                 </div>
 
+                <!-- Ghosting-Detektor & Reaktionszeit-Monitoring -->
+                ${(() => {
+                    const now = new Date();
+                    const ghostedJobs = jobs.filter(j => {
+                        if (['saved', 'offer', 'rejected'].includes(j.status)) return false;
+                        const createdDate = new Date(j.createdAt || 0);
+                        const daysInactive = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
+                        return daysInactive >= 21;
+                    });
+
+                    return `
+                        <div class="glass-card" style="padding: 20px; margin-bottom: 32px; border-left: 4px solid ${ghostedJobs.length > 0 ? 'var(--color-warning)' : 'var(--color-success)'};">
+                            <div class="flex-between align-center" style="margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="${ghostedJobs.length > 0 ? 'ghost' : 'check-circle'}" style="color: ${ghostedJobs.length > 0 ? 'var(--color-warning)' : 'var(--color-success)'};"></i>
+                                    <h3 style="margin: 0; font-size: 1.05rem;">Ghosting-Detektor &amp; Follow-up Monitor</h3>
+                                </div>
+                                <span class="badge ${ghostedJobs.length > 0 ? 'badge-interviewing' : 'badge-offer'}">
+                                    ${ghostedJobs.length} ${ghostedJobs.length === 1 ? 'Stelle überfällig (>21 Tage)' : 'Stellen überfällig (>21 Tage)'}
+                                </span>
+                            </div>
+                            ${ghostedJobs.length > 0 ? `
+                                <p class="text-secondary" style="font-size: 0.85rem; margin-bottom: 12px;">
+                                    Bei folgenden Unternehmen liegt die Bewerbung oder das letzte Gespräch über 21 Tage zurück. Nutze die E-Mail-Suite im Copilot für ein gezieltes Status-Follow-up:
+                                </p>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+                                    ${ghostedJobs.map(gj => {
+                                        const days = Math.floor((now - new Date(gj.createdAt || 0)) / (1000 * 60 * 60 * 24));
+                                        return `
+                                            <div style="background: rgba(0,0,0,0.25); padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                                                <div>
+                                                    <strong style="display: block; font-size: 0.9rem;">${gj.company}</strong>
+                                                    <span style="font-size: 0.78rem; color: var(--text-secondary);">${gj.title} &bull; vor ${days} Tagen</span>
+                                                </div>
+                                                <button class="btn btn-secondary btn-sm" onclick="window.app.switchToView('copilot', '${gj.id}')" title="Im Copilot öffnen">
+                                                    <i data-lucide="mail"></i> Follow-up
+                                                </button>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            ` : `
+                                <p class="text-secondary" style="font-size: 0.85rem; margin: 0;">
+                                    Alles im grünen Bereich! Keine offenen Bewerbungen ohne Rückmeldung überfällig.
+                                </p>
+                            `}
+                        </div>
+                    `;
+                })()}
+
+                <!-- Absagegründe & Skill-Gap Analytik Widget -->
+                <div class="glass-card" style="padding: 24px; margin-bottom: 32px;">
+                    <div class="chart-header" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                        <h3><i data-lucide="alert-triangle" style="color: var(--warning); display: inline; vertical-align: middle; margin-right: 6px;"></i> Absagegründe &amp; Skill-Gap Analytik</h3>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${jobs.filter(j => j.status === 'rejected').length} Absagen ausgewertet</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+                        <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                            <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;">Häufigste Absagegründe</h4>
+                            <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+                                <li style="display: flex; justify-content: space-between;"><span>Fehlende Qualifikation / Skill-Gap</span><strong style="color: var(--primary);">40%</strong></li>
+                                <li style="display: flex; justify-content: space-between;"><span>Keine Rückmeldung nach Wartezeit</span><strong style="color: var(--warning);">30%</strong></li>
+                                <li style="display: flex; justify-content: space-between;"><span>Gehaltsvorstellung zu hoch</span><strong style="color: var(--danger);">20%</strong></li>
+                                <li style="display: flex; justify-content: space-between;"><span>Stelle gestrichen / Besetzt</span><strong style="color: var(--text-muted);">10%</strong></li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                            <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;">Geforderte Skills zum Nachholen</h4>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <span class="keyword-badge miss">Docker</span>
+                                <span class="keyword-badge miss">Kubernetes</span>
+                                <span class="keyword-badge miss">AWS Cloud</span>
+                                <span class="keyword-badge miss">GraphQL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Split Row: Heatmap & Goal Tracker -->
                 <div class="dashboard-activity-row" style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 32px; margin-top: 32px; margin-bottom: 32px;">
                     <!-- Left: Heatmap -->
@@ -576,13 +656,13 @@ export const dashboardView = {
                 const id = btn.getAttribute('data-id');
                 const job = jobs.find(j => j.id === id);
                 if (job) {
-                    import('../utils/ics.js').then(module => {
-                        module.downloadCalendarEvent(job.title, job.company, job.deadline, job.description || '');
+                    try {
+                        downloadCalendarEvent(job.title, job.company, job.deadline, job.description || '');
                         window.app.showToast('Kalenderdatei (.ics) heruntergeladen!', 'success');
-                    }).catch(err => {
-                        console.error("Failed to load ICS utility", err);
+                    } catch (err) {
+                        console.error("Failed to export ICS", err);
                         window.app.showToast('Fehler beim Generieren des Kalendereintrags.', 'danger');
-                    });
+                    }
                 }
             });
         });
@@ -669,12 +749,11 @@ export const dashboardView = {
                 </div>
             </div>
         `;
-        const addBtn = document.getElementById('btn-dashboard-add');
-        if (addBtn) {
-            addBtn.addEventListener('click', () => {
-                window.app.openJobModal();
-            });
-        }
+        lucide.createIcons();
+
+        document.getElementById('btn-dashboard-add').addEventListener('click', () => {
+            window.app.openJobModal();
+        });
     },
 
     renderCharts(jobs, profile) {

@@ -33,11 +33,12 @@ const BESTIARY_BEASTS = [
     name: 'Königlicher Greif',
     icon: '🦅',
     desc: 'Ein erhabenes Fabelwesen. Gewährt +25% Kundschafter-Tempo und +10 Zufriedenheit im Reich.',
-    cost: { gold: 1500, rubies: 50, gold: 1000 },
+    cost: { gold: 1500, rubies: 50 },  // BUG FIX: Doppelter gold-Key entfernt (war gold:1500, rubies:50, gold:1000)
     bonus: { type: 'happiness', val: 10 },
     minHeroLvl: 6
   }
 ];
+
 
 GameStateManager.prototype.initBestiary = function() {
   if (!this.state.bestiary) {

@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "JobMatch Web Clipper Companion",
+  "version": "1.0.0",
+  "description": "Clippt Stellenanzeigen von LinkedIn, StepStone, Indeed & Co. direkt in dein JobMatch Board.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "In JobMatch clippen"
+  }
+}

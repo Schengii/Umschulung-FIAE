@@ -75,6 +75,40 @@ class WizardTowerManager {
       stateManager.state.mana = Math.min(stateManager.state.maxMana, stateManager.state.mana + 1);
     }
   }
+
+  craftElementalRune(element = 'fire') {
+    this.init();
+    const state = stateManager.state;
+    const costGems = 5;
+    if ((state.resources.gems || 0) < costGems) {
+      return { success: false, msg: 'Nicht genug Edelsteine zum Runenschmieden!' };
+    }
+    state.resources.gems -= costGems;
+    if (!state.runes) state.runes = [];
+    const rune = { id: `rune_${element}_${Date.now()}`, element, power: 25 };
+    state.runes.push(rune);
+    stateManager.save();
+    return { success: true, rune, msg: `🔮 Elementar-Rune (${element.toUpperCase()}) geschmiedet!` };
+  }
+
+  enchantWalls(runeId) {
+    this.init();
+    const state = stateManager.state;
+    if (!state.wallEnchantment) state.wallEnchantment = null;
+    state.wallEnchantment = { runeId, enchantedAt: Date.now() };
+    stateManager.save();
+    return { success: true, msg: '✨ Burgmauern mit Elementarrune verzaubert!' };
+  }
+
+  socketRuneToEquipment(itemId = 'weapon', runeId = 'fire') {
+    this.init();
+    const state = stateManager.state;
+    if (!state.socketedRunes) state.socketedRunes = {};
+    state.socketedRunes[itemId] = runeId;
+    stateManager.save();
+    return { success: true, msg: `💎 Rune in Ausrüstung ${itemId.toUpperCase()} eingesetzt!` };
+  }
 }
 
 window.WizardTowerManager = WizardTowerManager;
+

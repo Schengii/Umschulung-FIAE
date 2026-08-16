@@ -7,6 +7,9 @@ class GameStateManager {
     this.state = null;
     this.autosaveInterval = null;
     this.listeners = [];
+    this.historyStack = [];
+    this.historyIndex = -1;
+    this.maxHistory = 20;
   }
 
   addListener(callback) {
@@ -15,6 +18,72 @@ class GameStateManager {
 
   notifyListeners(changeType = 'general') {
     this.listeners.forEach(cb => cb(this.state, changeType));
+  }
+
+  saveSnapshot(actionLabel = 'action') {
+    if (!this.state) return;
+    if (this.historyIndex < this.historyStack.length - 1) {
+      this.historyStack = this.historyStack.slice(0, this.historyIndex + 1);
+    }
+    const snapshot = JSON.stringify(this.state);
+    this.historyStack.push({ label: actionLabel, data: snapshot });
+    if (this.historyStack.length > this.maxHistory) {
+      this.historyStack.shift();
+    } else {
+      this.historyIndex++;
+    }
+  }
+
+  undo() {
+    if (this.historyIndex > 0) {
+      this.historyIndex--;
+      this.state = JSON.parse(this.historyStack[this.historyIndex].data);
+      this.notifyListeners('undo');
+      return true;
+    }
+    return false;
+  }
+
+  redo() {
+    if (this.historyIndex < this.historyStack.length - 1) {
+      this.historyIndex++;
+      this.state = JSON.parse(this.historyStack[this.historyIndex].data);
+      this.notifyListeners('redo');
+      return true;
+    }
+    return false;
+  }
+
+  dispatch(actionType, payload = {}) {
+    if (!this.state) return;
+    this.saveSnapshot(actionType);
+    switch (actionType) {
+      case 'SET_RESOURCE':
+        if (payload.key && payload.value !== undefined) {
+          this.state.resources[payload.key] = payload.value;
+        }
+        break;
+      case 'ADD_RESOURCES':
+        if (payload.resources) {
+          Object.keys(payload.resources).forEach(k => {
+            this.state.resources[k] = (this.state.resources[k] || 0) + payload.resources[k];
+          });
+        }
+        break;
+      case 'SET_COMBAT_FORMATION':
+        if (payload.formation) {
+          this.state.combatFormation = payload.formation;
+        }
+        break;
+      case 'UPDATE_MORALE':
+        if (payload.delta) {
+          this.state.happiness = Math.max(0, Math.min(100, (this.state.happiness || 50) + payload.delta));
+        }
+        break;
+      default:
+        break;
+    }
+    this.notifyListeners(actionType);
   }
 
   async init() {
@@ -430,6 +499,23 @@ class GameStateManager {
     stoneMult *= seasonStoneMult;
     foodMult *= seasonFoodMult;
     ironOreMult *= seasonIronOreMult;
+
+    // ============================================================
+    // NEU: Royal Decrees Produktions-Multiplikatoren (decrees.js)
+    // ============================================================
+    if (window.royalDecreesManager) {
+      ironMult *= window.royalDecreesManager.getDecreeBonus('ironMult');
+      woodMult *= window.royalDecreesManager.getDecreeBonus('woodMult');
+    }
+
+    // ============================================================
+    // NEU: Guild-Wonders Boni (guild_wonders.js)
+    // gw1 (Sonnenkoloss): +50% Gold-Einnahmen → wird auf goldRate angewendet
+    // ============================================================
+    let guildWonderGoldMult = 1.0;
+    if (window.guildWondersManager) {
+      guildWonderGoldMult = window.guildWondersManager.getCompletedBonus('gold_income');
+    }
 
     const isStriking = (this.state.happiness || 50) < 30;
     const multiplier = isStriking ? 0 : (hasFountain ? 1.10 : 1.0);

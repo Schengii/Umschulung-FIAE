@@ -7,6 +7,13 @@ import { comparerView } from './views/comparerView.js';
 import { copilotView } from './views/copilotView.js';
 import { calendarView } from './views/calendarView.js';
 import { finderView } from './views/finderView.js';
+import { commandPalette } from './utils/commandPalette.js';
+import { i18n } from './utils/i18n.js';
+import { speechRecognitionHelper } from './utils/speechRecognition.js';
+import { backupManager } from './utils/backup.js';
+import { geminiApi } from './utils/geminiApi.js';
+import { webClipper } from './utils/webClipper.js';
+import { printCurriculumVitae } from './utils/cvExport.js';
 
 class App {
     constructor() {
@@ -16,21 +23,47 @@ class App {
         this.modalInterviews = [];
         this.modalExpenses = [];
         this.modalDocuments = [];
+        this.currentThemeMode = localStorage.getItem('jobmatch_theme_mode') || 'dark';
     }
 
     init() {
+        window.app = this;
         this.initRouting();
+        this.initMobileNav();
+        this.initThemeToggle();
+        this.initLanguageToggle();
+        this.initRejectionModal();
         this.initModals();
         this.initGlobalSearch();
         this.initNotificationBell();
         this.initCvUpload();
+        
+        commandPalette.init(this);
+        backupManager.createSnapshot('Auto Startup Backup').catch(() => {});
+
+        // Check for Web Clipper payload in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const clippedPayload = urlParams.get('clip_job');
+        if (clippedPayload) {
+            const parsedJob = webClipper.parseClippedPayload(clippedPayload);
+            if (parsedJob) {
+                storage.addJob(parsedJob);
+                alert(`Job "${parsedJob.title}" bei "${parsedJob.company}" wurde erfolgreich gecallt & gespeichert!`);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+
+
         this.renderCurrentView();
+        i18n.updateDom();
         
         // Initial Icon setup
         lucide.createIcons();
 
         // Check deadlines for notifications
         this.checkDeadlines();
+        this.requestNotificationPermissions();
 
         // Apply accessibility settings
         this.applyAccessibilitySettings();
@@ -60,11 +93,115 @@ class App {
             document.body.classList.remove('rgs-mode');
         }
 
-        // Custom Theme Hues
-        const primary = profile.themePrimaryHue || 239;
-        const secondary = profile.themeSecondaryHue || 263;
-        document.documentElement.style.setProperty('--primary-hue', primary);
-        document.documentElement.style.setProperty('--secondary-hue', secondary);
+        // Apply Theme Mode (dark, light, oled)
+        this.setThemeMode(this.currentThemeMode);
+    }
+
+    initMobileNav() {
+        const mobileItems = document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item');
+        mobileItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const viewName = item.getAttribute('data-view');
+                mobileItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                this.switchToView(viewName);
+            });
+        });
+    }
+
+    initThemeToggle() {
+        const btn = document.getElementById('btn-theme-toggle');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                let nextTheme = 'dark';
+                if (this.currentThemeMode === 'dark') nextTheme = 'light';
+                else if (this.currentThemeMode === 'light') nextTheme = 'oled';
+                else nextTheme = 'dark';
+
+                this.setThemeMode(nextTheme);
+            });
+        }
+    }
+
+    setThemeMode(mode) {
+        this.currentThemeMode = mode;
+        document.body.classList.remove('theme-light', 'theme-oled');
+        if (mode === 'light') {
+            document.body.classList.add('theme-light');
+        } else if (mode === 'oled') {
+            document.body.classList.add('theme-oled');
+        }
+        localStorage.setItem('jobmatch_theme_mode', mode);
+        
+        const btn = document.getElementById('btn-theme-toggle');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                if (mode === 'light') icon.setAttribute('data-lucide', 'sun');
+                else if (mode === 'oled') icon.setAttribute('data-lucide', 'zap');
+                else icon.setAttribute('data-lucide', 'moon');
+                if (window.lucide) window.lucide.createIcons();
+            }
+        }
+    }
+
+    initLanguageToggle() {
+        const btn = document.getElementById('btn-lang-toggle');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                const current = i18n.getLanguage();
+                const next = current === 'de' ? 'en' : 'de';
+                i18n.setLanguage(next);
+                this.showToast(`Sprache gewechselt zu ${next.toUpperCase()}`, 'primary');
+                this.renderCurrentView();
+            });
+        }
+    }
+
+    initRejectionModal() {
+        const modal = document.getElementById('rejection-reason-modal');
+        const btnClose = document.getElementById('btn-close-rejection-modal');
+        const btnSkip = document.getElementById('btn-skip-rejection-reason');
+        const btnSave = document.getElementById('btn-save-rejection-reason');
+
+        if (btnClose) btnClose.addEventListener('click', () => this.closeModal('rejection-reason-modal'));
+        if (btnSkip) btnSkip.addEventListener('click', () => this.closeModal('rejection-reason-modal'));
+
+        if (btnSave) {
+            btnSave.addEventListener('click', () => {
+                const jobId = document.getElementById('rejection-job-id').value;
+                const reason = document.getElementById('rejection-reason-select').value;
+                const missingSkill = document.getElementById('rejection-missing-skill').value.trim();
+
+                const jobs = storage.getJobs();
+                const job = jobs.find(j => j.id === jobId);
+                if (job) {
+                    job.rejectionReason = reason;
+                    if (missingSkill) {
+                        job.missingSkillRecorded = missingSkill;
+                    }
+                    storage.saveJobs(jobs);
+                    this.showToast('Absage-Grund gespeichert!', 'success');
+                }
+                this.closeModal('rejection-reason-modal');
+            });
+        }
+    }
+
+    openRejectionModal(jobId) {
+        document.getElementById('rejection-job-id').value = jobId;
+        const modal = document.getElementById('rejection-reason-modal');
+        if (modal) modal.classList.remove('hide');
+    }
+
+    requestNotificationPermissions() {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('Push Notifications genehmigt.');
+                }
+            });
+        }
     }
 
     // --- VIEW ROUTING ---
@@ -155,7 +292,7 @@ class App {
             cards.forEach(card => {
                 const title = card.querySelector('.card-title') ? card.querySelector('.card-title').textContent.toLowerCase() : '';
                 const company = card.querySelector('.card-company') ? card.querySelector('.card-company').textContent.toLowerCase() : '';
-                const tagsText = card.querySelector('.card-tags') ? card.querySelector('.card-tags').textContent.toLowerCase() : '';
+                const tagsText = card.querySelector('.card-tags-list') ? card.querySelector('.card-tags-list').textContent.toLowerCase() : '';
                 const match = title.includes(query) || company.includes(query) || tagsText.includes(query);
                 
                 if (match) {
@@ -406,13 +543,13 @@ class App {
         document.getElementById('btn-save-profile').addEventListener('click', () => this.handleProfileSubmit());
         document.getElementById('btn-export-cv').addEventListener('click', () => {
             const profile = storage.getProfile();
-            import('./utils/cvExport.js').then(module => {
-                module.printCurriculumVitae(profile);
+            try {
+                printCurriculumVitae(profile);
                 this.showToast('Lebenslauf-Druckdialog geöffnet!', 'success');
-            }).catch(err => {
+            } catch (err) {
                 console.error(err);
                 this.showToast('Fehler beim Lebenslauf-Export.', 'danger');
-            });
+            }
         });
 
         // Add Skill button
@@ -429,15 +566,18 @@ class App {
         });
 
         // Backup Buttons
-        document.getElementById('btn-export-data').addEventListener('click', () => this.handleDataExport());
-        const btnImport = document.getElementById('btn-trigger-import') || document.getElementById('btn-import-data');
-        if (btnImport) {
-            btnImport.addEventListener('click', () => {
+        const exportDataBtn = document.getElementById('btn-export-data');
+        if (exportDataBtn) exportDataBtn.addEventListener('click', () => this.handleDataExport());
+        
+        const triggerImportBtn = document.getElementById('btn-import-data') || document.getElementById('btn-trigger-import');
+        if (triggerImportBtn) {
+            triggerImportBtn.addEventListener('click', () => {
                 const fileInput = document.getElementById('import-file-input');
                 if (fileInput) fileInput.click();
             });
         }
-        document.getElementById('import-file-input').addEventListener('change', (e) => this.handleDataImport(e));
+        const importFileInput = document.getElementById('import-file-input');
+        if (importFileInput) importFileInput.addEventListener('change', (e) => this.handleDataImport(e));
 
         // Sub-tabs in job modal (Phase 2)
         const modalTabBtns = document.querySelectorAll('.modal-tab-btn');

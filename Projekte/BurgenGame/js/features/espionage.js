@@ -83,6 +83,16 @@ class EspionageManager {
       const gainedRubies = 20 + Math.floor(Math.random() * 30);
       this.stateManager.state.resources.rubies = (this.stateManager.state.resources.rubies || 0) + gainedRubies;
       reportText = `Dein Spion hat gegnerische Baupläne entwendet und wertvolle Rubine erbeutet! 💎 +${gainedRubies} Rubine erhalten.`;
+    } else if (missionType === 'burn_granary') {
+      reportTitle = '🔥 Kornspeicher-Brandstiftung';
+      reportText = `Dein Spion hat das Vorratslager der gegnerischen Festung in Brand gesteckt! 30% ihrer Nahrungsvorräte wurden vernichtet.`;
+      if (!this.stateManager.state.sabotagedGranary) this.stateManager.state.sabotagedGranary = {};
+      this.stateManager.state.sabotagedGranary[targetId] = true;
+    } else if (missionType === 'sabotage_gates') {
+      reportTitle = '🔓 Tor-Sabotage';
+      reportText = `Dein Spion hat die Burgtor-Riegel manipuliert! Dein nächster Angriff auf diese Festung erhält +25% Durchbruchschaden.`;
+      if (!this.stateManager.state.sabotagedGates) this.stateManager.state.sabotagedGates = {};
+      this.stateManager.state.sabotagedGates[targetId] = true;
     } else {
       reportTitle = '💥 Sabotage-Akt';
       reportText = `Dein Spion hat Sprengsätze an der gegnerischen Befestigung gezündet! Die Außenposten-Befestigung wurde beschädigt.`;

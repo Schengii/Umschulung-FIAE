@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj": {}
+    "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj": {}
   },
   "projects": {
-    "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj": {
+    "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
+        "projectUniqueName": "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
         "projectName": "Minecraft-Pokemon",
-        "projectPath": "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
+        "projectPath": "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
         "packagesPath": "C:\\Users\\sche-\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\.godot\\mono\\temp\\obj\\",
+        "outputPath": "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\.godot\\mono\\temp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

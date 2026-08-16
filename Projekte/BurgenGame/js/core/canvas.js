@@ -33,6 +33,7 @@ class GameCanvas {
     this.hoveredOutpostId = null;
 
     this.particles = [];
+    this.magicParticles = null;
     this.npcs = [];
     this.floatingTexts = [];
     this.lastProdFloatTime = Date.now();
@@ -788,6 +789,10 @@ class GameCanvas {
       this.drawWorldMapView();
     }
     this.drawSeasonalWeather();
+
+    if (window.magicParticles) {
+      window.magicParticles.updateAndDraw(this.ctx);
+    }
 
     this.drawFloatingTexts();
     this.drawHoverTooltip();

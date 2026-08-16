@@ -1,10 +1,11 @@
 /**
- * Opens a print-friendly window with a structured CV layout
+ * Opens a print-friendly window with customizable structured CV layouts
  * and triggers the system printing dialog.
  * 
  * @param {Object} profile - User profile containing experience, skills, and details.
+ * @param {string} templateStyle - Theme style ('modern', 'classic', 'minimalist')
  */
-export function printCurriculumVitae(profile) {
+export function printCurriculumVitae(profile, templateStyle = 'modern') {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
         alert('Bitte erlaube Pop-Ups für diese Seite, um den Lebenslauf-Export zu starten.');
@@ -25,6 +26,35 @@ export function printCurriculumVitae(profile) {
         })
         .join('');
 
+    let themeCss = '';
+    if (templateStyle === 'classic') {
+        themeCss = `
+            .sidebar { background-color: #f8fafc; color: #1e293b; border-right: 2px solid #e2e8f0; }
+            .sidebar h2 { color: #1e293b; border-bottom: 2px solid #0284c7; }
+            .skill-badge { background-color: #0284c7; color: #ffffff; }
+            .name { font-family: Georgia, serif; color: #0f172a; }
+            .section-title { border-bottom: 2px solid #0284c7; color: #0284c7; font-family: Georgia, serif; }
+        `;
+    } else if (templateStyle === 'minimalist') {
+        themeCss = `
+            .cv-container { grid-template-columns: 1fr; padding: 20mm; }
+            .sidebar { background: transparent; padding: 0; margin-bottom: 20px; border-bottom: 1px solid #cbd5e1; flex-direction: row; justify-content: space-between; }
+            .sidebar h2 { display: none; }
+            .skill-badge { background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+            .name { font-size: 28pt; letter-spacing: -1px; }
+            .section-title { border-bottom: 1px solid #334155; }
+        `;
+    } else {
+        // Default Modern
+        themeCss = `
+            .sidebar { background-color: #0f172a; color: #cbd5e1; }
+            .sidebar h2 { color: #ffffff; border-bottom: 2px solid #38bdf8; }
+            .skill-badge { background-color: #1e293b; color: #f1f5f9; }
+            .name { color: #0f172a; }
+            .section-title { border-bottom: 2px solid #e2e8f0; color: #0f172a; }
+        `;
+    }
+
     printWindow.document.write(`
         <!DOCTYPE html>
         <html lang="de">
@@ -37,7 +67,7 @@ export function printCurriculumVitae(profile) {
                     margin: 0;
                 }
                 body {
-                    font-family: Arial, Helvetica, sans-serif;
+                    font-family: Inter, Helvetica, Arial, sans-serif;
                     font-size: 10.5pt;
                     line-height: 1.6;
                     color: #1e293b;
@@ -48,20 +78,16 @@ export function printCurriculumVitae(profile) {
                 .cv-container {
                     display: grid;
                     grid-template-columns: 1fr 2.2fr;
-                    min-height: 297mm; /* Standard A4 height */
+                    min-height: 297mm;
                 }
                 .sidebar {
-                    background-color: #0f172a;
-                    color: #cbd5e1;
                     padding: 25mm 15mm;
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
                 }
                 .sidebar h2 {
-                    color: #ffffff;
-                    font-size: 14pt;
-                    border-bottom: 2px solid #38bdf8;
+                    font-size: 13pt;
                     padding-bottom: 6px;
                     margin-top: 10px;
                     margin-bottom: 15px;
@@ -73,7 +99,6 @@ export function printCurriculumVitae(profile) {
                 .name {
                     font-size: 26pt;
                     font-weight: 800;
-                    color: #0f172a;
                     line-height: 1.1;
                     margin: 0 0 5px 0;
                 }
@@ -87,8 +112,6 @@ export function printCurriculumVitae(profile) {
                 }
                 .section-title {
                     font-size: 14pt;
-                    color: #0f172a;
-                    border-bottom: 2px solid #e2e8f0;
                     padding-bottom: 4px;
                     margin-top: 0;
                     margin-bottom: 15px;
@@ -98,8 +121,6 @@ export function printCurriculumVitae(profile) {
                 }
                 .skill-badge {
                     display: inline-block;
-                    background-color: #1e293b;
-                    color: #f1f5f9;
                     padding: 4px 10px;
                     border-radius: 4px;
                     font-size: 9pt;
@@ -126,13 +147,10 @@ export function printCurriculumVitae(profile) {
                     font-size: 8pt;
                     text-transform: uppercase;
                 }
+                ${themeCss}
                 @media print {
-                    body {
-                        background-color: #ffffff;
-                    }
-                    .cv-container {
-                        min-height: 100vh;
-                    }
+                    body { background-color: #ffffff; }
+                    .cv-container { min-height: 100vh; }
                 }
             </style>
         </head>

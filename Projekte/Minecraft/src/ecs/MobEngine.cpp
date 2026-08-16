@@ -1,4 +1,5 @@
 #include "MobEngine.hpp"
+#include "ItemEntity.hpp"
 #include "../world/World.hpp"
 #include "../world/ExplosionEngine.hpp"
 #include "../physics/PhysicsEngine.hpp"
@@ -25,19 +26,33 @@ void MobEngine::spawnMob(MobType type, const glm::vec3& position) {
     if (type == MobType::Zombie) mob.health = 20.0f;
     else if (type == MobType::Skeleton) mob.health = 20.0f;
     else if (type == MobType::Creeper) mob.health = 20.0f;
+    else if (type == MobType::EnderDragon) mob.health = 200.0f; // Boss health
+    else if (type == MobType::IronGolem) mob.health = 100.0f;   // Defender health
+    else if (type == MobType::Villager) mob.health = 20.0f;
     else mob.health = 10.0f; // Pig / Cow
     mob.maxHealth = mob.health;
     m_Mobs.push_back(mob);
     std::cout << "[MobEngine] Spawned Mob at (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 }
 
-void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime) {
+void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime, ItemEntityManager* itemMgr) {
     // 1. Update Mobs
     for (auto it = m_Mobs.begin(); it != m_Mobs.end(); ) {
         Mob& mob = *it;
 
         if (mob.health <= 0.0f) {
             std::cout << "[MobEngine] Mob Defeated!" << std::endl;
+            if (itemMgr) {
+                if (mob.type == MobType::Pig) {
+                    itemMgr->spawnItemDrop(BlockType::RawPorkchop, 1 + rand() % 2, mob.position);
+                } else if (mob.type == MobType::Zombie) {
+                    itemMgr->spawnItemDrop(BlockType::Apple, 1, mob.position);
+                } else if (mob.type == MobType::Villager) {
+                    itemMgr->spawnItemDrop(BlockType::Emerald, 1, mob.position);
+                } else if (mob.type == MobType::IronGolem) {
+                    itemMgr->spawnItemDrop(BlockType::IronOre, 3 + rand() % 3, mob.position);
+                }
+            }
             AudioManager::playSound3D(SoundEffect::MobHit, mob.position, playerPos, glm::vec3(0, 0, -1));
             it = m_Mobs.erase(it);
             continue;
@@ -50,15 +65,28 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
             if (distToPlayer < 22.0f && distToPlayer > 1.2f) {
                 glm::vec3 dir = glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
                 float speed = 3.5f;
+
+                // Check 3D obstruction
+                glm::vec3 frontCheck = mob.position + dir * 0.6f;
+                int fx = static_cast<int>(std::floor(frontCheck.x));
+                int fy = static_cast<int>(std::floor(mob.position.y));
+                int fz = static_cast<int>(std::floor(frontCheck.z));
+                BlockType frontBlock = world.getBlock(fx, fy, fz);
+                BlockType headBlock = world.getBlock(fx, fy + 1, fz);
+
+                if (BlockData::isSolid(frontBlock)) {
+                    if (!BlockData::isSolid(headBlock) && mob.isGrounded) {
+                        mob.velocity.y = 7.5f;
+                        mob.isGrounded = false;
+                    } else {
+                        // Sidestep around wall obstacle
+                        glm::vec3 sideDir = glm::normalize(glm::vec3(-dir.z, 0.0f, dir.x));
+                        dir = glm::normalize(dir + sideDir * 0.8f);
+                    }
+                }
+
                 mob.velocity.x = dir.x * speed;
                 mob.velocity.z = dir.z * speed;
-
-                glm::vec3 frontCheck = mob.position + dir * 0.6f;
-                BlockType frontBlock = world.getBlock(static_cast<int>(std::floor(frontCheck.x)), static_cast<int>(std::floor(mob.position.y)), static_cast<int>(std::floor(frontCheck.z)));
-                if (BlockData::isSolid(frontBlock) && mob.isGrounded) {
-                    mob.velocity.y = 7.5f;
-                    mob.isGrounded = false;
-                }
             } else if (distToPlayer <= 1.5f && mob.attackCooldown <= 0.0f) {
                 playerHealth -= 3.0f;
                 playerVel += glm::normalize(playerPos - mob.position) * 4.0f + glm::vec3(0, 2, 0);
@@ -105,11 +133,52 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
                 }
             }
         }
-        // --- Passive Animal Wandering ---
-        else if (mob.type == MobType::Pig || mob.type == MobType::Cow) {
-            if (rand() % 200 == 0) {
-                mob.velocity.x = (rand() % 100 - 50) * 0.04f;
-                mob.velocity.z = (rand() % 100 - 50) * 0.04f;
+        // --- Ender Dragon Flying Boss AI ---
+        else if (mob.type == MobType::EnderDragon) {
+            // Aerial flight & circling player
+            glm::vec3 target = playerPos + glm::vec3(std::sin(mob.fuseTimer) * 15.0f, 10.0f + std::cos(mob.fuseTimer) * 4.0f, std::cos(mob.fuseTimer) * 15.0f);
+            mob.fuseTimer += deltaTime * 1.2f;
+
+            glm::vec3 flyDir = glm::normalize(target - mob.position);
+            mob.velocity = flyDir * 8.0f;
+            mob.position += mob.velocity * deltaTime;
+
+            // Swoop attack when close
+            if (distToPlayer < 4.0f && mob.attackCooldown <= 0.0f) {
+                playerHealth -= 8.0f; // Boss heavy knockback and damage
+                playerVel += glm::normalize(playerPos - mob.position) * 12.0f + glm::vec3(0, 6, 0);
+                mob.attackCooldown = 2.5f;
+                AudioManager::playSound(SoundEffect::Explosion);
+            }
+            if (mob.attackCooldown > 0.0f) mob.attackCooldown -= deltaTime;
+            ++it;
+            continue;
+        }
+        // --- Iron Golem Defender AI ---
+        else if (mob.type == MobType::IronGolem) {
+            // Find nearby hostile mobs (Zombies, Skeletons) and attack them
+            for (auto& hostile : m_Mobs) {
+                if (hostile.type == MobType::Zombie || hostile.type == MobType::Skeleton) {
+                    float distToHostile = glm::distance(mob.position, hostile.position);
+                    if (distToHostile < 16.0f && distToHostile > 1.5f) {
+                        glm::vec3 dir = glm::normalize(glm::vec3(hostile.position.x - mob.position.x, 0.0f, hostile.position.z - mob.position.z));
+                        mob.velocity.x = dir.x * 2.5f;
+                        mob.velocity.z = dir.z * 2.5f;
+                    } else if (distToHostile <= 1.5f && mob.attackCooldown <= 0.0f) {
+                        hostile.health -= 12.0f; // Iron Golem smash attack
+                        hostile.velocity += glm::vec3(0.0f, 6.0f, 0.0f); // Launch into air
+                        mob.attackCooldown = 1.2f;
+                        AudioManager::playSound(SoundEffect::MobHit);
+                    }
+                    break;
+                }
+            }
+        }
+        // --- Villager & Passive Animal Wandering ---
+        else if (mob.type == MobType::Villager || mob.type == MobType::Pig || mob.type == MobType::Cow) {
+            if (rand() % 150 == 0) {
+                mob.velocity.x = (rand() % 100 - 50) * 0.03f;
+                mob.velocity.z = (rand() % 100 - 50) * 0.03f;
             }
         }
 
@@ -142,7 +211,7 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
     }
 }
 
-bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage) {
+bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage, ItemEntityManager* itemMgr) {
     for (auto& mob : m_Mobs) {
         float dist = glm::distance(playerPos, mob.position);
         if (dist <= reach) {

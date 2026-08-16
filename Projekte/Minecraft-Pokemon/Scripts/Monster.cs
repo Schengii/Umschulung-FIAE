@@ -112,6 +112,8 @@ public partial class Monster : CharacterBody3D
             visuals.AddChild(_glowLight);
         }
 
+        AddFacialFeatures(visuals);
+
         switch (MonsterName)
         {
             case "Evoli":
@@ -895,5 +897,47 @@ public partial class Monster : CharacterBody3D
         };
         data.AssignDefaultMoves();
         return data;
+    }
+
+    private void AddFacialFeatures(Node3D visuals)
+    {
+        Color eyeColor = MonsterName switch
+        {
+            "Pikachu" or "Raichu" or "Glumanda" or "Schiggy" => Colors.Black,
+            "Gengar" or "Nebulak" or "Alpollo" => Colors.Red,
+            "Mewtu" or "Psiana" => Colors.DeepPink,
+            "Nachtara" => Colors.Red,
+            "Zapdos" or "Arktos" => Colors.Cyan,
+            _ => Colors.Black
+        };
+
+        Color? cheekColor = (MonsterName == "Pikachu" || MonsterName == "Raichu") ? Colors.Red : null;
+
+        var eyeL = new MeshInstance3D();
+        eyeL.Mesh = new BoxMesh { Size = new Vector3(0.08f, 0.08f, 0.02f) };
+        eyeL.Position = new Vector3(-0.14f, 0.55f, 0.28f);
+        eyeL.SetSurfaceOverrideMaterial(0, new StandardMaterial3D { AlbedoColor = eyeColor, EmissionEnabled = (eyeColor == Colors.Red || eyeColor == Colors.Cyan), Emission = eyeColor });
+        visuals.AddChild(eyeL);
+
+        var eyeR = new MeshInstance3D();
+        eyeR.Mesh = eyeL.Mesh;
+        eyeR.Position = new Vector3(0.14f, 0.55f, 0.28f);
+        eyeR.SetSurfaceOverrideMaterial(0, eyeL.GetSurfaceOverrideMaterial(0));
+        visuals.AddChild(eyeR);
+
+        if (cheekColor.HasValue)
+        {
+            var cheekL = new MeshInstance3D();
+            cheekL.Mesh = new BoxMesh { Size = new Vector3(0.09f, 0.09f, 0.02f) };
+            cheekL.Position = new Vector3(-0.21f, 0.44f, 0.28f);
+            cheekL.SetSurfaceOverrideMaterial(0, new StandardMaterial3D { AlbedoColor = cheekColor.Value, EmissionEnabled = true, Emission = cheekColor.Value });
+            visuals.AddChild(cheekL);
+
+            var cheekR = new MeshInstance3D();
+            cheekR.Mesh = cheekL.Mesh;
+            cheekR.Position = new Vector3(0.21f, 0.44f, 0.28f);
+            cheekR.SetSurfaceOverrideMaterial(0, cheekL.GetSurfaceOverrideMaterial(0));
+            visuals.AddChild(cheekR);
+        }
     }
 }

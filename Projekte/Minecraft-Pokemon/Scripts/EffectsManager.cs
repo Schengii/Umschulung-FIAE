@@ -132,20 +132,81 @@ public partial class EffectsManager : Node
 
     public void SpawnAttackVfx(string moveType, Vector3 targetPos)
     {
-        Color color = moveType.ToLower() switch
+        string type = moveType.ToLower();
+        var particles = new CpuParticles3D();
+        particles.Position = targetPos + new Vector3(0, 1.2f, 0);
+        particles.Amount = 24;
+        particles.Lifetime = 0.6f;
+        particles.OneShot = true;
+        particles.Explosiveness = 0.85f;
+        particles.Spread = 180.0f;
+        particles.InitialVelocityMin = 3.0f;
+        particles.InitialVelocityMax = 7.0f;
+
+        var mesh = new BoxMesh();
+        mesh.Size = type == "feuer" ? new Vector3(0.2f, 0.4f, 0.2f) : (type == "eis" ? new Vector3(0.25f, 0.25f, 0.05f) : new Vector3(0.15f, 0.15f, 0.15f));
+        particles.Mesh = mesh;
+
+        Color color = type switch
         {
             "feuer" => Colors.OrangeRed,
             "wasser" => Colors.DeepSkyBlue,
-            "elektro" => Colors.Yellow,
-            "eis" => Colors.Cyan,
+            "elektro" => Colors.Gold,
+            "eis" => Colors.LightCyan,
             "pflanze" => Colors.LimeGreen,
             "geist" or "gift" => Colors.DarkMagenta,
             "drache" => Colors.Crimson,
             _ => Colors.White
         };
 
-        SpawnBlockBreakEffect(targetPos + new Vector3(0, 1, 0), color);
-        PlaySoundEffect(color == Colors.Yellow ? 1000.0f : 400.0f, 0.2f);
+        var mat = new StandardMaterial3D();
+        mat.AlbedoColor = color;
+        mat.EmissionEnabled = true;
+        mat.Emission = color;
+        particles.MaterialOverride = mat;
+
+        AddChild(particles);
+        particles.Emitting = true;
+
+        float freq = type == "elektro" ? 1100.0f : (type == "feuer" ? 350.0f : (type == "wasser" ? 600.0f : 500.0f));
+        PlaySoundEffect(freq, 0.25f);
+
+        var timer = GetTree().CreateTimer(0.7f);
+        timer.Timeout += () => particles.QueueFree();
+    }
+
+    private string _currentBgmTheme = "";
+    public void PlayBgmTheme(string theme)
+    {
+        if (_currentBgmTheme == theme) return;
+        _currentBgmTheme = theme;
+
+        float[] notes = theme switch
+        {
+            "Kampf" => new float[] { 440.0f, 523.25f, 659.25f, 587.33f, 659.25f, 783.99f },
+            "Hoehle" => new float[] { 220.0f, 261.63f, 329.63f, 293.66f },
+            _ => new float[] { 523.25f, 659.25f, 783.99f, 1046.50f, 783.99f, 659.25f }
+        };
+
+        for (int i = 0; i < notes.Length; i++)
+        {
+            float note = notes[i];
+            float delay = i * 0.25f;
+            GetTree().CreateTimer(delay).Timeout += () => PlaySoundEffect(note, 0.2f);
+        }
+    }
+
+    public void PlayBiomeAmbience(string biome)
+    {
+        float baseTone = biome switch
+        {
+            "Vulkan" => 150.0f,
+            "Gebirge" => 880.0f,
+            "Schnee" => 1200.0f,
+            "Strand" => 330.0f,
+            _ => 523.25f
+        };
+        PlaySoundEffect(baseTone, 0.4f);
     }
 
     public void PlayCustomSynthMelody()

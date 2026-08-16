@@ -5,4 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <!-- Exclude the unit-test subfolder from the Godot build -->
+  <ItemGroup>
+    <Compile Remove="Minecraft-Pokemon.Tests/**" />
+  </ItemGroup>
 </Project>

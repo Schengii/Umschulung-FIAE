@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Empire Classic - Casual Castle Builder</title>
   <meta name="description" content="Baue deine Burg, rekrutiere Ritter und erobere Raubritterburgen in diesem mittelalterlichen Aufbauspiel!">
   
@@ -24,7 +24,7 @@
     <!-- UI Overlay Layer for HUD and Modals -->
     <div id="ui-layer">
       <div class="initial-loading">
-        <h1 style="font-family: 'Cinzel', serif; color: #d4af37;">Lade Königreich...</h1>
+        <h1 class="loading-title">Lade Königreich...</h1>
         <div class="loader"></div>
       </div>
     </div>
@@ -34,11 +34,16 @@
   <script src="js/utils/theme.js"></script>
   <script src="js/utils/i18n.js"></script>
   <script src="js/utils/analytics.js"></script>
+  <script src="js/utils/noise.js"></script>
+  <script src="js/utils/input_keyboard.js"></script>
+  <script src="js/utils/input_gamepad.js"></script>
 
   <!-- Game Configuration -->
   <script src="js/core/config.js"></script>
 
   <!-- Core Game Modules -->
+  <script src="js/core/reactive_state.js"></script>
+  <script src="js/core/mod_manager.js"></script>
   <script src="js/core/persistence.js"></script>
   <script src="js/core/state.js"></script>
   <script src="js/features/sound.js"></script>
@@ -46,6 +51,15 @@
   <script src="js/core/ui.js"></script>
 
   <!-- Modular Game Features -->
+  <script src="js/features/guild_wars.js"></script>
+  <script src="js/features/map_editor.js"></script>
+  <script src="js/features/stock_market.js"></script>
+  <script src="js/features/three_render.js"></script>
+  <script src="js/features/disasters_advanced.js"></script>
+  <script src="js/features/tournament_arena.js"></script>
+  <script src="js/features/online_multiplayer.js"></script>
+  <script src="js/features/dynasty_tree.js"></script>
+  <script src="js/features/magic_particles.js"></script>
   <script src="js/features/marketplace.js"></script>
   <script src="js/features/heroes.js"></script>
   <script src="js/features/outposts.js"></script>
@@ -101,6 +115,25 @@
   <script src="js/features/pvp_league.js"></script>
   <script src="js/features/fog_of_war.js"></script>
   <script src="js/features/story_campaign.js"></script>
+  <script src="js/features/siege_minigame.js"></script>
+  <script src="js/features/familiars.js"></script>
+  <script src="js/features/blueprints_multiupgrade.js"></script>
+  <script src="js/features/ruler_titles.js"></script>
+  <script src="js/features/supply_chains.js"></script>
+  <script src="js/features/webrtc_pvp.js"></script>
+  <script src="js/features/cloud_sync.js"></script>
+  <script src="js/features/economy_charts.js"></script>
+  <script src="js/features/wall_traps.js"></script>
+  <script src="js/features/kingdom_chronicle.js"></script>
+  <script src="js/features/overseas_expeditions.js"></script>
+  <script src="js/features/alchemist_lab.js"></script>
+  <script src="js/features/guild_territory.js"></script>
+  <script src="js/features/ambient_soundscapes.js"></script>
+  <script src="js/features/destruction_physics.js"></script>
+  <script src="js/features/royal_finance_decrees.js"></script>
+  <script src="js/features/mythic_breeding.js"></script>
+  <script src="js/features/ranked_leagues.js"></script>
+  <script src="js/features/mobile_haptics.js"></script>
 
 
 

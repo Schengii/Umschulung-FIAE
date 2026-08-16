@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B7Mqptkj5FU=",
+  "dgSpecHash": "pwR8SClzmDQ=",
   "success": true,
-  "projectFilePath": "c:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
+  "projectFilePath": "C:\\Users\\sche-\\Desktop\\Programmieren Projekte\\Minecraft-Pokemon\\Minecraft-Pokemon.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sche-\\.nuget\\packages\\godot.sourcegenerators\\4.3.0\\godot.sourcegenerators.4.3.0.nupkg.sha512",
     "C:\\Users\\sche-\\.nuget\\packages\\godotsharp\\4.3.0\\godotsharp.4.3.0.nupkg.sha512",

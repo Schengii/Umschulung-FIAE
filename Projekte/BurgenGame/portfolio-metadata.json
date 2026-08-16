@@ -25,5 +25,27 @@
     { "name": "canvas.js", "path": "Projekte/BurgenGame/js/core/canvas.js", "type": "javascript" },
     { "name": "state.js", "path": "Projekte/BurgenGame/js/core/state.js", "type": "javascript" },
     { "name": "ui.js", "path": "Projekte/BurgenGame/js/core/ui.js", "type": "javascript" }
-  ]
+  ],
+  "architectureBadges": [
+    { "name": "HTML5 60FPS Canvas", "color": "#f59e0b" },
+    { "name": "Dedicated Web Worker AI", "color": "#8b5cf6" },
+    { "name": "State Machine & Reducer", "color": "#10b981" },
+    { "name": "IndexedDB / LocalStorage", "color": "#0284c7" }
+  ],
+  "keyLearnings": {
+    "challengeDe": "Ruckelfreie 60 FPS Darstellung von Hunderten Truppen & Gebäuden bei gleichzeitiger Ausführung komplexer KI-Bot-Entscheidungen im Hintergrund.",
+    "challengeEn": "Maintaining smooth 60 FPS rendering with hundreds of active units and buildings while running complex AI bot heuristics in the background.",
+    "solutionDe": "Auslagerung der CPU-intensiven KI-Bot-Berechnungen in einen isolierten Web Worker und Implementierung eines optimierten Canvas-Schichten-Renderers mit Delta-Time Interpolation.",
+    "solutionEn": "Offloaded CPU-heavy AI bot decisions to an isolated Web Worker and implemented a layered 2D Canvas renderer with delta-time interpolation.",
+    "architectureHighlightsDe": [
+      "Dedizierter Web Worker für asynchrone AI-Bot-Berechnungen",
+      "Kompakter Reducer-basierter State Manager",
+      "Isometrisches Tile- & Grid-Kollisionssystem"
+    ],
+    "architectureHighlightsEn": [
+      "Dedicated Web Worker for asynchronous AI Bot calculations",
+      "Compact Reducer-based State Manager",
+      "Isometric tile & grid collision resolution"
+    ]
+  }
 }

@@ -1,46 +1,46 @@
 # JobMatch - Dein Bewerbungs-Companion (PWA)
 
-JobMatch ist eine moderne, progressive Webanwendung (PWA) zur effizienten Organisation, Analyse und Optimierung deines Bewerbungsprozesses. Die Anwendung läuft vollständig im Browser, speichert Daten lokal im `localStorage` und in `IndexedDB`, bietet optionale Cloud-Synchronisation über Supabase und nutzt die Gemini API für intelligente Textanalysen, Anschreiben-Generierung und Interview-Training.
+JobMatch ist eine moderne, progressive Webanwendung (PWA) zur effizienten Organisation, Analyse, finanziellen Steuerung und KI-gestützten Optimierung deines gesamten Bewerbungsprozesses. Die Anwendung läuft vollständig im Browser, speichert Daten lokal im `localStorage` und in `IndexedDB`, bietet optionale Cloud-Synchronisation über Supabase und nutzt die **Google Gemini API** (mit nahtlosem Offline-Fallback) für intelligente Textanalysen, Anschreiben- und Lebenslauf-Generierung, PDF-Parsing, STAR-Interview-Training, KI-Mentoring, Zeugnis- und Vertragsprüfung, Portfolio-Showcases sowie Kündigungs- und Onboarding-Planung.
 
 ---
 
-## 🚀 Features & Funktionen
+## 🚀 Neuheiten in Version 5.0 (Career Transition & Tax Compliance Suite)
 
-- **Dashboard (Statistiken, Analytics & Markt-Gehalt)**
-  - Auswertung von Bewerbungsraten und Konvertierungs-Trichtern (Saved ➔ Applied ➔ Interview ➔ Offer).
-  - Interaktive Chart.js Diagramme (Status-Doughnut, Brutto/Netto Bar Chart, 6-Monats-Trendline).
-  - Netto-Gehalts-Schätzung auf Basis deutscher Steuerklassen und Kinderfreibeträge + KI Marktgehalt-Benchmark.
-  - Heatmap & Wochenziel-Tracker (Aktivitäts-Streak).
-  - Fristen-Erinnerungen und anstehende Termine.
-- **Kanban-Board (Bewerbungs-Tracker & Tags)**
-  - Übersichtliche Phasen: Gespeichert, Unterlagen bereit, Beworben, Gespräch, Angebot erhalten, Absage.
-  - Drag-and-Drop Unterstützung für das schnelle Verschieben von Job-Karten.
-  - Tagging-System (z. B. `Remote`, `React`, `Prio1`) & globale Echtzeit-Suche.
-  - Direktes Eintragen von Terminen in den Google-Kalender oder Herunterladen als `.ics` Datei.
-- **Interaktiver Kalender**
-  - Visueller Monatskalender mit Übersicht aller Bewerbungsfristen und Interview-Termine.
-- **Job-Suche & Aggregator**
-  - Live-Durchsuchung öffentlicher Job-APIs (z. B. Remotive API) mit 1-Klick-Übernahme in das Kanban-Board.
-- **Job-Vergleicher (Entscheidungsmatrix)**
-  - Gewichtete Kriterien-Matrix (Gehalt, Pendelzeit, Homeoffice, Kultur, Tech-Stack) zur Ermittlung des besten Jobangebots.
-  - Schieberegler zur Echtzeit-Anpassung der Gewichtung mit direkter Neuberechnung.
-- **Bewerbungs-Copilot (AI-Integration)**
-  - Automatischer Skill-Abgleich (Match-Score in %).
-  - Parser für Stellenanzeigen per Text/URL und E-Mail-Import für Zu-/Absagen und Termine.
-  - Anschreiben-Generator mit Tonalitäts-Auswahl (*Klassisch*, *Kreativ & Modern*, *Kurzer Pitch*).
-  - **Interview-Simulator**: 5-Fragen Simulation inkl. Text-to-Speech (Vorlesen), Speech-to-Text (Antwort sprechen) und STAR-Feedback.
-  - **Interview-Spickzettel (1-Pager)**: Druckfertiger Spickzettel mit Top-Argumenten und eigenen Fragen vor dem Gespräch.
-  - **Lebenslauf-Optimizer**: Abgleich des Lebenslauf-Texts mit der Stelle und Formulierungsvorschlägen.
-- **Dokumenten-Tresor & Kosten-Tracker**
-  - Lokale Speicherung von Bewerbungsunterlagen (PDF, Word, Bilder) via IndexedDB.
-  - Erfassung steuerlich absetzbarer Ausgaben (Fahrtkosten, Fotos, Kurse).
-- **Multi-Profil-Manager & Design-Presets**
-  - Beliebig viele Profile (z. B. "Frontend Entwickler" vs. "Fullstack Entwickler").
-  - Fertige Farb-Presets (*Indigo Violet*, *Emerald Ocean*, *Cyber Neon*, *Warm Sunset*) und HSL-Farbregler.
-- **Barrierefreiheit & PWA**
-  - **LRS-Modus** (Dyslexie-Schriftart) & **RGS-Modus** (Rot-Grün-Kontrast).
-  - Desktop Push-Notifications bei Fristablauf.
-  - Offline-fähig dank Service Worker & Webmanifest.
+### 📂 1. Portfolio- & Projekt-Showcase Builder
+- **Modul**: `js/views/copilot/showcaseBuilder.js`
+- **Funktion**:
+  - Interaktives Anlegen technischer Case Studies nach dem STAR-Prinzip (*Problem*, *Lösung & Architektur*, *Erreichte Metriken / Impact*).
+  - 1-Klick-Druck- und PDF-Export als professionelles Projekt-Beiblatt zur Bewerbung.
+
+### 📝 2. Rechtskonformer Kündigungsschreiben-Generator
+- **Modul**: `js/views/copilot/resignationGen.js`
+- **Funktion**:
+  - Erstellung formell einwandfreier Kündigungsschreiben nach DIN 5008 (BGB § 622).
+  - Automatische Fristberechnung (Monatsende, 15. des Monats, Probezeitende).
+  - Rechtssichere Klauseln: Anforderung eines qualifizierten Arbeitszeugnisses, Bestätigung des Austrittsdatums & Resturlaubsregelung.
+
+---
+
+## 🚀 Kernfunktionen (Version 4.5, 4.0, 3.5 & 3.0)
+
+- **30-60-90 Tage Onboarding- & Probezeit-Planer**: Phasen-Checklisten & 1:1 Gesprächsleitfäden.
+- **Regionales & Branchenweites Gehaltsbänder-Radar**: Benchmarks nach Bundesland, KMU vs. Großkonzern und Erfahrungsstufe.
+- **Bewerbungs-Inbox Simulator & Auto-Status-Sync**: Automatische Statuserkennung aus E-Mails mit 1-Klick-Kanban-Update.
+- **Audio-Interview-Trainer & Podcast-Drill**: Hands-Free Vorbereitung mit TTS und Antwort-Timer.
+- **1-Page Bewerber-Flyer & Mini-Pitch-Deck**: Kompakter visueller Snapshot mit PDF-Druck.
+- **KI-Arbeitsvertrags- & Klausel-Checker**: Prüfung auf unwirksame Klauseln (§ 307 BGB) und Karenzentschädigung (§ 74 HGB).
+- **KI-Arbeitszeugnis-Prüfer & HR-Code Entschlüssler**: Schulnoten-Berechnung (1-5) und Fallstrick-Erkennung.
+- **LinkedIn & Xing Recruiter-Pitch-Generator**: Konvertierende Kurzanschreiben mit Live-Zeichenzähler.
+- **Google Calendar & Outlook Web Live-Sync**: 1-Klick-Übertragung von Vorstellungsgesprächen und Fristen.
+- **Live-Jobsuche & Aggregator**: Anbindung an offene Job-APIs (**Arbeitnow API & Feeds**) mit 1-Klick-Übernahme ins Kanban-Board.
+- **Interaktiver Lebenslauf-Builder (CV-Builder)**: Formular-Editor mit **3 A4-Design-Layouts**, KI-Zuschnitt und Druck/PDF-Export.
+- **KI-Mentor & Verhandlungs-Sparringspartner**: Interaktives Vorstellungsgesprächs-Training und Gehaltsverhandlungs-Rollenspiel.
+- **Intelligente E-Mail-Suite**: Dankschreiben, Follow-up, Gegenangebote und Absageschreiben mit 1-Klick `mailto:`-Dispatch.
+- **Ghosting-Detektor & Follow-up Monitor**: Erkennt Bewerbungen ohne Rückmeldung nach > 21 Tagen.
+- **Steuer-Reisekosten & Verpflegungsmehraufwand (Anlage N)**: Berechnung der gesetzlichen Pauschalen.
+- **Chrome / Edge Extension Companion (Manifest V3)**: Installierbare Browser-Erweiterung (`extension/`) zum 1-Klick-Clippen von Stellen.
+- **STAR-Interview-Simulator mit Voice Coach**: Echtzeit-Spracherkennung, Sprechtempo-Messer (WPM) und Füllwort-Detektor.
+
 
 ---
 
@@ -48,55 +48,70 @@ JobMatch ist eine moderne, progressive Webanwendung (PWA) zur effizienten Organi
 
 ```text
 Jobbsuche/
-├── css/                      # CSS-Stylesheets für die Benutzeroberfläche
-│   ├── comparer.css          # Styles für den Job-Vergleicher
-│   ├── copilot.css           # Styles für den AI-Copilot
-│   ├── dashboard.css         # Styles für das Dashboard
-│   ├── kanban.css            # Styles für das Kanban-Board
-│   └── main.css              # Globale Layouts, Variablen und Themes
-├── js/                       # Anwendungslogik (JavaScript)
-│   ├── app.js                # Haupteintrittspunkt, App-Initialisierung & Navigation
-│   ├── mockAi.js             # Clientseitiger Parser und Fallback für AI-Funktionen
-│   ├── storage.js            # Datenverwaltung (localStorage, Im-/Export, Supabase-Trigger)
-│   ├── utils/                # Hilfsfunktionen
-│   │   ├── cvExport.js       # Exportiert das Benutzerprofil / CV
-│   │   ├── db.js             # IndexedDB Dateispeicher (Dokumenten-Tresor)
-│   │   ├── ics.js            # Generierung von Kalenderdateien (.ics)
-│   │   ├── pdfExport.js      # PDF-Generierung für Anschreiben (mit Designvorlagen)
-│   │   ├── supabaseSync.js   # Cloud-Synchronisation mit Supabase
-│   │   └── taxCalculator.js  # Brutto-Netto-Gehaltsrechner (Deutschland)
-│   └── views/                # Benutzeroberflächen-Views
-│       ├── calendarView.js   # Interaktiver Monatskalender
-│       ├── comparerView.js   # Logik und UI für den Job-Vergleicher
-│       ├── copilotView.js    # Logik und UI für den Bewerbungs-Copilot & Interview-Simulator
-│       ├── dashboardView.js  # Logik und UI für das Dashboard & Analytics Charts
-│       ├── finderView.js     # Job-Suche & Aggregator Integration
-│       └── kanbanView.js     # Logik und UI für das Kanban-Board
-├── index.html                # Haupt-HTML-Dokument (Single-Page-Application)
-├── manifest.webmanifest      # PWA-Konfiguration für mobile Endgeräte/Desktop-Installation
-├── package.json              # Abhängigkeiten und Skripte (Vite-Setup)
-└── sw.js                     # PWA Service Worker (Caching und Offline-Support)
+├── css/                      # CSS-Stylesheets
+├── extension/                # Chrome / Edge Extension (Manifest V3)
+├── js/                       # JavaScript ES Modules
+│   ├── app.js                # Main Controller & Route Handler
+│   ├── mockAi.js             # Offline AI Parser & Evaluator
+│   ├── storage.js            # Storage Manager (LocalStorage, IndexedDB, Custom Cols)
+│   ├── utils/                # Utility Modules
+│   │   ├── backup.js         # Snapshots & Rollbacks
+│   │   ├── cvExport.js       # PDF / Print CV Engine
+│   │   ├── cvParser.js       # PDF.js Text & Skill Extractor
+│   │   ├── db.js             # IndexedDB Document Vault
+│   │   ├── emailParser.js    # Email & Date Auto-Parser
+│   │   ├── geminiApi.js      # Google Gemini REST API Connector
+│   │   ├── ics.js            # ICS, Google & Outlook Calendar Sync
+│   │   ├── jobApi.js         # Live Job API Connector (Arbeitnow & Feeds)
+│   │   ├── pdfExport.js      # PDF Cover Letter Generator
+│   │   ├── taxCalculator.js  # Tax & Travel Allowance Calculator
+│   │   ├── taxExport.js      # Tax Report (Anlage N / CSV & PDF)
+│   │   └── webClipper.js     # Bookmarklet & Web Clipper Engine
+│   └── views/                # Application Views & Copilot Submodules
+│       ├── calendarView.js   # Calendar (ICS, Google, Outlook & Email Import)
+│       ├── comparerView.js   # Decision Matrix & Job Showdown (Radar Chart)
+│       ├── copilotView.js    # AI Copilot Suite Main View
+│       ├── copilot/          # Copilot Submodules
+│       │   ├── aiMentor.js           # Interactive AI Mentor & Negotiation
+│       │   ├── audioDrill.js         # Hands-Free Audio Interview Podcast Drill
+│       │   ├── cheatSheet.js         # 1-Pager Cheat Sheet
+│       │   ├── contractChecker.js    # Employment Contract Clause Checker
+│       │   ├── coverLetterGen.js     # Cover Letter AI
+│       │   ├── cvBuilder.js          # Interactive CV Builder & Templates
+│       │   ├── cvOptimizer.js        # CV Optimizer & PDF Import
+│       │   ├── emailSuite.js         # Professional Email Generator & Mailto
+│       │   ├── inboxSimulator.js     # Email Inbox & Auto-Status Sync
+│       │   ├── interviewSimulator.js # STAR Simulator & Voice Coach
+│       │   ├── learningRoadmap.js    # Skill-Gap Roadmap
+│       │   ├── negotiatorView.js     # Salary Negotiator
+│       │   ├── onboardingPlanner.js  # 30-60-90 Days Onboarding Roadmap
+│       │   ├── outreachGen.js        # LinkedIn & Xing Pitch Generator
+│       │   ├── pitchFlyer.js         # 1-Page Candidate Snapshot & Pitch Deck
+│       │   ├── referenceChecker.js   # Reference / Arbeitszeugnis Checker
+│       │   └── salaryRadar.js        # Regional & Industry Salary Radar
+│       ├── dashboardView.js  # Dashboard Analytics, Ghosting Detector & Charts
+│       ├── finderView.js     # Live Job Finder & Web Clipper
+│       └── kanbanView.js     # Kanban Board (Batch, Custom Columns & Tags)
+├── index.html                # Single Page Application HTML
+├── manifest.webmanifest      # PWA Manifest
+├── package.json              # Vite dependencies & build scripts
+└── sw.js                     # Service Worker
 ```
 
 ---
 
-## 🛠️ Installationsanleitung
+## 🛠️ Ausführung & Build
 
-### Voraussetzungen
-Stelle sicher, dass du [Node.js](https://nodejs.org/) installiert hast.
+### Entwicklungs-Server
+```bash
+npm run dev
+```
 
-### Schritte zur Ausführung
-1. Öffne ein Terminal im Projektverzeichnis.
-2. Installiere die Entwicklungsumgebung (Vite):
-   ```bash
-   npm install
-   ```
-3. Starte den lokalen Entwicklungsserver:
-   ```bash
-   npm run dev
-   ```
-4. Öffne die in der Konsole angezeigte Adresse (z. B. `http://localhost:5173`) im Webbrowser.
-5. Um ein Production-Build zu erstellen:
-   ```bash
-   npm run build
-   ```
+### Production Build
+```bash
+npm run build
+```
+
+
+
+

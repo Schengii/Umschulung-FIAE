@@ -155,4 +155,7 @@ Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 re
 - **Formularvalidierung (`contact-form.js`)**: Clientseitige Regex-Prüfung von E-Mail-Adressen und Meldungsfeedback vor der Übermittlung.
 - **Timer Teardown & Speicherleck-Schutz (`ihk-exam-simulator.js`)**: Automatische Deregistrierung von `setInterval`-Timern bei `beforeunload`-Events zum Schutz der Systemressourcen.
 - **Terminal Historie & Auto-Scroll (`git-simulator.js`)**: Befehlshistorie mit Pfeiltasten Rauf/Runter sowie synchronisiertes Auto-Scrollen bei langen Ausgaben im Git-Terminal.
+- **Projekt-Highlights & Key Learnings (`modal.js` & `projekt-detail.js`)**: Strukturierte Architektur-Badges sowie detaillierte Abschnitte zu technischen Herausforderungen und Lösungen für Top-Projekte (EcoChef, BurgenGame, Arbeitszeiterfassung).
+- **Interaktiver Code-Explorer & Snippets (`portfolio.html` & `projekt-detail.html`)**: Erweiterter Quellcode-Viewer mit Syntax-Highlighting für TypeScript Gemini Services, Web Worker AI Heuristiken, React Custom Hooks und Java Strategy Patterns.
+
 

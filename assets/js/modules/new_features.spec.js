@@ -3,8 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('New Interactive Features E2E Verification', () => {
 
   test('sollte den Recruiter Skill-Matchmaker auf portfolio.html initialisieren und filtern', async ({ page }) => {
-    await page.goto('/pages/portfolio.html');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/pages/portfolio.html', { waitUntil: 'domcontentloaded' });
 
     const widget = page.locator('#skill-matchmaker-widget');
     await expect(widget).toBeVisible();

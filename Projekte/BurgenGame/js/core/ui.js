@@ -212,6 +212,15 @@ class GameUI {
           <button id="control-leaderboard" class="control-btn" title="Bestenliste">📊 Bestenliste</button>
           <button id="control-stats" class="control-btn" title="Statistik-Dashboard">📈 Statistiken</button>
           <button id="control-prestige" class="control-btn" title="Prestige">🌟 Prestige</button>
+          <button id="control-mods" class="control-btn" title="Mods & Plugins">🧩 Modding</button>
+          <button id="control-chat" class="control-btn" title="Weltchat & Server Sync">💬 Weltchat</button>
+          <button id="control-dynasty" class="control-btn" title="Königsfamilie & Stammbaum">👑 Stammbaum</button>
+          <button id="control-3d" class="control-btn" title="3D WebGL Umschalten">🎲 3D-Ansicht</button>
+          <button id="control-disasters" class="control-btn" title="Katastrophenschutz">⚡ Katastrophen</button>
+          <button id="control-tournament" class="control-btn" title="Lanzen-Turnier">⚔️ Turnier-Arena</button>
+          <button id="control-guild" class="control-btn" title="Gilden & Kriege">🛡️ Gilden-System</button>
+          <button id="control-mapeditor" class="control-btn" title="Karten-Editor">🗺️ Karten-Editor</button>
+          <button id="control-stocks" class="control-btn" title="Rohstoff-Börse & Aktien">📈 Rohstoff-Börse</button>
         </div>
       </div>
 
@@ -465,6 +474,78 @@ class GameUI {
     if (statsCtrl) {
       statsCtrl.addEventListener('click', () => {
         if (this.openStatsDashboardModal) this.openStatsDashboardModal();
+      });
+    }
+
+    // Mod Manager Modal
+    const modsCtrl = document.getElementById('control-mods');
+    if (modsCtrl) {
+      modsCtrl.addEventListener('click', () => {
+        if (window.modManager) window.modManager.showModManagerModal();
+      });
+    }
+
+    // Global Chat & Server Sync Modal
+    const chatCtrl = document.getElementById('control-chat');
+    if (chatCtrl) {
+      chatCtrl.addEventListener('click', () => {
+        if (window.onlineMultiplayer) window.onlineMultiplayer.showChatModal();
+      });
+    }
+
+    // Dynasty Tree Modal
+    const dynastyCtrl = document.getElementById('control-dynasty');
+    if (dynastyCtrl) {
+      dynastyCtrl.addEventListener('click', () => {
+        if (window.dynastyTree) window.dynastyTree.showModal();
+      });
+    }
+
+    // 3D WebGL Toggle
+    const threeCtrl = document.getElementById('control-3d');
+    if (threeCtrl) {
+      threeCtrl.addEventListener('click', () => {
+        if (window.threeRender) window.threeRender.toggleMode();
+      });
+    }
+
+    // Advanced Disasters Modal
+    const disasterCtrl = document.getElementById('control-disasters');
+    if (disasterCtrl) {
+      disasterCtrl.addEventListener('click', () => {
+        if (window.advancedDisasters) window.advancedDisasters.showDisasterModal();
+      });
+    }
+
+    // Tournament Arena Modal
+    const tourneyCtrl = document.getElementById('control-tournament');
+    if (tourneyCtrl) {
+      tourneyCtrl.addEventListener('click', () => {
+        if (window.tournamentArena) window.tournamentArena.showArenaModal();
+      });
+    }
+
+    // Guild Wars Modal
+    const guildCtrl = document.getElementById('control-guild');
+    if (guildCtrl) {
+      guildCtrl.addEventListener('click', () => {
+        if (window.guildWars) window.guildWars.showGuildModal();
+      });
+    }
+
+    // Visual Map Editor Modal
+    const editorCtrl = document.getElementById('control-mapeditor');
+    if (editorCtrl) {
+      editorCtrl.addEventListener('click', () => {
+        if (window.mapEditor) window.mapEditor.showEditorModal();
+      });
+    }
+
+    // Stock Market Modal
+    const stockCtrl = document.getElementById('control-stocks');
+    if (stockCtrl) {
+      stockCtrl.addEventListener('click', () => {
+        if (window.stockMarket) window.stockMarket.showStockModal();
       });
     }
 

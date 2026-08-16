@@ -97,6 +97,25 @@ class ShipyardManager {
     this.gameUI.showFloatingNotification(`⛵ Expedition erfolgreich! Beute: +${lootGold} Gold ${lootGems > 0 ? `+${lootGems} Edelsteine` : ''}`);
     if (window.gameSound) window.gameSound.playSFX('coin');
   }
+
+  buildVessel(shipType) {
+    this.buildShip(shipType);
+    return stateManager.state.fleet;
+  }
+
+  launchTradeVoyage(shipId, goodsType = 'silk') {
+    this.init();
+    const ship = stateManager.state.fleet.find(s => s.id === shipId) || stateManager.state.fleet[0];
+    if (!ship) return { success: false, msg: 'Kein Schiff verfügbar!' };
+
+    const rewardGold = 600;
+    stateManager.state.gold = (stateManager.state.gold || 0) + rewardGold;
+    if (!stateManager.state.luxuryGoods) stateManager.state.luxuryGoods = { spices: 0, silk: 0, gemstones: 0 };
+    stateManager.state.luxuryGoods[goodsType] = (stateManager.state.luxuryGoods[goodsType] || 0) + 10;
+    stateManager.save();
+    return { success: true, msg: `🚢 Handelsfahrt mit ${goodsType.toUpperCase()} abgeschlossen! (+${rewardGold} Gold, +10 ${goodsType})` };
+  }
 }
 
 window.ShipyardManager = ShipyardManager;
+

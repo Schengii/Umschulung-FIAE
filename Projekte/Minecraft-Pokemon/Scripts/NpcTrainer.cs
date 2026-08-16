@@ -171,4 +171,40 @@ public partial class NpcTrainer : CharacterBody3D
             _label.Modulate = Colors.Crimson;
         }
     }
+
+    public void SetupTeamRocketGrunt()
+    {
+        Team.Clear();
+        TrainerName = "Team Rocket Rüpel";
+        Title = "🌙 Nacht-Invasion";
+        BadgeName = "Schatten-Herausforderung";
+
+        Team.Add(new PokemonData("Alpollo", 35, 110, "Geist/Gift", Colors.Purple));
+        Team.Add(new PokemonData("Nachtara", 38, 120, "Unlicht", Colors.MidnightBlue));
+        Team.Add(new PokemonData("Garados", 40, 135, "Wasser/Flug", Colors.DarkBlue));
+
+        if (_label != null)
+        {
+            _label.Text = $"☠️ {TrainerName}\n[{Title}]";
+            _label.Modulate = Colors.Purple;
+        }
+    }
+
+    public void SetupMoonlightChallenger()
+    {
+        Team.Clear();
+        TrainerName = "Mondschein-Astronaut";
+        Title = "🌟 Kosmisches Duell";
+        BadgeName = "Mond-Abzeichen";
+
+        Team.Add(new PokemonData("Psiana", 55, 160, "Psycho", Colors.LightPink));
+        Team.Add(new PokemonData("Nachtara", 58, 175, "Unlicht", Colors.DeepSkyBlue));
+        Team.Add(new PokemonData("Mewtu", 60, 200, "Psycho", Colors.MediumPurple));
+
+        if (_label != null)
+        {
+            _label.Text = $"✨ {TrainerName}\n[{Title}]";
+            _label.Modulate = Colors.Cyan;
+        }
+    }
 }

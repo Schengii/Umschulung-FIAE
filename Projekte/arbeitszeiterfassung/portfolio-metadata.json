@@ -14,5 +14,33 @@
   "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
   "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
   "category": "web",
-  "language": "JavaScript"
+  "language": "JavaScript",
+  "codeFiles": [
+    { "name": "index.html", "path": "Projekte/arbeitszeiterfassung/index.html", "type": "html" },
+    { "name": "app.js", "path": "Projekte/arbeitszeiterfassung/js/app.js", "type": "javascript" },
+    { "name": "storage.js", "path": "Projekte/arbeitszeiterfassung/js/storage.js", "type": "javascript" },
+    { "name": "charts.js", "path": "Projekte/arbeitszeiterfassung/js/charts.js", "type": "javascript" }
+  ],
+  "architectureBadges": [
+    { "name": "Offline-First PWA", "color": "#0284c7" },
+    { "name": "Firebase Realtime Sync", "color": "#f59e0b" },
+    { "name": "SVG / Canvas Charts", "color": "#10b981" },
+    { "name": "ArbZG Compliance Engine", "color": "#8b5cf6" }
+  ],
+  "keyLearnings": {
+    "challengeDe": "Konfliktfreie Synchronisation lokaler Zeiterfassungsdaten mit Firebase Firestore bei unbeständigen Netzwerkverbindungen und automatisierte Einhaltung des Arbeitszeitgesetzes (ArbZG).",
+    "challengeEn": "Conflict-free synchronization of local time logs with Firebase Firestore during unstable connections and automated compliance with legal working hour constraints (ArbZG).",
+    "solutionDe": "Implementierung einer Offline-First Queue mit automatischer Retry-Logik und einer modularen ArbZG-Pausenautomatik, die gesetzliche Mindestpausen regelbasiert berechnet.",
+    "solutionEn": "Implemented an Offline-First event queue with exponential backoff retry and a rule-based break computation engine strictly enforcing labor laws.",
+    "architectureHighlightsDe": [
+      "Offline-First Persistenzschicht mit Firebase Realtime Sync",
+      "Dynamische SVG-Donut & Trend-Diagramme",
+      "Export nach PDF, CSV und Excel-konformen Formaten"
+    ],
+    "architectureHighlightsEn": [
+      "Offline-First persistence layer with Firebase Realtime Sync",
+      "Dynamic SVG donut charts and trend analysis",
+      "Automated export to PDF, CSV, and Excel-compatible formats"
+    ]
+  }
 }

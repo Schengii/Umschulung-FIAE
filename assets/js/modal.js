@@ -146,13 +146,66 @@
          </a>`
       : '';
 
+    // Build architecture badges
+    let archBadgesHTML = '';
+    if (projectData && Array.isArray(projectData.architectureBadges) && projectData.architectureBadges.length > 0) {
+      archBadgesHTML = `
+        <div class="architecture-badges-container" style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.5rem 0;">
+          ${projectData.architectureBadges.map(b => `
+            <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+              <i class="fa-solid fa-layer-group" style="margin-right: 4px; font-size: 0.65rem;"></i>${b.name}
+            </span>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Build Key Learnings & Challenges block
+    let keyLearningsHTML = '';
+    if (projectData && projectData.keyLearnings) {
+      const kl = projectData.keyLearnings;
+      keyLearningsHTML = `
+        <div class="card key-learnings-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-left: 3px solid var(--primary); padding: 0.85rem 1rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.88rem; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-lightbulb"></i>
+            <span lang="de">Key Learnings &amp; Architektur-Lösung</span>
+            <span lang="en">Key Learnings &amp; Architecture Solution</span>
+          </h4>
+          <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
+            <p style="margin: 0 0 0.35rem 0;">
+              <strong style="color: var(--text-primary);"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; margin-right: 4px;"></i><span lang="de">Herausforderung:</span><span lang="en">Challenge:</span></strong>
+              <span lang="de">${kl.challengeDe}</span>
+              <span lang="en">${kl.challengeEn}</span>
+            </p>
+            <p style="margin: 0 0 0.35rem 0;">
+              <strong style="color: var(--text-primary);"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 4px;"></i><span lang="de">Lösung:</span><span lang="en">Solution:</span></strong>
+              <span lang="de">${kl.solutionDe}</span>
+              <span lang="en">${kl.solutionEn}</span>
+            </p>
+            ${kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0 ? `
+              <ul style="margin: 0.35rem 0 0 1.2rem; padding: 0;">
+                ${kl.architectureHighlightsDe.map((hDe, i) => `
+                  <li>
+                    <span lang="de">${hDe}</span>
+                    <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
     modalBody.innerHTML = `
       <h2 id="modal-title" lang="de" style="margin-bottom:0.25rem;">${titleDe}</h2>
-      <h2 lang="en" style="margin-bottom:1rem;">${titleEn}</h2>
+      <h2 lang="en" style="margin-bottom:0.5rem;">${titleEn}</h2>
+      ${archBadgesHTML}
       ${mediaHTML}
       ${tagsHTML}
-      <p lang="de" style="margin:1rem 0;">${descDe}</p>
-      <p lang="en" style="margin:1rem 0;">${descEn}</p>
+      <p lang="de" style="margin:0.75rem 0;">${descDe}</p>
+      <p lang="en" style="margin:0.75rem 0;">${descEn}</p>
+      ${keyLearningsHTML}
       <div class="modal-buttons">
         ${linkHTML}
         ${githubHTML}

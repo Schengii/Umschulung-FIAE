@@ -1,8 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
-
-// WICHTIG: Füge hier deine echten Firebase Credentials ein!
+// Local / Offline Firebase Architecture Configuration
 const firebaseConfig = {
   apiKey: "DEIN_API_KEY",
   authDomain: "DEIN_PROJECT_ID.firebaseapp.com",
@@ -12,22 +8,8 @@ const firebaseConfig = {
   appId: "DEIN_APP_ID"
 };
 
-let app, db, auth;
+let app = null, db = null, auth = null;
 let isFirebaseValid = false;
-
-try {
-  if (firebaseConfig.apiKey !== "DEIN_API_KEY") {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    auth = getAuth(app);
-    isFirebaseValid = true;
-    console.log("Firebase Live initialized.");
-  } else {
-    console.warn("Firebase Config fehlt! Nutze Offline/Mock-Fallback.");
-  }
-} catch (e) {
-  console.error("Firebase init failed:", e);
-}
 
 window.firebaseMock = {
   auth: {

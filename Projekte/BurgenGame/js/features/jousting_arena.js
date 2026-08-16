@@ -58,6 +58,27 @@ class JoustingArena {
 
     this.showModal();
   }
+
+  startSandboxBattle(playerTroops = { spearman: 5, bowman: 3 }, enemyTroops = { spearman: 4, bowman: 2 }) {
+    const report = {
+      troopsSent: playerTroops,
+      defenders: enemyTroops,
+      isSandbox: true,
+      victory: false
+    };
+
+    let pPower = 0;
+    Object.keys(playerTroops).forEach(k => pPower += (playerTroops[k] || 0) * 15);
+    let ePower = 0;
+    Object.keys(enemyTroops).forEach(k => ePower += (enemyTroops[k] || 0) * 15);
+
+    report.victory = pPower >= ePower;
+    if (this.gameUI) {
+      this.gameUI.showFloatingNotification(report.victory ? '🎯 Sandbox-Schlacht Gewonnen!' : '💥 Sandbox-Schlacht Verloren!');
+    }
+    return report;
+  }
 }
 
 window.JoustingArena = JoustingArena;
+

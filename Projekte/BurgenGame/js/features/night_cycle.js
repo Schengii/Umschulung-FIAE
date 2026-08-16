@@ -37,6 +37,13 @@ class NightCycle {
     this.overlay.style.background = `rgba(0,0,50,${opacity})`;
   }
 
+  getNightFactor() {
+    if (!this.enabled) return 0;
+    const now = Date.now();
+    const progress = ((now - this.lastTick) % this.cycleDuration) / this.cycleDuration;
+    return Math.max(0, Math.sin(Math.PI * progress));
+  }
+
   toggle() {
     this.enabled = !this.enabled;
     if (!this.enabled && this.overlay) this.overlay.style.background = 'transparent';
@@ -44,3 +51,4 @@ class NightCycle {
 }
 
 window.NightCycle = null;
+

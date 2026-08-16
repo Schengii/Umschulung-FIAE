@@ -1,0 +1,17 @@
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\bin\Release\Minecraft-Pokemon.deps.json
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\bin\Release\Minecraft-Pokemon.runtimeconfig.json
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\bin\Release\Minecraft-Pokemon.dll
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\bin\Release\Minecraft-Pokemon.pdb
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\bin\Release\GodotSharp.dll
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.csproj.AssemblyReference.cache
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.AssemblyInfoInputs.cache
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.AssemblyInfo.cs
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.csproj.CoreCompileInputs.cache
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.sourcelink.json
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraf.39678499.Up2Date
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.dll
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\refint\Minecraft-Pokemon.dll
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.pdb
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\Minecraft-Pokemon.genruntimeconfig.cache
+c:\Users\sche-\Desktop\Programmieren Projekte\Minecraft-Pokemon\.godot\mono\temp\obj\Release\ref\Minecraft-Pokemon.dll

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jobmatch-v1';
+const CACHE_NAME = 'jobmatch-v2';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -20,7 +20,12 @@ const ASSETS_TO_CACHE = [
     '/js/utils/cvExport.js',
     '/js/utils/ics.js',
     '/js/utils/pdfExport.js',
-    '/js/utils/taxCalculator.js'
+    '/js/utils/taxCalculator.js',
+    '/js/utils/commandPalette.js',
+    '/js/utils/audioRecorder.js',
+    '/js/utils/crypto.js',
+    '/js/utils/speechRecognition.js',
+    '/js/utils/i18n.js'
 ];
 
 self.addEventListener('install', (e) => {
@@ -50,7 +55,6 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-    // Skip external APIs (e.g. Gemini, Lucide icons, Chart.js) or proxy calls
     if (!e.request.url.startsWith(self.location.origin)) {
         return;
     }
@@ -58,15 +62,49 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
         caches.match(e.request).then((cachedResponse) => {
             if (cachedResponse) {
-                // Return cached asset, but fetch updated version in background (Stale-While-Revalidate)
                 fetch(e.request).then((networkResponse) => {
                     if (networkResponse.status === 200) {
                         caches.open(CACHE_NAME).then((cache) => cache.put(e.request, networkResponse));
                     }
-                }).catch(() => {/* Ignore network failures when offline */});
+                }).catch(() => {});
                 return cachedResponse;
             }
             return fetch(e.request);
+        })
+    );
+});
+
+// Push & Notification Handlers
+self.addEventListener('push', (e) => {
+    let data = { title: 'JobMatch Erinnerung', body: 'Du hast anstehende Fristen oder Termine.' };
+    if (e.data) {
+        try {
+            data = e.data.json();
+        } catch(err) {
+            data.body = e.data.text();
+        }
+    }
+
+    const options = {
+        body: data.body,
+        icon: 'https://img.icons8.com/neon/180/briefcase.png',
+        badge: 'https://img.icons8.com/neon/180/briefcase.png',
+        vibrate: [100, 50, 100]
+    };
+
+    e.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
+
+self.addEventListener('notificationclick', (e) => {
+    e.notification.close();
+    e.waitUntil(
+        clients.matchAll({ type: 'window' }).then((clientList) => {
+            if (clientList.length > 0) {
+                return clientList[0].focus();
+            }
+            return clients.openWindow('/');
         })
     );
 });

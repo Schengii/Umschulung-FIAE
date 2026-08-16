@@ -239,6 +239,68 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        // Build architecture badges
+        let archBadgesHTML = '';
+        if (project.architectureBadges && Array.isArray(project.architectureBadges) && project.architectureBadges.length > 0) {
+            archBadgesHTML = `
+                <div class="architecture-badges-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0;">
+                    ${project.architectureBadges.map(b => `
+                        <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                            <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i>${b.name}
+                        </span>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Build Key Learnings & Challenges section
+        let keyLearningsHTML = '';
+        if (project.keyLearnings) {
+            const kl = project.keyLearnings;
+            keyLearningsHTML = `
+                <div class="card key-learnings-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 1.25rem 1.5rem; border-radius: var(--radius-md); margin: 1.5rem 0;">
+                    <h3 style="margin: 0 0 0.75rem 0; font-size: 1.05rem; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span lang="de">Key Learnings &amp; Architektur-Lösung</span>
+                        <span lang="en">Key Learnings &amp; Architecture Solution</span>
+                    </h3>
+                    <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+                        <div style="margin-bottom: 0.75rem;">
+                            <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                                <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i>
+                                <span lang="de">Technische Herausforderung:</span>
+                                <span lang="en">Technical Challenge:</span>
+                            </strong>
+                            <p style="margin: 0;" lang="de">${kl.challengeDe}</p>
+                            <p style="margin: 0;" lang="en">${kl.challengeEn}</p>
+                        </div>
+                        <div style="margin-bottom: 0.75rem;">
+                            <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                                <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+                                <span lang="de">Architektur-Lösung:</span>
+                                <span lang="en">Architecture Solution:</span>
+                            </strong>
+                            <p style="margin: 0;" lang="de">${kl.solutionDe}</p>
+                            <p style="margin: 0;" lang="en">${kl.solutionEn}</p>
+                        </div>
+                        ${kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0 ? `
+                            <div>
+                                <strong style="color: var(--text-primary);"><span lang="de">Architektur-Highlights:</span><span lang="en">Architecture Highlights:</span></strong>
+                                <ul style="margin: 0.35rem 0 0 1.2rem; padding: 0;">
+                                    ${kl.architectureHighlightsDe.map((hDe, i) => `
+                                        <li>
+                                            <span lang="de">${hDe}</span>
+                                            <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
         const projectImgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
 
         detailContainer.innerHTML = `
@@ -249,6 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             ${project.stars > 0 ? `<p style="color: var(--text-muted);"><i class="fa fa-star" style="color: #eab308;"></i> ${project.stars} Stars auf GitHub</p>` : ''}
 
+            ${archBadgesHTML}
+
             <div class="tech-tags" style="margin: 1rem 0;">
                 ${tagsHTML}
             </div>
@@ -257,6 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p lang="de">${description}</p>
                 <p lang="en">${description}</p>
             </div>
+
+            ${keyLearningsHTML}
 
             ${mediaHTML}
 

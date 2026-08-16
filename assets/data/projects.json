@@ -16,9 +16,65 @@
     "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
     "category": "web",
     "language": "JavaScript",
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/arbeitszeiterfassung/index.html",
+        "type": "html"
+      },
+      {
+        "name": "app.js",
+        "path": "Projekte/arbeitszeiterfassung/js/app.js",
+        "type": "javascript"
+      },
+      {
+        "name": "storage.js",
+        "path": "Projekte/arbeitszeiterfassung/js/storage.js",
+        "type": "javascript"
+      },
+      {
+        "name": "charts.js",
+        "path": "Projekte/arbeitszeiterfassung/js/charts.js",
+        "type": "javascript"
+      }
+    ],
+    "architectureBadges": [
+      {
+        "name": "Offline-First PWA",
+        "color": "#0284c7"
+      },
+      {
+        "name": "Firebase Realtime Sync",
+        "color": "#f59e0b"
+      },
+      {
+        "name": "SVG / Canvas Charts",
+        "color": "#10b981"
+      },
+      {
+        "name": "ArbZG Compliance Engine",
+        "color": "#8b5cf6"
+      }
+    ],
+    "keyLearnings": {
+      "challengeDe": "Konfliktfreie Synchronisation lokaler Zeiterfassungsdaten mit Firebase Firestore bei unbeständigen Netzwerkverbindungen und automatisierte Einhaltung des Arbeitszeitgesetzes (ArbZG).",
+      "challengeEn": "Conflict-free synchronization of local time logs with Firebase Firestore during unstable connections and automated compliance with legal working hour constraints (ArbZG).",
+      "solutionDe": "Implementierung einer Offline-First Queue mit automatischer Retry-Logik und einer modularen ArbZG-Pausenautomatik, die gesetzliche Mindestpausen regelbasiert berechnet.",
+      "solutionEn": "Implemented an Offline-First event queue with exponential backoff retry and a rule-based break computation engine strictly enforcing labor laws.",
+      "architectureHighlightsDe": [
+        "Offline-First Persistenzschicht mit Firebase Realtime Sync",
+        "Dynamische SVG-Donut & Trend-Diagramme",
+        "Export nach PDF, CSV und Excel-konformen Formaten"
+      ],
+      "architectureHighlightsEn": [
+        "Offline-First persistence layer with Firebase Realtime Sync",
+        "Dynamic SVG donut charts and trend analysis",
+        "Automated export to PDF, CSV, and Excel-compatible formats"
+      ]
+    },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-08-03T11:15:25.074Z",
+    "updatedAt": "2026-08-16T14:16:55.217Z",
     "images": [
       "assets/images/arbeitszeit_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -72,9 +128,43 @@
         "type": "javascript"
       }
     ],
+    "architectureBadges": [
+      {
+        "name": "HTML5 60FPS Canvas",
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Dedicated Web Worker AI",
+        "color": "#8b5cf6"
+      },
+      {
+        "name": "State Machine & Reducer",
+        "color": "#10b981"
+      },
+      {
+        "name": "IndexedDB / LocalStorage",
+        "color": "#0284c7"
+      }
+    ],
+    "keyLearnings": {
+      "challengeDe": "Ruckelfreie 60 FPS Darstellung von Hunderten Truppen & Gebäuden bei gleichzeitiger Ausführung komplexer KI-Bot-Entscheidungen im Hintergrund.",
+      "challengeEn": "Maintaining smooth 60 FPS rendering with hundreds of active units and buildings while running complex AI bot heuristics in the background.",
+      "solutionDe": "Auslagerung der CPU-intensiven KI-Bot-Berechnungen in einen isolierten Web Worker und Implementierung eines optimierten Canvas-Schichten-Renderers mit Delta-Time Interpolation.",
+      "solutionEn": "Offloaded CPU-heavy AI bot decisions to an isolated Web Worker and implemented a layered 2D Canvas renderer with delta-time interpolation.",
+      "architectureHighlightsDe": [
+        "Dedizierter Web Worker für asynchrone AI-Bot-Berechnungen",
+        "Kompakter Reducer-basierter State Manager",
+        "Isometrisches Tile- & Grid-Kollisionssystem"
+      ],
+      "architectureHighlightsEn": [
+        "Dedicated Web Worker for asynchronous AI Bot calculations",
+        "Compact Reducer-based State Manager",
+        "Isometric tile & grid collision resolution"
+      ]
+    },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-08-03T11:15:25.479Z"
+    "updatedAt": "2026-08-16T14:16:55.390Z"
   },
   {
     "repoName": "EcoChef",
@@ -214,6 +304,44 @@
         "descEn": "The project was submitted as a final graduation thesis and received excellent grades. It showcases modern hybrid app development (Cordova/PWA) and generative AI integration."
       }
     ],
+    "architectureBadges": [
+      {
+        "name": "Lit / Web Components",
+        "color": "#0284c7"
+      },
+      {
+        "name": "Google Gemini 1.5 Pro AI",
+        "color": "#8b5cf6"
+      },
+      {
+        "name": "Service-Layer Pattern",
+        "color": "#10b981"
+      },
+      {
+        "name": "Cordova Hybrid App",
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Offline PWA Caching",
+        "color": "#ec4899"
+      }
+    ],
+    "keyLearnings": {
+      "challengeDe": "Zuverlässige Extraktion valider JSON-Daten aus unvorhersehbaren LLM-Antworten und fehlerfreie Offline-Bereitstellung aller Rezeptschritte mit Audio-Vorlesefunktion (TTS).",
+      "challengeEn": "Reliable extraction of validated JSON structures from probabilistic LLM responses and rock-solid offline availability of recipes with speech synthesis (TTS).",
+      "solutionDe": "Implementierung eines resilienten Prompt-Designs mit JSON-Schema-Guards, lokaler LocalStorage-Validierung sowie asynchroner Web Speech API Entkopplung im isolierten Service-Layer.",
+      "solutionEn": "Implemented resilient prompt engineering with JSON schema guards, robust local storage validation, and asynchronous Web Speech API decoupling in a clean service layer.",
+      "architectureHighlightsDe": [
+        "Modularer TypeScript Service-Layer (GeminiService, StorageService, SpeechService)",
+        "Reaktives UI-Rendering mit Lit-Element & WCAG 2.1 AAA Accessibility",
+        "Strikte Typisierung & Validierung von Nährwert- und CO2-Daten"
+      ],
+      "architectureHighlightsEn": [
+        "Modular TypeScript Service Layer (GeminiService, StorageService, SpeechService)",
+        "Reactive UI rendering via Lit-Element & WCAG 2.1 AAA Accessibility",
+        "Strict typing and verification for nutritional and carbon emission analytics"
+      ]
+    },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
     "updatedAt": "2026-01-15T08:40:14Z",
@@ -241,7 +369,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-08-03T11:15:26.297Z",
+    "updatedAt": "2026-08-16T14:16:55.792Z",
     "images": [
       "assets/images/elektrocheck_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -266,7 +394,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-08-03T11:15:26.501Z",
+    "updatedAt": "2026-08-16T14:16:55.976Z",
     "images": [
       "assets/images/finance_bot_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -291,7 +419,7 @@
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-08-03T11:15:26.912Z",
+    "updatedAt": "2026-08-16T14:16:56.200Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -316,7 +444,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-08-03T11:15:27.009Z",
+    "updatedAt": "2026-08-16T14:16:56.221Z",
     "images": [
       "assets/images/gluecksspiel_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -341,7 +469,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-08-03T11:15:27.438Z",
+    "updatedAt": "2026-08-16T14:16:56.462Z",
     "images": [
       "assets/images/jobsuche_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -366,7 +494,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-08-03T11:15:27.646Z",
+    "updatedAt": "2026-08-16T14:16:56.667Z",
     "images": [
       "assets/images/manufaktur_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -404,7 +532,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft",
-    "updatedAt": "2026-08-03T11:08:08Z",
+    "updatedAt": "2026-08-14T14:05:21Z",
     "images": [
       "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -442,7 +570,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-08-03T11:15:28.117Z",
+    "updatedAt": "2026-08-16T14:16:57.075Z",
     "images": [
       "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -467,7 +595,7 @@
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-08-03T11:15:28.320Z",
+    "updatedAt": "2026-08-16T14:16:57.256Z",
     "images": [
       "assets/images/orbital_scrap_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -510,7 +638,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Sims",
-    "updatedAt": "2026-08-03T10:47:34Z",
+    "updatedAt": "2026-08-15T11:25:09Z",
     "images": [
       "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -534,7 +662,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-08-03T11:15:28.740Z",
+    "updatedAt": "2026-08-16T14:16:57.758Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -558,7 +686,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-08-03T11:15:28.957Z",
+    "updatedAt": "2026-08-16T14:16:57.980Z",
     "images": [
       "assets/images/analytics_showcase.png",
       "assets/images/it_workspace.png"
@@ -583,7 +711,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-08-03T11:15:29.181Z",
+    "updatedAt": "2026-08-16T14:16:58.369Z",
     "images": [
       "assets/images/wohnungssuche_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -612,7 +740,7 @@
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-08-03T11:15:29.399Z"
+    "updatedAt": "2026-08-16T14:16:58.558Z"
   },
   {
     "repoName": null,

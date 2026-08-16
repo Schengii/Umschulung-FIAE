@@ -767,3 +767,49 @@ GameStateManager.prototype.triggerRebelRaid = function() {
 
   this.resolveDefense(raidMission);
 };
+
+GameStateManager.prototype.spawnTitanRaid = function() {
+  if (!this.state.activeTitan) {
+    this.state.activeTitan = {
+      id: `titan_${Date.now()}`,
+      name: '🌋 Uralter Erdtitan Level 100',
+      hp: 5000,
+      maxHp: 5000,
+      rewardGold: 5000,
+      rewardGems: 50
+    };
+  }
+  this.save();
+  this.notifyListeners('titan_spawned');
+  return this.state.activeTitan;
+};
+
+GameStateManager.prototype.attackTitanWorldBoss = function(troopsSent = { spearman: 10, knight: 5 }) {
+  if (!this.state.activeTitan) this.spawnTitanRaid();
+  const titan = this.state.activeTitan;
+
+  let playerPower = 0;
+  Object.keys(troopsSent).forEach(t => {
+    playerPower += (troopsSent[t] || 0) * 20;
+  });
+
+  titan.hp = Math.max(0, titan.hp - playerPower);
+  let defeated = titan.hp === 0;
+
+  if (defeated) {
+    this.state.resources.gold = (this.state.resources.gold || 0) + titan.rewardGold;
+    this.state.resources.gems = (this.state.resources.gems || 0) + titan.rewardGems;
+    this.state.activeTitan = null;
+  }
+  this.save();
+  this.notifyListeners('titan_attacked');
+
+  return {
+    success: true,
+    damageDealt: playerPower,
+    remainingHp: titan ? titan.hp : 0,
+    defeated,
+    msg: defeated ? `🌋 Titan VERNICHTET! Belohnung: +${titan.rewardGold} Gold & +${titan.rewardGems} Edelsteine!` : `💥 Titan attackiert! ${playerPower} Schaden zugefügt!`
+  };
+};
+

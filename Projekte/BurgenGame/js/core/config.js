@@ -42,6 +42,8 @@ const BUILDING_TYPES = {
   GARDEN: 'garden',
   BANNER: 'banner',
   BREWERY: 'brewery',
+  CHAPEL: 'chapel',
+  WELL: 'well',
   CATTLE_FARM: 'cattle_farm',
   TANNERY: 'tannery',
   ARROW_TOWER: 'arrow_tower',
@@ -49,7 +51,9 @@ const BUILDING_TYPES = {
   MOAT: 'moat',
   DRAWBRIDGE: 'drawbridge',
   FIRE_STATION: 'fire_station',
-  GRANARY_SEAL: 'granary_seal'
+  GRANARY_SEAL: 'granary_seal',
+  CHURCH: 'church',
+  HOP_FARM: 'hop_farm'
 };
 
 const BUILDING_AGE_REQUIREMENTS = {
@@ -61,6 +65,7 @@ const BUILDING_AGE_REQUIREMENTS = {
   [BUILDING_TYPES.WALL]: AGES.DARK,
   [BUILDING_TYPES.FOUNTAIN]: AGES.DARK,
   [BUILDING_TYPES.CATTLE_FARM]: AGES.DARK,
+  [BUILDING_TYPES.WELL]: AGES.DARK,
   
   [BUILDING_TYPES.TAX_HOUSE]: AGES.FEUDAL,
   [BUILDING_TYPES.TAVERN]: AGES.FEUDAL,
@@ -69,6 +74,8 @@ const BUILDING_AGE_REQUIREMENTS = {
   [BUILDING_TYPES.BAKERY]: AGES.FEUDAL,
   [BUILDING_TYPES.BARRACKS]: AGES.FEUDAL,
   [BUILDING_TYPES.TANNERY]: AGES.FEUDAL,
+  [BUILDING_TYPES.CHURCH]: AGES.FEUDAL,
+  [BUILDING_TYPES.HOP_FARM]: AGES.FEUDAL,
   
   [BUILDING_TYPES.IRON_MINE]: AGES.CASTLE,
   [BUILDING_TYPES.SMELTER]: AGES.CASTLE,
@@ -450,6 +457,34 @@ const BUILDINGS_CONFIG = {
     baseHeight: 1,
     levels: {
       1: { cost: { wood: 150, stone: 200, gold: 120 }, time: 30 }
+    }
+  },
+  [BUILDING_TYPES.CHURCH]: {
+    name: 'Kapelle',
+    description: 'Bietet der Bevölkerung geistlichen Beistand und erfüllt das Bedürfnis nach Glaube.',
+    baseWidth: 1,
+    baseHeight: 1,
+    levels: {
+      1: { cost: { wood: 120, stone: 180, gold: 100 }, time: 25 },
+      2: { cost: { wood: 250, stone: 350, gold: 250 }, time: 60 }
+    }
+  },
+  [BUILDING_TYPES.WELL]: {
+    name: 'Dorfbrunnen',
+    description: 'Spendet frisches Quellwasser und erfüllt das Hygienebedürfnis deiner Bürger.',
+    baseWidth: 1,
+    baseHeight: 1,
+    levels: {
+      1: { cost: { wood: 50, stone: 80, gold: 20 }, time: 10 }
+    }
+  },
+  [BUILDING_TYPES.HOP_FARM]: {
+    name: 'Hopfenfeld',
+    description: 'Baut Hopfen an, der in der Brauerei zu erfrischendem Bier verarbeitet wird.',
+    baseWidth: 1,
+    baseHeight: 1,
+    levels: {
+      1: { cost: { wood: 80, stone: 30, gold: 20 }, time: 15, production: { hops: 5 } }
     }
   }
 };

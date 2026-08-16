@@ -109,6 +109,36 @@ GameStateManager.prototype.calculateHappiness = function() {
     if (state.luxuryGoods.gemstones > 0) happiness += 5;
   }
 
+  // ============================================================
+  // NEU: Thronsaal-Dekorationen Boni (throneroom.js)
+  // ============================================================
+  if (window.throneroomDecorator) {
+    happiness += window.throneroomDecorator.getTotalHappinessBonus();
+  }
+
+  // ============================================================
+  // NEU: Dynastietrait-Boni (dynasty.js)
+  // greedy: -10 Zufriedenheit, diplomat: +5
+  // ============================================================
+  if (window.dynastyManager) {
+    happiness += window.dynastyManager.getDynastyBonus('happiness_mod');
+  }
+
+  // ============================================================
+  // NEU: Aktive Erlasse (decrees.js)
+  // festival_bounty: +25, tax_raise: -15
+  // ============================================================
+  if (window.royalDecreesManager) {
+    happiness += window.royalDecreesManager.getDecreeBonus('happinessMod');
+  }
+
+  // ============================================================
+  // NEU: Kapelle-Bonus (aus story_events.js gesetzt)
+  // ============================================================
+  if (state.hasChapel) {
+    happiness += 12;
+  }
+
   return Math.max(0, Math.min(100, Math.round(happiness)));
 };
 

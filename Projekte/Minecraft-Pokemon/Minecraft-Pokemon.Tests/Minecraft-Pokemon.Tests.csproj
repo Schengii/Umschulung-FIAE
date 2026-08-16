@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>MinecraftPokemon.Tests</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <!-- GodotSharp stubs allow compiling Godot-dependent files without the engine runtime -->
+    <PackageReference Include="GodotSharp" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- Include all game source files except Player.cs (which has too many
+       engine-scene dependencies that break the test compilation) -->
+  <ItemGroup>
+    <Compile Include="../Scripts/AchievementManager.cs" />
+    <Compile Include="../Scripts/BattleManager.cs" />
+    <Compile Include="../Scripts/BlockType.cs" />
+    <Compile Include="../Scripts/BreedingManager.cs" />
+    <Compile Include="../Scripts/EffectsManager.cs" />
+    <Compile Include="../Scripts/HostileMob.cs" />
+    <Compile Include="../Scripts/MoveData.cs" />
+    <Compile Include="../Scripts/Monster.cs" />
+    <Compile Include="../Scripts/MultiplayerManager.cs" />
+    <Compile Include="../Scripts/NpcTrainer.cs" />
+    <Compile Include="../Scripts/NpcVillager.cs" />
+    <Compile Include="../Scripts/Pokeball.cs" />
+    <Compile Include="../Scripts/PokemonData.cs" />
+    <Compile Include="../Scripts/QuestManager.cs" />
+    <Compile Include="../Scripts/SaveSystem.cs" />
+    <Compile Include="../Scripts/TerrainController.cs" />
+    <Compile Include="../Scripts/TMManager.cs" />
+    <Compile Include="../Scripts/WeatherManager.cs" />
+  </ItemGroup>
+
+</Project>
