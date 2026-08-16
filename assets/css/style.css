@@ -331,6 +331,7 @@ html[data-reduced-motion="true"] ::after {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
 }
 .a11y-dropdown-title {
