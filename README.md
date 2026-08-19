@@ -147,20 +147,20 @@ Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 re
 - **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
-- **45 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
+- **52 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
 
 ### ⚙️ Code-Refactoring & Neue Features (August 2026 Enterprise Release)
+- **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.
+- **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*BurgenGame*, *EcoChef*, *Sims 2.5D*, *ManuFaktur*) ohne Verlassen des Portfolios.
+- **Lokaler Client-seitiger KI-Portfolio-Copilot (`portfolio-copilot.js`)**: 100% offline-fähiges Chat-Widget für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
+- **Executive Dossier 2.0 & Rollenbasierter PDF-Generator (`executive-dossier.js`)**: Maßgeschneiderter 1-Klick-Export für Fullstack-, Backend- oder IHK-Prüfer-Profile.
+- **Clean-Code & RegEx Challenge-Lab (`challenge-lab.html` & `challenge-lab.js`)**: Interaktives Coding-Lab zu IT-Sicherheit (SQL-Injection), RegEx, Pure Functions und Big-O mit XP-Gamification.
 - **In-Browser Java 21 & C++23 WASM Runner (`playground.html` & `playground.js`)**: Interaktiver Bytecode-Compiler & WebAssembly-Runner mit Syntax-Tabs und Live-Ausführung im Browser.
 - **Interaktiver 3D Systemarchitektur-Graph (`architecture.html` & `architecture.js`)**: 3D-Knotengraph mit Orbit-Kamerasteuerung, dynamischer Projektion und Komponenten-Telemetrie.
 - **Voice-Assisted AI Interview Simulator (`interview.js` & `interview-trainer.html`)**: Sprachausgabe (SpeechSynthesis) und Spracheingabe per Mikrofon (SpeechRecognition) für realistische IHK-Fachgespräche.
 - **PWA Offline-Sync & Cache Telemetrie (`dashboard.html` & `dashboard.js`)**: Live-Inspector für Service-Worker Cache Storage, Netzwerkzustand und IndexedDB-Synchronisation.
-- **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle 23 Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
+- **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle 25 Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
 - **Side-by-Side Projekt-Vergleichsmatrix (`project_compare.js`)**: Interaktive Gegenüberstellung von 2 bis 3 Projekten hinsichtlich Architektur-Badges, Tech-Stack, Key Learnings und Live-Demo Links im Bottom-Drawer.
-- **Interaktiver Skill-Radar Deep-Link (`skills_matrix.js`)**: Direktes Filtern der Portfolio-Projekte per Klick auf die Kompetenz-Punkte im 2D-SVG-Radar-Chart auf `ueber-mich.html`.
-- **Druckoptimierter PDF-OnePager (`portfolio_exporter.js`)**: 1-Klick-Export eines sauberen, standardkonformen Bewerber-Dossiers.
-- **Tastatursteuerung & Escape-Key Handling (`components.js`)**: Globale Unterstützung der `Esc`-Taste zum sofortigen Schließen aller Modale, Dropdowns und Menüs.
-- **Projekt-Highlights & Key Learnings (`modal.js` & `projekt-detail.js`)**: Farbcodierte Architektur-Badges und strukturierte Challenge/Solution Cards für alle Top-Projekte.
-- **Interaktiver In-Browser Code-Explorer (`portfolio.html` & `projekt-detail.html`)**: Quellcode-Browser mit Syntax-Highlighting (EcoChef Gemini Service, BurgenGame Worker AI Heuristics, React Hooks, Java Patterns).
 
 
 

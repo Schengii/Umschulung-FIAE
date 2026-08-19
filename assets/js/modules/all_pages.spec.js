@@ -5,6 +5,8 @@ const pages = [
   'pages/home.html',
   'pages/dashboard.html',
   'pages/portfolio.html',
+  'pages/ihk-cockpit.html',
+  'pages/challenge-lab.html',
   'pages/links.html',
   'pages/ausbildungsablauf.html',
   'pages/ueber-mich.html',

@@ -1,0 +1,333 @@
+/* ==========================================================================
+   MODULE: IHK COCKPIT & CHALLENGE LAB STYLES
+   ========================================================================== */
+
+/* Layout & Containers */
+.ihk-cockpit-main,
+.challenge-lab-main {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+}
+
+.ihk-header-card {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    border-left: 4px solid var(--accent-color);
+}
+
+.challenge-header-card {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    border-left: 4px solid #10b981;
+}
+
+.ihk-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--accent-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.challenge-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.ihk-header-title,
+.challenge-header-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.ihk-header-desc,
+.challenge-header-desc {
+    color: var(--text-secondary);
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.cockpit-tabs-container {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+}
+
+.cockpit-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.cockpit-panel-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.cockpit-panel-subtitle {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.cockpit-action-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* NWA Table */
+.nwa-table-container {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.nwa-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.nwa-th-row {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.nwa-th-cell {
+    padding: 0.75rem;
+    text-align: center;
+    width: 25%;
+}
+
+.nwa-th-cell.text-left {
+    text-align: left;
+    width: 35%;
+}
+
+.nwa-th-cell.weight {
+    width: 15%;
+}
+
+.nwa-tfoot-row {
+    border-top: 2px solid var(--accent-color);
+    font-weight: bold;
+    background: rgba(14, 165, 233, 0.05);
+}
+
+.nwa-score-cell {
+    padding: 0.75rem;
+    text-align: center;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+}
+
+.nwa-recommendation-card {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+}
+
+.nwa-winner-highlight {
+    font-weight: 700;
+    color: #10b981;
+}
+
+/* Phasenplan */
+.phasen-total-badge {
+    background: rgba(14, 165, 233, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.phasen-bars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* Fachgespräch */
+.fg-header-center {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.fg-header-desc {
+    color: var(--text-secondary);
+    max-width: 650px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+}
+
+.fg-card-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.fg-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.fg-category-pill {
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+}
+
+.fg-timer-text {
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.fg-question-heading {
+    font-size: 1.25rem;
+    min-height: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.fg-answer-wrapper {
+    display: none;
+    background: rgba(16, 185, 129, 0.05);
+    border-left: 3px solid #10b981;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-top: 1rem;
+}
+
+.fg-answer-title {
+    font-weight: 700;
+    color: #10b981;
+    margin-bottom: 0.5rem;
+}
+
+.fg-answer-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.fg-actions-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.fg-progress-status {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.fg-progress-score {
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+/* Challenge Lab Tracker */
+.challenge-tracker-card {
+    margin-bottom: var(--space-xl);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.challenge-stat-item {
+    text-align: center;
+}
+
+.challenge-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.challenge-stat-score {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #10b981;
+}
+
+.challenge-stat-progress {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-color);
+}
+
+.challenge-stat-rank {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.challenge-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Portfolio Quick Bar */
+.portfolio-quickbar-card {
+    margin-bottom: 1.5rem;
+    background: rgba(14, 165, 233, 0.05);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.portfolio-quickbar-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.portfolio-quickbar-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}

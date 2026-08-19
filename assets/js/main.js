@@ -56,6 +56,11 @@ import { initIhkExamSimulator } from './modules/ihk-exam-simulator.js';
 import { initSqlPlayground } from './modules/sql-playground.js';
 import { initC4Architecture } from './modules/c4-architecture.js';
 import { initAudioPitch } from './modules/audio-pitch.js';
+import { initIhkCockpit } from './modules/ihk-cockpit.js';
+import { initQuickSandbox } from './modules/quick-sandbox.js';
+import { initPortfolioCopilot } from './modules/portfolio-copilot.js';
+import { initExecutiveDossier } from './modules/executive-dossier.js';
+import { initChallengeLab } from './modules/challenge-lab.js';
 
 /**
  * Main bootstrap function to initialize all modules.
@@ -73,7 +78,8 @@ function bootstrap() {
         initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
         initImpressumEnhancements, initTimelineScroll, initPremiumEffects, initPremiumEffectsP2,
         initSkillMatchmaker, initPdfExporter, initIcalGenerator, initIhkExamSimulator,
-        initSqlPlayground, initC4Architecture, initAudioPitch
+        initSqlPlayground, initC4Architecture, initAudioPitch,
+        initIhkCockpit, initQuickSandbox, initPortfolioCopilot, initExecutiveDossier, initChallengeLab
     ];
 
     // Sequentially call all initializer functions

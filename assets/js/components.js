@@ -102,7 +102,7 @@ function renderNav(currentPage) {
     // Determine active navigation group
     const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
     const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html', 'git-simulator.html'];
+    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html', 'git-simulator.html', 'ihk-cockpit.html', 'challenge-lab.html'];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -157,6 +157,8 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(weiteresPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
+                        <li><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link"><span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit</span></a></li>
+                        <li><a href="${pagePrefix}challenge-lab.html" class="dropdown-link"><span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
                         <li><a href="${pagePrefix}interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
                         <li><a href="${pagePrefix}playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
                         <li><a href="${pagePrefix}architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
