@@ -2,6 +2,24 @@
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten.
 
+## [1.3.0] - 2026-08-20
+
+### DSGVO, Rechtssicherheit & Privacy-Hardening
+- **Lokalisierung aller Drittanbieter-Ressourcen (`assets/vendor/`)**:
+  - Font Awesome 6.5.2 (Icons & Webfonts) und Prism.js (Syntax-Highlighter) wurden vollständig lokal im Projekt integriert. Alle externen CDN-Abhängigkeiten (`cdnjs.cloudflare.com`) wurden entfernt.
+  - Content Security Policy (CSP) auf allen 27 HTML-Seiten gehärtet.
+- **Google Maps 2-Klick-Datenschutzlösung (`impressum.html`)**:
+  - Direkte Google Maps iFrames durch ein interaktives 2-Klick-Consent-Overlay ersetzt. Verbindung zu Google-Servern wird erst nach explizitem Nutzerklick hergestellt.
+- **Aktualisierung Impressum & Datenschutzerklärung**:
+  - Rechtshinweise auf das Digitale-Dienste-Gesetz (§ 5 DDG) und § 18 Abs. 2 MStV aktualisiert.
+  - Vollständige Offenlegung aller genutzten `localStorage`-Schlüssel in [datenschutz.html](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/pages/datenschutz.html).
+
+### Design, SEO & Barrierefreiheit
+- **SEO & Strukturierte Daten**: JSON-LD Schema.org (`ProfilePage`, `Person`) in [home.html](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/pages/home.html) und [ueber-mich.html](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/pages/ueber-mich.html) integriert.
+- **Print-Stylesheet Optimierung (`assets/css/print.css`)**: Interaktive Buttons, Chat-Widgets und Modale werden im Druckmodus vollständig ausgeblendet für ein sauberes A4-Layout.
+- **PWA Service Worker Cache (`umschulung-fiae-v28`)**: Aktualisierter Cache für lückenlosen 100% Offline-Betrieb aller 27 Unterseiten und Module.
+- **Test-Verifikation**: 100% Erfolgsquote (`52/52 passed`) in der Playwright E2E Testsuite.
+
 ## [1.2.0] - 2026-08-19
 
 ### Hinzugefügt (Enterprise Portfolio Erweiterungen)

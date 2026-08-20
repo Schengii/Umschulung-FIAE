@@ -24,7 +24,10 @@ function initTabs() {
         t.classList.add('btn-secondary');
         t.setAttribute('aria-selected', 'false');
       });
-      panels.forEach(p => (p.style.display = 'none'));
+      panels.forEach(p => {
+        p.style.display = 'none';
+        p.classList.add('display-none');
+      });
 
       tab.classList.add('active', 'btn-primary');
       tab.classList.remove('btn-secondary');
@@ -33,6 +36,7 @@ function initTabs() {
       const targetId = tab.dataset.target;
       const targetPanel = document.getElementById(targetId);
       if (targetPanel) {
+        targetPanel.classList.remove('display-none');
         targetPanel.style.display = 'block';
       }
     });
@@ -342,9 +346,18 @@ function loadNextQuestion() {
   if (answerBox) answerBox.style.display = 'none';
 
   btnStart.textContent = '⏭️ Nächste Frage';
-  btnReveal.style.display = 'inline-block';
-  btnGood.style.display = 'none';
-  btnBad.style.display = 'none';
+  if (btnReveal) {
+    btnReveal.classList.remove('display-none');
+    btnReveal.style.display = 'inline-block';
+  }
+  if (btnGood) {
+    btnGood.classList.add('display-none');
+    btnGood.style.display = 'none';
+  }
+  if (btnBad) {
+    btnBad.classList.add('display-none');
+    btnBad.style.display = 'none';
+  }
 
   startTimer();
 }
@@ -380,10 +393,22 @@ function revealAnswer() {
   const btnGood = document.getElementById('btn-fg-grade-good');
   const btnBad = document.getElementById('btn-fg-grade-bad');
 
-  if (answerBox) answerBox.style.display = 'block';
-  if (btnReveal) btnReveal.style.display = 'none';
-  if (btnGood) btnGood.style.display = 'inline-block';
-  if (btnBad) btnBad.style.display = 'inline-block';
+  if (answerBox) {
+    answerBox.classList.remove('display-none');
+    answerBox.style.display = 'block';
+  }
+  if (btnReveal) {
+    btnReveal.classList.add('display-none');
+    btnReveal.style.display = 'none';
+  }
+  if (btnGood) {
+    btnGood.classList.remove('display-none');
+    btnGood.style.display = 'inline-block';
+  }
+  if (btnBad) {
+    btnBad.classList.remove('display-none');
+    btnBad.style.display = 'inline-block';
+  }
 }
 
 function gradeAnswer(isGood) {

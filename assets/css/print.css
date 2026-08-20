@@ -1,9 +1,9 @@
 /* ==========================================================================
-   PRINT STYLESHEET — Portfolio Print-Optimierung
+   PRINT STYLESHEET — Portfolio & Lebenslauf Print-Optimierung
    ========================================================================== */
 
 @media print {
-    /* Hide non-essential UI elements */
+    /* Hide non-essential UI and interactive elements */
     header,
     nav,
     .topnav,
@@ -28,18 +28,27 @@
     #back-to-top,
     #portfolio-searchbar,
     .project-search-input,
-    .sort-select,
     .modal,
     .btn-admin-toggle,
     .hire-me-form,
     #hire-me-form,
-    .status-widget {
+    .status-widget,
+    #copilot-toggle-btn,
+    #copilot-drawer,
+    #command-palette-overlay,
+    .audio-pitch-card,
+    .c4-level-bar,
+    .arch-tabs-bar,
+    .recruiter-filters,
+    .badge-filter,
+    .token-auth-box,
+    .interactive-only {
         display: none !important;
     }
 
     /* Reset background and colors for print */
     * {
-        background: white !important;
+        background: transparent !important;
         color: #000 !important;
         box-shadow: none !important;
         text-shadow: none !important;
@@ -47,18 +56,19 @@
 
     body {
         font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-        font-size: 11pt;
-        line-height: 1.5;
+        font-size: 10.5pt;
+        line-height: 1.45;
         margin: 0;
         padding: 0;
     }
 
     /* Cards in print mode */
     .card {
-        border: 1px solid #ccc !important;
+        border: 1px solid #d1d5db !important;
         page-break-inside: avoid;
         margin-bottom: 1rem;
         padding: 1rem;
+        background: #fff !important;
     }
 
     /* Layout — single column for print */
@@ -72,15 +82,16 @@
         max-width: 100% !important;
     }
 
-    /* Links — show URL after link text */
-    a[href]::after {
+    /* Links — hide full URL clutter for internal, show for external */
+    a[href^="http"]::after {
         content: " (" attr(href) ")";
         font-size: 0.8em;
-        color: #555 !important;
+        color: #4b5563 !important;
     }
 
     a[href^="#"]::after,
-    a[href^="javascript:"]::after {
+    a[href^="javascript:"]::after,
+    a[href$=".html"]::after {
         content: "";
     }
 
@@ -92,23 +103,25 @@
 
     /* Skill bars in print */
     .skill-fill {
-        background: #333 !important;
+        background: #374151 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
     }
 
     .skill-track {
-        border: 1px solid #ccc !important;
+        border: 1px solid #9ca3af !important;
     }
 
     /* Page breaks */
-    h2, h3 {
+    h1, h2, h3 {
         page-break-after: avoid;
+        color: #111827 !important;
     }
 
     /* Timeline print */
     .timeline-badge {
-        border: 1px solid #333 !important;
+        border: 1px solid #374151 !important;
+        background: #f3f4f6 !important;
     }
 
     /* Language — show only active language */

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Umschulung IT | Maximilian Schenk</title>
     <meta name="description"
@@ -16,12 +16,32 @@
     <meta property="og:url" content="https://max-schenk.de/home.html">
     <meta property="og:image" content="https://max-schenk.de/assets/images/it_workspace.png">
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "dateCreated": "2024-04-01T08:00:00+02:00",
+        "mainEntity": {
+            "@type": "Person",
+            "name": "Maximilian Schenk",
+            "jobTitle": "Fachinformatiker für Anwendungsentwicklung (FIAE)",
+            "description": "Umschulung zum Fachinformatiker für Anwendungsentwicklung am BFW Dortmund mit Praktikum bei der DFG in Bonn.",
+            "url": "https://max-schenk.de",
+            "sameAs": [
+                "https://github.com/Schengii",
+                "https://linkedin.com/in/maximilian-schenk"
+            ],
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Bonn",
+                "postalCode": "53175",
+                "addressCountry": "DE"
+            }
+        }
+    }
+    </script>
     <script src="../assets/js/components.js"></script>
 </head>
 
@@ -258,7 +278,7 @@
 
             <!-- Right Column -->
             <aside class="right-col">
-                <section class="card recruiter-profile-card border-left-primary" aria-labelledby="steckbrief-title">
+                <section class="card recruiter-profile-card border-left-primary" aria-labelledby="steckbrief-title">
                     <h3 id="steckbrief-title" class="m-0 font-size-1-15rem">
                         <span lang="de"><i class="fa-solid fa-address-card" aria-hidden="true"></i> Steckbrief
                             (Recruiter-Info)</span>
@@ -285,28 +305,28 @@
                         </tr>
                         <tr class="border-bottom-1px-solid">
                             <td class="font-weight-600 color-text-secondary"><span
-                                    lang="de">Schwerpunkte</span><span lang="en">Core Stack</span></td>
+                                     lang="de">Schwerpunkte</span><span lang="en">Core Stack</span></td>
                             <td class="color-text-primary" id="steckbrief-schwerpunkte">React, TypeScript, Java SE, SQL</td>
                         </tr>
                         <tr class="border-bottom-1px-solid">
                             <td class="font-weight-600 color-text-secondary"><span
-                                    lang="de">Verfügbarkeit</span><span lang="en">Availability</span></td>
+                                     lang="de">Verfügbarkeit</span><span lang="en">Availability</span></td>
                             <td class="color-text-primary font-weight-600"><span lang="de">Ab
                                      sofort (Bonn / Remote)</span><span lang="en">Immediate (Bonn / Remote)</span></td>
                         </tr>
                         <tr class="border-bottom-1px-solid">
                             <td class="font-weight-600 color-text-secondary"><span
-                                    lang="de">Erfahrung</span><span lang="en">Experience</span></td>
+                                     lang="de">Erfahrung</span><span lang="en">Experience</span></td>
                             <td class="color-text-primary"><span lang="de">2 Jahre
-                                    Web-Praktikum (DFG) + IHK-Abschluss</span><span lang="en">2 yrs cooperative web
-                                    internship (DFG)</span></td>
+                                     Web-Praktikum (DFG) + IHK-Abschluss</span><span lang="en">2 yrs cooperative web
+                                     internship (DFG)</span></td>
                         </tr>
                         <tr>
                             <td class="font-weight-600 color-text-secondary"><span
-                                    lang="de">Stärke</span><span lang="en">Core Value</span></td>
+                                     lang="de">Stärke</span><span lang="en">Core Value</span></td>
                             <td class="color-text-primary"><span lang="de">Problemlösung
-                                    (Elektroniker-Mindset) + Clean Code</span><span lang="en">Electronics mindset +
-                                    Clean Code</span></td>
+                                     (Elektroniker-Mindset) + Clean Code</span><span lang="en">Electronics mindset +
+                                     Clean Code</span></td>
                         </tr>
                     </table>
                 </section>
@@ -329,7 +349,6 @@
                         <span lang="en">🚀 Status: Available immediately for full-time roles</span>
                     </div>
                 </section>
-
 
                 <!-- INTERACTIVE TIMELINE (LEBENSLAUF) -->
                 <section class="card" aria-labelledby="card-aboutme">

@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenschutzerklärung - Umschulung IT</title>
-    <meta name="description" content="Datenschutzerklärung für das Portfolio von Maximilian Schenk — Informationen zur Datenverarbeitung, Cookies und externen Diensten.">
+    <meta name="description" content="Datenschutzerklärung für das Portfolio von Maximilian Schenk — Informationen zur Datenverarbeitung, LocalStorage und Datenschutz nach DSGVO.">
     <meta name="author" content="Maximilian Schenk">
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
     <script src="../assets/js/components.js"></script>
 </head>
 
@@ -26,67 +26,68 @@
     <main id="main-content" class="main-container layout-single">
         <article class="card">
             <h1>
-                <span lang="de">Datenschutzerklärung</span>
-                <span lang="en">Privacy Policy</span>
+                <span lang="de"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Datenschutzerklärung</span>
+                <span lang="en"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Privacy Policy</span>
             </h1>
 
             <h2 lang="de">1. Verantwortlicher</h2>
             <h2 lang="en">1. Data Controller</h2>
-            <p>Maximilian Schenk<br>Rüdesheimer Str. 14<br>53175 Bonn<br>E-Mail: <a href="mailto:sche-max@web.de">sche-max@web.de</a></p>
+            <p>
+                Maximilian Schenk<br>
+                Rüdesheimer Str. 14<br>
+                53175 Bonn<br>
+                Deutschland<br>
+                E-Mail: <a href="mailto:sche-max@web.de">sche-max@web.de</a><br>
+                Telefon: <a href="tel:+4917624921897">0176 24921897</a>
+            </p>
             <hr>
 
-            <h2 lang="de">2. Allgemeine Hinweise</h2>
-            <h2 lang="en">2. General Information</h2>
-            <p lang="de">Diese Website ist ein privates Portfolio-Projekt im Rahmen einer Umschulung zum Fachinformatiker für Anwendungsentwicklung. Sie dient ausschließlich Präsentationszwecken und erhebt keine personenbezogenen Daten über Server-Logfiles hinaus.</p>
-            <p lang="en">This website is a private portfolio project as part of a retraining program for IT Application Development. It is purely for presentation purposes and does not collect personal data beyond server log files.</p>
+            <h2 lang="de">2. Allgemeine Hinweise &amp; Hosting</h2>
+            <h2 lang="en">2. General Information &amp; Hosting</h2>
+            <p lang="de">Diese Website ist ein privates Portfolio-Projekt im Rahmen einer Umschulung zum Fachinformatiker für Anwendungsentwicklung. Sie dient der fachlichen Präsentation und Bewerbung. Alle Webseiten, Schriftarten und Skripte werden lokal bzw. über statische Webserver bereitgestellt. Beim Aufruf der Seiten fallen lediglich technisch notwendige Server-Logfiles Ihres Internetanbieters an (z. B. IP-Adresse, Browser-Typ, Zeitpunkt des Zugriffs).</p>
+            <p lang="en">This website is a personal portfolio project showcasing training as an IT Specialist for Application Development. All pages, web fonts, and scripts are hosted locally. When visiting the site, only standard server log data is processed by the hosting infrastructure.</p>
             <hr>
 
-            <h2 lang="de">3. Local Storage</h2>
+            <h2 lang="de">3. Lokale Speicherung (Local Storage)</h2>
             <h2 lang="en">3. Local Storage</h2>
-            <p lang="de">Diese Website verwendet den Local Storage Ihres Browsers, um folgende Einstellungen lokal auf Ihrem Gerät zu speichern:</p>
-            <p lang="en">This website uses your browser's Local Storage to save the following settings locally on your device:</p>
+            <p lang="de">Diese Website verwendet den <code>localStorage</code> Ihres Browsers, um Ihre Benutzereinstellungen ausschließlich lokal auf Ihrem Endgerät zu speichern. Es findet <strong>keine Übertragung</strong> an externe Server oder Tracking-Dienste statt:</p>
+            <p lang="en">This website uses your browser's <code>localStorage</code> to keep your personal UI preferences stored exclusively on your device. <strong>No data is transmitted</strong> to external analytics or tracking services:</p>
             <ul>
-                <li lang="de"><strong>Theme-Präferenz</strong> (Hell/Dunkel)</li>
-                <li lang="en"><strong>Theme preference</strong> (Light/Dark)</li>
-                <li lang="de"><strong>Sprachpräferenz</strong> (Deutsch/Englisch)</li>
-                <li lang="en"><strong>Language preference</strong> (German/English)</li>
-                <li lang="de"><strong>Benutzername</strong> (optional eingegebener Name für die Begrüßung)</li>
-                <li lang="en"><strong>Username</strong> (optionally entered name for the greeting)</li>
-                <li lang="de"><strong>Spiel-Highscores</strong> (Snake, Memory)</li>
-                <li lang="en"><strong>Game high scores</strong> (Snake, Memory)</li>
-                <li lang="de"><strong>Cookie-Zustimmung</strong></li>
-                <li lang="en"><strong>Cookie consent</strong></li>
+                <li><code>fiae_theme</code>: <span lang="de">Gewähltes Farbschema (Hell / Dunkel)</span><span lang="en">Selected theme (Light / Dark)</span></li>
+                <li><code>fiae_accent_color</code>: <span lang="de">Gewählte Akzentfarbe (Blau, Grün, Lila, etc.)</span><span lang="en">Selected accent color (Blue, Green, Purple, etc.)</span></li>
+                <li><code>fiae_lang</code>: <span lang="de">Sprachpräferenz (Deutsch / Englisch)</span><span lang="en">Language preference (German / English)</span></li>
+                <li><code>fiae_username</code>: <span lang="de">Optional eingegebener Name für die Dashboard-Begrüßung</span><span lang="en">Optionally entered name for personalized greetings</span></li>
+                <li><code>fiae_a11y_*</code>: <span lang="de">Barrierefreiheits-Einstellungen (Schriftgröße, Legasthenie-Hilfe, Farbkontrast)</span><span lang="en">Accessibility options (Font scale, Dyslexia font, High contrast)</span></li>
+                <li><code>fiae_achievements</code>: <span lang="de">Lokale Gamification-Errungenschaften &amp; Fortschritte</span><span lang="en">Local achievements &amp; gamification progress</span></li>
+                <li><code>snake_highscore</code>, <code>memory_best_time</code>: <span lang="de">Lokale Spielstände der Mini-Games</span><span lang="en">Local game high scores</span></li>
+                <li><code>fiae_cookie_consent</code>: <span lang="de">Status der Cookie-/Datenschutz-Bestätigung</span><span lang="en">Consent acknowledgement state</span></li>
             </ul>
-            <p lang="de">Diese Daten werden <strong>nicht</strong> an einen Server übertragen. Sie können den Local Storage jederzeit in Ihren Browser-Einstellungen löschen.</p>
-            <p lang="en">This data is <strong>not</strong> transmitted to any server. You can clear the Local Storage at any time in your browser settings.</p>
+            <p lang="de">Sie können die gespeicherten Daten jederzeit selbst über Ihre Browser-Einstellungen oder den Button „Alle lokalen Daten löschen“ im Dashboard zurücksetzen.</p>
+            <p lang="en">You can clear this stored data anytime in your browser settings or via the reset button on the dashboard.</p>
             <hr>
 
-            <h2 lang="de">4. Externe Dienste</h2>
-            <h2 lang="en">4. External Services</h2>
-
-            <h3>Google Fonts (Inter &amp; Outfit)</h3>
-            <p lang="de">Diese Website lädt die Schriftarten „Inter“ und „Outfit“ von Google Fonts. Dabei wird eine Verbindung zu Servern von Google (USA) hergestellt und Ihre IP-Adresse übermittelt. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Datenschutzerklärung</a>.</p>
-            <p lang="en">This website loads the "Inter" and "Outfit" fonts from Google Fonts. A connection to Google servers (USA) is established and your IP address is transmitted. More info: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
-
-            <h3>Google Maps</h3>
-            <p lang="de">Auf der Impressum-Seite werden Google Maps Karten eingebettet. Beim Laden der Karte wird eine Verbindung zu Google-Servern hergestellt. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Datenschutzerklärung</a>.</p>
-            <p lang="en">The Impressum page embeds Google Maps. Loading the map establishes a connection to Google servers. More info: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</p>
-
-            <h3>Font Awesome (CDN)</h3>
-            <p lang="de">Icons werden über das Font Awesome CDN (cdnjs.cloudflare.com) geladen. Dabei wird eine Verbindung zu Cloudflare-Servern hergestellt.</p>
-            <p lang="en">Icons are loaded via the Font Awesome CDN (cdnjs.cloudflare.com). This establishes a connection to Cloudflare servers.</p>
+            <h2 lang="de">4. Lokales Schriftarten- &amp; Icon-Hosting</h2>
+            <h2 lang="en">4. Local Font &amp; Icon Hosting</h2>
+            <p lang="de">Zur Gewährleistung maximaler Privatsphäre und DSGVO-Konformität werden alle Schriftarten (Inter, Outfit) und Icon-Bibliotheken (Font Awesome) <strong>vollständig lokal</strong> auf unserem Webserver gehostet. Es erfolgt keine Verbindung zu Servern von Google Fonts oder externen Content Delivery Networks (CDNs).</p>
+            <p lang="en">To guarantee full GDPR compliance and privacy, all fonts (Inter, Outfit) and icon libraries (Font Awesome) are <strong>hosted 100% locally</strong>. No connections are made to third-party font servers or CDNs.</p>
             <hr>
 
-            <h2 lang="de">5. Kontaktformular</h2>
-            <h2 lang="en">5. Contact Form</h2>
-            <p lang="de">Das Kontaktformular auf der Impressum-Seite ist <strong>rein demonstrativ</strong>. Eingegebene Daten werden nicht gespeichert und nicht versendet.</p>
-            <p lang="en">The contact form on the Impressum page is <strong>purely demonstrative</strong>. Entered data is not stored and not sent.</p>
+            <h2 lang="de">5. Google Maps (2-Klick-Lösung)</h2>
+            <h2 lang="en">5. Google Maps (2-Click Solution)</h2>
+            <p lang="de">Auf der Impressum-Seite wird Kartenmaterial von Google Maps angeboten. Zum Schutz Ihrer Privatsphäre sind diese Karten standardmäßig deaktiviert. Erst wenn Sie aktiv auf <em>„Karte laden &amp; aktivieren“</em> klicken, wird eine Verbindung zu den Servern von Google Ireland Limited / Google LLC hergestellt und Ihre IP-Adresse übertragen. Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).</p>
+            <p lang="en">On the legal notice page, maps are provided via Google Maps. By default, maps are disabled. Only upon clicking <em>"Load &amp; activate map"</em> is a connection to Google servers established. Legal basis: Art. 6 (1) lit. a GDPR (Consent).</p>
             <hr>
 
-            <h2 lang="de">6. Ihre Rechte</h2>
-            <h2 lang="en">6. Your Rights</h2>
-            <p lang="de">Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer personenbezogenen Daten. Bei Fragen wenden Sie sich bitte an: <a href="mailto:sche-max@web.de">sche-max@web.de</a></p>
-            <p lang="en">You have the right to access, correct, delete, and restrict the processing of your personal data. For questions, please contact: <a href="mailto:sche-max@web.de">sche-max@web.de</a></p>
+            <h2 lang="de">6. Kontaktformular</h2>
+            <h2 lang="en">6. Contact Form</h2>
+            <p lang="de">Wenn Sie uns über das Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben (Name, E-Mail-Adresse, Nachricht) ausschließlich zur Bearbeitung der Anfrage per verschlüsselter API oder E-Mail-Client verarbeitet. Eine Weitergabe an Dritte findet nicht statt.</p>
+            <p lang="en">When submitting inquiries through our contact forms, your information (name, email address, message) is processed solely to handle your request. No data is shared with third parties.</p>
+            <hr>
+
+            <h2 lang="de">7. Ihre Rechte als betroffene Person</h2>
+            <h2 lang="en">7. Your Rights under GDPR</h2>
+            <p lang="de">Sie haben gemäß Art. 15–21 DSGVO jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger sowie das Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Wenden Sie sich hierzu bitte an: <a href="mailto:sche-max@web.de">sche-max@web.de</a>.</p>
+            <p lang="en">Under Art. 15–21 GDPR, you have the right to information, rectification, erasure, and restriction of processing of your personal data at any time. For inquiries, contact: <a href="mailto:sche-max@web.de">sche-max@web.de</a>.</p>
         </article>
     </main>
 
@@ -96,4 +97,3 @@
 </body>
 
 </html>
-

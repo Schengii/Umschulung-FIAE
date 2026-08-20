@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum & Kontakt - Umschulung IT | Maximilian Schenk</title>
     <meta name="description"
@@ -17,8 +17,7 @@
     <meta property="og:image" content="https://max-schenk.de/assets/images/it_workspace.png">
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
     <script src="../assets/js/components.js"></script>
     <link rel="stylesheet" href="../assets/css/impressum.css">
 </head>
@@ -42,15 +41,15 @@
                         <span lang="de">Kontakt &amp; Impressum</span>
                         <span lang="en">Legal Notice &amp; Contact</span>
                     </h2>
-                    <p lang="de">Ich freue mich über Rückmeldungen, Fragen und Anregungen zu meiner Umschulung und
-                        diesem Web-Portfolio!</p>
-                    <p lang="en">I welcome feedback, questions, and suggestions regarding my retraining and this web
-                        portfolio!</p>
+                    <p lang="de">Ich freue mich über Rückmeldungen, Fragen und Anregungen zu meiner Umschulung und diesem Web-Portfolio!</p>
+                    <p lang="en">I welcome feedback, questions, and suggestions regarding my retraining and this web portfolio!</p>
                     <hr>
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <strong>E-Mail:</strong> <a
-                            href="mailto:sche-max@web.de">sche-max@web.de</a></p>
-                    <p><i class="fa fa-phone" aria-hidden="true"></i> <strong><span lang="de">Telefon:</span><span
-                                lang="en">Phone:</span></strong> <a href="tel:+4917624921897">0176 24921897</a></p>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <strong>E-Mail:</strong> <a href="mailto:sche-max@web.de">sche-max@web.de</a></p>
+                    <p><i class="fa fa-phone" aria-hidden="true"></i> <strong><span lang="de">Telefon:</span><span lang="en">Phone:</span></strong> <a href="tel:+4917624921897">0176 24921897</a></p>
+                    <p class="font-size-0-8rem color-text-muted margin-top-0-5rem">
+                        <span lang="de">Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz) &middot; Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: Maximilian Schenk</span>
+                        <span lang="en">Information pursuant to Section 5 DDG (Digital Services Act) &middot; Responsible for content: Maximilian Schenk</span>
+                    </p>
                 </article>
 
                 <article class="card" aria-labelledby="addr-bonn">
@@ -64,10 +63,21 @@
                         53175 Bonn<br>
                         Germany
                     </p>
-                    <div class="map-container">
-                        <iframe title="Google Maps Standort Bonn"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5054.46808144908!2d7.132505293668065!3d50.69704129851722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee3f119f2ffc1%3A0xc9c318a1fed01d18!2sR%C3%BCdesheimer%20Str.%2014%2C%2053175%20Bonn!5e0!3m2!1sde!2sde!4v1713951947205!5m2!1sde!2sde"
-                            allowfullscreen="" loading="lazy"></iframe>
+                    <div class="map-container map-2click-container" 
+                         data-map-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5054.46808144908!2d7.132505293668065!3d50.69704129851722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee3f119f2ffc1%3A0xc9c318a1fed01d18!2sR%C3%BCdesheimer%20Str.%2014%2C%2053175%20Bonn!5e0!3m2!1sde!2sde!4v1713951947205!5m2!1sde!2sde"
+                         data-title="Google Maps Standort Bonn">
+                        <div class="map-placeholder-overlay">
+                            <i class="fa-solid fa-map-location-dot fa-2x color-primary" aria-hidden="true"></i>
+                            <p class="map-privacy-hint font-size-0-85rem">
+                                <span lang="de">Zum Schutz deiner Privatsphäre ist Google Maps deaktiviert. Mit Klick auf den Button wird die interaktive Karte geladen (Verbindung zu Google Maps).</span>
+                                <span lang="en">To protect your privacy, Google Maps is deactivated. Clicking the button loads the map from Google.</span>
+                            </p>
+                            <button type="button" class="btn-primary small-btn btn-load-map cursor-pointer">
+                                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                <span lang="de">Karte laden (Bonn)</span>
+                                <span lang="en">Load Map (Bonn)</span>
+                            </button>
+                        </div>
                     </div>
                 </article>
 
@@ -82,10 +92,21 @@
                         44265 Dortmund<br>
                         Germany
                     </p>
-                    <div class="map-container">
-                        <iframe title="Google Maps Standort Dortmund"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.058468615845!2d7.472410677201505!3d51.475441071806124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b91790e93f208d%3A0x39303511b2287d4!2sHacheneyer%20Str.%20180%2C%2044265%20Dortmund!5e0!3m2!1sde!2sde!4v1713958104968!5m2!1sde!2sde"
-                            allowfullscreen="" loading="lazy"></iframe>
+                    <div class="map-container map-2click-container" 
+                         data-map-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.058468615845!2d7.472410677201505!3d51.475441071806124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b91790e93f208d%3A0x39303511b2287d4!2sHacheneyer%20Str.%20180%2C%2044265%20Dortmund!5e0!3m2!1sde!2sde!4v1713958104968!5m2!1sde!2sde"
+                         data-title="Google Maps Standort Dortmund">
+                        <div class="map-placeholder-overlay">
+                            <i class="fa-solid fa-map-location-dot fa-2x color-primary" aria-hidden="true"></i>
+                            <p class="map-privacy-hint font-size-0-85rem">
+                                <span lang="de">Zum Schutz deiner Privatsphäre ist Google Maps deaktiviert. Mit Klick auf den Button wird die interaktive Karte geladen (Verbindung zu Google Maps).</span>
+                                <span lang="en">To protect your privacy, Google Maps is deactivated. Clicking the button loads the map from Google.</span>
+                            </p>
+                            <button type="button" class="btn-primary small-btn btn-load-map cursor-pointer">
+                                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                <span lang="de">Karte laden (Dortmund)</span>
+                                <span lang="en">Load Map (Dortmund)</span>
+                            </button>
+                        </div>
                     </div>
                 </article>
 
@@ -94,10 +115,8 @@
                         <span lang="de">Qualifikationen &amp; Vorträge</span>
                         <span lang="en">Qualifications &amp; Presentations</span>
                     </h2>
-                    <p lang="de">Im Rahmen meiner Umschulung habe ich verschiedene Präsentationen und Arbeiten erstellt.
-                        Hier kannst du die wichtigsten Dokumente herunterladen:</p>
-                    <p lang="en">During my retraining, I prepared various presentations and projects. You can download
-                        the key documents here:</p>
+                    <p lang="de">Im Rahmen meiner Umschulung habe ich verschiedene Präsentationen und Arbeiten erstellt. Hier kannst du die wichtigsten Dokumente herunterladen:</p>
+                    <p lang="en">During my retraining, I prepared various presentations and projects. You can download the key documents here:</p>
                     <div class="grid-220px-col margin-top-1rem">
                         <div class="card dashed-card p-1rem display-flex flex-direction-column flex-space-between bg-page card-margin-0 border-dashed-card">
                             <div>
@@ -135,8 +154,7 @@
 
                         <div class="form-group">
                             <label for="contact-email">E-Mail *</label>
-                            <input type="email" id="contact-email" class="form-control" required
-                                placeholder="deine@mail.de">
+                            <input type="email" id="contact-email" class="form-control" required placeholder="deine@mail.de">
                         </div>
 
                         <div class="form-group">
@@ -144,8 +162,7 @@
                                 <span lang="de">Nachricht</span>
                                 <span lang="en">Message</span>
                                 *</label>
-                            <textarea id="contact-message" class="form-control contact-message-textarea" rows="5"
-                                required placeholder="..."></textarea>
+                            <textarea id="contact-message" class="form-control contact-message-textarea" rows="5" required placeholder="..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-primary">
@@ -156,8 +173,8 @@
 
                     <div id="form-feedback" class="card form-feedback-styled">
                         <i class="fa fa-check-circle" aria-hidden="true"></i>
-                        <span lang="de">Nachricht wurde simuliert gesendet! Vielen Dank.</span>
-                        <span lang="en">Message successfully sent (simulated). Thank you!</span>
+                        <span lang="de">Nachricht wurde gesendet! Vielen Dank.</span>
+                        <span lang="en">Message successfully sent! Thank you.</span>
                     </div>
                 </section>
 

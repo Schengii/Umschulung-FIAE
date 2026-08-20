@@ -97,9 +97,14 @@ Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung
   - 👁️ **Hochkontrast-Modus (`data-contrast="high"`)**: Erfüllt das WCAG 2.1 AAA Kontrastverhältnis (7:1).
   - Persistiert alle Benutzereinstellungen im `localStorage`.
 
-### 3. PWA-Offline-Caching (`sw.js`)
-Der Service Worker in [sw.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/sw.js) cached alle statischen Dateien (HTML, CSS, JS, Bilder) für die Offline-Nutzung.
-- **Cache-Version**: `umschulung-fiae-v25` signalisiert allen Browsern automatisches Aktualisieren statischer Assets.
+### 3. PWA-Offline-Caching (`sw.js`) & 100% DSGVO-Konformität
+- **Service Worker (`umschulung-fiae-v28`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
+- **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
+  - Alle Icon-Fonts (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
+  - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
+  - Die Content-Security-Policy (CSP) ist strikt gehärtet.
+- **Google Maps 2-Klick-Datenschutzlösung**: Karten im Impressum werden standardmäßig blockiert und erst nach aktiver Nutzereinwilligung dynamisch geladen.
+- **Digitale-Dienste-Gesetz (DDG)**: Das Impressum und die Datenschutzerklärung sind auf dem aktuellen Stand nach § 5 DDG und Art. 13/14 DSGVO.
 
 ### 4. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
 Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/data/projects.json) sowie `assets/js/projects_data.js`.

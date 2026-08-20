@@ -68,10 +68,11 @@ test.describe('New Interactive Features E2E Verification', () => {
     const c4Switcher = page.locator('#c4-level-switcher');
     await expect(c4Switcher).toBeVisible();
 
-    const lvl2Btn = page.locator('button[data-level="2"]');
+    const lvl2Btn = c4Switcher.locator('button[data-level="2"]');
+    await lvl2Btn.scrollIntoViewIfNeeded();
     await lvl2Btn.click();
 
-    const info = page.locator('#c4-level-info');
+    const info = c4Switcher.locator('#c4-level-info');
     await expect(info).toContainText('Container Diagramm');
   });
 
