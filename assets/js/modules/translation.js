@@ -20,6 +20,7 @@ export function initTranslation() {
         updateDynamicElementsTranslation(newLang);
 
         document.dispatchEvent(new CustomEvent('langchange', { detail: newLang }));
+        window.dispatchEvent(new CustomEvent('fiae:lang-change', { detail: { lang: newLang } }));
     });
 }
 

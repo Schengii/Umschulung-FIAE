@@ -2,6 +2,19 @@
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten.
 
+## [1.4.0] - 2026-08-20
+
+### Architektur, Reaktivität & Entwickler-Experience
+- **Zentraler Event-Bus (`assets/js/modules/event-bus.js`)**:
+  - Einführung eines leichtgewichtigen, nativen `CustomEvent`-Busses (`fiae:theme-change`, `fiae:lang-change`, `fiae:accent-change`, `fiae:a11y-change`).
+  - Ermöglicht lose gekoppeltes, reaktives State-Management zwischen Theme-, Sprach- und Barrierefreiheits-Komponenten ohne DOM-Polling.
+- **TypeScript-Prüfung & IDE-Intellisense (`jsconfig.json`)**:
+  - Projektweites Typechecking mit `"checkJs": true` und `ESNext`-Ziel für erstklassige Code-Vervollständigung und statische Fehlererkennung in modernen IDEs.
+- **Bildoptimierungs-Pipeline (`scripts/optimize_images.js`)**:
+  - Skript zur automatischen Überwachung und Prüfung von Bildgrößen, Kompressionsraten und WebP-Potenzialen.
+- **Showcase-Konsolidierung & Aufräumung**:
+  - Zuordnung dedizierter Showcase-Bilder für Finanzenportfolio, Urlaubsfotos und Verkaufs-Vorlagen; Bereinigung aller temporären Build- und Test-Logs.
+
 ## [1.3.0] - 2026-08-20
 
 ### DSGVO, Rechtssicherheit & Privacy-Hardening

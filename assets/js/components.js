@@ -519,6 +519,7 @@ function initAccessibilityControls() {
     if (btnDyslexia) {
         btnDyslexia.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-dyslexia') === 'true';
+            const nextVal = !current;
             if (current) {
                 document.documentElement.removeAttribute('data-dyslexia');
                 StorageManager.setItem('portfolio_dyslexia', 'false');
@@ -528,6 +529,7 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_dyslexia', 'true');
                 btnDyslexia.classList.add('active');
             }
+            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'dyslexia', value: nextVal } }));
         });
         if (document.documentElement.getAttribute('data-dyslexia') === 'true') {
             btnDyslexia.classList.add('active');
@@ -539,6 +541,7 @@ function initAccessibilityControls() {
     if (btnColorblind) {
         btnColorblind.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-colorblind');
+            const nextVal = current === 'deuteranopia' ? '' : 'deuteranopia';
             if (current === 'deuteranopia') {
                 document.documentElement.removeAttribute('data-colorblind');
                 StorageManager.setItem('portfolio_colorblind', '');
@@ -548,6 +551,7 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_colorblind', 'deuteranopia');
                 btnColorblind.classList.add('active');
             }
+            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'colorblind', value: nextVal } }));
         });
         if (document.documentElement.getAttribute('data-colorblind')) {
             btnColorblind.classList.add('active');
@@ -559,18 +563,23 @@ function initAccessibilityControls() {
     if (btnFontScale) {
         btnFontScale.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-font-scale');
+            let nextVal = '';
             if (!current) {
                 document.documentElement.setAttribute('data-font-scale', 'large');
                 StorageManager.setItem('portfolio_font_scale', 'large');
                 btnFontScale.classList.add('active');
+                nextVal = 'large';
             } else if (current === 'large') {
                 document.documentElement.setAttribute('data-font-scale', 'xlarge');
                 StorageManager.setItem('portfolio_font_scale', 'xlarge');
+                nextVal = 'xlarge';
             } else {
                 document.documentElement.removeAttribute('data-font-scale');
                 StorageManager.setItem('portfolio_font_scale', '');
                 btnFontScale.classList.remove('active');
+                nextVal = 'normal';
             }
+            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'fontScale', value: nextVal } }));
         });
         if (document.documentElement.getAttribute('data-font-scale')) {
             btnFontScale.classList.add('active');
@@ -582,6 +591,7 @@ function initAccessibilityControls() {
     if (btnContrast) {
         btnContrast.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-contrast') === 'high';
+            const nextVal = !current;
             if (current) {
                 document.documentElement.removeAttribute('data-contrast');
                 StorageManager.setItem('portfolio_contrast', 'normal');
@@ -591,6 +601,7 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_contrast', 'high');
                 btnContrast.classList.add('active');
             }
+            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'contrast', value: nextVal } }));
         });
         if (document.documentElement.getAttribute('data-contrast') === 'high') {
             btnContrast.classList.add('active');

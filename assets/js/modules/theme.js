@@ -19,6 +19,8 @@ export function initTheme() {
         document.documentElement.setAttribute('data-theme', newTheme);
         StorageManager.setItem(STORAGE_KEYS.THEME, newTheme);
         updateThemeIcon(newTheme);
+        window.dispatchEvent(new CustomEvent('fiae:theme-change', { detail: { theme: newTheme } }));
+        document.dispatchEvent(new CustomEvent('themechange', { detail: newTheme }));
     });
 }
 
