@@ -111,23 +111,22 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Befehl zum Ausführen: `npm run generate-data`
 - Prüfbefehl: `npm run check-sync`
 
-### 5. Kryptografischer Token-Schutz & DSGVO (`token-auth.js`)
-Schützt vertrauliche Dokumente auf `lebenslauf.html`. Der Zugriff wird über die Eingabe des Passwort-Tokens **fiae2026** freigeschaltet.
-- **Client-Kryptografie**: Gehaltswunsch und Zeugnislinks sind im HTML-Code als Base64-verschlüsselter XOR-Payload hinterlegt und werden erst nach Token-Eingabe im DOM entschlüsselt.
-- **DSGVO & CSP**: Strenge Content-Security-Policy (CSP) im Header aller HTML-Dateien. Lokale WOFF2 Fonts ohne Google-Server-Verbindungen.
+### 5. Qualitätssicherung, Bereinigung & E2E-Testing
+- **Test-Suite**: 52 automatisierte Playwright-E2E-Tests (`npm run test:e2e`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 21 Projekte validieren.
+- **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js`.
+- **Bereinigte Projektstruktur**: Automatische Entfernung temporärer Test-Artefakte, veralteter Bildreste und Konsolidierung aller Projektmetadaten.
 
 ---
 
-## 🚀 Entwicklung & Lokales Testen
+## 🚀 Lokale Entwicklung & Start
 
 ### 1. Abhängigkeiten installieren
-Installiere die benötigten E2E-Test-Abhängigkeiten (Playwright) lokal im Projektverzeichnis:
 ```bash
 npm install
 npx playwright install chromium
 ```
 
-### 2. Projektdaten generieren & verifizieren
+### 2. Projektdaten generieren & prüfen
 ```bash
 npm run generate-data
 npm run check-sync
@@ -135,15 +134,15 @@ npm run check-sync
 
 ### 3. Lokalen Entwicklungsserver starten
 ```bash
-npx http-server . -p 8080 -c-1
+npm run dev
 ```
 Öffne anschließend **[http://127.0.0.1:8080](http://127.0.0.1:8080)** im Browser.
 
-### 4. Automated E2E Testing (Playwright)
+### 4. Automatisierte E2E-Tests ausführen (Playwright)
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle 23 HTML-Seiten, den 1-Click Launch aller **21 registrierten Projekte**, Git-Simulator-Befehle, Dark-Mode-Toggles und interaktive Features.
+Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **21 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
 
 ---
 

@@ -74,7 +74,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-08-16T14:16:55.217Z",
+    "updatedAt": "2026-08-20T13:09:16.657Z",
     "images": [
       "assets/images/arbeitszeit_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -164,7 +164,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-08-16T14:16:55.390Z"
+    "updatedAt": "2026-08-20T13:09:18.680Z"
   },
   {
     "repoName": "EcoChef",
@@ -369,7 +369,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-08-16T14:16:55.792Z",
+    "updatedAt": "2026-08-20T13:09:24.099Z",
     "images": [
       "assets/images/elektrocheck_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -394,7 +394,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-08-16T14:16:55.976Z",
+    "updatedAt": "2026-08-20T13:09:25.851Z",
     "images": [
       "assets/images/finance_bot_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -411,7 +411,7 @@
       "TailwindCSS",
       "Recharts"
     ],
-    "image": "assets/images/analytics_showcase.png",
+    "image": "assets/images/finanzenportfolio_showcase.png",
     "link": "Projekte/Finanzenportfolio/dist/index.html",
     "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
     "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
@@ -419,10 +419,10 @@
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-08-16T14:16:56.200Z",
+    "updatedAt": "2026-08-17T10:25:27Z",
     "images": [
-      "assets/images/analytics_showcase.png",
-      "assets/images/it_workspace.png"
+      "assets/images/finanzenportfolio_showcase.png",
+      "assets/images/analytics_showcase.png"
     ]
   },
   {
@@ -444,7 +444,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-08-16T14:16:56.221Z",
+    "updatedAt": "2026-08-20T13:09:27.322Z",
     "images": [
       "assets/images/gluecksspiel_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -469,7 +469,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-08-16T14:16:56.462Z",
+    "updatedAt": "2026-08-20T13:09:28.734Z",
     "images": [
       "assets/images/jobsuche_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -494,7 +494,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-08-16T14:16:56.667Z",
+    "updatedAt": "2026-08-20T13:09:29.838Z",
     "images": [
       "assets/images/manufaktur_showcase.png",
       "assets/images/analytics_showcase.png"
@@ -570,7 +570,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-08-16T14:16:57.075Z",
+    "updatedAt": "2026-08-20T13:09:31.729Z",
     "images": [
       "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -595,7 +595,7 @@
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-08-16T14:16:57.256Z",
+    "updatedAt": "2026-08-20T13:09:32.351Z",
     "images": [
       "assets/images/orbital_scrap_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -638,7 +638,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Sims",
-    "updatedAt": "2026-08-15T11:25:09Z",
+    "updatedAt": "2026-08-17T12:23:55Z",
     "images": [
       "assets/images/burgen_showcase.png",
       "assets/images/game_leaderboard.png"
@@ -654,7 +654,7 @@
       "Image Processing",
       "CSS Grid"
     ],
-    "image": "assets/images/analytics_showcase.png",
+    "image": "assets/images/urlaubsfotos_showcase.png",
     "link": "Projekte/Urlaubsfotos/dist/index.html",
     "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
     "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
@@ -662,10 +662,10 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-08-16T14:16:57.758Z",
+    "updatedAt": "2026-08-20T13:09:32.849Z",
     "images": [
-      "assets/images/analytics_showcase.png",
-      "assets/images/it_workspace.png"
+      "assets/images/urlaubsfotos_showcase.png",
+      "assets/images/analytics_showcase.png"
     ]
   },
   {
@@ -678,7 +678,7 @@
       "PDF Generation",
       "LocalStorage"
     ],
-    "image": "assets/images/analytics_showcase.png",
+    "image": "assets/images/verkaufsvorlagen_showcase.png",
     "link": "Projekte/VerkaufsVorlagen/dist/index.html",
     "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
     "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
@@ -686,10 +686,10 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-08-16T14:16:57.980Z",
+    "updatedAt": "2026-08-20T13:09:33.089Z",
     "images": [
-      "assets/images/analytics_showcase.png",
-      "assets/images/it_workspace.png"
+      "assets/images/verkaufsvorlagen_showcase.png",
+      "assets/images/analytics_showcase.png"
     ]
   },
   {
@@ -711,7 +711,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-08-16T14:16:58.369Z",
+    "updatedAt": "2026-08-20T13:09:33.283Z",
     "images": [
       "assets/images/wohnungssuche_showcase.png",
       "assets/images/ai_chat_showcase.png"
@@ -740,7 +740,7 @@
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-08-16T14:16:58.558Z"
+    "updatedAt": "2026-08-20T13:09:33.466Z"
   },
   {
     "repoName": null,
