@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resolvedImg = (window.resolveAssetPath || (p => p))(project.image);
             imageHTML = `
             <div class="project-image-container">
-                <img src="${resolvedImg}" alt="${project.titleDe}" loading="lazy" class="project-image">
+                <img src="${resolvedImg}" alt="${project.titleDe}" loading="lazy" class="project-image" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
             </div>`;
         }
         
@@ -357,12 +357,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // EcoChef is the IHK graduation project and always leads (it also gets
+    // the large hero treatment below, see project.repoName === 'EcoChef').
+    // FEATURED_REPOS are the next-strongest, most relevant projects for a
+    // recruiter scanning the page - they're pinned near the top regardless
+    // of GitHub star count, which otherwise rewards older hobby repos over
+    // newer, more representative work. DEPRIORITIZED_REPOS is the opposite:
+    // projects kept in the portfolio but pushed to the back of the list
+    // instead of competing with the curated ones for first impressions.
+    const FEATURED_REPOS = ['ElektroCheck-AI', 'Finanzenportfolio', 'arbeitszeiterfassung', 'BurgenGame'];
+    const DEPRIORITIZED_REPOS = ['Glücksspiel'];
+
+    function projectTier(repoName) {
+        if (repoName === 'EcoChef') return 0;
+        if (FEATURED_REPOS.includes(repoName)) return 1;
+        if (DEPRIORITIZED_REPOS.includes(repoName)) return 3;
+        return 2;
+    }
+
     function sortProjects(projects, order) {
         return [...projects].sort((a, b) => {
-            if (a.repoName === 'EcoChef') return -1;
-            if (b.repoName === 'EcoChef') return 1;
-            if (a.repoName === 'ManuFaktur') return -1;
-            if (b.repoName === 'ManuFaktur') return 1;
+            const tierA = projectTier(a.repoName);
+            const tierB = projectTier(b.repoName);
+            if (tierA !== tierB) return tierA - tierB;
+
+            // Within the featured tier, keep FEATURED_REPOS in the curated
+            // order above rather than re-sorting them by star count too.
+            if (tierA === 1) {
+                return FEATURED_REPOS.indexOf(a.repoName) - FEATURED_REPOS.indexOf(b.repoName);
+            }
+
             const starsA = a.stars || 0;
             const starsB = b.stars || 0;
             return order === 'asc' ? starsA - starsB : starsB - starsA;

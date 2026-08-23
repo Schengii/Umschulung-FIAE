@@ -105,7 +105,7 @@
     } else if (images.length > 1) {
         hasCarousel = true;
         const slides = images.map(img => `
-            <img src="${(window.resolveAssetPath || (p => p))(img)}" class="carousel-slide-img" alt="${titleDe}">
+            <img src="${(window.resolveAssetPath || (p => p))(img)}" class="carousel-slide-img" alt="${titleDe}" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
         `).join('\n');
         
         const dots = images.map((_, idx) => `
@@ -128,7 +128,7 @@
         const singleImg = (window.resolveAssetPath || (p => p))(images[0]);
         mediaHTML = `
             <div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
-               <img src="${singleImg}" alt="${titleDe}" class="project-image" loading="lazy">
+               <img src="${singleImg}" alt="${titleDe}" class="project-image" loading="lazy" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
             </div>`;
     }
 

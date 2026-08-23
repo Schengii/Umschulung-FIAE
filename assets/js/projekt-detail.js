@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectImgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
 
         detailContainer.innerHTML = `
-            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);">` : ''}
+            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.style.objectFit='contain';this.style.background='var(--bg-page)';this.style.padding='2rem';">` : ''}
             
             <h2 lang="de">${project.titleDe}</h2>
             <h2 lang="en">${project.titleEn}</h2>
@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `
             <a href="${url}" class="related-project-card">
-                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy">` : ''}
+                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">` : ''}
                 <div class="related-project-info">
                     <h4 lang="de">${project.titleDe}</h4>
                     <h4 lang="en">${project.titleEn}</h4>

@@ -9,7 +9,7 @@
     "PWA / Offline",
     "Job Board"
   ],
-  "image": "assets/images/jobsuche_showcase.png",
+  "image": "assets/images/jobsuche_showcase.webp",
   "link": "Projekte/Jobbsuche/index.html",
   "descDe": "Jobsuche ist ein PWA-basiertes Stellenportal für Webentwickler. Es ermöglicht das Suchen, Filtern und Speichern von Jobangeboten. Dank PWA-Technologie können gemerkte Stellen offline eingesehen werden, und Push-Benachrichtigungen informieren über neue Angebote.",
   "descEn": "Jobsuche is a PWA job board for web developers. It allows users to search, filter, and save job postings. Thanks to PWA technologies, saved jobs are readable offline, and push notifications alert you about new listings.",

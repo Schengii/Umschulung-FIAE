@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v28';
+const CACHE_NAME = 'umschulung-fiae-v29';
 const ASSETS = [
     './',
     'index.html',
@@ -82,8 +82,8 @@ const ASSETS = [
     'assets/js/modules/challenge-lab.js',
     'assets/js/modules/command_palette.js',
     'assets/js/modules/confetti.js',
+    'assets/js/modules/consent-notice.js',
     'assets/js/modules/contact-form.js',
-    'assets/js/modules/cookie-banner.js',
     'assets/js/modules/countdown.js',
     'assets/js/modules/document-preview.js',
     'assets/js/modules/easter-eggs.js',
@@ -136,7 +136,7 @@ const ASSETS = [
     'assets/images/favicon.svg',
     'assets/images/maximilian_schenk_portrait.jpg',
     'assets/images/BFW_Fahnen_Panorama.jpg',
-    'assets/images/it_workspace.png',
+    'assets/images/it_workspace.webp',
     'assets/images/icon-192.png',
     'assets/images/icon-512.png'
 ];
@@ -211,7 +211,16 @@ self.addEventListener('fetch', (e) => {
                         }
                         return networkResponse;
                     })
-                    .catch(() => {/* Ignore offline network failure for assets */});
+                    .catch(() => {
+                        // Network failed (offline, blocked, timed out) and nothing was cached yet.
+                        // Never resolve to `undefined` here - respondWith() requires a real Response,
+                        // otherwise the browser reports the request itself as failed, which for a
+                        // script/style file breaks the page's whole JS/CSS loading silently.
+                        return new Response('', {
+                            status: 503,
+                            statusText: 'Offline and not yet cached'
+                        });
+                    });
 
                 return cachedResponse || fetchPromise;
             })

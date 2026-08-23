@@ -18,7 +18,7 @@ import { initCountdown } from './modules/countdown.js';
 import { initUsernameGreeting } from './modules/username-greeting.js';
 import { initScrollAnimations } from './modules/scroll-animations.js';
 import { initBackToTop } from './modules/backtotop.js';
-import { initCookieBanner } from './modules/cookie-banner.js';
+import { initCookieBanner } from './modules/consent-notice.js';
 import { initPwaInstaller } from './modules/pwa-installer.js';
 import { initContactForm } from './modules/contact-form.js';
 import { initSkillBars } from './modules/skill-bars.js';

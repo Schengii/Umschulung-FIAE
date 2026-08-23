@@ -3572,6 +3572,20 @@ html nav {
     transform: scale(1.04);
 }
 
+/* Fallback state when a screenshot fails to load (see onerror handlers in
+   portfolio.js / modal.js / projekt-detail.js). Shows the neutral placeholder
+   icon centered and untouched instead of stretched/cropped like a real photo. */
+.img-fallback {
+    object-fit: contain !important;
+    padding: 2rem;
+    background: var(--bg-page);
+    transform: none !important;
+}
+
+.project-card:hover .img-fallback {
+    transform: none !important;
+}
+
 /* Project description */
 .project-card>p {
     flex: 1;

@@ -9,7 +9,7 @@
     "Jolt 3D Physics",
     "UI & Game Loop"
   ],
-  "image": "assets/images/orbital_scrap_showcase.png",
+  "image": "assets/images/orbital_scrap_showcase.webp",
   "link": null,
   "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
   "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",

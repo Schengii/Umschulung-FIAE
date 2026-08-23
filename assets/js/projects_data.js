@@ -10,7 +10,7 @@ window.projectsData = [
       "Vanilla JS",
       "Productivity"
     ],
-    "image": "assets/images/arbeitszeit_showcase.png",
+    "image": "assets/images/arbeitszeit_showcase.webp",
     "link": "Projekte/arbeitszeiterfassung/index.html",
     "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
     "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
@@ -74,10 +74,10 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-08-20T13:09:16.657Z",
+    "updatedAt": "2026-08-23T17:37:13.855Z",
     "images": [
-      "assets/images/arbeitszeit_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/arbeitszeit_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -91,10 +91,10 @@ window.projectsData = [
       "Game Loop",
       "Persistence"
     ],
-    "image": "assets/images/burgen_showcase.png",
+    "image": "assets/images/burgen_showcase.webp",
     "images": [
-      "assets/images/burgen_showcase.png",
-      "assets/images/burgen_gameplay.png"
+      "assets/images/burgen_showcase.webp",
+      "assets/images/burgen_gameplay.webp"
     ],
     "link": "Projekte/BurgenGame/index.html",
     "descDe": "Ein vollständig im Browser spielbares 2D-Aufbaustrategiespiel mit Canvas-Rendering, dynamischen Ressourcen-Zyklen, Bau- und Upgradelogik für Gebäude, feindlichen Angriffswellen und persistenter Spielstand-Speicherung.",
@@ -164,7 +164,7 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-08-20T13:09:18.680Z"
+    "updatedAt": "2026-08-23T17:37:14.041Z"
   },
   {
     "repoName": "EcoChef",
@@ -177,7 +177,7 @@ window.projectsData = [
       "LocalStorage",
       "Speech Synthesis"
     ],
-    "image": "assets/images/ecochef_showcase.png",
+    "image": "assets/images/ecochef_showcase.webp",
     "link": "Projekte/EcoChef/www/index.html",
     "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
     "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
@@ -346,8 +346,8 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/EcoChef",
     "updatedAt": "2026-01-15T08:40:14Z",
     "images": [
-      "assets/images/ecochef_showcase.png",
-      "assets/images/ai_chat_showcase.png"
+      "assets/images/ecochef_showcase.webp",
+      "assets/images/ai_chat_showcase.webp"
     ]
   },
   {
@@ -361,7 +361,7 @@ window.projectsData = [
       "TailwindCSS",
       "AI Integration"
     ],
-    "image": "assets/images/elektrocheck_showcase.png",
+    "image": "assets/images/elektrocheck_showcase.webp",
     "link": "Projekte/ElektroCheck%20AI/dist/index.html",
     "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
     "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
@@ -369,10 +369,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-08-20T13:09:24.099Z",
+    "updatedAt": "2026-08-23T17:37:14.666Z",
     "images": [
-      "assets/images/elektrocheck_showcase.png",
-      "assets/images/ai_chat_showcase.png"
+      "assets/images/elektrocheck_showcase.webp",
+      "assets/images/ai_chat_showcase.webp"
     ]
   },
   {
@@ -386,7 +386,7 @@ window.projectsData = [
       "Conversational UI",
       "Flexbox / CSS3"
     ],
-    "image": "assets/images/finance_bot_showcase.png",
+    "image": "assets/images/finance_bot_showcase.webp",
     "link": "Projekte/finance-ai-bot/frontend/index.html",
     "descDe": "Finance AI Bot ist ein interaktiver Finanzplaner-Assistent. Der Chatbot verarbeitet natürliche Sprache, analysiert persönliche Einnahmen und Ausgaben, berechnet Sparraten und hilft Nutzern dabei, ein monatliches Budget spielerisch zu planen.",
     "descEn": "Finance AI Bot is an interactive financial assistant chatbot. It processes natural language queries to analyze personal income and expenses, calculate savings rates, and help users set and achieve monthly budget targets.",
@@ -394,10 +394,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-08-20T13:09:25.851Z",
+    "updatedAt": "2026-08-23T17:37:14.875Z",
     "images": [
-      "assets/images/finance_bot_showcase.png",
-      "assets/images/ai_chat_showcase.png"
+      "assets/images/finance_bot_showcase.webp",
+      "assets/images/ai_chat_showcase.webp"
     ]
   },
   {
@@ -411,7 +411,7 @@ window.projectsData = [
       "TailwindCSS",
       "Recharts"
     ],
-    "image": "assets/images/finanzenportfolio_showcase.png",
+    "image": "assets/images/finanzenportfolio_showcase.webp",
     "link": "Projekte/Finanzenportfolio/dist/index.html",
     "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
     "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
@@ -421,8 +421,8 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
     "updatedAt": "2026-08-17T10:25:27Z",
     "images": [
-      "assets/images/finanzenportfolio_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/finanzenportfolio_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -436,7 +436,7 @@ window.projectsData = [
       "CSS3 Animations",
       "Game Design"
     ],
-    "image": "assets/images/gluecksspiel_showcase.png",
+    "image": "assets/images/gluecksspiel_showcase.webp",
     "link": "Projekte/Glücksspiel/index.html",
     "descDe": "Eine bunte, animierte Casino-Spiele-Plattform mit klassischen Casual-Mini-Spielen wie Spielautomaten (Slots), Roulette, Plinko, Mines und dem Zauberkessel (Cauldron). Das Projekt zeichnet sich durch flüssige CSS-Animationen, Soundeffekte und ein lokales Guthaben-Management aus.",
     "descEn": "A vibrant casino mini-games platform featuring slots, roulette, plinko, mines, and cauldron. The project features smooth CSS animations, retro sound effects, and persistent local balance tracking.",
@@ -444,10 +444,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-08-20T13:09:27.322Z",
+    "updatedAt": "2026-08-23T17:37:15.310Z",
     "images": [
-      "assets/images/gluecksspiel_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/gluecksspiel_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -461,7 +461,7 @@ window.projectsData = [
       "PWA / Offline",
       "Job Board"
     ],
-    "image": "assets/images/jobsuche_showcase.png",
+    "image": "assets/images/jobsuche_showcase.webp",
     "link": "Projekte/Jobbsuche/index.html",
     "descDe": "Jobsuche ist ein PWA-basiertes Stellenportal für Webentwickler. Es ermöglicht das Suchen, Filtern und Speichern von Jobangeboten. Dank PWA-Technologie können gemerkte Stellen offline eingesehen werden, und Push-Benachrichtigungen informieren über neue Angebote.",
     "descEn": "Jobsuche is a PWA job board for web developers. It allows users to search, filter, and save job postings. Thanks to PWA technologies, saved jobs are readable offline, and push notifications alert you about new listings.",
@@ -469,10 +469,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-08-20T13:09:28.734Z",
+    "updatedAt": "2026-08-23T17:37:15.692Z",
     "images": [
-      "assets/images/jobsuche_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/jobsuche_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -486,7 +486,7 @@ window.projectsData = [
       "Bildergalerie",
       "Merkliste"
     ],
-    "image": "assets/images/manufaktur_showcase.png",
+    "image": "assets/images/manufaktur_showcase.webp",
     "link": "Projekte/ManuFaktur/index.html",
     "descDe": "Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt, ein individuelles Kontaktformular sowie eine neue, persistente Favoriten/Merkliste (LocalStorage) für interessierte Käufer.",
     "descEn": "An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, a custom order form, and a newly integrated persistent Favorites Wishlist (LocalStorage) for potential buyers.",
@@ -494,10 +494,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-08-20T13:09:29.838Z",
+    "updatedAt": "2026-08-23T17:37:15.896Z",
     "images": [
-      "assets/images/manufaktur_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/manufaktur_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -512,7 +512,7 @@ window.projectsData = [
       "3D Voxel Engine",
       "Procedural Generation"
     ],
-    "image": "assets/images/burgen_showcase.png",
+    "image": "assets/images/burgen_showcase.webp",
     "link": "Projekte/Minecraft/index.html",
     "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
     "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
@@ -534,8 +534,8 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/Minecraft",
     "updatedAt": "2026-08-14T14:05:21Z",
     "images": [
-      "assets/images/burgen_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/burgen_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -550,7 +550,7 @@ window.projectsData = [
       "Breeding & Riding",
       "Pokédex"
     ],
-    "image": "assets/images/burgen_showcase.png",
+    "image": "assets/images/burgen_showcase.webp",
     "link": "Projekte/Minecraft-Pokemon/index.html",
     "descDe": "Ein Crossover-RPG in Godot 4 mit C#: Vereint Voxel-Bau und Survival von Minecraft mit dem Pokémon-Sammelsystem. Features: 21 Spezies, Tag-/Nacht-Spawns (Nachtara & Psiana), Wesen & Natures, rundenbasierter Kampf, Mega-Evolutionen, Zucht-Pension, Land-/Flug-Reiten, Live-Minimap HUD und JSON-Savegames.",
     "descEn": "A voxel crossover RPG built in Godot 4 with C#. Combines Minecraft building and survival with Pokémon capture mechanics. Features 21 species, day/night spawns (Umbreon & Espeon), nature stats, turn-based combat, mega evolutions, breeding pen, mount/flying mechanics, live minimap HUD, and JSON saves.",
@@ -570,10 +570,10 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-08-20T13:09:31.729Z",
+    "updatedAt": "2026-08-23T17:37:16.306Z",
     "images": [
-      "assets/images/burgen_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/burgen_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -587,7 +587,7 @@ window.projectsData = [
       "Jolt 3D Physics",
       "UI & Game Loop"
     ],
-    "image": "assets/images/orbital_scrap_showcase.png",
+    "image": "assets/images/orbital_scrap_showcase.webp",
     "link": "Projekte/orbital-scrap/index.html",
     "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
     "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",
@@ -595,10 +595,10 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-08-20T13:09:32.351Z",
+    "updatedAt": "2026-08-23T17:37:16.509Z",
     "images": [
-      "assets/images/orbital_scrap_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/orbital_scrap_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -613,7 +613,7 @@ window.projectsData = [
       "Life Simulation",
       "House Parties"
     ],
-    "image": "assets/images/burgen_showcase.png",
+    "image": "assets/images/burgen_showcase.webp",
     "link": "Projekte/Sims/dist/index.html",
     "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
     "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
@@ -638,10 +638,10 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Sims",
-    "updatedAt": "2026-08-17T12:23:55Z",
+    "updatedAt": "2026-08-22T16:32:36Z",
     "images": [
-      "assets/images/burgen_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/burgen_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -654,7 +654,7 @@ window.projectsData = [
       "Image Processing",
       "CSS Grid"
     ],
-    "image": "assets/images/urlaubsfotos_showcase.png",
+    "image": "assets/images/urlaubsfotos_showcase.webp",
     "link": "Projekte/Urlaubsfotos/dist/index.html",
     "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
     "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
@@ -662,10 +662,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-08-20T13:09:32.849Z",
+    "updatedAt": "2026-08-23T17:37:17.112Z",
     "images": [
-      "assets/images/urlaubsfotos_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/urlaubsfotos_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -678,7 +678,7 @@ window.projectsData = [
       "PDF Generation",
       "LocalStorage"
     ],
-    "image": "assets/images/verkaufsvorlagen_showcase.png",
+    "image": "assets/images/verkaufsvorlagen_showcase.webp",
     "link": "Projekte/VerkaufsVorlagen/dist/index.html",
     "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
     "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
@@ -686,10 +686,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-08-20T13:09:33.089Z",
+    "updatedAt": "2026-08-23T17:37:17.288Z",
     "images": [
-      "assets/images/verkaufsvorlagen_showcase.png",
-      "assets/images/analytics_showcase.png"
+      "assets/images/verkaufsvorlagen_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -703,7 +703,7 @@ window.projectsData = [
       "OpenAI API",
       "Capacitor PWA"
     ],
-    "image": "assets/images/wohnungssuche_showcase.png",
+    "image": "assets/images/wohnungssuche_showcase.webp",
     "link": "Projekte/Wohnungssuche%20KI/frontend/dist/index.html",
     "descDe": "Eine KI-gestützte Komplettlösung zur automatisierten Wohnungssuche. Das System scannt Immobilienportale per Web-Scraper und E-Mail-Postfächer per IMAP, analysiert Angebote mit GPT-Modellen, berechnet Entfernungen zu POIs und generiert fertige Bewerbungs-PDFs.",
     "descEn": "An AI-powered system designed to automate apartment searching. It scrapes real estate portals via Puppeteer, scans inbox folders using IMAP, evaluates listings using OpenAI's API, calculates POI proximity, and generates custom tenant disclosure PDFs.",
@@ -711,10 +711,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-08-20T13:09:33.283Z",
+    "updatedAt": "2026-08-23T17:37:17.482Z",
     "images": [
-      "assets/images/wohnungssuche_showcase.png",
-      "assets/images/ai_chat_showcase.png"
+      "assets/images/wohnungssuche_showcase.webp",
+      "assets/images/ai_chat_showcase.webp"
     ]
   },
   {
@@ -728,10 +728,10 @@ window.projectsData = [
       "2D Action",
       "Game Design"
     ],
-    "image": "assets/images/coopgame_showcase.png",
+    "image": "assets/images/coopgame_showcase.webp",
     "images": [
-      "assets/images/coopgame_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/coopgame_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ],
     "link": "Projekte/CoOpVersusGame/coop-versus-demo.html",
     "descDe": "Ein plattformübergreifender Multiplayer-Prototyp, entwickelt mit Godot 4.6. Das Spiel bietet ein integriertes Lobby-System für LAN- und Netzwerkverbindungen, kooperative Missionen und Versus-Modi, Boss- und Gegner-KIs, Power-ups sowie interaktive Druckplatten-Rätsel.",
@@ -740,7 +740,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-08-20T13:09:33.466Z"
+    "updatedAt": "2026-08-23T17:37:17.660Z"
   },
   {
     "repoName": null,
@@ -752,10 +752,10 @@ window.projectsData = [
       "Vanilla JS (ES6)",
       "LocalStorage"
     ],
-    "image": "assets/images/snake_showcase.png",
+    "image": "assets/images/snake_showcase.webp",
     "images": [
-      "assets/images/snake_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/snake_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ],
     "link": "snake.html",
     "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
@@ -773,10 +773,10 @@ window.projectsData = [
       "UX Design",
       "Accessibility"
     ],
-    "image": "assets/images/quiz_showcase.png",
+    "image": "assets/images/quiz_showcase.webp",
     "images": [
-      "assets/images/quiz_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/quiz_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ],
     "link": "quiz.html",
     "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
@@ -794,10 +794,10 @@ window.projectsData = [
       "Game Logic",
       "LocalStorage"
     ],
-    "image": "assets/images/memory_showcase.png",
+    "image": "assets/images/memory_showcase.webp",
     "images": [
-      "assets/images/memory_showcase.png",
-      "assets/images/game_leaderboard.png"
+      "assets/images/memory_showcase.webp",
+      "assets/images/game_leaderboard.webp"
     ],
     "link": "memory.html",
     "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
@@ -816,10 +816,10 @@ window.projectsData = [
       "JDBC / SQL",
       "Unit Testing"
     ],
-    "image": "assets/images/java_showcase.png",
+    "image": "assets/images/java_showcase.webp",
     "images": [
-      "assets/images/java_showcase.png",
-      "assets/images/java_tests.png"
+      "assets/images/java_showcase.webp",
+      "assets/images/java_tests.webp"
     ],
     "link": "Projekte/java-playground.html",
     "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",

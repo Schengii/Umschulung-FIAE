@@ -10,7 +10,7 @@
     "Breeding & Riding",
     "Pokédex"
   ],
-  "image": "assets/images/burgen_showcase.png",
+  "image": "assets/images/burgen_showcase.webp",
   "link": "Projekte/Minecraft-Pokemon/index.html",
   "descDe": "Ein Crossover-RPG in Godot 4 mit C#: Vereint Voxel-Bau und Survival von Minecraft mit dem Pokémon-Sammelsystem. Features: 21 Spezies, Tag-/Nacht-Spawns (Nachtara & Psiana), Wesen & Natures, rundenbasierter Kampf, Mega-Evolutionen, Zucht-Pension, Land-/Flug-Reiten, Live-Minimap HUD und JSON-Savegames.",
   "descEn": "A voxel crossover RPG built in Godot 4 with C#. Combines Minecraft building and survival with Pokémon capture mechanics. Features 21 species, day/night spawns (Umbreon & Espeon), nature stats, turn-based combat, mega evolutions, breeding pen, mount/flying mechanics, live minimap HUD, and JSON saves.",

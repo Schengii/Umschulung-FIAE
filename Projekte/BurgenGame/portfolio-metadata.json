@@ -9,10 +9,10 @@
     "Game Loop",
     "Persistence"
   ],
-  "image": "assets/images/burgen_showcase.png",
+  "image": "assets/images/burgen_showcase.webp",
   "images": [
-    "assets/images/burgen_showcase.png",
-    "assets/images/burgen_gameplay.png"
+    "assets/images/burgen_showcase.webp",
+    "assets/images/burgen_gameplay.webp"
   ],
   "link": "Projekte/BurgenGame/index.html",
   "descDe": "Ein vollständig im Browser spielbares 2D-Aufbaustrategiespiel mit Canvas-Rendering, dynamischen Ressourcen-Zyklen, Bau- und Upgradelogik für Gebäude, feindlichen Angriffswellen und persistenter Spielstand-Speicherung.",

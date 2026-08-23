@@ -3,7 +3,7 @@
   "titleDe": "📊 Finanzportfolio — Vermögensplaner & Dashboard",
   "titleEn": "📊 Financial Portfolio — Wealth Planner & Dashboard",
   "tags": ["React", "Vite", "TypeScript", "TailwindCSS", "Recharts"],
-  "image": "assets/images/finanzenportfolio_showcase.png",
+  "image": "assets/images/finanzenportfolio_showcase.webp",
   "link": "Projekte/Finanzenportfolio/dist/index.html",
   "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
   "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",

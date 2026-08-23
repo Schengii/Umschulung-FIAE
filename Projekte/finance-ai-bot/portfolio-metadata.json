@@ -9,7 +9,7 @@
     "Conversational UI",
     "Flexbox / CSS3"
   ],
-  "image": "assets/images/finance_bot_showcase.png",
+  "image": "assets/images/finance_bot_showcase.webp",
   "link": "Projekte/finance-ai-bot/frontend/index.html",
   "descDe": "Finance AI Bot ist ein interaktiver Finanzplaner-Assistent. Der Chatbot verarbeitet natürliche Sprache, analysiert persönliche Einnahmen und Ausgaben, berechnet Sparraten und hilft Nutzern dabei, ein monatliches Budget spielerisch zu planen.",
   "descEn": "Finance AI Bot is an interactive financial assistant chatbot. It processes natural language queries to analyze personal income and expenses, calculate savings rates, and help users set and achieve monthly budget targets.",
