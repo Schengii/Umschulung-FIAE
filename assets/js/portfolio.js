@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectsPerPage = 6;
     let currentSearchTerm = '';
     let currentCategory = 'all';
+    const clearSearchBtn = document.getElementById('btn-clear-search');
 
     // Event Listeners for Filters & Sorting
     const persistedSort = localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
@@ -44,8 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearchTerm = e.target.value.toLowerCase().trim();
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = currentSearchTerm ? 'block' : 'none';
+            }
             currentPage = 1; // Reset to first page on search
             renderAllProjects();
+        });
+    }
+
+    if (clearSearchBtn && searchInput) {
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            currentSearchTerm = '';
+            clearSearchBtn.style.display = 'none';
+            currentPage = 1;
+            renderAllProjects();
+            searchInput.focus();
         });
     }
 
@@ -167,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resolvedImg = (window.resolveAssetPath || (p => p))(project.image);
             imageHTML = `
             <div class="project-image-container">
-                <img src="${resolvedImg}" alt="${project.titleDe}" loading="lazy" class="project-image" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
+                <img src="${resolvedImg}" alt="${project.titleDe}" width="400" height="225" loading="lazy" class="project-image" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
             </div>`;
         }
         
@@ -286,7 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Filter
         const filteredProjects = allProjects.filter(proj => {
+            const isHighlight = proj.highlight || proj.isHighlight || proj.repoName === 'EcoChef' || proj.repoName === 'ElektroCheck' || proj.repoName === 'CoOpVersusGame' || (proj.stars && proj.stars >= 5);
             const matchesCategory = currentCategory === 'all' || 
+                                   (currentCategory === 'highlight' && isHighlight) ||
                                    (proj.category && proj.category.includes(currentCategory)) || 
                                    (proj.language && proj.language.toLowerCase() === currentCategory);
             

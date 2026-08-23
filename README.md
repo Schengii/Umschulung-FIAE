@@ -15,42 +15,48 @@ Umschulung-FIAE/
 │
 ├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen, Personalisierung & Barrierefreiheit)
 ├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten (Playwright, Build)
-├── playwright.config.js         # Playwright E2E Testkonfiguration
-├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v25) & PWA-Fähigkeit
+├── playwright.config.js         # Playwright E2E Testkonfiguration (50 automatisierte Tests)
+├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v31) & PWA-Fähigkeit
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
-├── pages/                       # Aufgeräumter Ordner für alle 23 Inhaltsseiten
+├── pages/                       # Aufgeräumter Ordner für alle 27 Inhaltsseiten
 │   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
-│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (21 registrierte Projekte)
-│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-geschützten Zeugnissen (Base64/XOR)
-│   ├── ueber-mich.html          # Steckbrief & Elektroniker-FIAE-Transfermatrix
+│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (21 registrierte Projekte, Filter & Schnellsuche)
+│   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, 80h Phasenplan, Fachgespräch, Bewertungsmatrix)
+│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-Schutz (fiae2026) & 1-Click PDF-Export
+│   ├── ueber-mich.html          # Steckbrief, Skill-Radar & Elektroniker-FIAE-Transfermatrix
 │   ├── dashboard.html           # IHK-Notensimulation & Notenrechner (AP1 & AP2)
 │   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
-│   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName)
-│   ├── architecture.html       # Interaktives C4-Architekturdiagramm
+│   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName) mit Code-Explorer & Live-Demo
+│   ├── architecture.html       # Interaktives C4-Architekturdiagramm & 3D Dependency Graph
+│   ├── challenge-lab.html      # Clean Code & RegEx Interactive Challenge Lab
 │   ├── flashcards.html         # IHK-Lernkarten mit Leitner-Box-System
 │   ├── interview-trainer.html  # Interaktiver Bewerbungs-Trainer für FIAE
-│   ├── playground.html         # In-Browser SQL & Code Playground
-│   ├── git-simulator.html      # Retro Hacker CRT Git-Befehlssimulator
+│   ├── playground.html         # In-Browser Web Sandbox & WASM Code Runner
+│   ├── git-simulator.html      # Retro Hacker CRT Git-Befehlssimulator (6 Level)
 │   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, games.html, etc.)
 │
 ├── assets/                      # Globale Web-Ressourcen
 │   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, print.css)
+│   │   └── modules/             # Modulare Stylesheets (portfolio_copilot.css, ihk_cockpit.css, etc.)
 │   ├── js/                      # Script-Dateien & ES6-Module
-│   │   ├── main.js              # Kern-Initialisierung & dynamischer Modul-Loader
-│   │   ├── components.js        # Header, Footer, Accessibility Manager & Templating
+│   │   ├── main.js              # Kern-Initialisierung & robuster Modul-Loader
+│   │   ├── components.js        # Header, Footer, kategorisierte Navigation, Accessibility Manager & Templating
 │   │   ├── constants.js         # Globale App-Konstanten & Pfadauflösung (resolveAssetPath)
-│   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering & Matchmaker
+│   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering, Schnellsuche & Highlights
 │   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (21 Projekte)
-│   │   └── modules/             # Abgekapselte JavaScript-Feature-Module & E2E-Tests
-│   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite
+│   │   └── modules/             # Abgekapselte Feature-Module & E2E-Tests
+│   │       ├── portfolio-copilot.js     # Offline-fähiger AI Portfolio Copilot
+│   │       ├── ihk-cockpit.js           # Nutzwertanalyse & 80h Phasenplan Steuerung
+│   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
+│   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
 │   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 21 Projekte
-│   │       └── ...              # Weitere Module (achievements.js, qr-generator.js)
+│   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
 │   ├── fonts/                   # Lokale WOFF2 Fonts (Inter & Outfit - 100% DSGVO-konform)
-│   └── images/                  # Bilder, Screenshots & Favicons
+│   └── images/                  # Optimierte WebP-Screenshots, Bilder & Favicons
 │
 ├── Projekte/                    # Unterordner für eigenständige IHK- & Praxis-Übungsprojekte
 │   ├── EcoChef/                 # IHK-Abschlussprojekt (Lit/TypeScript PWA mit Gemini KI)
@@ -79,25 +85,36 @@ Umschulung-FIAE/
 
 ---
 
-## 🛠 Kern-Architektur & Funktionsweise (Modul- & Funktions-Mapping)
+## 🛠 Kern-Architektur & Funktionsweise
 
 ### 1. Einstiegspunkt & Bootstrapping (`main.js` & HTML-Integration)
 Jede HTML-Seite lädt den zentralen Einstiegspunkt als ES-Modul:
 ```html
-<script type="module" src="assets/js/main.js"></script>
+<script type="module" src="../assets/js/main.js"></script>
 ```
-Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) importiert alle Feature-Module und führt sequentiell deren Initialisierungsfunktionen (z. B. `initTheme()`, `initNavigation()`, `initAccessibility()`) beim Laden aus. Dies verhindert Namenskonflikte und sorgt für saubere Kapselung.
+Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung-FIAE/assets/js/main.js) wartet auf die DOM-Bereitschaft (`document.readyState !== 'loading'`) und führt sequentiell alle Modul-Initialisierungen aus.
 
 ### 2. Header, Footer & Barrierefreiheits-Assistent (`components.js`)
-- **Header & Footer**: Werden dynamisch in die DOM-Elemente `#site-header` und `#site-footer` geladen, um HTML-Redundanzen zu vermeiden (DRY-Prinzip).
+- **Strukturierte Navigation**: Das Menü *„Weiteres“* ist in logische Abschnitte unterteilt (*IHK & Abschluss*, *Deep Tech & Sandbox*, *Karriere & Hubs*).
+- **Mobile Drawer**: Schließt sich bei Klick auf einen Navigationslink automatisch.
 - **Barrierefreiheits-Manager (`initAccessibilityControls`)**:
-  - 📖 **Legasthenie-Modus (`data-dyslexia="true"`)**: Aktiviert legasthenie-freundliche Typografie mit erhöhtem Zeilenabstand (`line-height: 1.8`) und Wortabstand.
-  - 🎨 **Rot-Grün-Schutz (`data-colorblind="deuteranopia"`)**: Schaltet auf eine farbfehlsichtigkeits-optimierte Palette (Okabe-Ito Palette) um.
-  - 🔍 **Schriftgrößen-Skalierung (`data-font-scale="large|xlarge"`)**: Stufenlose Schriftvergrößerung für Sehbeeinträchtigte.
-  - 👁️ **Hochkontrast-Modus (`data-contrast="high"`)**: Erfüllt das WCAG 2.1 AAA Kontrastverhältnis (7:1).
-  - Persistiert alle Benutzereinstellungen im `localStorage`.
+  - 📖 **Legasthenie-Modus (`data-dyslexia="true"`)**: Erhöhter Zeilen- und Wortabstand.
+  - 🎨 **Rot-Grün-Schutz (`data-colorblind="deuteranopia"`)**: Farbfehlsichtigkeits-optimierte Palette (Okabe-Ito).
+  - 🔍 **Schriftgrößen-Skalierung**: Stufenlose Schriftvergrößerung.
+  - 👁️ **Hochkontrast-Modus**: WCAG 2.1 AAA (7:1).
 
 ### 3. PWA-Offline-Caching (`sw.js`) & 100% DSGVO-Konformität
+- Lokaler Service Worker (`umschulung-fiae-v31`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
+- Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
+
+### 4. Test-Automatisierung & Qualitätskontrolle
+Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
+```bash
+npm test
+```
+- **50 / 50 Tests grün (100% Pass Rate)**
+- Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 21 Projekte.
+
 - **Service Worker (`umschulung-fiae-v28`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Alle Icon-Fonts (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.

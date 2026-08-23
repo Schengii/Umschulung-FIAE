@@ -1,3 +1,10 @@
+@import url('modules/portfolio_copilot.css');
+@import url('modules/command_palette.css');
+@import url('modules/project_compare.css');
+@import url('modules/pwa_telemetry.css');
+@import url('modules/hero_showcase.css');
+@import url('modules/ihk_cockpit.css');
+
 /* ==========================================================================
    DESIGN SYSTEM & CORE VARIABLES
    ========================================================================== */
@@ -591,6 +598,27 @@ nav.topnav {
     padding: 0.5rem 0;
     z-index: 100;
     animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-header {
+    padding: 0.5rem 1.25rem 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    pointer-events: none;
+    user-select: none;
+}
+
+.dropdown-divider {
+    height: 1px;
+    margin: 0.35rem 0.75rem;
+    background-color: var(--border);
+    list-style: none;
 }
 
 .dropdown-item {
@@ -3891,7 +3919,7 @@ html nav {
 
 .back-to-top {
     position: fixed;
-    bottom: 5rem;
+    bottom: 10.5rem;
     right: 1.5rem;
     z-index: 900;
     width: 2.75rem;
@@ -6936,12 +6964,3 @@ textarea:focus-visible,
 [data-theme="dark"] [role="button"]:focus-visible {
     box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.3) !important;
 }
-
-/* ==========================================================================
-   MODULES: COMMAND PALETTE & PROJECT COMPARE
-   ========================================================================== */
-@import url('modules/command_palette.css');
-@import url('modules/project_compare.css');
-@import url('modules/pwa_telemetry.css');
-@import url('modules/hero_showcase.css');
-@import url('modules/ihk_cockpit.css');

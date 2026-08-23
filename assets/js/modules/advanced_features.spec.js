@@ -22,18 +22,18 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
     // Switch to Fachgesprächs-Simulator Tab
     await page.click('#tab-fachgespraech');
-    await page.waitForTimeout(200);
-    await page.click('#btn-fg-start', { force: true });
+    await expect(page.locator('#panel-fachgespraech')).toBeVisible();
+    await page.locator('#btn-fg-start').click();
     const questionText = page.locator('#fg-question-text');
     await expect(questionText).toContainText('Frage 1/5');
 
     // Reveal answer
-    await page.click('#btn-fg-reveal', { force: true });
+    await page.locator('#btn-fg-reveal').click();
     const answerBox = page.locator('#fg-answer-box');
     await expect(answerBox).toBeVisible();
 
     // Grade answer
-    await page.click('#btn-fg-grade-good', { force: true });
+    await page.locator('#btn-fg-grade-good').click();
     const scoreDisplay = page.locator('#fg-score-display');
     await expect(scoreDisplay).toContainText('10 Punkte');
   });

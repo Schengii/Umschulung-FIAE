@@ -53,9 +53,7 @@ import { initSkillMatchmaker } from './modules/skill-matchmaker.js';
 import { initPdfExporter } from './modules/pdf-exporter.js';
 import { initIcalGenerator } from './modules/ical-generator.js';
 import { initIhkExamSimulator } from './modules/ihk-exam-simulator.js';
-import { initSqlPlayground } from './modules/sql-playground.js';
 import { initC4Architecture } from './modules/c4-architecture.js';
-import { initAudioPitch } from './modules/audio-pitch.js';
 import { initIhkCockpit } from './modules/ihk-cockpit.js';
 import { initQuickSandbox } from './modules/quick-sandbox.js';
 import { initPortfolioCopilot } from './modules/portfolio-copilot.js';
@@ -78,7 +76,7 @@ function bootstrap() {
         initGitSimulator, initRecruiterFilter, initAboutMeEnhancements, initProjectEnhancements,
         initImpressumEnhancements, initTimelineScroll, initPremiumEffects, initPremiumEffectsP2,
         initSkillMatchmaker, initPdfExporter, initIcalGenerator, initIhkExamSimulator,
-        initSqlPlayground, initC4Architecture, initAudioPitch,
+        initC4Architecture,
         initIhkCockpit, initQuickSandbox, initPortfolioCopilot, initExecutiveDossier, initChallengeLab
     ];
 
@@ -118,9 +116,8 @@ function bootstrap() {
     });
 }
 
-// Always wait for DOMContentLoaded to guarantee components.js has injected all templates.
-// If the document is already fully loaded, bootstrap immediately.
-if (document.readyState === 'complete') {
+// Always ensure bootstrap runs once DOM is ready (interactive or complete).
+if (document.readyState !== 'loading') {
     bootstrap();
 } else {
     document.addEventListener('DOMContentLoaded', bootstrap);

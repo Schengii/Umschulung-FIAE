@@ -16,21 +16,6 @@ test.describe('New Interactive Features E2E Verification', () => {
     await filterBtn.click();
   });
 
-  test('sollte den In-Browser SQL Playground auf playground.html ausführen', async ({ page }) => {
-    await page.goto('/pages/playground.html');
-    await page.waitForLoadState('networkidle');
-
-    const sqlSection = page.locator('#sql-playground-section');
-    await expect(sqlSection).toBeVisible();
-
-    const runBtn = page.locator('#btn-run-sql');
-    await expect(runBtn).toBeVisible();
-    await runBtn.click();
-
-    const results = page.locator('#sql-results-container');
-    await expect(results).toContainText('Müller GmbH');
-  });
-
   test('sollte den IHK Prüfungs-Simulator Modus auf quiz.html schalten', async ({ page }) => {
     await page.goto('/pages/quiz.html');
     await page.waitForLoadState('networkidle');
@@ -74,17 +59,6 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     const info = c4Switcher.locator('#c4-level-info');
     await expect(info).toContainText('Container Diagramm');
-  });
-
-  test('sollte den Audio Pitch Player auf home.html anzeigen', async ({ page }) => {
-    await page.goto('/pages/home.html');
-    await page.waitForLoadState('networkidle');
-
-    const audioCard = page.locator('#audio-pitch-card');
-    await expect(audioCard).toBeVisible();
-
-    const playBtn = page.locator('#btn-play-pitch');
-    await expect(playBtn).toBeVisible();
   });
 
   test('sollte den Git-Simulator mit neuen Levels 5 & 6 laden', async ({ page }) => {

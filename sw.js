@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v29';
+const CACHE_NAME = 'umschulung-fiae-v31';
 const ASSETS = [
     './',
     'index.html',
@@ -48,6 +48,12 @@ const ASSETS = [
     'assets/css/print.css',
     'assets/css/quiz.css',
     'assets/css/snake.css',
+    'assets/css/modules/portfolio_copilot.css',
+    'assets/css/modules/command_palette.css',
+    'assets/css/modules/hero_showcase.css',
+    'assets/css/modules/ihk_cockpit.css',
+    'assets/css/modules/project_compare.css',
+    'assets/css/modules/pwa_telemetry.css',
     // Core JS
     'assets/js/components.js',
     'assets/js/main.js',
@@ -75,7 +81,6 @@ const ASSETS = [
     'assets/js/modules/accent-color.js',
     'assets/js/modules/achievements.js',
     'assets/js/modules/age-calculator.js',
-    'assets/js/modules/audio-pitch.js',
     'assets/js/modules/backtotop.js',
     'assets/js/modules/blog-enhancements.js',
     'assets/js/modules/c4-architecture.js',
@@ -117,7 +122,6 @@ const ASSETS = [
     'assets/js/modules/skill-bars.js',
     'assets/js/modules/skill-matchmaker.js',
     'assets/js/modules/skill-radar.js',
-    'assets/js/modules/sql-playground.js',
     'assets/js/modules/theme.js',
     'assets/js/modules/timeline-scroll.js',
     'assets/js/modules/token-auth.js',

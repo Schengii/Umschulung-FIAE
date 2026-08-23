@@ -68,8 +68,13 @@
         <div class="layout-grid">
             <!-- Left Column: Projects -->
             <div class="left-col">
-                <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..."
-                    aria-label="Projekte durchsuchen" class="project-search-input">
+                <div class="search-input-wrapper" style="position: relative; width: 100%;">
+                    <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..."
+                        aria-label="Projekte durchsuchen" class="project-search-input">
+                    <button type="button" id="btn-clear-search" class="btn-clear-search" aria-label="Suche löschen" title="Suche löschen" style="display: none; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 4px 8px;">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </div>
                 <div class="card">
                     <h2 lang="de">Projekt-Showcase</h2>
                     <h2 lang="en">Project Showcase</h2>
@@ -115,8 +120,8 @@
                 <div id="skill-matchmaker-widget"></div>
 
                 <!-- Quick Action Bar: Dossier & Live Sandboxes -->
-                <div class="card portfolio-quickbar-card">
-                    <div class="portfolio-quickbar-label">
+                <div class="portfolio-quickbar margin-bottom-1rem flex-between flex-wrap gap-2 padding-0-75rem bg-page border-radius-8px border-card">
+                    <div class="font-size-0-85rem font-weight-600 color-primary d-flex align-center gap-1">
                         <span class="font-size-1-2rem">⚡</span>
                         <span>Schnellzugriff &amp; Recruiter-Tools:</span>
                     </div>
@@ -144,6 +149,10 @@
                     <button class="btn-filter active" data-filter="all">
                         <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
                         <span lang="de">Alle Projekte</span><span lang="en">All Projects</span>
+                    </button>
+                    <button class="btn-filter" data-filter="highlight">
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                        <span lang="de">⭐ Highlights</span><span lang="en">⭐ Highlights</span>
                     </button>
                     <button class="btn-filter" data-filter="web">
                         <i class="fa-solid fa-globe" aria-hidden="true"></i>

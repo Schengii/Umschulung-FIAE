@@ -157,24 +157,31 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(weiteresPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link"><span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit</span></a></li>
-                        <li><a href="${pagePrefix}challenge-lab.html" class="dropdown-link"><span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
-                        <li><a href="${pagePrefix}interview-trainer.html" class="dropdown-link"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
-                        <li><a href="${pagePrefix}playground.html" class="dropdown-link"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
-                        <li><a href="${pagePrefix}architecture.html" class="dropdown-link"><span lang="de">Architektur &amp; API</span><span lang="en">Architecture &amp; API</span></a></li>
-                        <li><a href="${pagePrefix}flashcards.html" class="dropdown-link"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
-                        <li><a href="${pagePrefix}dashboard.html" class="dropdown-link"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
-                        <li><a href="${pagePrefix}quiz.html" class="dropdown-link"><span lang="de">Test Quiz</span><span lang="en">Quiz Test</span></a></li>
-                        <li class="dropdown-item">
-                            <a href="${pagePrefix}games.html" class="dropdown-link">Games <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu">
-                                <li><a href="${pagePrefix}snake.html" class="dropdown-link">Snake JS</a></li>
-                                <li><a href="${pagePrefix}memory.html" class="dropdown-link">Memory JS</a></li>
-                                <li><a href="${pagePrefix}quiz.html" class="dropdown-link">Quiz JS</a></li>
-                                <li><a href="${pagePrefix}git-simulator.html" class="dropdown-link">Git Simulator</a></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span lang="de">IHK &amp; Abschluss</span><span lang="en">IHK &amp; Exam</span></li>
+                        <li role="none"><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link" role="menuitem"><span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit (80h)</span></a></li>
+                        <li role="none"><a href="${pagePrefix}flashcards.html" class="dropdown-link" role="menuitem"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
+                        <li role="none"><a href="${pagePrefix}quiz.html" class="dropdown-link" role="menuitem"><span lang="de">IHK Prüfungs-Quiz</span><span lang="en">IHK Exam Quiz</span></a></li>
+
+                        <li class="dropdown-divider" role="separator"></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-code" aria-hidden="true"></i> <span lang="de">Deep Tech &amp; Sandbox</span><span lang="en">Deep Tech &amp; Sandbox</span></li>
+                        <li role="none"><a href="${pagePrefix}architecture.html" class="dropdown-link" role="menuitem"><span lang="de">Architektur &amp; C4</span><span lang="en">Architecture &amp; C4</span></a></li>
+                        <li role="none"><a href="${pagePrefix}playground.html" class="dropdown-link" role="menuitem"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
+                        <li role="none"><a href="${pagePrefix}challenge-lab.html" class="dropdown-link" role="menuitem"><span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
+                        <li role="none"><a href="${pagePrefix}git-simulator.html" class="dropdown-link" role="menuitem"><span lang="de">Git Simulator (CRT)</span><span lang="en">Git Simulator (CRT)</span></a></li>
+
+                        <li class="dropdown-divider" role="separator"></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Karriere &amp; Hubs</span><span lang="en">Career &amp; Hubs</span></li>
+                        <li role="none"><a href="${pagePrefix}dashboard.html" class="dropdown-link" role="menuitem"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
+                        <li role="none"><a href="${pagePrefix}interview-trainer.html" class="dropdown-link" role="menuitem"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
+                        <li class="dropdown-item" role="none">
+                            <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <ul class="sub-dropdown-menu" role="menu">
+                                <li role="none"><a href="${pagePrefix}snake.html" class="dropdown-link" role="menuitem">Snake JS</a></li>
+                                <li role="none"><a href="${pagePrefix}memory.html" class="dropdown-link" role="menuitem">Memory JS</a></li>
+                                <li role="none"><a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Alle Games</span><span lang="en">All Games</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="${indexPath}" class="dropdown-link"><span lang="de">Startseite</span><span lang="en">Welcome Page</span></a></li>
+                        <li role="none"><a href="${indexPath}" class="dropdown-link" role="menuitem"><span lang="de">Startseite (Terminal)</span><span lang="en">Welcome (Terminal)</span></a></li>
                     </ul>
                 </li>
             </ul>
