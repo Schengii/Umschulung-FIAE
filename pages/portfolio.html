@@ -546,7 +546,8 @@
                     </div>
 
                     <a href="../assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download
-                        title="Lebenslauf als PDF herunterladen">
+                        title="Lebenslauf als PDF herunterladen"
+                        onclick="document.dispatchEvent(new CustomEvent('achievement:unlock', { detail: 'cv_downloaded' }))">
                         <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span
                             lang="en">Download CV</span>
                     </a>
