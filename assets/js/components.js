@@ -487,6 +487,13 @@ document.addEventListener('DOMContentLoaded', () => {
         cmdScript.src = isPagesFolder ? '../assets/js/modules/command_palette.js' : 'assets/js/modules/command_palette.js';
         document.body.appendChild(cmdScript);
     }
+
+    // Signal that header/nav/footer are in the DOM. main.js (a deferred module
+    // script) actually runs BEFORE this DOMContentLoaded handler fires, so any
+    // module that touches header/nav/footer elements (theme toggle, language
+    // toggle, accent-color toggle, mobile nav menu, cookie banner, ...) must
+    // wait for this event instead of bootstrapping on its own readyState check.
+    document.dispatchEvent(new CustomEvent('fiae:layout-ready'));
 });
 
 function initAccessibilityControls() {

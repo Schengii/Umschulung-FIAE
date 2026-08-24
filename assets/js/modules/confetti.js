@@ -128,5 +128,9 @@ const Confetti = {
 };
 
 export function initConfetti() {
-    // Confetti is initialized dynamically via Confetti.start()
+    // memory.js, quiz.js, snake.js and easter-eggs.js all call this via a
+    // `typeof Confetti !== 'undefined'` check, expecting a global - but
+    // `Confetti` above is only a module-scoped const, never exported or
+    // attached to window, so that check always failed silently. Expose it.
+    window.Confetti = Confetti;
 }
