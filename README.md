@@ -16,7 +16,7 @@ Umschulung-FIAE/
 ├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen, Personalisierung & Barrierefreiheit)
 ├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten (Playwright, Build)
 ├── playwright.config.js         # Playwright E2E Testkonfiguration (50 automatisierte Tests)
-├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v31) & PWA-Fähigkeit
+├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v35) & PWA-Fähigkeit
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
@@ -104,7 +104,7 @@ Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung
   - 👁️ **Hochkontrast-Modus**: WCAG 2.1 AAA (7:1).
 
 ### 3. PWA-Offline-Caching (`sw.js`) & 100% DSGVO-Konformität
-- Lokaler Service Worker (`umschulung-fiae-v32`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
+- Lokaler Service Worker (`umschulung-fiae-v35`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
 - Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
 
 ### 3b. Sichtschutz für sensible Bewerbungsdaten (`token-auth.js`)
@@ -115,10 +115,10 @@ Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
 ```bash
 npm test
 ```
-- **50 / 50 Tests grün (100% Pass Rate)**
+- **54 / 54 Tests grün (100% Pass Rate)**
 - Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 21 Projekte.
 
-- **Service Worker (`umschulung-fiae-v32`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
+- **Service Worker (`umschulung-fiae-v35`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Alle Icon-Fonts (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
@@ -132,7 +132,7 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung, Bereinigung & E2E-Testing
-- **Test-Suite**: 52 automatisierte Playwright-E2E-Tests (`npm run test:e2e`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 21 Projekte validieren.
+- **Test-Suite**: 54 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 21 Projekte validieren.
 - **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js`.
 - **Bereinigte Projektstruktur**: Automatische Entfernung temporärer Test-Artefakte, veralteter Bildreste und Konsolidierung aller Projektmetadaten.
 

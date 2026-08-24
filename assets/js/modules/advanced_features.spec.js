@@ -25,7 +25,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
     await expect(page.locator('#panel-fachgespraech')).toBeVisible();
     await page.locator('#btn-fg-start').click();
     const questionText = page.locator('#fg-question-text');
-    await expect(questionText).toContainText('Frage 1/5');
+    await expect(questionText).toContainText('Frage 1/8');
 
     // Reveal answer
     await page.locator('#btn-fg-reveal').click();

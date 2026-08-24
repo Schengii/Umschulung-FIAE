@@ -325,7 +325,7 @@ function renderFooter() {
             </div>
             
             <div class="footer-bottom">
-                <p class="copyright">&copy; ${year} Maximilian Schenk &middot; Rüdesheimer Str. 14 &middot; 53175 Bonn &middot; Germany</p>
+                <p class="copyright">&copy; ${year} Maximilian Schenk &middot; 53175 Bonn &middot; Germany</p>
                 <p class="footer-meta-row">
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>

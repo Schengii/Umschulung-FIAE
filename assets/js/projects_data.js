@@ -512,7 +512,7 @@ window.projectsData = [
       "3D Voxel Engine",
       "Procedural Generation"
     ],
-    "image": "assets/images/burgen_showcase.webp",
+    "image": "assets/images/minecraft_showcase.webp",
     "link": "Projekte/Minecraft/index.html",
     "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
     "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
@@ -534,7 +534,7 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/Minecraft",
     "updatedAt": "2026-08-14T14:05:21Z",
     "images": [
-      "assets/images/burgen_showcase.webp",
+      "assets/images/minecraft_showcase.webp",
       "assets/images/game_leaderboard.webp"
     ]
   },
@@ -550,7 +550,7 @@ window.projectsData = [
       "Breeding & Riding",
       "Pokédex"
     ],
-    "image": "assets/images/burgen_showcase.webp",
+    "image": "assets/images/minecraft_pokemon_showcase.webp",
     "link": "Projekte/Minecraft-Pokemon/index.html",
     "descDe": "Ein Crossover-RPG in Godot 4 mit C#: Vereint Voxel-Bau und Survival von Minecraft mit dem Pokémon-Sammelsystem. Features: 21 Spezies, Tag-/Nacht-Spawns (Nachtara & Psiana), Wesen & Natures, rundenbasierter Kampf, Mega-Evolutionen, Zucht-Pension, Land-/Flug-Reiten, Live-Minimap HUD und JSON-Savegames.",
     "descEn": "A voxel crossover RPG built in Godot 4 with C#. Combines Minecraft building and survival with Pokémon capture mechanics. Features 21 species, day/night spawns (Umbreon & Espeon), nature stats, turn-based combat, mega evolutions, breeding pen, mount/flying mechanics, live minimap HUD, and JSON saves.",
@@ -572,7 +572,7 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
     "updatedAt": "2026-08-23T17:37:16.306Z",
     "images": [
-      "assets/images/burgen_showcase.webp",
+      "assets/images/minecraft_pokemon_showcase.webp",
       "assets/images/game_leaderboard.webp"
     ]
   },
@@ -613,7 +613,7 @@ window.projectsData = [
       "Life Simulation",
       "House Parties"
     ],
-    "image": "assets/images/burgen_showcase.webp",
+    "image": "assets/images/sims_showcase.webp",
     "link": "Projekte/Sims/dist/index.html",
     "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
     "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
@@ -640,7 +640,7 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/Sims",
     "updatedAt": "2026-08-22T16:32:36Z",
     "images": [
-      "assets/images/burgen_showcase.webp",
+      "assets/images/sims_showcase.webp",
       "assets/images/game_leaderboard.webp"
     ]
   },

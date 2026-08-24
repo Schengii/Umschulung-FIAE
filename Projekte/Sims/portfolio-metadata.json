@@ -10,7 +10,11 @@
     "Life Simulation",
     "House Parties"
   ],
-  "image": "assets/images/burgen_showcase.webp",
+  "image": "assets/images/sims_showcase.webp",
+  "images": [
+    "assets/images/sims_showcase.webp",
+    "assets/images/game_leaderboard.webp"
+  ],
   "link": "Projekte/Sims/dist/index.html",
   "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
   "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",

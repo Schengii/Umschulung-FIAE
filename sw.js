@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v34';
+const CACHE_NAME = 'umschulung-fiae-v35';
 const ASSETS = [
     './',
     'index.html',
@@ -91,7 +91,6 @@ const ASSETS = [
     'assets/js/modules/confetti.js',
     'assets/js/modules/consent-notice.js',
     'assets/js/modules/contact-form.js',
-    'assets/js/modules/countdown.js',
     'assets/js/modules/document-preview.js',
     'assets/js/modules/easter-eggs.js',
     'assets/js/modules/executive-dossier.js',
@@ -111,7 +110,6 @@ const ASSETS = [
     'assets/js/modules/praktikumsbetrieb-media.js',
     'assets/js/modules/premium-effects-p2.js',
     'assets/js/modules/premium-effects.js',
-    'assets/js/modules/project-enhancements.js',
     'assets/js/modules/project-slideshow.js',
     'assets/js/modules/project_compare.js',
     'assets/js/modules/pwa-installer.js',

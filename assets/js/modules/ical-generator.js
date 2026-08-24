@@ -55,17 +55,31 @@ export function initIcalGenerator() {
             'END:VCALENDAR'
         ].join('\n');
 
+        // Notify Maximilian directly via mailto — without this, the slot below only ever
+        // creates a calendar entry for the visitor, and he would never actually learn
+        // that someone requested an appointment.
+        const notifySubject = encodeURIComponent(`Terminanfrage: Kennenlerngespräch am ${day}.${month}.${year}`);
+        const notifyBody = encodeURIComponent(`Hallo Maximilian,\n\nich würde mich gerne mit dir zu einem Kennenlerngespräch austauschen.\n\nVorgeschlagener Termin: ${day}.${month}.${year} um ${selectedTime} Uhr\n\nBitte melde dich zur Bestätigung oder mit einem Alternativvorschlag zurück.\n\nViele Grüße`);
+        const notifyMailto = `mailto:sche-max@web.de?subject=${notifySubject}&body=${notifyBody}`;
+
         if (successDiv) {
             successDiv.classList.remove('display-none');
             successDiv.innerHTML = `
                 <div class="margin-bottom-0-5rem">
-                    ✅ Termin angebahnt für ${day}.${month}.${year} um ${selectedTime} Uhr!
+                    ✅ Terminvorschlag für ${day}.${month}.${year} um ${selectedTime} Uhr erstellt!
                 </div>
+                <p class="font-size-0-75rem color-text-muted margin-bottom-0-5rem">
+                    <span lang="de">Sende die Anfrage per E-Mail, damit Maximilian den Termin bestätigen kann, und lade dir optional den Kalendereintrag herunter.</span>
+                    <span lang="en">Send the request via email so Maximilian can confirm the slot, and optionally download the calendar entry for yourself.</span>
+                </p>
                 <div class="d-flex flex-wrap gap-2 justify-center margin-top-0-5rem">
+                    <a href="${notifyMailto}" class="btn btn-sm btn-primary border-radius-4px font-size-0-8rem">
+                        <i class="fa-solid fa-paper-plane me-1"></i> <span lang="de">Anfrage senden</span><span lang="en">Send Request</span>
+                    </a>
                     <a href="${gcalUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary border-radius-4px font-size-0-8rem">
                         <i class="fa-brands fa-google me-1"></i> Google Calendar
                     </a>
-                    <button type="button" id="btn-download-ics" class="btn btn-sm btn-primary border-radius-4px font-size-0-8rem">
+                    <button type="button" id="btn-download-ics" class="btn btn-sm btn-outline-primary border-radius-4px font-size-0-8rem">
                         <i class="fa-solid fa-calendar-plus me-1"></i> .ics iCal Datei
                     </button>
                 </div>

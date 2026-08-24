@@ -6,63 +6,63 @@
 const DFG_GALLERY_DATA = [
     {
         id: 'abteilungen',
-        titleDe: 'Abteilungen der DFG',
-        titleEn: 'DFG Departments',
+        titleDe: 'Organisationsstruktur (vereinfacht)',
+        titleEn: 'Organizational Structure (simplified)',
         src: 'assets/images/Abteilungen-DFG.png',
-        altDe: 'Organigramm der DFG mit den verschiedenen Abteilungen und deren Beziehungen.',
-        altEn: 'DFG organization chart showing various departments and their relationships.',
-        descDe: 'Dieses Organigramm zeigt die strukturelle Aufteilung der DFG in verschiedene Fachabteilungen und administrative Bereiche.',
-        descEn: 'This organization chart shows the structural division of the DFG into various specialist departments and administrative areas.'
+        altDe: 'Vereinfachtes, zur Veranschaulichung erstelltes Organigramm mit Fachabteilungen und administrativen Bereichen.',
+        altEn: 'Simplified, illustrative organization chart with specialist departments and administrative areas.',
+        descDe: 'Eine vereinfachte, zur Veranschaulichung erstellte Darstellung, wie eine große Forschungsförderorganisation wie die DFG in Fachabteilungen und administrative Bereiche gegliedert sein kann — keine originalgetreue interne Unterlage.',
+        descEn: 'A simplified, illustrative diagram of how a large research funding organization like the DFG can be structured into departments and administrative areas — not a verbatim internal document.'
     },
     {
         id: 'team-anwendungsmanagement',
-        titleDe: 'Team Anwendungsmanagement Z-INF',
-        titleEn: 'Application Management Team Z-INF',
+        titleDe: 'Mein Team im Webentwicklungsbereich',
+        titleEn: 'My Team in Web Development',
         src: 'assets/images/Team-Anwendungsmanagement-Z-INF.png',
-        altDe: 'Struktur des Teams Anwendungsmanagement der Z-INF Abteilung mit Rollen und Personen.',
-        altEn: 'Structure of the application management team in the Z-INF department with roles and team members.',
-        descDe: 'Die Zusammensetzung des 9-köpfigen Web-Entwicklerteams mit Schwerpunkt Frontend-Technologien, in dem Maximilian eingesetzt war.',
-        descEn: 'The composition of the 9-member web development team focusing on frontend technologies where Maximilian was deployed.'
+        altDe: 'Vereinfachte Darstellung eines Web-Entwicklerteams mit Rollenverteilung.',
+        altEn: 'Simplified illustration of a web development team with role distribution.',
+        descDe: 'Eine vereinfachte, anonymisierte Darstellung der Rollenverteilung im 9-köpfigen Web-Entwicklerteam mit Schwerpunkt Frontend-Technologien, in dem ich eingesetzt war.',
+        descEn: 'A simplified, anonymized illustration of the role distribution within the 9-member web development team focused on frontend technologies where I was deployed.'
     },
     {
         id: 'zuständigkeiten',
-        titleDe: 'Fachliche Zuständigkeiten Z-INF',
-        titleEn: 'Z-INF Areas of Expertise',
+        titleDe: 'Fachliche Zuständigkeiten im Team',
+        titleEn: 'Areas of Expertise within the Team',
         src: 'assets/images/Fachliche-Zuständigkeiten-Z-INF.png',
-        altDe: 'Übersichtsdiagramm der fachlichen Zuständigkeiten innerhalb der Z-INF Gruppe.',
-        altEn: 'Overview diagram of specialized responsibilities within the Z-INF group.',
-        descDe: 'Dieses Diagramm ordnet die verschiedenen Fachbereiche und Software-Zuständigkeiten den jeweiligen Entwicklergruppen innerhalb der Z-INF Abteilung zu.',
-        descEn: 'This diagram maps the various technical areas and software responsibilities to the respective developer groups within the Z-INF department.'
+        altDe: 'Vereinfachtes Übersichtsdiagramm typischer fachlicher Zuständigkeiten innerhalb eines Entwicklungsteams.',
+        altEn: 'Simplified overview diagram of typical areas of responsibility within a development team.',
+        descDe: 'Eine vereinfachte, zur Veranschaulichung erstellte Übersicht, wie fachliche Zuständigkeiten und Software-Bereiche innerhalb meines Entwicklungsteams grob aufgeteilt waren.',
+        descEn: 'A simplified, illustrative overview of how technical areas and software responsibilities were roughly divided within my development team.'
     },
     {
         id: 'foerderaktivitaeten',
-        titleDe: 'Förderaktivitäten DFG 2023',
-        titleEn: 'DFG Funding Activities 2023',
+        titleDe: 'Förderlandschaft (illustrativ)',
+        titleEn: 'Funding Landscape (illustrative)',
         src: 'assets/images/Förderaktivitäten-DFG-2023.png',
-        altDe: 'Diagramm zur Verteilung der DFG-Fördergelder nach Wissenschaftsbereichen im Jahr 2023.',
-        altEn: 'Chart showing the distribution of DFG funding by scientific domain in the year 2023.',
-        descDe: 'Statistische Übersicht über die Bewilligungen und Verteilungen der DFG-Mittel im Jahr 2023 nach Fachgebieten.',
-        descEn: 'Statistical overview of DFG approvals and funding distributions in 2023 by scientific field.'
+        altDe: 'Illustratives Diagramm zur Verteilung von Fördermitteln nach Wissenschaftsbereichen.',
+        altEn: 'Illustrative chart showing the distribution of funding by scientific domain.',
+        descDe: 'Eine vereinfachte, illustrative Grafik zum Prinzip der Fördermittelverteilung nach Wissenschaftsbereichen bei einer Forschungsförderorganisation — keine originalen internen Zahlen.',
+        descEn: 'A simplified, illustrative graphic on the principle of funding distribution by scientific field at a research funding organization — not original internal figures.'
     },
     {
         id: 'neufa',
-        titleDe: 'Projekt Neufa-dfg',
-        titleEn: 'Project Neufa DFG',
+        titleDe: 'Modernisierungsinitiative IT-Infrastruktur',
+        titleEn: 'IT Infrastructure Modernization Initiative',
         src: 'assets/images/Projekt-Neufa-dfg.png',
-        altDe: 'Visualisierung des DFG Projekts Neufa zur Modernisierung der IT-Infrastruktur.',
-        altEn: 'Visualization of the DFG Project Neufa for modernizing the IT infrastructure.',
-        descDe: 'Einblicke in die Modernisierungs- und Web-Infrastruktur-Initiative (Projekt Neufa), an der Maximilian mitwirkte.',
-        descEn: 'Insights into the modernization and web infrastructure initiative (Project Neufa) in which Maximilian participated.'
+        altDe: 'Vereinfachte Visualisierung einer internen Modernisierungsinitiative zur IT-Infrastruktur.',
+        altEn: 'Simplified visualization of an internal IT infrastructure modernization initiative.',
+        descDe: 'Ein vereinfachter Einblick in eine interne Modernisierungs- und Web-Infrastruktur-Initiative, an der ich mitwirken durfte.',
+        descEn: 'A simplified glimpse into an internal modernization and web infrastructure initiative I was able to contribute to.'
     },
     {
         id: 'elan',
-        titleDe: 'Das elan-Portal',
-        titleEn: 'The elan Portal',
+        titleDe: 'Elektronisches Antragsportal (Prinzip)',
+        titleEn: 'Electronic Submission Portal (Concept)',
         src: 'assets/images/Elan-Bild.png',
-        altDe: 'Screenshot des elan-Portals für elektronische Antragstellung bei der DFG.',
-        altEn: 'Screenshot of the elan portal for electronic research proposal submissions at the DFG.',
-        descDe: 'Das zentrale Portal der DFG zur Einreichung von Forschungsanträgen. Maximilian arbeitete an Frontend-Komponenten dieses Systems.',
-        descEn: 'The central DFG portal for submitting research proposals. Maximilian worked on frontend components for this system.'
+        altDe: 'Vereinfachte Konzeptdarstellung eines Portals für elektronische Antragstellung.',
+        altEn: 'Simplified concept illustration of an electronic proposal submission portal.',
+        descDe: 'Ein vereinfachtes Konzeptbild zu einem zentralen Portal für elektronische Antragstellung, an dessen Frontend-Komponenten ich mitgearbeitet habe.',
+        descEn: 'A simplified concept illustration of a central portal for electronic proposal submissions, whose frontend components I helped work on.'
     },
     {
         id: 'sprint',
@@ -71,8 +71,8 @@ const DFG_GALLERY_DATA = [
         src: 'assets/images/Sprint-Zyklus.png',
         altDe: 'Darstellung des agilen Scrum-Prozesses mit Sprint-Planung, Daily Standup, Review und Retrospektive.',
         altEn: 'Diagram showing the agile Scrum process with Sprint Planning, Daily Standup, Review, and Retrospective.',
-        descDe: 'Die agile Entwicklungsmethodik (Scrum) bei der DFG, bestehend aus 2-Wochen-Sprints zur strukturierten Projektabwicklung.',
-        descEn: 'The agile development methodology (Scrum) used at DFG, utilizing 2-week sprints for structured project execution.'
+        descDe: 'Die allgemeine agile Entwicklungsmethodik (Scrum) meines Teams, bestehend aus 2-Wochen-Sprints zur strukturierten Projektabwicklung.',
+        descEn: 'The general agile development methodology (Scrum) used by my team, utilizing 2-week sprints for structured project execution.'
     }
 ];
 

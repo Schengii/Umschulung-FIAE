@@ -248,6 +248,16 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fa-solid fa-code-compare"></i> <span>Vergleichen</span>
         </button>`;
 
+        // Quick-Sandbox trigger: only for projects playable directly in the in-page modal
+        const SANDBOX_PLAYABLE_REPOS = ['EcoChef', 'BurgenGame', 'Sims', 'ManuFaktur', 'Glücksspiel', 'CoOpVersusGame', 'Urlaubsfotos'];
+        if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
+            buttonsHTML += `
+            <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${project.repoName}" title="Direkt hier im Portfolio starten">
+                <span lang="de"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Direkt testen</span>
+                <span lang="en"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Quick Play</span>
+            </button>`;
+        }
+
         buttonsHTML += '</div>';
 
         // Set category class for filtering

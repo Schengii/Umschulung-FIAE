@@ -63,7 +63,6 @@ const CORE_INITIALIZERS = [
 // at the top of its own init function — this only decides whether the file
 // gets fetched at all, the module's own guard still applies as usual.
 const LAZY_MODULES = [
-    ['./modules/countdown.js', 'initCountdown', '#cd-days'],
     ['./modules/username-greeting.js', 'initUsernameGreeting', '#mySubmit'],
     ['./modules/contact-form.js', 'initContactForm', '#contact-form, #hire-me-form'],
     ['./modules/skill-bars.js', 'initSkillBars', '.skill-fill'],
@@ -83,7 +82,6 @@ const LAZY_MODULES = [
     ['./git-simulator.js', 'initGitSimulator', '#terminal-output'],
     ['./modules/recruiter-filter.js', 'initRecruiterFilter', '.role-filter-container'],
     ['./modules/about-me-enhancements.js', 'initAboutMeEnhancements', '#bridge-display'],
-    ['./modules/project-enhancements.js', 'initProjectEnhancements', '.btn-match'],
     ['./modules/impressum-enhancements.js', 'initImpressumEnhancements', '.map-2click-container'],
     ['./modules/timeline-scroll.js', 'initTimelineScroll', '.timeline-v2'],
     ['./modules/skill-matchmaker.js', 'initSkillMatchmaker', '#skill-matchmaker-widget'],
@@ -92,7 +90,10 @@ const LAZY_MODULES = [
     ['./modules/ihk-exam-simulator.js', 'initIhkExamSimulator', '.quiz-container'],
     ['./modules/c4-architecture.js', 'initC4Architecture', '.arch-tabs-bar'],
     ['./modules/ihk-cockpit.js', 'initIhkCockpit', '.page-ihk-cockpit, #panel-nwa'],
-    ['./modules/quick-sandbox.js', 'initQuickSandbox', '[data-sandbox-project]'],
+    // Note: quick-sandbox.js is intentionally NOT lazy-loaded here — its trigger buttons are
+    // injected dynamically into portfolio.js's project cards, which can render after this
+    // one-time DOM check runs. It self-inits via a direct <script type="module"> include
+    // on portfolio.html instead (see quick-sandbox.js bottom).
     ['./modules/executive-dossier.js', 'initExecutiveDossier', '[data-open-dossier]'],
     ['./modules/challenge-lab.js', 'initChallengeLab', '.page-challenge-lab, #lab-challenges-list'],
 ];

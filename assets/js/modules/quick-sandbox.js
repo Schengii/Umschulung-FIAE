@@ -6,7 +6,7 @@
 const PLAYABLE_PROJECTS = {
   'EcoChef': {
     title: 'EcoChef — IHK PWA Abschlussprojekt',
-    url: '../Projekte/EcoChef/index.html',
+    url: '../Projekte/EcoChef/www/index.html',
     type: 'PWA Web App',
     desc: 'Intelligenter KI-Rezept- & Nachhaltigkeitsplaner mit Lit, TypeScript & Gemini KI.'
   },
@@ -18,7 +18,7 @@ const PLAYABLE_PROJECTS = {
   },
   'Sims': {
     title: 'Sims 5 Next-Gen Web Experience',
-    url: '../Projekte/Sims/index.html',
+    url: '../Projekte/Sims/dist/index.html',
     type: '2.5D Isometric Simulation',
     desc: 'Sims Simulation mit isometrischem Canvas-Rendering, dynamischen Bedürfnissen und Synthesizer-Audio.'
   },
@@ -42,7 +42,7 @@ const PLAYABLE_PROJECTS = {
   },
   'Urlaubsfotos': {
     title: 'Urlaubsfotos — Modern Gallery PWA',
-    url: '../Projekte/Urlaubsfotos/index.html',
+    url: '../Projekte/Urlaubsfotos/dist/index.html',
     type: 'React / Vite PWA',
     desc: 'Fotogalerie mit EXIF-Metadaten-Filter, Tags und Lightbox-Modus.'
   }
@@ -200,3 +200,8 @@ export function closeSandbox() {
   if (iframe) iframe.src = '';
   document.body.style.overflow = '';
 }
+
+// Self-init when loaded directly as a page module (e.g. on portfolio.html), since its
+// trigger buttons are injected dynamically into project cards after page load and would
+// otherwise be missed by main.js's one-time DOM-presence lazy-load check.
+initQuickSandbox();

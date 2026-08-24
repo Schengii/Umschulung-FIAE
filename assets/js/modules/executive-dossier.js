@@ -92,7 +92,7 @@ function injectDossierModal() {
           </div>
           <div style="text-align: right; font-size: 0.75rem; color: #64748b;">
             <div>IHK FIAE 2026</div>
-            <div>BFW Leipzig</div>
+            <div>BFW Dortmund</div>
           </div>
         </div>
 
