@@ -1,0 +1,6 @@
+# Godot editor cache & imported/generated assets
+.godot/
+
+# .NET build output
+bin/
+obj/
