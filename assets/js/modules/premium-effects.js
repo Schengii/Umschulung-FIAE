@@ -12,6 +12,40 @@ export function initPremiumEffects() {
 
     // 3. Trigger staggered entrance animations for all cards and interactive sections
     initStaggeredEntrances();
+
+    // 4. Initialize Button Ripple Interactions
+    initButtonRipples();
+}
+
+/**
+ * Creates a material-like tactile ripple animation on button clicks
+ */
+function initButtonRipples() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-primary, .hero-btn, .btn-secondary, .btn-filter, button');
+        if (!btn || btn.classList.contains('no-ripple')) return;
+
+        const rect = btn.getBoundingClientRect();
+        const circle = document.createElement('span');
+        const diameter = Math.max(rect.width, rect.height);
+        const radius = diameter / 2;
+
+        circle.style.width = circle.style.height = `${diameter}px`;
+        circle.style.left = `${e.clientX - rect.left - radius}px`;
+        circle.style.top = `${e.clientY - rect.top - radius}px`;
+        circle.classList.add('ripple-circle');
+
+        const existingRipple = btn.querySelector('.ripple-circle');
+        if (existingRipple) {
+            existingRipple.remove();
+        }
+
+        btn.appendChild(circle);
+
+        setTimeout(() => {
+            circle.remove();
+        }, 600);
+    });
 }
 
 /**

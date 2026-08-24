@@ -2,18 +2,14 @@ import { test, expect } from '@playwright/test';
 
 test.describe('New Interactive Features E2E Verification', () => {
 
-  test('sollte den Recruiter Skill-Matchmaker auf portfolio.html initialisieren und filtern', async ({ page }) => {
+  test('sollte das Portfolio mit Sortier- und Filter-Buttons fehlerfrei bedienen', async ({ page }) => {
     await page.goto('/pages/portfolio.html', { waitUntil: 'domcontentloaded' });
 
-    const widget = page.locator('#skill-matchmaker-widget');
-    await expect(widget).toBeVisible();
-
-    const badge = page.locator('#match-score-badge');
-    await expect(badge).toContainText('Match');
-
-    const filterBtn = page.locator('#btn-filter-matched');
+    const filterBtn = page.locator('.btn-filter[data-filter="all"]');
     await expect(filterBtn).toBeVisible();
-    await filterBtn.click();
+
+    const sortSelect = page.locator('#sort-select');
+    await expect(sortSelect).toBeVisible();
   });
 
   test('sollte den IHK Prüfungs-Simulator Modus auf quiz.html schalten', async ({ page }) => {

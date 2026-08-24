@@ -291,8 +291,8 @@ const FACHGESPRAECH_QUESTIONS = [
   },
   {
     category: 'Wirtschaftlichkeit & Make-or-Buy',
-    question: 'Wie haben Sie die wirtschaftliche Sinnhaftigkeit Ihres Projekts nachgewiesen? Erläutern Sie Ihre Amortisationsrechnung.',
-    answer: 'Über eine Kosten-Nutzen-Analyse und Amortisationsrechnung: Die Einmalkosten der Entwicklung (80h × Stundensatz = z. B. 4.800 €) stehen einer monatlichen Zeiteinsparung von 15 Stunden pro Mitarbeiter gegenüber. Bei 50 €/h spart das Unternehmen 750 €/Monat, womit sich das Projekt nach ca. 6,4 Monaten vollständig amortisiert (ROI).'
+    question: 'Wie haben Sie die wirtschaftliche Sinnhaftigkeit Ihres Projekts nachgewiesen? Erläutern Sie Ihre Amortisationsrechnung und Nutzwertanalyse.',
+    answer: 'Über eine Kosten-Nutzen-Analyse und Nutzwertanalyse mit gewichteten Kriterien (Kosten, Wartbarkeit, Datenschutz). Die Einmalkosten der Entwicklung (80h × Stundensatz = 4.800 €) stehen einer monatlichen Zeiteinsparung von 15 Stunden pro Mitarbeiter gegenüber. Bei 50 €/h spart das Unternehmen 750 €/Monat, womit sich das Projekt nach ca. 6,4 Monaten amortisiert (ROI).'
   },
   {
     category: 'Datenschutz, DSGVO & IT-Sicherheit',
@@ -302,7 +302,22 @@ const FACHGESPRAECH_QUESTIONS = [
   {
     category: 'Qualitätssicherung & Testing',
     question: 'Welche Teststrategie haben Sie gewählt und warum reichen reine Unit-Tests bei einer modernen Webanwendung nicht aus?',
-    answer: 'Pyramiden-Teststrategie: Schnelle Unit-Tests für Geschäftslogik, Integrationstests für Service-Worker & Caching, und automatisierte Playwright E2E-Tests für reale Nutzerinteraktionen (Navigation, Offline-Verhalten, Rendering). Unit-Tests prüfen isolierte Bausteine, während E2E-Tests das Zusammenspiel der gesamten PWA sicherstellen.'
+    answer: 'Pyramiden-Teststrategie: Schnelle Unit-Tests für isolierte Geschäftslogik, Integrationstests für Service-Worker & Caching, und automatisierte Playwright E2E-Tests für reale Nutzerinteraktionen (Navigation, Offline-Verhalten, Rendering). Unit-Tests prüfen isolierte Bausteine, während E2E-Tests das Zusammenspiel der gesamten PWA sicherstellen.'
+  },
+  {
+    category: 'Design Patterns & Clean Code',
+    question: 'Erläutern Sie das Strategy Pattern und die SOLID-Prinzipien. Wie tragen diese zur Wartbarkeit Ihrer Anwendung bei?',
+    answer: 'Das Strategy Pattern kapselt austauschbare Algorithmen (z. B. verschiedene Rabattberechnungen oder Export-Formate) hinter einer gemeinsamen Schnittstelle. Dadurch wird das Open-Closed-Principle (OCP aus SOLID) erfüllt: Neue Strategien können hinzugefügt werden, ohne bestehenden Code modifizieren zu müssen.'
+  },
+  {
+    category: 'Asynchrone Programmierung & Web Workers',
+    question: 'Wie verhindert man in JavaScript, dass rechenintensive Operationen den UI-Thread blockieren, und wie funktioniert der Event Loop?',
+    answer: 'JavaScript läuft standardmäßig in einem Single-Thread-Event-Loop (Call Stack, Web APIs, Task/Microtask Queue). Rechenintensive Aufgaben (wie KI-Entscheidungen oder Bildverarbeitung) werden in Web Worker ausgelagert. Diese laufen in separaten Hintergrund-Threads und kommunizieren asynchron über Message-Channels via postMessage().'
+  },
+  {
+    category: 'API-Design & Schnittstellen',
+    question: 'Was unterscheidet eine RESTful API von WebSockets und wann ist welches Kommunikationsprotokoll vorzuziehen?',
+    answer: 'REST basiert auf dem zustandslosen HTTP Request-Response-Modell und eignet sich ideal für CRUD-Operationen, Caching und strukturierte Datenaustausche. WebSockets bieten nach dem HTTP 101 Handshake eine persistente, bidirektionale Vollduplex-Verbindung mit minimalem Overhead für Realtime-Events (z. B. Chats, Live-Telemetry oder Multiplayer-Games).'
   }
 ];
 

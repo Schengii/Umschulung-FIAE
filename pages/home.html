@@ -60,12 +60,20 @@
 
         <!-- Hero Section -->
         <section class="hero-section" id="hero-section">
+            <div class="hero-visual">
+                <div class="hero-avatar-ring">
+                    <picture>
+                        <source srcset="../assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
+                        <img src="../assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk" class="hero-avatar-img">
+                    </picture>
+                </div>
+            </div>
             <div class="hero-content">
-                <h1 class="hero-title">
+                <h1 class="hero-title hero-glow-title">
                     <span lang="de">Maximilian Schenk</span>
                     <span lang="en">Maximilian Schenk</span>
                 </h1>
-                <div class="hero-subtitle">
+                <div class="hero-subtitle hero-glow-text">
                     <span id="hero-typing" class="hero-typing"></span><span class="hero-cursor">|</span>
                 </div>
                 <p class="hero-description">
@@ -92,16 +100,8 @@
                     <span class="hero-badge"><i class="fa fa-check-circle" aria-hidden="true"></i> <span
                             lang="de">FIAE</span><span lang="en">FIAE</span></span>
                     <span class="hero-badge"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, DE</span>
-                    <span class="hero-badge"><i class="fa fa-rocket" aria-hidden="true"></i> <span lang="de">Sofort
+                    <span class="hero-badge"><span class="live-dot-pulse"></span><i class="fa fa-rocket" aria-hidden="true"></i> <span lang="de">Sofort
                             verfügbar</span><span lang="en">Available now</span></span>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="hero-avatar-ring">
-                    <picture>
-                        <source srcset="../assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
-                        <img src="../assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk" class="hero-avatar-img">
-                    </picture>
                 </div>
             </div>
         </section>
@@ -183,6 +183,98 @@
                     <strong><span class="tracker-contact-name"></span></strong></span>
             </div>
         </div>
+
+        <!-- Highlights & Kernpunkte der Qualifikation (Interactive Highlights Grid) -->
+        <section class="card scroll-reveal" aria-labelledby="home-points-heading">
+            <h2 id="home-points-heading">
+                <span lang="de"><i class="fa-solid fa-star" aria-hidden="true"></i> Kernpunkte & Highlights auf einen Blick</span>
+                <span lang="en"><i class="fa-solid fa-star" aria-hidden="true"></i> Key Highlights & Profile Points</span>
+            </h2>
+            <p lang="de" class="text-secondary">Die wichtigsten Meilensteine, Kompetenzen und Kennzahlen meiner Ausbildung zum Fachinformatiker Anwendungsentwicklung:</p>
+            <p lang="en" class="text-secondary">Key milestones, core competencies and statistics from my retraining as an IT Specialist in Application Development:</p>
+
+            <div class="home-points-grid">
+                <!-- Punkt 1: Umschulung & BFW -->
+                <div class="point-card scroll-reveal stagger-delay-1">
+                    <div class="point-icon-wrapper">
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="point-title">
+                        <span lang="de"><span class="stat-number-animated" data-counter="24">24</span> Monate Umschulung</span>
+                        <span lang="en"><span class="stat-number-animated" data-counter="24">24</span> Months Retraining</span>
+                    </h3>
+                    <p class="point-desc">
+                        <span lang="de">Fundierte theoretische & praktische Ausbildung am Berufsförderungswerk (BFW) Dortmund mit IHK-Prüfungsvorbereitung.</span>
+                        <span lang="en">In-depth theoretical and practical retraining at BFW Dortmund with full IHK certification preparation.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">BFW Dortmund</span>
+                        <span class="point-tag">IHK Abschluss</span>
+                        <span class="point-tag">Top Noten</span>
+                    </div>
+                </div>
+
+                <!-- Punkt 2: Praxiserfahrung DFG -->
+                <div class="point-card scroll-reveal stagger-delay-2">
+                    <div class="point-icon-wrapper">
+                        <i class="fa-solid fa-building-user" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="point-title">
+                        <span lang="de">Praktikum DFG Bonn</span>
+                        <span lang="en">Internship DFG Bonn</span>
+                    </h3>
+                    <p class="point-desc">
+                        <span lang="de">Reale Enterprise-Softwareentwicklung bei der Deutschen Forschungsgemeinschaft in Bonn im IT-Anwendungsbetrieb.</span>
+                        <span lang="en">Real-world enterprise software development at the German Research Foundation (DFG) in Bonn.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">DFG Bonn</span>
+                        <span class="point-tag">Enterprise IT</span>
+                        <span class="point-tag">Projektpraxis</span>
+                    </div>
+                </div>
+
+                <!-- Punkt 3: Projekte & Live-Demos -->
+                <div class="point-card scroll-reveal stagger-delay-3">
+                    <div class="point-icon-wrapper">
+                        <i class="fa-solid fa-laptop-code" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="point-title">
+                        <span lang="de"><span class="stat-number-animated" data-counter="21">21</span>+ Praxis-Projekte</span>
+                        <span lang="en"><span class="stat-number-animated" data-counter="21">21</span>+ Live Projects</span>
+                    </h3>
+                    <p class="point-desc">
+                        <span lang="de">Interaktive Web-Apps, Git-Simulator, Clean-Code Challenge-Lab, WASM Sandbox und C4-Architekturen.</span>
+                        <span lang="en">Interactive web applications, Git simulator, Clean Code challenge lab, WASM sandbox, and C4 architectures.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">JavaScript / ES6+</span>
+                        <span class="point-tag">Python & Java</span>
+                        <span class="point-tag">REST APIs</span>
+                    </div>
+                </div>
+
+                <!-- Punkt 4: Standards & Barrierefreiheit -->
+                <div class="point-card scroll-reveal stagger-delay-4">
+                    <div class="point-icon-wrapper">
+                        <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="point-title">
+                        <span lang="de"><span class="stat-number-animated" data-counter="100" data-suffix="%">100%</span> WCAG AAA & PWA</span>
+                        <span lang="en"><span class="stat-number-animated" data-counter="100" data-suffix="%">100%</span> WCAG AAA & PWA</span>
+                    </h3>
+                    <p class="point-desc">
+                        <span lang="de">Barrierefreiheit mit Dyslexia-, Kontrast- & Screenreader-Modus sowie voller Offline-Fähigkeit via Service Worker.</span>
+                        <span lang="en">Accessibility with dyslexia, high contrast & screen-reader modes plus full offline PWA capability.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">WCAG 2.1 AAA</span>
+                        <span class="point-tag">PWA Offline</span>
+                        <span class="point-tag">Clean Code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Über mich Card (Maximilian Schenk Profil) -->
         <section class="card" aria-labelledby="card-aboutme-header">

@@ -123,6 +123,66 @@ document.addEventListener('DOMContentLoaded', () => {
             question_en: "What is the primary goal of the GDPR (DSGVO)?",
             answer_de: "Der Schutz **personenbezogener Daten** natürlicher Personen und die Gewährleistung des freien Datenverkehrs innerhalb des Europäischen Binnenmarktes.",
             answer_en: "The protection of **personal data** of natural persons and ensuring the free movement of data within the European Single Market."
+        },
+        {
+            id: 13,
+            category: "software",
+            hint_de: "Sicherheit & Auth",
+            hint_en: "Security & Auth",
+            question_de: "Warum wird bei Single-Page-Apps (SPAs) der OAuth2 PKCE Flow (Proof Key for Code Exchange) anstelle des Implicit Flow eingesetzt?",
+            question_en: "Why is the OAuth2 PKCE flow used for Single Page Apps (SPAs) instead of the Implicit Flow?",
+            answer_de: "SPAs können kein Client-Secret sicher geheim halten. **PKCE** erzeugt dynamisch einen `code_verifier` und `code_challenge`, womit Autorisierungscodes selbst bei Abfangen durch Angreifer nicht missbraucht werden können.",
+            answer_en: "SPAs cannot securely store client secrets. **PKCE** generates dynamic `code_verifier` and `code_challenge` pairs, preventing authorization code interception attacks."
+        },
+        {
+            id: 14,
+            category: "software",
+            hint_de: "Architektur & Microservices",
+            hint_en: "Architecture & Microservices",
+            question_de: "Was ist der Unterschied zwischen monolithischer und Event-Driven Microservice-Architektur?",
+            question_en: "What is the difference between monolithic and event-driven microservice architecture?",
+            answer_de: "Monolithen bündeln die gesamte Anwendungslogik in einer Codebasis. **Event-Driven Microservices** entkoppeln Services über Message-Broker (z. B. Kafka, RabbitMQ) asynchron, was unabhängige Skalierung und Ausfallsicherheit ermöglicht.",
+            answer_en: "Monoliths combine all logic into a single codebase. **Event-Driven Microservices** asynchronously decouple services via message brokers (e.g. Kafka, RabbitMQ) for independent scalability and fault tolerance."
+        },
+        {
+            id: 15,
+            category: "software",
+            hint_de: "Algorithmen & Big-O",
+            hint_en: "Algorithms & Big-O",
+            question_de: "Was bedeutet die Zeitkomplexität O(1), O(log n) und O(n) bei Datenstrukturen?",
+            question_en: "What do the time complexities O(1), O(log n), and O(n) mean in data structures?",
+            answer_de: "<strong>O(1)</strong>: Konstanter Zugriff (z. B. Hash Map per Key). <strong>O(log n)</strong>: Logarithmisch (z. B. binäre Suche in sortiertem Array). <strong>O(n)</strong>: Linearer Aufwand proportional zur Elementanzahl (z. B. lineare Suche).",
+            answer_en: "<strong>O(1)</strong>: Constant time lookup (e.g. Hash Map). <strong>O(log n)</strong>: Logarithmic search (e.g. binary search). <strong>O(n)</strong>: Linear time proportional to element count (e.g. linear scan)."
+        },
+        {
+            id: 16,
+            category: "database",
+            hint_de: "Transaktionen (ACID)",
+            hint_en: "Transactions (ACID)",
+            question_de: "Wofür steht das ACID-Prinzip bei relationalen Datenbanken?",
+            question_en: "What does the ACID principle stand for in relational databases?",
+            answer_de: "<strong>Atomicity</strong> (Alles oder Nichts), <strong>Consistency</strong> (Konsistenzüberprüfung), <strong>Isolation</strong> (Unabhängige parallele Transaktionen), <strong>Durability</strong> (Dauerhafte Persistenz nach Commit).",
+            answer_en: "<strong>Atomicity</strong> (all or nothing), <strong>Consistency</strong> (valid state rules), <strong>Isolation</strong> (concurrent transactions don't interfere), <strong>Durability</strong> (committed data survives crashes)."
+        },
+        {
+            id: 17,
+            category: "wiso",
+            hint_de: "Wirtschaftlichkeit",
+            hint_en: "Business Case",
+            question_de: "Was unterscheidet eine Nutzwertanalyse (NWA) von einer reinen Kostenvergleichsrechnung?",
+            question_en: "How does a Weighted Scoring Analysis (Nutzwertanalyse) differ from a simple cost comparison?",
+            answer_de: "Die **Nutzwertanalyse** bewertet qualitative und nicht-monetäre Kriterien (wie Wartbarkeit, Usability, Datenschutz) anhand gewichteter Punkte. Eine Kostenvergleichsrechnung betrachtet rein finanzielle Kennzahlen.",
+            answer_en: "A **Weighted Scoring Analysis** evaluates qualitative and non-monetary criteria (like maintainability, usability, privacy) using weighted scores, whereas cost comparisons only look at monetary values."
+        },
+        {
+            id: 18,
+            category: "network",
+            hint_de: "IT-Sicherheit",
+            hint_en: "IT Security",
+            question_de: "Was beschreibt die 'CIA-Triade' (Schutzziele der Informationssicherheit)?",
+            question_en: "What does the 'CIA Triad' describe in information security?",
+            answer_de: "<strong>Confidentiality (Vertraulichkeit)</strong>: Schutz vor unbefugtem Lesen. <strong>Integrity (Integrität)</strong>: Schutz vor Manipulation. <strong>Availability (Verfügbarkeit)</strong>: Zeitgerechter Zugriff für autorisierte Nutzer.",
+            answer_en: "<strong>Confidentiality</strong>: Protection against unauthorized access. <strong>Integrity</strong>: Protection against modification. <strong>Availability</strong>: Timely access for authorized users."
         }
     ];
 

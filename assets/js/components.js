@@ -122,24 +122,30 @@ function renderNav(currentPage) {
                 <li class="nav-item${active(ueberMichPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li role="none"><a href="${pagePrefix}ueber-mich.html" class="dropdown-link" role="menuitem"><span lang="de">Steckbrief</span><span lang="en">Profile</span></a></li>
-                        <li role="none"><a href="${pagePrefix}lebenslauf.html" class="dropdown-link" role="menuitem"><span lang="de">Lebenslauf</span><span lang="en">CV / Resume</span></a></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-id-card" aria-hidden="true"></i> <span lang="de">Profil &amp; Werdegang</span><span lang="en">Profile &amp; Career</span></li>
+                        <li role="none"><a href="${pagePrefix}ueber-mich.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> <span lang="de">Steckbrief &amp; Über mich</span><span lang="en">Profile &amp; About Me</span></a></li>
+                        <li role="none"><a href="${pagePrefix}lebenslauf.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span lang="de">Interaktiver Lebenslauf</span><span lang="en">Interactive CV / Resume</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active(ausbildungPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li role="none"><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link" role="menuitem"><span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
-                        <li role="none"><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link" role="menuitem"><span lang="de">Berufsförderungswerk Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-school" aria-hidden="true"></i> <span lang="de">Stationen &amp; Ablauf</span><span lang="en">Stations &amp; Process</span></li>
+                        <li role="none"><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-timeline" aria-hidden="true"></i> <span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
+                        <li role="none"><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-building-columns" aria-hidden="true"></i> <span lang="de">BFW Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
+                        <li role="none"><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-building-user" aria-hidden="true"></i> <span lang="de">Praktikumsbetrieb (DFG Bonn)</span><span lang="en">Internship (DFG Bonn)</span></a></li>
+
+                        <li class="dropdown-divider" role="separator"></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i> <span lang="de">Kostenträger &amp; Träger</span><span lang="en">Sponsors &amp; Institutions</span></li>
+                        <li role="none"><a href="${pagePrefix}kostentraeger.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-money-check-dollar" aria-hidden="true"></i> <span lang="de">Kostenträger Übersicht</span><span lang="en">Sponsors Overview</span></a></li>
                         <li class="dropdown-item" role="none">
-                            <a href="${pagePrefix}kostentraeger.html" class="dropdown-link" aria-haspopup="true" aria-expanded="false" role="menuitem"><span lang="de">Kostenträger</span><span lang="en">Sponsors</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <a href="${pagePrefix}kostentraeger.html" class="dropdown-link" aria-haspopup="true" aria-expanded="false" role="menuitem"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> <span lang="de">Träger-Portale</span><span lang="en">Sponsor Portals</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu" role="menu">
-                                <li role="none"><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
-                                <li role="none"><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
-                                <li role="none"><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
+                                <li role="none"><a href="https://www.deutsche-rentenversicherung.de/DRV/DE/Reha/Berufliche-Reha/berufliche-reha.html" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span lang="de">Rentenversicherung</span><span lang="en">Pension Insurance</span></a></li>
+                                <li role="none"><a href="https://www.bgbau.de/themen/versicherungsschutz-und-leistungen/berufliche-und-soziale-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><i class="fa-solid fa-helmet-safety" aria-hidden="true"></i> <span lang="de">Berufsgenossenschaften</span><span lang="en">Trade Associations</span></a></li>
+                                <li role="none"><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> <span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
                             </ul>
                         </li>
-                        <li role="none"><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link" role="menuitem"><span lang="de">Praktikumsbetrieb</span><span lang="en">Internship Company</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('portfolio.html')}">

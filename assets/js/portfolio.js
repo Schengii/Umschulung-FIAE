@@ -28,10 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const SORT_KEY = 'portfolio_sort_order';
     const DEFAULT_SORT_ORDER = 'desc';
 
-    // State for filtering and pagination
+    // State for filtering and pagination (Page 1 = 7 projects, subsequent pages = 6 projects)
     let allProjects = [];
     let currentPage = 1;
-    const projectsPerPage = 6;
+    const FIRST_PAGE_PROJECTS = 7;
+    const SUBSEQUENT_PAGE_PROJECTS = 6;
     let currentSearchTerm = '';
     let currentCategory = 'all';
     const clearSearchBtn = document.getElementById('btn-clear-search');
@@ -124,7 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         if (index !== -1) {
-            currentPage = Math.floor(index / projectsPerPage) + 1;
+            if (index < FIRST_PAGE_PROJECTS) {
+                currentPage = 1;
+            } else {
+                currentPage = 2 + Math.floor((index - FIRST_PAGE_PROJECTS) / SUBSEQUENT_PAGE_PROJECTS);
+            }
             hashHandled = true;
             renderAllProjects(); // Render the correct page
             
@@ -342,9 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (noResultsContainer) noResultsContainer.style.display = 'none';
 
-        // 4. Paginate
-        const startIndex = (currentPage - 1) * projectsPerPage;
-        const endIndex = startIndex + projectsPerPage;
+        // 4. Paginate (Page 1 = 7 projects, Page 2+ = 6 projects)
+        let startIndex, endIndex;
+        if (currentPage === 1) {
+            startIndex = 0;
+            endIndex = FIRST_PAGE_PROJECTS;
+        } else {
+            startIndex = FIRST_PAGE_PROJECTS + (currentPage - 2) * SUBSEQUENT_PAGE_PROJECTS;
+            endIndex = startIndex + SUBSEQUENT_PAGE_PROJECTS;
+        }
         const paginatedProjects = sorted.slice(startIndex, endIndex);
 
         // 5. Render
@@ -356,10 +367,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
 
+    function calculateTotalPages(totalProjects) {
+        if (totalProjects <= FIRST_PAGE_PROJECTS) return 1;
+        return 1 + Math.ceil((totalProjects - FIRST_PAGE_PROJECTS) / SUBSEQUENT_PAGE_PROJECTS);
+    }
+
     function renderPagination(totalProjects) {
         if (!paginationContainer) return;
         paginationContainer.innerHTML = '';
-        const totalPages = Math.ceil(totalProjects / projectsPerPage);
+        const totalPages = calculateTotalPages(totalProjects);
 
         if (totalPages <= 1) return;
 
@@ -387,7 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // newer, more representative work. DEPRIORITIZED_REPOS is the opposite:
     // projects kept in the portfolio but pushed to the back of the list
     // instead of competing with the curated ones for first impressions.
-    const FEATURED_REPOS = ['ElektroCheck-AI', 'Finanzenportfolio', 'arbeitszeiterfassung', 'BurgenGame'];
+    const FEATURED_REPOS = [
+        'arbeitszeiterfassung',
+        'BurgenGame',
+        'ElektroCheck-AI',
+        'Finanzenportfolio',
+        'Wohnungssuche-KI',
+        'CoOpVersusGame'
+    ];
     const DEPRIORITIZED_REPOS = ['Glücksspiel'];
 
     function projectTier(repoName) {
@@ -658,6 +681,45 @@ document.addEventListener('DOMContentLoaded', () => {
             openGameModal(href, titleDe);
         }
     });
+
+    // Code Showcase Accordion Toggle
+    const codeAccordionToggle = document.getElementById('code-accordion-toggle');
+    const codeAccordionContent = document.getElementById('code-accordion-content');
+    const codeShowcaseCard = document.getElementById('code-showcase');
+
+    if (codeAccordionToggle && codeAccordionContent) {
+        const toggleAccordion = () => {
+            const isExpanded = codeAccordionToggle.getAttribute('aria-expanded') === 'true';
+            const nextState = !isExpanded;
+
+            codeAccordionToggle.setAttribute('aria-expanded', String(nextState));
+            codeAccordionContent.setAttribute('aria-hidden', String(!nextState));
+
+            if (nextState) {
+                codeAccordionContent.style.display = 'block';
+                codeShowcaseCard?.classList.add('open');
+                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach(el => {
+                    if (el.getAttribute('lang') === 'de') el.textContent = 'Code ausblenden';
+                    if (el.getAttribute('lang') === 'en') el.textContent = 'Hide Code';
+                });
+            } else {
+                codeAccordionContent.style.display = 'none';
+                codeShowcaseCard?.classList.remove('open');
+                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach(el => {
+                    if (el.getAttribute('lang') === 'de') el.textContent = 'Code anzeigen';
+                    if (el.getAttribute('lang') === 'en') el.textContent = 'Show Code';
+                });
+            }
+        };
+
+        codeAccordionToggle.addEventListener('click', toggleAccordion);
+        codeAccordionToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleAccordion();
+            }
+        });
+    }
 
     // Code Showcase Tab Switcher
     const codeTabButtons = document.querySelectorAll('.code-tab-btn');
