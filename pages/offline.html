@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline - Keine Verbindung</title>
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -36,7 +36,7 @@
                 This page requires an active internet connection or a cached version to load. Please check your connection and try again.
             </p>
             <div class="offline-buttons-row">
-                <button onclick="window.location.reload();" class="btn-primary">
+                <button id="btn-offline-retry" class="btn-primary">
                     <i class="fa-solid fa-rotate-right"></i> <span lang="de">Erneut versuchen</span><span lang="en">Try Again</span>
                 </button>
                 <a href="home.html" class="btn-primary offline-dashboard-btn">
@@ -85,6 +85,8 @@
             100% { transform: scale(1); opacity: 0.8; }
         }
     </style>
+
+    <script src="../assets/js/offline-retry.js"></script>
 </body>
 
 </html>

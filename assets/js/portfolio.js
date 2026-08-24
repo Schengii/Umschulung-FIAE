@@ -6,6 +6,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Moved off an inline onclick attribute (CSP script-src hardening)
+    document.getElementById('btn-cv-download-portfolio')?.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('achievement:unlock', { detail: 'cv_downloaded' }));
+    });
+
     const searchInput = document.getElementById('portfolio-searchbar');
     const sortSelect = document.getElementById('sort-select');
     const filterButtons = document.querySelectorAll('.portfolio-filters .btn-filter');

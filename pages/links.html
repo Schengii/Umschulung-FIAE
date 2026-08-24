@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links & Quellen - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://max-schenk.de/pages/links.html">
@@ -81,7 +81,7 @@
             <div class="qr-generator-workspace">
                 <!-- Left Panel: Inputs -->
                 <div class="qr-inputs-panel">
-                    <form id="qr-generator-form" class="project-form" onsubmit="event.preventDefault();">
+                    <form id="qr-generator-form" class="project-form">
                         <div class="form-group qr-form-group">
                             <label for="qr-company-input" class="qr-form-label">
                                 <span lang="de">Firmenname</span>
@@ -126,7 +126,7 @@
                             <span lang="de">Generierter Link:</span>
                             <span lang="en">Generated Link:</span>
                         </div>
-                        <input type="text" id="qr-generated-link" readonly class="qr-result-link-input" onclick="this.select();">
+                        <input type="text" id="qr-generated-link" readonly class="qr-result-link-input">
                         
                         <div class="qr-actions-container">
                             <button id="qr-copy-btn" class="btn-primary qr-action-btn">

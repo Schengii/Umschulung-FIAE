@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lebenslauf - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://max-schenk.de/pages/lebenslauf.html">
@@ -37,7 +38,7 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm btn-primary" onclick="window.print()" title="Lebenslauf als PDF speichern / drucken">
+                <button type="button" id="btn-cv-print-header" class="btn btn-sm btn-primary" title="Lebenslauf als PDF speichern / drucken">
                     <i class="fa-solid fa-print me-1" aria-hidden="true"></i>
                     <span lang="de">Als PDF exportieren</span>
                     <span lang="en">Export as PDF</span>
@@ -464,7 +465,7 @@
                     perfectly formatted PDF. Menus and footers are automatically hidden.</p>
             </div>
             <div>
-                <button class="btn-primary cv-download-print-btn" onclick="window.print()">
+                <button id="btn-cv-print-card" class="btn-primary cv-download-print-btn">
                     <i class="fa fa-print" aria-hidden="true"></i>
                     <span lang="de">PDF drucken / speichern</span>
                     <span lang="en">Print / Save as PDF</span>

@@ -58,6 +58,7 @@ const ASSETS = [
     // Core JS
     'assets/js/components.js',
     'assets/js/main.js',
+    'assets/js/offline-retry.js',
     'assets/js/constants.js',
     'assets/js/portfolio.js',
     'assets/js/projects_data.js',

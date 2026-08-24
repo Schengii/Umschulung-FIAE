@@ -173,4 +173,11 @@ export function initQrGenerator() {
                 });
         });
     }
+
+    // Moved off inline onsubmit/onclick attributes (CSP script-src hardening)
+    const generatorForm = document.getElementById('qr-generator-form');
+    if (generatorForm) {
+        generatorForm.addEventListener('submit', (e) => e.preventDefault());
+    }
+    generatedLinkInput.addEventListener('click', () => generatedLinkInput.select());
 }

@@ -4,6 +4,12 @@
  */
 
 export function initPdfExporter() {
+    // lebenslauf.html's plain "print this page" buttons (moved off inline
+    // onclick="window.print()" attributes for CSP script-src hardening).
+    document.querySelectorAll('#btn-cv-print-header, #btn-cv-print-card').forEach(btn => {
+        btn.addEventListener('click', () => window.print());
+    });
+
     const exportBtns = document.querySelectorAll('.btn-export-pdf, [data-action="export-pdf"]');
     if (!exportBtns.length) return;
 

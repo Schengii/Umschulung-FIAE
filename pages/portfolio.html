@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZHYUqTdOWtzi7fQhIvUi4V+6mzNDCUqzWygrn+0Lhig=' https://www.gstatic.com ; style-src 'self' 'unsafe-inline' ; font-src 'self' ; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
     <meta name="description"
@@ -545,9 +545,8 @@
                         </div>
                     </div>
 
-                    <a href="../assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download
-                        title="Lebenslauf als PDF herunterladen"
-                        onclick="document.dispatchEvent(new CustomEvent('achievement:unlock', { detail: 'cv_downloaded' }))">
+                    <a id="btn-cv-download-portfolio" href="../assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download
+                        title="Lebenslauf als PDF herunterladen">
                         <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span
                             lang="en">Download CV</span>
                     </a>
