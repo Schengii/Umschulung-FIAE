@@ -24,3 +24,6 @@ Thumbs.db
 # Database & logs
 **/*.db
 **/*.log
+
+# Private application documents (real personal PDFs, not meant for the public repo)
+/Bewerbungsunterlagen/
