@@ -104,8 +104,11 @@ Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung
   - 👁️ **Hochkontrast-Modus**: WCAG 2.1 AAA (7:1).
 
 ### 3. PWA-Offline-Caching (`sw.js`) & 100% DSGVO-Konformität
-- Lokaler Service Worker (`umschulung-fiae-v31`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
+- Lokaler Service Worker (`umschulung-fiae-v32`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
 - Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
+
+### 3b. Sichtschutz für sensible Bewerbungsdaten (`token-auth.js`)
+Gehaltsvorstellung und Zeugnis-Downloads in `lebenslauf.html` sind standardmäßig ausgeblendet und werden erst nach Eingabe des Tokens `fiae2026` (oder `?token=fiae2026` in der URL) angezeigt. Der Inhalt wird per XOR mit diesem Token obfuskiert und im Browser zur Laufzeit wieder zusammengesetzt – das ist **keine kryptografische Verschlüsselung**, sondern ein einfacher Sichtschutz gegen zufälliges Mitlesen (der Schlüssel steht im Klartext im ausgelieferten JavaScript). Für echte Vertraulichkeit sind diese Inhalte damit nicht geeignet, wohl aber um sie vor flüchtigen Blicken zu verbergen.
 
 ### 4. Test-Automatisierung & Qualitätskontrolle
 Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
@@ -115,7 +118,7 @@ npm test
 - **50 / 50 Tests grün (100% Pass Rate)**
 - Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 21 Projekte.
 
-- **Service Worker (`umschulung-fiae-v28`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
+- **Service Worker (`umschulung-fiae-v32`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Alle Icon-Fonts (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
@@ -167,7 +170,7 @@ Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **21 re
 
 - **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
-- **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, kryptografischer Dokumentenschutz und lokale Datenspeicherung.
+- **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, clientseitiger Sichtschutz für sensible Bewerbungsdaten (kein kryptografischer Schutz, siehe Hinweis unten) und lokale Datenspeicherung.
 - **52 Bestandene E2E-Tests**: Vollständig automatisierte Testabdeckung mit Playwright (`npm test`).
 
 ### ⚙️ Code-Refactoring & Neue Features (August 2026 Enterprise Release)
