@@ -1,0 +1,35 @@
+{
+  "name": "Amazon 2.0",
+  "short_name": "Amazon 2.0",
+  "description": "Dein moderner Online-Shop mit Premium-Features",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#232F3E",
+  "theme_color": "#FF9900",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Warenkorb",
+      "short_name": "Warenkorb",
+      "description": "Öffne deinen Warenkorb",
+      "url": "/?action=cart",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Bestellungen",
+      "short_name": "Bestellungen",
+      "description": "Deine Bestellungen",
+      "url": "/?action=orders",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ],
+  "categories": ["shopping", "lifestyle"]
+}

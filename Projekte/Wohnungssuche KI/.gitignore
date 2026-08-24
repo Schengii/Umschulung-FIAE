@@ -21,7 +21,7 @@ backend/data/db.json.tmp
 backend/data/uploads/
 
 # Production builds
-frontend/dist/
+# (frontend/dist/ wird bewusst mit eingecheckt, da die Portfolio-Demo den gebauten Stand direkt served)
 
 # Logs
 npm-debug.log*
