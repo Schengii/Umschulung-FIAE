@@ -443,7 +443,7 @@ async function fetchData() {
             setTimeout(fetchData, 5000);
         }
     } catch (error) {
-        console.error("Fehler beim Laden der Prognosen:", error);
+        console.warn("Fehler beim Laden der Prognosen:", error);
         elements.assetsList.innerHTML = `
             <div class="error-state">
                 <i data-lucide="alert-triangle" class="text-red"></i>
@@ -478,7 +478,7 @@ async function checkServerStatus() {
             }
         }
     } catch (error) {
-        console.error("Fehler beim Prüfen des Serverstatus:", error);
+        console.warn("Fehler beim Prüfen des Serverstatus:", error);
         if (!statusPollingInterval) {
             setUpdatingUI(false);
         }
@@ -503,7 +503,7 @@ async function pollStatus() {
             fetchAccuracy(); // Neue Erfolgsquote holen
         }
     } catch (error) {
-        console.error("Fehler beim Pollen des Status:", error);
+        console.warn("Fehler beim Pollen des Status:", error);
     }
 }
 
@@ -543,7 +543,7 @@ async function triggerRefresh() {
             setUpdatingUI(false);
         }
     } catch (error) {
-        console.error("Fehler beim Starten des Updates:", error);
+        console.warn("Fehler beim Starten des Updates:", error);
         setUpdatingUI(false);
         showToast("Fehler beim Starten des Updates: " + error.message, "error");
     }
@@ -1024,7 +1024,7 @@ async function loadAssetHistory(symbol, period) {
             renderChart(data.history, symbol, colorHex);
         }
     } catch (error) {
-        console.error("Fehler beim Laden der historischen Kursdaten:", error);
+        console.warn("Fehler beim Laden der historischen Kursdaten:", error);
         // Fallback: Nutze die in den Predictions eingebettete Standard-Historie
         const asset = appData.predictions[symbol];
         if (asset && asset.history) {
@@ -1142,7 +1142,7 @@ async function initPortfolio() {
         }
         
     } catch (e) {
-        console.error("Fehler beim Initialisieren des Server-Portfolios, Fallback auf localStorage...", e);
+        console.warn("Fehler beim Initialisieren des Server-Portfolios, Fallback auf localStorage...", e);
         // Fallback zu localStorage falls Server nicht erreichbar oder Fehler auftritt
         const stored = localStorage.getItem('finance_ai_portfolio');
         if (stored) {
@@ -1344,7 +1344,7 @@ async function handleAddInvestment(e) {
         elements.invPrice.value = '';
         
     } catch (error) {
-        console.error("Fehler beim Hinzufügen des Investments:", error);
+        console.warn("Fehler beim Hinzufügen des Investments:", error);
         showToast(error.message, "error");
     }
 }
@@ -1366,7 +1366,7 @@ async function deleteHolding(idx) {
         localStorage.setItem('finance_ai_portfolio', JSON.stringify(portfolio));
         renderPortfolio();
     } catch (error) {
-        console.error("Fehler beim Löschen des Investments:", error);
+        console.warn("Fehler beim Löschen des Investments:", error);
         showToast(error.message, "error");
     }
 }
@@ -1426,7 +1426,7 @@ async function handleAddAsset(e) {
         // Success notification
         showToast(`Asset ${symbol} wurde erfolgreich zur Watchlist hinzugefügt. Analyse läuft im Hintergrund.`, "success");
     } catch (error) {
-        console.error("Fehler beim Hinzufügen des Assets:", error);
+        console.warn("Fehler beim Hinzufügen des Assets:", error);
         showToast(error.message, "error");
     } finally {
         submitBtn.disabled = false;
@@ -1460,7 +1460,7 @@ async function handleDeleteAsset() {
         // Success notification
         showToast("Asset erfolgreich aus Watchlist gelöscht.", "success");
     } catch (error) {
-        console.error("Fehler beim Löschen des Assets:", error);
+        console.warn("Fehler beim Löschen des Assets:", error);
         showToast(error.message, "error");
     }
 }
@@ -1494,7 +1494,7 @@ async function analyzePortfolioWithAI() {
         const report = await response.json();
         renderAiReport(report);
     } catch (error) {
-        console.error("Fehler bei der KI-Portfolio-Analyse:", error);
+        console.warn("Fehler bei der KI-Portfolio-Analyse:", error);
         showToast("Die Portfolio-Analyse konnte nicht durchgeführt werden. Bitte überprüfen Sie Ihre Internetverbindung oder ob der Server läuft.", "error");
     } finally {
         elements.analyzePortfolioBtn.disabled = false;
@@ -1710,7 +1710,7 @@ async function handleAutocompleteSymbol() {
             if (data.type) elements.addAssetType.value = data.type;
         }
     } catch (e) {
-        console.error("Fehler beim Autovervollständigen des Symbols:", e);
+        console.warn("Fehler beim Autovervollständigen des Symbols:", e);
     }
 }
 
@@ -1742,7 +1742,7 @@ async function fetchAccuracy() {
             descElem.innerText = "Fehler beim Laden";
         }
     } catch (e) {
-        console.error("Fehler beim Laden der KI-Genauigkeit:", e);
+        console.warn("Fehler beim Laden der KI-Genauigkeit:", e);
     }
 }
 
@@ -1886,7 +1886,7 @@ async function initCurrencyToggle() {
             exchangeRate = data.rate || 0.92;
         }
     } catch (e) {
-        console.error("Fehler beim Laden des USD/EUR Wechselkurses:", e);
+        console.warn("Fehler beim Laden des USD/EUR Wechselkurses:", e);
     }
 
     btn.addEventListener("click", () => {
@@ -2005,7 +2005,7 @@ async function renderAlerts() {
 
         if (window.lucide) window.lucide.createIcons();
     } catch (err) {
-        console.error("Fehler beim Rendern der Alarme:", err);
+        console.warn("Fehler beim Rendern der Alarme:", err);
     }
 }
 
@@ -2060,7 +2060,7 @@ async function checkTriggeredAlerts() {
             }
         }
     } catch (err) {
-        console.error("Fehler bei der Alarmprüfung:", err);
+        console.warn("Fehler bei der Alarmprüfung:", err);
     }
 }
 
@@ -2135,7 +2135,7 @@ async function renderDividendCalendar() {
             }
         });
     } catch (e) {
-        console.error("Fehler beim Laden des Dividenden-Charts:", e);
+        console.warn("Fehler beim Laden des Dividenden-Charts:", e);
     }
 }
 
@@ -2256,7 +2256,7 @@ async function openBacktestModal() {
         }).join("");
 
     } catch (err) {
-        console.error("Backtest Fehler:", err);
+        console.warn("Backtest Fehler:", err);
         tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--color-sell);">Fehler beim Laden: ${err.message}</td></tr>`;
     }
 }
@@ -2465,7 +2465,7 @@ async function loadChatHistory() {
             });
         }
     } catch (e) {
-        console.error("Fehler beim Laden des Chatverlaufs:", e);
+        console.warn("Fehler beim Laden des Chatverlaufs:", e);
     }
 }
 
@@ -2546,7 +2546,7 @@ async function loadPortfolios() {
             }
         }
     } catch (e) {
-        console.error("Fehler beim Laden der Portfolio-Liste:", e);
+        console.warn("Fehler beim Laden der Portfolio-Liste:", e);
     }
 }
 
@@ -2559,7 +2559,7 @@ async function loadPortfolioData() {
         }
         portfolio = await response.json();
     } catch (e) {
-        console.error("Fehler beim Laden der Portfolio-Daten:", e);
+        console.warn("Fehler beim Laden der Portfolio-Daten:", e);
     }
 }
 
@@ -2675,7 +2675,7 @@ async function loadTransactions() {
             if (window.lucide) window.lucide.createIcons();
         }
     } catch (e) {
-        console.error("Fehler beim Laden der Transaktionen:", e);
+        console.warn("Fehler beim Laden der Transaktionen:", e);
     }
 }
 
@@ -2804,7 +2804,7 @@ async function loadSettings() {
             if (mailRecipient) mailRecipient.value = data.email_recipient || "";
         }
     } catch (e) {
-        console.error("Fehler beim Laden der Einstellungen:", e);
+        console.warn("Fehler beim Laden der Einstellungen:", e);
     }
 }
 
@@ -2995,7 +2995,7 @@ async function loadRebalanceData() {
             updateRebalanceChart(data);
         }
     } catch (e) {
-        console.error("Fehler beim Laden der Zielallokation:", e);
+        console.warn("Fehler beim Laden der Zielallokation:", e);
     }
 }
 
