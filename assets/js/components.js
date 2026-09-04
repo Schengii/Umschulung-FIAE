@@ -176,9 +176,12 @@ function renderNav(currentPage) {
                         <li role="none"><a href="${pagePrefix}git-simulator.html" class="dropdown-link" role="menuitem"><span lang="de">Git Simulator (CRT)</span><span lang="en">Git Simulator (CRT)</span></a></li>
 
                         <li class="dropdown-divider" role="separator"></li>
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Karriere &amp; Hubs</span><span lang="en">Career &amp; Hubs</span></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Karriere-Tools</span><span lang="en">Career Tools</span></li>
                         <li role="none"><a href="${pagePrefix}dashboard.html" class="dropdown-link" role="menuitem"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
                         <li role="none"><a href="${pagePrefix}interview-trainer.html" class="dropdown-link" role="menuitem"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
+
+                        <li class="dropdown-divider" role="separator"></li>
+                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-dice" aria-hidden="true"></i> <span lang="de">Spielerei (zum Ausprobieren)</span><span lang="en">Just for fun (try it out)</span></li>
                         <li class="dropdown-item" role="none">
                             <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu" role="menu">

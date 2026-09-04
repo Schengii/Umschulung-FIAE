@@ -34,7 +34,7 @@ export function initIcalGenerator() {
         const endISO = `${year}${month}${day}T${endHours}${minutes}00`;
 
         const title = 'Kennenlerngespräch - Maximilian Schenk (FIAE)';
-        const description = 'Kennenlerngespräch bezüglich Fachinformatiker Anwendungsentwicklung Position. Website: https://max-schenk.de';
+        const description = 'Kennenlerngespräch bezüglich Fachinformatiker Anwendungsentwicklung Position. Website: https://max-schenk.tech';
         const location = 'Online Meeting (Teams / Zoom)';
 
         // 1. Generate Google Calendar URL

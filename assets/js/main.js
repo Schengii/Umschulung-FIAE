@@ -78,7 +78,6 @@ const LAZY_MODULES = [
     ['./modules/qr-generator.js', 'initQrGenerator', '#qr-company-input'],
     ['./modules/document-preview.js', 'initDocumentPreview', 'a[href$=".docx"], a[href$=".pptx"]'],
     ['./modules/faq-accordion.js', 'initFaqAccordion', '#faq-accordion-container'],
-    ['./modules/token-auth.js', 'initTokenAuth', '.token-secured, #token-input'],
     ['./git-simulator.js', 'initGitSimulator', '#terminal-output'],
     ['./modules/recruiter-filter.js', 'initRecruiterFilter', '.role-filter-container'],
     ['./modules/about-me-enhancements.js', 'initAboutMeEnhancements', '#bridge-display'],
