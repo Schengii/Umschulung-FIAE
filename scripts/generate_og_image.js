@@ -4,7 +4,6 @@
  * (assets/images/og-cover.png) from an inline SVG, so every page
  * shares one consistent, on-brand Open Graph / Twitter Card image.
  */
-const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
