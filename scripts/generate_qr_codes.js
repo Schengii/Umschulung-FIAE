@@ -6,7 +6,7 @@ const https = require('https');
 const targetDir = path.resolve(__dirname, '..', 'assets', 'images');
 const docxTargetDir = path.resolve(__dirname, '..', 'Bewerbungsunterlagen', 'extracted_images');
 
-const baseDomain = 'https://max-schenk.developerakademie.net/Umschulung-FIAE';
+const baseDomain = 'https://max-schenk.techveloperakademie.net/Umschulung-FIAE';
 
 const qrCodesToGenerate = [
   {

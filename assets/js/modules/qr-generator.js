@@ -23,7 +23,7 @@ export function initQrGenerator() {
     // Helper to calculate the base URL path
     function getBaseUrl() {
         if (window.location.protocol === 'file:') {
-            return 'https://max-schenk.de';
+            return 'https://max-schenk.tech';
         }
         // Extract base folder (handling subfolders if hosted in a subdirectory)
         const path = window.location.pathname;
