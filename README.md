@@ -107,8 +107,8 @@ Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung
 - Lokaler Service Worker (`umschulung-fiae-v35`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
 - Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
 
-### 3b. Sichtschutz für sensible Bewerbungsdaten (`token-auth.js`)
-Gehaltsvorstellung und Zeugnis-Downloads in `lebenslauf.html` sind standardmäßig ausgeblendet und werden erst nach Eingabe des Tokens `fiae2026` (oder `?token=fiae2026` in der URL) angezeigt. Der Inhalt wird per XOR mit diesem Token obfuskiert und im Browser zur Laufzeit wieder zusammengesetzt – das ist **keine kryptografische Verschlüsselung**, sondern ein einfacher Sichtschutz gegen zufälliges Mitlesen (der Schlüssel steht im Klartext im ausgelieferten JavaScript). Für echte Vertraulichkeit sind diese Inhalte damit nicht geeignet, wohl aber um sie vor flüchtigen Blicken zu verbergen.
+### 3b. Sensible Bewerbungsdaten (Gehalt & Zeugnisse)
+Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf der Seite angezeigt. `lebenslauf.html` verweist stattdessen auf eine formlose Anfrage per E-Mail. Eine frühere Version blendete diese Inhalte hinter einem clientseitigen Token (`fiae2026`) ein — das war lediglich eine XOR-Verschleierung ohne echten Zugriffsschutz (der Schlüssel lag im Klartext im ausgelieferten JavaScript) und wurde entfernt, da für öffentlich verlinkte Bewerbungsunterlagen ein "auf Anfrage"-Hinweis der ehrlichere und sicherere Weg ist.
 
 ### 4. Test-Automatisierung & Qualitätskontrolle
 Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
@@ -164,14 +164,23 @@ npm test
 ```
 Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **21 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
 
+### 5. Linting
+```bash
+npm run lint
+```
+Prüft `assets/js` und `scripts/` mit ESLint (Flat Config in `eslint.config.js`).
+
+### 6. Deploy-Pipeline (vorbereitet, nicht aktiv)
+`.github/workflows/deploy.yml` baut & deployed die Seite nach GitHub Pages, sobald in den Repository-Settings unter *Pages → Source* „GitHub Actions" ausgewählt wird. `.github/workflows/ci.yml` läuft bei jedem Push/PR und führt Data-Sync-Check, Lint, Playwright-Tests sowie einen informativen Lighthouse-Audit (`lighthouserc.json`) aus. Die Datei `CNAME` ist bereits auf `max-schenk.tech` vorkonfiguriert — der DNS-Eintrag beim Domain-Provider muss noch manuell gesetzt werden.
+
 ---
 
 ## 🌟 Veröffentlichungs-Zusammenfassung (August 2026 Release)
 
 - **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
-- **100% DSGVO-Konform**: Keine Cookies, keine externen Schriftart-Verbindungen, clientseitiger Sichtschutz für sensible Bewerbungsdaten (kein kryptografischer Schutz, siehe Hinweis unten) und lokale Datenspeicherung.
-- **50 Bestandene E2E-Tests**: Automatisierte Testabdeckung mit Playwright (`npm test`).
+- **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
+- **54 Bestandene E2E-Tests**: Automatisierte Testabdeckung mit Playwright (`npm test`).
 
 ### ⚙️ Code-Refactoring & neue Module (August 2026)
 - **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.

@@ -55,7 +55,7 @@ function generateFactsheetModal() {
                     <h2 class="m-0 font-size-1-4rem color-primary">Maximilian Schenk</h2>
                     <p class="font-size-0-95rem text-muted m-0">Angehender Fachinformatiker für Anwendungsentwicklung (FIAE)</p>
                     <p class="font-size-0-85rem color-secondary m-0 margin-top-0-25rem">
-                        📍 Berlin / Erfurt | 📧 schekky@gmail.com | 🌐 https://max-schenk.de
+                        📍 Berlin / Erfurt | 📧 schekky@gmail.com | 🌐 https://max-schenk.tech
                     </p>
                     ${recruiterCompany !== 'Ihr Unternehmen' ? `
                         <div class="badge badge-info margin-top-0-5rem font-size-0-8rem padding-4px-8px">
