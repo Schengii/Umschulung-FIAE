@@ -22,6 +22,19 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
         const email = document.getElementById(emailId);
         const message = document.getElementById(messageId);
         const feedback = document.getElementById(feedbackId);
+        const botcheck = form.querySelector('input[name="botcheck"]');
+
+        // Bot / Spam detection: real users leave the hidden honeypot empty
+        if (botcheck && botcheck.value.trim() !== '') {
+            console.warn('Spam submission detected and blocked.');
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'form-feedback success';
+                feedback.innerHTML = '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
+            }
+            form.reset();
+            return;
+        }
 
         if (!name || !email || !message) return;
         

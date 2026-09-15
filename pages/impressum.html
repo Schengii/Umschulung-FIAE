@@ -147,6 +147,12 @@
                     </h3>
 
                     <form id="contact-form" class="contact-form-styled">
+                        <!-- Honeypot field for bot spam prevention -->
+                        <div class="display-none" aria-hidden="true">
+                            <label for="contact-botcheck">Bitte dieses Feld freilassen</label>
+                            <input type="text" id="contact-botcheck" name="botcheck" tabindex="-1" autocomplete="off">
+                        </div>
+
                         <div class="form-group">
                             <label for="contact-name">Name *</label>
                             <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name">

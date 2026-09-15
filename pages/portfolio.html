@@ -427,6 +427,12 @@
                         position. Feel free to drop me a message!</p>
 
                     <form id="hire-me-form" class="project-form mt-1rem">
+                        <!-- Honeypot field for bot spam prevention -->
+                        <div class="display-none" aria-hidden="true">
+                            <label for="hire-me-botcheck">Bitte freilassen</label>
+                            <input type="text" id="hire-me-botcheck" name="botcheck" tabindex="-1" autocomplete="off">
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="hire-me-name"><span lang="de">Name *</span><span lang="en">Name
