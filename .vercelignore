@@ -1,0 +1,28 @@
+# Vercel Deployment Ignore
+# Verhindert, dass interne Entwicklungsdateien, Skripte und Dokumentationen öffentlich auf Vercel landen
+
+# Git & CI/CD
+.git/
+.github/
+
+# IDE & Editor
+.vscode/
+.idea/
+
+# Interne Skripte & Test-Infrastruktur
+scripts/
+test-results/
+playwright.config.js
+lighthouserc.json
+eslint.config.js
+.prettierrc.json
+jsconfig.json
+
+# Interne Dokumentation & Notizen
+README.md
+CHANGELOG.md
+
+# Package Manager Cache & Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
