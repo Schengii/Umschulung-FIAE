@@ -631,3 +631,16 @@ function initAccessibilityControls() {
         }
     }
 }
+
+// Initialize Vercel Web Analytics on production domains
+(function initVercelAnalytics() {
+    if (typeof window === 'undefined') return;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') return;
+    
+    if (!document.querySelector('script[src*="/_vercel/insights/script.js"]')) {
+        const script = document.createElement('script');
+        script.src = '/_vercel/insights/script.js';
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+})();

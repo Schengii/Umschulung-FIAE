@@ -187,6 +187,11 @@ self.addEventListener('fetch', (e) => {
     
     const url = new URL(e.request.url);
 
+    // Bypass Service Worker for Vercel internal routes (Insights/Analytics)
+    if (url.pathname.startsWith('/_vercel/')) {
+        return;
+    }
+
     // 1. Network-First strategy for HTML documents and navigation
     if (e.request.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html') || url.pathname === '/') {
         e.respondWith(
