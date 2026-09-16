@@ -74,7 +74,7 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-09-16T17:34:39.364Z",
+    "updatedAt": "2026-09-16T18:19:42.171Z",
     "images": [
       "assets/images/arbeitszeit_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +164,7 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-09-16T17:34:39.548Z"
+    "updatedAt": "2026-09-16T18:19:42.353Z"
   },
   {
     "repoName": "EcoChef",
@@ -177,7 +177,7 @@ window.projectsData = [
       "LocalStorage",
       "Speech Synthesis"
     ],
-    "image": "assets/images/ecochef_showcase.png",
+    "image": "assets/images/ecochef_showcase.webp",
     "link": "Projekte/EcoChef/www/index.html",
     "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
     "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
@@ -308,7 +308,7 @@ window.projectsData = [
     "githubUrl": "https://github.com/Schengii/EcoChef",
     "updatedAt": "2026-01-15T08:40:14Z",
     "images": [
-      "assets/images/ecochef_showcase.png",
+      "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
     ]
   },
@@ -331,7 +331,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-09-16T17:34:39.955Z",
+    "updatedAt": "2026-09-16T18:19:42.752Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -356,7 +356,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-09-16T17:34:40.132Z",
+    "updatedAt": "2026-09-16T18:19:42.951Z",
     "images": [
       "assets/images/finance_bot_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -406,11 +406,94 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-09-16T17:34:40.382Z",
+    "updatedAt": "2026-09-16T18:19:43.216Z",
     "images": [
       "assets/images/gluecksspiel_showcase.webp",
       "assets/images/game_leaderboard.webp"
     ]
+  },
+  {
+    "repoName": "Informatik-lernen",
+    "titleDe": "💻 Informatik-Lernen — Interaktiver IHK-Prüfungs- & Simulatoren-Hub",
+    "titleEn": "💻 CS Learning Hub — Interactive IHK Exam & Simulators Lab",
+    "tags": [
+      "React 19",
+      "TypeScript",
+      "Vite",
+      "IHK AP2",
+      "DNSSEC",
+      "Linux CoW",
+      "OpenAPI 3.1",
+      "eBPF"
+    ],
+    "image": "assets/images/it_workspace.webp",
+    "images": [
+      "assets/images/it_workspace.webp",
+      "assets/images/quiz_showcase.webp"
+    ],
+    "link": "Projekte/Informatik-lernen/index.html",
+    "descDe": "Umfassende interaktive Prüfungsvorbereitung und IT-Simulatoren-Hub für Fachinformatiker (AO 2020). Beinhaltet 25 praxisnahe Labore: DNSSEC Chain of Trust, Linux Btrfs/ZFS Copy-on-Write Sandbox, OpenAPI 3.1 Contract Testing, Agile Burndown & Gantt, eBPF Cilium Service Mesh, TLS 1.3 Anti-Replay und IHK-Wirtschaftlichkeitsrechner.",
+    "descEn": "Comprehensive interactive exam prep and IT simulator suite for IT specialists. Features 25 hands-on labs: DNSSEC chain of trust validation, Linux Btrfs/ZFS Copy-on-Write sandbox, OpenAPI 3.1 contract testing, Agile Burndown & Gantt planners, eBPF Cilium network policies, TLS 1.3 replay defense, and IHK profitability calculators.",
+    "category": "web",
+    "language": "JavaScript",
+    "architectureBadges": [
+      {
+        "name": "React 19 / Vite",
+        "color": "#0284c7"
+      },
+      {
+        "name": "Zustand & IndexedDB",
+        "color": "#8b5cf6"
+      },
+      {
+        "name": "Web Crypto / WebAuthn",
+        "color": "#10b981"
+      },
+      {
+        "name": "Monaco Editor",
+        "color": "#f59e0b"
+      },
+      {
+        "name": "WCAG 2.1 AAA Accessibility",
+        "color": "#ec4899"
+      }
+    ],
+    "keyLearnings": {
+      "challengeDe": "Realitätsnahe Simulation komplexer Betriebssystem- und Netzwerkprotokolle (Linux Btrfs CoW, DNSSEC, eBPF) im Browser ohne Root-Server-Backend.",
+      "challengeEn": "Realistic in-browser simulation of low-level OS and network protocol dynamics (Linux Btrfs CoW, DNSSEC, eBPF) without requiring a privileged server backend.",
+      "solutionDe": "Entwicklung dedizierter, zustandsbehafteter JavaScript-Engines mit In-Memory-Datenstrukturen (Extents, B-Trees, RRSIG Hashings) und reaktiven SVG-Visualisierungen.",
+      "solutionEn": "Engineered modular in-memory simulation engines (extents, B-trees, cryptographic RRSIG hashing) coupled with reactive SVG vector diagrams and live state inspectors.",
+      "architectureHighlightsDe": [
+        "25 autarke Simulations-Engines mit 100% Client-Side Ausführung",
+        "Duales Persistenzmodell: Zustand Store synchronisiert mit IndexedDB",
+        "Integrierte Monaco-Editor Code-Prüfung & AST-Validierung"
+      ],
+      "architectureHighlightsEn": [
+        "25 standalone simulation engines running 100% client-side",
+        "Dual persistence layer: Zustand store synchronized with IndexedDB",
+        "Integrated Monaco Editor with syntax checking & AST validation"
+      ]
+    },
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/Informatik-lernen/index.html",
+        "type": "html"
+      },
+      {
+        "name": "package.json",
+        "path": "Projekte/Informatik-lernen/package.json",
+        "type": "json"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Informatik-lernen/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Informatik-lernen",
+    "updatedAt": "2026-09-04T16:39:12Z"
   },
   {
     "repoName": "Jobsuche",
@@ -431,7 +514,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-09-16T17:34:40.590Z",
+    "updatedAt": "2026-09-16T18:19:43.702Z",
     "images": [
       "assets/images/jobsuche_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -456,7 +539,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-09-16T17:34:40.781Z",
+    "updatedAt": "2026-09-16T18:19:43.904Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -536,7 +619,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-09-16T17:34:41.186Z"
+    "updatedAt": "2026-09-16T18:19:44.353Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -557,7 +640,7 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-09-16T17:34:41.388Z",
+    "updatedAt": "2026-09-16T18:19:44.546Z",
     "images": [
       "assets/images/orbital_scrap_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -624,7 +707,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-09-16T17:34:41.800Z",
+    "updatedAt": "2026-09-16T18:19:44.966Z",
     "images": [
       "assets/images/urlaubsfotos_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -648,7 +731,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-09-16T17:34:41.985Z",
+    "updatedAt": "2026-09-16T18:19:45.217Z",
     "images": [
       "assets/images/verkaufsvorlagen_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -673,7 +756,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-09-16T17:34:42.177Z",
+    "updatedAt": "2026-09-16T18:19:45.428Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -702,7 +785,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-09-16T17:34:42.369Z"
+    "updatedAt": "2026-09-16T18:19:45.610Z"
   },
   {
     "repoName": null,

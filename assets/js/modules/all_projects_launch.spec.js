@@ -10,7 +10,7 @@ test.describe('All Projects 1-Click Launch E2E Verification', () => {
 
     // 2. Extract window.projectsData
     const projects = await page.evaluate(() => window.projectsData);
-    expect(projects.length).toBe(21);
+    expect(projects.length).toBe(22);
 
     console.log(`Extracted ${projects.length} projects from projectsData.`);
 

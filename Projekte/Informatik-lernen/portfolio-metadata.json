@@ -1,0 +1,80 @@
+{
+  "repoName": "Informatik-lernen",
+  "titleDe": "💻 Informatik-Lernen — Interaktiver IHK-Prüfungs- & Simulatoren-Hub",
+  "titleEn": "💻 CS Learning Hub — Interactive IHK Exam & Simulators Lab",
+  "tags": [
+    "React 19",
+    "TypeScript",
+    "Vite",
+    "IHK AP2",
+    "DNSSEC",
+    "Linux CoW",
+    "OpenAPI 3.1",
+    "eBPF"
+  ],
+  "image": "assets/images/it_workspace.webp",
+  "images": [
+    "assets/images/it_workspace.webp",
+    "assets/images/quiz_showcase.webp"
+  ],
+  "link": "Projekte/Informatik-lernen/index.html",
+  "descDe": "Umfassende interaktive Prüfungsvorbereitung und IT-Simulatoren-Hub für Fachinformatiker (AO 2020). Beinhaltet 25 praxisnahe Labore: DNSSEC Chain of Trust, Linux Btrfs/ZFS Copy-on-Write Sandbox, OpenAPI 3.1 Contract Testing, Agile Burndown & Gantt, eBPF Cilium Service Mesh, TLS 1.3 Anti-Replay und IHK-Wirtschaftlichkeitsrechner.",
+  "descEn": "Comprehensive interactive exam prep and IT simulator suite for IT specialists. Features 25 hands-on labs: DNSSEC chain of trust validation, Linux Btrfs/ZFS Copy-on-Write sandbox, OpenAPI 3.1 contract testing, Agile Burndown & Gantt planners, eBPF Cilium network policies, TLS 1.3 replay defense, and IHK profitability calculators.",
+  "category": "web",
+  "language": "JavaScript",
+  "architectureBadges": [
+    {
+      "name": "React 19 / Vite",
+      "color": "#0284c7"
+    },
+    {
+      "name": "Zustand & IndexedDB",
+      "color": "#8b5cf6"
+    },
+    {
+      "name": "Web Crypto / WebAuthn",
+      "color": "#10b981"
+    },
+    {
+      "name": "Monaco Editor",
+      "color": "#f59e0b"
+    },
+    {
+      "name": "WCAG 2.1 AAA Accessibility",
+      "color": "#ec4899"
+    }
+  ],
+  "keyLearnings": {
+    "challengeDe": "Realitätsnahe Simulation komplexer Betriebssystem- und Netzwerkprotokolle (Linux Btrfs CoW, DNSSEC, eBPF) im Browser ohne Root-Server-Backend.",
+    "challengeEn": "Realistic in-browser simulation of low-level OS and network protocol dynamics (Linux Btrfs CoW, DNSSEC, eBPF) without requiring a privileged server backend.",
+    "solutionDe": "Entwicklung dedizierter, zustandsbehafteter JavaScript-Engines mit In-Memory-Datenstrukturen (Extents, B-Trees, RRSIG Hashings) und reaktiven SVG-Visualisierungen.",
+    "solutionEn": "Engineered modular in-memory simulation engines (extents, B-trees, cryptographic RRSIG hashing) coupled with reactive SVG vector diagrams and live state inspectors.",
+    "architectureHighlightsDe": [
+      "25 autarke Simulations-Engines mit 100% Client-Side Ausführung",
+      "Duales Persistenzmodell: Zustand Store synchronisiert mit IndexedDB",
+      "Integrierte Monaco-Editor Code-Prüfung & AST-Validierung"
+    ],
+    "architectureHighlightsEn": [
+      "25 standalone simulation engines running 100% client-side",
+      "Dual persistence layer: Zustand store synchronized with IndexedDB",
+      "Integrated Monaco Editor with syntax checking & AST validation"
+    ]
+  },
+  "codeFiles": [
+    {
+      "name": "index.html",
+      "path": "Projekte/Informatik-lernen/index.html",
+      "type": "html"
+    },
+    {
+      "name": "package.json",
+      "path": "Projekte/Informatik-lernen/package.json",
+      "type": "json"
+    },
+    {
+      "name": "README.md",
+      "path": "Projekte/Informatik-lernen/README.md",
+      "type": "markdown"
+    }
+  ]
+}

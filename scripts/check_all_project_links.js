@@ -38,7 +38,7 @@ projects.forEach((proj, idx) => {
 });
 
 if (missingCount === 0) {
-    console.log('\n🎉 ALL 18 PROJECT LINKS EXIST ON DISK!');
+    console.log(`\n🎉 ALL ${projects.length} PROJECT LINKS EXIST ON DISK!`);
 } else {
     console.warn(`\n⚠️ ${missingCount} project links are missing or pointing to non-existent files.`);
 }
