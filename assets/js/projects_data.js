@@ -74,7 +74,7 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-09-16T16:28:59.920Z",
+    "updatedAt": "2026-09-16T17:34:39.364Z",
     "images": [
       "assets/images/arbeitszeit_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +164,7 @@ window.projectsData = [
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-09-16T16:29:00.117Z"
+    "updatedAt": "2026-09-16T17:34:39.548Z"
   },
   {
     "repoName": "EcoChef",
@@ -331,7 +331,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-09-16T16:29:00.604Z",
+    "updatedAt": "2026-09-16T17:34:39.955Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -356,10 +356,35 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-09-16T16:29:00.796Z",
+    "updatedAt": "2026-09-16T17:34:40.132Z",
     "images": [
       "assets/images/finance_bot_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
+    ]
+  },
+  {
+    "repoName": "Finanzenportfolio",
+    "titleDe": "📊 Finanzportfolio — Vermögensplaner & Dashboard",
+    "titleEn": "📊 Financial Portfolio — Wealth Planner & Dashboard",
+    "tags": [
+      "React",
+      "Vite",
+      "TypeScript",
+      "TailwindCSS",
+      "Recharts"
+    ],
+    "image": "assets/images/finanzenportfolio_showcase.webp",
+    "link": "Projekte/Finanzenportfolio/dist/index.html",
+    "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
+    "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
+    "category": "web",
+    "language": "TypeScript",
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
+    "updatedAt": "2026-09-11T14:05:35Z",
+    "images": [
+      "assets/images/finanzenportfolio_showcase.webp",
+      "assets/images/analytics_showcase.webp"
     ]
   },
   {
@@ -381,7 +406,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-09-16T16:29:00.813Z",
+    "updatedAt": "2026-09-16T17:34:40.382Z",
     "images": [
       "assets/images/gluecksspiel_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -406,7 +431,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-09-16T16:29:01.018Z",
+    "updatedAt": "2026-09-16T17:34:40.590Z",
     "images": [
       "assets/images/jobsuche_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -431,11 +456,49 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-09-16T16:29:01.204Z",
+    "updatedAt": "2026-09-16T17:34:40.781Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
     ]
+  },
+  {
+    "repoName": "Minecraft",
+    "titleDe": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+    "titleEn": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
+    "tags": [
+      "C++20",
+      "OpenGL 4.5",
+      "CMake",
+      "Redstone Logic",
+      "3D Voxel Engine",
+      "Procedural Generation"
+    ],
+    "image": "assets/images/minecraft_showcase.webp",
+    "images": [
+      "assets/images/minecraft_showcase.webp",
+      "assets/images/game_leaderboard.webp"
+    ],
+    "link": "Projekte/Minecraft/index.html",
+    "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
+    "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
+    "category": "games",
+    "language": "C++",
+    "codeFiles": [
+      {
+        "name": "CMakeLists.txt",
+        "path": "Projekte/Minecraft/CMakeLists.txt",
+        "type": "cmake"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Minecraft/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Minecraft",
+    "updatedAt": "2026-08-27T19:40:48Z"
   },
   {
     "repoName": "Minecraft-Pokemon",
@@ -473,7 +536,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-09-16T16:29:01.414Z"
+    "updatedAt": "2026-09-16T17:34:41.186Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -494,11 +557,54 @@ window.projectsData = [
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-09-16T16:29:01.595Z",
+    "updatedAt": "2026-09-16T17:34:41.388Z",
     "images": [
       "assets/images/orbital_scrap_showcase.webp",
       "assets/images/game_leaderboard.webp"
     ]
+  },
+  {
+    "repoName": "Sims",
+    "titleDe": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+    "titleEn": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
+    "tags": [
+      "React",
+      "TypeScript",
+      "2.5D Isometric Engine",
+      "Simlish Audio Synth",
+      "Life Simulation",
+      "House Parties"
+    ],
+    "image": "assets/images/sims_showcase.webp",
+    "images": [
+      "assets/images/sims_showcase.webp",
+      "assets/images/game_leaderboard.webp"
+    ],
+    "link": "Projekte/Sims/dist/index.html",
+    "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
+    "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
+    "category": "games web",
+    "language": "TypeScript",
+    "codeFiles": [
+      {
+        "name": "index.html",
+        "path": "Projekte/Sims/index.html",
+        "type": "html"
+      },
+      {
+        "name": "package.json",
+        "path": "Projekte/Sims/package.json",
+        "type": "json"
+      },
+      {
+        "name": "README.md",
+        "path": "Projekte/Sims/README.md",
+        "type": "markdown"
+      }
+    ],
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Sims",
+    "updatedAt": "2026-09-03T08:51:15Z"
   },
   {
     "repoName": "Urlaubsfotos",
@@ -518,7 +624,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-09-16T16:29:01.803Z",
+    "updatedAt": "2026-09-16T17:34:41.800Z",
     "images": [
       "assets/images/urlaubsfotos_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -542,7 +648,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-09-16T16:29:02.006Z",
+    "updatedAt": "2026-09-16T17:34:41.985Z",
     "images": [
       "assets/images/verkaufsvorlagen_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -567,7 +673,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-09-16T16:29:02.186Z",
+    "updatedAt": "2026-09-16T17:34:42.177Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -596,7 +702,7 @@ window.projectsData = [
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-09-16T16:29:02.384Z"
+    "updatedAt": "2026-09-16T17:34:42.369Z"
   },
   {
     "repoName": null,

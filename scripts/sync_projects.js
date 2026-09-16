@@ -7,7 +7,8 @@ const os = require('os');
 const REPO_MAPPING = {
   'Finanzenportfolio': {
     url: 'https://github.com/Schengii/Finanzenportfolio.git',
-    targetDir: 'Projekte/Finanzenportfolio'
+    targetDir: 'Projekte/Finanzenportfolio',
+    preserve: ['dist']
   },
   'Informatik-lernen': {
     url: 'https://github.com/Schengii/Informatik-lernen.git',
@@ -15,16 +16,18 @@ const REPO_MAPPING = {
   },
   'Minecraft': {
     url: 'https://github.com/Schengii/Minecraft.git',
-    targetDir: 'Projekte/Minecraft'
+    targetDir: 'Projekte/Minecraft',
+    preserve: ['index.html']
   },
   'Sims': {
     url: 'https://github.com/Schengii/Sims.git',
-    targetDir: 'Projekte/Sims'
+    targetDir: 'Projekte/Sims',
+    preserve: ['dist']
   },
   'EcoChef': {
     url: 'https://github.com/Schengii/eco-chef.git',
     targetDir: 'Projekte/EcoChef',
-    preserve: ['www'] // preserve local build folder if present
+    preserve: ['www']
   }
 };
 
@@ -76,14 +79,14 @@ async function syncProject(projectName, config) {
     }).trim();
     console.log(`📌 Neueste Commit-Info: ${lastCommit}`);
 
-    // If preserve folders exist in target, backup their relative paths
+    const preserveList = Array.from(new Set(['portfolio-metadata.json', ...(config.preserve || [])]));
     const preservedBackups = new Map();
-    if (config.preserve && fs.existsSync(targetFullPath)) {
-      for (const item of config.preserve) {
+    if (fs.existsSync(targetFullPath)) {
+      for (const item of preserveList) {
         const itemPath = path.join(targetFullPath, item);
         if (fs.existsSync(itemPath)) {
           const backupPath = path.join(os.tmpdir(), `fiae-preserve-${projectName}-${item}`);
-          console.log(`💾 Sichere lokalen Ordner: ${item}`);
+          console.log(`💾 Sichere: ${item}`);
           fs.cpSync(itemPath, backupPath, { recursive: true });
           preservedBackups.set(item, backupPath);
         }
@@ -94,7 +97,7 @@ async function syncProject(projectName, config) {
     if (fs.existsSync(targetFullPath)) {
       const existing = fs.readdirSync(targetFullPath);
       for (const file of existing) {
-        if (config.preserve && config.preserve.includes(file)) {
+        if (preserveList.includes(file)) {
           continue;
         }
         const filePath = path.join(targetFullPath, file);
@@ -107,11 +110,11 @@ async function syncProject(projectName, config) {
     // Copy new contents into target directory (excluding .git)
     copyRecursive(tempDir, targetFullPath, ['.git']);
 
-    // Restore preserved directories if they weren't in remote repo
+    // Restore preserved directories/files if they were not in remote repo
     for (const [item, backupPath] of preservedBackups.entries()) {
       const targetItemPath = path.join(targetFullPath, item);
       if (!fs.existsSync(targetItemPath)) {
-        console.log(`🔄 Stelle gesicherten Ordner wieder her: ${item}`);
+        console.log(`🔄 Stelle gesicherte Datei/Ordner wieder her: ${item}`);
         fs.cpSync(backupPath, targetItemPath, { recursive: true });
       }
       fs.rmSync(backupPath, { recursive: true, force: true });
