@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Layers, ShieldAlert, GraduationCap, Briefcase } from 'lucide-react';
+import { Sparkles, Layers, GraduationCap, Briefcase } from 'lucide-react';
 
 export default function DifficultyFilterBar({ activeFilter, onSelectFilter }) {
   const filters = [

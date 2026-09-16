@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, CheckCircle2, XCircle, FileCode, Sparkles, Layers, ShieldCheck, Cpu, UploadCloud, Terminal, RefreshCw } from 'lucide-react';
+import { Play, CheckCircle2, FileCode, Layers, Terminal, RefreshCw } from 'lucide-react';
 
 const INITIAL_STAGES = [
   { id: 'lint', name: 'Code Quality & Lint', icon: 'Code', enabled: true, command: 'npm run lint', status: 'idle', duration: '2s' },
@@ -13,10 +13,7 @@ const INITIAL_STAGES = [
 export default function CiCdPipelineLab({ onRewardXP }) {
   const [stages, setStages] = useState(INITIAL_STAGES);
   const [isRunning, setIsRunning] = useState(false);
-  const [activeStageIndex, setActiveStageIndex] = useState(-1);
   const [logs, setLogs] = useState([]);
-  const [pipelineFinished, setPipelineFinished] = useState(false);
-  const [pipelineSuccess, setPipelineSuccess] = useState(false);
 
   const toggleStage = (stageId) => {
     if (isRunning) return;
@@ -26,8 +23,6 @@ export default function CiCdPipelineLab({ onRewardXP }) {
   const handleRunPipeline = () => {
     if (isRunning) return;
     setIsRunning(true);
-    setPipelineFinished(false);
-    setPipelineSuccess(false);
     setLogs(['🚀 [Runner] Initializing GitHub Actions Runner (ubuntu-latest)...']);
 
     const enabledStages = stages.filter(s => s.enabled);
@@ -42,16 +37,12 @@ export default function CiCdPipelineLab({ onRewardXP }) {
     const runStep = () => {
       if (currentIndex >= enabledStages.length) {
         setIsRunning(false);
-        setActiveStageIndex(-1);
-        setPipelineFinished(true);
-        setPipelineSuccess(true);
         setLogs(prev => [...prev, '🎉 [SUCCESS] Pipeline erfolgreich abgeschlossen! Anwendung deployed.', 'STATUS: ALL CHECKS PASSED']);
         if (onRewardXP) onRewardXP(40);
         return;
       }
 
       const current = enabledStages[currentIndex];
-      setActiveStageIndex(stages.findIndex(s => s.id === current.id));
 
       setStages(prev => prev.map(s => s.id === current.id ? { ...s, status: 'running' } : s));
       setLogs(prev => [...prev, `▶️ Executing Step [${current.name}]: $ ${current.command}`]);
@@ -69,9 +60,6 @@ export default function CiCdPipelineLab({ onRewardXP }) {
 
   const resetPipeline = () => {
     setIsRunning(false);
-    setActiveStageIndex(-1);
-    setPipelineFinished(false);
-    setPipelineSuccess(false);
     setLogs([]);
     setStages(INITIAL_STAGES);
   };

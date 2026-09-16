@@ -12,6 +12,7 @@ export default function SqlDungeon({ onCompleteGame }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [completedLevels, setCompletedLevels] = useState([]);
 
   // Real In-Browser AlaSQL Engine Execution
   const executeQuery = () => {
@@ -38,7 +39,10 @@ export default function SqlDungeon({ onCompleteGame }) {
       // Validate against current level win condition
       if (currentLevel.validate(rows)) {
         setIsSuccess(true);
-        if (onCompleteGame) onCompleteGame(`sql_level_${currentLevel.id}`, currentLevel.xpReward);
+        if (!completedLevels.includes(currentLevel.id)) {
+          setCompletedLevels(prev => [...prev, currentLevel.id]);
+          if (onCompleteGame) onCompleteGame(`sql_level_${currentLevel.id}`, currentLevel.xpReward);
+        }
       }
     } catch (err) {
       setErrorMessage(`SQL Syntax/Execution Error: ${err.message}`);

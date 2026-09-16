@@ -1,6 +1,6 @@
 import React from 'react';
 import { BADGES } from '../../utils/storage';
-import { Trophy, Flame, Award, X, Sparkles } from 'lucide-react';
+import { Trophy, X } from 'lucide-react';
 
 export default function BadgesModal({ isOpen, onClose, userState }) {
   if (!isOpen) return null;

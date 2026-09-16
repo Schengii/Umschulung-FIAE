@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Key, Lock, ArrowRight, RotateCcw, CheckCircle2, Cpu, Zap } from 'lucide-react';
+
+import { ShieldCheck, Key, ArrowRight, RotateCcw, CheckCircle2, Zap } from 'lucide-react';
 import { RSA_CRYPTO_STEPS } from '../../data/expertLabsData';
 import { useStore } from '../../store/useStore';
 

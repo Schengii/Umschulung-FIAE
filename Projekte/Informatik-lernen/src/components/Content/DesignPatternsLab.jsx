@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, CheckCircle2, Code2, Sparkles, RefreshCw } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 export default function DesignPatternsLab() {
   const patterns = [

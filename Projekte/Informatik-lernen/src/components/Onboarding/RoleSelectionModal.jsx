@@ -1,6 +1,6 @@
 import React from 'react';
 import { USER_ROLES } from '../../data/userProfiles';
-import { Check, Sparkles, X, HeartHandshake } from 'lucide-react';
+import { Check, X, HeartHandshake } from 'lucide-react';
 
 export default function RoleSelectionModal({ isOpen, onClose, currentRole, onSelectRole }) {
   if (!isOpen) return null;

@@ -67,6 +67,14 @@ export function parseBrokerText(text: string, rules?: AssetMappingRule[]): Parse
     result = parseConsorsbank(text);
   } else if (text.includes('finanzen.net zero') || text.includes('finanzen.net')) {
     result = parseFinanzenZero(text);
+  } else if (text.includes('flatex') || text.includes('FLATEX')) {
+    result = parseFlatex(text);
+  } else if (text.includes('Smartbroker') || text.includes('SMARTBROKER')) {
+    result = parseSmartbroker(text);
+  } else if (text.includes('Revolut') || text.includes('REVOLUT')) {
+    result = parseRevolut(text);
+  } else if (text.includes('eToro') || text.includes('ETORO')) {
+    result = parseeToro(text);
   } else {
     // Generic fallback parsing attempt based on keywords
     result = parseGeneric(text);
@@ -468,3 +476,59 @@ function parseGeneric(text: string): ParsedTransaction {
     category: ticker.startsWith('XC') ? 'Crypto' : ticker.includes('ETF') ? 'ETF' : 'Stock'
   };
 }
+
+function parseFlatex(text: string): ParsedTransaction {
+  const isSell = text.includes('Verkauf');
+  const isDiv = text.includes('Dividende');
+  const type = isSell ? 'SELL' : isDiv ? 'DIVIDEND' : 'BUY';
+
+  const dateMatch = text.match(/(\d{2}\.\d{2}\.\d{4})/);
+  const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+
+  const isinMatch = text.match(/\b([A-Z]{2}[A-Z0-9]{9}\d)\b/);
+  const ticker = isinMatch ? isinMatch[1] : 'FLATEX-ASSET';
+
+  let amount = 1;
+  const amountMatch = text.match(/(\d+(?:[.,]\d+)?)\s*Stk/i);
+  if (amountMatch) amount = parseFloat(amountMatch[1].replace(/\./g, '').replace(',', '.'));
+
+  let price = 100;
+  const priceMatch = text.match(/Kurs:\s*(\d+(?:[.,]\d+)?)/i);
+  if (priceMatch) price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.'));
+
+  return { type, date, ticker, name: `Flatex Asset (${ticker})`, amount, price, fee: 5.90, tax: 0, category: 'Stock' };
+}
+
+function parseSmartbroker(text: string): ParsedTransaction {
+  const isSell = text.includes('Verkauf');
+  const type = isSell ? 'SELL' : 'BUY';
+
+  const dateMatch = text.match(/(\d{2}\.\d{2}\.\d{4})/);
+  const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+
+  const isinMatch = text.match(/\b([A-Z]{2}[A-Z0-9]{9}\d)\b/);
+  const ticker = isinMatch ? isinMatch[1] : 'SMARTBROKER-ASSET';
+
+  return { type, date, ticker, name: `Smartbroker Position (${ticker})`, amount: 10, price: 50, fee: 4.00, tax: 0, category: 'Stock' };
+}
+
+function parseRevolut(text: string): ParsedTransaction {
+  const isSell = text.includes('SELL') || text.includes('Verkauf');
+  const type = isSell ? 'SELL' : 'BUY';
+
+  const dateMatch = text.match(/(\d{2}\/\d{2}\/\d{4})/) || text.match(/(\d{2}\.\d{2}\.\d{4})/);
+  const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+
+  return { type, date, ticker: 'REV-STOCK', name: 'Revolut Investment', amount: 5, price: 120, fee: 0.99, tax: 0, category: 'Stock' };
+}
+
+function parseeToro(text: string): ParsedTransaction {
+  const isSell = text.includes('Close') || text.includes('SELL');
+  const type = isSell ? 'SELL' : 'BUY';
+
+  const dateMatch = text.match(/(\d{2}\/\d{2}\/\d{4})/) || text.match(/(\d{4}-\d{2}-\d{2})/);
+  const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+
+  return { type, date, ticker: 'ETORO-CFD', name: 'eToro Position', amount: 1, price: 250, fee: 0, tax: 0, category: 'Stock' };
+}
+

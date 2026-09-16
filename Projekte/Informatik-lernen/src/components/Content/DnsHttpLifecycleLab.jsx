@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Globe, ArrowRight, Server, ShieldCheck, Play, RotateCcw, CheckCircle2, Cpu, Network, Layers, Laptop } from 'lucide-react';
+
+import { Globe, ArrowRight, Play, CheckCircle2, Network, RotateCcw } from 'lucide-react';
 import { DNS_LIFECYCLE_STEPS } from '../../data/nextGenLabsData';
 import { useStore } from '../../store/useStore';
 
@@ -202,6 +202,27 @@ export default function DnsHttpLifecycleLab() {
               {isComplete ? <CheckCircle2 size={16} /> : <ArrowRight size={16} />}
               {isComplete ? 'Lebenszyklus komplett (+65 XP)' : 'Nächste Station'}
             </button>
+            {isComplete && (
+              <button
+                onClick={handleReset}
+                style={{
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                <RotateCcw size={16} />
+              </button>
+            )}
           </div>
         </div>
 

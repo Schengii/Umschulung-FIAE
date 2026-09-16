@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, CheckCircle2, Flame, Award, Shield, ShieldCheck } from 'lucide-react';
+import { Sparkles, CheckCircle2, Flame, ShieldCheck } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
 export default function DailyChallengeWidget({ onCompleteChallenge }) {

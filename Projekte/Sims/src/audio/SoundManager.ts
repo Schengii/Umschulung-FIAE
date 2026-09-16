@@ -9,27 +9,51 @@ export class SoundManager {
   private isMuted: boolean = false;
   private masterGain: GainNode | null = null;
 
+  public masterVolume: number = 0.8;
+  public sfxVolume: number = 0.8;
+  public radioVolume: number = 0.8;
+
   constructor() {
     // AudioContext will be initialized on first user gesture (WCAG & browser policy requirement)
   }
 
   private initContext(): void {
+    if (typeof window === 'undefined') return;
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
       this.ctx = new AudioCtx();
       this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = this.isMuted ? 0 : 0.3;
+      this.updateMasterVolume();
       this.masterGain.connect(this.ctx.destination);
     } else if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
   }
 
+  public updateMasterVolume(): void {
+    if (this.masterGain && this.ctx) {
+      const effVol = this.isMuted ? 0 : this.masterVolume * 0.4;
+      this.masterGain.gain.setValueAtTime(effVol, this.ctx.currentTime);
+    }
+  }
+
+  public setMasterVolume(vol: number): void {
+    this.masterVolume = Math.max(0, Math.min(1, vol));
+    this.updateMasterVolume();
+  }
+
+  public setSFXVolume(vol: number): void {
+    this.sfxVolume = Math.max(0, Math.min(1, vol));
+  }
+
+  public setRadioVolume(vol: number): void {
+    this.radioVolume = Math.max(0, Math.min(1, vol));
+  }
+
   public toggleMute(): boolean {
     this.isMuted = !this.isMuted;
-    if (this.masterGain) {
-      this.masterGain.gain.value = this.isMuted ? 0 : 0.3;
-    }
+    this.updateMasterVolume();
     return this.isMuted;
   }
 
@@ -41,7 +65,7 @@ export class SoundManager {
    * Plays a UI button click sound effect
    */
   public playUIClick(): void {
-    if (this.isMuted) return;
+    if (this.isMuted || this.sfxVolume <= 0) return;
     this.initContext();
     if (!this.ctx || !this.masterGain) return;
 
@@ -52,7 +76,7 @@ export class SoundManager {
     osc.frequency.setValueAtTime(440, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.05);
 
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.2 * this.sfxVolume, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
 
     osc.connect(gain);
@@ -67,7 +91,7 @@ export class SoundManager {
    * Synthesizes randomized vocal babble simulating Sims talking (Simlish)
    */
   public playSimlish(pitchMod: number = 1.0, emotion: 'happy' | 'flirty' | 'angry' | 'tired' = 'happy'): void {
-    if (this.isMuted) return;
+    if (this.isMuted || this.sfxVolume <= 0) return;
     this.initContext();
     if (!this.ctx || !this.masterGain) return;
 
@@ -91,7 +115,7 @@ export class SoundManager {
       osc.frequency.setValueAtTime(baseFreq + freqShift, now + timeOffset);
       osc.frequency.linearRampToValueAtTime(baseFreq + freqShift + (Math.random() * 60 - 30), now + timeOffset + duration);
 
-      gain.gain.setValueAtTime(0.25, now + timeOffset);
+      gain.gain.setValueAtTime(0.25 * this.sfxVolume, now + timeOffset);
       gain.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + duration);
 
       osc.connect(gain);
@@ -108,7 +132,7 @@ export class SoundManager {
    * Plays a level up fanfare sound
    */
   public playLevelUp(): void {
-    if (this.isMuted) return;
+    if (this.isMuted || this.sfxVolume <= 0) return;
     this.initContext();
     if (!this.ctx || !this.masterGain) return;
 
@@ -126,7 +150,7 @@ export class SoundManager {
       const startTime = now + idx * 0.1;
       const duration = idx === notes.length - 1 ? 0.4 : 0.12;
 
-      gain.gain.setValueAtTime(0.3, startTime);
+      gain.gain.setValueAtTime(0.3 * this.sfxVolume, startTime);
       gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
       osc.connect(gain);
@@ -141,7 +165,7 @@ export class SoundManager {
    * Plays cash register sound when buying furniture (§ Simoleons spent)
    */
   public playBuySound(): void {
-    if (this.isMuted) return;
+    if (this.isMuted || this.sfxVolume <= 0) return;
     this.initContext();
     if (!this.ctx || !this.masterGain) return;
 
@@ -153,7 +177,7 @@ export class SoundManager {
     osc.frequency.setValueAtTime(987.77, now); // B5
     osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
 
-    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.setValueAtTime(0.15 * this.sfxVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
 
     osc.connect(gain);
@@ -162,4 +186,263 @@ export class SoundManager {
     osc.start(now);
     osc.stop(now + 0.25);
   }
+
+  /**
+   * Plays ambient birds chirping sound for sunny day
+   */
+  public playBirdChirp(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(2400, now);
+    osc.frequency.exponentialRampToValueAtTime(3200, now + 0.08);
+
+    gain.gain.setValueAtTime(0.08 * this.sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.12);
+  }
+
+  /**
+   * Footstep Synthesizer
+   * Produces realistic surface-dependent footstep sound effects
+   */
+  public playFootstep(surfaceType: 'wood' | 'tile' | 'carpet' | 'grass' | 'pool' | 'marble' = 'wood'): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    if (surfaceType === 'wood') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.exponentialRampToValueAtTime(60, now + 0.06);
+      gain.gain.setValueAtTime(0.12 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    } else if (surfaceType === 'tile' || surfaceType === 'marble') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(420, now);
+      osc.frequency.exponentialRampToValueAtTime(180, now + 0.05);
+      gain.gain.setValueAtTime(0.09 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    } else if (surfaceType === 'carpet') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.07);
+      gain.gain.setValueAtTime(0.07 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+    } else if (surfaceType === 'grass') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.06);
+      gain.gain.setValueAtTime(0.08 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    } else if (surfaceType === 'pool') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.12);
+      gain.gain.setValueAtTime(0.15 * this.sfxVolume, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    }
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.12);
+  }
+
+  /**
+   * Plays Build/Buy Mode tool sound effect
+   */
+  public playBuildTool(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(280, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.08);
+
+    gain.gain.setValueAtTime(0.2 * this.sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.08);
+  }
+
+  /**
+   * Life stage aware Simlish vocalization
+   */
+  public playSimlishByLifeStage(lifeStage: string, mood: string = 'happy'): void {
+    let pitchMod = 1.0;
+    if (lifeStage === 'baby') pitchMod = 2.4;
+    else if (lifeStage === 'toddler') pitchMod = 1.8;
+    else if (lifeStage === 'child') pitchMod = 1.4;
+    else if (lifeStage === 'teen') pitchMod = 1.1;
+    else if (lifeStage === 'senior') pitchMod = 0.82;
+
+    let emotion: 'happy' | 'flirty' | 'angry' | 'tired' = 'happy';
+    if (mood === 'tense' || mood === 'angry') emotion = 'angry';
+    else if (mood === 'exhausted') emotion = 'tired';
+    else if (mood === 'flirty' || mood === 'romantic') emotion = 'flirty';
+
+    this.playSimlish(pitchMod, emotion);
+  }
+
+  /**
+   * Procedural Cooking Sizzle Synthesizer (stove, pan, buffet)
+   */
+  public playCookingSizzle(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.linearRampToValueAtTime(1400, now + 0.25);
+
+    gain.gain.setValueAtTime(0.08 * this.sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.28);
+  }
+
+  /**
+   * Procedural Water Splash Synthesizer (shower, pool, sink)
+   */
+  public playWaterSplash(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.2);
+
+    gain.gain.setValueAtTime(0.14 * this.sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.22);
+  }
+
+  /**
+   * Procedural Keyboard Typing Synthesizer (PC workstation, programming)
+   */
+  public playTypingSound(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    for (let i = 0; i < 3; i++) {
+      const clickTime = now + (i * 0.05);
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1200 + Math.random() * 400, clickTime);
+
+      gain.gain.setValueAtTime(0.06 * this.sfxVolume, clickTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.03);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(clickTime);
+      osc.stop(clickTime + 0.03);
+    }
+  }
+
+  /**
+   * Procedural Fireplace Crackling Synthesizer
+   */
+  public playFireplaceCrackling(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(50, now + 0.15);
+
+    gain.gain.setValueAtTime(0.09 * this.sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.16);
+  }
+
+  /**
+   * Procedural Phone Ring / Notification Chime
+   */
+  public playPhoneRing(): void {
+    if (this.isMuted || this.sfxVolume <= 0) return;
+    this.initContext();
+    if (!this.ctx || !this.masterGain) return;
+
+    const now = this.ctx.currentTime;
+    const notes = [659.25, 783.99, 1046.5]; // E5, G5, C6
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx!.createOscillator();
+      const gain = this.ctx!.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+      gain.gain.setValueAtTime(0.12 * this.sfxVolume, now + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.15);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain!);
+
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.15);
+    });
+  }
 }
+
+

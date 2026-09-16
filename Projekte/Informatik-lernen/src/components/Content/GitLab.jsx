@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitBranch, GitCommit, GitMerge, ArrowRight, CheckCircle2, RotateCcw, Terminal } from 'lucide-react';
+import { GitBranch, ArrowRight, Terminal } from 'lucide-react';
 
 export default function GitLab({ onRewardXP }) {
   const [commits, setCommits] = useState([

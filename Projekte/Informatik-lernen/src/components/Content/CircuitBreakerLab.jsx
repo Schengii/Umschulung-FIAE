@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ShieldAlert, Activity, CheckCircle2, RotateCcw, Play, Zap, ArrowRight, Layers, HeartPulse } from 'lucide-react';
+
+import { HeartPulse } from 'lucide-react';
 import { CIRCUIT_BREAKER_STATES, OPENTELEMETRY_TRACES } from '../../data/enterpriseLabsData';
 import { useStore } from '../../store/useStore';
 

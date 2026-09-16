@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Cpu, Globe, Binary, Code, CheckCircle2, Sparkles } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export const ANFAENGER_GUIDES = [
   {

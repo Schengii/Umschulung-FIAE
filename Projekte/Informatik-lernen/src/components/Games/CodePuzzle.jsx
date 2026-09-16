@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CODE_PUZZLE_LEVELS } from '../../data/gamesData';
-import { Puzzle, ArrowUp, ArrowDown, CheckCircle2, Play, RefreshCw } from 'lucide-react';
+import { Puzzle, ArrowUp, ArrowDown, CheckCircle2, Play } from 'lucide-react';
 
 export default function CodePuzzle({ onCompleteGame }) {
   const [levelIdx, setLevelIdx] = useState(0);
@@ -9,6 +9,16 @@ export default function CodePuzzle({ onCompleteGame }) {
   // For Puzzle 1 (Line Reordering)
   const [userLines, setUserLines] = useState(currentPuzzle.lines || []);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const hasNextLevel = levelIdx < CODE_PUZZLE_LEVELS.length - 1;
+
+  const goToNextLevel = () => {
+    if (!hasNextLevel) return;
+    const nextIdx = levelIdx + 1;
+    setLevelIdx(nextIdx);
+    setUserLines(CODE_PUZZLE_LEVELS[nextIdx].lines || []);
+    setIsSuccess(false);
+  };
 
   const moveLine = (idx, direction) => {
     const newLines = [...userLines];
@@ -121,6 +131,12 @@ export default function CodePuzzle({ onCompleteGame }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-green)', fontWeight: '700' }}>
               <CheckCircle2 size={22} /> Perfekt! Code ist korrekt strukturiert. (+{currentPuzzle.xpReward} XP)
             </div>
+          )}
+
+          {isSuccess && hasNextLevel && (
+            <button className="btn btn-secondary" onClick={goToNextLevel}>
+              Nächstes Level &rarr;
+            </button>
           )}
         </div>
 

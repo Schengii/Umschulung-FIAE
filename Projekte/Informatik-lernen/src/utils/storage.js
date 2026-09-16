@@ -1,4 +1,5 @@
-// Storage utility to manage user state, progress, XP, and badges
+// Storage utility to manage user state, progress, XP, activity history and badges
+import { syncUserStateToIndexedDb } from './indexedDbStoreMiddleware';
 
 const STORAGE_KEY = 'informatik_game_state_v1';
 
@@ -15,7 +16,29 @@ export const initialProfileState = {
   completedCloze: [],
   completedProjects: [],
   unlockedBadges: [],
-  savedCodeSnippets: {}
+  savedCodeSnippets: {},
+  activityHistory: {}, // { '2026-08-22': { count: 3, xp: 150 } }
+  soundSettings: { volume: 0.5, isMuted: false }
+};
+
+export const getTodayDateKey = () => {
+  return new Date().toISOString().slice(0, 10);
+};
+
+export const recordDailyActivity = (state, xpGained = 0) => {
+  const dateKey = getTodayDateKey();
+  const history = { ...(state.activityHistory || {}) };
+  const current = history[dateKey] || { count: 0, xp: 0 };
+  
+  history[dateKey] = {
+    count: current.count + 1,
+    xp: current.xp + xpGained
+  };
+
+  return {
+    ...state,
+    activityHistory: history
+  };
 };
 
 export const loadUserState = () => {
@@ -34,6 +57,11 @@ export const saveUserState = (state) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
     console.error('Failed to save storage:', e);
+  }
+  try {
+    syncUserStateToIndexedDb(state);
+  } catch {
+    // Ignoriere Fehler im synchronen Pfad
   }
 };
 
@@ -78,5 +106,10 @@ export const BADGES = [
   { id: 'web_builder', title: 'Fullstack Explorer', desc: 'Erstelle dein erstes Web-Projekt in der Live Sandbox.', icon: '🌐' },
   { id: 'logic_genius', title: 'Gatter-Genie', desc: 'Löse alle Logikschaltungen im Logic Game.', icon: '💡' },
   { id: 'regex_master', title: 'RegEx Meister', desc: 'Löse RegEx-Suchmuster Aufgaben.', icon: '🔍' },
-  { id: 'exam_passed', title: 'IHK Prüfung Zertifiziert', desc: 'Bestehe die IHK Prüfungssimulation mit über 60%.', icon: '🎓' }
+  { id: 'exam_passed', title: 'IHK Prüfung Zertifiziert', desc: 'Bestehe die IHK Prüfungssimulation mit über 60%.', icon: '🎓' },
+  { id: 'wiso_master', title: 'WISO Kalkulator', desc: 'Schließe eine Handelskalkulation oder einen Netzplan fehlerfrei ab.', icon: '📊' },
+  { id: 'ieee_architect', title: 'Hardware Architect', desc: 'Analysiere IEEE-754 Floats und KV-Diagramme.', icon: '🔬' },
+  { id: 'ipv6_expert', title: 'IPv6 & Routing Pioneer', desc: 'Generiere EUI-64 Adressen und meistere LPM-Routing.', icon: '🌐' },
+  { id: 'owasp_guardian', title: 'OWASP Guardian', desc: 'Identifiziere und neutralisiere Top-10 Schwachstellen.', icon: '🔒' },
+  { id: 'ai_pioneer', title: 'Neural AI Pioneer', desc: 'Erkunde neuronale Schichten und BPE Tokenizer.', icon: '🧠' }
 ];

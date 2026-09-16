@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { WEB_COMPONENTS_DATA } from '../../data/webComponentsData';
-import { Layers, CheckCircle2, Code2, Sparkles, Server } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 export default function WebComponentsHub() {
   const [selectedId, setSelectedId] = useState(WEB_COMPONENTS_DATA[0].id);

@@ -30,7 +30,7 @@ export default function CpuArchitectureLab({ onRewardXP }) {
     setLogs(prev => [msg, ...prev.slice(0, 10)]);
   };
 
-  const stepClock = () => {
+  const stepClock = useCallback(() => {
     if (phase === 'HALTED') {
       addLog('CPU ist angehalten (HLT erreicht). Drücke Reset für Neustart.');
       setIsRunning(false);
@@ -94,7 +94,7 @@ export default function CpuArchitectureLab({ onRewardXP }) {
         setPhase('FETCH');
       }
     }
-  };
+  }, [phase, pc, ram, ir, ac, solved, onRewardXP]);
 
   useEffect(() => {
     let timer = null;
@@ -104,7 +104,7 @@ export default function CpuArchitectureLab({ onRewardXP }) {
       }, clockSpeed);
     }
     return () => clearTimeout(timer);
-  }, [isRunning, phase, pc, ac, ir, ram, clockSpeed]);
+  }, [isRunning, phase, pc, ac, ir, ram, clockSpeed, stepClock]);
 
   const resetCpu = () => {
     setRam(initialRam);

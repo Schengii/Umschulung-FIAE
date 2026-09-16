@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, BarChart2, CheckCircle2, Play, Code } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
 export default function BigOVisualizer() {
   const [elementCount, setElementCount] = useState(10);

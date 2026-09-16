@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ORAL_EXAM_DATA } from '../../data/oralExamData';
-import { GraduationCap, Timer, Award, CheckCircle2, XCircle, Users, BookOpen, ChevronRight, RotateCcw, Sparkles, Mic, MicOff, Volume2 } from 'lucide-react';
+import { GraduationCap, Timer, CheckCircle2, ChevronRight, RotateCcw, Sparkles, Mic, MicOff } from 'lucide-react';
 
 export default function IhkOralExamSimulator({ onRewardXP }) {
   const [selectedRole, setSelectedRole] = useState('ae'); // 'ae' | 'fisi'

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ALGORITHM_DESCRIPTIONS } from '../../data/algorithmData';
-import { Play, Pause, RotateCcw, Cpu, Zap, Award } from 'lucide-react';
+import { Play, RotateCcw, Cpu } from 'lucide-react';
 
 export default function AlgoPlaygroundLab({ onRewardXP }) {
   const [array, setArray] = useState([45, 12, 89, 34, 67, 23, 90, 11, 55, 78]);

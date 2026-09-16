@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CAREER_ROADMAPS } from '../../data/roadmapData';
-import { Compass, CheckCircle2, ArrowRight, Award, Sparkles } from 'lucide-react';
+import { Compass, CheckCircle2 } from 'lucide-react';
 
 export default function CareerRoadmap({ userState }) {
   const [selectedRoadmapId, setSelectedRoadmapId] = useState(CAREER_ROADMAPS[0].id);
@@ -53,7 +53,7 @@ export default function CareerRoadmap({ userState }) {
 
         {/* Steps Flow Timeline */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative' }}>
-          {roadmap.steps.map((step, idx) => {
+          {roadmap.steps.map((step) => {
             const isCompleted = userState.completedTopics.includes(step.id);
             return (
               <div

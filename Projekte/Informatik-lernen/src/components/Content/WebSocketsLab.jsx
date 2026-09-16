@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { WEBSOCKET_PATTERNS } from '../../data/websocketData';
-import { Network, Radio, Copy } from 'lucide-react';
+import { Radio, Copy } from 'lucide-react';
 
 export default function WebSocketsLab() {
   const [selectedId, setSelectedId] = useState(WEBSOCKET_PATTERNS[0].id);

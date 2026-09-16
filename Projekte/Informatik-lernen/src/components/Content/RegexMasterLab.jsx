@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Code, CheckCircle2, XCircle, Sparkles, Flag } from 'lucide-react';
+import { Search, CheckCircle2, Flag } from 'lucide-react';
 
 const REGEX_QUESTS = [
   {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Search, Zap, CheckCircle2 } from 'lucide-react';
+import { Database } from 'lucide-react';
 
 export default function SqlQueryOptimizerLab({ onRewardXP }) {
   const [hasIndexOnEmail, setHasIndexOnEmail] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitBranch, Play, CheckCircle2, XCircle, Terminal, Copy, Award, ShieldCheck, RefreshCw, Cpu, Layers } from 'lucide-react';
+import { GitBranch, Play, CheckCircle2, Terminal, Copy, ShieldCheck, RefreshCw, Cpu, Layers } from 'lucide-react';
 
 const AVAILABLE_JOBS = [
   { id: 'checkout', name: 'Git Checkout', icon: GitBranch, stage: 'source', time: '1s' },

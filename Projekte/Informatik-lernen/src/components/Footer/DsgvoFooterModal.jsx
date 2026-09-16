@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Shield, FileText, ExternalLink, X, Heart, Code2, 
-  BookOpen, Terminal, Award, Sparkles, Layers, CheckCircle2, 
-  HelpCircle, Globe, GitBranch, Cpu, Database, Flame, Lock
-} from 'lucide-react';
+import { Shield, FileText, ExternalLink, X, Heart, Code2, HelpCircle, GitBranch } from 'lucide-react';
 
-export default function DsgvoFooterModal({ onOpenGlossaryModal, onOpenFlashcardsModal, onOpenDeploymentModal, onOpenBackupModal }) {
+export default function DsgvoFooterModal() {
   const [activeModal, setActiveModal] = useState(null); // 'datenschutz' | 'impressum' | 'dsgvo' | 'faq' | null
 
   return (

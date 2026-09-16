@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Swords, Shield, Heart, Zap, CheckCircle2, RefreshCw, Award } from 'lucide-react';
+import { Swords, RefreshCw } from 'lucide-react';
 
 export default function BossBattleGame({ onCompleteGame }) {
   const [bossHp, setBossHp] = useState(100);

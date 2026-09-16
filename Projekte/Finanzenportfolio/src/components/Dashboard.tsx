@@ -3,7 +3,7 @@ import {
    AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
    PieChart, Pie, Cell, BarChart, Bar
  } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, Activity, PieChart as PieIcon, Award, Download, Upload, Database, Percent, Calendar as CalendarIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Activity, PieChart as PieIcon, Award, Download, Upload, Database, Percent, Calendar as CalendarIcon, Sliders } from 'lucide-react';
 import type { Transaction, Holding, PortfolioStats } from '../types';
 import { convertCurrency, calculateGermanTax } from './performanceUtils';
 import { PortfolioHeatmap } from './PortfolioHeatmap';
@@ -17,6 +17,20 @@ import { AchievementBadges } from './AchievementBadges';
 import { BenchmarkComparison } from './BenchmarkComparison';
 import { RebalancingOrderPlanner } from './RebalancingOrderPlanner';
 import { ExDateDividendRadar } from './ExDateDividendRadar';
+import { DividendGrowthRadarWidget } from './DividendGrowthRadarWidget';
+import { FactorExposureWidget } from './FactorExposureWidget';
+import { DripAnalysisWidget } from './DripAnalysisWidget';
+import { FxExposureWidget } from './FxExposureWidget';
+import { CorrelationMatrixWidget } from './CorrelationMatrixWidget';
+import { DividendSafetyScoreWidget } from './DividendSafetyScoreWidget';
+import { CryptoStakingTaxWidget } from './CryptoStakingTaxWidget';
+import { FxHedgingWidget } from './FxHedgingWidget';
+import { DividendSeasonalityWidget } from './DividendSeasonalityWidget';
+import { BondDurationWidget } from './BondDurationWidget';
+import { AssetClassPerformanceChart } from './AssetClassPerformanceChart';
+import { EmergencyFundWidget } from './EmergencyFundWidget';
+import { Target2CalendarWidget } from './Target2CalendarWidget';
+import { DashboardCustomizerModal, DEFAULT_DASHBOARD_WIDGETS, type DashboardWidgetConfig } from './DashboardCustomizerModal';
 import { usePortfolio } from '../context/PortfolioContext';
  
  interface DashboardProps {
@@ -52,90 +66,134 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats, holdings, transacti
      });
    };
 
-   // Generate real historical data points day-by-day based on transactions
-   const performanceData = useMemo(() => {
-     const data = [];
-     const points = 30;
-     
-     // Chronological list of transactions
-     const sortedTxs = [...transactions].sort((a, b) => {
-       const dateA = a.date.split('.').reverse().join('-');
-       const dateB = b.date.split('.').reverse().join('-');
-       return new Date(dateA).getTime() - new Date(dateB).getTime();
-     });
+  const [timeframe, setTimeframe] = useState<'1M' | '3M' | '6M' | '1Y' | '3Y' | '5Y' | 'ALL'>('1Y');
+  const [showCustomizerModal, setShowCustomizerModal] = useState(false);
+  const [widgetConfigs, setWidgetConfigs] = useState<DashboardWidgetConfig[]>(() => {
+    const saved = localStorage.getItem('finanz_dashboard_widgets');
+    return saved ? JSON.parse(saved) : DEFAULT_DASHBOARD_WIDGETS;
+  });
 
-     const today = new Date();
-     
-     for (let i = 0; i < points; i++) {
-       const targetDate = new Date();
-       targetDate.setDate(today.getDate() - (points - 1 - i));
-       targetDate.setHours(23, 59, 59, 999);
-       
-       // Calculate holdings up to this day
-       const assetsAtDate: Record<string, { shares: number; costBasis: number; buyDate: Date; buyPrice: number }> = {};
-       
-       sortedTxs.forEach(tx => {
-         const txDate = new Date(tx.date.split('.').reverse().join('-'));
-         if (txDate.getTime() <= targetDate.getTime()) {
-           if (tx.type === 'DIVIDEND' || tx.type === 'DEPOSIT' || tx.type === 'WITHDRAWAL' || tx.type === 'STAKING') return;
-           
-           if (!assetsAtDate[tx.ticker]) {
-             assetsAtDate[tx.ticker] = { shares: 0, costBasis: 0, buyDate: txDate, buyPrice: tx.price };
-           }
-           
-           if (tx.type === 'BUY') {
-             assetsAtDate[tx.ticker].shares += tx.amount;
-             assetsAtDate[tx.ticker].costBasis += (tx.amount * tx.price) + tx.fee;
-           } else if (tx.type === 'SELL') {
-             const avgCost = assetsAtDate[tx.ticker].shares > 0 ? (assetsAtDate[tx.ticker].costBasis / assetsAtDate[tx.ticker].shares) : 0;
-             assetsAtDate[tx.ticker].shares = Math.max(0, assetsAtDate[tx.ticker].shares - tx.amount);
-             assetsAtDate[tx.ticker].costBasis = assetsAtDate[tx.ticker].shares * avgCost;
-           }
-         }
-       });
+  const isWidgetVisible = (id: string) => {
+    const w = widgetConfigs.find(item => item.id === id);
+    return w ? w.isVisible : true;
+  };
 
-       let totalValueAtDate = 0;
-       let totalInvestedAtDate = 0;
+  const handleToggleWidget = (id: string) => {
+    const updated = widgetConfigs.map(w => w.id === id ? { ...w, isVisible: !w.isVisible } : w);
+    setWidgetConfigs(updated);
+    localStorage.setItem('finanz_dashboard_widgets', JSON.stringify(updated));
+  };
 
-       Object.entries(assetsAtDate).forEach(([ticker, val]) => {
-         if (val.shares > 0) {
-           totalInvestedAtDate += val.costBasis;
-           
-           // Interpolate price from buy date to today
-           const currentPrice = stats.totalValue > 0 ? (holdings.find(h => h.ticker === ticker)?.currentPrice || val.buyPrice) : val.buyPrice;
-           const daysTotal = Math.max(1, (today.getTime() - val.buyDate.getTime()) / (1000 * 60 * 60 * 24));
-           const daysProgress = Math.max(0, Math.min(1, (targetDate.getTime() - val.buyDate.getTime()) / (1000 * 60 * 60 * 24) / daysTotal));
-           
-           // Add a slight fluctuation to make chart feel alive
-           const fluctuation = Math.sin(daysProgress * Math.PI * 3 + ticker.charCodeAt(0)) * (currentPrice * 0.03);
-           const priceAtDate = val.buyPrice + (currentPrice - val.buyPrice) * daysProgress + fluctuation;
-           
-           totalValueAtDate += val.shares * priceAtDate;
-         }
-       });
+  const handleApplyPreset = (preset: 'ALL' | 'DIVIDENDS' | 'GROWTH' | 'SECURITY') => {
+    const updated = widgetConfigs.map(w => {
+      if (preset === 'ALL') return { ...w, isVisible: true };
+      if (preset === 'DIVIDENDS') return { ...w, isVisible: w.category === 'DIVIDENDS' || w.category === 'ALL' };
+      if (preset === 'GROWTH') return { ...w, isVisible: w.category === 'GROWTH' || w.category === 'ALL' };
+      if (preset === 'SECURITY') return { ...w, isVisible: w.category === 'SECURITY' || w.category === 'ALL' };
+      return w;
+    });
+    setWidgetConfigs(updated);
+    localStorage.setItem('finanz_dashboard_widgets', JSON.stringify(updated));
+  };
 
-       // Convert value to baseCurrency for chart
-       const convertedVal = convertCurrency(totalValueAtDate, 'EUR', baseCurrency);
-       const convertedCost = convertCurrency(totalInvestedAtDate, 'EUR', baseCurrency);
+  // Generate real historical data points day-by-day based on transactions and timeframe
+  const performanceData = useMemo(() => {
+    const data = [];
+    
+    // Chronological list of transactions
+    const sortedTxs = [...transactions].sort((a, b) => {
+      const dateA = a.date.split('.').reverse().join('-');
+      const dateB = b.date.split('.').reverse().join('-');
+      return new Date(dateA).getTime() - new Date(dateB).getTime();
+    });
 
-       data.push({
-         date: targetDate.toLocaleDateString('de-DE', { day: 'numeric', month: 'short' }),
-         Wert: Math.round(convertedVal),
-         Investiert: Math.round(convertedCost)
-       });
-     }
-     
-     // Fallback if no holdings exist yet
-     if (data.every(d => d.Wert === 0)) {
-       return data.map((d) => ({
-         ...d,
-         Wert: 0,
-         Investiert: 0
-       }));
-     }
-     
-     return data;
-   }, [transactions, holdings, stats.totalValue, baseCurrency]);
+    const today = new Date();
+    
+    let daysToCalculate = 365;
+    if (timeframe === '1M') daysToCalculate = 30;
+    else if (timeframe === '3M') daysToCalculate = 90;
+    else if (timeframe === '6M') daysToCalculate = 180;
+    else if (timeframe === '1Y') daysToCalculate = 365;
+    else if (timeframe === '3Y') daysToCalculate = 1095;
+    else if (timeframe === '5Y') daysToCalculate = 1825;
+    else if (timeframe === 'ALL') {
+      if (sortedTxs.length > 0) {
+        const firstTxDate = new Date(sortedTxs[0].date.split('.').reverse().join('-'));
+        const diffDays = Math.ceil((today.getTime() - firstTxDate.getTime()) / (1000 * 60 * 60 * 24));
+        daysToCalculate = Math.max(30, Math.min(3650, diffDays));
+      } else {
+        daysToCalculate = 365;
+      }
+    }
+
+    const step = Math.max(1, Math.floor(daysToCalculate / 40)); // Max ~40 data points on chart
+
+    for (let i = daysToCalculate; i >= 0; i -= step) {
+      const targetDate = new Date();
+      targetDate.setDate(today.getDate() - i);
+      targetDate.setHours(23, 59, 59, 999);
+      
+      // Calculate holdings up to this day
+      const assetsAtDate: Record<string, { shares: number; costBasis: number; buyDate: Date; buyPrice: number }> = {};
+      
+      sortedTxs.forEach(tx => {
+        const txDate = new Date(tx.date.split('.').reverse().join('-'));
+        if (txDate.getTime() <= targetDate.getTime()) {
+          if (tx.type === 'DIVIDEND' || tx.type === 'DEPOSIT' || tx.type === 'WITHDRAWAL' || tx.type === 'STAKING') return;
+          
+          if (!assetsAtDate[tx.ticker]) {
+            assetsAtDate[tx.ticker] = { shares: 0, costBasis: 0, buyDate: txDate, buyPrice: tx.price };
+          }
+          
+          if (tx.type === 'BUY') {
+            assetsAtDate[tx.ticker].shares += tx.amount;
+            assetsAtDate[tx.ticker].costBasis += (tx.amount * tx.price) + tx.fee;
+          } else if (tx.type === 'SELL') {
+            const avgCost = assetsAtDate[tx.ticker].shares > 0 ? (assetsAtDate[tx.ticker].costBasis / assetsAtDate[tx.ticker].shares) : 0;
+            assetsAtDate[tx.ticker].shares = Math.max(0, assetsAtDate[tx.ticker].shares - tx.amount);
+            assetsAtDate[tx.ticker].costBasis = assetsAtDate[tx.ticker].shares * avgCost;
+          }
+        }
+      });
+
+      let totalValueAtDate = 0;
+      let totalInvestedAtDate = 0;
+
+      Object.entries(assetsAtDate).forEach(([ticker, val]) => {
+        if (val.shares > 0) {
+          totalInvestedAtDate += val.costBasis;
+          
+          const currentPrice = stats.totalValue > 0 ? (holdings.find(h => h.ticker === ticker)?.currentPrice || val.buyPrice) : val.buyPrice;
+          const daysTotal = Math.max(1, (today.getTime() - val.buyDate.getTime()) / (1000 * 60 * 60 * 24));
+          const daysProgress = Math.max(0, Math.min(1, (targetDate.getTime() - val.buyDate.getTime()) / (1000 * 60 * 60 * 24) / daysTotal));
+          
+          const fluctuation = Math.sin(daysProgress * Math.PI * 3 + ticker.charCodeAt(0)) * (currentPrice * 0.02);
+          const priceAtDate = val.buyPrice + (currentPrice - val.buyPrice) * daysProgress + fluctuation;
+          
+          totalValueAtDate += val.shares * priceAtDate;
+        }
+      });
+
+      const convertedVal = convertCurrency(totalValueAtDate, 'EUR', baseCurrency);
+      const convertedCost = convertCurrency(totalInvestedAtDate, 'EUR', baseCurrency);
+
+      data.push({
+        date: targetDate.toLocaleDateString('de-DE', { day: 'numeric', month: 'short', year: daysToCalculate > 365 ? '2-digit' : undefined }),
+        Wert: Math.round(convertedVal),
+        Investiert: Math.round(convertedCost)
+      });
+    }
+    
+    if (data.every(d => d.Wert === 0)) {
+      return data.map((d) => ({
+        ...d,
+        Wert: 0,
+        Investiert: 0
+      }));
+    }
+    
+    return data;
+  }, [transactions, holdings, stats.totalValue, baseCurrency, timeframe]);
  
    // Aggregate holdings for Pie Chart allocation
    const allocationData = useMemo(() => {
@@ -341,11 +399,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats, holdings, transacti
          <div className="glass-panel text-muted-bg">
            <div className="strat-forecast-title-row">
              <h3 className="strat-forecast-title-h3">Portfolioverlauf ({baseCurrency})</h3>
-             <div className="navigation-tabs strat-forecast-tabs">
-               <button className="nav-tab active strat-forecast-tab-btn">All</button>
-               <button className="nav-tab strat-forecast-tab-btn">1Y</button>
-               <button className="nav-tab strat-forecast-tab-btn">1M</button>
-             </div>
+              <div className="navigation-tabs strat-forecast-tabs" style={{ gap: '0.25rem' }}>
+                {(['1M', '3M', '6M', '1Y', '3Y', '5Y', 'ALL'] as const).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setTimeframe(tf)}
+                    className={`nav-tab strat-forecast-tab-btn ${timeframe === tf ? 'active' : ''}`}
+                    style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+                  >
+                    {tf}
+                  </button>
+                ))}
+              </div>
            </div>
            <div className="strat-forecast-chart-container">
              <ResponsiveContainer width="100%" height="100%">
@@ -601,34 +666,132 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats, holdings, transacti
          </div>
        </div>
 
-       {/* Heatmap & FIRE Widget Row */}
-       <div className="mt-6 space-y-6">
-         <PortfolioHealthAudit
+        {/* Heatmap & FIRE Widget Row */}
+        <div className="mt-6 space-y-6">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+            <div>
+              <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>Dashboard-Analysen & Module</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.5rem' }}>
+                ({widgetConfigs.filter(w => w.isVisible).length} von {widgetConfigs.length} aktiv)
+              </span>
+            </div>
+            <button
+              onClick={() => setShowCustomizerModal(true)}
+              className="btn btn-secondary"
+              style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.35rem 0.75rem' }}
+            >
+              <Sliders size={14} /> Ansicht anpassen / Fokus-Modi
+            </button>
+          </div>
+
+          {isWidgetVisible('health_audit') && (
+            <PortfolioHealthAudit
+              holdings={holdings}
+              transactions={transactions}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          {isWidgetVisible('heatmap') && (
+            <PortfolioHeatmap
+              holdings={holdings}
+              onSelectHolding={(h) => setSelectedHolding(h)}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          {isWidgetVisible('benchmark') && (
+            <BenchmarkComparison
+              portfolioReturnPercent={stats.totalGainsPercent}
+            />
+          )}
+
+          {isWidgetVisible('rebalancing') && (
+            <RebalancingOrderPlanner
+              holdings={holdings}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          {isWidgetVisible('dividend_growth_radar') && (
+            <DividendGrowthRadarWidget
+              holdings={holdings}
+              transactions={transactions}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          {isWidgetVisible('factor_exposure') && (
+            <FactorExposureWidget
+              holdings={holdings}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          {isWidgetVisible('ex_date_radar') && (
+            <ExDateDividendRadar
+              holdings={holdings}
+              transactions={transactions}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+         <CorrelationMatrixWidget
+           holdings={holdings}
+           baseCurrency={baseCurrency}
+         />
+
+         <DividendSafetyScoreWidget
            holdings={holdings}
            transactions={transactions}
            baseCurrency={baseCurrency}
          />
 
-         <PortfolioHeatmap
-           holdings={holdings}
-           onSelectHolding={(h) => setSelectedHolding(h)}
+         <CryptoStakingTaxWidget
+           transactions={transactions}
            baseCurrency={baseCurrency}
          />
 
-         <BenchmarkComparison
-           portfolioReturnPercent={stats.totalGainsPercent}
-         />
-
-         <RebalancingOrderPlanner
-           holdings={holdings}
-           baseCurrency={baseCurrency}
-         />
-
-         <ExDateDividendRadar
+         <DripAnalysisWidget
            holdings={holdings}
            transactions={transactions}
            baseCurrency={baseCurrency}
          />
+
+         <FxExposureWidget
+           holdings={holdings}
+           transactions={transactions}
+           baseCurrency={baseCurrency}
+         />
+
+         <FxHedgingWidget
+           holdings={holdings}
+           baseCurrency={baseCurrency}
+         />
+
+         <DividendSeasonalityWidget
+           transactions={transactions}
+           baseCurrency={baseCurrency}
+         />
+
+          <BondDurationWidget
+            holdings={holdings}
+            baseCurrency={baseCurrency}
+          />
+
+          {isWidgetVisible('asset_class_chart') && (
+            <AssetClassPerformanceChart
+              holdings={holdings}
+              baseCurrency={baseCurrency}
+            />
+          )}
+
+          <EmergencyFundWidget
+            holdings={holdings}
+            baseCurrency={baseCurrency}
+          />
+
+          <Target2CalendarWidget />
 
          <PerformanceAttribution
            transactions={transactions}
@@ -646,8 +809,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats, holdings, transacti
          />
 
          <FireFreedomWidget
-           portfolioValue={stats.totalValue}
-           annualDividends={stats.dividendsReceived}
+           totalValue={stats.totalValue}
+           monthlyDividends={stats.dividendsReceived / 12}
            baseCurrency={baseCurrency}
          />
 
@@ -658,15 +821,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ stats, holdings, transacti
          />
        </div>
 
-       {/* Holding Detail Drawer Modal */}
-       {selectedHolding && (
-         <HoldingDetailModal
-           holding={selectedHolding}
-           transactions={transactions}
-           onClose={() => setSelectedHolding(null)}
-           baseCurrency={baseCurrency}
-         />
-       )}
-     </div>
-   );
- };
+        {/* Holding Detail Modal */}
+        {selectedHolding && (
+          <HoldingDetailModal
+            holding={selectedHolding}
+            transactions={transactions}
+            onClose={() => setSelectedHolding(null)}
+            baseCurrency={baseCurrency}
+          />
+        )}
+
+        {/* Dashboard Customizer Modal */}
+        <DashboardCustomizerModal
+          isOpen={showCustomizerModal}
+          onClose={() => setShowCustomizerModal(false)}
+          widgets={widgetConfigs}
+          onToggleWidget={handleToggleWidget}
+          onApplyPreset={handleApplyPreset}
+        />
+      </div>
+    );
+  };

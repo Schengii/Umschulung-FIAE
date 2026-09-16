@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GLOSSARY_TERMS } from '../../data/glossaryData';
-import { BookOpen, Search, X, Volume2, Play, Pause, Sparkles, Filter } from 'lucide-react';
+import { BookOpen, Search, X, Volume2, Pause } from 'lucide-react';
 
 export default function GlossaryModal({ isOpen, onClose }) {
   const [searchTerm, setSearchTerm] = useState('');

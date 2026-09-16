@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Play, RefreshCw, Code, CheckCircle2 } from 'lucide-react';
+import { Globe, CheckCircle2 } from 'lucide-react';
 
 export default function WebSandbox({ onCompleteGame }) {
   const initialHtml = `<div class="card">
@@ -56,6 +56,7 @@ button {
   `;
 
   const handleSave = () => {
+    if (isSaved) return;
     setIsSaved(true);
     onCompleteGame('web_sandbox_first', 75);
   };
@@ -73,8 +74,8 @@ button {
           </p>
         </div>
 
-        <button className="btn btn-success" onClick={handleSave}>
-          <CheckCircle2 size={16} /> Web-App Speichern (+75 XP)
+        <button className="btn btn-success" onClick={handleSave} disabled={isSaved}>
+          <CheckCircle2 size={16} /> {isSaved ? 'Gespeichert!' : 'Web-App Speichern (+75 XP)'}
         </button>
       </div>
 

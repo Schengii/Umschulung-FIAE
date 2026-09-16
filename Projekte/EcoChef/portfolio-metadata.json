@@ -9,7 +9,7 @@
     "LocalStorage",
     "Speech Synthesis"
   ],
-  "image": "assets/images/ecochef_showcase.webp",
+  "image": "assets/images/ecochef_showcase.png",
   "link": "Projekte/EcoChef/www/index.html",
   "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
   "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
@@ -115,28 +115,5 @@
       "descDe": "Das Projekt wurde als IHK-Abschlussarbeit eingereicht und mit hervorragenden Noten bewertet. Es demonstriert moderne Hybrid-App-Entwicklung (Cordova/PWA) und die praktische Nutzung von Generativer KI im Alltag.",
       "descEn": "The project was submitted as a final graduation thesis and received excellent grades. It showcases modern hybrid app development (Cordova/PWA) and generative AI integration."
     }
-  ],
-  "architectureBadges": [
-    { "name": "Lit / Web Components", "color": "#0284c7" },
-    { "name": "Google Gemini 1.5 Pro AI", "color": "#8b5cf6" },
-    { "name": "Service-Layer Pattern", "color": "#10b981" },
-    { "name": "Cordova Hybrid App", "color": "#f59e0b" },
-    { "name": "Offline PWA Caching", "color": "#ec4899" }
-  ],
-  "keyLearnings": {
-    "challengeDe": "Zuverlässige Extraktion valider JSON-Daten aus unvorhersehbaren LLM-Antworten und fehlerfreie Offline-Bereitstellung aller Rezeptschritte mit Audio-Vorlesefunktion (TTS).",
-    "challengeEn": "Reliable extraction of validated JSON structures from probabilistic LLM responses and rock-solid offline availability of recipes with speech synthesis (TTS).",
-    "solutionDe": "Implementierung eines resilienten Prompt-Designs mit JSON-Schema-Guards, lokaler LocalStorage-Validierung sowie asynchroner Web Speech API Entkopplung im isolierten Service-Layer.",
-    "solutionEn": "Implemented resilient prompt engineering with JSON schema guards, robust local storage validation, and asynchronous Web Speech API decoupling in a clean service layer.",
-    "architectureHighlightsDe": [
-      "Modularer TypeScript Service-Layer (GeminiService, StorageService, SpeechService)",
-      "Reaktives UI-Rendering mit Lit-Element & WCAG 2.1 AAA Accessibility",
-      "Strikte Typisierung & Validierung von Nährwert- und CO2-Daten"
-    ],
-    "architectureHighlightsEn": [
-      "Modular TypeScript Service Layer (GeminiService, StorageService, SpeechService)",
-      "Reactive UI rendering via Lit-Element & WCAG 2.1 AAA Accessibility",
-      "Strict typing and verification for nutritional and carbon emission analytics"
-    ]
-  }
+  ]
 }

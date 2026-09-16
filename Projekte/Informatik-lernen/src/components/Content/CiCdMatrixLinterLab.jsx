@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Play, CheckCircle2, Terminal, Cpu, Apple, Box, RotateCcw, AlertTriangle, FileCode } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Layers, Play, CheckCircle2, Terminal, Cpu, Apple, Box, RotateCcw, FileCode } from 'lucide-react';
 import { CICD_YAML_TEMPLATES } from '../../data/advancedLabsData';
 import { useStore } from '../../store/useStore';
 

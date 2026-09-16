@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CLOZE_TESTS } from '../../data/clozeData';
 import { FileText, CheckCircle2, AlertCircle, RefreshCw, Award, XCircle } from 'lucide-react';
 
-export default function ClozeTester({ userState, onCompleteCloze }) {
+export default function ClozeTester({ onCompleteCloze }) {
   const [activeTestId, setActiveTestId] = useState(CLOZE_TESTS[0].id);
   const currentTest = CLOZE_TESTS.find((t) => t.id === activeTestId) || CLOZE_TESTS[0];
 

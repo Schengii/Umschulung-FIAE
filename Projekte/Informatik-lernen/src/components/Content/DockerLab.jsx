@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DOCKER_MODULES } from '../../data/dockerData';
-import { Box, Play, CheckCircle2, Copy } from 'lucide-react';
+import { Box, Copy } from 'lucide-react';
 
 export default function DockerLab() {
   const [selectedId, setSelectedId] = useState(DOCKER_MODULES[0].id);

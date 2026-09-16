@@ -1,5 +1,6 @@
 #include "StructureGenerator.hpp"
 #include "World.hpp"
+#include <cmath>
 
 namespace Minecraft {
 
@@ -7,16 +8,14 @@ void StructureGenerator::generateTree(World& world, int x, int y, int z, bool is
     int height = 4 + (rand() % 2);
     BlockType logType = isBirch ? BlockType::BirchLog : BlockType::OakLog;
 
-    // Log Trunk
     for (int i = 0; i < height; ++i) {
         world.setBlock(x, y + i, z, logType);
     }
 
-    // Leaves Canopy
     for (int lx = -2; lx <= 2; ++lx) {
         for (int lz = -2; lz <= 2; ++lz) {
             for (int ly = height - 2; ly <= height + 1; ++ly) {
-                if (abs(lx) == 2 && abs(lz) == 2 && ly == height + 1) continue;
+                if (std::abs(lx) == 2 && std::abs(lz) == 2 && ly == height + 1) continue;
                 if (world.getBlock(x + lx, y + ly, z + lz) == BlockType::Air) {
                     world.setBlock(x + lx, y + ly, z + lz, BlockType::Leaves);
                 }
@@ -26,11 +25,10 @@ void StructureGenerator::generateTree(World& world, int x, int y, int z, bool is
 }
 
 void StructureGenerator::generateDungeon(World& world, int x, int y, int z) {
-    // 5x5 Cobblestone Dungeon with Chest
     for (int dx = -2; dx <= 2; ++dx) {
         for (int dz = -2; dz <= 2; ++dz) {
             for (int dy = 0; dy <= 3; ++dy) {
-                if (dy == 0 || dy == 3 || abs(dx) == 2 || abs(dz) == 2) {
+                if (dy == 0 || dy == 3 || std::abs(dx) == 2 || std::abs(dz) == 2) {
                     world.setBlock(x + dx, y + dy, z + dz, BlockType::Stone);
                 } else {
                     world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
@@ -38,7 +36,6 @@ void StructureGenerator::generateDungeon(World& world, int x, int y, int z) {
             }
         }
     }
-    // Place Chest in center
     world.setBlock(x, y + 1, z, BlockType::Chest);
 }
 
@@ -46,7 +43,7 @@ void StructureGenerator::generateDesertTemple(World& world, int x, int y, int z)
     for (int dx = -3; dx <= 3; ++dx) {
         for (int dz = -3; dz <= 3; ++dz) {
             for (int dy = 0; dy <= 4; ++dy) {
-                if (dy == 0 || abs(dx) == 3 || abs(dz) == 3) {
+                if (dy == 0 || std::abs(dx) == 3 || std::abs(dz) == 3) {
                     world.setBlock(x + dx, y + dy, z + dz, BlockType::Sand);
                 } else {
                     world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
@@ -54,11 +51,72 @@ void StructureGenerator::generateDesertTemple(World& world, int x, int y, int z)
             }
         }
     }
-    world.setBlock(x, y + 1, z, BlockType::TNT);
+
+    for (int by = 1; by <= 4; ++by) {
+        world.setBlock(x, y - by, z, BlockType::Air);
+    }
+    world.setBlock(x, y - 5, z, BlockType::TNT);
+    world.setBlock(x + 1, y - 5, z, BlockType::TNT);
+    world.setBlock(x - 1, y - 5, z, BlockType::TNT);
+
+    world.setBlock(x + 1, y - 4, z + 1, BlockType::Chest);
+    world.setBlock(x - 1, y - 4, z + 1, BlockType::Chest);
+    world.setBlock(x + 1, y - 4, z - 1, BlockType::Chest);
+    world.setBlock(x - 1, y - 4, z - 1, BlockType::Chest);
+}
+
+void StructureGenerator::generateMineshaft(World& world, int startX, int startY, int startZ, int length) {
+    for (int i = 0; i < length; ++i) {
+        int z = startZ + i;
+
+        for (int dx = -1; dx <= 1; ++dx) {
+            for (int dy = 0; dy <= 2; ++dy) {
+                world.setBlock(startX + dx, startY + dy, z, BlockType::Air);
+            }
+            world.setBlock(startX + dx, startY - 1, z, BlockType::Stone);
+        }
+
+        world.setBlock(startX, startY, z, BlockType::Rail);
+
+        if (i % 4 == 0) {
+            world.setBlock(startX - 1, startY, z, BlockType::OakLog);
+            world.setBlock(startX - 1, startY + 1, z, BlockType::OakLog);
+            world.setBlock(startX + 1, startY, z, BlockType::OakLog);
+            world.setBlock(startX + 1, startY + 1, z, BlockType::OakLog);
+            world.setBlock(startX - 1, startY + 2, z, BlockType::Planks);
+            world.setBlock(startX, startY + 2, z, BlockType::Planks);
+            world.setBlock(startX + 1, startY + 2, z, BlockType::Planks);
+            world.setBlock(startX, startY + 1, z - 1, BlockType::RedstoneTorch);
+        }
+    }
+}
+
+void StructureGenerator::generateNetherFortressCorridor(World& world, int x, int y, int z, int length) {
+    for (int i = 0; i < length; ++i) {
+        int curZ = z + i;
+        // 5-wide bridge with Netherrack base and Obsidian trim
+        for (int dx = -2; dx <= 2; ++dx) {
+            world.setBlock(x + dx, y - 1, curZ, BlockType::Obsidian);
+            for (int dy = 0; dy <= 3; ++dy) {
+                world.setBlock(x + dx, y + dy, curZ, BlockType::Air);
+            }
+            if (std::abs(dx) == 2) {
+                world.setBlock(x + dx, y, curZ, BlockType::Netherrack); // Bridge railing
+            }
+        }
+
+        // Support pillars every 5 blocks down into the abyss
+        if (i % 5 == 0) {
+            for (int py = 1; py <= 10; ++py) {
+                world.setBlock(x - 2, y - py, curZ, BlockType::Netherrack);
+                world.setBlock(x + 2, y - py, curZ, BlockType::Netherrack);
+            }
+            world.setBlock(x, y + 1, curZ, BlockType::Glowstone); // Overhead beacon
+        }
+    }
 }
 
 void StructureGenerator::generateNetherPortalFrame(World& world, int x, int y, int z) {
-    // 4x5 Obsidian Portal Frame
     for (int px = 0; px < 4; ++px) {
         for (int py = 0; py < 5; ++py) {
             if (px == 0 || px == 3 || py == 0 || py == 4) {
@@ -68,6 +126,202 @@ void StructureGenerator::generateNetherPortalFrame(World& world, int x, int y, i
             }
         }
     }
+}
+
+void StructureGenerator::generateStronghold(World& world, int x, int y, int z) {
+    // 9x6x9 Stone Bricks Chamber
+    for (int dx = 0; dx < 9; ++dx) {
+        for (int dy = 0; dy < 6; ++dy) {
+            for (int dz = 0; dz < 9; ++dz) {
+                if (dx == 0 || dx == 8 || dz == 0 || dz == 8 || dy == 0 || dy == 5) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::StoneBricks);
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
+                }
+            }
+        }
+    }
+
+    // Central 3x3 Lava Pool at floor
+    for (int dx = 3; dx <= 5; ++dx) {
+        for (int dz = 3; dz <= 5; ++dz) {
+            world.setBlock(x + dx, y, z + dz, BlockType::Lava);
+        }
+    }
+
+    // End Portal Frame Rim at Y=1 around lava pool
+    for (int dx = 2; dx <= 6; ++dx) {
+        for (int dz = 2; dz <= 6; ++dz) {
+            if ((dx == 2 || dx == 6 || dz == 2 || dz == 6) && !(dx == 2 && dz == 2) && !(dx == 2 && dz == 6) && !(dx == 6 && dz == 2) && !(dx == 6 && dz == 6)) {
+                world.setBlock(x + dx, y + 1, z + dz, BlockType::EndPortalFrame);
+            }
+        }
+    }
+
+    // Silverfish Spawner and Iron Bars Archway
+    world.setBlock(x + 4, y + 2, z + 1, BlockType::Spawner);
+    world.setBlock(x + 3, y + 1, z, BlockType::IronBars);
+    world.setBlock(x + 5, y + 1, z, BlockType::IronBars);
+    world.setBlock(x + 1, y + 1, z + 1, BlockType::Chest);
+}
+
+void StructureGenerator::generateOceanRuin(World& world, int x, int y, int z) {
+    // 5x4x5 Prismarine / Stone Brick underwater ruin
+    for (int dx = 0; dx < 5; ++dx) {
+        for (int dy = 0; dy < 4; ++dy) {
+            for (int dz = 0; dz < 5; ++dz) {
+                if ((dx == 0 || dx == 4 || dz == 0 || dz == 4) && (rand() % 4 != 0)) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::StoneBricks);
+                } else if (dy == 0) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Sand);
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Water);
+                }
+            }
+        }
+    }
+    world.setBlock(x + 2, y + 1, z + 2, BlockType::Chest);
+}
+
+void StructureGenerator::generateEndCity(World& world, int x, int y, int z) {
+    // 7x14x7 End City Main Tower
+    for (int dy = 0; dy < 14; ++dy) {
+        for (int dx = 0; dx < 7; ++dx) {
+            for (int dz = 0; dz < 7; ++dz) {
+                if (dx == 0 || dx == 6 || dz == 0 || dz == 6 || dy == 0 || dy == 13) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Obsidian);
+                } else if (dy == 4 || dy == 8) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::StoneBricks); // Floor dividers
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
+                }
+            }
+        }
+    }
+
+    // Floating Overhang & Balcony with Chest & Spawner
+    for (int bx = -1; bx <= 7; ++bx) {
+        for (int bz = -1; bz <= 7; ++bz) {
+            if (bx == -1 || bx == 7 || bz == -1 || bz == 7) {
+                world.setBlock(x + bx, y + 13, z + bz, BlockType::EndPortalFrame);
+            }
+        }
+    }
+
+    world.setBlock(x + 3, y + 9, z + 3, BlockType::Spawner);
+    world.setBlock(x + 3, y + 9, z + 5, BlockType::Chest);
+    world.setBlock(x + 3, y + 14, z + 3, BlockType::Glowstone);
+}
+
+void StructureGenerator::generateNetherBastion(World& world, int x, int y, int z) {
+    // 11x8x11 Fortified Nether Bastion Remnant
+    for (int dy = 0; dy < 8; ++dy) {
+        for (int dx = 0; dx < 11; ++dx) {
+            for (int dz = 0; dz < 11; ++dz) {
+                if (dx == 0 || dx == 10 || dz == 0 || dz == 10 || dy == 0 || dy == 7) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Netherrack);
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
+                }
+            }
+        }
+    }
+
+    // Central Gold Treasure Vault & Spawner
+    world.setBlock(x + 5, y + 1, z + 5, BlockType::GoldOre);
+    world.setBlock(x + 4, y + 1, z + 5, BlockType::GoldOre);
+    world.setBlock(x + 6, y + 1, z + 5, BlockType::GoldOre);
+    world.setBlock(x + 5, y + 2, z + 5, BlockType::Chest);
+    world.setBlock(x + 5, y + 4, z + 5, BlockType::Spawner);
+
+    // Wall Torches / Glowstone
+    world.setBlock(x + 1, y + 4, z + 5, BlockType::Glowstone);
+    world.setBlock(x + 9, y + 4, z + 5, BlockType::Glowstone);
+}
+
+void StructureGenerator::generateOceanMonument(World& world, int x, int y, int z) {
+    // 13x9x13 Submerged Ocean Monument Temple
+    for (int dy = 0; dy < 9; ++dy) {
+        for (int dx = 0; dx < 13; ++dx) {
+            for (int dz = 0; dz < 13; ++dz) {
+                if (dx == 0 || dx == 12 || dz == 0 || dz == 12 || dy == 0 || dy == 8) {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Stone); // Monument outer wall
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Water); // Interior flooded
+                }
+            }
+        }
+    }
+
+    // Corner Sea Lantern / Glowstone Pillars
+    world.setBlock(x + 2, y + 4, z + 2, BlockType::Glowstone);
+    world.setBlock(x + 10, y + 4, z + 2, BlockType::Glowstone);
+    world.setBlock(x + 2, y + 4, z + 10, BlockType::Glowstone);
+    world.setBlock(x + 10, y + 4, z + 10, BlockType::Glowstone);
+
+    // Central Treasure Core with Gold & Spawner
+    world.setBlock(x + 6, y + 1, z + 6, BlockType::GoldOre);
+    world.setBlock(x + 6, y + 2, z + 6, BlockType::Chest);
+    world.setBlock(x + 6, y + 4, z + 6, BlockType::Spawner); // Guardian spawner
+}
+
+void StructureGenerator::generateShipwreck(World& world, int x, int y, int z) {
+    // 12x6x5 Sunken Shipwreck Hull
+    for (int dx = 0; dx < 12; ++dx) {
+        for (int dz = 0; dz < 5; ++dz) {
+            // Hull bottom & ribs
+            world.setBlock(x + dx, y, z + dz, BlockType::OakLog);
+            if (dz == 0 || dz == 4) {
+                world.setBlock(x + dx, y + 1, z + dz, BlockType::Planks);
+                world.setBlock(x + dx, y + 2, z + dz, BlockType::Planks);
+            }
+        }
+    }
+
+    // Bow & Stern Rise
+    for (int dz = 0; dz < 5; ++dz) {
+        world.setBlock(x, y + 3, z + dz, BlockType::Planks);
+        world.setBlock(x + 11, y + 3, z + dz, BlockType::Planks);
+    }
+
+    // Mast
+    for (int my = 1; my <= 5; ++my) {
+        world.setBlock(x + 5, y + my, z + 2, BlockType::OakLog);
+    }
+
+    // Captain's Quarter Loot Chest
+    world.setBlock(x + 1, y + 1, z + 2, BlockType::Chest);
+}
+
+void StructureGenerator::generateWoodlandMansion(World& world, int x, int y, int z) {
+    // 15x12x15 Multi-Story Woodland Grand Mansion
+    for (int dy = 0; dy < 12; ++dy) {
+        for (int dx = 0; dx < 15; ++dx) {
+            for (int dz = 0; dz < 15; ++dz) {
+                if (dy == 0 || dy == 5 || dy == 11) {
+                    // Floors and Roof
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Planks);
+                } else if (dx == 0 || dx == 14 || dz == 0 || dz == 14) {
+                    // Exterior Walls with corner pillars
+                    if ((dx == 0 || dx == 14) && (dz == 0 || dz == 14)) {
+                        world.setBlock(x + dx, y + dy, z + dz, BlockType::OakLog);
+                    } else if (dy % 5 == 2 && (dx % 4 == 2 || dz % 4 == 2)) {
+                        world.setBlock(x + dx, y + dy, z + dz, BlockType::Glass); // Glass windows
+                    } else {
+                        world.setBlock(x + dx, y + dy, z + dz, BlockType::Stone);
+                    }
+                } else {
+                    world.setBlock(x + dx, y + dy, z + dz, BlockType::Air);
+                }
+            }
+        }
+    }
+
+    // Ground Floor Grand Dining Room & Upper Treasury
+    world.setBlock(x + 7, y + 1, z + 7, BlockType::CraftingTable);
+    world.setBlock(x + 7, y + 6, z + 7, BlockType::Spawner); // Illager / Evoker spawner
+    world.setBlock(x + 7, y + 6, z + 9, BlockType::Chest);   // Grand Treasure chest
+    world.setBlock(x + 7, y + 6, z + 5, BlockType::EmeraldBlock); // Secret emerald vault
 }
 
 }

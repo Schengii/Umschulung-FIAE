@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Keyboard, Timer, Award, CheckCircle2, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Keyboard, RefreshCw } from 'lucide-react';
 
 export default function CodeTypingSpeedrun({ onCompleteGame }) {
   const snippets = [

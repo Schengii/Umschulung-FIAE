@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CLOUD_MODULES } from '../../data/cloudData';
-import { Cloud, Play, CheckCircle2, Copy } from 'lucide-react';
+import { Cloud, Copy } from 'lucide-react';
 
 export default function CloudDevOpsLab() {
   const [selectedId, setSelectedId] = useState(CLOUD_MODULES[0].id);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MICRO_PROJECTS } from '../../data/projectsData';
-import { FolderGit2, CheckCircle2, Code, ArrowRight } from 'lucide-react';
+import { FolderGit2, CheckCircle2, Code } from 'lucide-react';
 
 export default function ProjectViewer({ onCompleteProject }) {
   const [activeProjId, setActiveProjId] = useState(MICRO_PROJECTS[0].id);
@@ -49,7 +49,13 @@ export default function ProjectViewer({ onCompleteProject }) {
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <span className="badge badge-amber">{proj.difficulty}</span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--accent-amber)', fontWeight: '700' }}>+{proj.xpReward} XP</span>
+                  {isDone ? (
+                    <span style={{ fontSize: '0.8rem', color: 'var(--accent-emerald)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={14} /> Fertig
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.8rem', color: 'var(--accent-amber)', fontWeight: '700' }}>+{proj.xpReward} XP</span>
+                  )}
                 </div>
 
                 <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '6px' }}>

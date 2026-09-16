@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AI_BUSINESS_MODULES } from '../../data/aiBusinessData';
-import { Bot, Sparkles, CheckCircle2, Copy, BookOpen } from 'lucide-react';
+import { Bot, Copy } from 'lucide-react';
 
 export default function AiBusinessMasterclass() {
   const [selectedId, setSelectedId] = useState(AI_BUSINESS_MODULES[0].id);

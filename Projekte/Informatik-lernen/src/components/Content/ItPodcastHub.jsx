@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PODCAST_EPISODES } from '../../data/podcastData';
-import { Headphones, Play, CheckCircle2, Award, Volume2 } from 'lucide-react';
+import { Headphones, CheckCircle2 } from 'lucide-react';
 
 export default function ItPodcastHub() {
   const [selectedEpId, setSelectedEpId] = useState(PODCAST_EPISODES[0].id);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Download, CheckCircle2, Calculator, Clock, PieChart, ShieldAlert, Award } from 'lucide-react';
+
+import { FileText, Download, CheckCircle2, Calculator, Clock } from 'lucide-react';
 import { IHK_PROJECT_TEMPLATES } from '../../data/nextGenLabsData';
 import { useStore } from '../../store/useStore';
 
@@ -74,8 +74,10 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
     link.click();
     URL.revokeObjectURL(url);
 
-    setIsExported(true);
-    awardXP(75, 'IHK Master: Projektantrag generiert');
+    if (!isExported) {
+      setIsExported(true);
+      awardXP(75, 'IHK Master: Projektantrag generiert');
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Database, Play, RotateCcw, ShieldAlert, CheckCircle2, Lock, ArrowRight, Layers, AlertOctagon } from 'lucide-react';
+
+import { Database, RotateCcw, Lock } from 'lucide-react';
 import { SQL_ISOLATION_SCENARIOS } from '../../data/nextGenLabsData';
 import { useStore } from '../../store/useStore';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Database, Zap, Clock, ShieldCheck, CheckCircle2, RotateCcw, Play, Server, Layers } from 'lucide-react';
+
+import { Database, CheckCircle2, RotateCcw, Play, Server } from 'lucide-react';
 import { REDIS_CACHING_STRATEGIES } from '../../data/enterpriseLabsData';
 import { useStore } from '../../store/useStore';
 
@@ -8,11 +8,11 @@ export default function RedisCachingLab() {
   const { awardXP } = useStore();
   const [selectedStrategyId, setSelectedStrategyId] = useState(REDIS_CACHING_STRATEGIES[0].id);
   const [activeStepIdx, setActiveStepIdx] = useState(0);
-  const [cacheMemory, setCacheMemory] = useState([
+  const cacheMemory = [
     { key: 'user:42', val: '{"name":"Alice","role":"Admin"}', ttl: 3540 },
     { key: 'product:108', val: '{"title":"Laptop Pro","price":1299}', ttl: 1820 },
     { key: 'stats:daily', val: '{"pageviews":48920}', ttl: 450 }
-  ]);
+  ];
   const [isCompleted, setIsCompleted] = useState(false);
 
   const strategy = REDIS_CACHING_STRATEGIES.find(s => s.id === selectedStrategyId) || REDIS_CACHING_STRATEGIES[0];

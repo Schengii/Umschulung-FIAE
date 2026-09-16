@@ -45,6 +45,7 @@ public:
     ~Application();
 
     void run();
+    bool executeCommand(const std::string& cmd);
 
 private:
     void processInput(float deltaTime);
@@ -97,6 +98,11 @@ private:
     glm::vec3 m_PlayerVelocity{ 0.0f };
     BlockType m_SelectedBlock = BlockType::Grass;
     int m_SelectedSlot = 0;
+
+    float m_MiningProgress = 0.0f;
+    glm::ivec3 m_MiningBlockPos{ 0 };
+    float m_ArmSwingProgress = 0.0f;
+    float m_WalkBobbing = 0.0f;
 
     bool m_LeftMousePressedLast = false;
     bool m_RightMousePressedLast = false;

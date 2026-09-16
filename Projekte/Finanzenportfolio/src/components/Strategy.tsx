@@ -5,6 +5,8 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend 
 } from 'recharts';
 
+import { EsgAuditWidget } from './EsgAuditWidget';
+
 interface StrategyProps {
   holdings: Holding[];
   totalValue: number;
@@ -57,24 +59,32 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
     }
   };
 
-  // Current allocation calculations
+  // Current allocation calculations across all categories
   const currentAllocation = useMemo(() => {
-    const alloc: Record<string, number> = { Stock: 0, ETF: 0, Crypto: 0 };
+    const alloc: Record<string, number> = {
+      Stock: 0,
+      ETF: 0,
+      Crypto: 0,
+      Bond: 0,
+      Cash: 0,
+      RealEstate: 0,
+      PreciousMetal: 0,
+      P2P: 0,
+      Other: 0
+    };
     holdings.forEach(h => {
-      if (alloc[h.category] !== undefined) {
-        alloc[h.category] += h.currentValue;
-      }
+      const cat = h.category || 'Other';
+      alloc[cat] = (alloc[cat] || 0) + h.currentValue;
     });
 
-    const stockPercent = totalValue > 0 ? (alloc.Stock / totalValue) * 100 : 0;
-    const etfPercent = totalValue > 0 ? (alloc.ETF / totalValue) * 100 : 0;
-    const cryptoPercent = totalValue > 0 ? (alloc.Crypto / totalValue) * 100 : 0;
-
-    return {
-      Stock: { val: alloc.Stock, pct: stockPercent },
-      ETF: { val: alloc.ETF, pct: etfPercent },
-      Crypto: { val: alloc.Crypto, pct: cryptoPercent }
-    };
+    const result: Record<string, { val: number; pct: number }> = {};
+    Object.keys(alloc).forEach(k => {
+      result[k] = {
+        val: alloc[k],
+        pct: totalValue > 0 ? (alloc[k] / totalValue) * 100 : 0
+      };
+    });
+    return result;
   }, [holdings, totalValue]);
 
   // Sparplan-Optimierer Calculation
@@ -457,22 +467,37 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {['Stock', 'ETF', 'Crypto'].map((cat) => {
-                      const current = currentAllocation[cat as keyof typeof currentAllocation];
-                      const target = cat === 'Stock' ? targetStock : cat === 'ETF' ? targetEtf : targetCrypto;
+                    {(['Stock', 'ETF', 'Crypto', 'Bond', 'Cash', 'RealEstate', 'PreciousMetal', 'P2P'] as const).filter(cat => {
+                      if (cat === 'Stock' || cat === 'ETF' || cat === 'Crypto') return true;
+                      return (currentAllocation[cat]?.val || 0) > 0;
+                    }).map((cat) => {
+                      const current = currentAllocation[cat] || { val: 0, pct: 0 };
+                      const target = cat === 'Stock' ? targetStock : cat === 'ETF' ? targetEtf : cat === 'Crypto' ? targetCrypto : 0;
                       const diff = (totalValue * (target / 100)) - current.val;
                       const isBuy = diff > 0;
+                      const labelMap: Record<string, string> = {
+                        Stock: 'Aktien',
+                        ETF: 'ETFs',
+                        Crypto: 'Kryptowährungen',
+                        Bond: 'Anleihen',
+                        Cash: 'Cash / Liquidität',
+                        RealEstate: 'Immobilien',
+                        PreciousMetal: 'Edelmetalle / Rohstoffe',
+                        P2P: 'P2P-Kredite'
+                      };
                       
                       return (
                         <tr key={cat}>
-                          <td className="sav-item-title-active">{cat === 'Stock' ? 'Aktien' : cat === 'ETF' ? 'ETFs' : 'Kryptowährungen'}</td>
+                          <td className="sav-item-title-active">{labelMap[cat] || cat}</td>
                           <td>{current.pct.toFixed(1)}%</td>
                           <td>{target}%</td>
                           <td style={{ color: Math.abs(diff) < 5 ? 'var(--text-secondary)' : isBuy ? 'var(--accent-emerald)' : 'var(--accent-rose)', fontWeight: 600 }}>
                             {diff > 0 ? '+' : ''}{diff.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                           </td>
                           <td>
-                            {Math.abs(diff) < 20 ? (
+                            {target === 0 && current.val > 0 ? (
+                              <span className="sav-list-empty" style={{ margin: 0 }}>Bestand ohne Zielquote</span>
+                            ) : Math.abs(diff) < 20 ? (
                               <span className="sav-list-empty" style={{ margin: 0 }}>Optimal balanciert</span>
                             ) : (
                               <span className={isBuy ? 'rebalance-badge-buy' : 'rebalance-badge-sell'}>
@@ -832,6 +857,11 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
           </div>
         </div>
       )}
+
+      {/* ESG & Sustainability Audit Section */}
+      <div style={{ marginTop: '2rem' }}>
+        <EsgAuditWidget holdings={holdings} />
+      </div>
     </div>
   );
 };

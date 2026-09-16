@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wrench, CheckCircle2, Terminal, Code, Cpu } from 'lucide-react';
+import { Wrench } from 'lucide-react';
 
 export default function ToolingSetupGuide() {
   const tools = [

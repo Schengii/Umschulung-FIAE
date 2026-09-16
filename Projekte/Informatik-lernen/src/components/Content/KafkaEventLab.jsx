@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { KAFKA_PATTERNS } from '../../data/kafkaData';
-import { Network, RefreshCw, Send } from 'lucide-react';
+import { Network } from 'lucide-react';
 
 export default function KafkaEventLab() {
-  const [selectedId, setSelectedId] = useState(KAFKA_PATTERNS[0].id);
-
-  const activePattern = KAFKA_PATTERNS.find(k => k.id === selectedId) || KAFKA_PATTERNS[0];
+  const activePattern = KAFKA_PATTERNS[0];
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '60px' }}>

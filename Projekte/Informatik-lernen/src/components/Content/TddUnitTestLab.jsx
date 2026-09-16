@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, XCircle, Play, Award, Sparkles, Code } from 'lucide-react';
+import { Play } from 'lucide-react';
 
 export default function TddUnitTestLab({ onRewardXP }) {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);

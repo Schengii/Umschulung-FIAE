@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rocket, ExternalLink, X, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Rocket, X } from 'lucide-react';
 
 export default function DeploymentGuideModal({ isOpen, onClose }) {
   if (!isOpen) return null;

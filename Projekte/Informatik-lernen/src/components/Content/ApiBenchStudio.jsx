@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { API_STUDIO_ENDPOINTS } from '../../data/apiStudioData';
-import { Network, Send, CheckCircle2, Copy } from 'lucide-react';
+import { Network } from 'lucide-react';
 
 export default function ApiBenchStudio() {
   const [selectedId, setSelectedId] = useState(API_STUDIO_ENDPOINTS[0].id);

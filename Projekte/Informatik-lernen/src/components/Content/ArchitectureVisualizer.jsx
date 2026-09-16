@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Network, Server, Database, Cpu, Layers, ShieldCheck, ArrowRight, Activity } from 'lucide-react';
+import { Network } from 'lucide-react';
 
 export default function ArchitectureVisualizer() {
   const [selectedNode, setSelectedNode] = useState('gateway');

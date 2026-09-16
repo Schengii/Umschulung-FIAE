@@ -10,14 +10,23 @@ enum class BiomeType {
     Desert,
     Forest,
     Mountains,
-    Jungle
+    Jungle,
+    Taiga,
+    Swamp,
+    CrimsonForest,
+    WarpedForest,
+    SoulSandValley,
+    BasaltDeltas
 };
 
 class Biome {
 public:
     static BiomeType getBiome(float temperature, float moisture);
+    static BiomeType getNetherBiome(float temperature, float moisture);
     static BlockType getSurfaceBlock(BiomeType type, int height);
     static BlockType getSubSurfaceBlock(BiomeType type);
+    static glm::vec3 getGrassColor(BiomeType type);
+    static glm::vec3 getFoliageColor(BiomeType type);
 };
 
 }

@@ -40,6 +40,7 @@ export interface PlacedFurniture {
   gridX: number;
   gridY: number;
   rotation: 0 | 90 | 180 | 270;
+  swatchColor?: string;
 }
 
 export const FURNITURE_CATALOG: Record<string, FurnitureDefinition> = {
@@ -373,6 +374,1256 @@ export const FURNITURE_CATALOG: Record<string, FurnitureDefinition> = {
         icon: '🍱',
         duration: 6,
         needEffects: { hunger: 95, fun: 40, social: 50 }
+      }
+    ]
+  },
+
+  garden_plot: {
+    id: 'garden_plot',
+    name: 'Garten-Pflanzbeet',
+    category: 'decor',
+    price: 100,
+    width: 1,
+    height: 1,
+    color: '#795548',
+    accentColor: '#4caf50',
+    icon: '🌱',
+    description: 'Nährstoffreiches Beet zum Anbauen von Tomaten, Erdbeeren & Blumen.',
+    interactions: [
+      {
+        id: 'interact_garden',
+        label: 'Garten pflegen',
+        icon: '🧑‍🌾',
+        duration: 4,
+        needEffects: { fun: 25, energy: -5 }
+      }
+    ]
+  },
+
+  pet_bed: {
+    id: 'pet_bed',
+    name: 'Orthopädisches Pet-Bett',
+    category: 'comfort',
+    price: 180,
+    width: 1,
+    height: 1,
+    color: '#e74c3c',
+    accentColor: '#f39c12',
+    icon: '🛋️',
+    description: 'Weiches Kissen für Hunde und Katzen zum Schlafen.',
+    interactions: [
+      {
+        id: 'cuddle_pet_bed',
+        label: 'Haustier zum Schlafen bringen',
+        icon: '🐶',
+        duration: 3,
+        needEffects: { social: 30, fun: 20 }
+      }
+    ]
+  },
+
+  pet_bowl: {
+    id: 'pet_bowl',
+    name: 'Futternapf "Gourmet"',
+    category: 'appliances',
+    price: 90,
+    width: 1,
+    height: 1,
+    color: '#34495e',
+    accentColor: '#e67e22',
+    icon: '🦴',
+    description: 'Befülle den Napf mit Futter für Hunde & Katzen.',
+    interactions: [
+      {
+        id: 'fill_pet_bowl',
+        label: 'Futternapf auffüllen (§ 20)',
+        icon: '🥩',
+        duration: 2,
+        needEffects: { social: 25 }
+      }
+    ]
+  },
+
+  cat_tree: {
+    id: 'cat_tree',
+    name: 'Kletter- & Kratzbaum XL',
+    category: 'entertainment',
+    price: 240,
+    width: 1,
+    height: 1,
+    color: '#d35400',
+    accentColor: '#ecf0f1',
+    icon: '🐱',
+    description: 'Mehrstöckiger Kratzbaum für Katzen zum Klettern und Spielen.',
+    interactions: [
+      {
+        id: 'play_cat_tree',
+        label: 'Mit Katze am Kratzbaum spielen',
+        icon: '🧶',
+        duration: 5,
+        needEffects: { fun: 45, social: 35 }
+      }
+    ]
+  },
+
+  pet_toy: {
+    id: 'pet_toy',
+    name: 'Pet Spielzeugkiste',
+    category: 'entertainment',
+    price: 120,
+    width: 1,
+    height: 1,
+    color: '#f1c40f',
+    accentColor: '#9b59b6',
+    icon: '🎾',
+    description: 'Bälle, Kauknochen & Maussuch-Spiele für Haustiere.',
+    interactions: [
+      {
+        id: 'play_pet_fetch',
+        label: 'Stöckchen & Ball werfen',
+        icon: '🎾',
+        duration: 6,
+        needEffects: { fun: 65, social: 50 }
+      }
+    ]
+  },
+
+  stairs_wood: {
+    id: 'stairs_wood',
+    name: 'Holztreppe (Klassisch)',
+    category: 'comfort',
+    price: 400,
+    width: 1,
+    height: 1,
+    color: '#8d5524',
+    accentColor: '#d35400',
+    icon: '🪜',
+    description: 'Verbindet Stockwerke. Ermöglicht den Aufstieg ins nächste Geschoss.',
+    interactions: [
+      {
+        id: 'climb_stairs_up',
+        label: 'Etage nach oben steigen',
+        icon: '⬆️',
+        duration: 2,
+        needEffects: { energy: -2 }
+      },
+      {
+        id: 'climb_stairs_down',
+        label: 'Etage nach unten steigen',
+        icon: '⬇️',
+        duration: 2,
+        needEffects: { energy: -2 }
+      }
+    ]
+  },
+
+  stairs_modern: {
+    id: 'stairs_modern',
+    name: 'Design Glas-Metalltreppe',
+    category: 'comfort',
+    price: 750,
+    width: 1,
+    height: 1,
+    color: '#34495e',
+    accentColor: '#00e5ff',
+    icon: '🪜',
+    description: 'Moderne Luxus-Treppe für edle Villen.',
+    interactions: [
+      {
+        id: 'climb_stairs_up',
+        label: 'Etage nach oben steigen',
+        icon: '⬆️',
+        duration: 2,
+        needEffects: { energy: -2 }
+      },
+      {
+        id: 'climb_stairs_down',
+        label: 'Etage nach unten steigen',
+        icon: '⬇️',
+        duration: 2,
+        needEffects: { energy: -2 }
+      }
+    ]
+  },
+
+  dj_booth: {
+    id: 'dj_booth',
+    name: 'Profi DJ-Pult (Club VIP)',
+    category: 'entertainment',
+    price: 1200,
+    width: 2,
+    height: 1,
+    color: '#8e44ad',
+    accentColor: '#00e5ff',
+    icon: '🎧',
+    description: 'Mische Beats auf der Tanzfläche auf!',
+    interactions: [
+      {
+        id: 'dj_mix',
+        label: 'DJ Beats auflegen',
+        icon: '🎛️',
+        duration: 8,
+        needEffects: { fun: 95, social: 60 },
+        skillGain: { skill: 'charisma', amount: 30 }
+      }
+    ]
+  },
+
+  bar_counter: {
+    id: 'bar_counter',
+    name: 'Cocktail-Bar Counter',
+    category: 'appliances',
+    price: 900,
+    width: 2,
+    height: 1,
+    color: '#2c3e50',
+    accentColor: '#e74c3c',
+    icon: '🍸',
+    description: 'Serviere Erfrischungsdrinks an der Club-Bar.',
+    interactions: [
+      {
+        id: 'drink_cocktail',
+        label: 'Cocktail mixen & trinken',
+        icon: '🍹',
+        duration: 5,
+        needEffects: { fun: 80, social: 40 }
+      }
+    ]
+  },
+
+  treadmill: {
+    id: 'treadmill',
+    name: 'Fitness Pro Laufband',
+    category: 'entertainment',
+    price: 850,
+    width: 1,
+    height: 1,
+    color: '#27ae60',
+    accentColor: '#2ecc71',
+    icon: '🏃',
+    description: 'Verbessert die Ausdauer und hält deinen Sim fit.',
+    interactions: [
+      {
+        id: 'run_treadmill',
+        label: 'Laufen gehen',
+        icon: '🏃‍♂️',
+        duration: 8,
+        needEffects: { fun: 60, energy: -20, hygiene: -20 },
+        skillGain: { skill: 'fitness', amount: 35 }
+      }
+    ]
+  },
+
+  coffee_bar: {
+    id: 'coffee_bar',
+    name: 'Espresso Barista Stand',
+    category: 'appliances',
+    price: 650,
+    width: 1,
+    height: 1,
+    color: '#d35400',
+    accentColor: '#f39c12',
+    icon: '☕',
+    description: 'Frisch gemahlener Kaffee für vollen Energieschub.',
+    interactions: [
+      {
+        id: 'drink_espresso',
+        label: 'Espresso trinken',
+        icon: '☕',
+        duration: 3,
+        needEffects: { energy: 50, fun: 30 }
+      }
+    ]
+  },
+
+  // NEW ECO & MAGIC FURNITURE
+  solar_panel: {
+    id: 'solar_panel',
+    name: 'Solarpanel XL',
+    category: 'decor',
+    price: 800,
+    width: 1,
+    height: 1,
+    color: '#2980b9',
+    accentColor: '#f1c40f',
+    icon: '☀️',
+    description: 'Erzeugt sauberen Solarstrom & spart § 50 auf jeder Nebenkosten-Rechnung!',
+    interactions: [
+      {
+        id: 'inspect_solar',
+        label: 'Solarertrag prüfen',
+        icon: '🔋',
+        duration: 2,
+        needEffects: { fun: 15 }
+      }
+    ]
+  },
+
+  wind_turbine: {
+    id: 'wind_turbine',
+    name: 'Mini Windkraftanlage',
+    category: 'decor',
+    price: 1200,
+    width: 1,
+    height: 1,
+    color: '#bdc3c7',
+    accentColor: '#00e5ff',
+    icon: '🌀',
+    description: 'Nutzt die Kraft des Windes & spart § 75 auf jeder Nebenkosten-Rechnung!',
+    interactions: [
+      {
+        id: 'inspect_wind',
+        label: 'Windrad inspecten',
+        icon: '💨',
+        duration: 2,
+        needEffects: { fun: 15 }
+      }
+    ]
+  },
+
+  magic_cauldron: {
+    id: 'magic_cauldron',
+    name: 'Alchemie Zauberkessel',
+    category: 'appliances',
+    price: 600,
+    width: 1,
+    height: 1,
+    color: '#8e44ad',
+    accentColor: '#2ecc71',
+    icon: '🧪',
+    description: 'Braue magische Elixiere und steigere deine Magie-Stufe.',
+    interactions: [
+      {
+        id: 'brew_potion',
+        label: 'Elixier brauen',
+        icon: '✨',
+        duration: 6,
+        needEffects: { fun: 40, energy: -10 }
+      }
+    ]
+  },
+
+  spell_book: {
+    id: 'spell_book',
+    name: 'Historisches Zauberbuch-Pult',
+    category: 'entertainment',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#d35400',
+    accentColor: '#f1c40f',
+    icon: '📜',
+    description: 'Studiere alte Zaubersprüche & sammle Magie-Erfahrung.',
+    interactions: [
+      {
+        id: 'study_spells',
+        label: 'Zaubersprüche studieren',
+        icon: '📖',
+        duration: 5,
+        needEffects: { fun: 50, energy: -10 }
+      }
+    ]
+  },
+
+  chicken_coop: {
+    id: 'chicken_coop',
+    name: 'Landhaus Hühnerstall',
+    category: 'decor',
+    price: 500,
+    width: 2,
+    height: 1,
+    color: '#d35400',
+    accentColor: '#f1c40f',
+    icon: '🐔',
+    description: 'Bietet glücklichen Hühnern ein Zuhause. Frische Landeier ernten!',
+    interactions: [
+      {
+        id: 'collect_eggs',
+        label: 'Frische Eier einsammeln',
+        icon: '🥚',
+        duration: 4,
+        needEffects: { hunger: 20, fun: 15 }
+      }
+    ]
+  },
+
+  beehive: {
+    id: 'beehive',
+    name: 'Bio-Bienenstock',
+    category: 'decor',
+    price: 350,
+    width: 1,
+    height: 1,
+    color: '#f39c12',
+    accentColor: '#f1c40f',
+    icon: '🐝',
+    description: 'Fleißige Bienen produzieren süßen Bio-Honig im Garten.',
+    interactions: [
+      {
+        id: 'harvest_honey',
+        label: 'Bio-Honig ernten',
+        icon: '🍯',
+        duration: 3,
+        needEffects: { hunger: 15, fun: 20 }
+      }
+    ]
+  },
+
+  wedding_arch: {
+    id: 'wedding_arch',
+    name: 'Blumen-Hochzeitsbogen',
+    category: 'decor',
+    price: 750,
+    width: 2,
+    height: 1,
+    color: '#ecf0f1',
+    accentColor: '#e84393',
+    icon: '💒',
+    description: 'Bogen für Romantik & unvergessliche Hochzeits-Zeremonien.',
+    interactions: [
+      {
+        id: 'hold_wedding',
+        label: 'Ja-Wort geben & Heiraten',
+        icon: '💍',
+        duration: 8,
+        needEffects: { social: 60, fun: 50 }
+      }
+    ]
+  },
+
+  guitar_acoustic: {
+    id: 'guitar_acoustic',
+    name: 'Akustik-Gitarre',
+    category: 'entertainment',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#d35400',
+    accentColor: '#f39c12',
+    icon: '🎸',
+    description: 'Spiele romantische Balladen oder Straßenmusik für Simoleons.',
+    interactions: [
+      {
+        id: 'play_guitar',
+        label: 'Gitarre spielen',
+        icon: '🎵',
+        duration: 6,
+        needEffects: { fun: 45, social: 15 }
+      }
+    ]
+  },
+
+  chess_table: {
+    id: 'chess_table',
+    name: 'Großmeister Schach-Tisch',
+    category: 'entertainment',
+    price: 550,
+    width: 1,
+    height: 1,
+    color: '#2c3e50',
+    accentColor: '#ecf0f1',
+    icon: '♟️',
+    description: 'Fördert den Logik-Skill und bringt Spaß.',
+    interactions: [
+      {
+        id: 'play_chess',
+        label: 'Schach spielen',
+        icon: '🧠',
+        duration: 8,
+        needEffects: { fun: 50 }
+      }
+    ]
+  },
+
+  wood_bench: {
+    id: 'wood_bench',
+    name: 'Handwerker-Werkbank',
+    category: 'surfaces',
+    price: 650,
+    width: 2,
+    height: 1,
+    color: '#795548',
+    accentColor: '#8d6e63',
+    icon: '🔨',
+    description: 'Repariere kaputte Geräte oder schnitze Holzskulpturen.',
+    interactions: [
+      {
+        id: 'carve_wood',
+        label: 'Holzskulptur schnitzen',
+        icon: '🪚',
+        duration: 8,
+        needEffects: { fun: 40, energy: -10 }
+      }
+    ]
+  },
+
+  gravestone: {
+    id: 'gravestone',
+    name: 'Historischer Grabstein',
+    category: 'decor',
+    price: 200,
+    width: 1,
+    height: 1,
+    color: '#7f8c8d',
+    accentColor: '#34495e',
+    icon: '🪦',
+    description: 'Erinnert an vergangene Ahnengenerationen. Geister spuken nachts um ihn herum.',
+    interactions: [
+      {
+        id: 'mourn_ghost',
+        label: 'Trauern & Geist besänftigen',
+        icon: '👻',
+        duration: 5,
+        needEffects: { social: 20, fun: -10 }
+      }
+    ]
+  },
+
+  invention_workbench: {
+    id: 'invention_workbench',
+    name: 'Sci-Fi Erfinder-Werkbank',
+    category: 'appliances',
+    price: 1800,
+    width: 2,
+    height: 1,
+    color: '#0284c7',
+    accentColor: '#38bdf8',
+    icon: '🔬',
+    description: 'Station zur Erfindung von Sci-Fi-Gadgets und Brauen chemischer Serumpotionen.',
+    interactions: [
+      {
+        id: 'use_invention_bench',
+        label: 'Tüfteln & Erfinden',
+        icon: '⚙️',
+        duration: 6,
+        needEffects: { fun: 45, energy: -10 },
+        skillGain: { skill: 'programming', amount: 15 }
+      }
+    ]
+  },
+
+  pet_nursery_bed: {
+    id: 'pet_nursery_bed',
+    name: 'Welpen & Kätzchen Nest',
+    category: 'comfort',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#f472b6',
+    accentColor: '#fbcfe8',
+    icon: '🐾',
+    description: 'Ein kuscheliges Körbchen für neugeborene Tierbabys und Zuchtnachwuchs.',
+    interactions: [
+      {
+        id: 'cuddle_nursery_pet',
+        label: 'Tierbaby knuddeln',
+        icon: '💖',
+        duration: 4,
+        needEffects: { fun: 50, social: 30 }
+      }
+    ]
+  },
+
+  resort_reception: {
+    id: 'resort_reception',
+    name: 'Resort Empfangs-Tresen',
+    category: 'surfaces',
+    price: 2400,
+    width: 2,
+    height: 1,
+    color: '#0d9488',
+    accentColor: '#2dd4bf',
+    icon: '🏨',
+    description: 'Eleganter Rezeptionstresen zur Verwaltung deines Insel-Hotels und Gäste-Checkins.',
+    interactions: [
+      {
+        id: 'checkin_resort_guests',
+        label: 'Gäste einchecken',
+        icon: '📋',
+        duration: 5,
+        needEffects: { social: 25, fun: 20 }
+      }
+    ]
+  },
+
+  decorator_drafting_table: {
+    id: 'decorator_drafting_table',
+    name: 'Architekten Zeichentisch',
+    category: 'surfaces',
+    price: 1100,
+    width: 2,
+    height: 1,
+    color: '#d97706',
+    accentColor: '#fef08a',
+    icon: '📐',
+    description: 'Entwirf Grundrisse und erstelle Kunden-Präsentationen für deinen Raumausstatter-Auftrag.',
+    interactions: [
+      {
+        id: 'draft_blueprint',
+        label: 'Entwurf zeichnen',
+        icon: '✏️',
+        duration: 7,
+        needEffects: { fun: 35, energy: -5 }
+      }
+    ]
+  },
+
+  cow_pasture_barn: {
+    id: 'cow_pasture_barn',
+    name: 'Ranch Kuh-Stall',
+    category: 'appliances',
+    price: 2200,
+    width: 2,
+    height: 2,
+    color: '#854d0e',
+    accentColor: '#fef08a',
+    icon: '🐄',
+    description: 'Unterstand für Rinder & Schafe. Melke frische Bio-Milch und schere Wolle.',
+    interactions: [
+      {
+        id: 'milk_cow',
+        label: 'Kuh melken & füttern',
+        icon: '🥛',
+        duration: 6,
+        needEffects: { fun: 30, social: 20 }
+      }
+    ]
+  },
+
+  movie_camera_rig: {
+    id: 'movie_camera_rig',
+    name: 'Hollywood Kamera-Rig',
+    category: 'appliances',
+    price: 3800,
+    width: 2,
+    height: 1,
+    color: '#0f172a',
+    accentColor: '#f59e0b',
+    icon: '🎥',
+    description: 'Profi-Kamera für Hollywood-Blockbuster, Regie-Proben und Starlight-Auditions.',
+    interactions: [
+      {
+        id: 'direct_scene',
+        label: 'Filmszene regieführen',
+        icon: '🎬',
+        duration: 8,
+        needEffects: { fun: 45, energy: -10 }
+      }
+    ]
+  },
+
+  yacht_helm_wheel: {
+    id: 'yacht_helm_wheel',
+    name: 'Mega-Yacht Steuerrad',
+    category: 'entertainment',
+    price: 4500,
+    width: 1,
+    height: 1,
+    color: '#0284c7',
+    accentColor: '#bae6fd',
+    icon: '☸️',
+    description: 'Kapitäns-Steuerrad zur Navigation deiner Mega-Yacht auf hoher See.',
+    interactions: [
+      {
+        id: 'steer_yacht',
+        label: 'Yacht steuern & auslaufen',
+        icon: '⚓',
+        duration: 7,
+        needEffects: { fun: 50, social: 15 }
+      }
+    ]
+  },
+
+  tractor_workbench: {
+    id: 'tractor_workbench',
+    name: 'Traktor-Werkbank',
+    category: 'surfaces',
+    price: 1600,
+    width: 2,
+    height: 1,
+    color: '#15803d',
+    accentColor: '#86efac',
+    icon: '🚜',
+    description: 'Warte Landmaschinen und bereite Erntemaschinen für das Feld vor.',
+    interactions: [
+      {
+        id: 'repair_tractor',
+        label: 'Traktor warten',
+        icon: '🔧',
+        duration: 6,
+        needEffects: { fun: 30, energy: -10 }
+      }
+    ]
+  },
+
+  safe_vault: {
+    id: 'safe_vault',
+    name: 'Titan Banktresor',
+    category: 'appliances',
+    price: 1500,
+    width: 1,
+    height: 1,
+    color: '#334155',
+    accentColor: '#fbbf24',
+    icon: '🏦',
+    description: 'Schwerer Panzertresor zur sicheren Aufbewahrung von Simoleons, Gold und Diamanten.',
+    interactions: [
+      {
+        id: 'open_vault',
+        label: 'Tresor öffnen & verwalten',
+        icon: '🔑',
+        duration: 3,
+        needEffects: { fun: 20 }
+      }
+    ]
+  },
+
+  gold_display_case: {
+    id: 'gold_display_case',
+    name: 'Gold-Schauvitrine',
+    category: 'decor',
+    price: 800,
+    width: 1,
+    height: 1,
+    color: '#b45309',
+    accentColor: '#fde68a',
+    icon: '🏆',
+    description: 'Edle beleuchtete Vitrine zur Schaukelung deiner Goldbarren und Edelsteine.',
+    interactions: [
+      {
+        id: 'admire_gold',
+        label: 'Goldbarren bewundern',
+        icon: '✨',
+        duration: 4,
+        needEffects: { fun: 30, social: 10 }
+      }
+    ]
+  },
+
+  alchemy_cauldron: {
+    id: 'alchemy_cauldron',
+    name: 'Alchemie-Kessel',
+    category: 'appliances',
+    price: 1200,
+    width: 1,
+    height: 1,
+    color: '#3b0764',
+    accentColor: '#c084fc',
+    icon: '🔮',
+    description: 'Brodelnder Kessel zum Brauen von Verjüngungs-, Glücks- und Midas-Elixieren.',
+    interactions: [
+      {
+        id: 'open_alchemy',
+        label: 'Trank brauen & alchemieren',
+        icon: '⚗️',
+        duration: 5,
+        needEffects: { fun: 25, energy: -5 }
+      }
+    ]
+  },
+
+  potion_cabinet: {
+    id: 'potion_cabinet',
+    name: 'Apothekerschrank',
+    category: 'surfaces',
+    price: 650,
+    width: 1,
+    height: 1,
+    color: '#1e1b4b',
+    accentColor: '#818cf8',
+    icon: '🧪',
+    description: 'Aufbewahrungsschrank für gebraute Elixiere, Kräuter und Tinkturen.',
+    interactions: [
+      {
+        id: 'inspect_potions',
+        label: 'Trankbestand prüfen',
+        icon: '🔍',
+        duration: 3,
+        needEffects: { fun: 15 }
+      }
+    ]
+  },
+
+  pet_nursery_nest: {
+    id: 'pet_nursery_nest',
+    name: 'Haustier-Kinderstube & Nest',
+    category: 'comfort',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#831843',
+    accentColor: '#f43f5e',
+    icon: '🍼',
+    description: 'Kuscheliges Wärmenest für trächtige Haustiere und neugeborene Welpen & Kätzchen.',
+    interactions: [
+      {
+        id: 'open_nursery',
+        label: 'Kinderstube & Nest öffnen',
+        icon: '🐾',
+        duration: 3,
+        needEffects: { fun: 25, social: 15 }
+      }
+    ]
+  },
+
+  studio_camera: {
+    id: 'studio_camera',
+    name: 'Stativ-Studiokamera',
+    category: 'entertainment',
+    price: 850,
+    width: 1,
+    height: 1,
+    color: '#1e293b',
+    accentColor: '#38bdf8',
+    icon: '📷',
+    description: 'Professionelle Spiegelreflexkamera auf Dreibeinstativ für hochauflösende Porträtaufnahmen.',
+    interactions: [
+      {
+        id: 'open_studio',
+        label: 'Fotostudio & Shooting öffnen',
+        icon: '📸',
+        duration: 4,
+        needEffects: { fun: 30, social: 15 }
+      }
+    ]
+  },
+
+  photo_backdrop: {
+    id: 'photo_backdrop',
+    name: 'Foto-Studioleinwand',
+    category: 'decor',
+    price: 400,
+    width: 2,
+    height: 1,
+    color: '#334155',
+    accentColor: '#fbbf24',
+    icon: '🖼️',
+    description: 'Thematische Hintergrundkulisse für Porträts, Paar- und Haustiershootings.',
+    interactions: [
+      {
+        id: 'pose_backdrop',
+        label: 'Vor Leinwand posieren',
+        icon: '🕺',
+        duration: 3,
+        needEffects: { fun: 20 }
+      }
+    ]
+  },
+
+  bakery_oven: {
+    id: 'bakery_oven',
+    name: 'Gourmet-Backofen',
+    category: 'appliances',
+    price: 1400,
+    width: 1,
+    height: 1,
+    color: '#b45309',
+    accentColor: '#fbbf24',
+    icon: '🥐',
+    description: 'Leistungsstarker Konvektionsofen zum Backen von Torten, Croissants und Baguettes.',
+    interactions: [
+      {
+        id: 'open_bakery',
+        label: 'Bäckerei & Rezepte öffnen',
+        icon: '👩‍🍳',
+        duration: 4,
+        needEffects: { hunger: 20, fun: 15 }
+      }
+    ]
+  },
+
+  pastry_display_case: {
+    id: 'pastry_display_case',
+    name: 'Konditorei-Glaskuchentheke',
+    category: 'surfaces',
+    price: 750,
+    width: 2,
+    height: 1,
+    color: '#78350f',
+    accentColor: '#fde68a',
+    icon: '🍰',
+    description: 'Gekühlte Verkaufsvitrine für frisch gebackene Hochzeitstorten und Gebäck.',
+    interactions: [
+      {
+        id: 'open_bakery',
+        label: 'Vitrine bestücken & Erlöse prüfen',
+        icon: '💰',
+        duration: 3,
+        needEffects: { fun: 10 }
+      }
+    ]
+  },
+
+  cinema_projector_screen: {
+    id: 'cinema_projector_screen',
+    name: 'Heimkino-Leinwand & Beamer',
+    category: 'entertainment',
+    price: 2200,
+    width: 3,
+    height: 1,
+    color: '#0f172a',
+    accentColor: '#ec4899',
+    icon: '🎬',
+    description: '4K Laser-Projektionsleinwand für echtes Kinosaal-Feeling im eigenen Zuhause.',
+    interactions: [
+      {
+        id: 'open_cinema',
+        label: 'Heimkino starten',
+        icon: '🎥',
+        duration: 5,
+        needEffects: { fun: 40, social: 25 }
+      }
+    ]
+  },
+
+  popcorn_maker: {
+    id: 'popcorn_maker',
+    name: 'Retro-Popcorn-Maschine',
+    category: 'appliances',
+    price: 350,
+    width: 1,
+    height: 1,
+    color: '#dc2626',
+    accentColor: '#fef08a',
+    icon: '🍿',
+    description: 'Klassische Popcorn-Maschine mit knisterndem Heißluft-Kessel.',
+    interactions: [
+      {
+        id: 'open_cinema',
+        label: 'Popcorn zubereiten',
+        icon: '🍿',
+        duration: 3,
+        needEffects: { hunger: 15, fun: 10 }
+      }
+    ]
+  },
+
+  luxury_cinema_seats: {
+    id: 'luxury_cinema_seats',
+    name: 'Luxus-Kinosaalsessel',
+    category: 'comfort',
+    price: 600,
+    width: 2,
+    height: 1,
+    color: '#831843',
+    accentColor: '#f43f5e',
+    icon: '💺',
+    description: 'Bequeme rote Samtsessel mit Getränkehaltern für den perfekten Filmgenuss.',
+    interactions: [
+      {
+        id: 'open_cinema',
+        label: 'In Kinosessel entspannen',
+        icon: '🍿',
+        duration: 4,
+        needEffects: { energy: 25, fun: 20 }
+      }
+    ]
+  },
+
+  agility_hurdle: {
+    id: 'agility_hurdle',
+    name: 'Agility-Sprunghürde',
+    category: 'entertainment',
+    price: 300,
+    width: 1,
+    height: 1,
+    color: '#0284c7',
+    accentColor: '#38bdf8',
+    icon: '🚧',
+    description: 'Verstellbare Trainingshürde für Sprung- und Geschicklichkeitstraining von Haustieren.',
+    interactions: [
+      {
+        id: 'open_agility',
+        label: 'Agility-Training starten',
+        icon: '🐕',
+        duration: 4,
+        needEffects: { fun: 25, social: 20 }
+      }
+    ]
+  },
+
+  agility_slalom_poles: {
+    id: 'agility_slalom_poles',
+    name: 'Agility-Slalomstangen',
+    category: 'entertainment',
+    price: 350,
+    width: 2,
+    height: 1,
+    color: '#eab308',
+    accentColor: '#fde047',
+    icon: '🚩',
+    description: 'Reihe farbiger Slalomstangen für präzise Wendemanöver.',
+    interactions: [
+      {
+        id: 'open_agility',
+        label: 'Slalom trainieren',
+        icon: '🐾',
+        duration: 4,
+        needEffects: { fun: 25, social: 20 }
+      }
+    ]
+  },
+
+  agility_tunnel: {
+    id: 'agility_tunnel',
+    name: 'Agility-Kriechtunnel',
+    category: 'entertainment',
+    price: 400,
+    width: 2,
+    height: 1,
+    color: '#16a34a',
+    accentColor: '#86efac',
+    icon: '🚇',
+    description: 'Flexibler Stofftunnel für schnelles Hindernistraining.',
+    interactions: [
+      {
+        id: 'open_agility',
+        label: 'Tunnellauf trainieren',
+        icon: '🏃',
+        duration: 4,
+        needEffects: { fun: 25, social: 20 }
+      }
+    ]
+  },
+
+  astronomy_telescope: {
+    id: 'astronomy_telescope',
+    name: 'Großes Spiegelteleskop',
+    category: 'entertainment',
+    price: 1350,
+    width: 1,
+    height: 1,
+    color: '#1e293b',
+    accentColor: '#38bdf8',
+    icon: '🔭',
+    description: 'Optisches Präzisions-Teleskop für Himmelsbeobachtungen und Asteroiden-Scans.',
+    interactions: [
+      {
+        id: 'open_observatory',
+        label: 'Observatorium & Himmel scannen',
+        icon: '🌌',
+        duration: 5,
+        needEffects: { fun: 30 }
+      }
+    ]
+  },
+
+  meteorite_display_stand: {
+    id: 'meteorite_display_stand',
+    name: 'Meteoriten-Schaupodest',
+    category: 'decor',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#334155',
+    accentColor: '#fbbf24',
+    icon: '☄️',
+    description: 'Beleuchtetes Schaupodest für geborgene Meteoriten und Pallasit-Kristalle.',
+    interactions: [
+      {
+        id: 'open_observatory',
+        label: 'Entdeckungs-Archiv prüfen',
+        icon: '🪐',
+        duration: 3,
+        needEffects: { fun: 15 }
+      }
+    ]
+  },
+
+  tea_samovar: {
+    id: 'tea_samovar',
+    name: 'Kräuter-Teesamowar',
+    category: 'appliances',
+    price: 550,
+    width: 1,
+    height: 1,
+    color: '#b45309',
+    accentColor: '#fde68a',
+    icon: '🍵',
+    description: 'Traditioneller Samowar für frisch aufgebrühte Kräutertees und Bio-Aufgüsse.',
+    interactions: [
+      {
+        id: 'open_spa',
+        label: 'Tee aufbrühen & Teestube',
+        icon: '🍵',
+        duration: 3,
+        needEffects: { hunger: 15, energy: 20 }
+      }
+    ]
+  },
+
+  aromatherapy_diffuser: {
+    id: 'aromatherapy_diffuser',
+    name: 'Aromatherapie-Diffusor',
+    category: 'decor',
+    price: 300,
+    width: 1,
+    height: 1,
+    color: '#065f46',
+    accentColor: '#34d399',
+    icon: '🌿',
+    description: 'Ultraschall-Diffusor mit beruhigenden ätherischen Ölen.',
+    interactions: [
+      {
+        id: 'open_spa',
+        label: 'Aromatherapie starten',
+        icon: '🌸',
+        duration: 3,
+        needEffects: { fun: 20 }
+      }
+    ]
+  },
+
+  spa_massage_table: {
+    id: 'spa_massage_table',
+    name: 'Luxus-Massageliege',
+    category: 'comfort',
+    price: 1100,
+    width: 2,
+    height: 1,
+    color: '#1e3a8a',
+    accentColor: '#60a5fa',
+    icon: '💆',
+    description: 'Gepolsterte Wellness-Liege für Hot-Stone und Entspannungsmassagen.',
+    interactions: [
+      {
+        id: 'open_spa',
+        label: 'Massage-Behandlung buchen',
+        icon: '💆',
+        duration: 5,
+        needEffects: { energy: 40, fun: 35 }
+      }
+    ]
+  },
+
+  ice_skating_rink: {
+    id: 'ice_skating_rink',
+    name: 'Outdoor-Kunsteisbahn',
+    category: 'entertainment',
+    price: 1800,
+    width: 3,
+    height: 2,
+    color: '#0284c7',
+    accentColor: '#38bdf8',
+    icon: '⛸️',
+    description: 'Glatte Eisfläche für Pirouetten, Hockey-Matches und Eiskunstlauf-Wettbewerbe.',
+    interactions: [
+      {
+        id: 'open_skating',
+        label: 'Schlittschuhbahn betreten',
+        icon: '⛸️',
+        duration: 4,
+        needEffects: { fun: 35 }
+      }
+    ]
+  },
+
+  hot_punch_stand: {
+    id: 'hot_punch_stand',
+    name: 'Glühwein- & Punschhütte',
+    category: 'appliances',
+    price: 450,
+    width: 1,
+    height: 1,
+    color: '#b45309',
+    accentColor: '#fbbf24',
+    icon: '☕',
+    description: 'Holzhütte mit dampfendem Gewürzpunsch für kalte Wintertage.',
+    interactions: [
+      {
+        id: 'open_skating',
+        label: 'Punsch bestellen',
+        icon: '☕',
+        duration: 3,
+        needEffects: { hunger: 20, energy: 20 }
+      }
+    ]
+  },
+
+  honey_centrifuge: {
+    id: 'honey_centrifuge',
+    name: 'Elektrische Honigschleuder',
+    category: 'appliances',
+    price: 650,
+    width: 1,
+    height: 1,
+    color: '#d97706',
+    accentColor: '#fde68a',
+    icon: '🍯',
+    description: 'Edelstahl-Zentrifuge zur Gewinnung von reinem Blütenhonig.',
+    interactions: [
+      {
+        id: 'open_beekeeping',
+        label: 'Honigschleuder öffnen',
+        icon: '🍯',
+        duration: 4,
+        needEffects: { fun: 20 }
+      }
+    ]
+  },
+
+  candle_crafting_station: {
+    id: 'candle_crafting_station',
+    name: 'Bienenwachs-Gießtisch',
+    category: 'surfaces',
+    price: 450,
+    width: 2,
+    height: 1,
+    color: '#78350f',
+    accentColor: '#fbbf24',
+    icon: '🕯️',
+    description: 'Werkbank zum Gießen duftender Bienenwachskerzen und Kosmetik.',
+    interactions: [
+      {
+        id: 'open_beekeeping',
+        label: 'Kerzenwerkstatt öffnen',
+        icon: '🕯️',
+        duration: 4,
+        needEffects: { fun: 25 }
+      }
+    ]
+  },
+
+  fashion_runway: {
+    id: 'fashion_runway',
+    name: 'LED-Laufsteg & Catwalk',
+    category: 'entertainment',
+    price: 1600,
+    width: 3,
+    height: 1,
+    color: '#831843',
+    accentColor: '#f43f5e',
+    icon: '💃',
+    description: 'Beleuchteter Catwalk für glamouröse Haute-Couture Modenschauen.',
+    interactions: [
+      {
+        id: 'open_runway',
+        label: 'Modenschau starten',
+        icon: '💃',
+        duration: 5,
+        needEffects: { fun: 40, social: 30 }
+      }
+    ]
+  },
+
+  runway_spotlights: {
+    id: 'runway_spotlights',
+    name: 'Bühnen-Flutlichter',
+    category: 'decor',
+    price: 500,
+    width: 1,
+    height: 1,
+    color: '#1e293b',
+    accentColor: '#fde047',
+    icon: '💡',
+    description: 'Starke Studio-Scheinwerfer für den perfekten Auftritt im Rampenlicht.',
+    interactions: [
+      {
+        id: 'open_runway',
+        label: 'Rampenlicht einschalten',
+        icon: '✨',
+        duration: 3,
+        needEffects: { fun: 20 }
       }
     ]
   }

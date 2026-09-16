@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Activity, Cpu, Zap, BarChart2, Play, RefreshCw, CheckCircle2, Sparkles } from 'lucide-react';
+import { Activity, Play } from 'lucide-react';
 
 const ALGORITHMS = [
-  { id: 'o1', name: 'Constant Time - O(1)', type: 'O(1)', formula: (n) => 1, color: '#10b981', desc: 'Array Index Access, Hash Map Lookup' },
+  { id: 'o1', name: 'Constant Time - O(1)', type: 'O(1)', formula: (_n) => 1, color: '#10b981', desc: 'Array Index Access, Hash Map Lookup' },
   { id: 'ologn', name: 'Logarithmic Time - O(log N)', type: 'O(log N)', formula: (n) => Math.round(Math.log2(n)), color: '#38bdf8', desc: 'Binary Search in Sorted Array' },
   { id: 'on', name: 'Linear Time - O(N)', type: 'O(N)', formula: (n) => n, color: '#6366f1', desc: 'Linear Loop, Array Sum' },
   { id: 'onlogn', name: 'Linearithmic Time - O(N log N)', type: 'O(N log N)', formula: (n) => Math.round(n * Math.log2(n)), color: '#f59e0b', desc: 'QuickSort, MergeSort' },

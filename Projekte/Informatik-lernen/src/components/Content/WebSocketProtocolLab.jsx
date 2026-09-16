@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Wifi, Send, ArrowUpRight, ArrowDownLeft, RefreshCw, CheckCircle2, ShieldCheck, Zap, Terminal, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Wifi, Send, ArrowUpRight, ArrowDownLeft, Zap } from 'lucide-react';
 
 export default function WebSocketProtocolLab({ onRewardXP }) {
   const [connectionStatus, setConnectionStatus] = useState('DISCONNECTED'); // 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED'
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [pingLatency, setPingLatency] = useState(null);
-  const [handshakeHeaders, setHandshakeHeaders] = useState({
+  const handshakeHeaders = {
     secKey: 'dGhlIHNhbXBsZSBub25jZQ==',
     secAccept: 's3pPLMBiTxaQ9kYGzzhZRbK+xOo='
-  });
+  };
 
   const handleConnect = () => {
     if (connectionStatus === 'CONNECTED') return;

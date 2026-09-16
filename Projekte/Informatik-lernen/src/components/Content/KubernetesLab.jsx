@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { K8S_MODULES } from '../../data/k8sData';
-import { Cpu, Play, CheckCircle2, Copy } from 'lucide-react';
+import { Cpu, Copy } from 'lucide-react';
 
 export default function KubernetesLab() {
   const [selectedId, setSelectedId] = useState(K8S_MODULES[0].id);

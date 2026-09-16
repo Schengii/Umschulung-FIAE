@@ -1,5 +1,12 @@
 const FX_API_URL = 'https://open.er-api.com/v6/latest/EUR';
-const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,solana,ripple&vs_currencies=eur,usd';
+const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,solana,ripple,polkadot,dogecoin,chainlink,avalanche-2&vs_currencies=eur,usd';
+
+export interface PriceFetchResult {
+  prices: Record<string, number>;
+  lastUpdated: string;
+  status: 'ONLINE' | 'PARTIAL' | 'OFFLINE';
+  sourceCount: number;
+}
 
 export async function fetchLiveExchangeRates(): Promise<Record<string, number>> {
   try {
@@ -30,7 +37,11 @@ const CRYPTO_TICKER_MAP: Record<string, string> = {
   ETH: 'ethereum',
   ADA: 'cardano',
   SOL: 'solana',
-  XRP: 'ripple'
+  XRP: 'ripple',
+  DOT: 'polkadot',
+  DOGE: 'dogecoin',
+  LINK: 'chainlink',
+  AVAX: 'avalanche-2'
 };
 
 export async function fetchLiveCryptoPrices(): Promise<Record<string, number>> {
@@ -56,6 +67,10 @@ export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<st
   const fetchedPrices: Record<string, number> = {};
 
   for (const ticker of tickers) {
+    if (ticker === 'CASH') continue;
+
+    // Try direct fetch first
+    let priceFound = false;
     try {
       const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`;
       const res = await fetch(url);
@@ -64,12 +79,31 @@ export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<st
         const meta = json?.chart?.result?.[0]?.meta;
         if (meta && meta.regularMarketPrice) {
           fetchedPrices[ticker] = meta.regularMarketPrice;
+          priceFound = true;
         }
       }
     } catch {
-      // CORS or network fallback
+      // CORS block expected on browser
+    }
+
+    // Fallback using CORS proxy if direct failed
+    if (!priceFound) {
+      try {
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`)}`;
+        const res = await fetch(proxyUrl);
+        if (res.ok) {
+          const json = await res.json();
+          const meta = json?.chart?.result?.[0]?.meta;
+          if (meta && meta.regularMarketPrice) {
+            fetchedPrices[ticker] = meta.regularMarketPrice;
+          }
+        }
+      } catch {
+        // Silent fallback to previous/simulated prices
+      }
     }
   }
 
   return fetchedPrices;
 }
+

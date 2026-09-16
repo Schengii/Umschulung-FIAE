@@ -68,5 +68,75 @@ export const FLASHCARDS_DATA = [
     difficulty: 'Azubi / IHK',
     front: 'Was bedeuten die Kennzahlen RTO (Recovery Time Objective) und RPO (Recovery Point Objective)?',
     back: 'RTO = Maximale Ausfallzeit (Wie schnell muss das System nach einem Crash wieder laufen?).\nRPO = Maximal tolerierbarer Datenverlust gemessen in Zeit (Wie alt darf das letzte Backup sein?).'
+  },
+  {
+    id: 11,
+    category: 'IHK Prüfungswissen',
+    difficulty: 'Azubi / IHK',
+    front: 'Was ist eine Nutzwertanalyse (NWA / Scoring-Modell) und wozu dient sie?',
+    back: 'Ein qualitativ-quantitatives Verfahren zur Entscheidungsfindung unter Berücksichtigung nicht-monetärer Kriterien (z. B. Usability, Sicherheit, Support) mit Gewichtung und K.O.-Kriterien.'
+  },
+  {
+    id: 12,
+    category: 'Hardware & Storage',
+    difficulty: 'Azubi / IHK',
+    front: 'Wie berechnet sich die Nutzdaten-Kapazität bei einem RAID 5 und einem RAID 6?',
+    back: 'RAID 5: (N - 1) * Kapazität kleinster Datenträger (1 Platte für verteilte Parität).\nRAID 6: (N - 2) * Kapazität kleinster Datenträger (2 Platten für Dual-Parität P + Q).'
+  },
+  {
+    id: 13,
+    category: 'Netzwerke',
+    difficulty: 'Azubi / IHK',
+    front: 'Was ist der Hauptvorteil von VLSM (Variable Length Subnet Masking)?',
+    back: 'VLSM erlaubt es, Subnetze mit unterschiedlichen Präfixen (/25, /27, /30) innerhalb desselben Netzwerks einzurichten, wodurch IP-Adressverschwendung drastisch minimiert wird.'
+  },
+  {
+    id: 14,
+    category: 'Datenbanken',
+    difficulty: 'Junior / Professional',
+    front: 'Was bedeuten die ACID-Eigenschaften von Transaktionen in relationalen Datenbanken?',
+    back: 'Atomicity (Ganz oder gar nicht), Consistency (Konsistente Zustände vor & nach), Isolation (Transaktionen beeinflussen sich nicht), Durability (Dauerhafte Persistenz nach Commit im WAL/Storage).'
+  },
+  {
+    id: 15,
+    category: 'Security',
+    difficulty: 'Senior / Expert',
+    front: 'Was ist der Unterschied zwischen symmetrischer und asymmetrischer Verschlüsselung?',
+    back: 'Symmetrisch: Ein einziger gemeinsamer geheimer Schlüssel für Verschlüsselung und Entschlüsselung (z. B. AES - sehr schnell).\nAsymmetrisch: Schlüsselpaar aus Public Key (Verschlüsseln) und Private Key (Entschlüsseln, Signieren - z. B. RSA, ECC).'
+  },
+  {
+    id: 16,
+    category: 'Programmierung',
+    difficulty: 'Junior / Professional',
+    front: 'Was versteht man unter dem "Kritischen Pfad" in der Netzplantechnik (CPM)?',
+    back: 'Die Kette von Vorgängen von Projektbeginn bis Projektende, bei denen die Pufferzeit gleich 0 ist (Gesamtpuffer GP = 0). Jede Verzögerung auf dem kritischen Pfad verzögert das Gesamtprojekt.'
+  },
+  {
+    id: 17,
+    category: 'WISO & Arbeitsrecht',
+    difficulty: 'Azubi / IHK',
+    front: 'Welche Rangordnung (Normenpyramide) gilt im deutschen Arbeitsrecht?',
+    back: '1. EU-Recht & Grundgesetz\n2. Zwingende Bundesgesetze (BGB, ArbZG, KSchG)\n3. Tarifverträge\n4. Betriebsvereinbarungen\n5. Arbeitsvertrag (mit Günstigkeitsprinzip: zugunsten des Arbeitnehmers darf abgewichen werden).'
+  },
+  {
+    id: 18,
+    category: 'Netzwerke & Routing',
+    difficulty: 'Azubi / IHK',
+    front: 'Welche Aufgaben hat das Address Resolution Protocol (ARP)?',
+    back: 'ARP ermittelt auf OSI-Schicht 2 die physikalische MAC-Adresse zu einer bekannten logischen Schicht-3 IPv4-Adresse im lokalen Netzsegment.'
+  },
+  {
+    id: 19,
+    category: 'Cloud & DevOps',
+    difficulty: 'Junior / Professional',
+    front: 'Was ist der Unterschied zwischen horizontaler und vertikaler Skalierung?',
+    back: 'Vertikal (Scale-Up): Größere Hardware (mehr RAM, schnellere CPU im bestehenden Server).\nHorizontal (Scale-Out): Hinzufügen weiterer Server/Knoten und Lastverteilung via Load Balancer.'
+  },
+  {
+    id: 20,
+    category: 'Programmierung & Algorithmen',
+    difficulty: 'Senior / Expert',
+    front: 'Welche Zeitkomplexität (Big-O) haben binäre Suche (Binary Search) und lineare Suche?',
+    back: 'Lineare Suche: O(n) (muss im Worst Case jedes Element prüfen).\nBinäre Suche: O(log n) (halbiert den Suchraum in jedem Schritt, setzt sortiertes Array voraus).'
   }
 ];

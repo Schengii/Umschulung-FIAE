@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Network, Server, Database, Zap, Activity, ShieldAlert, CheckCircle2, RefreshCw, Cpu, HardDrive, Play, Pause, Sparkles } from 'lucide-react';
+import { Network, Zap, Activity, ShieldAlert, Play, Pause } from 'lucide-react';
 
 export default function SystemDesignLab({ onRewardXP }) {
   const [rps, setRps] = useState(1200);

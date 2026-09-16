@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import { Network, Router, HardDrive, ArrowRight, Play } from 'lucide-react';
 
 export default function PacketTracerLab({ onRewardXP }) {
-  const [nodes] = useState([
-    { id: 'pc1', name: 'Client PC 1', ip: '192.168.1.10/24', type: 'pc', status: 'online' },
-    { id: 'router1', name: 'Core Gateway Router', ip: '192.168.1.1/24', type: 'router', status: 'online' },
-    { id: 'server1', name: 'Web/App Server', ip: '192.168.2.50/24', type: 'server', status: 'online' }
-  ]);
-
   const [simulationState, setSimulationState] = useState('idle'); // 'idle' | 'pinging' | 'success'
   const [activeHop, setActiveHop] = useState(null);
   const [pingLogs, setPingLogs] = useState([]);

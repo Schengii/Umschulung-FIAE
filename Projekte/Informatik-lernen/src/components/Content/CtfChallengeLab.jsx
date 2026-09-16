@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flag, ShieldAlert, CheckCircle2, Lock, Sparkles, Terminal, HelpCircle, Eye, RefreshCw } from 'lucide-react';
+import { Flag, ShieldAlert, CheckCircle2, Lock, Terminal, HelpCircle } from 'lucide-react';
 
 const CTF_QUESTS = [
   {
@@ -83,7 +83,7 @@ export default function CtfChallengeLab({ onRewardXP }) {
       try {
         const decoded = atob('Q1RGe0JBU0U2NF9ERUNPREVfV0lOfQ==');
         setTestOutput(`Dekodierter String: ${decoded}`);
-      } catch (e) {
+      } catch {
         setTestOutput('Fehler beim Dekodieren');
       }
     }

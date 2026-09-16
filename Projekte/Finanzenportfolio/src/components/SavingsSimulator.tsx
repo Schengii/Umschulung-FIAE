@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import type { SavingsPlan, AssetCategory } from '../types';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Plus, Trash2, TrendingUp, Calendar, Play, Pause } from 'lucide-react';
+import { Plus, Trash2, TrendingUp, Calendar, Play, Pause, Zap, Check } from 'lucide-react';
 
 interface SavingsSimulatorProps {
   savingsPlans: SavingsPlan[];
@@ -9,6 +9,7 @@ interface SavingsSimulatorProps {
   onAddSavingsPlan: (plan: Omit<SavingsPlan, 'id'>) => void;
   onDeleteSavingsPlan: (id: string) => void;
   onToggleSavingsPlan: (id: string) => void;
+  onExecuteSavingsPlans?: () => void;
   isReadOnly?: boolean;
 }
 
@@ -18,6 +19,7 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
   onAddSavingsPlan,
   onDeleteSavingsPlan,
   onToggleSavingsPlan,
+  onExecuteSavingsPlans,
   isReadOnly = false
 }) => {
   // Sparplan Form State
@@ -31,6 +33,7 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
   const [initialCapital, setInitialCapital] = useState<number>(Math.round(portfolioValue));
   const [annualReturn, setAnnualReturn] = useState<number>(7); // 7% p.a. default
   const [years, setYears] = useState<number>(20); // 20 years default
+  const [annualSavingsGrowth, setAnnualSavingsGrowth] = useState<number>(2.5); // 2.5% salary raise adjustment p.a.
 
   // Calculate sum of active savings plans
   const totalActiveSavings = useMemo(() => {
@@ -47,6 +50,16 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
       setMonthlyContribution(totalActiveSavings);
     }
   }, [totalActiveSavings]);
+
+  const [executedNotice, setExecutedNotice] = useState<string | null>(null);
+
+  const handleExecute = () => {
+    if (onExecuteSavingsPlans) {
+      onExecuteSavingsPlans();
+      setExecutedNotice('Aktive Sparpläne für diesen Monat wurden erfolgreich eingebucht!');
+      setTimeout(() => setExecutedNotice(null), 3500);
+    }
+  };
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,20 +86,28 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
     const monthlyRate = annualReturn / 100 / 12;
     let totalInvested = initialCapital;
     let totalValue = initialCapital;
+    let dynValue = initialCapital;
+    let dynInvested = initialCapital;
 
     // Push initial point
     data.push({
       year: 0,
       'Eingezahltes Kapital': Math.round(totalInvested),
       'Zinseszinsgewinn': 0,
-      'Gesamtwert': Math.round(totalValue)
+      'Gesamtwert': Math.round(totalValue),
+      'Dynamischer Endwert (+Gehaltssprung)': Math.round(dynValue)
     });
 
     for (let y = 1; y <= years; y++) {
+      const currentMonthlyContrib = monthlyContribution * Math.pow(1 + annualSavingsGrowth / 100, y - 1);
+
       // Compound monthly for 12 months
       for (let m = 0; m < 12; m++) {
         totalValue = (totalValue + monthlyContribution) * (1 + monthlyRate);
         totalInvested += monthlyContribution;
+
+        dynValue = (dynValue + currentMonthlyContrib) * (1 + monthlyRate);
+        dynInvested += currentMonthlyContrib;
       }
 
       const totalInterests = Math.max(0, totalValue - totalInvested);
@@ -95,19 +116,21 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
         year: y,
         'Eingezahltes Kapital': Math.round(totalInvested),
         'Zinseszinsgewinn': Math.round(totalInterests),
-        'Gesamtwert': Math.round(totalValue)
+        'Gesamtwert': Math.round(totalValue),
+        'Dynamischer Endwert (+Gehaltssprung)': Math.round(dynValue)
       });
     }
 
     return data;
-  }, [initialCapital, annualReturn, years, monthlyContribution]);
+  }, [initialCapital, annualReturn, years, monthlyContribution, annualSavingsGrowth]);
 
   const endStats = useMemo(() => {
     const lastPoint = simulationData[simulationData.length - 1];
     return {
       totalValue: lastPoint['Gesamtwert'],
       totalInvested: lastPoint['Eingezahltes Kapital'],
-      totalInterests: lastPoint['Zinseszinsgewinn']
+      totalInterests: lastPoint['Zinseszinsgewinn'],
+      dynamicValue: lastPoint['Dynamischer Endwert (+Gehaltssprung)']
     };
   }, [simulationData]);
 
@@ -136,20 +159,39 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                 </p>
               </div>
             )}
-            <div className="sav-panel-header">
+            <div className="sav-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
               <h3 className="sav-panel-title">
                 <Calendar size={18} className="portfolio-select-icon" /> Aktive Sparpläne
               </h3>
-              {!isReadOnly && (
-                <button 
-                  className="btn-primary sav-panel-btn-neu" 
-                  onClick={() => setShowAddForm(!showAddForm)}
-                  aria-label={showAddForm ? 'Erstellungsformular schließen' : 'Neuen Sparplan erstellen'}
-                >
-                  <Plus size={12} /> {showAddForm ? 'Zu' : 'Neu'}
-                </button>
-              )}
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                {!isReadOnly && savingsPlans.filter(p => p.isActive).length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleExecute}
+                    className="btn btn-secondary"
+                    style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)' }}
+                    title="Aktive Sparpläne für diesen Monat als Käufe einbuchen"
+                  >
+                    <Zap size={13} /> Jetzt ausführen
+                  </button>
+                )}
+                {!isReadOnly && (
+                  <button 
+                    className="btn-primary sav-panel-btn-neu" 
+                    onClick={() => setShowAddForm(!showAddForm)}
+                    aria-label={showAddForm ? 'Erstellungsformular schließen' : 'Neuen Sparplan erstellen'}
+                  >
+                    <Plus size={12} /> {showAddForm ? 'Zu' : 'Neu'}
+                  </button>
+                )}
+              </div>
             </div>
+
+            {executedNotice && (
+              <div style={{ padding: '0.5rem 0.75rem', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#10b981', borderRadius: '8px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '0.75rem' }}>
+                <Check size={14} /> {executedNotice}
+              </div>
+            )}
 
             {showAddForm && (
               <form onSubmit={handleAddSubmit} className="transaction-form sav-form-form">
@@ -360,6 +402,26 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                   className="sav-slider-input"
                 />
               </div>
+
+              <div className="form-group">
+                <div className="sav-slider-label-row">
+                  <label htmlFor="slider-annual-growth">Jährliche Sparratenerhöhung (Gehaltssteigerung)</label>
+                  <span className="sav-slider-label-bold" style={{ color: '#10b981' }}>+{annualSavingsGrowth} % / Jahr</span>
+                </div>
+                <input 
+                  id="slider-annual-growth"
+                  type="range" 
+                  min="0" 
+                  max="10" 
+                  step="0.5"
+                  value={annualSavingsGrowth} 
+                  title="Jährliche Sparratenerhöhung Regler"
+                  aria-label="Jährliche Sparratenerhöhung"
+                  placeholder="Sparratenerhöhung einstellen"
+                  onChange={(e) => setAnnualSavingsGrowth(Number(e.target.value))} 
+                  className="sav-slider-input"
+                />
+              </div>
             </div>
 
             {/* Projection Summary Row */}
@@ -373,8 +435,14 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                 <p className="sav-sim-stat-value" style={{ color: 'var(--status-positive)' }}>+{endStats.totalInterests.toLocaleString('de-DE')} €</p>
               </div>
               <div>
-                <span className="sav-sim-stat-label">Endkapital Gesamt</span>
+                <span className="sav-sim-stat-label">Endkapital (Nominal)</span>
                 <p className="sav-sim-stat-value" style={{ color: 'var(--accent-blue)' }}>{endStats.totalValue.toLocaleString('de-DE')} €</p>
+              </div>
+              <div>
+                <span className="sav-sim-stat-label">Reale Kaufkraft (2% Inflation)</span>
+                <p className="sav-sim-stat-value" style={{ color: '#f59e0b', fontWeight: 'bold' }}>
+                  {Math.round(endStats.totalValue / Math.pow(1.02, years)).toLocaleString('de-DE')} €
+                </p>
               </div>
             </div>
 
@@ -392,6 +460,7 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                   <Legend verticalAlign="top" height={36} />
                   <Area type="monotone" name="Eingezahltes Kapital" dataKey="Eingezahltes Kapital" stroke="var(--accent-purple)" strokeWidth={2} fill="var(--accent-purple)" fillOpacity={0.1} stackId="1" />
                   <Area type="monotone" name="Zinseszinsgewinn" dataKey="Zinseszinsgewinn" stroke="var(--status-positive)" strokeWidth={2} fill="var(--status-positive)" fillOpacity={0.2} stackId="1" />
+                  <Area type="monotone" name="Dynamischer Endwert (+Gehaltssprung)" dataKey="Dynamischer Endwert (+Gehaltssprung)" stroke="#10b981" strokeWidth={2} fill="#10b981" fillOpacity={0.05} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

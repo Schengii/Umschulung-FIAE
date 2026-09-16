@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, Sparkles, CheckCircle2, AlertTriangle, Code, Lightbulb } from 'lucide-react';
+import { Bot, CheckCircle2, AlertTriangle, Lightbulb } from 'lucide-react';
 
 export default function AiPromptLab() {
   const [activeStep, setActiveStep] = useState(0);

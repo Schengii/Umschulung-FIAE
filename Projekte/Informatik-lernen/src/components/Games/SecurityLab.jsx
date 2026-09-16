@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SECURITY_LAB_SCENARIOS } from '../../data/gamesData';
-import { ShieldAlert, ShieldCheck, Bug, Code, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, Bug, AlertTriangle } from 'lucide-react';
 
 export default function SecurityLab({ onCompleteGame }) {
   const [labIdx, setLabIdx] = useState(0);

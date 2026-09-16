@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Smartphone, CheckCircle2, ArrowRight, Award, Code2 } from 'lucide-react';
+import { Smartphone, ArrowRight, Award } from 'lucide-react';
 
 export default function AppWorkshop({ onCompleteWorkshop }) {
   const [currentStep, setCurrentStep] = useState(0);

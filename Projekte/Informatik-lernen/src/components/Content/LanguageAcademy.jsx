@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PROGRAMMING_LANGUAGES } from '../../data/languageData';
-import { Code2, CheckCircle2, ArrowRight, Sparkles, BookOpen, Terminal, Copy, Check } from 'lucide-react';
+import { Code2, Terminal, Copy, Check } from 'lucide-react';
 
 export default function LanguageAcademy() {
   const [selectedLangId, setSelectedLangId] = useState(PROGRAMMING_LANGUAGES[0].id);

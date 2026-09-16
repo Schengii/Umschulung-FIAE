@@ -4,6 +4,9 @@ import { ArrowLeft, ArrowRight, TrendingUp, DollarSign, Clock, Calendar, BarChar
 import { convertCurrency } from './performanceUtils';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 
+import { downloadIcalCalendar } from '../services/icalExporter';
+import { CalendarExportModal } from './CalendarExportModal';
+
 interface DividendCalendarProps {
   transactions: Transaction[];
   holdings: Holding[];
@@ -18,6 +21,7 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
   const [selectedYear, setSelectedYear] = useState(2026);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // 0-indexed
   const [viewMode, setViewMode] = useState<'history' | 'forecast'>('history');
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   const monthsList = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -185,21 +189,30 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
           <h2 className="hl-title-h2">Auszahlungskalender & Prognose</h2>
           <p className="hl-subtitle">Detaillierte Übersicht deiner erhaltenen Dividenden und zukünftigen Ausschüttungen.</p>
         </div>
-        <div className="navigation-tabs" style={{ background: 'rgba(255,255,255,0.03)', padding: '0.25rem', borderRadius: '8px' }}>
-          <button 
-            className={`nav-tab ${viewMode === 'history' ? 'active' : ''}`}
-            onClick={() => setViewMode('history')}
-            style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button
+            onClick={() => setShowCalendarModal(true)}
+            className="btn btn-secondary flex items-center gap-1.5 text-xs font-semibold"
+            title="Dividenden- und Zinstermine in Apple/Google/Outlook Kalender (.ics) exportieren"
           >
-            <Calendar size={14} /> Historie
+            <Calendar size={14} /> Kalender Export (.ics)
           </button>
-          <button 
-            className={`nav-tab ${viewMode === 'forecast' ? 'active' : ''}`}
-            onClick={() => setViewMode('forecast')}
-            style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
-          >
-            <BarChart3 size={14} /> 12M Prognose
-          </button>
+          <div className="navigation-tabs" style={{ background: 'rgba(255,255,255,0.03)', padding: '0.25rem', borderRadius: '8px' }}>
+            <button 
+              className={`nav-tab ${viewMode === 'history' ? 'active' : ''}`}
+              onClick={() => setViewMode('history')}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+            >
+              <Calendar size={14} /> Historie
+            </button>
+            <button 
+              className={`nav-tab ${viewMode === 'forecast' ? 'active' : ''}`}
+              onClick={() => setViewMode('forecast')}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+            >
+              <BarChart3 size={14} /> 12M Prognose
+            </button>
+          </div>
         </div>
       </div>
 
@@ -380,6 +393,15 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
             </table>
           </div>
         </>
+      )}
+
+      {showCalendarModal && (
+        <CalendarExportModal
+          isOpen={showCalendarModal}
+          onClose={() => setShowCalendarModal(false)}
+          transactions={transactions}
+          holdings={holdings}
+        />
       )}
     </div>
   );

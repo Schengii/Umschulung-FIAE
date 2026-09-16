@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Editor from '@monaco-editor/react';
-import { Code, Play, RotateCcw, Sparkles, Terminal } from 'lucide-react';
+import { Code, Play, RotateCcw, Terminal } from 'lucide-react';
 
 export default function MonacoStudioLab({ onRewardXP }) {
   const [language, setLanguage] = useState('javascript');

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitBranch, GitCommit, GitMerge, GitPullRequest, RotateCcw, CheckCircle2, Play, Sparkles, Terminal, BookOpen } from 'lucide-react';
+import { GitBranch, GitCommit, GitMerge, GitPullRequest, RotateCcw, Sparkles, Terminal } from 'lucide-react';
 
 export default function GitBranchGraphLab({ onRewardXP }) {
   const initialBranches = {

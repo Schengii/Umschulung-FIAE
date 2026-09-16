@@ -88,5 +88,50 @@ export const VOCABULARY_LIST = [
     difficulty: 'Azubi / IHK',
     definition: 'Klassisches Entwurfsmuster: Model verwaltet Daten, View rendert die Benutzeroberfläche, Controller vermittelt Eingaben.',
     example: 'Spring Boot, ASP.NET MVC und Django setzen auf das MVC-Muster.'
+  },
+  {
+    id: 11,
+    term: 'Nutzwertanalyse (NWA)',
+    german: 'Punktwertverfahren / Scoring-Modell',
+    category: 'Projektmanagement & IHK',
+    difficulty: 'Azubi / IHK',
+    definition: 'Strukturierte Methode zur rationalen Entscheidungsfindung bei mehreren Handlungsalternativen anhand gewichteter Kriterien und K.O.-Schwellen.',
+    example: 'In der Projektdokumentation begründet die Nutzwertanalyse die Auswahl des Frameworks oder Cloud-Anbieters.'
+  },
+  {
+    id: 12,
+    term: 'RAID (Redundant Array of Independent Disks)',
+    german: 'Redundante Anordnung unabhängiger Festplatten',
+    category: 'Hardware & Storage',
+    difficulty: 'Azubi / IHK',
+    definition: 'Verbund mehrerer physischer Massenspeicher zu einem logischen Laufwerk zur Steigerung der Ausfallsicherheit (Redundanz) oder des Datendurchsatzes (Performance).',
+    example: 'RAID 5 kombiniert Striping mit verteilter Parität und übersteht den Ausfall einer beliebigen Festplatte.'
+  },
+  {
+    id: 13,
+    term: 'Variable Length Subnet Masking (VLSM)',
+    german: 'Subnetzmaskierung mit variabler Länge',
+    category: 'Netzwerke',
+    difficulty: 'Azubi / IHK',
+    definition: 'Verfahren zur effizienten Aufteilung eines IP-Netzwerks in Subnetze unterschiedlicher Größe basierend auf dem exakten Host-Bedarf jeder Abteilung.',
+    example: 'Mit VLSM erhält eine Entwicklungsabteilung ein /26 Netz (62 Hosts), während der Router-Uplink nur ein /30 Netz (2 Hosts) belegt.'
+  },
+  {
+    id: 14,
+    term: 'Maximum Transmission Unit (MTU)',
+    german: 'Maximale Übertragungseinheit',
+    category: 'Netzwerke',
+    difficulty: 'Junior / Professional',
+    definition: 'Die maximale Paketgröße in Bytes, die auf Schicht 2 (Data Link) ohne IP-Fragmentierung übertragen werden kann (Standard-Ethernet = 1500 Bytes).',
+    example: 'VPN-Tunnel (z. B. WireGuard oder IPsec) verringern die effektive MTU durch zusätzliche Verschlüsselungs-Header.'
+  },
+  {
+    id: 15,
+    term: 'JSON Web Token (JWT)',
+    german: 'Kompaktes, URL-sicheres Token-Format',
+    category: 'Security & Auth',
+    difficulty: 'Junior / Professional',
+    definition: 'Offener Standard (RFC 7519) zur sicheren Übertragung von Claims zwischen Parteien, bestehend aus Header, Payload und kryptografischer Signatur.',
+    example: 'Nach erfolgreichem OAuth2 Login sendet der Client das JWT im Authorization: Bearer Header mit.'
   }
 ];

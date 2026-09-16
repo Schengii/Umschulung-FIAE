@@ -99,6 +99,8 @@ typedef khronos_sizei_t GLsizeiptr;
 #define GL_NEAREST 0x2600
 #define GL_LINEAR 0x2601
 #define GL_NEAREST_MIPMAP_NEAREST 0x2700
+#define GL_LINEAR_MIPMAP_NEAREST 0x2701
+#define GL_NEAREST_MIPMAP_LINEAR 0x2702
 #define GL_LINEAR_MIPMAP_LINEAR 0x2703
 #define GL_REPEAT 0x2901
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -134,6 +136,7 @@ typedef void (GLAD_API_PTR *PFNGLDELETEVERTEXARRAYSPROC)(GLsizei n, const GLuint
 typedef void (GLAD_API_PTR *PFNGLGENBUFFERSPROC)(GLsizei n, GLuint *buffers);
 typedef void (GLAD_API_PTR *PFNGLBINDBUFFERPROC)(GLenum target, GLuint buffer);
 typedef void (GLAD_API_PTR *PFNGLBUFFERDATAPROC)(GLenum target, GLsizeiptr size, const void *data, GLenum usage);
+typedef void (GLAD_API_PTR *PFNGLBUFFERSUBDATAPROC)(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
 typedef void (GLAD_API_PTR *PFNGLDELETEBUFFERSPROC)(GLsizei n, const GLuint *buffers);
 
 typedef void (GLAD_API_PTR *PFNGLENABLEVERTEXATTRIBARRAYPROC)(GLuint index);
@@ -157,6 +160,7 @@ typedef void (GLAD_API_PTR *PFNGLDELETEPROGRAMPROC)(GLuint program);
 typedef GLint (GLAD_API_PTR *PFNGLGETUNIFORMLOCATIONPROC)(GLuint program, const GLchar *name);
 typedef void (GLAD_API_PTR *PFNGLUNIFORM1IPROC)(GLint location, GLint v0);
 typedef void (GLAD_API_PTR *PFNGLUNIFORM1FPROC)(GLint location, GLfloat v0);
+typedef void (GLAD_API_PTR *PFNGLUNIFORM2FPROC)(GLint location, GLfloat v0, GLfloat v1);
 typedef void (GLAD_API_PTR *PFNGLUNIFORM3FPROC)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
 typedef void (GLAD_API_PTR *PFNGLUNIFORM4FPROC)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
 typedef void (GLAD_API_PTR *PFNGLUNIFORMMATRIX4FVPROC)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
@@ -203,6 +207,7 @@ GLAD_GLAPI PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
 GLAD_GLAPI PFNGLGENBUFFERSPROC glGenBuffers;
 GLAD_GLAPI PFNGLBINDBUFFERPROC glBindBuffer;
 GLAD_GLAPI PFNGLBUFFERDATAPROC glBufferData;
+GLAD_GLAPI PFNGLBUFFERSUBDATAPROC glBufferSubData;
 GLAD_GLAPI PFNGLDELETEBUFFERSPROC glDeleteBuffers;
 
 GLAD_GLAPI PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
@@ -226,6 +231,7 @@ GLAD_GLAPI PFNGLDELETEPROGRAMPROC glDeleteProgram;
 GLAD_GLAPI PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 GLAD_GLAPI PFNGLUNIFORM1IPROC glUniform1i;
 GLAD_GLAPI PFNGLUNIFORM1FPROC glUniform1f;
+GLAD_GLAPI PFNGLUNIFORM2FPROC glUniform2f;
 GLAD_GLAPI PFNGLUNIFORM3FPROC glUniform3f;
 GLAD_GLAPI PFNGLUNIFORM4FPROC glUniform4f;
 GLAD_GLAPI PFNGLUNIFORMMATRIX4FVPROC glUniformMatrix4fv;

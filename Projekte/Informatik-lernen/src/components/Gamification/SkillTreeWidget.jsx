@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitBranch, Award, Sparkles, CheckCircle2, Lock, ArrowRight } from 'lucide-react';
+import { Award, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 
 export const SKILL_TREE_DATA = [
   {
@@ -35,7 +35,7 @@ export const SKILL_TREE_DATA = [
   }
 ];
 
-export default function SkillTreeWidget({ userState, onRewardXP }) {
+export default function SkillTreeWidget({ userState }) {
   const unlockedTopics = userState.completedTopics || [];
 
   return (

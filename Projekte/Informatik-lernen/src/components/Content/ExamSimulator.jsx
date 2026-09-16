@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { EXAM_QUESTIONS, IHK_EXAM_MODES, getIhkGrade } from '../../data/examData';
 import { Timer, CheckCircle2, XCircle, RefreshCw, Play, Pause, FileCheck2 } from 'lucide-react';
 
@@ -19,43 +19,7 @@ export default function ExamSimulator({ onCompleteExam }) {
     ? EXAM_QUESTIONS 
     : EXAM_QUESTIONS.filter(q => q.examType === activeModeId || q.examType === 'ap1');
 
-  useEffect(() => {
-    setTimeLeft(currentMode.durationMinutes * 60);
-    setIsTimerRunning(true);
-    setSelectedAnswers({});
-    setIsSubmitted(false);
-    setScoreData(null);
-  }, [activeModeId]);
-
-  useEffect(() => {
-    let interval = null;
-    if (isTimerRunning && !isSubmitted && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            handleSubmit();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isTimerRunning, isSubmitted, timeLeft]);
-
-  const formatTimer = (seconds) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
-
-  const handleSelect = (qIdx, optIdx) => {
-    if (!isSubmitted) {
-      setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
-    }
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     let earnedPoints = 0;
     let maxPoints = 0;
     let correctCount = 0;
@@ -87,6 +51,42 @@ export default function ExamSimulator({ onCompleteExam }) {
 
     if (percent >= 50 && onCompleteExam) {
       onCompleteExam(percent, percent >= 80 ? 150 : 80);
+    }
+  }, [filteredQuestions, selectedAnswers, onCompleteExam]);
+
+  useEffect(() => {
+    setTimeLeft(currentMode.durationMinutes * 60);
+    setIsTimerRunning(true);
+    setSelectedAnswers({});
+    setIsSubmitted(false);
+    setScoreData(null);
+  }, [activeModeId, currentMode.durationMinutes]);
+
+  useEffect(() => {
+    let interval = null;
+    if (isTimerRunning && !isSubmitted && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            handleSubmit();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, isSubmitted, timeLeft, handleSubmit]);
+
+  const formatTimer = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleSelect = (qIdx, optIdx) => {
+    if (!isSubmitted) {
+      setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
     }
   };
 

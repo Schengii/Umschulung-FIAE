@@ -18,17 +18,41 @@ export default defineConfig({
         theme_color: '#0f172a',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
           }
         ]
       }
     })
   ],
+  build: {
+    cssMinify: true,
+    modulePreload: {
+      resolveDependencies: (filename, deps) =>
+        deps.filter((dep) => !/vendor-(charts|pdf|sql)-/.test(dep))
+    },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router-dom/') || id.includes('node_modules/zustand/')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/') || id.includes('node_modules/canvas-confetti/')) {
+            return 'vendor-ui';
+          }
+          if (id.includes('node_modules/recharts/')) {
+            return 'vendor-charts';
+          }
+          if (id.includes('node_modules/jspdf/') || id.includes('node_modules/html2canvas/')) {
+            return 'vendor-pdf';
+          }
+          if (id.includes('node_modules/alasql/')) {
+            return 'vendor-sql';
+          }
+        }
+      }
+    }
+  }
 })

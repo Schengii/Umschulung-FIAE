@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Cloud, Server, Database, Shield, Layers, Code, CheckCircle2, Download } from 'lucide-react';
+import { Cloud, Server, Database, Code } from 'lucide-react';
 
 export default function CloudDesignerLab({ onRewardXP }) {
-  const [components, setComponents] = useState([
+  const components = [
     { id: 'vpc', name: 'AWS VPC (Virtual Private Cloud)', type: 'network', active: true },
     { id: 'ec2', name: 'EC2 Compute Node (App)', type: 'compute', active: true },
     { id: 'rds', name: 'RDS PostgreSQL Database', type: 'database', active: true }
-  ]);
+  ];
 
   const [generatedTerraform, setGeneratedTerraform] = useState('');
 

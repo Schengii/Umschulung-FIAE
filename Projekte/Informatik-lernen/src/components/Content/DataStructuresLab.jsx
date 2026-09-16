@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Network, Play, RotateCcw, Award, CheckCircle2, ChevronRight, Binary, ArrowRight } from 'lucide-react';
+import { Network, Play, RotateCcw, Award, CheckCircle2, Binary, ArrowRight } from 'lucide-react';
 
 // Sample tree node structure
 class TreeNode {

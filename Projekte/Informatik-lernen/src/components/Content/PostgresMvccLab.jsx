@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Database, Trash2, CheckCircle2, RotateCcw, Play, Layers, ArrowRight, ShieldAlert } from 'lucide-react';
+
+import { Database, CheckCircle2, RotateCcw, Layers, ArrowRight } from 'lucide-react';
 import { POSTGRES_MVCC_SCENARIOS } from '../../data/cloudArchLabsData';
 import { useStore } from '../../store/useStore';
 

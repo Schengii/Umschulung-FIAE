@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, CheckCircle2, Play, RefreshCw, Award } from 'lucide-react';
+import { Terminal, CheckCircle2 } from 'lucide-react';
 
 export default function CliTerminalLab({ onCompleteGame }) {
   const [history, setHistory] = useState([

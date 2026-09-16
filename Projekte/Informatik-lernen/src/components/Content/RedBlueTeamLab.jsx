@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RED_BLUE_SCENARIOS } from '../../data/securityTeamData';
-import { ShieldAlert, ShieldCheck, Bug, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, ShieldCheck, Bug } from 'lucide-react';
 
 export default function RedBlueTeamLab() {
   const [selectedId, setSelectedId] = useState(RED_BLUE_SCENARIOS[0].id);

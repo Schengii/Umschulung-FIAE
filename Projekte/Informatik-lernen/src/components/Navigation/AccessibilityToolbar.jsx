@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, Type, Sun, Volume2, ShieldAlert, Sparkles, X, RotateCcw } from 'lucide-react';
+import { Eye, X, RotateCcw } from 'lucide-react';
 
 export default function AccessibilityToolbar({
   fontSize,
@@ -12,7 +12,6 @@ export default function AccessibilityToolbar({
   setIsHighContrast,
   isReducedMotion,
   setIsReducedMotion,
-  theme,
   setTheme
 }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FLASHCARDS_DATA } from '../../data/flashcardsData';
-import { Layers, RotateCcw, CheckCircle2, XCircle, X, Award, Sparkles, Brain, Clock } from 'lucide-react';
+import { Layers, CheckCircle2, XCircle, X, Brain, Clock } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateSM2 } from '../../utils/srsAlgorithm';
 
@@ -32,10 +32,6 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
     }
 
     setCardIdx((prev) => (prev + 1) % FLASHCARDS_DATA.length);
-  };
-
-  const handleNext = (known) => {
-    handleQualityAnswer(known ? 4 : 1);
   };
 
   return (
@@ -84,7 +80,7 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
 
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>
-            <Layers size={14} /> Karteikarten ({cardIdx + 1} von {FLASHCARDS_DATA.length})
+            <Layers size={14} /> Karteikarten ({cardIdx + 1} von {FLASHCARDS_DATA.length}) • {completedCount} gemeistert
           </span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
             IT-Karteikarten Trainer

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, ShieldCheck, Download, X, CheckCircle2, Sparkles } from 'lucide-react';
+import { Award, Download, X } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
 export default function CertificateModal({ isOpen, onClose, userState }) {
@@ -65,7 +65,7 @@ export default function CertificateModal({ isOpen, onClose, userState }) {
       doc.text('Verifiziert durch IT-DevGame Certification Engine', 270, 180, { align: 'right' });
 
       doc.save(`Informatik_Zertifikat_Level_${userState.level}.pdf`);
-    } catch (e) {
+    } catch {
       window.print();
     }
   };

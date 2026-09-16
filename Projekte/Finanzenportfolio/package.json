@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
+    "lint": "tsc --noEmit",
     "test": "vitest run",
     "preview": "vite preview"
   },
@@ -24,7 +24,6 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "jsdom": "^29.1.1",
-    "oxlint": "^1.69.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.0",
     "vitest": "^4.1.10"

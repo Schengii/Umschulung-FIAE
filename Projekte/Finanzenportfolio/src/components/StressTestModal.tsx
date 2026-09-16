@@ -18,11 +18,16 @@ export const StressTestModal: React.FC<StressTestModalProps> = ({
   monthlySavings,
   baseCurrency
 }) => {
-  const [activeTab, setActiveTab] = useState<'montecarlo' | 'stresstest'>('montecarlo');
+  const [activeTab, setActiveTab] = useState<'montecarlo' | 'stresstest' | 'custom'>('montecarlo');
   const [years, setYears] = useState<number>(20);
   const [expectedReturn, setExpectedReturn] = useState<number>(7);
   const [volatility, setVolatility] = useState<number>(15);
   const [savingsRate, setSavingsRate] = useState<number>(monthlySavings || 200);
+
+  // Custom Macro Scenario State
+  const [customName, setCustomName] = useState('Geopolitischer Schock & Zinswende');
+  const [customStockShock, setCustomStockShock] = useState<number>(-25);
+  const [customCryptoShock, setCustomCryptoShock] = useState<number>(-45);
 
   const monteCarlo = useMemo(() => {
     return runMonteCarloSimulation(currentPortfolioValue, savingsRate, years, expectedReturn, volatility, 1000);
@@ -31,6 +36,16 @@ export const StressTestModal: React.FC<StressTestModalProps> = ({
   const stressTests = useMemo(() => {
     return runStressTestScenarios(currentPortfolioValue);
   }, [currentPortfolioValue]);
+
+  const customImpact = useMemo(() => {
+    const loss = currentPortfolioValue * (Math.abs(customStockShock) / 100);
+    const newValue = Math.max(0, currentPortfolioValue - loss);
+    return {
+      loss,
+      newValue,
+      dropPct: Math.abs(customStockShock)
+    };
+  }, [currentPortfolioValue, customStockShock]);
 
   const chartData = useMemo(() => {
     return monteCarlo.years.map(y => ({
@@ -72,6 +87,12 @@ export const StressTestModal: React.FC<StressTestModalProps> = ({
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activeTab === 'stresstest' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 Stress-Tests
+              </button>
+              <button 
+                onClick={() => setActiveTab('custom')}
+                className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${activeTab === 'custom' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
+              >
+                Eigener Stresstest
               </button>
             </div>
 
@@ -225,6 +246,87 @@ export const StressTestModal: React.FC<StressTestModalProps> = ({
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'custom' && (
+            <div className="space-y-6">
+              <div className="p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center gap-3">
+                <Sliders className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                <p className="text-xs text-purple-200 leading-relaxed">
+                  <strong>Benutzerdefinierter Makro-Stresstest:</strong> Konfiguriere eigene Markt-Schocks für Aktien, Tech-Titel und Krypto-Assets und analysiere die direkte Auswirkung auf dein Depot.
+                </p>
+              </div>
+
+              {/* Scenario Sliders */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                <div>
+                  <label className="text-xs text-slate-400 block mb-1">Szenario-Name</label>
+                  <input
+                    type="text"
+                    value={customName}
+                    onChange={(e) => setCustomName(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-400">Aktienmarkt Schock:</span>
+                    <span className="font-bold text-red-400">{customStockShock}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={-60}
+                    max={0}
+                    step={1}
+                    value={customStockShock}
+                    onChange={(e) => setCustomStockShock(Number(e.target.value))}
+                    className="w-full accent-red-500"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-400">Krypto Schock:</span>
+                    <span className="font-bold text-red-400">{customCryptoShock}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={-80}
+                    max={0}
+                    step={1}
+                    value={customCryptoShock}
+                    onChange={(e) => setCustomCryptoShock(Number(e.target.value))}
+                    className="w-full accent-red-500"
+                  />
+                </div>
+              </div>
+
+              {/* Impact Card */}
+              <div className="p-5 bg-slate-950/80 border border-slate-800 rounded-2xl space-y-3">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-sm text-slate-100">{customName}</h4>
+                  <span className="px-2.5 py-1 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-xs font-mono font-bold">
+                    -{customImpact.dropPct}% Portfoliodrop
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-800 text-xs">
+                  <div>
+                    <span className="text-slate-400 block">Simulierter Verlust:</span>
+                    <span className="text-lg font-black text-red-400 mt-1 block">
+                      -{customImpact.loss.toLocaleString('de-DE', { style: 'currency', currency: baseCurrency })}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block">Neuer Depotwert im Stresstest:</span>
+                    <span className="text-lg font-black text-slate-200 mt-1 block">
+                      {customImpact.newValue.toLocaleString('de-DE', { style: 'currency', currency: baseCurrency })}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           )}

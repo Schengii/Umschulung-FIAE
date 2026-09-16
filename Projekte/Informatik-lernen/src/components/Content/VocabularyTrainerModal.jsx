@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { VOCABULARY_LIST } from '../../data/vocabularyData';
-import { BookMarked, Search, Volume2, X, CheckCircle2, Award, Sparkles } from 'lucide-react';
+import { BookMarked, Search, Volume2, X } from 'lucide-react';
 
-export default function VocabularyTrainerModal({ isOpen, onClose, onRewardXP }) {
+export default function VocabularyTrainerModal({ isOpen, onClose }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeVocabId, setActiveVocabId] = useState(VOCABULARY_LIST[0].id);
 

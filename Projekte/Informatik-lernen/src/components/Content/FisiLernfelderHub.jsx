@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IHK_LERNFELDER } from '../../data/lernfelderData';
-import { GraduationCap, BookOpen, CheckCircle2, Award } from 'lucide-react';
+import { GraduationCap, CheckCircle2 } from 'lucide-react';
 
 export default function FisiLernfelderHub() {
   const [selectedYear, setSelectedYear] = useState('all');

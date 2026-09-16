@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { WASM_MODULES } from '../../data/wasmRustData';
-import { Cpu, Zap, Code2 } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 export default function WasmRustLab() {
-  const [selectedId, setSelectedId] = useState(WASM_MODULES[0].id);
-
-  const activeWasm = WASM_MODULES.find(w => w.id === selectedId) || WASM_MODULES[0];
+  const activeWasm = WASM_MODULES[0];
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '60px' }}>

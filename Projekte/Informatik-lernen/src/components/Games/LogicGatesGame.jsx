@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cpu, Zap, CheckCircle2, RefreshCw } from 'lucide-react';
+import { Cpu, Zap } from 'lucide-react';
 
 export default function LogicGatesGame({ onCompleteGame }) {
   const [inputA, setInputA] = useState(0);
@@ -22,6 +22,7 @@ export default function LogicGatesGame({ onCompleteGame }) {
   const outputSignal = computeOutput(inputA, inputB, gateType);
 
   const handleTestChallenge = () => {
+    if (isSuccess) return;
     setIsSuccess(true);
     onCompleteGame(`logic_gate_${gateType}`, 50);
   };
@@ -169,8 +170,8 @@ export default function LogicGatesGame({ onCompleteGame }) {
           </div>
         </div>
 
-        <button className="btn btn-primary" onClick={handleTestChallenge} style={{ marginTop: '20px' }}>
-          <Zap size={16} /> Schaltung Absolvieren (+50 XP)
+        <button className="btn btn-primary" onClick={handleTestChallenge} disabled={isSuccess} style={{ marginTop: '20px' }}>
+          <Zap size={16} /> {isSuccess ? 'Absolviert!' : 'Schaltung Absolvieren (+50 XP)'}
         </button>
 
       </div>

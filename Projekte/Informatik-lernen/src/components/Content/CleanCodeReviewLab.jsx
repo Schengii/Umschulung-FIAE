@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, AlertTriangle, CheckCircle2, Code, Zap, Award, ArrowRight, RotateCcw } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, CheckCircle2, Zap, ArrowRight, RotateCcw } from 'lucide-react';
 import { CLEAN_CODE_CHALLENGES } from '../../data/nextGenLabsData';
 import { useStore } from '../../store/useStore';
 

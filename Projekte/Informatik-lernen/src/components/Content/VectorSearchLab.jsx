@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Search, Cpu, Sparkles, CheckCircle2, ArrowRight, Layers, HelpCircle } from 'lucide-react';
+import { Database, Sparkles } from 'lucide-react';
 
 const DOCUMENT_CORPUS = [
   { id: 1, title: 'Python Basics', text: 'Python ist eine einfach zu lernende, interpretierte Programmiersprache mit klarer Syntax.', vector: [0.82, 0.15, 0.94, 0.05, 0.78] },

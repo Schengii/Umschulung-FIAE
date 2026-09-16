@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Network, Cloud, Server, ArrowRight, Play, RotateCcw, CheckCircle2, Layers, Cpu } from 'lucide-react';
+
+import { Cloud, ArrowRight, RotateCcw, CheckCircle2, Layers } from 'lucide-react';
 import { K8S_CNI_PACKET_STEPS } from '../../data/enterpriseLabsData';
 import { useStore } from '../../store/useStore';
 

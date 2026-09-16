@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Transaction, AssetCategory, AssetMappingRule } from '../types';
 import { parseBrokerPdf, parseBrokerText, MOCK_PDF_TEXTS } from './PdfParser';
-import { Upload, Plus, Trash2, Info } from 'lucide-react';
+import { Upload, Plus, Trash2, Info, Edit3, Download, X, Check } from 'lucide-react';
 import { PdfPreviewModal } from './PdfPreviewModal';
 
 interface TransactionsProps {
   transactions: Transaction[];
   onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  onUpdateTransaction?: (transaction: Transaction) => void;
   onDeleteTransaction: (id: string) => void;
   prefilledData?: { ticker: string; name: string; category: AssetCategory; price: number } | null;
   onClearPrefilledData?: () => void;
@@ -18,6 +19,7 @@ interface TransactionsProps {
 export const Transactions: React.FC<TransactionsProps> = ({
   transactions,
   onAddTransaction,
+  onUpdateTransaction,
   onDeleteTransaction,
   prefilledData,
   onClearPrefilledData,
@@ -42,9 +44,15 @@ export const Transactions: React.FC<TransactionsProps> = ({
   const [searchTx, setSearchTx] = useState('');
   const [filterType, setFilterType] = useState<string>('ALL');
 
+  // Multi-select state
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
   // PDF Preview modal state
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
   const [parsedTx, setParsedTx] = useState<Omit<Transaction, 'id'> | null>(null);
+
+  // In-place Edit state
+  const [editingTx, setEditingTx] = useState<Transaction | null>(null);
 
   const filteredTransactions = React.useMemo(() => {
     return transactions.filter(t => {
@@ -54,6 +62,65 @@ export const Transactions: React.FC<TransactionsProps> = ({
       return matchType && matchQuery;
     });
   }, [transactions, filterType, searchTx]);
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === filteredTransactions.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredTransactions.map(t => t.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const handleBatchDelete = () => {
+    if (confirm(`${selectedIds.length} ausgewählte Transaktionen wirklich löschen?`)) {
+      selectedIds.forEach(id => onDeleteTransaction(id));
+      setSelectedIds([]);
+    }
+  };
+
+  const handleExportTransactionsCsv = () => {
+    const headers = ['ID', 'Datum', 'Typ', 'Ticker', 'Name', 'Kategorie', 'Anteile', 'Kurs', 'Gebuehr', 'Steuer', 'Waehrung', 'Wechselkurs', 'Broker', 'Notizen'];
+    const rows = filteredTransactions.map(t => [
+      `"${t.id}"`,
+      `"${t.date}"`,
+      `"${t.type}"`,
+      `"${t.ticker}"`,
+      `"${(t.name || '').replace(/"/g, '""')}"`,
+      `"${t.category || ''}"`,
+      t.amount.toString(),
+      t.price.toString(),
+      (t.fee || 0).toString(),
+      (t.tax || 0).toString(),
+      `"${t.currency || 'EUR'}"`,
+      (t.exchangeRate || 1.0).toString(),
+      `"${t.broker || ''}"`,
+      `"${(t.notes || '').replace(/"/g, '""')}"`
+    ]);
+
+    const csvContent = [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `finanzportfolio_transaktionen_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTx) return;
+    if (onUpdateTransaction) {
+      onUpdateTransaction(editingTx);
+    }
+    setEditingTx(null);
+  };
+
 
   useEffect(() => {
     if (prefilledData) {
@@ -75,11 +142,14 @@ export const Transactions: React.FC<TransactionsProps> = ({
       setTicker('CASH');
       setName(type === 'DEPOSIT' ? 'Einzahlung (Cash)' : 'Auszahlung (Cash)');
       setPrice('1');
-      setCategory('Stock');
-    } else if (type === 'STAKING') {
+      setCategory('Cash');
+    } else if (type === 'STAKING' || type === 'AIRDROP' || type === 'MINING') {
       setCategory('Crypto');
-      setPrice('1');
+      if (!price) setPrice('1');
       setTicker(t => (t === 'CASH' ? '' : t));
+    } else if (type === 'FEE') {
+      setTicker(t => (t === 'CASH' ? '' : t));
+      if (!price) setPrice('1');
     } else {
       setTicker(t => {
         if (t === 'CASH') {
@@ -294,6 +364,9 @@ export const Transactions: React.FC<TransactionsProps> = ({
                   <option value="SELL">Verkauf</option>
                   <option value="DIVIDEND">Dividende</option>
                   <option value="STAKING">Staking (Crypto)</option>
+                  <option value="AIRDROP">Airdrop (Crypto)</option>
+                  <option value="MINING">Mining (Crypto)</option>
+                  <option value="FEE">Gebühr / Kosten</option>
                   <option value="DEPOSIT">Einzahlung (Cash)</option>
                   <option value="WITHDRAWAL">Auszahlung (Cash)</option>
                 </select>
@@ -307,12 +380,17 @@ export const Transactions: React.FC<TransactionsProps> = ({
                   value={category} 
                   title="Asset-Kategorie"
                   aria-label="Asset-Kategorie"
-                  disabled={isReadOnly || type === 'DEPOSIT' || type === 'WITHDRAWAL' || type === 'STAKING'}
+                  disabled={isReadOnly || type === 'DEPOSIT' || type === 'WITHDRAWAL'}
                   onChange={(e) => setCategory(e.target.value as AssetCategory)}
                 >
                   <option value="Stock">Aktie</option>
                   <option value="ETF">ETF</option>
                   <option value="Crypto">Krypto</option>
+                  <option value="Bond">Anleihe</option>
+                  <option value="RealEstate">Immobilie</option>
+                  <option value="PreciousMetal">Edelmetall</option>
+                  <option value="P2P">P2P Kredite</option>
+                  <option value="Cash">Cash / Liquidität</option>
                 </select>
               </div>
             </div>
@@ -416,7 +494,7 @@ export const Transactions: React.FC<TransactionsProps> = ({
               </div>
             </div>
 
-            {(type !== 'DEPOSIT' && type !== 'WITHDRAWAL' && type !== 'STAKING') && (
+            {(type !== 'DEPOSIT' && type !== 'WITHDRAWAL' && type !== 'STAKING' && type !== 'AIRDROP' && type !== 'MINING') && (
               <div className="tx-form-row-2">
                 <div className="form-group">
                   <label htmlFor="tx-fee" className="form-label">Gebühren</label>
@@ -498,11 +576,68 @@ export const Transactions: React.FC<TransactionsProps> = ({
               <option value="BUY">Kauf</option>
               <option value="SELL">Verkauf</option>
               <option value="DIVIDEND">Dividende</option>
+              <option value="STAKING">Staking</option>
+              <option value="AIRDROP">Airdrop</option>
+              <option value="MINING">Mining</option>
+              <option value="FEE">Gebühr</option>
               <option value="DEPOSIT">Einzahlung</option>
               <option value="WITHDRAWAL">Auszahlung</option>
             </select>
+            <button
+              type="button"
+              onClick={handleExportTransactionsCsv}
+              className="btn btn-secondary"
+              title="Gefilterte Transaktionen als CSV exportieren"
+              style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+            >
+              <Download size={13} /> CSV
+            </button>
           </div>
         </div>
+
+        {/* Batch Actions Toolbar */}
+        {!isReadOnly && filteredTransactions.length > 0 && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0.5rem 0.75rem',
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: '6px',
+            marginBottom: '0.5rem',
+            fontSize: '0.8rem'
+          }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={selectedIds.length === filteredTransactions.length && filteredTransactions.length > 0}
+                onChange={toggleSelectAll}
+              />
+              <span>Alle auswählen ({selectedIds.length} gewählt)</span>
+            </label>
+
+            {selectedIds.length > 0 && (
+              <button
+                onClick={handleBatchDelete}
+                style={{
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  color: '#ef4444',
+                  padding: '0.25rem 0.6rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                  fontSize: '0.75rem',
+                  fontWeight: '600'
+                }}
+              >
+                <Trash2 size={13} /> {selectedIds.length} Einträge löschen
+              </button>
+            )}
+          </div>
+        )}
 
         <div className="tx-list-scrollable">
           {filteredTransactions.length > 0 ? (
@@ -510,6 +645,9 @@ export const Transactions: React.FC<TransactionsProps> = ({
               const isBuy = tx.type === 'BUY';
               const isDiv = tx.type === 'DIVIDEND';
               const isStaking = tx.type === 'STAKING';
+              const isAirdrop = tx.type === 'AIRDROP';
+              const isMining = tx.type === 'MINING';
+              const isFee = tx.type === 'FEE';
               const isDeposit = tx.type === 'DEPOSIT';
               const isWithdrawal = tx.type === 'WITHDRAWAL';
               
@@ -523,14 +661,52 @@ export const Transactions: React.FC<TransactionsProps> = ({
                 displayVal = `${(tx.amount * tx.price).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
               }
 
+              const isSelected = selectedIds.includes(tx.id);
+
+              const badgeColor = isDeposit ? 'rgba(16, 185, 129, 0.2)' 
+                : isWithdrawal ? 'rgba(239, 68, 68, 0.2)' 
+                : isStaking ? 'rgba(245, 158, 11, 0.2)' 
+                : isAirdrop ? 'rgba(6, 182, 212, 0.2)' 
+                : isMining ? 'rgba(234, 179, 8, 0.2)' 
+                : isFee ? 'rgba(168, 85, 247, 0.2)' 
+                : undefined;
+
+              const badgeTextColor = isDeposit ? 'var(--accent-emerald)' 
+                : isWithdrawal ? 'var(--accent-rose)' 
+                : isStaking ? 'var(--accent-gold)' 
+                : isAirdrop ? '#06b6d4' 
+                : isMining ? '#eab308' 
+                : isFee ? '#a855f7' 
+                : undefined;
+
+              const badgeText = tx.type === 'BUY' ? 'Kauf' 
+                : tx.type === 'SELL' ? 'Verkauf' 
+                : tx.type === 'DIVIDEND' ? 'Div.' 
+                : tx.type === 'STAKING' ? 'Staking' 
+                : tx.type === 'AIRDROP' ? 'Airdrop' 
+                : tx.type === 'MINING' ? 'Mining' 
+                : tx.type === 'FEE' ? 'Gebühr' 
+                : tx.type === 'DEPOSIT' ? 'Einz.' 
+                : 'Ausz.';
+
+              const isNegative = isBuy || isWithdrawal || isFee;
+
               return (
-                <div key={tx.id} className="tx-item-box">
+                <div key={tx.id} className="tx-item-box" style={{ background: isSelected ? 'rgba(59, 130, 246, 0.08)' : undefined }}>
                   <div className="tx-item-left">
+                    {!isReadOnly && (
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelect(tx.id)}
+                        style={{ cursor: 'pointer', marginRight: '0.3rem' }}
+                      />
+                    )}
                     <span className={`badge badge-${tx.type.toLowerCase()}`} style={{
-                      backgroundColor: isDeposit ? 'rgba(16, 185, 129, 0.2)' : isWithdrawal ? 'rgba(239, 68, 68, 0.2)' : isStaking ? 'rgba(245, 158, 11, 0.2)' : undefined,
-                      color: isDeposit ? 'var(--accent-emerald)' : isWithdrawal ? 'var(--accent-rose)' : isStaking ? 'var(--accent-gold)' : undefined
+                      backgroundColor: badgeColor,
+                      color: badgeTextColor
                     }}>
-                      {tx.type === 'BUY' ? 'Kauf' : tx.type === 'SELL' ? 'Verkauf' : tx.type === 'DIVIDEND' ? 'Div.' : tx.type === 'STAKING' ? 'Staking' : tx.type === 'DEPOSIT' ? 'Einz.' : 'Ausz.'}
+                      {badgeText}
                     </span>
                     <div>
                       <span className="tx-item-name-bold">{tx.name}</span>
@@ -541,12 +717,13 @@ export const Transactions: React.FC<TransactionsProps> = ({
                     </div>
                   </div>
 
+
                   <div className="tx-item-right-wrap">
                     <div className="tx-item-right-text">
                       <span className="tx-item-total-value" style={{ 
-                        color: (isBuy || isWithdrawal) ? 'var(--accent-rose)' : (isDiv || isDeposit || isStaking) ? 'var(--accent-emerald)' : 'var(--text-color)' 
+                        color: isNegative ? 'var(--accent-rose)' : (isDiv || isDeposit || isStaking || isAirdrop || isMining) ? 'var(--accent-emerald)' : 'var(--text-color)' 
                       }}>
-                        {(isBuy || isWithdrawal) ? '-' : '+'}{displayVal}
+                        {isNegative ? '-' : '+'}{displayVal}
                       </span>
                       {tx.fee > 0 && (
                         <span className="tx-item-fee-text">
@@ -555,14 +732,25 @@ export const Transactions: React.FC<TransactionsProps> = ({
                       )}
                     </div>
                     {!isReadOnly && (
-                      <button 
-                        onClick={() => onDeleteTransaction(tx.id)}
-                        className="tx-item-trash-btn"
-                        title="Transaktion löschen"
-                        aria-label="Transaktion löschen"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                        <button 
+                          onClick={() => setEditingTx({ ...tx })}
+                          className="tx-item-trash-btn"
+                          title="Transaktion bearbeiten"
+                          aria-label="Transaktion bearbeiten"
+                          style={{ color: 'var(--accent-blue, #3b82f6)' }}
+                        >
+                          <Edit3 size={15} />
+                        </button>
+                        <button 
+                          onClick={() => onDeleteTransaction(tx.id)}
+                          className="tx-item-trash-btn"
+                          title="Transaktion löschen"
+                          aria-label="Transaktion löschen"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -588,6 +776,175 @@ export const Transactions: React.FC<TransactionsProps> = ({
           setParsedTx(null);
         }}
       />
+
+      {/* In-Place Transaction Edit Modal */}
+      {editingTx && (
+        <div className="modal-overlay" style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+          backdropFilter: 'blur(4px)', padding: '1rem'
+        }}>
+          <div style={{
+            background: 'var(--card-bg, #1e293b)', border: '1px solid var(--border-color)', borderRadius: '14px',
+            maxWidth: '520px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Edit3 size={18} className="text-blue-400" /> Transaktion bearbeiten
+              </h3>
+              <button onClick={() => setEditingTx(null)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Typ</label>
+                  <select
+                    className="form-select"
+                    value={editingTx.type}
+                    onChange={e => setEditingTx({ ...editingTx, type: e.target.value as any })}
+                  >
+                    <option value="BUY">Kauf</option>
+                    <option value="SELL">Verkauf</option>
+                    <option value="DIVIDEND">Dividende</option>
+                    <option value="DEPOSIT">Einzahlung</option>
+                    <option value="WITHDRAWAL">Auszahlung</option>
+                    <option value="STAKING">Staking</option>
+                    <option value="AIRDROP">Airdrop</option>
+                    <option value="MINING">Mining</option>
+                    <option value="FEE">Gebühr</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Datum</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="DD.MM.YYYY"
+                    value={editingTx.date}
+                    onChange={e => setEditingTx({ ...editingTx, date: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0.75rem' }}>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Ticker / Symbol</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={editingTx.ticker}
+                    onChange={e => setEditingTx({ ...editingTx, ticker: e.target.value.toUpperCase() })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Name / Bezeichnung</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={editingTx.name}
+                    onChange={e => setEditingTx({ ...editingTx, name: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Stückzahl / Betrag</label>
+                  <input
+                    type="number"
+                    step="any"
+                    className="form-input"
+                    value={editingTx.amount}
+                    onChange={e => setEditingTx({ ...editingTx, amount: parseFloat(e.target.value) || 0 })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Ausführungskurs</label>
+                  <input
+                    type="number"
+                    step="any"
+                    className="form-input"
+                    value={editingTx.price}
+                    onChange={e => setEditingTx({ ...editingTx, price: parseFloat(e.target.value) || 0 })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Gebühren</label>
+                  <input
+                    type="number"
+                    step="any"
+                    className="form-input"
+                    value={editingTx.fee || 0}
+                    onChange={e => setEditingTx({ ...editingTx, fee: parseFloat(e.target.value) || 0 })}
+                  />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '0.75rem' }}>Steuern</label>
+                  <input
+                    type="number"
+                    step="any"
+                    className="form-input"
+                    value={editingTx.tax || 0}
+                    onChange={e => setEditingTx({ ...editingTx, tax: parseFloat(e.target.value) || 0 })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Broker / Depot</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="z.B. Trade Republic, Scalable, ING..."
+                  value={editingTx.broker || ''}
+                  onChange={e => setEditingTx({ ...editingTx, broker: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Notizen</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Optionale Notiz..."
+                  value={editingTx.notes || ''}
+                  onChange={e => setEditingTx({ ...editingTx, notes: e.target.value })}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setEditingTx(null)}
+                  className="btn btn-secondary"
+                  style={{ fontSize: '0.8rem' }}
+                >
+                  Abbrechen
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <Check size={14} /> Änderungen speichern
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

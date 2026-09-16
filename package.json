@@ -7,6 +7,7 @@
     "test": "playwright test",
     "generate-data": "node scripts/generate_projects_data.js",
     "check-sync": "node scripts/check_data_sync.js",
+    "sync-projects": "node scripts/sync_projects.js",
     "lint": "eslint assets/js scripts",
     "lint:fix": "eslint assets/js scripts --fix",
     "optimize-images": "node scripts/optimize_images.js"

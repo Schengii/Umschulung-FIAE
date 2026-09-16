@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Network, Database, Zap, Layers, Play, CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react';
+
+import { Network, Database, Play, CheckCircle2 } from 'lucide-react';
 import { GRAPHQL_AST_SCENARIOS } from '../../data/expertLabsData';
 import { useStore } from '../../store/useStore';
 
@@ -11,6 +11,7 @@ export default function GraphqlResolverLab() {
   const scenario = GRAPHQL_AST_SCENARIOS[0];
 
   const handleExecute = () => {
+    if (isExecuted) return;
     setIsExecuted(true);
     awardXP(65, 'API Master: GraphQL AST & DataLoader');
   };

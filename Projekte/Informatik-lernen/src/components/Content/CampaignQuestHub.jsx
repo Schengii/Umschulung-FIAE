@@ -1,6 +1,6 @@
 import React from 'react';
 import { CAMPAIGN_CHAPTERS } from '../../data/campaignData';
-import { Compass, CheckCircle2, Circle, ArrowRight, Award, Sparkles, Flame } from 'lucide-react';
+import { Compass, Circle, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP }) {
   const completedTopics = userState.completedTopics || [];
@@ -22,9 +22,9 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
 
       {/* Chapters Timeline */}
       <div style={{ display: 'grid', gap: '24px' }}>
-        {CAMPAIGN_CHAPTERS.map((ch, idx) => {
+        {CAMPAIGN_CHAPTERS.map((ch) => {
           const totalQuests = ch.quests.length;
-          // Calculate arbitrary progress based on completed status or let user trigger
+          const completedInChapter = ch.quests.filter(q => completedTopics.includes(q.actionTab)).length;
           return (
             <div
               key={ch.id}
@@ -49,6 +49,9 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
                     </h3>
                   </div>
                 </div>
+                <span className="badge badge-emerald" style={{ fontSize: '0.75rem' }}>
+                  {completedInChapter} / {totalQuests} abgeschlossen
+                </span>
               </div>
 
               <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginBottom: '20px', lineHeight: 1.5 }}>
@@ -58,6 +61,7 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
               {/* Quests List */}
               <div style={{ display: 'grid', gap: '10px' }}>
                 {ch.quests.map((q) => {
+                  const isQuestDone = completedTopics.includes(q.actionTab);
                   return (
                     <div
                       key={q.id}
@@ -68,13 +72,17 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
                         background: 'var(--bg-card)',
                         padding: '12px 18px',
                         borderRadius: 'var(--radius-md)',
-                        border: '1px solid var(--border-color)',
+                        border: isQuestDone ? '1px solid var(--accent-emerald)' : '1px solid var(--border-color)',
                         flexWrap: 'wrap',
                         gap: '10px'
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Circle size={18} color="var(--accent-primary)" />
+                        {isQuestDone ? (
+                          <CheckCircle2 size={18} color="var(--accent-emerald)" />
+                        ) : (
+                          <Circle size={18} color="var(--accent-primary)" />
+                        )}
                         <span style={{ fontWeight: '600', fontSize: '0.92rem', color: 'var(--text-main)' }}>
                           {q.title}
                         </span>
@@ -91,7 +99,7 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
                         }}
                         style={{ gap: '6px' }}
                       >
-                        Quest Starten <ArrowRight size={14} />
+                        {isQuestDone ? 'Erneut spielen' : 'Quest Starten'} <ArrowRight size={14} />
                       </button>
                     </div>
                   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Terminal, Shield, Folder, File, CheckCircle2, RotateCcw, Lock, Award } from 'lucide-react';
+
+import { Terminal, CheckCircle2, Lock } from 'lucide-react';
 import { LINUX_PERMISSION_MODES } from '../../data/expertLabsData';
 import { useStore } from '../../store/useStore';
 

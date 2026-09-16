@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, RotateCcw, ArrowRight, CheckCircle2, Layers, Cpu, Database, Award, Info, Code2 } from 'lucide-react';
+import { Play, RotateCcw, ArrowRight, CheckCircle2, Layers, Cpu, Database, Info, Code2 } from 'lucide-react';
 import { DEBUGGER_SCENARIOS } from '../../data/nextGenLabsData';
 import { useStore } from '../../store/useStore';
 

@@ -1,235 +1,336 @@
-import React, { useState } from 'react';
-import { Play, Layers, Server, Database, ShieldCheck, FileCode, CheckCircle2, RefreshCw, Terminal, Cpu, HardDrive } from 'lucide-react';
-
-const INITIAL_SERVICES = [
-  {
-    id: 'frontend',
-    name: 'Frontend Web App',
-    image: 'nginx:alpine',
-    portHost: 8080,
-    portContainer: 80,
-    env: 'NODE_ENV=production',
-    enabled: true,
-    status: 'stopped'
-  },
-  {
-    id: 'backend',
-    name: 'Node.js Express API',
-    image: 'node:20-alpine',
-    portHost: 3000,
-    portContainer: 3000,
-    env: 'DB_HOST=postgres\nREDIS_HOST=redis',
-    enabled: true,
-    status: 'stopped'
-  },
-  {
-    id: 'postgres',
-    name: 'PostgreSQL Database',
-    image: 'postgres:16-alpine',
-    portHost: 5432,
-    portContainer: 5432,
-    env: 'POSTGRES_DB=devgame\nPOSTGRES_USER=admin\nPOSTGRES_PASSWORD=secret',
-    enabled: true,
-    status: 'stopped'
-  },
-  {
-    id: 'redis',
-    name: 'Redis Cache',
-    image: 'redis:7-alpine',
-    portHost: 6379,
-    portContainer: 6379,
-    env: '',
-    enabled: true,
-    status: 'stopped'
-  }
-];
+import React, { useState, useMemo } from 'react';
+import { 
+  Play, Layers, FileCode, RefreshCw, Terminal, 
+  Network, HardDrive, ShieldCheck, CheckCircle2, Award, Zap 
+} from 'lucide-react';
+import { 
+  DEFAULT_COMPOSE_PROJECT, 
+  resolveDependencyOrder, 
+  checkNetworkReachability, 
+  generateComposeYaml, 
+  simulateComposeUp 
+} from '../../utils/dockerComposeEngine';
+import { useStore } from '../../store/useStore';
 
 export default function DockerComposeLab({ onRewardXP }) {
-  const [services, setServices] = useState(INITIAL_SERVICES);
+  const { awardXP } = useStore();
+  const [project] = useState(DEFAULT_COMPOSE_PROJECT);
   const [isUp, setIsUp] = useState(false);
+  const [activeTab, setActiveTab] = useState('orchestrator'); // orchestrator, networks, volumes, yaml
   const [logs, setLogs] = useState([]);
+  const [selectedPingFrom, setSelectedPingFrom] = useState('web');
+  const [selectedPingTo, setSelectedPingTo] = useState('postgres');
+  const [xpClaimed, setXpClaimed] = useState(false);
 
-  const toggleService = (id) => {
-    if (isUp) return;
-    setServices(prev => prev.map(s => s.id === id ? { ...s, enabled: !s.enabled } : s));
-  };
+  const depAnalysis = useMemo(() => {
+    return resolveDependencyOrder(project.services);
+  }, [project.services]);
+
+  const pingResult = useMemo(() => {
+    return checkNetworkReachability(selectedPingFrom, selectedPingTo, project.services);
+  }, [selectedPingFrom, selectedPingTo, project.services]);
 
   const handleComposeUp = () => {
     if (isUp) return;
+    const res = simulateComposeUp(project);
     setIsUp(true);
-    setLogs(['$ docker compose up -d', 'Creating network "app_default"...']);
+    setLogs(res.logs);
 
-    const enabledList = services.filter(s => s.enabled);
-    let delay = 600;
-
-    enabledList.forEach((s, idx) => {
-      setTimeout(() => {
-        setServices(prev => prev.map(item => item.id === s.id ? { ...item, status: 'running' } : item));
-        setLogs(prev => [...prev, `[+] Container ${s.id}-1 Created & Started (${s.image} -> ${s.portHost}:${s.portContainer})`]);
-
-        if (idx === enabledList.length - 1) {
-          setLogs(prev => [...prev, '✔ Multi-Container Stack is HEALTHY and listening for requests.']);
-          if (onRewardXP) onRewardXP(35);
-        }
-      }, delay);
-      delay += 800;
-    });
+    if (res.success && !xpClaimed) {
+      if (onRewardXP) onRewardXP(45);
+      else awardXP(45, 'docker_compose_master');
+      setXpClaimed(true);
+    }
   };
 
   const handleComposeDown = () => {
     setIsUp(false);
-    setLogs(['$ docker compose down', 'Stopping containers...']);
-
-    setTimeout(() => {
-      setServices(prev => prev.map(s => ({ ...s, status: 'stopped' })));
-      setLogs(prev => [...prev, '✔ All containers stopped and removed.']);
-    }, 800);
+    setLogs(prev => [
+      ...prev,
+      '$ docker compose down',
+      'Stopping and removing containers, networks and volumes...',
+      '✔ Complete. System clean.'
+    ]);
   };
 
-  const generateComposeYaml = () => {
-    const activeServicesYaml = services
-      .filter(s => s.enabled)
-      .map(s => {
-        let envYaml = s.env
-          ? `    environment:\n` + s.env.split('\n').map(line => `      - ${line}`).join('\n')
-          : '';
-        return `  ${s.id}:\n    image: ${s.image}\n    ports:\n      - "${s.portHost}:${s.portContainer}"${envYaml ? '\n' + envYaml : ''}`;
-      })
-      .join('\n\n');
-
-    return `version: '3.8'
-
-services:
-${activeServicesYaml}
-`;
-  };
+  const yamlOutput = useMemo(() => {
+    return generateComposeYaml(project);
+  }, [project]);
 
   return (
-    <div style={{ background: 'var(--bg-card)', padding: '28px', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-color)' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <span className="badge badge-indigo" style={{ marginBottom: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <Layers size={14} /> Docker & Microservices Orchestration
-          </span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
-            🐳 Docker Compose Multi-Container Studio
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            Konfiguriere Multi-Container Stacks (Frontend, Node API, Postgres DB & Redis) und erstelle `docker-compose.yml`.
-          </p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Header Banner */}
+      <div 
+        className="glass-panel"
+        style={{
+          padding: '28px',
+          borderRadius: 'var(--radius-xl)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
+          boxShadow: 'var(--shadow-card)'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <span className="badge badge-indigo" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Layers size={14} /> Docker &amp; Microservices
+              </span>
+              <span className="badge badge-teal">Compose 3.8</span>
+              <span className="badge badge-green">DAG &amp; Isolation</span>
+            </div>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: '4px 0', color: 'var(--text-main)' }}>
+              🐳 Docker Compose Multi-Container Orchestrator
+            </h1>
+            <p style={{ color: 'var(--text-muted)', maxWidth: '750px', fontSize: '0.96rem', lineHeight: '1.6' }}>
+              Orchestriere containerisierte Multi-Tier-Architekturen. Analysiere DAG-Startreihenfolgen via `depends_on`, prüfe Bridge-Netzwerk-Isolation und inspiziere persistente Docker-Volumes.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <button
+              className={`btn ${isUp ? 'btn-rose' : 'btn-primary'}`}
+              onClick={isUp ? handleComposeDown : handleComposeUp}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              {isUp ? <RefreshCw size={16} /> : <Play size={16} />}
+              {isUp ? 'docker compose down' : 'docker compose up -d'}
+            </button>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          {isUp ? (
-            <button className="btn btn-secondary" onClick={handleComposeDown} style={{ borderColor: 'var(--accent-rose)', color: 'var(--accent-rose)', gap: '8px' }}>
-              <RefreshCw size={16} /> Docker Compose Down
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={handleComposeUp} style={{ gap: '8px', minWidth: '180px' }}>
-              <Play size={18} /> Docker Compose Up
-            </button>
-          )}
+        {/* Tab Navigation */}
+        <div style={{ display: 'flex', gap: '8px', marginTop: '24px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+          <button 
+            className={`btn btn-sm ${activeTab === 'orchestrator' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setActiveTab('orchestrator')}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Layers size={14} /> Container Stack &amp; DAG
+          </button>
+          <button 
+            className={`btn btn-sm ${activeTab === 'networks' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setActiveTab('networks')}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Network size={14} /> Netzwerk-Isolation (Bridge)
+          </button>
+          <button 
+            className={`btn btn-sm ${activeTab === 'volumes' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setActiveTab('volumes')}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <HardDrive size={14} /> Volumes &amp; Persistence
+          </button>
+          <button 
+            className={`btn btn-sm ${activeTab === 'yaml' ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => setActiveTab('yaml')}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <FileCode size={14} /> docker-compose.yml
+          </button>
         </div>
       </div>
 
-      {/* Container Stack Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        {services.map((s) => (
-          <div
-            key={s.id}
-            onClick={() => toggleService(s.id)}
-            style={{
-              background: s.status === 'running' ? 'rgba(16,185,129,0.15)' : s.enabled ? 'var(--bg-primary)' : 'rgba(148,163,184,0.08)',
-              padding: '20px',
-              borderRadius: 'var(--radius-lg)',
-              border: s.status === 'running' ? '2px solid var(--accent-emerald)' : s.enabled ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
-              opacity: s.enabled ? 1 : 0.5,
-              cursor: isUp ? 'default' : 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--accent-primary)', textTransform: 'uppercase' }}>
-                {s.id}
-              </span>
-              <span style={{
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                background: s.status === 'running' ? '#10b981' : '#64748b',
-                boxShadow: s.status === 'running' ? '0 0 8px #10b981' : 'none'
-              }} />
+      {/* Main Content Area based on Tab */}
+      {activeTab === 'orchestrator' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+          {/* Services List & DAG */}
+          <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Layers size={18} color="var(--accent-primary)" />
+              Service Dependency Flow (DAG)
+            </h2>
+
+            <div style={{ padding: '12px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', marginBottom: '16px', fontSize: '0.85rem' }}>
+              <strong>Kahn-Startreihenfolge:</strong>{' '}
+              {depAnalysis.launchOrder.map((id, idx) => (
+                <span key={id}>
+                  <code style={{ color: 'var(--accent-teal)' }}>{id}</code>
+                  {idx < depAnalysis.launchOrder.length - 1 && ' ➔ '}
+                </span>
+              ))}
             </div>
 
-            <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', margin: '0 0 6px 0' }}>
-              {s.name}
-            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {project.services.map(s => (
+                <div key={s.id} style={{
+                  padding: '14px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-tertiary)',
+                  border: isUp ? '1px solid var(--accent-emerald)' : '1px solid var(--border-color)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontWeight: 800 }}>{s.name}</span>
+                      <span className="badge badge-indigo" style={{ fontSize: '0.7rem' }}>{s.image}</span>
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                      Ports: {s.ports.join(', ') || 'Keine'} | Networks: [{(s.networks || []).join(', ')}]
+                    </div>
+                    {s.depends_on.length > 0 && (
+                      <div style={{ fontSize: '0.75rem', color: 'var(--accent-amber)', marginTop: '2px' }}>
+                        depends_on: [{s.depends_on.join(', ')}]
+                      </div>
+                    )}
+                  </div>
 
-            <div style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-              Image: {s.image}
-            </div>
-
-            <div style={{ display: 'inline-block', background: '#0f172a', color: '#38bdf8', padding: '4px 8px', borderRadius: 'var(--radius-md)', fontFamily: 'monospace', fontSize: '0.78rem' }}>
-              Port: {s.portHost}:{s.portContainer}
+                  <span className={`badge ${isUp ? 'badge-green' : 'badge-neutral'}`}>
+                    {isUp ? 'running' : 'stopped'}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Grid: Terminal Logs & Compose YAML */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
-        {/* Container Logs */}
-        <div style={{ background: '#0f172a', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#f8fafc', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Terminal size={16} style={{ color: '#38bdf8' }} /> Container Logs Stream
-          </h4>
-          <div style={{
-            background: '#020617',
-            padding: '14px',
-            borderRadius: 'var(--radius-md)',
-            color: '#38bdf8',
-            fontFamily: 'monospace',
-            fontSize: '0.85rem',
-            minHeight: '240px',
-            maxHeight: '300px',
-            overflowY: 'auto',
-            border: '1px solid #0f172a'
-          }}>
-            {logs.length === 0 ? (
-              <span style={{ color: '#64748b' }}>Starte den Stack mit "Docker Compose Up"...</span>
-            ) : (
-              logs.map((line, idx) => (
-                <div key={idx} style={{ marginBottom: '4px', color: line.includes('HEALTHY') ? '#10b981' : '#38bdf8' }}>
-                  {line}
+          {/* Terminal Console Logs */}
+          <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Terminal size={18} color="var(--accent-teal)" />
+              Orchestrator Terminal Output
+            </h2>
+
+            <div style={{
+              background: '#0d1117',
+              color: '#38ef7d',
+              padding: '16px',
+              borderRadius: 'var(--radius-md)',
+              fontFamily: 'monospace',
+              fontSize: '0.84rem',
+              minHeight: '260px',
+              maxHeight: '380px',
+              overflowY: 'auto',
+              lineHeight: '1.6'
+            }}>
+              {logs.length === 0 ? (
+                <div style={{ color: '#8b949e' }}>
+                  $ docker compose up -d (Warte auf Ausführung...)
                 </div>
-              ))
+              ) : (
+                logs.map((log, i) => (
+                  <div key={i}>{log}</div>
+                ))
+              )}
+            </div>
+
+            {isUp && (
+              <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.82rem', color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <ShieldCheck size={16} /> Multi-Container Stack aktiv &amp; gesund
+                </span>
+                <span className="badge badge-teal">
+                  <Award size={14} style={{ marginRight: '4px' }} /> 45 XP erhalten
+                </span>
+              </div>
             )}
           </div>
         </div>
+      )}
 
-        {/* Generated docker-compose.yml */}
-        <div style={{ background: '#0f172a', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#f8fafc', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <FileCode size={16} style={{ color: '#10b981' }} /> Generierte `docker-compose.yml`
-          </h4>
-          <pre style={{
-            margin: 0,
-            padding: '14px',
-            background: '#020617',
-            borderRadius: 'var(--radius-md)',
-            color: '#a5b4fc',
-            fontFamily: 'monospace',
-            fontSize: '0.82rem',
-            minHeight: '240px',
-            maxHeight: '300px',
-            overflowY: 'auto',
-            border: '1px solid #0f172a'
+      {activeTab === 'networks' && (
+        <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Network size={18} color="var(--accent-primary)" />
+            Netzwerk-Bridge Isolation &amp; Inter-Container Ping-Simulator
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '20px' }}>
+            Prüfe, ob zwei Container über gemeinsame Docker-Netzwerke kommunizieren können. Aus Sicherheitsgründen sollte der Web-Frontend-Container keinen direkten Netzwerkzugriff auf die interne Datenbank haben!
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
+                Quell-Container (From)
+              </label>
+              <select
+                value={selectedPingFrom}
+                onChange={(e) => setSelectedPingFrom(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
+              >
+                {project.services.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.id})</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
+                Ziel-Container (To)
+              </label>
+              <select
+                value={selectedPingTo}
+                onChange={(e) => setSelectedPingTo(e.target.value)}
+                style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
+              >
+                {project.services.map(s => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.id})</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div style={{
+            padding: '20px',
+            borderRadius: 'var(--radius-lg)',
+            background: pingResult.canReach ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
+            border: `1px solid ${pingResult.canReach ? 'var(--accent-emerald)' : 'var(--accent-rose)'}`
           }}>
-            {generateComposeYaml()}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 800, fontSize: '1.1rem', color: pingResult.canReach ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
+              {pingResult.canReach ? <CheckCircle2 size={20} /> : <Zap size={20} />}
+              {pingResult.canReach ? 'Verbindung erfolgreich (Erreichbar)' : 'Netzwerk-Isolation aktiv (Blockiert)'}
+            </div>
+            <p style={{ margin: '8px 0 0 0', fontSize: '0.9rem', color: 'var(--text-main)' }}>
+              {pingResult.reason}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'volumes' && (
+        <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <HardDrive size={18} color="var(--accent-teal)" />
+            Persistente Docker Volumes &amp; Bind-Mounts
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {project.volumes.map(v => (
+              <div key={v} style={{ padding: '16px', borderRadius: 'var(--radius-md)', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800 }}>
+                  <span>Volume: <code>{v}</code></span>
+                  <span className="badge badge-teal">Named Volume (Driver: local)</span>
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  Persistiert Daten auch nach <code>docker compose down</code> auf dem Host-Dateisystem (`/var/lib/docker/volumes/{v}/_data`).
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'yaml' && (
+        <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FileCode size={18} color="var(--accent-primary)" />
+            Generierte docker-compose.yml
+          </h2>
+          <pre style={{
+            background: '#0d1117',
+            color: '#e6edf3',
+            padding: '20px',
+            borderRadius: 'var(--radius-md)',
+            fontFamily: 'monospace',
+            fontSize: '0.88rem',
+            overflowX: 'auto',
+            lineHeight: '1.5'
+          }}>
+            {yamlOutput}
           </pre>
         </div>
-      </div>
+      )}
     </div>
   );
 }

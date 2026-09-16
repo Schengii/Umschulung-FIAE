@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Radio, ArrowRight, Play, RotateCcw, CheckCircle2, ShieldCheck, Video, Send, Zap, Globe, MessageSquare } from 'lucide-react';
+
+import { Radio, ArrowRight, RotateCcw, CheckCircle2, Video, Send, Zap } from 'lucide-react';
 import { WEBRTC_SIGNALING_STEPS } from '../../data/advancedLabsData';
 import { useStore } from '../../store/useStore';
 

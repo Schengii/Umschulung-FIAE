@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import alasql from 'alasql';
-import { Database, Play, CheckCircle2, Sparkles, HelpCircle, ArrowRight, RefreshCw, Layers } from 'lucide-react';
+import { Database } from 'lucide-react';
 
 const INITIAL_USERS = [
   { id: 1, name: 'Alice (Admin)', role: 'DevOps' },

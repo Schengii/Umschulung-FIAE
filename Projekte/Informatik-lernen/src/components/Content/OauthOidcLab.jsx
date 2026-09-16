@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { OAUTH_STEPS } from '../../data/oauthData';
-import { ShieldCheck, Lock, Copy } from 'lucide-react';
+import { Lock, Copy } from 'lucide-react';
 
 export default function OauthOidcLab() {
   const [selectedId, setSelectedId] = useState(OAUTH_STEPS[0].id);

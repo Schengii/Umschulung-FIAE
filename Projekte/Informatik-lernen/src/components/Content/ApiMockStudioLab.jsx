@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Globe, Key, FileText, CheckCircle2, ShieldAlert, Sparkles, History, Plus, Trash2, Code, Copy, RefreshCw } from 'lucide-react';
+import { Send, Globe, CheckCircle2, History, Copy } from 'lucide-react';
 
 const PRESET_ENDPOINTS = [
   {
@@ -132,7 +132,7 @@ export default function ApiMockStudioLab({ onRewardXP }) {
   const tryParseJson = (str) => {
     try {
       return JSON.parse(str);
-    } catch (e) {
+    } catch {
       return str;
     }
   };

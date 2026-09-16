@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SUBNETTING_QUIZ, NETWORK_CHEAT_SHEET } from '../../data/subnettingData';
-import { Network, Calculator, CheckCircle2, XCircle, HelpCircle, Award, Sparkles } from 'lucide-react';
+import { Network, Calculator, HelpCircle, Award } from 'lucide-react';
 
 export default function SubnettingLab({ onRewardXP }) {
   const [ipAddress, setIpAddress] = useState('192.168.1.100');

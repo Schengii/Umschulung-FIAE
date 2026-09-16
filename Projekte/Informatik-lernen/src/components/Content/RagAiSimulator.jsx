@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RAG_STEPS } from '../../data/ragAiData';
-import { Bot, Database, Sparkles, Copy } from 'lucide-react';
+import { Database } from 'lucide-react';
 
 export default function RagAiSimulator() {
   const [selectedId, setSelectedId] = useState(RAG_STEPS[0].id);

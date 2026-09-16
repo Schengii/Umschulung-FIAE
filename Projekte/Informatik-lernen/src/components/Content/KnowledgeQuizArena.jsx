@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { QUIZ_ARENA_CATEGORIES } from '../../data/quizArenaData';
-import { Trophy, CheckCircle2, XCircle, Award, Sparkles, RefreshCw } from 'lucide-react';
+import { Trophy, Award, RefreshCw } from 'lucide-react';
 
 export default function KnowledgeQuizArena({ onRewardXP }) {
   const [selectedCatId, setSelectedCatId] = useState(QUIZ_ARENA_CATEGORIES[0].id);
