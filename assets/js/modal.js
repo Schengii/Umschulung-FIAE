@@ -6,7 +6,7 @@
   const modal = document.getElementById('project-modal');
   if (!modal) return;
 
-  const modalContent = modal.querySelector('.modal-content');
+  const _modalContent = modal.querySelector('.modal-content');
   const modalBody = document.getElementById('modal-body');
 
   // ── Open modal when a project card body is clicked (not on link/button) ──

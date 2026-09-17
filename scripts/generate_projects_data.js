@@ -124,7 +124,7 @@ function fetchRepoInfo(repoName) {
         if (res.statusCode === 200) {
           try {
             resolve(JSON.parse(data));
-          } catch (_) {
+          } catch {
             resolve(null);
           }
         } else {

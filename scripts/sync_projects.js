@@ -127,7 +127,9 @@ async function syncProject(projectName, config) {
     // Clean up temp directory
     try {
       fs.rmSync(tempDir, { recursive: true, force: true });
-    } catch (_) {}
+    } catch {
+      // ignore cleanup error
+    }
   }
 }
 

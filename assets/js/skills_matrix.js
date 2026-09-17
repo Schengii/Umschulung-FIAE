@@ -184,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderRadarChart() {
         const skills = getFilteredRadarSkills();
         const N = skills.length;
-        const lang = document.documentElement.getAttribute('lang') || 'de';
 
         // Clear previous paths
         svgEl.innerHTML = '';

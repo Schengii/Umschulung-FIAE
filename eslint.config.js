@@ -46,6 +46,10 @@ module.exports = [
         Blob: 'readonly',
         URL: 'readonly',
         alert: 'readonly',
+        confirm: 'readonly',
+        prompt: 'readonly',
+        history: 'readonly',
+        SpeechSynthesisUtterance: 'readonly',
         performance: 'readonly',
         cancelAnimationFrame: 'readonly',
         // Cross-file browser globals defined by non-module <script> includes
@@ -63,7 +67,7 @@ module.exports = [
       },
     },
     rules: {
-      'no-unused-vars': ['warn', { args: 'none', varsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', { args: 'none', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'no-undef': 'warn',
       'no-empty': 'warn',
       'no-console': 'off',

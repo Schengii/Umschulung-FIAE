@@ -2,6 +2,26 @@
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten.
 
+## [1.5.0] - 2026-09-17
+
+### Code-Hygiene, Linter & Stabilität
+- **100% sauberer Linter (0 Fehler, 0 Warnungen)**:
+  - Ergänzung legitimer Web-Browser Globals (`confirm`, `prompt`, `history`, `SpeechSynthesisUtterance`) in `eslint.config.js`.
+  - Bereinigung aller 34 ungenutzten Variablen und Parameter in `components.js`, `dashboard.js`, `elektrocheck_overlay.js`, `memory.js`, `modal.js`, `portfolio.js`, `skills_matrix.js`, `snake.js`, `accent-color.js`, `blog-enhancements.js`, `pdf-exporter.js`, `scroll-animations.js` sowie den Automatisierungs-Skripten.
+  - Parameterlose Catch-Blöcke und sauber konfigurierte `caughtErrorsIgnorePattern: '^_'`.
+
+### PWA & Cache-Lifecycle
+- **Service Worker Version 36 (`umschulung-fiae-v36`)**:
+  - Aktualisierung des Caches für alle 27 Seiten und Assets, um ein nahtloses Update für alle PWA- und Browser-Clients bei Bereitstellung zu gewährleisten.
+
+### SEO & Strukturierte Daten (Schema.org)
+- **Erweiterung von `pages/lebenslauf.html`**:
+  - JSON-LD `@graph` mit `ProfilePage` und `Person`-Entität ergänzt (analog zu `ueber-mich.html`) für maximale Auffindbarkeit und Rich Snippets in Suchmaschinen und HR-Crawlern.
+
+### E2E-Qualitätssicherung & Dokumentation
+- **Vollständige E2E-Verifikation**: Alle 54 Playwright E2E Tests (inkl. aller 22 Projekt-Starts) und 22 physischen Link-Checks erfolgreich validiert.
+- **Dokumentations-Update**: Aktualisierung von `README.md` hinsichtlich Projektanzahl (22), Testmetriken und Qualitätsstandards.
+
 ## [1.4.0] - 2026-08-20
 
 ### Architektur, Reaktivität & Entwickler-Experience

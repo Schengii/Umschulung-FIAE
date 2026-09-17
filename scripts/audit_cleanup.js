@@ -17,7 +17,9 @@ function getDirSummary(dir) {
           fileCount++;
         }
       });
-    } catch(e) {}
+    } catch (_e) {
+      // ignore unreadable directories
+    }
   }
   traverse(dir);
   return { size, fileCount };

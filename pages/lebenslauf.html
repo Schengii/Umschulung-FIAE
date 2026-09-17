@@ -22,19 +22,38 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
+        "@graph": [
             {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://max-schenk.tech/"
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://max-schenk.tech/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Lebenslauf",
+                        "item": "https://max-schenk.tech/pages/lebenslauf.html"
+                    }
+                ]
             },
             {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "Lebenslauf",
-                "item": "https://max-schenk.tech/pages/lebenslauf.html"
+                "@type": "ProfilePage",
+                "mainEntity": {
+                    "@type": "Person",
+                    "name": "Maximilian Schenk",
+                    "jobTitle": "Fachinformatiker für Anwendungsentwicklung",
+                    "alumniOf": "Berufsförderungswerk Dortmund",
+                    "knowsAbout": ["Java", "JavaScript", "TypeScript", "React", "C++", "C#", "SQL", "Git", "Clean Code"],
+                    "url": "https://max-schenk.tech/pages/lebenslauf.html",
+                    "sameAs": [
+                        "https://github.com/Schengii",
+                        "https://linkedin.com/in/maximilian-schenk"
+                    ]
+                }
             }
         ]
     }

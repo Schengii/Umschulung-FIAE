@@ -200,7 +200,7 @@ function initMemoryGame() {
             }
             return a.time - b.time;
         });
-        const indexInTop5 = memoryLeaderboard.slice(0, 5).findIndex(entry => entry.moves === moves && entry.time === seconds);
+        const _indexInTop5 = memoryLeaderboard.slice(0, 5).findIndex(entry => entry.moves === moves && entry.time === seconds);
         memoryLeaderboard = memoryLeaderboard.slice(0, 5);
         StorageManager.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
         renderMemoryHighscores();
@@ -211,7 +211,7 @@ function initMemoryGame() {
 
         // Save best score
         const bestMoves = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES);
-        const bestTime = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
+        const _bestTime = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
         let isNewBest = false;
 
         if (!bestMoves || moves < parseInt(bestMoves)) {

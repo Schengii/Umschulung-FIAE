@@ -23,7 +23,7 @@ export function initPdfExporter() {
 
 function generateFactsheetModal() {
     const recruiterCompany = sessionStorage.getItem('recruiter_company') || localStorage.getItem('recruiter_company') || 'Ihr Unternehmen';
-    const recruiterName = sessionStorage.getItem('recruiter_name') || localStorage.getItem('recruiter_name') || 'Sehr geehrte Damen und Herren';
+    const _recruiterName = sessionStorage.getItem('recruiter_name') || localStorage.getItem('recruiter_name') || 'Sehr geehrte Damen und Herren';
 
     const modalId = 'pdf-export-modal';
     let existingModal = document.getElementById(modalId);

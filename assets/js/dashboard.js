@@ -141,7 +141,7 @@ function renderRecentProjects() {
 /* ==========================================================================
    IHK NOTENRECHNER LOGIC
    ========================================================================== */
-function getIhkGrade(score) {
+function _getIhkGrade(score) {
     if (score >= 92) return 1;
     if (score >= 81) return 2;
     if (score >= 67) return 3;

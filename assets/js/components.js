@@ -28,7 +28,7 @@
 
         const contrast = localStorage.getItem('portfolio_contrast');
         if (contrast === 'high') document.documentElement.setAttribute('data-contrast', 'high');
-    } catch (e) {
+    } catch (_e) {
         // LocalStorage fallback
     }
     document.documentElement.setAttribute('data-theme', initialTheme);
@@ -43,7 +43,7 @@ const StorageManager = {
             localStorage.setItem(key, key);
             localStorage.removeItem(key);
             return true;
-        } catch (e) {
+        } catch (_e) {
             return false;
         }
     },

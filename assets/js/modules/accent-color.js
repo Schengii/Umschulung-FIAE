@@ -43,7 +43,7 @@ export function initAccentColor() {
                 // Save preference
                 try {
                     localStorage.setItem('portfolio_accent', val);
-                } catch (e) {
+                } catch (_e) {
                     console.warn('LocalStorage not accessible for saving accent.');
                 }
                 

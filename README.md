@@ -15,16 +15,16 @@ Umschulung-FIAE/
 │
 ├── index.html                   # Haupt-Einstiegsseite im Root (Willkommen, Personalisierung & Barrierefreiheit)
 ├── package.json                 # Projektspezifische Scripte und Entwicklungs-Abhängigkeiten (Playwright, Build)
-├── playwright.config.js         # Playwright E2E Testkonfiguration (50 automatisierte Tests)
-├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v35) & PWA-Fähigkeit
+├── playwright.config.js         # Playwright E2E Testkonfiguration (54 automatisierte Tests)
+├── sw.js                        # Service Worker für Offline-Caching (umschulung-fiae-v36) & PWA-Fähigkeit
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
 ├── pages/                       # Aufgeräumter Ordner für alle 27 Inhaltsseiten
 │   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
-│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (21 registrierte Projekte, Filter & Schnellsuche)
+│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (22 registrierte Projekte, Filter & Schnellsuche)
 │   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, 80h Phasenplan, Fachgespräch, Bewertungsmatrix)
-│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Token-Schutz (fiae2026) & 1-Click PDF-Export
+│   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Schema.org Person/ProfilePage & 1-Click PDF-Export
 │   ├── ueber-mich.html          # Steckbrief, Skill-Radar & Elektroniker-FIAE-Transfermatrix
 │   ├── dashboard.html           # IHK-Notensimulation & Notenrechner (AP1 & AP2)
 │   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
@@ -45,13 +45,13 @@ Umschulung-FIAE/
 │   │   ├── components.js        # Header, Footer, kategorisierte Navigation, Accessibility Manager & Templating
 │   │   ├── constants.js         # Globale App-Konstanten & Pfadauflösung (resolveAssetPath)
 │   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering, Schnellsuche & Highlights
-│   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (21 Projekte)
+│   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (22 Projekte)
 │   │   └── modules/             # Abgekapselte Feature-Module & E2E-Tests
 │   │       ├── portfolio-copilot.js     # Offline-fähiger AI Portfolio Copilot
 │   │       ├── ihk-cockpit.js           # Nutzwertanalyse & 80h Phasenplan Steuerung
 │   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
 │   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
-│   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 21 Projekte
+│   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 22 Projekte
 │   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
@@ -104,7 +104,7 @@ Die [main.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/Umschulung
   - 👁️ **Hochkontrast-Modus**: WCAG 2.1 AAA (7:1).
 
 ### 3. PWA-Offline-Caching (`sw.js`) & 100% DSGVO-Konformität
-- Lokaler Service Worker (`umschulung-fiae-v35`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
+- Lokaler Service Worker (`umschulung-fiae-v36`) cacht alle 27 Seiten, CSS-Module, Icons und WOFF2-Fonts.
 - Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
 
 ### 3b. Sensible Bewerbungsdaten (Gehalt & Zeugnisse)
@@ -116,9 +116,9 @@ Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
 npm test
 ```
 - **54 / 54 Tests grün (100% Pass Rate)**
-- Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 21 Projekte.
+- Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 22 Projekte.
 
-- **Service Worker (`umschulung-fiae-v35`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
+- **Service Worker (`umschulung-fiae-v36`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Alle Icon-Fonts (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
@@ -132,9 +132,9 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung, Bereinigung & E2E-Testing
-- **Test-Suite**: 54 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 21 Projekte validieren.
-- **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js`.
-- **Bereinigte Projektstruktur**: Automatische Entfernung temporärer Test-Artefakte, veralteter Bildreste und Konsolidierung aller Projektmetadaten.
+- **Test-Suite**: 54 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 22 Projekte validieren.
+- **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js` (22/22 Links fehlerfrei).
+- **Bereinigte Codebasis & Linter**: 0 Fehler und 0 Warnungen in ESLint (`npm run lint`), 0 Sicherheitslücken in Abhängigkeiten (`npm audit`).
 
 ---
 
@@ -162,25 +162,25 @@ npm run dev
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **21 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
+Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **22 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
 
 ### 5. Linting
 ```bash
 npm run lint
 ```
-Prüft `assets/js` und `scripts/` mit ESLint (Flat Config in `eslint.config.js`).
+Prüft `assets/js` und `scripts/` mit ESLint (Flat Config in `eslint.config.js`) – 0 Fehler, 0 Warnungen.
 
 ### 6. Deploy-Pipeline (vorbereitet, nicht aktiv)
 `.github/workflows/deploy.yml` baut & deployed die Seite nach GitHub Pages, sobald in den Repository-Settings unter *Pages → Source* „GitHub Actions" ausgewählt wird. `.github/workflows/ci.yml` läuft bei jedem Push/PR und führt Data-Sync-Check, Lint, Playwright-Tests sowie einen informativen Lighthouse-Audit (`lighthouserc.json`) aus. Die Datei `CNAME` ist bereits auf `max-schenk.tech` vorkonfiguriert — der DNS-Eintrag beim Domain-Provider muss noch manuell gesetzt werden.
 
 ---
 
-## 🌟 Veröffentlichungs-Zusammenfassung (August 2026 Release)
+## 🌟 Veröffentlichungs-Zusammenfassung (Release 2026)
 
-- **21 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
+- **22 Vollwertige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
-- **54 Bestandene E2E-Tests**: Automatisierte Testabdeckung mit Playwright (`npm test`).
+- **54 Bestandene E2E-Tests**: Automatisierte Testabdeckung mit Playwright (`npm test`) bei 100% Erfolgsquote.
 
 ### ⚙️ Code-Refactoring & neue Module (August 2026)
 - **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.

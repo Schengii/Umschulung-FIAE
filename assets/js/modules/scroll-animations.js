@@ -188,7 +188,6 @@ function initTechParticles() {
     }
     window.addEventListener('resize', handleResize, { passive: true });
 
-    let animId;
     function render() {
         ctx.clearRect(0, 0, width, height);
 
@@ -216,7 +215,7 @@ function initTechParticles() {
             p.draw();
         });
 
-        animId = requestAnimationFrame(render);
+        requestAnimationFrame(render);
     }
 
     render();

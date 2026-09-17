@@ -43,8 +43,6 @@ function initSocialShare() {
     const articles = document.querySelectorAll('article.card');
     if (!articles.length) return;
 
-    const pageUrl = encodeURIComponent(window.location.href);
-
     articles.forEach(article => {
         // Clear any existing share buttons to prevent duplicates
         const existingShare = article.querySelector('.social-share-buttons');
@@ -52,8 +50,6 @@ function initSocialShare() {
 
         const title = article.querySelector('h2');
         if (!title) return;
-
-        const titleText = encodeURIComponent(title.innerText.trim());
 
         const shareContainer = document.createElement('div');
         shareContainer.className = 'social-share-buttons';

@@ -18,13 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const paginationContainer = document.getElementById('pagination-container');
     const dynamicContainer = document.getElementById('dynamic-projects-container');
     const skeletonLoader = document.getElementById('skeleton-loader');
-    const githubError = document.getElementById('github-error');
 
-    // GitHub API Configuration & Caching
-    const GITHUB_USERNAME = document.getElementById('github-username')?.value?.trim() || 'Schengii';
-    const CACHE_KEY = 'github_projects_cache';
-    const CACHE_TIME_KEY = 'github_projects_cache_time';
-    const CACHE_DURATION = 3600000; // 1 hour in milliseconds
     const SORT_KEY = 'portfolio_sort_order';
     const DEFAULT_SORT_ORDER = 'desc';
 

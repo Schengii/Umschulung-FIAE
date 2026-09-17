@@ -41,7 +41,6 @@ function renderHighscores() {
     const listBody = document.getElementById('highscore-list-body');
     if (!listBody) return;
     listBody.innerHTML = '';
-    const lang = getLang();
 
     // Pad list with placeholders if less than 5 entries
     const displayList = [...highscoreList];

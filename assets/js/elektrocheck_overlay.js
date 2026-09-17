@@ -131,6 +131,8 @@ class BoundingBoxRenderer {
     }
 }
 
+window.BoundingBoxRenderer = BoundingBoxRenderer;
+
 // To use this, in your ElektroCheck AI page's main script (e.g., elektrocheck.js):
 // 1. Ensure your HTML has an <img> with id="uploaded-image" and a <div> with id="bounding-box-overlay"
 //    The <img> and the overlay <div> should be wrapped in a relatively positioned container.
