@@ -48,6 +48,28 @@ export function initSearchAndFilter() {
     }
 }
 
+/**
+ * Pure evaluation function for card filtering.
+ * Determines whether a card matches the given category and search query.
+ */
+export function matchesCardFilter(categoryClassList, textContent, activeCategory = 'all', searchQuery = '') {
+    let matchesCategory = true;
+    if (activeCategory !== 'all') {
+        const targetClass = `filter-${activeCategory}`;
+        matchesCategory = Array.isArray(categoryClassList) 
+            ? categoryClassList.includes(targetClass)
+            : (categoryClassList && typeof categoryClassList.contains === 'function' ? categoryClassList.contains(targetClass) : false);
+    }
+
+    let matchesSearch = true;
+    const normalizedQuery = (searchQuery || '').toLowerCase().trim();
+    if (normalizedQuery !== '') {
+        matchesSearch = (textContent || '').toLowerCase().includes(normalizedQuery);
+    }
+
+    return matchesCategory && matchesSearch;
+}
+
 function applyFilters() {
     const path = window.location.pathname;
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
@@ -61,20 +83,11 @@ function applyFilters() {
     cards.forEach(card => {
         if (isWelcomePage) return;
 
-        let matchesCategory = true;
-        if (currentCategory !== 'all') {
-            matchesCategory = card.classList.contains(`filter-${currentCategory}`);
-        }
-
-        let matchesSearch = true;
-        if (currentSearchQuery !== '') {
-            matchesSearch = card.textContent.toLowerCase().includes(currentSearchQuery);
-        }
-
-        const shouldShow = matchesCategory && matchesSearch;
+        const shouldShow = matchesCardFilter(card.classList, card.textContent, currentCategory, currentSearchQuery);
         card.style.display = shouldShow ? '' : 'none';
         if (shouldShow) visibleCount++;
     });
+
 
     const noResultsContainer = document.querySelector('.no-results');
     if (noResultsContainer) {

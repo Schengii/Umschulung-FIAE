@@ -13,3 +13,5 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0003](0003-zweischichtige-csp-strategie.md) | Zweischichtige CSP-Strategie (Meta-Tag + HTTP-Header) | Akzeptiert |
 | [0004](0004-head-konsistenz-guard-statt-templating.md) | `<head>`-Konsistenz-Guard statt Templating-System | Akzeptiert |
 | [0005](0005-build-skript-nicht-build-nennen.md) | Lokales Build-Skript nicht `build` nennen (Vercel Zero-Config-Falle) | Akzeptiert |
+| [0006](0006-warum-vanilla-js-ohne-framework.md) | Warum Vanilla JS statt SPA-Framework (React/Vue/Angular) | Akzeptiert |
+

@@ -4,6 +4,15 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Dokumentation — ADR 0006 für Framework-Verzicht (Vanilla JS) ergänzt
+- **`docs/adr/0006-warum-vanilla-js-ohne-framework.md`**: Begründung für die bewusste Architektur-Entscheidung gegen SPA-Frameworks (React/Vue/Angular) und für modulares Vanilla JS im IHK- und Portfolio-Kontext dokumentiert (Beherrschung der Web-Grundlagen, Zero-Overhead-Performance, Langzeitstabilität, Quellcode-Transparenz im Prüfungsgespräch). Index in `docs/adr/README.md` aktualisiert.
+
+### Testing — Vitest Unit-Tests für C4-Architektur & Search-Filter erweitert
+- **`assets/js/modules/search-filter.js`**: `matchesCardFilter`-Funktion extrahiert und mit Unit-Tests (`search-filter.test.js`) abgedeckt (Kategorie-Filter, Case-Insensitive Volltextsuche, kombinierte Bedingungen, DOM-TokenList-Kompatibilität).
+- **`assets/js/modules/c4-architecture.js`**: `getHotspotStyleForLevel` und `C4_DESCRIPTIONS` extrahiert und mit Unit-Tests (`c4-architecture.test.js`) abgedeckt (Level 1–3 Zoom- und Hervorhebungsstufen für Container/Komponenten).
+- **Gesamtergebnis**: Unit-Testsuite auf 8 Test-Dateien und 58/58 Tests (100 % bestanden) ausgebaut.
+
+
 ### SEO — Kanonische Domain von Apex auf `www.` vereinheitlicht
 - **Ursache**: Der Live-Check zeigte, dass `https://max-schenk.tech/` (Apex) per `308 Permanent Redirect` auf `https://www.max-schenk.tech/` weiterleitet — diese Weiterleitung ist auf Vercel-Domain-Ebene konfiguriert (nicht in `vercel.json`) und macht `www.` zur tatsächlich ausgelieferten Domain. Sämtliche `canonical`-Tags, `og:url`-Tags, JSON-LD-`url`/`sameAs`/`BreadcrumbList`-Einträge, `sitemap.xml` (alle 25 URLs) und `robots.txt` verwiesen jedoch weiterhin auf die Apex-Domain — jede dieser URLs erforderte also einen zusätzlichen Redirect-Hop, bevor eine Suchmaschine oder ein Crawler die tatsächliche Seite sieht.
 - **Fix**: Alle `https://max-schenk.tech`-Vorkommen in den 27 HTML-Seiten (inkl. `index.html`, beide `404.html`), `sitemap.xml`, `robots.txt` sowie den Generator-Skripten `scripts/add_og_meta.js` und den Textbausteinen in `assets/js/modules/pdf-exporter.js`, `qr-generator.js` und `ical-generator.js` auf `https://www.max-schenk.tech` umgestellt (141 Ersetzungen). Die `CNAME`-Datei bleibt unverändert (siehe ADR 0002).

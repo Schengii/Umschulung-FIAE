@@ -3,6 +3,24 @@
  * Adds C4 Level controls (Context, Container, Component) to architecture diagrams.
  */
 
+export const C4_DESCRIPTIONS = {
+    '1': 'High-Level System Overview: Interaktion zwischen Nutzer, Frontend & Cloud-Services',
+    '2': 'Container Diagramm: Schnittstellen zwischen Web-App, Spring Boot API & Database',
+    '3': 'Component View: Detaillierte Klassen, Services, DTOs & JPA Repositories'
+};
+
+export function getHotspotStyleForLevel(level, component) {
+    const lvl = String(level);
+    if (lvl === '1') {
+        return { opacity: '1', transform: 'scale(1)' };
+    }
+    if (lvl === '2') {
+        const isCore = component === 'database' || component === 'client';
+        return { opacity: isCore ? '1' : '0.7', transform: 'scale(1.02)' };
+    }
+    return { opacity: '1', transform: 'scale(1.04)' };
+}
+
 export function initC4Architecture() {
     const tabsBar = document.querySelector('.arch-tabs-bar');
     if (!tabsBar) return;
@@ -37,33 +55,20 @@ export function initC4Architecture() {
     const levelBtns = switcher.querySelectorAll('.btn-c4-level');
     const levelInfo = switcher.querySelector('#c4-level-info');
 
-    const descriptions = {
-        '1': 'High-Level System Overview: Interaktion zwischen Nutzer, Frontend & Cloud-Services',
-        '2': 'Container Diagramm: Schnittstellen zwischen Web-App, Spring Boot API & Database',
-        '3': 'Component View: Detaillierte Klassen, Services, DTOs & JPA Repositories'
-    };
-
     levelBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             levelBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             const lvl = btn.dataset.level;
-            if (levelInfo) levelInfo.textContent = descriptions[lvl] || '';
+            if (levelInfo) levelInfo.textContent = C4_DESCRIPTIONS[lvl] || '';
 
             const hotspots = document.querySelectorAll('.hotspot');
             hotspots.forEach(h => {
                 h.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                if (lvl === '1') {
-                    h.style.opacity = '1';
-                    h.style.transform = 'scale(1)';
-                } else if (lvl === '2') {
-                    h.style.opacity = h.dataset.component === 'database' || h.dataset.component === 'client' ? '1' : '0.7';
-                    h.style.transform = 'scale(1.02)';
-                } else {
-                    h.style.opacity = '1';
-                    h.style.transform = 'scale(1.04)';
-                }
+                const style = getHotspotStyleForLevel(lvl, h.dataset.component);
+                h.style.opacity = style.opacity;
+                h.style.transform = style.transform;
             });
 
             if (window.showToast) {
