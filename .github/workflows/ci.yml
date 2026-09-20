@@ -24,6 +24,9 @@ jobs:
       - name: Install Project Dependencies
         run: npm ci || npm install
 
+      - name: Audit Dependencies for Known Vulnerabilities
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Install Playwright Chromium Browser
         run: npx playwright install --with-deps chromium
 

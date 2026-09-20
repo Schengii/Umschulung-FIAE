@@ -2,6 +2,13 @@
  * IHK Timed Exam Simulator Module for AP1, AP2 & WISO
  */
 
+export function formatTimerText(secondsRemaining) {
+    const clamped = Math.max(0, secondsRemaining);
+    const mins = String(Math.floor(clamped / 60)).padStart(2, '0');
+    const secs = String(clamped % 60).padStart(2, '0');
+    return `${mins}:${secs}`;
+}
+
 export function initIhkExamSimulator() {
     const quizContainer = document.querySelector('.quiz-container');
     if (!quizContainer) return;
@@ -90,10 +97,8 @@ export function initIhkExamSimulator() {
     }, { once: true });
 
     function updateTimerText() {
-        const mins = String(Math.floor(timeRemaining / 60)).padStart(2, '0');
-        const secs = String(timeRemaining % 60).padStart(2, '0');
         if (timerCountdown) {
-            timerCountdown.textContent = `${mins}:${secs}`;
+            timerCountdown.textContent = formatTimerText(timeRemaining);
         }
     }
 }

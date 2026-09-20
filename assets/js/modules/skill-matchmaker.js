@@ -3,6 +3,25 @@
  * Computes matching score between recruiter requirements and candidate's tech stack.
  */
 
+export function computeMatchScore(activeSkills, projects) {
+    if (!activeSkills || activeSkills.length === 0) return 0;
+
+    let totalMaxMatch = 0;
+    (projects || []).forEach(p => {
+        const tags = (p.tags || []).map(t => t.toLowerCase()).join(' ') + ' ' + (p.language || '').toLowerCase() + ' ' + (p.descDe || '').toLowerCase();
+        let matches = 0;
+        activeSkills.forEach(s => {
+            if (s.tags.some(t => tags.includes(t))) {
+                matches++;
+            }
+        });
+        const score = Math.round((matches / activeSkills.length) * 100);
+        if (score > totalMaxMatch) totalMaxMatch = score;
+    });
+
+    return totalMaxMatch > 0 ? Math.min(100, Math.max(65, totalMaxMatch + 15)) : 0;
+}
+
 export function initSkillMatchmaker() {
     const container = document.getElementById('skill-matchmaker-widget');
     if (!container) return;
@@ -106,21 +125,8 @@ export function initSkillMatchmaker() {
 
         const activeSkills = availableSkills.filter(s => selectedSkills.has(s.id));
         const allProjectsData = window.projectsData || [];
-        
-        let totalMaxMatch = 0;
-        allProjectsData.forEach(p => {
-            const tags = (p.tags || []).map(t => t.toLowerCase()).join(' ') + ' ' + (p.language || '').toLowerCase() + ' ' + (p.descDe || '').toLowerCase();
-            let matches = 0;
-            activeSkills.forEach(s => {
-                if (s.tags.some(t => tags.includes(t))) {
-                    matches++;
-                }
-            });
-            const score = Math.round((matches / activeSkills.length) * 100);
-            if (score > totalMaxMatch) totalMaxMatch = score;
-        });
 
-        const overallScore = totalMaxMatch > 0 ? Math.min(100, Math.max(65, totalMaxMatch + 15)) : 0;
+        const overallScore = computeMatchScore(activeSkills, allProjectsData);
         const badge = container.querySelector('#match-score-badge');
         const fill = container.querySelector('#match-progress-fill');
 

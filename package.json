@@ -25,12 +25,12 @@
     "generate-qr-codes": "node scripts/generate_qr_codes.js"
   },
   "devDependencies": {
-    "@playwright/test": "^1.45.0",
+    "@playwright/test": "^1.63.0",
     "esbuild": "^0.28.2",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "http-server": "^14.1.1",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "sharp": "^0.35.4",
     "vitest": "^5.0.1"
   },
