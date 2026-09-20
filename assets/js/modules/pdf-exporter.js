@@ -6,14 +6,14 @@
 export function initPdfExporter() {
     // lebenslauf.html's plain "print this page" buttons (moved off inline
     // onclick="window.print()" attributes for CSP script-src hardening).
-    document.querySelectorAll('#btn-cv-print-header, #btn-cv-print-card').forEach(btn => {
+    document.querySelectorAll('#btn-cv-print-header, #btn-cv-print-card').forEach((btn) => {
         btn.addEventListener('click', () => window.print());
     });
 
     const exportBtns = document.querySelectorAll('.btn-export-pdf, [data-action="export-pdf"]');
     if (!exportBtns.length) return;
 
-    exportBtns.forEach(btn => {
+    exportBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             generateFactsheetModal();
@@ -22,8 +22,12 @@ export function initPdfExporter() {
 }
 
 function generateFactsheetModal() {
-    const recruiterCompany = sessionStorage.getItem('recruiter_company') || localStorage.getItem('recruiter_company') || 'Ihr Unternehmen';
-    const _recruiterName = sessionStorage.getItem('recruiter_name') || localStorage.getItem('recruiter_name') || 'Sehr geehrte Damen und Herren';
+    const recruiterCompany =
+        sessionStorage.getItem('recruiter_company') || localStorage.getItem('recruiter_company') || 'Ihr Unternehmen';
+    const _recruiterName =
+        sessionStorage.getItem('recruiter_name') ||
+        localStorage.getItem('recruiter_name') ||
+        'Sehr geehrte Damen und Herren';
 
     const modalId = 'pdf-export-modal';
     let existingModal = document.getElementById(modalId);
@@ -57,11 +61,15 @@ function generateFactsheetModal() {
                     <p class="font-size-0-85rem color-secondary m-0 margin-top-0-25rem">
                         📍 Berlin / Erfurt | 📧 schekky@gmail.com | 🌐 https://www.max-schenk.tech
                     </p>
-                    ${recruiterCompany !== 'Ihr Unternehmen' ? `
+                    ${
+                        recruiterCompany !== 'Ihr Unternehmen'
+                            ? `
                         <div class="badge badge-info margin-top-0-5rem font-size-0-8rem padding-4px-8px">
                             Exklusiv zusammengestellt für ${recruiterCompany}
                         </div>
-                    ` : ''}
+                    `
+                            : ''
+                    }
                 </div>
 
                 <div class="grid-2-col gap-3 margin-bottom-1rem d-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
@@ -121,7 +129,7 @@ function generateFactsheetModal() {
     document.body.appendChild(modal);
 
     modal.querySelector('.btn-close-modal').addEventListener('click', () => modal.remove());
-    modal.querySelectorAll('.btn-close-modal').forEach(b => b.addEventListener('click', () => modal.remove()));
+    modal.querySelectorAll('.btn-close-modal').forEach((b) => b.addEventListener('click', () => modal.remove()));
 
     modal.querySelector('#btn-do-print').addEventListener('click', () => {
         window.print();

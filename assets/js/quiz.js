@@ -1,105 +1,106 @@
 // Fragen für das Quiz auf Deutsch und Englisch
 const questionsDE = [
     {
-        question: "Was ist der Unterschied zwischen einer Umschulung und einer Ausbildung?",
+        question: 'Was ist der Unterschied zwischen einer Umschulung und einer Ausbildung?',
         answers: [
-            { text: "Es gibt keinen Unterschied", correct: false },
-            { text: "Die Ausbildungsdauer", correct: true },
-            { text: "Die Abschlussprüfung", correct: false },
-            { text: "Keine Antwort ist richtig", correct: false },
-        ]
+            { text: 'Es gibt keinen Unterschied', correct: false },
+            { text: 'Die Ausbildungsdauer', correct: true },
+            { text: 'Die Abschlussprüfung', correct: false },
+            { text: 'Keine Antwort ist richtig', correct: false },
+        ],
     },
     {
-        question: "Wie viele Berufsförderungswerke gibt es in Deutschland?",
+        question: 'Wie viele Berufsförderungswerke gibt es in Deutschland?',
         answers: [
-            { text: "5", correct: false },
-            { text: "12", correct: false },
-            { text: "28", correct: true },
-            { text: "Keine Antwort ist richtig", correct: false },
-        ]
+            { text: '5', correct: false },
+            { text: '12', correct: false },
+            { text: '28', correct: true },
+            { text: 'Keine Antwort ist richtig', correct: false },
+        ],
     },
     {
-        question: "Wer sind die Kostenträger für eine Umschulung?",
+        question: 'Wer sind die Kostenträger für eine Umschulung?',
         answers: [
-            { text: "Agentur für Arbeit", correct: false },
-            { text: "Berufsgenossenschaften", correct: false },
-            { text: "Rentenversicherung", correct: false },
-            { text: "Alle Antworten sind richtig", correct: true },
-        ]
+            { text: 'Agentur für Arbeit', correct: false },
+            { text: 'Berufsgenossenschaften', correct: false },
+            { text: 'Rentenversicherung', correct: false },
+            { text: 'Alle Antworten sind richtig', correct: true },
+        ],
     },
     {
-        question: "Wann darf man eine Umschulung im BFW machen?",
+        question: 'Wann darf man eine Umschulung im BFW machen?',
         answers: [
-            { text: "Durch Bewilligung einer LTA (Leistung zur Teilhabe am Arbeitsleben)", correct: true },
-            { text: "Jeder kann eine Umschulung jederzeit einfach so machen", correct: false },
-            { text: "Durch einen leichten Autounfall ohne Reha-Bedarf", correct: false },
-            { text: "Keine Antwort ist richtig", correct: false },
-        ]
+            { text: 'Durch Bewilligung einer LTA (Leistung zur Teilhabe am Arbeitsleben)', correct: true },
+            { text: 'Jeder kann eine Umschulung jederzeit einfach so machen', correct: false },
+            { text: 'Durch einen leichten Autounfall ohne Reha-Bedarf', correct: false },
+            { text: 'Keine Antwort ist richtig', correct: false },
+        ],
     },
     {
-        question: "Wo und wie lange macht Maximilian sein Praktikum?",
+        question: 'Wo und wie lange macht Maximilian sein Praktikum?',
         answers: [
-            { text: "6 Monate lang bei Haribo", correct: false },
-            { text: "3 Jahre lang direkt im BFW", correct: false },
-            { text: "2 Jahre (24 Monate) lang bei der DFG in Bonn", correct: true },
-            { text: "Er macht kein Praktikum", correct: false },
-        ]
-    }
+            { text: '6 Monate lang bei Haribo', correct: false },
+            { text: '3 Jahre lang direkt im BFW', correct: false },
+            { text: '2 Jahre (24 Monate) lang bei der DFG in Bonn', correct: true },
+            { text: 'Er macht kein Praktikum', correct: false },
+        ],
+    },
 ];
 
 const questionsEN = [
     {
-        question: "What is the main difference between retraining (Umschulung) and a regular apprenticeship (Ausbildung)?",
+        question:
+            'What is the main difference between retraining (Umschulung) and a regular apprenticeship (Ausbildung)?',
         answers: [
-            { text: "There is no difference", correct: false },
-            { text: "The training duration", correct: true },
-            { text: "The final exam", correct: false },
-            { text: "None of the above", correct: false },
-        ]
+            { text: 'There is no difference', correct: false },
+            { text: 'The training duration', correct: true },
+            { text: 'The final exam', correct: false },
+            { text: 'None of the above', correct: false },
+        ],
     },
     {
-        question: "How many BFW vocational retraining centers are there in Germany?",
+        question: 'How many BFW vocational retraining centers are there in Germany?',
         answers: [
-            { text: "5", correct: false },
-            { text: "12", correct: false },
-            { text: "28", correct: true },
-            { text: "None of the above", correct: false },
-        ]
+            { text: '5', correct: false },
+            { text: '12', correct: false },
+            { text: '28', correct: true },
+            { text: 'None of the above', correct: false },
+        ],
     },
     {
-        question: "Who are the sponsors covering retraining costs?",
+        question: 'Who are the sponsors covering retraining costs?',
         answers: [
-            { text: "Employment Agency", correct: false },
-            { text: "Trade Associations", correct: false },
-            { text: "Pension Insurance", correct: false },
-            { text: "All of the above are correct", correct: true },
-        ]
+            { text: 'Employment Agency', correct: false },
+            { text: 'Trade Associations', correct: false },
+            { text: 'Pension Insurance', correct: false },
+            { text: 'All of the above are correct', correct: true },
+        ],
     },
     {
-        question: "When are you allowed to undergo retraining at BFW?",
+        question: 'When are you allowed to undergo retraining at BFW?',
         answers: [
-            { text: "Upon approval of LTA (rehab benefit for participation in working life)", correct: true },
-            { text: "Anyone can do it at any time", correct: false },
-            { text: "Due to a minor car accident without rehabilitation needs", correct: false },
-            { text: "None of the above", correct: false },
-        ]
+            { text: 'Upon approval of LTA (rehab benefit for participation in working life)', correct: true },
+            { text: 'Anyone can do it at any time', correct: false },
+            { text: 'Due to a minor car accident without rehabilitation needs', correct: false },
+            { text: 'None of the above', correct: false },
+        ],
     },
     {
-        question: "Where and for how long is Maximilian completing his internship?",
+        question: 'Where and for how long is Maximilian completing his internship?',
         answers: [
-            { text: "6 months at Haribo", correct: false },
-            { text: "3 years inside the BFW", correct: false },
-            { text: "2 years (24 months) at DFG in Bonn", correct: true },
-            { text: "He is not doing any internship", correct: false },
-        ]
-    }
+            { text: '6 months at Haribo', correct: false },
+            { text: '3 years inside the BFW', correct: false },
+            { text: '2 years (24 months) at DFG in Bonn', correct: true },
+            { text: 'He is not doing any internship', correct: false },
+        ],
+    },
 ];
 
 // DOM Elemente
-const questionElement = document.getElementById("question");
-const answerButtons = document.getElementById("answer-buttons");
-const nextButton = document.getElementById("next-btn");
-const quizProgress = document.getElementById("quiz-progress");
+const questionElement = document.getElementById('question');
+const answerButtons = document.getElementById('answer-buttons');
+const nextButton = document.getElementById('next-btn');
+const quizProgress = document.getElementById('quiz-progress');
 
 // Spielvariablen
 let currentQuestionIndex = 0;
@@ -117,15 +118,14 @@ function renderBestScore() {
     const lang = document.documentElement.getAttribute('lang') || 'de';
     const bestScore = StorageManager.getItem('quiz_best_score');
     const totalQuestions = getActiveQuestions().length;
-    
+
     if (bestScore !== null) {
-        bestScoreEl.innerHTML = lang === 'de'
-            ? `Persönliche Bestleistung: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Richtige</span>`
-            : `Personal Best: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Correct</span>`;
+        bestScoreEl.innerHTML =
+            lang === 'de'
+                ? `Persönliche Bestleistung: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Richtige</span>`
+                : `Personal Best: <span style="color: var(--primary);">${bestScore} / ${totalQuestions} Correct</span>`;
     } else {
-        bestScoreEl.innerHTML = lang === 'de'
-            ? 'Persönliche Bestleistung: noch keine'
-            : 'Personal Best: none yet';
+        bestScoreEl.innerHTML = lang === 'de' ? 'Persönliche Bestleistung: noch keine' : 'Personal Best: none yet';
     }
 }
 
@@ -133,11 +133,14 @@ function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     questionCorrectness = new Array(getActiveQuestions().length).fill(false); // Reset correctness tracking
-    
+
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    nextButton.innerHTML = lang === 'de' ? 'Nächste Frage <i class="fa fa-arrow-right"></i>' : 'Next Question <i class="fa fa-arrow-right"></i>';
-    nextButton.className = "btn-primary";
-    
+    nextButton.innerHTML =
+        lang === 'de'
+            ? 'Nächste Frage <i class="fa fa-arrow-right"></i>'
+            : 'Next Question <i class="fa fa-arrow-right"></i>';
+    nextButton.className = 'btn-primary';
+
     renderBestScore();
     showQuestion();
 }
@@ -147,33 +150,33 @@ function showQuestion() {
     const questions = getActiveQuestions();
     let currentQuestion = questions[currentQuestionIndex];
     let questionNo = currentQuestionIndex + 1;
-    
+
     // Setzen der Frage
     questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;
-    
+
     // Fortschrittsanzeige
     if (quizProgress) {
-        const percent = ((currentQuestionIndex) / questions.length) * 100;
+        const percent = (currentQuestionIndex / questions.length) * 100;
         quizProgress.style.width = `${percent}%`;
     }
 
     // Antworten generieren
-    currentQuestion.answers.forEach(answer => {
-        const button = document.createElement("button");
+    currentQuestion.answers.forEach((answer) => {
+        const button = document.createElement('button');
         button.innerHTML = answer.text;
-        button.classList.add("btn-quiz");
-        button.setAttribute("role", "button");
+        button.classList.add('btn-quiz');
+        button.setAttribute('role', 'button');
         answerButtons.appendChild(button);
-        
+
         if (answer.correct) {
             button.dataset.correct = answer.correct;
         }
-        button.addEventListener("click", selectAnswer);
+        button.addEventListener('click', selectAnswer);
     });
 }
 
 function resetState() {
-    nextButton.style.display = "none";
+    nextButton.style.display = 'none';
     while (answerButtons.firstChild) {
         answerButtons.removeChild(answerButtons.firstChild);
     }
@@ -181,54 +184,58 @@ function resetState() {
 
 function selectAnswer(e) {
     const selectedBtn = e.target;
-    const isCorrect = selectedBtn.dataset.correct === "true";
+    const isCorrect = selectedBtn.dataset.correct === 'true';
     const questionIndex = currentQuestionIndex; // Capture current question index
-    
+
     if (isCorrect) {
-        selectedBtn.classList.add("correct");
+        selectedBtn.classList.add('correct');
         score++;
         questionCorrectness[questionIndex] = true; // Mark as correct
         if (typeof GameAudio !== 'undefined') {
             GameAudio.play('match');
         }
     } else {
-        selectedBtn.classList.add("incorrect");
+        selectedBtn.classList.add('incorrect');
         if (typeof GameAudio !== 'undefined') {
             questionCorrectness[questionIndex] = false; // Mark as incorrect
             GameAudio.play('fail');
         }
     }
-    
+
     // Alle Knöpfe deaktivieren und die richtige Antwort markieren
-    Array.from(answerButtons.children).forEach(button => {
-        if (button.dataset.correct === "true") {
-            button.classList.add("correct");
+    Array.from(answerButtons.children).forEach((button) => {
+        if (button.dataset.correct === 'true') {
+            button.classList.add('correct');
         }
         button.disabled = true;
     });
-    
-    nextButton.style.display = "block";
+
+    nextButton.style.display = 'block';
 }
 
 function showScore() {
     resetState();
     const questions = getActiveQuestions();
-    
+
     if (quizProgress) {
-        quizProgress.style.width = "100%";
+        quizProgress.style.width = '100%';
     }
-    
+
     // Determine weak categories from quiz
     const weakCategories = new Set();
     questions.forEach((q, index) => {
-        if (!questionCorrectness[index]) { // If question was answered incorrectly
+        if (!questionCorrectness[index]) {
+            // If question was answered incorrectly
             weakCategories.add(q.category);
         }
     });
     if (weakCategories.size > 0) {
-        StorageManager.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, JSON.stringify([...weakCategories]));
+        StorageManager.setItem(
+            STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES,
+            JSON.stringify([...weakCategories])
+        );
     }
-    
+
     const percentage = Math.round((score / questions.length) * 100);
 
     const bestScore = parseInt(StorageManager.getItem('quiz_best_score') || -1);
@@ -244,7 +251,7 @@ function showScore() {
     if (percentage === 100 && typeof Confetti !== 'undefined') {
         Confetti.start();
     }
-    
+
     // Sound play
     if (typeof GameAudio !== 'undefined') {
         if (percentage === 100) {
@@ -262,17 +269,17 @@ function showScore() {
     }
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    let feedback = "";
-    
+    let feedback = '';
+
     if (lang === 'de') {
         if (percentage === 100) {
-            feedback = "Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉";
+            feedback = 'Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉';
         } else if (percentage >= 60) {
-            feedback = "Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍";
+            feedback = 'Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍';
         } else {
-            feedback = "Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚";
+            feedback = 'Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚';
         }
-        
+
         questionElement.innerHTML = `
             <div style="text-align: center; padding: 1rem 0;">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
@@ -283,17 +290,17 @@ function showScore() {
                 <p style="color: var(--text-secondary);">${feedback}</p>
             </div>
         `;
-        
+
         nextButton.innerHTML = '<i class="fa fa-refresh"></i> Quiz neu starten';
     } else {
         if (percentage === 100) {
-            feedback = "Excellent! You answered all questions perfectly! 🎉";
+            feedback = 'Excellent! You answered all questions perfectly! 🎉';
         } else if (percentage >= 60) {
-            feedback = "Well done! You answered most questions correctly. 👍";
+            feedback = 'Well done! You answered most questions correctly. 👍';
         } else {
-            feedback = "Too bad! Please read the website content again and try once more. 📚";
+            feedback = 'Too bad! Please read the website content again and try once more. 📚';
         }
-        
+
         questionElement.innerHTML = `
             <div style="text-align: center; padding: 1rem 0;">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
@@ -304,12 +311,12 @@ function showScore() {
                 <p style="color: var(--text-secondary);">${feedback}</p>
             </div>
         `;
-        
+
         nextButton.innerHTML = '<i class="fa fa-refresh"></i> Restart Quiz';
     }
-    
-    nextButton.className = "btn-primary";
-    nextButton.style.display = "block";
+
+    nextButton.className = 'btn-primary';
+    nextButton.style.display = 'block';
 }
 
 function handleNextButton() {
@@ -323,7 +330,7 @@ function handleNextButton() {
 }
 
 if (questionElement && answerButtons && nextButton) {
-    nextButton.addEventListener("click", () => {
+    nextButton.addEventListener('click', () => {
         const questions = getActiveQuestions();
         if (currentQuestionIndex < questions.length) {
             handleNextButton();

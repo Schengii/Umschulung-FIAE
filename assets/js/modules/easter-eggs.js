@@ -3,7 +3,18 @@
  * ↑ ↑ ↓ ↓ ← → ← → B A triggers a secret celebration
  */
 export function initEasterEggs() {
-    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    const konamiCode = [
+        'ArrowUp',
+        'ArrowUp',
+        'ArrowDown',
+        'ArrowDown',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowLeft',
+        'ArrowRight',
+        'b',
+        'a',
+    ];
     let konamiIndex = 0;
 
     document.addEventListener('keydown', (e) => {

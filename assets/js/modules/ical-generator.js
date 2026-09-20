@@ -10,9 +10,9 @@ export function initIcalGenerator() {
 
     let selectedTime = null;
 
-    slotsContainer.querySelectorAll('.btn-slot').forEach(btn => {
+    slotsContainer.querySelectorAll('.btn-slot').forEach((btn) => {
         btn.addEventListener('click', () => {
-            slotsContainer.querySelectorAll('.btn-slot').forEach(b => b.classList.remove('active'));
+            slotsContainer.querySelectorAll('.btn-slot').forEach((b) => b.classList.remove('active'));
             btn.classList.add('active');
             selectedTime = btn.dataset.time || '10:00';
             bookingBtn.classList.remove('display-none');
@@ -34,7 +34,8 @@ export function initIcalGenerator() {
         const endISO = `${year}${month}${day}T${endHours}${minutes}00`;
 
         const title = 'Kennenlerngespräch - Maximilian Schenk (FIAE)';
-        const description = 'Kennenlerngespräch bezüglich Fachinformatiker Anwendungsentwicklung Position. Website: https://www.max-schenk.tech';
+        const description =
+            'Kennenlerngespräch bezüglich Fachinformatiker Anwendungsentwicklung Position. Website: https://www.max-schenk.tech';
         const location = 'Online Meeting (Teams / Zoom)';
 
         // 1. Generate Google Calendar URL
@@ -52,14 +53,16 @@ export function initIcalGenerator() {
             `DTSTART:${startISO}`,
             `DTEND:${endISO}`,
             'END:VEVENT',
-            'END:VCALENDAR'
+            'END:VCALENDAR',
         ].join('\n');
 
         // Notify Maximilian directly via mailto — without this, the slot below only ever
         // creates a calendar entry for the visitor, and he would never actually learn
         // that someone requested an appointment.
         const notifySubject = encodeURIComponent(`Terminanfrage: Kennenlerngespräch am ${day}.${month}.${year}`);
-        const notifyBody = encodeURIComponent(`Hallo Maximilian,\n\nich würde mich gerne mit dir zu einem Kennenlerngespräch austauschen.\n\nVorgeschlagener Termin: ${day}.${month}.${year} um ${selectedTime} Uhr\n\nBitte melde dich zur Bestätigung oder mit einem Alternativvorschlag zurück.\n\nViele Grüße`);
+        const notifyBody = encodeURIComponent(
+            `Hallo Maximilian,\n\nich würde mich gerne mit dir zu einem Kennenlerngespräch austauschen.\n\nVorgeschlagener Termin: ${day}.${month}.${year} um ${selectedTime} Uhr\n\nBitte melde dich zur Bestätigung oder mit einem Alternativvorschlag zurück.\n\nViele Grüße`
+        );
         const notifyMailto = `mailto:sche-max@web.de?subject=${notifySubject}&body=${notifyBody}`;
 
         if (successDiv) {

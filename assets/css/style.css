@@ -112,9 +112,18 @@
     --bg-grid-color: rgba(255, 255, 255, 0.02);
     --bg-glow-1: rgba(96, 165, 250, 0.08);
     --bg-glow-2: rgba(139, 92, 246, 0.08);
+
+    /* #60a5fa is too light for white text (2.54:1) on solid-fill chips/buttons */
+    --text-on-primary: #0f172a;
 }
 
-/* Accent Color Custom Properties Definitions */
+/* Accent Color Custom Properties Definitions
+   --text-on-primary is the text color for elements filled solid with
+   var(--primary) (active filter chips/tabs). Each accent's --primary was
+   picked for readability as TEXT/border/icon color, not as a solid button
+   fill, so most of them don't meet 4.5:1 contrast against white and need a
+   dark override here instead; only the default light-mode blue is light
+   enough in relative luminance to keep white text. */
 html[data-accent="blue"] {
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
@@ -130,6 +139,7 @@ html[data-accent="blue"] {
     --accent: #8b5cf6;
     --accent-light: rgba(139, 92, 246, 0.15);
     --bg-nav-active: #3b82f6;
+    --text-on-primary: #0f172a;
 }
 
 html[data-accent="emerald"] {
@@ -139,6 +149,7 @@ html[data-accent="emerald"] {
     --accent: #0d9488;
     --accent-light: #f0fdfa;
     --bg-nav-active: #10b981;
+    --text-on-primary: #0f172a;
 }
 [data-theme="dark"][data-accent="emerald"] {
     --primary: #34d399;
@@ -147,6 +158,7 @@ html[data-accent="emerald"] {
     --accent: #14b8a6;
     --accent-light: rgba(20, 184, 166, 0.15);
     --bg-nav-active: #10b981;
+    --text-on-primary: #0f172a;
 }
 
 html[data-accent="violet"] {
@@ -156,6 +168,10 @@ html[data-accent="violet"] {
     --accent: #ec4899;
     --accent-light: #fdf2f8;
     --bg-nav-active: #8b5cf6;
+    /* #8b5cf6 fails 4.5:1 with EITHER white (4.23:1) or dark (4.22:1) text,
+       so unlike the other accents this one needs a darker solid-fill shade
+       instead of just a text-color swap; white text stays fine on it. */
+    --chip-active-bg: #7c3aed;
 }
 [data-theme="dark"][data-accent="violet"] {
     --primary: #a78bfa;
@@ -163,6 +179,7 @@ html[data-accent="violet"] {
     --primary-light: rgba(167, 139, 250, 0.15);
     --accent: #f472b6;
     --accent-light: rgba(244, 114, 182, 0.15);
+    --text-on-primary: #0f172a;
     --bg-nav-active: #8b5cf6;
 }
 
@@ -173,6 +190,7 @@ html[data-accent="orange"] {
     --accent: #e11d48;
     --accent-light: #fff1f2;
     --bg-nav-active: #f97316;
+    --text-on-primary: #0f172a;
 }
 [data-theme="dark"][data-accent="orange"] {
     --primary: #fb923c;
@@ -181,6 +199,7 @@ html[data-accent="orange"] {
     --accent: #fb7185;
     --accent-light: rgba(251, 113, 133, 0.15);
     --bg-nav-active: #f97316;
+    --text-on-primary: #0f172a;
 }
 
 html[data-accent="rose"] {
@@ -190,6 +209,7 @@ html[data-accent="rose"] {
     --accent: #8b5cf6;
     --accent-light: #f5f3ff;
     --bg-nav-active: #f43f5e;
+    --text-on-primary: #0f172a;
 }
 [data-theme="dark"][data-accent="rose"] {
     --primary: #fb7185;
@@ -198,6 +218,7 @@ html[data-accent="rose"] {
     --accent: #a78bfa;
     --accent-light: rgba(167, 139, 250, 0.15);
     --bg-nav-active: #f43f5e;
+    --text-on-primary: #0f172a;
 }
 
 /* ==========================================================================
@@ -1797,9 +1818,9 @@ html[lang="en"] [lang="de"] {
 }
 
 .btn-filter.active {
-    background-color: var(--primary);
+    background-color: var(--chip-active-bg, var(--primary));
     border-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
 }
 
 /* Tech tag styling for portfolio */
@@ -2704,9 +2725,9 @@ html[lang="en"] [lang="de"] {
 }
 
 .category-tab.active {
-    background-color: var(--primary);
+    background-color: var(--chip-active-bg, var(--primary));
     border-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
 }
 
 /* 3D Flashcard Structure */

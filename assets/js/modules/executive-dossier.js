@@ -4,66 +4,69 @@
  */
 
 const DOSSIER_TEMPLATES = {
-  fullstack: {
-    title: 'Executive Dossier: Fullstack & Frontend Engineering',
-    role: 'Frontend & PWA Specialist (React / TypeScript / Lit)',
-    summary: 'Spezialisierung auf performante Single-Page- & Progressive-Web-Apps mit nativer Browser-Architektur, Offline-First-Konzepten und moderner UI/UX nach WCAG 2.1 AAA.',
-    highlights: [
-      'EcoChef (Lit/TS PWA + Gemini KI) — IHK Abschlussprojekt',
-      'ElektroCheck AI (React/Vite + OpenAI API)',
-      'Finanzenportfolio (React + Recharts Dashboards)',
-      'Urlaubsfotos (React/Vite PWA mit Filter-Engine)'
-    ],
-    skills: 'TypeScript, JavaScript ES6+, React 19, Lit Web Components, HTML5/CSS3, PWA (Service Worker, IndexedDB), Vite, Playwright E2E'
-  },
-  backend: {
-    title: 'Executive Dossier: Systems Engineering & C++ / Godot',
-    role: 'Software Architect & Game Engine Developer',
-    summary: 'Fokus auf objektorientierte Systementwicklung, hardwarenahe Programmierung, algorithmische Komplexität und performante Grafik-Engines.',
-    highlights: [
-      'Minecraft 3D Voxel Engine (C++20, OpenGL 4.5, Biome & Redstone)',
-      'Minecraft-Pokemon RPG (Godot 4.x, C# .NET)',
-      'Orbital Scrap (Godot 4.6 Sci-Fi Idle Game)',
-      'SQL & Relational DB Playground (PostgreSQL / SQLite)'
-    ],
-    skills: 'C++20, Modern C# .NET, Godot Engine 4.x, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading'
-  },
-  ihk: {
-    title: 'IHK Prüfungs-Dossier: Fachinformatiker Anwendungsentwicklung',
-    role: 'IHK Abschlussprüfung FIAE (Sommer 2026)',
-    summary: 'Umfassender Nachweis der beruflichen Handlungskompetenz nach Ausbildungsrahmenplan: Von der Wirtschaftlichkeitsanalyse über saubere C4-Architektur bis hin zur vollständigen Testabdeckung.',
-    highlights: [
-      '80h IHK-Abschlussprojekt EcoChef (inkl. Nutzwertanalyse & Amortisation)',
-      'Elektroniker-FIAE Transfermatrix & Systemkompetenz',
-      'Playwright Test-Suite mit 100% Pass-Rate',
-      'Vollständige Einhaltung von DSGVO und WCAG 2.1 AAA'
-    ],
-    skills: 'Software Engineering, Projektmanagement (80h), Nutzwertanalyse, UML/C4, Relationale DBs (SQL), Clean Code, QA & E2E Testing'
-  }
+    fullstack: {
+        title: 'Executive Dossier: Fullstack & Frontend Engineering',
+        role: 'Frontend & PWA Specialist (React / TypeScript / Lit)',
+        summary:
+            'Spezialisierung auf performante Single-Page- & Progressive-Web-Apps mit nativer Browser-Architektur, Offline-First-Konzepten und moderner UI/UX nach WCAG 2.1 AAA.',
+        highlights: [
+            'EcoChef (Lit/TS PWA + Gemini KI) — IHK Abschlussprojekt',
+            'ElektroCheck AI (React/Vite + OpenAI API)',
+            'Finanzenportfolio (React + Recharts Dashboards)',
+            'Urlaubsfotos (React/Vite PWA mit Filter-Engine)',
+        ],
+        skills: 'TypeScript, JavaScript ES6+, React 19, Lit Web Components, HTML5/CSS3, PWA (Service Worker, IndexedDB), Vite, Playwright E2E',
+    },
+    backend: {
+        title: 'Executive Dossier: Systems Engineering & C++ / Godot',
+        role: 'Software Architect & Game Engine Developer',
+        summary:
+            'Fokus auf objektorientierte Systementwicklung, hardwarenahe Programmierung, algorithmische Komplexität und performante Grafik-Engines.',
+        highlights: [
+            'Minecraft 3D Voxel Engine (C++20, OpenGL 4.5, Biome & Redstone)',
+            'Minecraft-Pokemon RPG (Godot 4.x, C# .NET)',
+            'Orbital Scrap (Godot 4.6 Sci-Fi Idle Game)',
+            'SQL & Relational DB Playground (PostgreSQL / SQLite)',
+        ],
+        skills: 'C++20, Modern C# .NET, Godot Engine 4.x, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading',
+    },
+    ihk: {
+        title: 'IHK Prüfungs-Dossier: Fachinformatiker Anwendungsentwicklung',
+        role: 'IHK Abschlussprüfung FIAE (Sommer 2026)',
+        summary:
+            'Umfassender Nachweis der beruflichen Handlungskompetenz nach Ausbildungsrahmenplan: Von der Wirtschaftlichkeitsanalyse über saubere C4-Architektur bis hin zur vollständigen Testabdeckung.',
+        highlights: [
+            '80h IHK-Abschlussprojekt EcoChef (inkl. Nutzwertanalyse & Amortisation)',
+            'Elektroniker-FIAE Transfermatrix & Systemkompetenz',
+            'Playwright Test-Suite mit 100% Pass-Rate',
+            'Vollständige Einhaltung von DSGVO und WCAG 2.1 AAA',
+        ],
+        skills: 'Software Engineering, Projektmanagement (80h), Nutzwertanalyse, UML/C4, Relationale DBs (SQL), Clean Code, QA & E2E Testing',
+    },
 };
 
 export function initExecutiveDossier() {
-  injectDossierModal();
-  attachDossierEvents();
+    injectDossierModal();
+    attachDossierEvents();
 }
 
 function injectDossierModal() {
-  if (document.getElementById('executive-dossier-modal')) return;
+    if (document.getElementById('executive-dossier-modal')) return;
 
-  const modal = document.createElement('div');
-  modal.id = 'executive-dossier-modal';
-  modal.className = 'modal-backdrop';
-  modal.style.display = 'none';
-  modal.style.position = 'fixed';
-  modal.style.inset = '0';
-  modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-  modal.style.backdropFilter = 'blur(6px)';
-  modal.style.zIndex = '99999';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
-  modal.style.padding = '1rem';
+    const modal = document.createElement('div');
+    modal.id = 'executive-dossier-modal';
+    modal.className = 'modal-backdrop';
+    modal.style.display = 'none';
+    modal.style.position = 'fixed';
+    modal.style.inset = '0';
+    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    modal.style.backdropFilter = 'blur(6px)';
+    modal.style.zIndex = '99999';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.padding = '1rem';
 
-  modal.innerHTML = `
+    modal.innerHTML = `
     <div class="card" style="width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; background: var(--bg-card, #1e293b); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
         <div>
@@ -121,75 +124,75 @@ function injectDossierModal() {
     </div>
   `;
 
-  document.body.appendChild(modal);
+    document.body.appendChild(modal);
 }
 
 function attachDossierEvents() {
-  const modal = document.getElementById('executive-dossier-modal');
-  const btnClose = document.getElementById('btn-close-dossier');
-  const btnPrint = document.getElementById('btn-print-dossier');
-  const typeBtns = document.querySelectorAll('.dossier-type-btn');
+    const modal = document.getElementById('executive-dossier-modal');
+    const btnClose = document.getElementById('btn-close-dossier');
+    const btnPrint = document.getElementById('btn-print-dossier');
+    const typeBtns = document.querySelectorAll('.dossier-type-btn');
 
-  if (btnClose && modal) {
-    btnClose.addEventListener('click', () => (modal.style.display = 'none'));
-  }
-
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
-    });
-  }
-
-  typeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      typeBtns.forEach(b => {
-        b.classList.remove('active', 'btn-primary');
-        b.classList.add('btn-secondary');
-      });
-      btn.classList.add('active', 'btn-primary');
-      btn.classList.remove('btn-secondary');
-
-      renderDossierPreview(btn.dataset.type);
-    });
-  });
-
-  if (btnPrint) {
-    btnPrint.addEventListener('click', () => {
-      window.print();
-    });
-  }
-
-  // Trigger from anywhere with [data-open-dossier]
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('[data-open-dossier]');
-    if (trigger) {
-      e.preventDefault();
-      openDossierModal();
+    if (btnClose && modal) {
+        btnClose.addEventListener('click', () => (modal.style.display = 'none'));
     }
-  });
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    }
+
+    typeBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            typeBtns.forEach((b) => {
+                b.classList.remove('active', 'btn-primary');
+                b.classList.add('btn-secondary');
+            });
+            btn.classList.add('active', 'btn-primary');
+            btn.classList.remove('btn-secondary');
+
+            renderDossierPreview(btn.dataset.type);
+        });
+    });
+
+    if (btnPrint) {
+        btnPrint.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    // Trigger from anywhere with [data-open-dossier]
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-open-dossier]');
+        if (trigger) {
+            e.preventDefault();
+            openDossierModal();
+        }
+    });
 }
 
 export function openDossierModal(initialType = 'fullstack') {
-  const modal = document.getElementById('executive-dossier-modal');
-  if (!modal) return;
+    const modal = document.getElementById('executive-dossier-modal');
+    if (!modal) return;
 
-  renderDossierPreview(initialType);
-  modal.style.display = 'flex';
+    renderDossierPreview(initialType);
+    modal.style.display = 'flex';
 }
 
 function renderDossierPreview(typeKey) {
-  const data = DOSSIER_TEMPLATES[typeKey] || DOSSIER_TEMPLATES.fullstack;
+    const data = DOSSIER_TEMPLATES[typeKey] || DOSSIER_TEMPLATES.fullstack;
 
-  const roleEl = document.getElementById('dossier-role-text');
-  const summaryEl = document.getElementById('dossier-summary-text');
-  const highlightsEl = document.getElementById('dossier-highlights-list');
-  const skillsEl = document.getElementById('dossier-skills-text');
+    const roleEl = document.getElementById('dossier-role-text');
+    const summaryEl = document.getElementById('dossier-summary-text');
+    const highlightsEl = document.getElementById('dossier-highlights-list');
+    const skillsEl = document.getElementById('dossier-skills-text');
 
-  if (roleEl) roleEl.textContent = data.role;
-  if (summaryEl) summaryEl.textContent = data.summary;
-  if (skillsEl) skillsEl.textContent = data.skills;
+    if (roleEl) roleEl.textContent = data.role;
+    if (summaryEl) summaryEl.textContent = data.summary;
+    if (skillsEl) skillsEl.textContent = data.skills;
 
-  if (highlightsEl) {
-    highlightsEl.innerHTML = data.highlights.map(h => `<li>${h}</li>`).join('');
-  }
+    if (highlightsEl) {
+        highlightsEl.innerHTML = data.highlights.map((h) => `<li>${h}</li>`).join('');
+    }
 }

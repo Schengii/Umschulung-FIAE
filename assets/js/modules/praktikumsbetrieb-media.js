@@ -12,7 +12,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Vereinfachtes, zur Veranschaulichung erstelltes Organigramm mit Fachabteilungen und administrativen Bereichen.',
         altEn: 'Simplified, illustrative organization chart with specialist departments and administrative areas.',
         descDe: 'Eine vereinfachte, zur Veranschaulichung erstellte Darstellung, wie eine große Forschungsförderorganisation wie die DFG in Fachabteilungen und administrative Bereiche gegliedert sein kann — keine originalgetreue interne Unterlage.',
-        descEn: 'A simplified, illustrative diagram of how a large research funding organization like the DFG can be structured into departments and administrative areas — not a verbatim internal document.'
+        descEn: 'A simplified, illustrative diagram of how a large research funding organization like the DFG can be structured into departments and administrative areas — not a verbatim internal document.',
     },
     {
         id: 'team-anwendungsmanagement',
@@ -22,7 +22,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Vereinfachte Darstellung eines Web-Entwicklerteams mit Rollenverteilung.',
         altEn: 'Simplified illustration of a web development team with role distribution.',
         descDe: 'Eine vereinfachte, anonymisierte Darstellung der Rollenverteilung im 9-köpfigen Web-Entwicklerteam mit Schwerpunkt Frontend-Technologien, in dem ich eingesetzt war.',
-        descEn: 'A simplified, anonymized illustration of the role distribution within the 9-member web development team focused on frontend technologies where I was deployed.'
+        descEn: 'A simplified, anonymized illustration of the role distribution within the 9-member web development team focused on frontend technologies where I was deployed.',
     },
     {
         id: 'zuständigkeiten',
@@ -32,7 +32,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Vereinfachtes Übersichtsdiagramm typischer fachlicher Zuständigkeiten innerhalb eines Entwicklungsteams.',
         altEn: 'Simplified overview diagram of typical areas of responsibility within a development team.',
         descDe: 'Eine vereinfachte, zur Veranschaulichung erstellte Übersicht, wie fachliche Zuständigkeiten und Software-Bereiche innerhalb meines Entwicklungsteams grob aufgeteilt waren.',
-        descEn: 'A simplified, illustrative overview of how technical areas and software responsibilities were roughly divided within my development team.'
+        descEn: 'A simplified, illustrative overview of how technical areas and software responsibilities were roughly divided within my development team.',
     },
     {
         id: 'foerderaktivitaeten',
@@ -42,7 +42,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Illustratives Diagramm zur Verteilung von Fördermitteln nach Wissenschaftsbereichen.',
         altEn: 'Illustrative chart showing the distribution of funding by scientific domain.',
         descDe: 'Eine vereinfachte, illustrative Grafik zum Prinzip der Fördermittelverteilung nach Wissenschaftsbereichen bei einer Forschungsförderorganisation — keine originalen internen Zahlen.',
-        descEn: 'A simplified, illustrative graphic on the principle of funding distribution by scientific field at a research funding organization — not original internal figures.'
+        descEn: 'A simplified, illustrative graphic on the principle of funding distribution by scientific field at a research funding organization — not original internal figures.',
     },
     {
         id: 'neufa',
@@ -52,7 +52,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Vereinfachte Visualisierung einer internen Modernisierungsinitiative zur IT-Infrastruktur.',
         altEn: 'Simplified visualization of an internal IT infrastructure modernization initiative.',
         descDe: 'Ein vereinfachter Einblick in eine interne Modernisierungs- und Web-Infrastruktur-Initiative, an der ich mitwirken durfte.',
-        descEn: 'A simplified glimpse into an internal modernization and web infrastructure initiative I was able to contribute to.'
+        descEn: 'A simplified glimpse into an internal modernization and web infrastructure initiative I was able to contribute to.',
     },
     {
         id: 'elan',
@@ -62,7 +62,7 @@ const DFG_GALLERY_DATA = [
         altDe: 'Vereinfachte Konzeptdarstellung eines Portals für elektronische Antragstellung.',
         altEn: 'Simplified concept illustration of an electronic proposal submission portal.',
         descDe: 'Ein vereinfachtes Konzeptbild zu einem zentralen Portal für elektronische Antragstellung, an dessen Frontend-Komponenten ich mitgearbeitet habe.',
-        descEn: 'A simplified concept illustration of a central portal for electronic proposal submissions, whose frontend components I helped work on.'
+        descEn: 'A simplified concept illustration of a central portal for electronic proposal submissions, whose frontend components I helped work on.',
     },
     {
         id: 'sprint',
@@ -72,8 +72,8 @@ const DFG_GALLERY_DATA = [
         altDe: 'Darstellung des agilen Scrum-Prozesses mit Sprint-Planung, Daily Standup, Review und Retrospektive.',
         altEn: 'Diagram showing the agile Scrum process with Sprint Planning, Daily Standup, Review, and Retrospective.',
         descDe: 'Die allgemeine agile Entwicklungsmethodik (Scrum) meines Teams, bestehend aus 2-Wochen-Sprints zur strukturierten Projektabwicklung.',
-        descEn: 'The general agile development methodology (Scrum) used by my team, utilizing 2-week sprints for structured project execution.'
-    }
+        descEn: 'The general agile development methodology (Scrum) used by my team, utilizing 2-week sprints for structured project execution.',
+    },
 ];
 
 const ECOCHEF_VIDEO_DATA = [
@@ -84,7 +84,7 @@ const ECOCHEF_VIDEO_DATA = [
         src: 'assets/videos/V1_Hauptclip.mp4',
         duration: '1:06',
         descDe: 'Der Hauptclip zeigt das grundlegende Konzept von EcoChef: Zutateneingabe im virtuellen Kühlschrank, Absenden an die Gemini-KI, Generierung des Rezepts mit Nährwert- und CO2-Ersparnis-Berechnung.',
-        descEn: 'The main clip highlights the core concept of EcoChef: entering ingredients in the virtual pantry, submitting to Gemini AI, and generating custom recipes with nutrition and carbon savings data.'
+        descEn: 'The main clip highlights the core concept of EcoChef: entering ingredients in the virtual pantry, submitting to Gemini AI, and generating custom recipes with nutrition and carbon savings data.',
     },
     {
         id: 'v2',
@@ -93,7 +93,7 @@ const ECOCHEF_VIDEO_DATA = [
         src: 'assets/videos/V2_Kochmodusclip.mp4',
         duration: '0:22',
         descDe: 'Demonstration des interaktiven Kochmodus. Dank Sprachausgabe liest der intelligente Assistent die Zubereitungsschritte vor, damit man beim Kochen die Hände frei hat.',
-        descEn: 'Demonstration of the interactive cooking mode. Thanks to speech synthesis, the assistant reads out the cooking steps hands-free.'
+        descEn: 'Demonstration of the interactive cooking mode. Thanks to speech synthesis, the assistant reads out the cooking steps hands-free.',
     },
     {
         id: 'v3',
@@ -102,7 +102,7 @@ const ECOCHEF_VIDEO_DATA = [
         src: 'assets/videos/V3_Rezept_anpassen_clip.mp4',
         duration: '1:16',
         descDe: 'Zeigt, wie flexibel die Anwendung ist: Ein generiertes Rezept lässt sich nachträglich anpassen (z. B. "mach es schärfer" oder "vegane Option"), woraufhin Gemini das Rezept neu ausgibt.',
-        descEn: 'Shows the app flexibility: Any generated recipe can be modified on the fly (e.g. "make it spicier" or "vegan option"), and Gemini adjusts it instantly.'
+        descEn: 'Shows the app flexibility: Any generated recipe can be modified on the fly (e.g. "make it spicier" or "vegan option"), and Gemini adjusts it instantly.',
     },
     {
         id: 'v4',
@@ -111,7 +111,7 @@ const ECOCHEF_VIDEO_DATA = [
         duration: '1:33',
         src: 'assets/videos/V4_Rezept_speichern_im_lokalstorage.mp4',
         descDe: 'EcoChef speichert Lieblingsrezepte dauerhaft lokal ab. Dieser Clip zeigt das Speichern, Abrufen und Verwalten der erstellten Rezepte ohne Server-Zwang.',
-        descEn: 'EcoChef stores favorite recipes permanently in local storage. This clip shows saving, loading, and managing custom recipes serverlessly.'
+        descEn: 'EcoChef stores favorite recipes permanently in local storage. This clip shows saving, loading, and managing custom recipes serverlessly.',
     },
     {
         id: 'v5',
@@ -120,12 +120,13 @@ const ECOCHEF_VIDEO_DATA = [
         duration: '0:50',
         src: 'assets/videos/V5_Dark_Light_Mode_Wechsel.mp4',
         descDe: 'Veranschaulichung des flüssigen und barrierefreien Wechsels zwischen Dark und Light Mode in der EcoChef-App, abgestimmt auf die Präferenzen des Benutzers.',
-        descEn: 'Demonstration of the smooth and accessible transition between dark and light modes in the EcoChef application, tailored to user preferences.'
-    }
+        descEn: 'Demonstration of the smooth and accessible transition between dark and light modes in the EcoChef application, tailored to user preferences.',
+    },
 ];
 
 export function initPraktikumsbetriebMedia() {
-    const isInternshipPage = window.location.pathname.endsWith('praktikumsbetrieb.html') || document.getElementById('dfg-gallery-section');
+    const isInternshipPage =
+        window.location.pathname.endsWith('praktikumsbetrieb.html') || document.getElementById('dfg-gallery-section');
     if (!isInternshipPage) return;
 
     setupDfgGallery();
@@ -151,7 +152,7 @@ function setupDfgGallery() {
         // Update Image attributes (supporting WCAG Alt text)
         imageEl.style.opacity = '0';
         setTimeout(() => {
-            imageEl.src = (window.resolveAssetPath || (p => p))(item.src);
+            imageEl.src = (window.resolveAssetPath || ((p) => p))(item.src);
             imageEl.alt = lang === 'de' ? item.altDe : item.altEn;
             imageEl.style.opacity = '1';
         }, 150);
@@ -223,11 +224,11 @@ function setupEcoChefVideoPlayer() {
 
         // Update player source
         const wasPaused = videoEl.paused;
-        videoEl.src = (window.resolveAssetPath || (p => p))(videoItem.src);
+        videoEl.src = (window.resolveAssetPath || ((p) => p))(videoItem.src);
         videoEl.load();
 
         if (shouldPlay && !wasPaused) {
-            videoEl.play().catch(err => console.log('Autoplay blocked or interrupted:', err));
+            videoEl.play().catch((err) => console.log('Autoplay blocked or interrupted:', err));
         }
 
         // Update titles and descriptions
@@ -305,36 +306,38 @@ function setupElektroCheckScanner() {
             y: 0.68,
             width: 0.18,
             height: 0.22,
-            label: "Isolationsfehler / Cable damage",
-            color: "#ef4444",
-            titleDe: "⚠️ Kabel beschädigt (Isolationsfehler)",
-            titleEn: "⚠️ Damaged Cable (Insulation fault)",
-            risk: "CRITICAL",
-            descDe: "Das Netzkabel der Kaffeemaschine weist eine mechanische Beschädigung mit freiliegenden Adern auf. Gefahr von Kurzschluss und elektrischem Schlag.",
-            descEn: "The power cord shows mechanical damage with exposed copper wires. Risk of short circuit and electric shock.",
+            label: 'Isolationsfehler / Cable damage',
+            color: '#ef4444',
+            titleDe: '⚠️ Kabel beschädigt (Isolationsfehler)',
+            titleEn: '⚠️ Damaged Cable (Insulation fault)',
+            risk: 'CRITICAL',
+            descDe: 'Das Netzkabel der Kaffeemaschine weist eine mechanische Beschädigung mit freiliegenden Adern auf. Gefahr von Kurzschluss und elektrischem Schlag.',
+            descEn: 'The power cord shows mechanical damage with exposed copper wires. Risk of short circuit and electric shock.',
             actionDe: "Maßnahme: Sofort außer Betrieb nehmen, Plakette 'Gesperrt' anbringen und Kabel tauschen.",
-            actionEn: "Action: Decommission immediately, attach 'Locked' label, and replace power cord."
+            actionEn: "Action: Decommission immediately, attach 'Locked' label, and replace power cord.",
         },
         {
             x: 0.72,
             y: 0.22,
             width: 0.08,
             height: 0.1,
-            label: "Prüffrist überfällig / Overdue",
-            color: "#f97316",
-            titleDe: "⏱️ Prüffrist abgelaufen (DGUV V3)",
-            titleEn: "⏱️ Testing Period Overdue (DGUV V3)",
-            risk: "MEDIUM",
-            descDe: "Die regelmäßige Sicherheitsprüfung nach DGUV Vorschrift 3 für diese Kaffeemaschine ist seit Mai 2026 abgelaufen.",
-            descEn: "The regular safety inspection according to DGUV regulation 3 for this coffee machine is overdue since May 2026.",
-            actionDe: "Maßnahme: Wiederholungsprüfung durch befähigte Person unverzüglich durchführen lassen.",
-            actionEn: "Action: Schedule re-testing by a qualified inspector immediately."
-        }
+            label: 'Prüffrist überfällig / Overdue',
+            color: '#f97316',
+            titleDe: '⏱️ Prüffrist abgelaufen (DGUV V3)',
+            titleEn: '⏱️ Testing Period Overdue (DGUV V3)',
+            risk: 'MEDIUM',
+            descDe: 'Die regelmäßige Sicherheitsprüfung nach DGUV Vorschrift 3 für diese Kaffeemaschine ist seit Mai 2026 abgelaufen.',
+            descEn: 'The regular safety inspection according to DGUV regulation 3 for this coffee machine is overdue since May 2026.',
+            actionDe: 'Maßnahme: Wiederholungsprüfung durch befähigte Person unverzüglich durchführen lassen.',
+            actionEn: 'Action: Schedule re-testing by a qualified inspector immediately.',
+        },
     ];
 
     function renderResultsList() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
-        resultsList.innerHTML = defects.map(d => `
+        resultsList.innerHTML = defects
+            .map(
+                (d) => `
             <div class="scanner-result-item ${d.risk.toLowerCase()}">
                 <div class="scanner-result-title">
                     <span>${lang === 'de' ? d.titleDe : d.titleEn}</span>
@@ -343,7 +346,9 @@ function setupElektroCheckScanner() {
                 <div class="scanner-result-desc">${lang === 'de' ? d.descDe : d.descEn}</div>
                 <div class="scanner-result-action">${lang === 'de' ? d.actionDe : d.actionEn}</div>
             </div>
-        `).join('');
+        `
+            )
+            .join('');
     }
 
     runBtn.addEventListener('click', () => {
@@ -361,9 +366,10 @@ function setupElektroCheckScanner() {
         if (playIcon) playIcon.style.display = 'none';
         laser.classList.add('active');
 
-        statusBox.innerHTML = lang === 'de'
-            ? `<span><i class="fa fa-sync fa-spin"></i> KI analysiert Bild auf Mängel...</span>`
-            : `<span><i class="fa fa-sync fa-spin"></i> AI analyzing image for anomalies...</span>`;
+        statusBox.innerHTML =
+            lang === 'de'
+                ? `<span><i class="fa fa-sync fa-spin"></i> KI analysiert Bild auf Mängel...</span>`
+                : `<span><i class="fa fa-sync fa-spin"></i> AI analyzing image for anomalies...</span>`;
 
         resultsCard.classList.add('collapsed');
 
@@ -374,9 +380,10 @@ function setupElektroCheckScanner() {
             if (playIcon) playIcon.style.display = 'inline-block';
             clearBtn.disabled = false;
 
-            statusBox.innerHTML = lang === 'de'
-                ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
-                : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
+            statusBox.innerHTML =
+                lang === 'de'
+                    ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
+                    : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
 
             // Draw bounding boxes
             if (bboxRenderer) {
@@ -405,9 +412,10 @@ function setupElektroCheckScanner() {
         clearBtn.disabled = true;
         runBtn.disabled = false;
 
-        statusBox.innerHTML = lang === 'de'
-            ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
-            : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
+        statusBox.innerHTML =
+            lang === 'de'
+                ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
+                : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
     });
 
     // Listen for language changes to update existing details
@@ -417,14 +425,16 @@ function setupElektroCheckScanner() {
 
             // Re-render status text
             const lang = document.documentElement.getAttribute('lang') || 'de';
-            statusBox.innerHTML = lang === 'de'
-                ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
-                : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
+            statusBox.innerHTML =
+                lang === 'de'
+                    ? `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analyse abgeschlossen. 2 Mängel identifiziert.</span>`
+                    : `<span><i class="fa fa-check-circle" style="color:#10b981;"></i> Analysis completed. 2 defects identified.</span>`;
         } else {
             const lang = document.documentElement.getAttribute('lang') || 'de';
-            statusBox.innerHTML = lang === 'de'
-                ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
-                : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
+            statusBox.innerHTML =
+                lang === 'de'
+                    ? `<span><i class="fa-solid fa-circle-info"></i> Bereit für Analyse.</span>`
+                    : `<span><i class="fa-solid fa-circle-info"></i> Ready for analysis.</span>`;
         }
     });
 }

@@ -7,148 +7,148 @@ import { filterRadarSkills, filterListSkills, sortSkills } from './modules/skill
 const SKILLS_DATA = [
     // Frontend
     {
-        name: "HTML5 / CSS3",
+        name: 'HTML5 / CSS3',
         score: 90,
-        category: "frontend",
-        descDe: "Semantisches HTML, CSS-Layouts (Flexbox, Grid), responsive Anpassungen und BFW-barrierefreie Designs.",
-        descEn: "Semantic HTML, CSS layouts (Flexbox, Grid), responsive design, and accessible markup.",
-        refLink: "playground.html",
-        refTextDe: "Im Code Playground testen",
-        refTextEn: "Test in Code Playground"
+        category: 'frontend',
+        descDe: 'Semantisches HTML, CSS-Layouts (Flexbox, Grid), responsive Anpassungen und BFW-barrierefreie Designs.',
+        descEn: 'Semantic HTML, CSS layouts (Flexbox, Grid), responsive design, and accessible markup.',
+        refLink: 'playground.html',
+        refTextDe: 'Im Code Playground testen',
+        refTextEn: 'Test in Code Playground',
     },
     {
-        name: "JavaScript (ES6+)",
+        name: 'JavaScript (ES6+)',
         score: 85,
-        category: "frontend",
-        descDe: "Moderne Syntax, Asynchronität (Promises, async/await), DOM-Manipulation und Event-Handling.",
-        descEn: "Modern ES6+ syntax, asynchronous programming (Promises, async/await), DOM and Event APIs.",
-        refLink: "playground.html",
-        refTextDe: "Im Code Playground testen",
-        refTextEn: "Test in Code Playground"
+        category: 'frontend',
+        descDe: 'Moderne Syntax, Asynchronität (Promises, async/await), DOM-Manipulation und Event-Handling.',
+        descEn: 'Modern ES6+ syntax, asynchronous programming (Promises, async/await), DOM and Event APIs.',
+        refLink: 'playground.html',
+        refTextDe: 'Im Code Playground testen',
+        refTextEn: 'Test in Code Playground',
     },
     {
-        name: "TypeScript",
+        name: 'TypeScript',
         score: 75,
-        category: "frontend",
-        descDe: "Statische Typisierung, Interfaces, Generics und sichere Datenstrukturen in App-Projekten.",
-        descEn: "Static typing, Interfaces, Generics, and robust data structures in application projects.",
-        refLink: "playground.html",
-        refTextDe: "TypeScript ansehen",
-        refTextEn: "View TypeScript"
+        category: 'frontend',
+        descDe: 'Statische Typisierung, Interfaces, Generics und sichere Datenstrukturen in App-Projekten.',
+        descEn: 'Static typing, Interfaces, Generics, and robust data structures in application projects.',
+        refLink: 'playground.html',
+        refTextDe: 'TypeScript ansehen',
+        refTextEn: 'View TypeScript',
     },
     {
-        name: "Lit (Web Components)",
+        name: 'Lit (Web Components)',
         score: 80,
-        category: "frontend",
-        descDe: "Erstellung modularer, reaktiver Web Components im Entwicklerteam der DFG.",
-        descEn: "Creating modular, reactive Web Components within the DFG web development team.",
-        refLink: "praktikumsbetrieb.html",
-        refTextDe: "Praktikums-Details ansehen",
-        refTextEn: "View Internship Details"
+        category: 'frontend',
+        descDe: 'Erstellung modularer, reaktiver Web Components im Entwicklerteam der DFG.',
+        descEn: 'Creating modular, reactive Web Components within the DFG web development team.',
+        refLink: 'praktikumsbetrieb.html',
+        refTextDe: 'Praktikums-Details ansehen',
+        refTextEn: 'View Internship Details',
     },
     {
-        name: "Apache Cordova",
+        name: 'Apache Cordova',
         score: 70,
-        category: "frontend",
-        descDe: "Kompilierung von Webanwendungen in native Hybrid-Apps für Android und iOS.",
-        descEn: "Compiling web applications into native hybrid apps for Android and iOS.",
-        refLink: "praktikumsbetrieb.html",
-        refTextDe: "EcoChef App ansehen",
-        refTextEn: "View EcoChef App"
+        category: 'frontend',
+        descDe: 'Kompilierung von Webanwendungen in native Hybrid-Apps für Android und iOS.',
+        descEn: 'Compiling web applications into native hybrid apps for Android and iOS.',
+        refLink: 'praktikumsbetrieb.html',
+        refTextDe: 'EcoChef App ansehen',
+        refTextEn: 'View EcoChef App',
     },
     // Backend
     {
-        name: "Java SE",
+        name: 'Java SE',
         score: 75,
-        category: "backend",
-        descDe: "Objektorientierung (OOP), Datenstrukturen, Unit-Testing (JUnit) und IHK-Kernkompetenzen.",
-        descEn: "Object-oriented programming (OOP), standard data structures, unit testing, and core IHK modules.",
-        refLink: "flashcards.html",
-        refTextDe: "Mit Lernkarten üben",
-        refTextEn: "Practice with Flashcards"
+        category: 'backend',
+        descDe: 'Objektorientierung (OOP), Datenstrukturen, Unit-Testing (JUnit) und IHK-Kernkompetenzen.',
+        descEn: 'Object-oriented programming (OOP), standard data structures, unit testing, and core IHK modules.',
+        refLink: 'flashcards.html',
+        refTextDe: 'Mit Lernkarten üben',
+        refTextEn: 'Practice with Flashcards',
     },
     {
-        name: "C# / .NET",
+        name: 'C# / .NET',
         score: 65,
-        category: "backend",
-        descDe: "Grundlagen der C#-Entwicklung, Klassenhierarchien und OOP-Paradigmen.",
-        descEn: "Basics of C# development, class hierarchies, and OOP paradigms.",
-        refLink: "flashcards.html",
-        refTextDe: "Mit Lernkarten üben",
-        refTextEn: "Practice with Flashcards"
+        category: 'backend',
+        descDe: 'Grundlagen der C#-Entwicklung, Klassenhierarchien und OOP-Paradigmen.',
+        descEn: 'Basics of C# development, class hierarchies, and OOP paradigms.',
+        refLink: 'flashcards.html',
+        refTextDe: 'Mit Lernkarten üben',
+        refTextEn: 'Practice with Flashcards',
     },
     {
-        name: "SQL (PostgreSQL)",
+        name: 'SQL (PostgreSQL)',
         score: 80,
-        category: "backend",
-        descDe: "Relationale Schemata, JOINs, Indexierung, Unterabfragen und referenzielle Integrität.",
-        descEn: "Relational schemas, JOIN queries, indexing, subqueries, and referential integrity.",
-        refLink: "flashcards.html",
-        refTextDe: "SQL Lernkarten ansehen",
-        refTextEn: "View SQL Flashcards"
+        category: 'backend',
+        descDe: 'Relationale Schemata, JOINs, Indexierung, Unterabfragen und referenzielle Integrität.',
+        descEn: 'Relational schemas, JOIN queries, indexing, subqueries, and referential integrity.',
+        refLink: 'flashcards.html',
+        refTextDe: 'SQL Lernkarten ansehen',
+        refTextEn: 'View SQL Flashcards',
     },
     {
-        name: "REST APIs",
+        name: 'REST APIs',
         score: 85,
-        category: "backend",
-        descDe: "Integration, Entwurf und Konsumierung von RESTful Web Services via JSON.",
-        descEn: "Integration, design, and consumption of RESTful Web Services via JSON.",
-        refLink: "playground.html",
-        refTextDe: "API Fetcher testen",
-        refTextEn: "Test API Fetcher"
+        category: 'backend',
+        descDe: 'Integration, Entwurf und Konsumierung von RESTful Web Services via JSON.',
+        descEn: 'Integration, design, and consumption of RESTful Web Services via JSON.',
+        refLink: 'playground.html',
+        refTextDe: 'API Fetcher testen',
+        refTextEn: 'Test API Fetcher',
     },
     // Tools
     {
-        name: "Git / GitHub",
+        name: 'Git / GitHub',
         score: 85,
-        category: "tools",
-        descDe: "Versionsverwaltung, Branching (Gitflow), Pull Requests und CI/CD-Workflows.",
-        descEn: "Version control, branching (Gitflow), pull requests, and CI/CD pipelines.",
-        refLink: "dashboard.html",
-        refTextDe: "GitHub Grid ansehen",
-        refTextEn: "View GitHub Grid"
+        category: 'tools',
+        descDe: 'Versionsverwaltung, Branching (Gitflow), Pull Requests und CI/CD-Workflows.',
+        descEn: 'Version control, branching (Gitflow), pull requests, and CI/CD pipelines.',
+        refLink: 'dashboard.html',
+        refTextDe: 'GitHub Grid ansehen',
+        refTextEn: 'View GitHub Grid',
     },
     {
-        name: "npm / Webpack Basics",
+        name: 'npm / Webpack Basics',
         score: 70,
-        category: "tools",
-        descDe: "Paketmanagement, Script-Automatisierung und Asset-Bundling.",
-        descEn: "Package management, scripting automation, and asset bundling.",
-        refLink: "playground.html",
-        refTextDe: "Code Playground ansehen",
-        refTextEn: "View Code Playground"
+        category: 'tools',
+        descDe: 'Paketmanagement, Script-Automatisierung und Asset-Bundling.',
+        descEn: 'Package management, scripting automation, and asset bundling.',
+        refLink: 'playground.html',
+        refTextDe: 'Code Playground ansehen',
+        refTextEn: 'View Code Playground',
     },
     {
-        name: "Docker Basics",
+        name: 'Docker Basics',
         score: 60,
-        category: "tools",
-        descDe: "Grundwissen zur Containerisierung lokaler Entwicklungsumgebungen.",
-        descEn: "Basic knowledge of containerizing local development environments.",
-        refLink: "architecture.html",
-        refTextDe: "Architektur ansehen",
-        refTextEn: "View Architecture"
+        category: 'tools',
+        descDe: 'Grundwissen zur Containerisierung lokaler Entwicklungsumgebungen.',
+        descEn: 'Basic knowledge of containerizing local development environments.',
+        refLink: 'architecture.html',
+        refTextDe: 'Architektur ansehen',
+        refTextEn: 'View Architecture',
     },
     // Electronics
     {
-        name: "SPS / PLC (TIA-Portal)",
+        name: 'SPS / PLC (TIA-Portal)',
         score: 70,
-        category: "electronics",
-        descDe: "Programmierung von Industriesteuerungen (FUP, KOP, Grafcet) für Betriebstechnik.",
-        descEn: "Programming industrial controllers (FBD, LD, Grafcet) for electrical engineering.",
-        refLink: "playground.html",
-        refTextDe: "SPS-Simulator starten",
-        refTextEn: "Start PLC Simulator"
+        category: 'electronics',
+        descDe: 'Programmierung von Industriesteuerungen (FUP, KOP, Grafcet) für Betriebstechnik.',
+        descEn: 'Programming industrial controllers (FBD, LD, Grafcet) for electrical engineering.',
+        refLink: 'playground.html',
+        refTextDe: 'SPS-Simulator starten',
+        refTextEn: 'Start PLC Simulator',
     },
     {
-        name: "DGUV Vorschrift 3",
+        name: 'DGUV Vorschrift 3',
         score: 85,
-        category: "electronics",
-        descDe: "Sicherheitsprüfung ortsveränderlicher elektrischer Betriebsmittel gemäß Unfallverhütungsvorschrift.",
-        descEn: "Safety inspection of mobile electrical devices in compliance with accident prevention regulations.",
-        refLink: "praktikumsbetrieb.html",
-        refTextDe: "Mängelscanner starten",
-        refTextEn: "Start Defect Scanner"
-    }
+        category: 'electronics',
+        descDe: 'Sicherheitsprüfung ortsveränderlicher elektrischer Betriebsmittel gemäß Unfallverhütungsvorschrift.',
+        descEn: 'Safety inspection of mobile electrical devices in compliance with accident prevention regulations.',
+        refLink: 'praktikumsbetrieb.html',
+        refTextDe: 'Mängelscanner starten',
+        refTextEn: 'Start Defect Scanner',
+    },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -167,12 +167,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Representative skills for 'all' mode to keep chart clean (max 6 axes)
     const repsForAll = [
-        "HTML5 / CSS3",
-        "JavaScript (ES6+)",
-        "REST APIs",
-        "SQL (PostgreSQL)",
-        "Git / GitHub",
-        "DGUV Vorschrift 3"
+        'HTML5 / CSS3',
+        'JavaScript (ES6+)',
+        'REST APIs',
+        'SQL (PostgreSQL)',
+        'Git / GitHub',
+        'DGUV Vorschrift 3',
     ];
 
     function getFilteredRadarSkills() {
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Draw grid circles (concentric webs)
         const levels = [25, 50, 75, 100];
-        levels.forEach(level => {
+        levels.forEach((level) => {
             const rad = maxRadius * (level / 100);
             const points = [];
             for (let i = 0; i < N; i++) {
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text.setAttribute('x', lx);
             text.setAttribute('y', ly);
             text.setAttribute('class', 'axis-label');
-            
+
             // Adjust anchor based on side
             if (Math.cos(angle) > 0.1) {
                 text.setAttribute('text-anchor', 'start');
@@ -299,7 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortVal = sortSelect ? sortSelect.value : 'default';
         const filteredSkills = sortSkills(filterListSkills(SKILLS_DATA, activeCategory), sortVal);
 
-        listGrid.innerHTML = filteredSkills.map(s => `
+        listGrid.innerHTML = filteredSkills
+            .map(
+                (s) => `
             <div class="skill-matrix-card">
                 <div class="skill-card-header">
                     <span class="skill-card-name">${s.name}</span>
@@ -316,24 +318,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     </a>
                 </div>
             </div>
-        `).join('');
+        `
+            )
+            .join('');
 
         // Trigger transition width after rendering
         setTimeout(() => {
             const fills = listGrid.querySelectorAll('.skill-fill');
-            fills.forEach(fill => {
+            fills.forEach((fill) => {
                 fill.style.width = fill.getAttribute('data-width');
             });
         }, 50);
     }
 
     // Bind click events on filter tabs
-    tabs.forEach(tab => {
+    tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
             document.querySelector('.skills-tab.active').classList.remove('active');
             tab.classList.add('active');
             activeCategory = tab.getAttribute('data-cat');
-            
+
             renderRadarChart();
             renderDetailsGrid();
 

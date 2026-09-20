@@ -53,9 +53,9 @@ export function initIhkExamSimulator() {
     const timerCountdown = modeSelector.querySelector('#timer-countdown');
     const modeButtons = modeSelector.querySelectorAll('.btn-exam-mode');
 
-    modeButtons.forEach(btn => {
+    modeButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-            modeButtons.forEach(b => b.classList.remove('active'));
+            modeButtons.forEach((b) => b.classList.remove('active'));
             btn.classList.add('active');
 
             const mode = btn.dataset.mode;
@@ -92,9 +92,13 @@ export function initIhkExamSimulator() {
     }
 
     // Teardown timer interval when user leaves page to prevent memory leak
-    window.addEventListener('beforeunload', () => {
-        if (timerInterval) clearInterval(timerInterval);
-    }, { once: true });
+    window.addEventListener(
+        'beforeunload',
+        () => {
+            if (timerInterval) clearInterval(timerInterval);
+        },
+        { once: true }
+    );
 
     function updateTimerText() {
         if (timerCountdown) {

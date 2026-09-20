@@ -26,7 +26,7 @@ export function computeQualityScore({ coverage, cleanCode, docs, security }) {
     const cc = clampPercent(cleanCode);
     const d = clampPercent(docs);
     const s = clampPercent(security);
-    return (c * WEIGHTS.coverage) + (cc * WEIGHTS.cleanCode) + (d * WEIGHTS.docs) + (s * WEIGHTS.security);
+    return c * WEIGHTS.coverage + cc * WEIGHTS.cleanCode + d * WEIGHTS.docs + s * WEIGHTS.security;
 }
 
 /** Classifies an overall quality score into a status tier for the badge/ring color. */

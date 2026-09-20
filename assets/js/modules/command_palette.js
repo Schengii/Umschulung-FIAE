@@ -3,22 +3,94 @@
  * Allows instant fuzzy search across all pages, projects, and learning resources.
  */
 
-(function() {
+(function () {
     'use strict';
 
     const NAV_ITEMS = [
-        { titleDe: "Home / Dashboard", titleEn: "Home / Dashboard", category: "Navigation", icon: "fa-house", url: "home.html" },
-        { titleDe: "Projekt-Portfolio (21 Projekte)", titleEn: "Project Portfolio", category: "Navigation", icon: "fa-briefcase", url: "portfolio.html" },
-        { titleDe: "Lebenslauf & Zeugnisse", titleEn: "CV & Credentials", category: "Karriere", icon: "fa-file-lines", url: "lebenslauf.html" },
-        { titleDe: "Über mich & Elektroniker-Brücke", titleEn: "About Me & Skill Bridge", category: "Profil", icon: "fa-user", url: "ueber-mich.html" },
-        { titleDe: "IHK Notenrechner & AP1/AP2 Simulator", titleEn: "IHK Grade Calculator", category: "Tools", icon: "fa-calculator", url: "dashboard.html" },
-        { titleDe: "IHK Lernkarten (Spaced Repetition)", titleEn: "IHK Flashcards", category: "Lernen", icon: "fa-layer-group", url: "flashcards.html" },
-        { titleDe: "Interaktiver Bewerbungs-Trainer", titleEn: "Interview Trainer", category: "Karriere", icon: "fa-user-tie", url: "interview-trainer.html" },
-        { titleDe: "SQL & Code Playground", titleEn: "SQL & Code Playground", category: "Lernen", icon: "fa-terminal", url: "playground.html" },
-        { titleDe: "Git Branching Simulator (CRT Terminal)", titleEn: "Git Branching Simulator", category: "Games & Sim", icon: "fa-code-branch", url: "git-simulator.html" },
-        { titleDe: "C4 Software-Architektur Diagramm", titleEn: "C4 Architecture Diagram", category: "Architektur", icon: "fa-sitemap", url: "architecture.html" },
-        { titleDe: "Quellen, Links & QR Generator", titleEn: "Links & QR Generator", category: "Info", icon: "fa-link", url: "links.html" },
-        { titleDe: "Impressum & iCal Terminbuchung", titleEn: "Legal Notice & iCal", category: "Rechtliches", icon: "fa-scale-balanced", url: "impressum.html" }
+        {
+            titleDe: 'Home / Dashboard',
+            titleEn: 'Home / Dashboard',
+            category: 'Navigation',
+            icon: 'fa-house',
+            url: 'home.html',
+        },
+        {
+            titleDe: 'Projekt-Portfolio (21 Projekte)',
+            titleEn: 'Project Portfolio',
+            category: 'Navigation',
+            icon: 'fa-briefcase',
+            url: 'portfolio.html',
+        },
+        {
+            titleDe: 'Lebenslauf & Zeugnisse',
+            titleEn: 'CV & Credentials',
+            category: 'Karriere',
+            icon: 'fa-file-lines',
+            url: 'lebenslauf.html',
+        },
+        {
+            titleDe: 'Über mich & Elektroniker-Brücke',
+            titleEn: 'About Me & Skill Bridge',
+            category: 'Profil',
+            icon: 'fa-user',
+            url: 'ueber-mich.html',
+        },
+        {
+            titleDe: 'IHK Notenrechner & AP1/AP2 Simulator',
+            titleEn: 'IHK Grade Calculator',
+            category: 'Tools',
+            icon: 'fa-calculator',
+            url: 'dashboard.html',
+        },
+        {
+            titleDe: 'IHK Lernkarten (Spaced Repetition)',
+            titleEn: 'IHK Flashcards',
+            category: 'Lernen',
+            icon: 'fa-layer-group',
+            url: 'flashcards.html',
+        },
+        {
+            titleDe: 'Interaktiver Bewerbungs-Trainer',
+            titleEn: 'Interview Trainer',
+            category: 'Karriere',
+            icon: 'fa-user-tie',
+            url: 'interview-trainer.html',
+        },
+        {
+            titleDe: 'SQL & Code Playground',
+            titleEn: 'SQL & Code Playground',
+            category: 'Lernen',
+            icon: 'fa-terminal',
+            url: 'playground.html',
+        },
+        {
+            titleDe: 'Git Branching Simulator (CRT Terminal)',
+            titleEn: 'Git Branching Simulator',
+            category: 'Games & Sim',
+            icon: 'fa-code-branch',
+            url: 'git-simulator.html',
+        },
+        {
+            titleDe: 'C4 Software-Architektur Diagramm',
+            titleEn: 'C4 Architecture Diagram',
+            category: 'Architektur',
+            icon: 'fa-sitemap',
+            url: 'architecture.html',
+        },
+        {
+            titleDe: 'Quellen, Links & QR Generator',
+            titleEn: 'Links & QR Generator',
+            category: 'Info',
+            icon: 'fa-link',
+            url: 'links.html',
+        },
+        {
+            titleDe: 'Impressum & iCal Terminbuchung',
+            titleEn: 'Legal Notice & iCal',
+            category: 'Rechtliches',
+            icon: 'fa-scale-balanced',
+            url: 'impressum.html',
+        },
     ];
 
     function initCommandPalette() {
@@ -54,18 +126,19 @@
         let currentItems = [];
 
         function getCombinedCatalog() {
-            const isPages = window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+            const isPages =
+                window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
             const pagePrefix = isPages ? '' : 'pages/';
 
-            let items = NAV_ITEMS.map(item => ({
+            let items = NAV_ITEMS.map((item) => ({
                 ...item,
-                url: pagePrefix + item.url
+                url: pagePrefix + item.url,
             }));
 
             // Include all projects if available
             const projectsList = window.projectsData || window._cachedProjectsData || [];
             if (Array.isArray(projectsList) && projectsList.length > 0) {
-                projectsList.forEach(proj => {
+                projectsList.forEach((proj) => {
                     const detailUrl = `${pagePrefix}projekt-detail.html?repo=${encodeURIComponent(proj.repoName || '')}`;
                     items.push({
                         titleDe: proj.titleDe || proj.repoName || '',
@@ -73,7 +146,7 @@
                         category: `Projekt (${proj.category || 'Web'})`,
                         icon: 'fa-cube',
                         url: detailUrl,
-                        tags: (proj.tags || []).join(' ')
+                        tags: (proj.tags || []).join(' '),
                     });
                 });
             }
@@ -83,7 +156,8 @@
 
         // Preload projectsData dynamically if not yet on page
         if (!window.projectsData) {
-            const isPages = window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+            const isPages =
+                window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
             const dataScript = document.createElement('script');
             dataScript.src = isPages ? '../assets/js/projects_data.js' : 'assets/js/projects_data.js';
             dataScript.onload = () => {
@@ -100,12 +174,18 @@
             if (!term) {
                 currentItems = allItems.slice(0, 8);
             } else {
-                currentItems = allItems.filter(item => {
-                    const title = (lang === 'de' ? item.titleDe : item.titleEn) || item.titleDe;
-                    const cat = item.category || '';
-                    const tags = item.tags || '';
-                    return title.toLowerCase().includes(term) || cat.toLowerCase().includes(term) || tags.toLowerCase().includes(term);
-                }).slice(0, 10);
+                currentItems = allItems
+                    .filter((item) => {
+                        const title = (lang === 'de' ? item.titleDe : item.titleEn) || item.titleDe;
+                        const cat = item.category || '';
+                        const tags = item.tags || '';
+                        return (
+                            title.toLowerCase().includes(term) ||
+                            cat.toLowerCase().includes(term) ||
+                            tags.toLowerCase().includes(term)
+                        );
+                    })
+                    .slice(0, 10);
             }
 
             selectedIndex = 0;

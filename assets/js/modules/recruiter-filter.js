@@ -9,10 +9,10 @@ export function initRecruiterFilter() {
 
     if (!filterButtons.length || !positionCell || !schwerpunkteCell) return;
 
-    filterButtons.forEach(btn => {
+    filterButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
             // Remove active class from all buttons
-            filterButtons.forEach(b => b.classList.remove('active'));
+            filterButtons.forEach((b) => b.classList.remove('active'));
             // Add active class to clicked button
             btn.classList.add('active');
 
@@ -20,14 +20,12 @@ export function initRecruiterFilter() {
             const lang = document.documentElement.getAttribute('lang') || 'de';
 
             if (role === 'frontend') {
-                positionCell.innerHTML = lang === 'de' 
-                    ? 'Frontend-Entwickler / Web-Entwickler' 
-                    : 'Frontend Developer / Web Developer';
+                positionCell.innerHTML =
+                    lang === 'de' ? 'Frontend-Entwickler / Web-Entwickler' : 'Frontend Developer / Web Developer';
                 schwerpunkteCell.innerHTML = `<strong>React</strong>, <strong>TypeScript</strong>, HTML5, CSS3`;
             } else if (role === 'backend') {
-                positionCell.innerHTML = lang === 'de' 
-                    ? 'Backend-Entwickler / Java-Spezialist' 
-                    : 'Backend Developer / Java Specialist';
+                positionCell.innerHTML =
+                    lang === 'de' ? 'Backend-Entwickler / Java-Spezialist' : 'Backend Developer / Java Specialist';
                 schwerpunkteCell.innerHTML = `<strong>Java SE</strong>, <strong>Spring Boot</strong>, <strong>SQL</strong>, REST-APIs`;
             } else {
                 // 'all' / default
@@ -51,27 +49,31 @@ function renderGitActivity() {
     if (!listElement) return;
 
     const mockCommits = [
-        { message: "feat: add recruiter role filter to home", date: "Just now" },
-        { message: "refactor: optimize PWA service worker caching", date: "1 day ago" },
-        { message: "docs: update API documentation for EcoChef capstone project", date: "3 days ago" },
-        { message: "fix: resolve memory leaks in 2D strategy game loop", date: "5 days ago" }
+        { message: 'feat: add recruiter role filter to home', date: 'Just now' },
+        { message: 'refactor: optimize PWA service worker caching', date: '1 day ago' },
+        { message: 'docs: update API documentation for EcoChef capstone project', date: '3 days ago' },
+        { message: 'fix: resolve memory leaks in 2D strategy game loop', date: '5 days ago' },
     ];
 
     fetch('https://api.github.com/repos/Schengii/Umschulung-FIAE/commits?per_page=4')
-        .then(response => {
+        .then((response) => {
             if (!response.ok) throw new Error('Failed to fetch from GitHub API');
             return response.json();
         })
-        .then(data => {
+        .then((data) => {
             listElement.innerHTML = '';
-            data.forEach(item => {
+            data.forEach((item) => {
                 const li = document.createElement('li');
                 li.style.marginBottom = '8px';
                 li.style.paddingBottom = '8px';
                 li.style.borderBottom = '1px dashed var(--border)';
-                
+
                 const dateObj = new Date(item.commit.author.date);
-                const formattedDate = dateObj.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const formattedDate = dateObj.toLocaleDateString(undefined, {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                });
 
                 li.innerHTML = `
                     <div style="font-weight: 600; color: var(--primary);">${escapeHTML(item.commit.message.split('\n')[0])}</div>
@@ -83,7 +85,7 @@ function renderGitActivity() {
         .catch(() => {
             // Fallback to mock data if API limits are hit or offline
             listElement.innerHTML = '';
-            mockCommits.forEach(item => {
+            mockCommits.forEach((item) => {
                 const li = document.createElement('li');
                 li.style.marginBottom = '8px';
                 li.style.paddingBottom = '8px';
@@ -100,9 +102,9 @@ function renderGitActivity() {
 function escapeHTML(str) {
     if (!str) return '';
     return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }

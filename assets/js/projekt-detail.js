@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchGitHubRepos() {
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-        if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
+        if (cachedData && cachedTime && Date.now() - parseInt(cachedTime) < CACHE_DURATION) {
             return JSON.parse(cachedData);
         }
         try {
@@ -44,16 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch all project data sources
             const [staticProjects, githubRepos, customProjects] = await Promise.all([
-                fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json')).then(res => res.ok ? res.json() : []),
+                fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json')).then((res) =>
+                    res.ok ? res.json() : []
+                ),
                 fetchGitHubRepos(),
-                JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]')
+                JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]'),
             ]);
 
-            const githubRepoMap = new Map(githubRepos.map(repo => [repo.name.toLowerCase(), repo]));
+            const githubRepoMap = new Map(githubRepos.map((repo) => [repo.name.toLowerCase(), repo]));
 
             // Combine all projects into one list
             let allProjects = [
-                ...staticProjects.map(proj => {
+                ...staticProjects.map((proj) => {
                     const enriched = { ...proj };
                     if (enriched.repoName) {
                         const ghRepo = githubRepoMap.get(enriched.repoName.toLowerCase());
@@ -69,13 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     return enriched;
                 }),
-                ...customProjects
+                ...customProjects,
             ];
 
             // Find the requested project
-            const project = allProjects.find(p => 
-                (repoIdentifier && p.repoName === repoIdentifier) || 
-                (titleIdentifier && p.titleDe === titleIdentifier)
+            const project = allProjects.find(
+                (p) =>
+                    (repoIdentifier && p.repoName === repoIdentifier) ||
+                    (titleIdentifier && p.titleDe === titleIdentifier)
             );
 
             if (project) {
@@ -84,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 throw new Error('Projekt nicht gefunden.');
             }
-
         } catch (error) {
             detailContainer.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             breadcrumbCurrent.textContent = title;
         }
 
-        const tagsHTML = (project.tags || []).map(tag => `<span class="tech-tag">${tag}</span>`).join(' ');
+        const tagsHTML = (project.tags || []).map((tag) => `<span class="tech-tag">${tag}</span>`).join(' ');
 
         let buttonsHTML = '<div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">';
         if (project.link) {
@@ -155,9 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3 lang="en"><i class="fa-solid fa-file-powerpoint" style="color: #d24726;"></i> Project Presentations</h3>
                 <div class="download-card-container">
             `;
-            project.downloadPpts.forEach(ppt => {
+            project.downloadPpts.forEach((ppt) => {
                 const pptTitle = lang === 'de' ? ppt.titleDe : ppt.titleEn;
-                const pptUrl = (window.resolveAssetPath || (p => p))(ppt.url);
+                const pptUrl = (window.resolveAssetPath || ((p) => p))(ppt.url);
                 mediaHTML += `
                     <a href="${pptUrl}" class="ppt-download-card" download aria-label="Download ${pptTitle}">
                         <div class="ppt-icon-wrapper">
@@ -205,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span lang="de"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video-Auswahl</span>
                             <span lang="en"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video Playlist</span>
                         </h4>
-                        <div class="playlist-tracks" id="project-video-tracks" role="tablist"></div>
+                        <div class="playlist-tracks" id="project-video-tracks" role="group" aria-label="Video-Auswahl"></div>
                         <div class="dsgvo-note-card">
                             <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                             <div>
@@ -241,14 +243,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Build architecture badges
         let archBadgesHTML = '';
-        if (project.architectureBadges && Array.isArray(project.architectureBadges) && project.architectureBadges.length > 0) {
+        if (
+            project.architectureBadges &&
+            Array.isArray(project.architectureBadges) &&
+            project.architectureBadges.length > 0
+        ) {
             archBadgesHTML = `
                 <div class="architecture-badges-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0;">
-                    ${project.architectureBadges.map(b => `
+                    ${project.architectureBadges
+                        .map(
+                            (b) => `
                         <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
                             <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i>${b.name}
                         </span>
-                    `).join('')}
+                    `
+                        )
+                        .join('')}
                 </div>
             `;
         }
@@ -283,28 +293,36 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p style="margin: 0;" lang="de">${kl.solutionDe}</p>
                             <p style="margin: 0;" lang="en">${kl.solutionEn}</p>
                         </div>
-                        ${kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0 ? `
+                        ${
+                            kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0
+                                ? `
                             <div>
                                 <strong style="color: var(--text-primary);"><span lang="de">Architektur-Highlights:</span><span lang="en">Architecture Highlights:</span></strong>
                                 <ul style="margin: 0.35rem 0 0 1.2rem; padding: 0;">
-                                    ${kl.architectureHighlightsDe.map((hDe, i) => `
+                                    ${kl.architectureHighlightsDe
+                                        .map(
+                                            (hDe, i) => `
                                         <li>
                                             <span lang="de">${hDe}</span>
                                             <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
                                         </li>
-                                    `).join('')}
+                                    `
+                                        )
+                                        .join('')}
                                 </ul>
                             </div>
-                        ` : ''}
+                        `
+                                : ''
+                        }
                     </div>
                 </div>
             `;
         }
 
-        const projectImgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
+        const projectImgResolved = project.image ? (window.resolveAssetPath || ((p) => p))(project.image) : '';
 
         detailContainer.innerHTML = `
-            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.style.objectFit='contain';this.style.background='var(--bg-page)';this.style.padding='2rem';">` : ''}
+            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" data-img-fallback="contain">` : ''}
             
             <h2 lang="de">${project.titleDe}</h2>
             <h2 lang="en">${project.titleEn}</h2>
@@ -368,11 +386,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const videoItem = project.videoPlaylist[activeIndex];
 
             const wasPaused = videoEl.paused;
-            videoEl.src = (window.resolveAssetPath || (p => p))(videoItem.url);
+            videoEl.src = (window.resolveAssetPath || ((p) => p))(videoItem.url);
             videoEl.load();
 
             if (shouldPlay && !wasPaused) {
-                videoEl.play().catch(err => console.log('Autoplay blocked:', err));
+                videoEl.play().catch((err) => console.log('Autoplay blocked:', err));
             }
 
             currentTitleEl.textContent = lang === 'de' ? videoItem.titleDe : videoItem.titleEn;
@@ -395,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = document.createElement('button');
             btn.className = 'playlist-track-btn';
             btn.setAttribute('aria-label', `Play video: ${videoItem.titleDe}`);
-            
+
             btn.innerHTML = `
                 <div class="track-icon">
                     <i class="fa fa-play-circle" aria-hidden="true"></i>
@@ -432,22 +450,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderRelatedProjects(currentProject, allProjects) {
         if (!relatedSection || !relatedContainer) return;
 
-        const currentTags = new Set((currentProject.tags || []).map(t => t.toLowerCase()));
+        const currentTags = new Set((currentProject.tags || []).map((t) => t.toLowerCase()));
         const currentId = currentProject.repoName || currentProject.titleDe;
 
         const related = allProjects
-            .filter(p => (p.repoName || p.titleDe) !== currentId) // Exclude self
-            .map(p => {
-                const otherTags = new Set((p.tags || []).map(t => t.toLowerCase()));
-                const commonTags = new Set([...currentTags].filter(tag => otherTags.has(tag)));
+            .filter((p) => (p.repoName || p.titleDe) !== currentId) // Exclude self
+            .map((p) => {
+                const otherTags = new Set((p.tags || []).map((t) => t.toLowerCase()));
+                const commonTags = new Set([...currentTags].filter((tag) => otherTags.has(tag)));
                 return { project: p, score: commonTags.size };
             })
-            .filter(item => item.score > 0) // Only include projects with at least one common tag
+            .filter((item) => item.score > 0) // Only include projects with at least one common tag
             .sort((a, b) => b.score - a.score) // Sort by most common tags
             .slice(0, 3); // Take top 3
 
         if (related.length > 0) {
-            relatedContainer.innerHTML = related.map(item => generateRelatedCard(item.project)).join('');
+            relatedContainer.innerHTML = related.map((item) => generateRelatedCard(item.project)).join('');
             relatedSection.style.display = 'block';
             const lang = document.documentElement.getAttribute('lang') || 'de';
             document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
@@ -455,15 +473,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateRelatedCard(project) {
-        const url = project.repoName 
+        const url = project.repoName
             ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
             : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;
 
-        const imgResolved = project.image ? (window.resolveAssetPath || (p => p))(project.image) : '';
+        const imgResolved = project.image ? (window.resolveAssetPath || ((p) => p))(project.image) : '';
 
         return `
             <a href="${url}" class="related-project-card">
-                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">` : ''}
+                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy" data-img-fallback="fallback">` : ''}
                 <div class="related-project-info">
                     <h4 lang="de">${project.titleDe}</h4>
                     <h4 lang="en">${project.titleEn}</h4>
@@ -497,9 +515,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            indicator.textContent = lang === 'de' 
-                ? `Schritt ${currentSlide + 1} von ${slides.length}`
-                : `Step ${currentSlide + 1} of ${slides.length}`;
+            indicator.textContent =
+                lang === 'de'
+                    ? `Schritt ${currentSlide + 1} von ${slides.length}`
+                    : `Step ${currentSlide + 1} of ${slides.length}`;
 
             progressFill.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
 
@@ -537,6 +556,9 @@ document.addEventListener('DOMContentLoaded', () => {
         project.codeFiles.forEach((fileItem, index) => {
             const item = document.createElement('div');
             item.className = 'tree-item';
+            item.setAttribute('role', 'button');
+            item.setAttribute('tabindex', '0');
+            item.setAttribute('aria-label', `Datei öffnen: ${fileItem.name}`);
 
             let iconClass = 'fa-regular fa-file-code';
             if (fileItem.type === 'html') iconClass = 'fa-brands fa-html5';
@@ -544,17 +566,25 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (fileItem.type === 'typescript') iconClass = 'fa-solid fa-code';
 
             item.innerHTML = `
-                <i class="${iconClass}"></i>
+                <i class="${iconClass}" aria-hidden="true"></i>
                 <span>${fileItem.name}</span>
             `;
 
-            item.addEventListener('click', () => {
+            const openFile = () => {
                 const active = treeContainer.querySelector('.tree-item.active');
                 if (active) active.classList.remove('active');
                 item.classList.add('active');
 
                 activeFileEl.textContent = fileItem.name;
                 loadCodeFile(fileItem.path, fileItem.type);
+            };
+
+            item.addEventListener('click', openFile);
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openFile();
+                }
             });
 
             treeContainer.appendChild(item);
@@ -571,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigator.clipboard.writeText(codeView.textContent).then(() => {
                     const originalText = copyBtn.innerHTML;
                     copyBtn.innerHTML = '<i class="fa fa-check"></i> Copied!';
-                    setTimeout(() => copyBtn.innerHTML = originalText, 2000);
+                    setTimeout(() => (copyBtn.innerHTML = originalText), 2000);
                 });
             });
         }
@@ -588,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const resolvedPath = (window.resolveAssetPath || (p => p))(filePath);
+            const resolvedPath = (window.resolveAssetPath || ((p) => p))(filePath);
             const response = await fetch(resolvedPath);
             if (!response.ok) throw new Error('Datei konnte nicht geladen werden.');
             const codeText = await response.text();
@@ -636,7 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.addEventListener('click', () => {
             const lang = document.documentElement.getAttribute('lang') || 'de';
             titleSpan.textContent = lang === 'de' ? project.titleDe : project.titleEn;
-            iframe.src = (window.resolveAssetPath || (p => p))(project.link);
+            iframe.src = (window.resolveAssetPath || ((p) => p))(project.link);
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         });
@@ -653,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fullscreenBtn.addEventListener('click', () => {
             if (!document.fullscreenElement) {
-                modal.requestFullscreen().catch(err => {
+                modal.requestFullscreen().catch((err) => {
                     console.warn(`Error attempting to enable full-screen mode: ${err.message}`);
                 });
             } else {

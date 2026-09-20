@@ -24,7 +24,7 @@ console.log(`Auditing ${htmlFiles.length} HTML files in Projekte/...`);
 
 let issuesFound = 0;
 
-htmlFiles.forEach(filePath => {
+htmlFiles.forEach((filePath) => {
     const relPath = path.relative(rootDir, filePath);
     const content = fs.readFileSync(filePath, 'utf8');
 
@@ -32,7 +32,7 @@ htmlFiles.forEach(filePath => {
     const matches = content.match(/(src|href)=["']\/(?!\/)([^\s"'>]+)["']/gi);
     if (matches) {
         console.warn(`\n⚠️ ${relPath}:`);
-        matches.forEach(match => {
+        matches.forEach((match) => {
             console.warn(`   ${match}`);
             issuesFound++;
         });
@@ -42,5 +42,7 @@ htmlFiles.forEach(filePath => {
 if (issuesFound === 0) {
     console.log('\n✅ No absolute root paths (src="/..." or href="/...") found in Projekte/ HTML files!');
 } else {
-    console.warn(`\n⚠️ Found ${issuesFound} absolute root path references that will 404 when opened in subdirectories!`);
+    console.warn(
+        `\n⚠️ Found ${issuesFound} absolute root path references that will 404 when opened in subdirectories!`
+    );
 }

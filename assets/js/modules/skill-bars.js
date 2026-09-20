@@ -6,20 +6,23 @@ export function initSkillBars() {
     const skillFills = document.querySelectorAll('.skill-fill');
     if (!skillFills.length) return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
 
-    skillFills.forEach(fill => observer.observe(fill));
+    skillFills.forEach((fill) => observer.observe(fill));
 
     // Handle interactive skill filtering for portfolio
     const skillBars = document.querySelectorAll('.skill-bar');
-    skillBars.forEach(bar => {
+    skillBars.forEach((bar) => {
         // Only make clickable on pages where project search/filtering exists
         if (document.getElementById('portfolio-searchbar')) {
             bar.style.cursor = 'pointer';

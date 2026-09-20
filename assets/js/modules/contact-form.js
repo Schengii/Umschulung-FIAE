@@ -30,20 +30,22 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
             if (feedback) {
                 feedback.style.display = 'block';
                 feedback.className = 'form-feedback success';
-                feedback.innerHTML = '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
+                feedback.innerHTML =
+                    '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
             }
             form.reset();
             return;
         }
 
         if (!name || !email || !message) return;
-        
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
             if (feedback) {
                 feedback.style.display = 'block';
                 feedback.className = 'form-feedback warning';
-                feedback.innerHTML = '<span lang="de">Bitte füllen Sie alle Felder aus.</span><span lang="en">Please fill in all required fields.</span>';
+                feedback.innerHTML =
+                    '<span lang="de">Bitte füllen Sie alle Felder aus.</span><span lang="en">Please fill in all required fields.</span>';
             }
             return;
         }
@@ -52,7 +54,8 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
             if (feedback) {
                 feedback.style.display = 'block';
                 feedback.className = 'form-feedback warning';
-                feedback.innerHTML = '<span lang="de">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span><span lang="en">Please enter a valid email address.</span>';
+                feedback.innerHTML =
+                    '<span lang="de">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span><span lang="en">Please enter a valid email address.</span>';
             }
             return;
         }
@@ -63,7 +66,8 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
             const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> <span lang="de">Wird gesendet...</span><span lang="en">Sending...</span>';
+                submitBtn.innerHTML =
+                    '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> <span lang="de">Wird gesendet...</span><span lang="en">Sending...</span>';
                 // Trigger translation update for button loader text
                 const currentLang = document.documentElement.getAttribute('lang') || 'de';
                 document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
@@ -73,35 +77,37 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    Accept: 'application/json',
                 },
                 body: JSON.stringify({
                     access_key: APP.WEB3FORMS_KEY,
                     name: name.value,
                     email: email.value,
                     message: message.value,
-                    subject: `Portfolio Kontakt: ${name.value}`
-                })
+                    subject: `Portfolio Kontakt: ${name.value}`,
+                }),
             })
-                .then(res => res.json())
-                .then(data => {
+                .then((res) => res.json())
+                .then((data) => {
                     if (data.success) {
                         if (feedback) {
                             feedback.style.display = 'block';
                             feedback.className = 'form-feedback success';
-                            feedback.innerHTML = '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
+                            feedback.innerHTML =
+                                '<span lang="de">Nachricht erfolgreich gesendet!</span><span lang="en">Message sent successfully!</span>';
                         }
                         form.reset();
                     } else {
                         throw new Error(data.message || 'Web3Forms error');
                     }
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.warn('Web3Forms failed, falling back to mailto:', err);
                     if (feedback) {
                         feedback.style.display = 'block';
                         feedback.className = 'form-feedback warning';
-                        feedback.innerHTML = '<span lang="de">Fehler beim Senden. Mail-Programm wird geöffnet...</span><span lang="en">Error sending. Opening mail client...</span>';
+                        feedback.innerHTML =
+                            '<span lang="de">Fehler beim Senden. Mail-Programm wird geöffnet...</span><span lang="en">Error sending. Opening mail client...</span>';
                     }
                     setTimeout(() => {
                         _triggerMailto(name.value, email.value, message.value);
@@ -116,7 +122,9 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                     document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
 
                     if (feedback) {
-                        setTimeout(() => { feedback.style.display = 'none'; }, 6000);
+                        setTimeout(() => {
+                            feedback.style.display = 'none';
+                        }, 6000);
                     }
                 });
         } else {

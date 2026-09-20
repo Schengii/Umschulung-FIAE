@@ -8,7 +8,7 @@ export function initTimelineScroll() {
     const timelines = document.querySelectorAll('.timeline-v2');
     if (!timelines.length) return;
 
-    timelines.forEach(timeline => {
+    timelines.forEach((timeline) => {
         // Ensure parent has position relative/static for absolute centering
         timeline.style.position = 'relative';
 
@@ -54,7 +54,7 @@ export function initTimelineScroll() {
             activeLine.setAttribute('y2', progressHeight.toString());
 
             // Activate markers dynamically
-            items.forEach(item => {
+            items.forEach((item) => {
                 const marker = item.querySelector('.timeline-v2-marker');
                 if (!marker) return;
 
@@ -69,7 +69,7 @@ export function initTimelineScroll() {
 
         window.addEventListener('scroll', updateProgress, { passive: true });
         window.addEventListener('resize', updateProgress, { passive: true });
-        
+
         // Initial execution on boot
         setTimeout(updateProgress, 100);
     });

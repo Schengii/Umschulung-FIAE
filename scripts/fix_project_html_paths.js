@@ -24,7 +24,7 @@ console.log(`Processing ${htmlFiles.length} HTML files in Projekte/...`);
 
 let fixedCount = 0;
 
-htmlFiles.forEach(filePath => {
+htmlFiles.forEach((filePath) => {
     let content = fs.readFileSync(filePath, 'utf8');
 
     // Replace href="/..." with href="./..." (ignoring //, http, https)

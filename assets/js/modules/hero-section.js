@@ -12,9 +12,22 @@ export function initHeroSection() {
     // 1. Typing animation with smooth pacing
     const typingEl = document.getElementById('hero-typing');
     if (typingEl) {
-        const phrases = lang === 'de'
-            ? ['Fachinformatiker für Anwendungsentwicklung', 'Frontend & Full-Stack Webentwickler', 'Clean Code, TDD & moderne Softwarearchitektur', 'KI-Nutzung, Automation & Modern Tools', 'Sofort einsatzbereit & motiviert 🚀']
-            : ['IT Specialist — Application Development', 'Frontend & Full-Stack Web Developer', 'Clean Code, TDD & Modern Software Architecture', 'AI Engineering, Automation & Modern Tools', 'Available & Ready for Action 🚀'];
+        const phrases =
+            lang === 'de'
+                ? [
+                      'Fachinformatiker für Anwendungsentwicklung',
+                      'Frontend & Full-Stack Webentwickler',
+                      'Clean Code, TDD & moderne Softwarearchitektur',
+                      'KI-Nutzung, Automation & Modern Tools',
+                      'Sofort einsatzbereit & motiviert 🚀',
+                  ]
+                : [
+                      'IT Specialist — Application Development',
+                      'Frontend & Full-Stack Web Developer',
+                      'Clean Code, TDD & Modern Software Architecture',
+                      'AI Engineering, Automation & Modern Tools',
+                      'Available & Ready for Action 🚀',
+                  ];
 
         let phraseIndex = 0;
         let charIndex = 0;
@@ -50,10 +63,23 @@ export function initHeroSection() {
 
         document.addEventListener('langchange', (e) => {
             const newLang = e.detail;
-            const newPhrases = newLang === 'de' ? 
-                ['Fachinformatiker für Anwendungsentwicklung', 'Frontend & Full-Stack Webentwickler', 'Clean Code, TDD & moderne Softwarearchitektur', 'KI-Nutzung, Automation & Modern Tools', 'Sofort einsatzbereit & motiviert 🚀'] : 
-                ['IT Specialist — Application Development', 'Frontend & Full-Stack Web Developer', 'Clean Code, TDD & Modern Software Architecture', 'AI Engineering, Automation & Modern Tools', 'Available & Ready for Action 🚀'];
-            
+            const newPhrases =
+                newLang === 'de'
+                    ? [
+                          'Fachinformatiker für Anwendungsentwicklung',
+                          'Frontend & Full-Stack Webentwickler',
+                          'Clean Code, TDD & moderne Softwarearchitektur',
+                          'KI-Nutzung, Automation & Modern Tools',
+                          'Sofort einsatzbereit & motiviert 🚀',
+                      ]
+                    : [
+                          'IT Specialist — Application Development',
+                          'Frontend & Full-Stack Web Developer',
+                          'Clean Code, TDD & Modern Software Architecture',
+                          'AI Engineering, Automation & Modern Tools',
+                          'Available & Ready for Action 🚀',
+                      ];
+
             phrases.length = 0;
             phrases.push(...newPhrases);
             phraseIndex = 0;
@@ -76,7 +102,8 @@ function initHeroParticles(container) {
 
     const canvas = document.createElement('canvas');
     canvas.className = 'hero-particles';
-    canvas.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;';
+    canvas.style.cssText =
+        'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;';
     container.style.position = 'relative';
     container.insertBefore(canvas, container.firstChild);
 
@@ -87,11 +114,11 @@ function initHeroParticles(container) {
     let height = (canvas.height = container.offsetHeight);
 
     const colors = [
-        '59, 130, 246',  // Electric Blue
-        '6, 182, 212',   // Neon Cyan
-        '168, 85, 247',  // Cyber Purple
-        '16, 185, 129',  // Emerald Green
-        '236, 72, 153'   // Pink Flare
+        '59, 130, 246', // Electric Blue
+        '6, 182, 212', // Neon Cyan
+        '168, 85, 247', // Cyber Purple
+        '16, 185, 129', // Emerald Green
+        '236, 72, 153', // Pink Flare
     ];
 
     const particleCount = Math.min(85, Math.max(45, Math.floor((width * height) / 8500)));
@@ -104,7 +131,7 @@ function initHeroParticles(container) {
 
         reset(initial = false) {
             this.x = Math.random() * width;
-            this.y = initial ? Math.random() * height : (Math.random() > 0.5 ? -10 : height + 10);
+            this.y = initial ? Math.random() * height : Math.random() > 0.5 ? -10 : height + 10;
             this.vx = (Math.random() - 0.5) * 0.7;
             this.vy = (Math.random() - 0.5) * 0.7;
             this.radius = Math.random() * 2.5 + 1.2;
@@ -150,7 +177,7 @@ function initHeroParticles(container) {
             ctx.beginPath();
             ctx.arc(this.x, this.y, Math.max(0.5, this.radius), 0, Math.PI * 2);
             ctx.fillStyle = `rgba(${this.color}, ${dynamicAlpha})`;
-            
+
             // Halo glow for larger particles
             if (this.radius > 2.0) {
                 ctx.shadowBlur = 10;
@@ -211,7 +238,7 @@ function initHeroParticles(container) {
         }
 
         // Draw & update particles
-        particles.forEach(p => {
+        particles.forEach((p) => {
             const dynamicAlpha = p.update(mouseX, mouseY);
             p.draw(dynamicAlpha);
         });
@@ -225,4 +252,3 @@ function initHeroParticles(container) {
         if (animId) cancelAnimationFrame(animId);
     });
 }
-

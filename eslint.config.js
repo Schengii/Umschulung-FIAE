@@ -54,6 +54,7 @@ module.exports = [
         cancelAnimationFrame: 'readonly',
         Request: 'readonly',
         Response: 'readonly',
+        HTMLImageElement: 'readonly',
         clients: 'readonly',
         // Cross-file browser globals defined by non-module <script> includes
         // (constants.js, storage.js, audio.js, achievements.js, confetti.js, news_data.js …)
@@ -70,8 +71,8 @@ module.exports = [
       },
     },
     rules: {
-      'no-unused-vars': ['warn', { args: 'none', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
-      'no-undef': 'warn',
+      'no-unused-vars': ['error', { args: 'none', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      'no-undef': 'error',
       'no-empty': 'warn',
       'no-console': 'off',
     },

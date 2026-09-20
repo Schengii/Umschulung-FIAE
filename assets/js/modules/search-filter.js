@@ -37,9 +37,9 @@ export function initSearchAndFilter() {
     }
 
     if (filterButtons) {
-        filterButtons.forEach(button => {
+        filterButtons.forEach((button) => {
             button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
+                filterButtons.forEach((btn) => btn.classList.remove('active'));
                 button.classList.add('active');
                 currentCategory = button.getAttribute('data-filter') || 'all';
                 applyFilters();
@@ -56,9 +56,11 @@ export function matchesCardFilter(categoryClassList, textContent, activeCategory
     let matchesCategory = true;
     if (activeCategory !== 'all') {
         const targetClass = `filter-${activeCategory}`;
-        matchesCategory = Array.isArray(categoryClassList) 
+        matchesCategory = Array.isArray(categoryClassList)
             ? categoryClassList.includes(targetClass)
-            : (categoryClassList && typeof categoryClassList.contains === 'function' ? categoryClassList.contains(targetClass) : false);
+            : categoryClassList && typeof categoryClassList.contains === 'function'
+              ? categoryClassList.contains(targetClass)
+              : false;
     }
 
     let matchesSearch = true;
@@ -80,7 +82,7 @@ function applyFilters() {
     const isWelcomePage = !!document.getElementById('mySubmit');
     let visibleCount = 0;
 
-    cards.forEach(card => {
+    cards.forEach((card) => {
         if (isWelcomePage) return;
 
         const shouldShow = matchesCardFilter(card.classList, card.textContent, currentCategory, currentSearchQuery);
@@ -88,10 +90,9 @@ function applyFilters() {
         if (shouldShow) visibleCount++;
     });
 
-
     const noResultsContainer = document.querySelector('.no-results');
     if (noResultsContainer) {
         const queryActive = currentSearchQuery !== '' || currentCategory !== 'all';
-        noResultsContainer.style.display = (visibleCount === 0 && queryActive) ? 'block' : 'none';
+        noResultsContainer.style.display = visibleCount === 0 && queryActive ? 'block' : 'none';
     }
 }

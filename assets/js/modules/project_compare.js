@@ -3,7 +3,7 @@
  * Allows users and recruiters to select 2 or 3 projects and see an immediate architectural diff.
  */
 
-(function() {
+(function () {
     'use strict';
 
     let selectedProjects = [];
@@ -51,10 +51,12 @@
             e.stopPropagation();
 
             const repoName = btn.dataset.repo;
-            const project = (window.projectsData || []).find(p => p.repoName === repoName || p.titleDe === repoName);
+            const project = (window.projectsData || []).find((p) => p.repoName === repoName || p.titleDe === repoName);
             if (!project) return;
 
-            const existingIndex = selectedProjects.findIndex(p => (p.repoName || p.titleDe) === (project.repoName || project.titleDe));
+            const existingIndex = selectedProjects.findIndex(
+                (p) => (p.repoName || p.titleDe) === (project.repoName || project.titleDe)
+            );
             if (existingIndex >= 0) {
                 selectedProjects.splice(existingIndex, 1);
                 btn.classList.remove('active');
@@ -84,9 +86,10 @@
         const lang = document.documentElement.getAttribute('lang') || 'de';
         if (selectedProjects.length > 0) {
             bar.classList.remove('hidden');
-            countText.textContent = lang === 'de' 
-                ? `${selectedProjects.length} ${selectedProjects.length === 1 ? 'Projekt' : 'Projekte'} vergleichen` 
-                : `Compare ${selectedProjects.length} ${selectedProjects.length === 1 ? 'Project' : 'Projects'}`;
+            countText.textContent =
+                lang === 'de'
+                    ? `${selectedProjects.length} ${selectedProjects.length === 1 ? 'Projekt' : 'Projekte'} vergleichen`
+                    : `Compare ${selectedProjects.length} ${selectedProjects.length === 1 ? 'Project' : 'Projects'}`;
         } else {
             bar.classList.add('hidden');
         }
@@ -107,12 +110,18 @@
             return;
         }
 
-        grid.innerHTML = selectedProjects.map((p, idx) => {
-            const title = lang === 'de' ? p.titleDe : p.titleEn;
-            const badges = (p.architectureBadges || []).map(b => `<span class="badge" style="background: ${b.color}15; color: ${b.color}; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${b.name}</span>`).join(' ');
-            const kl = p.keyLearnings;
+        grid.innerHTML = selectedProjects
+            .map((p, idx) => {
+                const title = lang === 'de' ? p.titleDe : p.titleEn;
+                const badges = (p.architectureBadges || [])
+                    .map(
+                        (b) =>
+                            `<span class="badge" style="background: ${b.color}15; color: ${b.color}; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${b.name}</span>`
+                    )
+                    .join(' ');
+                const kl = p.keyLearnings;
 
-            return `
+                return `
                 <div class="compare-column">
                     <button class="compare-column-close" data-index="${idx}" title="Entfernen">&times;</button>
                     <h4 style="margin: 0; color: var(--primary); font-size: 1rem;">${title}</h4>
@@ -132,11 +141,13 @@
                     <div class="compare-feature-row">
                         <strong>Tech-Stack &amp; Frameworks</strong>
                         <div class="tech-tags" style="margin-top: 4px;">
-                            ${(p.tags || []).map(t => `<span class="tech-tag" style="font-size: 0.7rem;">${t}</span>`).join('')}
+                            ${(p.tags || []).map((t) => `<span class="tech-tag" style="font-size: 0.7rem;">${t}</span>`).join('')}
                         </div>
                     </div>
 
-                    ${kl ? `
+                    ${
+                        kl
+                            ? `
                         <div class="compare-feature-row">
                             <strong>Kern-Herausforderung</strong>
                             <span style="font-size: 0.8rem; color: var(--text-secondary);">${lang === 'de' ? kl.challengeDe : kl.challengeEn}</span>
@@ -145,7 +156,9 @@
                             <strong>Lösungsansatz</strong>
                             <span style="font-size: 0.8rem; color: var(--text-secondary);">${lang === 'de' ? kl.solutionDe : kl.solutionEn}</span>
                         </div>
-                    ` : ''}
+                    `
+                            : ''
+                    }
 
                     <div style="margin-top: auto; padding-top: 0.5rem; display: flex; gap: 0.5rem;">
                         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="btn-primary font-size-0-75rem padding-4px-8px" style="flex:1; text-align:center;">Launch Demo</a>` : ''}
@@ -153,16 +166,19 @@
                     </div>
                 </div>
             `;
-        }).join('');
+            })
+            .join('');
 
         // Bind remove buttons inside compare columns
-        grid.querySelectorAll('.compare-column-close').forEach(btn => {
+        grid.querySelectorAll('.compare-column-close').forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.dataset.index);
                 const removed = selectedProjects.splice(idx, 1)[0];
-                
+
                 // Uncheck button on card
-                const cardBtn = document.querySelector(`.btn-compare-select[data-repo="${removed.repoName || removed.titleDe}"]`);
+                const cardBtn = document.querySelector(
+                    `.btn-compare-select[data-repo="${removed.repoName || removed.titleDe}"]`
+                );
                 if (cardBtn) cardBtn.classList.remove('active');
 
                 updateFloatingBar();

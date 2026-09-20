@@ -1,0 +1,7 @@
+node_modules/
+assets/vendor/
+Projekte/
+test-results/
+playwright-report/
+dist/
+assets/js/projects_data.js

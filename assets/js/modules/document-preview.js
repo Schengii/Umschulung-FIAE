@@ -215,7 +215,8 @@ export function initDocumentPreview() {
                 iconClass = 'fa-regular fa-file-powerpoint';
                 iconColorClass = 'powerpoint';
                 fileTypeLabel = 'PowerPoint Präsentation (PPTX)';
-                fileTitle = element.closest('li')?.querySelector('strong')?.textContent ||
+                fileTitle =
+                    element.closest('li')?.querySelector('strong')?.textContent ||
                     element.closest('.download-item-box')?.querySelector('.download-item-title')?.textContent ||
                     'Präsentation';
             }
@@ -226,9 +227,11 @@ export function initDocumentPreview() {
                     <div class="doc-preview-file-title">${fileTitle}</div>
                     <div class="doc-preview-file-meta">${fileTypeLabel}</div>
                     <p style="margin: 0; color: var(--text-secondary); max-width: 480px; font-size: 0.9rem;">
-                        ${lang === 'de'
-                    ? 'Die direkte Vorschau dieses Dateiformats wird im Webbrowser nicht unterstützt. Bitte laden Sie die Datei herunter, um sie zu betrachten.'
-                    : 'Direct preview of this file format is not supported in the web browser. Please download the file to view it.'}
+                        ${
+                            lang === 'de'
+                                ? 'Die direkte Vorschau dieses Dateiformats wird im Webbrowser nicht unterstützt. Bitte laden Sie die Datei herunter, um sie zu betrachten.'
+                                : 'Direct preview of this file format is not supported in the web browser. Please download the file to view it.'
+                        }
                     </p>
                     <div class="doc-preview-btn-row">
                         <a href="${fileUrl}" download class="btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.95rem;">

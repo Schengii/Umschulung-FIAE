@@ -113,7 +113,9 @@ class BoundingBoxRenderer {
             boxEl.addEventListener('click', () => {
                 console.log('Bounding box clicked:', box.label || `Box ${index + 1}`, box);
                 // Here you could trigger a modal or display more info
-                alert(`Defekt: ${box.label || 'Unbekannt'}\nPosition: (${(box.x * 100).toFixed(1)}%, ${(box.y * 100).toFixed(1)}%)\nGröße: ${(box.width * 100).toFixed(1)}% x ${(box.height * 100).toFixed(1)}%`);
+                alert(
+                    `Defekt: ${box.label || 'Unbekannt'}\nPosition: (${(box.x * 100).toFixed(1)}%, ${(box.y * 100).toFixed(1)}%)\nGröße: ${(box.width * 100).toFixed(1)}% x ${(box.height * 100).toFixed(1)}%`
+                );
             });
 
             this.overlayContainer.appendChild(boxEl);

@@ -20,7 +20,7 @@ export function resetBoxLevel() {
 /** Counts how many cards sit in each box (1..MAX_BOX_LEVEL). */
 export function computeBoxStats(cards, boxLevels) {
     const counts = { 1: 0, 2: 0, 3: 0 };
-    cards.forEach(card => {
+    cards.forEach((card) => {
         const level = boxLevels[card.id] || MIN_BOX_LEVEL;
         if (counts[level] !== undefined) counts[level]++;
     });
@@ -32,7 +32,7 @@ export function filterByBox(cards, boxLevels, boxCategory) {
     const targetLevel = { box1: 1, box2: 2, box3: 3 }[boxCategory];
     if (!targetLevel) return [...cards];
     if (targetLevel === MIN_BOX_LEVEL) {
-        return cards.filter(c => (boxLevels[c.id] || MIN_BOX_LEVEL) === targetLevel);
+        return cards.filter((c) => (boxLevels[c.id] || MIN_BOX_LEVEL) === targetLevel);
     }
-    return cards.filter(c => boxLevels[c.id] === targetLevel);
+    return cards.filter((c) => boxLevels[c.id] === targetLevel);
 }

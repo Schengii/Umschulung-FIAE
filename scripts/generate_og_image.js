@@ -44,10 +44,10 @@ const svg = `
 </svg>`;
 
 sharp(Buffer.from(svg))
-  .png()
-  .toFile(outPath)
-  .then(() => console.log(`OG image written to ${outPath}`))
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+    .png()
+    .toFile(outPath)
+    .then(() => console.log(`OG image written to ${outPath}`))
+    .catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });

@@ -19,7 +19,10 @@ const pagesDir = path.join(root, 'pages');
 const files = [
     path.join(root, 'index.html'),
     path.join(root, '404.html'),
-    ...fs.readdirSync(pagesDir).filter(f => f.endsWith('.html')).map(f => path.join(pagesDir, f)),
+    ...fs
+        .readdirSync(pagesDir)
+        .filter((f) => f.endsWith('.html'))
+        .map((f) => path.join(pagesDir, f)),
 ];
 
 // offline.html is an intentionally minimal PWA fallback page (no header/nav,
@@ -28,12 +31,32 @@ const MINIMAL_PAGES = new Set(['offline.html']);
 
 const CHECKS = [
     { name: 'charset', re: /<meta charset="UTF-8">/i, requiredFor: 'all' },
-    { name: 'viewport', re: /<meta name="viewport" content="width=device-width, initial-scale=1\.0">/i, requiredFor: 'all' },
+    {
+        name: 'viewport',
+        re: /<meta name="viewport" content="width=device-width, initial-scale=1\.0">/i,
+        requiredFor: 'all',
+    },
     { name: 'CSP meta', re: /<meta http-equiv="Content-Security-Policy"/i, requiredFor: 'all' },
-    { name: 'style.css link', re: /<link rel="stylesheet" href="(\.\.\/)?assets\/css\/style\.css">/i, requiredFor: 'all' },
-    { name: 'Font Awesome link', re: /<link rel="stylesheet" href="(\.\.\/)?assets\/vendor\/fontawesome\/css\/all\.min\.css">/i, requiredFor: 'all' },
-    { name: 'favicon link', re: /<link rel="icon" type="image\/svg\+xml" href="(\.\.\/)?assets\/images\/favicon\.svg">/i, requiredFor: 'full' },
-    { name: 'components.js script', re: /<script[^>]*src="(\.\.\/)?assets\/js\/components\.js"[^>]*>/i, requiredFor: 'full' },
+    {
+        name: 'style.css link',
+        re: /<link rel="stylesheet" href="(\.\.\/)?assets\/css\/style\.css">/i,
+        requiredFor: 'all',
+    },
+    {
+        name: 'Font Awesome link',
+        re: /<link rel="stylesheet" href="(\.\.\/)?assets\/vendor\/fontawesome\/css\/all\.min\.css">/i,
+        requiredFor: 'all',
+    },
+    {
+        name: 'favicon link',
+        re: /<link rel="icon" type="image\/svg\+xml" href="(\.\.\/)?assets\/images\/favicon\.svg">/i,
+        requiredFor: 'full',
+    },
+    {
+        name: 'components.js script',
+        re: /<script[^>]*src="(\.\.\/)?assets\/js\/components\.js"[^>]*>/i,
+        requiredFor: 'full',
+    },
     { name: 'meta author', re: /<meta name="author" content="Maximilian Schenk">/i, requiredFor: 'full' },
     { name: 'og:title', re: /<meta property="og:title"/i, requiredFor: 'full' },
     { name: 'og:description', re: /<meta property="og:description"/i, requiredFor: 'full' },
@@ -47,10 +70,9 @@ for (const file of files) {
     const rel = path.relative(root, file);
     const isMinimal = MINIMAL_PAGES.has(path.basename(file));
 
-    const missing = CHECKS
-        .filter(check => check.requiredFor === 'all' || !isMinimal)
-        .filter(check => !check.re.test(html))
-        .map(check => check.name);
+    const missing = CHECKS.filter((check) => check.requiredFor === 'all' || !isMinimal)
+        .filter((check) => !check.re.test(html))
+        .map((check) => check.name);
 
     if (missing.length > 0) {
         hadFailure = true;

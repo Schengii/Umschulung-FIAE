@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Git Simulator Page Tests', () => {
-
     test.beforeEach(async ({ page }) => {
-        page.on('console', msg => console.log('PAGE LOG:', msg.text(), msg.location()));
-        page.on('pageerror', err => console.log('PAGE ERROR:', err.message, err.stack));
+        page.on('console', (msg) => console.log('PAGE LOG:', msg.text(), msg.location()));
+        page.on('pageerror', (err) => console.log('PAGE ERROR:', err.message, err.stack));
         // Goto git-simulator.html
         await page.goto('/pages/git-simulator.html');
     });
@@ -20,7 +19,7 @@ test.describe('Git Simulator Page Tests', () => {
 
     test('sollte einen Commit über die Befehlseingabe erstellen', async ({ page }) => {
         const input = page.locator('#terminal-input');
-        
+
         // Focus and type git commit command
         await input.focus();
         await input.fill('git commit -m "Test commit"');
@@ -38,7 +37,7 @@ test.describe('Git Simulator Page Tests', () => {
 
     test('sollte einen neuen Branch erstellen', async ({ page }) => {
         const input = page.locator('#terminal-input');
-        
+
         await input.focus();
         await input.fill('git branch feature/test');
         await input.press('Enter');

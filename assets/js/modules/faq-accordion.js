@@ -82,7 +82,7 @@ export function initFaqAccordion() {
     document.head.appendChild(style);
 
     const faqItems = accordionContainer.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
+    faqItems.forEach((item) => {
         const trigger = item.querySelector('.faq-trigger');
         const panel = item.querySelector('.faq-panel');
 
@@ -91,7 +91,7 @@ export function initFaqAccordion() {
                 const isOpen = item.classList.contains('open');
 
                 // Close other items
-                faqItems.forEach(otherItem => {
+                faqItems.forEach((otherItem) => {
                     if (otherItem !== item && otherItem.classList.contains('open')) {
                         otherItem.classList.remove('open');
                         const otherTrigger = otherItem.querySelector('.faq-trigger');

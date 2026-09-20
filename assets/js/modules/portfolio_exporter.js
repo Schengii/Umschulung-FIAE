@@ -3,7 +3,7 @@
  * Generates an executive printable summary of all key projects and competencies with clean CSS print formatting.
  */
 
-(function() {
+(function () {
     'use strict';
 
     function initPortfolioExporter() {

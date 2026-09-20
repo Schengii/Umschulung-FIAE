@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Landing Page Tests', () => {
-
     test.beforeEach(async ({ page }) => {
-        page.on('console', msg => console.log('PAGE LOG:', msg.text(), msg.location()));
-        page.on('pageerror', err => console.log('PAGE ERROR:', err.message, err.stack));
+        page.on('console', (msg) => console.log('PAGE LOG:', msg.text(), msg.location()));
+        page.on('pageerror', (err) => console.log('PAGE ERROR:', err.message, err.stack));
         // Gehe vor jedem Test zur Startseite
         await page.goto('/index.html');
     });

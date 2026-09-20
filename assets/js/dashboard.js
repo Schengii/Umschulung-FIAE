@@ -5,7 +5,8 @@
 import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
 
 export function initDashboard() {
-    const isDashboardPage = window.location.pathname.endsWith('dashboard.html') || document.getElementById('commit-grid');
+    const isDashboardPage =
+        window.location.pathname.endsWith('dashboard.html') || document.getElementById('commit-grid');
     if (!isDashboardPage) return;
 
     renderStats();
@@ -54,7 +55,7 @@ function initPwaTelemetry() {
     if (purgeBtn) {
         purgeBtn.onclick = () => {
             if (window.caches) {
-                caches.keys().then(keys => {
+                caches.keys().then((keys) => {
                     if (window.showToast) window.showToast('PWA Cache geprüft und synchronisiert', 'success');
                 });
             }
@@ -99,22 +100,22 @@ function renderStats() {
 }
 
 function renderProjectCount() {
-    fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json'))
-        .then(r => r.json())
-        .then(projects => {
+    fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json'))
+        .then((r) => r.json())
+        .then((projects) => {
             const el = document.getElementById('stat-projects');
             if (el) el.textContent = projects.length;
         })
-        .catch(() => { });
+        .catch(() => {});
 }
 
 function renderRecentProjects() {
     const container = document.querySelector('.left-col .card');
     if (!container) return;
 
-    fetch((window.resolveAssetPath || (p => p))('assets/data/projects.json'))
-        .then(r => r.json())
-        .then(projects => {
+    fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json'))
+        .then((r) => r.json())
+        .then((projects) => {
             const lang = document.documentElement.getAttribute('lang') || 'de';
             const recent = projects.slice(-3).reverse();
 
@@ -124,20 +125,24 @@ function renderRecentProjects() {
             card.innerHTML = `
                 <h3>${lang === 'de' ? '📁 Letzte Projekte' : '📁 Recent Projects'}</h3>
                 <ul style="list-style:none; padding:0; margin-top:1rem;">
-                    ${recent.map(p => `
+                    ${recent
+                        .map(
+                            (p) => `
                         <li style="padding:0.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
                             <span style="font-weight:600;">${p.title}</span>
                             <a href="${p.link}" style="font-size:0.85rem;">
                                 ${lang === 'de' ? 'Öffnen →' : 'Open →'}
                             </a>
                         </li>
-                    `).join('')}
+                    `
+                        )
+                        .join('')}
                 </ul>
             `;
 
             container.after(card);
         })
-        .catch(() => { });
+        .catch(() => {});
 }
 
 /* ==========================================================================
@@ -165,10 +170,10 @@ function initQaMetrics() {
         { num: coverageInput, range: coverageRange },
         { num: cleanCodeInput, range: cleanCodeRange },
         { num: docsInput, range: docsRange },
-        { num: securityInput, range: securityRange }
+        { num: securityInput, range: securityRange },
     ];
 
-    mappings.forEach(pair => {
+    mappings.forEach((pair) => {
         if (!pair.range) return;
 
         pair.num.addEventListener('input', () => {
@@ -209,9 +214,30 @@ function initQaMetrics() {
 
         // Status determinations
         const statusConfig = {
-            success: { stroke: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.2)', icon: 'fa-check-circle', text_de: 'Produktionsbereit!', text_en: 'Production Ready!' },
-            warning: { stroke: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', border: 'rgba(245, 158, 11, 0.2)', icon: 'fa-info-circle', text_de: 'Freigabe-Kandidat', text_en: 'Release Candidate' },
-            danger: { stroke: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.2)', icon: 'fa-exclamation-circle', text_de: 'Refactoring empfohlen', text_en: 'Refactoring Recommended' }
+            success: {
+                stroke: '#10b981',
+                bg: 'rgba(16, 185, 129, 0.1)',
+                border: 'rgba(16, 185, 129, 0.2)',
+                icon: 'fa-check-circle',
+                text_de: 'Produktionsbereit!',
+                text_en: 'Production Ready!',
+            },
+            warning: {
+                stroke: '#f59e0b',
+                bg: 'rgba(245, 158, 11, 0.1)',
+                border: 'rgba(245, 158, 11, 0.2)',
+                icon: 'fa-info-circle',
+                text_de: 'Freigabe-Kandidat',
+                text_en: 'Release Candidate',
+            },
+            danger: {
+                stroke: '#ef4444',
+                bg: 'rgba(239, 68, 68, 0.1)',
+                border: 'rgba(239, 68, 68, 0.2)',
+                icon: 'fa-exclamation-circle',
+                text_de: 'Refactoring empfohlen',
+                text_en: 'Refactoring Recommended',
+            },
         };
         const status = statusConfig[getQualityStatus(overallScore)];
         ring.style.stroke = status.stroke;
@@ -229,7 +255,7 @@ function initQaMetrics() {
                 { name: lang === 'de' ? 'Coverage' : 'Coverage', val: coverage, color: '#3b82f6' },
                 { name: lang === 'de' ? 'Clean Code' : 'Clean Code', val: cleanCode, color: '#a855f7' },
                 { name: lang === 'de' ? 'Doku' : 'Docs', val: docs, color: '#10b981' },
-                { name: lang === 'de' ? 'Security' : 'Security', val: security, color: '#f43f5e' }
+                { name: lang === 'de' ? 'Security' : 'Security', val: security, color: '#f43f5e' },
             ];
 
             let svgContent = '';
@@ -257,13 +283,17 @@ function renderLearningRecommendations() {
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
-    const weakQuizCategories = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]'));
-    const flashcardsWrongCounts = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}'));
+    const weakQuizCategories = JSON.parse(
+        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]')
+    );
+    const flashcardsWrongCounts = JSON.parse(
+        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
+    );
 
     const recommendations = {};
 
     // Process quiz recommendations
-    weakQuizCategories.forEach(cat => {
+    weakQuizCategories.forEach((cat) => {
         recommendations[cat] = (recommendations[cat] || 0) + 2; // Higher weight for quiz
     });
 
@@ -279,22 +309,40 @@ function renderLearningRecommendations() {
 
     let recommendationsHtml = '';
     if (sortedRecommendations.length > 0) {
-        recommendationsHtml = sortedRecommendations.map(cat => {
-            let categoryName = cat; // Default to category key
-            // Map internal category keys to user-friendly names
-            switch (cat) {
-                case 'tech': categoryName = lang === 'de' ? 'Technische Fragen' : 'Technical Questions'; break;
-                case 'project': categoryName = lang === 'de' ? 'Projektfragen' : 'Project Questions'; break;
-                case 'personal': categoryName = lang === 'de' ? 'Persönliche Fragen' : 'Personal Questions'; break;
-                case 'ihk': categoryName = lang === 'de' ? 'IHK-Fragen' : 'IHK Questions'; break;
-                case 'software': categoryName = lang === 'de' ? 'Softwareentwicklung' : 'Software Development'; break;
-                case 'database': categoryName = lang === 'de' ? 'Datenbanken' : 'Databases'; break;
-                case 'network': categoryName = lang === 'de' ? 'Netzwerke & Sicherheit' : 'Networking & Security'; break;
-                case 'wiso': categoryName = lang === 'de' ? 'Wirtschaft & Soziales' : 'Business & Society'; break;
-                // Add more mappings as needed
-            }
-            return `<li><a href="${getRecommendationLink(cat)}">${categoryName}</a></li>`;
-        }).join('');
+        recommendationsHtml = sortedRecommendations
+            .map((cat) => {
+                let categoryName = cat; // Default to category key
+                // Map internal category keys to user-friendly names
+                switch (cat) {
+                    case 'tech':
+                        categoryName = lang === 'de' ? 'Technische Fragen' : 'Technical Questions';
+                        break;
+                    case 'project':
+                        categoryName = lang === 'de' ? 'Projektfragen' : 'Project Questions';
+                        break;
+                    case 'personal':
+                        categoryName = lang === 'de' ? 'Persönliche Fragen' : 'Personal Questions';
+                        break;
+                    case 'ihk':
+                        categoryName = lang === 'de' ? 'IHK-Fragen' : 'IHK Questions';
+                        break;
+                    case 'software':
+                        categoryName = lang === 'de' ? 'Softwareentwicklung' : 'Software Development';
+                        break;
+                    case 'database':
+                        categoryName = lang === 'de' ? 'Datenbanken' : 'Databases';
+                        break;
+                    case 'network':
+                        categoryName = lang === 'de' ? 'Netzwerke & Sicherheit' : 'Networking & Security';
+                        break;
+                    case 'wiso':
+                        categoryName = lang === 'de' ? 'Wirtschaft & Soziales' : 'Business & Society';
+                        break;
+                    // Add more mappings as needed
+                }
+                return `<li><a href="${getRecommendationLink(cat)}">${categoryName}</a></li>`;
+            })
+            .join('');
     } else {
         recommendationsHtml = `<li><span lang="de">Keine spezifischen Empfehlungen. Mach ein Quiz oder lerne Lernkarten!</span><span lang="en">No specific recommendations yet. Take a quiz or study flashcards!</span></li>`;
     }
@@ -377,7 +425,7 @@ function initCommitGrid() {
 
         cellsData.push({
             date: date,
-            commits: commits
+            commits: commits,
         });
     }
 
@@ -393,7 +441,7 @@ function initCommitGrid() {
         document.body.appendChild(tooltip);
     }
 
-    cellsData.forEach(cell => {
+    cellsData.forEach((cell) => {
         const cellEl = document.createElement('div');
         cellEl.className = 'commit-cell';
 
@@ -411,7 +459,9 @@ function initCommitGrid() {
         // Tooltip listeners
         cellEl.addEventListener('mouseenter', (e) => {
             const formattedDate = cell.date.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
-                year: 'numeric', month: 'long', day: 'numeric'
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
             });
             tooltip.innerHTML = `<strong>${cell.commits} Commits</strong> am / on ${formattedDate}`;
             tooltip.style.opacity = 1;
@@ -431,14 +481,13 @@ function initCommitGrid() {
 
     // Update totals
     if (totalSpan) {
-        totalSpan.textContent = lang === 'de'
-            ? `${totalCommits} Beiträge im letzten Jahr`
-            : `${totalCommits} contributions in the last year`;
+        totalSpan.textContent =
+            lang === 'de'
+                ? `${totalCommits} Beiträge im letzten Jahr`
+                : `${totalCommits} contributions in the last year`;
     }
     if (streakSpan) {
-        streakSpan.textContent = lang === 'de'
-            ? `Beste Strähne: ${maxStreak} Tage`
-            : `Best Streak: ${maxStreak} days`;
+        streakSpan.textContent = lang === 'de' ? `Beste Strähne: ${maxStreak} Tage` : `Best Streak: ${maxStreak} days`;
     }
 }
 
@@ -505,9 +554,10 @@ function renderAchievementsWidget() {
 
     // Update Progress UI
     if (progressText) {
-        progressText.textContent = lang === 'de'
-            ? `${unlockedCount} von ${totalCount} freigeschaltet`
-            : `${unlockedCount} of ${totalCount} unlocked`;
+        progressText.textContent =
+            lang === 'de'
+                ? `${unlockedCount} von ${totalCount} freigeschaltet`
+                : `${unlockedCount} of ${totalCount} unlocked`;
     }
     if (progressBar) {
         progressBar.style.width = `${percentage}%`;
@@ -528,7 +578,7 @@ function renderAchievementsWidget() {
         document.body.appendChild(tooltip);
     }
 
-    Object.keys(definitions).forEach(id => {
+    Object.keys(definitions).forEach((id) => {
         const def = definitions[id];
         const isUnlocked = unlockedIds.includes(id);
 
@@ -550,8 +600,12 @@ function renderAchievementsWidget() {
             const title = lang === 'de' ? def.title_de : def.title_en;
             const desc = lang === 'de' ? def.desc_de : def.desc_en;
             const statusText = isUnlocked
-                ? (lang === 'de' ? '🏅 Freigeschaltet' : '🏅 Unlocked')
-                : (lang === 'de' ? '🔒 Gesperrt' : '🔒 Locked');
+                ? lang === 'de'
+                    ? '🏅 Freigeschaltet'
+                    : '🏅 Unlocked'
+                : lang === 'de'
+                  ? '🔒 Gesperrt'
+                  : '🔒 Locked';
 
             tooltip.innerHTML = `
                 <div style="font-weight: 700; font-family: var(--font-heading); color: var(--primary); margin-bottom: 2px;">${title}</div>

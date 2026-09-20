@@ -6,8 +6,8 @@
 
 const PLAYGROUND_TEMPLATES = {
     counter: {
-        titleDe: "Zähler-Button (Interactive Button)",
-        titleEn: "Counter Button (Interactive Button)",
+        titleDe: 'Zähler-Button (Interactive Button)',
+        titleEn: 'Counter Button (Interactive Button)',
         html: `<div class="app-container">
     <h2>Zähler-Demo</h2>
     <p>Klicke auf den Button, um den Wert zu erhöhen!</p>
@@ -64,11 +64,11 @@ button.addEventListener('click', () => {
     if (count % 10 === 0) {
         console.log('🎉 Jubiläum! 10er Marke erreicht!');
     }
-});`
+});`,
     },
     flexbox: {
-        titleDe: "CSS Flexbox Layout-Switcher",
-        titleEn: "CSS Flexbox Layout Switcher",
+        titleDe: 'CSS Flexbox Layout-Switcher',
+        titleEn: 'CSS Flexbox Layout Switcher',
         html: `<div class="container">
     <div class="controls">
         <button id="toggle-dir-btn">Layout umschalten (Direction)</button>
@@ -136,11 +136,11 @@ button.addEventListener('click', () => {
     const nextDir = currentDir === 'row' ? 'column' : 'row';
     wrapper.style.flexDirection = nextDir;
     console.log('Flex-direction geändert zu:', nextDir);
-});`
+});`,
     },
     canvas: {
-        titleDe: "HTML5 Canvas Ball-Physik",
-        titleEn: "HTML5 Canvas Ball Physics",
+        titleDe: 'HTML5 Canvas Ball-Physik',
+        titleEn: 'HTML5 Canvas Ball Physics',
         html: `<div class="canvas-container">
     <h3>Bouncing Ball (Physics Loop)</h3>
     <canvas id="physics-canvas" width="400" height="250"></canvas>
@@ -222,11 +222,11 @@ function draw() {
 }
 
 console.log('Physik-Simulation gestartet.');
-draw();`
+draw();`,
     },
-    "sps-logic": {
-        titleDe: "SPS Selbsthalteschaltung (SPS/PLC Simulator)",
-        titleEn: "PLC Latch Circuit (PLC Simulator)",
+    'sps-logic': {
+        titleDe: 'SPS Selbsthalteschaltung (SPS/PLC Simulator)',
+        titleEn: 'PLC Latch Circuit (PLC Simulator)',
         html: `<div class="sps-simulator">
     <h2>⚡ SPS / PLC Logik-Simulator ⚡</h2>
     <p>Simuliere eine Selbsthalteschaltung (Start/Stop-Latch-Schaltkreis) in Echtzeit.</p>
@@ -620,11 +620,11 @@ s0Btn.addEventListener('touchend', () => { S0 = true; updatePLC(); });
 
 updatePLC();
 console.log('SPS-Selbsthalteschaltungs-Simulator initialisiert.');
-console.log('Ausgang Q0.0 = (Start S1 ODER Selbsthaltung Q0.0) UND Stopp S0');`
+console.log('Ausgang Q0.0 = (Start S1 ODER Selbsthaltung Q0.0) UND Stopp S0');`,
     },
-    "canvas-particles": {
-        titleDe: "Interaktives Partikel-System (Canvas)",
-        titleEn: "Interactive Particle System (Canvas)",
+    'canvas-particles': {
+        titleDe: 'Interaktives Partikel-System (Canvas)',
+        titleEn: 'Interactive Particle System (Canvas)',
         html: `<div class="particles-container">
     <h3>Interactive Particle System</h3>
     <canvas id="particles-canvas" width="460" height="280"></canvas>
@@ -716,11 +716,11 @@ function animate() {
 }
 
 console.log('Partikel-Simulation gestartet. Bewege die Maus über das Canvas!');
-animate();`
+animate();`,
     },
-    "api-fetch": {
-        titleDe: "Live REST API Fetcher (JSONPlaceholder)",
-        titleEn: "Live REST API Fetcher (JSONPlaceholder)",
+    'api-fetch': {
+        titleDe: 'Live REST API Fetcher (JSONPlaceholder)',
+        titleEn: 'Live REST API Fetcher (JSONPlaceholder)',
         html: `<div class="api-container">
     <h3>Live REST API Fetcher (JSONPlaceholder)</h3>
     <div class="search-bar">
@@ -791,7 +791,7 @@ button:hover {
     min-height: 120px;
     max-height: 160px;
     overflow-y: auto;
-}` ,
+}`,
         js: `const fetchBtn = document.getElementById('fetch-btn');
 const inputId = document.getElementById('post-id');
 const output = document.getElementById('api-output');
@@ -812,11 +812,11 @@ fetchBtn.addEventListener('click', async () => {
         console.log('FETCH FEHLER: ' + err.message);
         output.innerHTML = '<span style="color:#ef4444;">Error: ' + err.message + '</span>';
     }
-});`
+});`,
     },
-    "wasm-runner": {
-        titleDe: "In-Browser Java / C++ WASM Simulator (Compiler & Runtime)",
-        titleEn: "In-Browser Java / C++ WASM Simulator (Compiler & Runtime)",
+    'wasm-runner': {
+        titleDe: 'In-Browser Java / C++ WASM Simulator (Compiler & Runtime)',
+        titleEn: 'In-Browser Java / C++ WASM Simulator (Compiler & Runtime)',
         html: `<div class="compiler-box">
     <h2>☕ / ⚡ Java & C++ WASM Runner</h2>
     <div class="lang-selector">
@@ -993,8 +993,8 @@ compileBtn.onclick = () => {
             console.log('WASM RUNNER: ' + currentLang.toUpperCase() + ' erfolgreich ausgeführt.');
         }, 500);
     }, 400);
-};`
-    }
+};`,
+    },
 };
 
 class CodePlayground {
@@ -1016,11 +1016,11 @@ class CodePlayground {
 
         this.previewIframe = document.getElementById('preview-iframe');
         this.consoleLogBox = document.getElementById('console-log-box');
-        
+
         this.btnHtml = document.getElementById('btn-tab-html');
         this.btnCss = document.getElementById('btn-tab-css');
         this.btnJs = document.getElementById('btn-tab-js');
-        
+
         this.runBtn = document.getElementById('run-code-btn');
         this.clearConsoleBtn = document.getElementById('clear-console-btn');
 
@@ -1048,16 +1048,16 @@ class CodePlayground {
             '[': ']',
             '(': ')',
             '"': '"',
-            "'": "'"
+            "'": "'",
         };
 
         const editorConfig = [
             { ed: this.htmlEditor, wrapper: this.htmlWrapper, lines: this.htmlLines },
             { ed: this.cssEditor, wrapper: this.cssWrapper, lines: this.cssLines },
-            { ed: this.jsEditor, wrapper: this.jsWrapper, lines: this.jsLines }
+            { ed: this.jsEditor, wrapper: this.jsWrapper, lines: this.jsLines },
         ];
 
-        editorConfig.forEach(item => {
+        editorConfig.forEach((item) => {
             const { ed, lines } = item;
             if (!ed || !lines) return;
 
@@ -1127,7 +1127,7 @@ class CodePlayground {
 
         // Bind Template selection
         const templateBtns = document.querySelectorAll('.template-select-btn');
-        templateBtns.forEach(btn => {
+        templateBtns.forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 const templKey = btn.getAttribute('data-template');
                 this.loadTemplate(templKey);
@@ -1140,12 +1140,12 @@ class CodePlayground {
 
     switchTab(tab) {
         this.activeTab = tab;
-        
+
         // Update tab buttons
         this.btnHtml.classList.remove('active');
         this.btnCss.classList.remove('active');
         this.btnJs.classList.remove('active');
-        
+
         if (tab === 'html') this.btnHtml.classList.add('active');
         if (tab === 'css') this.btnCss.classList.add('active');
         if (tab === 'js') this.btnJs.classList.add('active');
@@ -1170,9 +1170,10 @@ class CodePlayground {
 
         if (this.consoleLogBox) {
             const lang = document.documentElement.getAttribute('lang') || 'de';
-            const welcomeMsg = lang === 'de' 
-                ? `System: Template "${templ.titleDe}" geladen.` 
-                : `System: Template "${templ.titleEn}" loaded.`;
+            const welcomeMsg =
+                lang === 'de'
+                    ? `System: Template "${templ.titleDe}" geladen.`
+                    : `System: Template "${templ.titleEn}" loaded.`;
             this.consoleLogBox.innerHTML = `<div class="console-entry system">[Info] ${welcomeMsg}</div>`;
         }
 
@@ -1235,7 +1236,7 @@ class CodePlayground {
 
         const entry = document.createElement('div');
         entry.className = `console-entry ${type}`;
-        
+
         const timestamp = new Date().toLocaleTimeString();
         entry.textContent = `[${timestamp}] ${message}`;
 

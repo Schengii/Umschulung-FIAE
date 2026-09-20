@@ -37,7 +37,7 @@ const GameAudio = {
 
     updateMuteButtonsUI() {
         const buttons = document.querySelectorAll('.mute-toggle-btn');
-        buttons.forEach(btn => {
+        buttons.forEach((btn) => {
             if (this.isMuted) {
                 btn.innerHTML = '<i class="fa fa-volume-off" aria-hidden="true"></i>';
                 btn.classList.add('muted');
@@ -114,7 +114,7 @@ const GameAudio = {
         } catch (e) {
             console.warn('GameAudio error:', e);
         }
-    }
+    },
 };
 
 // Initialize on page load

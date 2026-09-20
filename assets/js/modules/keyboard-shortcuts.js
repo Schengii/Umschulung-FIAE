@@ -48,11 +48,17 @@ export function initKeyboardShortcuts() {
         // Arrow keys for flashcard navigation
         if (e.key === 'ArrowLeft') {
             const prevBtn = document.getElementById('btn-prev');
-            if (prevBtn) { prevBtn.click(); return; }
+            if (prevBtn) {
+                prevBtn.click();
+                return;
+            }
         }
         if (e.key === 'ArrowRight') {
             const nextBtn = document.getElementById('btn-next');
-            if (nextBtn) { nextBtn.click(); return; }
+            if (nextBtn) {
+                nextBtn.click();
+                return;
+            }
         }
 
         // Space to flip flashcard

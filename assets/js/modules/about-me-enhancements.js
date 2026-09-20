@@ -15,23 +15,23 @@ function initSkillBridge() {
 
     const bridgeData = {
         trouble: {
-            titleDe: "Systematisches Troubleshooting",
-            titleEn: "Systematic Troubleshooting",
-            de: "Elektronik: Aufspüren von Wackelkontakten und Sensorstörungen in riesigen Haribo-Produktionsstraßen.<br><br><strong>IT-Transfer:</strong> Exakt dieselbe analytische Vorgehensweise (Signale messen, Pfade isolieren) hilft beim Debuggen von REST-API-Aufrufen und komplexen JS-Event-Chains.",
-            en: "Electronics: Locating faulty contacts and sensor glitches in huge Haribo production lines.<br><br><strong>IT-Transfer:</strong> The exact same analytical approach (measuring signals, isolating paths) helps debug REST API requests and complex JS event chains."
+            titleDe: 'Systematisches Troubleshooting',
+            titleEn: 'Systematic Troubleshooting',
+            de: 'Elektronik: Aufspüren von Wackelkontakten und Sensorstörungen in riesigen Haribo-Produktionsstraßen.<br><br><strong>IT-Transfer:</strong> Exakt dieselbe analytische Vorgehensweise (Signale messen, Pfade isolieren) hilft beim Debuggen von REST-API-Aufrufen und komplexen JS-Event-Chains.',
+            en: 'Electronics: Locating faulty contacts and sensor glitches in huge Haribo production lines.<br><br><strong>IT-Transfer:</strong> The exact same analytical approach (measuring signals, isolating paths) helps debug REST API requests and complex JS event chains.',
         },
         security: {
-            titleDe: "Sicherheitsbewusstsein (SecOps)",
-            titleEn: "Security Awareness (SecOps)",
-            de: "Elektronik: Strikte Einhaltung von DGUV-V3-Schutzvorschriften bei Arbeiten an 400V-Anlagen.<br><br><strong>IT-Transfer:</strong> Ein natürlicher Respekt vor Risiken führt zu sauberem Input-Validation, sicheren Environment-Variablen und robustem Error-Handling im Code.",
-            en: "Electronics: Strict compliance with safety regulations (DGUV-V3) when working on 400V machinery.<br><br><strong>IT-Transfer:</strong> A natural respect for operational hazards leads to clean input validation, secure environment variables, and robust error handling."
+            titleDe: 'Sicherheitsbewusstsein (SecOps)',
+            titleEn: 'Security Awareness (SecOps)',
+            de: 'Elektronik: Strikte Einhaltung von DGUV-V3-Schutzvorschriften bei Arbeiten an 400V-Anlagen.<br><br><strong>IT-Transfer:</strong> Ein natürlicher Respekt vor Risiken führt zu sauberem Input-Validation, sicheren Environment-Variablen und robustem Error-Handling im Code.',
+            en: 'Electronics: Strict compliance with safety regulations (DGUV-V3) when working on 400V machinery.<br><br><strong>IT-Transfer:</strong> A natural respect for operational hazards leads to clean input validation, secure environment variables, and robust error handling.',
         },
         logic: {
-            titleDe: "Prozesslogik & Zustände",
-            titleEn: "Process Logic & States",
-            de: "Elektronik: Programmierung von Ablaufsteuerungen in SPS (TIA Portal) mittels Grafcet.<br><br><strong>IT-Transfer:</strong> Die Modellierung von physischen Anlagen als Zustandsautomaten (Finite State Machines) bildet das perfekte Fundament für State Management (React Context, Redux) und reaktive Benutzeroberflächen.",
-            en: "Electronics: Programming step-by-step logic in PLCs (TIA Portal) using Grafcet.<br><br><strong>IT-Transfer:</strong> Modeling physical systems as finite state machines is the perfect foundation for UI state management (React Context, Redux) and reactive components."
-        }
+            titleDe: 'Prozesslogik & Zustände',
+            titleEn: 'Process Logic & States',
+            de: 'Elektronik: Programmierung von Ablaufsteuerungen in SPS (TIA Portal) mittels Grafcet.<br><br><strong>IT-Transfer:</strong> Die Modellierung von physischen Anlagen als Zustandsautomaten (Finite State Machines) bildet das perfekte Fundament für State Management (React Context, Redux) und reaktive Benutzeroberflächen.',
+            en: 'Electronics: Programming step-by-step logic in PLCs (TIA Portal) using Grafcet.<br><br><strong>IT-Transfer:</strong> Modeling physical systems as finite state machines is the perfect foundation for UI state management (React Context, Redux) and reactive components.',
+        },
     };
 
     function updateBridge(key) {
@@ -45,9 +45,9 @@ function initSkillBridge() {
         `;
     }
 
-    bridgeButtons.forEach(btn => {
+    bridgeButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-            bridgeButtons.forEach(b => b.classList.remove('active'));
+            bridgeButtons.forEach((b) => b.classList.remove('active'));
             btn.classList.add('active');
             updateBridge(btn.getAttribute('data-bridge'));
         });

@@ -15,7 +15,7 @@ export function initNavigation() {
     }
 
     const dropdownItems = document.querySelectorAll('.nav-item');
-    dropdownItems.forEach(item => {
+    dropdownItems.forEach((item) => {
         const link = item.querySelector('.nav-link');
         const dropdown = item.querySelector('.dropdown-menu');
 
@@ -30,7 +30,7 @@ export function initNavigation() {
                     e.stopPropagation();
 
                     // Close all other dropdowns
-                    dropdownItems.forEach(otherItem => {
+                    dropdownItems.forEach((otherItem) => {
                         if (otherItem !== item) {
                             otherItem.classList.remove('open');
                             const otherLink = otherItem.querySelector('.nav-link');
@@ -44,7 +44,7 @@ export function initNavigation() {
             });
 
             const subItems = dropdown.querySelectorAll('.dropdown-item');
-            subItems.forEach(subItem => {
+            subItems.forEach((subItem) => {
                 const subLink = subItem.querySelector('.dropdown-link');
                 const subDropdown = subItem.querySelector('.sub-dropdown-menu');
 
@@ -59,7 +59,7 @@ export function initNavigation() {
                             e.stopPropagation();
 
                             // Close other sub-dropdowns in the same parent
-                            subItems.forEach(otherSub => {
+                            subItems.forEach((otherSub) => {
                                 if (otherSub !== subItem) {
                                     otherSub.classList.remove('open');
                                     const otherLink = otherSub.querySelector('.dropdown-link');
@@ -79,7 +79,7 @@ export function initNavigation() {
     // Close dropdowns & mobile menu on clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.nav-item') && !e.target.closest('#menu-toggle')) {
-            dropdownItems.forEach(item => {
+            dropdownItems.forEach((item) => {
                 item.classList.remove('open');
                 const link = item.querySelector('.nav-link');
                 if (link) link.setAttribute('aria-expanded', 'false');
@@ -113,7 +113,7 @@ export function initNavigation() {
                     menuToggle.focus();
                 }
             }
-            dropdownItems.forEach(item => {
+            dropdownItems.forEach((item) => {
                 if (item.classList.contains('open')) {
                     item.classList.remove('open');
                     const link = item.querySelector('.nav-link');

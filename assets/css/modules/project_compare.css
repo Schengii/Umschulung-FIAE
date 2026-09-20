@@ -138,3 +138,13 @@
 .compare-floating-bar.hidden {
     display: none;
 }
+
+/* On narrow viewports the bar's text wraps onto two lines, growing tall
+   enough to overlap the AI-Copilot launcher button (fixed at bottom: 85px,
+   z-index: 10005) — that made the compare bar unclickable on mobile since
+   the copilot button intercepted the pointer events on top of it. */
+@media (max-width: 600px) {
+    .compare-floating-bar {
+        bottom: 150px;
+    }
+}

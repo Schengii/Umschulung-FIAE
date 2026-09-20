@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    filterButtons.forEach(button => {
+    filterButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+            filterButtons.forEach((btn) => btn.classList.remove('active'));
             button.classList.add('active');
             currentCategory = button.getAttribute('data-filter') || 'all';
             currentPage = 1; // Reset to first page on filter change
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (categoryParam) {
             currentCategory = categoryParam.toLowerCase();
-            filterButtons.forEach(btn => {
+            filterButtons.forEach((btn) => {
                 const f = btn.getAttribute('data-filter') || 'all';
                 if (f === currentCategory) {
                     btn.classList.add('active');
@@ -98,8 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (techParam || searchParam) {
-            const rawQuery = (techParam || searchParam);
-            const cleanQuery = rawQuery.replace(/<[^>]*>/g, '').toLowerCase().trim();
+            const rawQuery = techParam || searchParam;
+            const cleanQuery = rawQuery
+                .replace(/<[^>]*>/g, '')
+                .toLowerCase()
+                .trim();
             if (searchInput) searchInput.value = cleanQuery;
             currentSearchTerm = cleanQuery;
         }
@@ -107,17 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const hash = decodeURIComponent(window.location.hash.substring(1)).trim();
         const targetQuery = repoParam || hash;
         if (!targetQuery) return;
-        
+
         // Find project in allProjects
-        const index = allProjects.findIndex(proj => {
+        const index = allProjects.findIndex((proj) => {
             const titleDe = (proj.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             const titleEn = (proj.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             const repoName = (proj.repoName || '').toLowerCase();
             const cleanHash = targetQuery.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            
+
             return titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash;
         });
-        
+
         if (index !== -1) {
             if (index < FIRST_PAGE_PROJECTS) {
                 currentPage = 1;
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             hashHandled = true;
             renderAllProjects(); // Render the correct page
-            
+
             // Find card in DOM and open it after render
             setTimeout(() => {
                 const cards = document.querySelectorAll('.project-card');
@@ -151,17 +154,16 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadAndRenderProjects() {
         if (!dynamicContainer) return;
         if (skeletonLoader) skeletonLoader.style.display = 'grid';
-    
+
         try {
             // Load pre-loaded static projects from projects_data.js
-            allProjects = (window.projectsData && Array.isArray(window.projectsData)) ? window.projectsData : [];
-            
+            allProjects = window.projectsData && Array.isArray(window.projectsData) ? window.projectsData : [];
+
             // Handle deep link
             handleDeepLink();
-    
+
             // Render everything
             renderAllProjects();
-    
         } catch (e) {
             console.error('Error loading or rendering projects:', e);
         } finally {
@@ -173,23 +175,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateDynamicCardHTML(project) {
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
-        
+
         // Build tags (guard against null/empty)
         const tags = Array.isArray(project.tags) ? project.tags : [];
-        const tagsHTML = tags.length > 0
-            ? tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('\n        ')
-            : '';
-        
+        const tagsHTML =
+            tags.length > 0 ? tags.map((tag) => `<span class="tech-tag">${tag}</span>`).join('\n        ') : '';
+
         // Build image
         let imageHTML = '';
         if (project.image) {
-            const resolvedImg = (window.resolveAssetPath || (p => p))(project.image);
+            const resolvedImg = (window.resolveAssetPath || ((p) => p))(project.image);
             imageHTML = `
             <div class="project-image-container">
-                <img src="${resolvedImg}" alt="${project.titleDe}" width="400" height="225" loading="lazy" class="project-image" onerror="this.onerror=null;this.src=window.PLACEHOLDER_IMAGE;this.classList.add('img-fallback');">
+                <img src="${resolvedImg}" alt="${project.titleDe}" width="400" height="225" loading="lazy" class="project-image" data-img-fallback="fallback">
             </div>`;
         }
-        
+
         // Build stars badge
         let starsHTML = '';
         if (project.stars !== undefined && project.stars > 0) {
@@ -198,19 +199,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Build buttons
         let buttonsHTML = '<div class="project-buttons">';
-        
+
         // Primary: Details
         buttonsHTML += `
         <button class="btn-primary btn-project btn-details">
             <span lang="de"><i class="fa fa-info-circle" aria-hidden="true"></i> Details</span>
             <span lang="en"><i class="fa fa-info-circle" aria-hidden="true"></i> Details</span>
         </button>`;
-        
+
         if (project.link) {
             let btnTextDe = 'Projekt starten';
             let btnTextEn = 'Launch Project';
             let btnIcon = 'fa-external-link';
-            
+
             if (isGame) {
                 btnTextDe = 'Spielen';
                 btnTextEn = 'Play Game';
@@ -219,15 +220,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnTextDe = 'Ausprobieren';
                 btnTextEn = 'Try Out';
             }
-            
-            const resolvedLink = (window.resolveAssetPath || (p => p))(project.link);
+
+            const resolvedLink = (window.resolveAssetPath || ((p) => p))(project.link);
             buttonsHTML += `
             <a href="${resolvedLink}" class="btn-secondary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
             </a>`;
         }
-        
+
         if (project.githubUrl) {
             buttonsHTML += `
             <a href="${project.githubUrl}" class="btn-secondary btn-project btn-github" target="_blank" rel="noopener">
@@ -235,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
             </a>`;
         }
-        
+
         // Compare selection button
         buttonsHTML += `
         <button type="button" class="btn-compare-select" data-repo="${project.repoName || project.titleDe}" title="Mit anderen Projekten vergleichen">
@@ -243,7 +244,15 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>`;
 
         // Quick-Sandbox trigger: only for projects playable directly in the in-page modal
-        const SANDBOX_PLAYABLE_REPOS = ['EcoChef', 'BurgenGame', 'Sims', 'ManuFaktur', 'Glücksspiel', 'CoOpVersusGame', 'Urlaubsfotos'];
+        const SANDBOX_PLAYABLE_REPOS = [
+            'EcoChef',
+            'BurgenGame',
+            'Sims',
+            'ManuFaktur',
+            'Glücksspiel',
+            'CoOpVersusGame',
+            'Urlaubsfotos',
+        ];
         if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
             buttonsHTML += `
             <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${project.repoName}" title="Direkt hier im Portfolio starten">
@@ -258,20 +267,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const languageClass = project.language ? `filter-${project.language.toLowerCase()}` : '';
         let categoryClass = '';
         if (project.category) {
-            categoryClass = project.category.split(' ').map(c => `filter-${c}`).join(' ');
+            categoryClass = project.category
+                .split(' ')
+                .map((c) => `filter-${c}`)
+                .join(' ');
         } else {
             categoryClass = 'filter-web';
         }
-        
+
         const safeTagsAttr = encodeURIComponent(JSON.stringify(project.tags));
-        
+
         if (project.repoName === 'EcoChef') {
             const highlightBadgeHTML = `
             <div class="highlight-badge">
                 <span lang="de"><i class="fa fa-trophy" aria-hidden="true"></i> Abschlussprojekt IHK</span>
                 <span lang="en"><i class="fa fa-trophy" aria-hidden="true"></i> IHK Graduation Project</span>
             </div>`;
-            const safeImagesAttr = encodeURIComponent(JSON.stringify(project.images || (project.image ? [project.image] : [])));
+            const safeImagesAttr = encodeURIComponent(
+                JSON.stringify(project.images || (project.image ? [project.image] : []))
+            );
             return `
             <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
                 ${imageHTML}
@@ -292,7 +306,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </article>`;
         }
 
-        const safeImagesAttr = encodeURIComponent(JSON.stringify(project.images || (project.image ? [project.image] : [])));
+        const safeImagesAttr = encodeURIComponent(
+            JSON.stringify(project.images || (project.image ? [project.image] : []))
+        );
         return `
         <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
             <div class="project-card-header">
@@ -314,13 +330,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!dynamicContainer) return;
 
         // 1. Filter
-        const filteredProjects = allProjects.filter(proj => {
-            const isHighlight = proj.highlight || proj.isHighlight || proj.repoName === 'EcoChef' || proj.repoName === 'ElektroCheck' || proj.repoName === 'CoOpVersusGame' || (proj.stars && proj.stars >= 5);
-            const matchesCategory = currentCategory === 'all' || 
-                                   (currentCategory === 'highlight' && isHighlight) ||
-                                   (proj.category && proj.category.includes(currentCategory)) || 
-                                   (proj.language && proj.language.toLowerCase() === currentCategory);
-            
+        const filteredProjects = allProjects.filter((proj) => {
+            const isHighlight =
+                proj.highlight ||
+                proj.isHighlight ||
+                proj.repoName === 'EcoChef' ||
+                proj.repoName === 'ElektroCheck' ||
+                proj.repoName === 'CoOpVersusGame' ||
+                (proj.stars && proj.stars >= 5);
+            const matchesCategory =
+                currentCategory === 'all' ||
+                (currentCategory === 'highlight' && isHighlight) ||
+                (proj.category && proj.category.includes(currentCategory)) ||
+                (proj.language && proj.language.toLowerCase() === currentCategory);
+
             if (!matchesCategory) return false;
 
             if (currentSearchTerm) {
@@ -328,13 +351,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEn = (proj.titleEn || '').toLowerCase();
                 const descDe = (proj.descDe || '').toLowerCase();
                 const descEn = (proj.descEn || '').toLowerCase();
-                const tags = (proj.tags || []).map(t => t.toLowerCase());
+                const tags = (proj.tags || []).map((t) => t.toLowerCase());
 
-                return titleDe.includes(currentSearchTerm) ||
-                       titleEn.includes(currentSearchTerm) ||
-                       descDe.includes(currentSearchTerm) ||
-                       descEn.includes(currentSearchTerm) ||
-                       tags.some(tag => tag.includes(currentSearchTerm));
+                return (
+                    titleDe.includes(currentSearchTerm) ||
+                    titleEn.includes(currentSearchTerm) ||
+                    descDe.includes(currentSearchTerm) ||
+                    descEn.includes(currentSearchTerm) ||
+                    tags.some((tag) => tag.includes(currentSearchTerm))
+                );
             }
             return true;
         });
@@ -363,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const paginatedProjects = sorted.slice(startIndex, endIndex);
 
         // 5. Render
-        dynamicContainer.innerHTML = paginatedProjects.map(proj => generateDynamicCardHTML(proj)).join('\n');
+        dynamicContainer.innerHTML = paginatedProjects.map((proj) => generateDynamicCardHTML(proj)).join('\n');
 
         renderPagination(sorted.length);
 
@@ -413,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'ElektroCheck-AI',
         'Finanzenportfolio',
         'Wohnungssuche-KI',
-        'CoOpVersusGame'
+        'CoOpVersusGame',
     ];
     const DEPRIORITIZED_REPOS = ['Glücksspiel'];
 
@@ -472,7 +497,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = `mailto:sche-max@web.de?subject=${subject}&body=${body}`;
             if (feedback) {
                 feedback.style.display = 'flex';
-                setTimeout(() => { feedback.style.display = 'none'; }, 4000);
+                setTimeout(() => {
+                    feedback.style.display = 'none';
+                }, 4000);
             }
         });
     }
@@ -481,21 +508,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const testimonialDots = document.querySelectorAll('.testimonial-dot');
     const testimonialItems = document.querySelectorAll('.testimonial-item');
     if (testimonialDots.length && testimonialItems.length) {
-        testimonialDots.forEach(dot => {
+        testimonialDots.forEach((dot) => {
             dot.addEventListener('click', () => {
                 const idx = parseInt(dot.dataset.index);
-                testimonialItems.forEach(item => item.classList.remove('active'));
-                testimonialDots.forEach(d => d.classList.remove('active'));
+                testimonialItems.forEach((item) => item.classList.remove('active'));
+                testimonialDots.forEach((d) => d.classList.remove('active'));
                 if (testimonialItems[idx]) testimonialItems[idx].classList.add('active');
                 dot.classList.add('active');
             });
         });
-        
+
         let currentTestimonial = 0;
         setInterval(() => {
             currentTestimonial = (currentTestimonial + 1) % testimonialItems.length;
-            testimonialItems.forEach(item => item.classList.remove('active'));
-            testimonialDots.forEach(d => d.classList.remove('active'));
+            testimonialItems.forEach((item) => item.classList.remove('active'));
+            testimonialDots.forEach((d) => d.classList.remove('active'));
             testimonialItems[currentTestimonial].classList.add('active');
             testimonialDots[currentTestimonial].classList.add('active');
         }, 6000);
@@ -508,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rawSkill === 'Java/OOP') searchWord = 'Java';
         else if (rawSkill === 'SQL/DB') searchWord = 'SQL';
         else if (rawSkill === 'HTML/CSS') searchWord = 'HTML';
-        
+
         if (searchInput) {
             searchInput.value = searchWord;
             currentSearchTerm = searchWord.toLowerCase().trim();
@@ -523,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const tagEl = e.target.closest('.tech-tag');
         if (!tagEl) return;
-        
+
         const tagName = tagEl.textContent.trim();
         if (searchInput) {
             searchInput.value = tagName;
@@ -639,7 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const iframe = document.getElementById('game-modal-iframe');
         if (iframe) iframe.src = gameUrl;
-        
+
         modal.classList.remove('hidden');
         modal.offsetHeight; // force reflow
         modal.classList.add('show');
@@ -702,14 +729,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nextState) {
                 codeAccordionContent.style.display = 'block';
                 codeShowcaseCard?.classList.add('open');
-                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach(el => {
+                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach((el) => {
                     if (el.getAttribute('lang') === 'de') el.textContent = 'Code ausblenden';
                     if (el.getAttribute('lang') === 'en') el.textContent = 'Hide Code';
                 });
             } else {
                 codeAccordionContent.style.display = 'none';
                 codeShowcaseCard?.classList.remove('open');
-                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach(el => {
+                codeAccordionToggle.querySelectorAll('.code-accordion-badge-text').forEach((el) => {
                     if (el.getAttribute('lang') === 'de') el.textContent = 'Code anzeigen';
                     if (el.getAttribute('lang') === 'en') el.textContent = 'Show Code';
                 });
@@ -729,16 +756,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const codeTabButtons = document.querySelectorAll('.code-tab-btn');
     const codeSnippets = document.querySelectorAll('.code-snippet');
     if (codeTabButtons.length && codeSnippets.length) {
-        codeTabButtons.forEach(btn => {
+        codeTabButtons.forEach((btn) => {
             btn.addEventListener('click', () => {
                 const targetId = btn.dataset.target;
-                
+
                 // Toggle active button
-                codeTabButtons.forEach(b => b.classList.remove('active'));
+                codeTabButtons.forEach((b) => b.classList.remove('active'));
                 btn.classList.add('active');
-                
+
                 // Toggle active snippet
-                codeSnippets.forEach(snip => {
+                codeSnippets.forEach((snip) => {
                     if (snip.id === targetId) {
                         snip.classList.add('active');
                         snip.style.display = 'block';

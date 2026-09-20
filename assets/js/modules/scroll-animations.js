@@ -22,18 +22,22 @@ function initScrollProgressBar() {
     document.body.appendChild(bar);
 
     let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const scrollTop = window.scrollY || document.documentElement.scrollTop;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                bar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                    bar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
 }
 
 /**
@@ -41,7 +45,7 @@ function initScrollProgressBar() {
  */
 function initScrollReveal() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.querySelectorAll('.scroll-reveal, .card').forEach(el => {
+        document.querySelectorAll('.scroll-reveal, .card').forEach((el) => {
             el.classList.add('reveal-visible');
         });
         return;
@@ -52,19 +56,22 @@ function initScrollReveal() {
     );
     if (!revealElements.length) return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.06,
-        rootMargin: '0px 0px -30px 0px'
-    });
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.06,
+            rootMargin: '0px 0px -30px 0px',
+        }
+    );
 
-    revealElements.forEach(el => {
+    revealElements.forEach((el) => {
         if (!el.classList.contains('scroll-reveal')) {
             el.classList.add('scroll-reveal');
         }
@@ -81,47 +88,52 @@ function initNumberCounters() {
 
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                observer.unobserve(el);
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    observer.unobserve(el);
 
-                const targetVal = parseFloat(el.getAttribute('data-counter') || el.innerText.replace(/[^0-9.]/g, ''));
-                if (isNaN(targetVal)) return;
+                    const targetVal = parseFloat(
+                        el.getAttribute('data-counter') || el.innerText.replace(/[^0-9.]/g, '')
+                    );
+                    if (isNaN(targetVal)) return;
 
-                if (isReducedMotion) {
-                    el.innerText = String(targetVal);
-                    return;
-                }
-
-                const prefix = el.getAttribute('data-prefix') || '';
-                const suffix = el.getAttribute('data-suffix') || '';
-                const duration = 1400; // ms
-                const startTime = performance.now();
-
-                function updateCount(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    // Ease out expo curve
-                    const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-                    const currentVal = Math.floor(easeProgress * targetVal);
-
-                    el.innerText = `${prefix}${currentVal}${suffix}`;
-
-                    if (progress < 1) {
-                        requestAnimationFrame(updateCount);
-                    } else {
-                        el.innerText = `${prefix}${targetVal}${suffix}`;
+                    if (isReducedMotion) {
+                        el.innerText = String(targetVal);
+                        return;
                     }
+
+                    const prefix = el.getAttribute('data-prefix') || '';
+                    const suffix = el.getAttribute('data-suffix') || '';
+                    const duration = 1400; // ms
+                    const startTime = performance.now();
+
+                    function updateCount(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out expo curve
+                        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                        const currentVal = Math.floor(easeProgress * targetVal);
+
+                        el.innerText = `${prefix}${currentVal}${suffix}`;
+
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            el.innerText = `${prefix}${targetVal}${suffix}`;
+                        }
+                    }
+
+                    requestAnimationFrame(updateCount);
                 }
+            });
+        },
+        { threshold: 0.2 }
+    );
 
-                requestAnimationFrame(updateCount);
-            }
-        });
-    }, { threshold: 0.2 });
-
-    counterElements.forEach(el => observer.observe(el));
+    counterElements.forEach((el) => observer.observe(el));
 }
 
 /**
@@ -210,7 +222,7 @@ function initTechParticles() {
         }
 
         // Draw & update particles
-        particles.forEach(p => {
+        particles.forEach((p) => {
             p.update();
             p.draw();
         });
@@ -220,4 +232,3 @@ function initTechParticles() {
 
     render();
 }
-

@@ -15,7 +15,7 @@ export function initSkillRadar() {
         { name: 'Spring Boot', value: 60 },
         { name: 'React', value: 55 },
         { name: 'Testing', value: 50 },
-        { name: 'KI/AI', value: 70 }
+        { name: 'KI/AI', value: 70 },
     ];
 
     const size = 280;
@@ -85,17 +85,20 @@ export function initSkillRadar() {
     });
 
     // Animate radar on scroll
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const polygon = container.querySelector('.radar-polygon');
-                if (polygon) {
-                    polygon.style.animation = 'radarFadeIn 1s ease-out forwards';
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const polygon = container.querySelector('.radar-polygon');
+                    if (polygon) {
+                        polygon.style.animation = 'radarFadeIn 1s ease-out forwards';
+                    }
+                    observer.unobserve(entry.target);
                 }
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
+            });
+        },
+        { threshold: 0.3 }
+    );
 
     observer.observe(container);
 }

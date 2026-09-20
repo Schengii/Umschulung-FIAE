@@ -13,5 +13,7 @@ export function calculateAge(birthYear, birthMonth, birthDay, today = new Date()
 export function initAgeCalculator() {
     const age = calculateAge(2002, 5, 10);
     const els = document.querySelectorAll('#my-age, #my-age-en, #my-age-de');
-    els.forEach(el => { if (el) el.textContent = age; });
+    els.forEach((el) => {
+        if (el) el.textContent = age;
+    });
 }

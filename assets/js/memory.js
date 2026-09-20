@@ -58,7 +58,7 @@ function initMemoryGame() {
         { name: 'react', icon: 'fa-brands fa-react', color: '#61dafb' },
         { name: 'git', icon: 'fa-brands fa-git-alt', color: '#f05032' },
         { name: 'html5', icon: 'fa-brands fa-html5', color: '#e34f26' },
-        { name: 'css3', icon: 'fa-brands fa-css3-alt', color: '#1572b6' }
+        { name: 'css3', icon: 'fa-brands fa-css3-alt', color: '#1572b6' },
     ];
     let cards = [];
     let flippedCards = [];
@@ -200,7 +200,9 @@ function initMemoryGame() {
             }
             return a.time - b.time;
         });
-        const _indexInTop5 = memoryLeaderboard.slice(0, 5).findIndex(entry => entry.moves === moves && entry.time === seconds);
+        const _indexInTop5 = memoryLeaderboard
+            .slice(0, 5)
+            .findIndex((entry) => entry.moves === moves && entry.time === seconds);
         memoryLeaderboard = memoryLeaderboard.slice(0, 5);
         StorageManager.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
         renderMemoryHighscores();
@@ -226,7 +228,7 @@ function initMemoryGame() {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
             const timeStr = `${mins}:${String(secs).padStart(2, '0')}`;
-            
+
             let html = '';
             if (lang === 'de') {
                 html = `<h3>🎉 Gewonnen!</h3>

@@ -27,8 +27,8 @@ jobs:
       - name: Audit Dependencies for Known Vulnerabilities
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Install Playwright Chromium Browser
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright Browsers (Chromium, Firefox, WebKit)
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Verify Data Synchronization (22 Projects)
         run: npm run check-sync
@@ -36,14 +36,30 @@ jobs:
       - name: Verify <head> Boilerplate Consistency
         run: npm run check-head
 
+      - name: Verify CSP script-src Hashes Match Inline Scripts
+        run: npm run check-csp
+
+      - name: Verify Service Worker Precache List Is Up To Date
+        run: npm run check-sw-assets
+
       - name: Lint JavaScript
         run: npm run lint
+
+      - name: Check Code Formatting (Prettier)
+        run: npm run format:check
 
       - name: Run Vitest Unit Test Suite
         run: npm run test:unit
 
-      - name: Run Playwright E2E Test Suite
+      - name: Run Playwright E2E Test Suite (Chromium, Firefox, WebKit, Mobile)
         run: npm test
+
+      - name: Verify Production Build (esbuild minify)
+        run: npm run build:dist
+
+      - name: JSDoc Type Check (advisory, pre-existing findings not yet triaged)
+        run: npm run typecheck
+        continue-on-error: true
 
   lighthouse:
     name: Lighthouse Quality Audit (a11y/SEO/best-practices enforced, performance informational)

@@ -79,8 +79,12 @@ function updateWelcomeH1(username) {
     if (!myH1) return;
     const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
     myH1.textContent = username
-        ? (lang === 'de' ? `Willkommen zurück, ${username}!` : `Welcome back, ${username}!`)
-        : (lang === 'de' ? 'Willkommen' : 'Welcome');
+        ? lang === 'de'
+            ? `Willkommen zurück, ${username}!`
+            : `Welcome back, ${username}!`
+        : lang === 'de'
+          ? 'Willkommen'
+          : 'Welcome';
 }
 
 function updateDashboardGreeting() {
@@ -101,36 +105,42 @@ function updateDashboardGreeting() {
 
             if (company && name) {
                 if (welcomeTitle) {
-                    welcomeTitle.innerHTML = lang === 'de'
-                        ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong> vom Team <strong>${escapeHTML(company)}</strong>!`
-                        : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong> from the team at <strong>${escapeHTML(company)}</strong>!`;
+                    welcomeTitle.innerHTML =
+                        lang === 'de'
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong> vom Team <strong>${escapeHTML(company)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong> from the team at <strong>${escapeHTML(company)}</strong>!`;
                 }
                 if (welcomeDesc) {
-                    welcomeDesc.innerHTML = lang === 'de'
-                        ? `Schön, dass Sie da sind! Auf dieser Website finden Sie interaktive Einblicke in meine Umschulung, Projekte (wie „EcoChef“) und meinen Werdegang.`
-                        : `Great to have you here! On this website, you will find interactive details regarding my retraining journey, projects (such as "EcoChef"), and career path.`;
+                    welcomeDesc.innerHTML =
+                        lang === 'de'
+                            ? `Schön, dass Sie da sind! Auf dieser Website finden Sie interaktive Einblicke in meine Umschulung, Projekte (wie „EcoChef“) und meinen Werdegang.`
+                            : `Great to have you here! On this website, you will find interactive details regarding my retraining journey, projects (such as "EcoChef"), and career path.`;
                 }
             } else if (company) {
                 if (welcomeTitle) {
-                    welcomeTitle.innerHTML = lang === 'de'
-                        ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, Team von <strong>${escapeHTML(company)}</strong>!`
-                        : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome to the team at <strong>${escapeHTML(company)}</strong>!`;
+                    welcomeTitle.innerHTML =
+                        lang === 'de'
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, Team von <strong>${escapeHTML(company)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome to the team at <strong>${escapeHTML(company)}</strong>!`;
                 }
                 if (welcomeDesc) {
-                    welcomeDesc.innerHTML = lang === 'de'
-                        ? `Vielen Dank für das Scannen des QR-Codes. Auf dieser Website finden Sie interaktive Einblicke in meine Umschulung und meine Programmierprojekte.`
-                        : `Thank you for scanning the QR code in my resume. On this website, you will find interactive details regarding my retraining journey and coding projects.`;
+                    welcomeDesc.innerHTML =
+                        lang === 'de'
+                            ? `Vielen Dank für das Scannen des QR-Codes. Auf dieser Website finden Sie interaktive Einblicke in meine Umschulung und meine Programmierprojekte.`
+                            : `Thank you for scanning the QR code in my resume. On this website, you will find interactive details regarding my retraining journey and coding projects.`;
                 }
             } else if (name) {
                 if (welcomeTitle) {
-                    welcomeTitle.innerHTML = lang === 'de'
-                        ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong>!`
-                        : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong>!`;
+                    welcomeTitle.innerHTML =
+                        lang === 'de'
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong>!`;
                 }
                 if (welcomeDesc) {
-                    welcomeDesc.innerHTML = lang === 'de'
-                        ? `Schön, dass Sie mein Profil aufrufen! Entdecken Sie meine IHK-Abschlussarbeit „EcoChef“ oder testen Sie mein Wissen im Bewerbungstrainer.`
-                        : `Thank you for checking out my profile! Explore my capstone project "EcoChef" or practice coding concepts with my mock interview simulator.`;
+                    welcomeDesc.innerHTML =
+                        lang === 'de'
+                            ? `Schön, dass Sie mein Profil aufrufen! Entdecken Sie meine IHK-Abschlussarbeit „EcoChef“ oder testen Sie mein Wissen im Bewerbungstrainer.`
+                            : `Thank you for checking out my profile! Explore my capstone project "EcoChef" or practice coding concepts with my mock interview simulator.`;
                 }
             }
         }
@@ -140,7 +150,7 @@ function updateDashboardGreeting() {
             if (company) {
                 trackerCard.style.display = 'block';
                 const companySpans = trackerCard.querySelectorAll('.tracker-company-name');
-                companySpans.forEach(span => {
+                companySpans.forEach((span) => {
                     span.textContent = company;
                 });
 
@@ -163,9 +173,10 @@ function updateDashboardGreeting() {
 
         // Soft welcome text
         if (welcomeText) {
-            welcomeText.innerHTML = lang === 'de'
-                ? `Schön, dass Sie da sind! Schauen Sie sich gerne in Ruhe um.`
-                : `Great to have you here! Feel free to explore my dashboard.`;
+            welcomeText.innerHTML =
+                lang === 'de'
+                    ? `Schön, dass Sie da sind! Schauen Sie sich gerne in Ruhe um.`
+                    : `Great to have you here! Feel free to explore my dashboard.`;
         }
     }
     // 2. Regular user greetings
@@ -178,9 +189,10 @@ function updateDashboardGreeting() {
         }
         if (welcomeText) {
             const username = StorageManager.getItem(STORAGE_KEYS.USERNAME, '');
-            const greeting = lang === 'de'
-                ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`
-                : `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
+            const greeting =
+                lang === 'de'
+                    ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`
+                    : `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
             welcomeText.innerHTML = greeting;
         }
     }
@@ -189,9 +201,9 @@ function updateDashboardGreeting() {
 function escapeHTML(str) {
     if (!str) return '';
     return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }

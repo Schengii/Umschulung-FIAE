@@ -195,12 +195,19 @@ class App {
     }
 
     requestNotificationPermissions() {
+        // Browsers require this to happen inside a user gesture (Firefox
+        // rejects an eager call on load with a console error), so it's
+        // deferred to the first click instead of running at init time.
         if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Push Notifications genehmigt.');
+            document.addEventListener('click', () => {
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            console.log('Push Notifications genehmigt.');
+                        }
+                    });
                 }
-            });
+            }, { once: true });
         }
     }
 

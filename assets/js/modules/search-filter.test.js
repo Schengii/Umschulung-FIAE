@@ -31,7 +31,7 @@ describe('matchesCardFilter', () => {
 
     it('handles classList DOM token list or null/undefined gracefully', () => {
         const fakeClassList = {
-            contains: (c) => c === 'filter-tools'
+            contains: (c) => c === 'filter-tools',
         };
         expect(matchesCardFilter(fakeClassList, 'Docker Compose', 'tools', 'docker')).toBe(true);
         expect(matchesCardFilter(null, null, 'all', '')).toBe(true);

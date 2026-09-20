@@ -98,36 +98,39 @@ export function initQrGenerator() {
             const url = generatedLinkInput.value;
             if (!url) return;
 
-            navigator.clipboard.writeText(url).then(() => {
-                const lang = document.documentElement.getAttribute('lang') || 'de';
-                const originalText = copyBtn.innerHTML;
+            navigator.clipboard
+                .writeText(url)
+                .then(() => {
+                    const lang = document.documentElement.getAttribute('lang') || 'de';
+                    const originalText = copyBtn.innerHTML;
 
-                copyBtn.style.backgroundColor = '#10b981';
-                copyBtn.innerHTML = `
+                    copyBtn.style.backgroundColor = '#10b981';
+                    copyBtn.innerHTML = `
                     <i class="fa fa-check" aria-hidden="true"></i>
                     <span lang="de">Kopiert!</span>
                     <span lang="en">Copied!</span>
                 `;
 
-                // Trigger translation listener just in case
-                if (typeof initTranslation === 'function') {
-                    document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-                }
+                    // Trigger translation listener just in case
+                    if (typeof initTranslation === 'function') {
+                        document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+                    }
 
-                // Show toast notification if available
-                if (typeof window.showToast === 'function') {
-                    const msg = lang === 'de' ? 'Link erfolgreich kopiert!' : 'Link successfully copied!';
-                    window.showToast(msg, 'success');
-                }
+                    // Show toast notification if available
+                    if (typeof window.showToast === 'function') {
+                        const msg = lang === 'de' ? 'Link erfolgreich kopiert!' : 'Link successfully copied!';
+                        window.showToast(msg, 'success');
+                    }
 
-                setTimeout(() => {
-                    copyBtn.style.backgroundColor = '';
-                    copyBtn.innerHTML = originalText;
-                    document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-                }, 1500);
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
+                    setTimeout(() => {
+                        copyBtn.style.backgroundColor = '';
+                        copyBtn.innerHTML = originalText;
+                        document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
+                    }, 1500);
+                })
+                .catch((err) => {
+                    console.error('Failed to copy text: ', err);
+                });
         });
     }
 
@@ -148,8 +151,8 @@ export function initQrGenerator() {
 
             // Fetch image blob to bypass standard download behavior and trigger saving dialog
             fetch(qrUrl)
-                .then(response => response.blob())
-                .then(blob => {
+                .then((response) => response.blob())
+                .then((blob) => {
                     const blobUrl = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = blobUrl;
@@ -166,7 +169,7 @@ export function initQrGenerator() {
                         window.showToast(msg, 'success');
                     }
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.error('Failed to download QR code image blob:', err);
                     // Fallback to opening in a new tab
                     window.open(qrUrl, '_blank');

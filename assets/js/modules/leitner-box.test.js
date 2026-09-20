@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { advanceBoxLevel, resetBoxLevel, computeBoxStats, filterByBox, MAX_BOX_LEVEL, MIN_BOX_LEVEL } from './leitner-box.js';
+import {
+    advanceBoxLevel,
+    resetBoxLevel,
+    computeBoxStats,
+    filterByBox,
+    MAX_BOX_LEVEL,
+    MIN_BOX_LEVEL,
+} from './leitner-box.js';
 
 describe('advanceBoxLevel', () => {
     it('advances one level', () => {
@@ -42,13 +49,13 @@ describe('filterByBox', () => {
     const boxLevels = { 1: 1, 2: 2, 3: 3 };
 
     it('filters box1 including cards with no recorded level', () => {
-        expect(filterByBox(cards, {}, 'box1').map(c => c.id)).toEqual([1, 2, 3]);
-        expect(filterByBox(cards, boxLevels, 'box1').map(c => c.id)).toEqual([1]);
+        expect(filterByBox(cards, {}, 'box1').map((c) => c.id)).toEqual([1, 2, 3]);
+        expect(filterByBox(cards, boxLevels, 'box1').map((c) => c.id)).toEqual([1]);
     });
 
     it('filters box2 and box3 exactly', () => {
-        expect(filterByBox(cards, boxLevels, 'box2').map(c => c.id)).toEqual([2]);
-        expect(filterByBox(cards, boxLevels, 'box3').map(c => c.id)).toEqual([3]);
+        expect(filterByBox(cards, boxLevels, 'box2').map((c) => c.id)).toEqual([2]);
+        expect(filterByBox(cards, boxLevels, 'box3').map((c) => c.id)).toEqual([3]);
     });
 
     it('returns all cards for an unknown category', () => {

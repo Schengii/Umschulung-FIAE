@@ -51,10 +51,22 @@ import { initPortfolioCopilot } from './modules/portfolio-copilot.js';
 import { initConfetti } from './modules/confetti.js';
 
 const CORE_INITIALIZERS = [
-    initTheme, initNavigation, initTranslation, initAccentColor,
-    initSearchAndFilter, initScrollAnimations, initBackToTop, initCookieBanner,
-    initPwaInstaller, initKeyboardShortcuts, initEasterEggs, initAchievements,
-    initPremiumEffects, initPremiumEffectsP2, initGameAudio, initPortfolioCopilot,
+    initTheme,
+    initNavigation,
+    initTranslation,
+    initAccentColor,
+    initSearchAndFilter,
+    initScrollAnimations,
+    initBackToTop,
+    initCookieBanner,
+    initPwaInstaller,
+    initKeyboardShortcuts,
+    initEasterEggs,
+    initAchievements,
+    initPremiumEffects,
+    initPremiumEffectsP2,
+    initGameAudio,
+    initPortfolioCopilot,
     initConfetti,
 ];
 
@@ -84,7 +96,11 @@ const LAZY_MODULES = [
     ['./modules/impressum-enhancements.js', 'initImpressumEnhancements', '.map-2click-container'],
     ['./modules/timeline-scroll.js', 'initTimelineScroll', '.timeline-v2'],
     ['./modules/skill-matchmaker.js', 'initSkillMatchmaker', '#skill-matchmaker-widget'],
-    ['./modules/pdf-exporter.js', 'initPdfExporter', '#btn-cv-print-header, #btn-cv-print-card, .btn-export-pdf, [data-action="export-pdf"]'],
+    [
+        './modules/pdf-exporter.js',
+        'initPdfExporter',
+        '#btn-cv-print-header, #btn-cv-print-card, .btn-export-pdf, [data-action="export-pdf"]',
+    ],
     ['./modules/ical-generator.js', 'initIcalGenerator', '#confirm-booking-btn'],
     ['./modules/ihk-exam-simulator.js', 'initIhkExamSimulator', '.quiz-container'],
     ['./modules/c4-architecture.js', 'initC4Architecture', '.arch-tabs-bar'],

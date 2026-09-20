@@ -10,9 +10,16 @@
     "generate-data": "node scripts/generate_projects_data.js",
     "check-sync": "node scripts/check_data_sync.js",
     "check-head": "node scripts/check_head_consistency.js",
+    "check-csp": "node scripts/verify_csp_hashes.js",
+    "check-csp:fix": "node scripts/verify_csp_hashes.js --fix",
+    "generate-sw-assets": "node scripts/generate_sw_assets.js",
+    "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
     "lint": "eslint assets/js scripts",
     "lint:fix": "eslint assets/js scripts --fix",
+    "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\"",
+    "format:fix": "prettier --write \"assets/js/**/*.js\" \"scripts/**/*.js\"",
+    "typecheck": "tsc --noEmit -p jsconfig.json",
     "optimize-images": "node scripts/optimize_images.js",
     "compress-images": "node scripts/compress_images.js",
     "audit-cleanup": "node scripts/audit_cleanup.js",
@@ -25,6 +32,7 @@
     "generate-qr-codes": "node scripts/generate_qr_codes.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "esbuild": "^0.28.2",
     "eslint": "^9.39.5",
@@ -32,6 +40,7 @@
     "http-server": "^14.1.1",
     "prettier": "^3.9.8",
     "sharp": "^0.35.4",
+    "typescript": "^7.0.2",
     "vitest": "^5.0.1"
   },
   "dependencies": {

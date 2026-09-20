@@ -98,7 +98,7 @@ function initMouseSpotlight() {
  */
 function enhanceCards() {
     const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
+    cards.forEach((card) => {
         // Prevent double enhancement
         if (card.dataset.premiumEnhanced === 'true') return;
         card.dataset.premiumEnhanced = 'true';
@@ -112,11 +112,13 @@ function enhanceCards() {
 
     // Listen for dynamically added cards in the document
     const observer = new MutationObserver((mutations) => {
-        mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(node => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
                 if (node.nodeType === Node.ELEMENT_NODE) {
-                    const cardsInNode = node.classList?.contains('card') ? [node] : node.querySelectorAll?.('.card') || [];
-                    cardsInNode.forEach(card => {
+                    const cardsInNode = node.classList?.contains('card')
+                        ? [node]
+                        : node.querySelectorAll?.('.card') || [];
+                    cardsInNode.forEach((card) => {
                         if (card.dataset.premiumEnhanced !== 'true') {
                             card.dataset.premiumEnhanced = 'true';
                             card.classList.add('card-glass', 'card-glow-border');
@@ -142,20 +144,20 @@ function apply3DTilt(element) {
 
     element.addEventListener('mousemove', (e) => {
         const rect = element.getBoundingClientRect();
-        
+
         // Mouse coordinate within card
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         // Calculate normalized coordinate (-0.5 to 0.5)
-        const xNorm = (x / rect.width) - 0.5;
-        const yNorm = (y / rect.height) - 0.5;
-        
+        const xNorm = x / rect.width - 0.5;
+        const yNorm = y / rect.height - 0.5;
+
         // Set maximum tilt angles in degrees
         const maxTilt = 6;
         const rotateX = -yNorm * maxTilt;
         const rotateY = xNorm * maxTilt;
-        
+
         // Set variables for border-glow effect and apply transform
         element.style.setProperty('--mouse-x', `${x}px`);
         element.style.setProperty('--mouse-y', `${y}px`);

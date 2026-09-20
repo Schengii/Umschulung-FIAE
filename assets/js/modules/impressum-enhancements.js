@@ -5,7 +5,7 @@
 export function initImpressumEnhancements() {
     // 1. Two-Click Google Maps activation
     const mapContainers = document.querySelectorAll('.map-2click-container');
-    mapContainers.forEach(container => {
+    mapContainers.forEach((container) => {
         const btn = container.querySelector('.btn-load-map');
         const src = container.getAttribute('data-map-src');
         const title = container.getAttribute('data-title') || 'Google Maps';
@@ -38,9 +38,9 @@ export function initImpressumEnhancements() {
 
     let selectedSlot = null;
 
-    slots.forEach(slot => {
+    slots.forEach((slot) => {
         slot.addEventListener('click', () => {
-            slots.forEach(s => s.classList.remove('active'));
+            slots.forEach((s) => s.classList.remove('active'));
             slot.classList.add('active');
             selectedSlot = slot.getAttribute('data-time');
             confirmBtn.style.display = 'block';

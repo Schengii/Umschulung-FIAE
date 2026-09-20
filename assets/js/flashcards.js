@@ -8,184 +8,221 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardsDatabase = [
         {
             id: 1,
-            category: "software",
-            hint_de: "Software-Testen",
-            hint_en: "Software Testing",
-            question_de: "Was ist der Unterschied zwischen Blackbox- und Whitebox-Tests?",
-            question_en: "What is the difference between black-box and white-box testing?",
-            answer_de: "Beim <strong>Blackbox-Test</strong> ist die innere Struktur des Programms unbekannt (Test gegen Spezifikation). Beim <strong>Whitebox-Test</strong> ist der Quellcode bekannt und Testfälle decken den Codefluss (Zweige, Pfade) ab.",
-            answer_en: "In <strong>Black-box testing</strong>, the internal code structure is unknown (testing against specifications). In <strong>White-box testing</strong>, the source code is known, and test cases cover the code flow (branches, paths)."
+            category: 'software',
+            hint_de: 'Software-Testen',
+            hint_en: 'Software Testing',
+            question_de: 'Was ist der Unterschied zwischen Blackbox- und Whitebox-Tests?',
+            question_en: 'What is the difference between black-box and white-box testing?',
+            answer_de:
+                'Beim <strong>Blackbox-Test</strong> ist die innere Struktur des Programms unbekannt (Test gegen Spezifikation). Beim <strong>Whitebox-Test</strong> ist der Quellcode bekannt und Testfälle decken den Codefluss (Zweige, Pfade) ab.',
+            answer_en:
+                'In <strong>Black-box testing</strong>, the internal code structure is unknown (testing against specifications). In <strong>White-box testing</strong>, the source code is known, and test cases cover the code flow (branches, paths).',
         },
         {
             id: 2,
-            category: "software",
-            hint_de: "Design Patterns",
-            hint_en: "Design Patterns",
-            question_de: "Was ist das Hauptziel des MVC-Entwurfsmusters (Model-View-Controller)?",
-            question_en: "What is the main goal of the MVC (Model-View-Controller) design pattern?",
-            answer_de: "Die <strong>strikte Trennung</strong> von Daten (Model), Benutzeroberfläche (View) und Anwendungslogik (Controller) zur Erhöhung der Wartbarkeit, Modularität und Testbarkeit.",
-            answer_en: "The <strong>strict separation</strong> of data (Model), user interface (View), and application logic (Controller) to enhance maintainability, modularity, and testability."
+            category: 'software',
+            hint_de: 'Design Patterns',
+            hint_en: 'Design Patterns',
+            question_de: 'Was ist das Hauptziel des MVC-Entwurfsmusters (Model-View-Controller)?',
+            question_en: 'What is the main goal of the MVC (Model-View-Controller) design pattern?',
+            answer_de:
+                'Die <strong>strikte Trennung</strong> von Daten (Model), Benutzeroberfläche (View) und Anwendungslogik (Controller) zur Erhöhung der Wartbarkeit, Modularität und Testbarkeit.',
+            answer_en:
+                'The <strong>strict separation</strong> of data (Model), user interface (View), and application logic (Controller) to enhance maintainability, modularity, and testability.',
         },
         {
             id: 3,
-            category: "database",
-            hint_de: "Datenbanken",
-            hint_en: "Databases",
-            question_de: "Was besagt die 3. Normalform (3NF) im Datenbankdesign?",
-            question_en: "What does the 3rd Normal Form (3NF) state in database design?",
-            answer_de: "Ein Relationenschema ist in der 3NF, wenn es in der 2NF ist und <strong>keine transitiven Abhängigkeiten</strong> von Nicht-Schlüsselattributen vom Primärschlüssel existieren (Nicht-Schlüssel müssen direkt vom Primärschlüssel abhängen).",
-            answer_en: "A database schema is in 3NF if it is in 2NF and <strong>no transitive dependencies</strong> exist (non-key attributes must depend directly and only on the primary key)."
+            category: 'database',
+            hint_de: 'Datenbanken',
+            hint_en: 'Databases',
+            question_de: 'Was besagt die 3. Normalform (3NF) im Datenbankdesign?',
+            question_en: 'What does the 3rd Normal Form (3NF) state in database design?',
+            answer_de:
+                'Ein Relationenschema ist in der 3NF, wenn es in der 2NF ist und <strong>keine transitiven Abhängigkeiten</strong> von Nicht-Schlüsselattributen vom Primärschlüssel existieren (Nicht-Schlüssel müssen direkt vom Primärschlüssel abhängen).',
+            answer_en:
+                'A database schema is in 3NF if it is in 2NF and <strong>no transitive dependencies</strong> exist (non-key attributes must depend directly and only on the primary key).',
         },
         {
             id: 4,
-            category: "database",
-            hint_de: "Datenbanken",
-            hint_en: "Databases",
+            category: 'database',
+            hint_de: 'Datenbanken',
+            hint_en: 'Databases',
             question_de: "Was bewirkt ein 'Foreign Key' (Fremdschlüssel) in SQL?",
             question_en: "What is the purpose of a 'Foreign Key' in SQL?",
-            answer_de: "Er sichert die <strong>referenzielle Integrität</strong>, indem er eine Beziehung zwischen Tabellen erzwingt. Ein Wert im Fremdschlüssel muss als Primärschlüssel in der referenzierten Tabelle existieren.",
-            answer_en: "It secures <strong>referential integrity</strong> by enforcing a link between tables. A value in the foreign key column must exist in the primary key column of the referenced table."
+            answer_de:
+                'Er sichert die <strong>referenzielle Integrität</strong>, indem er eine Beziehung zwischen Tabellen erzwingt. Ein Wert im Fremdschlüssel muss als Primärschlüssel in der referenzierten Tabelle existieren.',
+            answer_en:
+                'It secures <strong>referential integrity</strong> by enforcing a link between tables. A value in the foreign key column must exist in the primary key column of the referenced table.',
         },
         {
             id: 5,
-            category: "network",
-            hint_de: "Netzwerke",
-            hint_en: "Networks",
-            question_de: "Was ist der Unterschied zwischen TCP und UDP?",
-            question_en: "What is the difference between TCP and UDP?",
-            answer_de: "<strong>TCP</strong> ist verbindungsorientiert und zuverlässig (Paketprüfung, Flusskontrolle). <strong>UDP</strong> ist verbindungslos und schnell (keine Bestätigungen, ideal für Streaming/VoIP).",
-            answer_en: "<strong>TCP</strong> is connection-oriented and reliable (data validation, flow control). <strong>UDP</strong> is connectionless and fast (no confirmations, ideal for streaming/VoIP)."
+            category: 'network',
+            hint_de: 'Netzwerke',
+            hint_en: 'Networks',
+            question_de: 'Was ist der Unterschied zwischen TCP und UDP?',
+            question_en: 'What is the difference between TCP and UDP?',
+            answer_de:
+                '<strong>TCP</strong> ist verbindungsorientiert und zuverlässig (Paketprüfung, Flusskontrolle). <strong>UDP</strong> ist verbindungslos und schnell (keine Bestätigungen, ideal für Streaming/VoIP).',
+            answer_en:
+                '<strong>TCP</strong> is connection-oriented and reliable (data validation, flow control). <strong>UDP</strong> is connectionless and fast (no confirmations, ideal for streaming/VoIP).',
         },
         {
             id: 6,
-            category: "network",
-            hint_de: "IT-Sicherheit",
-            hint_en: "IT Security",
-            question_de: "Erkläre das Prinzip einer SQL-Injection (SQLi) und wie man sie verhindert.",
-            question_en: "Explain the concept of SQL Injection (SQLi) and how to prevent it.",
-            answer_de: "Ein Angreifer schleust Schadcode über Eingabefelder in Datenbankabfragen ein. Schutz bieten **Prepared Statements (Parametrisierte Abfragen)** und die Maskierung von Eingaben.",
-            answer_en: "An attacker injects malicious SQL statements into inputs to manipulate queries. Protection is achieved using **Prepared Statements (Parameterized Queries)** and input escaping."
+            category: 'network',
+            hint_de: 'IT-Sicherheit',
+            hint_en: 'IT Security',
+            question_de: 'Erkläre das Prinzip einer SQL-Injection (SQLi) und wie man sie verhindert.',
+            question_en: 'Explain the concept of SQL Injection (SQLi) and how to prevent it.',
+            answer_de:
+                'Ein Angreifer schleust Schadcode über Eingabefelder in Datenbankabfragen ein. Schutz bieten **Prepared Statements (Parametrisierte Abfragen)** und die Maskierung von Eingaben.',
+            answer_en:
+                'An attacker injects malicious SQL statements into inputs to manipulate queries. Protection is achieved using **Prepared Statements (Parameterized Queries)** and input escaping.',
         },
         {
             id: 7,
-            category: "wiso",
-            hint_de: "Projektmanagement",
-            hint_en: "Project Management",
-            question_de: "Was sind die Phasen eines Projekts nach DIN 69901?",
-            question_en: "What are the project phases according to DIN 69901?",
-            answer_de: "Die Phasen sind: **1. Initialisierung, 2. Definition, 3. Planung, 4. Steuerung (Durchführung), 5. Abschluss**.",
-            answer_en: "The phases are: **1. Initialization, 2. Definition, 3. Planning, 4. Control (Execution), 5. Closure**."
+            category: 'wiso',
+            hint_de: 'Projektmanagement',
+            hint_en: 'Project Management',
+            question_de: 'Was sind die Phasen eines Projekts nach DIN 69901?',
+            question_en: 'What are the project phases according to DIN 69901?',
+            answer_de:
+                'Die Phasen sind: **1. Initialisierung, 2. Definition, 3. Planung, 4. Steuerung (Durchführung), 5. Abschluss**.',
+            answer_en:
+                'The phases are: **1. Initialization, 2. Definition, 3. Planning, 4. Control (Execution), 5. Closure**.',
         },
         {
             id: 8,
-            category: "wiso",
-            hint_de: "Recht & Wirtschaft",
-            hint_en: "Law & Business",
+            category: 'wiso',
+            hint_de: 'Recht & Wirtschaft',
+            hint_en: 'Law & Business',
             question_de: "Was versteht man unter 'AGB' und wann werden sie Vertragsbestandteil?",
             question_en: "What are 'AGB' (T&C) and when do they become part of a contract?",
-            answer_de: "<strong>Allgemeine Geschäftsbedingungen</strong>. Sie werden Vertragsbestandteil, wenn der Verwender bei Vertragsschluss ausdrücklich darauf hinweist und die Gegenseite die Möglichkeit der Einsichtnahme hat.",
-            answer_en: "<strong>Terms and Conditions</strong>. They become part of the contract if the user explicitly points them out at contract conclusion and the other party has a reasonable opportunity to view them."
+            answer_de:
+                '<strong>Allgemeine Geschäftsbedingungen</strong>. Sie werden Vertragsbestandteil, wenn der Verwender bei Vertragsschluss ausdrücklich darauf hinweist und die Gegenseite die Möglichkeit der Einsichtnahme hat.',
+            answer_en:
+                '<strong>Terms and Conditions</strong>. They become part of the contract if the user explicitly points them out at contract conclusion and the other party has a reasonable opportunity to view them.',
         },
         {
             id: 9,
-            category: "software",
-            hint_de: "Clean Code",
-            hint_en: "Clean Code",
-            question_de: "Wofür steht das SOLID-Prinzip in der Softwareentwicklung?",
-            question_en: "What does the SOLID acronym stand for in software development?",
-            answer_de: "<strong>S</strong>ingle Responsibility, <strong>O</strong>pen/Closed, <strong>L</strong>iskov Substitution, <strong>I</strong>nterface Segregation, <strong>D</strong>ependency Inversion.",
-            answer_en: "<strong>S</strong>ingle Responsibility, <strong>O</strong>pen/Closed, <strong>L</strong>iskov Substitution, <strong>I</strong>nterface Segregation, <strong>D</strong>ependency Inversion."
+            category: 'software',
+            hint_de: 'Clean Code',
+            hint_en: 'Clean Code',
+            question_de: 'Wofür steht das SOLID-Prinzip in der Softwareentwicklung?',
+            question_en: 'What does the SOLID acronym stand for in software development?',
+            answer_de:
+                '<strong>S</strong>ingle Responsibility, <strong>O</strong>pen/Closed, <strong>L</strong>iskov Substitution, <strong>I</strong>nterface Segregation, <strong>D</strong>ependency Inversion.',
+            answer_en:
+                '<strong>S</strong>ingle Responsibility, <strong>O</strong>pen/Closed, <strong>L</strong>iskov Substitution, <strong>I</strong>nterface Segregation, <strong>D</strong>ependency Inversion.',
         },
         {
             id: 10,
-            category: "database",
-            hint_de: "SQL",
-            hint_en: "SQL",
+            category: 'database',
+            hint_de: 'SQL',
+            hint_en: 'SQL',
             question_de: "Was bewirkt der SQL-Befehl 'GROUP BY'?",
             question_en: "What does the SQL command 'GROUP BY' do?",
-            answer_de: "Er gruppiert Zeilen, die in bestimmten Spalten dieselben Werte aufweisen, häufig zur Nutzung mit Aggregatfunktionen wie `COUNT()`, `SUM()` oder `AVG()`.",
-            answer_en: "It groups rows that have the same values in specified columns, often used together with aggregate functions like `COUNT()`, `SUM()`, or `AVG()`."
+            answer_de:
+                'Er gruppiert Zeilen, die in bestimmten Spalten dieselben Werte aufweisen, häufig zur Nutzung mit Aggregatfunktionen wie `COUNT()`, `SUM()` oder `AVG()`.',
+            answer_en:
+                'It groups rows that have the same values in specified columns, often used together with aggregate functions like `COUNT()`, `SUM()`, or `AVG()`.',
         },
         {
             id: 11,
-            category: "network",
-            hint_de: "Netzwerke",
-            hint_en: "Networks",
-            question_de: "Wofür steht DHCP und welche Funktion hat es?",
-            question_en: "What does DHCP stand for and what is its function?",
-            answer_de: "<strong>Dynamic Host Configuration Protocol</strong>. Es weist Geräten in einem Netzwerk automatisch IP-Adressen und weitere Parameter (Subnetzmaske, Gateway) zu.",
-            answer_en: "<strong>Dynamic Host Configuration Protocol</strong>. It automatically assigns IP addresses and other parameters (subnet mask, gateway) to devices in a network."
+            category: 'network',
+            hint_de: 'Netzwerke',
+            hint_en: 'Networks',
+            question_de: 'Wofür steht DHCP und welche Funktion hat es?',
+            question_en: 'What does DHCP stand for and what is its function?',
+            answer_de:
+                '<strong>Dynamic Host Configuration Protocol</strong>. Es weist Geräten in einem Netzwerk automatisch IP-Adressen und weitere Parameter (Subnetzmaske, Gateway) zu.',
+            answer_en:
+                '<strong>Dynamic Host Configuration Protocol</strong>. It automatically assigns IP addresses and other parameters (subnet mask, gateway) to devices in a network.',
         },
         {
             id: 12,
-            category: "wiso",
-            hint_de: "Datenschutz",
-            hint_en: "Data Protection",
-            question_de: "Was ist das Hauptziel der DSGVO?",
-            question_en: "What is the primary goal of the GDPR (DSGVO)?",
-            answer_de: "Der Schutz **personenbezogener Daten** natürlicher Personen und die Gewährleistung des freien Datenverkehrs innerhalb des Europäischen Binnenmarktes.",
-            answer_en: "The protection of **personal data** of natural persons and ensuring the free movement of data within the European Single Market."
+            category: 'wiso',
+            hint_de: 'Datenschutz',
+            hint_en: 'Data Protection',
+            question_de: 'Was ist das Hauptziel der DSGVO?',
+            question_en: 'What is the primary goal of the GDPR (DSGVO)?',
+            answer_de:
+                'Der Schutz **personenbezogener Daten** natürlicher Personen und die Gewährleistung des freien Datenverkehrs innerhalb des Europäischen Binnenmarktes.',
+            answer_en:
+                'The protection of **personal data** of natural persons and ensuring the free movement of data within the European Single Market.',
         },
         {
             id: 13,
-            category: "software",
-            hint_de: "Sicherheit & Auth",
-            hint_en: "Security & Auth",
-            question_de: "Warum wird bei Single-Page-Apps (SPAs) der OAuth2 PKCE Flow (Proof Key for Code Exchange) anstelle des Implicit Flow eingesetzt?",
-            question_en: "Why is the OAuth2 PKCE flow used for Single Page Apps (SPAs) instead of the Implicit Flow?",
-            answer_de: "SPAs können kein Client-Secret sicher geheim halten. **PKCE** erzeugt dynamisch einen `code_verifier` und `code_challenge`, womit Autorisierungscodes selbst bei Abfangen durch Angreifer nicht missbraucht werden können.",
-            answer_en: "SPAs cannot securely store client secrets. **PKCE** generates dynamic `code_verifier` and `code_challenge` pairs, preventing authorization code interception attacks."
+            category: 'software',
+            hint_de: 'Sicherheit & Auth',
+            hint_en: 'Security & Auth',
+            question_de:
+                'Warum wird bei Single-Page-Apps (SPAs) der OAuth2 PKCE Flow (Proof Key for Code Exchange) anstelle des Implicit Flow eingesetzt?',
+            question_en: 'Why is the OAuth2 PKCE flow used for Single Page Apps (SPAs) instead of the Implicit Flow?',
+            answer_de:
+                'SPAs können kein Client-Secret sicher geheim halten. **PKCE** erzeugt dynamisch einen `code_verifier` und `code_challenge`, womit Autorisierungscodes selbst bei Abfangen durch Angreifer nicht missbraucht werden können.',
+            answer_en:
+                'SPAs cannot securely store client secrets. **PKCE** generates dynamic `code_verifier` and `code_challenge` pairs, preventing authorization code interception attacks.',
         },
         {
             id: 14,
-            category: "software",
-            hint_de: "Architektur & Microservices",
-            hint_en: "Architecture & Microservices",
-            question_de: "Was ist der Unterschied zwischen monolithischer und Event-Driven Microservice-Architektur?",
-            question_en: "What is the difference between monolithic and event-driven microservice architecture?",
-            answer_de: "Monolithen bündeln die gesamte Anwendungslogik in einer Codebasis. **Event-Driven Microservices** entkoppeln Services über Message-Broker (z. B. Kafka, RabbitMQ) asynchron, was unabhängige Skalierung und Ausfallsicherheit ermöglicht.",
-            answer_en: "Monoliths combine all logic into a single codebase. **Event-Driven Microservices** asynchronously decouple services via message brokers (e.g. Kafka, RabbitMQ) for independent scalability and fault tolerance."
+            category: 'software',
+            hint_de: 'Architektur & Microservices',
+            hint_en: 'Architecture & Microservices',
+            question_de: 'Was ist der Unterschied zwischen monolithischer und Event-Driven Microservice-Architektur?',
+            question_en: 'What is the difference between monolithic and event-driven microservice architecture?',
+            answer_de:
+                'Monolithen bündeln die gesamte Anwendungslogik in einer Codebasis. **Event-Driven Microservices** entkoppeln Services über Message-Broker (z. B. Kafka, RabbitMQ) asynchron, was unabhängige Skalierung und Ausfallsicherheit ermöglicht.',
+            answer_en:
+                'Monoliths combine all logic into a single codebase. **Event-Driven Microservices** asynchronously decouple services via message brokers (e.g. Kafka, RabbitMQ) for independent scalability and fault tolerance.',
         },
         {
             id: 15,
-            category: "software",
-            hint_de: "Algorithmen & Big-O",
-            hint_en: "Algorithms & Big-O",
-            question_de: "Was bedeutet die Zeitkomplexität O(1), O(log n) und O(n) bei Datenstrukturen?",
-            question_en: "What do the time complexities O(1), O(log n), and O(n) mean in data structures?",
-            answer_de: "<strong>O(1)</strong>: Konstanter Zugriff (z. B. Hash Map per Key). <strong>O(log n)</strong>: Logarithmisch (z. B. binäre Suche in sortiertem Array). <strong>O(n)</strong>: Linearer Aufwand proportional zur Elementanzahl (z. B. lineare Suche).",
-            answer_en: "<strong>O(1)</strong>: Constant time lookup (e.g. Hash Map). <strong>O(log n)</strong>: Logarithmic search (e.g. binary search). <strong>O(n)</strong>: Linear time proportional to element count (e.g. linear scan)."
+            category: 'software',
+            hint_de: 'Algorithmen & Big-O',
+            hint_en: 'Algorithms & Big-O',
+            question_de: 'Was bedeutet die Zeitkomplexität O(1), O(log n) und O(n) bei Datenstrukturen?',
+            question_en: 'What do the time complexities O(1), O(log n), and O(n) mean in data structures?',
+            answer_de:
+                '<strong>O(1)</strong>: Konstanter Zugriff (z. B. Hash Map per Key). <strong>O(log n)</strong>: Logarithmisch (z. B. binäre Suche in sortiertem Array). <strong>O(n)</strong>: Linearer Aufwand proportional zur Elementanzahl (z. B. lineare Suche).',
+            answer_en:
+                '<strong>O(1)</strong>: Constant time lookup (e.g. Hash Map). <strong>O(log n)</strong>: Logarithmic search (e.g. binary search). <strong>O(n)</strong>: Linear time proportional to element count (e.g. linear scan).',
         },
         {
             id: 16,
-            category: "database",
-            hint_de: "Transaktionen (ACID)",
-            hint_en: "Transactions (ACID)",
-            question_de: "Wofür steht das ACID-Prinzip bei relationalen Datenbanken?",
-            question_en: "What does the ACID principle stand for in relational databases?",
-            answer_de: "<strong>Atomicity</strong> (Alles oder Nichts), <strong>Consistency</strong> (Konsistenzüberprüfung), <strong>Isolation</strong> (Unabhängige parallele Transaktionen), <strong>Durability</strong> (Dauerhafte Persistenz nach Commit).",
-            answer_en: "<strong>Atomicity</strong> (all or nothing), <strong>Consistency</strong> (valid state rules), <strong>Isolation</strong> (concurrent transactions don't interfere), <strong>Durability</strong> (committed data survives crashes)."
+            category: 'database',
+            hint_de: 'Transaktionen (ACID)',
+            hint_en: 'Transactions (ACID)',
+            question_de: 'Wofür steht das ACID-Prinzip bei relationalen Datenbanken?',
+            question_en: 'What does the ACID principle stand for in relational databases?',
+            answer_de:
+                '<strong>Atomicity</strong> (Alles oder Nichts), <strong>Consistency</strong> (Konsistenzüberprüfung), <strong>Isolation</strong> (Unabhängige parallele Transaktionen), <strong>Durability</strong> (Dauerhafte Persistenz nach Commit).',
+            answer_en:
+                "<strong>Atomicity</strong> (all or nothing), <strong>Consistency</strong> (valid state rules), <strong>Isolation</strong> (concurrent transactions don't interfere), <strong>Durability</strong> (committed data survives crashes).",
         },
         {
             id: 17,
-            category: "wiso",
-            hint_de: "Wirtschaftlichkeit",
-            hint_en: "Business Case",
-            question_de: "Was unterscheidet eine Nutzwertanalyse (NWA) von einer reinen Kostenvergleichsrechnung?",
-            question_en: "How does a Weighted Scoring Analysis (Nutzwertanalyse) differ from a simple cost comparison?",
-            answer_de: "Die **Nutzwertanalyse** bewertet qualitative und nicht-monetäre Kriterien (wie Wartbarkeit, Usability, Datenschutz) anhand gewichteter Punkte. Eine Kostenvergleichsrechnung betrachtet rein finanzielle Kennzahlen.",
-            answer_en: "A **Weighted Scoring Analysis** evaluates qualitative and non-monetary criteria (like maintainability, usability, privacy) using weighted scores, whereas cost comparisons only look at monetary values."
+            category: 'wiso',
+            hint_de: 'Wirtschaftlichkeit',
+            hint_en: 'Business Case',
+            question_de: 'Was unterscheidet eine Nutzwertanalyse (NWA) von einer reinen Kostenvergleichsrechnung?',
+            question_en: 'How does a Weighted Scoring Analysis (Nutzwertanalyse) differ from a simple cost comparison?',
+            answer_de:
+                'Die **Nutzwertanalyse** bewertet qualitative und nicht-monetäre Kriterien (wie Wartbarkeit, Usability, Datenschutz) anhand gewichteter Punkte. Eine Kostenvergleichsrechnung betrachtet rein finanzielle Kennzahlen.',
+            answer_en:
+                'A **Weighted Scoring Analysis** evaluates qualitative and non-monetary criteria (like maintainability, usability, privacy) using weighted scores, whereas cost comparisons only look at monetary values.',
         },
         {
             id: 18,
-            category: "network",
-            hint_de: "IT-Sicherheit",
-            hint_en: "IT Security",
+            category: 'network',
+            hint_de: 'IT-Sicherheit',
+            hint_en: 'IT Security',
             question_de: "Was beschreibt die 'CIA-Triade' (Schutzziele der Informationssicherheit)?",
             question_en: "What does the 'CIA Triad' describe in information security?",
-            answer_de: "<strong>Confidentiality (Vertraulichkeit)</strong>: Schutz vor unbefugtem Lesen. <strong>Integrity (Integrität)</strong>: Schutz vor Manipulation. <strong>Availability (Verfügbarkeit)</strong>: Zeitgerechter Zugriff für autorisierte Nutzer.",
-            answer_en: "<strong>Confidentiality</strong>: Protection against unauthorized access. <strong>Integrity</strong>: Protection against modification. <strong>Availability</strong>: Timely access for authorized users."
-        }
+            answer_de:
+                '<strong>Confidentiality (Vertraulichkeit)</strong>: Schutz vor unbefugtem Lesen. <strong>Integrity (Integrität)</strong>: Schutz vor Manipulation. <strong>Availability (Verfügbarkeit)</strong>: Zeitgerechter Zugriff für autorisierte Nutzer.',
+            answer_en:
+                '<strong>Confidentiality</strong>: Protection against unauthorized access. <strong>Integrity</strong>: Protection against modification. <strong>Availability</strong>: Timely access for authorized users.',
+        },
     ];
 
     // DOM selectors
@@ -264,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 starredIds.splice(idx, 1);
                 starIcon.className = 'fa-regular fa-star';
-                
+
                 if (currentCategory === 'marked') {
                     setTimeout(() => {
                         filterDeck();
@@ -277,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Category Filter logic
     if (tabContainer) {
-        tabContainer.querySelectorAll('.category-tab').forEach(tab => {
+        tabContainer.querySelectorAll('.category-tab').forEach((tab) => {
             tab.addEventListener('click', () => {
                 tabContainer.querySelector('.category-tab.active').classList.remove('active');
                 tab.classList.add('active');
@@ -293,13 +330,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentCategory === 'all') {
             filteredDeck = [...fullDatabase];
         } else if (currentCategory === 'marked') {
-            filteredDeck = fullDatabase.filter(c => starredIds.includes(c.id));
+            filteredDeck = fullDatabase.filter((c) => starredIds.includes(c.id));
         } else if (currentCategory === 'custom') {
             filteredDeck = [...customCards];
         } else if (currentCategory === 'box1' || currentCategory === 'box2' || currentCategory === 'box3') {
             filteredDeck = filterByBox(fullDatabase, boxLevels, currentCategory);
         } else {
-            filteredDeck = fullDatabase.filter(c => c.category === currentCategory);
+            filteredDeck = fullDatabase.filter((c) => c.category === currentCategory);
         }
 
         currentIndex = 0;
@@ -315,9 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (total === 0) {
             hintEl.textContent = '—';
-            questionEl.innerHTML = lang === 'de' 
-                ? 'Keine Lernkarten in dieser Kategorie vorhanden.' 
-                : 'No flashcards available in this category.';
+            questionEl.innerHTML =
+                lang === 'de'
+                    ? 'Keine Lernkarten in dieser Kategorie vorhanden.'
+                    : 'No flashcards available in this category.';
             answerEl.innerHTML = '—';
             if (deckStatusEl) deckStatusEl.textContent = '0 / 0';
             if (btnPrev) btnPrev.disabled = true;
@@ -331,11 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnNext) btnNext.disabled = total <= 1;
 
         const card = filteredDeck[currentIndex];
-        
+
         // Populate front/back details (multilingual fallback for custom cards)
-        hintEl.textContent = lang === 'de' ? (card.hint_de || card.hint_en) : (card.hint_en || card.hint_de);
-        questionEl.innerHTML = lang === 'de' ? (card.question_de || card.question_en) : (card.question_en || card.question_de);
-        answerEl.innerHTML = lang === 'de' ? (card.answer_de || card.answer_en) : (card.answer_en || card.answer_de);
+        hintEl.textContent = lang === 'de' ? card.hint_de || card.hint_en : card.hint_en || card.hint_de;
+        questionEl.innerHTML =
+            lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de;
+        answerEl.innerHTML = lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de;
 
         // Render card box indicator on question
         const currentLevel = boxLevels[card.id] || 1;
@@ -383,10 +422,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCorrect.addEventListener('click', (e) => {
             e.stopPropagation();
             if (!isFlipped) return;
-            
+
             // Trigger dashboard contribution tick!
             if (window.addLiveCommit) window.addLiveCommit();
-            
+
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
                 // Leitner box level upgrade
@@ -410,15 +449,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
                     }
                 }
-                
+
                 const totalCards = getFullDatabase().length;
                 if (knownCards.length >= totalCards && typeof Achievements !== 'undefined') {
                     Achievements.unlock('flashcard_master');
                 }
             }
-            
+
             renderStats();
-            
+
             // Auto navigate to next card after a small delay
             if (filteredDeck.length > 1) {
                 setTimeout(() => {
@@ -451,13 +490,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Record learning recommendations
-                let wrongCounts = JSON.parse(StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}'));
+                let wrongCounts = JSON.parse(
+                    StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
+                );
                 wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
-                StorageManager.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, JSON.stringify(wrongCounts));
+                StorageManager.setItem(
+                    STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS,
+                    JSON.stringify(wrongCounts)
+                );
             }
 
             renderStats();
-            
+
             // Auto flip card back to retry
             setTimeout(() => {
                 isFlipped = false;
@@ -488,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 question_de: question,
                 question_en: question,
                 answer_de: answer,
-                answer_en: answer
+                answer_en: answer,
             };
 
             customCards.push(newCard);
@@ -521,24 +565,44 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        customListEl.innerHTML = customCards.map(c => `
+        customListEl.innerHTML = customCards
+            .map(
+                (c) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.5rem; font-size:0.8rem;">
                 <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">
                     <strong>[${c.category.toUpperCase()}]</strong> ${c.hint_de}
                 </div>
-                <button class="btn-secondary" onclick="deleteCustomCard('${c.id}')" style="width:auto; padding:0.25rem 0.5rem; font-size:0.75rem; border-color:#ef4444; color:#ef4444;">
+                <button class="btn-secondary" data-delete-card-id="${c.id}" style="width:auto; padding:0.25rem 0.5rem; font-size:0.75rem; border-color:#ef4444; color:#ef4444;">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
-        `).join('');
+        `
+            )
+            .join('');
     }
 
-    // Global custom card delete handle
-    window.deleteCustomCard = function(id) {
-        const lang = document.documentElement.getAttribute('lang') || 'de';
-        if (!confirm(lang === 'de' ? 'Möchtest du diese Karte wirklich löschen?' : 'Are you sure you want to delete this card?')) return;
+    // Delegated listener: customListEl's content is rebuilt via innerHTML on
+    // every render, and an inline onclick="" attribute here would violate
+    // this site's CSP (script-src has no 'unsafe-hashes' for event handler
+    // attributes), so the buttons are wired up via one delegated listener.
+    document.getElementById('custom-cards-list')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-delete-card-id]');
+        if (btn) window.deleteCustomCard(btn.dataset.deleteCardId);
+    });
 
-        customCards = customCards.filter(c => c.id !== id);
+    // Global custom card delete handle
+    window.deleteCustomCard = function (id) {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        if (
+            !confirm(
+                lang === 'de'
+                    ? 'Möchtest du diese Karte wirklich löschen?'
+                    : 'Are you sure you want to delete this card?'
+            )
+        )
+            return;
+
+        customCards = customCards.filter((c) => c.id !== id);
         StorageManager.setItem('flashcards_custom', JSON.stringify(customCards));
 
         // Clean stats level

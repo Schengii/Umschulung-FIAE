@@ -10,90 +10,90 @@ let gitState = {
     branches: {}, // Map of branchName -> commitId
     head: 'main', // Active branch name or direct commitId (detached HEAD)
     commitCount: 0,
-    activeBranch: 'main'
+    activeBranch: 'main',
 };
 
 // Available Level Objectives
 const LEVELS = {
     sandbox: {
-        titleDe: "Freie Sandbox",
-        titleEn: "Free Sandbox",
-        descDe: "Probiere beliebige Git-Befehle aus. Es gibt kein festes Ziel. Nutze die Tasten oder tippe Befehle in die Konsole.",
-        descEn: "Try out any Git commands you want. There is no set goal. Use the quick buttons or type commands in the console.",
-        check: () => false
+        titleDe: 'Freie Sandbox',
+        titleEn: 'Free Sandbox',
+        descDe: 'Probiere beliebige Git-Befehle aus. Es gibt kein festes Ziel. Nutze die Tasten oder tippe Befehle in die Konsole.',
+        descEn: 'Try out any Git commands you want. There is no set goal. Use the quick buttons or type commands in the console.',
+        check: () => false,
     },
     lvl1: {
-        titleDe: "Level 1: Erste Commits",
-        titleEn: "Level 1: First Commits",
-        descDe: "Erstelle mindestens 2 neue Commits auf dem Hauptzweig <code>main</code>.<br><strong>Tipp:</strong> Klicke zweimal auf <strong>Commit</strong> oder tippe <code>git commit</code>.",
-        descEn: "Create at least 2 new commits on the <code>main</code> branch.<br><strong>Tip:</strong> Click <strong>Commit</strong> twice or type <code>git commit</code>.",
+        titleDe: 'Level 1: Erste Commits',
+        titleEn: 'Level 1: First Commits',
+        descDe: 'Erstelle mindestens 2 neue Commits auf dem Hauptzweig <code>main</code>.<br><strong>Tipp:</strong> Klicke zweimal auf <strong>Commit</strong> oder tippe <code>git commit</code>.',
+        descEn: 'Create at least 2 new commits on the <code>main</code> branch.<br><strong>Tip:</strong> Click <strong>Commit</strong> twice or type <code>git commit</code>.',
         check: () => {
-            const mainCommits = Object.values(gitState.commits).filter(c => c.branch === 'main');
+            const mainCommits = Object.values(gitState.commits).filter((c) => c.branch === 'main');
             return mainCommits.length >= 3 && gitState.head === 'main';
-        }
+        },
     },
     lvl2: {
-        titleDe: "Level 2: Branching erstellen",
-        titleEn: "Level 2: Creating Branches",
-        descDe: "Erstelle einen neuen Entwicklungszweig namens <code>feature/login</code> und wechsle auf diesen Zweig.<br><strong>Tipp:</strong> <code>git checkout -b feature/login</code>.",
-        descEn: "Create a new development branch named <code>feature/login</code> and switch to it.<br><strong>Tip:</strong> <code>git checkout -b feature/login</code>.",
+        titleDe: 'Level 2: Branching erstellen',
+        titleEn: 'Level 2: Creating Branches',
+        descDe: 'Erstelle einen neuen Entwicklungszweig namens <code>feature/login</code> und wechsle auf diesen Zweig.<br><strong>Tipp:</strong> <code>git checkout -b feature/login</code>.',
+        descEn: 'Create a new development branch named <code>feature/login</code> and switch to it.<br><strong>Tip:</strong> <code>git checkout -b feature/login</code>.',
         check: () => {
             return gitState.branches['feature/login'] !== undefined && gitState.head === 'feature/login';
-        }
+        },
     },
     lvl3: {
-        titleDe: "Level 3: Mergen & Integrieren",
-        titleEn: "Level 3: Merging & Integration",
-        descDe: "1. Wechsle auf den Zweig <code>feature/login</code> (falls nicht bereits dort).<br>2. Erstelle einen Commit.<br>3. Wechsle zurück auf <code>main</code> (<code>git checkout main</code>).<br>4. Führe den Branch zusammen: <code>git merge feature/login</code>.",
-        descEn: "1. Switch to branch <code>feature/login</code>.<br>2. Create a commit.<br>3. Switch back to <code>main</code> (<code>git checkout main</code>).<br>4. Merge the branch: <code>git merge feature/login</code>.",
+        titleDe: 'Level 3: Mergen & Integrieren',
+        titleEn: 'Level 3: Merging & Integration',
+        descDe: '1. Wechsle auf den Zweig <code>feature/login</code> (falls nicht bereits dort).<br>2. Erstelle einen Commit.<br>3. Wechsle zurück auf <code>main</code> (<code>git checkout main</code>).<br>4. Führe den Branch zusammen: <code>git merge feature/login</code>.',
+        descEn: '1. Switch to branch <code>feature/login</code>.<br>2. Create a commit.<br>3. Switch back to <code>main</code> (<code>git checkout main</code>).<br>4. Merge the branch: <code>git merge feature/login</code>.',
         check: () => {
             // Check if there is a commit on main that has a parent from feature/login
             const commits = Object.values(gitState.commits);
-            const mergeCommit = commits.find(c => c.branch === 'main' && c.parent2Id);
+            const mergeCommit = commits.find((c) => c.branch === 'main' && c.parent2Id);
             if (mergeCommit) {
                 const parent2 = gitState.commits[mergeCommit.parent2Id];
                 return parent2 && parent2.branch === 'feature/login' && gitState.head === 'main';
             }
             return false;
-        }
+        },
     },
     lvl4: {
-        titleDe: "Level 4: Rebase (Fortgeschritten)",
-        titleEn: "Level 4: Rebase (Advanced)",
-        descDe: "Rebasing verschiebt Commits auf einen neuen Basis-Commit.<br>1. Erstelle einen Commit auf <code>main</code>.<br>2. Wechsle auf <code>feature/login</code> und erstelle dort einen Commit.<br>3. Führe <code>git rebase main</code> aus, um die Änderungen sauber linear anzuordnen.",
-        descEn: "Rebasing moves commits onto a new base commit.<br>1. Create a commit on <code>main</code>.<br>2. Switch to <code>feature/login</code> and commit there.<br>3. Run <code>git rebase main</code> to cleanly align changes linearly.",
+        titleDe: 'Level 4: Rebase (Fortgeschritten)',
+        titleEn: 'Level 4: Rebase (Advanced)',
+        descDe: 'Rebasing verschiebt Commits auf einen neuen Basis-Commit.<br>1. Erstelle einen Commit auf <code>main</code>.<br>2. Wechsle auf <code>feature/login</code> und erstelle dort einen Commit.<br>3. Führe <code>git rebase main</code> aus, um die Änderungen sauber linear anzuordnen.',
+        descEn: 'Rebasing moves commits onto a new base commit.<br>1. Create a commit on <code>main</code>.<br>2. Switch to <code>feature/login</code> and commit there.<br>3. Run <code>git rebase main</code> to cleanly align changes linearly.',
         check: () => {
             // Check if feature/login commit is a descendant of a commit on main, and parent is not a merge commit
             const commits = Object.values(gitState.commits);
-            const loginCommit = commits.find(c => c.branch === 'feature/login');
+            const loginCommit = commits.find((c) => c.branch === 'feature/login');
             if (loginCommit && loginCommit.parentId) {
                 const parent = gitState.commits[loginCommit.parentId];
                 // In a rebase, the parent of the rebased commit on feature/login is now on main branch
                 return parent && parent.branch === 'main' && !loginCommit.parent2Id;
             }
             return false;
-        }
+        },
     },
     lvl5: {
-        titleDe: "Level 5: Stash & Work-in-Progress",
-        titleEn: "Level 5: Stash & Work-in-Progress",
-        descDe: "Speichere unfertige Änderungen im Stash ab.<br>Führe <code>git stash</code> und anschließend <code>git stash pop</code> aus.",
-        descEn: "Stash uncommitted work-in-progress.<br>Run <code>git stash</code> and then <code>git stash pop</code>.",
+        titleDe: 'Level 5: Stash & Work-in-Progress',
+        titleEn: 'Level 5: Stash & Work-in-Progress',
+        descDe: 'Speichere unfertige Änderungen im Stash ab.<br>Führe <code>git stash</code> und anschließend <code>git stash pop</code> aus.',
+        descEn: 'Stash uncommitted work-in-progress.<br>Run <code>git stash</code> and then <code>git stash pop</code>.',
         check: () => {
             const commits = Object.values(gitState.commits);
             return commits.length >= 2;
-        }
+        },
     },
     lvl6: {
-        titleDe: "Level 6: Cherry-Pick (Profi)",
-        titleEn: "Level 6: Cherry-Pick (Pro)",
-        descDe: "Kopiere einen spezifischen Commit von einem anderen Branch.<br>1. Erstelle Branch <code>feature/hotfix</code> und mache einen Commit.<br>2. Wechsle auf <code>main</code> und kopiere den Commit mit <code>git cherry-pick &lt;hash&gt;</code>.",
-        descEn: "Copy a specific commit from another branch.<br>1. Create branch <code>feature/hotfix</code> and commit.<br>2. Switch to <code>main</code> and copy the commit via <code>git cherry-pick &lt;hash&gt;</code>.",
+        titleDe: 'Level 6: Cherry-Pick (Profi)',
+        titleEn: 'Level 6: Cherry-Pick (Pro)',
+        descDe: 'Kopiere einen spezifischen Commit von einem anderen Branch.<br>1. Erstelle Branch <code>feature/hotfix</code> und mache einen Commit.<br>2. Wechsle auf <code>main</code> und kopiere den Commit mit <code>git cherry-pick &lt;hash&gt;</code>.',
+        descEn: 'Copy a specific commit from another branch.<br>1. Create branch <code>feature/hotfix</code> and commit.<br>2. Switch to <code>main</code> and copy the commit via <code>git cherry-pick &lt;hash&gt;</code>.',
         check: () => {
             const commits = Object.values(gitState.commits);
-            return commits.some(c => c.message && c.message.includes('Cherry-picked'));
-        }
-    }
+            return commits.some((c) => c.message && c.message.includes('Cherry-picked'));
+        },
+    },
 };
 
 let currentLevelId = 'sandbox';
@@ -104,7 +104,7 @@ const BRANCH_COLORS = {
     'feature/login': '#a855f7', // Violet
     develop: '#10b981', // Green
     hotfix: '#f43f5e', // Rose
-    default: '#f59e0b' // Amber
+    default: '#f59e0b', // Amber
 };
 
 // DOM Elements
@@ -131,7 +131,7 @@ function resetGitState() {
         branches: {},
         head: 'main',
         commitCount: 0,
-        activeBranch: 'main'
+        activeBranch: 'main',
     };
 
     const rootHash = generateHash();
@@ -141,7 +141,7 @@ function resetGitState() {
         parentId: null,
         parent2Id: null,
         branch: 'main',
-        depth: 0
+        depth: 0,
     };
     gitState.branches['main'] = rootHash;
     gitState.head = 'main';
@@ -188,10 +188,10 @@ function layoutGraph() {
 
     // Track vertical positions (y values) for branches
     const branchTracks = {
-        'main': 160,
+        main: 160,
         'feature/login': 80,
-        'develop': 240,
-        'hotfix': 40
+        develop: 240,
+        hotfix: 40,
     };
 
     let nextTrackY = 100;
@@ -208,13 +208,13 @@ function layoutGraph() {
 
     // Calculate depths (x coordinate) using BFS/DFS from root commits
     // Start with root commit (the one with parent = null)
-    const roots = commits.filter(c => !c.parentId);
-    
+    const roots = commits.filter((c) => !c.parentId);
+
     // Assign depth sequentially based on parent relationships
     const visited = new Set();
     const queue = [];
-    
-    roots.forEach(r => {
+
+    roots.forEach((r) => {
         r.depth = 0;
         queue.push(r);
         visited.add(r.id);
@@ -222,8 +222,8 @@ function layoutGraph() {
 
     while (queue.length > 0) {
         const curr = queue.shift();
-        const children = commits.filter(c => c.parentId === curr.id || c.parent2Id === curr.id);
-        
+        const children = commits.filter((c) => c.parentId === curr.id || c.parent2Id === curr.id);
+
         for (const child of children) {
             if (!visited.has(child.id)) {
                 // Depth is parent depth + 1. If merge, use max depth of parents + 1
@@ -243,14 +243,14 @@ function layoutGraph() {
     }
 
     // Set X and Y coordinates
-    commits.forEach(c => {
+    commits.forEach((c) => {
         c.x = 60 + (c.depth || 0) * 85;
         c.y = getTrackY(c.branch);
     });
 
     // Make sure SVG width expands if graph gets long
     if (gitSvg) {
-        const maxDepth = Math.max(...commits.map(c => c.depth || 0), 3);
+        const maxDepth = Math.max(...commits.map((c) => c.depth || 0), 3);
         const requiredWidth = 120 + maxDepth * 85;
         const containerWidth = gitSvg.parentElement.clientWidth;
         gitSvg.setAttribute('width', Math.max(requiredWidth, containerWidth));
@@ -279,14 +279,14 @@ function renderGraph() {
     const commits = Object.values(gitState.commits);
 
     // 1. Draw Connection Lines (links)
-    commits.forEach(c => {
+    commits.forEach((c) => {
         const drawLink = (parentId) => {
             const parent = gitState.commits[parentId];
             if (!parent) return;
 
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             const color = BRANCH_COLORS[c.branch] || BRANCH_COLORS.default;
-            
+
             // Draw a nice bezier curve or straight line depending on track
             let dStr;
             if (c.y === parent.y) {
@@ -310,7 +310,7 @@ function renderGraph() {
     });
 
     // 2. Draw Commit Nodes (Circles)
-    commits.forEach(c => {
+    commits.forEach((c) => {
         const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         g.setAttribute('class', 'commit-node');
         g.setAttribute('data-id', c.id);
@@ -355,10 +355,10 @@ function renderGraph() {
 
     // 3. Draw Branch Labels & HEAD pointer
     const labelOffsets = {}; // To prevent labels overlapping on the same node
-    
+
     // List of active branches and HEAD pointing to their targets
     const branchEntries = Object.entries(gitState.branches);
-    
+
     branchEntries.forEach(([branchName, commitId]) => {
         const commit = gitState.commits[commitId];
         if (!commit) return;
@@ -491,7 +491,9 @@ function executeGitCommand(commandStr) {
     const trimCmd = commandStr.trim();
     if (!trimCmd) return;
 
-    writeTerminalLine(`<span class="terminal-prompt">visitor@fiae-portfolio:~/git-sandbox$</span> <span class="cmd-echo">${trimCmd}</span>`);
+    writeTerminalLine(
+        `<span class="terminal-prompt">visitor@fiae-portfolio:~/git-sandbox$</span> <span class="cmd-echo">${trimCmd}</span>`
+    );
 
     const parts = trimCmd.split(/\s+/);
     const base = parts[0];
@@ -504,25 +506,29 @@ function executeGitCommand(commandStr) {
     if (base === 'help') {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         if (lang === 'de') {
-            writeSystemLine("Unterstützte Befehle:\n" +
-                "  git commit [-m \"Nachricht\"]      - Neuen Commit erstellen\n" +
-                "  git branch <name>                 - Neuen Zweig erstellen\n" +
-                "  git checkout <name|hash>          - Auf Branch/Commit wechseln\n" +
-                "  git checkout -b <name>            - Branch erstellen &amp; aktivieren\n" +
-                "  git merge <name>                  - Branch zusammenführen\n" +
-                "  git rebase <name>                 - Branch-Historie auf neuen Stand setzen\n" +
-                "  git reset --hard <hash>           - Aktuellen Branch zurücksetzen\n" +
-                "  git log                           - Commit-Verlauf anzeigen");
+            writeSystemLine(
+                'Unterstützte Befehle:\n' +
+                    '  git commit [-m "Nachricht"]      - Neuen Commit erstellen\n' +
+                    '  git branch <name>                 - Neuen Zweig erstellen\n' +
+                    '  git checkout <name|hash>          - Auf Branch/Commit wechseln\n' +
+                    '  git checkout -b <name>            - Branch erstellen &amp; aktivieren\n' +
+                    '  git merge <name>                  - Branch zusammenführen\n' +
+                    '  git rebase <name>                 - Branch-Historie auf neuen Stand setzen\n' +
+                    '  git reset --hard <hash>           - Aktuellen Branch zurücksetzen\n' +
+                    '  git log                           - Commit-Verlauf anzeigen'
+            );
         } else {
-            writeSystemLine("Supported Commands:\n" +
-                "  git commit [-m \"message\"]      - Create new commit\n" +
-                "  git branch <name>                 - Create new branch\n" +
-                "  git checkout <name|hash>          - Switch to branch/commit\n" +
-                "  git checkout -b <name>            - Create &amp; switch branch\n" +
-                "  git merge <name>                  - Merge branch\n" +
-                "  git rebase <name>                 - Rebase branch timeline\n" +
-                "  git reset --hard <hash>           - Reset current branch\n" +
-                "  git log                           - Show commit history");
+            writeSystemLine(
+                'Supported Commands:\n' +
+                    '  git commit [-m "message"]      - Create new commit\n' +
+                    '  git branch <name>                 - Create new branch\n' +
+                    '  git checkout <name|hash>          - Switch to branch/commit\n' +
+                    '  git checkout -b <name>            - Create &amp; switch branch\n' +
+                    '  git merge <name>                  - Merge branch\n' +
+                    '  git rebase <name>                 - Rebase branch timeline\n' +
+                    '  git reset --hard <hash>           - Reset current branch\n' +
+                    '  git log                           - Show commit history'
+            );
         }
         return;
     }
@@ -552,8 +558,8 @@ function executeGitCommand(commandStr) {
 
         const newHash = generateHash();
         const parentCommit = gitState.commits[targetCommitId];
-        const newDepth = parentCommit ? (parentCommit.depth + 1) : 0;
-        
+        const newDepth = parentCommit ? parentCommit.depth + 1 : 0;
+
         // Find active branch name
         const currentBranch = gitState.branches[gitState.head] ? gitState.head : 'detached';
 
@@ -563,7 +569,7 @@ function executeGitCommand(commandStr) {
             parentId: targetCommitId,
             parent2Id: null,
             branch: currentBranch === 'detached' ? parentCommit.branch : currentBranch,
-            depth: newDepth
+            depth: newDepth,
         };
 
         if (currentBranch !== 'detached') {
@@ -574,11 +580,10 @@ function executeGitCommand(commandStr) {
 
         writeSuccessLine(`[${currentBranch} ${newHash}] ${msg}`);
         playAudio('success');
-
     } else if (action === 'branch') {
         const branchName = parts[2];
         if (!branchName) {
-            writeErrorLine("Branch-Name fehlt. Verwendung: git branch <name>");
+            writeErrorLine('Branch-Name fehlt. Verwendung: git branch <name>');
             return;
         }
         if (gitState.branches[branchName]) {
@@ -588,13 +593,12 @@ function executeGitCommand(commandStr) {
 
         gitState.branches[branchName] = targetCommitId;
         writeSystemLine(`Branch '${branchName}' erstellt auf Commit ${targetCommitId}.`);
-
     } else if (action === 'checkout' || action === 'switch') {
         const isBFlag = parts[2] === '-b' || parts[2] === '-c';
         const target = isBFlag ? parts[3] : parts[2];
 
         if (!target) {
-            writeErrorLine("Ziel fehlt. Verwendung: git checkout <branch|hash>");
+            writeErrorLine('Ziel fehlt. Verwendung: git checkout <branch|hash>');
             return;
         }
 
@@ -620,11 +624,10 @@ function executeGitCommand(commandStr) {
                 writeErrorLine(`Branch oder Commit '${target}' nicht gefunden.`);
             }
         }
-
     } else if (action === 'merge') {
         const sourceBranch = parts[2];
         if (!sourceBranch) {
-            writeErrorLine("Quell-Branch fehlt. Verwendung: git merge <branch>");
+            writeErrorLine('Quell-Branch fehlt. Verwendung: git merge <branch>');
             return;
         }
         if (!gitState.branches[sourceBranch]) {
@@ -639,13 +642,13 @@ function executeGitCommand(commandStr) {
         }
 
         if (currentBranch === sourceBranch) {
-            writeErrorLine("Kann einen Branch nicht mit sich selbst mergen.");
+            writeErrorLine('Kann einen Branch nicht mit sich selbst mergen.');
             return;
         }
 
         const sourceCommitId = gitState.branches[sourceBranch];
         if (targetCommitId === sourceCommitId) {
-            writeSystemLine("Bereits aktuell (Already up to date).");
+            writeSystemLine('Bereits aktuell (Already up to date).');
             return;
         }
 
@@ -677,17 +680,16 @@ function executeGitCommand(commandStr) {
                 parentId: targetCommitId,
                 parent2Id: sourceCommitId,
                 branch: currentBranch,
-                depth: newDepth
+                depth: newDepth,
             };
             gitState.branches[currentBranch] = newHash;
             writeSuccessLine(`Merge-Commit ${newHash} erstellt. '${sourceBranch}' in '${currentBranch}' integriert.`);
         }
         playAudio('success');
-
     } else if (action === 'rebase') {
         const baseBranch = parts[2];
         if (!baseBranch) {
-            writeErrorLine("Ziel-Branch fehlt. Verwendung: git rebase <branch>");
+            writeErrorLine('Ziel-Branch fehlt. Verwendung: git rebase <branch>');
             return;
         }
         const baseCommitId = gitState.branches[baseBranch];
@@ -717,12 +719,12 @@ function executeGitCommand(commandStr) {
         }
 
         if (listToRebase.length === 0) {
-            writeSystemLine("Bereits aktuell oder keine Commits zum Rebasing.");
+            writeSystemLine('Bereits aktuell oder keine Commits zum Rebasing.');
             return;
         }
 
         let currentBaseId = baseCommitId;
-        listToRebase.forEach(c => {
+        listToRebase.forEach((c) => {
             const newHash = generateHash();
             const parentCommit = gitState.commits[currentBaseId];
             gitState.commits[newHash] = {
@@ -731,7 +733,7 @@ function executeGitCommand(commandStr) {
                 parentId: currentBaseId,
                 parent2Id: null,
                 branch: currentBranch,
-                depth: parentCommit.depth + 1
+                depth: parentCommit.depth + 1,
             };
             currentBaseId = newHash;
         });
@@ -739,13 +741,12 @@ function executeGitCommand(commandStr) {
         gitState.branches[currentBranch] = currentBaseId;
         writeSuccessLine(`Erfolgreich rebased und aktualisiert: ref ${currentBranch}.`);
         playAudio('success');
-
     } else if (action === 'reset') {
         const isHard = parts[2] === '--hard';
         const hash = isHard ? parts[3] : parts[2];
 
         if (!hash) {
-            writeErrorLine("Commit-Hash fehlt. Verwendung: git reset --hard <hash>");
+            writeErrorLine('Commit-Hash fehlt. Verwendung: git reset --hard <hash>');
             return;
         }
 
@@ -762,18 +763,18 @@ function executeGitCommand(commandStr) {
             gitState.head = hash;
             writeSystemLine(`HEAD zeigt nun auf ${hash}.`);
         }
-
     } else if (action === 'log') {
         let currId = targetCommitId;
         const logLines = [];
         while (currId) {
             const commit = gitState.commits[currId];
             if (!commit) break;
-            logLines.push(`* <span style="color:var(--accent); font-weight:bold;">${commit.id}</span> - ${commit.message} (${commit.branch})`);
+            logLines.push(
+                `* <span style="color:var(--accent); font-weight:bold;">${commit.id}</span> - ${commit.message} (${commit.branch})`
+            );
             currId = commit.parentId;
         }
         writeSystemLine(logLines.join('\n') || 'Keine Commits vorhanden.');
-
     } else {
         writeErrorLine(`Unbekannte Git-Aktion: '${action}'. Tippe 'help' für Infos.`);
     }
@@ -797,9 +798,10 @@ function handleLevelChange(levelId) {
         levelDescription.innerHTML = lang === 'de' ? desc.descDe : desc.descEn;
     }
 
-    writeSystemLine(lang === 'de' ? 
-        `*** Challenge '${desc.titleDe}' gestartet! ***` : 
-        `*** Challenge '${desc.titleEn}' started! ***`
+    writeSystemLine(
+        lang === 'de'
+            ? `*** Challenge '${desc.titleDe}' gestartet! ***`
+            : `*** Challenge '${desc.titleEn}' started! ***`
     );
 }
 
@@ -816,11 +818,12 @@ function checkLevelProgress() {
             badge.style.color = '#10b981';
             badge.innerHTML = `🏆 ${lang === 'de' ? 'Bestanden' : 'Passed'}`;
         }
-        writeSuccessLine(lang === 'de' ? 
-            "🎉 Glückwunsch! Du hast die Challenge erfolgreich bestanden." : 
-            "🎉 Congratulations! You successfully passed this challenge."
+        writeSuccessLine(
+            lang === 'de'
+                ? '🎉 Glückwunsch! Du hast die Challenge erfolgreich bestanden.'
+                : '🎉 Congratulations! You successfully passed this challenge.'
         );
-        
+
         // Trigger Konfetti & Achievement unlock
         triggerConfettiEffect();
         unlockSimulatorAchievement();
@@ -837,24 +840,26 @@ function triggerConfettiEffect() {
         window.confetti({
             particleCount: 80,
             spread: 60,
-            origin: { y: 0.8 }
+            origin: { y: 0.8 },
         });
     }
 }
 
 function unlockSimulatorAchievement() {
     // Unlock Konami or custom achievement if achievements module loaded
-    import('./modules/achievements.js').then(module => {
-        if (module.default && typeof module.default.unlock === 'function') {
-            module.default.unlock('konami_master'); // Reuses existing game badge
-        } else if (typeof Achievements !== 'undefined') {
-            Achievements.unlock('konami_master');
-        }
-    }).catch(() => {
-        if (typeof Achievements !== 'undefined') {
-            Achievements.unlock('konami_master');
-        }
-    });
+    import('./modules/achievements.js')
+        .then((module) => {
+            if (module.default && typeof module.default.unlock === 'function') {
+                module.default.unlock('konami_master'); // Reuses existing game badge
+            } else if (typeof Achievements !== 'undefined') {
+                Achievements.unlock('konami_master');
+            }
+        })
+        .catch(() => {
+            if (typeof Achievements !== 'undefined') {
+                Achievements.unlock('konami_master');
+            }
+        });
 }
 
 function playAudio(soundId) {

@@ -19,11 +19,11 @@ function initPageTransitions() {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'page-transition-overlay active'; // start active to fade in
-        
+
         const spinner = document.createElement('div');
         spinner.className = 'transition-spinner';
         overlay.appendChild(spinner);
-        
+
         document.body.appendChild(overlay);
     }
 
@@ -53,13 +53,13 @@ function initPageTransitions() {
             !e.shiftKey
         ) {
             e.preventDefault();
-            
+
             // Play click sound
             playAudioCue('click');
-            
+
             // Fade in transition overlay
             overlay.classList.add('active');
-            
+
             // Navigate after fade duration
             setTimeout(() => {
                 window.location.href = href;
@@ -129,7 +129,7 @@ function initUIAudio() {
 
     // Attach hover/click sounds to interactive elements
     const selectors = 'a, button, .card, .nav-item, input, select';
-    
+
     document.addEventListener('mouseover', (e) => {
         const el = e.target.closest(selectors);
         if (el) {
@@ -154,16 +154,16 @@ function initUIAudio() {
                 const isEnabled = localStorage.getItem('audio_effects_enabled') !== 'false';
                 const newStatus = !isEnabled;
                 localStorage.setItem('audio_effects_enabled', String(newStatus));
-                
+
                 const icon = el.querySelector('i');
                 if (icon) {
                     icon.className = `fa-solid ${newStatus ? 'fa-volume-high' : 'fa-volume-xmark'}`;
                 }
-                
+
                 if (window.showToast) {
                     window.showToast(newStatus ? 'Sound-Effekte aktiviert' : 'Sound-Effekte deaktiviert', 'success');
                 }
-                
+
                 if (newStatus) {
                     playAudioCue('click');
                 }
@@ -173,4 +173,3 @@ function initUIAudio() {
         }
     });
 }
-

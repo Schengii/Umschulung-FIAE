@@ -131,11 +131,11 @@
                         <!-- Injected Image -->
                     </div>
                     <div id="qr-result-details" class="qr-result-details">
-                        <div class="qr-result-label">
+                        <div class="qr-result-label" id="qr-generated-link-label">
                             <span lang="de">Generierter Link:</span>
                             <span lang="en">Generated Link:</span>
                         </div>
-                        <input type="text" id="qr-generated-link" readonly class="qr-result-link-input">
+                        <input type="text" id="qr-generated-link" readonly class="qr-result-link-input" aria-labelledby="qr-generated-link-label">
                         
                         <div class="qr-actions-container">
                             <button id="qr-copy-btn" class="btn-primary qr-action-btn">

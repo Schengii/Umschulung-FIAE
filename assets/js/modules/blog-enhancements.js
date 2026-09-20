@@ -14,7 +14,7 @@ function initReadingTime() {
 
     const wordsPerMinute = 200;
 
-    articles.forEach(article => {
+    articles.forEach((article) => {
         // Clear any existing badge to prevent duplicates
         const existingBadge = article.querySelector('.reading-time-badge');
         if (existingBadge) existingBadge.remove();
@@ -43,7 +43,7 @@ function initSocialShare() {
     const articles = document.querySelectorAll('article.card');
     if (!articles.length) return;
 
-    articles.forEach(article => {
+    articles.forEach((article) => {
         // Clear any existing share buttons to prevent duplicates
         const existingShare = article.querySelector('.social-share-buttons');
         if (existingShare) existingShare.remove();
@@ -63,10 +63,23 @@ function initSocialShare() {
             <a href="https://instagram.com/schengii" class="share-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
             <a href="https://facebook.com" class="share-btn" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
             <a href="https://wa.me/4917624921897" class="share-btn" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-            <button class="share-btn share-copy" aria-label="Copy Link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.innerHTML='<i class=\\'fa fa-check\\'></i>';setTimeout(()=>this.innerHTML='<i class=\\'fa fa-link\\'></i>',2000)})">
+            <button type="button" class="share-btn share-copy" aria-label="Copy Link">
                 <i class="fa fa-link" aria-hidden="true"></i>
             </button>
         `;
+
+        // Inline onclick attributes violate this site's CSP (script-src has no
+        // 'unsafe-hashes'/'unsafe-inline' for event handler attributes), so the
+        // copy button is wired up here instead of via an onclick="" string.
+        const copyBtn = shareContainer.querySelector('.share-copy');
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                copyBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fa fa-link" aria-hidden="true"></i>';
+                }, 2000);
+            });
+        });
 
         article.appendChild(shareContainer);
     });

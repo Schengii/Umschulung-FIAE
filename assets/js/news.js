@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.btn-filter');
     const searchInput = document.getElementById('news-searchbar');
     let currentLanguage = 'de';
-    
+
     if (typeof StorageManager !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
         currentLanguage = StorageManager.getItem(STORAGE_KEYS.LANG, 'de');
     } else {
@@ -68,17 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let visibleCount = 0;
 
         // newsData is assumed to be globally available from news_data.js
-        newsData.forEach(article => {
+        newsData.forEach((article) => {
             const titleDe = (article.title_de || '').toLowerCase();
             const titleEn = (article.title_en || '').toLowerCase();
             const contentDe = (article.content_de || []).join(' ').toLowerCase();
             const contentEn = (article.content_en || []).join(' ').toLowerCase();
 
             const matchesFilter = filter === 'all' || article.category === filter;
-            const matchesSearch = query === '' || 
-                titleDe.includes(query) || 
-                titleEn.includes(query) || 
-                contentDe.includes(query) || 
+            const matchesSearch =
+                query === '' ||
+                titleDe.includes(query) ||
+                titleEn.includes(query) ||
+                contentDe.includes(query) ||
                 contentEn.includes(query);
 
             if (matchesFilter && matchesSearch) {
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const content = currentLanguage === 'de' ? article.content_de : article.content_en;
 
                 let contentHtml = '';
-                content.forEach(paragraph => {
+                content.forEach((paragraph) => {
                     contentHtml += `<p>${highlightText(paragraph, query)}</p>`;
                 });
 
@@ -141,9 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Filter Buttons binding
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+    filterButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+            filterButtons.forEach((btn) => btn.classList.remove('active'));
             this.classList.add('active');
             renderNews(this.dataset.filter);
         });
@@ -173,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial render and listen for language changes
     updateSearchPlaceholder();
     renderNews();
-    
+
     // Copy article link handler
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.copy-article-btn');
@@ -185,7 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.clipboard.writeText(shareUrl).then(() => {
             if (typeof window.showToast === 'function') {
                 window.showToast(
-                    currentLanguage === 'de' ? 'Artikel-Link in die Zwischenablage kopiert!' : 'Article link copied to clipboard!',
+                    currentLanguage === 'de'
+                        ? 'Artikel-Link in die Zwischenablage kopiert!'
+                        : 'Article link copied to clipboard!',
                     'success'
                 );
             }
@@ -252,10 +255,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function highlightText(text, query) {
         if (!query) return text;
         const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
-        return text.replace(regex, '<mark style="background: #fde047; color: black; border-radius: 2px; padding: 0 2px;">$1</mark>');
+        return text.replace(
+            regex,
+            '<mark style="background: #fde047; color: black; border-radius: 2px; padding: 0 2px;">$1</mark>'
+        );
     }
 
     function escapeRegex(string) {
         return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
     }
-});
+});

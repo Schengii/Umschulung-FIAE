@@ -22,12 +22,24 @@ function resolvePageLink(targetPage) {
 
 const KNOWLEDGE_BASE = [
     {
-        keywords: ['wer', 'kontakt', 'profil', 'person', 'maximilian', 'schenk', 'vorstellung', 'who', 'about', 'contact', 'developer'],
+        keywords: [
+            'wer',
+            'kontakt',
+            'profil',
+            'person',
+            'maximilian',
+            'schenk',
+            'vorstellung',
+            'who',
+            'about',
+            'contact',
+            'developer',
+        ],
         responseDe: `Maximilian Schenk ist angehender <strong>Fachinformatiker für Anwendungsentwicklung (FIAE)</strong> mit IHK-Abschluss 2026. Zuvor erfolgreich als Elektroniker für Betriebstechnik tätig, kombiniert er tiefes Hardware-/Systemverständnis mit moderner Fullstack-Softwareentwicklung (TypeScript, C++, C#, Python, SQL).`,
         responseEn: `Maximilian Schenk is an aspiring <strong>IT Specialist for Application Development (FIAE)</strong> graduating in 2026. Formerly an electronics technician for industrial engineering, he bridges deep hardware & systems knowledge with modern full-stack development (TypeScript, C++, C#, Python, SQL).`,
         link: 'ueber-mich.html',
         linkTextDe: 'Über mich & Transfermatrix',
-        linkTextEn: 'About Me & Transfer Matrix'
+        linkTextEn: 'About Me & Transfer Matrix',
     },
     {
         keywords: ['abschluss', 'projekt', 'ihk', 'ecochef', 'antrag', 'doku', 'phasenplan', 'thesis', 'graduation'],
@@ -35,7 +47,7 @@ const KNOWLEDGE_BASE = [
         responseEn: `The IHK graduation project is <strong>EcoChef</strong>: An AI-driven recipe and sustainability planner built as a PWA (Lit 3.x, TypeScript, Gemini AI API & IndexedDB) following Clean Architecture with utility analysis and an 80-hour phase plan.`,
         link: 'ihk-cockpit.html',
         linkTextDe: 'IHK-Cockpit & EcoChef Doku',
-        linkTextEn: 'IHK Cockpit & Documentation'
+        linkTextEn: 'IHK Cockpit & Documentation',
     },
     {
         keywords: ['react', 'web', 'frontend', 'typescript', 'javascript', 'html', 'css', 'pwa', 'lit', 'vite'],
@@ -43,7 +55,7 @@ const KNOWLEDGE_BASE = [
         responseEn: `In frontend & web technologies, Maximilian works with <strong>React 19, TypeScript, Lit Web Components, Vite, and modern CSS</strong>. Showcase projects include *EcoChef*, *ElektroCheck AI*, *Finanzenportfolio*, and *Urlaubsfotos*.`,
         link: 'portfolio.html?filter=web',
         linkTextDe: 'Web & PWA Projekte im Portfolio',
-        linkTextEn: 'Web & PWA Projects'
+        linkTextEn: 'Web & PWA Projects',
     },
     {
         keywords: ['c++', 'c#', 'godot', 'engine', 'game', 'opengl', 'minecraft', 'spiele', 'games', 'gaming'],
@@ -51,15 +63,25 @@ const KNOWLEDGE_BASE = [
         responseEn: `For systems and game programming, Maximilian utilizes <strong>C++20 with OpenGL 4.5</strong> (custom 3D voxel engine with biomes & redstone logic) and <strong>Godot 4.x with C# .NET</strong> (RPG *Minecraft-Pokemon*, *Orbital Scrap*).`,
         link: 'portfolio.html?filter=game',
         linkTextDe: 'C++ & Godot Games im Portfolio',
-        linkTextEn: 'C++ & Godot Games'
+        linkTextEn: 'C++ & Godot Games',
     },
     {
-        keywords: ['sql', 'datenbank', 'db', 'normalisierung', 'postgresql', 'sqlite', 'er-modell', 'database', 'postgres'],
+        keywords: [
+            'sql',
+            'datenbank',
+            'db',
+            'normalisierung',
+            'postgresql',
+            'sqlite',
+            'er-modell',
+            'database',
+            'postgres',
+        ],
         responseDe: `Maximilian beherrscht <strong>relationale Datenmodellierung (1NF bis 3NF)</strong>, komplexe SQL-Joins, Subqueries und Index-Optimierung (PostgreSQL, SQLite) und wendet diese in Fullstack-Projekten an.`,
         responseEn: `Maximilian is proficient in <strong>relational data modeling (1NF–3NF)</strong>, complex joins, subqueries, and index optimizations (PostgreSQL, SQLite) applied in full-stack projects.`,
         link: 'portfolio.html',
         linkTextDe: 'Datenbank-Projekte im Portfolio',
-        linkTextEn: 'View Database Projects'
+        linkTextEn: 'View Database Projects',
     },
     {
         keywords: ['ki', 'ai', 'gemini', 'openai', 'nlp', 'machine learning', 'bot', 'llm', 'copilot'],
@@ -67,7 +89,7 @@ const KNOWLEDGE_BASE = [
         responseEn: `In AI engineering, Maximilian has built production apps with <strong>Google Gemini API, OpenAI API, and local NLP algorithms</strong>: *EcoChef* (recipe AI), *ElektroCheck AI* (automated test report audit), and *finance-ai-bot*.`,
         link: 'portfolio.html?filter=ki',
         linkTextDe: 'Alle KI & AI-Projekte ansehen',
-        linkTextEn: 'View All AI Projects'
+        linkTextEn: 'View All AI Projects',
     },
     {
         keywords: ['zeugnis', 'noten', 'gehalt', 'lebenslauf', 'cv', 'zertifikat', 'resume', 'grades', 'certificate'],
@@ -75,7 +97,7 @@ const KNOWLEDGE_BASE = [
         responseEn: `The CV, references, and intermediate IHK certificates are available on the resume page. Confidential certificates & salary expectations are token-protected (Access: <code>fiae2026</code>).`,
         link: 'lebenslauf.html',
         linkTextDe: 'Zum interaktiven Lebenslauf',
-        linkTextEn: 'View Interactive CV'
+        linkTextEn: 'View Interactive CV',
     },
     {
         keywords: ['git', 'version', 'branch', 'merge', 'rebase', 'workflow', 'github'],
@@ -83,8 +105,8 @@ const KNOWLEDGE_BASE = [
         responseEn: `Maximilian applies production Git workflows (feature branching, rebase, tagging, conventional commits). You can test his command-line mastery in the interactive Git Simulator!`,
         link: 'git-simulator.html',
         linkTextDe: 'Git-Simulator ausprobieren',
-        linkTextEn: 'Try Git Simulator'
-    }
+        linkTextEn: 'Try Git Simulator',
+    },
 ];
 
 export function initPortfolioCopilot() {
@@ -137,9 +159,11 @@ function injectCopilotWidget() {
             <!-- Message History -->
             <div id="copilot-messages" role="log" aria-live="polite">
                 <div class="copilot-msg bot">
-                    ${currentLang === 'en' 
-                        ? 'Hello! I am Maximilian’s Portfolio Copilot. Feel free to ask anything about his skills, projects (C++, React, Godot, AI, SQL), or his IHK graduation project!' 
-                        : 'Hallo! Ich bin der Portfolio-Copilot. Frag mich gerne alles zu Maximilians Fähigkeiten, Projekten (C++, React, Godot, KI, SQL) oder dem IHK-Abschlussprojekt!'}
+                    ${
+                        currentLang === 'en'
+                            ? 'Hello! I am Maximilian’s Portfolio Copilot. Feel free to ask anything about his skills, projects (C++, React, Godot, AI, SQL), or his IHK graduation project!'
+                            : 'Hallo! Ich bin der Portfolio-Copilot. Frag mich gerne alles zu Maximilians Fähigkeiten, Projekten (C++, React, Godot, KI, SQL) oder dem IHK-Abschlussprojekt!'
+                    }
                 </div>
 
                 <!-- Suggestion Chips -->
@@ -249,9 +273,11 @@ function resetChatHistory() {
     const currentLang = document.documentElement.lang === 'en' ? 'en' : 'de';
     messages.innerHTML = `
         <div class="copilot-msg bot">
-            ${currentLang === 'en' 
-                ? 'Chat reset. How else can I help you regarding Maximilian’s portfolio and projects?' 
-                : 'Chat zurückgesetzt. Wie kann ich dir noch zu Maximilians Profil, Projekten und IHK-Abschluss weiterhelfen?'}
+            ${
+                currentLang === 'en'
+                    ? 'Chat reset. How else can I help you regarding Maximilian’s portfolio and projects?'
+                    : 'Chat zurückgesetzt. Wie kann ich dir noch zu Maximilians Profil, Projekten und IHK-Abschluss weiterhelfen?'
+            }
         </div>
         <div id="copilot-suggestions">
             <button type="button" class="copilot-chip" data-query="Welche C++ und Godot Projekte gibt es?">🎮 C++ & Godot</button>
@@ -328,9 +354,10 @@ function handleUserQuery(queryText) {
                 </div>
             `;
         } else {
-            botMsg.innerHTML = currentLang === 'en'
-                ? `<div>Thanks for your question! Maximilian has built hands-on projects in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python, and SQL</strong>. Feel free to pick a suggestion or visit the <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a> directly!</div>`
-                : `<div>Danke für deine Frage! Maximilian hat praxisnahe Projekte in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python und SQL</strong> entwickelt. Wähle gerne ein Thema oben aus oder springe direkt ins <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a>.</div>`;
+            botMsg.innerHTML =
+                currentLang === 'en'
+                    ? `<div>Thanks for your question! Maximilian has built hands-on projects in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python, and SQL</strong>. Feel free to pick a suggestion or visit the <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a> directly!</div>`
+                    : `<div>Danke für deine Frage! Maximilian hat praxisnahe Projekte in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python und SQL</strong> entwickelt. Wähle gerne ein Thema oben aus oder springe direkt ins <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a>.</div>`;
         }
 
         messages.appendChild(botMsg);

@@ -33,10 +33,7 @@ const Confetti = {
         window.addEventListener('resize', this.resizeHandler);
 
         // Spawn particles
-        const colors = [
-            '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
-            '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'
-        ];
+        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'];
 
         const count = 120;
         for (let i = 0; i < count; i++) {
@@ -50,14 +47,14 @@ const Confetti = {
                 tiltAngleIncremental: Math.random() * 0.07 + 0.02,
                 tiltAngle: 0,
                 vx: Math.random() * 4 - 2,
-                vy: Math.random() * 3 + 2 // speed downwards
+                vy: Math.random() * 3 + 2, // speed downwards
             });
         }
 
         const startTime = Date.now();
         const loop = () => {
             const elapsed = Date.now() - startTime;
-            if (elapsed > durationMs && this.particles.every(p => p.y > this.canvas.height)) {
+            if (elapsed > durationMs && this.particles.every((p) => p.y > this.canvas.height)) {
                 this.stop();
                 return;
             }
@@ -81,11 +78,11 @@ const Confetti = {
         const height = this.canvas.height;
         const width = this.canvas.width;
 
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             p.tiltAngle += p.tiltAngleIncremental;
             p.y += p.vy;
             p.x += p.vx;
-            p.tilt = Math.sin(p.tiltAngle - (p.r / 2)) * 10;
+            p.tilt = Math.sin(p.tiltAngle - p.r / 2) * 10;
 
             // Loop or reset if off screen before duration ends
             if (p.y > height + 20) {
@@ -98,7 +95,7 @@ const Confetti = {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             this.ctx.beginPath();
             this.ctx.lineWidth = p.r;
             this.ctx.strokeStyle = p.color;
@@ -124,7 +121,7 @@ const Confetti = {
             this.ctx = null;
         }
         this.particles = [];
-    }
+    },
 };
 
 export function initConfetti() {

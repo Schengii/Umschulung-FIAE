@@ -5,7 +5,7 @@
  */
 
 // Immediate Theme, Accent & Accessibility Bootstrapping to prevent white flashing / style shifts
-(function() {
+(function () {
     let initialTheme = 'dark';
     let initialAccent = 'blue';
     try {
@@ -35,6 +35,29 @@
     document.documentElement.setAttribute('data-accent', initialAccent);
 })();
 
+// Delegated <img> fallback handler. This site's CSP has no 'unsafe-hashes' for
+// script-src-attr, so inline onerror="" attributes are silently blocked
+// (Firefox logs and enforces this; it's a real cross-browser bug, not just a
+// console warning). Pages opt in via data-img-fallback instead of onerror.
+// The 'error' event doesn't bubble, so this must use the capture phase.
+document.addEventListener(
+    'error',
+    (e) => {
+        const img = e.target;
+        if (!(img instanceof HTMLImageElement)) return;
+        const mode = img.dataset.imgFallback;
+        if (!mode || !window.PLACEHOLDER_IMAGE || img.src === window.PLACEHOLDER_IMAGE) return;
+        img.src = window.PLACEHOLDER_IMAGE;
+        if (mode === 'contain') {
+            img.style.objectFit = 'contain';
+            img.style.background = 'var(--bg-page)';
+            img.style.padding = '2rem';
+        } else {
+            img.classList.add('img-fallback');
+        }
+    },
+    true
+);
 
 const StorageManager = {
     isAvailable() {
@@ -71,7 +94,7 @@ const StorageManager = {
             return true;
         }
         return false;
-    }
+    },
 };
 
 /* ============================================================
@@ -100,9 +123,27 @@ function renderNav(currentPage) {
     const indexPath = isPagesFolder ? '../index.html' : 'index.html';
 
     // Determine active navigation group
-    const ausbildungPages = ['ausbildungsablauf.html', 'berufsfoerderungswerk.html', 'kostentraeger.html', 'praktikumsbetrieb.html'];
+    const ausbildungPages = [
+        'ausbildungsablauf.html',
+        'berufsfoerderungswerk.html',
+        'kostentraeger.html',
+        'praktikumsbetrieb.html',
+    ];
     const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
-    const weiteresPages = ['quiz.html', 'snake.html', 'games.html', 'memory.html', 'flashcards.html', 'interview-trainer.html', 'playground.html', 'architecture.html', 'dashboard.html', 'git-simulator.html', 'ihk-cockpit.html', 'challenge-lab.html'];
+    const weiteresPages = [
+        'quiz.html',
+        'snake.html',
+        'games.html',
+        'memory.html',
+        'flashcards.html',
+        'interview-trainer.html',
+        'playground.html',
+        'architecture.html',
+        'dashboard.html',
+        'git-simulator.html',
+        'ihk-cockpit.html',
+        'challenge-lab.html',
+    ];
 
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
@@ -481,9 +522,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.head.appendChild(link); // Fix: Link muss dem DOM hinzugefügt werden
         }
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(swPath)
-                .then(reg => console.log('PWA Service Worker registered:', reg.scope))
-                .catch(err => console.warn('PWA Service Worker failed:', err));
+            navigator.serviceWorker
+                .register(swPath)
+                .then((reg) => console.log('PWA Service Worker registered:', reg.scope))
+                .catch((err) => console.warn('PWA Service Worker failed:', err));
         }
     }
 
@@ -493,7 +535,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dynamically load Command Palette if not already loaded
     if (!document.querySelector('script[src*="command_palette.js"]')) {
         const cmdScript = document.createElement('script');
-        cmdScript.src = isPagesFolder ? '../assets/js/modules/command_palette.js' : 'assets/js/modules/command_palette.js';
+        cmdScript.src = isPagesFolder
+            ? '../assets/js/modules/command_palette.js'
+            : 'assets/js/modules/command_palette.js';
         document.body.appendChild(cmdScript);
     }
 
@@ -552,7 +596,9 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_dyslexia', 'true');
                 btnDyslexia.classList.add('active');
             }
-            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'dyslexia', value: nextVal } }));
+            window.dispatchEvent(
+                new CustomEvent('fiae:a11y-change', { detail: { feature: 'dyslexia', value: nextVal } })
+            );
         });
         if (document.documentElement.getAttribute('data-dyslexia') === 'true') {
             btnDyslexia.classList.add('active');
@@ -574,7 +620,9 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_colorblind', 'deuteranopia');
                 btnColorblind.classList.add('active');
             }
-            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'colorblind', value: nextVal } }));
+            window.dispatchEvent(
+                new CustomEvent('fiae:a11y-change', { detail: { feature: 'colorblind', value: nextVal } })
+            );
         });
         if (document.documentElement.getAttribute('data-colorblind')) {
             btnColorblind.classList.add('active');
@@ -602,7 +650,9 @@ function initAccessibilityControls() {
                 btnFontScale.classList.remove('active');
                 nextVal = 'normal';
             }
-            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'fontScale', value: nextVal } }));
+            window.dispatchEvent(
+                new CustomEvent('fiae:a11y-change', { detail: { feature: 'fontScale', value: nextVal } })
+            );
         });
         if (document.documentElement.getAttribute('data-font-scale')) {
             btnFontScale.classList.add('active');
@@ -624,7 +674,9 @@ function initAccessibilityControls() {
                 StorageManager.setItem('portfolio_contrast', 'high');
                 btnContrast.classList.add('active');
             }
-            window.dispatchEvent(new CustomEvent('fiae:a11y-change', { detail: { feature: 'contrast', value: nextVal } }));
+            window.dispatchEvent(
+                new CustomEvent('fiae:a11y-change', { detail: { feature: 'contrast', value: nextVal } })
+            );
         });
         if (document.documentElement.getAttribute('data-contrast') === 'high') {
             btnContrast.classList.add('active');
@@ -636,7 +688,7 @@ function initAccessibilityControls() {
 (function initVercelAnalytics() {
     if (typeof window === 'undefined') return;
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') return;
-    
+
     if (!document.querySelector('script[src*="/_vercel/insights/script.js"]')) {
         const script = document.createElement('script');
         script.src = '/_vercel/insights/script.js';

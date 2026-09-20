@@ -28,28 +28,28 @@ export function initAccentColor() {
 
     // Accent selection dots
     const dots = accentDropdown.querySelectorAll('.accent-dot-btn');
-    
+
     // Highlight the active dot on load
     const currentAccent = document.documentElement.getAttribute('data-accent') || 'blue';
     updateActiveDot(currentAccent);
 
-    dots.forEach(dot => {
+    dots.forEach((dot) => {
         dot.addEventListener('click', () => {
             const val = dot.getAttribute('data-accent-val');
             if (val) {
                 // Update HTML attribute
                 document.documentElement.setAttribute('data-accent', val);
-                
+
                 // Save preference
                 try {
                     localStorage.setItem('portfolio_accent', val);
                 } catch (_e) {
                     console.warn('LocalStorage not accessible for saving accent.');
                 }
-                
+
                 // Highlight active dot
                 updateActiveDot(val);
-                
+
                 // Close dropdown
                 accentDropdown.style.display = 'none';
             }
@@ -57,7 +57,7 @@ export function initAccentColor() {
     });
 
     function updateActiveDot(activeVal) {
-        dots.forEach(dot => {
+        dots.forEach((dot) => {
             if (dot.getAttribute('data-accent-val') === activeVal) {
                 dot.classList.add('active');
                 dot.setAttribute('aria-checked', 'true');

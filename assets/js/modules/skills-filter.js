@@ -7,15 +7,15 @@
 /** Skills shown for the radar chart's 'all' category (kept to max 6 axes). */
 export function filterRadarSkills(skills, category, repsForAll) {
     if (category === 'all') {
-        return skills.filter(s => repsForAll.includes(s.name));
+        return skills.filter((s) => repsForAll.includes(s.name));
     }
-    return skills.filter(s => s.category === category);
+    return skills.filter((s) => s.category === category);
 }
 
 /** Skills shown in the list view for a given category tab. */
 export function filterListSkills(skills, category) {
     if (category === 'all') return [...skills];
-    return skills.filter(s => s.category === category);
+    return skills.filter((s) => s.category === category);
 }
 
 /** Sorts a skills list by the given sort mode ('alpha'|'level-desc'|'level-asc'|'default'). */

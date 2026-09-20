@@ -3,12 +3,18 @@ import { getIhkGrade, computeQualityScore, getQualityStatus } from './grade-calc
 
 describe('getIhkGrade', () => {
     it.each([
-        [100, 1], [92, 1],
-        [91, 2], [81, 2],
-        [80, 3], [67, 3],
-        [66, 4], [50, 4],
-        [49, 5], [30, 5],
-        [29, 6], [0, 6],
+        [100, 1],
+        [92, 1],
+        [91, 2],
+        [81, 2],
+        [80, 3],
+        [67, 3],
+        [66, 4],
+        [50, 4],
+        [49, 5],
+        [30, 5],
+        [29, 6],
+        [0, 6],
     ])('maps score %i to IHK grade %i', (score, expected) => {
         expect(getIhkGrade(score)).toBe(expected);
     });
@@ -27,7 +33,9 @@ describe('computeQualityScore', () => {
     });
 
     it('clamps out-of-range and non-numeric inputs', () => {
-        expect(computeQualityScore({ coverage: 150, cleanCode: -20, docs: NaN, security: 100 })).toBeCloseTo(40 + 0 + 0 + 15);
+        expect(computeQualityScore({ coverage: 150, cleanCode: -20, docs: NaN, security: 100 })).toBeCloseTo(
+            40 + 0 + 0 + 15
+        );
     });
 });
 

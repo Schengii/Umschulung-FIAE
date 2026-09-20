@@ -200,9 +200,19 @@ document.addEventListener("DOMContentLoaded", () => {
     initCurrencyToggle();
     initAlerts();
     
-    // Request notification permission (DSGVO compliant - user is asked, local only)
+    // Request notification permission (DSGVO compliant - user is asked, local only).
+    // Browsers require this to happen inside a user gesture, so it can't be
+    // called eagerly on load (Firefox rejects it with a console error there).
     if (Notification && Notification.permission === "default") {
-        Notification.requestPermission();
+        document.addEventListener(
+            "click",
+            () => {
+                if (Notification.permission === "default") {
+                    Notification.requestPermission();
+                }
+            },
+            { once: true }
+        );
     }
 });
 
