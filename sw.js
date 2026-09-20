@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v37';
+const CACHE_NAME = 'umschulung-fiae-v38';
 const ASSETS = [
     './',
     'index.html',
@@ -96,6 +96,7 @@ const ASSETS = [
     'assets/js/modules/executive-dossier.js',
     'assets/js/modules/faq-accordion.js',
     'assets/js/modules/game-audio.js',
+    'assets/js/modules/grade-calculator.js',
     'assets/js/modules/hero-section.js',
     'assets/js/modules/ical-generator.js',
     'assets/js/modules/ihk-cockpit.js',
@@ -103,6 +104,7 @@ const ASSETS = [
     'assets/js/modules/impressum-enhancements.js',
     'assets/js/modules/keyboard-shortcuts.js',
     'assets/js/modules/learning-progress.js',
+    'assets/js/modules/leitner-box.js',
     'assets/js/modules/navigation.js',
     'assets/js/modules/pdf-exporter.js',
     'assets/js/modules/portfolio-copilot.js',
@@ -122,6 +124,8 @@ const ASSETS = [
     'assets/js/modules/skill-bars.js',
     'assets/js/modules/skill-matchmaker.js',
     'assets/js/modules/skill-radar.js',
+    'assets/js/modules/skills-filter.js',
+
     'assets/js/modules/theme.js',
     'assets/js/modules/timeline-scroll.js',
     'assets/js/modules/token-auth.js',

@@ -7,10 +7,14 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ### Dokumentation — ADR 0006 für Framework-Verzicht (Vanilla JS) ergänzt
 - **`docs/adr/0006-warum-vanilla-js-ohne-framework.md`**: Begründung für die bewusste Architektur-Entscheidung gegen SPA-Frameworks (React/Vue/Angular) und für modulares Vanilla JS im IHK- und Portfolio-Kontext dokumentiert (Beherrschung der Web-Grundlagen, Zero-Overhead-Performance, Langzeitstabilität, Quellcode-Transparenz im Prüfungsgespräch). Index in `docs/adr/README.md` aktualisiert.
 
+### PWA & Cache-Lifecycle — Service Worker v38
+- **`sw.js`**: Cache auf `umschulung-fiae-v38` angehoben. Neu extrahierte ES-Module (`grade-calculator.js`, `leitner-box.js`, `skills-filter.js`) in die statische Precache-Asset-Liste aufgenommen, um vollständige Offline-Fähigkeit für Notensimulation, Karteikasten und Skills-Filterung zu garantieren.
+
 ### Testing — Vitest Unit-Tests für C4-Architektur & Search-Filter erweitert
 - **`assets/js/modules/search-filter.js`**: `matchesCardFilter`-Funktion extrahiert und mit Unit-Tests (`search-filter.test.js`) abgedeckt (Kategorie-Filter, Case-Insensitive Volltextsuche, kombinierte Bedingungen, DOM-TokenList-Kompatibilität).
 - **`assets/js/modules/c4-architecture.js`**: `getHotspotStyleForLevel` und `C4_DESCRIPTIONS` extrahiert und mit Unit-Tests (`c4-architecture.test.js`) abgedeckt (Level 1–3 Zoom- und Hervorhebungsstufen für Container/Komponenten).
 - **Gesamtergebnis**: Unit-Testsuite auf 8 Test-Dateien und 58/58 Tests (100 % bestanden) ausgebaut.
+
 
 
 ### SEO — Kanonische Domain von Apex auf `www.` vereinheitlicht
