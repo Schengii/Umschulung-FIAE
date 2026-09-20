@@ -7,7 +7,8 @@
     "allowJs": true,
     "strict": false,
     "noEmit": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["node"]
   },
   "include": [
     "assets/js/**/*.js",

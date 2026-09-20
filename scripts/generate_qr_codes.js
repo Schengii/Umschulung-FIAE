@@ -28,41 +28,43 @@ const qrCodesToGenerate = [
 ];
 
 function downloadQrCode(qr) {
-    return new Promise((resolve, reject) => {
-        // Generate QR API URL (using api.qrserver.com, 350x350px, black on white)
-        const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(qr.url)}&margin=10`;
+    return /** @type {Promise<void>} */ (
+        new Promise((resolve, reject) => {
+            // Generate QR API URL (using api.qrserver.com, 350x350px, black on white)
+            const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(qr.url)}&margin=10`;
 
-        https
-            .get(apiUrl, (res) => {
-                if (res.statusCode !== 200) {
-                    reject(new Error(`Failed to fetch QR code for ${qr.url}. Status code: ${res.statusCode}`));
-                    return;
-                }
-
-                const chunks = [];
-                res.on('data', (chunk) => chunks.push(chunk));
-                res.on('end', () => {
-                    const buffer = Buffer.concat(chunks);
-
-                    // Write to assets/images
-                    const assetsPath = path.join(targetDir, qr.filename);
-                    fs.writeFileSync(assetsPath, buffer);
-                    console.log(`Saved QR code: ${assetsPath} -> pointing to ${qr.url}`);
-
-                    // Also write to Bewerbungsunterlagen/extracted_images so they are in his CV resources
-                    if (fs.existsSync(docxTargetDir)) {
-                        const docxPath = path.join(docxTargetDir, qr.filename);
-                        fs.writeFileSync(docxPath, buffer);
-                        console.log(`Copied to CV images: ${docxPath}`);
+            https
+                .get(apiUrl, (res) => {
+                    if (res.statusCode !== 200) {
+                        reject(new Error(`Failed to fetch QR code for ${qr.url}. Status code: ${res.statusCode}`));
+                        return;
                     }
 
-                    resolve();
+                    const chunks = [];
+                    res.on('data', (chunk) => chunks.push(chunk));
+                    res.on('end', () => {
+                        const buffer = Buffer.concat(chunks);
+
+                        // Write to assets/images
+                        const assetsPath = path.join(targetDir, qr.filename);
+                        fs.writeFileSync(assetsPath, buffer);
+                        console.log(`Saved QR code: ${assetsPath} -> pointing to ${qr.url}`);
+
+                        // Also write to Bewerbungsunterlagen/extracted_images so they are in his CV resources
+                        if (fs.existsSync(docxTargetDir)) {
+                            const docxPath = path.join(docxTargetDir, qr.filename);
+                            fs.writeFileSync(docxPath, buffer);
+                            console.log(`Copied to CV images: ${docxPath}`);
+                        }
+
+                        resolve();
+                    });
+                })
+                .on('error', (err) => {
+                    reject(err);
                 });
-            })
-            .on('error', (err) => {
-                reject(err);
-            });
-    });
+        })
+    );
 }
 
 async function run() {

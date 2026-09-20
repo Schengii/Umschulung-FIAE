@@ -1,0 +1,1 @@
+var e={SUCCESS:[40,60,40],WARNING:[80,50,80],ERROR:[120,80,120,80,120],SELECTION:[25],LEVEL_UP:[50,50,100,50,200]};function t(t=`SELECTION`){if(typeof navigator<`u`&&typeof navigator.vibrate==`function`)try{let n=e[t]||e.SELECTION;return navigator.vibrate(n),!0}catch{return!1}return!1}export{t};

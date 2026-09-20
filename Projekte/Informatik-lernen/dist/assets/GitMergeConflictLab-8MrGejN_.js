@@ -1,0 +1,49 @@
+import{r as e}from"./rolldown-runtime-hePW80VL.js";import{h as t}from"./vendor-charts-LpGij_Qu.js";import{n}from"./vendor-react-CYlvDiRg.js";import{B as r,Mt as i,Nt as a,jt as o,ln as s,nn as c,t as l}from"./vendor-ui-Cq2y2VJf.js";import{i as u,r as d}from"./index-DtBBWYGD.js";var f=e(t(),1),p=[{id:`config_port`,fileName:`server.config.json`,branchCurrent:`main`,branchIncoming:`feature/microservice-ports`,description:`Beide Branches haben den Port und das Log-Level in der Server-Konfiguration gleichzeitig geändert.`,baseCode:`{
+  "appName": "IT-Auth-Service",
+  "port": 8080,
+  "logLevel": "INFO",
+  "database": "postgres://localhost:5432/auth"
+}`,currentCode:`{
+  "appName": "IT-Auth-Service",
+  "port": 3000,
+  "logLevel": "WARN",
+  "database": "postgres://localhost:5432/auth"
+}`,incomingCode:`{
+  "appName": "IT-Auth-Service",
+  "port": 8443,
+  "logLevel": "DEBUG",
+  "database": "postgres://localhost:5432/auth",
+  "tls": true
+}`,targetAcceptedBoth:`{
+  "appName": "IT-Auth-Service",
+  "port": 8443,
+  "logLevel": "INFO",
+  "database": "postgres://localhost:5432/auth",
+  "tls": true
+}`},{id:`auth_middleware`,fileName:`authMiddleware.js`,branchCurrent:`main`,branchIncoming:`security/jwt-rotation`,description:`Im Feature-Branch wurde eine asymmetrische RS256-Prüfung eingebaut, während auf main ein Bearer-Token-Prefix hinzugefügt wurde.`,baseCode:`export function verifyToken(req, res, next) {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(401).send('Unauthorized');
+  return next();
+}`,currentCode:`export function verifyToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Invalid Bearer format' });
+  }
+  const token = authHeader.split(' ')[1];
+  return next();
+}`,incomingCode:`export function verifyToken(req, res, next) {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(401).send('Unauthorized');
+  const isRs256Valid = verifyJwtSignatureRS256(token);
+  if (!isRs256Valid) return res.status(403).send('Forbidden');
+  return next();
+}`,targetAcceptedBoth:`export function verifyToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Invalid Bearer format' });
+  }
+  const token = authHeader.split(' ')[1];
+  const isRs256Valid = verifyJwtSignatureRS256(token);
+  if (!isRs256Valid) return res.status(403).json({ error: 'Forbidden' });
+  return next();
+}`}];function m(e,t,n=`HEAD`,r=`incoming`){return`<<<<<<< ${n} (Aktuelle Änderung)\n${e.trim()}\n=======\n${t.trim()}\n>>>>>>> ${r} (Eingehende Änderung)`}function h(e){return e?e.includes(`<<<<<<<`)||e.includes(`=======`)||e.includes(`>>>>>>>`):!1}function g(e,t,n){switch(e){case`accept_current`:return t.trim();case`accept_incoming`:return n.trim();case`accept_both`:return`${t.trim()}\n\n// --- Eingehende Ergänzung ---\n${n.trim()}`;default:return t.trim()}}var _=n();function v(){let{awardXP:e}=d(),[t,n]=(0,f.useState)(p[0].id),v=p.find(e=>e.id===t)||p[0],[y,b]=(0,f.useState)(()=>m(v.currentCode,v.incomingCode,v.branchCurrent,v.branchIncoming)),[x,S]=(0,f.useState)(`conflict`),C=e=>{let t=p.find(t=>t.id===e);t&&(n(t.id),b(m(t.currentCode,t.incomingCode,t.branchCurrent,t.branchIncoming)),S(`conflict`),u.playSFX(`click`))},w=e=>{let t=g(e,v.currentCode,v.incomingCode);b(t),S(`resolved`),u.playSFX(`success`)},T=()=>{b(m(v.currentCode,v.incomingCode,v.branchCurrent,v.branchIncoming)),S(`conflict`),u.playSFX(`click`)},E=()=>{if(h(y)){S(`conflict`),u.playSFX(`error`);return}x!==`committed`&&(S(`committed`),u.playSFX(`levelUp`),l({particleCount:90,spread:60,origin:{y:.6}}),e(50,`git_merge_master`))},D=h(y);return(0,_.jsxs)(`div`,{className:`space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20`,children:[(0,_.jsx)(`div`,{className:`bg-gradient-to-r from-orange-950 via-amber-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-orange-700/40 relative overflow-hidden`,children:(0,_.jsx)(`div`,{className:`relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4`,children:(0,_.jsxs)(`div`,{children:[(0,_.jsxs)(`div`,{className:`flex items-center gap-2 mb-2`,children:[(0,_.jsx)(`span`,{className:`px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-500/30 text-orange-200 border border-orange-400/30`,children:`Git 3-Way Merge Studio`}),(0,_.jsx)(`span`,{className:`px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/30 text-emerald-200 border border-emerald-400/30`,children:`+50 XP pro gelösten Konflikt`})]}),(0,_.jsxs)(`h1`,{className:`text-2xl md:text-3xl font-bold flex items-center gap-3`,children:[(0,_.jsx)(o,{className:`w-8 h-8 text-orange-400`}),`Git Merge-Conflict Resolver`]}),(0,_.jsx)(`p`,{className:`text-slate-300 text-sm md:text-base mt-1 max-w-2xl`,children:`Verstehe und löse reale Merge-Konflikte zwischen Branches interaktiv auf (Accept Current vs. Incoming vs. Both vs. Manual Edit).`})]})})}),(0,_.jsx)(`div`,{className:`grid grid-cols-1 md:grid-cols-2 gap-3`,children:p.map(e=>(0,_.jsxs)(`button`,{onClick:()=>C(e.id),className:`p-4 rounded-xl border text-left transition ${t===e.id?`bg-orange-950/80 border-orange-500 text-white shadow-lg`:`bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800`}`,children:[(0,_.jsxs)(`div`,{className:`flex items-center justify-between mb-1`,children:[(0,_.jsxs)(`span`,{className:`font-mono text-xs text-orange-400 font-bold flex items-center gap-1.5`,children:[(0,_.jsx)(a,{className:`w-3.5 h-3.5`}),` `,e.fileName]}),(0,_.jsxs)(`span`,{className:`text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono`,children:[e.branchCurrent,` ⟵ `,e.branchIncoming]})]}),(0,_.jsx)(`p`,{className:`text-xs text-slate-400 mt-1`,children:e.description})]},e.id))}),(0,_.jsxs)(`div`,{className:`grid grid-cols-1 md:grid-cols-2 gap-4`,children:[(0,_.jsxs)(`div`,{className:`bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2`,children:[(0,_.jsxs)(`div`,{className:`flex justify-between items-center text-xs`,children:[(0,_.jsxs)(`span`,{className:`font-bold text-cyan-400 flex items-center gap-1`,children:[(0,_.jsx)(i,{className:`w-4 h-4`}),` Current Change (`,v.branchCurrent,` / HEAD)`]}),(0,_.jsx)(`button`,{onClick:()=>w(`accept_current`),className:`px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 rounded text-[11px] font-bold transition`,children:`Accept Current`})]}),(0,_.jsx)(`pre`,{className:`p-3 bg-slate-950 rounded-lg text-cyan-300 font-mono text-xs overflow-x-auto border border-slate-800`,children:v.currentCode})]}),(0,_.jsxs)(`div`,{className:`bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2`,children:[(0,_.jsxs)(`div`,{className:`flex justify-between items-center text-xs`,children:[(0,_.jsxs)(`span`,{className:`font-bold text-emerald-400 flex items-center gap-1`,children:[(0,_.jsx)(a,{className:`w-4 h-4`}),` Incoming Change (`,v.branchIncoming,`)`]}),(0,_.jsx)(`button`,{onClick:()=>w(`accept_incoming`),className:`px-2.5 py-1 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 rounded text-[11px] font-bold transition`,children:`Accept Incoming`})]}),(0,_.jsx)(`pre`,{className:`p-3 bg-slate-950 rounded-lg text-emerald-300 font-mono text-xs overflow-x-auto border border-slate-800`,children:v.incomingCode})]})]}),(0,_.jsxs)(`div`,{className:`bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl`,children:[(0,_.jsxs)(`div`,{className:`flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3`,children:[(0,_.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,_.jsx)(c,{className:`w-5 h-5 text-orange-400`}),(0,_.jsxs)(`span`,{className:`text-sm font-bold text-white font-mono`,children:[v.fileName,` (Merging)`]}),(0,_.jsx)(`span`,{className:`px-2.5 py-0.5 rounded text-xs font-bold font-mono ${D?`bg-rose-950 text-rose-300 border border-rose-800`:`bg-emerald-950 text-emerald-300 border border-emerald-800`}`,children:D?`⚠️ Konflikt ungelöst`:`✓ Konflikt aufgelöst`})]}),(0,_.jsxs)(`div`,{className:`flex flex-wrap gap-2`,children:[(0,_.jsx)(`button`,{onClick:()=>w(`accept_both`),className:`px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition`,children:`Accept Both`}),(0,_.jsxs)(`button`,{onClick:T,className:`px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center gap-1 transition`,children:[(0,_.jsx)(r,{className:`w-3.5 h-3.5`}),` Reset`]}),(0,_.jsxs)(`button`,{onClick:E,disabled:D||x===`committed`,className:`px-5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-lg ${D||x===`committed`?`bg-slate-800 text-slate-500 cursor-not-allowed`:`bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white`}`,children:[(0,_.jsx)(i,{className:`w-3.5 h-3.5`}),x===`committed`?`Merge abgeschlossen!`:`git commit (Merge abschließen)`]})]})]}),(0,_.jsx)(`textarea`,{value:y,onChange:e=>b(e.target.value),rows:10,className:`w-full bg-slate-950 border rounded-xl p-4 font-mono text-xs leading-relaxed focus:outline-none ${D?`border-rose-700/80 text-rose-200`:`border-emerald-600/80 text-emerald-200`}`}),x===`committed`&&(0,_.jsxs)(`div`,{className:`p-4 bg-emerald-950/60 border border-emerald-700 rounded-xl text-emerald-200 text-xs flex items-center justify-between`,children:[(0,_.jsxs)(`div`,{className:`flex items-center gap-2`,children:[(0,_.jsx)(s,{className:`w-5 h-5 text-emerald-400`}),(0,_.jsxs)(`span`,{className:`font-bold`,children:[`Merge Commit erfolgreich erstellt! Der Konflikt wurde sauber in `,v.fileName,` gelöst.`]})]}),(0,_.jsx)(`span`,{className:`font-bold text-amber-300`,children:`+50 XP erhalten!`})]})]})]})}export{v as default};
