@@ -11,7 +11,7 @@ Ein Testlauf mit Vite zeigte: Vite bündelt standardmäßig nur `type="module"`-
 
 ## Entscheidung
 
-Statt eines vollen Bundlers wurde `scripts/build_minified.js` (esbuild) eingeführt, das `npm run build` bereitstellt:
+Statt eines vollen Bundlers wurde `scripts/build_minified.js` (esbuild) eingeführt, das `npm run build:dist` bereitstellt (zur ursprünglichen Namensgebung und einem daraus resultierenden Produktions-Incident siehe ADR 0005):
 
 - Minifiziert alle Dateien unter `assets/js/` (−28 %) und `assets/css/` (−27 %) nach `dist/`.
 - Kopiert alles Weitere (HTML, Bilder, Vendor, Fonts, `Projekte/`, `manifest.json`, `sw.js`, …) unverändert.

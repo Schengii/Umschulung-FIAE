@@ -18,7 +18,7 @@ const targets = [
     .map((f) => path.join(root, 'pages', f)),
 ];
 
-const SITE = 'https://max-schenk.tech';
+const SITE = 'https://www.max-schenk.tech';
 const DEFAULT_IMAGE = `${SITE}/assets/images/og-cover.png`;
 
 let patched = 0;

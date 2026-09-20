@@ -149,7 +149,7 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run check-head` | `check_head_consistency.js` | Prüft, ob jede Seite die gemeinsamen `<head>`-Boilerplate-Tags (CSP, Viewport, Favicon, Stylesheets, `meta author`, OG-Tags) enthält — verhindert stillen Drift wie die zunächst fehlende CSP in Root-`404.html` |
 | `npm run optimize-images` | `optimize_images.js` | Audit-Report über Bildgrößen (read-only, keine Änderungen) |
 | `npm run compress-images` | `compress_images.js` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
-| `npm run build` | `build_minified.js` | Minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung) |
+| `npm run build:dist` | `build_minified.js` | Minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung). **Bewusst nicht `build` genannt**: Vercel führt bei einem Zero-Config-Projekt automatisch `npm run build` aus, falls dieses Skript existiert — das hätte die Produktion versehentlich auf den Minify-Build umgestellt (siehe ADR 0001) |
 | `npm run audit-cleanup` | `audit_cleanup.js` | Verzeichnisgrößen-/Dateianzahl-Report je Ordner |
 | `npm run audit-project-paths` | `audit_project_html_paths.js` | Findet fehlerhafte relative Pfade in Sub-Projekt-HTML |
 | `npm run fix-project-paths` | `fix_project_html_paths.js` | Korrigiert die von `audit-project-paths` gefundenen Pfade |

@@ -4,7 +4,7 @@
   "description": "Portfolio Maximilian Schenk",
   "scripts": {
     "dev": "http-server . -p 8080 -c-1",
-    "build": "node scripts/build_minified.js",
+    "build:dist": "node scripts/build_minified.js",
     "test": "playwright test",
     "test:unit": "vitest run",
     "generate-data": "node scripts/generate_projects_data.js",
