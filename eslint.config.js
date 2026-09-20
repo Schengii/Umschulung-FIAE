@@ -52,6 +52,9 @@ module.exports = [
         SpeechSynthesisUtterance: 'readonly',
         performance: 'readonly',
         cancelAnimationFrame: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+        clients: 'readonly',
         // Cross-file browser globals defined by non-module <script> includes
         // (constants.js, storage.js, audio.js, achievements.js, confetti.js, news_data.js …)
         APP: 'readonly',

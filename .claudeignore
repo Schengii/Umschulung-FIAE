@@ -1,0 +1,64 @@
+# .claudeignore - Token-Schutz & Ausschlussregeln für Claude Code
+# Schützt das Context-Window vor riesigen Build-Artefakten, Binärdateien, Medien und Test-Reports.
+
+# 1. Abhängigkeiten & Paketmanager
+node_modules/
+**/node_modules/
+.venv/
+**/venv/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# 2. Test-Reports & E2E-Logs (Playwright)
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
+# 3. Binärdateien, Executables & Build-Artefakte
+**/build/
+**/*.exe
+**/*.o
+**/*.obj
+**/*.bin
+**/*.pdb
+**/*.ilk
+**/*.dll
+**/*.so
+**/*.dylib
+**/*.wasm
+
+# 4. Große Medien- & Bilddateien (Assets im Repo)
+assets/images/**/*.png
+assets/images/**/*.jpg
+assets/images/**/*.jpeg
+assets/images/**/*.webp
+assets/images/**/*.gif
+assets/images/**/*.svg
+assets/fonts/**/*.woff2
+assets/fonts/**/*.woff
+assets/fonts/**/*.ttf
+assets/fonts/**/*.eot
+
+# 5. Private Unterlagen & Dokumente
+/Bewerbungsunterlagen/
+*.pdf
+
+# 6. Umgebungs- & Sensible Konfigurationsdateien
+.env
+.env.*
+*.pem
+*.key
+
+# 7. OS-Dateien & Caches
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+npm-debug.log*
+
+# 8. Git & Claude intern
+.git/
+.claude/worktrees/
+.claude/scheduled_tasks.lock

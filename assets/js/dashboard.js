@@ -2,6 +2,8 @@
  * Dashboard — Stats, Projektübersicht, interaktive Widgets
  * Loaded dynamically as a module.
  */
+import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
+
 export function initDashboard() {
     const isDashboardPage = window.location.pathname.endsWith('dashboard.html') || document.getElementById('commit-grid');
     if (!isDashboardPage) return;
@@ -141,15 +143,6 @@ function renderRecentProjects() {
 /* ==========================================================================
    IHK NOTENRECHNER LOGIC
    ========================================================================== */
-function _getIhkGrade(score) {
-    if (score >= 92) return 1;
-    if (score >= 81) return 2;
-    if (score >= 67) return 3;
-    if (score >= 50) return 4;
-    if (score >= 30) return 5;
-    return 6;
-}
-
 function initQaMetrics() {
     const coverageInput = document.getElementById('qa-test-coverage');
     const cleanCodeInput = document.getElementById('qa-clean-code');
@@ -197,17 +190,13 @@ function initQaMetrics() {
     function calculateQuality() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
-        const coverage = Math.min(100, Math.max(0, parseFloat(coverageInput.value) || 0));
-        const cleanCode = Math.min(100, Math.max(0, parseFloat(cleanCodeInput.value) || 0));
-        const docs = Math.min(100, Math.max(0, parseFloat(docsInput.value) || 0));
-        const security = Math.min(100, Math.max(0, parseFloat(securityInput.value) || 0));
+        const coverage = parseFloat(coverageInput.value) || 0;
+        const cleanCode = parseFloat(cleanCodeInput.value) || 0;
+        const docs = parseFloat(docsInput.value) || 0;
+        const security = parseFloat(securityInput.value) || 0;
 
-        // Weightings:
-        // Coverage = 40%
-        // Clean Code = 30%
-        // Documentation = 15%
-        // Security = 15%
-        const overallScore = (coverage * 0.4) + (cleanCode * 0.3) + (docs * 0.15) + (security * 0.15);
+        // Weightings: Coverage 40% / Clean Code 30% / Documentation 15% / Security 15%
+        const overallScore = computeQualityScore({ coverage, cleanCode, docs, security });
 
         // Update UI
         percentText.textContent = `${Math.round(overallScore)}%`;
@@ -219,33 +208,19 @@ function initQaMetrics() {
         ring.style.strokeDashoffset = offset;
 
         // Status determinations
-        if (overallScore >= 90) {
-            ring.style.stroke = '#10b981'; // Green
-            if (badge) {
-                badge.className = 'grade-alert success';
-                badge.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
-                badge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
-                badge.style.color = '#10b981';
-                badge.innerHTML = `<span><i class="fa fa-check-circle"></i> ${lang === 'de' ? 'Produktionsbereit!' : 'Production Ready!'}</span>`;
-            }
-        } else if (overallScore >= 75) {
-            ring.style.stroke = '#f59e0b'; // Amber
-            if (badge) {
-                badge.className = 'grade-alert warning';
-                badge.style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
-                badge.style.borderColor = 'rgba(245, 158, 11, 0.2)';
-                badge.style.color = '#f59e0b';
-                badge.innerHTML = `<span><i class="fa fa-info-circle"></i> ${lang === 'de' ? 'Freigabe-Kandidat' : 'Release Candidate'}</span>`;
-            }
-        } else {
-            ring.style.stroke = '#ef4444'; // Red
-            if (badge) {
-                badge.className = 'grade-alert danger';
-                badge.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-                badge.style.borderColor = 'rgba(239, 68, 68, 0.2)';
-                badge.style.color = '#ef4444';
-                badge.innerHTML = `<span><i class="fa fa-exclamation-circle"></i> ${lang === 'de' ? 'Refactoring empfohlen' : 'Refactoring Recommended'}</span>`;
-            }
+        const statusConfig = {
+            success: { stroke: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.2)', icon: 'fa-check-circle', text_de: 'Produktionsbereit!', text_en: 'Production Ready!' },
+            warning: { stroke: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', border: 'rgba(245, 158, 11, 0.2)', icon: 'fa-info-circle', text_de: 'Freigabe-Kandidat', text_en: 'Release Candidate' },
+            danger: { stroke: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.2)', icon: 'fa-exclamation-circle', text_de: 'Refactoring empfohlen', text_en: 'Refactoring Recommended' }
+        };
+        const status = statusConfig[getQualityStatus(overallScore)];
+        ring.style.stroke = status.stroke;
+        if (badge) {
+            badge.className = `grade-alert ${getQualityStatus(overallScore)}`;
+            badge.style.backgroundColor = status.bg;
+            badge.style.borderColor = status.border;
+            badge.style.color = status.stroke;
+            badge.innerHTML = `<span><i class="fa ${status.icon}"></i> ${lang === 'de' ? status.text_de : status.text_en}</span>`;
         }
 
         const barChartSvg = document.getElementById('qa-bar-chart');

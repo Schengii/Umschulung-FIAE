@@ -16,6 +16,7 @@ node_modules/
 **/*.bin
 test-results/
 playwright-report/
+/dist/
 .env
 .env.*
 .DS_Store

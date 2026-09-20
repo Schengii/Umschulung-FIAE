@@ -28,8 +28,40 @@ const REPO_MAPPING = {
     url: 'https://github.com/Schengii/eco-chef.git',
     targetDir: 'Projekte/EcoChef',
     preserve: ['www']
+  },
+  'BurgenGame': {
+    url: 'https://github.com/Schengii/BurgenGame.git',
+    targetDir: 'Projekte/BurgenGame'
+  },
+  'CoOpVersusGame': {
+    url: 'https://github.com/Schengii/CoOpVersusGame.git',
+    targetDir: 'Projekte/CoOpVersusGame'
+  },
+  'Jobbsuche': {
+    url: 'https://github.com/Schengii/Jobbsuche.git',
+    targetDir: 'Projekte/Jobbsuche'
+  },
+  'ManuFaktur': {
+    url: 'https://github.com/Schengii/ManuFaktur.git',
+    targetDir: 'Projekte/ManuFaktur'
+  },
+  'Minecraft-Pokemon': {
+    url: 'https://github.com/Schengii/Minecraft-Pokemon.git',
+    targetDir: 'Projekte/Minecraft-Pokemon'
+  },
+  'arbeitszeiterfassung': {
+    url: 'https://github.com/Schengii/arbeitszeiterfassung.git',
+    targetDir: 'Projekte/arbeitszeiterfassung',
+    preserve: ['dist']
   }
 };
+
+// The following sub-projects under Projekte/ have no local .git remote to verify
+// an upstream URL against, so they are intentionally left out of REPO_MAPPING
+// rather than guessed: 'Amazon 2.0', 'ElektroCheck AI', 'Glücksspiel', 'Maps',
+// 'orbital-scrap', 'Urlaubsfotos', 'VerkaufsVorlagen', 'Wohnungssuche KI',
+// 'finance-ai-bot', 'snake-ascend'. Add them once a confirmed GitHub repo URL
+// exists for each.
 
 const rootDir = path.resolve(__dirname, '..');
 

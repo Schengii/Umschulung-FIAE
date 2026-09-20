@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync:
@@ -34,15 +35,18 @@ jobs:
       - name: Run Subprojects Sync Script
         run: npm run sync-projects
 
-      - name: Commit and Push if Changes Detected
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "Changes detected! Committing and pushing..."
-            git add -A
-            git commit -m "chore(sync): automated weekly sync of standalone projects"
-            git push origin main
-          else
-            echo "No changes found. Subprojects are already up to date."
-          fi
+      - name: Open Pull Request if Changes Detected
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(sync): automated weekly sync of standalone projects"
+          branch: automated/subprojects-sync
+          delete-branch: true
+          title: "chore(sync): automated weekly sync of standalone projects"
+          body: |
+            Automated weekly sync of the mapped standalone sub-project repositories (`scripts/sync_projects.js`).
+
+            This PR is opened by the `sync.yml` workflow instead of pushing directly to `main`, so the regular
+            CI checks (lint, unit tests, E2E tests, data-sync guard) run against the synced changes before they
+            merge. Review the diff and merge once CI is green.
+          labels: automated-sync

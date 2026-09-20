@@ -30,16 +30,21 @@ jobs:
       - name: Verify Data Synchronization (22 Projects)
         run: npm run check-sync
 
+      - name: Verify <head> Boilerplate Consistency
+        run: npm run check-head
+
       - name: Lint JavaScript
         run: npm run lint
+
+      - name: Run Vitest Unit Test Suite
+        run: npm run test:unit
 
       - name: Run Playwright E2E Test Suite
         run: npm test
 
   lighthouse:
-    name: Lighthouse Quality Audit (informational)
+    name: Lighthouse Quality Audit (a11y/SEO/best-practices enforced, performance informational)
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

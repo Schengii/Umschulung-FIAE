@@ -1,6 +1,8 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
+import { advanceBoxLevel, resetBoxLevel, computeBoxStats, filterByBox } from './modules/leitner-box.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Database of questions (bilingual)
     const cardsDatabase = [
@@ -294,12 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredDeck = fullDatabase.filter(c => starredIds.includes(c.id));
         } else if (currentCategory === 'custom') {
             filteredDeck = [...customCards];
-        } else if (currentCategory === 'box1') {
-            filteredDeck = fullDatabase.filter(c => (boxLevels[c.id] || 1) === 1);
-        } else if (currentCategory === 'box2') {
-            filteredDeck = fullDatabase.filter(c => boxLevels[c.id] === 2);
-        } else if (currentCategory === 'box3') {
-            filteredDeck = fullDatabase.filter(c => boxLevels[c.id] === 3);
+        } else if (currentCategory === 'box1' || currentCategory === 'box2' || currentCategory === 'box3') {
+            filteredDeck = filterByBox(fullDatabase, boxLevels, currentCategory);
         } else {
             filteredDeck = fullDatabase.filter(c => c.category === currentCategory);
         }
@@ -393,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentCard) {
                 // Leitner box level upgrade
                 const currentLevel = boxLevels[currentCard.id] || 1;
-                const nextLevel = Math.min(3, currentLevel + 1);
+                const nextLevel = advanceBoxLevel(currentLevel);
                 boxLevels[currentCard.id] = nextLevel;
                 StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
 
@@ -441,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
                 // Reset box level to 1
-                boxLevels[currentCard.id] = 1;
+                boxLevels[currentCard.id] = resetBoxLevel();
                 StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
 
                 // Remove from known cards list
@@ -564,16 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullDatabase = getFullDatabase();
         const total = fullDatabase.length;
 
-        let b1 = 0;
-        let b2 = 0;
-        let b3 = 0;
-
-        fullDatabase.forEach(c => {
-            const level = boxLevels[c.id] || 1;
-            if (level === 1) b1++;
-            else if (level === 2) b2++;
-            else if (level === 3) b3++;
-        });
+        const { 1: b1, 2: b2, 3: b3 } = computeBoxStats(fullDatabase, boxLevels);
 
         // Set counts
         if (box1Count) box1Count.textContent = b1;

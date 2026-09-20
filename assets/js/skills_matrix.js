@@ -2,6 +2,7 @@
  * Skills Matrix JavaScript Logic
  * Renders SVG Radar Chart dynamically and manages filtering of skill detail cards.
  */
+import { filterRadarSkills, filterListSkills, sortSkills } from './modules/skills-filter.js';
 
 const SKILLS_DATA = [
     // Frontend
@@ -175,10 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function getFilteredRadarSkills() {
-        if (activeCategory === 'all') {
-            return SKILLS_DATA.filter(s => repsForAll.includes(s.name));
-        }
-        return SKILLS_DATA.filter(s => s.category === activeCategory);
+        return filterRadarSkills(SKILLS_DATA, activeCategory, repsForAll);
     }
 
     function renderRadarChart() {
@@ -297,23 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDetailsGrid() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         // Get ALL skills of this category (not just the representatives)
-        let filteredSkills = [];
-        if (activeCategory === 'all') {
-            filteredSkills = [...SKILLS_DATA];
-        } else {
-            filteredSkills = SKILLS_DATA.filter(s => s.category === activeCategory);
-        }
-
-        // Apply sorting
         const sortSelect = document.getElementById('skills-sort-select');
         const sortVal = sortSelect ? sortSelect.value : 'default';
-        if (sortVal === 'alpha') {
-            filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sortVal === 'level-desc') {
-            filteredSkills.sort((a, b) => b.score - a.score);
-        } else if (sortVal === 'level-asc') {
-            filteredSkills.sort((a, b) => a.score - b.score);
-        }
+        const filteredSkills = sortSkills(filterListSkills(SKILLS_DATA, activeCategory), sortVal);
 
         listGrid.innerHTML = filteredSkills.map(s => `
             <div class="skill-matrix-card">

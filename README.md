@@ -133,8 +133,30 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 
 ### 5. Qualitätssicherung, Bereinigung & E2E-Testing
 - **Test-Suite**: 54 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 22 Projekte validieren.
+- **Unit-Tests**: 36 Vitest-Tests (`npm run test:unit`) für die reine Kernlogik in `assets/js/modules/` — Leitner-Box-Algorithmus (`leitner-box.js`), IHK-Notenrechner & QA-Score-Gewichtung (`grade-calculator.js`), Skills-Matrix-Filter/-Sortierung (`skills-filter.js`).
 - **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js` (22/22 Links fehlerfrei).
 - **Bereinigte Codebasis & Linter**: 0 Fehler und 0 Warnungen in ESLint (`npm run lint`), 0 Sicherheitslücken in Abhängigkeiten (`npm audit`).
+
+### 6. Wartungsskripte (`scripts/`)
+Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>` ausführbar. Keines läuft automatisiert in CI — bei Bedarf manuell aufrufen:
+
+| Befehl | Skript | Zweck |
+|---|---|---|
+| `npm run generate-data` | `generate_projects_data.js` | Sub-Projekte scannen, `projects.json`/`projects_data.js` generieren |
+| `npm run check-sync` | `check_data_sync.js` | Prüft, ob generierte Projektdaten aktuell sind |
+| `npm run sync-projects` | `sync_projects.js` | Zieht die 5 gemappten Sub-Projekte von ihren Upstream-Repos |
+| `npm run check-project-links` | `check_all_project_links.js` | Verifiziert, dass alle Projekt-Links tatsächlich erreichbar sind |
+| `npm run check-head` | `check_head_consistency.js` | Prüft, ob jede Seite die gemeinsamen `<head>`-Boilerplate-Tags (CSP, Viewport, Favicon, Stylesheets, `meta author`, OG-Tags) enthält — verhindert stillen Drift wie die zunächst fehlende CSP in Root-`404.html` |
+| `npm run optimize-images` | `optimize_images.js` | Audit-Report über Bildgrößen (read-only, keine Änderungen) |
+| `npm run compress-images` | `compress_images.js` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
+| `npm run build` | `build_minified.js` | Minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung) |
+| `npm run audit-cleanup` | `audit_cleanup.js` | Verzeichnisgrößen-/Dateianzahl-Report je Ordner |
+| `npm run audit-project-paths` | `audit_project_html_paths.js` | Findet fehlerhafte relative Pfade in Sub-Projekt-HTML |
+| `npm run fix-project-paths` | `fix_project_html_paths.js` | Korrigiert die von `audit-project-paths` gefundenen Pfade |
+| `npm run localize-vendor-assets` | `localize_vendor_assets.js` | Prüft, ob noch externe CDN-Referenzen statt lokaler `assets/vendor/`-Kopien genutzt werden |
+| `npm run add-og-meta` | `add_og_meta.js` | Ergänzt fehlende OpenGraph/Twitter-Meta-Tags (idempotent) |
+| `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
+| `npm run generate-qr-codes` | `generate_qr_codes.js` | Erzeugt QR-Codes für Kernseiten (Lebenslauf/PDF-Export) |
 
 ---
 
@@ -164,14 +186,20 @@ npm test
 ```
 Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **22 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
 
-### 5. Linting
+### 5. Unit-Tests ausführen (Vitest)
+```bash
+npm run test:unit
+```
+Testet die reine Kernlogik (Leitner-Box, Notenrechner/QA-Score, Skills-Matrix-Filter) isoliert ohne Browser — Konfiguration in `vitest.config.js`.
+
+### 6. Linting
 ```bash
 npm run lint
 ```
 Prüft `assets/js` und `scripts/` mit ESLint (Flat Config in `eslint.config.js`) – 0 Fehler, 0 Warnungen.
 
-### 6. Deploy-Pipeline (vorbereitet, nicht aktiv)
-`.github/workflows/deploy.yml` baut & deployed die Seite nach GitHub Pages, sobald in den Repository-Settings unter *Pages → Source* „GitHub Actions" ausgewählt wird. `.github/workflows/ci.yml` läuft bei jedem Push/PR und führt Data-Sync-Check, Lint, Playwright-Tests sowie einen informativen Lighthouse-Audit (`lighthouserc.json`) aus. Die Datei `CNAME` ist bereits auf `max-schenk.tech` vorkonfiguriert — der DNS-Eintrag beim Domain-Provider muss noch manuell gesetzt werden.
+### 7. Deployment
+**Vercel ist das einzige, autoritative Deployment-Ziel** (`vercel.json`, Custom Domain `max-schenk.tech`, Auto-Deploy bei Push auf `main`). Der zuvor parallel vorhandene, nie aktivierte GitHub-Pages-Workflow (`.github/workflows/deploy.yml`) wurde entfernt, um Verwirrung über das tatsächliche Deployment-Ziel zu vermeiden. `.github/workflows/ci.yml` läuft bei jedem Push/PR und führt Data-Sync-Check, `<head>`-Konsistenz-Check, Lint, Vitest, Playwright-Tests sowie einen Lighthouse-Audit (`lighthouserc.json`) aus — diese Checks gaten den Merge, nicht das Deployment selbst (das übernimmt Vercel eigenständig bei jedem Push auf `main`).
 
 ---
 

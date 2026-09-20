@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v36';
+const CACHE_NAME = 'umschulung-fiae-v37';
 const ASSETS = [
     './',
     'index.html',
@@ -140,9 +140,12 @@ const ASSETS = [
     'assets/images/favicon.svg',
     'assets/images/maximilian_schenk_portrait.jpg',
     'assets/images/BFW_Fahnen_Panorama.jpg',
+    'assets/images/BFW_Fahnen_Panorama.webp',
     'assets/images/it_workspace.webp',
     'assets/images/icon-192.png',
-    'assets/images/icon-512.png'
+    'assets/images/icon-512.png',
+    'assets/images/icon-192-maskable.png',
+    'assets/images/icon-512-maskable.png'
 ];
 
 self.addEventListener('install', (e) => {

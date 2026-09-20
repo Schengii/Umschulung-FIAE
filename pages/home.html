@@ -339,6 +339,7 @@
                         <span lang="en">Source: Wikipedia, updated: April 11, 2024</span>
                     </h5>
                     <picture>
+                        <source srcset="../assets/images/BFW_Fahnen_Panorama.webp" type="image/webp">
                         <source srcset="../assets/images/BFW_Fahnen_Panorama.jpg" type="image/jpeg">
                         <img src="../assets/images/BFW_Fahnen_Panorama.jpg"
                             alt="Hauptgebäude des Berufsförderungswerks BFW Dortmund" loading="lazy">
@@ -613,6 +614,84 @@
                 </section>
             </aside>
         </div>
+
+        <!-- Contact Section -->
+        <section class="card margin-top-2rem border-left-primary scroll-reveal" id="contact-section" aria-labelledby="contact-section-title">
+            <div class="display-flex flex-wrap flex-space-between align-items-center flex-gap-1rem">
+                <div>
+                    <h2 id="contact-section-title" class="m-0 font-size-1-35rem text-gradient">
+                        <span lang="de"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Jetzt Kontakt aufnehmen</span>
+                        <span lang="en"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Get In Touch Now</span>
+                    </h2>
+                    <p lang="de" class="margin-top-0-5rem margin-bottom-0 color-text-secondary">
+                        Haben Sie Fragen zu meinem Werdegang, Projekten oder einer offenen Junior-Position? Schreiben Sie mir gerne direkt eine Nachricht!
+                    </p>
+                    <p lang="en" class="margin-top-0-5rem margin-bottom-0 color-text-secondary">
+                        Have questions about my background, projects or an open junior position? Feel free to send me a message directly!
+                    </p>
+                </div>
+                <div class="display-flex flex-gap-0-75rem align-items-center">
+                    <a href="mailto:sche-max@web.de" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="E-Mail senden">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i> sche-max@web.de
+                    </a>
+                    <a href="tel:+4917624921897" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="Telefon">
+                        <i class="fa-solid fa-phone" aria-hidden="true"></i> 0176 24921897
+                    </a>
+                </div>
+            </div>
+
+            <form id="contact-form" class="contact-form-styled margin-top-1-5rem">
+                <!-- Honeypot field for bot spam prevention -->
+                <div class="display-none" aria-hidden="true">
+                    <label for="home-botcheck">Bitte dieses Feld freilassen</label>
+                    <input type="text" id="home-botcheck" name="botcheck" tabindex="-1" autocomplete="off">
+                </div>
+
+                <div class="grid-2-col flex-gap-1rem">
+                    <div class="form-group">
+                        <label for="contact-name">
+                            <span lang="de">Ihr Name / Unternehmen *</span>
+                            <span lang="en">Your Name / Company *</span>
+                        </label>
+                        <input type="text" id="contact-name" class="form-control" required placeholder="z. B. Max Mustermann (Tech GmbH)">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">
+                            <span lang="de">Ihre E-Mail-Adresse *</span>
+                            <span lang="en">Your Email Address *</span>
+                        </label>
+                        <input type="email" id="contact-email" class="form-control" required placeholder="name@unternehmen.de">
+                    </div>
+                </div>
+
+                <div class="form-group margin-top-0-75rem">
+                    <label for="contact-message">
+                        <span lang="de">Ihre Nachricht / Stellenangebot *</span>
+                        <span lang="en">Your Message / Job Offer *</span>
+                    </label>
+                    <textarea id="contact-message" class="form-control contact-message-textarea" rows="4" required placeholder="Guten Tag Herr Schenk, wir haben Ihr Portfolio gesehen und..."></textarea>
+                </div>
+
+                <div class="display-flex align-items-center flex-gap-1rem margin-top-1rem">
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                        <span lang="de">Nachricht absenden</span>
+                        <span lang="en">Send Message</span>
+                    </button>
+                    <span class="font-size-0-8rem color-text-muted">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        <span lang="de">100% datenschutzkonform &amp; spamgeschützt</span>
+                        <span lang="en">100% privacy-compliant &amp; spam-protected</span>
+                    </span>
+                </div>
+            </form>
+
+            <div id="form-feedback" class="card form-feedback-styled margin-top-1rem display-none">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                <span lang="de">Nachricht wurde erfolgreich gesendet! Vielen Dank.</span>
+                <span lang="en">Message successfully sent! Thank you.</span>
+            </div>
+        </section>
     </main>
 
     <div id="site-footer"></div>

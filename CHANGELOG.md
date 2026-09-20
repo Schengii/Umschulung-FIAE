@@ -2,6 +2,58 @@
 
 Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten.
 
+## [Unreleased]
+
+### DevOps — Sub-Projekt-Sync auf 11 von 21 Projekten ausgeweitet
+- **`scripts/sync_projects.js` `REPO_MAPPING`**: 6 weitere Sub-Projekte ergänzt — `BurgenGame`, `CoOpVersusGame`, `Jobbsuche`, `ManuFaktur`, `Minecraft-Pokemon`, `arbeitszeiterfassung` (mit `preserve: ['dist']`, da `dist/` dort `.gitignore`t ist). URLs wurden **nicht geraten**, sondern aus dem tatsächlichen `git remote get-url origin` jedes lokalen Klons verifiziert.
+- **Bewusst nicht ergänzt**: die anderen 10 Sub-Projekte (`Amazon 2.0`, `ElektroCheck AI`, `Glücksspiel`, `Maps`, `orbital-scrap`, `Urlaubsfotos`, `VerkaufsVorlagen`, `Wohnungssuche KI`, `finance-ai-bot`, `snake-ascend`) haben lokal kein `.git`-Verzeichnis, ihr Upstream-Repo ließ sich also nicht verifizieren. Eine falsche/geratene Repo-URL im Sync-Skript wäre schlimmer als der aktuelle Zustand (könnte den falschen Inhalt synchronisieren oder den Workflow zum Scheitern bringen).
+- Der eigentliche Sync-Lauf (`npm run sync-projects`) wurde **nicht** ausgeführt, da er lokal bestehende Verzeichnisse überschreibt — die neuen Mappings greifen beim nächsten manuellen oder geplanten Lauf.
+
+### Wartbarkeit — `<head>`-Konsistenz-Guard statt Include-System
+- **Bewusst gegen ein automatisches Template-/Include-System entschieden**: die 28 Seiten unterscheiden sich nicht nur inhaltlich, sondern auch in der **Reihenfolge** der Boilerplate-Tags (z. B. `canonical` mal vor, mal nach `description`) — ein blindes Auto-Rewrite-Skript hätte alle Seiten gleichzeitig anfassen müssen, mit realem Risiko, etwas zu zerstören, ohne den eigentlichen Duplizierungs-Schmerz (manuelle Mehrfach-Pflege) grundlegend sicherer zu machen.
+- **Stattdessen**: `scripts/check_head_consistency.js` (`npm run check-head`) prüft für jede Seite, ob CSP, Viewport, Favicon, Stylesheet-Links, `meta author` und OG-Tags vorhanden sind — genau die Art von Drift, die bei der CSP-Vereinheitlichung in Schritt 1 manuell in `404.html` gefunden wurde. Als neuer Guard-Schritt in `ci.yml` verankert.
+- **Dabei echte, bisher unentdeckte Lücken gefunden und behoben**: `meta author` fehlte auf `challenge-lab.html`, `dashboard.html`, `flashcards.html`, `ihk-cockpit.html`, `praktikumsbetrieb.html`; beide `404.html`-Dateien (Root + `pages/`) hatten weder `meta author` noch OG-Tags.
+
+### Performance — Minify-Build statt vollem Bundler
+- **`npm run build`** (`scripts/build_minified.js`, esbuild): minifiziert alle Dateien unter `assets/js/` (-28%, 964→693 KB) und `assets/css/` (-27%, 319→231 KB) nach `dist/` und kopiert alles Weitere (HTML, Bilder, Vendor, Fonts, `Projekte/`, `manifest.json`, `sw.js`, …) unverändert. Kein Bundling, keine Pfad-Umschreibung, keine HTML-Änderung — dadurch bleibt jede bestehende CSP-Hash und jeder `<script src>`-Verweis exakt gültig.
+- **Bewusst gegen einen vollen Vite-Bundler entschieden**: ein Testlauf zeigte, dass Vite standardmäßig nur `type="module"`-Scripts bündelt/kopiert — die meisten Seiten laden ihre Hauptlogik aber noch als klassische `<script src>`-Tags. Ein echter Bundler-Einsatz hätte eine seitenweite Umstellung auf ES-Module samt Vollverifikation aller 27 Seiten erfordert; das Risiko für die produktive Seite stand nicht im Verhältnis zum Zusatznutzen gegenüber reiner Minifizierung.
+- **Produktion (Vercel) bleibt unverändert unbundled** (`vercel.json` liefert weiterhin direkt aus dem Repo-Root aus). `dist/` ist lokal mit der vollen Playwright-Suite (54/54 grün) gegen einen separaten Port verifiziert, wird aber bewusst nicht automatisch deployed — das Umschalten der Produktions-Auslieferung auf `dist/` ist eine separate Entscheidung.
+- `dist/` zu `.gitignore` hinzugefügt.
+
+### Dokumentation — Sub-Projekt-README ergänzt
+- **`Projekte/arbeitszeiterfassung/README.md` neu angelegt** (einziges Sub-Projekt ohne README): beschreibt Kernfunktionen, den TypeScript/Vite-Stack, die parallele `js/`-Fallback-Struktur, Vitest-Tests und lokale Entwicklungsbefehle, basierend auf `portfolio-metadata.json` und der tatsächlichen Ordnerstruktur.
+
+### PWA — Manifest erweitert
+- **`manifest.json`**: `categories`, `shortcuts` (Portfolio/Lebenslauf/Dashboard) und `screenshots` (wide + narrow, per Playwright live gerendert und als WebP komprimiert) ergänzt.
+- **Neue maskable Icon-Varianten** (`icon-192-maskable.png`, `icon-512-maskable.png`): Inhalt auf 80% der Canvas herunterskaliert und mit `background_color`-Fläche zentriert, statt die bestehenden Icons ohne Safe-Zone-Puffer als "maskable" zu deklarieren. In den SW-Precache (v37) aufgenommen.
+
+### DevOps — Sync-Workflow auf Pull Request umgestellt
+- **`.github/workflows/sync.yml`**: pusht nicht mehr direkt auf `main`, sondern öffnet über `peter-evans/create-pull-request@v7` einen PR (Branch `automated/subprojects-sync`). Dadurch laufen Lint, Vitest, Playwright und der Data-Sync-Guard aus `ci.yml` als reguläre PR-Checks, bevor der wöchentliche Sync gemerged wird — vorher lief `ci.yml` erst nachdem bereits direkt auf `main` gepusht wurde.
+- Neue Berechtigung `pull-requests: write` ergänzt.
+
+### Testing — Vitest-Unit-Tests für Kernlogik
+- **Reine Logik aus drei Modulen extrahiert** in eigenständige, DOM-freie ESM-Module unter `assets/js/modules/`: `leitner-box.js` (Karteikarten-Boxlevel-Übergänge aus `flashcards.js`), `grade-calculator.js` (IHK-Notenskala & QA-Score-Gewichtung aus `dashboard.js`), `skills-filter.js` (Filter/Sortierung aus `skills_matrix.js`).
+- **36 neue Vitest-Tests** (`npm run test:unit`, `vitest.config.js`) decken diese Module vollständig ab, inkl. Edge Cases (Clamping, unbekannte Sortier-Modi, fehlende Boxlevel).
+- `flashcards.js` und `skills_matrix.js` von klassischen `<script defer>`/`<script>`-Tags auf `type="module"` umgestellt, um die neuen Module zu importieren; `dashboard.js` war bereits ein Modul. Die bislang tote `_getIhkGrade`-Funktion in `dashboard.js` wurde entfernt und durch die getestete, jetzt tatsächlich genutzte `computeQualityScore`/`getQualityStatus`-Logik ersetzt.
+- Alle 54 Playwright-E2E-Tests und `npm run lint` nach der Umstellung erneut grün verifiziert.
+- `.github/workflows/ci.yml`: neuer `Run Vitest Unit Test Suite`-Schritt vor den E2E-Tests.
+
+### Qualitätssicherung — Lighthouse-CI ausgeweitet
+- **`lighthouserc.json`**: URL-Abdeckung von 5 auf 13 Seiten erweitert (inkl. Git-Simulator, Playground, Architecture, Flashcards, Quiz, Interview-Trainer, IHK-Cockpit, Dashboard).
+- **Accessibility/SEO/Best-Practices auf `error` gesetzt** (vorher `warn`, blockierte nie CI): lokal über 11 der 13 Seiten verifiziert, alle konsistent bei ≥0,96 (a11y), 1,0 (Best-Practices), ≥0,91 (SEO) — deutlich über der 0,9-Schwelle.
+- **Performance bewusst bei `warn` belassen**: lokale Messung liegt bei nur ~0,35–0,64 (ohne CDN/Kompression), ein Hard-Fail würde CI sofort und dauerhaft brechen. Das eigentliche Performance-Problem (kein Bundler, monolithisches CSS) ist ein separater, größerer Umbau (siehe Roadmap-Punkte 11/12).
+- `.github/workflows/ci.yml`: `continue-on-error: true` vom Lighthouse-Job entfernt, Jobname präzisiert.
+
+### Performance — Bildoptimierung
+- **`BFW_Fahnen_Panorama.jpg` (266 KB) als WebP ergänzt**: neue `assets/images/BFW_Fahnen_Panorama.webp` (164 KB, -38%), auf die tatsächliche Anzeigegröße (`max-height: 480px` in `.bfw-campus-img`) herunterskaliert von 1813px auf 1400px Breite. In `pages/home.html` und `pages/berufsfoerderungswerk.html` als `<source type="image/webp">` vor dem bestehenden JPEG-Fallback eingebunden.
+- **Service Worker auf `v37` angehoben** (`sw.js`), neue WebP-Datei in die `ASSETS`-Precache-Liste aufgenommen.
+- `scripts/compress_images.js` auf alle Bilder über 80 KB laufen lassen (marginale 1-3% Re-Encoding-Gewinne bei den bereits komprimierten WebP-Showcases).
+
+### Sicherheit — CSP-Vereinheitlichung
+- **Formatierung aller Content-Security-Policy Meta-Tags normalisiert**: Alle 27 Seiten (inkl. `index.html`) nutzen jetzt exakt dieselbe Whitespace-Formatierung statt handgepflegter Varianten mit uneinheitlichen Leerzeichen.
+- **Fehlende CSP in `404.html` (Root) ergänzt**: Die Root-404-Seite hatte bisher gar keinen CSP-Meta-Tag und verließ sich stillschweigend auf den Vercel-Header als einzigen Schutz.
+- **Zweischichtige CSP-Strategie dokumentiert**: `vercel.json` liefert eine bewusst permissive Baseline (inkl. `'unsafe-inline'`) als Sicherheitsnetz, falls eine Seite künftig den Meta-Tag vergisst — die eigentliche, strikte Durchsetzung passiert über den seitenspezifischen Meta-Tag (per-page `sha256`-Hash für `home.html`/`portfolio.html`/`ueber-mich.html`, dokumentierte `unsafe-inline`-Ausnahme für `playground.html`). Beide Policies werden vom Browser kombiniert (UND-verknüpft) durchgesetzt, sodass der permissive Header nichts freischaltet, was der Meta-Tag nicht bereits erlaubt.
+
 ## [1.5.0] - 2026-09-17
 
 ### Code-Hygiene, Linter & Stabilität
