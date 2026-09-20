@@ -201,6 +201,9 @@ Prüft `assets/js` und `scripts/` mit ESLint (Flat Config in `eslint.config.js`)
 ### 7. Deployment
 **Vercel ist das einzige, autoritative Deployment-Ziel** (`vercel.json`, Custom Domain `max-schenk.tech`, Auto-Deploy bei Push auf `main`). Der zuvor parallel vorhandene, nie aktivierte GitHub-Pages-Workflow (`.github/workflows/deploy.yml`) wurde entfernt, um Verwirrung über das tatsächliche Deployment-Ziel zu vermeiden. `.github/workflows/ci.yml` läuft bei jedem Push/PR und führt Data-Sync-Check, `<head>`-Konsistenz-Check, Lint, Vitest, Playwright-Tests sowie einen Lighthouse-Audit (`lighthouserc.json`) aus — diese Checks gaten den Merge, nicht das Deployment selbst (das übernimmt Vercel eigenständig bei jedem Push auf `main`).
 
+### 8. Architecture Decision Records
+Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<head>`-Konsistenz statt Templating) sind als kurze ADRs unter [`docs/adr/`](docs/adr/README.md) festgehalten — jeweils mit Kontext, Entscheidung und bewusst in Kauf genommenen Konsequenzen.
+
 ---
 
 ## 🌟 Veröffentlichungs-Zusammenfassung (Release 2026)

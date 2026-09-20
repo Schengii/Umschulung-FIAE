@@ -4,6 +4,16 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### DevOps — Doppeltes Deployment-Setup bereinigt
+- **`.github/workflows/deploy.yml` (nie aktivierter GitHub-Pages-Workflow) entfernt**: Er lief parallel zum tatsächlich produktiven Vercel-Deployment (`vercel.json`, Custom Domain `max-schenk.tech`), wurde aber laut eigenem Kommentar nie aktiviert (`Settings → Pages → Source` stand nie auf "GitHub Actions"). Zwei parallel gepflegte Deployment-Pfade für dieselbe Domain sind ein reines Verwirrungsrisiko ohne Zusatznutzen.
+- **`README.md`** dokumentiert jetzt explizit unter "7. Deployment": Vercel ist das einzige, autoritative Deployment-Ziel; `ci.yml` gated den Merge (Tests/Lint/Lighthouse), das Deployment selbst übernimmt Vercel eigenständig bei jedem Push auf `main`.
+- **Nicht entfernt**: die `CNAME`-Datei (`max-schenk.tech`) bleibt bestehen, da sie für Vercel wirkungslos, aber harmlos ist. Ob GitHub Pages in den Repo-Einstellungen zusätzlich als "Deploy from a branch" aktiv ist, lässt sich von hier aus nicht prüfen — das sollte einmal manuell in `Settings → Pages` verifiziert werden, um eine dritte, stille Auslieferung derselben Domain auszuschließen.
+
+### Dokumentation — Architecture Decision Records (ADR) eingeführt
+- **`docs/adr/`** neu angelegt mit vier ADRs im Kurzformat (Kontext/Entscheidung/Konsequenzen) für die zentralen, bereits getroffenen aber bisher nur verstreut im Changelog begründeten strukturellen Entscheidungen: kein Bundler (nur Minify-Build), Vercel als alleiniges Deployment-Ziel, zweischichtige CSP-Strategie (Meta-Tag + HTTP-Header) und Konsistenz-Guard statt Auto-Template-System für den `<head>`-Block.
+- Aus dem Portfolio-Review vom 19.09.2026 hervorgegangen (letzter offener struktureller Punkt der Verbesserungs-Roadmap neben der bereits erledigten Deployment-Bereinigung).
+- **`README.md`**: neuer Abschnitt "8. Architecture Decision Records" mit Link auf `docs/adr/README.md`.
+
 ### DevOps — Sub-Projekt-Sync auf 11 von 21 Projekten ausgeweitet
 - **`scripts/sync_projects.js` `REPO_MAPPING`**: 6 weitere Sub-Projekte ergänzt — `BurgenGame`, `CoOpVersusGame`, `Jobbsuche`, `ManuFaktur`, `Minecraft-Pokemon`, `arbeitszeiterfassung` (mit `preserve: ['dist']`, da `dist/` dort `.gitignore`t ist). URLs wurden **nicht geraten**, sondern aus dem tatsächlichen `git remote get-url origin` jedes lokalen Klons verifiziert.
 - **Bewusst nicht ergänzt**: die anderen 10 Sub-Projekte (`Amazon 2.0`, `ElektroCheck AI`, `Glücksspiel`, `Maps`, `orbital-scrap`, `Urlaubsfotos`, `VerkaufsVorlagen`, `Wohnungssuche KI`, `finance-ai-bot`, `snake-ascend`) haben lokal kein `.git`-Verzeichnis, ihr Upstream-Repo ließ sich also nicht verifizieren. Eine falsche/geratene Repo-URL im Sync-Skript wäre schlimmer als der aktuelle Zustand (könnte den falschen Inhalt synchronisieren oder den Workflow zum Scheitern bringen).
