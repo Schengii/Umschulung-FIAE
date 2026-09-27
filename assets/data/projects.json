@@ -1,5 +1,30 @@
 [
   {
+    "repoName": "Amazon-2.0",
+    "titleDe": "🛒 Amazon 2.0 — Premium E-Commerce Shop",
+    "titleEn": "🛒 Amazon 2.0 — Premium E-Commerce Shop",
+    "tags": [
+      "TypeScript",
+      "Vite",
+      "PWA",
+      "Vitest",
+      "Custom CSS Design System"
+    ],
+    "image": "assets/images/analytics_showcase.webp",
+    "link": "Projekte/Amazon 2.0/dist/index.html",
+    "descDe": "Eine performante Re-Implementierung einer modernen Online-Shopping-Plattform mit Vanilla TypeScript, Vite und einem eigenen CSS-Design-System. Enthält u. a. Filter- und Suchsystem, Preisverlauf-Charts, Command Palette (Ctrl+K), Warenkorb/Checkout-Simulation, Dark/Light Theme und PWA-Offline-Unterstützung.",
+    "descEn": "A performant re-implementation of a modern online shopping platform built with vanilla TypeScript, Vite, and a custom CSS design system. Features include filtering/search, price-history charts, a command palette (Ctrl+K), a cart/checkout simulation, dark/light theming, and PWA offline support.",
+    "category": "web",
+    "language": "TypeScript",
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/Amazon-2.0",
+    "updatedAt": "2026-09-27T11:58:01.980Z",
+    "images": [
+      "assets/images/analytics_showcase.webp",
+      "assets/images/analytics_showcase.webp"
+    ]
+  },
+  {
     "repoName": "arbeitszeiterfassung",
     "titleDe": "⏱️ Arbeitszeiterfassung — PWA Zeiterfassung",
     "titleEn": "⏱️ Arbeitszeiterfassung — Time Tracker PWA",
@@ -74,7 +99,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-09-20T19:11:34.896Z",
+    "updatedAt": "2026-09-27T11:58:02.166Z",
     "images": [
       "assets/images/arbeitszeit_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +189,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-09-20T19:11:35.068Z"
+    "updatedAt": "2026-09-27T11:58:02.439Z"
   },
   {
     "repoName": "EcoChef",
@@ -331,7 +356,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-09-20T19:11:35.439Z",
+    "updatedAt": "2026-09-27T11:58:02.978Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -356,7 +381,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-09-20T19:11:35.615Z",
+    "updatedAt": "2026-09-27T11:58:03.329Z",
     "images": [
       "assets/images/finance_bot_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -381,7 +406,7 @@
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-09-11T14:05:35Z",
+    "updatedAt": "2026-09-22T14:44:21Z",
     "images": [
       "assets/images/finanzenportfolio_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -406,7 +431,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-09-20T19:11:35.828Z",
+    "updatedAt": "2026-09-27T11:58:03.625Z",
     "images": [
       "assets/images/gluecksspiel_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -431,7 +456,7 @@
       "assets/images/it_workspace.webp",
       "assets/images/quiz_showcase.webp"
     ],
-    "link": "Projekte/Informatik-lernen/dist/index.html",
+    "link": "https://informatik-lernen.vercel.app",
     "descDe": "Umfassende interaktive Prüfungsvorbereitung und IT-Simulatoren-Hub für Fachinformatiker (AO 2020). Beinhaltet 25 praxisnahe Labore: DNSSEC Chain of Trust, Linux Btrfs/ZFS Copy-on-Write Sandbox, OpenAPI 3.1 Contract Testing, Agile Burndown & Gantt, eBPF Cilium Service Mesh, TLS 1.3 Anti-Replay und IHK-Wirtschaftlichkeitsrechner.",
     "descEn": "Comprehensive interactive exam prep and IT simulator suite for IT specialists. Features 25 hands-on labs: DNSSEC chain of trust validation, Linux Btrfs/ZFS Copy-on-Write sandbox, OpenAPI 3.1 contract testing, Agile Burndown & Gantt planners, eBPF Cilium network policies, TLS 1.3 replay defense, and IHK profitability calculators.",
     "category": "web",
@@ -493,7 +518,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-09-04T16:39:12Z"
+    "updatedAt": "2026-09-27T10:05:35Z"
   },
   {
     "repoName": "Jobsuche",
@@ -514,7 +539,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-09-20T19:11:36.435Z",
+    "updatedAt": "2026-09-27T11:58:04.255Z",
     "images": [
       "assets/images/jobsuche_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -539,7 +564,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-09-20T19:11:36.609Z",
+    "updatedAt": "2026-09-27T11:58:04.531Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -619,7 +644,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-09-20T19:11:36.986Z"
+    "updatedAt": "2026-09-27T11:58:05.001Z"
   },
   {
     "repoName": "orbital-scrap",
@@ -640,7 +665,7 @@
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-09-20T19:11:37.176Z",
+    "updatedAt": "2026-09-27T11:58:05.194Z",
     "images": [
       "assets/images/orbital_scrap_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -690,6 +715,30 @@
     "updatedAt": "2026-09-03T08:51:15Z"
   },
   {
+    "repoName": "snake-ascend",
+    "titleDe": "🐍 Snake Ascend: Block Royale",
+    "titleEn": "🐍 Snake Ascend: Block Royale",
+    "tags": [
+      "HTML5 Canvas",
+      "Vanilla JavaScript",
+      "Web Audio API",
+      "Game Design"
+    ],
+    "image": "assets/images/snake_showcase.webp",
+    "images": [
+      "assets/images/snake_showcase.webp",
+      "assets/images/game_leaderboard.webp"
+    ],
+    "link": "Projekte/snake-ascend/index.html",
+    "descDe": "Ein Geschicklichkeitsspiel, das Elemente aus Tetris, Doodle Jump, Snake und Clash Royale verbindet: Die Schlange klettert automatisch, Karten aus einer Elixier-Hand platzieren Blöcke als Plattformen, Gegner und Boss-Türme müssen überwunden werden.",
+    "descEn": "A skill game combining elements of Tetris, Doodle Jump, Snake, and Clash Royale: the snake auto-climbs while an elixir-powered hand of cards lets you place platform blocks, dodge enemies, and take down boss towers.",
+    "category": "games",
+    "language": "JavaScript",
+    "stars": 0,
+    "githubUrl": "https://github.com/Schengii/snake-ascend",
+    "updatedAt": "2026-09-27T11:58:05.763Z"
+  },
+  {
     "repoName": "Urlaubsfotos",
     "titleDe": "📸 Urlaubsfotos Organizer — Fotogalerie & Filter",
     "titleEn": "📸 Vacation Photo Organizer — Gallery & Filtering",
@@ -707,7 +756,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-09-20T19:11:37.657Z",
+    "updatedAt": "2026-09-27T11:58:06.031Z",
     "images": [
       "assets/images/urlaubsfotos_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -731,7 +780,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-09-20T19:11:37.841Z",
+    "updatedAt": "2026-09-27T11:58:06.406Z",
     "images": [
       "assets/images/verkaufsvorlagen_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -756,7 +805,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-09-20T19:11:38.012Z",
+    "updatedAt": "2026-09-27T11:58:06.630Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -785,7 +834,7 @@
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-09-20T19:11:38.183Z"
+    "updatedAt": "2026-09-27T11:58:06.864Z"
   },
   {
     "repoName": null,

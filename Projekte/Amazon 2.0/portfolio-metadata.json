@@ -1,0 +1,18 @@
+{
+  "repoName": "Amazon-2.0",
+  "titleDe": "🛒 Amazon 2.0 — Premium E-Commerce Shop",
+  "titleEn": "🛒 Amazon 2.0 — Premium E-Commerce Shop",
+  "tags": [
+    "TypeScript",
+    "Vite",
+    "PWA",
+    "Vitest",
+    "Custom CSS Design System"
+  ],
+  "image": "assets/images/analytics_showcase.webp",
+  "link": "Projekte/Amazon 2.0/dist/index.html",
+  "descDe": "Eine performante Re-Implementierung einer modernen Online-Shopping-Plattform mit Vanilla TypeScript, Vite und einem eigenen CSS-Design-System. Enthält u. a. Filter- und Suchsystem, Preisverlauf-Charts, Command Palette (Ctrl+K), Warenkorb/Checkout-Simulation, Dark/Light Theme und PWA-Offline-Unterstützung.",
+  "descEn": "A performant re-implementation of a modern online shopping platform built with vanilla TypeScript, Vite, and a custom CSS design system. Features include filtering/search, price-history charts, a command palette (Ctrl+K), a cart/checkout simulation, dark/light theming, and PWA offline support.",
+  "category": "web",
+  "language": "TypeScript"
+}

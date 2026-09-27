@@ -17,6 +17,11 @@ projects.forEach((proj, idx) => {
         return;
     }
 
+    if (/^https?:\/\//i.test(rawLink)) {
+        console.log(`✅ [${idx + 1}/${projects.length}] ${proj.titleDe} -> ${rawLink} (External URL, skipped)`);
+        return;
+    }
+
     // Unescape %20 or similar in file paths
     const unescapedLink = decodeURIComponent(rawLink);
     const targetPath = path.join(rootDir, unescapedLink);
