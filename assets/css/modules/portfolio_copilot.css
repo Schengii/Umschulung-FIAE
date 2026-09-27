@@ -19,7 +19,7 @@
     padding: 0.7rem 1.2rem;
     border-radius: var(--radius-full, 9999px);
     background: linear-gradient(135deg, var(--primary, #2563eb), var(--accent, #4f46e5));
-    color: #ffffff;
+    color: var(--text-on-primary);
     font-weight: 600;
     font-size: 0.9rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -140,7 +140,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.15rem;
-    color: #fff;
+    color: var(--text-on-primary);
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
 }
 
@@ -250,7 +250,7 @@
 .copilot-msg.user {
     align-self: flex-end;
     background: linear-gradient(135deg, var(--primary, #2563eb), var(--accent, #4f46e5));
-    color: #ffffff;
+    color: var(--text-on-primary);
     padding: 0.7rem 1rem;
     border-radius: 14px 14px 2px 14px;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
@@ -281,7 +281,7 @@
 
 .copilot-link-btn:hover {
     background: var(--primary, #2563eb);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border-color: var(--primary, #2563eb);
     transform: translateY(-1px);
 }
@@ -351,7 +351,7 @@
 
 .copilot-chip:hover {
     background: var(--primary, #2563eb);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border-color: var(--primary, #2563eb);
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
@@ -396,7 +396,7 @@
 
 .copilot-send-btn {
     background: var(--primary, #2563eb);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border: none;
     border-radius: var(--radius-md, 0.5rem);
     padding: 0.6rem 1rem;

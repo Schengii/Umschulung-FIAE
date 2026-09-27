@@ -108,7 +108,7 @@
 
 .btn-compare-select.active {
     background: var(--primary);
-    color: #fff;
+    color: var(--text-on-primary);
     border-color: var(--primary);
 }
 
@@ -117,7 +117,7 @@
     bottom: 20px;
     right: 20px;
     background: var(--primary);
-    color: #fff;
+    color: var(--text-on-primary);
     padding: 0.75rem 1.25rem;
     border-radius: 50px;
     box-shadow: var(--shadow-lg), 0 0 20px rgba(37, 99, 235, 0.4);

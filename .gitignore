@@ -17,6 +17,12 @@ node_modules/
 test-results/
 playwright-report/
 /dist/
+# NOTE: Projekte/*/dist/ is intentionally NOT ignored — these are the live,
+# committed build outputs served directly as demo links from the portfolio
+# (see assets/js/projects_data.js). Only the Vite PWA dev-server artifact
+# folder (never used in production) is excluded:
+Projekte/**/dev-dist/
+.lighthouseci/
 .env
 .env.*
 .DS_Store

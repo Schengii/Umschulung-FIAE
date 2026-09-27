@@ -485,7 +485,7 @@ iframe {
     top: -40px;
     left: 0;
     background: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     padding: 8px;
     z-index: 100;
     transition: top 0.2s;
@@ -1244,7 +1244,7 @@ nav.topnav {
 
 .btn-primary {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
@@ -1427,7 +1427,7 @@ nav.topnav {
 
 .memory-card-front {
     background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
+    color: var(--text-on-primary);
     font-size: 1.5rem;
 }
 
@@ -1731,7 +1731,7 @@ html[lang="en"] [lang="de"] {
 
 .timeline-item:hover .timeline-badge {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     transform: scale(1.1);
 }
 
@@ -1844,7 +1844,7 @@ html[lang="en"] [lang="de"] {
 
 .tech-tag:hover {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
     transform: translateY(-1px);
 }
@@ -1913,7 +1913,7 @@ html[lang="en"] [lang="de"] {
 
 .timeline-item:hover .timeline-badge {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     transform: scale(1.25);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
@@ -1959,7 +1959,7 @@ html[lang="en"] [lang="de"] {
 
 .dpad-btn:active {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
     transform: scale(0.92);
 }
@@ -1997,7 +1997,7 @@ html[lang="en"] [lang="de"] {
 
 .btn-admin-toggle {
     background-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border: none;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
@@ -2566,7 +2566,7 @@ html[lang="en"] [lang="de"] {
 .roadmap-item:hover .roadmap-badge {
     background-color: var(--primary);
     border-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
@@ -2683,7 +2683,7 @@ html[lang="en"] [lang="de"] {
 
 .code-copy-btn:hover {
     background: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
 }
 
@@ -3232,7 +3232,7 @@ html[lang="en"] [lang="de"] {
 
 .btn-secondary:hover {
     background: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     text-decoration: none;
 }
 
@@ -3458,7 +3458,7 @@ html[lang="en"] [lang="de"] {
 
 .share-btn:hover {
     background: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
     text-decoration: none;
 }
@@ -3708,7 +3708,7 @@ html nav {
     font-weight: 600;
     text-decoration: none;
     background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
+    color: var(--text-on-primary);
     border: none;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -3835,7 +3835,7 @@ html nav {
 .btn-pagination.active {
     background: var(--primary);
     border-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
@@ -3915,7 +3915,7 @@ html nav {
 
 .modal-close:hover {
     background: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     border-color: var(--primary);
     transform: rotate(90deg);
 }
@@ -3992,7 +3992,7 @@ html nav {
     height: 2.75rem;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
+    color: var(--text-on-primary);
     border: none;
     font-size: 1.1rem;
     cursor: pointer;
@@ -4065,7 +4065,7 @@ html nav {
 .topnav #audio-mute-toggle:hover {
     background: var(--primary);
     border-color: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
 }
 
 .topnav #theme-toggle:hover {
@@ -4094,7 +4094,7 @@ html nav {
 .topnav #lang-toggle:hover {
     background: var(--primary);
     border-color: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
 }
 
 /* ==========================================================================
@@ -4167,7 +4167,7 @@ html nav {
 .highlight-badge {
     align-self: flex-start;
     background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
+    color: var(--text-on-primary);
     font-size: 0.7rem;
     font-weight: 700;
     padding: 0.25rem 0.75rem;
@@ -4531,7 +4531,7 @@ html nav {
 
 .app-header.scrolled nav.topnav .nav-item.active>.nav-link {
     background-color: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
 }
 
 /* Accessibility: Keyboard outline visible on focus */
@@ -5099,7 +5099,7 @@ html nav {
 
 .social-sidebar-link:hover {
     background-color: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
     transform: translateY(-2px);
 }
 
@@ -5126,7 +5126,7 @@ html nav {
     padding: 0.4rem 0.8rem;
     border-radius: var(--radius-sm);
     background: var(--primary);
-    color: #ffffff !important;
+    color: var(--text-on-primary) !important;
     display: flex;
     align-items: center;
     gap: 0.35rem;
@@ -6001,7 +6001,7 @@ button.welcome-theme-toggle {
 .tracker-step.completed .tracker-bubble {
     background: var(--primary);
     border-color: var(--primary);
-    color: white;
+    color: var(--text-on-primary);
     font-size: 0rem; /* hide icon number */
 }
 
@@ -6112,7 +6112,7 @@ button.welcome-theme-toggle {
 
 .tree-item.active {
     background-color: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
 }
 
 .tree-item i {
@@ -6816,7 +6816,7 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
 }
 .carousel-btn:hover {
     background: var(--primary);
-    color: #fff;
+    color: var(--text-on-primary);
 }
 .carousel-btn.prev-btn {
     left: 10px;
@@ -7470,7 +7470,7 @@ textarea:focus-visible,
 .code-accordion-header:hover .code-accordion-badge,
 .code-showcase-card.open .code-accordion-badge {
     background: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border-color: var(--primary);
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
 }

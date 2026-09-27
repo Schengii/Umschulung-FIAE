@@ -67,7 +67,7 @@
 
 .user-bubble {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border-top-right-radius: 4px;
 }
 
@@ -183,7 +183,7 @@
     height: 48px;
     border-radius: 50%;
     background: var(--primary);
-    color: #ffffff;
+    color: var(--text-on-primary);
     border: none;
     cursor: pointer;
     display: flex;
