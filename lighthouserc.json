@@ -15,7 +15,13 @@
         "http://localhost/pages/flashcards.html",
         "http://localhost/pages/quiz.html",
         "http://localhost/pages/interview-trainer.html",
-        "http://localhost/pages/ihk-cockpit.html"
+        "http://localhost/pages/ihk-cockpit.html",
+        "http://localhost/pages/ausbildungsablauf.html",
+        "http://localhost/pages/berufsfoerderungswerk.html",
+        "http://localhost/pages/kostentraeger.html",
+        "http://localhost/pages/praktikumsbetrieb.html",
+        "http://localhost/pages/links.html",
+        "http://localhost/pages/news.html"
       ],
       "numberOfRuns": 1
     },
