@@ -2109,7 +2109,7 @@ html[lang="en"] [lang="de"] {
 
 .btn-edit-project:hover {
     background-color: #f59e0b;
-    color: white;
+    color: #451a03;
     transform: scale(1.1);
 }
 
@@ -3635,7 +3635,7 @@ html nav {
     align-items: center;
     gap: 0.3rem;
     background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
+    color: #451a03;
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.25rem 0.6rem;

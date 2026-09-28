@@ -85,6 +85,7 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                     email: email.value,
                     message: message.value,
                     subject: `Portfolio Kontakt: ${name.value}`,
+                    botcheck: false,
                 }),
             })
                 .then((res) => res.json())

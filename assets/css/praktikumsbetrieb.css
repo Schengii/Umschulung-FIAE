@@ -319,7 +319,7 @@
 
 /* Focus and active styles for accessibility (no exclusive colors) */
 .playlist-track-btn.active .track-icon {
-    color: #ffffff;
+    color: var(--text-on-primary);
 }
 
 .playlist-track-btn .track-icon {

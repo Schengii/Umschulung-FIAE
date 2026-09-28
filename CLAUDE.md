@@ -50,7 +50,7 @@ Umschulung-FIAE/
 │
 ├── pages/                       # Alle 27 Inhalts- & Funktionsseiten
 │   ├── home.html                # Hauptseite / Landing-Dashboard
-│   ├── portfolio.html           # Projekt-Showcase (24 registrierte Projekte)
+│   ├── portfolio.html           # Projekt-Showcase (25 registrierte Projekte)
 │   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, Phasenplan)
 │   ├── lebenslauf.html          # Interaktiver Lebenslauf & PDF-Export
 │   ├── ueber-mich.html          # Steckbrief, Skills & Transfermatrix
@@ -66,7 +66,7 @@ Umschulung-FIAE/
 │   │   ├── components.js        # Globale Komponenten (Header, Footer, Nav, A11y)
 │   │   ├── constants.js         # Konstanten & Pfadauflösung (resolveAssetPath)
 │   │   ├── portfolio.js         # Portfolio-Filterung & Rendering
-│   │   ├── projects_data.js     # Generierte Datenbank (24 Projekte)
+│   │   ├── projects_data.js     # Generierte Datenbank (25 Projekte)
 │   │   └── modules/             # Feature-Module (portfolio-copilot, ihk-cockpit, etc.)
 │   ├── data/                    # JSON-Datenquellen (projects.json)
 │   ├── fonts/                   # Lokale WOFF2 Fonts (DSGVO-konform)

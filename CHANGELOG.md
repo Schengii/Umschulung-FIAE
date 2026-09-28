@@ -4,6 +4,33 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.8.0] — 2026-09-28
+
+### Barrierefreiheit — WCAG-AA-Kontrastfehler auf Amber-Elementen und Playlist-Icon behoben
+- **Bug gefunden**: Drei CSS-Stellen verwendeten `color: white` auf Hintergründen mit unzureichendem Kontrast: `.btn-edit-project:hover` (`background: #f59e0b`, ~2,1:1), `.stars-badge` (Gradient `#f59e0b → #d97706`, ~2,1:1) und `.playlist-track-btn.active .track-icon` (hartkodiertes `#ffffff` statt `var(--text-on-primary)` auf `var(--primary)`-Hintergrund). Alle drei unterschreiten die WCAG 2.1 AA-Anforderung von 4,5:1 und waren der verbliebene „bekannte Folgefund" aus dem vorherigen A11y-Eintrag.
+- **Fix**: `.btn-edit-project:hover` und `.stars-badge` auf `color: #451a03` (Dunkelbraun, Kontrast ~7,3:1 auf `#f59e0b`) umgestellt; `.playlist-track-btn.active .track-icon` auf `color: var(--text-on-primary)` normalisiert. Betroffen: `assets/css/style.css` (2 Stellen) und `assets/css/praktikumsbetrieb.css` (1 Stelle).
+
+### Sicherheit — Web3Forms Server-seitigen Honeypot-Parameter ergänzt
+- **Befund**: `assets/js/modules/contact-form.js` prüfte den Honeypot-Wert bereits client-seitig und die HTML-Formulare hatten das `input[name="botcheck"]`-Feld korrekt, aber der JSON-Payload an die Web3Forms-API fehlte `botcheck: false` — die server-seitige Spam-Erkennung von Web3Forms war damit nicht aktiviert.
+- **Fix**: `botcheck: false` als expliziter Parameter zum Web3Forms-JSON-Payload ergänzt. Web3Forms blockiert Einreichungen mit `botcheck: true` jetzt auch serverseitig.
+
+### Code-Qualität — `.prettierignore` für generierte Dateien und Sub-Projekte eingeführt
+- **Befund**: `assets/js/projects_data.js` (maschinell generiert von `npm run generate-data`) wurde bei jedem `npm run format:fix`-Lauf neu formatiert — unnötiges Diff-Rauschen. `Projekte/`-Unterordner haben eigene Tooling-Konfigurationen und sollten nicht per Haupt-Prettier formatiert werden.
+- **Fix**: `.prettierignore` angelegt mit `assets/js/projects_data.js`, `Projekte/` und `dist/`. `npm run format:check` bleibt grün.
+
+### Testing & CI — Playwright-Workers-Konfiguration stabilisiert
+- **Befund**: `playwright.config.js` setzte `workers: 1`, obwohl `fullyParallel: true` konfiguriert war — alle 316 Tests liefen seriell trotz Multi-Core-Verfügbarkeit. Eine erste Korrektur auf `workers: process.env.CI ? 2 : undefined` (auto-parallele lokale Ausführung) zeigte sich jedoch als zu aggressiv: auto-Parallelismus (typisch ≥4 Workers) überlastete den lokalen Dev-Server mit gleichzeitigen Firefox+WebKit+Chrome+Mobile-Chrome-Requests und verursachte 26 Timeout-Flakes.
+- **Fix**: `workers: process.env.CI ? 2 : 1` — CI profitiert von 2 parallelen Workern; lokal läuft weiterhin seriell (1 Worker), was bei 4 Browser-Projekten die stabilste Konfiguration ist. `fullyParallel: true` parallelisiert innerhalb eines Workers über die Testdateien, sodass die Gesamtdauer kaum schlechter ist als mit 2 Workern auf einem einzelnen Browser-Projekt.
+
+## [1.7.0] — 2026-09-28
+
+### Portfolio — Maps-Projekt als simulierte Showcase-Seite ins Portfolio aufgenommen
+
+- **Befund**: `Projekte/Maps/` enthält eine vollständige React-Native/Expo-Navigations-App (TypeScript, GPS, Offline-Routing, AR-Navigation, KI-Reiseführer, Wetterradar, 20+ Features), war aber mangels Web-Build bisher nicht im Portfolio registriert.
+- **Fix**: Interaktive Showcase-Seite `Projekte/Maps/maps-showcase.html` erstellt — nach dem Vorbild von `CoOpVersusGame/coop-versus-demo.html` mit animierter Canvas-Karte, simulierter GPS-Position, Verkehrs-Alerts, responsivem Feature-Grid und technischen Architektur-Daten. `portfolio-metadata.json` angelegt, `npm run generate-data` ausgeführt — Portfolio zeigt jetzt 25 statt 24 Projekte. `check-sync`, `check-project-links`, `lint`, `test:unit` (58/58) alle grün.
+
+## [1.6.0] — 2026-09-28
+
 ### Sicherheit — Regression: `frame-ancestors` in Meta-Tag-CSP verursachte Konsolenfehler auf allen 29 Seiten
 - **Bug gefunden**: Die im vorherigen Eintrag ("CSP um härtende Direktiven erweitert") hinzugefügte `frame-ancestors 'none'`-Direktive wurde auch in die Seiten-Meta-Tag-CSPs geschrieben. `frame-ancestors` ist laut CSP3-Spezifikation in einem `<meta>`-Element jedoch ungültig und wird von Chromium mit "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a `<meta>` element." quittiert — ein Konsolenfehler auf jeder einzelnen Seite, den `npm test` (alle `all_pages.spec.js`-Fälle assertieren `consoleErrors` gleich `[]`) beim nächsten vollständigen Lauf korrekt als Regression aufgedeckt hätte.
 - **Fix**: `frame-ancestors 'none';` aus allen 29 Seiten-Meta-Tags entfernt (per Skript) — bleibt aber in der `vercel.json`-HTTP-Header-CSP bestehen, wo die Direktive tatsächlich wirksam ist und zusammen mit `X-Frame-Options: DENY` Clickjacking verhindert. `object-src`, `base-uri` und `form-action` sind in Meta-Tags weiterhin gültig und blieben unverändert. Mit `npm test` (316 Tests über alle 4 Browser-Projekte, davon 2 anfängliche Firefox-Flakes durch kalten Service-Worker-Cache nach `CACHE_NAME`-Bump bzw. eine Modal-Animations-Timing-Flake — beide im isolierten Rerun grün) verifiziert.
