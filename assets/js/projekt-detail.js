@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initProjectVideoPlayer(project) {
-        const videoEl = /** @type {HTMLImageElement} */ (document.getElementById('project-video-player'));
+        const videoEl = /** @type {HTMLVideoElement} */ (document.getElementById('project-video-player'));
         const tracksContainer = document.getElementById('project-video-tracks');
         const currentTitleEl = document.getElementById('project-video-current-title');
         const currentDescEl = document.getElementById('project-video-current-desc');
@@ -657,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal = document.getElementById('live-demo-modal');
         }
 
-        const iframe = /** @type {HTMLImageElement} */ (document.getElementById('demo-iframe'));
+        const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('demo-iframe'));
         const titleSpan = document.getElementById('demo-project-title');
         const closeBtn = document.getElementById('demo-close-btn');
         const reloadBtn = document.getElementById('demo-reload-btn');

@@ -10,7 +10,7 @@ export function initContactForm() {
 }
 
 function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
-    const form = document.getElementById(formId);
+    const form = /** @type {HTMLFormElement} */ (document.getElementById(formId));
     if (!form) return;
 
     form.removeAttribute('onsubmit');
@@ -22,7 +22,7 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
         const email = /** @type {HTMLInputElement} */ (document.getElementById(emailId));
         const message = /** @type {HTMLInputElement} */ (document.getElementById(messageId));
         const feedback = document.getElementById(feedbackId);
-        const botcheck = form.querySelector('input[name="botcheck"]');
+        const botcheck = /** @type {HTMLInputElement} */ (form.querySelector('input[name="botcheck"]'));
 
         // Bot / Spam detection: real users leave the hidden honeypot empty
         if (botcheck && botcheck.value.trim() !== '') {
@@ -62,7 +62,7 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
 
         // Check if Web3Forms key is set
         if (typeof APP !== 'undefined' && APP.WEB3FORMS_KEY) {
-            const submitBtn = form.querySelector('button[type="submit"]');
+            const submitBtn = /** @type {HTMLButtonElement} */ (form.querySelector('button[type="submit"]'));
             const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
             if (submitBtn) {
                 submitBtn.disabled = true;

@@ -18,6 +18,7 @@ let snake = [{ x: 10, y: 10 }];
 let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
+// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
 let score = 0;
 let highscore = 0;
 let highscoreList = [];
