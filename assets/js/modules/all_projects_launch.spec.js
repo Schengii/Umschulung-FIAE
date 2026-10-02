@@ -1,5 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+// Several showcase projects call their own optional demo backend on a loopback port
+// (finance-ai-bot :8000, Wohnungssuche KI :5000, ...) that is not started in tests.
+// Chromium reports that as "Failed to load resource" (filtered below); Firefox words it
+// as a CORS error with reason "CORS request did not succeed". Only that exact
+// "backend not reachable" case on a non-test-server loopback port is ignored.
+const isUnreachableDemoBackend = (text) =>
+    text.includes('CORS request did not succeed') && /https?:\/\/127\.0\.0\.1:(?!8080\b)\d+\//.test(text);
+
 test.describe('All Projects 1-Click Launch E2E Verification', () => {
     test('sollte alle Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
         test.setTimeout(120000);
@@ -30,14 +38,12 @@ test.describe('All Projects 1-Click Launch E2E Verification', () => {
             projPage.on('console', (msg) => {
                 if (msg.type() === 'error') {
                     const text = msg.text();
-                    // Filter out network resource 404 warnings & service workers. Firefox words an
-                    // unreachable optional demo backend (finance-ai-bot API on :8000, not started in
-                    // tests) as a CORS error instead of Chromium's "Failed to load resource".
+                    // Filter out network resource 404 warnings & service workers.
                     if (
                         !text.includes('favicon.ico') &&
                         !text.includes('ServiceWorker') &&
                         !text.includes('Failed to load resource') &&
-                        !text.includes('http://127.0.0.1:8000/')
+                        !isUnreachableDemoBackend(text)
                     ) {
                         projConsoleErrors.push(`Console Error on ${rawLink}: ${text}`);
                     }
