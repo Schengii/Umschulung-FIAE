@@ -30,6 +30,7 @@ module.exports = [
         clearInterval: 'readonly',
         requestAnimationFrame: 'readonly',
         CustomEvent: 'readonly',
+        EventTarget: 'readonly',
         URLSearchParams: 'readonly',
         caches: 'readonly',
         self: 'readonly',
