@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { stubGithubApi } from '../../../scripts/e2e-helpers.js';
 
 const pages = [
     'index.html',
@@ -29,6 +30,10 @@ const pages = [
     'Projekte/CoOpVersusGame/coop-versus-demo.html',
     'Projekte/java-playground.html',
 ];
+
+test.beforeEach(async ({ page }) => {
+    await stubGithubApi(page);
+});
 
 test.describe('Global Pages Stability Verification', () => {
     for (const pageName of pages) {

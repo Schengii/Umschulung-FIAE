@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { stubGithubApi } from '../../../scripts/e2e-helpers.js';
+
+test.beforeEach(async ({ page }) => {
+    await stubGithubApi(page);
+});
 
 test.describe('New Interactive Features E2E Verification', () => {
     test('sollte das Portfolio mit Sortier- und Filter-Buttons fehlerfrei bedienen', async ({ page }) => {
