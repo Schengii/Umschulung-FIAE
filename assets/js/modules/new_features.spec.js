@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { stubGithubApi, settle } from '../../../scripts/e2e-helpers.js';
+
+test.beforeEach(async ({ page }) => {
+    await stubGithubApi(page);
+});
 
 test.describe('New Interactive Features E2E Verification', () => {
     test('sollte das Portfolio mit Sortier- und Filter-Buttons fehlerfrei bedienen', async ({ page }) => {
@@ -13,7 +18,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den IHK Prüfungs-Simulator Modus auf quiz.html schalten', async ({ page }) => {
         await page.goto('/pages/quiz.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const modeSelector = page.locator('.ihk-mode-selector');
         await expect(modeSelector).toBeVisible();
@@ -27,7 +32,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den iCal Event-Generator auf impressum.html auslösen', async ({ page }) => {
         await page.goto('/pages/impressum.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const slotBtn = page.locator('.btn-slot').first();
         await slotBtn.click();
@@ -43,7 +48,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den C4 Architektur-Level Switcher auf architecture.html bedienen', async ({ page }) => {
         await page.goto('/pages/architecture.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const c4Switcher = page.locator('#c4-level-switcher');
         await expect(c4Switcher).toBeVisible();
@@ -58,7 +63,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den Git-Simulator mit neuen Levels 5 & 6 laden', async ({ page }) => {
         await page.goto('/pages/git-simulator.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const dropdown = page.locator('#level-select');
         await expect(dropdown).toBeVisible();
@@ -70,7 +75,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte die Command Palette (Strg+K) öffnen, suchen und navigieren', async ({ page }) => {
         await page.goto('/pages/home.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Trigger via keyboard shortcut
         await page.keyboard.press('Control+KeyK');
@@ -91,7 +96,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den Side-by-Side Projektvergleich auf portfolio.html bedienen können', async ({ page }) => {
         await page.goto('/pages/portfolio.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Select first project to compare
         const compareBtns = page.locator('.btn-compare-select');
@@ -118,7 +123,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte im Skill-Radar auf ueber-mich.html interaktive Filter-Links bereitstellen', async ({ page }) => {
         await page.goto('/pages/ueber-mich.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const radarDots = page.locator('.radar-dot');
         await expect(radarDots.first()).toBeVisible();
@@ -127,7 +132,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den Java & C++ WASM Runner auf playground.html laden', async ({ page }) => {
         await page.goto('/pages/playground.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const wasmBtn = page.locator('button[data-template="wasm-runner"]');
         await expect(wasmBtn).toBeVisible();
@@ -143,7 +148,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte den 3D Architektur-Graphen auf architecture.html initialisieren', async ({ page }) => {
         await page.goto('/pages/architecture.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const tab3d = page.locator('#tab-btn-3d');
         await expect(tab3d).toBeVisible();
@@ -157,7 +162,7 @@ test.describe('New Interactive Features E2E Verification', () => {
 
     test('sollte das PWA Offline-Sync Telemetrie Widget auf dashboard.html anzeigen', async ({ page }) => {
         await page.goto('/pages/dashboard.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         const badge = page.locator('#pwa-sync-status-badge');
         await expect(badge).toBeVisible();
