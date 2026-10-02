@@ -35,8 +35,13 @@ const pages = [
 test.describe('Accessibility (axe-core, WCAG 2.1 AA)', () => {
     for (const pageName of pages) {
         test(`sollte auf ${pageName} keine WCAG 2.1 AA Verstöße haben`, async ({ page }) => {
+            // Measure the settled state: the site collapses transitions under
+            // prefers-reduced-motion, and finishing running animations first keeps axe from
+            // sampling half-transparent colours mid fade-in (flaky color-contrast on CI WebKit).
+            await page.emulateMedia({ reducedMotion: 'reduce' });
             await page.goto(`/${pageName}`);
             await page.waitForLoadState('networkidle');
+            await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
             await page.waitForTimeout(500);
 
             const results = await new AxeBuilder({ page })

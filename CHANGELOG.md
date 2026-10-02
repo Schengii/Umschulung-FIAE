@@ -9,6 +9,13 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Fix**: `.gitattributes` erzwingt LF für HTML/JS/CSS/JSON/MD/YML; `scripts/verify_csp_hashes.js` normalisiert vor dem Hashen CRLF zu LF; die Hashes der fünf Seiten wurden mit `check-csp:fix` neu geschrieben. Die neuen Werte stimmen mit den vom CI-Runner gemeldeten überein.
 - **Folgefund**: Weil die CI bisher schon an `check-csp` abbrach, lief die E2E-Matrix lange nicht. Erster voller Lauf: 310 grün, 9 flaky (8× WebKit-axe-`color-contrast`, 1× Firefox-Service-Worker/Video), 1 hart rot — `all_projects_launch` in Firefox, weil das optionale `finance-ai-bot`-Backend (`127.0.0.1:8000`) in der CI nicht läuft und Firefox das als CORS-Konsolenfehler meldet. Der Test ignoriert jetzt gezielt Meldungen zu diesem Backend (Chromium-Äquivalent `Failed to load resource` wurde schon gefiltert).
 
+### PWA — Service Worker fasst Audio/Video und Range-Requests nicht mehr an
+- **Befund**: `sw.js` behandelte Videos wie normale Assets (Stale-While-Revalidate). Medien werden aber per Range-Request geladen: eine 206-Teilantwort lässt sich nicht cachen, und eine vollständig gecachte Datei ist keine gültige Antwort auf einen Range-Request. In Firefox brach das Laden mit „A ServiceWorker intercepted the request and encountered an unexpected error“ ab (sichtbar als flaky E2E-Test auf `projekt-detail.html?repo=EcoChef`, betrifft aber echte Nutzer).
+- **Fix**: Requests mit `Range`-Header sowie `destination` `video`/`audio` werden nicht mehr abgefangen, der Browser streamt sie direkt. `CACHE_NAME` auf `umschulung-fiae-v42`.
+
+### Testing — axe-`color-contrast` auf WebKit nicht mehr flaky
+- Die Footer-Kontrastverstöße traten nur im ersten Versuch auf CI-WebKit auf und verschwanden im Retry. `accessibility.spec.js` aktiviert jetzt `prefers-reduced-motion` (die Seite kollabiert dann alle Übergänge) und wartet auf laufende Animationen, damit axe den eingeschwungenen Zustand misst und keine halbtransparenten Zwischenfarben.
+
 ### Sicherheit — Nutzertexte in `innerHTML` werden escaped
 - **Befund**: Eigene Flashcards (Frage, Antwort, Hinweis, Kategorie, ID) wurden roh in `localStorage` gespeichert und per `innerHTML` gerendert; im Interview-Trainer ging die freie Antwort (`h.answer`) ungefiltert in die Ergebnisansicht. Beides ist Self-XSS, bei den Flashcards bleibt der Payload jedoch dauerhaft im Browser bestehen.
 - **Fix**: Neues Modul `assets/js/modules/html-utils.js` (`escapeHtml`) mit Unit-Test; `flashcards.js` escaped eigene Karten beim Rendern (eingebaute Karten behalten ihr vertrauenswürdiges Markup), `interview.js` escaped Frage und Antwort (klassisches Script, daher lokale Kopie des Helfers). E2E-Test `flashcards_escaping.spec.js` schlägt ohne den Fix fehl.
