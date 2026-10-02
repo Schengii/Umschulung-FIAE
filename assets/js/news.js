@@ -241,14 +241,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-regular fa-thumbs-up';
             const countSpan = btn.querySelector('.like-count');
-            if (countSpan) countSpan.textContent = baseCount;
+            if (countSpan) countSpan.textContent = String(baseCount);
         } else {
             localStorage.setItem(likeKey, 'true');
             btn.style.color = 'var(--primary)';
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-solid fa-thumbs-up';
             const countSpan = btn.querySelector('.like-count');
-            if (countSpan) countSpan.textContent = baseCount + 1;
+            if (countSpan) countSpan.textContent = String(baseCount + 1);
         }
     });
 

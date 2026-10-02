@@ -1002,9 +1002,9 @@ class CodePlayground {
         this.activeTab = 'html';
         this.runTimeout = null;
 
-        this.htmlEditor = document.getElementById('editor-html');
-        this.cssEditor = document.getElementById('editor-css');
-        this.jsEditor = document.getElementById('editor-js');
+        this.htmlEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-html'));
+        this.cssEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-css'));
+        this.jsEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-js'));
 
         this.htmlWrapper = document.getElementById('wrapper-html');
         this.cssWrapper = document.getElementById('wrapper-css');
@@ -1014,7 +1014,7 @@ class CodePlayground {
         this.cssLines = document.getElementById('line-numbers-css');
         this.jsLines = document.getElementById('line-numbers-js');
 
-        this.previewIframe = document.getElementById('preview-iframe');
+        this.previewIframe = /** @type {HTMLElement} */ (document.getElementById('preview-iframe'));
         this.consoleLogBox = document.getElementById('console-log-box');
 
         this.btnHtml = document.getElementById('btn-tab-html');

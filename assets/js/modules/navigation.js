@@ -8,7 +8,7 @@ export function initNavigation() {
     if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
             const isOpen = navMenu.classList.toggle('open');
-            menuToggle.setAttribute('aria-expanded', isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
             const icon = menuToggle.querySelector('i');
             if (icon) icon.className = isOpen ? 'fa fa-times' : 'fa fa-bars';
         });
@@ -39,7 +39,7 @@ export function initNavigation() {
                     });
 
                     const isOpen = item.classList.toggle('open');
-                    link.setAttribute('aria-expanded', isOpen);
+                    link.setAttribute('aria-expanded', String(isOpen));
                 }
             });
 
@@ -68,7 +68,7 @@ export function initNavigation() {
                             });
 
                             const isSubOpen = subItem.classList.toggle('open');
-                            subLink.setAttribute('aria-expanded', isSubOpen);
+                            subLink.setAttribute('aria-expanded', String(isSubOpen));
                         }
                     });
                 }

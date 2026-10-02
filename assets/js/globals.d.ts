@@ -26,3 +26,11 @@ interface Window {
     SpeechRecognition: any;
     webkitSpeechRecognition: any;
 }
+
+// This site's selectors target HTML elements almost exclusively, so default the
+// untyped querySelector/querySelectorAll results to HTMLElement instead of Element
+// (tag-name selectors such as 'input' keep their specific types via lib.dom overloads).
+interface ParentNode {
+    querySelector<E extends HTMLElement = HTMLElement>(selectors: string): E | null;
+    querySelectorAll<E extends HTMLElement = HTMLElement>(selectors: string): NodeListOf<E>;
+}

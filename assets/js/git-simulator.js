@@ -321,7 +321,7 @@ function renderGraph() {
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', c.x);
         circle.setAttribute('cy', c.y);
-        circle.setAttribute('r', 14);
+        circle.setAttribute('r', String(14));
         circle.setAttribute('class', 'commit-circle');
 
         const activeCommitId = gitState.branches[gitState.head] || gitState.head;
@@ -333,7 +333,7 @@ function renderGraph() {
         if (isActive) {
             circle.setAttribute('fill', branchColor);
             circle.setAttribute('stroke', '#fff');
-            circle.setAttribute('r', 16);
+            circle.setAttribute('r', String(16));
         }
 
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -373,7 +373,7 @@ function renderGraph() {
         // Draw arrow link from label to node
         const ptr = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         ptr.setAttribute('x1', labelX);
-        ptr.setAttribute('y1', labelY - 10);
+        ptr.setAttribute('y1', String(labelY - 10));
         ptr.setAttribute('x2', commit.x);
         ptr.setAttribute('y2', commit.y + 15);
         ptr.setAttribute('class', 'ref-pointer');
@@ -382,10 +382,10 @@ function renderGraph() {
 
         // Label box
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rect.setAttribute('x', labelX - 35);
-        rect.setAttribute('y', labelY - 10);
-        rect.setAttribute('width', 70);
-        rect.setAttribute('height', 18);
+        rect.setAttribute('x', String(labelX - 35));
+        rect.setAttribute('y', String(labelY - 10));
+        rect.setAttribute('width', String(70));
+        rect.setAttribute('height', String(18));
         rect.setAttribute('class', 'ref-rect');
         rect.setAttribute('rx', '4');
         rect.setAttribute('ry', '4');
@@ -408,7 +408,7 @@ function renderGraph() {
 
             const headPtr = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             headPtr.setAttribute('x1', labelX);
-            headPtr.setAttribute('y1', headY - 10);
+            headPtr.setAttribute('y1', String(headY - 10));
             headPtr.setAttribute('x2', labelX);
             headPtr.setAttribute('y2', labelY + 8);
             headPtr.setAttribute('class', 'ref-pointer');
@@ -416,10 +416,10 @@ function renderGraph() {
             labelsGroup.appendChild(headPtr);
 
             const headRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            headRect.setAttribute('x', labelX - 25);
-            headRect.setAttribute('y', headY - 10);
-            headRect.setAttribute('width', 50);
-            headRect.setAttribute('height', 18);
+            headRect.setAttribute('x', String(labelX - 25));
+            headRect.setAttribute('y', String(headY - 10));
+            headRect.setAttribute('width', String(50));
+            headRect.setAttribute('height', String(18));
             headRect.setAttribute('class', 'ref-rect');
             headRect.setAttribute('rx', '4');
             headRect.setAttribute('ry', '4');
@@ -452,7 +452,7 @@ function renderGraph() {
             // Draw arrow pointer
             const ptr = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             ptr.setAttribute('x1', labelX);
-            ptr.setAttribute('y1', labelY - 10);
+            ptr.setAttribute('y1', String(labelY - 10));
             ptr.setAttribute('x2', commit.x);
             ptr.setAttribute('y2', commit.y + 15);
             ptr.setAttribute('class', 'ref-pointer');
@@ -461,10 +461,10 @@ function renderGraph() {
 
             // HEAD label box
             const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            rect.setAttribute('x', labelX - 45);
-            rect.setAttribute('y', labelY - 10);
-            rect.setAttribute('width', 90);
-            rect.setAttribute('height', 18);
+            rect.setAttribute('x', String(labelX - 45));
+            rect.setAttribute('y', String(labelY - 10));
+            rect.setAttribute('width', String(90));
+            rect.setAttribute('height', String(18));
             rect.setAttribute('class', 'ref-rect');
             rect.setAttribute('rx', '4');
             rect.setAttribute('ry', '4');
