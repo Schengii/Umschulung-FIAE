@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('news-searchbar');
     let currentLanguage = 'de';
 
-    if (typeof StorageManager !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
-        currentLanguage = StorageManager.getItem(STORAGE_KEYS.LANG, 'de');
+    if (typeof AppStorage !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
+        currentLanguage = AppStorage.getItem(STORAGE_KEYS.LANG, 'de');
     } else {
         currentLanguage = document.documentElement.getAttribute('lang') || 'de';
     }

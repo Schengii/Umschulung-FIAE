@@ -16,7 +16,7 @@ function initMemoryGame() {
 
     if (!grid) return;
 
-    let memoryLeaderboard = JSON.parse(StorageManager.getItem('memory_highscore_list', '[]')) || [];
+    let memoryLeaderboard = JSON.parse(AppStorage.getItem('memory_highscore_list', '[]')) || [];
 
     function renderMemoryHighscores() {
         const listBody = document.getElementById('memory-highscore-list-body');
@@ -204,7 +204,7 @@ function initMemoryGame() {
             .slice(0, 5)
             .findIndex((entry) => entry.moves === moves && entry.time === seconds);
         memoryLeaderboard = memoryLeaderboard.slice(0, 5);
-        StorageManager.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
+        AppStorage.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
         renderMemoryHighscores();
 
         if (typeof Confetti !== 'undefined') {
@@ -212,13 +212,13 @@ function initMemoryGame() {
         }
 
         // Save best score
-        const bestMoves = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES);
-        const _bestTime = StorageManager.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
+        const bestMoves = AppStorage.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES);
+        const _bestTime = AppStorage.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
         let isNewBest = false;
 
         if (!bestMoves || moves < parseInt(bestMoves)) {
-            StorageManager.setItem(STORAGE_KEYS.MEMORY_BEST_MOVES, moves);
-            StorageManager.setItem(STORAGE_KEYS.MEMORY_BEST_TIME, seconds);
+            AppStorage.setItem(STORAGE_KEYS.MEMORY_BEST_MOVES, moves);
+            AppStorage.setItem(STORAGE_KEYS.MEMORY_BEST_TIME, seconds);
             isNewBest = true;
         }
 

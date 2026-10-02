@@ -5,7 +5,7 @@ export function initTranslation() {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;
 
-    const storedLang = StorageManager.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
+    const storedLang = AppStorage.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
     document.documentElement.setAttribute('lang', storedLang);
     updateLangToggleButton(storedLang);
     updateDynamicElementsTranslation(storedLang);
@@ -15,7 +15,7 @@ export function initTranslation() {
         const newLang = currentLang === 'de' ? 'en' : 'de';
 
         document.documentElement.setAttribute('lang', newLang);
-        StorageManager.setItem(STORAGE_KEYS.LANG, newLang);
+        AppStorage.setItem(STORAGE_KEYS.LANG, newLang);
         updateLangToggleButton(newLang);
         updateDynamicElementsTranslation(newLang);
 

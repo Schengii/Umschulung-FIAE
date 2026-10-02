@@ -59,7 +59,7 @@ module.exports = [
         // Cross-file browser globals defined by non-module <script> includes
         // (constants.js, storage.js, audio.js, achievements.js, confetti.js, news_data.js …)
         APP: 'readonly',
-        StorageManager: 'readonly',
+        AppStorage: 'readonly',
         STORAGE_KEYS: 'readonly',
         GameAudio: 'readonly',
         Achievements: 'readonly',

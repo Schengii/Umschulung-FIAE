@@ -288,6 +288,17 @@ const INTERVIEW_QUESTIONS = [
     },
 ];
 
+// interview.js is a classic script (no imports), so it carries its own copy of the
+// escaping helper from modules/html-utils.js.
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 class InterviewSimulator {
     constructor() {
         this.selectedCategories = [];
@@ -308,7 +319,7 @@ class InterviewSimulator {
         this.sendBtn = document.getElementById('send-btn');
         this.micBtn = document.getElementById('mic-btn');
         this.ttsToggleBtn = document.getElementById('tts-toggle-btn');
-        this.ttsEnabled = StorageManager.getItem('interview_tts_enabled', 'true') === 'true';
+        this.ttsEnabled = AppStorage.getItem('interview_tts_enabled', 'true') === 'true';
         this.recognition = null;
         this.isRecording = false;
 
@@ -337,7 +348,7 @@ class InterviewSimulator {
             this.updateTtsButtonIcon();
             this.ttsToggleBtn.addEventListener('click', () => {
                 this.ttsEnabled = !this.ttsEnabled;
-                StorageManager.setItem('interview_tts_enabled', this.ttsEnabled ? 'true' : 'false');
+                AppStorage.setItem('interview_tts_enabled', this.ttsEnabled ? 'true' : 'false');
                 this.updateTtsButtonIcon();
                 if (!this.ttsEnabled && window.speechSynthesis) {
                     window.speechSynthesis.cancel();
@@ -661,9 +672,9 @@ class InterviewSimulator {
         if (window.addLiveCommit) {
             window.addLiveCommit();
         } else {
-            let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+            let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
             liveCommitsToday++;
-            StorageManager.setItem('github_live_commits_today', liveCommitsToday);
+            AppStorage.setItem('github_live_commits_today', liveCommitsToday);
         }
     }
 
@@ -729,11 +740,11 @@ class InterviewSimulator {
             this.history.forEach((h, idx) => {
                 const cardHTML = `
                     <div class="review-item" style="border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: var(--card-bg-light);">
-                        <h4 style="margin-top:0; color: var(--text-primary); font-size: 1.05rem;">Q${idx + 1}: ${h.question}</h4>
+                        <h4 style="margin-top:0; color: var(--text-primary); font-size: 1.05rem;">Q${idx + 1}: ${escapeHtml(h.question)}</h4>
                         <div style="margin: 0.5rem 0;">
                             <strong>Score: ${h.score}%</strong>
                         </div>
-                        <p style="margin-bottom: 0.5rem;"><strong>Deine Antwort / Your Answer:</strong><br><span class="small-muted">${h.answer}</span></p>
+                        <p style="margin-bottom: 0.5rem;"><strong>Deine Antwort / Your Answer:</strong><br><span class="small-muted">${escapeHtml(h.answer)}</span></p>
                         <p style="margin-bottom: 0.5rem;"><strong>Erreichte Stichpunkte:</strong> ${h.matched.map((m) => `<span class="badge-match" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">${m}</span>`).join(' ') || 'Keine'}</p>
                         <p style="margin-bottom: 0;"><strong>Fehlende Stichpunkte:</strong> ${h.missing.map((m) => `<span class="badge-match" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">${m}</span>`).join(' ') || 'Keine'}</p>
                     </div>

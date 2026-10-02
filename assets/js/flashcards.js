@@ -2,6 +2,7 @@
  * Flashcards Module — Interactive IHK Exam Preparation
  */
 import { advanceBoxLevel, resetBoxLevel, computeBoxStats, filterByBox } from './modules/leitner-box.js';
+import { escapeHtml } from './modules/html-utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Database of questions (bilingual)
@@ -257,9 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!cardEl || !hintEl || !questionEl || !answerEl) return;
 
     // Load data from LocalStorage
-    let starredIds = JSON.parse(StorageManager.getItem('flashcards_starred', '[]')) || [];
-    let customCards = JSON.parse(StorageManager.getItem('flashcards_custom', '[]')) || [];
-    let boxLevels = JSON.parse(StorageManager.getItem('flashcards_box_levels', '{}')) || {};
+    let starredIds = JSON.parse(AppStorage.getItem('flashcards_starred', '[]')) || [];
+    let customCards = JSON.parse(AppStorage.getItem('flashcards_custom', '[]')) || [];
+    let boxLevels = JSON.parse(AppStorage.getItem('flashcards_box_levels', '{}')) || {};
 
     let currentCategory = 'all';
     let filteredDeck = [];
@@ -308,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 200);
                 }
             }
-            StorageManager.setItem('flashcards_starred', JSON.stringify(starredIds));
+            AppStorage.setItem('flashcards_starred', JSON.stringify(starredIds));
         });
     }
 
@@ -372,9 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Populate front/back details (multilingual fallback for custom cards)
         hintEl.textContent = lang === 'de' ? card.hint_de || card.hint_en : card.hint_en || card.hint_de;
-        questionEl.innerHTML =
-            lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de;
-        answerEl.innerHTML = lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de;
+        // Built-in cards may contain trusted markup; user-created cards are plain text.
+        const isCustom = typeof card.id === 'string' && card.id.startsWith('custom_');
+        const cardText = (text) => (isCustom ? escapeHtml(text) : text);
+        questionEl.innerHTML = cardText(
+            lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de
+        );
+        answerEl.innerHTML = cardText(
+            lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de
+        );
 
         // Render card box indicator on question
         const currentLevel = boxLevels[card.id] || 1;
@@ -432,21 +439,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentLevel = boxLevels[currentCard.id] || 1;
                 const nextLevel = advanceBoxLevel(currentLevel);
                 boxLevels[currentCard.id] = nextLevel;
-                StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
 
                 // If level is 3, count as known (mastered)
-                const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
                 if (nextLevel === 3) {
                     if (!knownCards.includes(currentCard.id)) {
                         knownCards.push(currentCard.id);
-                        StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
                     }
                 } else {
                     // Remove if dropped below level 3
                     const kidx = knownCards.indexOf(currentCard.id);
                     if (kidx !== -1) {
                         knownCards.splice(kidx, 1);
-                        StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
                     }
                 }
 
@@ -479,22 +486,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentCard) {
                 // Reset box level to 1
                 boxLevels[currentCard.id] = resetBoxLevel();
-                StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
 
                 // Remove from known cards list
-                const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
                 const kidx = knownCards.indexOf(currentCard.id);
                 if (kidx !== -1) {
                     knownCards.splice(kidx, 1);
-                    StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+                    AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
                 }
 
                 // Record learning recommendations
                 let wrongCounts = JSON.parse(
-                    StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
+                    AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
                 );
                 wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
-                StorageManager.setItem(
+                AppStorage.setItem(
                     STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS,
                     JSON.stringify(wrongCounts)
                 );
@@ -536,11 +543,11 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             customCards.push(newCard);
-            StorageManager.setItem('flashcards_custom', JSON.stringify(customCards));
+            AppStorage.setItem('flashcards_custom', JSON.stringify(customCards));
 
             // Set Leitner Box Level 1
             boxLevels[newCard.id] = 1;
-            StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+            AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
 
             // Clear inputs
             newHint.value = '';
@@ -570,9 +577,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 (c) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.5rem; font-size:0.8rem;">
                 <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">
-                    <strong>[${c.category.toUpperCase()}]</strong> ${c.hint_de}
+                    <strong>[${escapeHtml(String(c.category).toUpperCase())}]</strong> ${escapeHtml(c.hint_de)}
                 </div>
-                <button class="btn-secondary" data-delete-card-id="${c.id}" style="width:auto; padding:0.25rem 0.5rem; font-size:0.75rem; border-color:#ef4444; color:#ef4444;">
+                <button class="btn-secondary" data-delete-card-id="${escapeHtml(c.id)}" style="width:auto; padding:0.25rem 0.5rem; font-size:0.75rem; border-color:#ef4444; color:#ef4444;">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -603,18 +610,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
 
         customCards = customCards.filter((c) => c.id !== id);
-        StorageManager.setItem('flashcards_custom', JSON.stringify(customCards));
+        AppStorage.setItem('flashcards_custom', JSON.stringify(customCards));
 
         // Clean stats level
         if (boxLevels[id]) {
             delete boxLevels[id];
-            StorageManager.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+            AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
         }
-        const knownCards = JSON.parse(StorageManager.getItem('known_flashcards', '[]') || '[]');
+        const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
         const kidx = knownCards.indexOf(id);
         if (kidx !== -1) {
             knownCards.splice(kidx, 1);
-            StorageManager.setItem('known_flashcards', JSON.stringify(knownCards));
+            AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
         }
 
         filterDeck();
@@ -639,8 +646,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
 
         // Sync with dashboard progress (Box 3 count / total count)
-        StorageManager.setItem('flashcard_total_count', total);
-        StorageManager.setItem('flashcard_correct_count', b3);
+        AppStorage.setItem('flashcard_total_count', total);
+        AppStorage.setItem('flashcard_correct_count', b3);
     }
 
     // i18n support alignment

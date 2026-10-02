@@ -91,7 +91,7 @@ function renderStats() {
                 <div style="font-size:0.8rem; color:var(--text-muted);">${lang === 'de' ? 'Mini-Games' : 'Mini Games'}</div>
             </div>
             <div class="stat-box" style="text-align:center; padding:1rem; background:var(--bg-page); border-radius:var(--radius-md); border:1px solid var(--border);">
-                <div style="font-size:2rem; font-weight:700; color:var(--primary);">${StorageManager.getItem('username') ? '👤' : '—'}</div>
+                <div style="font-size:2rem; font-weight:700; color:var(--primary);">${AppStorage.getItem('username') ? '👤' : '—'}</div>
                 <div style="font-size:0.8rem; color:var(--text-muted);">${lang === 'de' ? 'Profil' : 'Profile'}</div>
             </div>
         </div>
@@ -284,10 +284,10 @@ function renderLearningRecommendations() {
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
     const weakQuizCategories = JSON.parse(
-        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]')
+        AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]')
     );
     const flashcardsWrongCounts = JSON.parse(
-        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
+        AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
     );
 
     const recommendations = {};
@@ -389,7 +389,7 @@ function initCommitGrid() {
     let maxStreak = 0;
 
     // Load custom live commits added today
-    let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+    let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
 
     // Generate contribution data going back from today
     for (let i = totalDays - 1; i >= 0; i--) {
@@ -520,9 +520,9 @@ document.addEventListener('langchange', () => {
 
 // Global function to trigger a live commit on the dashboard from games/other areas
 window.addLiveCommit = function () {
-    let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+    let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
     liveCommitsToday++;
-    StorageManager.setItem('github_live_commits_today', liveCommitsToday);
+    AppStorage.setItem('github_live_commits_today', liveCommitsToday);
 
     // Re-initialize if we are on dashboard
     initCommitGrid();

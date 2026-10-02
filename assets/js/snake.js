@@ -27,8 +27,8 @@ let isPaused = false;
 const speed = 150;
 
 document.addEventListener('DOMContentLoaded', () => {
-    highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
-    highscoreList = JSON.parse(StorageManager.getItem('snake_highscore_list', '[]')) || [];
+    highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
+    highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
     if (highscoreEl) highscoreEl.textContent = highscore;
     renderHighscores();
 
@@ -193,7 +193,7 @@ function gameOver() {
             .slice(0, 5)
             .findIndex((entry) => entry.score === score && entry.date === currentDate);
         highscoreList = highscoreList.slice(0, 5);
-        StorageManager.setItem('snake_highscore_list', JSON.stringify(highscoreList));
+        AppStorage.setItem('snake_highscore_list', JSON.stringify(highscoreList));
         renderHighscores();
 
         if (indexInTop5 !== -1 && typeof Confetti !== 'undefined') {
@@ -203,7 +203,7 @@ function gameOver() {
 
     if (score > highscore) {
         highscore = score;
-        StorageManager.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
+        AppStorage.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
         if (highscoreEl) highscoreEl.textContent = highscore;
     }
 

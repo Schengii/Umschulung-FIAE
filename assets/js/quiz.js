@@ -116,7 +116,7 @@ function renderBestScore() {
     const bestScoreEl = document.getElementById('quiz-best-score');
     if (!bestScoreEl) return;
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    const bestScore = StorageManager.getItem('quiz_best_score');
+    const bestScore = AppStorage.getItem('quiz_best_score');
     const totalQuestions = getActiveQuestions().length;
 
     if (bestScore !== null) {
@@ -230,7 +230,7 @@ function showScore() {
         }
     });
     if (weakCategories.size > 0) {
-        StorageManager.setItem(
+        AppStorage.setItem(
             STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES,
             JSON.stringify([...weakCategories])
         );
@@ -238,9 +238,9 @@ function showScore() {
 
     const percentage = Math.round((score / questions.length) * 100);
 
-    const bestScore = parseInt(StorageManager.getItem('quiz_best_score') || -1);
+    const bestScore = parseInt(AppStorage.getItem('quiz_best_score') || -1);
     if (score > bestScore) {
-        StorageManager.setItem('quiz_best_score', score);
+        AppStorage.setItem('quiz_best_score', score);
         renderBestScore();
     }
 

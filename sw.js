@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v40';
+const CACHE_NAME = 'umschulung-fiae-v41';
 const ASSETS = [
     './',
     'index.html',
@@ -98,6 +98,7 @@ const ASSETS = [
     'assets/js/modules/game-audio.js',
     'assets/js/modules/grade-calculator.js',
     'assets/js/modules/hero-section.js',
+    'assets/js/modules/html-utils.js',
     'assets/js/modules/ical-generator.js',
     'assets/js/modules/ihk-cockpit.js',
     'assets/js/modules/ihk-exam-simulator.js',

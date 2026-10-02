@@ -84,7 +84,7 @@ const Achievements = {
     },
 
     getUnlocked() {
-        const data = StorageManager.getItem('achievements', '[]');
+        const data = AppStorage.getItem('achievements', '[]');
         try {
             return JSON.parse(data);
         } catch {
@@ -101,7 +101,7 @@ const Achievements = {
 
         const unlocked = this.getUnlocked();
         unlocked.push(id);
-        StorageManager.setItem('achievements', JSON.stringify(unlocked));
+        AppStorage.setItem('achievements', JSON.stringify(unlocked));
 
         this.showNotification(id);
         document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
@@ -150,17 +150,17 @@ const Achievements = {
 
 export function initAchievements() {
     // Track first visit
-    if (!StorageManager.getItem('has_visited')) {
-        StorageManager.setItem('has_visited', 'true');
+    if (!AppStorage.getItem('has_visited')) {
+        AppStorage.setItem('has_visited', 'true');
         Achievements.unlock('first_visit');
     }
 
     // Track page visits for explorer achievement
-    const visitedPages = JSON.parse(StorageManager.getItem('visited_pages', '[]') || '[]');
+    const visitedPages = JSON.parse(AppStorage.getItem('visited_pages', '[]') || '[]');
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     if (!visitedPages.includes(currentPage)) {
         visitedPages.push(currentPage);
-        StorageManager.setItem('visited_pages', JSON.stringify(visitedPages));
+        AppStorage.setItem('visited_pages', JSON.stringify(visitedPages));
     }
     if (visitedPages.length >= 5) {
         Achievements.unlock('explorer');

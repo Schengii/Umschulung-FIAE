@@ -6,7 +6,7 @@ export function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
 
-    const storedTheme = StorageManager.getItem(STORAGE_KEYS.THEME);
+    const storedTheme = AppStorage.getItem(STORAGE_KEYS.THEME);
     const initialTheme = storedTheme || 'dark';
 
     document.documentElement.setAttribute('data-theme', initialTheme);
@@ -17,7 +17,7 @@ export function initTheme() {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
         document.documentElement.setAttribute('data-theme', newTheme);
-        StorageManager.setItem(STORAGE_KEYS.THEME, newTheme);
+        AppStorage.setItem(STORAGE_KEYS.THEME, newTheme);
         updateThemeIcon(newTheme);
         window.dispatchEvent(new CustomEvent('fiae:theme-change', { detail: { theme: newTheme } }));
         document.dispatchEvent(new CustomEvent('themechange', { detail: newTheme }));

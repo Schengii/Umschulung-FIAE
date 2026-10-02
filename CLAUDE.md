@@ -1,98 +1,59 @@
-# CLAUDE.md — Projekt-Leitfaden & Kontext für Umschulung-FIAE
+# CLAUDE.md
 
-Entwickler- und KI-Leitfaden für das zentrale Portfolio- und Prüfungsvorbereitungs-Repository **Umschulung FIAE** von Maximilian Schenk.
-Dieses Dokument definiert Architektur, Entwicklungsrichtlinien, Build-/Testbefehle und Qualitätsstandards für Claude Code.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
----
+Portfolio- und IHK-Prüfungsvorbereitungs-Site (PWA) für die Umschulung zum FIAE. Reines statisches Vanilla HTML/CSS/JS (ES-Module, kein Framework, kein Bundler). Repo-Sprache (Doku, Kommentare, UI) ist überwiegend Deutsch; neue Texte bitte zweisprachig (DE/EN) halten, wie die bestehenden Seiten. Architekturentscheidungen stehen in `docs/adr/` (z. B. 0001 Minify statt Bundler, 0003 CSP, 0004 Head-Konsistenz, 0006 Vanilla JS).
 
-## 🎯 Projekt-Überblick & Tech-Stack
+## Befehle
 
-Moderne, performante und barrierefreie Web-App (PWA) als Showcase für die Ausbildung/Umschulung zum **Fachinformatiker für Anwendungsentwicklung (FIAE)**.
-
-- **Architektur:** Reines Vanilla HTML5, modernes CSS3 (Custom Design Tokens, Flexbox/Grid, Glassmorphism, Dark/Light Mode) und modulares Vanilla JavaScript (ES6+ ES-Module via `type="module"`).
-- **Entwicklungs-Server:** `http-server` (Port 8080)
-- **Testing & E2E:** Playwright E2E Test-Suite (`playwright test`) mit 54+ automatisierten Tests für Seitenstabilität und Projekt-Starts.
-- **Code-Qualität & Linting:** ESLint 9 + Prettier (Flat Config `eslint.config.js`).
-- **Offline & PWA:** Native Service Worker Implementierung (`sw.js`, Cache-Strategien) und `manifest.json`.
-- **Hosting & Deployment:** Vercel / GitHub Pages mit optimierten CSP-Headern (`vercel.json`).
-- **Datenschutz & A11y:** 100 % lokale Schriftarten (Inter & Outfit via WOFF2), WCAG 2.1 AA Konformität, barrierefreie Tastaturnavigation & ARIA-Live Regions.
-
----
-
-## 🛠️ Häufige Entwickler- & Test-Befehle
-
-| Aufgabe | Befehl |
-| :--- | :--- |
-| **Lokalen Dev-Server starten** | `npm run dev` *(Startet `http-server . -p 8080 -c-1`)* |
-| **E2E-Tests ausführen (Playwright)** | `npm test` |
-| **Linter prüfen** | `npm run lint` |
-| **Linter Auto-Fix** | `npm run lint:fix` |
-| **Projektdatenbank generieren** | `npm run generate-data` |
-| **Daten-Synchronisation prüfen** | `npm run check-sync` |
-| **Projekte synchronisieren** | `npm run sync-projects` |
-| **Bilder optimieren/komprimieren** | `npm run optimize-images` / `npm run compress-images` |
-| **Projektpfade & Links auditieren** | `npm run audit-project-paths` / `npm run check-project-links` |
-| **OG Meta & Social Cards generieren**| `npm run add-og-meta` / `npm run generate-og-image` |
-
----
-
-## 📂 Kern-Dateistruktur
-
-```text
-Umschulung-FIAE/
-├── index.html                   # Haupt-Einstiegsseite & Personalisierung
-├── package.json                 # Skripte und Dev-Dependencies
-├── playwright.config.js         # Playwright E2E-Konfiguration
-├── eslint.config.js             # ESLint Konfiguration (Flat Config)
-├── sw.js                        # PWA Service Worker (Cache-First / Network-First)
-├── manifest.json                # PWA Manifest
-├── vercel.json                  # Vercel Deployment- und Security-Header
-│
-├── pages/                       # Alle 27 Inhalts- & Funktionsseiten
-│   ├── home.html                # Hauptseite / Landing-Dashboard
-│   ├── portfolio.html           # Projekt-Showcase (25 registrierte Projekte)
-│   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, Phasenplan)
-│   ├── lebenslauf.html          # Interaktiver Lebenslauf & PDF-Export
-│   ├── ueber-mich.html          # Steckbrief, Skills & Transfermatrix
-│   ├── dashboard.html           # IHK-Notensimulation (AP1 & AP2)
-│   ├── architecture.html        # C4-Architektur & interaktiver Dependency Graph
-│   └── ...                      # Weitere Fachseiten & Labore
-│
-├── assets/                      # Statische Assets & App-Logik
-│   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css)
-│   │   └── modules/             # Modulare Stylesheets
-│   ├── js/                      # JavaScript Module
-│   │   ├── main.js              # Kern-Initialisierung & Modul-Loader
-│   │   ├── components.js        # Globale Komponenten (Header, Footer, Nav, A11y)
-│   │   ├── constants.js         # Konstanten & Pfadauflösung (resolveAssetPath)
-│   │   ├── portfolio.js         # Portfolio-Filterung & Rendering
-│   │   ├── projects_data.js     # Generierte Datenbank (25 Projekte)
-│   │   └── modules/             # Feature-Module (portfolio-copilot, ihk-cockpit, etc.)
-│   ├── data/                    # JSON-Datenquellen (projects.json)
-│   ├── fonts/                   # Lokale WOFF2 Fonts (DSGVO-konform)
-│   └── images/                  # Optimierte WebP-Grafiken & Screenshots
-│
-└── scripts/                     # Node.js Automatisierungs- & Audit-Skripte
+```bash
+npm run dev            # http-server auf :8080 (-c-1, kein Cache)
+npm test               # Playwright E2E (Chromium, Firefox, WebKit, Pixel 5), startet Server selbst
+npm run test:unit      # Vitest (nur assets/js/modules/**/*.test.js, Node-Umgebung)
+npm run lint           # ESLint nur über assets/js und scripts (Projekte/ ist ignoriert)
+npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)
+npm run typecheck      # tsc via jsconfig.json (in CI nur advisory; Altlast, Fehlerzahl steht nicht fest)
+npm run build:dist     # esbuild-Minify nach dist/ (kein Bundling, Pfade bleiben identisch)
 ```
 
----
+Einzelne Tests:
 
-## 🧭 Richtlinien für Änderungen & Best Practices
+```bash
+npx playwright test assets/js/modules/git_simulator.spec.js --project=chromium
+npx playwright test -g "Testname" --project=chromium
+npx vitest run assets/js/modules/leitner-box.test.js
+```
 
-1. **Pfadauflösung & Navigation:**
-   - Pfade müssen über `resolveAssetPath` bzw. relative Pfade robust aufgelöst werden, um sowohl lokal unter `/` als auch in Unterpfaden oder Subpages fehlerfrei zu funktionieren.
-2. **Daten-Konsistenz:**
-   - Bei Änderungen an Projektdaten immer `npm run generate-data` und `npm run check-sync` ausführen, um `projects_data.js` und `projects.json` synchron zu halten.
-3. **Barrierefreiheit (WCAG AA):**
-   - Tastaturbedienbarkeit (`tabindex`, `focus-visible`, `Enter`/`Space`), ARIA-Attribute (`aria-expanded`, `aria-live`) und semantische HTML5-Elemente stets sicherstellen.
-4. **Keine unnötigen externen Abhängigkeiten:**
-   - Reines Vanilla JavaScript bevorzugen. Keine externen CDNs für Fonts oder Skripte einbinden (Datenschutz und Offline-Fähigkeit via PWA).
-5. **Dokumentation & Changelog:**
-   - Bei relevanten Feature-Erweiterungen oder Fixes das `CHANGELOG.md` aktualisieren.
+Playwright `testDir` ist `assets/js/modules` – Specs (`*.spec.js`) und Vitest-Tests (`*.test.js`) liegen **neben dem Modulcode**, nicht in einem `tests/`-Ordner. Mit `workers: 1` lokal läuft die volle Suite über alle 4 Browser-Projekte langsam; für Iteration `--project=chromium` nutzen.
 
----
+Node ≥ 22.12 (`.nvmrc`/`engines`, CI nutzt 24; Vitest 5 läuft nicht auf Node 20).
 
-## ⚡ Claude Code Tool-Nutzung
+## CI-Gates (müssen vor Push grün sein)
 
-- **Spezialisierte Tools nutzen:** `Read`, `Edit`, `Write`, `Grep` und `Glob` statt Shell-Einzeilern.
-- **Terminal/Bash:** Vorrangig für `npm run ...`, `npx playwright test` und Git-Befehle einsetzen.
+`.github/workflows/ci.yml` führt aus: `check-sync`, `check-head`, `check-csp`, `check-sw-assets`, `lint`, `format:check`, `test:unit`, `npm test`, `build:dist`. Typische Auslöser:
+
+- **Neue/geänderte Datei in HTML/CSS/JS/Fonts** → `npm run generate-sw-assets` (schreibt die Precache-Liste in `sw.js`; `check-sw-assets` schlägt sonst fehl). Bilder sind bewusst eine kuratierte Konstante und werden nicht automatisch precached. `CACHE_NAME` in `sw.js` bei relevanten Änderungen hochzählen.
+- **Inline-`<script>` geändert oder CSP geändert** → `npm run check-csp:fix`. Jede Seite hat einen eigenen CSP-`<meta>`-Tag mit `sha256`-Hashes für Inline-Scripts; zusätzlich liefert `vercel.json` eine permissivere Header-CSP als Sicherheitsnetz (ADR 0003). Beide Stellen bei neuen externen Ressourcen anfassen.
+- **Neue Seite** → `<head>`-Boilerplate muss `check-head` bestehen (Seiten werden nicht aus Template generiert, sondern von Hand gepflegt und nur auf Vorhandensein geprüft), plus Eintrag in `sitemap.xml`/Navigation.
+- **Projektdaten** → siehe unten, `generate-data` + `check-sync`.
+
+## Architektur
+
+**Seiten-Bootstrap.** Jede Seite in `pages/*.html` (plus `index.html`, `404.html`) lädt `assets/js/main.js` als `type="module"`. `components.js` injiziert Header/Nav/Footer in seinem eigenen `DOMContentLoaded` und feuert danach `fiae:layout-ready`; `main.js` wartet auf dieses Event (nicht auf DOMContentLoaded), sonst finden Module die Header-Elemente nicht. Immer-nötige Module (theme, navigation, translation, accent-color, search-filter …) werden statisch importiert, seitenspezifische über die `LAZY_MODULES`-Tabelle in `main.js` als `[Pfad, Exportname, Selektor]` – das Modul wird nur dynamisch importiert, wenn der Selektor auf der Seite existiert. Neues Feature-Modul = Datei in `assets/js/modules/` + Eintrag dort, mit demselben Guard-Selektor wie im Modul selbst. Pfade immer über `resolveAssetPath` (`constants.js`) bzw. relativ auflösen (Seiten liegen in `pages/`, Root-Seiten nicht).
+
+**Projekt-Daten-Pipeline.** `Projekte/` enthält die eigenständigen Einzelprojekte (eigene Repos, eigene `dist`/`index.html`, **nicht** von ESLint/Vitest erfasst) als Teil dieses Monorepos. `scripts/sync_projects.js` zieht sie aus den GitHub-Repos (`REPO_MAPPING` mit `preserve`-Listen; wöchentlich per `.github/workflows/sync.yml`). `scripts/generate_projects_data.js` scannt `Projekte/` plus eine statische Liste (`staticProjects`: externe/Root-Projekte) und erzeugt **zwei** Artefakte: `assets/js/projects_data.js` (generiert, ESLint-ignoriert) und `assets/data/projects.json`. Diese nie von Hand editieren; `check-sync` verifiziert die Konsistenz. Projektzahlen in Doku/Texten driften leicht – nicht hartkodieren, wenn vermeidbar.
+
+**Offline/PWA.** `sw.js` hat Cache-First für Precache-`ASSETS` (generiert, s. o.) und Network-First-Strategien; `pages/offline.html` ist der Fallback. `manifest.json` beschreibt die Installierbarkeit.
+
+**Build/Deploy.** Hosting auf Vercel (`vercel.json` mit Security-Headern). `build:dist` minifiziert nur `assets/js`/`assets/css` per esbuild und kopiert den Rest unverändert – es darf keine HTML-/Script-Referenzen umschreiben, sonst werden CSP-Hashes ungültig (ADR 0001/0005). Lighthouse-CI (`lighthouserc.json`) erzwingt a11y/SEO/best-practices.
+
+**Zustand & Daten.** Kein Backend: Persistenz über `localStorage` (Highscores, Lernfortschritt, Leitner-Box, Achievements), Modul-Kommunikation z. T. über `modules/event-bus.js`. Der Git-Simulator hält seinen Zustand rein im Speicher (ADR 0007).
+
+## Konventionen
+
+- Keine externen CDNs/Fonts/Skripte (Datenschutz + Offline); Drittbibliotheken lokal unter `assets/vendor/` (`npm run localize-vendor-assets`). Fonts sind lokales WOFF2.
+- A11y (WCAG 2.1 AA): Tastaturbedienung, `focus-visible`, ARIA-Attribute/Live-Regions für interaktive Komponenten; Lighthouse/axe prüfen das in CI.
+- Prettier-Formatierung gilt für `assets/js/**` und `scripts/**`; `Projekte/**` nicht anfassen, außer die Änderung gehört wirklich in das jeweilige Unterprojekt (wird sonst vom Sync überschrieben).
+- Nutzerkontrollierte oder in `localStorage` persistierte Texte nie roh in `innerHTML`/`insertAdjacentHTML` interpolieren: `escapeHtml` aus `assets/js/modules/html-utils.js` verwenden (klassische Scripts ohne `import`, z. B. `interview.js`, haben eine lokale Kopie).
+- Der globale Storage-Wrapper aus `components.js` heißt `AppStorage` (nicht `StorageManager`, das kollidiert mit dem DOM-Typ). Von klassischen Scripts geteilte Globals für den Typecheck stehen in `assets/js/globals.d.ts`.
+- Relevante Features/Fixes in `CHANGELOG.md` eintragen.
