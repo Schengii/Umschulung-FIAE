@@ -4,6 +4,19 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Sicherheit — Nutzertexte in `innerHTML` werden escaped
+- **Befund**: Eigene Flashcards (Frage, Antwort, Hinweis, Kategorie, ID) wurden roh in `localStorage` gespeichert und per `innerHTML` gerendert; im Interview-Trainer ging die freie Antwort (`h.answer`) ungefiltert in die Ergebnisansicht. Beides ist Self-XSS, bei den Flashcards bleibt der Payload jedoch dauerhaft im Browser bestehen.
+- **Fix**: Neues Modul `assets/js/modules/html-utils.js` (`escapeHtml`) mit Unit-Test; `flashcards.js` escaped eigene Karten beim Rendern (eingebaute Karten behalten ihr vertrauenswürdiges Markup), `interview.js` escaped Frage und Antwort (klassisches Script, daher lokale Kopie des Helfers). E2E-Test `flashcards_escaping.spec.js` schlägt ohne den Fix fehl.
+
+### Tooling — Node 24, `AppStorage`, Typecheck-Altlast
+- **Node**: CI-Workflows auf Node 24 (Vitest 5 verlangt Node ≥ 22.12 und lief auf Node 20 nicht), `engines` in `package.json` und `.nvmrc` ergänzt.
+- **`StorageManager` → `AppStorage`**: Der globale Storage-Wrapper aus `components.js` überschattete den DOM-Typ `StorageManager` (91 Vorkommen in 19 Dateien umbenannt, kein Laufzeitunterschied).
+- **Typecheck**: `assets/js/globals.d.ts` deklariert die zwischen klassischen Scripts geteilten Globals, dazu JSDoc-Typannotationen an DOM-Deklarationen und `event.target`-Zugriffen. Fehler von 598 auf 206 gesunken; die Stufe bleibt in der CI beratend (`continue-on-error`).
+
+### Testing — Unit-Tests für `event-bus` und `resolveAssetPath`
+- 16 neue Vitest-Fälle (61 → 77): `resolveAssetPath` für Seiten in `pages/`, Root-Seiten, Windows-Pfadtrenner und durchgereichte URLs; `event-bus` für Nutzdaten, Abmelden, `onceEvent` und Event-Trennung. ESLint kennt `EventTarget` als Global.
+- Service-Worker-Cache auf `umschulung-fiae-v41` angehoben, Precache-Liste enthält `html-utils.js`.
+
 ## [1.8.0] — 2026-09-28
 
 ### Barrierefreiheit — WCAG-AA-Kontrastfehler auf Amber-Elementen und Playlist-Icon behoben
