@@ -4,6 +4,11 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Repo-Hygiene — `Projekte/` vermessen, IDE-Müll entfernt, Screenshot verkleinert
+- **Messung** (getrackte Dateien): Repo 198 MB, davon `Projekte/` 164 MB (83 %) in 2546 Dateien; Git-Historie 185 MiB. Hauptgewicht sind Bilder (121 MB), nicht Build-Output (`dist`/`build`/`www`: 22 MB). `ManuFaktur` allein hat 110 MB, wird aber wöchentlich aus einem eigenen Repo gesynct (`REPO_MAPPING`) — Optimierungen müssen dort passieren, sonst überschreibt der Sync sie. Entscheidung: Struktur unverändert lassen (Submodule/Deploy-Sync wären ein großer Umbau ohne Gewinn bei der Klongröße, History-Rewrite bricht PRs und Forks).
+- **Entfernt**: 53 getrackte Dateien aus `Projekte/ElektroCheck AI/.vs/` (Visual-Studio-Benutzerstatus mit Copilot-Snapshots/-Sitzungen) aus dem Index genommen und `.vs/` in `.gitignore` aufgenommen. Die Dateien bleiben lokal erhalten, in der Git-Historie aber weiterhin enthalten.
+- **Verkleinert**: `ElektroCheck AI/docs/images/ElektroCheck_ai_Bild1.png` (6,0 MB, nirgends referenziert) durch eine WebP-Fassung ersetzt (0,58 MB, Qualität 90). Verlustfreie PNG-Neukodierung brachte nur ~2 %, weil es eine fotoähnliche Infografik ist.
+
 ### Tooling — Typecheck-Altlast von 598 auf 70 Fehler reduziert
 - **Fix (ohne Verhaltensänderung)**: Test-/Spec-Dateien sind aus `jsconfig.json` ausgenommen (sie stubben `window` absichtlich). Zahlen/Booleans, die in Textfelder oder Attribute gehen (`setAttribute('r', 14)`, `el.textContent = score`, `style.opacity = 1`), laufen durch `String(...)` — identisch zur DOM-eigenen Umwandlung. `globals.d.ts` setzt `querySelector`/`querySelectorAll` ohne Tag-Selektor auf `HTMLElement` als Standardtyp, und weitere `getElementById`-Deklarationen und `this.field`-Zuweisungen haben JSDoc-Typen. Chromium-Suite (80 Tests), Lint und Unit-Tests grün.
 - **Rest (70)**: überwiegend Einzelfälle; dazu zwei echte Namenskollisionen (`score` in `quiz.js` und `snake.js`, beides klassische Scripts mit globalem Scope). `typecheck` bleibt in der CI beratend.

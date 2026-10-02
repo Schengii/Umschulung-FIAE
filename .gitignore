@@ -34,3 +34,6 @@ Thumbs.db
 
 # Private application documents (real personal PDFs, not meant for the public repo)
 /Bewerbungsunterlagen/
+
+# Visual Studio per-user state (Copilot snapshots/sessions) - never commit
+.vs/
