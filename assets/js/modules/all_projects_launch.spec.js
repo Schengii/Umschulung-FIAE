@@ -30,11 +30,14 @@ test.describe('All Projects 1-Click Launch E2E Verification', () => {
             projPage.on('console', (msg) => {
                 if (msg.type() === 'error') {
                     const text = msg.text();
-                    // Filter out network resource 404 warnings & service workers
+                    // Filter out network resource 404 warnings & service workers. Firefox words an
+                    // unreachable optional demo backend (finance-ai-bot API on :8000, not started in
+                    // tests) as a CORS error instead of Chromium's "Failed to load resource".
                     if (
                         !text.includes('favicon.ico') &&
                         !text.includes('ServiceWorker') &&
-                        !text.includes('Failed to load resource')
+                        !text.includes('Failed to load resource') &&
+                        !text.includes('http://127.0.0.1:8000/')
                     ) {
                         projConsoleErrors.push(`Console Error on ${rawLink}: ${text}`);
                     }
