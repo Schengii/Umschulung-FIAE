@@ -14,20 +14,20 @@
 .idea/
 
 # Test-Infrastruktur & lokale Artefakte
-test-results/
-dist/
-playwright.config.js
-lighthouserc.json
-eslint.config.js
-.prettierrc.json
-jsconfig.json
-jsconfig.sw.json
+/test-results/
+/dist/
+/playwright.config.js
+/lighthouserc.json
+/eslint.config.js
+/.prettierrc.json
+/jsconfig.json
+/jsconfig.sw.json
 
 # Interne Dokumentation & Notizen
-README.md
-CHANGELOG.md
-CLAUDE.md
-docs/
+/README.md
+/CHANGELOG.md
+/CLAUDE.md
+/docs/
 
 # Package Manager Cache & Logs
 npm-debug.log*
