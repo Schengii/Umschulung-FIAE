@@ -11,7 +11,7 @@ export function initKeyboardShortcuts() {
 
     document.addEventListener('keydown', (e) => {
         // Don't trigger shortcuts when typing in inputs
-        const tag = e.target.tagName.toLowerCase();
+        const tag = /** @type {HTMLElement} */ (e.target).tagName.toLowerCase();
         if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
 
         // Ctrl+K or Cmd+K — Focus search bar

@@ -2,12 +2,12 @@
  * Modern Accessible Snake Game with DE/EN Translation
  */
 
-const canvas = document.getElementById('canvas');
+const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('canvas'));
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const highscoreEl = document.getElementById('highscore');
 const startBtn = document.getElementById('start-btn');
-const pauseBtn = document.getElementById('pause-btn');
+const pauseBtn = /** @type {HTMLButtonElement} */ (document.getElementById('pause-btn'));
 
 const rows = 20;
 const cols = 20;

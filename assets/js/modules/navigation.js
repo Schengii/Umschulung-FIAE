@@ -78,7 +78,10 @@ export function initNavigation() {
 
     // Close dropdowns & mobile menu on clicking outside
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.nav-item') && !e.target.closest('#menu-toggle')) {
+        if (
+            !(/** @type {HTMLElement} */ (e.target).closest('.nav-item')) &&
+            !(/** @type {HTMLElement} */ (e.target).closest('#menu-toggle'))
+        ) {
             dropdownItems.forEach((item) => {
                 item.classList.remove('open');
                 const link = item.querySelector('.nav-link');
@@ -90,7 +93,7 @@ export function initNavigation() {
     // Auto-close mobile navigation drawer when clicking a destination link
     if (navMenu) {
         navMenu.addEventListener('click', (e) => {
-            const destLink = e.target.closest('a[href]:not([href="#"]):not([href=""])');
+            const destLink = /** @type {HTMLElement} */ (e.target).closest('a[href]:not([href="#"]):not([href=""])');
             if (destLink && navMenu.classList.contains('open')) {
                 navMenu.classList.remove('open');
                 if (menuToggle) {

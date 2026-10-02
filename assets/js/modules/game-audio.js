@@ -13,7 +13,9 @@ const GameAudio = {
 
         // Listen for mute clicks globally (since nav is loaded dynamically)
         document.addEventListener('click', (e) => {
-            const target = e.target.closest('.mute-toggle-btn') || e.target.closest('#audio-mute-toggle');
+            const target =
+                /** @type {HTMLElement} */ (e.target).closest('.mute-toggle-btn') ||
+                /** @type {HTMLElement} */ (e.target).closest('#audio-mute-toggle');
             if (target) {
                 e.preventDefault();
                 this.toggleMute();

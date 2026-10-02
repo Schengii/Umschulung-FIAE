@@ -22,7 +22,9 @@ export function initPremiumEffects() {
  */
 function initButtonRipples() {
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-primary, .hero-btn, .btn-secondary, .btn-filter, button');
+        const btn = /** @type {HTMLElement} */ (e.target).closest(
+            '.btn-primary, .hero-btn, .btn-secondary, .btn-filter, button'
+        );
         if (!btn || btn.classList.contains('no-ripple')) return;
 
         const rect = btn.getBoundingClientRect();

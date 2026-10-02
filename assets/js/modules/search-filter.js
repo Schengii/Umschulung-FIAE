@@ -9,10 +9,10 @@ export function initSearchAndFilter() {
     const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
     if (!APP.SEARCHABLE_PAGES.includes(currentPage)) return;
 
-    const searchBar = document.getElementById('searchbar');
+    const searchBar = /** @type {HTMLInputElement} */ (document.getElementById('searchbar'));
     const filterButtons = document.querySelectorAll('.btn-filter');
 
-    let noResultsContainer = document.querySelector('.no-results');
+    let noResultsContainer = /** @type {HTMLElement} */ (document.querySelector('.no-results'));
     if (!noResultsContainer) {
         const main = document.querySelector('main');
         if (main) {
@@ -90,7 +90,7 @@ function applyFilters() {
         if (shouldShow) visibleCount++;
     });
 
-    const noResultsContainer = document.querySelector('.no-results');
+    const noResultsContainer = /** @type {HTMLElement} */ (document.querySelector('.no-results'));
     if (noResultsContainer) {
         const queryActive = currentSearchQuery !== '' || currentCategory !== 'all';
         noResultsContainer.style.display = visibleCount === 0 && queryActive ? 'block' : 'none';

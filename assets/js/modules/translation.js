@@ -39,7 +39,7 @@ function updateLangToggleButton(lang) {
 
 function updateDynamicElementsTranslation(lang) {
     // 1. Search bars placeholder and aria-label
-    const searchBar = document.getElementById('searchbar');
+    const searchBar = /** @type {HTMLInputElement} */ (document.getElementById('searchbar'));
     if (searchBar) {
         if (lang === 'de') {
             searchBar.placeholder = 'Suche...';
@@ -50,7 +50,7 @@ function updateDynamicElementsTranslation(lang) {
         }
     }
 
-    const portfolioSearch = document.getElementById('portfolio-searchbar');
+    const portfolioSearch = /** @type {HTMLInputElement} */ (document.getElementById('portfolio-searchbar'));
     if (portfolioSearch) {
         if (lang === 'de') {
             portfolioSearch.placeholder = 'Projekte durchsuchen...';

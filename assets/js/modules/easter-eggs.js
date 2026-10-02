@@ -19,7 +19,7 @@ export function initEasterEggs() {
 
     document.addEventListener('keydown', (e) => {
         // Skip if typing in inputs
-        const tag = e.target.tagName.toLowerCase();
+        const tag = /** @type {HTMLElement} */ (e.target).tagName.toLowerCase();
         if (tag === 'input' || tag === 'textarea') return;
 
         if (e.key === konamiCode[konamiIndex]) {

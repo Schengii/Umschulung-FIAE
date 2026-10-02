@@ -137,7 +137,7 @@ export function initPraktikumsbetriebMedia() {
 // 1. Setup DFG Interactive Gallery
 function setupDfgGallery() {
     const tabsContainer = document.getElementById('dfg-gallery-tabs');
-    const imageEl = document.getElementById('dfg-gallery-img');
+    const imageEl = /** @type {HTMLImageElement} */ (document.getElementById('dfg-gallery-img'));
     const titleEl = document.getElementById('dfg-gallery-title');
     const descEl = document.getElementById('dfg-gallery-desc');
 
@@ -209,7 +209,7 @@ function setupDfgGallery() {
 
 // 2. Setup EcoChef Video Playlist Player
 function setupEcoChefVideoPlayer() {
-    const videoEl = document.getElementById('ecochef-video-player');
+    const videoEl = /** @type {HTMLImageElement} */ (document.getElementById('ecochef-video-player'));
     const tracksContainer = document.getElementById('ecochef-video-tracks');
     const currentTitleEl = document.getElementById('ecochef-video-current-title');
     const currentDescEl = document.getElementById('ecochef-video-current-desc');
@@ -287,8 +287,8 @@ function setupEcoChefVideoPlayer() {
 
 // 3. Setup ElektroCheck AI Live Defect Scanner
 function setupElektroCheckScanner() {
-    const runBtn = document.getElementById('run-scanner-btn');
-    const clearBtn = document.getElementById('clear-scanner-btn');
+    const runBtn = /** @type {HTMLButtonElement} */ (document.getElementById('run-scanner-btn'));
+    const clearBtn = /** @type {HTMLButtonElement} */ (document.getElementById('clear-scanner-btn'));
     const laser = document.getElementById('scanner-laser');
     const spinner = document.getElementById('scanner-spinner');
     const playIcon = document.getElementById('scanner-play-icon');

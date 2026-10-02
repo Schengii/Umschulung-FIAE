@@ -522,7 +522,7 @@ class ArchitectureExplorer {
         this.apiDetailsContainer.innerHTML = detailsHTML;
 
         // Bind Execute button Click
-        const executeBtn = document.getElementById('api-execute-btn');
+        const executeBtn = /** @type {HTMLButtonElement} */ (document.getElementById('api-execute-btn'));
         if (executeBtn) {
             executeBtn.addEventListener('click', () => this.executeApiRequest());
         }
@@ -532,7 +532,7 @@ class ArchitectureExplorer {
     }
 
     executeApiRequest() {
-        const executeBtn = document.getElementById('api-execute-btn');
+        const executeBtn = /** @type {HTMLButtonElement} */ (document.getElementById('api-execute-btn'));
         const respSection = document.getElementById('api-response-section');
         const respBody = document.getElementById('api-resp-body');
         const respTime = document.getElementById('response-time');

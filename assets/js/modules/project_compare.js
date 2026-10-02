@@ -46,7 +46,7 @@
 
         // Delegate click for project compare buttons inside cards
         document.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-compare-select');
+            const btn = /** @type {HTMLElement} */ (e.target).closest('.btn-compare-select');
             if (!btn) return;
             e.stopPropagation();
 

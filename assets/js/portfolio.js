@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('achievement:unlock', { detail: 'cv_downloaded' }));
     });
 
-    const searchInput = document.getElementById('portfolio-searchbar');
-    const sortSelect = document.getElementById('sort-select');
+    const searchInput = /** @type {HTMLInputElement} */ (document.getElementById('portfolio-searchbar'));
+    const sortSelect = /** @type {HTMLInputElement} */ (document.getElementById('sort-select'));
     const filterButtons = document.querySelectorAll('.portfolio-filters .btn-filter');
     const noResultsContainer = document.getElementById('no-results-container');
     const paginationContainer = document.getElementById('pagination-container');
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value.toLowerCase().trim();
+            currentSearchTerm = /** @type {HTMLInputElement} */ (e.target).value.toLowerCase().trim();
             if (clearSearchBtn) {
                 clearSearchBtn.style.display = currentSearchTerm ? 'block' : 'none';
             }
@@ -548,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle tag clicking in cards
     document.addEventListener('click', (e) => {
-        const tagEl = e.target.closest('.tech-tag');
+        const tagEl = /** @type {HTMLElement} */ (e.target).closest('.tech-tag');
         if (!tagEl) return;
 
         const tagName = tagEl.textContent.trim();
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.querySelector('.game-modal-backdrop').addEventListener('click', closeGameModal);
         }
 
-        const iframe = document.getElementById('game-modal-iframe');
+        const iframe = /** @type {HTMLImageElement} */ (document.getElementById('game-modal-iframe'));
         if (iframe) iframe.src = gameUrl;
 
         modal.classList.remove('hidden');
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) {
             modal.classList.remove('show');
             document.body.style.overflow = '';
-            const iframe = document.getElementById('game-modal-iframe');
+            const iframe = /** @type {HTMLImageElement} */ (document.getElementById('game-modal-iframe'));
             if (iframe) iframe.src = 'about:blank'; // unload game audio/scripts
             setTimeout(() => {
                 if (!modal.classList.contains('show')) {
@@ -699,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Intercept game launch clicks
     document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
+        const link = /** @type {HTMLElement} */ (e.target).closest('a');
         if (!link) return;
 
         const href = link.getAttribute('href') || '';

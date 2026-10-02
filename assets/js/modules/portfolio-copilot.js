@@ -195,7 +195,7 @@ function attachCopilotEvents() {
     const closeBtn = document.getElementById('copilot-close-btn');
     const clearBtn = document.getElementById('copilot-clear-btn');
     const form = document.getElementById('copilot-form');
-    const input = document.getElementById('copilot-input');
+    const input = /** @type {HTMLInputElement} */ (document.getElementById('copilot-input'));
     const messages = document.getElementById('copilot-messages');
 
     if (toggleBtn && chatBox) {
@@ -256,7 +256,7 @@ function attachCopilotEvents() {
 
     // Suggestion Chips Click
     document.addEventListener('click', (e) => {
-        const chip = e.target.closest('.copilot-chip');
+        const chip = /** @type {HTMLElement} */ (e.target).closest('.copilot-chip');
         if (chip) {
             const query = chip.dataset.query;
             if (query) {

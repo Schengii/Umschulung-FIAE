@@ -164,7 +164,7 @@ function attachDossierEvents() {
 
     // Trigger from anywhere with [data-open-dossier]
     document.addEventListener('click', (e) => {
-        const trigger = e.target.closest('[data-open-dossier]');
+        const trigger = /** @type {HTMLElement} */ (e.target).closest('[data-open-dossier]');
         if (trigger) {
             e.preventDefault();
             openDossierModal();

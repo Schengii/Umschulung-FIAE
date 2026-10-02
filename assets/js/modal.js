@@ -18,16 +18,16 @@
         }
 
         // Close if the dedicated close buttons are clicked
-        if (e.target.closest('.modal-close') || e.target.id === 'modal-close-inner') {
+        if (/** @type {HTMLElement} */ (e.target).closest('.modal-close') || e.target.id === 'modal-close-inner') {
             closeModal();
             return;
         }
 
         // Only open on project card click — but NOT when clicking a link or button inside the card (except the Details button)
-        const card = e.target.closest('.project-card');
+        const card = /** @type {HTMLElement} */ (e.target).closest('.project-card');
         if (!card) return;
-        if (e.target.closest('a')) return;
-        const button = e.target.closest('button');
+        if (/** @type {HTMLElement} */ (e.target).closest('a')) return;
+        const button = /** @type {HTMLElement} */ (e.target).closest('button');
         if (button && !button.classList.contains('btn-details')) return;
 
         openModal(card);

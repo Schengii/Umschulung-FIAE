@@ -273,7 +273,7 @@ export function initDocumentPreview() {
 
     // Intercept clicks on links that view/download candidate files
     document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
+        const link = /** @type {HTMLElement} */ (e.target).closest('a');
         if (!link) return;
 
         const href = link.getAttribute('href') || '';

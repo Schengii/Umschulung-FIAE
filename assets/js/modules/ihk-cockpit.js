@@ -168,24 +168,24 @@ function renderNwaTable() {
     // Bind Input Listeners
     nwaBody.querySelectorAll('.nwa-weight-input').forEach((input) => {
         input.addEventListener('change', (e) => {
-            const idx = parseInt(e.target.dataset.index, 10);
-            currentCriteria[idx].weight = parseFloat(e.target.value) || 0;
+            const idx = parseInt(/** @type {HTMLElement} */ (e.target).dataset.index, 10);
+            currentCriteria[idx].weight = parseFloat(/** @type {HTMLInputElement} */ (e.target).value) || 0;
             renderNwaTable();
         });
     });
 
     nwaBody.querySelectorAll('.nwa-range-a').forEach((input) => {
         input.addEventListener('input', (e) => {
-            const idx = parseInt(e.target.dataset.index, 10);
-            currentCriteria[idx].scoreA = parseInt(e.target.value, 10);
+            const idx = parseInt(/** @type {HTMLElement} */ (e.target).dataset.index, 10);
+            currentCriteria[idx].scoreA = parseInt(/** @type {HTMLInputElement} */ (e.target).value, 10);
             renderNwaTable();
         });
     });
 
     nwaBody.querySelectorAll('.nwa-range-b').forEach((input) => {
         input.addEventListener('input', (e) => {
-            const idx = parseInt(e.target.dataset.index, 10);
-            currentCriteria[idx].scoreB = parseInt(e.target.value, 10);
+            const idx = parseInt(/** @type {HTMLElement} */ (e.target).dataset.index, 10);
+            currentCriteria[idx].scoreB = parseInt(/** @type {HTMLInputElement} */ (e.target).value, 10);
             renderNwaTable();
         });
     });

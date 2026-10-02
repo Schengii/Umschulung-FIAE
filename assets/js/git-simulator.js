@@ -960,7 +960,7 @@ export function initGitSimulator() {
     // Level selector events
     if (levelSelect) {
         levelSelect.addEventListener('change', (e) => {
-            handleLevelChange(e.target.value);
+            handleLevelChange(/** @type {HTMLInputElement} */ (e.target).value);
         });
     }
 

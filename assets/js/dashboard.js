@@ -149,10 +149,10 @@ function renderRecentProjects() {
    IHK NOTENRECHNER LOGIC
    ========================================================================== */
 function initQaMetrics() {
-    const coverageInput = document.getElementById('qa-test-coverage');
-    const cleanCodeInput = document.getElementById('qa-clean-code');
-    const docsInput = document.getElementById('qa-documentation');
-    const securityInput = document.getElementById('qa-security-scan');
+    const coverageInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-test-coverage'));
+    const cleanCodeInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-clean-code'));
+    const docsInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-documentation'));
+    const securityInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-security-scan'));
 
     // Ranges
     const coverageRange = document.getElementById('qa-test-coverage-range');

@@ -18,9 +18,9 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const name = document.getElementById(nameId);
-        const email = document.getElementById(emailId);
-        const message = document.getElementById(messageId);
+        const name = /** @type {HTMLInputElement} */ (document.getElementById(nameId));
+        const email = /** @type {HTMLInputElement} */ (document.getElementById(emailId));
+        const message = /** @type {HTMLInputElement} */ (document.getElementById(messageId));
         const feedback = document.getElementById(feedbackId);
         const botcheck = form.querySelector('input[name="botcheck"]');
 

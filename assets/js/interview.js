@@ -691,7 +691,7 @@ class InterviewSimulator {
         if (scoreVal) scoreVal.textContent = `${overallPercentage}%`;
 
         // Radial SVG update
-        const circle = document.getElementById('result-ring-fill');
+        const circle = /** @type {HTMLElement} */ (document.getElementById('result-ring-fill'));
         if (circle) {
             const radius = circle.r.baseVal.value;
             const circumference = 2 * Math.PI * radius;

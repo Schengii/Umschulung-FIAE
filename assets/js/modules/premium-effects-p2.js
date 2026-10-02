@@ -34,7 +34,7 @@ function initPageTransitions() {
 
     // Intercept internal clicks
     document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
+        const link = /** @type {HTMLElement} */ (e.target).closest('a');
         if (!link) return;
 
         const href = link.getAttribute('href');
@@ -131,7 +131,7 @@ function initUIAudio() {
     const selectors = 'a, button, .card, .nav-item, input, select';
 
     document.addEventListener('mouseover', (e) => {
-        const el = e.target.closest(selectors);
+        const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
         if (el) {
             // Debounce or filter out continuous hovers on identical target
             if (el.dataset.audioHovered !== 'true') {
@@ -145,7 +145,7 @@ function initUIAudio() {
     });
 
     document.addEventListener('click', (e) => {
-        const el = e.target.closest(selectors);
+        const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
         if (el) {
             // If the element clicked is the audio toggle itself, handle the state flip
             if (el.id === 'audio-toggle') {

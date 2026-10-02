@@ -75,7 +75,7 @@ export function initSkillRadar() {
 
     // Attach interaction listener
     container.addEventListener('click', (e) => {
-        const target = e.target.closest('.radar-label, .radar-dot');
+        const target = /** @type {HTMLElement} */ (e.target).closest('.radar-label, .radar-dot');
         if (target) {
             const skillName = target.getAttribute('data-skill');
             if (skillName) {

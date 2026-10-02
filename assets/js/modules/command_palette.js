@@ -279,7 +279,7 @@
         }
 
         input.addEventListener('input', (e) => {
-            renderResults(e.target.value);
+            renderResults(/** @type {HTMLInputElement} */ (e.target).value);
         });
 
         overlay.addEventListener('click', (e) => {

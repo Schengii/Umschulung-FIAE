@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initProjectVideoPlayer(project) {
-        const videoEl = document.getElementById('project-video-player');
+        const videoEl = /** @type {HTMLImageElement} */ (document.getElementById('project-video-player'));
         const tracksContainer = document.getElementById('project-video-tracks');
         const currentTitleEl = document.getElementById('project-video-current-title');
         const currentDescEl = document.getElementById('project-video-current-desc');
@@ -493,8 +493,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initIhkStepper(project) {
-        const prevBtn = document.getElementById('stepper-prev-btn');
-        const nextBtn = document.getElementById('stepper-next-btn');
+        const prevBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-prev-btn'));
+        const nextBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-next-btn'));
         const indicator = document.getElementById('stepper-indicator');
         const progressFill = document.getElementById('stepper-progress-fill');
         const container = document.getElementById('stepper-slides-container');
@@ -657,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal = document.getElementById('live-demo-modal');
         }
 
-        const iframe = document.getElementById('demo-iframe');
+        const iframe = /** @type {HTMLImageElement} */ (document.getElementById('demo-iframe'));
         const titleSpan = document.getElementById('demo-project-title');
         const closeBtn = document.getElementById('demo-close-btn');
         const reloadBtn = document.getElementById('demo-reload-btn');

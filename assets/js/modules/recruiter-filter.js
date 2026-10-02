@@ -37,7 +37,9 @@ export function initRecruiterFilter() {
 
     // Re-trigger layout on language change
     document.addEventListener('langchange', () => {
-        const activeBtn = document.querySelector('.role-filter-container .btn-filter.active');
+        const activeBtn = /** @type {HTMLElement} */ (
+            document.querySelector('.role-filter-container .btn-filter.active')
+        );
         if (activeBtn) activeBtn.click();
     });
 

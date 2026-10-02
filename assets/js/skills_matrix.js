@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDetailsGrid() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         // Get ALL skills of this category (not just the representatives)
-        const sortSelect = document.getElementById('skills-sort-select');
+        const sortSelect = /** @type {HTMLInputElement} */ (document.getElementById('skills-sort-select'));
         const sortVal = sortSelect ? sortSelect.value : 'default';
         const filteredSkills = sortSkills(filterListSkills(SKILLS_DATA, activeCategory), sortVal);
 

@@ -233,19 +233,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const answerEl = document.getElementById('card-answer');
     const starBtn = document.getElementById('star-card-btn');
     const starIcon = starBtn ? starBtn.querySelector('i') : null;
-    const btnWrong = document.getElementById('btn-wrong');
-    const btnCorrect = document.getElementById('btn-correct');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnNext = document.getElementById('btn-next');
+    const btnWrong = /** @type {HTMLButtonElement} */ (document.getElementById('btn-wrong'));
+    const btnCorrect = /** @type {HTMLButtonElement} */ (document.getElementById('btn-correct'));
+    const btnPrev = /** @type {HTMLButtonElement} */ (document.getElementById('btn-prev'));
+    const btnNext = /** @type {HTMLButtonElement} */ (document.getElementById('btn-next'));
     const deckStatusEl = document.getElementById('deck-status');
     const tabContainer = document.getElementById('category-tabs');
 
     // Custom Cards & Spaced Repetition selectors
     const createForm = document.getElementById('create-card-form');
-    const newCat = document.getElementById('new-card-cat');
-    const newHint = document.getElementById('new-card-hint');
-    const newQuestion = document.getElementById('new-card-question');
-    const newAnswer = document.getElementById('new-card-answer');
+    const newCat = /** @type {HTMLInputElement} */ (document.getElementById('new-card-cat'));
+    const newHint = /** @type {HTMLInputElement} */ (document.getElementById('new-card-hint'));
+    const newQuestion = /** @type {HTMLInputElement} */ (document.getElementById('new-card-question'));
+    const newAnswer = /** @type {HTMLInputElement} */ (document.getElementById('new-card-answer'));
     const customListEl = document.getElementById('custom-cards-list');
 
     const box1Count = document.getElementById('box1-count');
@@ -593,7 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // this site's CSP (script-src has no 'unsafe-hashes' for event handler
     // attributes), so the buttons are wired up via one delegated listener.
     document.getElementById('custom-cards-list')?.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-delete-card-id]');
+        const btn = /** @type {HTMLElement} */ (e.target).closest('[data-delete-card-id]');
         if (btn) window.deleteCustomCard(btn.dataset.deleteCardId);
     });
 

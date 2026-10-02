@@ -139,7 +139,7 @@ function bootstrap() {
 
     // Optimized card mouse tracking hover glow effect
     document.addEventListener('mousemove', (e) => {
-        const card = e.target.closest('.card');
+        const card = /** @type {HTMLElement} */ (e.target).closest('.card');
         if (card) {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;

@@ -4,7 +4,7 @@
  */
 export function initUsernameGreeting() {
     const mySubmit = document.getElementById('mySubmit');
-    const myText = document.getElementById('myText');
+    const myText = /** @type {HTMLInputElement} */ (document.getElementById('myText'));
 
     // Parse URL parameters and store in sessionStorage for persistence during the session
     const urlParams = new URLSearchParams(window.location.search);
