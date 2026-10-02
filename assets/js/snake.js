@@ -29,7 +29,7 @@ const speed = 150;
 document.addEventListener('DOMContentLoaded', () => {
     highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
     highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
-    if (highscoreEl) highscoreEl.textContent = highscore;
+    if (highscoreEl) highscoreEl.textContent = String(highscore);
     renderHighscores();
 
     document.addEventListener('keydown', handleKeyDown);
@@ -108,7 +108,7 @@ function startGame() {
     direction = 'RIGHT';
     nextDirection = 'RIGHT';
     score = 0;
-    if (scoreEl) scoreEl.textContent = score;
+    if (scoreEl) scoreEl.textContent = String(score);
     placeFood();
 
     isPlaying = true;
@@ -204,7 +204,7 @@ function gameOver() {
     if (score > highscore) {
         highscore = score;
         AppStorage.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
-        if (highscoreEl) highscoreEl.textContent = highscore;
+        if (highscoreEl) highscoreEl.textContent = String(highscore);
     }
 
     updateButtons();
@@ -263,7 +263,7 @@ function gameStep() {
 
     if (head.x === food.x && head.y === food.y) {
         score += 10;
-        if (scoreEl) scoreEl.textContent = score;
+        if (scoreEl) scoreEl.textContent = String(score);
 
         if (score >= 50 && typeof Achievements !== 'undefined') {
             Achievements.unlock('snake_50');

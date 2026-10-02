@@ -636,9 +636,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const { 1: b1, 2: b2, 3: b3 } = computeBoxStats(fullDatabase, boxLevels);
 
         // Set counts
-        if (box1Count) box1Count.textContent = b1;
-        if (box2Count) box2Count.textContent = b2;
-        if (box3Count) box3Count.textContent = b3;
+        if (box1Count) box1Count.textContent = String(b1);
+        if (box2Count) box2Count.textContent = String(b2);
+        if (box3Count) box3Count.textContent = String(b3);
 
         // Set bars width
         if (box1Bar) box1Bar.style.width = total > 0 ? `${(b1 / total) * 100}%` : '0%';

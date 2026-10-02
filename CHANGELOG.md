@@ -4,6 +4,10 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Tooling — Typecheck-Altlast von 598 auf 70 Fehler reduziert
+- **Fix (ohne Verhaltensänderung)**: Test-/Spec-Dateien sind aus `jsconfig.json` ausgenommen (sie stubben `window` absichtlich). Zahlen/Booleans, die in Textfelder oder Attribute gehen (`setAttribute('r', 14)`, `el.textContent = score`, `style.opacity = 1`), laufen durch `String(...)` — identisch zur DOM-eigenen Umwandlung. `globals.d.ts` setzt `querySelector`/`querySelectorAll` ohne Tag-Selektor auf `HTMLElement` als Standardtyp, und weitere `getElementById`-Deklarationen und `this.field`-Zuweisungen haben JSDoc-Typen. Chromium-Suite (80 Tests), Lint und Unit-Tests grün.
+- **Rest (70)**: überwiegend Einzelfälle; dazu zwei echte Namenskollisionen (`score` in `quiz.js` und `snake.js`, beides klassische Scripts mit globalem Scope). `typecheck` bleibt in der CI beratend.
+
 ### CI — CSP-Hashes waren zeilenendungsabhängig (Ursache der roten CI)
 - **Befund**: `check-csp` schlug in der CI auf allen bisherigen `main`-Läufen fehl. Die `sha256`-Hashes in den CSP-`<meta>`-Tags wurden unter Windows über CRLF-Inhalt berechnet, im Repo und auf dem Linux-Runner (und damit in Produktion) ist der Inline-Script-Text aber LF — der Hash stimmte dort nie. Betroffen: `home`, `lebenslauf`, `portfolio`, `ueber-mich`, `dashboard`; auf diesen Seiten dürften Inline-Scripts durch die strengere Meta-CSP blockiert worden sein.
 - **Fix**: `.gitattributes` erzwingt LF für HTML/JS/CSS/JSON/MD/YML; `scripts/verify_csp_hashes.js` normalisiert vor dem Hashen CRLF zu LF; die Hashes der fünf Seiten wurden mit `check-csp:fix` neu geschrieben. Die neuen Werte stimmen mit den vom CI-Runner gemeldeten überein.

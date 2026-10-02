@@ -97,7 +97,7 @@ function initMemoryGame() {
             const card = document.createElement('div');
             card.className = 'memory-card';
             card.dataset.symbol = symbol.name;
-            card.dataset.index = index;
+            card.dataset.index = String(index);
 
             card.innerHTML = `
                 <div class="memory-card-inner">
@@ -142,7 +142,7 @@ function initMemoryGame() {
 
         if (flippedCards.length === 2) {
             moves++;
-            if (movesDisplay) movesDisplay.textContent = moves;
+            if (movesDisplay) movesDisplay.textContent = String(moves);
             checkMatch();
         }
     }

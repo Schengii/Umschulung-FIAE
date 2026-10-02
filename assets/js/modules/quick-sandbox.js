@@ -195,7 +195,7 @@ export function openSandbox(projKey) {
 
 export function closeSandbox() {
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = document.getElementById('sandbox-iframe');
+    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
     document.body.style.overflow = '';

@@ -12,7 +12,7 @@ npm test               # Playwright E2E (Chromium, Firefox, WebKit, Pixel 5), st
 npm run test:unit      # Vitest (nur assets/js/modules/**/*.test.js, Node-Umgebung)
 npm run lint           # ESLint nur über assets/js und scripts (Projekte/ ist ignoriert)
 npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)
-npm run typecheck      # tsc via jsconfig.json (in CI nur advisory; Altlast, Fehlerzahl steht nicht fest)
+npm run typecheck      # tsc via jsconfig.json (in CI nur advisory; ca. 70 Altlast-Fehler übrig, nur Einzelfälle)
 npm run build:dist     # esbuild-Minify nach dist/ (kein Bundling, Pfade bleiben identisch)
 ```
 

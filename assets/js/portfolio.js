@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
-            pageBtn.textContent = i;
+            pageBtn.textContent = String(i);
             pageBtn.className = 'btn-filter btn-pagination';
             if (i === currentPage) {
                 pageBtn.classList.add('active');

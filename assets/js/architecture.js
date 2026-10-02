@@ -215,7 +215,7 @@ class ArchitectureExplorer {
         this.apiDetailsContainer = document.getElementById('api-details-container');
 
         // 3D Canvas Engine
-        this.canvas3d = document.getElementById('arch-3d-canvas');
+        this.canvas3d = /** @type {HTMLCanvasElement} */ (document.getElementById('arch-3d-canvas'));
         this.animId3d = null;
         this.rotX = 0.3;
         this.rotY = 0.5;
