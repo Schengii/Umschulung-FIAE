@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { settle } from '../../../scripts/e2e-helpers.js';
 import AxeBuilder from '@axe-core/playwright';
 
 // Complements the Lighthouse a11y score gate (page-level, category threshold)
@@ -40,7 +41,7 @@ test.describe('Accessibility (axe-core, WCAG 2.1 AA)', () => {
             // sampling half-transparent colours mid fade-in (flaky color-contrast on CI WebKit).
             await page.emulateMedia({ reducedMotion: 'reduce' });
             await page.goto(`/${pageName}`);
-            await page.waitForLoadState('networkidle');
+            await settle(page);
             await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
             await page.waitForTimeout(500);
 

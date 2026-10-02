@@ -27,4 +27,19 @@ async function stubGithubApi(page) {
     );
 }
 
-module.exports = { stubGithubApi };
+/**
+ * Waits for the network to go idle, but never longer than `timeoutMs`.
+ *
+ * A plain `waitForLoadState('networkidle')` fails the whole test at the 30 s test timeout
+ * when a page keeps a request open (seen sporadically in Firefox on CI runners, on a different
+ * page each run). Every caller follows up with auto-waiting locator assertions and the console /
+ * pageerror listeners stay strict, so continuing after the grace period loses no coverage.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {number} [timeoutMs]
+ */
+async function settle(page, timeoutMs = 10000) {
+    await page.waitForLoadState('networkidle', { timeout: timeoutMs }).catch(() => {});
+}
+
+module.exports = { stubGithubApi, settle };
