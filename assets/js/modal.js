@@ -18,7 +18,10 @@
         }
 
         // Close if the dedicated close buttons are clicked
-        if (/** @type {HTMLElement} */ (e.target).closest('.modal-close') || e.target.id === 'modal-close-inner') {
+        if (
+            /** @type {HTMLElement} */ (e.target).closest('.modal-close') ||
+            /** @type {HTMLElement} */ (e.target).id === 'modal-close-inner'
+        ) {
             closeModal();
             return;
         }
@@ -244,7 +247,7 @@
         // Bind click listeners for video selector buttons
         if (hasPlaylist) {
             const videoSelectButtons = modalBody.querySelectorAll('.video-select-btn');
-            const player = modalBody.querySelector('#modal-video-player');
+            const player = /** @type {HTMLVideoElement} */ (modalBody.querySelector('#modal-video-player'));
             const videoDesc = modalBody.querySelector('#modal-video-description');
             const lang = document.documentElement.getAttribute('lang') || 'de';
 

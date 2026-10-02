@@ -1014,7 +1014,7 @@ class CodePlayground {
         this.cssLines = document.getElementById('line-numbers-css');
         this.jsLines = document.getElementById('line-numbers-js');
 
-        this.previewIframe = /** @type {HTMLElement} */ (document.getElementById('preview-iframe'));
+        this.previewIframe = /** @type {HTMLIFrameElement} */ (document.getElementById('preview-iframe'));
         this.consoleLogBox = document.getElementById('console-log-box');
 
         this.btnHtml = document.getElementById('btn-tab-html');

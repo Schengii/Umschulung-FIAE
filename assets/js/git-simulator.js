@@ -849,8 +849,11 @@ function unlockSimulatorAchievement() {
     // Unlock Konami or custom achievement if achievements module loaded
     import('./modules/achievements.js')
         .then((module) => {
-            if (module.default && typeof module.default.unlock === 'function') {
-                module.default.unlock('konami_master'); // Reuses existing game badge
+            if (
+                /** @type {any} */ (module).default &&
+                typeof (/** @type {any} */ (module).default.unlock) === 'function'
+            ) {
+                /** @type {any} */ (module).default.unlock('konami_master'); // Reuses existing game badge
             } else if (typeof Achievements !== 'undefined') {
                 Achievements.unlock('konami_master');
             }

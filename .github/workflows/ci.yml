@@ -51,9 +51,8 @@ jobs:
       - name: Verify Production Build (esbuild minify)
         run: npm run build:dist
 
-      - name: JSDoc Type Check (advisory, pre-existing findings not yet triaged)
+      - name: JSDoc Type Check
         run: npm run typecheck
-        continue-on-error: true
 
   e2e:
     # One job per Playwright project so the browsers run in parallel (a single

@@ -172,7 +172,7 @@ export function openSandbox(projKey) {
     const title = document.getElementById('sandbox-title');
     const badge = document.getElementById('sandbox-badge');
     const desc = document.getElementById('sandbox-desc');
-    const btnNewTab = /** @type {HTMLElement} */ (document.getElementById('btn-sandbox-newtab'));
+    const btnNewTab = /** @type {HTMLAnchorElement} */ (document.getElementById('btn-sandbox-newtab'));
     const loader = document.getElementById('sandbox-loader');
 
     if (!modal || !iframe) return;

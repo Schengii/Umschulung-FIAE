@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Flip card logic
     cardEl.addEventListener('click', (e) => {
-        if (starBtn && starBtn.contains(e.target)) return;
+        if (starBtn && starBtn.contains(/** @type {Node} */ (e.target))) return;
 
         isFlipped = !isFlipped;
         if (isFlipped) {

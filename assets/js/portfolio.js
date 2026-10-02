@@ -488,9 +488,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hireMeForm) {
         hireMeForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('hire-me-name')?.value.trim() || '';
-            const email = document.getElementById('hire-me-email')?.value.trim() || '';
-            const msg = document.getElementById('hire-me-message')?.value.trim() || '';
+            const name =
+                /** @type {HTMLInputElement | null} */ (document.getElementById('hire-me-name'))?.value.trim() || '';
+            const email =
+                /** @type {HTMLInputElement | null} */ (document.getElementById('hire-me-email'))?.value.trim() || '';
+            const msg =
+                /** @type {HTMLInputElement | null} */ (document.getElementById('hire-me-message'))?.value.trim() || '';
             const feedback = document.getElementById('hire-me-feedback');
             const subject = encodeURIComponent(`Portfolio Kontakt von ${name}`);
             const body = encodeURIComponent(`${msg}\n\nAbsender: ${name} <${email}>`);

@@ -166,6 +166,7 @@ function initQaMetrics() {
     const percentText = document.getElementById('overall-percentage');
     const badge = document.getElementById('grade-status-badge');
 
+    /** @type {{ num: any, range: any }[]} */
     const mappings = [
         { num: coverageInput, range: coverageRange },
         { num: cleanCodeInput, range: cleanCodeRange },

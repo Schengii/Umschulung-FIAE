@@ -117,9 +117,9 @@ function enhanceCards() {
         mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
                 if (node.nodeType === Node.ELEMENT_NODE) {
-                    const cardsInNode = node.classList?.contains('card')
+                    const cardsInNode = /** @type {Element} */ (node).classList?.contains('card')
                         ? [node]
-                        : node.querySelectorAll?.('.card') || [];
+                        : /** @type {Element} */ (node).querySelectorAll?.('.card') || [];
                     cardsInNode.forEach((card) => {
                         if (card.dataset.premiumEnhanced !== 'true') {
                             card.dataset.premiumEnhanced = 'true';

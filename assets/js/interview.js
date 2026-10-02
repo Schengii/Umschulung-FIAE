@@ -453,7 +453,9 @@ class InterviewSimulator {
             window.speechSynthesis.cancel();
         }
         // Collect choices
-        const checkedBoxes = document.querySelectorAll('input[name="category"]:checked');
+        const checkedBoxes = /** @type {NodeListOf<HTMLInputElement>} */ (
+            document.querySelectorAll('input[name="category"]:checked')
+        );
         this.selectedCategories = Array.from(checkedBoxes).map((cb) => cb.value);
 
         if (this.selectedCategories.length === 0) {
@@ -691,7 +693,9 @@ class InterviewSimulator {
         if (scoreVal) scoreVal.textContent = `${overallPercentage}%`;
 
         // Radial SVG update
-        const circle = /** @type {HTMLElement} */ (document.getElementById('result-ring-fill'));
+        const circle = /** @type {SVGCircleElement} */ (
+            /** @type {unknown} */ (document.getElementById('result-ring-fill'))
+        );
         if (circle) {
             const radius = circle.r.baseVal.value;
             const circumference = 2 * Math.PI * radius;

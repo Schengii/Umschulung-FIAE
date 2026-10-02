@@ -252,8 +252,8 @@ export function initRoadmap() {
         const checkboxes = drawerContent.querySelectorAll('.topic-checkbox');
         checkboxes.forEach((cb) => {
             cb.addEventListener('change', (e) => {
-                const key = e.target.getAttribute('data-key');
-                localStorage.setItem(key, e.target.checked ? 'true' : 'false');
+                const key = /** @type {HTMLInputElement} */ (e.target).getAttribute('data-key');
+                localStorage.setItem(key, /** @type {HTMLInputElement} */ (e.target).checked ? 'true' : 'false');
             });
         });
 

@@ -209,7 +209,7 @@ function setupDfgGallery() {
 
 // 2. Setup EcoChef Video Playlist Player
 function setupEcoChefVideoPlayer() {
-    const videoEl = /** @type {HTMLImageElement} */ (document.getElementById('ecochef-video-player'));
+    const videoEl = /** @type {HTMLVideoElement} */ (document.getElementById('ecochef-video-player'));
     const tracksContainer = document.getElementById('ecochef-video-tracks');
     const currentTitleEl = document.getElementById('ecochef-video-current-title');
     const currentDescEl = document.getElementById('ecochef-video-current-desc');

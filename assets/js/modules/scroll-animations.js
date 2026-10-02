@@ -92,7 +92,7 @@ function initNumberCounters() {
         (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    const el = entry.target;
+                    const el = /** @type {HTMLElement} */ (entry.target);
                     observer.unobserve(el);
 
                     const targetVal = parseFloat(
