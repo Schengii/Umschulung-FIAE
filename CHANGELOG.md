@@ -4,6 +4,35 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### CI — CSP-Hashes waren zeilenendungsabhängig (Ursache der roten CI)
+- **Befund**: `check-csp` schlug in der CI auf allen bisherigen `main`-Läufen fehl. Die `sha256`-Hashes in den CSP-`<meta>`-Tags wurden unter Windows über CRLF-Inhalt berechnet, im Repo und auf dem Linux-Runner (und damit in Produktion) ist der Inline-Script-Text aber LF — der Hash stimmte dort nie. Betroffen: `home`, `lebenslauf`, `portfolio`, `ueber-mich`, `dashboard`; auf diesen Seiten dürften Inline-Scripts durch die strengere Meta-CSP blockiert worden sein.
+- **Fix**: `.gitattributes` erzwingt LF für HTML/JS/CSS/JSON/MD/YML; `scripts/verify_csp_hashes.js` normalisiert vor dem Hashen CRLF zu LF; die Hashes der fünf Seiten wurden mit `check-csp:fix` neu geschrieben. Die neuen Werte stimmen mit den vom CI-Runner gemeldeten überein.
+- **Folgefund**: Weil die CI bisher schon an `check-csp` abbrach, lief die E2E-Matrix lange nicht. Erster voller Lauf: 310 grün, 9 flaky (8× WebKit-axe-`color-contrast`, 1× Firefox-Service-Worker/Video), 1 hart rot — `all_projects_launch` in Firefox, weil das optionale `finance-ai-bot`-Backend (`127.0.0.1:8000`) in der CI nicht läuft und Firefox das als CORS-Konsolenfehler meldet. Dasselbe gilt für `Wohnungssuche KI` (`:5000`). Der Test ignoriert jetzt gezielt Firefox' „CORS request did not succeed“ gegen Loopback-Ports außer dem Testserver (`:8080`) — Chromiums Äquivalent `Failed to load resource` wurde schon gefiltert, echte CORS-Fehler gegen erreichbare Server bleiben sichtbar.
+
+### CI — E2E-Matrix parallelisiert
+- **Befund**: Ein einziger serieller Job (Checks + alle vier Browser-Projekte) brauchte ~13 Minuten und lieferte bei einem Fehler wenig Hinweis auf den Browser.
+- **Fix**: `ci.yml` getrennt in `quality` (Daten-/CSP-/Lint-/Unit-/Build-Gates, einmalig), `e2e` (Matrix je Playwright-Projekt, `fail-fast: false`, installiert nur den jeweils nötigen Browser, lädt `test-results/` bei Fehlern als Artefakt hoch) und `lighthouse`. Job-Namen haben sich geändert (Branch-Protection ist im Repo nicht aktiv, daher keine Pflicht-Checks betroffen). Der Schrittname „(22 Projects)“ entfällt.
+
+### PWA — Service Worker fasst Audio/Video und Range-Requests nicht mehr an
+- **Befund**: `sw.js` behandelte Videos wie normale Assets (Stale-While-Revalidate). Medien werden aber per Range-Request geladen: eine 206-Teilantwort lässt sich nicht cachen, und eine vollständig gecachte Datei ist keine gültige Antwort auf einen Range-Request. In Firefox brach das Laden mit „A ServiceWorker intercepted the request and encountered an unexpected error“ ab (sichtbar als flaky E2E-Test auf `projekt-detail.html?repo=EcoChef`, betrifft aber echte Nutzer).
+- **Fix**: Requests mit `Range`-Header sowie `destination` `video`/`audio` werden nicht mehr abgefangen, der Browser streamt sie direkt. `CACHE_NAME` auf `umschulung-fiae-v42`.
+
+### Testing — axe-`color-contrast` auf WebKit nicht mehr flaky
+- Die Footer-Kontrastverstöße traten nur im ersten Versuch auf CI-WebKit auf und verschwanden im Retry. `accessibility.spec.js` aktiviert jetzt `prefers-reduced-motion` (die Seite kollabiert dann alle Übergänge) und wartet auf laufende Animationen, damit axe den eingeschwungenen Zustand misst und keine halbtransparenten Zwischenfarben.
+
+### Sicherheit — Nutzertexte in `innerHTML` werden escaped
+- **Befund**: Eigene Flashcards (Frage, Antwort, Hinweis, Kategorie, ID) wurden roh in `localStorage` gespeichert und per `innerHTML` gerendert; im Interview-Trainer ging die freie Antwort (`h.answer`) ungefiltert in die Ergebnisansicht. Beides ist Self-XSS, bei den Flashcards bleibt der Payload jedoch dauerhaft im Browser bestehen.
+- **Fix**: Neues Modul `assets/js/modules/html-utils.js` (`escapeHtml`) mit Unit-Test; `flashcards.js` escaped eigene Karten beim Rendern (eingebaute Karten behalten ihr vertrauenswürdiges Markup), `interview.js` escaped Frage und Antwort (klassisches Script, daher lokale Kopie des Helfers). E2E-Test `flashcards_escaping.spec.js` schlägt ohne den Fix fehl.
+
+### Tooling — Node 24, `AppStorage`, Typecheck-Altlast
+- **Node**: CI-Workflows auf Node 24 (Vitest 5 verlangt Node ≥ 22.12 und lief auf Node 20 nicht), `engines` in `package.json` und `.nvmrc` ergänzt.
+- **`StorageManager` → `AppStorage`**: Der globale Storage-Wrapper aus `components.js` überschattete den DOM-Typ `StorageManager` (91 Vorkommen in 19 Dateien umbenannt, kein Laufzeitunterschied).
+- **Typecheck**: `assets/js/globals.d.ts` deklariert die zwischen klassischen Scripts geteilten Globals, dazu JSDoc-Typannotationen an DOM-Deklarationen und `event.target`-Zugriffen. Fehler von 598 auf 206 gesunken; die Stufe bleibt in der CI beratend (`continue-on-error`).
+
+### Testing — Unit-Tests für `event-bus` und `resolveAssetPath`
+- 16 neue Vitest-Fälle (61 → 77): `resolveAssetPath` für Seiten in `pages/`, Root-Seiten, Windows-Pfadtrenner und durchgereichte URLs; `event-bus` für Nutzdaten, Abmelden, `onceEvent` und Event-Trennung. ESLint kennt `EventTarget` als Global.
+- Service-Worker-Cache auf `umschulung-fiae-v41` angehoben, Precache-Liste enthält `html-utils.js`.
+
 ## [1.8.0] — 2026-09-28
 
 ### Barrierefreiheit — WCAG-AA-Kontrastfehler auf Amber-Elementen und Playlist-Icon behoben

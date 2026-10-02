@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v41';
+const CACHE_NAME = 'umschulung-fiae-v42';
 const ASSETS = [
     './',
     'index.html',
@@ -196,6 +196,18 @@ self.addEventListener('fetch', (e) => {
 
     // Bypass Service Worker for Vercel internal routes (Insights/Analytics)
     if (url.pathname.startsWith('/_vercel/')) {
+        return;
+    }
+
+    // Let the browser stream audio/video itself. Media is fetched with Range requests: a
+    // partial (206) response can't be cached, and a full cached copy isn't a valid answer to
+    // a Range request - Firefox aborts playback with "A ServiceWorker intercepted the request
+    // and encountered an unexpected error".
+    if (
+        e.request.headers.has('range') ||
+        e.request.destination === 'video' ||
+        e.request.destination === 'audio'
+    ) {
         return;
     }
 
