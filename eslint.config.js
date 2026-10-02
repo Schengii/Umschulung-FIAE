@@ -57,8 +57,11 @@ module.exports = [
         Response: 'readonly',
         HTMLImageElement: 'readonly',
         clients: 'readonly',
-        // Cross-file browser globals defined by non-module <script> includes
-        // (constants.js, storage.js, audio.js, achievements.js, confetti.js, news_data.js …)
+        // Cross-file browser globals. Classic <script> includes define them in the shared
+        // global scope (constants.js: APP, STORAGE_KEYS; components.js: AppStorage;
+        // news_data.js: newsData; toast.js: showToast), and three ES modules attach
+        // themselves to window so those classic scripts can reach them
+        // (modules/game-audio.js, modules/achievements.js, modules/confetti.js).
         APP: 'readonly',
         AppStorage: 'readonly',
         STORAGE_KEYS: 'readonly',
@@ -68,7 +71,6 @@ module.exports = [
         newsData: 'readonly',
         initBlogEnhancements: 'readonly',
         showToast: 'readonly',
-        BoundingBoxRenderer: 'readonly',
       },
     },
     rules: {

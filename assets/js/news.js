@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 const likeKey = `news_likes_${article.id}`;
-                const liked = localStorage.getItem(likeKey) === 'true';
-                const likeCount = parseInt(localStorage.getItem(`${likeKey}_count`) || '0', 10) + (liked ? 1 : 0);
+                const liked = AppStorage.getItem(likeKey) === 'true';
+                const likeCount = parseInt(AppStorage.getItem(`${likeKey}_count`) || '0', 10) + (liked ? 1 : 0);
 
                 articleElement.innerHTML = `
                     <div class="news-card-header">
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span lang="en">Share</span>
                         </button>
                     </div>
-                    <h5><span lang="${currentLanguage}">${date}</span></h5>
+                    <p class="card-source"><span lang="${currentLanguage}">${date}</span></p>
                     ${contentHtml}
                     <div style="margin-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem;">
                         <button type="button" class="like-article-btn" data-id="${article.id}" style="background: none; border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; cursor: pointer; color: ${liked ? 'var(--primary)' : 'var(--text-secondary)'}; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
@@ -232,18 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const articleId = btn.getAttribute('data-id');
         const likeKey = `news_likes_${articleId}`;
-        const liked = localStorage.getItem(likeKey) === 'true';
+        const liked = AppStorage.getItem(likeKey) === 'true';
 
-        let baseCount = parseInt(localStorage.getItem(`${likeKey}_count`) || '0', 10);
+        let baseCount = parseInt(AppStorage.getItem(`${likeKey}_count`) || '0', 10);
         if (liked) {
-            localStorage.setItem(likeKey, 'false');
+            AppStorage.setItem(likeKey, 'false');
             btn.style.color = 'var(--text-secondary)';
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-regular fa-thumbs-up';
             const countSpan = btn.querySelector('.like-count');
             if (countSpan) countSpan.textContent = String(baseCount);
         } else {
-            localStorage.setItem(likeKey, 'true');
+            AppStorage.setItem(likeKey, 'true');
             btn.style.color = 'var(--primary)';
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-solid fa-thumbs-up';

@@ -22,12 +22,18 @@ export function initPdfExporter() {
 }
 
 function generateFactsheetModal() {
+    // sessionStorage throws when storage is blocked; the export must still work then.
+    const fromSession = (key) => {
+        try {
+            return sessionStorage.getItem(key);
+        } catch (_e) {
+            return null;
+        }
+    };
     const recruiterCompany =
-        sessionStorage.getItem('recruiter_company') || localStorage.getItem('recruiter_company') || 'Ihr Unternehmen';
+        fromSession('recruiter_company') || AppStorage.getItem('recruiter_company') || 'Ihr Unternehmen';
     const _recruiterName =
-        sessionStorage.getItem('recruiter_name') ||
-        localStorage.getItem('recruiter_name') ||
-        'Sehr geehrte Damen und Herren';
+        fromSession('recruiter_name') || AppStorage.getItem('recruiter_name') || 'Sehr geehrte Damen und Herren';
 
     const modalId = 'pdf-export-modal';
     let existingModal = document.getElementById(modalId);
@@ -51,7 +57,7 @@ function generateFactsheetModal() {
                 <h3 class="m-0 color-primary">
                     <i class="fa-solid fa-file-pdf me-2"></i> Recruiter Factsheet — Maximilian Schenk
                 </h3>
-                <button type="button" class="btn-close-modal btn btn-sm btn-outline-secondary" aria-label="Schließen">✕</button>
+                <button type="button" class="btn-close-modal btn btn-sm btn-outline-secondary" aria-label="Schließen" data-en-aria-label="Close">✕</button>
             </div>
             
             <div id="factsheet-print-area" class="factsheet-container p-3 background-page border-radius-8px" style="color: var(--text-color);">

@@ -2,6 +2,8 @@
  * Praktikumsbetrieb Media Module — Handles DFG Image Gallery and EcoChef Video Player
  */
 
+import { BoundingBoxRenderer } from './bounding-box-renderer.js';
+
 // Global state for media items
 const DFG_GALLERY_DATA = [
     {
@@ -355,8 +357,10 @@ function setupElektroCheckScanner() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
         // Lazy instantiate BoundingBoxRenderer
-        if (!bboxRenderer && typeof BoundingBoxRenderer !== 'undefined') {
-            bboxRenderer = new BoundingBoxRenderer('uploaded-image', 'bounding-box-overlay');
+        const scannerImage = document.getElementById('uploaded-image');
+        const scannerOverlay = document.getElementById('bounding-box-overlay');
+        if (!bboxRenderer && scannerImage && scannerOverlay) {
+            bboxRenderer = new BoundingBoxRenderer(scannerImage, scannerOverlay);
         }
 
         // Start scanning state
@@ -387,7 +391,7 @@ function setupElektroCheckScanner() {
 
             // Draw bounding boxes
             if (bboxRenderer) {
-                bboxRenderer.renderBoundingBoxes(defects);
+                bboxRenderer.render(defects);
             }
 
             // Fill results list and show
@@ -405,7 +409,7 @@ function setupElektroCheckScanner() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
         if (bboxRenderer) {
-            bboxRenderer.clearBoundingBoxes();
+            bboxRenderer.clear();
         }
 
         resultsCard.classList.add('collapsed');

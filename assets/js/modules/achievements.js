@@ -2,7 +2,7 @@
  * Achievement System Module — Gamification with unlock badges
  * Tracks user accomplishments across the portfolio site.
  */
-const Achievements = {
+export const Achievements = {
     definitions: {
         first_visit: {
             icon: '👋',
@@ -74,6 +74,20 @@ const Achievements = {
             desc_de: 'Mindestens 5 verschiedene Seiten besucht.',
             desc_en: 'Visited at least 5 different pages.',
         },
+        exam_passed: {
+            icon: '🎓',
+            title_de: 'Prüfung bestanden',
+            title_en: 'Exam Passed',
+            desc_de: 'Eine IHK-Prüfungssimulation mit mindestens 50 % bestanden.',
+            desc_en: 'Passed an IHK exam simulation with at least 50%.',
+        },
+        git_master: {
+            icon: '🌿',
+            title_de: 'Git-Profi',
+            title_en: 'Git Pro',
+            desc_de: 'Eine Challenge im Git-Simulator bestanden.',
+            desc_en: 'Passed a challenge in the Git simulator.',
+        },
         cv_downloaded: {
             icon: '📄',
             title_de: 'Bewerbungsmappe geöffnet',
@@ -115,6 +129,8 @@ const Achievements = {
 
         const toast = document.createElement('div');
         toast.className = 'achievement-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
         toast.innerHTML = `
             <div class="achievement-toast-icon">${def.icon}</div>
             <div class="achievement-toast-body">
@@ -134,9 +150,9 @@ const Achievements = {
         // Trigger animation
         requestAnimationFrame(() => toast.classList.add('show'));
 
-        // Play sound
-        if (typeof GameAudio !== 'undefined') {
-            GameAudio.play('success');
+        // Play sound (silent unless the visitor enabled sound)
+        if (window.GameAudio) {
+            window.GameAudio.play('success');
         }
 
         // Auto-dismiss
@@ -148,6 +164,10 @@ const Achievements = {
     },
 };
 
+// The page scripts (quiz.js, snake.js, memory.js, interview.js, ...) are classic <script>
+// files and cannot import this module; they reach it through the global.
+window.Achievements = Achievements;
+
 export function initAchievements() {
     // Track first visit
     if (!AppStorage.getItem('has_visited')) {
@@ -156,7 +176,13 @@ export function initAchievements() {
     }
 
     // Track page visits for explorer achievement
-    const visitedPages = JSON.parse(AppStorage.getItem('visited_pages', '[]') || '[]');
+    let visitedPages = [];
+    try {
+        const stored = JSON.parse(AppStorage.getItem('visited_pages', '[]') || '[]');
+        if (Array.isArray(stored)) visitedPages = stored;
+    } catch {
+        // corrupt entry: start over
+    }
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     if (!visitedPages.includes(currentPage)) {
         visitedPages.push(currentPage);
@@ -174,8 +200,19 @@ export function initAchievements() {
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-    // Listen for language changes
-    document.addEventListener('langchange', () => {
+    // Language switched by the visitor. Not 'langchange': several modules dispatch that
+    // one themselves just to re-render their texts.
+    window.addEventListener('fiae:lang-change', () => {
         Achievements.unlock('polyglot');
+    });
+
+    // CV opened, downloaded or printed (delegated: some of these controls are rendered later)
+    document.addEventListener('click', (e) => {
+        const target = /** @type {HTMLElement} */ (e.target);
+        const link = target.closest('a[href]');
+        const isCvLink = link && /lebenslauf[^/]*\.pdf$/i.test(link.getAttribute('href'));
+        if (isCvLink || target.closest('#btn-cv-print-header, #btn-cv-print-card')) {
+            Achievements.unlock('cv_downloaded');
+        }
     });
 }

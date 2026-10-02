@@ -82,9 +82,9 @@ function injectModalHtml() {
         </div>
 
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <button id="btn-sandbox-reload" class="btn btn-sm btn-outline" title="Neu laden" style="padding: 0.35rem 0.6rem;">🔄</button>
-          <a id="btn-sandbox-newtab" href="#" target="_blank" class="btn btn-sm btn-secondary" title="In neuem Tab öffnen" style="padding: 0.35rem 0.6rem;">↗️ Neuer Tab</a>
-          <button id="btn-sandbox-close" class="btn btn-sm btn-primary" title="Schließen" style="padding: 0.35rem 0.75rem; background: #ef4444; border-color: #ef4444;">✕</button>
+          <button id="btn-sandbox-reload" class="btn btn-sm btn-outline" title="Neu laden" data-en-title="Reload" style="padding: 0.35rem 0.6rem;">🔄</button>
+          <a id="btn-sandbox-newtab" href="#" target="_blank" class="btn btn-sm btn-secondary" title="In neuem Tab öffnen" data-en-title="Open in new tab" style="padding: 0.35rem 0.6rem;">↗️ Neuer Tab</a>
+          <button id="btn-sandbox-close" class="btn btn-sm btn-primary" title="Schließen" data-en-title="Close" style="padding: 0.35rem 0.75rem; background: #ef4444; border-color: #ef4444;">✕</button>
         </div>
       </div>
 

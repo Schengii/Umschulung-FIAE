@@ -49,6 +49,21 @@ export function initSkillMatchmaker() {
 
     let selectedSkills = new Set(['java', 'js', 'htmlcss', 'sql']);
 
+    // home.html does not load projects_data.js; fetch the catalogue instead of relying on
+    // another script happening to have put window.projectsData there.
+    let projects = Array.isArray(window.projectsData) ? window.projectsData : [];
+    if (projects.length === 0) {
+        fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json'))
+            .then((res) => (res.ok ? res.json() : []))
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    projects = data;
+                    updateMatchScores();
+                }
+            })
+            .catch((e) => console.warn('Skill matchmaker: project data not available:', e));
+    }
+
     function renderWidget() {
         container.innerHTML = `
             <div class="matchmaker-box p-3 border-radius-8px background-glass shadow-sm margin-bottom-1-5rem">
@@ -120,7 +135,10 @@ export function initSkillMatchmaker() {
 
                 if (window.showToast) {
                     window.showToast(
-                        `Projekte nach Anforderungsprofil gefiltert (${selectedSkills.size} Skills)`,
+                        {
+                            de: `Projekte nach Anforderungsprofil gefiltert (${selectedSkills.size} Skills)`,
+                            en: `Projects filtered by requirements profile (${selectedSkills.size} skills)`,
+                        },
                         'info'
                     );
                 }
@@ -138,13 +156,16 @@ export function initSkillMatchmaker() {
         }
 
         const activeSkills = availableSkills.filter((s) => selectedSkills.has(s.id));
-        const allProjectsData = window.projectsData || [];
-
-        const overallScore = computeMatchScore(activeSkills, allProjectsData);
+        const overallScore = computeMatchScore(activeSkills, projects);
         const badge = container.querySelector('#match-score-badge');
         const fill = container.querySelector('#match-progress-fill');
 
-        if (badge) badge.textContent = `🎯 ${overallScore}% Match für Ihr Team`;
+        const isEnglish = document.documentElement.getAttribute('lang') === 'en';
+        if (badge) {
+            badge.textContent = isEnglish
+                ? `🎯 ${overallScore}% match for your team`
+                : `🎯 ${overallScore}% Match für Ihr Team`;
+        }
         if (fill) fill.style.width = `${overallScore}%`;
     }
 

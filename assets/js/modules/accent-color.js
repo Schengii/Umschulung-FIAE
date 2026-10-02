@@ -40,12 +40,8 @@ export function initAccentColor() {
                 // Update HTML attribute
                 document.documentElement.setAttribute('data-accent', val);
 
-                // Save preference
-                try {
-                    localStorage.setItem('portfolio_accent', val);
-                } catch (_e) {
-                    console.warn('LocalStorage not accessible for saving accent.');
-                }
+                // Save preference (AppStorage tolerates blocked storage)
+                AppStorage.setItem('portfolio_accent', val);
 
                 // Highlight active dot
                 updateActiveDot(val);

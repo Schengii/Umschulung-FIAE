@@ -22,7 +22,13 @@
 
         exportBtn.addEventListener('click', () => {
             if (typeof showToast === 'function') {
-                showToast('Generiere druckoptimiertes Portfolio-Dossier...', 'info');
+                showToast(
+                    {
+                        de: 'Generiere druckoptimiertes Portfolio-Dossier...',
+                        en: 'Generating print-optimised portfolio dossier...',
+                    },
+                    'info'
+                );
             }
             window.print();
         });

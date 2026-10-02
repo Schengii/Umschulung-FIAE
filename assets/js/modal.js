@@ -133,8 +133,8 @@
                 <div class="carousel-track" id="modal-carousel-track">
                     ${slides}
                 </div>
-                <button class="carousel-btn prev-btn" id="carousel-prev" aria-label="Vorheriges Bild">‹</button>
-                <button class="carousel-btn next-btn" id="carousel-next" aria-label="Nächstes Bild">›</button>
+                <button class="carousel-btn prev-btn" id="carousel-prev" aria-label="Vorheriges Bild" data-en-aria-label="Previous image">‹</button>
+                <button class="carousel-btn next-btn" id="carousel-next" aria-label="Nächstes Bild" data-en-aria-label="Next image">›</button>
                 <div class="carousel-dots" id="carousel-dots-container">
                     ${dots}
                 </div>

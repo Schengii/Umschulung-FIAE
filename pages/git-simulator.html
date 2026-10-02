@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interaktiver Git-Branching-Simulator | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/git-simulator.html">
@@ -97,8 +97,13 @@
                         <li><code>git checkout -b &lt;name&gt;</code> <span lang="de">Erstellt &amp; wechselt Branch</span><span lang="en">Creates &amp; switches branch</span></li>
                         <li><code>git merge &lt;name&gt;</code> <span lang="de">Mergt Branch in aktuellen HEAD</span><span lang="en">Merges branch into HEAD</span></li>
                         <li><code>git rebase &lt;name&gt;</code> <span lang="de">Rebaset HEAD auf Branch</span><span lang="en">Rebases HEAD onto branch</span></li>
+                        <li><code>git cherry-pick &lt;hash&gt;</code> <span lang="de">Kopiert einen einzelnen Commit</span><span lang="en">Copies a single commit</span></li>
                         <li><code>git reset --hard &lt;hash&gt;</code> <span lang="de">Setzt Branch zurück</span><span lang="en">Resets branch back</span></li>
+                        <li><code>git stash</code> / <code>git stash pop</code> <span lang="de">Lagert Änderungen zwischen / holt sie zurück</span><span lang="en">Shelves changes / brings them back</span></li>
+                        <li><code>git status</code> <span lang="de">Zeigt Branch und offene Änderungen</span><span lang="en">Shows branch and pending changes</span></li>
+                        <li><code>git branch -d &lt;name&gt;</code> <span lang="de">Löscht einen Branch</span><span lang="en">Deletes a branch</span></li>
                         <li><code>git log</code> <span lang="de">Zeigt Commit-Historie</span><span lang="en">Shows commit history</span></li>
+                        <li><code>touch &lt;datei&gt;</code> <span lang="de">Simuliert eine uncommittete Änderung</span><span lang="en">Simulates an uncommitted change</span></li>
                         <li><code>clear</code> <span lang="de">Konsole leeren</span><span lang="en">Clear terminal console</span></li>
                     </ul>
                 </div>
@@ -107,7 +112,7 @@
             <!-- Right Area: Visualizer & Terminal -->
             <div class="main-simulator-panel">
                 <!-- Visualizer Canvas -->
-                <section class="card visualizer-card" aria-label="Git Visualizer Canvas">
+                <section class="card visualizer-card" aria-label="Git-Visualisierung" data-en-aria-label="Git Visualizer Canvas">
                     <div class="visualizer-header">
                         <h3>
                             <span lang="de"><i class="fa-solid fa-diagram-project"></i> Commit-Graph (Live)</span>
@@ -135,7 +140,7 @@
                 </section>
 
                 <!-- Quick Action Buttons & Terminal -->
-                <section class="card terminal-card" aria-label="Terminal Console">
+                <section class="card terminal-card" aria-label="Terminal-Konsole" data-en-aria-label="Terminal Console">
                     <!-- Quick Actions Bar -->
                     <div class="quick-actions-bar">
                         <button class="action-btn" id="btn-quick-commit">
@@ -166,7 +171,7 @@
                             </div>
                             <div class="terminal-input-line">
                                 <span class="terminal-prompt">visitor@fiae-portfolio:~/git-sandbox$</span>
-                                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Git command input">
+                                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Git-Befehl eingeben" data-en-aria-label="Git command input">
                             </div>
                         </div>
                     </div>

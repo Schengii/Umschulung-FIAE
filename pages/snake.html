@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake JS - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/snake.html">
@@ -41,19 +41,19 @@
                 <div><span lang="de">Punkte:</span><span lang="en">Score:</span> <span id="score">0</span></div>
                 <div><span lang="de">Highscore:</span><span lang="en">High Score:</span> <span id="highscore">0</span></div>
             </div>
-            <canvas id="canvas" width="400" height="400" aria-label="Snake Spielfeld" role="img"></canvas>
+            <canvas id="canvas" width="400" height="400" aria-label="Snake Spielfeld" data-en-aria-label="Snake playing field" role="img"></canvas>
             <div class="game-controls">
                 <button id="start-btn" class="btn-game"><i class="fa fa-play" aria-hidden="true"></i> <span lang="de">Start</span><span lang="en">Start</span></button>
                 <button id="pause-btn" class="btn-game" disabled><i class="fa fa-pause" aria-hidden="true"></i> <span lang="de">Pause</span><span lang="en">Pause</span></button>
             </div>
             <!-- Mobile Control D-Pad -->
             <div class="mobile-dpad" id="mobile-dpad">
-                <button class="dpad-btn" id="dpad-up" aria-label="Steuerung Oben"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                <button class="dpad-btn" id="dpad-up" aria-label="Steuerung Oben" data-en-aria-label="Control up"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
                 <div class="dpad-row">
-                    <button class="dpad-btn" id="dpad-left" aria-label="Steuerung Links"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-                    <button class="dpad-btn" id="dpad-right" aria-label="Steuerung Rechts"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                    <button class="dpad-btn" id="dpad-left" aria-label="Steuerung Links" data-en-aria-label="Control left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                    <button class="dpad-btn" id="dpad-right" aria-label="Steuerung Rechts" data-en-aria-label="Control right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
                 </div>
-                <button class="dpad-btn" id="dpad-down" aria-label="Steuerung Unten"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+                <button class="dpad-btn" id="dpad-down" aria-label="Steuerung Unten" data-en-aria-label="Control down"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
             </div>
             <div class="snake-controls-info">
                 <p><strong><span lang="de">Steuerung:</span><span lang="en">Controls:</span></strong> <span lang="de">Pfeiltasten / W, A, S, D | <strong>Pause:</strong> Leertaste</span><span lang="en">Arrow keys / W, A, S, D | <strong>Pause:</strong> Spacebar</span></p>

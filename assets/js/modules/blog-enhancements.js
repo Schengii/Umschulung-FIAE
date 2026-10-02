@@ -26,7 +26,7 @@ function initReadingTime() {
         const badge = document.createElement('span');
         badge.className = 'reading-time-badge';
         badge.innerHTML = `
-            <i class="fa fa-clock-o" aria-hidden="true"></i>
+            <i class="fa-regular fa-clock" aria-hidden="true"></i>
             <span lang="de">${readTime} Min. Lesezeit</span>
             <span lang="en">${readTime} min read</span>
         `;
@@ -63,7 +63,7 @@ function initSocialShare() {
             <a href="https://instagram.com/schengii" class="share-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
             <a href="https://facebook.com" class="share-btn" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
             <a href="https://wa.me/4917624921897" class="share-btn" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-            <button type="button" class="share-btn share-copy" aria-label="Copy Link">
+            <button type="button" class="share-btn share-copy" aria-label="Link kopieren" data-en-aria-label="Copy Link">
                 <i class="fa fa-link" aria-hidden="true"></i>
             </button>
         `;

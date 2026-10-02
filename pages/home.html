@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-w6wNynblYFqS7AkoKQRZHCDm0Ywn+135ymavC/JQEnU=' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-w6wNynblYFqS7AkoKQRZHCDm0Ywn+135ymavC/JQEnU='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/home.html">
@@ -16,9 +16,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.max-schenk.tech/pages/home.html">
     <meta property="og:image" content="https://www.max-schenk.tech/assets/images/it_workspace.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Home — Umschulung IT Portfolio">
+    <meta name="twitter:description" content="Dashboard mit Werdegang, IHK-Countdown und Infos zur Umschulung als Fachinformatiker.">
+    <meta name="twitter:image" content="https://www.max-schenk.tech/assets/images/it_workspace.webp">
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
     <link rel="preload" href="../assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../assets/css/modules/hero_showcase.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
     <script type="application/ld+json">
@@ -66,7 +71,7 @@
                 <div class="hero-avatar-ring">
                     <picture>
                         <source srcset="../assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
-                        <img src="../assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk" class="hero-avatar-img">
+                        <img src="../assets/images/maximilian_schenk_portrait.jpg" width="457" height="686" alt="Maximilian Schenk" class="hero-avatar-img">
                     </picture>
                 </div>
             </div>
@@ -305,13 +310,13 @@
                         <span lang="de">Was ist ein Fachinformatiker?</span>
                         <span lang="en">What is an IT Specialist?</span>
                     </h2>
-                    <h5>
+                    <p class="card-source">
                         <span lang="de">Quelle: Berufe.net, aktualisiert: 11. April 2024</span>
                         <span lang="en">Source: Berufe.net, updated: April 11, 2024</span>
-                    </h5>
+                    </p>
                     <picture>
-                        <source srcset="../assets/images/it_workspace.webp" type="image/png">
-                        <img src="../assets/images/it_workspace.webp" alt="IT-Ausbildung im Betrieb"
+                        <source srcset="../assets/images/it_workspace.webp" type="image/webp">
+                        <img src="../assets/images/it_workspace.webp" width="1024" height="1024" alt="IT-Ausbildung im Betrieb"
                             loading="lazy"><!-- KI generiert -->
                     </picture>
                     <p><strong>
@@ -336,14 +341,14 @@
 
                 <article class="card" aria-labelledby="card-bfw">
                     <h2 id="card-bfw">Berufsförderungswerk Dortmund BFW</h2>
-                    <h5>
+                    <p class="card-source">
                         <span lang="de">Quelle: Wikipedia, aktualisiert: 11. April 2024</span>
                         <span lang="en">Source: Wikipedia, updated: April 11, 2024</span>
-                    </h5>
+                    </p>
                     <picture>
                         <source srcset="../assets/images/BFW_Fahnen_Panorama.webp" type="image/webp">
                         <source srcset="../assets/images/BFW_Fahnen_Panorama.jpg" type="image/jpeg">
-                        <img src="../assets/images/BFW_Fahnen_Panorama.jpg"
+                        <img src="../assets/images/BFW_Fahnen_Panorama.jpg" width="1813" height="800"
                             alt="Hauptgebäude des Berufsförderungswerks BFW Dortmund" loading="lazy">
                     </picture>
                     <p><strong>
@@ -522,7 +527,7 @@
                                     team.</span></div>
                         </div>
                         <div class="timeline-item">
-                            <div class="timeline-badge"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                            <div class="timeline-badge"><i class="fa-regular fa-file-lines" aria-hidden="true"></i></div>
                             <div class="timeline-date">Mitte Feb 2025</div>
                             <div class="timeline-title"><span lang="de">AP1 Prüfung</span><span lang="en">AP1
                                     Exam</span></div>
@@ -564,9 +569,9 @@
                         is sponsored by the Federal Pension Insurance. Program includes a parallel 2-year internship in
                         a host company of choice.</p>
                     <p lang="de">Es gibt eine Abschlussprüfung Teil 1 und Teil 2 vor der IHK. Mehr zur IHK Dortmund
-                        erfahren Sie <a href="https://www.ihk.de/dortmund/" target="_blank" rel="noopener">hier</a>.</p>
+                        erfahren Sie <a href="https://www.ihk.de/dortmund/" target="_blank" rel="noopener">auf der Website der IHK zu Dortmund</a>.</p>
                     <p lang="en">Qualifications consist of Part 1 and Part 2 exams before the IHK. Learn more about IHK
-                        Dortmund <a href="https://www.ihk.de/dortmund/" target="_blank" rel="noopener">here</a>.</p>
+                        Dortmund <a href="https://www.ihk.de/dortmund/" target="_blank" rel="noopener">on the IHK Dortmund website</a>.</p>
                 </section>
 
                 <section class="card" aria-labelledby="card-praktikum-side">
@@ -608,7 +613,7 @@
                                 Bild</a></li>
                         <li><a href="https://de.wikipedia.org/wiki/Berufsf%C3%B6rderungswerk" target="_blank"
                                 rel="noopener">BFW (Wikipedia)</a></li>
-                        <li><a href="../assets/images/academy_campus.png" target="_blank" rel="noopener">BFW Dortmund
+                        <li><a href="../assets/images/BFW_Fahnen_Panorama.jpg" target="_blank" rel="noopener">BFW Dortmund
                                 Campus Bild</a></li>
                         <li><a href="https://de.wikipedia.org/wiki/Deutsche_Forschungsgemeinschaft" target="_blank"
                                 rel="noopener">Infos DFG</a></li>
@@ -633,10 +638,10 @@
                     </p>
                 </div>
                 <div class="display-flex flex-gap-0-75rem align-items-center">
-                    <a href="mailto:sche-max@web.de" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="E-Mail senden">
+                    <a href="mailto:sche-max@web.de" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="E-Mail senden" data-en-aria-label="Send email">
                         <i class="fa-solid fa-envelope" aria-hidden="true"></i> sche-max@web.de
                     </a>
-                    <a href="tel:+4917624921897" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="Telefon">
+                    <a href="tel:+4917624921897" class="btn-secondary font-size-0-9rem padding-6px-12px" aria-label="Telefon" data-en-aria-label="Phone">
                         <i class="fa-solid fa-phone" aria-hidden="true"></i> 0176 24921897
                     </a>
                 </div>
@@ -655,14 +660,14 @@
                             <span lang="de">Ihr Name / Unternehmen *</span>
                             <span lang="en">Your Name / Company *</span>
                         </label>
-                        <input type="text" id="contact-name" class="form-control" required placeholder="z. B. Max Mustermann (Tech GmbH)">
+                        <input type="text" id="contact-name" class="form-control" required placeholder="z. B. Max Mustermann (Tech GmbH)" data-en-placeholder="e.g. Jane Doe (Tech Ltd)">
                     </div>
                     <div class="form-group">
                         <label for="contact-email">
                             <span lang="de">Ihre E-Mail-Adresse *</span>
                             <span lang="en">Your Email Address *</span>
                         </label>
-                        <input type="email" id="contact-email" class="form-control" required placeholder="name@unternehmen.de">
+                        <input type="email" id="contact-email" class="form-control" required placeholder="name@unternehmen.de" data-en-placeholder="name@company.com">
                     </div>
                 </div>
 
@@ -671,7 +676,7 @@
                         <span lang="de">Ihre Nachricht / Stellenangebot *</span>
                         <span lang="en">Your Message / Job Offer *</span>
                     </label>
-                    <textarea id="contact-message" class="form-control contact-message-textarea" rows="4" required placeholder="Guten Tag Herr Schenk, wir haben Ihr Portfolio gesehen und..."></textarea>
+                    <textarea id="contact-message" class="form-control contact-message-textarea" rows="4" required placeholder="Guten Tag Herr Schenk, wir haben Ihr Portfolio gesehen und..." data-en-placeholder="Hello Mr Schenk, we have seen your portfolio and..."></textarea>
                 </div>
 
                 <div class="display-flex align-items-center flex-gap-1rem margin-top-1rem">

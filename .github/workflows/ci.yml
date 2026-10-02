@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Read-only token: no job here writes to the repository.
+permissions:
+  contents: read
+
+# A newer push to the same branch/PR makes the older run pointless.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     name: Quality Gates (data sync, CSP, lint, unit tests, build)
@@ -21,11 +30,14 @@ jobs:
           node-version: 24
           cache: 'npm'
 
+      # `npm ci` only: it fails when package-lock.json and package.json disagree,
+      # which a fallback to `npm install` would silently paper over.
       - name: Install Project Dependencies
-        run: npm ci || npm install
+        run: npm ci
 
+      # No --omit=dev: this project has devDependencies only, so omitting them audits nothing.
       - name: Audit Dependencies for Known Vulnerabilities
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --audit-level=high
 
       - name: Verify Data Synchronization
         run: npm run check-sync
@@ -36,7 +48,13 @@ jobs:
       - name: Verify CSP script-src Hashes Match Inline Scripts
         run: npm run check-csp
 
-      - name: Verify Service Worker Precache List Is Up To Date
+      - name: Verify Font Awesome Subset Covers Every Used Icon
+        run: npm run check-icons
+
+      - name: Verify Sitemap Lists Every Indexable Page
+        run: npm run check-sitemap
+
+      - name: Verify Service Worker Precache List And Cache Name Are Up To Date
         run: npm run check-sw-assets
 
       - name: Lint JavaScript
@@ -57,7 +75,9 @@ jobs:
   e2e:
     # One job per Playwright project so the browsers run in parallel (a single
     # serial job took ~13 min) and a failure points straight at the browser.
-    name: E2E (${{ matrix.project }})
+    # The extra `dist` entry runs the same suite against the minified build,
+    # which is what Vercel actually deploys (ADR 0008).
+    name: E2E (${{ matrix.project }}${{ matrix.root == 'dist' && ', dist build' || '' }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -71,6 +91,9 @@ jobs:
             browser: webkit
           - project: mobile-chrome
             browser: chromium
+          - project: chromium
+            browser: chromium
+            root: dist
 
     steps:
       - name: Checkout Repository
@@ -83,25 +106,31 @@ jobs:
           cache: 'npm'
 
       - name: Install Project Dependencies
-        run: npm ci || npm install
+        run: npm ci
+
+      - name: Build Production Output (dist)
+        if: matrix.root == 'dist'
+        run: npm run build:dist
 
       - name: Install Playwright Browser (${{ matrix.browser }})
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run Playwright E2E Tests (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }}
+        env:
+          E2E_ROOT: ${{ matrix.root }}
 
       - name: Upload Playwright Results on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-results-${{ matrix.project }}
+          name: playwright-results-${{ matrix.project }}${{ matrix.root == 'dist' && '-dist' || '' }}
           path: test-results/
           retention-days: 7
           if-no-files-found: ignore
 
   lighthouse:
-    name: Lighthouse Quality Audit (a11y/SEO/best-practices enforced, performance informational)
+    name: Lighthouse Quality Audit (performance, a11y, SEO, best-practices enforced)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -111,6 +140,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      # Audit the minified build, i.e. the files production actually serves.
+      - name: Build Production Output (dist)
+        run: npm run build:dist
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11

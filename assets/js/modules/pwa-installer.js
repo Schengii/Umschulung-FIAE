@@ -20,17 +20,13 @@ export function initPwaInstaller() {
                 // Force reflow
                 banner.offsetHeight;
                 banner.classList.add('show');
-
-                // Translate language tags
-                const currentLang = document.documentElement.getAttribute('lang') || 'de';
-                document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
             }
         }
     });
 
     // Create and inject the banner dynamically
     const bannerHtml = `
-    <div id="pwa-install-banner" class="pwa-install-banner hidden" role="dialog" aria-label="App installieren">
+    <div id="pwa-install-banner" class="pwa-install-banner hidden" role="dialog" aria-label="App installieren / Install app">
         <div class="pwa-install-content">
             <i class="fa fa-download" aria-hidden="true"></i>
             <div class="pwa-install-text">

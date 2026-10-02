@@ -174,7 +174,7 @@ export function initRoadmap() {
         const topicsListHTML = topics
             .map((t, idx) => {
                 const storageKey = `fiae_progress_phase_${phaseId}_topic_${idx}`;
-                const checked = localStorage.getItem(storageKey) === 'true' ? 'checked' : '';
+                const checked = AppStorage.getItem(storageKey) === 'true' ? 'checked' : '';
                 return `
                 <li style="display:flex; align-items:center; gap:0.5rem; padding: 4px 0;">
                     <input type="checkbox" id="${storageKey}" class="topic-checkbox" data-key="${storageKey}" ${checked} style="cursor:pointer; width:18px; height:18px; accent-color:var(--primary);">
@@ -253,7 +253,7 @@ export function initRoadmap() {
         checkboxes.forEach((cb) => {
             cb.addEventListener('change', (e) => {
                 const key = /** @type {HTMLInputElement} */ (e.target).getAttribute('data-key');
-                localStorage.setItem(key, /** @type {HTMLInputElement} */ (e.target).checked ? 'true' : 'false');
+                AppStorage.setItem(key, /** @type {HTMLInputElement} */ (e.target).checked ? 'true' : 'false');
             });
         });
 

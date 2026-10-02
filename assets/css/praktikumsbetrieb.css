@@ -395,6 +395,7 @@
 }
 
 .scanner-image {
+    width: auto;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -426,6 +427,8 @@
 
 .bounding-box-label {
     position: absolute;
+    top: -1.6em;
+    left: 0;
     color: white;
     padding: 2px 6px;
     font-size: 0.75rem;

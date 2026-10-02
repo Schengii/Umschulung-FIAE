@@ -23,3 +23,304 @@
 .quiz-clear-floats {
     clear: both;
 }
+
+/* ==========================================================================
+   IHK exam simulation (modules/ihk-exam-simulator.js)
+   ========================================================================== */
+.ihk-mode-selector {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-page);
+}
+
+.exam-mode-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.card .exam-mode-title {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    color: var(--primary);
+}
+
+.exam-mode-hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.exam-mode-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.btn-exam-mode {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-exam-mode:hover {
+    border-color: var(--primary);
+}
+
+.btn-exam-mode.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--text-on-primary);
+    font-weight: 600;
+}
+
+.exam-timer {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.exam-timer[hidden] {
+    display: none;
+}
+
+.exam-timer-low {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* While a simulation is selected, the standard quiz steps aside. */
+.quiz-container.exam-active > :not(h2):not(.ihk-mode-selector):not(.exam-panel):not(.sr-only) {
+    display: none !important;
+}
+
+.exam-panel[hidden] {
+    display: none;
+}
+
+.card .exam-heading,
+.card .exam-question {
+    margin-bottom: 1rem;
+}
+
+.exam-heading:focus {
+    outline: none;
+}
+
+.exam-note,
+.exam-best {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.exam-start-btn {
+    width: auto;
+    margin-top: 1rem;
+}
+
+.exam-question-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.exam-topic-chip {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+}
+
+.exam-answers {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.btn-quiz.exam-answer.selected {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+    box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+[data-theme="dark"] .btn-quiz.exam-answer.selected {
+    background-color: rgba(96, 165, 250, 0.15);
+}
+
+.exam-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 1.25rem;
+}
+
+.exam-step {
+    min-width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.exam-step.answered {
+    border-color: var(--primary);
+    font-weight: 700;
+}
+
+.exam-step.current {
+    background: var(--primary);
+    color: var(--text-on-primary);
+}
+
+.exam-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+
+.exam-nav button {
+    width: auto;
+}
+
+.exam-nav #exam-submit-btn {
+    margin-left: auto;
+}
+
+.exam-nav button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.exam-warning {
+    margin-top: 0.75rem;
+    font-weight: 600;
+    color: #b45309;
+}
+
+[data-theme="dark"] .exam-warning {
+    color: #fbbf24;
+}
+
+.exam-score {
+    padding: 0.75rem 1rem;
+    border-left: 4px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-page);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.exam-score.exam-passed {
+    border-left-color: #10b981;
+}
+
+.exam-score.exam-failed {
+    border-left-color: #ef4444;
+}
+
+.exam-topic-table {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.exam-topic-table caption {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.exam-topic-table th,
+.exam-topic-table td {
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font-weight: 400;
+}
+
+.exam-topic-table thead th {
+    font-weight: 700;
+}
+
+.exam-topic-weak th[scope="row"] {
+    font-weight: 700;
+}
+
+.exam-topic-bar {
+    display: inline-block;
+    width: min(8rem, 30vw);
+    height: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: var(--radius-full);
+    background: var(--border);
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.exam-topic-fill {
+    display: block;
+    height: 100%;
+    background: #10b981;
+}
+
+.exam-topic-weak .exam-topic-fill {
+    background: #ef4444;
+}
+
+.exam-recommendation {
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.card .exam-subheading {
+    margin: 1.5rem 0 0.75rem;
+}
+
+.exam-review {
+    margin: 0 0 1.25rem;
+    padding-left: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.exam-review li {
+    margin-bottom: 0.9rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid #10b981;
+}
+
+.exam-review li.exam-review-wrong {
+    border-left-color: #ef4444;
+}
+
+.exam-review-question {
+    font-weight: 600;
+}
+
+.exam-review-explanation {
+    color: var(--text-muted);
+}

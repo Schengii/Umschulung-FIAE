@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-cBALp/y7MARjgUvTRbfwCrsls6mbJ5XhyBozXwy490U=' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-cBALp/y7MARjgUvTRbfwCrsls6mbJ5XhyBozXwy490U='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Über mich - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/ueber-mich.html">
@@ -286,7 +286,7 @@
                     <!-- Filter Tabs & Sort controls wrapper -->
                     <div class="skills-controls-container flex-space-between margin-bottom-1-5rem">
                         <div class="skills-filter-tabs margin-bottom-0" id="skills-filter-tabs" role="tablist"
-                            aria-label="Skills-Kategorien">
+                            aria-label="Skills-Kategorien" data-en-aria-label="Skill categories">
                             <button class="skills-tab active" data-cat="all" role="tab" aria-selected="true">
                                 <span lang="de">Alle</span><span lang="en">All</span>
                             </button>
@@ -414,11 +414,11 @@
             <!-- Right Column: Sidebar -->
             <aside class="right-col sidebar-column">
                 <!-- Profile Image Card -->
-                <section class="card" aria-label="Steckbrief">
+                <section class="card" aria-label="Steckbrief" data-en-aria-label="Profile">
                     <div class="avatar-container">
                         <picture>
                             <source srcset="../assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
-                            <img src="../assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk Portrait">
+                            <img src="../assets/images/maximilian_schenk_portrait.jpg" width="457" height="686" alt="Maximilian Schenk Portrait">
                         </picture>
                     </div>
 

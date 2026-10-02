@@ -1,7 +1,15 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
-import { advanceBoxLevel, resetBoxLevel, computeBoxStats, filterByBox } from './modules/leitner-box.js';
+import {
+    advanceBoxLevel,
+    resetBoxLevel,
+    computeBoxStats,
+    filterByBox,
+    filterDue,
+    nextDueDate,
+    daysUntilDue,
+} from './modules/leitner-box.js';
 import { escapeHtml } from './modules/html-utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -257,10 +265,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!cardEl || !hintEl || !questionEl || !answerEl) return;
 
+    const dueCountEl = document.getElementById('due-count');
+    const dueSummaryEl = document.getElementById('due-summary');
+
+    // A damaged entry (manual edit, interrupted write) must not take the page down.
+    const readStored = (key, fallback) => {
+        try {
+            const value = JSON.parse(AppStorage.getItem(key, 'null'));
+            if (Array.isArray(fallback)) return Array.isArray(value) ? value : fallback;
+            return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;
+        } catch (_e) {
+            return fallback;
+        }
+    };
+
     // Load data from LocalStorage
-    let starredIds = JSON.parse(AppStorage.getItem('flashcards_starred', '[]')) || [];
-    let customCards = JSON.parse(AppStorage.getItem('flashcards_custom', '[]')) || [];
-    let boxLevels = JSON.parse(AppStorage.getItem('flashcards_box_levels', '{}')) || {};
+    let starredIds = readStored('flashcards_starred', []);
+    let customCards = readStored('flashcards_custom', []);
+    let boxLevels = readStored('flashcards_box_levels', {});
+    // cardId -> timestamp of the day the card is due again (see leitner-box.js)
+    let dueDates = readStored('flashcards_due_dates', {});
 
     let currentCategory = 'all';
     let filteredDeck = [];
@@ -334,6 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredDeck = fullDatabase.filter((c) => starredIds.includes(c.id));
         } else if (currentCategory === 'custom') {
             filteredDeck = [...customCards];
+        } else if (currentCategory === 'due') {
+            filteredDeck = filterDue(fullDatabase, dueDates, Date.now());
         } else if (currentCategory === 'box1' || currentCategory === 'box2' || currentCategory === 'box3') {
             filteredDeck = filterByBox(fullDatabase, boxLevels, currentCategory);
         } else {
@@ -346,6 +372,16 @@ document.addEventListener('DOMContentLoaded', () => {
         renderStats();
     }
 
+    // In the "due" deck a correctly answered card is done for today: rebuild the deck and stay
+    // at the same position, which now holds the next card.
+    function dropAnsweredDueCard() {
+        const position = currentIndex;
+        filteredDeck = filterDue(getFullDatabase(), dueDates, Date.now());
+        currentIndex = filteredDeck.length === 0 ? 0 : position % filteredDeck.length;
+        resetCardState();
+        renderCard();
+    }
+
     // 4. Render active card
     function renderCard() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -353,10 +389,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (total === 0) {
             hintEl.textContent = '—';
-            questionEl.innerHTML =
-                lang === 'de'
-                    ? 'Keine Lernkarten in dieser Kategorie vorhanden.'
-                    : 'No flashcards available in this category.';
+            if (currentCategory === 'due') {
+                questionEl.textContent =
+                    lang === 'de'
+                        ? 'Für heute ist alles wiederholt. 🎉 Morgen geht es weiter.'
+                        : 'Everything is reviewed for today. 🎉 More tomorrow.';
+            } else {
+                questionEl.textContent =
+                    lang === 'de'
+                        ? 'Keine Lernkarten in dieser Kategorie vorhanden.'
+                        : 'No flashcards available in this category.';
+            }
             answerEl.innerHTML = '—';
             if (deckStatusEl) deckStatusEl.textContent = '0 / 0';
             if (btnPrev) btnPrev.disabled = true;
@@ -383,9 +426,17 @@ document.addEventListener('DOMContentLoaded', () => {
             lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de
         );
 
-        // Render card box indicator on question
+        // Box indicator and next review date next to the hint
         const currentLevel = boxLevels[card.id] || 1;
-        hintEl.innerHTML += ` <span style="font-size:0.75rem; background:rgba(138, 115, 85, 0.15); padding:0.1rem 0.4rem; border-radius:3px; margin-left:0.5rem; font-weight:bold; border: 1px solid var(--border)">Box ${currentLevel}</span>`;
+        const days = daysUntilDue(dueDates[card.id], Date.now());
+        let dueText;
+        if (days === 0) dueText = lang === 'de' ? 'heute fällig' : 'due today';
+        else if (days === 1) dueText = lang === 'de' ? 'morgen fällig' : 'due tomorrow';
+        else dueText = lang === 'de' ? `fällig in ${days} Tagen` : `due in ${days} days`;
+        const badge = document.createElement('span');
+        badge.className = 'flashcard-box-badge';
+        badge.textContent = `Box ${currentLevel} · ${dueText}`;
+        hintEl.append(' ', badge);
 
         // Check if starred
         if (starIcon) {
@@ -440,6 +491,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nextLevel = advanceBoxLevel(currentLevel);
                 boxLevels[currentCard.id] = nextLevel;
                 AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+                dueDates[currentCard.id] = nextDueDate(nextLevel, Date.now());
+                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
 
                 // If level is 3, count as known (mastered)
                 const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
@@ -465,6 +518,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderStats();
 
+            if (currentCategory === 'due') {
+                setTimeout(dropAnsweredDueCard, 300);
+                return;
+            }
+
             // Auto navigate to next card after a small delay
             if (filteredDeck.length > 1) {
                 setTimeout(() => {
@@ -487,6 +545,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Reset box level to 1
                 boxLevels[currentCard.id] = resetBoxLevel();
                 AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+                // Not known: due again right away.
+                delete dueDates[currentCard.id];
+                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
 
                 // Remove from known cards list
                 const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
@@ -617,6 +678,10 @@ document.addEventListener('DOMContentLoaded', () => {
             delete boxLevels[id];
             AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
         }
+        if (dueDates[id]) {
+            delete dueDates[id];
+            AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
+        }
         const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
         const kidx = knownCards.indexOf(id);
         if (kidx !== -1) {
@@ -645,6 +710,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (box2Bar) box2Bar.style.width = total > 0 ? `${(b2 / total) * 100}%` : '0%';
         if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
 
+        // Cards due for review today
+        const dueCount = filterDue(fullDatabase, dueDates, Date.now()).length;
+        if (dueCountEl) dueCountEl.textContent = String(dueCount);
+        if (dueSummaryEl) {
+            const lang = document.documentElement.getAttribute('lang') || 'de';
+            if (dueCount === 0) {
+                dueSummaryEl.textContent =
+                    lang === 'de' ? 'Heute ist nichts mehr fällig. 🎉' : 'Nothing left to review today. 🎉';
+            } else {
+                dueSummaryEl.textContent =
+                    lang === 'de'
+                        ? `Heute fällig: ${dueCount} von ${total} Karten`
+                        : `Due today: ${dueCount} of ${total} cards`;
+            }
+        }
+
         // Sync with dashboard progress (Box 3 count / total count)
         AppStorage.setItem('flashcard_total_count', total);
         AppStorage.setItem('flashcard_correct_count', b3);
@@ -654,6 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('langchange', () => {
         renderCard();
         renderCustomList();
+        renderStats();
     });
 
     // Initial load

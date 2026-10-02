@@ -11,6 +11,8 @@ const Confetti = {
 
     start(durationMs = 3000) {
         if (this.isActive) return;
+        // Full-screen particle animation: skip it for visitors who asked for reduced motion.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         this.isActive = true;
         this.particles = [];
 
@@ -124,10 +126,10 @@ const Confetti = {
     },
 };
 
+// memory.js, quiz.js, snake.js, git-simulator.js and easter-eggs.js reach this through a
+// `typeof Confetti !== 'undefined'` check, i.e. they expect a global.
+window.Confetti = Confetti;
+
 export function initConfetti() {
-    // memory.js, quiz.js, snake.js and easter-eggs.js all call this via a
-    // `typeof Confetti !== 'undefined'` check, expecting a global - but
-    // `Confetti` above is only a module-scoped const, never exported or
-    // attached to window, so that check always failed silently. Expose it.
-    window.Confetti = Confetti;
+    // Nothing to set up: importing the module is what makes `Confetti` available.
 }

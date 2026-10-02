@@ -4,26 +4,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const relatedSection = document.getElementById('related-projects-section');
     const relatedContainer = document.getElementById('related-projects-container');
     const GITHUB_USERNAME = 'Schengii';
-    const CACHE_KEY = 'github_projects_cache';
-    const CACHE_TIME_KEY = 'github_projects_cache_time';
+    const CACHE_KEY = STORAGE_KEYS.GITHUB_PROJECTS_CACHE;
+    const CACHE_TIME_KEY = STORAGE_KEYS.GITHUB_PROJECTS_CACHE_TIME;
     const CACHE_DURATION = 3600000; // 1 hour
 
+    // Stored values can be damaged (manual edits, a half-written entry on a full quota); a
+    // parse error there must not take the whole detail page down.
+    function parseStoredList(text) {
+        try {
+            const parsed = JSON.parse(text || '[]');
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (_e) {
+            return [];
+        }
+    }
+
     async function fetchGitHubRepos() {
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-        if (cachedData && cachedTime && Date.now() - parseInt(cachedTime) < CACHE_DURATION) {
-            return JSON.parse(cachedData);
+        const cachedData = AppStorage.getItem(CACHE_KEY);
+        const cachedTime = AppStorage.getItem(CACHE_TIME_KEY);
+        const cachedRepos = parseStoredList(cachedData);
+        if (cachedRepos.length && cachedTime && Date.now() - parseInt(cachedTime, 10) < CACHE_DURATION) {
+            return cachedRepos;
         }
         try {
             const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
             if (!response.ok) throw new Error('GitHub API request failed');
             const repos = await response.json();
-            localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
-            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            AppStorage.setItem(CACHE_KEY, JSON.stringify(repos));
+            AppStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
             return repos;
         } catch (e) {
             console.warn('Could not fetch from GitHub, using cache if available.', e);
-            return cachedData ? JSON.parse(cachedData) : [];
+            return cachedRepos;
         }
     }
 
@@ -48,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     res.ok ? res.json() : []
                 ),
                 fetchGitHubRepos(),
-                JSON.parse(localStorage.getItem('portfolio_custom_projects') || '[]'),
+                parseStoredList(AppStorage.getItem(STORAGE_KEYS.PORTFOLIO_CUSTOM_PROJECTS)),
             ]);
 
             const githubRepoMap = new Map(githubRepos.map((repo) => [repo.name.toLowerCase(), repo]));
@@ -207,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span lang="de"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video-Auswahl</span>
                             <span lang="en"><i class="fa-solid fa-circle-play" aria-hidden="true"></i> Video Playlist</span>
                         </h4>
-                        <div class="playlist-tracks" id="project-video-tracks" role="group" aria-label="Video-Auswahl"></div>
+                        <div class="playlist-tracks" id="project-video-tracks" role="group" aria-label="Video-Auswahl" data-en-aria-label="Video selection"></div>
                         <div class="dsgvo-note-card">
                             <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                             <div>
@@ -643,9 +655,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="demo-modal-header">
                         <span class="demo-project-title" id="demo-project-title"></span>
                         <div class="demo-controls">
-                            <button class="demo-btn-control" id="demo-reload-btn" title="Reload"><i class="fa-solid fa-rotate-right"></i></button>
-                            <button class="demo-btn-control" id="demo-fullscreen-btn" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
-                            <button class="demo-btn-control close-btn" id="demo-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+                            <button class="demo-btn-control" id="demo-reload-btn" title="Neu laden" data-en-title="Reload"><i class="fa-solid fa-rotate-right"></i></button>
+                            <button class="demo-btn-control" id="demo-fullscreen-btn" title="Vollbild umschalten" data-en-title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
+                            <button class="demo-btn-control close-btn" id="demo-close-btn" title="Schließen" data-en-title="Close"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
                     <div class="demo-modal-body">

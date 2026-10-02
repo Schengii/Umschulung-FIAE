@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CvF4Lb/gstTW5ql73PtoMb6aksNLwNZYTmTZFV49Jm4=' 'sha256-yoER0j1qHJp1zL47ypgPh0X/td876OAKhTucgfAjiXQ=' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CvF4Lb/gstTW5ql73PtoMb6aksNLwNZYTmTZFV49Jm4=' 'sha256-yoER0j1qHJp1zL47ypgPh0X/td876OAKhTucgfAjiXQ='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
     <meta name="description"
@@ -16,6 +16,10 @@
     <meta property="og:image" content="https://www.max-schenk.tech/assets/images/ecochef_showcase.webp">
     <meta property="og:url" content="https://www.max-schenk.tech/pages/portfolio.html">
     <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Portfolio - Maximilian Schenk">
+    <meta name="twitter:description" content="Meine Programmierprojekte als angehender Fachinformatiker Anwendungsentwicklung.">
+    <meta name="twitter:image" content="https://www.max-schenk.tech/assets/images/ecochef_showcase.webp">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -91,9 +95,9 @@
             <!-- Left Column: Projects -->
             <div class="left-col">
                 <div class="search-input-wrapper">
-                    <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..."
-                        aria-label="Projekte durchsuchen" class="project-search-input">
-                    <button type="button" id="btn-clear-search" class="btn-clear-search" aria-label="Suche löschen" title="Suche löschen">
+                    <input type="text" id="portfolio-searchbar" placeholder="🔍 Projekte durchsuchen..." data-en-placeholder="🔍 Search projects..."
+                        aria-label="Projekte durchsuchen" data-en-aria-label="Search projects" class="project-search-input">
+                    <button type="button" id="btn-clear-search" class="btn-clear-search" aria-label="Suche löschen" data-en-aria-label="Clear search" title="Suche löschen" data-en-title="Clear search">
                         <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -112,7 +116,7 @@
 
                 <!-- Portfolio Filters -->
                 <div class="portfolio-filters">
-                    <select id="sort-select" class="sort-select" aria-label="Sort projects">
+                    <select id="sort-select" class="sort-select" aria-label="Projekte sortieren" data-en-aria-label="Sort projects">
                         <option value="desc" lang="de">⭐ Sterne ↓</option>
                         <option value="asc" lang="de">⭐ Sterne ↑</option>
                         <option value="desc" lang="en">⭐ Stars ↓</option>
@@ -224,7 +228,7 @@
 
 
                 <!-- Pagination Controls -->
-                <nav id="pagination-container" class="pagination-nav" aria-label="Project navigation"></nav>
+                <nav id="pagination-container" class="pagination-nav" aria-label="Projekt-Navigation" data-en-aria-label="Project navigation"></nav>
 
                 <!-- Folder projects dynamically injected here -->
                 <div id="folder-projects-container"></div>
@@ -545,8 +549,8 @@
                     </div>
 
                     <a id="btn-cv-download-portfolio" href="../assets/pdf/Lebenslauf.pdf" class="btn-primary btn-primary-block" download
-                        title="Lebenslauf als PDF herunterladen">
-                        <i class="fa fa-file-pdf-o"></i> <span lang="de">Lebenslauf Download</span><span
+                        title="Lebenslauf als PDF herunterladen" data-en-title="Download CV as PDF">
+                        <i class="fa-regular fa-file-pdf" aria-hidden="true"></i> <span lang="de">Lebenslauf Download</span><span
                             lang="en">Download CV</span>
                     </a>
                 </section>
@@ -609,13 +613,13 @@
     <!-- Modal für Projekt‑Detail -->
     <div id="project-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-content">
-            <button class="modal-close" aria-label="Schließen">&times;</button>
+            <button class="modal-close" aria-label="Schließen" data-en-aria-label="Close">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
     <!-- Back‑to‑Top Button -->
-    <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang">⬆︎</button>
+    <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang" data-en-aria-label="Back to top">⬆︎</button>
 
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>

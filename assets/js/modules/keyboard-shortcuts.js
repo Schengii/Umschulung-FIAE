@@ -100,9 +100,9 @@ export function initKeyboardShortcuts() {
             helpModal.style.display = 'none';
             helpModal.innerHTML = `
                 <div class="modal-content" style="max-width: 480px;">
-                    <button class="modal-close" aria-label="Close" id="shortcuts-help-close">&times;</button>
+                    <button class="modal-close" aria-label="Schließen" data-en-aria-label="Close" id="shortcuts-help-close">&times;</button>
                     <h3 style="margin-bottom: 1rem;">
-                        <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                        <i class="fa-regular fa-keyboard" aria-hidden="true"></i>
                         <span lang="de">Tastaturkürzel</span>
                         <span lang="en">Keyboard Shortcuts</span>
                     </h3>

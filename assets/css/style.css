@@ -1,9 +1,8 @@
-@import url('modules/portfolio_copilot.css');
-@import url('modules/command_palette.css');
-@import url('modules/project_compare.css');
-@import url('modules/pwa_telemetry.css');
-@import url('modules/hero_showcase.css');
-@import url('modules/ihk_cockpit.css');
+/* The stylesheets in modules/ are no longer @import-ed here: an @import is only discovered
+   after this file has downloaded, which chained six more render-blocking requests onto every
+   page. Page-specific modules are linked by the pages that use them (before this file, so the
+   cascade order is unchanged); the copilot and command palette styles are loaded on demand by
+   their scripts via loadStylesheet() in components.js. */
 
 /* ==========================================================================
    DESIGN SYSTEM & CORE VARIABLES
@@ -394,6 +393,13 @@ html[data-reduced-motion="true"] ::after {
     padding: 0;
 }
 
+/* Static <img> tags carry their intrinsic width/height as attributes, so the browser can
+   reserve the right aspect ratio before the file has loaded (no layout shift). The rendered
+   height still has to follow the CSS width instead of the attribute. */
+img {
+    height: auto;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     letter-spacing: -0.01em;
@@ -424,19 +430,35 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
-    /* Page-load animation */
-    animation: pageLoad 0.5s ease-out;
+    /* Page-load animation: opacity only. A transform on <body> turns it into the containing
+       block of every position:fixed element for as long as the animation runs, so the cookie
+       banner, toasts and background glows were laid out against the document instead of the
+       viewport and jumped when it ended (CLS 0.3 - 0.9 in Lighthouse). The slide-in lives on
+       <main>, which has no fixed-position children visible at load. */
+    animation: pageFade 0.5s ease-out;
 }
 
-@keyframes pageLoad {
+@keyframes pageFade {
     from {
         opacity: 0;
-        transform: translateY(12px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+    }
+}
+
+main {
+    animation: pageRise 0.5s ease-out;
+}
+
+@keyframes pageRise {
+    from {
+        transform: translateY(12px);
+    }
+
+    to {
+        transform: none;
     }
 }
 
@@ -866,12 +888,26 @@ nav.topnav {
     font-size: clamp(1.1rem, 2vw + 0.5rem, 1.25rem);
 }
 
-.card h5 {
+.card h5,
+.card .card-source {
     font-size: 0.85rem;
     color: var(--text-muted);
     font-weight: 500;
     margin-bottom: 1.25rem;
     display: block;
+}
+
+/* Source/date captions used to be <h5>; keep their look without the heading semantics. */
+.card .card-source {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    line-height: inherit;
+}
+
+/* A heading one level up that should keep the size of a card <h3>. */
+.card h2.card-subheading {
+    font-size: clamp(1.1rem, 2vw + 0.5rem, 1.25rem);
+    letter-spacing: -0.01em;
 }
 
 .card p {
@@ -3356,10 +3392,14 @@ html[lang="en"] [lang="de"] {
 /* ==========================================================================
    ACHIEVEMENT TOAST NOTIFICATIONS
    ========================================================================== */
+/* Slides in via transform: animating `bottom` moves the box itself, which counts as a
+   layout shift on every unlock. */
 .achievement-toast {
     position: fixed;
-    bottom: -120px;
+    bottom: 1.5rem;
     right: 1.5rem;
+    transform: translateY(calc(100% + 3rem));
+    visibility: hidden;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -3370,16 +3410,14 @@ html[lang="en"] [lang="de"] {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     z-index: 10000;
-    transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.5s;
     max-width: 360px;
 }
 
 .achievement-toast.show {
-    bottom: 1.5rem;
-}
-
-.achievement-toast.hide {
-    bottom: -120px;
+    transform: none;
+    visibility: visible;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
 }
 
 .achievement-toast-icon {
@@ -3395,6 +3433,11 @@ html[lang="en"] [lang="de"] {
     letter-spacing: 0.05em;
 }
 
+/* Amber on a white card is ~2.1:1; the darker tone keeps WCAG AA in the light theme. */
+[data-theme="light"] .achievement-toast-title {
+    color: #b45309;
+}
+
 .achievement-toast-name {
     font-size: 0.95rem;
     font-weight: 600;
@@ -3403,6 +3446,67 @@ html[lang="en"] [lang="de"] {
 
 .achievement-toast-desc {
     font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Progress backup card (dashboard) */
+.backup-intro {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.backup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.backup-actions button {
+    width: auto;
+}
+
+.backup-confirm {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-page);
+    font-size: 0.9rem;
+}
+
+.backup-confirm[hidden] {
+    display: none;
+}
+
+.backup-status {
+    min-height: 1.4em;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.backup-status-error {
+    color: #b91c1c;
+}
+
+[data-theme="dark"] .backup-status-error {
+    color: #fca5a5;
+}
+
+/* Recent code activity (home) */
+.git-activity-item {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.git-activity-repo {
+    font-weight: 600;
+}
+
+.git-activity-date {
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
@@ -3979,6 +4083,23 @@ html nav {
     border-left-color: var(--primary);
 }
 
+.toast-action {
+    margin-left: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    color: var(--text-on-primary);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.toast-action:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
 /* ==========================================================================
    PORTFOLIO — BACK TO TOP BUTTON
    ========================================================================== */
@@ -4044,8 +4165,7 @@ html nav {
     margin: 0;
 }
 
-.topnav #theme-toggle,
-.topnav #audio-mute-toggle {
+.topnav #theme-toggle {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -4061,8 +4181,7 @@ html nav {
     flex-shrink: 0;
 }
 
-.topnav #theme-toggle:hover,
-.topnav #audio-mute-toggle:hover {
+.topnav #theme-toggle:hover {
     background: var(--primary);
     border-color: var(--primary);
     color: var(--text-on-primary);
@@ -4841,10 +4960,10 @@ html nav {
 }
 
 .footer-meta-row {
+    /* No opacity here: 80 % of --text-muted drops below 4.5:1 on the light footer. */
     color: var(--text-muted);
     font-size: 0.78rem;
     margin-top: 0.4rem;
-    opacity: 0.8;
     display: flex;
     align-items: center;
     justify-content: center;

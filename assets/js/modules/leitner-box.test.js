@@ -4,6 +4,12 @@ import {
     resetBoxLevel,
     computeBoxStats,
     filterByBox,
+    filterDue,
+    isDue,
+    nextDueDate,
+    daysUntilDue,
+    startOfDay,
+    REVIEW_INTERVAL_DAYS,
     MAX_BOX_LEVEL,
     MIN_BOX_LEVEL,
 } from './leitner-box.js';
@@ -60,5 +66,53 @@ describe('filterByBox', () => {
 
     it('returns all cards for an unknown category', () => {
         expect(filterByBox(cards, boxLevels, 'all')).toHaveLength(3);
+    });
+});
+
+describe('review scheduling', () => {
+    // A review in the evening: due dates must count calendar days, not 24-hour blocks.
+    const reviewedAt = new Date(2026, 2, 10, 21, 30).getTime();
+    const dayOffset = (timestamp) => Math.round((timestamp - startOfDay(reviewedAt)) / 86400000);
+
+    it('grows the interval with the box', () => {
+        expect(REVIEW_INTERVAL_DAYS).toEqual({ 1: 1, 2: 3, 3: 7 });
+        expect(dayOffset(nextDueDate(1, reviewedAt))).toBe(1);
+        expect(dayOffset(nextDueDate(2, reviewedAt))).toBe(3);
+        expect(dayOffset(nextDueDate(3, reviewedAt))).toBe(7);
+    });
+
+    it('makes a card due from midnight of the due day', () => {
+        const due = nextDueDate(1, reviewedAt);
+        expect(new Date(due).getHours()).toBe(0);
+        expect(isDue(due, new Date(2026, 2, 10, 23, 59).getTime())).toBe(false);
+        expect(isDue(due, new Date(2026, 2, 11, 0, 0).getTime())).toBe(true);
+    });
+
+    it('stays on midnight across a daylight saving change', () => {
+        // 29 March 2026 is the European switch to summer time (a 23-hour day).
+        const due = nextDueDate(2, new Date(2026, 2, 28, 12, 0).getTime());
+        expect(new Date(due).getDate()).toBe(31);
+        expect(new Date(due).getHours()).toBe(0);
+    });
+
+    it('falls back to the shortest interval for an unknown box', () => {
+        expect(dayOffset(nextDueDate(99, reviewedAt))).toBe(1);
+    });
+
+    it('treats cards without a due date as due', () => {
+        expect(isDue(undefined, reviewedAt)).toBe(true);
+        expect(isDue(0, reviewedAt)).toBe(true);
+    });
+
+    it('filters a deck down to the cards that are due', () => {
+        const cards = [{ id: 'new' }, { id: 'tomorrow' }, { id: 'overdue' }];
+        const dueDates = { tomorrow: nextDueDate(1, reviewedAt), overdue: reviewedAt - 1000 };
+        expect(filterDue(cards, dueDates, reviewedAt).map((card) => card.id)).toEqual(['new', 'overdue']);
+    });
+
+    it('reports the whole days until a card is due', () => {
+        expect(daysUntilDue(undefined, reviewedAt)).toBe(0);
+        expect(daysUntilDue(nextDueDate(1, reviewedAt), reviewedAt)).toBe(1);
+        expect(daysUntilDue(nextDueDate(3, reviewedAt), reviewedAt)).toBe(7);
     });
 });

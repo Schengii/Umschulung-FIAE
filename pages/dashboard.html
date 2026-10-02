@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ki0j61UChTyG8n1TzQBJfsRJYYCdzqyRUNw9wUAKU04=' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ki0j61UChTyG8n1TzQBJfsRJYYCdzqyRUNw9wUAKU04='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard – Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/dashboard.html">
@@ -40,6 +40,7 @@
     <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
     <link rel="preload" href="../assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/outfit-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../assets/css/modules/pwa_telemetry.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
@@ -130,7 +131,7 @@
                                             <span lang="en">Test Coverage - 40% Weight</span>
                                         </label>
                                         <input type="number" id="qa-test-coverage" class="form-control" min="0" max="100" placeholder="%" value="85">
-                                        <input type="range" id="qa-test-coverage-range" class="form-range" min="0" max="100" value="85" aria-label="Test Coverage slider" title="Test Coverage slider">
+                                        <input type="range" id="qa-test-coverage-range" class="form-range" min="0" max="100" value="85" aria-label="Regler Testabdeckung" data-en-aria-label="Test Coverage slider" title="Regler Testabdeckung" data-en-title="Test Coverage slider">
                                     </div>
                                     <div class="form-group">
                                         <label for="qa-clean-code">
@@ -138,7 +139,7 @@
                                             <span lang="en">Clean Code Compliance - 30% Weight</span>
                                         </label>
                                         <input type="number" id="qa-clean-code" class="form-control" min="0" max="100" placeholder="%" value="92">
-                                        <input type="range" id="qa-clean-code-range" class="form-range" min="0" max="100" value="92" aria-label="Clean Code slider" title="Clean Code slider">
+                                        <input type="range" id="qa-clean-code-range" class="form-range" min="0" max="100" value="92" aria-label="Regler Clean Code" data-en-aria-label="Clean Code slider" title="Regler Clean Code" data-en-title="Clean Code slider">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -148,7 +149,7 @@
                                             <span lang="en">Documentation Coverage - 15% Weight</span>
                                         </label>
                                         <input type="number" id="qa-documentation" class="form-control" min="0" max="100" placeholder="%" value="80">
-                                        <input type="range" id="qa-documentation-range" class="form-range" min="0" max="100" value="80" aria-label="Documentation Coverage slider" title="Documentation Coverage slider">
+                                        <input type="range" id="qa-documentation-range" class="form-range" min="0" max="100" value="80" aria-label="Regler Dokumentationsabdeckung" data-en-aria-label="Documentation Coverage slider" title="Regler Dokumentationsabdeckung" data-en-title="Documentation Coverage slider">
                                     </div>
                                     <div class="form-group">
                                         <label for="qa-security-scan">
@@ -156,7 +157,7 @@
                                             <span lang="en">Security Scans (SecOps) - 15% Weight</span>
                                         </label>
                                         <input type="number" id="qa-security-scan" class="form-control" min="0" max="100" placeholder="%" value="95">
-                                        <input type="range" id="qa-security-scan-range" class="form-range" min="0" max="100" value="95" aria-label="Security Scans slider" title="Security Scans slider">
+                                        <input type="range" id="qa-security-scan-range" class="form-range" min="0" max="100" value="95" aria-label="Regler Security-Scans" data-en-aria-label="Security Scans slider" title="Regler Security-Scans" data-en-title="Security Scans slider">
                                     </div>
                                 </div>
                             </form>
@@ -187,44 +188,42 @@
 
                     <hr>
 
-                    <!-- PWA Offline-Sync & Cache Inspector Widget -->
+                    <!-- PWA Offline & Cache Inspector Widget (values filled in by dashboard.js) -->
                     <div class="mt-2rem">
                         <div class="flex-between align-center">
                             <h3>
-                                <span lang="de"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> PWA Offline-Sync &amp; Cache Telemetrie</span>
-                                <span lang="en"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> PWA Offline-Sync &amp; Cache Telemetry</span>
+                                <span lang="de"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> PWA Offline-Cache</span>
+                                <span lang="en"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> PWA Offline Cache</span>
                             </h3>
-                            <span id="pwa-sync-status-badge" class="badge badge-info pwa-telemetry-status-badge">
-                                ● Live PWA Cache Active
-                            </span>
+                            <span id="pwa-sync-status-badge" class="badge badge-info pwa-telemetry-status-badge" role="status">…</span>
                         </div>
-                        <p lang="de">Echtzeit-Telemetrie des Service Workers (<code>umschulung-fiae-v25</code>), IndexedDB Sync-Puffers und lokaler Offline-Ressourcen.</p>
-                        <p lang="en">Real-time telemetry of the Service Worker (<code>umschulung-fiae-v25</code>), IndexedDB synchronization queue, and offline cache storage.</p>
-                        
+                        <p lang="de">Live-Werte aus der Cache-API dieses Browsers: aktiver Service-Worker-Cache (<code class="pwa-cache-name">–</code>) und die offline verfügbaren Dateien.</p>
+                        <p lang="en">Live values from this browser's Cache API: the active service worker cache (<code class="pwa-cache-name">–</code>) and the files available offline.</p>
+
                         <div class="pwa-telemetry-grid">
                             <div class="pwa-telemetry-card">
                                 <div class="pwa-telemetry-label">Cache Storage</div>
-                                <div id="pwa-cache-size" class="pwa-telemetry-value-cyan">48 Assets (100%)</div>
-                                <div class="pwa-telemetry-subtext-green">✓ Alle 23 Seiten gecacht</div>
+                                <div id="pwa-cache-size" class="pwa-telemetry-value-cyan">–</div>
+                                <div id="pwa-cache-pages" class="pwa-telemetry-subtext-green"></div>
                             </div>
                             <div class="pwa-telemetry-card">
-                                <div class="pwa-telemetry-label">Netzwerk-Status</div>
-                                <div id="pwa-network-state" class="pwa-telemetry-value-green">Online (High-Speed)</div>
-                                <div class="pwa-telemetry-subtext-muted">Sync-Latenz: &lt; 5ms</div>
+                                <div class="pwa-telemetry-label"><span lang="de">Netzwerk-Status</span><span lang="en">Network status</span></div>
+                                <div id="pwa-network-state" class="pwa-telemetry-value-green">–</div>
+                                <div id="pwa-network-detail" class="pwa-telemetry-subtext-muted"></div>
                             </div>
                             <div class="pwa-telemetry-card">
-                                <div class="pwa-telemetry-label">Offline Queue</div>
-                                <div id="pwa-queue-count" class="pwa-telemetry-value-purple">0 Ausstehend</div>
-                                <div class="pwa-telemetry-subtext-green">✓ IndexedDB synchron</div>
+                                <div class="pwa-telemetry-label">Service Worker</div>
+                                <div id="pwa-sw-state" class="pwa-telemetry-value-purple">–</div>
+                                <div id="pwa-sw-detail" class="pwa-telemetry-subtext-muted"></div>
                             </div>
                         </div>
 
                         <div class="pwa-telemetry-actions">
                             <button id="pwa-test-offline-btn" class="tab-btn small-btn pwa-telemetry-btn">
-                                <i class="fa-solid fa-wifi" aria-hidden="true"></i> Offline-Modus testen
+                                <i class="fa-solid fa-wifi" aria-hidden="true"></i> <span lang="de">Offline-Verfügbarkeit prüfen</span><span lang="en">Check offline availability</span>
                             </button>
                             <button id="pwa-purge-cache-btn" class="tab-btn small-btn pwa-telemetry-btn">
-                                <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> Cache aktualisieren
+                                <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> <span lang="de">Nach Update suchen</span><span lang="en">Check for update</span>
                             </button>
                         </div>
                     </div>
@@ -329,6 +328,41 @@
                     <div id="achievements-widget-grid" class="achievements-grid-widget">
                         <!-- Populated dynamically by JS -->
                     </div>
+                </section>
+
+                <!-- Progress backup (modules/progress-backup.js) -->
+                <section class="card" id="progress-backup" aria-labelledby="progress-backup-title">
+                    <h3 id="progress-backup-title">
+                        <span lang="de"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Fortschritt sichern</span>
+                        <span lang="en"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Back up progress</span>
+                    </h3>
+                    <p class="backup-intro">
+                        <span lang="de">Lernstand, Highscores, Erfolge und Einstellungen liegen nur in diesem Browser. Exportiere sie als Datei, um sie auf ein anderes Gerät mitzunehmen oder nach dem Löschen der Website-Daten wiederherzustellen.</span>
+                        <span lang="en">Learning progress, highscores, achievements and settings are stored in this browser only. Export them as a file to take them to another device or to restore them after clearing the site data.</span>
+                    </p>
+                    <div class="backup-actions">
+                        <button type="button" id="backup-export-btn" class="btn-primary">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                            <span lang="de">Exportieren</span><span lang="en">Export</span>
+                        </button>
+                        <button type="button" id="backup-import-btn" class="btn-secondary">
+                            <i class="fa-solid fa-upload" aria-hidden="true"></i>
+                            <span lang="de">Importieren</span><span lang="en">Import</span>
+                        </button>
+                        <input type="file" id="backup-file-input" class="sr-only" accept="application/json,.json" tabindex="-1" aria-label="Sicherungsdatei auswählen" data-en-aria-label="Choose backup file">
+                    </div>
+                    <div id="backup-confirm" class="backup-confirm" hidden>
+                        <p id="backup-confirm-text"></p>
+                        <div class="backup-actions">
+                            <button type="button" id="backup-confirm-btn" class="btn-primary">
+                                <span lang="de">Jetzt importieren</span><span lang="en">Import now</span>
+                            </button>
+                            <button type="button" id="backup-cancel-btn" class="btn-secondary">
+                                <span lang="de">Abbrechen</span><span lang="en">Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p id="backup-status" class="backup-status" role="status"></p>
                 </section>
             </aside>
         </div>
