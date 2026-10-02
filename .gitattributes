@@ -1,0 +1,9 @@
+# Keep line endings identical on every checkout. CSP script hashes in the
+# <meta> tags are computed over the inline script text, so CRLF vs LF changes
+# the hash (see scripts/verify_csp_hashes.js).
+*.html text eol=lf
+*.js   text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf

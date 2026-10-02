@@ -45,8 +45,11 @@ function extractInlineScripts(html) {
     return scripts;
 }
 
+// Hash the LF form: the deployed files (Vercel/CI checkout) use LF line endings,
+// so a CRLF working copy on Windows must not produce a different hash.
 function hashOf(content) {
-    return 'sha256-' + crypto.createHash('sha256').update(content, 'utf8').digest('base64');
+    const normalized = content.replace(/\r\n/g, '\n');
+    return 'sha256-' + crypto.createHash('sha256').update(normalized, 'utf8').digest('base64');
 }
 
 let hadFailure = false;

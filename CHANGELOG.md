@@ -4,6 +4,10 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### CI — CSP-Hashes waren zeilenendungsabhängig (Ursache der roten CI)
+- **Befund**: `check-csp` schlug in der CI auf allen bisherigen `main`-Läufen fehl. Die `sha256`-Hashes in den CSP-`<meta>`-Tags wurden unter Windows über CRLF-Inhalt berechnet, im Repo und auf dem Linux-Runner (und damit in Produktion) ist der Inline-Script-Text aber LF — der Hash stimmte dort nie. Betroffen: `home`, `lebenslauf`, `portfolio`, `ueber-mich`, `dashboard`; auf diesen Seiten dürften Inline-Scripts durch die strengere Meta-CSP blockiert worden sein.
+- **Fix**: `.gitattributes` erzwingt LF für HTML/JS/CSS/JSON/MD/YML; `scripts/verify_csp_hashes.js` normalisiert vor dem Hashen CRLF zu LF; die Hashes der fünf Seiten wurden mit `check-csp:fix` neu geschrieben. Die neuen Werte stimmen mit den vom CI-Runner gemeldeten überein.
+
 ### Sicherheit — Nutzertexte in `innerHTML` werden escaped
 - **Befund**: Eigene Flashcards (Frage, Antwort, Hinweis, Kategorie, ID) wurden roh in `localStorage` gespeichert und per `innerHTML` gerendert; im Interview-Trainer ging die freie Antwort (`h.answer`) ungefiltert in die Ergebnisansicht. Beides ist Self-XSS, bei den Flashcards bleibt der Payload jedoch dauerhaft im Browser bestehen.
 - **Fix**: Neues Modul `assets/js/modules/html-utils.js` (`escapeHtml`) mit Unit-Test; `flashcards.js` escaped eigene Karten beim Rendern (eingebaute Karten behalten ihr vertrauenswürdiges Markup), `interview.js` escaped Frage und Antwort (klassisches Script, daher lokale Kopie des Helfers). E2E-Test `flashcards_escaping.spec.js` schlägt ohne den Fix fehl.
