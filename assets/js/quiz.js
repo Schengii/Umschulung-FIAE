@@ -104,6 +104,7 @@ const quizProgress = document.getElementById('quiz-progress');
 
 // Spielvariablen
 let currentQuestionIndex = 0;
+// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
 let score = 0;
 let questionCorrectness = []; // Tracks correctness for each question
 
@@ -116,7 +117,7 @@ function renderBestScore() {
     const bestScoreEl = document.getElementById('quiz-best-score');
     if (!bestScoreEl) return;
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    const bestScore = StorageManager.getItem('quiz_best_score');
+    const bestScore = AppStorage.getItem('quiz_best_score');
     const totalQuestions = getActiveQuestions().length;
 
     if (bestScore !== null) {
@@ -169,7 +170,7 @@ function showQuestion() {
         answerButtons.appendChild(button);
 
         if (answer.correct) {
-            button.dataset.correct = answer.correct;
+            button.dataset.correct = String(answer.correct);
         }
         button.addEventListener('click', selectAnswer);
     });
@@ -203,7 +204,7 @@ function selectAnswer(e) {
     }
 
     // Alle Knöpfe deaktivieren und die richtige Antwort markieren
-    Array.from(answerButtons.children).forEach((button) => {
+    /** @type {HTMLButtonElement[]} */ (Array.from(answerButtons.children)).forEach((button) => {
         if (button.dataset.correct === 'true') {
             button.classList.add('correct');
         }
@@ -230,7 +231,7 @@ function showScore() {
         }
     });
     if (weakCategories.size > 0) {
-        StorageManager.setItem(
+        AppStorage.setItem(
             STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES,
             JSON.stringify([...weakCategories])
         );
@@ -238,9 +239,9 @@ function showScore() {
 
     const percentage = Math.round((score / questions.length) * 100);
 
-    const bestScore = parseInt(StorageManager.getItem('quiz_best_score') || -1);
+    const bestScore = parseInt(AppStorage.getItem('quiz_best_score') || -1);
     if (score > bestScore) {
-        StorageManager.setItem('quiz_best_score', score);
+        AppStorage.setItem('quiz_best_score', score);
         renderBestScore();
     }
 

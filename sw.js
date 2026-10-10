@@ -1,4 +1,4 @@
-const CACHE_NAME = 'umschulung-fiae-v39';
+const CACHE_NAME = 'umschulung-fiae-v42';
 const ASSETS = [
     './',
     'index.html',
@@ -32,7 +32,6 @@ const ASSETS = [
     'pages/ueber-mich.html',
     // CSS
     'assets/css/architecture.css',
-    'assets/css/darkmode.css',
     'assets/css/games.css',
     'assets/css/git-simulator.css',
     'assets/css/impressum.css',
@@ -99,6 +98,7 @@ const ASSETS = [
     'assets/js/modules/game-audio.js',
     'assets/js/modules/grade-calculator.js',
     'assets/js/modules/hero-section.js',
+    'assets/js/modules/html-utils.js',
     'assets/js/modules/ical-generator.js',
     'assets/js/modules/ihk-cockpit.js',
     'assets/js/modules/ihk-exam-simulator.js',
@@ -196,6 +196,18 @@ self.addEventListener('fetch', (e) => {
 
     // Bypass Service Worker for Vercel internal routes (Insights/Analytics)
     if (url.pathname.startsWith('/_vercel/')) {
+        return;
+    }
+
+    // Let the browser stream audio/video itself. Media is fetched with Range requests: a
+    // partial (206) response can't be cached, and a full cached copy isn't a valid answer to
+    // a Range request - Firefox aborts playback with "A ServiceWorker intercepted the request
+    // and encountered an unexpected error".
+    if (
+        e.request.headers.has('range') ||
+        e.request.destination === 'video' ||
+        e.request.destination === 'audio'
+    ) {
         return;
     }
 

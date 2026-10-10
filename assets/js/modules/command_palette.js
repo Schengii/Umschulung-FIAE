@@ -120,7 +120,7 @@
 
         document.body.appendChild(overlay);
 
-        const input = overlay.querySelector('#command-palette-input');
+        const input = /** @type {HTMLInputElement} */ (overlay.querySelector('#command-palette-input'));
         const results = overlay.querySelector('#command-palette-results');
         let selectedIndex = 0;
         let currentItems = [];
@@ -130,6 +130,7 @@
                 window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
             const pagePrefix = isPages ? '' : 'pages/';
 
+            /** @type {Array<Record<string, any>>} */
             let items = NAV_ITEMS.map((item) => ({
                 ...item,
                 url: pagePrefix + item.url,
@@ -279,7 +280,7 @@
         }
 
         input.addEventListener('input', (e) => {
-            renderResults(e.target.value);
+            renderResults(/** @type {HTMLInputElement} */ (e.target).value);
         });
 
         overlay.addEventListener('click', (e) => {

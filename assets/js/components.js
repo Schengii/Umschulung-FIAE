@@ -59,7 +59,7 @@ document.addEventListener(
     true
 );
 
-const StorageManager = {
+const AppStorage = {
     isAvailable() {
         try {
             const key = '__storage_test__';
@@ -83,7 +83,7 @@ const StorageManager = {
                 localStorage.setItem(key, value);
                 return true;
             } catch (e) {
-                console.warn('StorageManager: Failed to write to localStorage:', e);
+                console.warn('AppStorage: Failed to write to localStorage:', e);
             }
         }
         return false;
@@ -375,7 +375,7 @@ function renderFooter() {
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
                     &nbsp;&middot;&nbsp;
                     <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Sound umschalten" title="Sound umschalten">
-                        <i class="fa-solid ${StorageManager.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
+                        <i class="fa-solid ${AppStorage.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
                         <span>Audio</span>
                     </button>
                     &nbsp;&middot;&nbsp;
@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide search bar on pages where search is not needed
     const searchablePages = ['news.html', 'home.html'];
     if (!searchablePages.includes(currentPage)) {
-        const searchContainer = document.querySelector('.search-container');
+        const searchContainer = /** @type {HTMLElement} */ (document.querySelector('.search-container'));
         if (searchContainer) {
             searchContainer.style.display = 'none';
         }
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cookie banner (only if not already accepted)
-    if (!StorageManager.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
+    if (!AppStorage.getItem('cookieConsent') && !document.getElementById('cookie-banner')) {
         document.body.insertAdjacentHTML('beforeend', renderCookieBanner());
     }
 
@@ -561,7 +561,7 @@ function initAccessibilityControls() {
     });
 
     document.addEventListener('click', (e) => {
-        if (!a11yDropdown.contains(e.target) && e.target !== a11yToggle) {
+        if (!a11yDropdown.contains(/** @type {Node} */ (e.target)) && e.target !== a11yToggle) {
             a11yDropdown.style.display = 'none';
         }
     });
@@ -589,11 +589,11 @@ function initAccessibilityControls() {
             const nextVal = !current;
             if (current) {
                 document.documentElement.removeAttribute('data-dyslexia');
-                StorageManager.setItem('portfolio_dyslexia', 'false');
+                AppStorage.setItem('portfolio_dyslexia', 'false');
                 btnDyslexia.classList.remove('active');
             } else {
                 document.documentElement.setAttribute('data-dyslexia', 'true');
-                StorageManager.setItem('portfolio_dyslexia', 'true');
+                AppStorage.setItem('portfolio_dyslexia', 'true');
                 btnDyslexia.classList.add('active');
             }
             window.dispatchEvent(
@@ -613,11 +613,11 @@ function initAccessibilityControls() {
             const nextVal = current === 'deuteranopia' ? '' : 'deuteranopia';
             if (current === 'deuteranopia') {
                 document.documentElement.removeAttribute('data-colorblind');
-                StorageManager.setItem('portfolio_colorblind', '');
+                AppStorage.setItem('portfolio_colorblind', '');
                 btnColorblind.classList.remove('active');
             } else {
                 document.documentElement.setAttribute('data-colorblind', 'deuteranopia');
-                StorageManager.setItem('portfolio_colorblind', 'deuteranopia');
+                AppStorage.setItem('portfolio_colorblind', 'deuteranopia');
                 btnColorblind.classList.add('active');
             }
             window.dispatchEvent(
@@ -637,16 +637,16 @@ function initAccessibilityControls() {
             let nextVal = '';
             if (!current) {
                 document.documentElement.setAttribute('data-font-scale', 'large');
-                StorageManager.setItem('portfolio_font_scale', 'large');
+                AppStorage.setItem('portfolio_font_scale', 'large');
                 btnFontScale.classList.add('active');
                 nextVal = 'large';
             } else if (current === 'large') {
                 document.documentElement.setAttribute('data-font-scale', 'xlarge');
-                StorageManager.setItem('portfolio_font_scale', 'xlarge');
+                AppStorage.setItem('portfolio_font_scale', 'xlarge');
                 nextVal = 'xlarge';
             } else {
                 document.documentElement.removeAttribute('data-font-scale');
-                StorageManager.setItem('portfolio_font_scale', '');
+                AppStorage.setItem('portfolio_font_scale', '');
                 btnFontScale.classList.remove('active');
                 nextVal = 'normal';
             }
@@ -667,11 +667,11 @@ function initAccessibilityControls() {
             const nextVal = !current;
             if (current) {
                 document.documentElement.removeAttribute('data-contrast');
-                StorageManager.setItem('portfolio_contrast', 'normal');
+                AppStorage.setItem('portfolio_contrast', 'normal');
                 btnContrast.classList.remove('active');
             } else {
                 document.documentElement.setAttribute('data-contrast', 'high');
-                StorageManager.setItem('portfolio_contrast', 'high');
+                AppStorage.setItem('portfolio_contrast', 'high');
                 btnContrast.classList.add('active');
             }
             window.dispatchEvent(

@@ -3,15 +3,15 @@
  * Generates recruiter personalized landing page links and downloadable QR codes.
  */
 export function initQrGenerator() {
-    const companyInput = document.getElementById('qr-company-input');
-    const nameInput = document.getElementById('qr-name-input');
-    const targetSelect = document.getElementById('qr-target-select');
+    const companyInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-company-input'));
+    const nameInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-name-input'));
+    const targetSelect = /** @type {HTMLInputElement} */ (document.getElementById('qr-target-select'));
 
     const placeholder = document.getElementById('qr-code-placeholder');
     const imageContainer = document.getElementById('qr-code-image-container');
     const resultDetails = document.getElementById('qr-result-details');
     const instructionText = document.getElementById('qr-instruction-text');
-    const generatedLinkInput = document.getElementById('qr-generated-link');
+    const generatedLinkInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-generated-link'));
 
     const copyBtn = document.getElementById('qr-copy-btn');
     const downloadBtn = document.getElementById('qr-download-btn');

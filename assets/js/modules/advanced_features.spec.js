@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { settle } from '../../../scripts/e2e-helpers.js';
 
 test.describe('Advanced Features & Tools E2E Verification', () => {
     test('sollte das IHK-Cockpit mit Nutzwertanalyse, Phasenplan und Fachgespräch steuern', async ({ page }) => {
         await page.goto('/pages/ihk-cockpit.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Check Nutzwertanalyse
         const nwaWinner = page.locator('#nwa-winner-text');
@@ -39,7 +40,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
     test('sollte das Clean-Code & RegEx Challenge-Lab bedienen und XP sammeln', async ({ page }) => {
         await page.goto('/pages/challenge-lab.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Solve Lab 1 (SQL Injection -> Option B)
         const lab1OptB = page.locator('button[data-challenge-id="c1"][data-opt-id="b"]');
@@ -61,7 +62,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
     test('sollte das Quick-Sandbox Modal im Portfolio öffnen und bedienen', async ({ page }) => {
         await page.goto('/pages/portfolio.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Click on BurgenGame Sandbox Button
         await page.click('button[data-sandbox-project="BurgenGame"]');
@@ -77,7 +78,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
     test('sollte das Executive Dossier 2.0 öffnen und Profile umschalten', async ({ page }) => {
         await page.goto('/pages/portfolio.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Open Dossier
         await page.click('button[data-open-dossier]');
@@ -98,7 +99,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
     test('sollte den FIAE AI Copilot öffnen und auf Fragen antworten', async ({ page }) => {
         await page.goto('/pages/home.html');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
 
         // Open Copilot
         await page.click('#copilot-toggle-btn');

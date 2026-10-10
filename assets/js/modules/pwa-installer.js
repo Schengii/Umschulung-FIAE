@@ -14,7 +14,7 @@ export function initPwaInstaller() {
         // Show the banner
         const banner = document.getElementById('pwa-install-banner');
         if (banner) {
-            const isDismissed = StorageManager.getItem('pwa_dismissed') === 'true';
+            const isDismissed = AppStorage.getItem('pwa_dismissed') === 'true';
             if (!isDismissed) {
                 banner.classList.remove('hidden');
                 // Force reflow
@@ -74,7 +74,7 @@ export function initPwaInstaller() {
 
     if (btnDismiss) {
         btnDismiss.addEventListener('click', () => {
-            StorageManager.setItem('pwa_dismissed', 'true');
+            AppStorage.setItem('pwa_dismissed', 'true');
             if (banner) {
                 banner.classList.remove('show');
                 setTimeout(() => banner.classList.add('hidden'), 300);

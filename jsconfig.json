@@ -14,9 +14,12 @@
   },
   "include": [
     "assets/js/**/*.js",
+    "assets/js/**/*.d.ts",
     "scripts/**/*.js"
   ],
   "exclude": [
+    "**/*.test.js",
+    "**/*.spec.js",
     "node_modules",
     "test-results",
     "Projekte/**/node_modules"

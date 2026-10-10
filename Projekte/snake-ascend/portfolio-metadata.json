@@ -1,0 +1,18 @@
+{
+  "repoName": "snake-ascend",
+  "titleDe": "🐍 Snake Ascend: Block Royale",
+  "titleEn": "🐍 Snake Ascend: Block Royale",
+  "tags": [
+    "HTML5 Canvas",
+    "Vanilla JavaScript",
+    "Web Audio API",
+    "Game Design"
+  ],
+  "image": "assets/images/snake_showcase.webp",
+  "images": ["assets/images/snake_showcase.webp", "assets/images/game_leaderboard.webp"],
+  "link": "Projekte/snake-ascend/index.html",
+  "descDe": "Ein Geschicklichkeitsspiel, das Elemente aus Tetris, Doodle Jump, Snake und Clash Royale verbindet: Die Schlange klettert automatisch, Karten aus einer Elixier-Hand platzieren Blöcke als Plattformen, Gegner und Boss-Türme müssen überwunden werden.",
+  "descEn": "A skill game combining elements of Tetris, Doodle Jump, Snake, and Clash Royale: the snake auto-climbs while an elixir-powered hand of cards lets you place platform blocks, dodge enemies, and take down boss towers.",
+  "category": "games",
+  "language": "JavaScript"
+}

@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const newsArticlesContainer = document.getElementById('news-articles-container');
     const filterButtons = document.querySelectorAll('.btn-filter');
-    const searchInput = document.getElementById('news-searchbar');
+    const searchInput = /** @type {HTMLInputElement} */ (document.getElementById('news-searchbar'));
     let currentLanguage = 'de';
 
-    if (typeof StorageManager !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
-        currentLanguage = StorageManager.getItem(STORAGE_KEYS.LANG, 'de');
+    if (typeof AppStorage !== 'undefined' && typeof STORAGE_KEYS !== 'undefined') {
+        currentLanguage = AppStorage.getItem(STORAGE_KEYS.LANG, 'de');
     } else {
         currentLanguage = document.documentElement.getAttribute('lang') || 'de';
     }
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Search bar binding
     if (searchInput) {
         searchInput.addEventListener('input', () => {
-            const activeFilterBtn = document.querySelector('.btn-filter.active');
+            const activeFilterBtn = /** @type {HTMLElement} */ (document.querySelector('.btn-filter.active'));
             const activeFilter = activeFilterBtn ? activeFilterBtn.dataset.filter : 'all';
             renderNews(activeFilter);
         });
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Copy article link handler
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.copy-article-btn');
+        const btn = /** @type {HTMLElement} */ (e.target).closest('.copy-article-btn');
         if (!btn) return;
 
         const articleId = btn.getAttribute('data-id');
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('langchange', (event) => {
         currentLanguage = event.detail;
         updateSearchPlaceholder();
-        const activeFilterBtn = document.querySelector('.btn-filter.active');
+        const activeFilterBtn = /** @type {HTMLElement} */ (document.querySelector('.btn-filter.active'));
         const activeFilter = activeFilterBtn ? activeFilterBtn.dataset.filter : 'all';
         renderNews(activeFilter);
     });
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Like button click handler
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.like-article-btn');
+        const btn = /** @type {HTMLElement} */ (e.target).closest('.like-article-btn');
         if (!btn) return;
 
         const articleId = btn.getAttribute('data-id');
@@ -241,14 +241,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-regular fa-thumbs-up';
             const countSpan = btn.querySelector('.like-count');
-            if (countSpan) countSpan.textContent = baseCount;
+            if (countSpan) countSpan.textContent = String(baseCount);
         } else {
             localStorage.setItem(likeKey, 'true');
             btn.style.color = 'var(--primary)';
             const icon = btn.querySelector('i');
             if (icon) icon.className = 'fa-solid fa-thumbs-up';
             const countSpan = btn.querySelector('.like-count');
-            if (countSpan) countSpan.textContent = baseCount + 1;
+            if (countSpan) countSpan.textContent = String(baseCount + 1);
         }
     });
 

@@ -8,12 +8,14 @@ const GameAudio = {
 
     init() {
         // Load mute state
-        this.isMuted = StorageManager.getItem('game_audio_muted') === 'true';
+        this.isMuted = AppStorage.getItem('game_audio_muted') === 'true';
         this.updateMuteButtonsUI();
 
         // Listen for mute clicks globally (since nav is loaded dynamically)
         document.addEventListener('click', (e) => {
-            const target = e.target.closest('.mute-toggle-btn') || e.target.closest('#audio-mute-toggle');
+            const target =
+                /** @type {HTMLElement} */ (e.target).closest('.mute-toggle-btn') ||
+                /** @type {HTMLElement} */ (e.target).closest('#audio-mute-toggle');
             if (target) {
                 e.preventDefault();
                 this.toggleMute();
@@ -30,7 +32,7 @@ const GameAudio = {
 
     toggleMute() {
         this.isMuted = !this.isMuted;
-        StorageManager.setItem('game_audio_muted', this.isMuted ? 'true' : 'false');
+        AppStorage.setItem('game_audio_muted', this.isMuted ? 'true' : 'false');
         this.updateMuteButtonsUI();
         return this.isMuted;
     },

@@ -2,6 +2,9 @@
   "name": "umschulung-fiae",
   "version": "1.0.0",
   "description": "Portfolio Maximilian Schenk",
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "http-server . -p 8080 -c-1",
     "build:dist": "node scripts/build_minified.js",
@@ -36,7 +39,7 @@
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.2",
     "esbuild": "^0.28.2",
-    "eslint": "^9.39.5",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
     "http-server": "^14.1.1",
     "prettier": "^3.9.8",

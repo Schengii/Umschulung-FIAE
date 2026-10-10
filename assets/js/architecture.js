@@ -215,7 +215,7 @@ class ArchitectureExplorer {
         this.apiDetailsContainer = document.getElementById('api-details-container');
 
         // 3D Canvas Engine
-        this.canvas3d = document.getElementById('arch-3d-canvas');
+        this.canvas3d = /** @type {HTMLCanvasElement} */ (document.getElementById('arch-3d-canvas'));
         this.animId3d = null;
         this.rotX = 0.3;
         this.rotY = 0.5;
@@ -522,7 +522,7 @@ class ArchitectureExplorer {
         this.apiDetailsContainer.innerHTML = detailsHTML;
 
         // Bind Execute button Click
-        const executeBtn = document.getElementById('api-execute-btn');
+        const executeBtn = /** @type {HTMLButtonElement} */ (document.getElementById('api-execute-btn'));
         if (executeBtn) {
             executeBtn.addEventListener('click', () => this.executeApiRequest());
         }
@@ -532,7 +532,7 @@ class ArchitectureExplorer {
     }
 
     executeApiRequest() {
-        const executeBtn = document.getElementById('api-execute-btn');
+        const executeBtn = /** @type {HTMLButtonElement} */ (document.getElementById('api-execute-btn'));
         const respSection = document.getElementById('api-response-section');
         const respBody = document.getElementById('api-resp-body');
         const respTime = document.getElementById('response-time');
@@ -590,9 +590,9 @@ class ArchitectureExplorer {
         if (window.addLiveCommit) {
             window.addLiveCommit();
         } else {
-            let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+            let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
             liveCommitsToday++;
-            StorageManager.setItem('github_live_commits_today', liveCommitsToday);
+            AppStorage.setItem('github_live_commits_today', liveCommitsToday);
         }
     }
 }

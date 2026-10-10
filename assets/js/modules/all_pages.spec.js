@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { stubGithubApi, settle } from '../../../scripts/e2e-helpers.js';
 
 const pages = [
     'index.html',
@@ -29,6 +30,10 @@ const pages = [
     'Projekte/CoOpVersusGame/coop-versus-demo.html',
     'Projekte/java-playground.html',
 ];
+
+test.beforeEach(async ({ page }) => {
+    await stubGithubApi(page);
+});
 
 test.describe('Global Pages Stability Verification', () => {
     for (const pageName of pages) {
@@ -64,7 +69,7 @@ test.describe('Global Pages Stability Verification', () => {
             expect(response.status()).toBe(200);
 
             // Wait for network idle to let all module scripts run
-            await page.waitForLoadState('networkidle');
+            await settle(page);
             // Wait a short moment for DOM bootstrap initialization
             await page.waitForTimeout(500);
 
@@ -79,7 +84,7 @@ test.describe('EcoChef Project Detail Page Features', () => {
     test('sollte Code-Explorer, Stepper und Live-Demo steuern können', async ({ page }) => {
         // Navigiere zur EcoChef-Detailseite
         await page.goto('/pages/projekt-detail.html?repo=EcoChef');
-        await page.waitForLoadState('networkidle');
+        await settle(page);
         await page.waitForTimeout(500);
 
         // 1. Live-Demo Modal testen

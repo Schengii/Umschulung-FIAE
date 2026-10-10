@@ -5,7 +5,7 @@ export function initTranslation() {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;
 
-    const storedLang = StorageManager.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
+    const storedLang = AppStorage.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
     document.documentElement.setAttribute('lang', storedLang);
     updateLangToggleButton(storedLang);
     updateDynamicElementsTranslation(storedLang);
@@ -15,7 +15,7 @@ export function initTranslation() {
         const newLang = currentLang === 'de' ? 'en' : 'de';
 
         document.documentElement.setAttribute('lang', newLang);
-        StorageManager.setItem(STORAGE_KEYS.LANG, newLang);
+        AppStorage.setItem(STORAGE_KEYS.LANG, newLang);
         updateLangToggleButton(newLang);
         updateDynamicElementsTranslation(newLang);
 
@@ -39,7 +39,7 @@ function updateLangToggleButton(lang) {
 
 function updateDynamicElementsTranslation(lang) {
     // 1. Search bars placeholder and aria-label
-    const searchBar = document.getElementById('searchbar');
+    const searchBar = /** @type {HTMLInputElement} */ (document.getElementById('searchbar'));
     if (searchBar) {
         if (lang === 'de') {
             searchBar.placeholder = 'Suche...';
@@ -50,7 +50,7 @@ function updateDynamicElementsTranslation(lang) {
         }
     }
 
-    const portfolioSearch = document.getElementById('portfolio-searchbar');
+    const portfolioSearch = /** @type {HTMLInputElement} */ (document.getElementById('portfolio-searchbar'));
     if (portfolioSearch) {
         if (lang === 'de') {
             portfolioSearch.placeholder = 'Projekte durchsuchen...';

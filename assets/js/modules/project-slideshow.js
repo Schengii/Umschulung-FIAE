@@ -6,8 +6,8 @@ export function initSlideshow() {
     if (!viewer) return;
 
     const slides = viewer.querySelectorAll('.slide');
-    const prevBtn = document.getElementById('slide-prev');
-    const nextBtn = document.getElementById('slide-next');
+    const prevBtn = /** @type {HTMLButtonElement} */ (document.getElementById('slide-prev'));
+    const nextBtn = /** @type {HTMLButtonElement} */ (document.getElementById('slide-next'));
     const indicator = document.getElementById('slide-indicator');
 
     if (!slides.length || !prevBtn || !nextBtn || !indicator) return;

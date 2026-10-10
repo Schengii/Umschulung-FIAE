@@ -11,13 +11,21 @@ export function initKeyboardShortcuts() {
 
     document.addEventListener('keydown', (e) => {
         // Don't trigger shortcuts when typing in inputs
-        const tag = e.target.tagName.toLowerCase();
-        if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+        const tag = /** @type {HTMLElement} */ (e.target).tagName.toLowerCase();
+        if (
+            tag === 'input' ||
+            tag === 'textarea' ||
+            tag === 'select' ||
+            /** @type {HTMLElement} */ (e.target).isContentEditable
+        )
+            return;
 
         // Ctrl+K or Cmd+K — Focus search bar
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
-            const searchBar = document.getElementById('searchbar') || document.getElementById('portfolio-searchbar');
+            const searchBar = /** @type {HTMLInputElement} */ (
+                document.getElementById('searchbar') || document.getElementById('portfolio-searchbar')
+            );
             if (searchBar) {
                 searchBar.focus();
                 searchBar.select();

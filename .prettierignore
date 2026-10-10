@@ -1,7 +1,8 @@
-node_modules/
-assets/vendor/
-Projekte/
-test-results/
-playwright-report/
-dist/
+# Generated files — formatting these causes noisy diffs
 assets/js/projects_data.js
+
+# Sub-projects have their own tooling
+Projekte/
+
+# Build output
+dist/

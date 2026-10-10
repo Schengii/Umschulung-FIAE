@@ -1002,9 +1002,9 @@ class CodePlayground {
         this.activeTab = 'html';
         this.runTimeout = null;
 
-        this.htmlEditor = document.getElementById('editor-html');
-        this.cssEditor = document.getElementById('editor-css');
-        this.jsEditor = document.getElementById('editor-js');
+        this.htmlEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-html'));
+        this.cssEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-css'));
+        this.jsEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-js'));
 
         this.htmlWrapper = document.getElementById('wrapper-html');
         this.cssWrapper = document.getElementById('wrapper-css');
@@ -1014,7 +1014,7 @@ class CodePlayground {
         this.cssLines = document.getElementById('line-numbers-css');
         this.jsLines = document.getElementById('line-numbers-js');
 
-        this.previewIframe = document.getElementById('preview-iframe');
+        this.previewIframe = /** @type {HTMLIFrameElement} */ (document.getElementById('preview-iframe'));
         this.consoleLogBox = document.getElementById('console-log-box');
 
         this.btnHtml = document.getElementById('btn-tab-html');
@@ -1248,9 +1248,9 @@ class CodePlayground {
         if (window.addLiveCommit) {
             window.addLiveCommit();
         } else {
-            let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+            let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
             liveCommitsToday++;
-            StorageManager.setItem('github_live_commits_today', liveCommitsToday);
+            AppStorage.setItem('github_live_commits_today', liveCommitsToday);
         }
     }
 }

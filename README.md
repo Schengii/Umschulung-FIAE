@@ -22,7 +22,7 @@ Umschulung-FIAE/
 │
 ├── pages/                       # Aufgeräumter Ordner für alle 27 Inhaltsseiten
 │   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
-│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (22 registrierte Projekte, Filter & Schnellsuche)
+│   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (25 registrierte Projekte, Filter & Schnellsuche)
 │   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, 80h Phasenplan, Fachgespräch, Bewertungsmatrix)
 │   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Schema.org Person/ProfilePage & 1-Click PDF-Export
 │   ├── ueber-mich.html          # Steckbrief, Skill-Radar & Elektroniker-FIAE-Transfermatrix
@@ -45,13 +45,13 @@ Umschulung-FIAE/
 │   │   ├── components.js        # Header, Footer, kategorisierte Navigation, Accessibility Manager & Templating
 │   │   ├── constants.js         # Globale App-Konstanten & Pfadauflösung (resolveAssetPath)
 │   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering, Schnellsuche & Highlights
-│   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (22 Projekte)
+│   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank (25 Projekte)
 │   │   └── modules/             # Abgekapselte Feature-Module & E2E-Tests
 │   │       ├── portfolio-copilot.js     # Offline-fähiger AI Portfolio Copilot
 │   │       ├── ihk-cockpit.js           # Nutzwertanalyse & 80h Phasenplan Steuerung
 │   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
 │   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
-│   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 22 Projekte
+│   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller 25 Projekte
 │   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
@@ -116,7 +116,7 @@ Das Projekt verfügt über eine vollständige **Playwright E2E Testsuite**:
 npm test
 ```
 - **54 / 54 Tests grün (100% Pass Rate)**
-- Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 22 Projekte.
+- Testet Seitenstabilität aller HTML-Dateien, interaktive Module (IHK-Cockpit, Copilot, Challenge Lab, Quick-Sandbox, Dossier) sowie den Launch aller 25 Projekte.
 
 - **Service Worker (`umschulung-fiae-v36`)**: Implementiert eine *Network-First*-Strategie für HTML-Inhalte und *Stale-While-Revalidate* für statische Assets (CSS, JS, Fonts, Images).
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
@@ -132,9 +132,9 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung, Bereinigung & E2E-Testing
-- **Test-Suite**: 54 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 22 Projekte validieren.
-- **Unit-Tests**: 36 Vitest-Tests (`npm run test:unit`) für die reine Kernlogik in `assets/js/modules/` — Leitner-Box-Algorithmus (`leitner-box.js`), IHK-Notenrechner & QA-Score-Gewichtung (`grade-calculator.js`), Skills-Matrix-Filter/-Sortierung (`skills-filter.js`).
-- **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js` (22/22 Links fehlerfrei).
+- **Test-Suite**: 316 automatisierte Playwright-E2E-Tests (`npm test`), welche alle 27 HTML-Seiten, interaktive Sandbox-Modale, Notenrechner, Quiz-Systeme und die Ausführbarkeit aller 25 Projekte validieren.
+- **Unit-Tests**: 58 Vitest-Tests (`npm run test:unit`) für die reine Kernlogik in `assets/js/modules/` — Leitner-Box-Algorithmus (`leitner-box.js`), IHK-Notenrechner & QA-Score-Gewichtung (`grade-calculator.js`), Skills-Matrix-Filter/-Sortierung (`skills-filter.js`).
+- **Projekt- & Datenkonsistenz**: Automatische Verifikation durch `node scripts/check_data_sync.js` und `node scripts/check_all_project_links.js` (25/25 Links fehlerfrei).
 - **Bereinigte Codebasis & Linter**: 0 Fehler und 0 Warnungen in ESLint (`npm run lint`), 0 Sicherheitslücken in Abhängigkeiten (`npm audit`).
 
 ### 6. Wartungsskripte (`scripts/`)
@@ -184,7 +184,7 @@ npm run dev
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **22 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
+Die Test-Suite verifiziert alle 27 HTML-Seiten, den 1-Click Launch aller **25 registrierten Projekte**, Git-Simulator, IHK-Cockpit, Copilot, Challenge-Lab, Dark-Mode-Toggles und Barrierefreiheit.
 
 ### 5. Unit-Tests ausführen (Vitest)
 ```bash

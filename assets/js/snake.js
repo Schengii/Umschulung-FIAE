@@ -2,12 +2,12 @@
  * Modern Accessible Snake Game with DE/EN Translation
  */
 
-const canvas = document.getElementById('canvas');
+const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('canvas'));
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const highscoreEl = document.getElementById('highscore');
 const startBtn = document.getElementById('start-btn');
-const pauseBtn = document.getElementById('pause-btn');
+const pauseBtn = /** @type {HTMLButtonElement} */ (document.getElementById('pause-btn'));
 
 const rows = 20;
 const cols = 20;
@@ -18,6 +18,7 @@ let snake = [{ x: 10, y: 10 }];
 let food = { x: 5, y: 5 };
 let direction = 'RIGHT';
 let nextDirection = 'RIGHT';
+// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
 let score = 0;
 let highscore = 0;
 let highscoreList = [];
@@ -27,9 +28,9 @@ let isPaused = false;
 const speed = 150;
 
 document.addEventListener('DOMContentLoaded', () => {
-    highscore = parseInt(StorageManager.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
-    highscoreList = JSON.parse(StorageManager.getItem('snake_highscore_list', '[]')) || [];
-    if (highscoreEl) highscoreEl.textContent = highscore;
+    highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
+    highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
+    if (highscoreEl) highscoreEl.textContent = String(highscore);
     renderHighscores();
 
     document.addEventListener('keydown', handleKeyDown);
@@ -108,7 +109,7 @@ function startGame() {
     direction = 'RIGHT';
     nextDirection = 'RIGHT';
     score = 0;
-    if (scoreEl) scoreEl.textContent = score;
+    if (scoreEl) scoreEl.textContent = String(score);
     placeFood();
 
     isPlaying = true;
@@ -193,7 +194,7 @@ function gameOver() {
             .slice(0, 5)
             .findIndex((entry) => entry.score === score && entry.date === currentDate);
         highscoreList = highscoreList.slice(0, 5);
-        StorageManager.setItem('snake_highscore_list', JSON.stringify(highscoreList));
+        AppStorage.setItem('snake_highscore_list', JSON.stringify(highscoreList));
         renderHighscores();
 
         if (indexInTop5 !== -1 && typeof Confetti !== 'undefined') {
@@ -203,8 +204,8 @@ function gameOver() {
 
     if (score > highscore) {
         highscore = score;
-        StorageManager.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
-        if (highscoreEl) highscoreEl.textContent = highscore;
+        AppStorage.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
+        if (highscoreEl) highscoreEl.textContent = String(highscore);
     }
 
     updateButtons();
@@ -263,7 +264,7 @@ function gameStep() {
 
     if (head.x === food.x && head.y === food.y) {
         score += 10;
-        if (scoreEl) scoreEl.textContent = score;
+        if (scoreEl) scoreEl.textContent = String(score);
 
         if (score >= 50 && typeof Achievements !== 'undefined') {
             Achievements.unlock('snake_50');

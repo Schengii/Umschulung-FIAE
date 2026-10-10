@@ -1,0 +1,49 @@
+{
+  "repoName": "Maps",
+  "titleDe": "🗺️ Maps — GPS Navigations-App (React Native)",
+  "titleEn": "🗺️ Maps — GPS Navigation App (React Native)",
+  "tags": [
+    "React Native",
+    "Expo",
+    "TypeScript",
+    "GPS / Navigation",
+    "Offline-Routing",
+    "AR-Navigation"
+  ],
+  "image": "assets/images/maps_showcase.webp",
+  "link": "Projekte/Maps/maps-showcase.html",
+  "descDe": "Vollständige React-Native-Navigations-App mit Echtzeit-GPS, Verkehrs-Alerts, Offline-Routing, AR-Navigation, KI-Reiseführer, Wetterradar, E-Ladesäulen, GPX-Track-Export, Group-Ride, Indoor-Maps und CarPlay-/Android-Auto-Integration. DSGVO-konform mit eigenem Einwilligungs-Management.",
+  "descEn": "Full-featured React Native navigation app with real-time GPS, traffic alerts, offline routing, AR navigation, AI tour guide, weather radar, EV charging POIs, GPX track export, group ride, indoor maps, and CarPlay/Android Auto integration. GDPR-compliant with dedicated consent management.",
+  "category": "apps",
+  "language": "TypeScript",
+  "codeFiles": [
+    { "name": "App.tsx", "path": "Projekte/Maps/App.tsx", "type": "typescript" },
+    { "name": "HomeScreen.tsx", "path": "Projekte/Maps/src/screens/HomeScreen.tsx", "type": "typescript" },
+    { "name": "MapViewComponent.tsx", "path": "Projekte/Maps/src/components/MapViewComponent.tsx", "type": "typescript" },
+    { "name": "GdprBanner.tsx", "path": "Projekte/Maps/src/components/GdprBanner.tsx", "type": "typescript" }
+  ],
+  "architectureBadges": [
+    { "name": "React Native / Expo", "color": "#0ea5e9" },
+    { "name": "Context API + Hooks", "color": "#8b5cf6" },
+    { "name": "Offline-Routing Engine", "color": "#10b981" },
+    { "name": "AR Camera Overlay", "color": "#f59e0b" }
+  ],
+  "keyLearnings": {
+    "challengeDe": "Gleichzeitige Verwaltung von GPS-Updates, Routing-Berechnungen, Karten-Tile-Downloads und UI-Animationen ohne spürbare Performance-Einbußen auf Mittelklasse-Mobilgeräten.",
+    "challengeEn": "Simultaneously managing GPS updates, routing calculations, map tile downloads, and UI animations without noticeable performance degradation on mid-range mobile devices.",
+    "solutionDe": "Service-Layer mit klarer Aufgabentrennung: adaptives GPS-Sampling, Offline-Routing-Engine als isolierter Service, LRU-Tile-Cache und Context-basierte Zustandsverteilung ohne Prop-Drilling.",
+    "solutionEn": "Strict service-layer separation: adaptive GPS sampling, isolated offline routing engine, LRU tile cache, and context-based state distribution eliminating prop-drilling.",
+    "architectureHighlightsDe": [
+      "Zwei Context Provider (Location, Navigation) als globale State-Schicht",
+      "20+ spezialisierte Komponenten und Modals für jede Feature-Domäne",
+      "Offline-fähiges Tile-Caching mit LRU-Eviction",
+      "DSGVO-Einwilligungs-Management als eigene Komponente"
+    ],
+    "architectureHighlightsEn": [
+      "Two Context Providers (Location, Navigation) as global state layer",
+      "20+ specialized components and modals for each feature domain",
+      "Offline-capable tile caching with LRU eviction",
+      "GDPR consent management as a standalone component"
+    ]
+  }
+}

@@ -7,18 +7,18 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test:
-    name: Run E2E Test Suite & Data Sync Guard
+  quality:
+    name: Quality Gates (data sync, CSP, lint, unit tests, build)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: Install Project Dependencies
@@ -27,10 +27,7 @@ jobs:
       - name: Audit Dependencies for Known Vulnerabilities
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Install Playwright Browsers (Chromium, Firefox, WebKit)
-        run: npx playwright install --with-deps chromium firefox webkit
-
-      - name: Verify Data Synchronization (22 Projects)
+      - name: Verify Data Synchronization
         run: npm run check-sync
 
       - name: Verify <head> Boilerplate Consistency
@@ -51,27 +48,69 @@ jobs:
       - name: Run Vitest Unit Test Suite
         run: npm run test:unit
 
-      - name: Run Playwright E2E Test Suite (Chromium, Firefox, WebKit, Mobile)
-        run: npm test
-
       - name: Verify Production Build (esbuild minify)
         run: npm run build:dist
 
-      - name: JSDoc Type Check (advisory, pre-existing findings not yet triaged)
+      - name: JSDoc Type Check
         run: npm run typecheck
-        continue-on-error: true
+
+  e2e:
+    # One job per Playwright project so the browsers run in parallel (a single
+    # serial job took ~13 min) and a failure points straight at the browser.
+    name: E2E (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: chromium
+            browser: chromium
+          - project: firefox
+            browser: firefox
+          - project: webkit
+            browser: webkit
+          - project: mobile-chrome
+            browser: chromium
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci || npm install
+
+      - name: Install Playwright Browser (${{ matrix.browser }})
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run Playwright E2E Tests (${{ matrix.project }})
+        run: npx playwright test --project=${{ matrix.project }}
+
+      - name: Upload Playwright Results on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ matrix.project }}
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
 
   lighthouse:
     name: Lighthouse Quality Audit (a11y/SEO/best-practices enforced, performance informational)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11

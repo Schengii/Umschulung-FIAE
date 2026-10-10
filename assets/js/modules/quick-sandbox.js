@@ -120,7 +120,7 @@ function attachEventListeners() {
     const modal = document.getElementById('quick-sandbox-modal');
     const btnClose = document.getElementById('btn-sandbox-close');
     const btnReload = document.getElementById('btn-sandbox-reload');
-    const iframe = document.getElementById('sandbox-iframe');
+    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     const loader = document.getElementById('sandbox-loader');
 
     if (btnClose && modal) {
@@ -156,7 +156,7 @@ function attachEventListeners() {
 
     // Delegate clicks on [data-sandbox-project]
     document.addEventListener('click', (e) => {
-        const trigger = e.target.closest('[data-sandbox-project]');
+        const trigger = /** @type {HTMLElement} */ (e.target).closest('[data-sandbox-project]');
         if (trigger) {
             e.preventDefault();
             const projKey = trigger.dataset.sandboxProject;
@@ -168,11 +168,11 @@ function attachEventListeners() {
 export function openSandbox(projKey) {
     const project = PLAYABLE_PROJECTS[projKey];
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = document.getElementById('sandbox-iframe');
+    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     const title = document.getElementById('sandbox-title');
     const badge = document.getElementById('sandbox-badge');
     const desc = document.getElementById('sandbox-desc');
-    const btnNewTab = document.getElementById('btn-sandbox-newtab');
+    const btnNewTab = /** @type {HTMLAnchorElement} */ (document.getElementById('btn-sandbox-newtab'));
     const loader = document.getElementById('sandbox-loader');
 
     if (!modal || !iframe) return;
@@ -195,7 +195,7 @@ export function openSandbox(projKey) {
 
 export function closeSandbox() {
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = document.getElementById('sandbox-iframe');
+    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
     document.body.style.overflow = '';

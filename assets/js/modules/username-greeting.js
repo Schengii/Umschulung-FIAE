@@ -4,7 +4,7 @@
  */
 export function initUsernameGreeting() {
     const mySubmit = document.getElementById('mySubmit');
-    const myText = document.getElementById('myText');
+    const myText = /** @type {HTMLInputElement} */ (document.getElementById('myText'));
 
     // Parse URL parameters and store in sessionStorage for persistence during the session
     const urlParams = new URLSearchParams(window.location.search);
@@ -25,7 +25,7 @@ export function initUsernameGreeting() {
     }
 
     if (mySubmit && myText) {
-        const storedName = StorageManager.getItem(STORAGE_KEYS.USERNAME);
+        const storedName = AppStorage.getItem(STORAGE_KEYS.USERNAME);
         if (storedName) {
             myText.value = storedName;
             updateWelcomeH1(storedName);
@@ -34,7 +34,7 @@ export function initUsernameGreeting() {
         mySubmit.addEventListener('click', () => {
             const username = myText.value.trim();
             if (username) {
-                StorageManager.setItem(STORAGE_KEYS.USERNAME, username);
+                AppStorage.setItem(STORAGE_KEYS.USERNAME, username);
                 updateWelcomeH1(username);
 
                 const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
@@ -188,7 +188,7 @@ function updateDashboardGreeting() {
             trackerCard.style.display = 'none';
         }
         if (welcomeText) {
-            const username = StorageManager.getItem(STORAGE_KEYS.USERNAME, '');
+            const username = AppStorage.getItem(STORAGE_KEYS.USERNAME, '');
             const greeting =
                 lang === 'de'
                     ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`

@@ -91,7 +91,7 @@ function renderStats() {
                 <div style="font-size:0.8rem; color:var(--text-muted);">${lang === 'de' ? 'Mini-Games' : 'Mini Games'}</div>
             </div>
             <div class="stat-box" style="text-align:center; padding:1rem; background:var(--bg-page); border-radius:var(--radius-md); border:1px solid var(--border);">
-                <div style="font-size:2rem; font-weight:700; color:var(--primary);">${StorageManager.getItem('username') ? '👤' : '—'}</div>
+                <div style="font-size:2rem; font-weight:700; color:var(--primary);">${AppStorage.getItem('username') ? '👤' : '—'}</div>
                 <div style="font-size:0.8rem; color:var(--text-muted);">${lang === 'de' ? 'Profil' : 'Profile'}</div>
             </div>
         </div>
@@ -149,10 +149,10 @@ function renderRecentProjects() {
    IHK NOTENRECHNER LOGIC
    ========================================================================== */
 function initQaMetrics() {
-    const coverageInput = document.getElementById('qa-test-coverage');
-    const cleanCodeInput = document.getElementById('qa-clean-code');
-    const docsInput = document.getElementById('qa-documentation');
-    const securityInput = document.getElementById('qa-security-scan');
+    const coverageInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-test-coverage'));
+    const cleanCodeInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-clean-code'));
+    const docsInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-documentation'));
+    const securityInput = /** @type {HTMLInputElement} */ (document.getElementById('qa-security-scan'));
 
     // Ranges
     const coverageRange = document.getElementById('qa-test-coverage-range');
@@ -166,6 +166,7 @@ function initQaMetrics() {
     const percentText = document.getElementById('overall-percentage');
     const badge = document.getElementById('grade-status-badge');
 
+    /** @type {{ num: any, range: any }[]} */
     const mappings = [
         { num: coverageInput, range: coverageRange },
         { num: cleanCodeInput, range: cleanCodeRange },
@@ -208,9 +209,9 @@ function initQaMetrics() {
 
         // Update SVG circle gauge
         const circ = 2 * Math.PI * 65;
-        ring.style.strokeDasharray = circ;
+        ring.style.strokeDasharray = String(circ);
         const offset = circ - (overallScore / 100) * circ;
-        ring.style.strokeDashoffset = offset;
+        ring.style.strokeDashoffset = String(offset);
 
         // Status determinations
         const statusConfig = {
@@ -284,10 +285,10 @@ function renderLearningRecommendations() {
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
     const weakQuizCategories = JSON.parse(
-        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]')
+        AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, '[]')
     );
     const flashcardsWrongCounts = JSON.parse(
-        StorageManager.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
+        AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
     );
 
     const recommendations = {};
@@ -389,7 +390,7 @@ function initCommitGrid() {
     let maxStreak = 0;
 
     // Load custom live commits added today
-    let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+    let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
 
     // Generate contribution data going back from today
     for (let i = totalDays - 1; i >= 0; i--) {
@@ -464,7 +465,7 @@ function initCommitGrid() {
                 day: 'numeric',
             });
             tooltip.innerHTML = `<strong>${cell.commits} Commits</strong> am / on ${formattedDate}`;
-            tooltip.style.opacity = 1;
+            tooltip.style.opacity = String(1);
 
             // Position
             const rect = cellEl.getBoundingClientRect();
@@ -473,7 +474,7 @@ function initCommitGrid() {
         });
 
         cellEl.addEventListener('mouseleave', () => {
-            tooltip.style.opacity = 0;
+            tooltip.style.opacity = String(0);
         });
 
         gridContainer.appendChild(cellEl);
@@ -520,9 +521,9 @@ document.addEventListener('langchange', () => {
 
 // Global function to trigger a live commit on the dashboard from games/other areas
 window.addLiveCommit = function () {
-    let liveCommitsToday = parseInt(StorageManager.getItem('github_live_commits_today', 0)) || 0;
+    let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
     liveCommitsToday++;
-    StorageManager.setItem('github_live_commits_today', liveCommitsToday);
+    AppStorage.setItem('github_live_commits_today', liveCommitsToday);
 
     // Re-initialize if we are on dashboard
     initCommitGrid();
@@ -612,7 +613,7 @@ function renderAchievementsWidget() {
                 <div style="color: var(--text-primary); font-size: 0.8rem; margin-bottom: 4px; max-width: 220px; white-space: normal;">${desc}</div>
                 <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">${statusText}</div>
             `;
-            tooltip.style.opacity = 1;
+            tooltip.style.opacity = String(1);
 
             const rect = badgeBox.getBoundingClientRect();
             tooltip.style.left = `${rect.left + window.scrollX - tooltip.offsetWidth / 2 + rect.width / 2}px`;
@@ -620,7 +621,7 @@ function renderAchievementsWidget() {
         };
 
         const hideTooltip = () => {
-            tooltip.style.opacity = 0;
+            tooltip.style.opacity = String(0);
         };
 
         badgeBox.addEventListener('mouseenter', showTooltip);

@@ -14,6 +14,6 @@ export function initAgeCalculator() {
     const age = calculateAge(2002, 5, 10);
     const els = document.querySelectorAll('#my-age, #my-age-en, #my-age-de');
     els.forEach((el) => {
-        if (el) el.textContent = age;
+        if (el) el.textContent = String(age);
     });
 }

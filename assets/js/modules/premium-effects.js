@@ -22,7 +22,9 @@ export function initPremiumEffects() {
  */
 function initButtonRipples() {
     document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-primary, .hero-btn, .btn-secondary, .btn-filter, button');
+        const btn = /** @type {HTMLElement} */ (e.target).closest(
+            '.btn-primary, .hero-btn, .btn-secondary, .btn-filter, button'
+        );
         if (!btn || btn.classList.contains('no-ripple')) return;
 
         const rect = btn.getBoundingClientRect();
@@ -115,9 +117,9 @@ function enhanceCards() {
         mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
                 if (node.nodeType === Node.ELEMENT_NODE) {
-                    const cardsInNode = node.classList?.contains('card')
+                    const cardsInNode = /** @type {Element} */ (node).classList?.contains('card')
                         ? [node]
-                        : node.querySelectorAll?.('.card') || [];
+                        : /** @type {Element} */ (node).querySelectorAll?.('.card') || [];
                     cardsInNode.forEach((card) => {
                         if (card.dataset.premiumEnhanced !== 'true') {
                             card.dataset.premiumEnhanced = 'true';
