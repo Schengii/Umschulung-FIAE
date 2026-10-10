@@ -1,0 +1,45 @@
+name: "🐛 Bug Report"
+description: "Melde einen Fehler oder unerwartetes Verhalten"
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Danke für deinen Bug-Report! Bitte fülle die folgenden Felder möglichst genau aus.
+  - type: textarea
+    id: description
+    attributes:
+      label: Problembeschreibung
+      description: Eine klare und prägnante Beschreibung des Fehlers.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Wie lässt sich das Problem nachstellen?
+      placeholder: |
+        1. Öffne Seite '...'
+        2. Klicke auf '...'
+        3. Siehe Fehler
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+      description: Was sollte stattdessen passieren?
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Browser / Plattform
+      options:
+        - Chromium / Chrome
+        - Firefox
+        - Safari / WebKit
+        - Mobile (iOS / Android)
+        - Service Worker / Offline-Modus
+    validations:
+      required: true

@@ -1,0 +1,27 @@
+name: "✨ Feature Request"
+description: "Schlage eine neue Lernfunktion, Prüfungsinhalt oder Idee vor"
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Ideen für neue Lernmodule, Prüfungsfragen oder Portfolio-Verbesserungen sind willkommen!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem soll gelöst werden?
+      description: Gibt es einen Mangel oder ein Thema, das noch fehlt?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Lösungsvorschlag
+      description: Wie könnte das Feature aussehen oder funktionieren?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen
+      description: Hast du alternative Ansätze in Betracht gezogen?

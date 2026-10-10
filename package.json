@@ -6,6 +6,7 @@
     "node": ">=22.12"
   },
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "dev": "http-server . -p 8080 -c-1",
     "build:dist": "node scripts/build_minified.js",
     "test": "playwright test",

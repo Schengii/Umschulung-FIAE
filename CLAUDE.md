@@ -16,6 +16,7 @@ npm run typecheck      # tsc via jsconfig.json + jsconfig.sw.json (CI-Gate, 0 Fe
 npm run build:dist     # Produktions-Build nach dist/ (esbuild-Minify, kein Bundling, Pfade bleiben identisch)
 npm run regen          # subset-icons + generate-sw-assets, in dieser Reihenfolge (nach Änderungen an Seiten/Assets)
 npm run check          # alle statischen CI-Gates am Stück (check-*, lint, format, typecheck, Unit-Tests)
+npm run prepare        # aktiviert Git-Hooks (.githooks/) via git config core.hooksPath
 ```
 
 Einzelne Tests:
@@ -65,4 +66,5 @@ Node ≥ 22.12 (`.nvmrc`/`engines`, CI nutzt 24; Vitest 5 läuft nicht auf Node 
 - Nutzerkontrollierte oder in `localStorage` persistierte Texte nie roh in `innerHTML`/`insertAdjacentHTML` interpolieren: `escapeHtml` aus `assets/js/modules/html-utils.js` verwenden (klassische Scripts ohne `import`, z. B. `interview.js`, haben eine lokale Kopie).
 - Der globale Storage-Wrapper aus `components.js` heißt `AppStorage` (nicht `StorageManager`, das kollidiert mit dem DOM-Typ); kein direkter `localStorage`-Zugriff außerhalb von `components.js` und `progress-backup.js`. Gespeichertes JSON immer mit `try/catch` lesen. Von klassischen Scripts geteilte Globals für den Typecheck stehen in `assets/js/globals.d.ts`.
 - Überschriften-Ebenen nicht überspringen; Quellen-/Datumszeilen sind `<p class="card-source">`, keine `<h5>`. Statische `<img>` tragen `width`/`height`.
+- **Git Hooks & Secrets (`.githooks/`):** Git-Hooks sind über `git config core.hooksPath .githooks` aktiviert (`npm run prepare`). Der Pre-Commit Hook blockiert `.env`-Dateien (außer `.env.example`), private Keys (`*.pem`, `*.key`) sowie echte API-Keys/Tokens (GitHub `ghp_`, OpenAI/Claude `sk-`, AWS, private Keys) vor jedem Commit.
 - Relevante Features/Fixes in `CHANGELOG.md` eintragen.
