@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 // Several showcase projects call their own optional demo backend on a loopback port
-// (finance-ai-bot :8000, Wohnungssuche KI :5000, ...) that is not started in tests.
+// (finance-ai-bot :8000, Wohnungssuche KI :5000, BurgenGame :3001, ...) that is not started in tests.
 // Chromium reports that as "Failed to load resource" (filtered below); Firefox words it
 // as a CORS error with reason "CORS request did not succeed". Only that exact
 // "backend not reachable" case on a non-test-server loopback port is ignored.
 const isUnreachableDemoBackend = (text) =>
-    text.includes('CORS request did not succeed') && /https?:\/\/127\.0\.0\.1:(?!8080\b)\d+\//.test(text);
+    text.includes('CORS request did not succeed') && /https?:\/\/(?:127\.0\.0\.1|localhost):(?!8080\b)\d+\//.test(text);
 
 test.describe('All Projects 1-Click Launch E2E Verification', () => {
     test('sollte alle Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
