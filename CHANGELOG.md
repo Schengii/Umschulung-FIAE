@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### CI — Firefox-E2E: `localhost`-Demo-Backends werden ignoriert
+- **Fix**: `all_projects_launch.spec.js` ignorierte nicht erreichbare Demo-Backends (Firefox: „CORS request did not succeed“) nur auf `127.0.0.1`. `BurgenGame` ruft `http://localhost:3001/api/health` auf, was `E2E (firefox)` auf `main` rot machte. Der Filter erlaubt jetzt beide Loopback-Hostnamen (nie den Test-Server-Port 8080).
+
 ### Tooling — Typecheck auf 0 Fehler, jetzt CI-Gate
 - **Ergebnis**: Die letzten 70 Fehler sind behoben (Verlauf: 598 → 70 → 0). `npm run typecheck` ist in der CI kein beratender Schritt mehr (`continue-on-error` entfernt) und bricht den Build bei neuen Fehlern.
 - **Wie (ohne Verhaltensänderung)**: `globals.d.ts` typisiert die Custom-Events `langchange`/`radarfilter` (`CustomEvent`), `Element.closest()` (Standard `HTMLElement`) und die Tag-Selektor-Überladungen von `querySelector(All)`, damit `querySelector('img')` ein `HTMLImageElement` bleibt; weitere Globals (`APP`, `newsData`, `initTranslation`, …) sind deklariert. Dazu JSDoc-Typen an Deklarationen (`<video>`, `<iframe>`, Formularfelder, SVG-Kreis) und `event.target`-Zugriffen. Die beiden `score`-Kollisionen zwischen `quiz.js` und `snake.js` (klassische Scripts mit globalem Scope, nie auf derselben Seite geladen) sind per begründetem `@ts-ignore` markiert — ein `export {}` wäre in einem klassischen `<script>` ein Syntaxfehler.
