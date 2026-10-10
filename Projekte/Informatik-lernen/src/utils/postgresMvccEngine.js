@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL MVCC, Tuple Headers & Autovacuum Engine
  * Simulates Tuple versions (xmin, xmax, t_ctid), Dead Tuple generation,

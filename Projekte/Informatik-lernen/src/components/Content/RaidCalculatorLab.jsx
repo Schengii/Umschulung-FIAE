@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { 
   Database, HardDrive, Layers, Award 
 } from 'lucide-react';
-import { calculateRaidStorage, RAID_LEVELS } from '../../utils/raidEngine';
+import { calculateRaidStorage, RAID_LEVELS, RAID_DRILL_QUESTIONS } from '../../utils/raidEngine';
+import LabDrillSection from '../Shared/LabDrillSection';
 import { useStore } from '../../store/useStore';
 
 export default function RaidCalculatorLab({ onRewardXP }) {
@@ -251,6 +252,8 @@ export default function RaidCalculatorLab({ onRewardXP }) {
           ))}
         </div>
       </div>
+
+      <LabDrillSection title="IHK Prüfungs-Drill: RAID & Storage" questions={RAID_DRILL_QUESTIONS} accentColor="#6366f1" />
     </div>
   );
 }

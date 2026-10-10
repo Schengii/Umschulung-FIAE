@@ -1,5 +1,5 @@
-import type { FireWithdrawalConfig, FireMonteCarloSummary } from '../types';
-import { runFireMonteCarloSimulation } from '../components/performanceUtils';
+import type { FireWithdrawalConfig, FireMonteCarloSummary, MonteCarloResult } from '../types';
+import { runFireMonteCarloSimulation, runMonteCarloSimulation } from '../components/performanceUtils';
 
 export interface MonteCarloWorkerPayload {
   config: FireWithdrawalConfig;
@@ -23,3 +23,30 @@ export async function runMonteCarloSimulationAsync(
     }, 0);
   });
 }
+
+/**
+ * Executes general wealth accumulation Monte Carlo simulation asynchronously.
+ */
+export async function runGeneralMonteCarloSimulationAsync(
+  currentPortfolioValue: number,
+  monthlySavings: number,
+  years: number = 20,
+  expectedReturnPercent: number = 7.0,
+  volatilityPercent: number = 15.0,
+  trials: number = 1000
+): Promise<MonteCarloResult> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const result = runMonteCarloSimulation(
+        currentPortfolioValue,
+        monthlySavings,
+        years,
+        expectedReturnPercent,
+        volatilityPercent,
+        trials
+      );
+      resolve(result);
+    }, 0);
+  });
+}
+

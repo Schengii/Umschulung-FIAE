@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * eBPF Cilium Service Mesh & L7 Tracing Engine
  * Simuliert Socket-Level Kernel Bypasses (sock_ops, sk_msg) und vergleicht eBPF Sidecarless Mesh mit Envoy Sidecars.

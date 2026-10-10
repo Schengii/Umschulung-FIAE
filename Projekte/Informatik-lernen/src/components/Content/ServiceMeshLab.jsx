@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Shield, Copy, Check, Network, Play } from 'lucide-react';
 import { ServiceMeshSimulator } from '../../utils/serviceMeshEngine';
 import { useStore } from '../../store/useStore';
 import { triggerHaptic } from '../../utils/haptics';
+
+const randomRequestId = () => Math.floor(100 + Math.random() * 900);
 
 export default function ServiceMeshLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -11,42 +13,38 @@ export default function ServiceMeshLab({ onRewardXP }) {
   const [copied, setCopied] = useState(false);
   const [solved, setSolved] = useState(false);
 
-  const meshRef = useRef(null);
+  const [mesh] = useState(() => {
+    const sim = new ServiceMeshSimulator();
+    sim.setCanaryWeights(80);
+    sim.routeRequest(101);
+    sim.routeRequest(102);
+    return sim;
+  });
   const [, setTick] = useState(0);
-
-  useEffect(() => {
-    meshRef.current = new ServiceMeshSimulator();
-    meshRef.current.setCanaryWeights(80);
-    meshRef.current.routeRequest(101);
-    meshRef.current.routeRequest(102);
-    setTick(t => t + 1);
-  }, []);
 
   const handleWeightChange = (val) => {
     setCanaryV1(val);
-    if (meshRef.current) meshRef.current.setCanaryWeights(val);
+    mesh.setCanaryWeights(val);
     triggerHaptic('SELECTION');
     setTick(t => t + 1);
   };
 
   const handleMtlsChange = (mode) => {
     setMtlsMode(mode);
-    if (meshRef.current) meshRef.current.mtlsMode = mode;
+    mesh.mtlsMode = mode;
     triggerHaptic('SELECTION');
     setTick(t => t + 1);
   };
 
   const handleSendRequest = () => {
-    if (!meshRef.current) return;
-    meshRef.current.routeRequest(Math.floor(100 + Math.random() * 900));
+    mesh.routeRequest(randomRequestId());
     triggerHaptic('SUCCESS');
     setTick(t => t + 1);
     checkXP();
   };
 
   const handleCopyYaml = () => {
-    if (!meshRef.current) return;
-    navigator.clipboard.writeText(meshRef.current.generateVirtualServiceYaml());
+    navigator.clipboard.writeText(mesh.generateVirtualServiceYaml());
     setCopied(true);
     triggerHaptic('SUCCESS');
     setTimeout(() => setCopied(false), 2000);
@@ -64,8 +62,8 @@ export default function ServiceMeshLab({ onRewardXP }) {
     }
   };
 
-  const history = meshRef.current ? meshRef.current.routingHistory : [];
-  const yaml = meshRef.current ? meshRef.current.generateVirtualServiceYaml() : '';
+  const history = mesh.routingHistory;
+  const yaml = mesh.generateVirtualServiceYaml();
 
   return (
     <div style={{ background: 'var(--bg-card)', padding: '28px', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-color)' }}>

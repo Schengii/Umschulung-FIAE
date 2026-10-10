@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * WISO Calculations Utility
  * Handelskalkulation, Deckungsbeitrag, Break-Even-Point & Netzplantechnik (CPM)
@@ -60,6 +61,117 @@ export function calculateVorwaertskalkulation({
   };
 }
 
+/**
+ * Rückwärtskalkulation (Berechnung des maximal zulässigen Listeneinkaufspreises LEP ausgehend vom gegebenen Verkaufspreis)
+ */
+export function calculateRueckwaertskalkulation({
+  bruttoverkaufspreis = 1485.45,
+  umsatzsteuerProzent = 19,
+  kundenrabattProzent = 5,
+  kundenskontoProzent = 2,
+  gewinnzuschlagProzent = 15,
+  handlungskostenzuschlagProzent = 25,
+  bezugskosten = 20,
+  lieferskontoProzent = 2,
+  lieferantenrabattProzent = 10
+}) {
+  const nettoverkaufspreis = umsatzsteuerProzent > 0 
+    ? bruttoverkaufspreis / (1 + umsatzsteuerProzent / 100) 
+    : bruttoverkaufspreis;
+  const umsatzsteuer = bruttoverkaufspreis - nettoverkaufspreis;
+
+  const kundenrabattBetrag = (nettoverkaufspreis * kundenrabattProzent) / 100;
+  const zielverkaufspreis = nettoverkaufspreis - kundenrabattBetrag;
+
+  const kundenskontoBetrag = (zielverkaufspreis * kundenskontoProzent) / 100;
+  const barverkaufspreis = zielverkaufspreis - kundenskontoBetrag;
+
+  const selbstkosten = gewinnzuschlagProzent > 0
+    ? barverkaufspreis / (1 + gewinnzuschlagProzent / 100)
+    : barverkaufspreis;
+  const gewinn = barverkaufspreis - selbstkosten;
+
+  const bezugspreis = handlungskostenzuschlagProzent > 0
+    ? selbstkosten / (1 + handlungskostenzuschlagProzent / 100)
+    : selbstkosten;
+  const handlungskosten = selbstkosten - bezugspreis;
+
+  const bareinkaufspreis = bezugspreis - Number(bezugskosten);
+
+  // Bareinkaufspreis = Zieleinkaufspreis - Lieferskonto (Im Einkauf: Bar = Ziel * (1 - Skonto/100))
+  const zieleinkaufspreis = lieferskontoProzent < 100
+    ? bareinkaufspreis / (1 - lieferskontoProzent / 100)
+    : bareinkaufspreis;
+  const skontoBetrag = zieleinkaufspreis - bareinkaufspreis;
+
+  // Zieleinkaufspreis = LEP - Lieferantenrabatt (Ziel = LEP * (1 - Rabatt/100))
+  const maxListeneinkaufspreis = lieferantenrabattProzent < 100
+    ? zieleinkaufspreis / (1 - lieferantenrabattProzent / 100)
+    : zieleinkaufspreis;
+  const rabattBetrag = maxListeneinkaufspreis - zieleinkaufspreis;
+
+  return {
+    bruttoverkaufspreis: Number(bruttoverkaufspreis.toFixed(2)),
+    umsatzsteuer: Number(umsatzsteuer.toFixed(2)),
+    nettoverkaufspreis: Number(nettoverkaufspreis.toFixed(2)),
+    kundenrabattBetrag: Number(kundenrabattBetrag.toFixed(2)),
+    zielverkaufspreis: Number(zielverkaufspreis.toFixed(2)),
+    kundenskontoBetrag: Number(kundenskontoBetrag.toFixed(2)),
+    barverkaufspreis: Number(barverkaufspreis.toFixed(2)),
+    gewinn: Number(gewinn.toFixed(2)),
+    selbstkosten: Number(selbstkosten.toFixed(2)),
+    handlungskosten: Number(handlungskosten.toFixed(2)),
+    bezugspreis: Number(bezugspreis.toFixed(2)),
+    bezugskosten: Number(bezugskosten),
+    bareinkaufspreis: Number(bareinkaufspreis.toFixed(2)),
+    skontoBetrag: Number(skontoBetrag.toFixed(2)),
+    zieleinkaufspreis: Number(zieleinkaufspreis.toFixed(2)),
+    rabattBetrag: Number(rabattBetrag.toFixed(2)),
+    maxListeneinkaufspreis: Number(maxListeneinkaufspreis.toFixed(2))
+  };
+}
+
+/**
+ * Differenzkalkulation (Berechnung des erzielbaren Gewinns bei vorgegebenem Einkaufs- und Verkaufspreis)
+ */
+export function calculateDifferenzkalkulation({
+  listeneinkaufspreis = 1000,
+  lieferantenrabattProzent = 10,
+  lieferskontoProzent = 2,
+  bezugskosten = 20,
+  handlungskostenzuschlagProzent = 25,
+  nettoverkaufspreis = 1250,
+  kundenrabattProzent = 5,
+  kundenskontoProzent = 2
+}) {
+  // Einkaufsteil -> Selbstkosten
+  const rabattBetrag = (listeneinkaufspreis * lieferantenrabattProzent) / 100;
+  const zieleinkaufspreis = listeneinkaufspreis - rabattBetrag;
+  const skontoBetrag = (zieleinkaufspreis * lieferskontoProzent) / 100;
+  const bareinkaufspreis = zieleinkaufspreis - skontoBetrag;
+  const bezugspreis = bareinkaufspreis + Number(bezugskosten);
+  const handlungskosten = (bezugspreis * handlungskostenzuschlagProzent) / 100;
+  const selbstkosten = bezugspreis + handlungskosten;
+
+  // Verkaufsteil von oben -> Barverkaufspreis
+  const kundenrabattBetrag = (nettoverkaufspreis * kundenrabattProzent) / 100;
+  const zielverkaufspreis = nettoverkaufspreis - kundenrabattBetrag;
+  const kundenskontoBetrag = (zielverkaufspreis * kundenskontoProzent) / 100;
+  const barverkaufspreis = zielverkaufspreis - kundenskontoBetrag;
+
+  // Differenz ist der erzielbare Gewinn
+  const erzielbarerGewinnBetrag = barverkaufspreis - selbstkosten;
+  const gewinnsatzProzent = selbstkosten > 0 ? (erzielbarerGewinnBetrag / selbstkosten) * 100 : 0;
+
+  return {
+    selbstkosten: Number(selbstkosten.toFixed(2)),
+    barverkaufspreis: Number(barverkaufspreis.toFixed(2)),
+    erzielbarerGewinnBetrag: Number(erzielbarerGewinnBetrag.toFixed(2)),
+    gewinnsatzProzent: Number(gewinnsatzProzent.toFixed(2)),
+    isRentabel: erzielbarerGewinnBetrag > 0
+  };
+}
+
 export function calculateDeckungsbeitrag({
   verkaufspreisStueck = 50,
   variableKostenStueck = 20,
@@ -81,14 +193,30 @@ export function calculateDeckungsbeitrag({
   };
 }
 
+/**
+ * @typedef {object} NetzplanNodeInput
+ * @property {string} id
+ * @property {number|string} dauer
+ * @property {string[]} [vorgaenger]
+ *
+ * @typedef {NetzplanNodeInput & { dauer: number, vorgaenger: string[], nachfolger: string[], faz: number, fez: number, saz: number, sez: number, gp: number, fp: number, isKritisch: boolean }} NetzplanNode
+ */
+
+/**
+ * Netzplantechnik (CPM): Vorwärts-/Rückwärtsrechnung mit FAZ/FEZ/SAZ/SEZ,
+ * Gesamtpuffer (GP), freiem Puffer (FP) und kritischem Pfad.
+ * @param {NetzplanNodeInput[]} [nodes]
+ * @returns {{ projektdauer: number, nodes: NetzplanNode[] }}
+ */
 export function calculateNetzplan(nodes = []) {
+  /** @type {Record<string, NetzplanNode>} */
   const nodeMap = {};
   nodes.forEach(n => {
     nodeMap[n.id] = {
       ...n,
       dauer: Number(n.dauer),
       vorgaenger: Array.isArray(n.vorgaenger) ? n.vorgaenger : [],
-      nachfolger: [],
+      nachfolger: /** @type {string[]} */ ([]),
       faz: 0,
       fez: 0,
       saz: 0,
@@ -110,7 +238,7 @@ export function calculateNetzplan(nodes = []) {
   const visited = new Set();
   const forwardQueue = Object.values(nodeMap).filter(n => n.vorgaenger.length === 0);
 
-  const calculateForward = (nodeId) => {
+  const calculateForward = (/** @type {string} */ nodeId) => {
     const node = nodeMap[nodeId];
     if (!node) return;
     if (node.vorgaenger.length === 0) {
@@ -145,7 +273,7 @@ export function calculateNetzplan(nodes = []) {
   const backwardQueue = Object.values(nodeMap).filter(n => n.nachfolger.length === 0);
   const backwardVisited = new Set();
 
-  const calculateBackward = (nodeId) => {
+  const calculateBackward = (/** @type {string} */ nodeId) => {
     const node = nodeMap[nodeId];
     if (!node) return;
 

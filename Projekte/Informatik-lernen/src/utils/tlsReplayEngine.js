@@ -1,8 +1,58 @@
+// @ts-check
 /**
  * TLS 1.3 0-RTT Replay Attack & Anti-Replay Mechanism Engine
  * Simuliert Early Data (0-RTT), Replay-Angriffe und serverseitige Gegenmaßnahmen nach RFC 8446.
  */
 
+/**
+ * @typedef {'none' | 'single_use_tickets' | 'client_timestamps' | 'strike_register'} AntiReplayMechanism
+ *
+ * @typedef {object} TlsSession
+ * @property {string} sessionId
+ * @property {string} psk
+ * @property {number} ticketAge
+ * @property {number} maxTicketAge
+ * @property {number} createdAt
+ * @property {boolean} isUsed
+ *
+ * @typedef {object} TlsRequest
+ * @property {string} method
+ * @property {string} path
+ * @property {string} [body]
+ * @property {boolean} idempotent
+ * @property {boolean} safe
+ *
+ * @typedef {object} ProcessTls0RttInput
+ * @property {TlsSession} session
+ * @property {TlsRequest} request
+ * @property {AntiReplayMechanism} [antiReplay]
+ * @property {Set<string> | string[]} [serverStrikeRegister]
+ * @property {number} [clientTimestampSkewMs]
+ * @property {boolean} [isReplayed]
+ *
+ * @typedef {object} ProcessTls0RttResult
+ * @property {boolean} accepted0Rtt
+ * @property {boolean} executedRequest
+ * @property {number} status
+ * @property {number} rttCount
+ * @property {'safe' | 'low' | 'high' | 'critical'} riskLevel
+ * @property {string} message
+ * @property {string | null} rejectionReason
+ * @property {boolean} strikeRegisterUpdated
+ *
+ * @typedef {object} AuditTls0RttInput
+ * @property {boolean} allowNonIdempotent0Rtt
+ * @property {AntiReplayMechanism} antiReplay
+ * @property {number} maxEarlyDataBytes
+ *
+ * @typedef {object} AuditTls0RttResult
+ * @property {number} score
+ * @property {'A+' | 'B' | 'C' | 'F'} grade
+ * @property {boolean} isCompliant
+ * @property {string[]} issues
+ */
+
+/** @type {Record<'NONE' | 'SINGLE_USE_TICKETS' | 'CLIENT_TIMESTAMPS' | 'STRIKE_REGISTER', AntiReplayMechanism>} */
 export const ANTI_REPLAY_MECHANISMS = {
   NONE: 'none',
   SINGLE_USE_TICKETS: 'single_use_tickets',
@@ -18,6 +68,8 @@ export const REQUEST_METHODS = {
 
 /**
  * Erstellt eine neue TLS 1.3 0-RTT Session
+ * @param {{ sessionId?: string, psk?: string, ticketAge?: number, maxTicketAge?: number }} [options]
+ * @returns {TlsSession}
  */
 export function createTlsSession(options = {}) {
   const sessionId = options.sessionId || 'tls-sess-' + Math.random().toString(36).substring(2, 9);
@@ -37,14 +89,8 @@ export function createTlsSession(options = {}) {
 
 /**
  * Simuliert das Senden einer 0-RTT Early-Data Anfrage an den Server
- * 
- * @param {Object} params
- * @param {Object} params.session - Die TLS-Session mit PSK und Ticket
- * @param {Object} params.request - Der HTTP-Request (Methode, Pfad, Idempotenz)
- * @param {string} params.antiReplay - Ausgewählter Schutzmechanismus (none, single_use_tickets, client_timestamps, strike_register)
- * @param {Set|Array} params.serverStrikeRegister - Bisher gesehene Ticket-Hashes / IDs
- * @param {number} params.clientTimestampSkewMs - Abweichung der Client-Zeit in ms
- * @param {boolean} params.isReplayed - Ob es sich um ein abgefangenes Replay-Paket handelt
+ * @param {ProcessTls0RttInput} input
+ * @returns {ProcessTls0RttResult}
  */
 export function processTls0RttRequest({
   session,
@@ -54,6 +100,7 @@ export function processTls0RttRequest({
   clientTimestampSkewMs = 0,
   isReplayed = false
 }) {
+  /** @type {ProcessTls0RttResult} */
   const result = {
     accepted0Rtt: false,
     executedRequest: false,
@@ -151,8 +198,11 @@ export function processTls0RttRequest({
 
 /**
  * Bewertet das Gesamtrisiko einer Serverkonfiguration für TLS 1.3 0-RTT
+ * @param {AuditTls0RttInput} input
+ * @returns {AuditTls0RttResult}
  */
 export function auditTls0RttConfiguration({ allowNonIdempotent0Rtt, antiReplay, maxEarlyDataBytes }) {
+  /** @type {string[]} */
   const issues = [];
   let score = 100;
 

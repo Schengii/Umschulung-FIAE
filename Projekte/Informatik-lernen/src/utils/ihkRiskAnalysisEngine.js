@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * IHK Risikoanalyse & Risikomatrix Engine (DIN EN 31010 / FMEA für AP2)
  * Berechnet Risikoprioritätszahlen (RPZ), 5x5 Ampel-Klassifizierung und generiert IHK-Projektdokumentationen.
@@ -60,13 +61,27 @@ export const DEFAULT_IHK_RISKS = [
 ];
 
 /**
+ * @typedef {Object} RiskItem
+ * @property {string} [id]
+ * @property {string} [title]
+ * @property {string} [category]
+ * @property {number} [probability]
+ * @property {number} [impact]
+ * @property {string} [strategy]
+ * @property {string} [preventiveMeasure]
+ * @property {string} [contingencyPlan]
+ */
+
+/**
  * Berechnet die Risikoprioritätszahl (RPZ) und Einstufung eines Risikos
+ * @param {RiskItem} risk
  */
 export function calculateRiskItem(risk) {
   const prob = Math.min(5, Math.max(1, Number(risk.probability) || 1));
   const imp = Math.min(5, Math.max(1, Number(risk.impact) || 1));
   const rpz = prob * imp;
 
+  /** @type {'LOW' | 'MEDIUM' | 'HIGH'} */
   let levelKey = 'LOW';
   if (rpz >= 15) {
     levelKey = 'HIGH';
@@ -86,6 +101,7 @@ export function calculateRiskItem(risk) {
 
 /**
  * Analysiert eine Liste von Projektrisiken
+ * @param {RiskItem[]} [risks=[]]
  */
 export function analyzeProjectRisks(risks = []) {
   if (!risks.length) {
@@ -140,6 +156,9 @@ export function analyzeProjectRisks(risks = []) {
 
 /**
  * Exportiert die Risikoanalyse als druckfertiges Markdown für die IHK-Dokumentation
+ * @param {any} analysis
+ * @param {string} [projectName='Abschlussprojekt']
+ * @returns {string}
  */
 export function exportRiskAnalysisMarkdown(analysis, projectName = 'Abschlussprojekt') {
   const dateStr = new Date().toLocaleDateString('de-DE');
@@ -158,9 +177,11 @@ export function exportRiskAnalysisMarkdown(analysis, projectName = 'Abschlusspro
   md += `| Nr. | Risiko / Problemstellung | Kategorie | W (1–5) | S (1–5) | RPZ (1–25) | Strategie | Präventivmaßnahme | Notfallmaßnahme |\n`;
   md += `| :-- | :----------------------- | :-------- | :-----: | :-----: | :--------: | :-------- | :---------------- | :-------------- |\n`;
 
-  analysis.evaluatedRisks.forEach((r, idx) => {
+  /** @param {any} r @param {number} idx */
+  const formatRiskRow = (r, idx) => {
     md += `| R${idx + 1} | ${r.title} | ${r.category} | ${r.probability} | ${r.impact} | **${r.rpz}** (${r.levelKey}) | ${r.strategy} | ${r.preventiveMeasure} | ${r.contingencyPlan} |\n`;
-  });
+  };
+  analysis.evaluatedRisks.forEach(formatRiskRow);
 
   md += `\n### 3. Fazit & Restrisiko-Bewertung\n`;
   md += `Durch die definierten Präventivmaßnahmen und klar zugewiesenen Notfallpläne wird das Gesamtrisiko auf ein beherrschbares Maß gesenkt. Es verbleiben keine ungedeckten kritischen Risiken ohne Handlungsstrategie.\n`;

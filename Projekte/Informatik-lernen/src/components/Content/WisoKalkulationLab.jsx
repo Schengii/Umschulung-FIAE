@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 
-import { Calculator, TrendingUp, GitBranch, Scale, CheckCircle2, Sparkles, Award } from 'lucide-react';
+import { Calculator, TrendingUp, GitBranch, Scale, CheckCircle2, Sparkles, Award, ArrowLeftRight } from 'lucide-react';
 import { 
   calculateVorwaertskalkulation, 
+  calculateRueckwaertskalkulation,
+  calculateDifferenzkalkulation,
   calculateDeckungsbeitrag, 
   calculateNetzplan 
 } from '../../utils/wisoCalculations';
@@ -14,7 +16,7 @@ export default function WisoKalkulationLab() {
   const [completedQuizzes, setCompletedQuizzes] = useState({});
   const [headerXpClaimed, setHeaderXpClaimed] = useState(false);
 
-  // Handelskalkulation State
+  // Handelskalkulation State (Vorwärts)
   const [kalkParams, setKalkParams] = useState({
     listeneinkaufspreis: 1000,
     lieferantenrabattProzent: 10,
@@ -28,6 +30,35 @@ export default function WisoKalkulationLab() {
   });
 
   const kalkResult = calculateVorwaertskalkulation(kalkParams);
+
+  // Rückwärtskalkulation State
+  const [rueckParams, setRueckParams] = useState({
+    bruttoverkaufspreis: 1485.45,
+    umsatzsteuerProzent: 19,
+    kundenrabattProzent: 5,
+    kundenskontoProzent: 2,
+    gewinnzuschlagProzent: 15,
+    handlungskostenzuschlagProzent: 25,
+    bezugskosten: 20,
+    lieferskontoProzent: 2,
+    lieferantenrabattProzent: 10
+  });
+
+  const rueckResult = calculateRueckwaertskalkulation(rueckParams);
+
+  // Differenzkalkulation State
+  const [diffParams, setDiffParams] = useState({
+    listeneinkaufspreis: 1000,
+    lieferantenrabattProzent: 10,
+    lieferskontoProzent: 2,
+    bezugskosten: 20,
+    handlungskostenzuschlagProzent: 25,
+    nettoverkaufspreis: 1350,
+    kundenrabattProzent: 5,
+    kundenskontoProzent: 2
+  });
+
+  const diffResult = calculateDifferenzkalkulation(diffParams);
 
   // Deckungsbeitrag State
   const [dbParams, setDbParams] = useState({
@@ -146,7 +177,18 @@ export default function WisoKalkulationLab() {
           }`}
         >
           <Calculator className="w-4 h-4" />
-          Handelskalkulation (Vorwärts)
+          Vorwärtskalkulation
+        </button>
+        <button
+          onClick={() => setActiveTab('rueckwaerts_differenz')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+            activeTab === 'rueckwaerts_differenz'
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+          }`}
+        >
+          <ArrowLeftRight className="w-4 h-4" />
+          Rückwärts- &amp; Differenzkalkulation
         </button>
         <button
           onClick={() => setActiveTab('deckungsbeitrag')}
@@ -157,7 +199,7 @@ export default function WisoKalkulationLab() {
           }`}
         >
           <TrendingUp className="w-4 h-4" />
-          Deckungsbeitrag & Break-Even
+          Deckungsbeitrag &amp; Break-Even
         </button>
         <button
           onClick={() => setActiveTab('netzplan')}
@@ -179,7 +221,7 @@ export default function WisoKalkulationLab() {
           }`}
         >
           <Scale className="w-4 h-4" />
-          WISO-Arbeitsrecht & IHK-Fälle
+          WISO-Arbeitsrecht &amp; IHK-Fälle
         </button>
       </div>
 
@@ -356,6 +398,136 @@ export default function WisoKalkulationLab() {
               <div className="flex justify-between py-2 text-emerald-400 font-bold text-lg bg-emerald-950/40 px-2 rounded">
                 <span>= Bruttoverkaufspreis (BKP):</span>
                 <span>{kalkResult.bruttoverkaufspreis.toFixed(2)} €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Content Tab: Rückwärts- & Differenzkalkulation */}
+      {activeTab === 'rueckwaerts_differenz' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Rückwärtskalkulation */}
+            <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <ArrowLeftRight className="w-5 h-5 text-blue-400" />
+                IHK Rückwärtskalkulation (Maximaler LEP)
+              </h2>
+              <p className="text-xs text-slate-400">
+                Ermittelt den maximal erlaubten Listeneinkaufspreis (LEP), den das Unternehmen beim Lieferanten akzeptieren darf, um bei einem vorgegebenen Marktpreis den Zielgewinn zu erwirtschaften.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="text-slate-300 block mb-1">Vorgegebener Brutto-VP (€)</label>
+                  <input
+                    type="number"
+                    value={rueckParams.bruttoverkaufspreis}
+                    onChange={(e) => setRueckParams({ ...rueckParams, bruttoverkaufspreis: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-300 block mb-1">Gewinnzuschlag (%)</label>
+                  <input
+                    type="number"
+                    value={rueckParams.gewinnzuschlagProzent}
+                    onChange={(e) => setRueckParams({ ...rueckParams, gewinnzuschlagProzent: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-300 block mb-1">Handlungskosten (%)</label>
+                  <input
+                    type="number"
+                    value={rueckParams.handlungskostenzuschlagProzent}
+                    onChange={(e) => setRueckParams({ ...rueckParams, handlungskostenzuschlagProzent: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-300 block mb-1">Lieferantenrabatt (%)</label>
+                  <input
+                    type="number"
+                    value={rueckParams.lieferantenrabattProzent}
+                    onChange={(e) => setRueckParams({ ...rueckParams, lieferantenrabattProzent: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs space-y-1.5">
+                <div className="flex justify-between py-1 text-slate-300">
+                  <span>Gegebener Netto-Verkaufspreis:</span>
+                  <span>{rueckResult.nettoverkaufspreis.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between py-1 text-slate-300">
+                  <span>- Selbstkosten (nach Abzug Gewinn):</span>
+                  <span>{rueckResult.selbstkosten.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between py-1 text-slate-300">
+                  <span>- Bezugspreis (nach HK-Abzug):</span>
+                  <span>{rueckResult.bezugspreis.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between py-2 text-emerald-400 font-bold text-sm bg-emerald-950/40 px-2 rounded">
+                  <span>= Max. Listeneinkaufspreis (LEP):</span>
+                  <span>{rueckResult.maxListeneinkaufspreis.toFixed(2)} €</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Differenzkalkulation */}
+            <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-amber-400" />
+                IHK Differenzkalkulation (Gewinnsatz-Prüfung)
+              </h2>
+              <p className="text-xs text-slate-400">
+                Prüft, welcher Gewinnbetrag und Gewinnsatz realisiert wird, wenn sowohl der Einkaufs- als auch der Verkaufspreis durch Marktbedingungen fest vorgegeben sind.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="text-slate-300 block mb-1">Listeneinkaufspreis LEP (€)</label>
+                  <input
+                    type="number"
+                    value={diffParams.listeneinkaufspreis}
+                    onChange={(e) => setDiffParams({ ...diffParams, listeneinkaufspreis: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-300 block mb-1">Markt-Nettoverkaufspreis (€)</label>
+                  <input
+                    type="number"
+                    value={diffParams.nettoverkaufspreis}
+                    onChange={(e) => setDiffParams({ ...diffParams, nettoverkaufspreis: Number(e.target.value) })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs space-y-2">
+                <div className="flex justify-between py-1 text-slate-300">
+                  <span>Ermittelte Selbstkosten:</span>
+                  <span>{diffResult.selbstkosten.toFixed(2)} €</span>
+                </div>
+                <div className="flex justify-between py-1 text-slate-300">
+                  <span>Barverkaufspreis (BVP):</span>
+                  <span>{diffResult.barverkaufspreis.toFixed(2)} €</span>
+                </div>
+                <div className={`flex justify-between py-2 font-bold text-sm px-2 rounded ${
+                  diffResult.isRentabel ? 'bg-emerald-950/40 text-emerald-400' : 'bg-rose-950/40 text-rose-400'
+                }`}>
+                  <span>= Erzielbarer Gewinn:</span>
+                  <span>{diffResult.erzielbarerGewinnBetrag.toFixed(2)} € ({diffResult.gewinnsatzProzent.toFixed(1)}%)</span>
+                </div>
+                <div className="text-xs pt-1">
+                  Status: {diffResult.isRentabel 
+                    ? <span className="text-emerald-400 font-bold">✓ Rentabel (Gewinn realisierbar)</span>
+                    : <span className="text-rose-400 font-bold">✗ Unrentabel (Verlustgeschäft!)</span>}
+                </div>
               </div>
             </div>
           </div>

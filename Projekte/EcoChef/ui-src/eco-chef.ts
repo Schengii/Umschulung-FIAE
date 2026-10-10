@@ -1,33 +1,36 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, type TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
-import { Recipe, IngredientItem, ShoppingItem, DailyStat, PantryItemAdvanced, Achievement, MealPlan, ActiveTimer, getLocalDateString, getGroupedShoppingList } from './models/eco-chef.models';
+import { Recipe, ShoppingItem, DailyStat, PantryItemAdvanced, Achievement, MealPlan, getLocalDateString } from './models/eco-chef.models';
 import { ecoChefStyles } from './styles/eco-chef.styles';
 
 import { StorageService } from './services/storage.service';
 import { AudioService } from './services/audio.service';
 import { SpeechService } from './services/speech.service';
 import { GeminiService } from './services/gemini.service';
-import { BarcodeService } from './services/barcode.service';
 import { QrService } from './services/qr.service';
 import { PdfService } from './services/pdf.service';
+import { BackupService } from './services/backup.service';
+import { SyncController, SyncData, SyncHost } from './controllers/sync.controller';
+import { TimerController, TimerHost } from './controllers/timer.controller';
+import { ShoppingListController, ShoppingListHost } from './controllers/shopping-list.controller';
+import { CameraController, CameraHost } from './controllers/camera.controller';
+import { VoiceController, VoiceHost } from './controllers/voice.controller';
+import { AchievementsController } from './controllers/achievements.controller';
+import { PantryController, PantryHost } from './controllers/pantry.controller';
+import { RecipeBookController, RecipeBookHost } from './controllers/recipe-book.controller';
+import { RecipeGeneratorController, RecipeGeneratorHost } from './controllers/recipe-generator.controller';
+import { sortByExpiry } from './services/pantry';
+import { parseNumericValue, estimateCo2Fallback, parseStepMinutes, prepareSavedRecipe } from './services/recipe-utils';
 import { showToast, showConfirmToast } from './components/eco-chef-toast';
 
-// Import subcomponents so they are registered
+// Always-needed components loaded eagerly
 import './components/eco-chef-welcome';
 import './components/eco-chef-gdpr-banner';
 import './components/eco-chef-privacy-modal';
 import './components/eco-chef-timer-expired-modal';
-import './components/eco-chef-settings';
-import './components/eco-chef-shopping-list';
-import './components/eco-chef-recipe-view';
-import './components/eco-chef-cooking-mode';
-import './components/eco-chef-pantry';
-import './components/eco-chef-meal-planner';
-import './components/eco-chef-achievements';
-import './components/eco-chef-regional-map';
-import './components/eco-chef-dashboard';
 import './components/eco-chef-toast';
+// Tab-specific and recipe components are loaded lazily via _loadTabComponent()
 
 @customElement('eco-chef')
 export class EcoChef extends LitElement {
@@ -44,21 +47,13 @@ export class EcoChef extends LitElement {
 
     @state() showExitDialog = false;
     @state() showSavedRecipes = false;
-    @state() savedRecipesList: Recipe[] = [];
-    @state() additionalPrompt = '';
-    @state() recipeChatHistory: string[] = [];
 
     @state() isCookingMode = false;
     @state() currentCookingStep = 0;
 
     @state() currentStepTimeMinutes: number | null = null;
-    @state() timerSecondsRemaining = 0;
-    @state() activeTimers: ActiveTimer[] = [];
-    @state() expiredTimerLabel = '';
-    private timerInterval: number | null = null;
 
     @state() showShoppingList = false;
-    @state() shoppingList: ShoppingItem[] = [];
 
     @state() capturedImage: string | null = null;
     @state() recipe: Recipe | null = null;
@@ -78,51 +73,41 @@ export class EcoChef extends LitElement {
     @state() showReadingRuler = false;
     @state() rulerY = 250;
 
-    pantryItems = ['Salz', 'Pfeffer', 'Olivenöl', 'Wasser', 'Zucker', 'Mehl', 'Milch', 'Butter', 'Eier', 'Knoblauch', 'Zwiebeln'];
-    @state() selectedPantry: { [key: string]: boolean } = {};
 
-    @state() isVoiceControlActive = false;
-    @state() voiceStatusText = '';
 
-    @state() showTimerExpiredModal = false;
     @state() recipeImage: string | null = null;
-    @state() isGeneratingImage = false;
     @state() showWelcomeScreen = true;
 
-    @state() searchQuery = '';
     @state() currentRating = 0;
-    @state() savedFilterRating = 0;
 
     @state() calorieGoal = 2000;
     @state() proteinGoal = 80;
     @state() geminiApiKey = '';
+    @state() geminiKeySessionOnly = true;
     @state() selectedAvatar = '🧑‍🍳';
     @state() budgetSettings = StorageService.getBudgetSettings();
     @state() notificationsEnabled = StorageService.getNotificationsEnabled();
     @state() soundEffectsEnabled = StorageService.getSoundEffectsEnabled();
     @state() showQrModal = false;
     @state() qrSvgMarkup = '';
-    @state() assistantAnswerText = '';
 
     @state() currentTab = 'zauberer';
-    @state() pantryItemsAdvanced: PantryItemAdvanced[] = [];
-    @state() achievementsList: Achievement[] = [];
     @state() mealPlan: MealPlan = {};
     @state() isGeneratingPlan = false;
-    @state() isScanningReceipt = false;
-    @state() isScanningProduct = false;
-    @state() syncCode = '';
-    @state() lastError: string | null = null;
 
-    defaultAchievements: Achievement[] = [
-        { id: 'retterKoenig', title: 'Retter-König', description: 'Koche Rezepte mit dringend zu verbrauchenden Zutaten.', icon: '👑', unlocked: false, progress: 0, target: 5 },
-        { id: 'klimaSchuetzer', title: 'Klimaschützer', description: 'Erreiche eine CO₂-Ersparnis von insgesamt 10 kg.', icon: '🌳', unlocked: false, progress: 0, target: 10 },
-        { id: 'sterneChef', title: 'Sterne-Eco-Chef', description: 'Bewerte 3 gekochte Rezepte mit 5 Sternen.', icon: '⭐', unlocked: false, progress: 0, target: 3 },
-        { id: 'scannerProfi', title: 'Scanner-Profi', description: 'Scanne 3 Kassenzettel per Kamera.', icon: '🧾', unlocked: false, progress: 0, target: 3 },
-        { id: 'pflanzenfresser', title: 'Pflanzenfresser', description: 'Koche 5 vegetarische oder vegane Gerichte.', icon: '🌿', unlocked: false, progress: 0, target: 5 },
-        { id: 'mealPrepKing', title: 'Meal-Prep-King', description: 'Generiere einen wöchentlichen Meal-Prep-Plan.', icon: '📦', unlocked: false, progress: 0, target: 1 },
-        { id: 'mhdRetter', title: 'MHD-Retter', description: 'Füge Zutat mit nahem MHD zur Koch-Auswahl hinzu.', icon: '⏰', unlocked: false, progress: 0, target: 1 }
-    ];
+    private readonly sync = new SyncController(this as unknown as SyncHost);
+    readonly timers = new TimerController(this as unknown as TimerHost);
+    readonly shopping = new ShoppingListController(this as unknown as ShoppingListHost);
+    readonly camera = new CameraController(this as unknown as CameraHost);
+    readonly voice = new VoiceController(this as unknown as VoiceHost);
+    readonly achievements = new AchievementsController(this);
+    readonly pantry = new PantryController(this as unknown as PantryHost);
+    readonly book = new RecipeBookController(this as unknown as RecipeBookHost);
+    readonly generator = new RecipeGeneratorController(this as unknown as RecipeGeneratorHost);
+
+    get syncCode(): string {
+        return this.sync.code;
+    }
 
     override connectedCallback() {
         super.connectedCallback();
@@ -142,39 +127,23 @@ export class EcoChef extends LitElement {
         this.isLrsMode = StorageService.getLrsMode();
         this.fontScale = StorageService.getFontScale();
         this.showReadingRuler = StorageService.getShowRuler();
-        this.selectedPantry = StorageService.getPantry();
-        this.shoppingList = StorageService.getShoppingList();
+        this.pantry.load();
+        this.shopping.load();
         this.selectedAllergens = StorageService.getAllergens();
         this.stats = StorageService.getStats();
         this.calorieGoal = StorageService.getCalorieGoal();
         this.proteinGoal = StorageService.getProteinGoal();
         this.geminiApiKey = StorageService.getGeminiApiKey();
+        this.geminiKeySessionOnly = !this.geminiApiKey || StorageService.isGeminiKeySessionOnly();
         this.selectedAvatar = localStorage.getItem('ecoChef_selectedAvatar') || '🧑‍🍳';
-        this.syncCode = localStorage.getItem('ecoChef_syncCode') || '';
 
-        this.pantryItemsAdvanced = StorageService.getPantryAdvanced();
         this.mealPlan = StorageService.getMealPlan();
         
-        let loadedAchievements = StorageService.getAchievements();
-        if (loadedAchievements.length === 0) {
-            loadedAchievements = [...this.defaultAchievements];
-            StorageService.setAchievements(loadedAchievements);
-        } else {
-            // Merge defaults if new achievements were added
-            this.defaultAchievements.forEach(def => {
-                if (!loadedAchievements.some(a => a.id === def.id)) {
-                    loadedAchievements.push(def);
-                }
-            });
-            StorageService.setAchievements(loadedAchievements);
-        }
-        this.achievementsList = loadedAchievements;
+        this.achievements.load();
         
         this.loadChips();
 
-        if (this.syncCode) {
-            this.handleApplySyncCode(new CustomEvent('apply-sync-code', { detail: { code: this.syncCode } }));
-        }
+        void this.sync.start();
 
         this.updateFontScaleStyle();
         this.updateBodyBackground();
@@ -183,16 +152,15 @@ export class EcoChef extends LitElement {
     override disconnectedCallback() {
         document.removeEventListener('backbutton', this.handleBackButton, false);
         SpeechService.cancelSpeak();
-        this.stopTimer();
+        this.timers.stop();
         AudioService.stopAlarm();
-        this.stopVoiceRecognition();
         super.disconnectedCallback();
     }
 
     handleBackButton = (e: Event) => {
         e.preventDefault();
-        if (this.showTimerExpiredModal) {
-            this.closeTimerExpiredModal();
+        if (this.timers.showExpiredModal) {
+            this.timers.closeExpiredModal();
         } else if (this.isCookingMode) {
             this.exitCookingMode();
         } else if (this.showSettings) {
@@ -210,102 +178,6 @@ export class EcoChef extends LitElement {
         }
     };
 
-    @state() showWebcam = false;
-    private webcamStream: MediaStream | null = null;
-
-    async openCamera() {
-        // App-Kamera über Cordova
-        if ((navigator as any).camera) {
-            const options = {
-                quality: 70,
-                destinationType: (navigator as any).camera.DestinationType.DATA_URL,
-                encodingType: (navigator as any).camera.EncodingType.JPEG,
-                mediaType: (navigator as any).camera.MediaType.PICTURE,
-                correctOrientation: true,
-                targetWidth: 800,
-                targetHeight: 800
-            };
-
-            (navigator as any).camera.getPicture(
-                (imageData: string) => {
-                    this.capturedImage = 'data:image/jpeg;base64,' + imageData;
-                    this.srAnnouncement = "Foto erfolgreich über App-Kamera aufgenommen.";
-                },
-                (error: any) => { 
-                    console.error("Cordova Camera error:", error); 
-                    this.srAnnouncement = "Fehler bei der App-Kamera.";
-                },
-                options
-            );
-            return;
-        }
-
-        // Web-Kamera über getUserMedia
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-                this.showWebcam = true;
-                await this.updateComplete;
-                const video = this.shadowRoot?.querySelector('#webcam-video') as HTMLVideoElement;
-                this.webcamStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' } // Bevorzugt Rückkamera auf Mobilgeräten im Browser
-                });
-                if (video) {
-                    video.srcObject = this.webcamStream;
-                }
-                this.srAnnouncement = "Webcam-Vorschau gestartet.";
-            } catch (err) {
-                console.warn("Webcam access failed, falling back to file picker", err);
-                this.showWebcam = false;
-                this.triggerFilePicker();
-            }
-        } else {
-            this.triggerFilePicker();
-        }
-    }
-
-    triggerFilePicker() {
-        const fileInput = this.shadowRoot?.querySelector('#file-upload') as HTMLInputElement;
-        if (fileInput) fileInput.click();
-    }
-
-    captureWebcam() {
-        const video = this.shadowRoot?.querySelector('#webcam-video') as HTMLVideoElement;
-        const canvas = this.shadowRoot?.querySelector('#webcam-canvas') as HTMLCanvasElement;
-        if (video && canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
-            if (ctx) {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                this.capturedImage = canvas.toDataURL('image/jpeg');
-                this.srAnnouncement = "Foto erfolgreich aufgenommen.";
-            }
-        }
-        this.closeWebcam();
-    }
-
-    closeWebcam() {
-        if (this.webcamStream) {
-            this.webcamStream.getTracks().forEach(track => track.stop());
-            this.webcamStream = null;
-        }
-        this.showWebcam = false;
-        this.srAnnouncement = "Kamera-Modus beendet.";
-    }
-
-    handleFileUpload(event: Event) {
-        const input = event.target as HTMLInputElement;
-        const file = input.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target?.result as string;
-                this.capturedImage = result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
     toggleDarkMode() {
         this.isDarkMode = !this.isDarkMode;
         StorageService.setTheme(this.isDarkMode ? 'dark' : 'light');
@@ -319,82 +191,6 @@ export class EcoChef extends LitElement {
             this.showSettings = false;
             this.recipe = null;
         }
-    }
-
-    addToShoppingList(ingredient: IngredientItem | string) {
-        let cleanName = '';
-        let category = 'Sonstiges';
-        if (typeof ingredient === 'string') {
-            cleanName = ingredient.replace(/^(\*|\d+\.)\s*/, '').trim();
-        } else {
-            cleanName = ingredient.item.replace(/^(\*|\d+\.)\s*/, '').trim();
-            category = ingredient.category || 'Sonstiges';
-        }
-        
-        const cleanNameLower = cleanName.toLowerCase();
-        const isInPantry = this.pantryItemsAdvanced.some(p => {
-            const pClean = p.name.toLowerCase().trim();
-            return cleanNameLower.includes(pClean) || pClean.includes(cleanNameLower);
-        });
-
-        if (isInPantry) {
-            // Use async confirm toast - non-blocking
-            showConfirmToast(
-                `"${cleanName}" ist bereits in der Vorratskammer. Trotzdem zur Einkaufsliste?`,
-                'Hinzufügen',
-                'Abbrechen'
-            ).then(confirmed => {
-                if (!confirmed) return;
-                if (!this.shoppingList.some(item => item.name === cleanName)) {
-                    this.shoppingList.push({ name: cleanName, checked: false, category });
-                    this.saveShoppingList();
-                    showToast(`"${cleanName}" zur Einkaufsliste hinzugefügt`, 'success');
-                    this.requestUpdate();
-                }
-            });
-            return;
-        }
-
-        if (!this.shoppingList.some(item => item.name === cleanName)) {
-            this.shoppingList.push({ name: cleanName, checked: false, category });
-            this.saveShoppingList();
-            showToast(`"${cleanName}" zur Einkaufsliste hinzugefügt`, 'success');
-            this.requestUpdate();
-        } else {
-            showToast('Das steht bereits auf deiner Einkaufsliste!', 'warning');
-        }
-    }
-
-    addManualShoppingItem(name: string) {
-        const trimmed = name.trim();
-        if (trimmed !== '') {
-            this.shoppingList.push({ name: trimmed, checked: false, category: 'Sonstiges' });
-            this.saveShoppingList();
-            this.requestUpdate();
-        }
-    }
-
-    toggleShoppingItem(index: number) {
-        if (this.shoppingList[index]) {
-            this.shoppingList[index].checked = !this.shoppingList[index].checked;
-            this.saveShoppingList();
-            this.requestUpdate();
-        }
-    }
-
-    removeShoppingItem(index: number) {
-        this.shoppingList.splice(index, 1);
-        this.saveShoppingList();
-        this.requestUpdate();
-    }
-
-    clearCheckedShoppingItems() {
-        this.shoppingList = this.shoppingList.filter(item => !item.checked);
-        this.saveShoppingList();
-    }
-
-    saveShoppingList() {
-        StorageService.setShoppingList(this.shoppingList);
     }
 
     handleIngredientsKeypress(e: KeyboardEvent) {
@@ -457,105 +253,21 @@ export class EcoChef extends LitElement {
         this.srAnnouncement = `Allergenfilter ${allergen} wurde ${this.selectedAllergens[allergen] ? 'aktiviert' : 'deaktiviert'}.`;
     }
 
-    normalizeIngredients(ingredients: any[]): IngredientItem[] {
-        if (!ingredients) return [];
-        return ingredients.map(ing => {
-            if (typeof ing === 'string') {
-                return { item: ing, category: 'Sonstiges' };
-            }
-            if (ing && typeof ing === 'object' && 'item' in ing) {
-                return { item: ing.item, category: ing.category || 'Sonstiges' };
-            }
-            return { item: String(ing), category: 'Sonstiges' };
-        });
-    }
-
     // Note: getGroupedShoppingList() is now the shared utility imported from eco-chef.models.ts
-
-    async shareShoppingList() {
-        if (this.shoppingList.length === 0) return;
-        
-        const grouped = getGroupedShoppingList(this.shoppingList);
-        let text = `🛒 *Meine EcoChef Einkaufsliste*:\n`;
-        
-        const categoriesOrder = ['Obst & Gemüse', 'Milchprodukte & Eier', 'Fleisch & Fisch', 'Vorrat & Gewürze', 'Bäckerei', 'Sonstiges'];
-        categoriesOrder.forEach(cat => {
-            if (grouped[cat] && grouped[cat].length > 0) {
-                text += `\n*${cat}*:\n`;
-                grouped[cat].forEach(g => {
-                    const prefix = g.item.checked ? '✅ ' : '⬜ ';
-                    text += `${prefix}${g.item.name}\n`;
-                });
-            }
-        });
-        
-        text += `\nGeneriert mit EcoChef 🧑‍🍳`;
-
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: 'Meine Einkaufsliste',
-                    text: text
-                });
-            } catch (err) {
-                console.error("Fehler beim Teilen", err);
-            }
-        } else {
-            await navigator.clipboard.writeText(text);
-            showToast('Einkaufsliste in die Zwischenablage kopiert!', 'success');
-        }
-    }
-
-    parseVal(val: string | number | undefined): number {
-        if (val === undefined || val === null) return 0;
-        if (typeof val === 'number') return val;
-        const match = val.match(/([\d.,]+)/);
-        if (match) {
-            return parseFloat(match[1].replace(',', '.'));
-        }
-        return 0;
-    }
-
-    /**
-     * Estimates CO₂ savings based on eco-score and diet when the AI
-     * does not return an explicit co2SavedKg value.
-     * Eco-Score leaves: 🍃🍃🍃🍃🍃 → A (best) ... 🍃 → E (worst)
-     */
-    private estimateCo2Fallback(): number {
-        if (!this.recipe) return 0;
-        const ecoScore = this.recipe.ecoScore || '';
-        const leafCount = (ecoScore.match(/🍃/g) || []).length;
-
-        // Base CO₂ saving by eco-score (kg per meal vs. meat-based reference)
-        const baseByLeaf: { [k: number]: number } = {
-            5: 1.4,
-            4: 1.0,
-            3: 0.7,
-            2: 0.4,
-            1: 0.2
-        };
-        let base = baseByLeaf[leafCount] ?? 0.5;
-
-        // Multiply by diet factor
-        if (this.selectedDiet === 'vegan')        base *= 1.3;
-        else if (this.selectedDiet === 'vegetarisch') base *= 1.1;
-
-        return parseFloat(base.toFixed(2));
-    }
 
     markAsCooked() {
         if (!this.recipe) return;
         const today = getLocalDateString();
         
-        const cal = this.parseVal(this.recipe.nutrition.calories);
-        const prot = this.parseVal(this.recipe.nutrition.protein);
-        const carb = this.parseVal(this.recipe.nutrition.carbs);
-        const fat = this.parseVal(this.recipe.nutrition.fat);
+        const cal = parseNumericValue(this.recipe.nutrition.calories);
+        const prot = parseNumericValue(this.recipe.nutrition.protein);
+        const carb = parseNumericValue(this.recipe.nutrition.carbs);
+        const fat = parseNumericValue(this.recipe.nutrition.fat);
 
         // Use AI-provided value; if missing or zero, estimate from eco-score + diet
         const co2 = (this.recipe.co2SavedKg && this.recipe.co2SavedKg > 0)
             ? this.recipe.co2SavedKg
-            : this.estimateCo2Fallback();
+            : estimateCo2Fallback(this.recipe.ecoScore, this.selectedDiet);
 
         const currentStat: DailyStat = this.stats[today] || {
             calories: 0,
@@ -588,213 +300,75 @@ export class EcoChef extends LitElement {
         if (!this.recipe) return;
 
         const stepText = this.recipe.instructions[this.currentCookingStep];
-        const minMatch = stepText.match(/(\d+)\s*(Minuten|Minute|Min|Min\.|min|min\.)/i);
-        const hrMatch = stepText.match(/(\d+)\s*(Stunden|Stunde|Std|Std\.|std|std\.)/i);
-
-        let totalMinutes = 0;
-        if (hrMatch) totalMinutes += parseInt(hrMatch[1], 10) * 60;
-        if (minMatch) totalMinutes += parseInt(minMatch[1], 10);
-
-        this.currentStepTimeMinutes = totalMinutes > 0 ? totalMinutes : null;
-    }
-
-    startTimer(minutes?: number | CustomEvent, label?: string) {
-        let mins: number | null = null;
-        let stepLabel: string | undefined = label;
-
-        if (typeof minutes === 'number') {
-            mins = minutes;
-        } else if (minutes && typeof minutes === 'object' && 'detail' in minutes) {
-            const detail = (minutes as CustomEvent).detail;
-            if (detail) {
-                if (typeof detail.minutes === 'number') {
-                    mins = detail.minutes;
-                }
-                if (detail.label) {
-                    stepLabel = detail.label;
-                }
-            }
-        }
-
-        if (mins === null || mins === undefined || isNaN(mins)) {
-            mins = this.currentStepTimeMinutes;
-        }
-
-        if (!mins || mins <= 0 || isNaN(mins)) return;
-
-        const defaultLabel = this.recipe ? `Schritt ${this.currentCookingStep + 1}: ${this.recipe.instructions[this.currentCookingStep].substring(0, 30)}...` : `Timer ${this.activeTimers.length + 1}`;
-        const finalLabel = stepLabel || defaultLabel;
-
-        const existingIndex = this.activeTimers.findIndex(t => t.label === finalLabel);
-        if (existingIndex !== -1) {
-            const updated = [...this.activeTimers];
-            updated[existingIndex] = {
-                ...updated[existingIndex],
-                secondsRemaining: mins * 60,
-                totalSeconds: mins * 60
-            };
-            this.activeTimers = updated;
-        } else {
-            const newTimer: ActiveTimer = {
-                id: Math.random().toString(36).substring(2, 9),
-                label: finalLabel,
-                totalSeconds: mins * 60,
-                secondsRemaining: mins * 60,
-                stepIndex: this.currentCookingStep
-            };
-            this.activeTimers = [...this.activeTimers, newTimer];
-        }
-
-        this.startTimerTicker();
-        SpeechService.speak(`Timer gestartet für ${mins} Minuten.`);
-    }
-
-    startTimerTicker() {
-        if (this.timerInterval) return;
-        this.timerInterval = window.setInterval(() => {
-            if (this.activeTimers.length === 0) {
-                this.stopTimerTicker();
-                return;
-            }
-
-            this.activeTimers = this.activeTimers.map(timer => {
-                if (timer.isPaused) return timer;
-                if (timer.secondsRemaining > 0) {
-                    return { ...timer, secondsRemaining: timer.secondsRemaining - 1 };
-                } else {
-                    return { ...timer, secondsRemaining: 0 };
-                }
-            });
-
-            // Find expired timer
-            const expired = this.activeTimers.find(t => t.secondsRemaining === 0);
-            if (expired) {
-                this.playAlarm(expired.label);
-                this.activeTimers = this.activeTimers.filter(t => t.id !== expired.id);
-            }
-
-            // Keep timerSecondsRemaining updated with the current step's timer (if it exists)
-            const currentStepTimer = this.activeTimers.find(t => t.stepIndex === this.currentCookingStep);
-            this.timerSecondsRemaining = currentStepTimer ? currentStepTimer.secondsRemaining : 0;
-            
-        }, 1000) as unknown as number;
-    }
-
-    stopTimerTicker() {
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
-        }
-    }
-
-    stopTimer(id?: string) {
-        if (typeof id === 'string') {
-            this.activeTimers = this.activeTimers.filter(t => t.id !== id);
-        } else {
-            // If no ID is passed (e.g. from legacy components), stop the current step's timer
-            this.activeTimers = this.activeTimers.filter(t => t.stepIndex !== this.currentCookingStep);
-        }
-        
-        if (this.activeTimers.length === 0) {
-            this.stopTimerTicker();
-        }
-        
-        const currentStepTimer = this.activeTimers.find(t => t.stepIndex === this.currentCookingStep);
-        this.timerSecondsRemaining = currentStepTimer ? currentStepTimer.secondsRemaining : 0;
-    }
-
-    playAlarm(label: string = '') {
-        this.expiredTimerLabel = label;
-        if (navigator.vibrate) {
-            navigator.vibrate([500, 200, 500, 200, 500, 200, 500]);
-        }
-        this.showTimerExpiredModal = true;
-        this.srAnnouncement = `Achtung! Die Zeit für ${label || 'den Schritt'} ist abgelaufen!`;
-        AudioService.playAlarm();
-    }
-
-    closeTimerExpiredModal() {
-        this.showTimerExpiredModal = false;
-        this.expiredTimerLabel = '';
-        AudioService.stopAlarm();
-        this.srAnnouncement = "Timer-Alarm beendet.";
+        this.currentStepTimeMinutes = parseStepMinutes(stepText);
     }
 
     override render() {
-        if (this.showWelcomeScreen) {
-            return html`
-                <div class="app-wrapper ${this.isDarkMode ? 'dark-theme' : ''} ${this.isLrsMode ? 'lrs-theme' : ''}">
-                    <div class="card" style="padding: 0;">
-                        <eco-chef-welcome 
-                            .isDarkMode="${this.isDarkMode}"
-                            .isLrsMode="${this.isLrsMode}"
-                            @toggle-dark-mode="${this.toggleDarkMode}"
-                            @toggle-lrs-mode="${this.toggleLrsMode}"
-                            @enter-app="${this.enterApp}">
-                        </eco-chef-welcome>
-                        
-                        <eco-chef-gdpr-banner 
-                            .hasConsent="${this.hasConsent}"
-                            @accept-consent="${this.acceptConsent}"
-                            @toggle-privacy="${this.togglePrivacyDetails}">
-                        </eco-chef-gdpr-banner>
-                        
-                        <eco-chef-privacy-modal 
-                            .showPrivacyDetails="${this.showPrivacyDetails}"
-                            @close="${this.togglePrivacyDetails}">
-                        </eco-chef-privacy-modal>
-                    </div>
-                </div>
-            `;
-        }
+        if (this.showWelcomeScreen) return this.renderWelcome();
 
         return html`
             <div class="app-wrapper ${this.isDarkMode ? 'dark-theme' : ''} ${this.isLrsMode ? 'lrs-theme' : ''}">
                <div class="card">
-                 
-                  <div class="header">
-                     <button class="theme-toggle-btn" @click="${this.toggleDarkMode}" title="Dark Mode wechseln" aria-label="Dunkelmodus umschalten" aria-pressed="${this.isDarkMode}">
-                         ${this.isDarkMode ? '☀️' : '🌙'}
-                     </button>
-                     
-                     <h2>${this.selectedAvatar} EcoChef</h2>
-                     <p class="subtitle">Dein KI-Rezept-Zauberer</p>
-                     
-                     <div class="header-actions">
-                         <button class="saved-btn ${this.currentTab === 'zauberer' ? 'active' : ''}" @click="${() => { this.currentTab = 'zauberer'; this.showSavedRecipes = false; }}" aria-label="Rezept-Generator">
-                             ✨ Zauberer
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'pantry' ? 'active' : ''}" @click="${() => { this.currentTab = 'pantry'; }}" aria-label="Vorratskammer">
-                             🥫 Vorrat
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'mealplan' ? 'active' : ''}" @click="${() => { this.currentTab = 'mealplan'; }}" aria-label="Wochenplan">
-                             📅 Wochenplan
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'shopping' ? 'active' : ''}" @click="${() => { this.currentTab = 'shopping'; }}" aria-label="Einkaufsliste">
-                             🛒 Einkäufe
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'regional' ? 'active' : ''}" @click="${() => { this.currentTab = 'regional'; }}" aria-label="Wochenmärkte">
-                             🌾 Regio Markt
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'achievements' ? 'active' : ''}" @click="${() => { this.currentTab = 'achievements'; }}" aria-label="Erfolge">
-                             🏆 Erfolge
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'dashboard' ? 'active' : ''}" @click="${() => { this.currentTab = 'dashboard'; }}" aria-label="Analytics Dashboard">
-                             📊 Analytics
-                         </button>
-                         <button class="saved-btn ${this.currentTab === 'settings' ? 'active' : ''}" @click="${() => { this.currentTab = 'settings'; }}" aria-label="Einstellungen">
-                             ⚙️ Setup
-                         </button>
-                     </div>
-                  </div>
+                  ${this.renderHeader()}
+                  ${this.renderSettingsTab()}
+                  ${this.renderPantryTab()}
+                  ${this.renderDashboardTab()}
+                  ${this.renderRegionalTab()}
+                  ${this.renderMealplanTab()}
+                  ${this.renderAchievementsTab()}
+                  ${this.renderGeneratorTab()}
+                  ${this.renderShoppingTab()}
+                  ${this.renderSavedRecipesTab()}
+                  ${this.renderRecipeTab()}
+               </div>
 
-                  ${this.currentTab === 'settings' ? html`
+               ${this.renderCookingMode()}
+               ${this.renderExitDialog()}
+               ${this.renderQrModal()}
+               ${this.renderReadingRuler()}
+
+                <!-- Cookie/DSGVO Banner -->
+                <eco-chef-gdpr-banner 
+                    .hasConsent="${this.hasConsent}"
+                    @accept-consent="${this.acceptConsent}"
+                    @toggle-privacy="${this.togglePrivacyDetails}">
+                </eco-chef-gdpr-banner>
+
+                <eco-chef-privacy-modal 
+                    .showPrivacyDetails="${this.showPrivacyDetails}"
+                    @close="${this.togglePrivacyDetails}">
+                </eco-chef-privacy-modal>
+
+                <eco-chef-timer-expired-modal 
+                    .showTimerExpiredModal="${this.timers.showExpiredModal}"
+                    .timerLabel="${this.timers.expiredLabel}"
+                    @close="${this.timers.closeExpiredModal}">
+                </eco-chef-timer-expired-modal>
+
+                <!-- Screen Reader Live Announcements & Global File Upload Input -->
+                <input type="file" id="file-upload" accept="image/*" style="display: none;" @change="${this.camera.handleFileUpload}" />
+                <div class="sr-only" aria-live="polite" id="sr-announcements">
+                    ${this.srAnnouncement}
+                </div>
+
+                ${this.renderMiniTimer()}
+                ${this.renderWebcamModal()}
+
+                <!-- Global Toast / Snackbar Notification System -->
+                <eco-chef-toast></eco-chef-toast>
+
+            </div>
+        `;
+    }
+
+    renderSettingsTab() {
+        return this.renderLazyTab('settings', () => html`
                       <eco-chef-settings
                           .isLrsMode="${this.isLrsMode}"
                           .showReadingRuler="${this.showReadingRuler}"
                           .fontScale="${this.fontScale}"
-                          .selectedPantry="${this.selectedPantry}"
-                          .pantryItems="${this.pantryItems}"
+                          .selectedPantry="${this.pantry.selectedStaples}"
+                          .pantryItems="${this.pantry.staples}"
                           .selectedAllergens="${this.selectedAllergens}"
                           .stats="${this.stats}"
                           .calorieGoal="${this.calorieGoal}"
@@ -803,10 +377,11 @@ export class EcoChef extends LitElement {
                           .notificationsEnabled="${this.notificationsEnabled}"
                           .soundEffectsEnabled="${this.soundEffectsEnabled}"
                           .geminiApiKey="${this.geminiApiKey}"
+                          .geminiKeySessionOnly="${this.geminiKeySessionOnly}"
                           .syncCode="${this.syncCode}"
                           .selectedAvatar="${this.selectedAvatar}"
                           @toggle-sound-effects="${(e: CustomEvent) => this.toggleSoundEffects(e.detail.enabled)}"
-                          @toggle-pantry-item="${(e: CustomEvent) => this.togglePantryItem(e.detail.item)}"
+                          @toggle-pantry-item="${(e: CustomEvent) => this.pantry.toggleStaple(e.detail.item)}"
                           @toggle-allergen="${(e: CustomEvent) => this.toggleAllergen(e.detail.allergen)}"
                           @change-font-scale="${(e: CustomEvent) => this.changeFontScale(e.detail.delta)}"
                           @change-calorie-goal="${(e: CustomEvent) => this.changeCalorieGoal(e.detail.goal)}"
@@ -819,55 +394,63 @@ export class EcoChef extends LitElement {
                               this.notificationsEnabled = e.detail.enabled;
                               StorageService.setNotificationsEnabled(this.notificationsEnabled);
                           }}"
-                          @change-gemini-api-key="${(e: CustomEvent) => this.changeGeminiApiKey(e.detail.key)}"
+                          @change-gemini-api-key="${(e: CustomEvent) => this.changeGeminiApiKey(e.detail.key, e.detail.sessionOnly)}"
                           @change-avatar="${(e: CustomEvent) => {
                               this.selectedAvatar = e.detail.avatar;
                               localStorage.setItem('ecoChef_selectedAvatar', e.detail.avatar);
                               this.autoSyncPush();
                           }}"
-                          @generate-sync-code="${this.handleGenerateSyncCode}"
-                          @apply-sync-code="${this.handleApplySyncCode}"
+                          @generate-sync-code="${() => this.sync.generate()}"
+                          @apply-sync-code="${(e: CustomEvent) => this.sync.connect(e.detail.code)}"
                           @toggle-lrs-mode="${this.toggleLrsMode}"
                           @toggle-reading-ruler="${this.toggleReadingRuler}"
                           @toggle-privacy="${this.togglePrivacyDetails}"
-                          @export-recipes="${this.exportRecipes}"
+                          @export-recipes="${this.book.exportJson}"
                           @export-full-backup="${this.exportFullBackup}"
                           @import-full-backup="${(e: CustomEvent) => this.importFullBackup(e.detail.data)}"
-                          @import-recipes-success="${(e: CustomEvent) => this.importRecipesSuccess(e.detail.recipes)}"
+                          @import-recipes-success="${(e: CustomEvent) => this.book.importRaw(e.detail.recipes)}"
                           @clear-all-data="${this.clearAllData}">
                       </eco-chef-settings>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'pantry' ? html`
+    renderPantryTab() {
+        return this.renderLazyTab('pantry', () => html`
                       <eco-chef-pantry
-                          .pantryItems="${this.pantryItemsAdvanced}"
-                          .isScanning="${this.isLoading && (this.isScanningReceipt || this.isScanningProduct)}"
-                          @add-pantry-item="${this.handleAddPantryItem}"
-                          @delete-pantry-item="${this.handleDeletePantryItem}"
+                          .pantryItems="${this.pantry.items}"
+                          .isScanning="${this.isLoading && (this.pantry.isScanningReceipt || this.pantry.isScanningProduct)}"
+                          @add-pantry-item="${(e: CustomEvent) => this.pantry.add(e.detail)}"
+                          @delete-pantry-item="${(e: CustomEvent) => this.pantry.remove(e.detail.name)}"
                           @use-pantry-item="${this.handleUsePantryItem}"
                           @add-seasonal-ingredient="${this.handleSeasonalIngredient}"
-                          @search-barcode="${(e: CustomEvent) => this.handleBarcodeSearch(e.detail.barcode)}"
-                          @trigger-receipt-scan="${this.handleTriggerReceiptScan}"
-                          @trigger-product-scan="${this.handleTriggerProductScan}"
+                          @search-barcode="${(e: CustomEvent) => this.pantry.searchBarcode(e.detail.barcode)}"
+                          @trigger-receipt-scan="${this.pantry.startReceiptScan}"
+                          @trigger-product-scan="${this.pantry.startProductScan}"
                           @trigger-mystery-box="${this.triggerMysteryBox}">
                       </eco-chef-pantry>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'dashboard' ? html`
+    renderDashboardTab() {
+        return this.renderLazyTab('dashboard', () => html`
                       <eco-chef-dashboard
                           .stats="${this.stats}"
                           .calorieGoal="${this.calorieGoal}"
                           .proteinGoal="${this.proteinGoal}">
                       </eco-chef-dashboard>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'regional' ? html`
+    renderRegionalTab() {
+        return this.renderLazyTab('regional', () => html`
                       <eco-chef-regional-map
-                          @add-shopping-item="${(e: CustomEvent) => this.addManualShoppingItem(e.detail.name)}">
+                          @add-shopping-item="${(e: CustomEvent) => this.shopping.addManual(e.detail.name)}">
                       </eco-chef-regional-map>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'mealplan' ? html`
+    renderMealplanTab() {
+        return this.renderLazyTab('mealplan', () => html`
                       <eco-chef-meal-planner
                           .mealPlan="${this.mealPlan}"
                           .isGeneratingPlan="${this.isGeneratingPlan}"
@@ -875,19 +458,39 @@ export class EcoChef extends LitElement {
                           @cook-plan-recipe="${this.handleCookPlanRecipe}"
                           @add-plan-shopping="${this.handleAddPlanShopping}">
                       </eco-chef-meal-planner>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'achievements' ? html`
+    renderAchievementsTab() {
+        return this.renderLazyTab('achievements', () => html`
                       <eco-chef-achievements
-                          .achievements="${this.achievementsList}"
+                          .achievements="${this.achievements.list}"
                           .stats="${this.stats}">
                       </eco-chef-achievements>
-                  ` : ''}
+        `);
+    }
 
-                  ${this.currentTab === 'zauberer' && !this.recipe && !this.showSavedRecipes ? html`
+    renderShoppingTab() {
+        return this.renderLazyTab('shopping', () => html`
+                      <eco-chef-shopping-list
+                          .shoppingList="${this.shopping.items}"
+                          .budgetSettings="${this.budgetSettings}"
+                          @add-item="${(e: CustomEvent) => this.shopping.addManual(e.detail.name)}"
+                          @toggle-item="${(e: CustomEvent) => this.shopping.toggle(e.detail.index)}"
+                          @remove-item="${(e: CustomEvent) => this.shopping.remove(e.detail.index)}"
+                          @clear-checked="${this.shopping.clearChecked}"
+                          @transfer-to-pantry="${this.transferShoppingToPantry}"
+                          @share-list="${this.shopping.share}">
+                      </eco-chef-shopping-list>
+        `);
+    }
+
+    renderGeneratorTab() {
+        if (!(this.currentTab === 'zauberer' && !this.recipe && !this.showSavedRecipes)) return '';
+        return html`
                       ${(() => {
                           if (!this.notificationsEnabled) return '';
-                          const expiring = this.pantryItemsAdvanced.filter(item => {
+                          const expiring = this.pantry.items.filter(item => {
                               if (!item.expiryDate) return false;
                               const today = new Date();
                               today.setHours(0, 0, 0, 0);
@@ -922,7 +525,7 @@ export class EcoChef extends LitElement {
 
                       <div class="input-with-camera">
                           <input type="text" id="ingredients-input" placeholder="Zutat eingeben & Enter drücken oder Foto 📷" .value="${this.ingredients}" @input="${this._handleInput}" @keypress="${this.handleIngredientsKeypress}" style="margin-bottom: 0;" aria-label="Zutaten eingeben" />
-                          <button class="camera-btn" @click="${this.openCamera}" title="Kühlschrank scannen" aria-label="Kühlschrank scannen oder Foto hochladen">📸</button>
+                          <button class="camera-btn" @click="${this.camera.open}" title="Kühlschrank scannen" aria-label="Kühlschrank scannen oder Foto hochladen">📸</button>
                       </div>
 
                       ${this.ingredientChips.length > 0 ? html`
@@ -1014,119 +617,47 @@ export class EcoChef extends LitElement {
                                   <div class="loader"></div>
                                   <p class="loader-text">KI kreiert dein Rezept...</p>`
                               : html`
-                                  <button class="main-btn" @click="${this.askGoogle}" aria-label="Rezept mit künstlicher Intelligenz generieren">✨ Rezept Zaubern</button>`
+                                  <button class="main-btn" @click="${this.generator.generate}" aria-label="Rezept mit künstlicher Intelligenz generieren">✨ Rezept Zaubern</button>`
                           }
                       </div>
-                  ` : ''}
+        `;
+    }
 
-                  ${this.currentTab === 'shopping' ? html`
-                      <eco-chef-shopping-list
-                          .shoppingList="${this.shoppingList}"
-                          .budgetSettings="${this.budgetSettings}"
-                          @add-item="${(e: CustomEvent) => this.addManualShoppingItem(e.detail.name)}"
-                          @toggle-item="${(e: CustomEvent) => this.toggleShoppingItem(e.detail.index)}"
-                          @remove-item="${(e: CustomEvent) => this.removeShoppingItem(e.detail.index)}"
-                          @clear-checked="${this.clearCheckedShoppingItems}"
-                          @transfer-to-pantry="${this.transferShoppingToPantry}"
-                          @share-list="${this.shareShoppingList}">
-                      </eco-chef-shopping-list>
-                  ` : ''}
+    renderSavedRecipesTab() {
+        if (!(this.currentTab === 'zauberer' && this.showSavedRecipes && !this.recipe)) return '';
+        return html`
+                      <eco-chef-saved-recipes
+                          .savedRecipesList="${this.book.saved}"
+                          @open-recipe="${(e: CustomEvent) => this.openSavedRecipe(e.detail.recipe)}"
+                          @delete-recipe="${(e: CustomEvent) => { e.stopPropagation(); this.book.remove(e.detail.index); }}"
+                          @update-rating="${(e: CustomEvent) => { e.stopPropagation(); this.book.rate(e.detail.index, e.detail.rating); }}"
+                          @import-recipes="${(e: CustomEvent) => this.book.importRaw(e.detail.recipes)}"
+                          @export-pdf="${() => this.book.exportPdf(this.selectedAvatar)}"
+                          @back-to-generator="${() => this.showSavedRecipes = false}">
+                      </eco-chef-saved-recipes>
+        `;
+    }
 
-                  ${this.currentTab === 'zauberer' && this.showSavedRecipes && !this.recipe ? html`
-                      <div class="saved-recipes-container">
-                          <h3 class="recipe-subheading">📚 Deine gespeicherten Rezepte</h3>
-
-                          <div class="search-box">
-                              <input type="text"
-                                     placeholder="🔍 Rezepte durchsuchen..."
-                                     .value="${this.searchQuery}"
-                                     @input="${(e: Event) => this.searchQuery = (e.target as HTMLInputElement).value}"
-                                     style="margin-bottom: 0;"
-                                     aria-label="Gespeicherte Rezepte durchsuchen" />
-                          </div>
-
-                          <div style="display: flex; gap: 6px; margin-top: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-                              <button class="chip ${this.savedFilterRating === 0 ? 'active' : ''}" @click="${() => this.savedFilterRating = 0}">Alle</button>
-                              <button class="chip ${this.savedFilterRating === 4 ? 'active' : ''}" @click="${() => this.savedFilterRating = 4}">⭐ 4+ Sterne</button>
-                              <button class="chip ${this.savedFilterRating === 5 ? 'active' : ''}" @click="${() => this.savedFilterRating = 5}">⭐ 5 Sterne</button>
-                          </div>
-
-                          <div style="display: flex; gap: 10px; margin-top: 10px; margin-bottom: 16px; flex-wrap: wrap;">
-                              <input type="file" id="import-file" accept=".json" style="display: none;" @change="${this.handleImportFile}" />
-                              <button class="secondary-btn" @click="${() => (this.shadowRoot?.querySelector('#import-file') as HTMLInputElement)?.click()}" style="border-color: #8b5cf6; color: #6d28d9;" aria-label="Rezepte aus JSON-Datei importieren">
-                                  📂 Rezepte importieren (JSON)
-                              </button>
-                              <button class="secondary-btn" @click="${this.exportCookbookPdf}" style="border-color: #10b981; color: #047857;" aria-label="Kochbuch als PDF/Druck ausgeben">
-                                  📖 Kochbuch als PDF / Drucken
-                              </button>
-                          </div>
-
-                          ${this.savedRecipesList.length === 0 ? html`
-                              <p class="empty-state">Du hast noch keine Rezepte gespeichert. Zaubere dein erstes Gericht!</p>
-                          ` : html`
-                              ${(() => {
-                                  const filtered = this.getFilteredSavedRecipes();
-                                  if (filtered.length === 0) {
-                                      return html`<p class="empty-state">Keine Rezepte gefunden für "${this.searchQuery}"</p>`;
-                                  }
-                                  return html`
-                                      <p class="subtitle" style="margin-bottom: 12px;">${filtered.length} von ${this.savedRecipesList.length} Rezept(en)</p>
-                                      <div class="saved-list">
-                                          ${filtered.map((item: any) => html`
-                                              <div class="saved-card" @click="${() => this.openSavedRecipe(item)}">
-                                                  <div class="saved-card-content">
-                                                      <h4>${item.title}</h4>
-                                                      <div class="saved-meta">
-                                                          <span>📊 ${item.difficulty || '?'}</span>
-                                                          <span>🕒 ${item.prepTime || '?'}</span>
-                                                          ${item.savedAt ? html`<span>📅 ${new Date(item.savedAt).toLocaleDateString('de-DE')}</span>` : ''}
-                                                      </div>
-                                                      <div class="rating-stars" @click="${(e: Event) => e.stopPropagation()}">
-                                                          ${[1, 2, 3, 4, 5].map(star => html`
-                                                              <button class="star-btn ${star <= (item.rating || 0) ? 'filled' : ''}"
-                                                                      @click="${(e: Event) => this.updateSavedRecipeRating(this.savedRecipesList.indexOf(item), star, e)}"
-                                                                      aria-label="${star} Sterne"
-                                                              >${star <= (item.rating || 0) ? '⭐' : '☆'}</button>
-                                                          `)}
-                                                      </div>
-                                                  </div>
-                                                  <button class="delete-btn" @click="${(e: Event) => this.deleteSavedRecipe(this.savedRecipesList.indexOf(item), e)}" aria-label="${item.title} löschen">🗑️</button>
-                                              </div>
-                                          `)}
-                                      </div>
-                                  `;
-                              })()}
-                          `}
-                          
-                          <button class="secondary-btn" @click="${() => this.showSavedRecipes = false}" style="margin-top: 16px;">
-                              🔙 Zurück zum Generator
-                          </button>
-                      </div>
-                  ` : ''}
-
-                  ${this.currentTab === 'zauberer' && this.recipe ? html`
+    renderRecipeTab() {
+        if (!(this.currentTab === 'zauberer' && this.recipe)) return '';
+        if (!this._loadedTabs.has('recipe-view')) return this.renderTabSpinner();
+        return html`
                       <eco-chef-recipe-view
                           .recipe="${this.recipe}"
                           .recipeImage="${this.recipeImage}"
-                          .isGeneratingImage="${this.isGeneratingImage}"
+                          .isGeneratingImage="${this.generator.isGeneratingImage}"
                           .persons="${this.persons}"
                           .currentRating="${this.currentRating}"
                           .isLoading="${this.isLoading}"
-                          .pantryItems="${this.pantryItemsAdvanced}"
-                          .chatHistory="${this.recipeChatHistory}"
-                          @add-to-shopping-list="${(e: CustomEvent) => this.addToShoppingList(e.detail.item)}"
+                          .pantryItems="${this.pantry.items}"
+                          .chatHistory="${this.generator.chatHistory}"
+                          @add-to-shopping-list="${(e: CustomEvent) => this.shopping.add(e.detail.item)}"
                           @set-recipe-rating="${(e: CustomEvent) => this.setRecipeRating(e.detail.rating)}"
-                          @change-portions="${(e: CustomEvent) => this.handlePortionChange(e.detail.persons)}"
+                          @change-portions="${(e: CustomEvent) => this.generator.changePortions(e.detail.persons)}"
                           @mark-cooked="${this.markAsCooked}"
                           @start-cooking="${this.startCooking}"
                           @print-recipe="${this.printRecipe}"
-                          @regenerate-recipe="${(e: CustomEvent) => {
-                              this.additionalPrompt = e.detail.additionalPrompt;
-                              if (this.additionalPrompt.trim()) {
-                                  this.recipeChatHistory = [...this.recipeChatHistory, this.additionalPrompt];
-                              }
-                              this.askGoogle();
-                          }}"
+                          @regenerate-recipe="${(e: CustomEvent) => this.generator.regenerate(e.detail.additionalPrompt)}"
                           @update-recipe="${(e: CustomEvent) => {
                                if (this.recipe) {
                                    this.recipe = {
@@ -1137,46 +668,51 @@ export class EcoChef extends LitElement {
                                }
                            }}"
                           @close="${() => {
-                              this.recipeChatHistory = [];
+                              this.generator.resetChat();
                               this.showExitDialog = true;
                           }}">
                       </eco-chef-recipe-view>
-                  ` : ''}
-               </div>
+        `;
+    }
 
-               ${this.isCookingMode && this.recipe ? html`
+    renderCookingMode() {
+        if (!(this.isCookingMode && this.recipe && this._loadedTabs.has('cooking-mode'))) return '';
+        return html`
                    <eco-chef-cooking-mode
                        .recipe="${this.recipe}"
                        .currentCookingStep="${this.currentCookingStep}"
-                       .timerSecondsRemaining="${this.timerSecondsRemaining}"
+                       .timerSecondsRemaining="${this.timers.secondsRemaining}"
                        .currentStepTimeMinutes="${this.currentStepTimeMinutes}"
-                       .isVoiceControlActive="${this.isVoiceControlActive}"
-                       .voiceStatusText="${this.voiceStatusText}"
-                       .activeTimers="${this.activeTimers}"
-                       .assistantAnswer="${this.assistantAnswerText}"
+                       .isVoiceControlActive="${this.voice.isActive}"
+                       .voiceStatusText="${this.voice.statusText}"
+                       .activeTimers="${this.timers.activeTimers}"
+                       .assistantAnswer="${this.generator.assistantAnswer}"
                        @close="${this.exitCookingMode}"
                        @prev-step="${this.prevStep}"
                        @next-step="${this.nextStep}"
                        @read-step="${this.readCurrentStep}"
-                       @toggle-voice="${this.toggleVoiceControl}"
-                       @start-timer="${this.startTimer}"
-                       @stop-timer="${(e: CustomEvent) => this.stopTimer(e.detail?.id)}"
-                       @ask-cooking-assistant="${this.handleAskCookingAssistant}">
+                       @toggle-voice="${this.voice.toggle}"
+                       @start-timer="${this.timers.start}"
+                       @stop-timer="${(e: CustomEvent) => this.timers.stop(e.detail?.id)}"
+                       @ask-cooking-assistant="${(e: CustomEvent) => this.generator.askAssistant(e.detail.question)}">
                    </eco-chef-cooking-mode>
-               ` : ''}
+        `;
+    }
 
-               ${this.showExitDialog ? html`
+    renderExitDialog() {
+        if (!(this.showExitDialog)) return '';
+        return html`
                    <div class="modal-overlay">
                        <div class="modal-content">
                            <h3>Was möchtest du tun?</h3>
                            <p>Dein Rezept ist fertig. Wie soll es weitergehen?</p>
                            <button class="modal-btn share" @click="${() => {
-                               this.shareRecipe();
+                               if (this.recipe) void this.book.share(this.recipe);
                                this.showExitDialog = false;
                            }}">📤 Teilen
                            </button>
                            <button class="modal-btn save" @click="${() => {
-                                this.saveRecipeWithRating();
+                                if (this.recipe) this.book.save(this.recipe, this.recipeImage, this.currentRating);
                                 this.showExitDialog = false;
                             }}">💾 Speichern${this.currentRating ? ` (${this.currentRating}⭐)` : ''}
                             </button>
@@ -1186,10 +722,12 @@ export class EcoChef extends LitElement {
                            <button class="modal-btn cancel" @click="${() => this.showExitDialog = false}">Zurück zum Rezept</button>
                         </div>
                     </div>
-                ` : ''}
+        `;
+    }
 
-                <!-- QR-Code Modal -->
-                ${this.showQrModal ? html`
+    renderQrModal() {
+        if (!(this.showQrModal)) return '';
+        return html`
                     <div class="modal-overlay" style="z-index: 2200;">
                         <div class="modal-content" style="max-width: 400px; display: flex; flex-direction: column; align-items: center; border-radius: 24px; padding: 24px; text-align: center;">
                             <h3 style="margin-bottom: 12px; color: var(--text-dark);">📱 Rezept per QR-Code teilen</h3>
@@ -1202,10 +740,12 @@ export class EcoChef extends LitElement {
                             </button>
                         </div>
                     </div>
-                ` : ''}
+        `;
+    }
 
-                <!-- Leselineal -->
-                ${this.showReadingRuler && (this.recipe || this.isCookingMode) ? html`
+    renderReadingRuler() {
+        if (!(this.showReadingRuler && (this.recipe || this.isCookingMode))) return '';
+        return html`
                     <div class="reading-ruler" style="top: ${this.rulerY}px;">
                         <div class="reading-ruler-handle" 
                              @touchstart="${this.handleRulerTouch}" 
@@ -1214,59 +754,39 @@ export class EcoChef extends LitElement {
                              aria-label="Leselineal verschieben"
                              title="Leselineal verschieben">↔️</div>
                     </div>
-                ` : ''}
+        `;
+    }
 
-                <!-- Cookie/DSGVO Banner -->
-                <eco-chef-gdpr-banner 
-                    .hasConsent="${this.hasConsent}"
-                    @accept-consent="${this.acceptConsent}"
-                    @toggle-privacy="${this.togglePrivacyDetails}">
-                </eco-chef-gdpr-banner>
-
-                <eco-chef-privacy-modal 
-                    .showPrivacyDetails="${this.showPrivacyDetails}"
-                    @close="${this.togglePrivacyDetails}">
-                </eco-chef-privacy-modal>
-
-                <eco-chef-timer-expired-modal 
-                    .showTimerExpiredModal="${this.showTimerExpiredModal}"
-                    .timerLabel="${this.expiredTimerLabel}"
-                    @close="${this.closeTimerExpiredModal}">
-                </eco-chef-timer-expired-modal>
-
-                <!-- Screen Reader Live Announcements & Global File Upload Input -->
-                <input type="file" id="file-upload" accept="image/*" style="display: none;" @change="${this.handleFileUpload}" />
-                <div class="sr-only" aria-live="polite" id="sr-announcements">
-                    ${this.srAnnouncement}
-                </div>
-
-                <!-- Floating Persistent Mini Timer Widget -->
-                ${this.activeTimers.length > 0 && !this.isCookingMode ? html`
+    renderMiniTimer() {
+        if (!(this.timers.activeTimers.length > 0 && !this.isCookingMode)) return '';
+        return html`
                     <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: #0f172a; color: white; border: 2px solid #10b981; border-radius: 20px; padding: 12px 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; font-family: inherit;">
                         <span style="font-size: 20px;">⏱️</span>
                         <div>
                             <div style="font-size: 13px; font-weight: 800; color: #10b981;">
-                                ${this.activeTimers[0].label}
+                                ${this.timers.activeTimers[0].label}
                             </div>
                             <div style="font-size: 16px; font-weight: 900; font-family: monospace;">
-                                ${Math.floor(this.activeTimers[0].secondsRemaining / 60)}:${(this.activeTimers[0].secondsRemaining % 60).toString().padStart(2, '0')}
-                                ${this.activeTimers.length > 1 ? `(+${this.activeTimers.length - 1} weitere)` : ''}
+                                ${Math.floor(this.timers.activeTimers[0].secondsRemaining / 60)}:${(this.timers.activeTimers[0].secondsRemaining % 60).toString().padStart(2, '0')}
+                                ${this.timers.activeTimers.length > 1 ? `(+${this.timers.activeTimers.length - 1} weitere)` : ''}
                             </div>
                         </div>
-                        <button @click="${() => this.togglePauseTimer(this.activeTimers[0].id)}" style="background: #334155; color: white; border: none; border-radius: 10px; width: 32px; height: 32px; font-size: 14px; cursor: pointer;">
-                            ${this.activeTimers[0].isPaused ? '▶️' : '⏸️'}
+                        <button @click="${() => this.timers.togglePause(this.timers.activeTimers[0].id)}" style="background: #334155; color: white; border: none; border-radius: 10px; width: 32px; height: 32px; font-size: 14px; cursor: pointer;">
+                            ${this.timers.activeTimers[0].isPaused ? '▶️' : '⏸️'}
                         </button>
-                        <button @click="${() => this.startTimer(1, this.activeTimers[0].label)}" style="background: #059669; color: white; border: none; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                        <button @click="${() => this.timers.start(1, this.timers.activeTimers[0].label)}" style="background: #059669; color: white; border: none; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
                             +1 Min
                         </button>
                         <button @click="${() => this.isCookingMode = true}" style="background: #10b981; color: white; border: none; border-radius: 10px; padding: 6px 12px; font-size: 12px; font-weight: 800; cursor: pointer;">
                             Kochmodus 🍳
                         </button>
                     </div>
-                ` : ''}
+        `;
+    }
 
-                <!-- Webcam/Kamera Modal für Webbrowser -->
-                ${this.showWebcam ? html`
+    renderWebcamModal() {
+        if (!(this.camera.showWebcam)) return '';
+        return html`
                     <div class="modal-overlay" style="z-index: 2100;">
                         <div class="modal-content" style="max-width: 500px; display: flex; flex-direction: column; align-items: center; border-radius: 24px; padding: 24px;">
                             <h3 style="margin-bottom: 16px;">📸 Kamera (Web)</h3>
@@ -1275,18 +795,89 @@ export class EcoChef extends LitElement {
                                 <canvas id="webcam-canvas" style="display: none;"></canvas>
                             </div>
                             <div style="display: flex; gap: 12px; width: 100%; margin-top: 20px;">
-                                <button class="main-btn" @click="${this.captureWebcam}" style="margin: 0; flex: 1;">Foto aufnehmen 📸</button>
-                                <button class="secondary-btn" @click="${this.closeWebcam}" style="margin: 0; flex: 1;">Abbrechen</button>
+                                <button class="main-btn" @click="${this.camera.capture}" style="margin: 0; flex: 1;">Foto aufnehmen 📸</button>
+                                <button class="secondary-btn" @click="${this.camera.close}" style="margin: 0; flex: 1;">Abbrechen</button>
                             </div>
                         </div>
                     </div>
-                ` : ''}
-
-                <!-- Global Toast / Snackbar Notification System -->
-                <eco-chef-toast></eco-chef-toast>
-
-            </div>
         `;
+    }
+
+    renderHeader() {
+        return html`
+                  <div class="header">
+                     <button class="theme-toggle-btn" @click="${this.toggleDarkMode}" title="Dark Mode wechseln" aria-label="Dunkelmodus umschalten" aria-pressed="${this.isDarkMode}">
+                         ${this.isDarkMode ? '☀️' : '🌙'}
+                     </button>
+                     
+                     <h2>${this.selectedAvatar} EcoChef</h2>
+                     <p class="subtitle">Dein KI-Rezept-Zauberer</p>
+                     
+                     <div class="header-actions">
+                         <button class="saved-btn ${this.currentTab === 'zauberer' ? 'active' : ''}" @click="${() => this._switchTab('zauberer')}" aria-label="Rezept-Generator">
+                             ✨ Zauberer
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'pantry' ? 'active' : ''}" @click="${() => this._switchTab('pantry')}" aria-label="Vorratskammer">
+                             🥫 Vorrat
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'mealplan' ? 'active' : ''}" @click="${() => this._switchTab('mealplan')}" aria-label="Wochenplan">
+                             📅 Wochenplan
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'shopping' ? 'active' : ''}" @click="${() => this._switchTab('shopping')}" aria-label="Einkaufsliste">
+                             🛒 Einkäufe
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'regional' ? 'active' : ''}" @click="${() => this._switchTab('regional')}" aria-label="Wochenmärkte">
+                             🌾 Regio Markt
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'achievements' ? 'active' : ''}" @click="${() => this._switchTab('achievements')}" aria-label="Erfolge">
+                             🏆 Erfolge
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'dashboard' ? 'active' : ''}" @click="${() => this._switchTab('dashboard')}" aria-label="Analytics Dashboard">
+                             📊 Analytics
+                         </button>
+                         <button class="saved-btn ${this.currentTab === 'settings' ? 'active' : ''}" @click="${() => this._switchTab('settings')}" aria-label="Einstellungen">
+                             ⚙️ Setup
+                         </button>
+                     </div>
+                  </div>
+        `;
+    }
+
+    renderWelcome() {
+        return html`
+                <div class="app-wrapper ${this.isDarkMode ? 'dark-theme' : ''} ${this.isLrsMode ? 'lrs-theme' : ''}">
+                    <div class="card" style="padding: 0;">
+                        <eco-chef-welcome 
+                            .isDarkMode="${this.isDarkMode}"
+                            .isLrsMode="${this.isLrsMode}"
+                            @toggle-dark-mode="${this.toggleDarkMode}"
+                            @toggle-lrs-mode="${this.toggleLrsMode}"
+                            @enter-app="${this.enterApp}">
+                        </eco-chef-welcome>
+                        
+                        <eco-chef-gdpr-banner 
+                            .hasConsent="${this.hasConsent}"
+                            @accept-consent="${this.acceptConsent}"
+                            @toggle-privacy="${this.togglePrivacyDetails}">
+                        </eco-chef-gdpr-banner>
+                        
+                        <eco-chef-privacy-modal 
+                            .showPrivacyDetails="${this.showPrivacyDetails}"
+                            @close="${this.togglePrivacyDetails}">
+                        </eco-chef-privacy-modal>
+                    </div>
+                </div>
+        `;
+    }
+
+    private renderTabSpinner() {
+        return html`<div style="display:flex;justify-content:center;padding:60px 0"><div class="loader"></div></div>`;
+    }
+
+    /** Renders a lazily loaded tab: nothing if inactive, a spinner until its component chunk has loaded. */
+    private renderLazyTab(tab: string, content: () => TemplateResult) {
+        if (this.currentTab !== tab) return '';
+        return this._loadedTabs.has(tab) ? content() : this.renderTabSpinner();
     }
 
     startCooking() {
@@ -1327,142 +918,6 @@ export class EcoChef extends LitElement {
         this.ingredients = (e.target as HTMLInputElement).value;
     }
 
-    async askGoogle() {
-        this.addIngredientFromInput();
-
-        if (this.ingredientChips.length === 0 && !this.capturedImage) {
-            showToast('Bitte gib zuerst Zutaten ein oder mache ein Foto deines Kühlschranks!', 'warning');
-            return;
-        }
-        this.isLoading = true;
-        this.lastError = null;
-        this.recipe = null;
-        this.recipeImage = null;
-        this.srAnnouncement = "Rezept wird von der Künstlichen Intelligenz generiert. Bitte warten Sie einen moment.";
-
-        const portions = this.persons || 2;
-        const textIngredients = this.ingredientChips.join(', ');
-        const pantryKeys = Object.keys(this.selectedPantry).filter(key => this.selectedPantry[key]);
-        const pantryText = pantryKeys.length > 0 ? `\nGrundzutaten in der Vorratskammer (bereits vorhanden und nutzbar): ${pantryKeys.join(', ')}` : '';
-        
-        const urgentList = Object.keys(this.urgentIngredients).filter(k => this.urgentIngredients[k] && this.ingredientChips.includes(k));
-        const urgentText = urgentList.length > 0 ? `\n🚨 DRINGEND ZU VERBRAUCHEN (diese Zutaten MÜSSEN zwingend im Rezept verwendet werden, um Lebensmittelverschwendung zu vermeiden): ${urgentList.join(', ')}` : '';
-        
-        const activeAllergens = Object.keys(this.selectedAllergens).filter(k => this.selectedAllergens[k]);
-        const allergenText = activeAllergens.length > 0 ? `\n⚠️ ALLERGIE- & UNVERTRÄGLICHKEITS-EINSCHRÄNKUNGEN: Das Rezept MUSS absolut frei von folgenden Allergenen sein (entsprechende Zutaten ausschließen oder durch sichere Alternativen ersetzen): ${activeAllergens.join(', ')}` : '';
-        
-        const combinedIngredients = textIngredients + pantryText + urgentText + allergenText;
-
-        const strictIngredientRule = this.allowExtraIngredients
-            ? "- Zutaten: Du darfst das Rezept mit passenden, zusätzlichen Zutaten aufwerten (z.B. Gemüse, Beilagen, Saucen), damit es perfekt wird."
-            : `- Zutaten-Regel (EXTREM WICHTIG): Du darfst AUSSCHLIESSLICH die exakt vom Nutzer angegebenen Zutaten oder auf dem Bild erkennbaren Zutaten verwenden.
-               
-               Füge KEINE EINZIGE weitere Hauptzutat zur Zutatenliste hinzu. Basis-Gewürze (Salz, Pfeffer) sowie Öl und Wasser sind okay.
-               Sei kreativ und erfinde ein neues Gericht, das wirklich NUR aus diesen vorhandenen Zutaten besteht!`;
-
-        const promptText = `
-            Du bist ein professioneller Sternekoch und Ernährungsexperte. Der Nutzer schickt dir Zutaten als Text und/oder ein Foto seines Kühlschranks/seiner Zutaten.
-            
-            Text-Eingabe des Nutzers (inklusive eventueller Vorratskammer-Grundzutaten, Resteverwerter-Modus und Allergenen): ${combinedIngredients}
-            
-            Falls ein Bild beigefügt ist: Analysiere das Bild GANZ GENAU und erkenne alle essbaren Zutaten darauf. Kombiniere sie mit der Text-Eingabe.
-            
-            VORGABEN:
-            - Ernährungsweise: ${this.selectedDiet && this.selectedDiet !== 'egal' ? this.selectedDiet : 'Keine'}
-            - Zeitaufwand: ${this.selectedEffort && this.selectedEffort !== 'egal' ? this.selectedEffort : 'Normal'}
-            - Portionen: 
-            Berechne die Zutatenmengen für exakt ${portions} Person(en).
-            ${strictIngredientRule}
-            
-            ${this.recipeChatHistory.length > 0 ? `🚨 ÄNDERUNGSWÜNSCHE (alle vorherigen und der aktuelle müssen berücksichtigt werden):
-            ${this.recipeChatHistory.map((p, idx) => `${idx + 1}. "${p}"`).join('\n')}` : ''}
-            
-            Antworte AUSSCHLIESSLICH mit einem gültigen JSON-Objekt. Das JSON MUSS diese exakte Struktur haben:
-            {
-              "title": "Name des Gerichts",
-              "difficulty": "Leicht, Mittel oder Schwer",
-              "prepTime": "z.B. 25 Min.",
-              "ecoScore": "Bewerte die Nachhaltigkeit/Regionalität des Gerichts von 1 bis 5 Blättern (Gib NUR diese Emojis zurück: z.B. '🍃🍃🍃🍃')",
-              "ecoScoreDetails": "Ausführliche, ansprechende Begründung des Eco-Scores (z.B. Saisonalität, CO2-Einsparung, regionale Zutaten)",
-              "co2Footprint": "Niedrig, Mittel oder Hoch (Einschätzung des CO2-Fußabdrucks)",
-              "co2SavedKg": 1.2, // geschätzte CO2-Ersparnis in kg gegenüber einem fleischbasierten Vergleichsgericht (als Zahl!)
-              "beverage": "Kurze Empfehlung für ein passendes Getränk (Wein, Bier oder was Alkoholfreies)",
-              "storageTip": "Kurzer Tipp zur Aufbewahrung oder Resteverwertung",
-              "nutrition": { "calories": "z.B. 450 kcal", "protein": "z.B. 25g", "carbs": "z.B. 40g", "fat": "z.B. 15g" },
-              "ingredientsList": [
-                { "item": "Menge und Zutat, z.B. 250g Kirschtomaten", "category": "Kategorie aus: 'Obst & Gemüse', 'Milchprodukte & Eier', 'Fleisch & Fisch', 'Vorrat & Gewürze', 'Bäckerei', 'Sonstiges'" }
-              ],
-              "instructions": ["Schritt 1...", "Schritt 2..."],
-              "tip": "Tipp..."
-            }
-        `;
-
-        try {
-            const text = await GeminiService.generateRecipe(this.capturedImage, promptText);
-            try {
-                const startIndex = text.indexOf('{');
-                const endIndex = text.lastIndexOf('}');
-
-                if (startIndex === -1 || endIndex === -1) {
-                    throw new Error("Kein JSON-Format in der Antwort gefunden.");
-                }
-
-                const jsonString = text.substring(startIndex, endIndex + 1);
-                const parsedData = JSON.parse(jsonString);
-
-                if (!parsedData.title || !parsedData.ingredientsList || !parsedData.instructions) {
-                    throw new Error("Wichtige Rezeptdaten fehlen.");
-                }
-
-                const fallbackNutrition = { calories: "? kcal", protein: "?g", carbs: "?g", fat: "?g" };
-
-                this.recipe = {
-                    title: parsedData.title,
-                    difficulty: parsedData.difficulty || "Unbekannt",
-                    prepTime: parsedData.prepTime || "Unbekannt",
-                    ecoScore: parsedData.ecoScore || "🍃🍃🍃",
-                    ecoScoreDetails: parsedData.ecoScoreDetails || "",
-                    co2Footprint: parsedData.co2Footprint || "Mittel",
-                    co2SavedKg: typeof parsedData.co2SavedKg === 'number' ? parsedData.co2SavedKg : parseFloat(parsedData.co2SavedKg) || 0,
-                    beverage: parsedData.beverage || "Ein frisches Glas Wasser passt wunderbar.",
-                    storageTip: parsedData.storageTip || "Am besten sofort genießen!",
-                    nutrition: parsedData.nutrition || fallbackNutrition,
-                    ingredientsList: Array.isArray(parsedData.ingredientsList) 
-                        ? this.normalizeIngredients(parsedData.ingredientsList) 
-                        : [{ item: "Zutaten konnten nicht geladen werden.", category: "Sonstiges" }],
-                    instructions: Array.isArray(parsedData.instructions) ? parsedData.instructions : ["Zubereitung fehlt."],
-                    tip: parsedData.tip || "Lass es dir schmecken!"
-                };
-
-                this.srAnnouncement = `Rezept erfolgreich geladen: ${this.recipe.title}. Bild wird generiert.`;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                this.generateRecipeImage(this.recipe.title);
-
-            } catch (parseError) {
-                console.error("Fehler beim Auswerten der KI-Antwort:", parseError);
-                this.lastError = 'parse';
-                showToast('Die KI-Antwort konnte nicht verarbeitet werden. Bitte versuche es nochmal!', 'error', { duration: 5000 });
-            }
-
-        } catch (networkError: any) {
-            console.error("API Verbindungsfehler:", networkError);
-            const errMsg: string = networkError?.message || '';
-            let userMsg = 'Verbindungsfehler – bitte Internetverbindung prüfen.';
-            if (errMsg.includes('API_KEY') || errMsg.includes('403')) {
-                userMsg = 'Ungültiger API-Key. Bitte in den Einstellungen prüfen.';
-            } else if (errMsg.includes('429') || errMsg.includes('RESOURCE_EXHAUSTED')) {
-                userMsg = 'API-Limit erreicht. Bitte kurz warten und dann erneut versuchen.';
-            } else if (errMsg.includes('timeout') || errMsg.includes('DEADLINE')) {
-                userMsg = 'Zeitüberschreitung – die KI hat zu lange gebraucht. Bitte nochmal versuchen.';
-            }
-            this.lastError = userMsg;
-            showToast(userMsg, 'error', { duration: 6000 });
-        } finally {
-            this.isLoading = false;
-        }
-    }
-
     startNewRecipe() {
         this.recipe = null;
         this.recipeImage = null;
@@ -1474,160 +929,43 @@ export class EcoChef extends LitElement {
         this.showExitDialog = false;
         this.showSavedRecipes = false;
         this.showShoppingList = false;
-        this.additionalPrompt = '';
-        this.recipeChatHistory = [];
+        this.generator.resetChat();
         this.isCookingMode = false;
         SpeechService.cancelSpeak();
-        this.stopTimer();
+        this.timers.stop();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     exitApp() {
-        if ((navigator as any).app) {
-            (navigator as any).app.exitApp();
+        if (navigator.app) {
+            navigator.app.exitApp();
         } else {
             showToast('App beenden funktioniert nur auf dem echten Gerät!', 'info');
         }
     }
 
-    async shareRecipe() {
-        if (!this.recipe) return;
-        const shareText = `Schau mal, was ich mit EcoChef gekocht habe:\n\n${this.recipe.title}\n🔥 ${this.recipe.nutrition?.calories || ''} | 🌍 Eco-Score: ${this.recipe.ecoScore || ''}\n🍷 Dazu passt: ${this.recipe.beverage || ''}\n\nLade dir die EcoChef App herunter!`;
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: this.recipe.title, text: shareText });
-            } catch (err) {
-                console.error("Fehler beim Teilen", err);
-            }
-        } else {
-            await navigator.clipboard.writeText(shareText);
-            showToast('Rezept-Text in die Zwischenablage kopiert!', 'success');
-        }
-    }
-
-    saveRecipeWithRating() {
-        if (!this.recipe) return;
-        const saved = StorageService.getSavedRecipes();
-        const recipeToSave = {
-            ...this.recipe,
-            image: this.recipeImage || undefined,
-            rating: this.currentRating || 0,
-            savedAt: new Date().toISOString()
-        };
-        saved.push(recipeToSave);
-        StorageService.setSavedRecipes(saved);
-        showToast(`Rezept gespeichert${this.currentRating ? ` mit ${this.currentRating} ⭐` : ''}!`, 'success');
-        this.srAnnouncement = `Rezept "${this.recipe.title}" wurde gespeichert.`;
-    }
-
     toggleSavedView() {
         this.showSavedRecipes = !this.showSavedRecipes;
         if (this.showSavedRecipes) {
+            void this._loadTabComponent('saved-recipes');
             this.showShoppingList = false;
             this.showSettings = false;
-            const parsed = StorageService.getSavedRecipes();
-            this.savedRecipesList = parsed.map((r: any) => ({
-                ...r,
-                ingredientsList: this.normalizeIngredients(r.ingredientsList)
-            }));
+            this.book.load();
             this.recipe = null;
         }
     }
 
-    openSavedRecipe(savedRecipe: any) {
-        this.recipe = {
-            ...savedRecipe,
-            co2SavedKg: typeof savedRecipe.co2SavedKg === 'number' ? savedRecipe.co2SavedKg : (parseFloat(savedRecipe.co2SavedKg) || 0),
-            ingredientsList: this.normalizeIngredients(savedRecipe.ingredientsList)
-        };
+    openSavedRecipe(savedRecipe: Recipe) {
+        this.recipe = prepareSavedRecipe(savedRecipe);
         this.recipeImage = savedRecipe.image || null;
         this.showSavedRecipes = false;
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    deleteSavedRecipe(index: number, event: Event) {
-        event.stopPropagation();
-        this.savedRecipesList.splice(index, 1);
-        StorageService.setSavedRecipes(this.savedRecipesList);
-        this.requestUpdate();
-    }
-
-    updateSavedRecipeRating(index: number, rating: number, event: Event) {
-        event.stopPropagation();
-        if (this.savedRecipesList[index]) {
-            this.savedRecipesList[index].rating = rating;
-            StorageService.setSavedRecipes(this.savedRecipesList);
-            this.requestUpdate();
-
-            if (rating === 5) {
-                const list = [...this.achievementsList];
-                const sc = list.find(a => a.id === 'sterneChef');
-                if (sc) {
-                    sc.progress = Math.min(sc.target, sc.progress + 1);
-                    sc.unlocked = sc.progress >= sc.target;
-                    this.achievementsList = list;
-                    StorageService.setAchievements(this.achievementsList);
-                }
-            }
-
-            this.srAnnouncement = `Bewertung auf ${rating} Sterne aktualisiert.`;
-        }
     }
 
     printRecipe() {
         if (!this.recipe) return;
         PdfService.printCookbook([this.recipe], this.selectedAvatar);
         this.srAnnouncement = `Rezept "${this.recipe.title}" wird gedruckt.`;
-    }
-
-    handleImportFile(event: Event) {
-        const input = event.target as HTMLInputElement;
-        const file = input.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const content = e.target?.result as string;
-                const imported = JSON.parse(content);
-
-                if (!Array.isArray(imported)) {
-                    showToast('Ungültiges Format. Erwartet wird ein JSON-Array von Rezepten.', 'error');
-                    return;
-                }
-
-                const existing = StorageService.getSavedRecipes();
-                const merged = [...existing, ...imported.map((r: any) => ({
-                    ...r,
-                    ingredientsList: this.normalizeIngredients(r.ingredientsList),
-                    importedAt: new Date().toISOString()
-                }))];
-
-                StorageService.setSavedRecipes(merged);
-                this.savedRecipesList = merged;
-                showToast(`${imported.length} Rezept(e) erfolgreich importiert!`, 'success');
-                this.srAnnouncement = `${imported.length} Rezepte importiert.`;
-            } catch (err) {
-                showToast('Fehler beim Importieren. Stelle sicher, dass es eine gültige EcoChef-JSON-Datei ist.', 'error');
-                console.error('Import error:', err);
-            }
-        };
-        reader.readAsText(file);
-        input.value = '';
-    }
-
-    importRecipesSuccess(recipes: any[]) {
-        const existing = StorageService.getSavedRecipes();
-        const merged = [...existing, ...recipes.map((r: any) => ({
-            ...r,
-            ingredientsList: this.normalizeIngredients(r.ingredientsList),
-            importedAt: new Date().toISOString()
-        }))];
-
-        StorageService.setSavedRecipes(merged);
-        this.savedRecipesList = merged;
-        showToast(`${recipes.length} Rezept(e) erfolgreich importiert!`, 'success');
-        this.srAnnouncement = `${recipes.length} Rezepte importiert.`;
     }
 
     updateFontScaleStyle() {
@@ -1641,15 +979,6 @@ export class EcoChef extends LitElement {
             this.showShoppingList = false;
             this.recipe = null;
         }
-    }
-
-    togglePantryItem(item: string) {
-        this.selectedPantry = {
-            ...this.selectedPantry,
-            [item]: !this.selectedPantry[item]
-        };
-        StorageService.setPantry(this.selectedPantry);
-        this.srAnnouncement = `${item} wurde in der Vorratskammer ${this.selectedPantry[item] ? 'aktiviert' : 'deaktiviert'}.`;
     }
 
     clearAllData() {
@@ -1668,146 +997,21 @@ export class EcoChef extends LitElement {
         });
     }
 
-    exportRecipes() {
-        const saved = StorageService.getSavedRecipes();
-        if (saved.length === 0) {
-            showToast('Du hast noch keine Rezepte gespeichert.', 'warning');
-            return;
-        }
-        
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(saved));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "ecoChef_rezepte.json");
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        this.srAnnouncement = "Deine Rezepte wurden als Datei heruntergeladen.";
-    }
-
     transferShoppingToPantry() {
-        const checkedItems = this.shoppingList.filter(item => item.checked);
+        const checkedItems = this.shopping.checkedItems();
         if (checkedItems.length === 0) return;
 
-        const todayStr = getLocalDateString();
-        const defaultExpiry = new Date();
-        defaultExpiry.setDate(defaultExpiry.getDate() + 7);
-        const expiryStr = getLocalDateString(defaultExpiry);
-
-        let addedCount = 0;
-        const updatedPantry = [...this.pantryItemsAdvanced];
-
-        checkedItems.forEach(cItem => {
-            const exists = updatedPantry.some(p => p.name.toLowerCase() === cItem.name.toLowerCase());
-            if (!exists) {
-                updatedPantry.push({
-                    name: cItem.name,
-                    active: true,
-                    addedDate: todayStr,
-                    expiryDate: expiryStr,
-                    quantity: 1,
-                    unit: 'Stk.',
-                    location: 'Kühlschrank'
-                });
-                addedCount++;
-            }
-        });
-
-        this.pantryItemsAdvanced = updatedPantry;
-        StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-
-        this.shoppingList = this.shoppingList.filter(item => !item.checked);
-        this.saveShoppingList();
+        const addedCount = this.pantry.addFromShopping(checkedItems);
+        this.shopping.clearChecked();
 
         showToast(`${addedCount} Zutat(en) in die Reste-Kammer übernommen!`, 'success');
         this.srAnnouncement = `${addedCount} Zutaten in Reste-Kammer übernommen.`;
         this.autoSyncPush();
     }
 
-    handlePortionChange(newPersons: number) {
-        if (!this.recipe || newPersons === this.persons || newPersons < 1) return;
-        const ratio = newPersons / this.persons;
-        const oldPersons = this.persons;
-        this.persons = newPersons;
-
-        const scaledIngredients = this.recipe.ingredientsList.map(ing => {
-            const scaledItemStr = ing.item.replace(/(\d+(?:[.,]\d+)?)/g, (match) => {
-                const val = parseFloat(match.replace(',', '.'));
-                if (isNaN(val)) return match;
-                const scaled = val * ratio;
-                return Number.isInteger(scaled) ? scaled.toString() : scaled.toFixed(1).replace('.', ',');
-            });
-            return {
-                ...ing,
-                item: scaledItemStr
-            };
-        });
-
-        const scaleNutrVal = (strVal: string | undefined) => {
-            if (!strVal) return strVal || '?';
-            return strVal.replace(/(\d+(?:[.,]\d+)?)/g, (match) => {
-                const val = parseFloat(match.replace(',', '.'));
-                if (isNaN(val)) return match;
-                const scaled = val * ratio;
-                return Math.round(scaled).toString();
-            });
-        };
-
-        this.recipe = {
-            ...this.recipe,
-            nutrition: {
-                calories: scaleNutrVal(this.recipe.nutrition?.calories),
-                protein: scaleNutrVal(this.recipe.nutrition?.protein),
-                carbs: scaleNutrVal(this.recipe.nutrition?.carbs),
-                fat: scaleNutrVal(this.recipe.nutrition?.fat),
-            },
-            ingredientsList: scaledIngredients
-        };
-
-        this.srAnnouncement = `Portionsmenge von ${oldPersons} auf ${newPersons} Personen angepasst.`;
-    }
-
     exportFullBackup() {
-        const backupData = {
-            version: '1.0.0',
-            exportedAt: new Date().toISOString(),
-            savedRecipes: StorageService.getSavedRecipes(),
-            pantryItemsAdvanced: StorageService.getPantryAdvanced(),
-            shoppingList: StorageService.getShoppingList(),
-            stats: StorageService.getStats(),
-            achievements: StorageService.getAchievements(),
-            urgentIngredients: StorageService.getUrgentIngredients(),
-            ingredientChips: StorageService.getIngredientChips(),
-            calorieGoal: StorageService.getCalorieGoal(),
-            proteinGoal: StorageService.getProteinGoal()
-        };
-
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `ecoChef_full_backup_${getLocalDateString()}.json`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
+        BackupService.downloadJson(BackupService.backupFilename(), BackupService.createBackup(), true);
         this.srAnnouncement = "Vollständiges EcoChef-Backup heruntergeladen.";
-    }
-
-    async handleBarcodeSearch(barcode: string) {
-        this.isLoading = true;
-        this.srAnnouncement = "Barcode wird abgefragt...";
-        const res = await BarcodeService.fetchProductByBarcode(barcode);
-        this.isLoading = false;
-
-        if (res.found) {
-            const newItem = BarcodeService.createPantryItemFromBarcode(res, barcode);
-            this.pantryItemsAdvanced = [...this.pantryItemsAdvanced, newItem];
-            StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-            showToast(`"${res.name}" erfolgreich per Barcode hinzugefügt!`, 'success');
-            this.srAnnouncement = `${res.name} aus Barcode hinzugefügt.`;
-            this.autoSyncPush();
-        } else {
-            showToast(res.rawMessage || 'Produkt nicht gefunden.', 'error');
-        }
     }
 
     openQrModal() {
@@ -1817,41 +1021,25 @@ export class EcoChef extends LitElement {
         this.showQrModal = true;
     }
 
-    importFullBackup(payload: any) {
-        if (!payload || typeof payload !== 'object') {
+    importFullBackup(raw: unknown) {
+        const payload = BackupService.parseBackup(raw);
+        if (!payload) {
             showToast('Ungültiges Backup-Format.', 'error');
             return;
         }
 
         try {
-            if (Array.isArray(payload.savedRecipes)) {
-                StorageService.setSavedRecipes(payload.savedRecipes);
-                this.savedRecipesList = payload.savedRecipes;
+            if (payload.savedRecipes) {
+                this.book.set(payload.savedRecipes as Recipe[]);
             }
-            if (Array.isArray(payload.pantryItemsAdvanced)) {
-                StorageService.setPantryAdvanced(payload.pantryItemsAdvanced);
-                this.pantryItemsAdvanced = payload.pantryItemsAdvanced;
-            }
-            if (Array.isArray(payload.shoppingList)) {
-                StorageService.setShoppingList(payload.shoppingList);
-                this.shoppingList = payload.shoppingList;
-            }
-            if (payload.stats && typeof payload.stats === 'object') {
-                StorageService.setStats(payload.stats);
-                this.stats = payload.stats;
-            }
-            if (Array.isArray(payload.achievements)) {
-                StorageService.setAchievements(payload.achievements);
-                this.achievementsList = payload.achievements;
-            }
-            if (payload.urgentIngredients) {
-                StorageService.setUrgentIngredients(payload.urgentIngredients);
-                this.urgentIngredients = payload.urgentIngredients;
-            }
-            if (Array.isArray(payload.ingredientChips)) {
-                StorageService.setIngredientChips(payload.ingredientChips);
-                this.ingredientChips = payload.ingredientChips;
-            }
+            this.applySyncData({
+                pantryItemsAdvanced: payload.pantryItemsAdvanced as PantryItemAdvanced[] | undefined,
+                shoppingList: payload.shoppingList as ShoppingItem[] | undefined,
+                stats: payload.stats,
+                urgentIngredients: payload.urgentIngredients,
+                achievementsList: payload.achievements as Achievement[] | undefined,
+                ingredientChips: payload.ingredientChips
+            });
 
             showToast('EcoChef-Backup erfolgreich wiederhergestellt!', 'success', { duration: 4500 });
             this.srAnnouncement = "Gesamtdaten erfolgreich importiert.";
@@ -1892,9 +1080,10 @@ export class EcoChef extends LitElement {
         StorageService.setProteinGoal(goal);
     }
 
-    changeGeminiApiKey(key: string) {
+    changeGeminiApiKey(key: string, sessionOnly = true) {
         this.geminiApiKey = key.trim();
-        StorageService.setGeminiApiKey(this.geminiApiKey);
+        this.geminiKeySessionOnly = sessionOnly;
+        StorageService.setGeminiApiKey(this.geminiApiKey, sessionOnly);
     }
 
     acceptConsent() {
@@ -1908,72 +1097,8 @@ export class EcoChef extends LitElement {
     }
 
     // Sprachsteuerung
-    toggleVoiceControl() {
-        if (this.isVoiceControlActive) {
-            this.stopVoiceRecognition();
-        } else {
-            this.isVoiceControlActive = true;
-            this.voiceStatusText = 'Hört zu...';
-            SpeechService.startListening(
-                (cmd) => this.handleVoiceCommand(cmd),
-                (status) => { this.voiceStatusText = status; },
-                () => { this.isVoiceControlActive = false; }
-            );
-            SpeechService.speak("Sprachsteuerung aktiv. Sag 'weiter' oder 'zurück', um durch die Schritte zu navigieren.");
-            this.srAnnouncement = "Sprachsteuerung aktiviert. Das Mikrofon hört zu.";
-        }
-    }
-
-    stopVoiceRecognition() {
-        this.isVoiceControlActive = false;
-        this.voiceStatusText = '';
-        SpeechService.stopListening();
-        this.srAnnouncement = "Sprachsteuerung deaktiviert.";
-    }
-
-    handleVoiceCommand(command: string) {
-        console.log("Voice Command:", command);
-        if (command.includes('weiter') || command.includes('nächst') || command.includes('weiterer')) {
-            this.nextStep();
-            this.speakCurrentStep();
-            this.srAnnouncement = "Nächster Schritt vorgelesen.";
-        } else if (command.includes('zurück') || command.includes('vorherig') || command.includes('letzter')) {
-            this.prevStep();
-            this.speakCurrentStep();
-            this.srAnnouncement = "Vorheriger Schritt vorgelesen.";
-        } else if (command.includes('vorlesen') || command.includes('lies vor') || command.includes('sprechen')) {
-            this.readCurrentStep();
-            this.srAnnouncement = "Schritt wird vorgelesen.";
-        } else if (command.includes('timer starten') || command.includes('timer start') || command.includes('starten')) {
-            if (this.currentStepTimeMinutes) {
-                this.startTimer();
-            } else {
-                SpeechService.speak("Für diesen Schritt ist keine Kochzeit angegeben.");
-            }
-            this.srAnnouncement = "Timer per Sprachbefehl gestartet.";
-        } else if (command.includes('wie viel zeit') || command.includes('restzeit') || command.includes('zeit übrig') || command.includes('dauer')) {
-            if (this.activeTimers.length === 0) {
-                SpeechService.speak("Es laufen aktuell keine aktiven Timer.");
-            } else {
-                const textList = this.activeTimers.map(t => {
-                    const m = Math.floor(t.secondsRemaining / 60);
-                    const s = t.secondsRemaining % 60;
-                    const timeText = m > 0 ? `${m} Minuten und ${s} Sekunden` : `${s} Sekunden`;
-                    return `Timer für ${t.label.split(':')[0]} hat noch ${timeText} übrig.`;
-                });
-                SpeechService.speak(`Es laufen ${this.activeTimers.length} Timer. ${textList.join(' ')}`);
-            }
-            this.srAnnouncement = "Timer-Restlaufzeit per Sprachbefehl angesagt.";
-        } else if (command.includes('stopp') || command.includes('halt') || command.includes('anhalten')) {
-            SpeechService.cancelSpeak();
-            this.stopTimer();
-            if (this.showTimerExpiredModal) {
-                this.closeTimerExpiredModal();
-            }
-            this.srAnnouncement = "Sprachausgabe und Timer gestoppt.";
-        } else if (command.includes('hilfe') || command.includes('befehle')) {
-            SpeechService.speak("Mögliche Befehle sind: weiter, zurück, vorlesen, timer starten, restzeit abfragen, stoppen und hilfe.");
-        }
+    hasStepDuration(): boolean {
+        return !!this.currentStepTimeMinutes;
     }
 
     speakCurrentStep() {
@@ -2013,19 +1138,6 @@ export class EcoChef extends LitElement {
         window.addEventListener('mouseup', onMouseUp);
     }
 
-    getFilteredSavedRecipes() {
-        let result = this.savedRecipesList;
-        if (this.savedFilterRating > 0) {
-            result = result.filter((r: any) => (r.rating || 0) >= this.savedFilterRating);
-        }
-        if (!this.searchQuery.trim()) return result;
-        const query = this.searchQuery.toLowerCase();
-        return result.filter((r: any) =>
-            r.title?.toLowerCase().includes(query) ||
-            r.ingredientsList?.some((i: any) => i.item?.toLowerCase().includes(query))
-        );
-    }
-
     setRecipeRating(rating: number) {
         if (!this.recipe) return;
         this.currentRating = rating;
@@ -2041,89 +1153,17 @@ export class EcoChef extends LitElement {
         this.srAnnouncement = "Willkommen in der Küche von EcoChef. Du kannst jetzt Zutaten eingeben.";
     }
 
-    async generateRecipeImage(title: string) {
-        this.isGeneratingImage = true;
-        this.recipeImage = null;
-        try {
-            this.recipeImage = await GeminiService.generateRecipeImage(title);
-        } catch (e) {
-            console.error("Imagen failed", e);
-        } finally {
-            this.isGeneratingImage = false;
-            if (this.recipe) {
-                this.recipe = {
-                    ...this.recipe,
-                    image: this.recipeImage || undefined
-                };
-            }
-            this.requestUpdate();
-        }
-    }
-
     override updated(changedProperties: Map<string | number | symbol, unknown>) {
         super.updated(changedProperties);
         if (changedProperties.has('capturedImage') && this.capturedImage) {
-            if (this.isScanningReceipt) {
-                this.processReceipt();
-            } else if (this.isScanningProduct) {
-                this.processProductScan();
-            }
+            void this.pantry.handleCapturedImage();
         }
-    }
-
-    handleAddPantryItem(e: CustomEvent) {
-        const { name, expiryDate, quantity, unit, location } = e.detail;
-        const exists = this.pantryItemsAdvanced.some(item => item.name.toLowerCase() === name.toLowerCase());
-        if (exists) {
-            showToast(`"${name}" ist bereits in der Reste-Kammer vorhanden!`, 'warning');
-            return;
-        }
-        const item: PantryItemAdvanced = {
-            name,
-            active: true,
-            addedDate: getLocalDateString(),
-            expiryDate,
-            quantity: quantity !== undefined ? quantity : 1,
-            unit: unit !== undefined ? unit : 'Stk.',
-            location: location !== undefined ? location : 'Kühlschrank'
-        };
-        this.pantryItemsAdvanced = [...this.pantryItemsAdvanced, item];
-        StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-        this.srAnnouncement = `${name} zur Reste-Kammer hinzugefügt.`;
-        this.autoSyncPush();
-    }
-
-    handleDeletePantryItem(e: CustomEvent) {
-        const { name } = e.detail;
-        this.pantryItemsAdvanced = this.pantryItemsAdvanced.filter(item => item.name !== name);
-        StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-        this.srAnnouncement = `${name} aus der Reste-Kammer entfernt.`;
-        this.autoSyncPush();
     }
 
     handleUsePantryItem(e: CustomEvent) {
         const { name } = e.detail;
         
-        // Gamification Challenge: mhdRetter
-        const matchedItem = this.pantryItemsAdvanced.find(p => p.name.toLowerCase() === name.toLowerCase());
-        if (matchedItem && matchedItem.expiryDate) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const expiry = new Date(matchedItem.expiryDate);
-            expiry.setHours(0, 0, 0, 0);
-            const diffDays = Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-            if (diffDays <= 3) {
-                const list = [...this.achievementsList];
-                const ach = list.find(a => a.id === 'mhdRetter');
-                if (ach && !ach.unlocked) {
-                    ach.progress = 1;
-                    ach.unlocked = true;
-                    this.achievementsList = list;
-                    StorageService.setAchievements(this.achievementsList);
-                    showToast('🏆 Erfolg freigeschaltet: MHD-Retter! Zutat kurz vor Ablauf verwendet.', 'success', { duration: 5000 });
-                }
-            }
-        }
+        this.pantry.onItemUsed(name);
 
         if (!this.ingredientChips.includes(name)) {
             this.ingredientChips = [...this.ingredientChips, name];
@@ -2143,66 +1183,12 @@ export class EcoChef extends LitElement {
         this.srAnnouncement = `${item} als saisonale Zutat ausgewählt. Wechsel zum Zauberer.`;
     }
 
-    handleTriggerReceiptScan() {
-        this.isScanningReceipt = true;
-        this.openCamera();
-    }
-
-    async processReceipt() {
-        if (!this.capturedImage) return;
-        this.isLoading = true;
-        this.srAnnouncement = "Kassenzettel wird analysiert...";
-        try {
-            const items = await GeminiService.scanReceipt(this.capturedImage);
-            if (items && items.length > 0) {
-                const todayStr = getLocalDateString();
-                const newItems = items.map(item => {
-                    const expiry = new Date();
-                    expiry.setDate(expiry.getDate() + (item.expiryDays || 7));
-                    const expiryDateStr = getLocalDateString(expiry);
-                    return {
-                        name: item.name || "Zutat",
-                        active: true,
-                        addedDate: todayStr,
-                        expiryDate: expiryDateStr,
-                        quantity: item.quantity || 1,
-                        unit: item.unit || 'Stk.',
-                        location: item.location || 'Kühlschrank'
-                    };
-                });
-                this.pantryItemsAdvanced = [...this.pantryItemsAdvanced, ...newItems];
-                StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-
-                // Update achievements progress
-                const list = [...this.achievementsList];
-                const sc = list.find(a => a.id === 'scannerProfi');
-                if (sc) {
-                    sc.progress = Math.min(sc.target, sc.progress + 1);
-                    sc.unlocked = sc.progress >= sc.target;
-                }
-                this.achievementsList = list;
-                StorageService.setAchievements(this.achievementsList);
-
-                showToast(`Kassenzettel gescannt! ${items.length} Zutaten hinzugefügt.`, 'success');
-            } else {
-                showToast('Es konnten keine Lebensmittel auf dem Foto erkannt werden.', 'warning');
-            }
-        } catch (e) {
-            console.error("Receipt scan failed", e);
-            showToast('Fehler beim Scannen des Kassenzettels.', 'error');
-        } finally {
-            this.capturedImage = null;
-            this.isScanningReceipt = false;
-            this.isLoading = false;
-        }
-    }
-
     async handleGenerateWeeklyPlan(e: CustomEvent) {
         const isMealPrep = e.detail?.isMealPrep || false;
         this.isGeneratingPlan = true;
         this.srAnnouncement = "Wochenplan wird generiert...";
         try {
-            const pantryNames = this.pantryItemsAdvanced.map(i => i.name);
+            const pantryNames = this.pantry.names();
             const plan = await GeminiService.generateWeeklyPlan(
                 pantryNames,
                 this.selectedDiet,
@@ -2215,13 +1201,7 @@ export class EcoChef extends LitElement {
             this.srAnnouncement = "Wochenplan erfolgreich generiert.";
 
             if (isMealPrep) {
-                const list = [...this.achievementsList];
-                const ach = list.find(a => a.id === 'mealPrepKing');
-                if (ach && !ach.unlocked) {
-                    ach.progress = 1;
-                    ach.unlocked = true;
-                    this.achievementsList = list;
-                    StorageService.setAchievements(this.achievementsList);
+                if (this.achievements.unlock('mealPrepKing')) {
                     showToast('🏆 Erfolg freigeschaltet: Meal-Prep-King!', 'success', { duration: 5000 });
                 }
             }
@@ -2238,242 +1218,101 @@ export class EcoChef extends LitElement {
         this.ingredientChips = [title];
         this.saveChips();
         this.currentTab = 'zauberer';
-        this.askGoogle();
+        void this.generator.generate();
     }
 
     handleAddPlanShopping(e: CustomEvent) {
         const { title } = e.detail;
-        this.addManualShoppingItem(title);
+        this.shopping.addManual(title);
         showToast(`"${title}" zur Einkaufsliste hinzugefügt!`, 'success');
     }
 
-    async handleGenerateSyncCode() {
-        this.srAnnouncement = "Generiere Synchronisations-Code...";
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        for (let i = 0; i < 6; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
 
-        const payload = {
-            pantryItemsAdvanced: this.pantryItemsAdvanced,
-            shoppingList: this.shoppingList,
-            achievementsList: this.achievementsList,
-            stats: this.stats,
-            urgentIngredients: this.urgentIngredients,
-            ingredientChips: this.ingredientChips
-        };
-
-        try {
-            const res = await fetch(`https://kvdb.io/ecochefsyncbucket_${code}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (res.ok) {
-                this.syncCode = code;
-                localStorage.setItem('ecoChef_syncCode', code);
-                this.srAnnouncement = `Sync-Code generiert: ${code}.`;
-                this.requestUpdate();
-            } else {
-                throw new Error("HTTP Status " + res.status);
-            }
-        } catch (e) {
-            console.error("Generate sync code failed", e);
-            showToast('Fehler beim Verbinden mit dem Cloud-Server.', 'error');
-        }
-    }
-
-    async handleApplySyncCode(e: CustomEvent) {
-        const { code } = e.detail;
-        this.srAnnouncement = "Verbinde und synchronisiere Daten...";
-        try {
-            const res = await fetch(`https://kvdb.io/ecochefsyncbucket_${code}`);
-            if (res.ok) {
-                const data = await res.json();
-                if (data) {
-                    if (data.pantryItemsAdvanced) {
-                        this.pantryItemsAdvanced = data.pantryItemsAdvanced;
-                        StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-                    }
-                    if (data.shoppingList) {
-                        this.shoppingList = data.shoppingList;
-                        this.saveShoppingList();
-                    }
-                    if (data.achievementsList) {
-                        this.achievementsList = data.achievementsList;
-                        StorageService.setAchievements(this.achievementsList);
-                    }
-                    if (data.stats) {
-                        this.stats = data.stats;
-                        StorageService.setStats(this.stats);
-                    }
-                    if (data.urgentIngredients) {
-                        this.urgentIngredients = data.urgentIngredients;
-                        StorageService.setUrgentIngredients(this.urgentIngredients);
-                    }
-                    if (data.ingredientChips) {
-                        this.ingredientChips = data.ingredientChips;
-                        this.saveChips();
-                    }
-                    this.syncCode = code;
-                    localStorage.setItem('ecoChef_syncCode', code);
-                    showToast('Daten erfolgreich synchronisiert!', 'success');
-                    this.srAnnouncement = "Synchronisation abgeschlossen.";
-                    this.requestUpdate();
-                }
-            } else {
-                showToast('Ungültiger oder abgelaufener Sync-Schlüssel.', 'error');
-            }
-        } catch (err) {
-            console.error("Apply sync code failed", err);
-            showToast('Fehler beim Abrufen der Synchronisationsdaten.', 'error');
-        }
-    }
 
     updateAchievements() {
-        let totalCO2 = 0;
-        let cookedCount = 0;
-        for (const date in this.stats) {
-            totalCO2 += this.stats[date].co2Saved || 0;
-            cookedCount += this.stats[date].count || 0;
-        }
-
-        const list = [...this.achievementsList];
-        
-        // 1. Klimaschützer
-        const ks = list.find(a => a.id === 'klimaSchuetzer');
-        if (ks) {
-            ks.progress = Math.round(totalCO2);
-            ks.unlocked = ks.progress >= ks.target;
-        }
-
-        // 2. Pflanzenfresser
-        const pf = list.find(a => a.id === 'pflanzenfresser');
-        if (pf && this.recipe) {
-            const isVeg = this.selectedDiet === 'vegetarisch' || this.selectedDiet === 'vegan';
-            if (isVeg) {
-                pf.progress = Math.min(pf.target, pf.progress + 1);
-                pf.unlocked = pf.progress >= pf.target;
-            }
-        }
-
-        // 3. Retter-König
-        const rk = list.find(a => a.id === 'retterKoenig');
-        if (rk && this.recipe) {
-            const hasUrgent = Object.keys(this.urgentIngredients).some(k => this.urgentIngredients[k] && this.recipe?.ingredientsList.some(i => i.item.toLowerCase().includes(k.toLowerCase())));
-            if (hasUrgent) {
-                rk.progress = Math.min(rk.target, rk.progress + 1);
-                rk.unlocked = rk.progress >= rk.target;
-            }
-        }
-
-        this.achievementsList = list;
-        StorageService.setAchievements(this.achievementsList);
+        this.achievements.onRecipeCooked({
+            stats: this.stats,
+            recipe: this.recipe,
+            diet: this.selectedDiet,
+            urgentIngredients: this.urgentIngredients
+        });
     }
 
-    handleTriggerProductScan() {
-        this.isScanningProduct = true;
-        this.openCamera();
+    autoSyncPush() {
+        return this.sync.push();
     }
 
-    async processProductScan() {
-        if (!this.capturedImage) return;
-        this.isLoading = true;
-        this.srAnnouncement = "Verpackung wird auf MHD und Inhalt analysiert...";
-        try {
-            const item = await GeminiService.scanPantryItem(this.capturedImage);
-            if (item && item.name) {
-                const todayStr = getLocalDateString();
-                const newItem = {
-                    name: item.name || "Unbekanntes Produkt",
-                    active: true,
-                    addedDate: todayStr,
-                    expiryDate: item.expiryDate || todayStr,
-                    quantity: item.quantity || 1,
-                    unit: item.unit || 'Stk.',
-                    location: item.location || 'Kühlschrank'
-                };
-                this.pantryItemsAdvanced = [...this.pantryItemsAdvanced, newItem];
-                StorageService.setPantryAdvanced(this.pantryItemsAdvanced);
-                showToast(`"${newItem.name}" erkannt und zur Vorratskammer hinzugefügt! (MHD: ${newItem.expiryDate})`, 'success', { duration: 5000 });
-                this.autoSyncPush();
-            } else {
-                showToast('Produkt konnte nicht eindeutig identifiziert werden.', 'warning');
-            }
-        } catch (e) {
-            console.error("Product scan failed", e);
-            showToast('Fehler beim Scannen des Produkts.', 'error');
-        } finally {
-            this.capturedImage = null;
-            this.isScanningProduct = false;
-            this.isLoading = false;
-        }
-    }
-
-    async autoSyncPush() {
-        if (!this.syncCode) return;
-        const payload = {
-            pantryItemsAdvanced: this.pantryItemsAdvanced,
-            shoppingList: this.shoppingList,
-            achievementsList: this.achievementsList,
+    // --- SyncHost implementation (used by SyncController) ---
+    getSyncData(): SyncData {
+        return {
+            pantryItemsAdvanced: this.pantry.items,
+            shoppingList: this.shopping.items,
+            achievementsList: this.achievements.list,
             stats: this.stats,
             urgentIngredients: this.urgentIngredients,
             ingredientChips: this.ingredientChips
         };
-        try {
-            await fetch(`https://kvdb.io/ecochefsyncbucket_${this.syncCode}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            console.log("Auto-sync push completed successfully.");
-        } catch (e) {
-            console.warn("Auto-sync push failed", e);
+    }
+
+    applySyncData(data: Partial<SyncData>) {
+        if (data.pantryItemsAdvanced) {
+            this.pantry.set(data.pantryItemsAdvanced);
+        }
+        if (data.shoppingList) {
+            this.shopping.set(data.shoppingList);
+        }
+        if (data.achievementsList) {
+            this.achievements.set(data.achievementsList);
+        }
+        if (data.stats) {
+            this.stats = data.stats;
+            StorageService.setStats(this.stats);
+        }
+        if (data.urgentIngredients) {
+            this.urgentIngredients = data.urgentIngredients;
+            StorageService.setUrgentIngredients(this.urgentIngredients);
+        }
+        if (data.ingredientChips) {
+            this.ingredientChips = data.ingredientChips;
+            this.saveChips();
         }
     }
 
-    exportCookbookPdf() {
-        if (this.savedRecipesList.length === 0) {
-            showToast('Du hast noch keine gespeicherten Rezepte im Kochbuch.', 'warning');
-            return;
-        }
-        PdfService.printCookbook(this.savedRecipesList, this.selectedAvatar);
+    notify(message: string, type: 'success' | 'error' | 'warning') {
+        showToast(message, type);
     }
 
-    async handleAskCookingAssistant(e: CustomEvent) {
-        const { question } = e.detail;
-        if (!this.recipe || !question) return;
-        this.assistantAnswerText = 'Chef denkt nach...';
-        try {
-            const answer = await GeminiService.askCookingQuestion(question, this.recipe.title);
-            this.assistantAnswerText = answer;
-            SpeechService.speak(answer);
-        } catch (err) {
-            console.error("Cooking assistant query failed", err);
-            this.assistantAnswerText = 'Fehler bei der Antwort des Kochassistenten.';
-        }
+    announce(message: string) {
+        this.srAnnouncement = message;
     }
 
-    togglePauseTimer(id: string) {
-        this.activeTimers = this.activeTimers.map(t => {
-            if (t.id === id) {
-                return { ...t, isPaused: !t.isPaused };
-            }
-            return t;
-        });
+    preloadRecipeComponents() {
+        void this._loadTabComponent('recipe-view');
+        void this._loadTabComponent('cooking-mode');
+    }
+
+    setCapturedImage(dataUrl: string) {
+        this.capturedImage = dataUrl;
+    }
+
+    getStepContext() {
+        return {
+            stepIndex: this.currentCookingStep,
+            stepText: this.recipe?.instructions[this.currentCookingStep] ?? null,
+            detectedMinutes: this.currentStepTimeMinutes
+        };
+    }
+
+    getPantryNames(): string[] {
+        return this.pantry.names();
     }
 
     triggerMysteryBox() {
-        if (this.pantryItemsAdvanced.length === 0) {
+        if (this.pantry.items.length === 0) {
             showToast('Deine Vorratskammer ist leer! Füge zuerst Zutaten hinzu.', 'warning');
             return;
         }
-        const sorted = [...this.pantryItemsAdvanced].sort((a, b) => {
-            const dA = a.expiryDate ? new Date(a.expiryDate).getTime() : Infinity;
-            const dB = b.expiryDate ? new Date(b.expiryDate).getTime() : Infinity;
-            return dA - dB;
-        });
+        const sorted = sortByExpiry(this.pantry.items);
 
         const topItems = sorted.slice(0, 3).map(i => i.name);
         this.ingredientChips = Array.from(new Set([...this.ingredientChips, ...topItems]));
@@ -2485,12 +1324,48 @@ export class EcoChef extends LitElement {
         this.currentTab = 'zauberer';
         this.srAnnouncement = `Mystery Box aktiviert mit den Zutaten: ${topItems.join(', ')}. Express-Rezept wird generiert.`;
         AudioService.playSuccessChime();
-        this.askGoogle();
+        void this.generator.generate();
     }
 
     toggleSoundEffects(enabled: boolean) {
         this.soundEffectsEnabled = enabled;
         StorageService.setSoundEffectsEnabled(enabled);
         this.srAnnouncement = `Soundeffekte wurden ${enabled ? 'aktiviert' : 'deaktiviert'}.`;
+    }
+
+    // ── Lazy Tab Loading ─────────────────────────────────────────────────────
+    @state() private _loadedTabs = new Set<string>();
+
+    private async _switchTab(tab: string): Promise<void> {
+        if (tab === 'zauberer') {
+            this.currentTab = 'zauberer';
+            this.showSavedRecipes = false;
+            return;
+        }
+        this.currentTab = tab; // Switch immediately so header highlights; content shows after load
+        if (!this._loadedTabs.has(tab)) {
+            await this._loadTabComponent(tab);
+        }
+    }
+
+    async _loadTabComponent(tab: string): Promise<void> {
+        if (this._loadedTabs.has(tab)) return;
+        const loaders: Record<string, () => Promise<unknown>> = {
+            settings:     () => import('./components/eco-chef-settings'),
+            pantry:       () => import('./components/eco-chef-pantry'),
+            shopping:     () => import('./components/eco-chef-shopping-list'),
+            mealplan:     () => import('./components/eco-chef-meal-planner'),
+            achievements: () => import('./components/eco-chef-achievements'),
+            regional:     () => import('./components/eco-chef-regional-map'),
+            dashboard:    () => import('./components/eco-chef-dashboard'),
+            'recipe-view':   () => import('./components/eco-chef-recipe-view'),
+            'cooking-mode':  () => import('./components/eco-chef-cooking-mode'),
+            'saved-recipes': () => import('./components/eco-chef-saved-recipes'),
+        };
+        const loader = loaders[tab];
+        if (loader) {
+            await loader();
+            this._loadedTabs = new Set([...this._loadedTabs, tab]);
+        }
     }
 }

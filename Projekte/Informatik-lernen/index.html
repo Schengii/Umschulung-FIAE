@@ -2,14 +2,105 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0d14" />
     <meta name="description" content="Informatik-Spiel & Interaktive Lernplattform für Anfänger, IT-Azubis und erfahrene Entwickler. Lerne Programmieren, SQL, IT-Security & Webentwicklung." />
+    <!-- OpenGraph & Social Sharing Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://informatik-lernen.vercel.app/" />
+    <meta property="og:title" content="IT-DevGame | Interaktives Informatik-Spiel & Lernplattform" />
+    <meta property="og:description" content="Gamifizierte IHK-Prüfungsvorbereitung & IT-Simulatoren-Hub für FIAE, FISI, FIDP, IT-SE. 200+ interaktive Labs — kostenlos & DSGVO-konform." />
+    <meta property="og:image" content="https://informatik-lernen.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="de_DE" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@IT_DevGame" />
+    <meta name="twitter:title" content="IT-DevGame | Interaktives Informatik-Spiel & Lernplattform" />
+    <meta name="twitter:description" content="Gamifizierte IHK-Prüfungsvorbereitung & IT-Simulatoren-Hub für FIAE, FISI, FIDP, IT-SE. 200+ interaktive Labs." />
+    <meta name="twitter:image" content="https://informatik-lernen.vercel.app/og-image.png" />
     <title>IT-DevGame | Interaktives Informatik-Spiel & Lernplattform</title>
   </head>
   <body>
+    <!-- Loading skeleton — shown before React mounts, hidden via CSS once #root has children -->
+    <style>
+      #app-skeleton {
+        position: fixed; inset: 0; z-index: 9999;
+        background: #0a0d14;
+        display: flex; flex-direction: column;
+        transition: opacity 0.3s ease;
+      }
+      #app-skeleton.hidden { opacity: 0; pointer-events: none; }
+      #sk-nav {
+        height: 56px; background: rgba(15,23,42,0.95);
+        border-bottom: 1px solid rgba(99,102,241,0.2);
+        display: flex; align-items: center; padding: 0 20px; gap: 16px;
+      }
+      .sk-logo { width: 36px; height: 36px; border-radius: 10px; background: #6366f1; flex-shrink: 0; }
+      .sk-bar { height: 14px; border-radius: 7px; background: rgba(99,102,241,0.15); animation: sk-pulse 1.6s ease-in-out infinite; }
+      .sk-pill { height: 30px; border-radius: 15px; background: rgba(99,102,241,0.12); animation: sk-pulse 1.6s ease-in-out infinite; }
+      #sk-body { flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; padding: 28px 20px; }
+      .sk-hero { border-radius: 16px; background: rgba(15,23,42,0.6); border: 1.5px solid rgba(99,102,241,0.2); padding: 36px; margin-bottom: 24px; }
+      .sk-card { border-radius: 12px; background: rgba(15,23,42,0.4); border: 1px solid rgba(99,102,241,0.12); padding: 20px; }
+      .sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; }
+      @keyframes sk-pulse {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 0.9; }
+      }
+    </style>
+    <div id="app-skeleton" aria-hidden="true">
+      <div id="sk-nav">
+        <div class="sk-logo"></div>
+        <div class="sk-pill" style="width:100px;"></div>
+        <div class="sk-pill" style="width:90px;margin-left:8px;"></div>
+        <div class="sk-pill" style="width:80px;"></div>
+        <div class="sk-pill" style="width:85px;"></div>
+        <div style="flex:1"></div>
+        <div class="sk-pill" style="width:120px;"></div>
+        <div class="sk-pill" style="width:36px;border-radius:50%;"></div>
+      </div>
+      <div id="sk-body">
+        <div class="sk-hero">
+          <div class="sk-bar" style="width:55%;height:18px;margin-bottom:14px;"></div>
+          <div class="sk-bar" style="width:75%;height:14px;margin-bottom:10px;"></div>
+          <div class="sk-bar" style="width:65%;height:14px;margin-bottom:24px;"></div>
+          <div style="display:flex;gap:12px;">
+            <div class="sk-pill" style="width:140px;"></div>
+            <div class="sk-pill" style="width:110px;"></div>
+          </div>
+        </div>
+        <div class="sk-grid">
+          <div class="sk-card"><div class="sk-bar" style="width:70%;height:13px;margin-bottom:10px;"></div><div class="sk-bar" style="width:50%;height:10px;"></div></div>
+          <div class="sk-card"><div class="sk-bar" style="width:80%;height:13px;margin-bottom:10px;"></div><div class="sk-bar" style="width:60%;height:10px;"></div></div>
+          <div class="sk-card"><div class="sk-bar" style="width:65%;height:13px;margin-bottom:10px;"></div><div class="sk-bar" style="width:45%;height:10px;"></div></div>
+          <div class="sk-card" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
     <div id="root"></div>
-    <script type="module" src="./src/main.jsx"></script>
+    <script>
+      // Hide skeleton as soon as React has rendered content into #root.
+      // WICHTIG: Dieses Skript muss NACH <div id="root"> stehen - davor liefert
+      // getElementById('root') null, das Skript bricht ab und das Vollbild-Skeleton
+      // (position: fixed, z-index 9999) würde die App dauerhaft überdecken.
+      (function() {
+        var sk = document.getElementById('app-skeleton');
+        var root = document.getElementById('root');
+        if (!sk || !root) return;
+        var mo = new MutationObserver(function() {
+          if (root.firstChild) {
+            sk.classList.add('hidden');
+            setTimeout(function() { sk.remove(); }, 350);
+            mo.disconnect();
+          }
+        });
+        mo.observe(root, { childList: true });
+        // Fallback: remove after 8s regardless
+        setTimeout(function() { if (sk.parentNode) sk.remove(); }, 8000);
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

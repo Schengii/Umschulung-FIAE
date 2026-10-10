@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Download, Upload, ShieldCheck, X, CheckCircle2, AlertCircle } from 'lucide-react';
-import { exportUserDataJSON, importUserDataJSON } from '../../utils/storage';
+import { exportUserDataJSON, importUserDataJSON, flushUserState, loadUserState } from '../../utils/storage';
 
 export default function BackupModal({ isOpen, onClose, onStateRestored }) {
   const [importStatus, setImportStatus] = useState(null);
@@ -89,7 +89,7 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
             onClick={handleExport}
             style={{ width: '100%', minHeight: '48px', gap: '8px', fontSize: '1rem' }}
           >
-            <Download size={20} /> Fortschritt als Backup herunterladen (JSON)
+            <Download size={20} /> Fortschritt als Backup herunterladen (.json)
           </button>
 
           {/* Import Button */}
@@ -100,6 +100,44 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
             <Upload size={20} /> Backup-Datei hochladen & wiederherstellen
             <input type="file" accept=".json" onChange={handleImportFile} style={{ display: 'none' }} />
           </label>
+
+          {/* Quick Copy to Clipboard / Paste */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              className="btn btn-secondary"
+              style={{ flex: 1, fontSize: '0.85rem', padding: '8px' }}
+              onClick={() => {
+                flushUserState(); // ausstehendes, gebündeltes Schreiben vorher sichern
+                navigator.clipboard.writeText(JSON.stringify(loadUserState()));
+                setImportStatus({ success: true, text: 'Backup-Code in Zwischenablage kopiert!' });
+              }}
+            >
+              📋 In Zwischenablage kopieren
+            </button>
+            <button
+              className="btn btn-secondary"
+              style={{ flex: 1, fontSize: '0.85rem', padding: '8px' }}
+              onClick={async () => {
+                try {
+                  const text = await navigator.clipboard.readText();
+                  const success = importUserDataJSON(text);
+                  if (success) {
+                    setImportStatus({ success: true, text: 'Lernstand aus Zwischenablage importiert!' });
+                    setTimeout(() => {
+                      onStateRestored();
+                      onClose();
+                    }, 1200);
+                  } else {
+                    setImportStatus({ success: false, text: 'Ungültiger JSON-Inhalt in Zwischenablage!' });
+                  }
+                } catch {
+                  setImportStatus({ success: false, text: 'Zugriff auf Zwischenablage verweigert.' });
+                }
+              }}
+            >
+              📥 Aus Zwischenablage einfügen
+            </button>
+          </div>
         </div>
 
         {importStatus && (

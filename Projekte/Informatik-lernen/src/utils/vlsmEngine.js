@@ -1,8 +1,57 @@
+// @ts-check
 /**
  * IHK VLSM (Variable Length Subnet Masking) Calculation Engine
  * Optimale Subnetz-Zuteilung und hierarchische IP-Planung nach IHK-Prüfungsstandard
  */
 
+/**
+ * @typedef {object} VlsmSubnetRequest
+ * @property {string} id
+ * @property {string} name
+ * @property {number} requiredHosts
+ *
+ * @typedef {object} VlsmCalculationInput
+ * @property {string} [baseIp]
+ * @property {number} [basePrefix]
+ * @property {VlsmSubnetRequest[]} [subnets]
+ *
+ * @typedef {object} AllocatedVlsmSubnet
+ * @property {string} id
+ * @property {string} name
+ * @property {number} requiredHosts
+ * @property {number} allocatedHosts
+ * @property {number} totalBlockSize
+ * @property {string} prefix
+ * @property {number} prefixNumber
+ * @property {string} subnetMask
+ * @property {string} networkAddress
+ * @property {string} firstUsableHost
+ * @property {string} lastUsableHost
+ * @property {string} broadcastAddress
+ * @property {number} efficiencyPercent
+ * @property {boolean} isOverflow
+ *
+ * @typedef {object} VlsmCalculationError
+ * @property {string} error
+ * @property {false} isValid
+ *
+ * @typedef {object} VlsmCalculationSuccess
+ * @property {true} isValid
+ * @property {string} baseNetwork
+ * @property {number} basePrefix
+ * @property {string} baseBroadcast
+ * @property {number} baseTotalIps
+ * @property {number} totalRequestedHosts
+ * @property {number} totalAllocatedIps
+ * @property {number} freeIpsRemaining
+ * @property {number} overallUtilizationPercent
+ * @property {boolean} isOverflow
+ * @property {AllocatedVlsmSubnet[]} subnets
+ *
+ * @typedef {VlsmCalculationError | VlsmCalculationSuccess} VlsmCalculationResult
+ */
+
+/** @type {VlsmSubnetRequest[]} */
 export const DEFAULT_VLSM_SUBNETS = [
   { id: 'sub_dev', name: 'Softwareentwicklung & DevOps', requiredHosts: 60 },
   { id: 'sub_sales', name: 'Vertrieb & Marketing', requiredHosts: 28 },
@@ -13,6 +62,8 @@ export const DEFAULT_VLSM_SUBNETS = [
 
 /**
  * Wandelt eine 32-Bit Integer IP in einen Dotted-Decimal String um
+ * @param {number} int
+ * @returns {string}
  */
 export function intToIp(int) {
   return [
@@ -25,6 +76,8 @@ export function intToIp(int) {
 
 /**
  * Wandelt einen Dotted-Decimal IPv4 String in einen 32-Bit Integer um
+ * @param {string} ipStr
+ * @returns {number}
  */
 export function ipToInt(ipStr) {
   const octets = ipStr.trim().split('.').map(Number);
@@ -36,6 +89,8 @@ export function ipToInt(ipStr) {
 
 /**
  * Berechnet die minimale Host-Bitanzahl für die geforderten Hosts
+ * @param {number} hosts
+ * @returns {number}
  */
 export function getRequiredHostBits(hosts) {
   const h = Math.max(1, Number(hosts));
@@ -50,6 +105,8 @@ export function getRequiredHostBits(hosts) {
 
 /**
  * Berechnet die vollständige VLSM-Subnetzverteilung
+ * @param {VlsmCalculationInput} input
+ * @returns {VlsmCalculationResult}
  */
 export function calculateVlsm({
   baseIp = '192.168.10.0',
@@ -60,7 +117,7 @@ export function calculateVlsm({
   try {
     baseInt = ipToInt(baseIp);
   } catch (e) {
-    return { error: e.message, isValid: false };
+    return { error: e instanceof Error ? e.message : String(e), isValid: false };
   }
 
   const baseTotalIps = Math.pow(2, 32 - basePrefix);

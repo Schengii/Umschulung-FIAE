@@ -83,29 +83,30 @@ export default function ProjectViewer({ onCompleteProject }) {
               {activeProj.description}
             </p>
 
-            {/* Steps List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '32px' }}>
-              {activeProj.steps.map((step, idx) => (
-                <div key={idx} style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                  <h4 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '6px', color: 'var(--accent-cyan)' }}>
-                    {step.title}
-                  </h4>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
-                    {step.detail}
-                  </p>
-
-                  <div className="code-window">
-                    <div className="code-header">
-                      <span>Code-Vorlage Schritt {idx + 1}</span>
-                      <Code size={14} />
-                    </div>
-                    <pre className="code-body">
-                      <code>{step.codeSnippet}</code>
-                    </pre>
-                  </div>
-                </div>
-              ))}
+            {/* Task Checklist */}
+            <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '12px', color: 'var(--accent-cyan)' }}>
+                Aufgabenstellung
+              </h4>
+              <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {(activeProj.tasks || []).map((task, idx) => (
+                  <li key={idx} style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{task}</li>
+                ))}
+              </ol>
             </div>
+
+            {/* Reference Code Snippet */}
+            {activeProj.codeSnippet && (
+              <div className="code-window" style={{ marginBottom: '32px' }}>
+                <div className="code-header">
+                  <span>Referenz-Code / Startvorlage</span>
+                  <Code size={14} />
+                </div>
+                <pre className="code-body">
+                  <code>{activeProj.codeSnippet}</code>
+                </pre>
+              </div>
+            )}
 
             <button
               className="btn btn-success"

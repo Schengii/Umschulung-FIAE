@@ -17,6 +17,7 @@ export default function LiveCodingChallengeStudio() {
   const [userCode, setUserCode] = useState(currentChallenge.starterCode);
   const [testRunResult, setTestRunResult] = useState(null);
   const [solvedChallengeIds, setSolvedChallengeIds] = useState([]);
+  const [isRunning, setIsRunning] = useState(false);
 
   const handleSelectChallenge = (cId) => {
     const ch = CODING_CHALLENGES.find(c => c.id === cId);
@@ -28,8 +29,10 @@ export default function LiveCodingChallengeStudio() {
     }
   };
 
-  const handleRunCode = () => {
-    const res = runChallengeCode(userCode, currentChallenge.id);
+  const handleRunCode = async () => {
+    setIsRunning(true);
+    const res = await runChallengeCode(userCode, currentChallenge.id);
+    setIsRunning(false);
     setTestRunResult(res);
 
     if (res.success && res.allPassed) {
@@ -142,9 +145,10 @@ export default function LiveCodingChallengeStudio() {
                 </button>
                 <button
                   onClick={handleRunCode}
+                  disabled={isRunning}
                   className="px-5 py-1.5 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-lg"
                 >
-                  <Play className="w-3.5 h-3.5 fill-white" /> Code Testen
+                  <Play className="w-3.5 h-3.5 fill-white" /> {isRunning ? 'Läuft…' : 'Code Testen'}
                 </button>
               </div>
             </div>

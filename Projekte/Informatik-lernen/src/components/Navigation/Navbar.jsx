@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { USER_ROLES } from '../../data/userProfiles';
 import { 
   Trophy, Flame, Code2, Sun, Moon, BookOpen, 
-  Layers, ShieldCheck, BookMarked, Globe, Rocket, Search, 
+  Layers, ShieldCheck, BookMarked, Rocket, Search,
   ChevronDown, Terminal, Award, 
   FileText, Wrench, GraduationCap, Sliders,
   Volume2, Menu, X
@@ -22,8 +22,6 @@ export default function Navbar({
   onOpenAudioModal,
   activeTab,
   setActiveTab,
-  lang,
-  setLang,
   setFontSize,
   isDyslexic,
   setIsDyslexic,
@@ -74,6 +72,30 @@ export default function Navbar({
   // Gruppierte Navigations-Menüs mit Badges & didaktischen Sub-Labels
   const labsMenuItems = [
     { id: 'labs', label: '🧪 Alle Labs & Simulatoren Hub', desc: 'Zentrale Übersicht aller 60+ interaktiven Labs', badge: 'Hub' },
+    { id: 'sql_window_functions_lab', label: '⚡ SQL Window Functions & Analytics Studio', desc: 'ROW_NUMBER, RANK, DENSE_RANK, NTILE & PARTITION BY', badge: 'Neu' },
+    { id: 'argocd_gitops_lab', label: '🐙 ArgoCD GitOps & Cluster Sync Studio', desc: 'Deklaratives GitOps, Drift-Erkennung, Auto-Prune & Self-Healing', badge: 'Neu' },
+    { id: 'vector_math_embedding_lab', label: '📐 Vektor-Mathematik & Embedding-Distanz Studio', desc: 'Cosine-Similarity, Euklidische L2- & Manhattan-Distanz', badge: 'Neu' },
+    { id: 'jwt_confusion_lab', label: '🔐 JWT Algorithm Confusion & Security Studio', desc: 'RS256 vs. HS256 Key-Confusion & None-Algorithmus Exploit-Abwehr', badge: 'Neu' },
+    { id: 'linux_mac_selinux_lab', label: '🛡️ Linux SELinux & AppArmor MAC Studio', desc: 'Type Enforcement, AVC Denials, DAC vs. MAC & Root-Schutz', badge: 'Neu' },
+    { id: 'dns_privacy_lab', label: '🔒 DNS Privacy: DoH & DoT vs. Port 53', desc: 'RFC 8484 & RFC 7858 Wire-Format, TLS & ISP-Eavesdropping', badge: 'Neu' },
+    { id: 'wiso_liquiditaet_lab', label: '💰 IHK Liquiditätsgrade & Working Capital', desc: 'Cash/Quick/Current Ratio & InsO § 17 Zahlungsunfähigkeit', badge: 'IHK Neu' },
+    { id: 'rag_semantic_cache_lab', label: '🧠 RAG Semantic Cache & Vector Similarity', desc: 'Cosine Similarity Schwellenwert & Zero-Cost Cache Hits', badge: 'Neu' },
+    { id: 'linux_psi_cgroup_lab', label: '🐧 Linux Cgroups v2 & PSI Pressure Stall Studio', desc: 'CPU, Memory & I/O Stalls (some vs. full) & OOM-Kill', badge: 'Neu' },
+    { id: 'nwa_sensitivity_lab', label: '📊 IHK Nutzwertanalyse Sensitivitäts-Studio', desc: '500x Monte-Carlo Stresstest & K.O.-Kriterien DIN 2225', badge: 'IHK Neu' },
+    { id: 'webrtc_ice_gathering_lab', label: '📡 WebRTC STUN/TURN & ICE Candidate Gathering', desc: 'RFC 8445 Candidate Types, Symmetric NAT & Relay', badge: 'Neu' },
+    { id: 'wiso_rentabilitaet_leverage_lab', label: '💰 WISO Rentabilitätskennzahlen & Leverage', desc: 'Eigenkapital-, Gesamtkapitalrentabilität & Hebelwirkung', badge: 'IHK Neu' },
+    { id: 'linux_cap_seccomp_lab', label: '🐧 Linux Capabilities & Seccomp BPF Sandbox', desc: 'CAP_NET_BIND_SERVICE, Rootless Container & Syscall-Filter', badge: 'Neu' },
+    { id: 'bgp_path_selection_lab', label: '🌐 BGP Path Selection & Decision Studio', desc: 'RFC 4271 8-Stufen-Algorithmus: Weight, LocalPref & AS-Path', badge: 'Neu' },
+    { id: 'wiso_maschinenstundensatz_lab', label: '📊 IHK Maschinenstundensatz-Rechner (MSS)', desc: 'Kalkulatorische Abschreibung, Zinsen & Stundensatz', badge: 'IHK Neu' },
+    { id: 'llm_rag_chunking_lab', label: '🧠 LLM RAG Chunking & Cross-Encoder Studio', desc: 'Sliding Window, Semantisches Chunking & Re-Ranking', badge: 'Neu' },
+    { id: 'oauth_revocation_lab', label: '🔐 OAuth 2.0 Token Revocation & Introspection', desc: 'RFC 7009 & RFC 7662 Token-Sicherheit am API Gateway', badge: 'Neu' },
+    { id: 'raid6_galois_lab', label: '💾 RAID 6 Dual-Parity & Galois Field Studio', desc: 'P & Q Reed-Solomon Paritätsberechnung & Dual-Rebuild', badge: 'Neu' },
+    { id: 'sqlite_worker_lab', label: '⚡ SQLite Web Worker Sandbox', desc: 'Zero-Jank Hintergrund-Query & Aggregations-Benchmark', badge: 'Neu' },
+    { id: 'wiso_zuschlagskalkulation_lab', label: '📊 IHK Fertigungs- & Zuschlagskalkulation', desc: 'MGKZ, FGKZ, Herstellkosten, VwGKZ/VtGKZ & Preisfindung', badge: 'Neu' },
+    { id: 'clean_arch_lab', label: '🏛️ Clean Architecture & Hexagonal Linter', desc: 'DIP Dependency Rule, Ports/Adapters & Cycle Detection', badge: 'Neu' },
+    { id: 'linux_netns_lab', label: '🐧 Linux Network Namespaces & veth Studio', desc: 'Isolation, veth Pairs, Bridge Switching & Bash Script', badge: 'Neu' },
+    { id: 'wiso_multi_contribution_lab', label: '📊 IHK Mehrstufige Deckungsbeitragsrechnung', desc: 'DB I bis IV Fixkosten-Kaskade, BEP & Sicherheitskoeffizient', badge: 'Neu' },
+    { id: 'ihk_weakness_audit_lab', label: '🎯 IHK Schwachstellen-Audit & Lern-Assistent', desc: 'LF1-LF12 Fehleranalyse, Lücken-Erkennung & Drill-Generator', badge: 'Neu' },
     { id: 'nwa_scoring', label: '📊 IHK Nutzwertanalyse Studio (NWA)', desc: 'Offizielle Entscheidungsmatrix mit K.O.-Kriterien', badge: 'IHK Neu' },
     { id: 'raid_calculator', label: '💾 RAID Storage & Paritäts-Rechner', desc: 'RAID 0-50, Kapazitäten, URE & Paritäts-Matrix', badge: 'IHK Neu' },
     { id: 'vlsm_subnet', label: '🌐 VLSM Subnet Splitter & IP-Planer', desc: 'Hierarchische IPv4-Subnetze ohne Adressverlust', badge: 'IHK Neu' },
@@ -82,7 +104,10 @@ export default function Navbar({
     { id: 'packet_sniffer', label: '📡 Web-Wireshark Packet Sniffer', desc: 'Frame Dissection, Hex Dump & Display Filter', badge: 'Flagship' },
     { id: 'erd_designer', label: '🗄️ Relational ERD & 3NF Normalform-Linter', desc: 'Entity Relationships, 1NF-3NF Audit & SQL DDL', badge: 'Flagship' },
     { id: 'transformer_attention', label: '🧠 Transformer Attention & LLM Studio', desc: 'Self-Attention Heatmap, Softmax & ReAct Agent', badge: 'Flagship' },
-    { id: 'cloud_canvas', label: '☁️ Cloud SLA & SPOF Architecture Canvas', desc: 'Verfügbarkeit (99.99%), Downtime & SPOF Linter', badge: 'Flagship' },
+    { id: 'ihk_tom_catalog_lab', label: '🛡️ IHK DSGVO TOM-Katalog Studio (Art. 32)', desc: 'Zutritt, Zugang, Trennung & Markdown Doku-Export', badge: 'Neu' },
+    { id: 'ihk_dpia_lab', label: '🛡️ IHK Datenschutz-Folgenabschätzung (DSFA)', desc: 'Art. 35 DSGVO Schwellenwert-Audit & Risikomatrix', badge: 'Neu' },
+    { id: 'wiso_labor_law_lab', label: '⚖️ IHK Arbeitsrecht & Kündigungsschutz', desc: 'BGB § 622 Fristen, KSchG & Sonderkündigungsschutz', badge: 'Neu' },
+    { id: 'data_lineage_etl', label: '🔄 ETL Pipeline & Data Lineage Studio', desc: 'FIDP/FIAE Datenintegration, DWH & Schema-Drift Audit', badge: 'Neu' },
     { id: 'bgp_anycast_lab', label: '🌐 Linux BGP Routing & Anycast', desc: 'eBGP/iBGP Peering, AS-Path & Anycast IP', badge: 'Neu' },
     { id: 'tls_handshake_lab', label: '🔒 TLS 1.3 Handshake Studio', desc: '1-RTT Full Handshake & 0-RTT Session Resumption', badge: 'Neu' },
     { id: 'jwt_attack_lab', label: '🔑 JWT Sicherheitslücken Studio', desc: 'alg:none Fälschung, Secret-Bruteforce & kid-Injection', badge: 'Neu' },
@@ -184,6 +209,11 @@ export default function Navbar({
   ];
 
   const examMenuItems = [
+    { id: 'ihk_study_plan_lab', label: '📅 IHK Prüfungs-Countdown & Lernplaner', desc: 'Prüfungstermine, Tage/Wochen & FIAE/FISI Sprints', badge: 'Neu' },
+    { id: 'bsi_grundschutz_lab', label: '🛡️ BSI IT-Grundschutz & NIS-2 Studio', desc: 'BSI 200-2 Schutzbedarf (CIA), Bausteine & NIS-2', badge: 'Neu' },
+    { id: 'wiso_payroll_lab', label: '💰 WISO Brutto-Netto & Lohnabrechnung', desc: 'Steuerklassen I-VI, Sozialabgaben & AG-Kosten', badge: 'Neu' },
+    { id: 'ipv6_ndp_lab', label: '🌐 IPv6 SLAAC, DHCPv6 & NDP Inspector', desc: 'RFC 4861 NDP, EUI-64 & Privacy Extensions', badge: 'Neu' },
+    { id: 'ihk_certificate_pdf_lab', label: '🎓 IHK Lernpass & Zertifikats-PDF', desc: 'Offizieller Nachweis für das Berichtsheft', badge: 'Neu' },
     { id: 'ihk_grade_calculator', label: '🎓 IHK Noten- & MEP-Rechner (AO 2020)', desc: 'Exakte Gewichtung AP1/AP2 & Ergänzungsprüfung', badge: 'Neu' },
     { id: 'exam', label: '🎓 IHK Abschlussprüfung (AP1 & AP2)', desc: '90-Min. Timer, Punkte & IHK Noten 1-6', badge: 'Prüfung' },
     { id: 'cheat_sheets', label: '📄 IHK Spickzettel & PDF Generator', desc: 'Druckfertige DIN A4 Zusammenfassungen & Formeln', badge: 'Neu' },
@@ -660,15 +690,6 @@ export default function Navbar({
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <ShieldCheck size={17} /> Backup &amp; Wiederherstellen
-                </div>
-
-                <div
-                  onClick={() => { setLang(lang === 'de' ? 'en' : 'de'); setActiveDropdown(null); }}
-                  style={{ padding: '10px 12px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: 'var(--text-muted)', fontWeight: 600 }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-tertiary)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                >
-                  <Globe size={17} /> Sprache: {lang.toUpperCase()} (DE / EN)
                 </div>
               </div>
             )}

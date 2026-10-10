@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TUTORIAL_VIDEOS } from '../../data/videosData';
-import { Video, Play, Clock, CheckCircle2, ListFilter } from 'lucide-react';
+import { Video, Play, Clock, CheckCircle2, ListFilter, GraduationCap } from 'lucide-react';
 
 export default function VideoHub({ onCompleteVideo }) {
   const [activeVideoId, setActiveVideoId] = useState(TUTORIAL_VIDEOS[0].id);
@@ -51,29 +51,33 @@ export default function VideoHub({ onCompleteVideo }) {
             </div>
 
             <div style={{ marginTop: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
                 <span className="badge badge-cyan">{activeVideo.category}</span>
-                <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Autor: {activeVideo.author}</span>
+                <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                  <GraduationCap size={14} style={{ verticalAlign: 'middle' }} /> {activeVideo.difficulty}
+                </span>
               </div>
 
               <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '8px' }}>{activeVideo.title}</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '16px' }}>
-                {activeVideo.summary}
+                {activeVideo.description}
               </p>
 
-              {/* Timestamps / Chapters */}
-              <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '10px' }}>
-                  <ListFilter size={16} /> Kapitelübersicht & Zeitstempel
+              {/* Key Takeaways */}
+              {Array.isArray(activeVideo.keyTakeaways) && activeVideo.keyTakeaways.length > 0 && (
+                <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '10px' }}>
+                    <ListFilter size={16} /> Das lernst du in diesem Video
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+                    {activeVideo.keyTakeaways.map((takeaway, idx) => (
+                      <div key={idx} style={{ fontSize: '0.82rem', background: 'var(--bg-secondary)', padding: '6px 10px', borderRadius: '6px' }}>
+                        {takeaway}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
-                  {activeVideo.timestamps.map((ts, idx) => (
-                    <div key={idx} style={{ fontSize: '0.82rem', background: 'var(--bg-secondary)', padding: '6px 10px', borderRadius: '6px' }}>
-                      <strong style={{ color: 'var(--accent-cyan)' }}>{ts.time}</strong> - {ts.label}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              )}
 
               {/* Complete Video Button */}
               <button

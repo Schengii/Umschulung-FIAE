@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Voice Quiz Engine
  * Evaluates spoken answers against keywords and manages audio quiz flow.
@@ -30,6 +31,10 @@ export const VOICE_QUIZ_QUESTIONS = [
   }
 ];
 
+/**
+ * @param {string} userText
+ * @param {number} questionIndex
+ */
 export function evaluateSpokenAnswer(userText, questionIndex) {
   const q = VOICE_QUIZ_QUESTIONS[questionIndex];
   if (!q || !userText) {

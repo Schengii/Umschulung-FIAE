@@ -1,34 +1,35 @@
 import React, { useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { Code, Play, RotateCcw, Terminal } from 'lucide-react';
+import { runInSandbox } from '../../utils/sandboxRunner';
 
 export default function MonacoStudioLab({ onRewardXP }) {
   const [language, setLanguage] = useState('javascript');
   const [code, setCode] = useState(`// VS Code Monaco Studio Lab\nfunction welcomeDeveloper(name) {\n    return \`Willkommen zurück, \${name}! Bereit zum Coden?\`;\n}\n\nconsole.log(welcomeDeveloper("IT-Azubi"));`);
   const [consoleLogs, setConsoleLogs] = useState([]);
 
-  const handleRunCode = () => {
+  const [isRunning, setIsRunning] = useState(false);
+
+  const handleRunCode = async () => {
     setConsoleLogs([]);
-    const logs = [];
-    const customConsole = {
-      log: (...args) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')),
-      error: (...args) => logs.push(`[ERROR] ${args.join(' ')}`),
-      warn: (...args) => logs.push(`[WARN] ${args.join(' ')}`)
-    };
 
-    try {
-      if (language === 'javascript') {
-        const runFn = new Function('console', code);
-        runFn(customConsole);
-      } else {
-        logs.push(`[${language.toUpperCase()} Engine] Code erfolgreich validiert.`);
-      }
-
-      setConsoleLogs(logs.length > 0 ? logs : ['Code ohne Konsolenausgabe ausgeführt.']);
+    if (language !== 'javascript') {
+      setConsoleLogs([`[${language.toUpperCase()} Engine] Code erfolgreich validiert.`]);
       if (onRewardXP) onRewardXP(25);
-    } catch (err) {
-      setConsoleLogs([`❌ Runtime Exception: ${err.message}`]);
+      return;
     }
+
+    setIsRunning(true);
+    const res = await runInSandbox({ code });
+    setIsRunning(false);
+
+    if (!res.ok) {
+      setConsoleLogs([...res.logs, res.timedOut ? `⏱️ ${res.error}` : `❌ Runtime Exception: ${res.error}`]);
+      return;
+    }
+
+    setConsoleLogs(res.logs.length > 0 ? res.logs : ['Code ohne Konsolenausgabe ausgeführt.']);
+    if (onRewardXP) onRewardXP(25);
   };
 
   return (
@@ -78,8 +79,8 @@ export default function MonacoStudioLab({ onRewardXP }) {
             }}
           />
           <div style={{ background: 'var(--bg-primary)', padding: '12px 16px', display: 'flex', gap: '12px' }}>
-            <button className="btn btn-primary" onClick={handleRunCode}>
-              <Play size={16} /> Code Ausführen
+            <button className="btn btn-primary" onClick={handleRunCode} disabled={isRunning}>
+              <Play size={16} /> {isRunning ? 'Läuft…' : 'Code Ausführen'}
             </button>
             <button className="btn btn-secondary" onClick={() => setCode('// Reset code')}>
               <RotateCcw size={16} /> Reset

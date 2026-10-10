@@ -1,8 +1,10 @@
+// @ts-check
 /**
  * RegEx Parser Engine & Visual Railroad Diagram Tokenizer
  * Parses regular expressions into abstract node trees for visualization and explanation.
  */
 
+/** @param {string} pattern */
 export function parseRegexTokens(pattern) {
   if (!pattern) return [];
 
@@ -72,6 +74,11 @@ export function parseRegexTokens(pattern) {
   return tokens;
 }
 
+/**
+ * @param {string} pattern
+ * @param {string} [flags]
+ * @param {string} [testString]
+ */
 export function testRegexMatch(pattern, flags = 'g', testString = '') {
   try {
     const reg = new RegExp(pattern, flags);
@@ -105,9 +112,10 @@ export function testRegexMatch(pattern, flags = 'g', testString = '') {
       isMatch: matches.length > 0
     };
   } catch (err) {
+    const e = /** @type {Error} */ (err);
     return {
       isValid: false,
-      error: err.message,
+      error: e.message,
       matches: [],
       matchCount: 0,
       isMatch: false

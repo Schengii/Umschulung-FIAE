@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import {
   Boxes, Award, Calculator
 } from 'lucide-react';
-import { calculateAndlerOptimalOrder } from '../../utils/wisoAndlerEngine';
+import { calculateAndlerOptimalOrder, ANDLER_DRILL_QUESTIONS } from '../../utils/wisoAndlerEngine';
 import { useStore } from '../../store/useStore';
+import LabDrillSection from '../Shared/LabDrillSection';
 import { triggerHaptic } from '../../utils/haptics';
 
 export default function WisoAndlerLab({ onRewardXP }) {
@@ -136,6 +137,8 @@ export default function WisoAndlerLab({ onRewardXP }) {
           </div>
         </div>
       </div>
+
+      <LabDrillSection title="IHK Prüfungs-Drill: Optimale Bestellmenge" questions={ANDLER_DRILL_QUESTIONS} accentColor="#d97706" />
     </div>
   );
 }

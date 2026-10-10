@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * JWT (JSON Web Token) Attack & Defense Engine
  * Demonstrates classic JWT implementation flaws for educational purposes:
@@ -5,6 +6,61 @@
  * path/SQL injection — plus the correct server-side defenses.
  */
 
+/**
+ * @typedef {object} JwtHeader
+ * @property {string} alg
+ * @property {string} [typ]
+ * @property {string} [kid]
+ *
+ * @typedef {Record<string, unknown>} JwtPayload
+ *
+ * @typedef {object} DecodedJwtOk
+ * @property {true} valid
+ * @property {JwtHeader} header
+ * @property {JwtPayload} payload
+ * @property {string} signature
+ *
+ * @typedef {object} DecodedJwtError
+ * @property {false} valid
+ * @property {string} error
+ *
+ * @typedef {DecodedJwtOk | DecodedJwtError} DecodedJwt
+ *
+ * @typedef {object} ForgeAlgNoneSuccess
+ * @property {true} success
+ * @property {string} forgedToken
+ * @property {JwtHeader} forgedHeader
+ * @property {JwtPayload} forgedPayload
+ *
+ * @typedef {object} ForgeAlgNoneError
+ * @property {false} success
+ * @property {string} [error]
+ *
+ * @typedef {ForgeAlgNoneSuccess | ForgeAlgNoneError} ForgeAlgNoneResult
+ *
+ * @typedef {object} AlgNoneDefenseResult
+ * @property {boolean} accepted
+ * @property {string} [reason]
+ *
+ * @typedef {object} BruteForceAttempt
+ * @property {string} candidate
+ * @property {boolean} matched
+ *
+ * @typedef {object} BruteForceResult
+ * @property {boolean} cracked
+ * @property {string | null} secret
+ * @property {BruteForceAttempt[]} attempts
+ *
+ * @typedef {object} KidInjectionResult
+ * @property {boolean} vulnerable
+ * @property {boolean} blocked
+ * @property {string} reason
+ */
+
+/**
+ * @param {JwtHeader | JwtPayload} obj
+ * @returns {string}
+ */
 function base64UrlEncode(obj) {
   const json = JSON.stringify(obj);
   // btoa is available in browsers; encode to base64url (no padding, -/_ instead of +//)
@@ -12,6 +68,10 @@ function base64UrlEncode(obj) {
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+/**
+ * @param {string} str
+ * @returns {any}
+ */
 function base64UrlDecode(str) {
   const b64 = str.replace(/-/g, '+').replace(/_/g, '/').padEnd(str.length + (4 - (str.length % 4)) % 4, '=');
   try {
@@ -21,6 +81,10 @@ function base64UrlDecode(str) {
   }
 }
 
+/**
+ * @param {string} token
+ * @returns {DecodedJwt}
+ */
 export function decodeJwt(token) {
   const parts = (token || '').split('.');
   if (parts.length !== 3) return { valid: false, error: 'Token besteht nicht aus 3 Teilen (header.payload.signature).' };
@@ -34,6 +98,9 @@ export function decodeJwt(token) {
  * Attack 1: "alg: none" — some libraries historically accepted an
  * unsigned token if the header claimed alg: "none", trusting the
  * client-supplied algorithm instead of the server's expected one.
+ * @param {string} originalToken
+ * @param {JwtPayload} tamperedPayload
+ * @returns {ForgeAlgNoneResult}
  */
 export function forgeAlgNoneToken(originalToken, tamperedPayload) {
   const decoded = decodeJwt(originalToken);
@@ -46,6 +113,11 @@ export function forgeAlgNoneToken(originalToken, tamperedPayload) {
   return { success: true, forgedToken, forgedHeader, forgedPayload };
 }
 
+/**
+ * @param {string} token
+ * @param {{ rejectAlgNone?: boolean }} [options]
+ * @returns {AlgNoneDefenseResult}
+ */
 export function verifyAlgNoneDefense(token, { rejectAlgNone = true } = {}) {
   const decoded = decodeJwt(token);
   if (!decoded.valid) return { accepted: false, reason: decoded.error };
@@ -66,6 +138,11 @@ export function verifyAlgNoneDefense(token, { rejectAlgNone = true } = {}) {
  */
 const COMMON_WEAK_SECRETS = ['secret', '123456', 'password', 'changeme', 'jwt_secret', 'admin', 'qwerty'];
 
+/**
+ * @param {string} actualSecret
+ * @param {string[]} [wordlist]
+ * @returns {BruteForceResult}
+ */
 export function bruteForceWeakSecret(actualSecret, wordlist = COMMON_WEAK_SECRETS) {
   const attempts = [];
   for (const candidate of wordlist) {
@@ -82,6 +159,9 @@ export function bruteForceWeakSecret(actualSecret, wordlist = COMMON_WEAK_SECRET
  * path or SQL query directly from the client-supplied "kid" header
  * without sanitization can be tricked into reading an attacker-chosen
  * key (e.g. /dev/null, which HMAC-verifies as an empty-string secret).
+ * @param {string} kidValue
+ * @param {{ sanitizesKid?: boolean }} [options]
+ * @returns {KidInjectionResult}
  */
 export function evaluateKidInjection(kidValue, { sanitizesKid = true } = {}) {
   const isSuspicious = /\.\.|\/|;|--|'|"/.test(kidValue);

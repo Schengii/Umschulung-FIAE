@@ -63,27 +63,80 @@ export async function fetchLiveCryptoPrices(): Promise<Record<string, number>> {
   }
 }
 
+interface PriceCacheEntry {
+  prices: Record<string, number>;
+  timestamp: number;
+}
+
+const CACHE_KEY = 'finanz_market_prices_cache';
+
+export function getCachedPrices(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return {};
+    const parsed: PriceCacheEntry = JSON.parse(raw);
+    return parsed.prices || {};
+  } catch {
+    return {};
+  }
+}
+
+export function savePricesToCache(newPrices: Record<string, number>) {
+  try {
+    const existing = getCachedPrices();
+    const merged = { ...existing, ...newPrices };
+    const payload: PriceCacheEntry = {
+      prices: merged,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+  } catch (e) {
+    console.warn('Could not save prices to localStorage cache:', e);
+  }
+}
+
 export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<string, number>> {
-  const fetchedPrices: Record<string, number> = {};
+  const cached = getCachedPrices();
+  const fetchedPrices: Record<string, number> = { ...cached };
+  const finnhubKey = typeof localStorage !== 'undefined' ? localStorage.getItem('finanz_finnhub_api_key') : null;
 
   for (const ticker of tickers) {
     if (ticker === 'CASH') continue;
 
-    // Try direct fetch first
     let priceFound = false;
-    try {
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`;
-      const res = await fetch(url);
-      if (res.ok) {
-        const json = await res.json();
-        const meta = json?.chart?.result?.[0]?.meta;
-        if (meta && meta.regularMarketPrice) {
-          fetchedPrices[ticker] = meta.regularMarketPrice;
-          priceFound = true;
+
+    // Optional: Try Finnhub if API Key is configured
+    if (finnhubKey) {
+      try {
+        const fhRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${encodeURIComponent(finnhubKey)}`);
+        if (fhRes.ok) {
+          const fhData = await fhRes.json();
+          if (fhData && fhData.c && fhData.c > 0) {
+            fetchedPrices[ticker] = fhData.c;
+            priceFound = true;
+          }
         }
+      } catch (e) {
+        // Fallback to Yahoo
       }
-    } catch {
-      // CORS block expected on browser
+    }
+
+    // Try direct Yahoo fetch
+    if (!priceFound) {
+      try {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const json = await res.json();
+          const meta = json?.chart?.result?.[0]?.meta;
+          if (meta && meta.regularMarketPrice) {
+            fetchedPrices[ticker] = meta.regularMarketPrice;
+            priceFound = true;
+          }
+        }
+      } catch {
+        // CORS block expected on browser
+      }
     }
 
     // Fallback using CORS proxy if direct failed
@@ -96,13 +149,17 @@ export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<st
           const meta = json?.chart?.result?.[0]?.meta;
           if (meta && meta.regularMarketPrice) {
             fetchedPrices[ticker] = meta.regularMarketPrice;
+            priceFound = true;
           }
         }
       } catch {
-        // Silent fallback to previous/simulated prices
+        // Silent fallback to cached or simulated prices
       }
     }
   }
+
+  // Update persistent cache
+  savePricesToCache(fetchedPrices);
 
   return fetchedPrices;
 }

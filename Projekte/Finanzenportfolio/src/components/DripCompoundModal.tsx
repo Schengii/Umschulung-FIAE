@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import type { Holding, Transaction } from '../types';
-import { RefreshCw, TrendingUp, DollarSign, ArrowUpRight, Zap, X, Info, Check } from 'lucide-react';
+import { RefreshCw, Zap, X, Check, Award } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { calculateDripComparison } from './performanceUtils';
 
@@ -38,6 +38,15 @@ export const DripCompoundModal: React.FC<DripCompoundModalProps> = ({
   const currentYieldPct = currentTotalVal > 0 ? (currentAnnualDividend / currentTotalVal) * 100 : 3.0;
 
   // Real dividends received this year that could be DRIP-reinvested
+  
+  // Filter dividend candidates: sorted by yield on cost & stability
+  const dividendAristocratCandidates = useMemo(() => {
+    return holdings
+      .filter(h => h.category === 'Stock' && (h.yieldOnCost > 2.0 || h.totalGainPercent > 10))
+      .sort((a, b) => (b.yieldOnCost || 0) - (a.yieldOnCost || 0))
+      .slice(0, 3);
+  }, [holdings]);
+
   const currentYear = new Date().getFullYear();
   const uninvestedDividendsThisYear = useMemo(() => {
     return transactions.filter(t => {
@@ -157,9 +166,22 @@ export const DripCompoundModal: React.FC<DripCompoundModalProps> = ({
             </div>
 
             <div>
-              <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.3rem' }}>
-                Dividendenrendite p.a.: <strong style={{ color: '#10b981' }}>{expectedYieldPercent.toFixed(1)}%</strong>
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.3rem' }}>
+                <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Dividendenrendite p.a.: <strong style={{ color: '#10b981' }}>{expectedYieldPercent.toFixed(1)}%</strong>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setExpectedYieldPercent(Math.max(1, Math.min(9, Math.round(currentYieldPct * 10) / 10)))}
+                  style={{
+                    background: 'transparent', border: 'none', color: '#10b981', fontSize: '0.7rem',
+                    cursor: 'pointer', textDecoration: 'underline', padding: 0
+                  }}
+                  title="Portfolio-Ist-Wert übernehmen"
+                >
+                  Ist: {currentYieldPct.toFixed(1)}%
+                </button>
+              </div>
               <input
                 type="range"
                 min={1.0}
@@ -251,6 +273,35 @@ export const DripCompoundModal: React.FC<DripCompoundModalProps> = ({
               </ResponsiveContainer>
             </div>
           </div>
+
+          
+          {/* Dividend Aristocrat & Reinvestment Focus */}
+          {dividendAristocratCandidates.length > 0 && (
+            <div style={{ background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.25)', borderRadius: '12px', padding: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#3b82f6', fontWeight: 600, fontSize: '0.9rem' }}>
+                  <Award size={18} /> Dividenden-Fokus: Top-Reinvestitions-Kandidaten
+                </div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Basierend auf Yield-on-Cost & Performance</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+                {dividendAristocratCandidates.map((c) => (
+                  <div key={c.ticker} style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.75rem 1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{c.name}</span>
+                      <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 600 }}>YoC: {(c.yieldOnCost || 0).toFixed(1)}%</span>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem', display: 'flex', justifyContent: 'space-between' }}>
+                      <span>{c.ticker}</span>
+                      <span style={{ color: (c.totalGainPercent || 0) >= 0 ? '#10b981' : '#ef4444' }}>
+                        {(c.totalGainPercent || 0) >= 0 ? '+' : ''}{(c.totalGainPercent || 0).toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 1-Click Execution for Current Year Received Dividends */}
           <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', padding: '1.25rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>

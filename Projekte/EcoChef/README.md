@@ -1,37 +1,59 @@
 # EcoChef 🧑‍🍳 - Dein intelligenter KI-Rezept-Zauberer
 
-**EcoChef** ist eine moderne, nachhaltige Hybrid-Web- & Mobile-App, die aus deinen vorhandenen Kühlschrankzutaten kreative, klimaschonende und leckere Gerichte zaubert. Mit Fokus auf Resteverwertung, Barrierefreiheit (LRS-Modus, Leselineal, Screenreader), Sprachsteuerung, Wochenmärkte-Finder, OpenFoodFacts Barcode-Scanner und umfassendes Budget- & Umwelt-Tracking.
+[![CI](https://github.com/Schengii/eco-chef/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Schengii/eco-chef/actions/workflows/ci.yml) [![Lizenz: Apache-2.0](https://img.shields.io/badge/Lizenz-Apache--2.0-yellow.svg)](LICENSE) [![Live-Demo](https://img.shields.io/badge/Live--Demo-Vercel-2ea44f?logo=vercel)](https://eco-chef-theta.vercel.app) ![Lit](https://img.shields.io/badge/Lit-3-324FFF?logo=lit&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+
+> **In short (EN):** AI kitchen assistant that turns leftover ingredients into recipes with Google Gemini. Includes barcode scanning (OpenFoodFacts), expiry alerts, a voice-controlled cooking mode, budget tracking and WCAG-oriented accessibility features. Runs as a web app and as an Android app via Cordova.
+> **Stack:** TypeScript · Lit Web Components · Google GenAI SDK (Gemini 3.5 Flash) · Webpack · Jest · Apache Cordova · Vercel
+> **Live demo:** [eco-chef-theta.vercel.app](https://eco-chef-theta.vercel.app)
+
+![EcoChef – Zutaten eingeben und Rezept zaubern](docs/screenshots/rezept.jpg)
+
+
+**EcoChef** ist eine moderne, nachhaltige Hybrid-Web- & Mobile-App, die aus deinen vorhandenen Kühlschrankzutaten kreative, klimaschonende und leckere Gerichte zaubert. Mit Fokus auf Resteverwertung, Barrierefreiheit (LRS-Modus, Leselineal, Screenreader), Sprachsteuerung, Wochenmärkte-Finder, OpenFoodFacts Barcode-Scanner und umfassendem Budget- & Umwelt-Tracking.
 
 ---
 
 ## 🌟 Kernfunktionen & Features
 
-- 🪄 **KI-Rezept-Zauberer (Google Gemini 2.5/Flash & Imagen):** Generierung maßgeschneiderter Rezepte inkl. Nährwerten, Eco-Score, Wein-/Getränkeempfehlung & Gerichtsfoto.
-- 📱 **QR-Code Rezept-Sharing:** Generiere hochauflösende Vektor-QR-Codes für jedes Rezept, um Gerichte sekundenschnell auf andere Smartphones zu übertragen.
-- 🔍 **OpenFoodFacts EAN-Barcode-Scanner:** Scanne Barcodes von Lebensmittelverpackungen, um Name, Marke, Nutri-Score (A-E) und Haltbarkeit automatisch abzufragen und in die Reste-Kammer einzutragen.
+- 🪄 **KI-Rezept-Zauberer (Google Gemini 3.5 Flash & Nano Banana):** Generierung maßgeschneiderter Rezepte inkl. Nährwerten, Eco-Score, Wein-/Getränkeempfehlung & Gerichtsfoto.
+- 📷 **Live-Kamera-Barcodescanner & EAN-Lookup:** Erkennt Barcodes (EAN-13, EAN-8, UPC) direkt live im Kamerasucher via nativer `BarcodeDetector`-API und importiert Produktdaten und Nutri-Score von OpenFoodFacts.
+- 📅 **Wochenplan Kalender-Export (.ics):** Generiere einen personalisierten Wochenplan und exportiere ihn mit einem Klick als standardkonforme iCalendar-Datei (.ics) für Google Kalender, Apple Kalender oder Outlook.
+- 🖨️ **Print-CSS für Einzelrezepte:** Perfekt formatiertes DIN-A4-Drucklayout für jedes Rezept auf Knopfdruck (blendet Navigation, Chat und Buttons aus).
+- 🗄️ **Duales IndexedDB & Quota-Speichersystem:** Asynchrone, unbegrenzte Persistenz via IndexedDB (`ecoChef_db`) mit synchronem Fallback und Quota-Management in LocalStorage.
+- 📱 **QR-Code Rezept-Sharing:** Generiere hochauflösende, fehlerkorrigierte Vektor-QR-Codes (ISO/IEC 18004) für jedes Rezept, direkt mit jeder Smartphone-Kamera scannbar.
+- 🔐 **Ende-zu-Ende verschlüsselte Cloud-Synchronisation:** Nahtlose Übertragung aller Rezepte und Vorräte zwischen Geräten via AES-GCM 256-Bit Verschlüsselung mit individuellem Sync-Code.
 - 🌾 **Regionalitäts- & Wochenmarkt-Finder:** Entdecke regionale Wochenmärkte, Hofläden & Unverpackt-Geschäfte in deiner Nähe inkl. Öffnungszeiten, Entfernung und Direktübernahme von Markt-Spezialitäten auf deine Einkaufsliste.
 - 💰 **Monatsbudget-Tracker & Spar-Kalkulator:** Lege dein monatliches Lebensmittelbudget fest, verfolge deine Ausgaben und berechne deine Ersparnis durch Resteverwertung.
 - 🚨 **MHD Ablauf-Erinnerungen & Warn-Banner:** Automatische Warnung auf dem Startbildschirm bei Zutaten mit Ablaufdatum in ≤ 2 Tagen inkl. 1-Klick-Rezeptverkochen.
 - 📸 **Kühlschrank- & Kassenzettel-Scan:** Scanne deine Einkäufe oder deinen Kühlschrank per Kamera/Upload.
 - 🍽️ **Dynamische Portionsskalierung:** Skaliere Mengenangaben & Nährwerte in Rezepten interaktiv von 1 bis 12 Personen in Echtzeit.
 - 🛒 **Einkaufsliste ➔ Vorratskammer Übernahme:** Übernehme abgehakte Einkaufsartikel mit einem Klick in die Reste-Kammer mit automatischer Haltbarkeitsberechnung.
-- ⏱️ **Kochmodus mit Sprachsteuerung & Custom-Timern:** Freihändiges Navigieren per Sprachbefehl, automatische Schritt-Timer sowie manuelle Schnell-Timer.
+- ⏱️ **Kochmodus mit Screen Wake Lock & Haptik:** Das Display bleibt während des Kochens automatisch aktiv (Screen Wake Lock API), freihändiges Navigieren per Sprachsteuerung, haptisches Feedback & Timer-Alarme.
 - 📦 **Vollständiges System-Backup (JSON):** Exportiere & Importiere dein gesamtes EcoChef-Profil (Rezepte, Vorratskammer, Einkäufe, Statistiken & Erfolge).
 - 🏆 **Gamification & Umwelt-Tracking:** Erfolge freischalten (Retter-König, Klimaschützer, MHD-Retter) und CO₂-Ersparnis visualisieren.
 - 👁️ **Barrierefreiheit (WCAG compliant & LRS-Modus):** OpenDyslexic-Schriftart, verschiebbares Leselineal, stufenlose Schriftvergrößerung, TalkBack / VoiceOver Support.
-- 🍞 **Toast-Benachrichtigungen:** Professionelles In-App Benachrichtigungssystem (`eco-chef-toast`) mit Slide-In/Out-Animation, Auto-Dismiss und Aktions-Buttons statt blockierender Browserdialoge.
+- 🍞 **Toast-Benachrichtigungen:** Professionelles In-App-Benachrichtigungssystem mit Slide-In/Out-Animation, Auto-Dismiss und Aktions-Buttons.
+
+---
+
+## 🌐 Live-App
+
+Die Web-App ist unter folgendem Link verfügbar:
+**https://eco-chef-theta.vercel.app**
 
 ---
 
 ## 🔑 API-Key Konfiguration
 
-### Entwicklungsumgebung (lokal)
-Erstelle eine `.env`-Datei im Projektverzeichnis (ist git-ignored):
+### Option 1: In-App Einstellungen (empfohlen für Endnutzer)
+Öffne die App → ⚙️ Einstellungen → Gemini API-Key eingeben. Dieser Wert hat immer Vorrang.
+
+### Option 2: Entwicklungsumgebung (lokaler Build)
+Erstelle eine `.env`-Datei im Projektverzeichnis:
 
 ```bash
-# Kopiere die Beispieldatei und füge deinen Key ein
 cp .env.example .env
-# Dann: Ersetze 'your_gemini_api_key_here' mit deinem echten Key
+# Ersetze 'your_gemini_api_key_here' mit deinem echten Key
 ```
 
 Inhalt der `.env`-Datei:
@@ -39,9 +61,12 @@ Inhalt der `.env`-Datei:
 GEMINI_API_KEY=dein_api_key_hier
 ```
 
-> **Tipp:** Der API-Key kann jederzeit auch direkt in den App-Einstellungen (⚙️) eingegeben werden. Dies hat immer Vorrang vor dem Build-Key.
+> Die `.env` wird nur im Dev-Modus (`npm run dev`) in das Bundle eingebettet. Produktions-Builds (`npm run build`) enthalten bewusst keinen Key und nutzen den Server-Proxy oder den Key, den Nutzer in den Einstellungen eintragen (standardmäßig nur für die Sitzung gespeichert).
 
-> **Sicherheit:** Committe niemals einen echten API-Key in die Versionskontrolle. Die `.env`-Datei ist in `.gitignore` eingetragen.
+### Option 3: Vercel (Serverless-Proxy)
+Der API-Key ist als Umgebungsvariable `GEMINI_API_KEY` auf Vercel hinterlegt. Die Web-App und alle mobilen Apps nutzen diesen sicheren Server-Proxy (`/api/gemini`) automatisch.
+
+> **Sicherheit:** Committe niemals einen echten API-Key in die Versionskontrolle.
 
 ---
 
@@ -64,9 +89,16 @@ npm run dev
 ```
 Rufe anschließend `http://localhost:4444` im Browser auf.
 
-### 4. Tests ausführen
+### 4. Tests & Typprüfung ausführen
 ```bash
+# Unit-Tests mit Jest (Coverage-Schwellen: npm run test:coverage)
 npm test
+
+# End-to-End-Tests (Playwright; einmalig: npx playwright install chromium)
+npm run e2e
+
+# Strikte TypeScript-Prüfung (Frontend & Vercel Functions)
+npm run type-check
 ```
 
 ### 5. Production Web-Build
@@ -75,11 +107,39 @@ npm run build
 ```
 
 ### 6. Android APK bauen (Cordova)
+
+**Voraussetzungen:**
+- Java JDK 17+ (bereits vorhanden)
+- Android SDK mit Build-Tools und Platform-Tools (via Android Studio installierbar)
+
 ```bash
-cordova platform add android
+# Einmalig: Android-Plattform hinzufügen
+npx cordova platform add android
+
+# App-Bundle in www/ erstellen
 npm run build
-cordova run android
+
+# APK bauen
+npx cordova build android
+
+# APK liegt dann in:
+# platforms/android/app/build/outputs/apk/debug/app-debug.apk
 ```
+
+Um direkt auf ein verbundenes Gerät oder Emulator zu deployen:
+```bash
+npx cordova run android
+```
+
+### 7. iOS App bauen (nur macOS + Xcode)
+
+```bash
+npx cordova platform add ios
+npm run build
+npx cordova build ios
+```
+
+> **Hinweis:** iOS-Builds sind ausschließlich auf macOS mit installiertem Xcode möglich (Apple-Plattformbeschränkung).
 
 ---
 
@@ -89,70 +149,213 @@ cordova run android
 EcoChef/
 ├── .env.example                # API-Key Konfigurationsvorlage (git-tracked)
 ├── .env                        # Lokaler API-Key (git-ignored!)
+├── api/
+│   ├── gemini.ts               # Vercel Serverless Function – Gemini REST-Proxy mit Rate-Limit & Whitelist
+│   └── tsconfig.json           # TypeScript-Konfiguration für Vercel Functions
+├── CLAUDE.md                   # Richtlinien & Architektur für Claude Code
+├── config.xml                  # Cordova-Konfiguration (Android, iOS, Plugins, CSP)
 ├── ui-src/                     # TypeScript Quellcode (Lit Web Components)
-│   ├── api-config.ts           # API-Key Konfiguration (über .env / DefinePlugin)
+│   ├── api-config.ts           # API-Key Konfiguration (Webpack DefinePlugin)
 │   ├── eco-chef.ts             # Zentraler Controller & App-State
+│   ├── index.html              # HTML-Einstiegspunkt (CSP, SW-Registrierung)
 │   ├── components/             # Modulare UI-Komponenten
 │   │   ├── eco-chef-recipe-view.ts       # Rezeptansicht & Portionsskalierer
-│   │   ├── eco-chef-cooking-mode.ts      # Kochmodus & Sprachsteuerung/Timer
+│   │   ├── eco-chef-saved-recipes.ts     # Ausgelagerte Rezeptbuch-Verwaltung & Suche
+│   │   ├── eco-chef-cooking-mode.ts      # Kochmodus mit Wake Lock, Sprachsteuerung & Timer
 │   │   ├── eco-chef-pantry.ts            # Vorratskammer & EAN Barcode / Bon-Scan
 │   │   ├── eco-chef-regional-map.ts      # Regio-Markt & Unverpackt Finder
 │   │   ├── eco-chef-shopping-list.ts     # Einkaufsliste & Budget-Tracker
 │   │   ├── eco-chef-settings.ts          # Setup, Budget & Voll-Backup
 │   │   ├── eco-chef-meal-planner.ts      # Wochenplaner
-│   │   ├── eco-chef-toast.ts             # Toast/Snackbar Benachrichtigungs-System (NEU)
+│   │   ├── eco-chef-toast.ts             # Toast/Snackbar Benachrichtigungs-System
 │   │   └── eco-chef-achievements.ts      # Erfolge & SVG-Charts
-│   ├── services/               # Gemini API, Barcode, QR, Storage, Speech Services
+│   ├── services/               # Gemini API, Calendar, Crypto, Barcode, QR, Storage, Speech Services
+│   │   ├── calendar.service.ts # RFC 5545 iCalendar-Export (.ics) für Wochenpläne
+│   │   ├── crypto.service.ts   # Clientseitige AES-GCM 256-Bit E2E-Verschlüsselung für Sync
+│   │   ├── qr.service.ts       # Standardkonforme Vektor-QR-Code-Generierung
+│   │   ├── storage.service.ts  # Duales IndexedDB- & Quota-Storage mit Bilddaten-Pruning
+│   │   ├── barcode.service.ts  # OpenFoodFacts API mit RFC-konformem User-Agent
+│   │   ├── gemini.service.ts   # Strukturierte Prompts & Proxy-Routing
+│   │   ├── speech.service.ts   # Sprachsteuerung mit Loop-Schutz & Backoff
+│   │   └── audio.service.ts    # Haptik & synthetisierte Alarme
 │   ├── models/                 # TypeScript Interfaces & gemeinsame Hilfsfunktionen
-│   └── styles/                 # Design System & CSS Tokens
+│   └── styles/                 # Design System & CSS Tokens inkl. Print-CSS
+├── www/                        # Webpack Build-Output (Cordova-Root)
+├── platforms/android/          # Generierter Android-Code (nicht manuell bearbeiten)
 ├── BENUTZERANLEITUNG.md        # Ausführliche Anleitung für Anwender
 ├── FACHLICHE_DOKUMENTATION.md  # Architektur- & Entwickler-Dokumentation
-└── webpack.config.js           # Webpack Bündelungs-Konfiguration
+└── webpack.config.js           # Webpack Bündelungs-Konfiguration mit Code-Splitting & Hashing
 ```
 
 ---
 
+## 🏗️ Deployment-Architektur
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Vercel (Web-Hosting)                     │
+│  ┌────────────────────────────┐  ┌────────────────────────┐ │
+│  │  Static Files (www/)       │  │  /api/gemini           │ │
+│  │  - bundle.[hash].js        │  │  Serverless Function   │ │
+│  │  - index.html              │  │  (Node.js, REST-Proxy) │ │
+│  │  - sw.js, manifest.json    │  └───────────┬────────────┘ │
+│  └────────────────────────────┘              │               │
+└──────────────────────────────────────────────│───────────────┘
+                                               │
+                                               ▼
+                               ┌───────────────────────────┐
+                               │  Google Gemini REST API   │
+                               │  gemini-3.5-flash         │ 
+                               └───────────────────────────┘
+
+Clients:
+  Browser (Web-PWA)  →  relative URL /api/gemini
+  Android-App        →  absolute URL https://eco-chef-theta.vercel.app/api/gemini
+  iOS-App            →  absolute URL https://eco-chef-theta.vercel.app/api/gemini
+```
+
+---
+
+## 🤖 KI-Entwicklerunterstützung (Claude Code)
+
+Das Projekt ist für den Einsatz von KI-Assistenten (insbesondere [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview)) vorkonfiguriert:
+
+- **[`CLAUDE.md`](./CLAUDE.md):** Enthält Kontextinformationen, Architekturdetails, Tech-Stack, Skripte und Code-Konventionen.
+- **[`.claudeignore`](./.claudeignore):** Schließt Build-Artefakte, Abhängigkeiten und Secrets aus.
+- **[`.claude.json`](./.claude.json):** Definiert Berechtigungen für Entwicklungsbefehle.
+
+---
+
 ## 📋 Changelog
+
+### v1.3.1 (2026-10-03) – Pro Features & Full Verification
+
+#### ✅ Neu: Live-Kamera-Barcodescanner (BarcodeDetector API)
+- Hardware-beschleunigter Live-Sucher mit animierter Laser-Scanlinie in `eco-chef-pantry.ts`
+- Automatische Erkennung von EAN-13, EAN-8 und UPC mit akustischem Chime und haptischer Vibration
+- Direktes automatisches Nachschlagen bei OpenFoodFacts
+
+#### ✅ Neu: Wochenplan Kalender-Export (.ics)
+- Neuer `CalendarService` (`calendar.service.ts`) zur Generierung von RFC 5545 iCalendar-Dateien
+- Erzeugt Termine für geplante Gerichte mit Rezeptdetails, Kochzeit und CO₂-Ersparnis
+- 1-Klick-Export für Google Kalender, Apple Kalender und Microsoft Outlook (inkl. 4 Unit-Tests)
+
+#### ✅ Neu: Professionelles Print-CSS für Einzelrezepte
+- Schaltfläche „🖨️ Rezept drucken" in `eco-chef-recipe-view.ts`
+- Umfassendes `@media print`-Stylesheet in `eco-chef.styles.ts`: blendet Header, Navigation, Chat und Buttons aus und erzeugt ein sauberes DIN-A4-Rezeptblatt
+
+#### ✅ Neu: Duales IndexedDB- & Quota-Speichersystem
+- Asynchrone Persistierung aller Rezepte in IndexedDB (`ecoChef_db`) ohne Größenbeschränkungen
+- Nahtlose Kombination mit synchronem LocalStorage-Cache und automatischem Bilddaten-Pruning
+
+### v1.3.1 (2026-10-08) – Sicherheit, Performance & Testabdeckung
+
+#### 🤖 Aktualisiert: Gemini-Modelle
+- Standardmodell `gemini-2.5-flash` → `gemini-3.5-flash` (live gegen die API getestet, Schema-JSON funktioniert). Google schränkt den Zugang zu den 2.5-Modellen ein.
+- Fallback-Kette bei Überlastung (503) oder Abschaltung (404): `gemini-3.5-flash-lite` → `gemini-2.5-flash`, serverseitig im Proxy (`modelChain`) und clientseitig bei eigenem Key.
+- Proxy-Whitelist bereinigt: abgeschaltete Modelle (`gemini-2.0-flash`, `gemini-1.5-*`) entfernt.
+- Bilder: Imagen 3 ist seit November 2025 abgeschaltet. Mit eigenem Key erzeugt jetzt `gemini-nano-banana-2.1` das Gerichtsfoto, sonst bleibt der lokale Platzhalter. Der öffentliche Proxy bietet bewusst keine Bildgenerierung (Kostenschutz).
+
+#### 🐛 Behoben: Dev-Key wurde nie eingebettet
+- `api-config.ts` prüfte `typeof process`, was im Browser immer `undefined` ist. Der Key aus `.env` kam daher nie in den Dev-Build an. Playwright setzt jetzt `ECOCHEF_NO_DEV_KEY=1`, damit die gemockten E2E-Tests weiter den Proxy nutzen (`LIVE_AI=1` für echte Aufrufe).
+
+#### 🔒 Behoben: HTML-Injection im Kochbuch-Druck
+- `pdf.service.ts` maskiert jetzt alle Rezeptfelder (`escapeHtml`) vor der Ausgabe im Druckfenster. Rezepte aus Import, QR-Code, Sync oder KI konnten zuvor HTML/Skript in das gleich-originäre Druckfenster einschleusen.
+
+#### ⚡ Neu: Kleineres Start-Bundle
+- Das `@google/genai`-SDK wird nur noch bei eigenem Nutzer-Key per dynamischem `import()` nachgeladen (eigener Chunk `genai.[hash].js`). Der Standardweg über den Server-Proxy braucht es nicht.
+- Start-Bundle: 581 KiB → 311 KiB (ohne Webpack-Warnungen).
+
+#### ✅ Verbessert: Tests & CI
+- 232 Jest-Tests (zuvor 186) und 9 Playwright-Tests; Gesamtabdeckung ca. 87 % (Schwellen in `jest.config.js` auf 80/70/80/80 angehoben).
+- Neue Tests für `storage.service` (inkl. IndexedDB via `fake-indexeddb`, Quota-Pruning), `speech.service`, `sw.service`, `backup.service`, `pdf.service` und den direkten Gemini-Pfad.
+- CI führt zusätzlich `npm audit --omit=dev --audit-level=high` aus.
+- Abhängigkeiten aktualisiert (Lit 3.3.3, Playwright 1.64, dotenv, css-loader, `webpack-dev-server` 6). `@vercel/node` wurde durch lokale Typen (`api/vercel-types.ts`) ersetzt; `npm audit --omit=dev` meldet 0 Schwachstellen.
+
+### v1.3.0 (2026-10-03) – Security, Quality & Architecture Optimizations
+
+#### ✅ Neu: Echte Vektor-QR-Codes (ISO/IEC 18004)
+- Echtes SVG-Generierungsmodul via `qrcode-generator` in `qr.service.ts` implementiert (Ersetzt Fake-SVG)
+- Automatische Wahl der optimalen QR-Code-Version (1–40) mit Error-Correction-Level L
+- Unmittelbar mit allen nativen Smartphone-Kameras (iOS & Android) sowie QR-Scannern lesbar
+
+#### ✅ Neu: Screen Wake Lock & Haptik im Kochmodus
+- Integration der `navigator.wakeLock` API in `eco-chef-cooking-mode.ts`: Display bleibt während des Kochens dauerhaft eingeschaltet (kein lästiges Display-Sperren mit nassen Händen)
+- Automatischer Re-Acquire bei Tab-Wechsel (`visibilitychange`) und sauberes Release beim Beenden
+- Haptisches Feedback via `navigator.vibrate` bei Schrittnavigation, Schnell-Timern und Alarmen
+
+#### ✅ Neu: Client-seitige E2E-Verschlüsselung für Cloud-Sync
+- Neuer `CryptoService` (`crypto.service.ts`) auf Basis der Web Crypto API
+- Verschlüsselt Rezept- und Vorratskammerdaten vor dem Cloud-Push mit **AES-GCM 256-Bit** und PBKDF2-abgeleitetem Schlüssel aus dem Sync-Code
+- Entschlüsselt Daten beim Sync-Pull sicher im Browser des Zielgeräts
+
+#### ✅ Neu: LocalStorage Quota-Schutz & Bild-Pruning
+- Robuste Speicherung via `safeSetItem` in `storage.service.ts`
+- Erkennt `QuotaExceededError` automatisch und entfernt speicherintensive historische Base64-Vorschaubilder, um Datenverlust von Rezepten und Vorräten zu verhindern
+
+#### ✅ Neu: Vercel Proxy-Härtung & Rate-Limiting
+- Per-IP Rate Limiting (In-Memory Sliding Window, max. 30 Req/Min) in `api/gemini.ts`
+- Whitelist für erlaubte Gemini-Modelle (`ALLOWED_MODELS`), um Missbrauch und Denial-of-Service abzuwehren
+
+#### ✅ Neu: Modernisierte PWA Caching-Strategie
+- Service Worker `eco-chef-v3`:
+  - **Network-First** für HTML/Navigation (stets aktuelle App-Version)
+  - **Stale-While-Revalidate** für statische JS/CSS/Font-Assets (blitzschneller Offline-Start)
+  - Vollständiger Cache-Bypass für API-Routen (`/api/`)
+
+#### ✅ Neu: Webpack Code-Splitting & Hashing
+- `splitChunks: { chunks: 'all' }` und `runtimeChunk: 'single'` in `webpack.config.js`
+- Bessere Bündelgrößen und optimiertes Browser-Caching durch `[name].[contenthash:8].js`
+
+#### ✅ Verbessert: OpenFoodFacts API-Compliance
+- Konformer `User-Agent: EcoChef/1.2.0 (https://github.com/Schengii/eco-chef; support@eco-chef.app)` und `Accept: application/json` Header in allen Barcode-Anfragen
+
+#### ✅ Verbessert: Speech Recognition Loop-Schutz
+- Failsafe-Wiederanlaufschutz mit 600ms Throttling, maximal 5 Wiederholungsversuchen und automatischem Reset bei Nutzerinteraktion
+
+#### ✅ Refactoring & Modularisierung
+- Auslagerung der Rezeptsammlung in eine eigenständige Lit-Komponente `eco-chef-saved-recipes.ts`
+- Strukturierte Optionen `generateRecipeFromOptions` in `gemini.service.ts`
+- Typ-Sicherheits-Check via `npm run type-check` und CI-Integration via GitHub Actions
+
+### v1.2.0 (2026-09-29) – Mobile & Deployment
+
+#### ✅ Neu: Vercel Serverless Proxy
+- Neue Datei `api/gemini.ts`: Serverless Function die direkt die Gemini REST API aufruft (kein `@google/genai` SDK – löst ESM/CJS-Konflikt auf Vercel)
+- `GEMINI_API_KEY` wird sicher als Server-seitige Umgebungsvariable verwaltet
+- Unterstützt `generateContent` (Text & Multimodal) mit Fallback-Antwort für `generateImages`
+
+#### ✅ Neu: Android + iOS Cordova-Unterstützung
+- `config.xml` vollständig überarbeitet:
+  - Android: `minSdkVersion=24`, `targetSdkVersion=36`, `Scheme=https`, `Hostname=localhost` (verhindert `file://`-Einschränkungen)
+  - iOS: `WKWebViewOnly`, `EnableViewportScale`, Inline-Medienwiedergabe
+  - Content Security Policy erlaubt Vercel-Proxy, Gemini-API, OpenFoodFacts, Google Fonts
+  - Plugin `cordova-plugin-network-information` hinzugefügt
+- `gemini.service.ts`: `getProxyUrl()` erkennt Cordova-Umgebung (`file://`/`content://` Protokoll oder `window.cordova`) und leitet automatisch an die absolute Vercel-URL weiter
+
+#### ✅ Neu: Sichere Service Worker Registrierung
+- `index.html`: Service Worker wird nur im Web-Kontext registriert; in Cordova (`file://`) übersprungen, da dort nicht unterstützt
+
+#### ✅ Behoben: Gemini-Modellname
+- Alle 6 Vorkommen von `gemini-flash-latest` (veraltet/überlastet) auf `gemini-2.5-flash` aktualisiert
 
 ### v1.1.0 (2026-08-18) – Kritische Verbesserungen
 
 #### ✅ Neu: Toast-Benachrichtigungs-System
 - Neue Komponente `eco-chef-toast.ts` mit `success`, `error`, `warning`, `info` Varianten
 - Slide-In/Out-Animationen mit Auto-Dismiss (3,5 Sekunden Standard)
-- Optionaler Aktions-Button (z.B. „Rückgängig", „Bestätigen")
 - Alle 35+ `alert()` und `confirm()` Aufrufe in der App ersetzt
-- Asynchrones Confirm-Dialog-System (`showConfirmToast()`) für Aktionen wie „Alle Daten löschen"
 
 #### ✅ Verbessert: CO₂-Tracking-Genauigkeit
 - Fallback-Schätzung wenn Gemini API keinen `co2SavedKg`-Wert liefert
-- Berechnung basiert auf Eco-Score (🍃-Anzahl) und Ernährungsweise (vegan × 1.3, vegetarisch × 1.1)
 - Verhindert 0kg-Einträge in den Statistiken
 
 #### ✅ Verbessert: Error-Handling bei Rezeptgenerierung
-- Spezifische Fehlermeldungen je nach Fehlertyp:
-  - **API-Key-Fehler** (403): „Ungültiger API-Key. Bitte in den Einstellungen prüfen."
-  - **Rate-Limit** (429): „API-Limit erreicht. Bitte kurz warten."
-  - **Timeout** (DEADLINE): „Zeitüberschreitung – bitte nochmal versuchen."
-  - **Netzwerkfehler**: „Verbindungsfehler – Internetverbindung prüfen."
-  - **Parse-Fehler**: „KI-Antwort konnte nicht verarbeitet werden."
-- Neuer State `lastError` für spätere Retry-Logik
+- Spezifische Fehlermeldungen je nach Fehlertyp (403, 429, Timeout, Netzwerk)
 
 #### ✅ Verbessert: API-Key Sicherheit
-- Webpack `DefinePlugin` injiziert den API-Key zur Build-Zeit aus einer `.env`-Datei
-- `.env`-Datei ist git-ignored (niemals in Versionskontrolle)
+- Webpack `DefinePlugin` injiziert den API-Key zur Build-Zeit aus `.env`
 - `.env.example`-Vorlage hinzugefügt
-- `.gitignore` um `.env`, `.env.local` erweitert
-- `api-config.ts` enthält keinen hartcodierten Key mehr
-
-#### ✅ Behoben: Code-Duplikat `getGroupedShoppingList`
-- Gemeinsame Hilfsfunktion `getGroupedShoppingList()` in `eco-chef.models.ts` ausgelagert
-- Identische Implementierung aus `eco-chef.ts` und `eco-chef-shopping-list.ts` entfernt
-- Beide Komponenten importieren jetzt die gemeinsame Funktion aus dem Models-Modul
-
-#### ✅ Behoben: `SpeechService.startListening()` Alert
-- Kein `alert()` mehr wenn Sprachsteuerung nicht unterstützt wird
-- Stattdessen: `console.warn()` + `onStatusChange` Callback mit benutzerfreundlicher Meldung
-- `eco-chef.ts` zeigt nun einen Toast wenn der Status „nicht unterstützt" enthält
 
 ---
 

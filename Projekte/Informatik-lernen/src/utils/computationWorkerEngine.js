@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Web Worker & Concurrency Computation Engine
  * Vergleicht Main-Thread (UI Blocking) vs. Dedicated Worker Thread Performance
@@ -56,6 +57,8 @@ export function runMonteCarloUreSimulation(iterations = 10000, diskSizeBytes = 8
 
 /**
  * Benchmark Runner mit Zeitmessung
+ * @param {string} type
+ * @param {any} params
  */
 export function executeBenchmarkTask(type = 'primes', params = {}) {
   const startTime = performance.now();

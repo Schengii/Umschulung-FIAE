@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Scale, X, Sparkles, AlertCircle, ArrowUpRight, ArrowDownRight, DollarSign } from 'lucide-react';
+import { Scale, X, Sparkles, AlertCircle, ArrowUpRight, ArrowDownRight, DollarSign, Clock } from 'lucide-react';
 import type { Holding } from '../types';
 import { calculateTaxLossHarvestingSuggestions, convertCurrency } from './performanceUtils';
 
@@ -21,6 +21,11 @@ export const TaxLossHarvestingModal: React.FC<TaxLossHarvestingModalProps> = ({
   const [targetExemptionEur, setTargetExemptionEur] = useState<number>(1000); // 1000 Single / 2000 Joint
 
   if (!isOpen) return null;
+
+  const currentYear = new Date().getFullYear();
+  const yearEndDate = new Date(currentYear, 11, 30); // 30.12. (letzter Börsentag)
+  const today = new Date();
+  const daysUntilYearEnd = Math.max(0, Math.ceil((yearEndDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
 
   const result = calculateTaxLossHarvestingSuggestions(holdings, targetExemptionEur, usedExemptionEur);
 
@@ -85,6 +90,26 @@ export const TaxLossHarvestingModal: React.FC<TaxLossHarvestingModalProps> = ({
               </span>
               <span className="text-xl font-bold text-amber-300 block mt-1">{formatVal(result.unusedExemptionEur)}</span>
               <span className="text-[10px] text-amber-400/80 block">Steuerfreies Gewinn-Potenzial</span>
+            </div>
+          </div>
+
+          {/* Year-End Deadline & Action Radar */}
+          <div className="p-4 bg-blue-950/30 border border-blue-500/30 rounded-2xl flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-200 text-sm">Frist: Stichtag 30./31. Dezember</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-blue-500/20 text-blue-300">
+                    Noch {daysUntilYearEnd} Tage im Steuerjahr {currentYear}
+                  </span>
+                </div>
+                <p className="text-slate-400 text-[11px] mt-0.5">
+                  Nicht ausgeschöpfte Sparer-Pauschbeträge verfallen zum Jahreswechsel ersatzlos. Durch gezieltes Gain- & Loss-Harvesting optimierst du deine KEST-Last.
+                </p>
+              </div>
             </div>
           </div>
 

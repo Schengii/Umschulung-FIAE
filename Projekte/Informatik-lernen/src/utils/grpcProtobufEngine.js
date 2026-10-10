@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * gRPC Protocol Buffers (Proto3) & Binary Wire Format Engine
  * Simulates proto schema compilation, binary wire encoding (Varints & Length-delimited tags),

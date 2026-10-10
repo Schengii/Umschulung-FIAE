@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux BPFtrace & Dynamic Kernel Tracing Engine
  * Simulates bpftrace one-liners and scripts (kprobes, tracepoints, uprobes),
@@ -36,8 +37,9 @@ User 0    executed command: cat /etc/shadow`
     };
   }
 
+  /** @param {string} scriptKey */
   runScript(scriptKey = 'vfs_read_hist') {
-    const selected = this.scripts[scriptKey] || this.scripts.vfs_read_hist;
+    const selected = (/** @type {Record<string, any>} */ (this.scripts))[scriptKey] || this.scripts.vfs_read_hist;
     return {
       scriptKey,
       title: selected.title,

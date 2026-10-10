@@ -1,9 +1,40 @@
+// @ts-check
 /**
  * IHK WISO Darlehensarten & Kreditsicherheiten Engine
  * Computes amortization schedules for Annuity, Installment (Ratendarlehen),
  * and Fixed-Maturity (Fälligkeitsdarlehen) loans, and classifies collateral types.
  */
 
+/**
+ * @typedef {'ANNUITY' | 'INSTALLMENT' | 'FIXED_MATURITY'} LoanType
+ *
+ * @typedef {object} LoanScheduleInput
+ * @property {number} [darlehensbetrag]
+ * @property {number} [zinssatzPercent]
+ * @property {number} [laufzeitJahre]
+ * @property {LoanType} [darlehensTyp]
+ *
+ * @typedef {object} LoanScheduleYear
+ * @property {number} jahr
+ * @property {number} zinsen
+ * @property {number} tilgung
+ * @property {number} kapitaldienst
+ * @property {number} restschuld
+ *
+ * @typedef {object} LoanScheduleResult
+ * @property {number} darlehensbetrag
+ * @property {number} zinssatzPercent
+ * @property {number} laufzeitJahre
+ * @property {LoanType} darlehensTyp
+ * @property {number} gesamtZinsen
+ * @property {number} gesamtKapitaldienst
+ * @property {LoanScheduleYear[]} schedule
+ */
+
+/**
+ * @param {LoanScheduleInput} input
+ * @returns {LoanScheduleResult}
+ */
 export function calculateLoanSchedule({
   darlehensbetrag = 100000,
   zinssatzPercent = 5.0,

@@ -1,6 +1,42 @@
+// @ts-check
 /**
  * IHK Präsentations-Stoppuhr & Folien-Gliederungs Engine
  * Bewertungs- und Zeitmanagement-Standard für die 15-minütige IHK-Projektpräsentation (AP2 Teil A)
+ */
+
+/**
+ * @typedef {object} PresentationPhase
+ * @property {string} id
+ * @property {string} title
+ * @property {number} targetDurationSec
+ * @property {string} color
+ * @property {string[]} keyPoints
+ * @property {string} recommendedSlides
+ *
+ * @typedef {object} PresentationRubric
+ * @property {string} id
+ * @property {string} category
+ * @property {string} description
+ * @property {number} weight
+ *
+ * @typedef {object} CurrentPhaseInfo
+ * @property {number} phaseIndex
+ * @property {PresentationPhase} phase
+ * @property {number} phaseElapsed
+ * @property {number} phaseRemaining
+ * @property {number} phaseProgressPct
+ * @property {boolean} isOvertime
+ *
+ * @typedef {object} TimingStatus
+ * @property {'ok' | 'warning' | 'danger'} status
+ * @property {string} message
+ *
+ * @typedef {object} PresentationGradeResult
+ * @property {number} percentage
+ * @property {number} grade
+ * @property {string} summary
+ * @property {boolean} passed
+ * @property {number} totalPoints
  */
 
 export const TOTAL_PRESENTATION_SECONDS = 15 * 60; // 900 Sekunden (15 Minuten)
@@ -91,6 +127,9 @@ export const PRESENTATION_RUBRICS = [
 
 /**
  * Berechnet die aktuelle Phase und den Fortschritt anhand der verstrichenen Sekunden
+ * @param {number} elapsedSeconds
+ * @param {PresentationPhase[]} [phases]
+ * @returns {CurrentPhaseInfo}
  */
 export function getCurrentPhaseInfo(elapsedSeconds, phases = DEFAULT_PRESENTATION_PHASES) {
   let accumulated = 0;
@@ -124,6 +163,8 @@ export function getCurrentPhaseInfo(elapsedSeconds, phases = DEFAULT_PRESENTATIO
 
 /**
  * Ermittelt den Zeit-Status (on_track, warning, overtime)
+ * @param {number} elapsedSeconds
+ * @returns {TimingStatus}
  */
 export function getTimingStatus(elapsedSeconds) {
   if (elapsedSeconds > TOTAL_PRESENTATION_SECONDS + 60) {
@@ -137,6 +178,8 @@ export function getTimingStatus(elapsedSeconds) {
 
 /**
  * Berechnet das Gesamtergebnis der Präsentationsbewertung nach IHK-Schema (1-6)
+ * @param {Record<string, number>} [checklistRatings]
+ * @returns {PresentationGradeResult}
  */
 export function calculatePresentationGrade(checklistRatings = {}) {
   let totalScore = 0;
@@ -171,6 +214,8 @@ export function calculatePresentationGrade(checklistRatings = {}) {
 
 /**
  * Formatiert Sekunden in MM:SS
+ * @param {number} seconds
+ * @returns {string}
  */
 export function formatTimeMMSS(seconds) {
   const mins = Math.floor(Math.abs(seconds) / 60);

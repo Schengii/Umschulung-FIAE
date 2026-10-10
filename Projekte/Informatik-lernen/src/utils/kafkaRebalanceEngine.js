@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Apache Kafka Consumer Group Rebalance Protocol Engine
  * Simulates Eager (Stop-the-World) vs. Cooperative Sticky Rebalancing,

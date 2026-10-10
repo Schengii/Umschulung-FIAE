@@ -1,11 +1,14 @@
+// @ts-check
 /**
  * Event-Sourcing & CQRS Read-Model Projection Engine
+ * @typedef {{id: number, type: string, timestamp: string, payload: Record<string, any>}} DomainEvent
  * Simulates immutable Append-Only Event Logs, deterministic event replay projections,
  * and snapshotting for low-latency read-model materialization.
  */
 
 export class EventSourcingProjectionEngine {
   constructor() {
+    /** @type {DomainEvent[]} */
     this.eventLog = [
       { id: 1, type: 'OrderCreated', timestamp: '10:00:01', payload: { orderId: 'ord-101', customer: 'Alice Dev' } },
       { id: 2, type: 'ItemAdded', timestamp: '10:00:15', payload: { orderId: 'ord-101', item: 'Cloud Server 16C/64G', price: 180.0 } },
@@ -17,9 +20,9 @@ export class EventSourcingProjectionEngine {
 
   projectState(upToEventId = 5) {
     const projection = {
-      orderId: null,
-      customer: null,
-      items: [],
+      /** @type {string|null} */ orderId: null,
+      /** @type {string|null} */ customer: null,
+      /** @type {string[]} */ items: [],
       totalPrice: 0.0,
       paymentStatus: 'UNPAID',
       fulfillmentStatus: 'PENDING',

@@ -1,8 +1,49 @@
+// @ts-check
 /**
  * IHK Fachgespräch & Mündliche Prüfung Studio Engine
  * Simulation des 15-minütigen Fachgesprächs vor dem IHK-Prüfungsausschuss (AP2)
  */
 
+/**
+ * @typedef {object} ExaminerPersona
+ * @property {string} id
+ * @property {string} role
+ * @property {string} focus
+ * @property {string} style
+ * @property {number} voicePitch
+ * @property {number} voiceRate
+ *
+ * @typedef {object} OralDefenseQuestion
+ * @property {string} id
+ * @property {string} examinerId
+ * @property {string} category
+ * @property {string} questionText
+ * @property {string[]} keywords
+ * @property {string} idealAnswerOutline
+ * @property {number} maxScore
+ *
+ * @typedef {object} OralAnswerEvaluation
+ * @property {number} score
+ * @property {number} [maxScore]
+ * @property {number} percentage
+ * @property {string[]} matchedKeywords
+ * @property {string[]} missingKeywords
+ * @property {number} [wordCount]
+ * @property {string} feedback
+ *
+ * @typedef {OralAnswerEvaluation & { score: number, maxScore: number }} ScoredOralAnswer
+ *
+ * @typedef {object} OralDefenseResult
+ * @property {number} totalScore
+ * @property {number} maxPossibleScore
+ * @property {number} percentage
+ * @property {number} grade
+ * @property {boolean} passed
+ * @property {number} ihkPoints
+ * @property {string} summary
+ */
+
+/** @type {ExaminerPersona[]} */
 export const EXAMINER_PERSONAS = [
   {
     id: 'tech_expert',
@@ -30,6 +71,7 @@ export const EXAMINER_PERSONAS = [
   }
 ];
 
+/** @type {OralDefenseQuestion[]} */
 export const ORAL_DEFENSE_QUESTIONS = [
   {
     id: 'q1',
@@ -80,6 +122,9 @@ export const ORAL_DEFENSE_QUESTIONS = [
 
 /**
  * Bewertet eine Antwort des Prüflings auf Basis von Keyword-Matching & Struktur
+ * @param {OralDefenseQuestion | null | undefined} question
+ * @param {string} [userResponse]
+ * @returns {OralAnswerEvaluation}
  */
 export function evaluateOralAnswer(question, userResponse = '') {
   if (!question || typeof userResponse !== 'string') {
@@ -93,7 +138,9 @@ export function evaluateOralAnswer(question, userResponse = '') {
   }
 
   const normalized = userResponse.toLowerCase();
+  /** @type {string[]} */
   const matched = [];
+  /** @type {string[]} */
   const missing = [];
 
   (question.keywords || []).forEach(kw => {
@@ -140,6 +187,8 @@ export function evaluateOralAnswer(question, userResponse = '') {
 
 /**
  * Berechnet das Gesamtergebnis des Fachgesprächs (Note & Bestehensstatus)
+ * @param {ScoredOralAnswer[]} [answers]
+ * @returns {OralDefenseResult}
  */
 export function calculateOralDefenseResult(answers = []) {
   if (!Array.isArray(answers) || answers.length === 0) {

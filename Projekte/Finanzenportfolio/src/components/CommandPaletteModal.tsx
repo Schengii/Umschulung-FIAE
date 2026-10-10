@@ -25,7 +25,12 @@ import {
   Columns,
   DollarSign,
   Camera,
-  Repeat
+  Repeat,
+  Landmark,
+  Bell,
+  Grid,
+  Flame,
+  TrendingUp
 } from 'lucide-react';
 import type { Holding } from '../types';
 
@@ -48,6 +53,7 @@ interface CommandPaletteModalProps {
   onOpenCsvImport: () => void;
   onOpenSettings: () => void;
   onOpenTaxHarvesting: () => void;
+  onOpenVorabpauschale?: () => void;
   onOpenTaxReport: () => void;
   onOpenStressTest: () => void;
   onOpenOrderAssistant: () => void;
@@ -60,6 +66,16 @@ interface CommandPaletteModalProps {
   onOpenDrip?: () => void;
   onOpenReceiptScanner?: () => void;
   onOpenCalendarExport?: () => void;
+  onOpenMultiCurrency?: () => void;
+  onOpenEmailWebhook?: () => void;
+  onOpenBrokerBreakdown?: () => void;
+  onOpenExcelExport?: () => void;
+  onOpenPriceAlerts?: () => void;
+  onOpenRebalanceOrders?: () => void;
+  onOpenTerAnalysis?: () => void;
+  onOpenCorrelationHeatmap?: () => void;
+  onOpenFireSimulator?: () => void;
+  onOpenSavingsGrowth?: () => void;
   onRefreshPrices: () => void;
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
@@ -76,6 +92,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   onOpenCsvImport,
   onOpenSettings,
   onOpenTaxHarvesting,
+  onOpenVorabpauschale,
   onOpenTaxReport,
   onOpenStressTest,
   onOpenOrderAssistant,
@@ -88,6 +105,16 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   onOpenDrip,
   onOpenReceiptScanner,
   onOpenCalendarExport,
+  onOpenMultiCurrency,
+  onOpenEmailWebhook,
+  onOpenBrokerBreakdown,
+  onOpenExcelExport,
+  onOpenPriceAlerts,
+  onOpenRebalanceOrders,
+  onOpenTerAnalysis,
+  onOpenCorrelationHeatmap,
+  onOpenFireSimulator,
+  onOpenSavingsGrowth,
   onRefreshPrices,
   isDarkMode,
   onToggleDarkMode,
@@ -239,6 +266,15 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         keywords: 'steuer freibetrag tax loss harvesting sparerpauschbetrag'
       },
       {
+        id: 'act-vorabpauschale',
+        title: 'ETF Vorabpauschale-Rechner (InvStG § 18)',
+        subtitle: 'Berechnung des Basisertrags und Steuerabzugs für Fonds',
+        category: 'ACTION',
+        icon: <Scale size={18} color="#3b82f6" />,
+        perform: () => { onClose(); if (onOpenVorabpauschale) onOpenVorabpauschale(); },
+        keywords: 'vorabpauschale basisertrag basiszins etf fonds invstg steuer thesaurierer'
+      },
+      {
         id: 'act-tax-report',
         title: 'Anlage KAP Steuer-Report (WISO/Taxfix)',
         subtitle: 'Zeilengetreue Aufschlüsselung der Kapitalerträge',
@@ -309,6 +345,96 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         icon: <Calendar size={18} color="#f59e0b" />,
         perform: () => { onClose(); if (onOpenCalendarExport) onOpenCalendarExport(); },
         keywords: 'kalender ical ics export zahltage dividenden termine outlook google apple'
+      },
+      {
+        id: 'act-multi-currency',
+        title: 'Multi-Währungs Cash-Konten & FX Währungstausch',
+        subtitle: 'EUR, USD, CHF & GBP Guthaben verwalten und FX-Swaps buchen',
+        category: 'ACTION',
+        icon: <DollarSign size={18} color="#10b981" />,
+        perform: () => { onClose(); if (onOpenMultiCurrency) onOpenMultiCurrency(); },
+        keywords: 'fx cash multi currency waehrung fremdwaehrung dollar franken pfund swap umtausch'
+      },
+      {
+        id: 'act-email-webhook',
+        title: 'E-Mail & Webhook Abrechnungs-Dispatcher',
+        subtitle: 'Automatischer PDF- & JSON-Import via n8n, Gmail & Apple Shortcuts',
+        category: 'ACTION',
+        icon: <Cloud size={18} color="#06b6d4" />,
+        perform: () => { onClose(); if (onOpenEmailWebhook) onOpenEmailWebhook(); },
+        keywords: 'webhook email dispatcher api automations n8n zapier shortcuts pdf abrechnung'
+      },
+      {
+        id: 'act-broker-breakdown',
+        title: 'Multi-Broker Depot-Mapping & Vergleich',
+        subtitle: 'Bestände, Renditen & Gebühren je Broker aufgeschlüsselt',
+        category: 'ACTION',
+        icon: <Landmark size={18} color="#3b82f6" />,
+        perform: () => { onClose(); if (onOpenBrokerBreakdown) onOpenBrokerBreakdown(); },
+        keywords: 'broker depot mapping trade republic scalable ing interactive consors bitpanda'
+      },
+      {
+        id: 'act-excel-export',
+        title: 'Excel Multi-Sheet Export (.xlsx)',
+        subtitle: '6 getrennte Tabellenblätter mit KPIs, Beständen, Trades & Steuern',
+        category: 'ACTION',
+        icon: <FileSpreadsheet size={18} color="#10b981" />,
+        perform: () => { onClose(); if (onOpenExcelExport) onOpenExcelExport(); },
+        keywords: 'excel xlsx export download tabelle sheet spreadsheet exportieren'
+      },
+      {
+        id: 'act-price-alerts',
+        title: 'Kursalarme & Push-Benachrichtigungen',
+        subtitle: 'Stop-Loss, Zielkurse und Tagesabsturz-Warnungen definieren',
+        category: 'ACTION',
+        icon: <Bell size={18} color="#f59e0b" />,
+        perform: () => { onClose(); if (onOpenPriceAlerts) onOpenPriceAlerts(); },
+        keywords: 'kursalarm alert preisalarm push notification stop loss zielkurs warnung'
+      },
+      {
+        id: 'act-rebalance-orders',
+        title: 'Portfolio-Rebalancing & Order-Assistent',
+        subtitle: 'Soll/Ist-Vergleich aller 8 Anlageklassen & Dual-Modus Rebalancing',
+        category: 'ACTION',
+        icon: <Scale size={18} color="#3b82f6" />,
+        perform: () => { onClose(); if (onOpenRebalanceOrders) onOpenRebalanceOrders(); },
+        keywords: 'rebalancing rebalance gewichtung ziel allokation order orderliste ausgleich'
+      },
+      {
+        id: 'act-ter-analysis',
+        title: 'Fondskosten- & TER-Zinseszins-Analyse',
+        subtitle: 'Total Expense Ratio & 30-Jahre Zinseszins-Gebührenverlust',
+        category: 'ACTION',
+        icon: <PieChart size={18} color="#a855f7" />,
+        perform: () => { onClose(); if (onOpenTerAnalysis) onOpenTerAnalysis(); },
+        keywords: 'ter fondskosten gebuehren etf zinseszins kostenquote expense ratio'
+      },
+      {
+        id: 'act-correlation-heatmap',
+        title: 'Portfoliokorrelations- & Diversifikations-Heatmap',
+        subtitle: 'Pearson-Korrelation (-1 bis +1) & Klumpenrisiko-Erkennung',
+        category: 'ACTION',
+        icon: <Grid size={18} color="#c084fc" />,
+        perform: () => { onClose(); if (onOpenCorrelationHeatmap) onOpenCorrelationHeatmap(); },
+        keywords: 'korrelation heatmap diversifikation cluster klumpen risiko pearson'
+      },
+      {
+        id: 'act-fire-simulator',
+        title: 'FIRE-Dynamik & Kapitalverzehr-Simulator',
+        subtitle: 'Variable Entnahmeraten, Guyton-Klinger Leitplanken & Rentenverrechnung',
+        category: 'ACTION',
+        icon: <Flame size={18} color="#f97316" />,
+        perform: () => { onClose(); if (onOpenFireSimulator) onOpenFireSimulator(); },
+        keywords: 'fire ruhestand rente kapitalverzehr entnahme bengen guyton klinger vpw freiheit'
+      },
+      {
+        id: 'act-savings-growth',
+        title: 'Sparplan-Dynamisierungs- & Zinseszins-Rechner',
+        subtitle: 'Vergleich fixer vs. dynamisierter Sparpläne & Meilenstein-Zeitersparnis',
+        category: 'ACTION',
+        icon: <TrendingUp size={18} color="#10b981" />,
+        perform: () => { onClose(); if (onOpenSavingsGrowth) onOpenSavingsGrowth(); },
+        keywords: 'sparplan dynamisierung zinseszins step up wachstum vermoegen rente sparquote'
       },
       {
         id: 'act-order-assistant',

@@ -1,5 +1,48 @@
+// @ts-check
 /**
  * IHK Examination Grading & MEP Calculation Engine (AO 2020)
+ *
+ * Mit JSDoc-Typannotationen abgesichert (`// @ts-check` + `npm run typecheck`),
+ * da eine falsche Notenberechnung hier direkt eine reale Bestehens-Entscheidung
+ * verfälschen würde. Dient als Referenz-Muster für die graduelle Typisierung
+ * weiterer sicherheitskritischer Engines (siehe `tsconfig.json`: `checkJs`
+ * ist projektweit deaktiviert, ein `@ts-check`-Kommentar aktiviert die
+ * Typprüfung gezielt pro Datei).
+ */
+
+/**
+ * @typedef {{ grade: 1|2|3|4|5|6, label: string, text: string }} IhkGradeResult
+ *
+ * @typedef {object} IhkFinalScoreInput
+ * @property {number} [ap1] - Punkte AP1 (0-100)
+ * @property {number} [ap2_b1] - Punkte AP2 Bereich 1 (0-100)
+ * @property {number} [ap2_b2] - Punkte AP2 Bereich 2 (0-100)
+ * @property {number} [ap2_wiso] - Punkte AP2 WiSo (0-100)
+ * @property {number} [doku] - Punkte Projektdokumentation (0-100)
+ * @property {number} [fachgespraech] - Punkte Fachgespräch (0-100)
+ *
+ * @typedef {object} IhkBreakdownEntry
+ * @property {number} points
+ * @property {string} weight
+ * @property {number} weightedPoints
+ * @property {IhkGradeResult} grade
+ *
+ * @typedef {object} IhkFinalScoreResult
+ * @property {number} totalPoints
+ * @property {IhkGradeResult} overallGrade
+ * @property {number} ap2TotalPoints
+ * @property {number} projectTotal
+ * @property {boolean} isPassed
+ * @property {string[]} fails
+ * @property {{ ap1: IhkBreakdownEntry, ap2_b1: IhkBreakdownEntry, ap2_b2: IhkBreakdownEntry, ap2_wiso: IhkBreakdownEntry, project: IhkBreakdownEntry }} breakdown
+ *
+ * @typedef {object} MepRecommendation
+ * @property {string} areaKey
+ * @property {string} areaName
+ * @property {number} writtenPoints
+ * @property {number} minRequiredMepPoints
+ * @property {boolean} isFeasible
+ * @property {string} explanation
  */
 
 export const IHK_OCCUPATIONS = {
@@ -37,6 +80,8 @@ export const IHK_OCCUPATIONS = {
 
 /**
  * Converts IHK point scale (0 - 100) to standard German grade (1 - 6)
+ * @param {number} points
+ * @returns {IhkGradeResult}
  */
 export function getIhkGrade(points) {
   const p = Math.round(points);
@@ -50,6 +95,8 @@ export function getIhkGrade(points) {
 
 /**
  * Evaluates comprehensive IHK exam result according to AO 2020
+ * @param {IhkFinalScoreInput} input
+ * @returns {IhkFinalScoreResult}
  */
 export function calculateIhkFinalScore({
   ap1 = 0,
@@ -132,14 +179,17 @@ export function calculateIhkFinalScore({
 
 /**
  * Calculates Mündliche Ergänzungsprüfung (MEP) possibilities for failing written subjects
+ * @param {{ ap2_b1?: number, ap2_b2?: number, ap2_wiso?: number }} [currentScores]
+ * @returns {MepRecommendation[]}
  */
-export function calculateMepPossibilities(currentScores) {
+export function calculateMepPossibilities({ ap2_b1 = 0, ap2_b2 = 0, ap2_wiso = 0 } = {}) {
   const possibleAreas = [
-    { key: 'ap2_b1', name: 'AP2 Bereich 1 (Planen & Konzipieren)', written: currentScores.ap2_b1 },
-    { key: 'ap2_b2', name: 'AP2 Bereich 2 (Fachaufgabe)', written: currentScores.ap2_b2 },
-    { key: 'ap2_wiso', name: 'AP2 Bereich 3 (WiSo)', written: currentScores.ap2_wiso }
+    { key: 'ap2_b1', name: 'AP2 Bereich 1 (Planen & Konzipieren)', written: ap2_b1 },
+    { key: 'ap2_b2', name: 'AP2 Bereich 2 (Fachaufgabe)', written: ap2_b2 },
+    { key: 'ap2_wiso', name: 'AP2 Bereich 3 (WiSo)', written: ap2_wiso }
   ];
 
+  /** @type {MepRecommendation[]} */
   const recommendations = [];
 
   possibleAreas.forEach(area => {

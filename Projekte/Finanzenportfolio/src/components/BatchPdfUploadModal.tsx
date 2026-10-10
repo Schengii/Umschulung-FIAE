@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { parseBrokerPdf, type ParsedTransaction } from './PdfParser';
+import { detectBrokerFromText } from '../utils/pdfImportUtils';
 import type { AssetMappingRule, Transaction } from '../types';
-import { Upload, X, CheckCircle, AlertCircle, FileText, Trash2 } from 'lucide-react';
+import { Upload, X, CheckCircle, AlertCircle, FileText, Trash2, Landmark } from 'lucide-react';
 
 interface BatchPdfUploadModalProps {
   isOpen: boolean;
@@ -16,21 +17,24 @@ export const BatchPdfUploadModal: React.FC<BatchPdfUploadModalProps> = ({
   onImportBatch,
   mappingRules
 }) => {
-  const [parsedList, setParsedList] = useState<{ file: File; tx: ParsedTransaction; status: 'ok' | 'error' }[]>([]);
+  const [parsedList, setParsedList] = useState<{ file: File; tx: ParsedTransaction; status: 'ok' | 'error'; detectedBroker: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
   const handleFilesChosen = async (files: FileList | File[]) => {
     setLoading(true);
-    const newItems: { file: File; tx: ParsedTransaction; status: 'ok' | 'error' }[] = [];
+    const newItems: { file: File; tx: ParsedTransaction; status: 'ok' | 'error'; detectedBroker: string }[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
         try {
           const parsed = await parseBrokerPdf(file, mappingRules);
-          newItems.push({ file, tx: parsed, status: 'ok' });
+          const detectedBroker = detectBrokerFromText(file.name) !== 'Sonstiger Broker' 
+            ? detectBrokerFromText(file.name) 
+            : 'Trade Republic';
+          newItems.push({ file, tx: parsed, status: 'ok', detectedBroker });
         } catch (e) {
           console.error(e);
           newItems.push({
@@ -46,7 +50,8 @@ export const BatchPdfUploadModal: React.FC<BatchPdfUploadModalProps> = ({
               tax: 0,
               category: 'Stock'
             },
-            status: 'error'
+            status: 'error',
+            detectedBroker: 'Unbekannt'
           });
         }
       }
@@ -74,8 +79,10 @@ export const BatchPdfUploadModal: React.FC<BatchPdfUploadModalProps> = ({
         fee: item.tx.fee,
         tax: item.tx.tax,
         category: item.tx.category,
+        broker: item.detectedBroker,
         currency: 'EUR',
-        exchangeRate: 1.0
+        exchangeRate: 1.0,
+        notes: `Importiert aus ${item.detectedBroker} PDF-Beleg (${item.file.name})`
       }));
 
     if (validTxs.length > 0) {
@@ -147,6 +154,7 @@ export const BatchPdfUploadModal: React.FC<BatchPdfUploadModalProps> = ({
                   <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
                     <tr>
                       <th className="p-3">Status</th>
+                      <th className="p-3">Broker</th>
                       <th className="p-3">Typ</th>
                       <th className="p-3">Datum</th>
                       <th className="p-3">Asset / Ticker</th>
@@ -168,6 +176,11 @@ export const BatchPdfUploadModal: React.FC<BatchPdfUploadModalProps> = ({
                               <AlertCircle className="w-3 h-3" /> Fehler
                             </span>
                           )}
+                        </td>
+                        <td className="p-3">
+                          <span className="inline-flex items-center gap-1 bg-slate-800/80 text-blue-300 px-2 py-0.5 rounded text-[11px] font-medium border border-slate-700">
+                            <Landmark size={11} /> {item.detectedBroker}
+                          </span>
                         </td>
                         <td className="p-3 font-semibold">{item.tx.type}</td>
                         <td className="p-3 text-slate-400">{item.tx.date}</td>

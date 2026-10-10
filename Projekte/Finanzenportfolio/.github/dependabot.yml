@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # Minor-/Patch-Updates werden zu einem wöchentlichen PR gebündelt;
+  # Major-Updates bleiben einzeln, damit sie bewusst geprüft werden.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns:
+          - "*"

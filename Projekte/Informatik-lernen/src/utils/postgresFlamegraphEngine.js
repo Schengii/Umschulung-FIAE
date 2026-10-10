@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL EXPLAIN ANALYZE & Buffer Cache FlameGraph Engine
  * Parses query execution plans, calculates execution time hierarchies (FlameGraph spans),
@@ -45,7 +46,7 @@ export class PostgresFlamegraphSimulator {
     let totalRead = 0;
     let totalTime = plan.executionTimeMs;
 
-    const traverse = (node) => {
+    const traverse = (/** @type {any} */ node) => {
       totalHit += node.sharedHitBlocks || 0;
       totalRead += node.sharedReadBlocks || 0;
       if (node.children) {

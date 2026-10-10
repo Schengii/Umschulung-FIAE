@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://informatik-lernen.vercel.app/sitemap.xml

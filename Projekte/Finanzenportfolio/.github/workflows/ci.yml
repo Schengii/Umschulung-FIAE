@@ -1,0 +1,41 @@
+name: CI
+
+# Prüft Pull Requests (u. a. von Dependabot) auf main: Typprüfung, Tests und Build.
+# Das Deployment auf GitHub Pages bleibt in deploy.yml (nur bei Push auf main).
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, Tests & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Typprüfung
+        run: npm run lint
+
+      - name: Tests (Vitest)
+        run: npm test
+
+      - name: Build
+        run: npm run build

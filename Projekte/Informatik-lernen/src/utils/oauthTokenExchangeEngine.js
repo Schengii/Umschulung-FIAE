@@ -1,16 +1,53 @@
+// @ts-check
 /**
  * OAuth 2.0 Token Exchange (RFC 8693) & Token Delegation Engine
  * Simulates STS (Security Token Service) token exchange, Impersonation vs. Delegation (`act` claim),
  * and generates RFC 8693 compliant POST requests and issued downstream JWTs.
  */
 
+/**
+ * @typedef {'DELEGATION' | 'IMPERSONATION'} ExchangeMode
+ *
+ * @typedef {object} TokenExchangeRequestPayload
+ * @property {string} grant_type
+ * @property {string} audience
+ * @property {string} subject_token
+ * @property {string} subject_token_type
+ * @property {string | undefined} actor_token
+ * @property {string | undefined} actor_token_type
+ * @property {string} requested_token_type
+ *
+ * @typedef {object} IssuedJwtClaims
+ * @property {string} iss
+ * @property {string} sub
+ * @property {string} aud
+ * @property {number} exp
+ * @property {number} iat
+ * @property {string} scope
+ * @property {{ sub: string }} [act]
+ *
+ * @typedef {object} TokenExchangeResult
+ * @property {ExchangeMode} exchangeMode
+ * @property {TokenExchangeRequestPayload} requestPayload
+ * @property {IssuedJwtClaims} issuedJwtClaims
+ * @property {{ alg: string, typ: string, kid: string }} issuedJwtHeader
+ * @property {boolean} isCompliant
+ * @property {string} description
+ */
+
 export class OAuthTokenExchangeSimulator {
   constructor() {
     this.tokenEndpoint = 'https://auth.company.internal/oauth/token';
     this.audience = 'https://payment-service.internal/api';
-    this.exchangeMode = 'DELEGATION'; // 'DELEGATION' | 'IMPERSONATION'
+    /** @type {ExchangeMode} */
+    this.exchangeMode = 'DELEGATION';
   }
 
+  /**
+   * @param {string} [subjectUser]
+   * @param {string} [intermediaryService]
+   * @returns {TokenExchangeResult}
+   */
   performExchange(subjectUser = 'alice_dev', intermediaryService = 'gateway_service') {
     const isDelegation = this.exchangeMode === 'DELEGATION';
 
@@ -26,6 +63,7 @@ export class OAuthTokenExchangeSimulator {
     };
 
     // Downstream JWT Claims
+    /** @type {IssuedJwtClaims} */
     const issuedJwtClaims = {
       iss: 'https://auth.company.internal',
       sub: subjectUser,

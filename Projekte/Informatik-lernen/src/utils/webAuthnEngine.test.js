@@ -83,4 +83,12 @@ describe('webAuthnEngine', () => {
     expect(authRes.success).toBe(false);
     expect(authRes.error).toContain('Keine physische Benutzer-Anwesenheit');
   });
+
+  it('prüft Verfügbarkeit der nativen WebAuthn Hardware-Erkennung', async () => {
+    const { isWebAuthnSupported, testRealWebAuthnHardware } = await import('./webAuthnEngine');
+    expect(typeof isWebAuthnSupported()).toBe('boolean');
+    const hardwareRes = await testRealWebAuthnHardware();
+    expect(hardwareRes).toBeDefined();
+  });
 });
+

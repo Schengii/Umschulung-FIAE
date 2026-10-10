@@ -34,6 +34,8 @@ export function parseUniversalCsv(csvText: string): UniversalCsvImportResult {
     return parseParqetCsv(lines);
   } else if (header.includes('trade republic') || header.includes('is_tax') || header.includes('cash_flow')) {
     return parseTradeRepublicCsv(lines);
+  } else if (header.includes('ghostfolio') || (header.includes('symbol') && header.includes('unitprice')) || (header.includes('account') && header.includes('fee') && header.includes('unitprice'))) {
+    return parseGhostfolioCsv(lines);
   }
 
   return parseFlexibleCsv(lines);
@@ -57,7 +59,42 @@ function parseJsonImport(json: any): UniversalCsvImportResult {
     };
   }
 
-  // Case B: Parqet JSON export or single portfolio object
+  // Case B: Ghostfolio JSON format (has symbolProfile or activities with dataSource/symbol)
+  if (Array.isArray(json.activities) && json.activities.some((a: any) => a.symbolProfile || a.dataSource || a.unitPrice !== undefined)) {
+    json.activities.forEach((item: any, idx: number) => {
+      try {
+        const typeStr = (item.type || 'BUY').toUpperCase();
+        let type: Transaction['type'] = 'BUY';
+        if (typeStr.includes('SELL')) type = 'SELL';
+        else if (typeStr.includes('DIVIDEND')) type = 'DIVIDEND';
+        else if (typeStr.includes('FEE')) type = 'FEE';
+
+        transactions.push({
+          id: `ghostfolio-json-${Date.now()}-${idx}`,
+          type,
+          date: item.date ? (item.date.includes('-') ? item.date.split('T')[0].split('-').reverse().join('.') : item.date) : new Date().toLocaleDateString('de-DE'),
+          ticker: item.symbol || item.ticker || 'GF_ASSET',
+          name: item.symbolProfile?.name || item.name || item.symbol || 'Ghostfolio Asset',
+          amount: Math.abs(Number(item.quantity || 1)),
+          price: Math.abs(Number(item.unitPrice || 0)),
+          fee: Number(item.fee || 0),
+          tax: 0,
+          category: (item.symbolProfile?.assetClass === 'CRYPTO' || item.symbol?.includes('BTC')) ? 'Crypto' : (item.symbolProfile?.assetSubClass === 'ETF' ? 'ETF' : 'Stock'),
+          currency: item.currency || 'EUR'
+        });
+      } catch {
+        failedCount++;
+      }
+    });
+
+    return {
+      detectedFormat: 'Ghostfolio JSON Export',
+      transactions,
+      failedCount
+    };
+  }
+
+  // Case C: Parqet JSON export or single portfolio object
   const rawList = json.activities || json.transactions || (Array.isArray(json.holdings) ? json.holdings : []);
   if (Array.isArray(rawList)) {
     rawList.forEach((item: any, idx: number) => {
@@ -277,6 +314,53 @@ function parseFlexibleCsv(lines: string[], formatName = 'Generisches CSV'): Univ
 
   return {
     detectedFormat: formatName,
+    transactions,
+    failedCount
+  };
+}
+
+function parseGhostfolioCsv(lines: string[]): UniversalCsvImportResult {
+  const transactions: Transaction[] = [];
+  let failedCount = 0;
+
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCsvLine(lines[i]);
+    if (cols.length < 5) continue;
+
+    try {
+      const date = cols[0] || new Date().toLocaleDateString('de-DE');
+      const typeStr = (cols[1] || 'BUY').toUpperCase();
+      let type: Transaction['type'] = 'BUY';
+      if (typeStr.includes('SELL')) type = 'SELL';
+      else if (typeStr.includes('DIVIDEND')) type = 'DIVIDEND';
+      else if (typeStr.includes('FEE')) type = 'FEE';
+
+      const ticker = cols[2] || 'GF_ASSET';
+      const amount = Math.abs(parseFloat((cols[3] || '1').replace(',', '.')));
+      const price = Math.abs(parseFloat((cols[4] || '0').replace(',', '.')));
+      const currency = cols[5] || 'EUR';
+      const fee = cols[6] ? Math.abs(parseFloat(cols[6].replace(',', '.'))) : 0;
+
+      transactions.push({
+        id: `ghostfolio-csv-${Date.now()}-${i}`,
+        type,
+        date: date.includes('-') ? date.split('-').reverse().join('.') : date,
+        ticker,
+        name: ticker,
+        amount: isNaN(amount) ? 1 : amount,
+        price: isNaN(price) ? 0 : price,
+        fee: isNaN(fee) ? 0 : fee,
+        tax: 0,
+        category: ticker.includes('BTC') || ticker.includes('ETH') ? 'Crypto' : 'Stock',
+        currency: ['EUR', 'USD', 'CHF', 'GBP'].includes(currency) ? (currency as any) : 'EUR'
+      });
+    } catch {
+      failedCount++;
+    }
+  }
+
+  return {
+    detectedFormat: 'Ghostfolio CSV Export',
     transactions,
     failedCount
   };

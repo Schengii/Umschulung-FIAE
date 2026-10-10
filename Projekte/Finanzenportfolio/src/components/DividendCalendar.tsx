@@ -4,8 +4,8 @@ import { ArrowLeft, ArrowRight, TrendingUp, DollarSign, Clock, Calendar, BarChar
 import { convertCurrency } from './performanceUtils';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 
-import { downloadIcalCalendar } from '../services/icalExporter';
 import { CalendarExportModal } from './CalendarExportModal';
+import { calculateDividendCagrPerAsset } from '../utils/dividendCagrUtils';
 
 interface DividendCalendarProps {
   transactions: Transaction[];
@@ -20,8 +20,12 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
 }) => {
   const [selectedYear, setSelectedYear] = useState(2026);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // 0-indexed
-  const [viewMode, setViewMode] = useState<'history' | 'forecast'>('history');
+  const [viewMode, setViewMode] = useState<'history' | 'forecast' | 'growth'>('history');
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const cagrStats = useMemo(() => {
+    return calculateDividendCagrPerAsset(transactions);
+  }, [transactions]);
 
   const monthsList = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -212,6 +216,13 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
             >
               <BarChart3 size={14} /> 12M Prognose
             </button>
+            <button 
+              className={`nav-tab ${viewMode === 'growth' ? 'active' : ''}`}
+              onClick={() => setViewMode('growth')}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+            >
+              <TrendingUp size={14} /> CAGR Wachstum
+            </button>
           </div>
         </div>
       </div>
@@ -316,7 +327,7 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
             </table>
           </div>
         </>
-      ) : (
+      ) : viewMode === 'forecast' ? (
         <>
           {/* Dividend Forecast view */}
           <div className="sav-sim-stats-grid mb-6" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
@@ -389,6 +400,73 @@ export const DividendCalendar: React.FC<DividendCalendarProps> = ({
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="hl-header-row mb-4">
+            <div>
+              <span className="fw-600 text-white fs-md">Dividenden-Wachstumsanalyse (CAGR)</span>
+              <p className="text-muted-bg text-xs mt-1">Historische jährliche Wachstumsraten deiner Dividenden-Zahler über 1, 3 und 5 Jahre.</p>
+            </div>
+          </div>
+
+          <div className="table-container">
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th>Asset / Ticker</th>
+                  <th>Aktive Zahler-Jahre</th>
+                  <th style={{ textAlign: 'right' }}>Erhalten Gesamt</th>
+                  <th style={{ textAlign: 'right' }}>1-Jahres CAGR</th>
+                  <th style={{ textAlign: 'right' }}>3-Jahres CAGR</th>
+                  <th style={{ textAlign: 'right' }}>5-Jahres CAGR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cagrStats.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                      Noch keine Dividenden-Historie zur CAGR-Berechnung vorhanden.
+                    </td>
+                  </tr>
+                ) : (
+                  cagrStats.map((item) => (
+                    <tr key={item.ticker}>
+                      <td>
+                        <div className="fw-600 text-white">{item.name}</div>
+                        <span className="font-mono text-xs text-muted-bg">{item.ticker}</span>
+                      </td>
+                      <td className="text-muted-bg">{item.yearsCount} Jahre</td>
+                      <td style={{ textAlign: 'right', fontWeight: 600, color: 'var(--accent-emerald)' }}>
+                        {formatVal(item.totalDividendsPaidEur)}
+                      </td>
+                      <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                        {item.cagr1Year !== null ? (
+                          <span style={{ color: item.cagr1Year >= 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
+                            {item.cagr1Year >= 0 ? '+' : ''}{(item.cagr1Year * 100).toFixed(1)}%
+                          </span>
+                        ) : '—'}
+                      </td>
+                      <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                        {item.cagr3Year !== null ? (
+                          <span style={{ color: item.cagr3Year >= 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
+                            {item.cagr3Year >= 0 ? '+' : ''}{(item.cagr3Year * 100).toFixed(1)}%
+                          </span>
+                        ) : '—'}
+                      </td>
+                      <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                        {item.cagr5Year !== null ? (
+                          <span style={{ color: item.cagr5Year >= 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
+                            {item.cagr5Year >= 0 ? '+' : ''}{(item.cagr5Year * 100).toFixed(1)}%
+                          </span>
+                        ) : '—'}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

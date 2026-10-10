@@ -1,7 +1,9 @@
+// @ts-check
 /**
  * Coding Challenges Engine
  * In-browser test runner for LeetCode/Exercism style code challenges.
  */
+import { runTestCasesInSandbox } from './sandboxRunner';
 
 export const CODING_CHALLENGES = [
   {
@@ -92,63 +94,20 @@ export const CODING_CHALLENGES = [
   }
 ];
 
-export function runChallengeCode(codeString, challengeId) {
+const CHALLENGE_FUNCTION_NAMES = ['isPalindrome', 'twoSum', 'fizzBuzz', 'search'];
+
+/**
+ * Führt den Nutzercode gegen die Testfälle der Challenge aus - in einem
+ * Web Worker mit Zeitlimit (siehe sandboxRunner.js), nicht im Haupt-Thread.
+ * @param {string} codeString
+ * @param {string} challengeId
+ * @param {import('./sandboxRunner').SandboxOptions} [sandboxOptions]
+ */
+export async function runChallengeCode(codeString, challengeId, sandboxOptions = {}) {
   const challenge = CODING_CHALLENGES.find(c => c.id === challengeId);
   if (!challenge) {
     return { success: false, error: 'Challenge nicht gefunden' };
   }
 
-  try {
-    // Sicherer Function-Constructor
-    const userFunction = new Function(`${codeString}; 
-      if (typeof isPalindrome === 'function') return isPalindrome;
-      if (typeof twoSum === 'function') return twoSum;
-      if (typeof fizzBuzz === 'function') return fizzBuzz;
-      if (typeof search === 'function') return search;
-      throw new Error('Keine gültige Hauptfunktion gefunden.');
-    `)();
-
-    const testResults = [];
-    let allPassed = true;
-
-    for (let i = 0; i < challenge.testCases.length; i++) {
-      const tc = challenge.testCases[i];
-      const startTime = performance.now();
-      let actualOutput;
-      let error = null;
-
-      try {
-        actualOutput = userFunction(...JSON.parse(JSON.stringify(tc.input)));
-      } catch (err) {
-        error = err.message || String(err);
-        allPassed = false;
-      }
-
-      const elapsedMs = Number((performance.now() - startTime).toFixed(2));
-      const passed = error === null && JSON.stringify(actualOutput) === JSON.stringify(tc.expected);
-      if (!passed) allPassed = false;
-
-      testResults.push({
-        testCaseIndex: i + 1,
-        input: tc.input,
-        expected: tc.expected,
-        actual: actualOutput,
-        passed,
-        elapsedMs,
-        error
-      });
-    }
-
-    return {
-      success: true,
-      allPassed,
-      testResults
-    };
-  } catch (compileErr) {
-    return {
-      success: false,
-      error: compileErr.message || String(compileErr),
-      testResults: []
-    };
-  }
+  return runTestCasesInSandbox(codeString, CHALLENGE_FUNCTION_NAMES, challenge.testCases, sandboxOptions);
 }

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { 
-  GitCommit, Award, Copy, Plus, Trash2 
+  GitCommit, Award, Copy, Plus, Trash2, CheckCircle, RefreshCw, PenTool
 } from 'lucide-react';
 import { 
   calculateCpmNetwork, 
@@ -11,10 +11,16 @@ import { useStore } from '../../store/useStore';
 
 export default function CpmNetworkLab({ onRewardXP }) {
   const { awardXP } = useStore();
+  const [activeMode, setActiveMode] = useState('interactive'); // 'interactive' | 'drill'
   const [nodes, setNodes] = useState(DEFAULT_CPM_PROJECT);
   const [activeTemplate, setActiveTemplate] = useState('custom');
   const [copied, setCopied] = useState(false);
   const [xpClaimed, setXpClaimed] = useState(false);
+
+  // Drill Trainer State: User gibt FAZ/FEZ/SAZ/SEZ/GP/FP für ausgewählte Tasks ein
+  const [drillAnswers, setDrillAnswers] = useState({});
+  const [drillChecked, setDrillChecked] = useState(false);
+  const [drillScore, setDrillScore] = useState(0);
 
   // Neuer Task State
   const [newId, setNewId] = useState('');
@@ -138,27 +144,49 @@ export default function CpmNetworkLab({ onRewardXP }) {
           </div>
         </div>
 
-        {/* Templates Bar */}
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)' }}>Prüfungsszenarien:</span>
-          <button
-            className={`btn ${activeTemplate === 'software_project' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
-            onClick={() => handleLoadTemplate('software_project')}
-          >
-            💻 FIAE: Software-Projekt (80h)
-          </button>
-          <button
-            className={`btn ${activeTemplate === 'datacenter_migration' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
-            onClick={() => handleLoadTemplate('datacenter_migration')}
-          >
-            🏢 FISI: RZ-Migration (40h)
-          </button>
-          <button
-            className={`btn ${activeTemplate === 'custom' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
-            onClick={() => { setNodes(DEFAULT_CPM_PROJECT); setActiveTemplate('custom'); }}
-          >
-            🔄 Standard-Netzplan
-          </button>
+        {/* Mode Selector & Templates Bar */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className={`btn ${activeMode === 'interactive' ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+              onClick={() => setActiveMode('interactive')}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <GitCommit size={15} /> Netzplan-Visualizer & Rechner
+            </button>
+            <button
+              className={`btn ${activeMode === 'drill' ? 'btn-primary' : 'btn-secondary'} btn-sm`}
+              onClick={() => {
+                setActiveMode('drill');
+                setDrillChecked(false);
+              }}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <PenTool size={15} /> IHK Prüfungs-Drill (Selbst ausfüllen)
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)' }}>Szenario:</span>
+            <button
+              className={`btn ${activeTemplate === 'software_project' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
+              onClick={() => handleLoadTemplate('software_project')}
+            >
+              💻 FIAE (80h)
+            </button>
+            <button
+              className={`btn ${activeTemplate === 'datacenter_migration' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
+              onClick={() => handleLoadTemplate('datacenter_migration')}
+            >
+              🏢 FISI (40h)
+            </button>
+            <button
+              className={`btn ${activeTemplate === 'custom' ? 'btn-primary' : 'btn-ghost'} btn-sm`}
+              onClick={() => { setNodes(DEFAULT_CPM_PROJECT); setActiveTemplate('custom'); }}
+            >
+              🔄 Standard
+            </button>
+          </div>
         </div>
       </div>
 
@@ -189,22 +217,23 @@ export default function CpmNetworkLab({ onRewardXP }) {
         </div>
       </div>
 
-      {/* Interactive CPM Node Grid (DIN 69900 6-Field Nodes) */}
-      <div 
-        className="glass-panel"
-        style={{
-          padding: '24px',
-          borderRadius: 'var(--radius-xl)',
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border-color)'
-        }}
-      >
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <GitCommit size={20} color="var(--accent-primary)" />
-          Vorgangsknoten nach DIN 69900 (Metra-Potenzial-Methode)
-        </h2>
+      {/* MODE 1: INTERACTIVE CALCULATOR & NODE GRID */}
+      {activeMode === 'interactive' && (
+        <div 
+          className="glass-panel"
+          style={{
+            padding: '24px',
+            borderRadius: 'var(--radius-xl)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)'
+          }}
+        >
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <GitCommit size={20} color="var(--accent-primary)" />
+            Vorgangsknoten nach DIN 69900 (Metra-Potenzial-Methode)
+          </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '18px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '18px' }}>
           {cpmData.nodes.map((node) => (
             <div
               key={node.id}
@@ -294,6 +323,154 @@ export default function CpmNetworkLab({ onRewardXP }) {
           ))}
         </div>
       </div>
+      )}
+
+      {/* MODE 2: IHK PRÜFUNGS-DRILL (SELBST AUSFÜLLEN & TESTEN) */}
+      {activeMode === 'drill' && (
+        <div 
+          className="glass-panel"
+          style={{
+            padding: '24px',
+            borderRadius: 'var(--radius-xl)',
+            background: 'var(--bg-card)',
+            border: '2px solid var(--accent-primary)'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <PenTool size={20} color="var(--accent-primary)" />
+                IHK Netzplan Prüfungs-Drill
+              </h2>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                Berechne für die Vorgänge FAZ, FEZ, SAZ, SEZ und Pufferzeiten selbst und trage sie in die Felder ein.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => {
+                  setDrillAnswers({});
+                  setDrillChecked(false);
+                }}
+              >
+                <RefreshCw size={14} /> Zurücksetzen
+              </button>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => {
+                  let correctCount = 0;
+                  let totalCount = 0;
+                  cpmData.nodes.forEach((n) => {
+                    const ans = drillAnswers[n.id] || {};
+                    ['faz', 'fez', 'saz', 'sez', 'gp', 'fp'].forEach((field) => {
+                      totalCount++;
+                      if (Number(ans[field]) === n[field]) correctCount++;
+                    });
+                  });
+                  setDrillScore({ correct: correctCount, total: totalCount });
+                  setDrillChecked(true);
+                  if (correctCount === totalCount && !xpClaimed) {
+                    handleClaimXP();
+                  }
+                }}
+              >
+                <CheckCircle size={14} /> Eingaben prüfen
+              </button>
+            </div>
+          </div>
+
+          {drillChecked && (
+            <div style={{
+              padding: '12px 16px',
+              borderRadius: '8px',
+              marginBottom: '16px',
+              background: drillScore.correct === drillScore.total ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+              border: `1px solid ${drillScore.correct === drillScore.total ? '#10b981' : '#ef4444'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ fontWeight: 700 }}>
+                Ergebnis: {drillScore.correct} von {drillScore.total} Werten korrekt ({Math.round((drillScore.correct / drillScore.total) * 100)}%)
+              </span>
+              {drillScore.correct === drillScore.total && (
+                <span className="badge badge-green">Perfekt! +50 XP</span>
+              )}
+            </div>
+          )}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+            {cpmData.nodes.map((node) => {
+              const ans = drillAnswers[node.id] || {};
+              const isFieldCorrect = (field) => drillChecked && Number(ans[field]) === node[field];
+              const isFieldWrong = (field) => drillChecked && ans[field] !== undefined && ans[field] !== '' && Number(ans[field]) !== node[field];
+
+              return (
+                <div
+                  key={node.id}
+                  style={{
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color)',
+                    padding: '12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 800, color: 'var(--accent-primary)' }}>[{node.id}] {node.name}</span>
+                    <span className="badge badge-amber" style={{ fontSize: '0.72rem' }}>Dauer: {node.duration}</span>
+                  </div>
+                  {node.predecessors.length > 0 && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      Vorgänger: {node.predecessors.join(', ')}
+                    </div>
+                  )}
+
+                  {/* Input Matrix: FAZ, FEZ, SAZ, SEZ, GP, FP */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px', marginTop: '6px' }}>
+                    {['faz', 'fez', 'saz', 'sez', 'gp', 'fp'].map((field) => (
+                      <div key={field}>
+                        <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                          {field} {drillChecked && (isFieldCorrect(field) ? '✓' : `(${node[field]})`)}
+                        </label>
+                        <input
+                          type="number"
+                          value={ans[field] ?? ''}
+                          placeholder={field.toUpperCase()}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setDrillAnswers((prev) => ({
+                              ...prev,
+                              [node.id]: {
+                                ...(prev[node.id] || {}),
+                                [field]: val === '' ? '' : Number(val)
+                              }
+                            }));
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '4px 6px',
+                            borderRadius: '4px',
+                            border: `1px solid ${isFieldCorrect(field) ? '#10b981' : isFieldWrong(field) ? '#ef4444' : 'var(--border-color)'}`,
+                            background: isFieldCorrect(field) ? 'rgba(16, 185, 129, 0.1)' : isFieldWrong(field) ? 'rgba(239, 68, 68, 0.1)' : 'var(--bg-card)',
+                            color: 'var(--text-main)',
+                            fontSize: '0.85rem',
+                            fontWeight: 700
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Task Creator Form */}
       <div 

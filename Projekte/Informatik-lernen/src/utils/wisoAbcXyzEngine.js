@@ -1,9 +1,36 @@
+// @ts-check
 /**
  * IHK WISO ABC & XYZ Materialanalyse Engine
  * Calculates cumulative value distribution (Lorenz Curve A <= 80%, B <= 95%, C > 95%),
  * consumption predictability (X <= 20%, Y 20-50%, Z > 50%), and 3x3 procurement matrix strategies.
  */
 
+/**
+ * @typedef {object} AbcXyzItem
+ * @property {number} id
+ * @property {string} name
+ * @property {number} menge
+ * @property {number} preis
+ * @property {number} schwankungPercent
+ *
+ * @typedef {AbcXyzItem & {
+ *   gesamtwert: number,
+ *   kumulierterAnteilPercent: number,
+ *   abcClass: 'A' | 'B' | 'C',
+ *   xyzClass: 'X' | 'Y' | 'Z',
+ *   matrixCode: string,
+ *   strategie: string
+ * }} AbcXyzAnalyzedItem
+ *
+ * @typedef {object} AbcXyzMatrixResult
+ * @property {number} summeGesamtwert
+ * @property {AbcXyzAnalyzedItem[]} analyzedItems
+ */
+
+/**
+ * @param {AbcXyzItem[]} [items]
+ * @returns {AbcXyzMatrixResult}
+ */
 export function calculateAbcXyzMatrix(items = [
   { id: 1, name: 'Server CPUs (Intel Xeon)', menge: 150, preis: 800, schwankungPercent: 12 },
   { id: 2, name: 'DDR5 ECC RAM Riegel', menge: 800, preis: 120, schwankungPercent: 18 },
@@ -26,10 +53,12 @@ export function calculateAbcXyzMatrix(items = [
     kumulierterWert += it.gesamtwert;
     const kumulierterAnteilPercent = summeGesamtwert > 0 ? (kumulierterWert / summeGesamtwert) * 100 : 0;
 
+    /** @type {'A' | 'B' | 'C'} */
     let abcClass = 'C';
     if (kumulierterAnteilPercent <= 80) abcClass = 'A';
     else if (kumulierterAnteilPercent <= 95) abcClass = 'B';
 
+    /** @type {'X' | 'Y' | 'Z'} */
     let xyzClass = 'Z';
     if (it.schwankungPercent <= 20) xyzClass = 'X';
     else if (it.schwankungPercent <= 50) xyzClass = 'Y';

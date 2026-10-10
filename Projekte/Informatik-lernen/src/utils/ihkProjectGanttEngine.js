@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * IHK Abschlussprüfung Teil 2 (AP2) Projekt-Gantt & Meilenstein Engine
  * Ermöglicht die vorschriftsmäßige Zeit- und Phasenplanung für IT-Ausbildungsberufe:
@@ -6,6 +7,42 @@
  * - IT-Systemelektroniker / Daten- und Prozessanalyse (40h / 80h)
  */
 
+/**
+ * @typedef {object} GanttPhase
+ * @property {string} id
+ * @property {string} name
+ * @property {number} hours
+ * @property {string} [description]
+ * @property {string[]} [milestones]
+ *
+ * @typedef {object} IhkProfile
+ * @property {string} id
+ * @property {string} name
+ * @property {number} targetHours
+ * @property {number} maxImplementationPct
+ * @property {number} minDocumentationPct
+ * @property {GanttPhase[]} defaultPhases
+ *
+ * @typedef {object} GanttValidationResult
+ * @property {boolean} isValid
+ * @property {number} totalHours
+ * @property {number} targetHours
+ * @property {number} diffHours
+ * @property {string[]} errors
+ * @property {string[]} warnings
+ * @property {string[]} advice
+ *
+ * @typedef {object} GanttTimelineEntry
+ * @property {string} id
+ * @property {string} name
+ * @property {number} hours
+ * @property {string} startDate
+ * @property {string} endDate
+ * @property {number} durationDays
+ * @property {string[]} milestones
+ */
+
+/** @type {Record<string, IhkProfile>} */
 export const IHK_PROFILES = {
   FIAE: {
     id: 'FIAE',
@@ -99,13 +136,20 @@ export const IHK_PROFILES = {
 
 /**
  * Validiert die Stunden und Einhaltung der typischen IHK-Richtlinien
+ * @param {GanttPhase[]} phases
+ * @param {string} [profileId]
+ * @param {number | null} [customTarget]
+ * @returns {GanttValidationResult}
  */
 export function validateIhkProjectPlan(phases, profileId = 'FIAE', customTarget = null) {
   const profile = IHK_PROFILES[profileId] || IHK_PROFILES.FIAE;
   const target = customTarget !== null ? customTarget : profile.targetHours;
 
+  /** @type {string[]} */
   const errors = [];
+  /** @type {string[]} */
   const warnings = [];
+  /** @type {string[]} */
   const advice = [];
 
   const totalHours = phases.reduce((acc, p) => acc + (Number(p.hours) || 0), 0);
@@ -167,15 +211,20 @@ export function validateIhkProjectPlan(phases, profileId = 'FIAE', customTarget 
 
 /**
  * Berechnet einen simulierten Kalender-Zeitstrahl (Startdatum -> Enddatum ohne Wochenenden)
+ * @param {GanttPhase[]} phases
+ * @param {string} [startDateStr]
+ * @param {number} [workHoursPerDay]
+ * @returns {GanttTimelineEntry[]}
  */
 export function calculateGanttTimeline(phases, startDateStr = '2026-04-01', workHoursPerDay = 8) {
   let currentDate = new Date(startDateStr);
-  
+
   // Wenn Startdatum auf Wochenende fällt, auf Montag vorrücken
   while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
+  /** @type {GanttTimelineEntry[]} */
   const timeline = [];
 
   phases.forEach((phase) => {
@@ -216,6 +265,10 @@ export function calculateGanttTimeline(phases, startDateStr = '2026-04-01', work
 
 /**
  * Exportiert den Projektantrag / Zeitplan in Markdown
+ * @param {GanttPhase[]} phases
+ * @param {string} [profileId]
+ * @param {string} [projectName]
+ * @returns {string}
  */
 export function exportGanttToMarkdown(phases, profileId = 'FIAE', projectName = 'IHK-Abschlussprojekt') {
   const profile = IHK_PROFILES[profileId] || IHK_PROFILES.FIAE;

@@ -1,8 +1,12 @@
+// @ts-check
 /**
  * WebRTC Peer-to-Peer & DataChannel Engine
  * RFC 8829 (JavaScript Session Establishment - JSEP), RFC 8866 (SDP), RFC 8831 (WebRTC Data Channels)
  */
 
+/**
+ * @param {string} peerId @param {string} name
+ */
 export function createPeerInstance(peerId, name) {
   return {
     id: peerId,
@@ -24,6 +28,7 @@ export function createPeerInstance(peerId, name) {
 /**
  * Generate Mock SDP Offer (RFC 8866)
  */
+/** @param {string} _peerId */
 export function generateSdpOffer(_peerId) {
   const sessionId = Math.floor(Math.random() * 1000000000);
   const ufrag = Math.random().toString(36).substring(2, 6);
@@ -41,6 +46,7 @@ export function generateSdpOffer(_peerId) {
 /**
  * Generate Mock SDP Answer
  */
+/** @param {string} _peerId @param {string} _offerSdp */
 export function generateSdpAnswer(_peerId, _offerSdp) {
   const sessionId = Math.floor(Math.random() * 1000000000);
   const ufrag = Math.random().toString(36).substring(2, 6);
@@ -58,6 +64,7 @@ export function generateSdpAnswer(_peerId, _offerSdp) {
 /**
  * Generate ICE Candidates (Host, STUN Server Reflexive, TURN Relay)
  */
+/** @param {string} _peerName */
 export function generateIceCandidates(_peerName) {
   const port = Math.floor(Math.random() * 20000 + 40000);
   return [
@@ -93,6 +100,9 @@ export function generateIceCandidates(_peerName) {
 
 /**
  * Transmit DataChannel Packet with simulated Latency & Packet Loss
+ */
+/**
+ * @param {{ message: string, senderName: string, latencyMs?: number, dropRatePercent?: number }} param0
  */
 export function simulateDataChannelTransmit({
   message,

@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      lint-and-test:
+        patterns:
+          - "vitest*"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "oxlint*"
+          - "@playwright/*"
+      size-limit:
+        patterns:
+          - "size-limit"
+          - "@size-limit/*"
+      vendor:
+        patterns:
+          - "react*"
+          - "lucide-react"
+          - "framer-motion"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

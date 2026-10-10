@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux Virtual Bridge & VXLAN Overlay Engine
  * Simulates veth pairs, Linux Bridge (br0) forwarding database (FDB),

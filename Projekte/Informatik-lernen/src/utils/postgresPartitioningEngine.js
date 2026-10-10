@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL Declarative Partitioning Engine (Range, List, Hash)
  * Simulates table partitioning strategies, SQL DDL generation,

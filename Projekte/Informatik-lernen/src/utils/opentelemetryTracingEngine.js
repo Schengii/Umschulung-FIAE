@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * OpenTelemetry Distributed Tracing & W3C TraceContext Engine
  * Generates W3C traceparent and baggage headers, calculates span parent-child relationships,

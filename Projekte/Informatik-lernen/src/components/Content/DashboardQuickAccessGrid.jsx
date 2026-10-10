@@ -49,6 +49,15 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       badge: 'IHK Neu'
     },
     {
+      id: 'ihk_transfer_time_lab',
+      icon: '⚡',
+      title: 'IHK Übertragungszeit- & Bandbreiten-Simulator',
+      desc: 'Bit vs. Byte, KiB vs. kB, Brutto- vs. Netto-Datenrate & Protokoll-Overhead mit Rechenweg.',
+      actionText: 'Dauer Berechnen',
+      color: 'var(--accent-blue, #2563eb)',
+      badge: 'IHK Neu'
+    },
+    {
       id: 'uml_diagram',
       icon: '📐',
       title: 'UML Studio (Sequenz & Aktivität)',
@@ -210,7 +219,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
           Empfohlene Lernbereiche &amp; Flagship Studios
         </h2>
         <span className="badge badge-indigo" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Sparkles size={14} /> Neu aktualisiert v3.18
+          <Sparkles size={14} /> Neu aktualisiert v3.48.0
         </span>
       </div>
 

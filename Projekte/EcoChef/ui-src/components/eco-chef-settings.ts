@@ -18,6 +18,7 @@ export class EcoChefSettings extends LitElement {
     @property({ type: Number }) calorieGoal = 2000;
     @property({ type: Number }) proteinGoal = 80;
     @property({ type: String }) geminiApiKey = '';
+    @property({ type: Boolean }) geminiKeySessionOnly = true;
     @property({ type: String }) syncCode = '';
     @property({ type: String }) selectedAvatar = '🧑‍🍳';
     @property({ type: Object }) budgetSettings: { monthlyBudget: number; currentSpent: number; savedEuro: number } = { monthlyBudget: 250, currentSpent: 0, savedEuro: 0 };
@@ -135,8 +136,22 @@ export class EcoChefSettings extends LitElement {
 
     private _onGeminiApiKeyChange(e: Event) {
         const key = (e.target as HTMLInputElement).value || '';
+        this._emitApiKey(key, this.geminiKeySessionOnly);
+    }
+
+    private _onSessionOnlyChange(e: Event) {
+        this._emitApiKey(this.geminiApiKey, (e.target as HTMLInputElement).checked);
+    }
+
+    private _clearGeminiApiKey() {
+        const input = this.shadowRoot?.querySelector('#settings-api-key-input') as HTMLInputElement | null;
+        if (input) input.value = '';
+        this._emitApiKey('', this.geminiKeySessionOnly);
+    }
+
+    private _emitApiKey(key: string, sessionOnly: boolean) {
         this.dispatchEvent(new CustomEvent('change-gemini-api-key', {
-            detail: { key },
+            detail: { key, sessionOnly },
             bubbles: true,
             composed: true
         }));
@@ -419,16 +434,28 @@ export class EcoChefSettings extends LitElement {
                 <div class="settings-section">
                     <h4 class="settings-title">🔑 API-Schlüssel (Optional)</h4>
                     <p class="subtitle" style="margin-bottom: 16px;">
-                        Gib hier deinen eigenen Gemini API-Key ein, um die App eigenständig zu betreiben. Falls leer, wird der integrierte Entwicklerschlüssel verwendet.
+                        Gib hier deinen eigenen Gemini API-Key ein, um die App eigenständig zu betreiben. Falls leer, laufen die KI-Anfragen über den EcoChef-Server (ohne eigenen Schlüssel).
+                    </p>
+                    <p class="subtitle" style="margin-bottom: 12px; font-size: 13px;">
+                        🔒 Hinweis: Der Schlüssel wird unverschlüsselt in diesem Browser bzw. auf diesem Gerät gespeichert und direkt an Google gesendet. Nutze nur einen eigenen Key mit Nutzungslimit und gib ihn nie auf fremden Geräten ein.
                     </p>
                     <div style="display: flex; flex-direction: column; gap: 8px;">
                         <input type="password" 
                                id="settings-api-key-input" 
                                .value="${this.geminiApiKey}" 
                                @change="${this._onGeminiApiKeyChange}" 
-                               placeholder="Z.B. AIzaSy..." 
+                               placeholder="Z.B. AIzaSy..."
+                               autocomplete="off" spellcheck="false" 
                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-dark); box-sizing: border-box;"
                                aria-label="Gemini API Key" />
+                        <label style="display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-dark);">
+                            <input type="checkbox" .checked="${this.geminiKeySessionOnly}" @change="${this._onSessionOnlyChange}" />
+                            Nur für diese Sitzung speichern (empfohlen)
+                        </label>
+                        ${this.geminiApiKey ? html`
+                            <button class="secondary-btn" @click="${this._clearGeminiApiKey}" style="margin: 0;" aria-label="Gespeicherten API-Key entfernen">
+                                🗑️ Key entfernen
+                            </button>` : ''}
                     </div>
                 </div>
 
@@ -445,7 +472,7 @@ export class EcoChefSettings extends LitElement {
                         ${this.syncCode ? html`
                             <div style="background: var(--bg-color); padding: 12px; border-radius: 12px; text-align: center; border: 2px solid var(--primary); margin-top: 8px;">
                                 <span style="font-size: 13px; font-weight: 700; color: var(--text-muted);">Dein Sync-Schlüssel (24 Std. gültig):</span>
-                                <div style="font-size: 22px; font-weight: 900; color: var(--primary-dark); margin-top: 4px; letter-spacing: 2px;">${this.syncCode}</div>
+                                <div style="font-size: 18px; font-weight: 900; color: var(--primary-dark); margin-top: 4px; letter-spacing: 1px;">${this.syncCode}</div>
                             </div>
                         ` : ''}
                         
@@ -455,7 +482,7 @@ export class EcoChefSettings extends LitElement {
                         <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
                             <input type="text" 
                                    id="sync-code-input" 
-                                   placeholder="Z.B. A1B2C3" 
+                                   placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" autocapitalize="characters" spellcheck="false" 
                                    style="flex-grow: 1; margin-bottom: 0; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-dark);"
                                    aria-label="Sync Code eingeben" />
                             <button class="main-btn" @click="${this._applySyncCode}" style="margin: 0; padding: 10px 16px; width: auto; font-size: 13px; border-radius: 8px;">Verbinden</button>

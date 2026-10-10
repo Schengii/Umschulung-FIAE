@@ -1,17 +1,89 @@
+// @ts-check
 /**
  * OAuth 2.0 with PKCE & OpenID Connect (OIDC) Flow Engine
  * RFC 7636 (PKCE) & OIDC Core 1.0 Specification
  */
 
+/**
+ * @typedef {object} OidcUser
+ * @property {string} id
+ * @property {string} name
+ * @property {string} email
+ * @property {string[]} [roles]
+ *
+ * @typedef {object} AuthorizationUrlConfig
+ * @property {string} authEndpoint
+ * @property {string} clientId
+ * @property {string} redirectUri
+ * @property {string} [scope]
+ * @property {string} state
+ * @property {string} [nonce]
+ * @property {string} codeChallenge
+ * @property {'S256' | 'plain'} [codeChallengeMethod]
+ *
+ * @typedef {object} IssueTokensInput
+ * @property {string} clientId
+ * @property {string} scope
+ * @property {string} [nonce]
+ * @property {OidcUser} user
+ * @property {string} [issuer]
+ *
+ * @typedef {object} IssuedTokens
+ * @property {string} access_token
+ * @property {string} token_type
+ * @property {number} expires_in
+ * @property {string} refresh_token
+ * @property {string} id_token
+ * @property {string} scope
+ * @property {{ accessToken: object, idToken: object, header: object }} decoded
+ *
+ * @typedef {object} AuthSession
+ * @property {string} code
+ * @property {string} redirectUri
+ * @property {string} codeChallenge
+ * @property {'S256' | 'plain'} codeChallengeMethod
+ * @property {string} scope
+ * @property {string} [nonce]
+ * @property {OidcUser} user
+ *
+ * @typedef {object} ExchangeCodeInput
+ * @property {string} code
+ * @property {string} codeVerifier
+ * @property {AuthSession | null | undefined} authSession
+ * @property {string} clientId
+ * @property {string} redirectUri
+ *
+ * @typedef {object} ExchangeCodeFailure
+ * @property {false} success
+ * @property {string} error
+ * @property {string} error_description
+ *
+ * @typedef {object} ExchangeCodeSuccess
+ * @property {true} success
+ * @property {IssuedTokens} tokens
+ *
+ * @typedef {ExchangeCodeFailure | ExchangeCodeSuccess} ExchangeCodeResult
+ */
+
 // Simple SHA-256 for browser/node environments without async requirement for pure logic tests
+/**
+ * @param {string} ascii
+ * @returns {Uint8Array}
+ */
 export function sha256Sync(ascii) {
+  /**
+   * @param {number} value
+   * @param {number} amount
+   * @returns {number}
+   */
   function rightRotate(value, amount) {
     return (value >>> amount) | (value << (32 - amount));
   }
 
-  let lengthProperty = 'length';
+  const lengthProperty = 'length';
   let i, j;
 
+  /** @type {number[]} */
   const words = [];
   const asciiBitLength = ascii[lengthProperty] * 8;
 
@@ -77,6 +149,10 @@ export function sha256Sync(ascii) {
 }
 
 // Convert bytes to Base64URL
+/**
+ * @param {Uint8Array} uint8Array
+ * @returns {string}
+ */
 export function base64UrlEncode(uint8Array) {
   let binary = '';
   const len = uint8Array.byteLength;
@@ -91,6 +167,8 @@ export function base64UrlEncode(uint8Array) {
 
 /**
  * Generate random PKCE Code Verifier (RFC 7636: 43 - 128 unreserved chars)
+ * @param {number} [length]
+ * @returns {string}
  */
 export function generateCodeVerifier(length = 64) {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
@@ -104,6 +182,8 @@ export function generateCodeVerifier(length = 64) {
 /**
  * Calculate S256 Code Challenge
  * code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+ * @param {string} verifier
+ * @returns {string}
  */
 export function computeCodeChallengeS256(verifier) {
   const hashBytes = sha256Sync(verifier);
@@ -112,6 +192,10 @@ export function computeCodeChallengeS256(verifier) {
 
 /**
  * Verify PKCE Challenge on Token Request
+ * @param {string} codeVerifier
+ * @param {string} expectedChallenge
+ * @param {'S256' | 'plain'} [method]
+ * @returns {boolean}
  */
 export function verifyPkce(codeVerifier, expectedChallenge, method = 'S256') {
   if (method === 'plain') {
@@ -126,6 +210,8 @@ export function verifyPkce(codeVerifier, expectedChallenge, method = 'S256') {
 
 /**
  * Build Authorization URL with PKCE & OIDC Parameters
+ * @param {AuthorizationUrlConfig} config
+ * @returns {string}
  */
 export function buildAuthorizationUrl(config) {
   const {
@@ -158,6 +244,8 @@ export function buildAuthorizationUrl(config) {
 
 /**
  * Mock Issue Tokens (Access Token, ID Token [JWT], Refresh Token)
+ * @param {IssueTokensInput} input
+ * @returns {IssuedTokens}
  */
 export function issueTokens({ clientId, scope, nonce, user, issuer = 'https://auth.devgame.it' }) {
   const now = Math.floor(Date.now() / 1000);
@@ -212,6 +300,8 @@ export function issueTokens({ clientId, scope, nonce, user, issuer = 'https://au
 
 /**
  * Perform Token Exchange Request Simulation
+ * @param {ExchangeCodeInput} input
+ * @returns {ExchangeCodeResult}
  */
 export function exchangeCodeForTokens({
   code,

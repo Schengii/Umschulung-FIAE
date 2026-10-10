@@ -1,0 +1,95 @@
+# ==============================================================================
+# .htaccess – ManuFAKTUR Schenk (www.manufaktur-malerei.de)
+# Server-Konfiguration für Apache Webserver (All-Inkl, Strato, IONOS, Hetzner etc.)
+# ==============================================================================
+
+# 1. REWRITE ENGINE & WEITERLEITUNGEN
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # A) HTTP zu HTTPS erzwingen
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # B) Kanonische Domain: manufaktur-malerei.de (ohne www) -> www.manufaktur-malerei.de
+    RewriteCond %{HTTP_HOST} ^manufaktur-malerei\.de$ [NC]
+    RewriteRule ^(.*)$ https://www.manufaktur-malerei.de/$1 [L,R=301]
+</IfModule>
+
+# 2. INDIVIDUELLE FEHLERSEITEN
+ErrorDocument 404 /404.html
+
+# 3. SICHERHEITS-HEADER (SECURITY HEADERS)
+<IfModule mod_headers.c>
+    # Schutz vor MIME-Type Sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Clickjacking-Schutz
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Referrer-Policy zum Schutz von Nutzerdaten
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Berechtigungsrichtlinien für Browser-Features
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+
+    # HTTP Strict Transport Security (HSTS) – 2 Jahre inkl. Subdomains & Preload
+    Header set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Content Security Policy (CSP) – schützt vor XSS, Formjacking und Datendiebstahl
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-1+j9Q/SA65Mdmm7vFBTFy6Vz5DyDhIGlkyMaV4IQHjc=' 'sha256-3xAvEALegIfOsiTm1QGrBbGLj8GCVhIT7uVEgxu7Ypg=' 'sha256-96UEuynZ1GitLHvS9NDpOZ7CvLP29C7NHnf9Py+kSTU=' 'sha256-B963NcsYwUs3wT95e1vC/qYvUuNp6NUgFy5yr5KaSo8=' 'sha256-BLjz/rOTLpcqX1urmhuS2j+8v1wxFawP50mFLSM/2A0=' 'sha256-GLaaeNdFsKZP5a2RzxbUiiDzykWdqiOcVYd7baeNsf4=' 'sha256-GVfkt9HE7Es1DRAYKWjW9as67EFi/UC+IQkHanKhajw=' 'sha256-JMGisoHJY55q6uHEUd77Yz7akyZuVg5fw76VZvS5VMg=' 'sha256-O4TokRrUYHcurNpY6XlcZvsa4jgERhKGlsseh7zi0sI=' 'sha256-UzPLMagnSzB1hiV/PCaLhw2iQSJ7Ly2fTZTZwbijT1A=' 'sha256-YbDh3VhY2FlHs1Nwdyk1Ut6xUtH2ZHKicrK/cMFIvb8=' 'sha256-ZkDJtPId1RE3kcAo7trK4J+H7k4YKfF/C+HEdqYTLeM=' 'sha256-lVZ1QjzveAsJ6njQfM2NbckOZTkZGxk9Rn7CBl1CFZc=' 'sha256-pbMhz7qOs9E9HiDlHC4fUldszi0fPWGMB1wI8814vSw=' 'sha256-rCgU00dF452W8+ejk0Xd58/5dc54aTgMqqbXOkmsp30=' 'sha256-rKAf28KS0WXD+DDd8wIOufWQFFP8oUm+376tVb6S8b4=' 'sha256-reSCUOOAcaSJM1L4D0h1dcdRWpfx8WYmwSmeEiFIO8U='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; frame-ancestors 'self'; upgrade-insecure-requests"
+
+    # Dokumente-Verzeichnis vor Suchmaschinen-Indexierung schützen
+    <FilesMatch "\.(pdf|vcf)$">
+        Header set X-Robots-Tag "noindex"
+    </FilesMatch>
+</IfModule>
+
+# 4. KOMPRESSION (GZIP / BROTLI)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
+</IfModule>
+
+# 5. BROWSER-CACHING (LADEZEITEN-OPTIMIERUNG)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    # HTML: Kurzer Cache bzw. erneute Validierung für zeitnahe Updates
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # CSS & JavaScript (alle Seiten binden sie mit ?v=N ein, siehe npm run release)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+
+    # Web-Fonts (lokal & unveränderlich)
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # Bilder (WebP, PNG, JPEG, SVG, ICO)
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Dokumente & Manifest
+    ExpiresByType application/manifest+json "access plus 1 week"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# 6. CACHE-CONTROL HEADER FÜR STATISCHE RESSOURCEN
+<IfModule mod_headers.c>
+    <FilesMatch "\.(woff2|woff)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(jpg|jpeg|png|webp|svg|ico)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+    <FilesMatch "\.(html)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>

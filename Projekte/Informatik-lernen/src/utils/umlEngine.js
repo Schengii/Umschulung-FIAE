@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * UML Studio Engine (Sequenz- & Aktivitätsdiagramme nach OMG UML 2.5)
  * IHK Standard für Anwendungsentwicklung & Systemintegration (AP1 & AP2)
@@ -41,6 +42,7 @@ export const DEFAULT_ACTIVITY_STEPS = [
 
 /**
  * Generiert Mermaid.js Sequenzdiagramm Code
+ * @param {{ participants?: any[], messages?: any[], title?: string }} param0
  */
 export function generateMermaidSequence({ participants = [], messages = [], title = 'IHK Sequenzdiagramm' }) {
   const lines = ['sequenceDiagram', `  title: ${title}`, `  autonumber`];
@@ -65,6 +67,7 @@ export function generateMermaidSequence({ participants = [], messages = [], titl
 
 /**
  * Validiert Sequenzdiagramm auf Vollständigkeit & IHK-Konformität
+ * @param {{ participants?: any[], messages?: any[] }} param0
  */
 export function validateSequenceDiagram({ participants = [], messages = [] }) {
   const issues = [];
@@ -119,6 +122,7 @@ export function validateSequenceDiagram({ participants = [], messages = [] }) {
 
 /**
  * Generiert Mermaid.js Flussdiagramm für Aktivitätsdiagramme
+ * @param {{ steps?: any[] }} param0
  */
 export function generateMermaidActivity({ steps = [] }) {
   const lines = ['flowchart TD'];
@@ -139,3 +143,67 @@ export function generateMermaidActivity({ steps = [] }) {
 
   return lines.join('\n');
 }
+
+/**
+ * IHK Klassendiagramm-Prüfungsfragen & Zuordnungs-Drill
+ */
+export const IHK_CLASS_DRILL_QUESTIONS = [
+  {
+    id: 'vis_private',
+    concept: 'Sichtbarkeits-Modifikator (Visibility)',
+    question: 'Welches Symbol kennzeichnet in einem UML 2.5 Klassendiagramm ein privates Attribut (nur innerhalb der eigenen Klasse sichtbar)?',
+    options: [
+      { text: '+ (Public)', isCorrect: false },
+      { text: '- (Private)', isCorrect: true },
+      { text: '# (Protected)', isCorrect: false },
+      { text: '~ (Package / Default)', isCorrect: false }
+    ],
+    explanation: 'Nach OMG UML 2.5: - steht für private, + für public, # für protected (Subklassen) und ~ für package visibility.'
+  },
+  {
+    id: 'rel_composition',
+    concept: 'Beziehungstypen: Komposition vs. Aggregation',
+    question: 'Ein Gebäude besteht aus Stockwerken. Wird das Gebäude abgerissen, existieren auch die Stockwerke nicht mehr (strenge existenzielle Abhängigkeit / Teil-Ganzes-Beziehung). Welcher Beziehungstyp liegt vor?',
+    options: [
+      { text: 'Vererbung (Generalisierung) mit leerer Dreiecksspitze', isCorrect: false },
+      { text: 'Komposition mit ausgefüllter schwarzer Raute (*--) am Ganzen', isCorrect: true },
+      { text: 'Aggregation mit weißer, nicht ausgefüllter Raute (o--) am Ganzen', isCorrect: false },
+      { text: 'Reine Assoziation mit offener Pfeilspitze (-->)', isCorrect: false }
+    ],
+    explanation: 'Die Komposition (gefüllte Raute am Ganzen) drückt eine existenzielle Abhängigkeit aus. Bei der Aggregation (leere Raute) können die Teile auch ohne das Ganze existieren.'
+  },
+  {
+    id: 'card_order',
+    concept: 'Multiplizitäten & Kardinalitäten',
+    question: 'Eine Kundenverwaltung besagt: "Ein Kunde kann keine, eine oder beliebig viele Bestellungen aufgeben. Jede Bestellung muss genau einem Kunden zugeordnet sein." Wie lauten die Multiplizitäten an den Enden [Kunde] --- [Bestellung]?',
+    options: [
+      { text: 'Kunde: 1..* | Bestellung: 1', isCorrect: false },
+      { text: 'Kunde: 1 | Bestellung: 0..*', isCorrect: true },
+      { text: 'Kunde: 0..1 | Bestellung: 1..*', isCorrect: false },
+      { text: 'Kunde: * | Bestellung: *', isCorrect: false }
+    ],
+    explanation: 'Am Ende [Kunde] steht 1 (genau ein Kunde je Bestellung), am Ende [Bestellung] steht 0..* (beliebig viele, auch 0 Bestellungen).'
+  }
+];
+
+export const DEFAULT_CLASS_DIAGRAM = [
+  'classDiagram',
+  '  class Kunde {',
+  '    -int id',
+  '    +String name',
+  '    +String email',
+  '    +bestellen(Warenkorb w) Bestellung',
+  '  }',
+  '  class Bestellung {',
+  '    -int bestellNr',
+  '    -Date datum',
+  '    -double gesamtbetrag',
+  '    +berechneSumme() double',
+  '  }',
+  '  class BestellPosition {',
+  '    -int menge',
+  '    -double einzelpreis',
+  '  }',
+  '  Kunde "1" --> "0..*" Bestellung : platziert',
+  '  Bestellung "1" *-- "1..*" BestellPosition : besteht aus'
+].join('\n');

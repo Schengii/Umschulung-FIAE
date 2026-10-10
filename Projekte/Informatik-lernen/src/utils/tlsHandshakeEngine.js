@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * TLS 1.3 Handshake Engine
  * Simulates the TLS 1.3 (RFC 8446) 1-RTT handshake: ClientHello -> ServerHello
@@ -5,22 +6,68 @@
  * plus the abbreviated 0-RTT resumption flow via a PSK (Pre-Shared Key).
  */
 
+/**
+ * @typedef {object} CipherSuite
+ * @property {string} id
+ * @property {string} strength
+ *
+ * @typedef {object} KeyExchangeGroup
+ * @property {string} id
+ * @property {string} label
+ *
+ * @typedef {object} HandshakeStep
+ * @property {string} id
+ * @property {'Client' | 'Server'} actor
+ * @property {string} title
+ * @property {string} detail
+ * @property {number} rttMs
+ *
+ * @typedef {object} FullHandshakeInput
+ * @property {string} [sni]
+ * @property {string} [cipherSuiteId]
+ * @property {string} [keyGroupId]
+ *
+ * @typedef {object} FullHandshakeResult
+ * @property {string} sni
+ * @property {CipherSuite} cipherSuite
+ * @property {KeyExchangeGroup} keyGroup
+ * @property {HandshakeStep[]} steps
+ * @property {number} totalRtt
+ * @property {string} summary
+ *
+ * @typedef {object} ResumptionHandshakeInput
+ * @property {string} [sni]
+ *
+ * @typedef {object} ResumptionHandshakeResult
+ * @property {string} sni
+ * @property {HandshakeStep[]} steps
+ * @property {number} totalRtt
+ * @property {string} summary
+ */
+
+/** @type {CipherSuite[]} */
 const CIPHER_SUITES = [
   { id: 'TLS_AES_256_GCM_SHA384', strength: 'Stark (256-Bit AEAD)' },
   { id: 'TLS_AES_128_GCM_SHA256', strength: 'Stark (128-Bit AEAD)' },
   { id: 'TLS_CHACHA20_POLY1305_SHA256', strength: 'Stark (Mobile-optimiert)' }
 ];
 
+/** @type {KeyExchangeGroup[]} */
 const KEY_EXCHANGE_GROUPS = [
   { id: 'x25519', label: 'X25519 (Curve25519 ECDHE)' },
   { id: 'secp256r1', label: 'secp256r1 (NIST P-256 ECDHE)' },
   { id: 'secp384r1', label: 'secp384r1 (NIST P-384 ECDHE)' }
 ];
 
+/**
+ * @param {FullHandshakeInput} input
+ * @returns {FullHandshakeResult}
+ */
 export function buildFullHandshake({ sni = 'app.devgame.it', cipherSuiteId = 'TLS_AES_256_GCM_SHA384', keyGroupId = 'x25519' }) {
   const cipherSuite = CIPHER_SUITES.find(c => c.id === cipherSuiteId) || CIPHER_SUITES[0];
   const keyGroup = KEY_EXCHANGE_GROUPS.find(g => g.id === keyGroupId) || KEY_EXCHANGE_GROUPS[0];
 
+  /** @type {HandshakeStep[]} */
   const steps = [
     {
       id: 'client_hello',
@@ -83,7 +130,12 @@ export function buildFullHandshake({ sni = 'app.devgame.it', cipherSuiteId = 'TL
   };
 }
 
+/**
+ * @param {ResumptionHandshakeInput} input
+ * @returns {ResumptionHandshakeResult}
+ */
 export function buildResumptionHandshake({ sni = 'app.devgame.it' }) {
+  /** @type {HandshakeStep[]} */
   const steps = [
     {
       id: 'client_hello_psk',

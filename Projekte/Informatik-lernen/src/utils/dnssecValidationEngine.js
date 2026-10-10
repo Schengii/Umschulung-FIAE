@@ -1,11 +1,95 @@
+// @ts-check
 /**
  * DNSSEC Cryptographic Chain of Trust & RRSIG Validation Engine
- * Simulates hierarchical validation from Root (.) -> TLD (.de) -> Zone (example.de)
+ * Simulates hierarchische Validierung von Root (.) -> TLD (.de) -> Zone (example.de)
  * Includes RRSIG verification, DS record hashing, NSEC3 Authenticated Denial of Existence,
  * and Kaminsky Cache Poisoning attack resilience.
  */
 
-// Einfacher deterministischer String-Hash für kryptografische Simulationen
+/**
+ * @typedef {object} DsRecord
+ * @property {number} keyTag
+ * @property {number} algorithm
+ * @property {number} digestType
+ * @property {string} digest
+ *
+ * @typedef {object} DnssecTldConfig
+ * @property {string} name
+ * @property {DsRecord} dsRecord
+ * @property {number} kskId
+ * @property {number} zskId
+ * @property {string} algorithm
+ *
+ * @typedef {object} DnssecDomainConfig
+ * @property {string} name
+ * @property {DsRecord} dsRecord
+ * @property {number} kskId
+ * @property {number} zskId
+ * @property {string} algorithm
+ * @property {{ type: string, name: string, ttl: number, rdata: string }} rrset
+ * @property {object} rrsig
+ *
+ * @typedef {object} DnssecConfig
+ * @property {{ name: string, kskId: number, zskId: number, algorithm: string, isTrustAnchor: boolean }} root
+ * @property {DnssecTldConfig} tld
+ * @property {DnssecDomainConfig} domain
+ *
+ * @typedef {object} DnssecCustomConfig
+ * @property {Partial<DnssecTldConfig>} [tld]
+ * @property {Partial<DnssecDomainConfig>} [domain]
+ * @property {boolean} [tamperDomainDs]
+ * @property {boolean} [tamperZsk]
+ * @property {boolean} [expireRrsig]
+ * @property {boolean} [tamperRecordData]
+ *
+ * @typedef {object} DnssecValidationStep
+ * @property {string} level
+ * @property {string} step
+ * @property {string} description
+ * @property {boolean} valid
+ * @property {string} badge
+ *
+ * @typedef {object} DnssecValidationResult
+ * @property {'SECURE' | 'BOGUS' | 'INSECURE'} status
+ * @property {string | null} bogusReason
+ * @property {DnssecValidationStep[]} steps
+ * @property {string | null} resolvedIp
+ * @property {string} dnssecAlert
+ *
+ * @typedef {object} Nsec3Record
+ * @property {string} hashedName
+ * @property {string} originalHint
+ * @property {string} nextHashedName
+ * @property {string[]} types
+ *
+ * @typedef {object} Nsec3ProofResult
+ * @property {string} query
+ * @property {string} salt
+ * @property {number} iterations
+ * @property {string} hashedQuery
+ * @property {boolean} isExisting
+ * @property {Nsec3Record | null} matchedRecord
+ * @property {{ from: string, to: string, proofText: string } | null} coveringInterval
+ * @property {boolean} nxdomainProven
+ * @property {string} antiZoneWalkingProtection
+ *
+ * @typedef {object} KaminskyAttackResult
+ * @property {boolean} success
+ * @property {boolean} poisoned
+ * @property {string | null} resultIp
+ * @property {string} resolverStatus
+ * @property {string} responseCode
+ * @property {boolean} adFlag
+ * @property {string} message
+ */
+
+/**
+ * Einfacher deterministischer String-Hash für kryptografische Simulationen
+ * @param {string} str
+ * @param {string} [salt]
+ * @param {number} [iterations]
+ * @returns {string}
+ */
 function simpleHash(str, salt = '', iterations = 1) {
   let combined = `${str}:${salt}`;
   let hash = 0x811c9dc5;
@@ -21,6 +105,7 @@ function simpleHash(str, salt = '', iterations = 1) {
 
 /**
  * Standard-Konfiguration der DNSSEC-Vertrauenskette
+ * @type {DnssecConfig}
  */
 export const DEFAULT_DNSSEC_CONFIG = {
   root: {
@@ -75,19 +160,21 @@ export const DEFAULT_DNSSEC_CONFIG = {
 
 /**
  * Validiert die vollständige DNSSEC-Vertrauenskette
- * @param {Object} customConfig - Optionale Modifikationen (z.B. manipulierte Hashes, abgelaufene Signaturen)
- * @returns {Object} Validierungsergebnis mit Detailstatus jedes Hops
+ * @param {DnssecCustomConfig} [customConfig] - Optionale Modifikationen (z.B. manipulierte Hashes, abgelaufene Signaturen)
+ * @returns {DnssecValidationResult} Validierungsergebnis mit Detailstatus jedes Hops
  */
 export function validateDnssecChain(customConfig = {}) {
   const config = {
     ...DEFAULT_DNSSEC_CONFIG,
-    ...customConfig,
     tld: { ...DEFAULT_DNSSEC_CONFIG.tld, ...(customConfig.tld || {}) },
     domain: { ...DEFAULT_DNSSEC_CONFIG.domain, ...(customConfig.domain || {}) }
   };
 
+  /** @type {DnssecValidationStep[]} */
   const steps = [];
-  let overallStatus = 'SECURE'; // 'SECURE' | 'BOGUS' | 'INSECURE'
+  /** @type {'SECURE' | 'BOGUS' | 'INSECURE'} */
+  let overallStatus = 'SECURE';
+  /** @type {string | null} */
   let bogusReason = null;
 
   // 1. Root Trust Anchor Prüfung
@@ -199,6 +286,7 @@ export function validateDnssecChain(customConfig = {}) {
  * Beweist kryptografisch, dass eine Subdomain nicht existiert (NXDOMAIN),
  * ohne dass Angreifer durch NSEC-Zone-Walking alle Hostnamen auslesen können.
  */
+/** @type {Nsec3Record[]} */
 export const NSEC3_SAMPLE_ZONE = [
   { hashedName: '2T9GK98', originalHint: 'api.example.de', nextHashedName: '7K1QP23', types: ['A', 'RRSIG'] },
   { hashedName: '7K1QP23', originalHint: 'mail.example.de', nextHashedName: 'B8X4M91', types: ['MX', 'RRSIG'] },
@@ -206,11 +294,18 @@ export const NSEC3_SAMPLE_ZONE = [
   { hashedName: 'F9Z2L04', originalHint: 'www.example.de', nextHashedName: '2T9GK98', types: ['A', 'AAAA', 'RRSIG'] }
 ];
 
+/**
+ * @param {string} subdomain
+ * @param {string} [salt]
+ * @param {number} [iterations]
+ * @returns {Nsec3ProofResult}
+ */
 export function verifyNsec3Proof(subdomain, salt = 'B4F1', iterations = 10) {
   const normalized = subdomain.toLowerCase().trim();
   const hashedQuery = simpleHash(normalized, salt, iterations).substring(0, 7);
 
   // Suche Intervall in geordneter NSEC3 Kette
+  /** @type {Nsec3Record | null} */
   let coveringRecord = null;
   for (const record of NSEC3_SAMPLE_ZONE) {
     if (record.hashedName < record.nextHashedName) {
@@ -249,6 +344,10 @@ export function verifyNsec3Proof(subdomain, salt = 'B4F1', iterations = 10) {
 /**
  * Simuliert den klassischen Kaminsky DNS Cache Poisoning Angriff
  * Vergleicht ungeschütztes Standard-DNS mit DNSSEC-validierendem Resolver
+ */
+/**
+ * @param {{ dnssecEnabled?: boolean, spoofedIp?: string }} [options]
+ * @returns {KaminskyAttackResult}
  */
 export function simulateKaminskyAttack(options = {}) {
   const { dnssecEnabled = true, spoofedIp = '6.6.6.66' } = options;

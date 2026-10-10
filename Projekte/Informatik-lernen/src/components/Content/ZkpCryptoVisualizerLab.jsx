@@ -59,7 +59,7 @@ export default function ZkpCryptoVisualizerLab() {
           </h2>
           <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
             <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '8px' }}>Geheimnis & Schlüssel:</div>
-            <div>Privater Schlüssel <strong>x = {privateKeyX.toString()}</strong> <span style={{ color: 'var(--accent-red)', fontSize: '0.8rem' }}>(Streng geheim)</span></div>
+            <div>Privater Schlüssel <strong>x = {PRIVATE_KEY_X.toString()}</strong> <span style={{ color: 'var(--accent-red)', fontSize: '0.8rem' }}>(Streng geheim)</span></div>
             <div>Öffentlicher Schlüssel <strong>Y = x * G</strong></div>
           </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import type { Holding } from '../types';
-import { Lightbulb, Sliders, Activity, Info, Calendar } from 'lucide-react';
+import type { Holding, TargetAllocation, AssetCategory } from '../types';
+import { Lightbulb, Sliders, Activity, Info, Calendar, Sparkles, Scale } from 'lucide-react';
 import { 
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend 
 } from 'recharts';
@@ -10,16 +10,87 @@ import { EsgAuditWidget } from './EsgAuditWidget';
 interface StrategyProps {
   holdings: Holding[];
   totalValue: number;
+  targetAllocations?: TargetAllocation[];
+  onUpdateTargetAllocations?: (allocations: TargetAllocation[]) => void;
+  onOpenRebalanceOrders?: () => void;
 }
 
-export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
+export const Strategy: React.FC<StrategyProps> = ({
+  holdings,
+  totalValue,
+  targetAllocations,
+  onUpdateTargetAllocations,
+  onOpenRebalanceOrders
+}) => {
   // Tab control: 'rebalance' | 'backtest'
   const [subTab, setSubTab] = useState<'rebalance' | 'backtest'>('rebalance');
 
-  // 1. Target Allocation State (Percentages)
-  const [targetStock, setTargetStock] = useState<number>(40);
-  const [targetEtf, setTargetEtf] = useState<number>(50);
-  const [targetCrypto, setTargetCrypto] = useState<number>(10);
+  // 1. Multi-Asset Target Allocation State across all 8 categories
+  const [targets, setTargets] = useState<Record<AssetCategory, number>>(() => {
+    const initial: Record<AssetCategory, number> = {
+      ETF: 50,
+      Stock: 30,
+      Crypto: 10,
+      Bond: 10,
+      PreciousMetal: 0,
+      Cash: 0,
+      RealEstate: 0,
+      P2P: 0
+    };
+    if (targetAllocations && targetAllocations.length > 0) {
+      targetAllocations.forEach(ta => {
+        if (ta.category in initial) {
+          initial[ta.category] = ta.weight;
+        }
+      });
+    }
+    return initial;
+  });
+
+  const totalTargetSum = useMemo(() => {
+    return Object.values(targets).reduce((sum, val) => sum + (Number(val) || 0), 0);
+  }, [targets]);
+
+  const handleTargetChange = (cat: AssetCategory, val: number) => {
+    const clamped = Math.max(0, Math.min(100, isNaN(val) ? 0 : val));
+    const newTargets = { ...targets, [cat]: clamped };
+    setTargets(newTargets);
+    if (onUpdateTargetAllocations) {
+      onUpdateTargetAllocations(
+        Object.entries(newTargets).map(([category, weight]) => ({
+          category: category as AssetCategory,
+          weight
+        }))
+      );
+    }
+  };
+
+  const handleNormalizeTargets = () => {
+    const sum = Object.values(targets).reduce((a, b) => a + b, 0);
+    if (sum <= 0) return;
+    const factor = 100 / sum;
+    const normalized: Record<AssetCategory, number> = { ...targets };
+    let running = 0;
+    const entries = Object.entries(targets) as [AssetCategory, number][];
+    entries.forEach(([cat, w], idx) => {
+      if (idx === entries.length - 1) {
+        normalized[cat] = Math.max(0, 100 - running);
+      } else {
+        const rounded = Math.round(w * factor);
+        normalized[cat] = rounded;
+        running += rounded;
+      }
+    });
+    setTargets(normalized);
+    if (onUpdateTargetAllocations) {
+      onUpdateTargetAllocations(
+        Object.entries(normalized).map(([category, weight]) => ({
+          category: category as AssetCategory,
+          weight
+        }))
+      );
+    }
+  };
 
   // 2. Investment Planner State
   const [extraInvestment, setExtraInvestment] = useState<number>(1000);
@@ -35,27 +106,22 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
   const [backtestCrypto, setBacktestCrypto] = useState<number>(10);
   const [backtestScenario, setBacktestScenario] = useState<'default' | 'dotcom' | 'financial' | 'covid' | 'bullrun'>('default');
 
-  // Auto-adjust sliders to sum up to 100%
-  const adjustSliders = (changed: 'stock' | 'etf' | 'crypto', val: number, isBacktest = false) => {
-    const setStock = isBacktest ? setBacktestStock : setTargetStock;
-    const setEtf = isBacktest ? setBacktestEtf : setTargetEtf;
-    const setCrypto = isBacktest ? setBacktestCrypto : setTargetCrypto;
-    
+  const adjustBacktestSliders = (changed: 'stock' | 'etf' | 'crypto', val: number) => {
     if (changed === 'stock') {
-      setStock(val);
+      setBacktestStock(val);
       const rem = 100 - val;
-      setEtf(Math.round(rem * 0.8));
-      setCrypto(Math.round(rem * 0.2));
+      setBacktestEtf(Math.round(rem * 0.8));
+      setBacktestCrypto(Math.round(rem * 0.2));
     } else if (changed === 'etf') {
-      setEtf(val);
+      setBacktestEtf(val);
       const rem = 100 - val;
-      setStock(Math.round(rem * 0.8));
-      setCrypto(Math.round(rem * 0.2));
+      setBacktestStock(Math.round(rem * 0.8));
+      setBacktestCrypto(Math.round(rem * 0.2));
     } else {
-      setCrypto(val);
+      setBacktestCrypto(val);
       const rem = 100 - val;
-      setStock(Math.round(rem * 0.45));
-      setEtf(Math.round(rem * 0.55));
+      setBacktestStock(Math.round(rem * 0.45));
+      setBacktestEtf(Math.round(rem * 0.55));
     }
   };
 
@@ -87,34 +153,38 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
     return result;
   }, [holdings, totalValue]);
 
-  // Sparplan-Optimierer Calculation
+  // Sparplan-Optimierer Calculation across all target categories
   const savingsPlanOptimizer = useMemo(() => {
-    if (monthlyBudget <= 0) return { Stock: 0, ETF: 0, Crypto: 0 };
-    
-    const targetStockVal = (totalValue + (monthlyBudget * optimizationMonths)) * (targetStock / 100);
-    const targetEtfVal = (totalValue + (monthlyBudget * optimizationMonths)) * (targetEtf / 100);
-    const targetCryptoVal = (totalValue + (monthlyBudget * optimizationMonths)) * (targetCrypto / 100);
+    const result: Record<string, number> = {};
+    if (monthlyBudget <= 0) return result;
 
-    const neededStock = Math.max(0, targetStockVal - currentAllocation.Stock.val);
-    const neededEtf = Math.max(0, targetEtfVal - currentAllocation.ETF.val);
-    const neededCrypto = Math.max(0, targetCryptoVal - currentAllocation.Crypto.val);
+    const futureTotal = totalValue + (monthlyBudget * optimizationMonths);
+    const needed: Record<string, number> = {};
+    let totalNeeded = 0;
 
-    const sumNeeded = neededStock + neededEtf + neededCrypto;
-    if (sumNeeded === 0) {
-      return {
-        Stock: Math.round(monthlyBudget * (targetStock / 100)),
-        ETF: Math.round(monthlyBudget * (targetEtf / 100)),
-        Crypto: Math.round(monthlyBudget * (targetCrypto / 100))
-      };
+    (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+      const targetPct = targets[cat] || 0;
+      if (targetPct > 0) {
+        const targetVal = futureTotal * (targetPct / 100);
+        const currentVal = currentAllocation[cat]?.val || 0;
+        const diff = Math.max(0, targetVal - currentVal);
+        needed[cat] = diff;
+        totalNeeded += diff;
+      }
+    });
+
+    if (totalNeeded === 0) {
+      (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+        result[cat] = Math.round(monthlyBudget * ((targets[cat] || 0) / 100));
+      });
+      return result;
     }
 
-    // Allocate monthly savings proportional to target shortfall
-    return {
-      Stock: Math.round(monthlyBudget * (neededStock / sumNeeded)),
-      ETF: Math.round(monthlyBudget * (neededEtf / sumNeeded)),
-      Crypto: Math.round(monthlyBudget * (neededCrypto / sumNeeded))
-    };
-  }, [currentAllocation, totalValue, monthlyBudget, optimizationMonths, targetStock, targetEtf, targetCrypto]);
+    (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+      result[cat] = Math.round(monthlyBudget * ((needed[cat] || 0) / totalNeeded));
+    });
+    return result;
+  }, [currentAllocation, totalValue, monthlyBudget, optimizationMonths, targets]);
 
   // AI Insights Generator
   const coachInsights = useMemo(() => {
@@ -217,56 +287,50 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
     };
   }, [holdings, currentAllocation]);
 
-  // Rebalancing Purchase calculator
+  // Multi-Asset Rebalancing Purchase calculator
   const rebalancePlanner = useMemo(() => {
-    if (extraInvestment <= 0) return { Stock: 0, ETF: 0, Crypto: 0 };
-    
+    const result: Record<string, number> = {};
+    if (extraInvestment <= 0) return result;
+
     const newTotal = totalValue + extraInvestment;
-    const stockCurrent = currentAllocation.Stock.val;
-    const etfCurrent = currentAllocation.ETF.val;
-    const cryptoCurrent = currentAllocation.Crypto.val;
+    const diffs: Record<string, number> = {};
+    let sumDiffs = 0;
 
-    const stockTarget = newTotal * (targetStock / 100);
-    const etfTarget = newTotal * (targetEtf / 100);
-    const cryptoTarget = newTotal * (targetCrypto / 100);
-
-    const diffStock = Math.max(0, stockTarget - stockCurrent);
-    const diffEtf = Math.max(0, etfTarget - etfCurrent);
-    const diffCrypto = Math.max(0, cryptoTarget - cryptoCurrent);
-
-    const sumDiffs = diffStock + diffEtf + diffCrypto;
+    (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+      const targetPct = targets[cat] || 0;
+      const targetVal = newTotal * (targetPct / 100);
+      const currentVal = currentAllocation[cat]?.val || 0;
+      const diff = Math.max(0, targetVal - currentVal);
+      diffs[cat] = diff;
+      sumDiffs += diff;
+    });
 
     if (sumDiffs > 0) {
       const factor = extraInvestment / sumDiffs;
       if (factor < 1) {
-        return {
-          Stock: Math.round(diffStock * factor),
-          ETF: Math.round(diffEtf * factor),
-          Crypto: Math.round(diffCrypto * factor)
-        };
+        (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+          result[cat] = Math.round((diffs[cat] || 0) * factor);
+        });
       } else {
         const excess = extraInvestment - sumDiffs;
-        return {
-          Stock: Math.round(diffStock + excess * (targetStock / 100)),
-          ETF: Math.round(diffEtf + excess * (targetEtf / 100)),
-          Crypto: Math.round(diffCrypto + excess * (targetCrypto / 100))
-        };
+        (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+          result[cat] = Math.round((diffs[cat] || 0) + excess * ((targets[cat] || 0) / 100));
+        });
       }
     } else {
-      return {
-        Stock: Math.round(extraInvestment * (targetStock / 100)),
-        ETF: Math.round(extraInvestment * (targetEtf / 100)),
-        Crypto: Math.round(extraInvestment * (targetCrypto / 100))
-      };
+      (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+        result[cat] = Math.round(extraInvestment * ((targets[cat] || 0) / 100));
+      });
     }
-  }, [extraInvestment, totalValue, currentAllocation, targetStock, targetEtf, targetCrypto]);
+
+    return result;
+  }, [extraInvestment, totalValue, currentAllocation, targets]);
 
   const detailedRebalanceSuggestions = useMemo(() => {
     const suggestions: Array<{ ticker: string; name: string; category: string; action: 'BUY' | 'SELL'; amount: number; notes: string }> = [];
-    const categories = ['Stock', 'ETF', 'Crypto'] as const;
 
-    categories.forEach(cat => {
-      const extraAllocated = rebalancePlanner[cat];
+    (Object.keys(targets) as AssetCategory[]).forEach(cat => {
+      const extraAllocated = rebalancePlanner[cat] || 0;
       if (extraAllocated <= 5) return;
 
       const catHoldings = holdings.filter(h => h.category === cat);
@@ -292,7 +356,7 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
     });
 
     return suggestions;
-  }, [rebalancePlanner, holdings]);
+  }, [rebalancePlanner, holdings, targets]);
 
   // Simulated Historical Backtesting Sandbox data
   const backtestData = useMemo(() => {
@@ -404,55 +468,64 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
           <div className="sav-col-flex">
             
             <div className="glass-panel">
-              <h3 className="tx-manual-title">Soll-Allokation (Zielgewichtung)</h3>
-              <p className="tx-dropzone-subtitle">Passe die Schieberegler an. Die Summe wird automatisch auf 100% gehalten.</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <h3 className="tx-manual-title" style={{ margin: 0 }}>Soll-Allokation (Multi-Asset Zielgewichtung)</h3>
+                  <p className="tx-dropzone-subtitle" style={{ margin: 0 }}>Definiere deine strategische Zielquote über alle 8 Anlageklassen.</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{
+                    padding: '0.25rem 0.6rem',
+                    borderRadius: '8px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    background: totalTargetSum === 100 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                    color: totalTargetSum === 100 ? '#10b981' : '#f59e0b',
+                    border: `1px solid ${totalTargetSum === 100 ? 'rgba(16, 185, 129, 0.3)' : 'rgba(245, 158, 11, 0.3)'}`
+                  }}>
+                    Summe: {totalTargetSum}% {totalTargetSum === 100 ? '✓' : '(Ziel: 100%)'}
+                  </span>
+                  {totalTargetSum !== 100 && (
+                    <button
+                      onClick={handleNormalizeTargets}
+                      className="btn-secondary"
+                      style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+                      title="Skaliert alle Quoten proportional auf genau 100%"
+                    >
+                      <Sparkles size={12} /> Auf 100% glätten
+                    </button>
+                  )}
+                </div>
+              </div>
               
-              <div className="strat-target-grid">
-                <div className="strat-target-col">
-                  <div className="sav-slider-label-row">
-                    <label htmlFor="slider-target-stock" className="strat-target-label">Aktien</label>
-                    <span className="sav-slider-label-bold">{targetStock}%</span>
+              <div className="strat-target-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', marginTop: '1rem' }}>
+                {([
+                  { cat: 'ETF' as AssetCategory, label: 'ETFs', color: '#3b82f6' },
+                  { cat: 'Stock' as AssetCategory, label: 'Aktien', color: '#10b981' },
+                  { cat: 'Crypto' as AssetCategory, label: 'Kryptos', color: '#f59e0b' },
+                  { cat: 'Bond' as AssetCategory, label: 'Anleihen', color: '#8b5cf6' },
+                  { cat: 'PreciousMetal' as AssetCategory, label: 'Edelmetalle', color: '#eab308' },
+                  { cat: 'Cash' as AssetCategory, label: 'Cash / Liquidität', color: '#06b6d4' },
+                  { cat: 'RealEstate' as AssetCategory, label: 'Immobilien', color: '#f97316' },
+                  { cat: 'P2P' as AssetCategory, label: 'P2P-Kredite', color: '#ec4899' },
+                ]).map(({ cat, label, color }) => (
+                  <div key={cat} className="strat-target-col" style={{ borderLeft: `3px solid ${color}`, paddingLeft: '0.5rem' }}>
+                    <div className="sav-slider-label-row">
+                      <label htmlFor={`slider-target-${cat}`} className="strat-target-label" style={{ fontSize: '0.75rem' }}>{label}</label>
+                      <span className="sav-slider-label-bold" style={{ color }}>{targets[cat] || 0}%</span>
+                    </div>
+                    <input 
+                      id={`slider-target-${cat}`}
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={targets[cat] || 0} 
+                      onChange={(e) => handleTargetChange(cat, parseInt(e.target.value) || 0)}
+                      className="projection-range"
+                      style={{ accentColor: color }}
+                    />
                   </div>
-                  <input 
-                    id="slider-target-stock"
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    value={targetStock} 
-                    onChange={(e) => adjustSliders('stock', parseInt(e.target.value))}
-                    className="projection-range"
-                  />
-                </div>
-                <div className="strat-target-col">
-                  <div className="sav-slider-label-row">
-                    <label htmlFor="slider-target-etf" className="strat-target-label">ETFs</label>
-                    <span className="sav-slider-label-bold">{targetEtf}%</span>
-                  </div>
-                  <input 
-                    id="slider-target-etf"
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    value={targetEtf} 
-                    onChange={(e) => adjustSliders('etf', parseInt(e.target.value))}
-                    className="projection-range"
-                  />
-                </div>
-                <div className="strat-target-col">
-                  <div className="sav-slider-label-row">
-                    <label htmlFor="slider-target-crypto" className="strat-target-label">Kryptos</label>
-                    <span className="sav-slider-label-bold">{targetCrypto}%</span>
-                  </div>
-                  <input 
-                    id="slider-target-crypto"
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    value={targetCrypto} 
-                    onChange={(e) => adjustSliders('crypto', parseInt(e.target.value))}
-                    className="projection-range"
-                  />
-                </div>
+                ))}
               </div>
 
               <div className="strat-table-container">
@@ -468,11 +541,11 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
                   </thead>
                   <tbody>
                     {(['Stock', 'ETF', 'Crypto', 'Bond', 'Cash', 'RealEstate', 'PreciousMetal', 'P2P'] as const).filter(cat => {
-                      if (cat === 'Stock' || cat === 'ETF' || cat === 'Crypto') return true;
+                      if ((targets[cat] || 0) > 0) return true;
                       return (currentAllocation[cat]?.val || 0) > 0;
                     }).map((cat) => {
                       const current = currentAllocation[cat] || { val: 0, pct: 0 };
-                      const target = cat === 'Stock' ? targetStock : cat === 'ETF' ? targetEtf : cat === 'Crypto' ? targetCrypto : 0;
+                      const target = targets[cat] || 0;
                       const diff = (totalValue * (target / 100)) - current.val;
                       const isBuy = diff > 0;
                       const labelMap: Record<string, string> = {
@@ -583,6 +656,19 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
                     />
                   </div>
                 </div>
+
+                {onOpenRebalanceOrders && (
+                  <div style={{ margin: '1rem 0', display: 'flex', justifyContent: 'flex-start' }}>
+                    <button
+                      onClick={onOpenRebalanceOrders}
+                      className="btn btn-primary"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
+                    >
+                      <Scale size={16} />
+                      📋 Detaillierte Orderliste & Rebalancing-Assistent öffnen
+                    </button>
+                  </div>
+                )}
 
                 <div className="strat-planner-results">
                   <h5 className="strat-planner-results-title">Empfohlene Verteilung der Einzahlung:</h5>
@@ -822,7 +908,7 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
               </div>
               <input 
                 type="range" min="0" max="100" value={backtestStock} 
-                onChange={(e) => adjustSliders('stock', parseInt(e.target.value), true)}
+                onChange={(e) => adjustBacktestSliders('stock', parseInt(e.target.value))}
                 className="projection-range"
               />
             </div>
@@ -834,7 +920,7 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
               </div>
               <input 
                 type="range" min="0" max="100" value={backtestEtf} 
-                onChange={(e) => adjustSliders('etf', parseInt(e.target.value), true)}
+                onChange={(e) => adjustBacktestSliders('etf', parseInt(e.target.value))}
                 className="projection-range"
               />
             </div>
@@ -846,7 +932,7 @@ export const Strategy: React.FC<StrategyProps> = ({ holdings, totalValue }) => {
               </div>
               <input 
                 type="range" min="0" max="100" value={backtestCrypto} 
-                onChange={(e) => adjustSliders('crypto', parseInt(e.target.value), true)}
+                onChange={(e) => adjustBacktestSliders('crypto', parseInt(e.target.value))}
                 className="projection-range"
               />
             </div>

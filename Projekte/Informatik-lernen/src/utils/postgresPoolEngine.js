@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL Connection Pooling (PgBouncer) & SQL Transaction Isolation Engine
  * Simulates Session vs. Transaction vs. Statement pooling memory footprint & client queues,

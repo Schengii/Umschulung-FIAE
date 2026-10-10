@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import type { SavingsPlan, AssetCategory } from '../types';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Plus, Trash2, TrendingUp, Calendar, Play, Pause, Zap, Check } from 'lucide-react';
+import { Plus, Trash2, TrendingUp, Calendar, Play, Pause, Zap, Check, Sliders, X } from 'lucide-react';
 
 interface SavingsSimulatorProps {
   savingsPlans: SavingsPlan[];
   portfolioValue: number;
   onAddSavingsPlan: (plan: Omit<SavingsPlan, 'id'>) => void;
+  onUpdateSavingsPlan?: (plan: SavingsPlan) => void;
   onDeleteSavingsPlan: (id: string) => void;
   onToggleSavingsPlan: (id: string) => void;
   onExecuteSavingsPlans?: () => void;
@@ -17,6 +18,7 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
   savingsPlans,
   portfolioValue,
   onAddSavingsPlan,
+  onUpdateSavingsPlan,
   onDeleteSavingsPlan,
   onToggleSavingsPlan,
   onExecuteSavingsPlans,
@@ -28,6 +30,14 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
   const [name, setName] = useState('');
   const [category, setCategory] = useState<AssetCategory>('Stock');
   const [amount, setAmount] = useState<number | ''>('');
+  const [addDynamization, setAddDynamization] = useState<string>('0');
+
+  // Plan Edit Modal State
+  const [editingPlan, setEditingPlan] = useState<SavingsPlan | null>(null);
+  const [editAmount, setEditAmount] = useState<string>('');
+  const [editDynamization, setEditDynamization] = useState<string>('0');
+  const [editPausedUntil, setEditPausedUntil] = useState<string>('');
+  const [editEmergencyBuffer, setEditEmergencyBuffer] = useState<string>('');
 
   // Simulator Sliders State
   const [initialCapital, setInitialCapital] = useState<number>(Math.round(portfolioValue));
@@ -70,14 +80,39 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
       name,
       category,
       amount: Number(amount),
-      isActive: true
+      isActive: true,
+      annualDynamizationPercent: parseFloat(addDynamization) || 0
     });
 
     setTicker('');
     setName('');
     setCategory('Stock');
     setAmount('');
+    setAddDynamization('0');
     setShowAddForm(false);
+  };
+
+  const handleOpenEdit = (plan: SavingsPlan) => {
+    setEditingPlan(plan);
+    setEditAmount(plan.amount.toString());
+    setEditDynamization((plan.annualDynamizationPercent || 0).toString());
+    setEditPausedUntil(plan.pausedUntilDate || '');
+    setEditEmergencyBuffer((plan.minimumEmergencyCashBufferEur || 0).toString());
+  };
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPlan || !onUpdateSavingsPlan) return;
+
+    onUpdateSavingsPlan({
+      ...editingPlan,
+      amount: parseFloat(editAmount) || editingPlan.amount,
+      annualDynamizationPercent: parseFloat(editDynamization) || 0,
+      pausedUntilDate: editPausedUntil.trim() || undefined,
+      minimumEmergencyCashBufferEur: parseFloat(editEmergencyBuffer) || undefined
+    });
+
+    setEditingPlan(null);
   };
 
   // Generate Compound Interest projection data
@@ -284,6 +319,25 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                           {plan.ticker}
                         </div>
                         <div className="sav-item-subtitle">{plan.name}</div>
+                        
+                        {/* Dynamization & Pause Badges */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '0.25rem' }}>
+                          {(plan.annualDynamizationPercent || 0) > 0 && (
+                            <span style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', fontWeight: 600 }}>
+                              📈 +{plan.annualDynamizationPercent}% Dynamik/J.
+                            </span>
+                          )}
+                          {plan.pausedUntilDate && (
+                            <span style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', fontWeight: 600 }}>
+                              ⏸️ Pausiert bis {plan.pausedUntilDate}
+                            </span>
+                          )}
+                          {(plan.minimumEmergencyCashBufferEur || 0) > 0 && (
+                            <span style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6', fontWeight: 600 }}>
+                              🛡️ Puffer: {plan.minimumEmergencyCashBufferEur} €
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     
@@ -292,14 +346,25 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
                         {plan.amount.toLocaleString('de-DE')} €
                       </span>
                       {!isReadOnly && (
-                        <button 
-                          onClick={() => onDeleteSavingsPlan(plan.id)}
-                          className="sav-item-trash-btn text-hover-rose"
-                          title="Sparplan löschen"
-                          aria-label="Sparplan löschen"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                        <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                          <button 
+                            onClick={() => handleOpenEdit(plan)}
+                            className="sav-item-trash-btn"
+                            title="Dynamisierung & Pause konfigurieren"
+                            aria-label="Sparplan konfigurieren"
+                            style={{ color: '#3b82f6' }}
+                          >
+                            <Sliders size={14} />
+                          </button>
+                          <button 
+                            onClick={() => onDeleteSavingsPlan(plan.id)}
+                            className="sav-item-trash-btn text-hover-rose"
+                            title="Sparplan löschen"
+                            aria-label="Sparplan löschen"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -469,6 +534,98 @@ export const SavingsSimulator: React.FC<SavingsSimulatorProps> = ({
         </div>
 
       </div>
+      {/* In-Place Plan Configuration Modal */}
+      {editingPlan && (
+        <div className="modal-overlay" style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+          backdropFilter: 'blur(4px)', padding: '1rem'
+        }}>
+          <div style={{
+            background: 'var(--card-bg, #0f172a)', border: '1px solid var(--border-color)', borderRadius: '16px',
+            maxWidth: '480px', width: '100%', padding: '1.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Sliders size={18} color="#3b82f6" /> Sparplan-Dynamisierung & Notgroschen
+              </h3>
+              <button onClick={() => setEditingPlan(null)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+              Konfiguration für <strong>{editingPlan.name} ({editingPlan.ticker})</strong>
+            </div>
+
+            <form onSubmit={handleSaveEdit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Monatliche Sparrate (€)</label>
+                <input
+                  type="number"
+                  step="any"
+                  className="form-input"
+                  value={editAmount}
+                  onChange={(e) => setEditAmount(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Jährliche Dynamisierung (% pro Jahr)</label>
+                <input
+                  type="number"
+                  step="0.5"
+                  className="form-input"
+                  placeholder="z.B. 2.5 oder 5"
+                  value={editDynamization}
+                  onChange={(e) => setEditDynamization(e.target.value)}
+                />
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                  Erhöht die Sparrate jährlich automatisch (z.B. Inflations- oder Gehaltssprung).
+                </span>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Temporär pausieren bis (Datum)</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={editPausedUntil}
+                  onChange={(e) => setEditPausedUntil(e.target.value)}
+                />
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                  Der Sparplan wird bis zu diesem Tag bei Sofortausführungen automatisch übersprungen.
+                </span>
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontSize: '0.75rem' }}>Notgroschen-Sperre (€ Mindestpuffer)</label>
+                <input
+                  type="number"
+                  step="100"
+                  className="form-input"
+                  placeholder="z.B. 5000"
+                  value={editEmergencyBuffer}
+                  onChange={(e) => setEditEmergencyBuffer(e.target.value)}
+                />
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                  Verhindert Ausführung, wenn das liquide Cash-Polster diesen Wert unterschreitet.
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setEditingPlan(null)}>
+                  Abbrechen
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Einstellungen speichern
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

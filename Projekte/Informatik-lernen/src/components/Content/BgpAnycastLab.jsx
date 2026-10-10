@@ -97,7 +97,7 @@ export default function BgpAnycastLab({ onRewardXP }) {
             </div>
 
             <div style={{ fontSize: '0.82rem', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div><strong>AS-Path:</strong> <code style={{ color: 'var(--accent-primary)' }}>{route.asPath.join(' $\\rightarrow$ ')}</code> ({route.asPath.length} Hops)</div>
+              <div><strong>AS-Path:</strong> <code style={{ color: 'var(--accent-primary)' }}>{route.asPath.join(' → ')}</code> ({route.asPath.length} Hops)</div>
               <div><strong>Local Preference:</strong> {route.localPref}</div>
               <div><strong>MED (Metric):</strong> {route.med}</div>
               <div><strong>Latenz:</strong> ~{route.latencyMs} ms</div>

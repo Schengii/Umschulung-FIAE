@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * IHK Wirtschaftlichkeits-, Amortisations- & Make-or-Buy Engine (AP2 Dokumentation)
  * Liefert vorschriftsmäßige kaufmännische Berechnungen für IT-Abschlussprojekte:
@@ -143,6 +144,11 @@ export function calculateCostComparison({
 
 /**
  * Erzeugt einen Markdown-Abschnitt für die IHK Projektdokumentation
+ * @param {any} amortisationData
+ * @param {any} makeOrBuyData
+ * @param {any} costComparisonData
+ * @param {string} [projectName='IHK-Projekt']
+ * @returns {string}
  */
 export function exportWirtschaftlichkeitMarkdown(amortisationData, makeOrBuyData, costComparisonData, projectName = 'IHK-Projekt') {
   let md = `## Wirtschaftlichkeitsanalyse für ${projectName}\n\n`;
@@ -159,9 +165,11 @@ export function exportWirtschaftlichkeitMarkdown(amortisationData, makeOrBuyData
   md += `| Jahr | Altsystem (kumuliert) | Neusystem (inkl. Investition) | Netto-Vorteil Neusystem |\n`;
   md += `| :---: | :---: | :---: | :---: |\n`;
 
-  costComparisonData.yearlyBreakdown.forEach(row => {
+  /** @param {any} row */
+  const formatCostRow = (row) => {
     md += `| Jahr ${row.year} | ${row.cumulativeOld.toLocaleString('de-DE')} € | ${row.cumulativeNew.toLocaleString('de-DE')} € | ${row.cumulativeDifference.toLocaleString('de-DE')} € |\n`;
-  });
+  };
+  costComparisonData.yearlyBreakdown.forEach(formatCostRow);
 
   md += `\n**Gesamteinsparung über ${costComparisonData.years} Jahre:** ${costComparisonData.totalSavings.toLocaleString('de-DE')} €\n\n`;
 

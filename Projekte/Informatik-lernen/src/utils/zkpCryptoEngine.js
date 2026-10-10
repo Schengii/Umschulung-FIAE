@@ -1,23 +1,44 @@
+// @ts-check
 /**
  * ZKP Crypto Engine
  * Basic Elliptic Curve Math over Finite Fields (for educational visualization)
  * Curve: y^2 = x^3 + ax + b (mod p)
  */
 
+/**
+ * @typedef {[bigint, bigint] | null} EcPoint Point at infinity is `null`.
+ * @typedef {bigint | number | string} BigIntLike
+ */
+
 export class EllipticCurve {
+  /**
+   * @param {BigIntLike} a
+   * @param {BigIntLike} b
+   * @param {BigIntLike} p
+   */
   constructor(a, b, p) {
     this.a = BigInt(a);
     this.b = BigInt(b);
     this.p = BigInt(p);
   }
 
-  // Modulo operation that handles negative numbers correctly
+  /**
+   * Modulo operation that handles negative numbers correctly
+   * @param {bigint} n
+   * @param {bigint} [p]
+   * @returns {bigint}
+   */
   mod(n, p = this.p) {
     const res = n % p;
     return res < 0n ? res + p : res;
   }
 
-  // Extended Euclidean Algorithm for modular inverse
+  /**
+   * Extended Euclidean Algorithm for modular inverse
+   * @param {bigint} n
+   * @param {bigint} [p]
+   * @returns {bigint | null}
+   */
   modInverse(n, p = this.p) {
     let t = 0n;
     let newt = 1n;
@@ -40,7 +61,12 @@ export class EllipticCurve {
     return t;
   }
 
-  // Add two points P and Q on the curve
+  /**
+   * Add two points P and Q on the curve
+   * @param {EcPoint} P
+   * @param {EcPoint} Q
+   * @returns {EcPoint}
+   */
   pointAdd(P, Q) {
     if (P === null) return Q; // Point at infinity
     if (Q === null) return P;
@@ -71,8 +97,14 @@ export class EllipticCurve {
     return [rx, ry];
   }
 
-  // Scalar multiplication k * P
+  /**
+   * Scalar multiplication k * P
+   * @param {BigIntLike} k
+   * @param {EcPoint} P
+   * @returns {EcPoint}
+   */
   scalarMult(k, P) {
+    /** @type {EcPoint} */
     let result = null;
     let addend = P;
     let multiplier = BigInt(k);
@@ -89,12 +121,29 @@ export class EllipticCurve {
 }
 
 /**
+ * @typedef {object} SchnorrZkpResult
+ * @property {EcPoint} Y
+ * @property {bigint} k
+ * @property {EcPoint} R
+ * @property {bigint} c
+ * @property {bigint} s
+ * @property {EcPoint} sG
+ * @property {EcPoint} checkR
+ * @property {boolean} isValid
+ */
+
+/**
  * Schnorr Signature ZKP (Interactive Simulation)
  * Prover wants to prove they know private key (x) such that Public Key Y = x * G
  * 1. Prover generates random k, computes R = k * G. Sends R to Verifier.
  * 2. Verifier sends random challenge c.
  * 3. Prover computes s = k + c * x (mod n). Sends s to Verifier.
  * 4. Verifier checks if s * G == R + c * Y.
+ * @param {EllipticCurve} curve
+ * @param {EcPoint} G
+ * @param {BigIntLike} orderN
+ * @param {BigIntLike} privateKeyX
+ * @returns {SchnorrZkpResult}
  */
 export function simulateSchnorrZkp(curve, G, orderN, privateKeyX) {
   const Y = curve.scalarMult(privateKeyX, G);
@@ -117,7 +166,7 @@ export function simulateSchnorrZkp(curve, G, orderN, privateKeyX) {
   // checkR = R + cY
   const checkR = curve.pointAdd(R, cY);
   
-  const isValid = sG[0] === checkR[0] && sG[1] === checkR[1];
+  const isValid = sG !== null && checkR !== null && sG[0] === checkR[0] && sG[1] === checkR[1];
   
   return {
     Y, k, R, c, s, sG, checkR, isValid

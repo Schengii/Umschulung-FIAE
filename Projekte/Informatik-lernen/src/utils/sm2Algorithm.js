@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * SuperMemo SM-2 Spaced Repetition Algorithm Engine & Ebbinghaus Curve
  */
@@ -46,6 +47,9 @@ export function calculateSm2NextReview({
 
 /**
  * SuperMemo-2 (SM-2) Alias für Flashcards Kompatibilität
+ */
+/**
+ * @param {{ quality: number, repetitions?: number, interval?: number, easeFactor?: number }} params
  */
 export function calculateSM2({ quality, repetitions = 0, interval = 1, easeFactor = 2.5 }) {
   const res = calculateSm2NextReview({

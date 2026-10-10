@@ -5,10 +5,12 @@ import {
   Layers, Award, FileText, ArrowRight, X, Command, Database, ShieldCheck,
   Calculator, Globe, ShieldAlert, Brain, GitMerge,
   Lock, Activity, GitCommit, Network, Server, Code, Radio, Mic, Zap,
-  Clock, GitPullRequest, Calendar, Key, HardDrive, FileCode, TrendingDown
+  Clock, GitPullRequest, Calendar, Key, HardDrive, FileCode, TrendingDown,
+  Cloud, Compass, GraduationCap, Route, Scale, Building2, Users, KeyRound
 } from 'lucide-react';
 import { TOPICS } from '../../data/topicsData';
 import { GLOSSARY_TERMS } from '../../data/glossaryData';
+import { LAB_MODULES } from '../../data/labModulesData';
 
 export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpenModal }) {
   const [search, setSearch] = useState('');
@@ -26,7 +28,62 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
   // Schnell-Befehle & Navigationselemente
   const staticActions = [
     { id: 'view-home', title: 'Übersicht / Startseite', category: 'Navigation', icon: BookOpen, action: () => onNavigate('dashboard') },
+    { id: 'view-k8s-gateway-api', title: 'Kubernetes Gateway API & Envoy Traffic Splitting Studio (HTTPRoute & Canary Split)', category: 'Labs & Tools', icon: Route, action: () => onNavigate('k8s_gateway_api_lab') },
+    { id: 'view-wiso-break-even', title: 'IHK WISO Deckungsbeitrag Stufe 2 & Break-Even-Point Solver (Fixkostenspaltung & Engpass)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_break_even_lab') },
+    { id: 'view-wiso-bookkeeping', title: 'IHK WISO Doppelte Buchführung (T-Konten, Buchungssätze SKR03, GuV & Bilanz)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_bookkeeping_lab') },
+    { id: 'view-wiso-bab', title: 'IHK WISO Betriebsabrechnungsbogen BAB (Kostenstellenrechnung, Zuschlagssätze & Kalkulation)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_bab_lab') },
+    { id: 'view-wiso-payment', title: 'IHK WISO Zahlungsverkehr (SEPA-Überweisung, SEPA-Lastschrift, Wechsel & Skonto-Effektivzins)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_payment_lab') },
+    { id: 'view-dnssec-rollover', title: 'DNSSEC KSK & ZSK Key Rollover Studio (ZSK Pre-Publish, Double-DS & RFC 5011)', category: 'Labs & Tools', icon: KeyRound, action: () => onNavigate('dnssec_rollover_lab') },
+    { id: 'view-cloud-iam-policy', title: 'Cloud IAM Policy Evaluator & Least-Privilege Linter (SCPs, Explicit Deny & Role Security)', category: 'Labs & Tools', icon: Lock, action: () => onNavigate('cloud_iam_policy_lab') },
+    { id: 'view-sre-slo-burn', title: 'Prometheus PromQL Alerting & SRE Error-Budget Burn Studio (Multi-Window Alerting)', category: 'Labs & Tools', icon: TrendingDown, action: () => onNavigate('sre_slo_burn_lab') },
+    { id: 'view-kafka-consumer-lag', title: 'Kafka Consumer Lag & Partition Rebalance Protocol Studio (Cooperative Sticky vs. Eager)', category: 'Labs & Tools', icon: Zap, action: () => onNavigate('kafka_consumer_lag_lab') },
+    { id: 'view-linux-auditd-ebpf', title: 'Linux Auditd & eBPF Syscall Tracepoint Security Studio (Kernel Auditing & RCE Threat Hunting)', category: 'Labs & Tools', icon: Activity, action: () => onNavigate('linux_auditd_ebpf_lab') },
+    { id: 'view-ihk-proposal-pdf', title: 'IHK Projektantrag PDF- & Dokumentations-Generator (AP2 Teil A Zeitplan & TOMs)', category: 'Prüfung', icon: FileText, action: () => onNavigate('ihk_proposal_pdf_lab') },
+    { id: 'view-bgp-anycast-ddos', title: 'BGP Anycast & DDoS Flow-Scrubber Studio (Edge PoPs, SYN-Cookies & Route Withdrawal)', category: 'Labs & Tools', icon: ShieldAlert, action: () => onNavigate('bgp_anycast_ddos_lab') },
+    { id: 'view-wiso-personal-planung', title: 'IHK WISO Personalbedarfsplanung (Brutto- & Nettobedarf, Reserve- & Einsatzbedarf)', category: 'Prüfung', icon: Users, action: () => onNavigate('wiso_personal_planung_lab') },
+    { id: 'view-oauth21-dpop', title: 'OAuth 2.1 & RFC 9449 DPoP Sender-Constrained Security Studio (PKCE S256 & Replay Protection)', category: 'Labs & Tools', icon: KeyRound, action: () => onNavigate('oauth21_dpop_lab') },
+    { id: 'view-wiso-company-forms', title: 'IHK WISO Rechtsformen & Haftung (GmbH, UG, OHG, KG & Einzelunternehmen)', category: 'Prüfung', icon: Building2, action: () => onNavigate('wiso_company_forms_lab') },
+    { id: 'view-mtls-ztna', title: 'Mutual TLS (mTLS) & Zero-Trust Service-Mesh Studio (RFC 8446 & RBAC)', category: 'Labs & Tools', icon: Lock, action: () => onNavigate('mtls_ztna_lab') },
+    { id: 'view-srp-zero-knowledge', title: 'SRP-6a Zero-Knowledge Authentication Studio (RFC 5054 Handshake & Verifier)', category: 'Labs & Tools', icon: Lock, action: () => onNavigate('srp_zero_knowledge_lab') },
+    { id: 'view-wiso-contract-breach', title: 'IHK WISO Kaufvertragsstörungen & Sachmängelhaftung (BGB §§ 433–441 & HGB § 377)', category: 'Prüfung', icon: Scale, action: () => onNavigate('wiso_contract_breach_lab') },
+    { id: 'view-routing-dijkstra', title: 'Routing-Algorithmen Studio: Dijkstra (SPF) & Spanning Tree (STP Loop Prevention)', category: 'Labs & Tools', icon: Route, action: () => onNavigate('routing_dijkstra_lab') },
+    { id: 'view-http-caching', title: 'HTTP Caching Studio (RFC 9111 Cache-Control, ETag & 304 Not Modified)', category: 'Labs & Tools', icon: Zap, action: () => onNavigate('http_caching_lab') },
+    { id: 'view-exam-readiness', title: 'Adaptiver IHK Prüfungspfad & Countdown-Planer (Readiness Score & Notenprognose)', category: 'Prüfung', icon: Calendar, action: () => onNavigate('exam_readiness_lab') },
+    { id: 'view-ihk-mep', title: 'IHK Mündliche Ergänzungsprüfung (MEP) Simulator (15 Min Notfallprüfung & 2:1 Notenrechner)', category: 'Prüfung', icon: GraduationCap, action: () => onNavigate('ihk_mep_simulator_lab') },
+    { id: 'view-wiso-financing', title: 'WISO Finanzierungsvergleich: Kauf vs. Kredit vs. Leasing (AfA § 7 EStG Tax Shield)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_financing_lab') },
+    { id: 'view-pki-certificate', title: 'X.509 PKI & Certificate Chain Validator Studio (Trust Anchor, SAN & OCSP Stapling)', category: 'Labs & Tools', icon: Lock, action: () => onNavigate('pki_certificate_lab') },
+    { id: 'view-sql-isolation', title: 'SQL Transaction Isolation & ACID Studio (Read Committed, Repeatable Read, SSI & Write Skew)', category: 'Labs & Tools', icon: Database, action: () => onNavigate('sql_isolation_lab') },
+    { id: 'view-dguv-v3', title: 'DGUV Vorschrift 3 & VDE Elektro-Prüfstudio (R_PE, R_ISO, RCD 30mA & USV-Dimensionierung)', category: 'Labs & Tools', icon: Zap, action: () => onNavigate('dguv_v3_lab') },
+    { id: 'view-sql-window-functions', title: 'SQL Window Functions & Analytics Studio (ROW_NUMBER, RANK, DENSE_RANK, NTILE, LEAD/LAG)', category: 'Labs & Tools', icon: Database, action: () => onNavigate('sql_window_functions_lab') },
+    { id: 'view-argocd-gitops', title: 'ArgoCD GitOps & Cluster Sync Studio (Git-to-Cluster Drift, Out-of-Sync & Self-Healing)', category: 'Labs & Tools', icon: Cloud, action: () => onNavigate('argocd_gitops_lab') },
+    { id: 'view-vector-math-embedding', title: 'Vektor-Mathematik & Embedding-Distanz Studio (Cosine Sim, L2 Euclidean & Manhattan)', category: 'Labs & Tools', icon: Compass, action: () => onNavigate('vector_math_embedding_lab') },
+    { id: 'view-jwt-confusion', title: 'JWT Algorithm Confusion & Security Studio (RS256 vs. HS256 Key Confusion & None Exploit)', category: 'Labs & Tools', icon: Key, action: () => onNavigate('jwt_confusion_lab') },
+    { id: 'view-linux-mac-selinux', title: 'Linux SELinux & AppArmor MAC Security Studio (DAC vs. MAC & Type Enforcement)', category: 'Labs & Tools', icon: ShieldCheck, action: () => onNavigate('linux_mac_selinux_lab') },
+    { id: 'view-dns-privacy', title: 'DNS Privacy Inspector (DNS-over-HTTPS DoH & DoT vs. Port 53 Wire-Format)', category: 'Labs & Tools', icon: Globe, action: () => onNavigate('dns_privacy_lab') },
+    { id: 'view-wiso-liquiditaet', title: 'IHK WISO Liquiditätsgrade & Working Capital Studio (1., 2. & 3. Grad / InsO § 17)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_liquiditaet_lab') },
+    { id: 'view-rag-semantic-cache', title: 'RAG Semantic Cache & Vector Similarity Studio (Cosine Threshold & Zero-Cost Hits)', category: 'Labs & Tools', icon: Brain, action: () => onNavigate('rag_semantic_cache_lab') },
+    { id: 'view-linux-psi-cgroup', title: 'Linux Cgroups v2 & PSI Pressure Stall Studio (CPU, Memory & I/O Stalls / OOM)', category: 'Labs & Tools', icon: Activity, action: () => onNavigate('linux_psi_cgroup_lab') },
+    { id: 'view-nwa-sensitivity', title: 'IHK Nutzwertanalyse Sensitivitäts- & Monte-Carlo Studio (500x Stresstest)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('nwa_sensitivity_lab') },
+    { id: 'view-webrtc-ice', title: 'WebRTC STUN/TURN & ICE Candidate Gathering Studio (RFC 8445 Candidate Pairs)', category: 'Labs & Tools', icon: Radio, action: () => onNavigate('webrtc_ice_gathering_lab') },
+    { id: 'view-wiso-leverage', title: 'WISO Rentabilitätskennzahlen & Leverage-Effekt Studio (EK-, GK-Rendite & Hebel)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_rentabilitaet_leverage_lab') },
+    { id: 'view-linux-cap-seccomp', title: 'Linux Capabilities & Seccomp BPF Sandbox (Least Privilege, Syscall Filter & Rootless)', category: 'Labs & Tools', icon: Terminal, action: () => onNavigate('linux_cap_seccomp_lab') },
+    { id: 'view-bgp-path-selection', title: 'BGP Path Selection & Decision Studio (RFC 4271 8-Stufen BGP Decision Engine)', category: 'Labs & Tools', icon: Network, action: () => onNavigate('bgp_path_selection_lab') },
+    { id: 'view-wiso-mss', title: 'IHK Maschinenstundensatz-Rechner (Kalk. Abschreibung, Zinsen & Stundensatz MSS)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_maschinenstundensatz_lab') },
+    { id: 'view-llm-rag-chunking', title: 'LLM RAG Chunking & Cross-Encoder Studio (Sliding Window & Two-Stage Re-Ranking)', category: 'Labs & Tools', icon: Brain, action: () => onNavigate('llm_rag_chunking_lab') },
+    { id: 'view-bsi-grundschutz', title: 'BSI IT-Grundschutz & NIS-2 Risiko-Studio (BSI 200-2 / 200-3 & CIA)', category: 'Prüfung', icon: ShieldCheck, action: () => onNavigate('bsi_grundschutz_lab') },
+    { id: 'view-ipv6-ndp', title: 'IPv6 SLAAC, DHCPv6 & NDP Inspector (RFC 4861 & EUI-64 / Privacy)', category: 'Labs & Tools', icon: Network, action: () => onNavigate('ipv6_ndp_lab') },
+    { id: 'view-wiso-payroll', title: 'WISO Brutto-Netto & Lohnabrechnungs-Studio (Steuern & Sozialabgaben)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_payroll_lab') },
+    { id: 'view-ihk-study-plan', title: 'IHK Prüfungs-Countdown & Adaptiver Lernplaner (FIAE / FISI Sprints)', category: 'Prüfung', icon: Calendar, action: () => onNavigate('ihk_study_plan_lab') },
+    { id: 'view-ihk-certificate-pdf', title: 'IHK Lernpass & Zertifikats-Generator (PDF für das Berichtsheft)', category: 'Prüfung', icon: Award, action: () => onNavigate('ihk_certificate_pdf_lab') },
     { id: 'view-nwa-scoring', title: 'IHK Nutzwertanalyse Studio (NWA Entscheidungsmatrix & K.O.-Kriterien)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('nwa_scoring') },
+    { id: 'view-oauth-revocation', title: 'OAuth 2.0 Token Revocation & Introspection Studio (RFC 7009 & RFC 7662)', category: 'Labs & Tools', icon: Lock, action: () => onNavigate('oauth_revocation_lab') },
+    { id: 'view-raid6-galois', title: 'RAID 6 Dual-Parity & Galois Field Studio (P & Q Reed-Solomon Dual Rebuild)', category: 'Labs & Tools', icon: Database, action: () => onNavigate('raid6_galois_lab') },
+    { id: 'view-sqlite-worker', title: 'SQLite Web Worker Sandbox (Zero-Jank Query Engine & Benchmarks)', category: 'Labs & Tools', icon: Cpu, action: () => onNavigate('sqlite_worker_lab') },
+    { id: 'view-wiso-zuschlag', title: 'IHK Fertigungs- & Zuschlagskalkulation Studio (MGKZ, FGKZ, HK & BVP)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_zuschlagskalkulation_lab') },
+    { id: 'view-clean-arch', title: 'Clean Architecture & Hexagonal Ports/Adapters Linter (DIP & Cycle Detection)', category: 'Labs & Tools', icon: Layers, action: () => onNavigate('clean_arch_lab') },
+    { id: 'view-linux-netns', title: 'Linux Network Namespaces & veth Studio (Isolation, Bridge & Bash Export)', category: 'Labs & Tools', icon: Network, action: () => onNavigate('linux_netns_lab') },
+    { id: 'view-wiso-multi-db', title: 'IHK Mehrstufige Deckungsbeitragsrechnung Studio (DB I-IV Fixkosten-Kaskade)', category: 'Prüfung', icon: Calculator, action: () => onNavigate('wiso_multi_contribution_lab') },
+    { id: 'view-ihk-weakness-audit', title: 'IHK Schwachstellen-Audit & Adaptiver Lern-Assistent (LF1-LF12)', category: 'Prüfung', icon: Award, action: () => onNavigate('ihk_weakness_audit_lab') },
     { id: 'view-raid-calculator', title: 'RAID Storage & Paritäts-Rechner (RAID 0, 1, 5, 6, 10, 50 & URE Risiko)', category: 'Labs & Tools', icon: Database, action: () => onNavigate('raid_calculator') },
     { id: 'view-vlsm-subnet', title: 'VLSM Subnet Splitter & IP-Planer (Hierarchische Host-Berechnung)', category: 'Labs & Tools', icon: Network, action: () => onNavigate('vlsm_subnet') },
     { id: 'view-ihk-proposal', title: 'IHK Projektantrags-Prüfer & Meilenstein-Gantt (AO 2020 80h/40h)', category: 'Prüfung', icon: Award, action: () => onNavigate('ihk_project_proposal') },
@@ -190,11 +247,22 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
     action: () => onOpenModal('glossary', g.term)
   }));
 
-  const allItems = [...staticActions, ...topicItems, ...glossaryMatches];
+  // Alle interaktiven Labs matchen (bisher nicht durchsuchbar - nur die 14
+  // Wissens-Themen wurden erfasst, nicht die 220+ Labs aus LabsDashboard)
+  const labItems = LAB_MODULES.map(m => ({
+    id: `lab-${m.id}`,
+    title: m.title,
+    category: 'Interaktive Labs',
+    icon: m.icon || Terminal,
+    description: `${m.desc || ''} ${(m.tags || []).join(' ')}`,
+    action: () => onNavigate(m.id)
+  }));
 
-  const filteredItems = search.trim() === '' 
-    ? staticActions 
-    : allItems.filter(item => 
+  const allItems = [...staticActions, ...topicItems, ...labItems, ...glossaryMatches];
+
+  const filteredItems = search.trim() === ''
+    ? staticActions
+    : allItems.filter(item =>
         item.title.toLowerCase().includes(search.toLowerCase()) ||
         item.category.toLowerCase().includes(search.toLowerCase()) ||
         (item.description && item.description.toLowerCase().includes(search.toLowerCase()))
@@ -282,14 +350,14 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <kbd style={{ background: 'var(--bg-secondary)', padding: '3px 7px', borderRadius: '6px', fontSize: '0.75rem', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>ESC</kbd>
-              <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+              <button onClick={onClose} aria-label="Suche schließen" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
                 <X size={18} />
               </button>
             </div>
           </div>
 
           {/* Results List */}
-          <div style={{ maxHeight: '380px', overflowY: 'auto', padding: '8px' }}>
+          <div tabIndex={0} aria-label="Suchergebnisse" style={{ maxHeight: '380px', overflowY: 'auto', padding: '8px' }}>
             {filteredItems.length === 0 ? (
               <div style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
                 <Search size={32} style={{ margin: '0 auto 12px', opacity: 0.5 }} />

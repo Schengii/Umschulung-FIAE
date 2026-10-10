@@ -16,7 +16,6 @@ import { DepositLadderWidget } from './components/DepositLadderWidget';
 import { CloudSyncModal } from './components/CloudSyncModal';
 import { OrderAssistantModal } from './components/OrderAssistantModal';
 import { QrSyncModal } from './components/QrSyncModal';
-import { CryptoTaxLossHarvestingModal } from './components/CryptoTaxLossHarvestingModal';
 import { PdfFactsheetExporter } from './components/PdfFactsheetExporter';
 import { DualPortfolioCompareModal } from './components/DualPortfolioCompareModal';
 import { CommandPaletteModal } from './components/CommandPaletteModal';
@@ -24,7 +23,21 @@ import { WithholdingTaxRefundModal } from './components/WithholdingTaxRefundModa
 import { DripCompoundModal } from './components/DripCompoundModal';
 import { ReceiptScannerModal } from './components/ReceiptScannerModal';
 import { CalendarExportModal } from './components/CalendarExportModal';
-import { Cloud, ShoppingCart, QrCode, Coins, Columns, Search, Landmark, Repeat, Camera } from 'lucide-react';
+import { MultiCurrencyCashModal } from './components/MultiCurrencyCashModal';
+import { EmailWebhookDispatcherModal } from './components/EmailWebhookDispatcherModal';
+import { BrokerBreakdownModal } from './components/BrokerBreakdownModal';
+import { ExcelExportModal } from './components/ExcelExportModal';
+import { PriceAlertsModal } from './components/PriceAlertsModal';
+import { RebalancingOrderModal } from './components/RebalancingOrderModal';
+import { TerExpenseAnalysisModal } from './components/TerExpenseAnalysisModal';
+import { CryptoTaxLossOptimizerModal } from './components/CryptoTaxLossOptimizerModal';
+import { NetworkStatusIndicator } from './components/NetworkStatusIndicator';
+import { CorrelationHeatmapModal } from './components/CorrelationHeatmapModal';
+import { FireWithdrawalSimulatorModal } from './components/FireWithdrawalSimulatorModal';
+import { SavingsPlanGrowthModal } from './components/SavingsPlanGrowthModal';
+import { loadPriceAlerts, savePriceAlerts, checkPriceAlerts } from './utils/alertUtils';
+import type { PriceAlert } from './types';
+import { Cloud, ShoppingCart, QrCode, Coins, Columns, Search, Landmark, Repeat, Camera, Bell, Grid, Flame, TrendingUp } from 'lucide-react';
 
 const BatchPdfUploadModal = lazy(() => import('./components/BatchPdfUploadModal').then(m => ({ default: m.BatchPdfUploadModal })));
 const TaxReportModal = lazy(() => import('./components/TaxReportModal').then(m => ({ default: m.TaxReportModal })));
@@ -35,8 +48,9 @@ const PdfExportModal = lazy(() => import('./components/PdfExportModal').then(m =
 
 import { VaultUnlockModal } from './components/VaultUnlockModal';
 import { TaxLossHarvestingModal } from './components/TaxLossHarvestingModal';
+import { VorabpauschaleModal } from './components/VorabpauschaleModal';
 import { OptionIncomeTracker } from './components/OptionIncomeTracker';
-import { Scale, DollarSign } from 'lucide-react';
+import { Scale, DollarSign, Calculator } from 'lucide-react';
 
 function App() {
   const {
@@ -66,6 +80,7 @@ function App() {
     addSavingsPlan,
     toggleSavingsPlan,
     removeSavingsPlan,
+    updateSavingsPlan,
     executeSavingsPlans,
     addMappingRule,
     deleteMappingRule,
@@ -76,7 +91,8 @@ function App() {
     deleteRealEstate,
     addDepositLadderItem,
     updateDepositLadderItem,
-    deleteDepositLadderItem
+    deleteDepositLadderItem,
+    updateTargetAllocations
   } = usePortfolio();
 
   const [currentTab, setCurrentTab] = useState<'dashboard' | 'holdings' | 'transactions' | 'strategy' | 'dividend_calendar' | 'watchlist' | 'savings' | 'options' | 'real_estate' | 'deposit_ladder' | 'mapping_rules'>('dashboard');
@@ -85,6 +101,7 @@ function App() {
   const [showBatchPdfModal, setShowBatchPdfModal] = useState(false);
   const [showTaxReportModal, setShowTaxReportModal] = useState(false);
   const [showTaxHarvestingModal, setShowTaxHarvestingModal] = useState(false);
+  const [showVorabpauschaleModal, setShowVorabpauschaleModal] = useState(false);
   const [showWithholdingTaxModal, setShowWithholdingTaxModal] = useState(false);
   const [showStressTestModal, setShowStressTestModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -99,7 +116,52 @@ function App() {
   const [showDripModal, setShowDripModal] = useState(false);
   const [showReceiptScannerModal, setShowReceiptScannerModal] = useState(false);
   const [showCalendarExportModal, setShowCalendarExportModal] = useState(false);
+  const [showMultiCurrencyModal, setShowMultiCurrencyModal] = useState(false);
+  const [showEmailWebhookModal, setShowEmailWebhookModal] = useState(false);
+  const [showBrokerBreakdownModal, setShowBrokerBreakdownModal] = useState(false);
+  const [showExcelExportModal, setShowExcelExportModal] = useState(false);
+  const [showPriceAlertsModal, setShowPriceAlertsModal] = useState(false);
+  const [showRebalancingOrderModal, setShowRebalancingOrderModal] = useState(false);
+  const [showTerAnalysisModal, setShowTerAnalysisModal] = useState(false);
+  const [showCorrelationHeatmapModal, setShowCorrelationHeatmapModal] = useState(false);
+  const [showFireSimulatorModal, setShowFireSimulatorModal] = useState(false);
+  const [showSavingsGrowthModal, setShowSavingsGrowthModal] = useState(false);
+  const [priceAlerts, setPriceAlerts] = useState<PriceAlert[]>(() => loadPriceAlerts());
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Check price alerts when holdings change
+  useEffect(() => {
+    if (holdings.length > 0 && priceAlerts.length > 0) {
+      const { updatedAlerts, newlyTriggered } = checkPriceAlerts(priceAlerts, holdings);
+      if (newlyTriggered.length > 0) {
+        setPriceAlerts(updatedAlerts);
+      }
+    }
+  }, [holdings, priceAlerts]);
+
+  const handleAddAlert = (alertData: Omit<PriceAlert, 'id' | 'createdAt' | 'isActive'>) => {
+    const newAlert: PriceAlert = {
+      ...alertData,
+      id: `alert-${Date.now()}`,
+      createdAt: new Date().toLocaleDateString('de-DE'),
+      isActive: true
+    };
+    const updated = [...priceAlerts, newAlert];
+    setPriceAlerts(updated);
+    savePriceAlerts(updated);
+  };
+
+  const handleToggleAlert = (id: string) => {
+    const updated = priceAlerts.map(a => a.id === id ? { ...a, isActive: !a.isActive } : a);
+    setPriceAlerts(updated);
+    savePriceAlerts(updated);
+  };
+
+  const handleDeleteAlert = (id: string) => {
+    const updated = priceAlerts.filter(a => a.id !== id);
+    setPriceAlerts(updated);
+    savePriceAlerts(updated);
+  };
 
   // Global Keyboard Shortcut: Ctrl+K / Cmd+K
   useEffect(() => {
@@ -195,6 +257,8 @@ function App() {
 
         {/* Action Controls & Switcher */}
         <div className="header-controls-group">
+          <NetworkStatusIndicator onReconnect={handleRefreshPrices} />
+
           <button
             onClick={() => setShowCommandPalette(true)}
             className="theme-toggle-btn"
@@ -212,6 +276,26 @@ function App() {
             title="Echtzeit-Kurse & Währungen aktualisieren"
           >
             <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />
+          </button>
+
+          {/* Price Alerts Bell Button */}
+          <button
+            onClick={() => setShowPriceAlertsModal(true)}
+            className="theme-toggle-btn"
+            title="Kursalarme verwalten"
+            style={{ position: 'relative' }}
+          >
+            <Bell size={16} />
+            {priceAlerts.filter(a => a.isActive).length > 0 && (
+              <span style={{
+                position: 'absolute', top: '-4px', right: '-4px',
+                background: '#ef4444', color: '#fff', fontSize: '0.65rem',
+                fontWeight: 'bold', minWidth: '15px', height: '15px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 2px'
+              }}>
+                {priceAlerts.filter(a => a.isActive).length}
+              </span>
+            )}
           </button>
 
           {/* Categorized Tools & Assistants Dropdown */}
@@ -261,6 +345,48 @@ function App() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                     <button
+                      onClick={() => { setShowRebalancingOrderModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Scale size={14} style={{ color: '#3b82f6' }} /> Rebalancing & Order-Assistent
+                    </button>
+                    <button
+                      onClick={() => { setShowTerAnalysisModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <PieChart size={14} style={{ color: '#a855f7' }} /> Fondskosten- & TER-Analyse
+                    </button>
+                    <button
+                      onClick={() => { setShowCorrelationHeatmapModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Grid size={14} style={{ color: '#c084fc' }} /> Korrelations- & Diversifikations-Heatmap
+                    </button>
+                    <button
+                      onClick={() => { setShowFireSimulatorModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Flame size={14} style={{ color: '#f97316' }} /> FIRE-Dynamik & Kapitalverzehr
+                    </button>
+                    <button
+                      onClick={() => { setShowSavingsGrowthModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <TrendingUp size={14} style={{ color: '#10b981' }} /> Sparplan-Dynamisierungs-Rechner
+                    </button>
+                    <button
+                      onClick={() => { setShowBrokerBreakdownModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Landmark size={14} style={{ color: '#3b82f6' }} /> Multi-Broker Depot-Mapping
+                    </button>
+                    <button
                       onClick={() => { setShowCompareModal(true); setShowToolsDropdown(false); }}
                       style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
                       className="hover:bg-slate-800"
@@ -289,6 +415,13 @@ function App() {
                       <Calendar size={14} style={{ color: '#f59e0b' }} /> Finanzkalender & iCal Export
                     </button>
                     <button
+                      onClick={() => { setShowPriceAlertsModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Bell size={14} style={{ color: '#f59e0b' }} /> Kursalarme & Push-Warnungen
+                    </button>
+                    <button
                       onClick={() => { setShowStressTestModal(true); setShowToolsDropdown(false); }}
                       style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
                       className="hover:bg-slate-800"
@@ -301,6 +434,13 @@ function App() {
                       className="hover:bg-slate-800"
                     >
                       <FileText size={14} style={{ color: '#10b981' }} /> PDF Monatsbericht drucken
+                    </button>
+                    <button
+                      onClick={() => { setShowMultiCurrencyModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <DollarSign size={14} style={{ color: '#10b981' }} /> Multi-Währungs Cash & FX
                     </button>
                   </div>
                 </div>
@@ -324,6 +464,13 @@ function App() {
                       className="hover:bg-slate-800"
                     >
                       <Scale size={14} style={{ color: '#10b981' }} /> Tax Loss Harvesting & Freibetrag
+                    </button>
+                    <button
+                      onClick={() => { setShowVorabpauschaleModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Calculator size={14} style={{ color: '#3b82f6' }} /> ETF Vorabpauschale-Rechner (InvStG)
                     </button>
                     <button
                       onClick={() => { setShowWithholdingTaxModal(true); setShowToolsDropdown(false); }}
@@ -389,6 +536,20 @@ function App() {
                       className="hover:bg-slate-800"
                     >
                       <QrCode size={14} style={{ color: '#a855f7' }} /> Offline QR-Code Transfer
+                    </button>
+                    <button
+                      onClick={() => { setShowExcelExportModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <FileSpreadsheet size={14} style={{ color: '#10b981' }} /> Excel Multi-Sheet Export (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => { setShowEmailWebhookModal(true); setShowToolsDropdown(false); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%', padding: '0.4rem 0.5rem', background: 'transparent', border: 'none', borderRadius: '6px', color: 'var(--text-color)', textAlign: 'left', cursor: 'pointer', fontSize: '0.8rem' }}
+                      className="hover:bg-slate-800"
+                    >
+                      <Cloud size={14} style={{ color: '#06b6d4' }} /> E-Mail & Webhook Dispatcher
                     </button>
                   </div>
                 </div>
@@ -550,6 +711,9 @@ function App() {
           <Strategy 
             holdings={holdings} 
             totalValue={stats.totalValue} 
+            targetAllocations={activePortfolio.targetAllocations}
+            onUpdateTargetAllocations={updateTargetAllocations}
+            onOpenRebalanceOrders={() => setShowRebalancingOrderModal(true)}
           />
         )}
         {currentTab === 'dividend_calendar' && (
@@ -584,6 +748,7 @@ function App() {
             savingsPlans={activePortfolio.savingsPlans || []} 
             portfolioValue={stats.totalValue} 
             onAddSavingsPlan={handleAddSavingsPlan} 
+            onUpdateSavingsPlan={updateSavingsPlan}
             onDeleteSavingsPlan={removeSavingsPlan} 
             onToggleSavingsPlan={toggleSavingsPlan} 
             onExecuteSavingsPlans={executeSavingsPlans}
@@ -638,7 +803,9 @@ function App() {
             isOpen={showTaxReportModal}
             onClose={() => setShowTaxReportModal(false)}
             portfolio={activePortfolio}
-            taxExemptionLimit={1000}
+            taxExemptionLimit={stats.taxAllowanceEur || 1000}
+            holdings={holdings}
+            taxCountry={stats.taxCountry}
           />
         )}
         {showTaxHarvestingModal && (
@@ -647,6 +814,15 @@ function App() {
             onClose={() => setShowTaxHarvestingModal(false)}
             holdings={holdings}
             usedExemptionEur={stats.taxExemptionUsed}
+            baseCurrency={baseCurrency}
+          />
+        )}
+        {showVorabpauschaleModal && (
+          <VorabpauschaleModal
+            isOpen={showVorabpauschaleModal}
+            onClose={() => setShowVorabpauschaleModal(false)}
+            holdings={holdings}
+            transactions={activePortfolio.transactions || []}
             baseCurrency={baseCurrency}
           />
         )}
@@ -682,6 +858,7 @@ function App() {
             onClose={() => setShowPdfExportModal(false)}
             portfolio={activePortfolio}
             baseCurrency={baseCurrency}
+            holdings={holdings}
           />
         )}
       </Suspense>
@@ -717,9 +894,9 @@ function App() {
         />
       )}
 
-      {/* Crypto Tax Tranches & Harvesting Modal */}
+      {/* Crypto Tax Loss Optimizer & Haltefristen-Radar (§ 23 EStG) */}
       {showCryptoTaxModal && (
-        <CryptoTaxLossHarvestingModal
+        <CryptoTaxLossOptimizerModal
           isOpen={showCryptoTaxModal}
           onClose={() => setShowCryptoTaxModal(false)}
           transactions={activePortfolio.transactions || []}
@@ -756,6 +933,7 @@ function App() {
           onClose={() => setShowCompareModal(false)}
           portfolios={portfolios}
           baseCurrency={baseCurrency}
+          currentPrices={currentPrices}
         />
       )}
 
@@ -769,6 +947,7 @@ function App() {
         onOpenCsvImport={() => setShowCsvImportModal(true)}
         onOpenSettings={() => setShowSettingsModal(true)}
         onOpenTaxHarvesting={() => setShowTaxHarvestingModal(true)}
+        onOpenVorabpauschale={() => setShowVorabpauschaleModal(true)}
         onOpenTaxReport={() => setShowTaxReportModal(true)}
         onOpenStressTest={() => setShowStressTestModal(true)}
         onOpenOrderAssistant={() => setShowOrderAssistantModal(true)}
@@ -781,6 +960,13 @@ function App() {
         onOpenDrip={() => setShowDripModal(true)}
         onOpenReceiptScanner={() => setShowReceiptScannerModal(true)}
         onOpenCalendarExport={() => setShowCalendarExportModal(true)}
+        onOpenMultiCurrency={() => setShowMultiCurrencyModal(true)}
+        onOpenEmailWebhook={() => setShowEmailWebhookModal(true)}
+        onOpenBrokerBreakdown={() => setShowBrokerBreakdownModal(true)}
+        onOpenExcelExport={() => setShowExcelExportModal(true)}
+        onOpenPriceAlerts={() => setShowPriceAlertsModal(true)}
+        onOpenRebalanceOrders={() => setShowRebalancingOrderModal(true)}
+        onOpenTerAnalysis={() => setShowTerAnalysisModal(true)}
         onRefreshPrices={handleRefreshPrices}
         isDarkMode={isDarkMode}
         onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
@@ -817,9 +1003,147 @@ function App() {
           onClose={() => setShowCalendarExportModal(false)}
           transactions={activePortfolio.transactions}
           holdings={holdings}
+          deposits={activePortfolio.depositLadder || []}
+        />
+      )}
+
+      {/* Multi-Währungs Cash-Konten & FX Währungstausch Modal */}
+      {showMultiCurrencyModal && (
+        <MultiCurrencyCashModal
+          isOpen={showMultiCurrencyModal}
+          onClose={() => setShowMultiCurrencyModal(false)}
+          transactions={activePortfolio.transactions}
+          onAddTransaction={handleAddTransaction}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Automatischer E-Mail- & Webhook-Abrechnungs-Dispatcher Modal */}
+      {showEmailWebhookModal && (
+        <EmailWebhookDispatcherModal
+          isOpen={showEmailWebhookModal}
+          onClose={() => setShowEmailWebhookModal(false)}
+          onAddTransaction={handleAddTransaction}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Multi-Broker Depot-Mapping & Vergleich Modal */}
+      {showBrokerBreakdownModal && (
+        <BrokerBreakdownModal
+          isOpen={showBrokerBreakdownModal}
+          onClose={() => setShowBrokerBreakdownModal(false)}
+          holdings={holdings}
+          transactions={activePortfolio.transactions}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Excel Multi-Sheet Export Modal */}
+      {showExcelExportModal && (
+        <ExcelExportModal
+          isOpen={showExcelExportModal}
+          onClose={() => setShowExcelExportModal(false)}
+          portfolio={activePortfolio}
+          stats={stats}
+          holdings={holdings}
+          transactions={activePortfolio.transactions}
+          depositLadder={activePortfolio.depositLadder || []}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Kursalarme & Push-Benachrichtigungen Modal */}
+      {showPriceAlertsModal && (
+        <PriceAlertsModal
+          isOpen={showPriceAlertsModal}
+          onClose={() => setShowPriceAlertsModal(false)}
+          holdings={holdings}
+          alerts={priceAlerts}
+          onAddAlert={handleAddAlert}
+          onToggleAlert={handleToggleAlert}
+          onDeleteAlert={handleDeleteAlert}
+          baseCurrency={baseCurrency}
           depositLadder={activePortfolio.depositLadder || []}
         />
       )}
+
+      {/* Portfolio-Rebalancing Ausführungs-Assistent & Orderliste */}
+      {showRebalancingOrderModal && (
+        <RebalancingOrderModal
+          isOpen={showRebalancingOrderModal}
+          onClose={() => setShowRebalancingOrderModal(false)}
+          holdings={holdings}
+          targetAllocations={activePortfolio.targetAllocations}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Fondskosten- & TER-Zinseszins-Analyse */}
+      {showTerAnalysisModal && (
+        <TerExpenseAnalysisModal
+          isOpen={showTerAnalysisModal}
+          onClose={() => setShowTerAnalysisModal(false)}
+          holdings={holdings}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Portfoliokorrelations- & Diversifikations-Heatmap */}
+      {showCorrelationHeatmapModal && (
+        <CorrelationHeatmapModal
+          isOpen={showCorrelationHeatmapModal}
+          onClose={() => setShowCorrelationHeatmapModal(false)}
+          holdings={holdings}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* FIRE-Dynamik & Kapitalverzehr-Simulator */}
+      {showFireSimulatorModal && (
+        <FireWithdrawalSimulatorModal
+          isOpen={showFireSimulatorModal}
+          onClose={() => setShowFireSimulatorModal(false)}
+          totalPortfolioValue={stats.totalValue}
+          baseCurrency={baseCurrency}
+        />
+      )}
+
+      {/* Sparplan-Dynamisierungs- & Zinseszins-Rechner */}
+      {showSavingsGrowthModal && (
+        <SavingsPlanGrowthModal
+          isOpen={showSavingsGrowthModal}
+          onClose={() => setShowSavingsGrowthModal(false)}
+          portfolioValue={stats.totalValue}
+          baseCurrency={baseCurrency}
+          holdings={holdings}
+          targetAllocations={activePortfolio.targetAllocations}
+        />
+      )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="mobile-bottom-nav">
+        <button className={`mobile-bottom-btn ${currentTab === 'dashboard' ? 'active' : ''}`} onClick={() => setCurrentTab('dashboard')}>
+          <PieChart size={18} />
+          <span>Dashboard</span>
+        </button>
+        <button className={`mobile-bottom-btn ${currentTab === 'holdings' ? 'active' : ''}`} onClick={() => setCurrentTab('holdings')}>
+          <Wallet size={18} />
+          <span>Depot</span>
+        </button>
+        <button className={`mobile-bottom-btn ${currentTab === 'transactions' ? 'active' : ''}`} onClick={() => setCurrentTab('transactions')}>
+          <Activity size={18} />
+          <span>Aktivitäten</span>
+        </button>
+        <button className={`mobile-bottom-btn ${currentTab === 'dividend_calendar' ? 'active' : ''}`} onClick={() => setCurrentTab('dividend_calendar')}>
+          <Calendar size={18} />
+          <span>Zahltage</span>
+        </button>
+        <button className={`mobile-bottom-btn ${showToolsDropdown ? 'active' : ''}`} onClick={() => setShowToolsDropdown(prev => !prev)}>
+          <Sparkles size={18} />
+          <span>Tools</span>
+        </button>
+      </nav>
 
       {/* Security Master PIN Unlock Modal */}
       <VaultUnlockModal

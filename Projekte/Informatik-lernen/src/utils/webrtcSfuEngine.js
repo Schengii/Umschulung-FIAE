@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * WebRTC Media Server Architecture Engine (Mesh vs. MCU vs. SFU Simulcast)
  * Calculates uplink/downlink stream counts, server transcoding overhead,

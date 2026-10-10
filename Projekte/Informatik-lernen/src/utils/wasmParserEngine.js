@@ -1,9 +1,11 @@
+// @ts-check
 /**
  * WebAssembly Parser Engine
  * Parses raw WASM bytecode (Uint8Array) into structured sections and visualizable hex dumps.
  * Identifiziert Sections: Type (1), Import (2), Function (3), Memory (5), Export (7), Code (10), Data (11).
  */
 
+/** @type {Record<number, string>} */
 const SECTION_NAMES = {
   0: 'Custom',
   1: 'Type',
@@ -20,7 +22,10 @@ const SECTION_NAMES = {
   12: 'DataCount',
 };
 
-// Reads an Unsigned LEB128 from buffer
+/**
+ * @param {Uint8Array} buffer
+ * @param {number} offset
+ */
 export function readULEB128(buffer, offset) {
   let result = 0;
   let shift = 0;
@@ -34,8 +39,11 @@ export function readULEB128(buffer, offset) {
   return { value: result, newOffset: currentOffset, length: currentOffset - offset };
 }
 
-// Parses full WASM buffer
+/**
+ * @param {Uint8Array} buffer
+ */
 export function parseWasm(buffer) {
+  /** @type {any[]} */
   const sections = [];
   let offset = 0;
   
@@ -102,7 +110,9 @@ export function parseWasm(buffer) {
   return { error: null, sections, byteLength: buffer.length };
 }
 
-// Generates a Hex Dump from buffer
+/**
+ * @param {Uint8Array} buffer
+ */
 export function generateHexDump(buffer) {
   const lines = [];
   for (let i = 0; i < buffer.length; i += 16) {

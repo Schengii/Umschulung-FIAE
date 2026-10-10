@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Service Mesh mTLS, Envoy Sidecar & Traffic Shifting Engine
  * Simulates Envoy proxy sidecar interception, SPIFFE/SPIRE X.509 identity validation,
@@ -11,9 +12,11 @@ export class ServiceMeshSimulator {
     this.canaryWeightV2 = 10;
     this.clientSpiffeId = 'spiffe://cluster.local/ns/prod/sa/frontend-service';
     this.targetSpiffeId = 'spiffe://cluster.local/ns/prod/sa/order-service';
+    /** @type {any[]} */
     this.routingHistory = [];
   }
 
+  /** @param {number} v1Weight */
   setCanaryWeights(v1Weight) {
     this.canaryWeightV1 = Math.max(0, Math.min(100, v1Weight));
     this.canaryWeightV2 = 100 - this.canaryWeightV1;

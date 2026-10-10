@@ -10,11 +10,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          # size-limit@14 requires Node >=22.19 (uses node:fs/promises' `glob`
+          # export, only available from Node 22+) - Node 20 fails at runtime.
+          node-version: 22
           cache: npm
 
       - run: npm ci
@@ -22,8 +24,108 @@ jobs:
       - name: Lint (fails on any warning, e.g. undefined JSX references)
         run: npm run lint:ci
 
+      - name: Type-check (gradueller JSDoc-Typing über @ts-check pro Datei)
+        run: npm run typecheck
+
       - name: Unit tests
         run: npm test
 
+      - name: Coverage report (gated for src/utils/*Engine.js, informational otherwise)
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
       - name: Production build
         run: npm run build
+
+      - name: Bundle size regression check
+        run: npm run size
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright OS dependencies only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: E2E smoke tests
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  lighthouse:
+    # Lighthouse-CI gegen den Produktions-Build: A11y < 0.9 bricht den Build
+    # (meta-viewport/Zoom-Blocker eingeschlossen); Performance/SEO/Best-Practices
+    # warnen nur. Konfiguration: lighthouserc.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Lighthouse CI
+        run: npx --yes @lhci/cli@0.15.x autorun
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 14
+
+  bundle-size-report:
+    # Kommentiert den Bundle-Size-Trend (Vorher/Nachher pro Chunk) direkt in
+    # den PR, damit schleichendes Wachstum sichtbar wird, bevor ein
+    # size-limit-Grenzwert reißt (siehe "size"-Job oben, der hart gated).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Bundle size trend comment
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_step: install
