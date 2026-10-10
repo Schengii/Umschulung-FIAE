@@ -561,7 +561,7 @@ function initAccessibilityControls() {
     });
 
     document.addEventListener('click', (e) => {
-        if (!a11yDropdown.contains(e.target) && e.target !== a11yToggle) {
+        if (!a11yDropdown.contains(/** @type {Node} */ (e.target)) && e.target !== a11yToggle) {
             a11yDropdown.style.display = 'none';
         }
     });

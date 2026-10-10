@@ -172,7 +172,7 @@ export function openSandbox(projKey) {
     const title = document.getElementById('sandbox-title');
     const badge = document.getElementById('sandbox-badge');
     const desc = document.getElementById('sandbox-desc');
-    const btnNewTab = /** @type {HTMLElement} */ (document.getElementById('btn-sandbox-newtab'));
+    const btnNewTab = /** @type {HTMLAnchorElement} */ (document.getElementById('btn-sandbox-newtab'));
     const loader = document.getElementById('sandbox-loader');
 
     if (!modal || !iframe) return;
@@ -195,7 +195,7 @@ export function openSandbox(projKey) {
 
 export function closeSandbox() {
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = document.getElementById('sandbox-iframe');
+    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
     document.body.style.overflow = '';

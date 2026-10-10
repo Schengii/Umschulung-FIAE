@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { stubGithubApi } from '../../../scripts/e2e-helpers.js';
 
 test.describe('Landing Page Tests', () => {
     test.beforeEach(async ({ page }) => {
         page.on('console', (msg) => console.log('PAGE LOG:', msg.text(), msg.location()));
         page.on('pageerror', (err) => console.log('PAGE ERROR:', err.message, err.stack));
+        await stubGithubApi(page);
         // Gehe vor jedem Test zur Startseite
         await page.goto('/index.html');
     });
@@ -33,7 +35,9 @@ test.describe('Landing Page Tests', () => {
         await submitButton.click();
 
         // Überprüfen, ob zur home.html weitergeleitet wurde
-        await expect(page).toHaveURL(/.*home.html/);
+        // 800 ms Erfolgs-Feedback vor dem Redirect + Laden von home.html: auf langsamem CI-WebKit
+        // reichen die Standard-5 s nicht immer.
+        await expect(page).toHaveURL(/.*home.html/, { timeout: 15000 });
 
         // Überprüfen, ob der Name im Local Storage gespeichert wurde
         const storedName = await page.evaluate(() => localStorage.getItem('username'));

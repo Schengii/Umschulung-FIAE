@@ -166,6 +166,7 @@ function initQaMetrics() {
     const percentText = document.getElementById('overall-percentage');
     const badge = document.getElementById('grade-status-badge');
 
+    /** @type {{ num: any, range: any }[]} */
     const mappings = [
         { num: coverageInput, range: coverageRange },
         { num: cleanCodeInput, range: cleanCodeRange },
@@ -208,9 +209,9 @@ function initQaMetrics() {
 
         // Update SVG circle gauge
         const circ = 2 * Math.PI * 65;
-        ring.style.strokeDasharray = circ;
+        ring.style.strokeDasharray = String(circ);
         const offset = circ - (overallScore / 100) * circ;
-        ring.style.strokeDashoffset = offset;
+        ring.style.strokeDashoffset = String(offset);
 
         // Status determinations
         const statusConfig = {
@@ -464,7 +465,7 @@ function initCommitGrid() {
                 day: 'numeric',
             });
             tooltip.innerHTML = `<strong>${cell.commits} Commits</strong> am / on ${formattedDate}`;
-            tooltip.style.opacity = 1;
+            tooltip.style.opacity = String(1);
 
             // Position
             const rect = cellEl.getBoundingClientRect();
@@ -473,7 +474,7 @@ function initCommitGrid() {
         });
 
         cellEl.addEventListener('mouseleave', () => {
-            tooltip.style.opacity = 0;
+            tooltip.style.opacity = String(0);
         });
 
         gridContainer.appendChild(cellEl);
@@ -612,7 +613,7 @@ function renderAchievementsWidget() {
                 <div style="color: var(--text-primary); font-size: 0.8rem; margin-bottom: 4px; max-width: 220px; white-space: normal;">${desc}</div>
                 <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">${statusText}</div>
             `;
-            tooltip.style.opacity = 1;
+            tooltip.style.opacity = String(1);
 
             const rect = badgeBox.getBoundingClientRect();
             tooltip.style.left = `${rect.left + window.scrollX - tooltip.offsetWidth / 2 + rect.width / 2}px`;
@@ -620,7 +621,7 @@ function renderAchievementsWidget() {
         };
 
         const hideTooltip = () => {
-            tooltip.style.opacity = 0;
+            tooltip.style.opacity = String(0);
         };
 
         badgeBox.addEventListener('mouseenter', showTooltip);

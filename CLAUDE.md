@@ -12,7 +12,7 @@ npm test               # Playwright E2E (Chromium, Firefox, WebKit, Pixel 5), st
 npm run test:unit      # Vitest (nur assets/js/modules/**/*.test.js, Node-Umgebung)
 npm run lint           # ESLint nur über assets/js und scripts (Projekte/ ist ignoriert)
 npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)
-npm run typecheck      # tsc via jsconfig.json (in CI nur advisory; Altlast, Fehlerzahl steht nicht fest)
+npm run typecheck      # tsc via jsconfig.json (CI-Gate, 0 Fehler; Tests/Specs sind ausgenommen)
 npm run build:dist     # esbuild-Minify nach dist/ (kein Bundling, Pfade bleiben identisch)
 ```
 
@@ -30,7 +30,7 @@ Node ≥ 22.12 (`.nvmrc`/`engines`, CI nutzt 24; Vitest 5 läuft nicht auf Node 
 
 ## CI-Gates (müssen vor Push grün sein)
 
-`.github/workflows/ci.yml` führt aus: `check-sync`, `check-head`, `check-csp`, `check-sw-assets`, `lint`, `format:check`, `test:unit`, `npm test`, `build:dist`. Typische Auslöser:
+`.github/workflows/ci.yml` hat drei parallele Jobs: `quality` (`check-sync`, `check-head`, `check-csp`, `check-sw-assets`, `lint`, `format:check`, `test:unit`, `build:dist`, `typecheck`), `e2e` (Matrix: ein Job je Playwright-Projekt chromium/firefox/webkit/mobile-chrome) und `lighthouse`. Typische Auslöser:
 
 - **Neue/geänderte Datei in HTML/CSS/JS/Fonts** → `npm run generate-sw-assets` (schreibt die Precache-Liste in `sw.js`; `check-sw-assets` schlägt sonst fehl). Bilder sind bewusst eine kuratierte Konstante und werden nicht automatisch precached. `CACHE_NAME` in `sw.js` bei relevanten Änderungen hochzählen.
 - **Inline-`<script>` geändert oder CSP geändert** → `npm run check-csp:fix`. Jede Seite hat einen eigenen CSP-`<meta>`-Tag mit `sha256`-Hashes für Inline-Scripts; zusätzlich liefert `vercel.json` eine permissivere Header-CSP als Sicherheitsnetz (ADR 0003). Beide Stellen bei neuen externen Ressourcen anfassen.

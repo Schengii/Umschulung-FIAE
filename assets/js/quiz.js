@@ -104,6 +104,7 @@ const quizProgress = document.getElementById('quiz-progress');
 
 // Spielvariablen
 let currentQuestionIndex = 0;
+// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
 let score = 0;
 let questionCorrectness = []; // Tracks correctness for each question
 
@@ -169,7 +170,7 @@ function showQuestion() {
         answerButtons.appendChild(button);
 
         if (answer.correct) {
-            button.dataset.correct = answer.correct;
+            button.dataset.correct = String(answer.correct);
         }
         button.addEventListener('click', selectAnswer);
     });
@@ -203,7 +204,7 @@ function selectAnswer(e) {
     }
 
     // Alle Knöpfe deaktivieren und die richtige Antwort markieren
-    Array.from(answerButtons.children).forEach((button) => {
+    /** @type {HTMLButtonElement[]} */ (Array.from(answerButtons.children)).forEach((button) => {
         if (button.dataset.correct === 'true') {
             button.classList.add('correct');
         }

@@ -211,10 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Line
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', cx);
-            line.setAttribute('y1', cy);
-            line.setAttribute('x2', targetX);
-            line.setAttribute('y2', targetY);
+            line.setAttribute('x1', String(cx));
+            line.setAttribute('y1', String(cy));
+            line.setAttribute('x2', String(targetX));
+            line.setAttribute('y2', String(targetY));
             line.setAttribute('class', 'axis-line');
             svgEl.appendChild(line);
 
@@ -228,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Math.sin(angle) < -0.5) ly -= 2;
 
             const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', lx);
-            text.setAttribute('y', ly);
+            text.setAttribute('x', String(lx));
+            text.setAttribute('y', String(ly));
             text.setAttribute('class', 'axis-label');
 
             // Adjust anchor based on side
@@ -273,8 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const py = cy + scoreRad * Math.sin(angle);
 
             const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            dot.setAttribute('cx', px);
-            dot.setAttribute('cy', py);
+            dot.setAttribute('cx', String(px));
+            dot.setAttribute('cy', String(py));
             dot.setAttribute('r', '5');
             dot.setAttribute('class', 'radar-dot');
             dot.style.cursor = 'pointer';

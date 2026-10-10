@@ -4,6 +4,57 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### CI — Firefox-E2E: `localhost`-Demo-Backends werden ignoriert
+- **Fix**: `all_projects_launch.spec.js` ignorierte nicht erreichbare Demo-Backends (Firefox: „CORS request did not succeed“) nur auf `127.0.0.1`. `BurgenGame` ruft `http://localhost:3001/api/health` auf, was `E2E (firefox)` auf `main` rot machte. Der Filter erlaubt jetzt beide Loopback-Hostnamen (nie den Test-Server-Port 8080).
+
+### Tooling — Typecheck auf 0 Fehler, jetzt CI-Gate
+- **Ergebnis**: Die letzten 70 Fehler sind behoben (Verlauf: 598 → 70 → 0). `npm run typecheck` ist in der CI kein beratender Schritt mehr (`continue-on-error` entfernt) und bricht den Build bei neuen Fehlern.
+- **Wie (ohne Verhaltensänderung)**: `globals.d.ts` typisiert die Custom-Events `langchange`/`radarfilter` (`CustomEvent`), `Element.closest()` (Standard `HTMLElement`) und die Tag-Selektor-Überladungen von `querySelector(All)`, damit `querySelector('img')` ein `HTMLImageElement` bleibt; weitere Globals (`APP`, `newsData`, `initTranslation`, …) sind deklariert. Dazu JSDoc-Typen an Deklarationen (`<video>`, `<iframe>`, Formularfelder, SVG-Kreis) und `event.target`-Zugriffen. Die beiden `score`-Kollisionen zwischen `quiz.js` und `snake.js` (klassische Scripts mit globalem Scope, nie auf derselben Seite geladen) sind per begründetem `@ts-ignore` markiert — ein `export {}` wäre in einem klassischen `<script>` ein Syntaxfehler.
+- **Bekannter Fund, bewusst nicht behoben**: `Achievements` (`modules/achievements.js`) und `GameAudio` (`modules/game-audio.js`) sind modul-lokale Konstanten und werden nirgends als Global bereitgestellt (anders als `Confetti` via `window.Confetti`). Alle Aufrufer prüfen `typeof Achievements/GameAudio !== 'undefined'` und laufen daher ins Leere: keine Soundeffekte, keine Freischaltungen aus `flashcards`/`interview`/`quiz`/`git-simulator`, und das Dashboard meldet „Achievements module not loaded“. Browser-Probe bestätigt: beide `typeof` ergeben auf Dashboard, Quiz, Git-Simulator und Snake `undefined`. Der Zweig `module.default` in `git-simulator.js` ist ebenfalls tot (kein Default-Export). Das Einschalten würde Töne (Standard: nicht stumm) und Erfolgs-Toasts erstmals aktivieren — eine Produktentscheidung, daher separat.
+
+### Repo-Hygiene — `Projekte/` vermessen, IDE-Müll entfernt, Screenshot verkleinert
+- **Messung** (getrackte Dateien): Repo 198 MB, davon `Projekte/` 164 MB (83 %) in 2546 Dateien; Git-Historie 185 MiB. Hauptgewicht sind Bilder (121 MB), nicht Build-Output (`dist`/`build`/`www`: 22 MB). `ManuFaktur` allein hat 110 MB, wird aber wöchentlich aus einem eigenen Repo gesynct (`REPO_MAPPING`) — Optimierungen müssen dort passieren, sonst überschreibt der Sync sie. Entscheidung: Struktur unverändert lassen (Submodule/Deploy-Sync wären ein großer Umbau ohne Gewinn bei der Klongröße, History-Rewrite bricht PRs und Forks).
+- **Entfernt**: 53 getrackte Dateien aus `Projekte/ElektroCheck AI/.vs/` (Visual-Studio-Benutzerstatus mit Copilot-Snapshots/-Sitzungen) aus dem Index genommen und `.vs/` in `.gitignore` aufgenommen. Die Dateien bleiben lokal erhalten, in der Git-Historie aber weiterhin enthalten.
+- **Verkleinert**: `ElektroCheck AI/docs/images/ElektroCheck_ai_Bild1.png` (6,0 MB, nirgends referenziert) durch eine WebP-Fassung ersetzt (0,58 MB, Qualität 90). Verlustfreie PNG-Neukodierung brachte nur ~2 %, weil es eine fotoähnliche Infografik ist.
+
+### Tooling — Typecheck-Altlast von 598 auf 70 Fehler reduziert
+- **Fix (ohne Verhaltensänderung)**: Test-/Spec-Dateien sind aus `jsconfig.json` ausgenommen (sie stubben `window` absichtlich). Zahlen/Booleans, die in Textfelder oder Attribute gehen (`setAttribute('r', 14)`, `el.textContent = score`, `style.opacity = 1`), laufen durch `String(...)` — identisch zur DOM-eigenen Umwandlung. `globals.d.ts` setzt `querySelector`/`querySelectorAll` ohne Tag-Selektor auf `HTMLElement` als Standardtyp, und weitere `getElementById`-Deklarationen und `this.field`-Zuweisungen haben JSDoc-Typen. Chromium-Suite (80 Tests), Lint und Unit-Tests grün.
+- **Rest (70)**: überwiegend Einzelfälle; dazu zwei echte Namenskollisionen (`score` in `quiz.js` und `snake.js`, beides klassische Scripts mit globalem Scope). `typecheck` bleibt in der CI beratend.
+
+### CI — CSP-Hashes waren zeilenendungsabhängig (Ursache der roten CI)
+- **Befund**: `check-csp` schlug in der CI auf allen bisherigen `main`-Läufen fehl. Die `sha256`-Hashes in den CSP-`<meta>`-Tags wurden unter Windows über CRLF-Inhalt berechnet, im Repo und auf dem Linux-Runner (und damit in Produktion) ist der Inline-Script-Text aber LF — der Hash stimmte dort nie. Betroffen: `home`, `lebenslauf`, `portfolio`, `ueber-mich`, `dashboard`; auf diesen Seiten dürften Inline-Scripts durch die strengere Meta-CSP blockiert worden sein.
+- **Fix**: `.gitattributes` erzwingt LF für HTML/JS/CSS/JSON/MD/YML; `scripts/verify_csp_hashes.js` normalisiert vor dem Hashen CRLF zu LF; die Hashes der fünf Seiten wurden mit `check-csp:fix` neu geschrieben. Die neuen Werte stimmen mit den vom CI-Runner gemeldeten überein.
+- **Folgefund**: Weil die CI bisher schon an `check-csp` abbrach, lief die E2E-Matrix lange nicht. Erster voller Lauf: 310 grün, 9 flaky (8× WebKit-axe-`color-contrast`, 1× Firefox-Service-Worker/Video), 1 hart rot — `all_projects_launch` in Firefox, weil das optionale `finance-ai-bot`-Backend (`127.0.0.1:8000`) in der CI nicht läuft und Firefox das als CORS-Konsolenfehler meldet. Dasselbe gilt für `Wohnungssuche KI` (`:5000`). Der Test ignoriert jetzt gezielt Firefox' „CORS request did not succeed“ gegen Loopback-Ports außer dem Testserver (`:8080`) — Chromiums Äquivalent `Failed to load resource` wurde schon gefiltert, echte CORS-Fehler gegen erreichbare Server bleiben sichtbar.
+
+### Testing — E2E-Specs hängen nicht mehr an der GitHub-API
+- **Befund**: Nach der Matrix-Umstellung bestanden 7 Tests erst im Retry (Firefox: 5, WebKit: 2). Gemeinsamer Nenner in Firefox: `waitForLoadState('networkidle')` lief in den 30-s-Timeout, weil mehrere Seiten (`projekt-detail`, Recruiter-Filter) die unauthentifizierte `api.github.com` abfragen — auf geteilten Runner-IPs langsam oder rate-limitiert. In WebKit reichte das Standard-Timeout von 5 s für den Landing-Page-Redirect (800 ms Feedback + Laden von `home.html`) nicht immer.
+- **Fix**: `scripts/e2e-helpers.js` (`stubGithubApi`) beantwortet GitHub-Requests sofort mit einem 403 „rate limit“ — dieselbe Fallback-Strecke, die die App ohnehin hat, nur deterministisch. Eingebunden in `all_pages`, `new_features` und `landing_page`. Der Helfer liegt bewusst in `scripts/`, damit weder Service-Worker-Precache noch Build ihn aufnehmen. Der Redirect-Test wartet bis zu 15 s auf `home.html`.
+- **Korrektur**: Der GitHub-Stub allein beseitigte die Firefox-Flakes nicht (im CI-Lauf danach weiter 5× `networkidle`-Timeout, jeweils auf einer anderen Seite). Deshalb ersetzt `settle(page)` aus `scripts/e2e-helpers.js` alle 18 `waitForLoadState('networkidle')` in den Specs: Es wartet höchstens 10 s auf Netzwerkruhe und läuft danach weiter, statt den Test beim 30-s-Timeout abzubrechen. Die Konsolen-/pageerror-Listener und die auto-wartenden Locator-Assertions bleiben strikt. Das ist eine Abmilderung; warum einzelne Seiten in Firefox auf CI nicht zur Ruhe kommen, ist nicht geklärt.
+
+### CI — E2E-Matrix parallelisiert
+- **Befund**: Ein einziger serieller Job (Checks + alle vier Browser-Projekte) brauchte ~13 Minuten und lieferte bei einem Fehler wenig Hinweis auf den Browser.
+- **Fix**: `ci.yml` getrennt in `quality` (Daten-/CSP-/Lint-/Unit-/Build-Gates, einmalig), `e2e` (Matrix je Playwright-Projekt, `fail-fast: false`, installiert nur den jeweils nötigen Browser, lädt `test-results/` bei Fehlern als Artefakt hoch) und `lighthouse`. Job-Namen haben sich geändert (Branch-Protection ist im Repo nicht aktiv, daher keine Pflicht-Checks betroffen). Der Schrittname „(22 Projects)“ entfällt.
+
+### PWA — Service Worker fasst Audio/Video und Range-Requests nicht mehr an
+- **Befund**: `sw.js` behandelte Videos wie normale Assets (Stale-While-Revalidate). Medien werden aber per Range-Request geladen: eine 206-Teilantwort lässt sich nicht cachen, und eine vollständig gecachte Datei ist keine gültige Antwort auf einen Range-Request. In Firefox brach das Laden mit „A ServiceWorker intercepted the request and encountered an unexpected error“ ab (sichtbar als flaky E2E-Test auf `projekt-detail.html?repo=EcoChef`, betrifft aber echte Nutzer).
+- **Fix**: Requests mit `Range`-Header sowie `destination` `video`/`audio` werden nicht mehr abgefangen, der Browser streamt sie direkt. `CACHE_NAME` auf `umschulung-fiae-v42`.
+
+### Testing — axe-`color-contrast` auf WebKit nicht mehr flaky
+- Die Footer-Kontrastverstöße traten nur im ersten Versuch auf CI-WebKit auf und verschwanden im Retry. `accessibility.spec.js` aktiviert jetzt `prefers-reduced-motion` (die Seite kollabiert dann alle Übergänge) und wartet auf laufende Animationen, damit axe den eingeschwungenen Zustand misst und keine halbtransparenten Zwischenfarben.
+
+### Sicherheit — Nutzertexte in `innerHTML` werden escaped
+- **Befund**: Eigene Flashcards (Frage, Antwort, Hinweis, Kategorie, ID) wurden roh in `localStorage` gespeichert und per `innerHTML` gerendert; im Interview-Trainer ging die freie Antwort (`h.answer`) ungefiltert in die Ergebnisansicht. Beides ist Self-XSS, bei den Flashcards bleibt der Payload jedoch dauerhaft im Browser bestehen.
+- **Fix**: Neues Modul `assets/js/modules/html-utils.js` (`escapeHtml`) mit Unit-Test; `flashcards.js` escaped eigene Karten beim Rendern (eingebaute Karten behalten ihr vertrauenswürdiges Markup), `interview.js` escaped Frage und Antwort (klassisches Script, daher lokale Kopie des Helfers). E2E-Test `flashcards_escaping.spec.js` schlägt ohne den Fix fehl.
+
+### Tooling — Node 24, `AppStorage`, Typecheck-Altlast
+- **Node**: CI-Workflows auf Node 24 (Vitest 5 verlangt Node ≥ 22.12 und lief auf Node 20 nicht), `engines` in `package.json` und `.nvmrc` ergänzt.
+- **`StorageManager` → `AppStorage`**: Der globale Storage-Wrapper aus `components.js` überschattete den DOM-Typ `StorageManager` (91 Vorkommen in 19 Dateien umbenannt, kein Laufzeitunterschied).
+- **Typecheck**: `assets/js/globals.d.ts` deklariert die zwischen klassischen Scripts geteilten Globals, dazu JSDoc-Typannotationen an DOM-Deklarationen und `event.target`-Zugriffen. Fehler von 598 auf 206 gesunken; die Stufe bleibt in der CI beratend (`continue-on-error`).
+
+### Testing — Unit-Tests für `event-bus` und `resolveAssetPath`
+- 16 neue Vitest-Fälle (61 → 77): `resolveAssetPath` für Seiten in `pages/`, Root-Seiten, Windows-Pfadtrenner und durchgereichte URLs; `event-bus` für Nutzdaten, Abmelden, `onceEvent` und Event-Trennung. ESLint kennt `EventTarget` als Global.
+- Service-Worker-Cache auf `umschulung-fiae-v41` angehoben, Precache-Liste enthält `html-utils.js`.
+
 ## [1.8.0] — 2026-09-28
 
 ### Barrierefreiheit — WCAG-AA-Kontrastfehler auf Amber-Elementen und Playlist-Icon behoben

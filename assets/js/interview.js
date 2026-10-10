@@ -315,9 +315,9 @@ class InterviewSimulator {
         this.setupCard = document.getElementById('setup-card');
         this.chatCard = document.getElementById('chat-card');
         this.resultCard = document.getElementById('result-card');
-        this.inputText = document.getElementById('user-input-text');
-        this.sendBtn = document.getElementById('send-btn');
-        this.micBtn = document.getElementById('mic-btn');
+        this.inputText = /** @type {HTMLInputElement} */ (document.getElementById('user-input-text'));
+        this.sendBtn = /** @type {HTMLButtonElement} */ (document.getElementById('send-btn'));
+        this.micBtn = /** @type {HTMLButtonElement} */ (document.getElementById('mic-btn'));
         this.ttsToggleBtn = document.getElementById('tts-toggle-btn');
         this.ttsEnabled = AppStorage.getItem('interview_tts_enabled', 'true') === 'true';
         this.recognition = null;
@@ -453,7 +453,9 @@ class InterviewSimulator {
             window.speechSynthesis.cancel();
         }
         // Collect choices
-        const checkedBoxes = document.querySelectorAll('input[name="category"]:checked');
+        const checkedBoxes = /** @type {NodeListOf<HTMLInputElement>} */ (
+            document.querySelectorAll('input[name="category"]:checked')
+        );
         this.selectedCategories = Array.from(checkedBoxes).map((cb) => cb.value);
 
         if (this.selectedCategories.length === 0) {
@@ -691,13 +693,15 @@ class InterviewSimulator {
         if (scoreVal) scoreVal.textContent = `${overallPercentage}%`;
 
         // Radial SVG update
-        const circle = /** @type {HTMLElement} */ (document.getElementById('result-ring-fill'));
+        const circle = /** @type {SVGCircleElement} */ (
+            /** @type {unknown} */ (document.getElementById('result-ring-fill'))
+        );
         if (circle) {
             const radius = circle.r.baseVal.value;
             const circumference = 2 * Math.PI * radius;
             circle.style.strokeDasharray = `${circumference} ${circumference}`;
             const offset = circumference - (overallPercentage / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
+            circle.style.strokeDashoffset = String(offset);
         }
 
         // Summary details
