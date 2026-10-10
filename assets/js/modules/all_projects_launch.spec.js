@@ -6,8 +6,7 @@ import { test, expect } from '@playwright/test';
 // as a CORS error with reason "CORS request did not succeed". Only that exact
 // "backend not reachable" case on a non-test-server loopback port is ignored.
 const isUnreachableDemoBackend = (text) =>
-    text.includes('CORS request did not succeed') &&
-    /https?:\/\/(?:127\.0\.0\.1|localhost):(?!8080\b)\d+\//.test(text);
+    text.includes('CORS request did not succeed') && /https?:\/\/(?:127\.0\.0\.1|localhost):(?!8080\b)\d+\//.test(text);
 
 test.describe('All Projects 1-Click Launch E2E Verification', () => {
     test('sollte alle Projekte aus projectsData auslesen und jedes einzelne fehlerfrei starten', async ({ page }) => {
