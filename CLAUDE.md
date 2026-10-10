@@ -13,7 +13,7 @@ npm run test:unit      # Vitest (nur assets/js/modules/**/*.test.js, Node-Umgebu
 npm run lint           # ESLint über assets/js, scripts und sw.js (Projekte/ ist ignoriert)
 npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)
 npm run typecheck      # tsc via jsconfig.json + jsconfig.sw.json (CI-Gate, 0 Fehler; Tests/Specs sind ausgenommen)
-npm run build:dist     # Produktions-Build nach dist/ (esbuild-Minify, kein Bundling, Pfade bleiben identisch)
+npm run build:dist     # Produktions-Build nach dist/ (esbuild-Minify, kein Bundling, Pfade bleiben identisch); bewusst kein `build`-Script (ADR 0005)
 npm run regen          # subset-icons + generate-sw-assets, in dieser Reihenfolge (nach Änderungen an Seiten/Assets)
 npm run check          # alle statischen CI-Gates am Stück (check-*, lint, format, typecheck, Unit-Tests)
 npm run prepare        # aktiviert Git-Hooks (.githooks/) via git config core.hooksPath
