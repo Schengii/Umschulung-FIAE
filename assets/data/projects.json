@@ -18,7 +18,7 @@
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Amazon-2.0",
-    "updatedAt": "2026-10-10T09:57:40.735Z",
+    "updatedAt": "2026-10-10T13:18:56.458Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -108,7 +108,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-10-10T09:57:40.854Z"
+    "updatedAt": "2026-10-10T13:18:56.469Z"
   },
   {
     "repoName": "EcoChef",
@@ -121,7 +121,7 @@
       "LocalStorage",
       "Speech Synthesis"
     ],
-    "image": "assets/images/ecochef_showcase.png",
+    "image": "assets/images/ecochef_showcase.webp",
     "link": "Projekte/EcoChef/www/index.html",
     "descDe": "EcoChef ist die IHK-Abschlussarbeit (Hybrid-App) – ein intelligenter Rezept-Assistent. Aus Kühlschrank-Zutaten generiert die Gemini-KI kreative, nachhaltige Rezeptideen inklusive Nährwertangaben, CO2-Einsparungsberechnungen und integriertem Kochmodus mit digitalem Vorlese-Assistenten.",
     "descEn": "EcoChef is the final IHK graduation project (hybrid app) – an intelligent recipe assistant. Using Gemini AI, it generates creative, sustainable recipes based on your ingredients, calculates nutritional values and CO2 savings, and includes a hands-free reading assistant.",
@@ -250,9 +250,9 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
-    "updatedAt": "2026-10-02T15:51:15Z",
+    "updatedAt": "2026-10-10T13:18:56.471Z",
     "images": [
-      "assets/images/ecochef_showcase.png",
+      "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
     ]
   },
@@ -275,7 +275,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-10-10T09:57:41.104Z",
+    "updatedAt": "2026-10-10T13:18:56.474Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -293,14 +293,14 @@
       "Recharts"
     ],
     "image": "assets/images/finanzenportfolio_showcase.webp",
-    "link": "https://schengii.github.io/Finanzenportfolio/",
+    "link": "Projekte/Finanzenportfolio/dist/index.html",
     "descDe": "Ein interaktives Dashboard zur Analyse und Verwaltung des persönlichen Vermögens. Visualisiert Vermögensaufteilungen und simuliert Kursentwicklungen.",
     "descEn": "An interactive dashboard to analyze and manage personal wealth. Visualizes asset allocation and simulates market trends.",
     "category": "web",
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-10-10T08:15:18Z",
+    "updatedAt": "2026-10-10T13:18:56.477Z",
     "images": [
       "assets/images/finanzenportfolio_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -325,7 +325,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-10-10T09:57:41.286Z",
+    "updatedAt": "2026-10-10T13:18:56.479Z",
     "images": [
       "assets/images/gluecksspiel_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -350,7 +350,7 @@
       "assets/images/it_workspace.webp",
       "assets/images/quiz_showcase.webp"
     ],
-    "link": "https://informatik-lernen.vercel.app",
+    "link": "Projekte/Informatik-lernen/dist/index.html",
     "descDe": "Umfassende interaktive Prüfungsvorbereitung und IT-Simulatoren-Hub für Fachinformatiker (AO 2020). Beinhaltet 25 praxisnahe Labore: DNSSEC Chain of Trust, Linux Btrfs/ZFS Copy-on-Write Sandbox, OpenAPI 3.1 Contract Testing, Agile Burndown & Gantt, eBPF Cilium Service Mesh, TLS 1.3 Anti-Replay und IHK-Wirtschaftlichkeitsrechner.",
     "descEn": "Comprehensive interactive exam prep and IT simulator suite for IT specialists. Features 25 hands-on labs: DNSSEC chain of trust validation, Linux Btrfs/ZFS Copy-on-Write sandbox, OpenAPI 3.1 contract testing, Agile Burndown & Gantt planners, eBPF Cilium network policies, TLS 1.3 replay defense, and IHK profitability calculators.",
     "category": "web",
@@ -412,7 +412,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-10T08:14:57Z"
+    "updatedAt": "2026-10-10T13:18:56.481Z"
   },
   {
     "repoName": "Jobsuche",
@@ -433,7 +433,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-10-10T09:57:41.603Z",
+    "updatedAt": "2026-10-10T13:18:56.484Z",
     "images": [
       "assets/images/jobsuche_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -451,14 +451,14 @@
       "Merkliste"
     ],
     "image": "assets/images/manufaktur_showcase.webp",
-    "link": "https://www.manufaktur-malerei.de",
+    "link": "Projekte/ManuFaktur/index.html",
     "descDe": "Ein kunstvolles Web-Portfolio für handgemalte Bilder und Kunstwerke. Die responsive Seite präsentiert Tierportraits und Landschaftsgemälde (Acryl/Öl), bietet eine interaktive Bildergalerie mit Lightbox-Effekt, ein individuelles Kontaktformular sowie eine neue, persistente Favoriten/Merkliste (LocalStorage) für interessierte Käufer.",
     "descEn": "An artistic web portfolio showcasing hand-painted custom artworks. The responsive website features sections for pet portraits and landscapes (acrylic/oil), an interactive lightbox image gallery, a custom order form, and a newly integrated persistent Favorites Wishlist (LocalStorage) for potential buyers.",
     "category": "web",
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-10T08:14:28Z",
+    "updatedAt": "2026-10-10T13:18:56.488Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -542,7 +542,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Maps",
-    "updatedAt": "2026-10-10T09:57:41.862Z",
+    "updatedAt": "2026-10-10T13:18:56.490Z",
     "images": [
       "assets/images/maps_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -584,7 +584,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft",
-    "updatedAt": "2026-10-10T09:57:41.966Z"
+    "updatedAt": "2026-10-10T13:18:56.492Z"
   },
   {
     "repoName": "Minecraft-Pokemon",
@@ -622,7 +622,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-10-10T09:57:42.077Z"
+    "updatedAt": "2026-10-10T13:18:56.493Z"
   },
   {
     "repoName": "Sims",
@@ -665,7 +665,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Sims",
-    "updatedAt": "2026-10-10T09:57:42.185Z"
+    "updatedAt": "2026-10-10T13:18:56.495Z"
   },
   {
     "repoName": "Urlaubsfotos",
@@ -685,7 +685,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-10-10T09:57:42.322Z",
+    "updatedAt": "2026-10-10T13:18:56.496Z",
     "images": [
       "assets/images/urlaubsfotos_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -709,7 +709,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-10-10T09:57:42.434Z",
+    "updatedAt": "2026-10-10T13:18:56.498Z",
     "images": [
       "assets/images/verkaufsvorlagen_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -734,7 +734,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-10-10T09:57:42.582Z",
+    "updatedAt": "2026-10-10T13:18:56.500Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -815,7 +815,7 @@
     },
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-10-10T09:57:42.721Z",
+    "updatedAt": "2026-10-10T13:18:56.501Z",
     "images": [
       "assets/images/arbeitszeit_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -840,7 +840,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-10-02T15:56:56Z",
+    "updatedAt": "2026-10-10T13:18:56.503Z",
     "images": [
       "assets/images/finance_bot_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -865,7 +865,7 @@
     "language": "GDScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-10-10T09:57:42.973Z",
+    "updatedAt": "2026-10-10T13:18:56.504Z",
     "images": [
       "assets/images/orbital_scrap_showcase.webp",
       "assets/images/game_leaderboard.webp"
@@ -893,7 +893,7 @@
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/snake-ascend",
-    "updatedAt": "2026-10-10T09:57:43.077Z"
+    "updatedAt": "2026-10-10T13:18:56.506Z"
   },
   {
     "repoName": "CoOpVersusGame",
@@ -918,7 +918,7 @@
     "stars": 2,
     "language": "GDScript",
     "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-10-10T09:57:43.199Z"
+    "updatedAt": "2026-10-10T13:18:56.507Z"
   },
   {
     "repoName": null,
