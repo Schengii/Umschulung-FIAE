@@ -6,16 +6,31 @@
 
 // Immediate Theme, Accent & Accessibility Bootstrapping to prevent white flashing / style shifts
 (function () {
+    // First visit follows the system colour scheme; nothing is persisted until the visitor
+    // picks a theme, so a later change of the system setting is still honoured.
     let initialTheme = 'dark';
+    try {
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) initialTheme = 'light';
+    } catch (_e) {
+        // matchMedia unavailable: keep the dark default
+    }
     let initialAccent = 'blue';
     try {
-        const storedTheme = localStorage.getItem('portfolio_theme');
-        if (storedTheme) initialTheme = storedTheme;
-        else localStorage.setItem('portfolio_theme', 'dark');
+        // Same key theme.js writes ('theme', STORAGE_KEYS.THEME). This block used to read
+        // 'portfolio_theme', which nothing ever updated, so a visitor who chose the light
+        // theme got a dark first paint on every page load.
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark' || storedTheme === 'light') initialTheme = storedTheme;
+        localStorage.removeItem('portfolio_theme');
 
         const storedAccent = localStorage.getItem('portfolio_accent');
         if (storedAccent) initialAccent = storedAccent;
-        else localStorage.setItem('portfolio_accent', 'blue');
+
+        // Same key translation.js writes (STORAGE_KEYS.LANG). Set here, before the first
+        // paint: applied only at layout-ready, an English visitor first saw the German text
+        // and then a re-layout.
+        const storedLang = localStorage.getItem('lang');
+        if (storedLang === 'de' || storedLang === 'en') document.documentElement.setAttribute('lang', storedLang);
 
         const dyslexia = localStorage.getItem('portfolio_dyslexia');
         if (dyslexia === 'true') document.documentElement.setAttribute('data-dyslexia', 'true');
@@ -58,6 +73,29 @@ document.addEventListener(
     },
     true
 );
+
+/**
+ * Loads a stylesheet on demand (widgets that are not part of the first paint). The link is
+ * placed in front of style.css so the cascade matches the former CSS import order.
+ * @param {string} assetPath path from the site root, e.g. 'assets/css/modules/foo.css'
+ * @returns {Promise<void>} resolves once the sheet is applied (also if it fails to load)
+ */
+function loadStylesheet(assetPath) {
+    const fileName = assetPath.split('/').pop();
+    if (document.querySelector(`link[rel="stylesheet"][href$="${fileName}"]`)) return Promise.resolve();
+    const inPages = window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+    return new Promise((resolve) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = (inPages ? '../' : '') + assetPath;
+        link.onload = () => resolve();
+        link.onerror = () => resolve();
+        const mainSheet = document.querySelector('link[rel="stylesheet"][href$="css/style.css"]');
+        if (mainSheet) mainSheet.before(link);
+        else document.head.appendChild(link);
+    });
+}
+window.loadStylesheet = loadStylesheet;
 
 const AppStorage = {
     isAvailable() {
@@ -151,9 +189,9 @@ function renderNav(currentPage) {
     };
 
     return `
-    <nav class="topnav" aria-label="Hauptnavigation">
+    <nav class="topnav" aria-label="Hauptnavigation" data-en-aria-label="Main navigation">
         <div class="nav-wrapper">
-            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen/schließen" data-en-aria-label="Open/close menu" aria-expanded="false">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
             <ul class="nav-menu" id="nav-menu">
@@ -243,12 +281,12 @@ function renderNav(currentPage) {
                         <span lang="en">Filter cards</span>
                     </label>
                     <i class="fa fa-search search-icon" aria-hidden="true"></i>
-                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." aria-label="Karten filtern">
+                    <input type="text" id="searchbar" class="search-input" placeholder="Suche..." data-en-placeholder="Search..." aria-label="Karten filtern" data-en-aria-label="Filter cards">
                 </div>
 
                 <!-- Accessibility Customizer Dropdown -->
                 <div class="a11y-customizer-container">
-                    <button id="a11y-toggle" class="theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" title="Barrierefreiheit & Lesehilfe">
+                    <button id="a11y-toggle" class="theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" data-en-aria-label="Accessibility & reading aids" title="Barrierefreiheit & Lesehilfe" data-en-title="Accessibility & reading aids">
                         <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
                     </button>
                     <div id="a11y-dropdown" class="a11y-dropdown-menu" role="menu">
@@ -270,7 +308,7 @@ function renderNav(currentPage) {
 
                 <!-- Unified Theme & Appearance Dropdown -->
                 <div class="accent-customizer-container" style="position: relative;">
-                    <button id="accent-toggle" class="theme-toggle" aria-label="Farbschema & Akzente" title="Farbschema & Akzente">
+                    <button id="accent-toggle" class="theme-toggle" aria-label="Farbschema & Akzente" data-en-aria-label="Colour scheme & accents" title="Farbschema & Akzente" data-en-title="Colour scheme & accents">
                         <i class="fa-solid fa-palette" aria-hidden="true"></i>
                     </button>
                     <div id="accent-dropdown" class="accent-dropdown" style="display: none;" role="menu">
@@ -289,7 +327,7 @@ function renderNav(currentPage) {
                 <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 65px;" aria-label="Sprache umschalten"></button>
 
                 <!-- Dark Mode Toggle -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten" title="Dark / Light Mode">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten" data-en-aria-label="Toggle theme" title="Dark / Light Mode">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>
                 </button>
             </div>
@@ -335,7 +373,7 @@ function renderFooter() {
                         <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
                         <a href="https://instagram.com/schengii" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
                         <a href="https://wa.me/4917624921897" target="_blank" rel="noopener" aria-label="WhatsApp" class="social-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-                        <a href="mailto:sche-max@web.de" aria-label="E-Mail" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
+                        <a href="mailto:sche-max@web.de" aria-label="E-Mail" data-en-aria-label="Email" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 
@@ -374,14 +412,14 @@ function renderFooter() {
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
                     &nbsp;&middot;&nbsp;
-                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Sound umschalten" title="Sound umschalten">
-                        <i class="fa-solid ${AppStorage.getItem('audio_effects_enabled', 'true') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
+                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Sound einschalten" title="Sound einschalten" aria-pressed="false">
+                        <i class="fa-solid ${AppStorage.getItem('sound_enabled') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
                         <span>Audio</span>
                     </button>
                     &nbsp;&middot;&nbsp;
-                    <span title="Tastaturkürzel" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
+                    <span title="Tastaturkürzel" data-en-title="Keyboard shortcuts" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
                     &nbsp;&middot;&nbsp;
-                    <span id="visitor-session-counter" title="Datenschutzfreundliche Besucher-Statistik"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span id="visit-count-display">100% Privacy</span></span>
+                    <span id="visitor-session-counter" title="Datenschutzfreundliche Besucher-Statistik" data-en-title="Privacy-friendly visitor statistics"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> <span id="visit-count-display">100% Privacy</span></span>
                 </p>
             </div>
         </div>
@@ -393,7 +431,7 @@ function renderFooter() {
    ============================================================ */
 function renderBackToTop() {
     return `
-    <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang scrollen" title="Nach oben">
+    <button id="back-to-top" class="back-to-top" aria-label="Zum Seitenanfang scrollen" data-en-aria-label="Scroll to top" title="Nach oben" data-en-title="Back to top">
         <i class="fa fa-chevron-up" aria-hidden="true"></i>
     </button>`;
 }
@@ -407,7 +445,7 @@ function renderCookieBanner() {
     const datenschutzPath = isPagesFolder ? 'datenschutz.html' : 'pages/datenschutz.html';
 
     return `
-    <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie-Hinweis">
+    <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie-Hinweis" data-en-aria-label="Cookie notice">
         <div class="cookie-content">
             <p>
                 <span lang="de">Diese Website verwendet Local Storage für Theme- und Spracheinstellungen sowie externe Dienste (Google Maps, Font Awesome CDN). Mehr dazu in der <a href="${datenschutzPath}">Datenschutzerklärung</a>.</span>
@@ -445,34 +483,80 @@ function renderBreadcrumb(items) {
    ============================================================ */
 function initBreadcrumbs() {
     const container = document.getElementById('breadcrumb-container');
-    if (!container) return;
+    if (!container || container.dataset.rendered === 'true') return;
     try {
         const items = JSON.parse(container.getAttribute('data-items'));
         container.innerHTML = renderBreadcrumb(items);
+        container.dataset.rendered = 'true';
     } catch (e) {
         console.warn('Breadcrumb data-items parse error:', e);
     }
 }
 
 /* ============================================================
-   AUTO-INJECT ON LOAD
+   EARLY LAYOUT INJECTION
    ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-    initBreadcrumbs();
+function currentPageName() {
     const path = window.location.pathname;
-    const currentPage = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
+    return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+}
 
-    // Header & Navigation Loader (not on index.html)
+let headerInjected = false;
+
+/**
+ * Replaces the header/nav placeholders with the real header. Safe to call repeatedly: it
+ * only acts on placeholders that are still in the document.
+ */
+function injectHeader() {
+    const currentPage = currentPageName();
     const headerEl = document.getElementById('site-header');
     const navEl = document.getElementById('site-nav');
+    if (!headerEl && !navEl) return;
 
     if (headerEl) {
         headerEl.outerHTML = renderHeader(currentPage);
-        if (navEl) navEl.remove();
-    } else if (navEl) {
-        navEl.outerHTML = renderNav(currentPage);
+        headerInjected = true;
     }
+    if (navEl) {
+        // renderHeader already contains the navigation; a stand-alone placeholder is only
+        // filled on pages without a header placeholder.
+        if (headerInjected) navEl.remove();
+        else navEl.outerHTML = renderNav(currentPage);
+    }
+
+    // Hide search bar on pages where search is not needed. Same list as
+    // APP.SEARCHABLE_PAGES (constants.js), which is not loaded yet when this runs.
+    const searchablePages = ['news.html', 'home.html'];
+    if (!searchablePages.includes(currentPage)) {
+        const searchContainer = /** @type {HTMLElement} */ (document.querySelector('.search-container'));
+        if (searchContainer) {
+            searchContainer.style.display = 'none';
+        }
+    }
+}
+
+// The header and the breadcrumbs sit above the page content. Injected at DOMContentLoaded
+// they arrived after the first paint (main.js and its imports delay that event), pushing
+// everything down by the header height: a layout shift of ~0.2 on every page. This script
+// runs in <head>, so it watches the parser instead and fills each placeholder in the same
+// task that created it, i.e. before the browser can paint it empty.
+const earlyLayoutObserver = new MutationObserver(() => {
+    injectHeader();
+    initBreadcrumbs();
+});
+earlyLayoutObserver.observe(document.documentElement, { childList: true, subtree: true });
+
+/* ============================================================
+   AUTO-INJECT ON LOAD
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    earlyLayoutObserver.disconnect();
+    // Fallback for anything the observer did not catch.
+    injectHeader();
+    initBreadcrumbs();
+
+    const path = window.location.pathname;
+    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
 
     // Scroll-based Header Shrink Animation
     const appHeader = document.querySelector('.app-header');
@@ -486,15 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         window.addEventListener('scroll', toggleHeaderScroll, { passive: true });
         toggleHeaderScroll();
-    }
-
-    // Hide search bar on pages where search is not needed
-    const searchablePages = ['news.html', 'home.html'];
-    if (!searchablePages.includes(currentPage)) {
-        const searchContainer = /** @type {HTMLElement} */ (document.querySelector('.search-container'));
-        if (searchContainer) {
-            searchContainer.style.display = 'none';
-        }
     }
 
     // Footer
@@ -522,6 +597,25 @@ document.addEventListener('DOMContentLoaded', () => {
             document.head.appendChild(link); // Fix: Link muss dem DOM hinzugefügt werden
         }
         if ('serviceWorker' in navigator) {
+            // A new worker activates immediately (skipWaiting + clients.claim) and drops the
+            // old cache, so an already open page keeps running its old scripts next to new
+            // ones. Offer a reload instead of leaving that mix in place. Only when a worker
+            // was already in control: on a first visit the same event just means "installed".
+            const hadController = Boolean(navigator.serviceWorker.controller);
+            let updateAnnounced = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!hadController || updateAnnounced || typeof window.showToast !== 'function') return;
+                updateAnnounced = true;
+                window.showToast(
+                    {
+                        de: 'Eine neue Version der Seite ist verfügbar.',
+                        en: 'A new version of this site is available.',
+                    },
+                    'info',
+                    0,
+                    { label: { de: 'Neu laden', en: 'Reload' }, onClick: () => window.location.reload() }
+                );
+            });
             navigator.serviceWorker
                 .register(swPath)
                 .then((reg) => console.log('PWA Service Worker registered:', reg.scope))

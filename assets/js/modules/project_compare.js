@@ -63,7 +63,13 @@
             } else {
                 if (selectedProjects.length >= MAX_COMPARE) {
                     if (typeof showToast === 'function') {
-                        showToast('Maximal 3 Projekte gleichzeitig vergleichbar.', 'warning');
+                        showToast(
+                            {
+                                de: 'Maximal 3 Projekte gleichzeitig vergleichbar.',
+                                en: 'You can compare at most 3 projects at a time.',
+                            },
+                            'warning'
+                        );
                     }
                     return;
                 }
@@ -123,7 +129,7 @@
 
                 return `
                 <div class="compare-column">
-                    <button class="compare-column-close" data-index="${idx}" title="Entfernen">&times;</button>
+                    <button class="compare-column-close" data-index="${idx}" title="Entfernen" data-en-title="Remove">&times;</button>
                     <h4 style="margin: 0; color: var(--primary); font-size: 1rem;">${title}</h4>
                     
                     <div class="compare-feature-row">

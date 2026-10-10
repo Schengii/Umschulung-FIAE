@@ -308,8 +308,14 @@
     line-height: 1.4;
 }
 
-.system-line {
+.system-line,
+.log-line {
     color: rgba(57, 255, 20, 0.65);
+}
+
+.log-hash {
+    color: var(--accent);
+    font-weight: 700;
 }
 
 .error-line {

@@ -23,43 +23,156 @@ export function initDashboard() {
     document.addEventListener('achievementunlocked', renderAchievementsWidget);
 }
 
+/**
+ * PWA widget: shows what this browser really has cached (Cache API) instead of fixed numbers.
+ */
 function initPwaTelemetry() {
     const statusBadge = document.getElementById('pwa-sync-status-badge');
     const netState = document.getElementById('pwa-network-state');
+    const netDetail = document.getElementById('pwa-network-detail');
+    const cacheSize = document.getElementById('pwa-cache-size');
+    const cachePages = document.getElementById('pwa-cache-pages');
+    const swState = document.getElementById('pwa-sw-state');
+    const swDetail = document.getElementById('pwa-sw-detail');
     const testBtn = document.getElementById('pwa-test-offline-btn');
-    const purgeBtn = document.getElementById('pwa-purge-cache-btn');
+    const updateBtn = document.getElementById('pwa-purge-cache-btn');
+    if (!statusBadge && !cacheSize) return;
 
-    const updateNetworkStatus = () => {
-        if (!netState) return;
-        const online = navigator.onLine;
-        netState.textContent = online ? 'Online (High-Speed)' : 'Offline (Cache Modus)';
-        netState.style.color = online ? '#10b981' : '#ef4444';
-        if (statusBadge) {
-            statusBadge.textContent = online ? '● Live PWA Cache Active' : '⚠ Service Worker Offline Active';
-            statusBadge.style.color = online ? '#10b981' : '#f59e0b';
-        }
-    };
+    const isEnglish = () => document.documentElement.getAttribute('lang') === 'en';
+    const toast = (text, type) => window.showToast && window.showToast(text, type);
+    const hasCacheApi = 'caches' in window;
 
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-    updateNetworkStatus();
-
-    if (testBtn) {
-        testBtn.onclick = () => {
-            if (window.showToast) {
-                window.showToast('PWA Offline-Simulation: Assets werden zu 100% aus Cache v25 ausgeliefert', 'info');
-            }
-        };
+    /** Reads the site's precache: name, number of entries and how many of them are pages. */
+    async function readCache() {
+        if (!hasCacheApi) return null;
+        const names = (await caches.keys()).filter((name) => name.startsWith('umschulung-fiae-'));
+        if (names.length === 0) return null;
+        const name = names[names.length - 1];
+        const requests = await (await caches.open(name)).keys();
+        const pages = requests.filter((req) => /(\.html|\/)$/.test(new URL(req.url).pathname)).length;
+        return { name, files: requests.length, pages };
     }
 
-    if (purgeBtn) {
-        purgeBtn.onclick = () => {
-            if (window.caches) {
-                caches.keys().then((keys) => {
-                    if (window.showToast) window.showToast('PWA Cache geprüft und synchronisiert', 'success');
-                });
+    async function render() {
+        const en = isEnglish();
+        const online = navigator.onLine;
+
+        if (netState) {
+            netState.textContent = online ? 'Online' : en ? 'Offline (served from cache)' : 'Offline (Cache-Modus)';
+            netState.style.color = online ? '#10b981' : '#ef4444';
+        }
+        if (netDetail) {
+            const type = /** @type {any} */ (navigator).connection?.effectiveType;
+            netDetail.textContent = type ? (en ? `Connection type: ${type}` : `Verbindungstyp: ${type}`) : '';
+        }
+
+        const controlled = 'serviceWorker' in navigator && Boolean(navigator.serviceWorker.controller);
+        if (swState) swState.textContent = controlled ? (en ? 'Active' : 'Aktiv') : en ? 'Not active' : 'Nicht aktiv';
+        if (swDetail) {
+            swDetail.textContent = controlled
+                ? en
+                    ? 'This page is served through the service worker.'
+                    : 'Diese Seite läuft über den Service Worker.'
+                : en
+                  ? 'Takes over after the first reload.'
+                  : 'Übernimmt nach dem ersten Neuladen.';
+        }
+
+        let cache = null;
+        try {
+            cache = await readCache();
+        } catch (e) {
+            console.warn('PWA widget: Cache API not readable:', e);
+        }
+        document.querySelectorAll('.pwa-cache-name').forEach((el) => {
+            el.textContent = cache ? cache.name : '–';
+        });
+        if (cacheSize) {
+            cacheSize.textContent = cache
+                ? en
+                    ? `${cache.files} files`
+                    : `${cache.files} Dateien`
+                : en
+                  ? 'No cache yet'
+                  : 'Noch kein Cache';
+        }
+        if (cachePages) {
+            cachePages.textContent = cache
+                ? en
+                    ? `${cache.pages} pages available offline`
+                    : `${cache.pages} Seiten offline verfügbar`
+                : '';
+        }
+        if (statusBadge) {
+            const ready = Boolean(cache);
+            statusBadge.textContent = !online
+                ? en
+                    ? '⚠ Offline – served from cache'
+                    : '⚠ Offline – Auslieferung aus dem Cache'
+                : ready
+                  ? en
+                      ? '● Offline cache ready'
+                      : '● Offline-Cache bereit'
+                  : en
+                    ? '○ Offline cache not set up yet'
+                    : '○ Offline-Cache noch nicht eingerichtet';
+            statusBadge.style.color = !online ? '#f59e0b' : ready ? '#10b981' : '';
+        }
+        return cache;
+    }
+
+    window.addEventListener('online', render);
+    window.addEventListener('offline', render);
+    document.addEventListener('langchange', render);
+    render();
+    if ('serviceWorker' in navigator) {
+        // The first visit installs the worker while the page is already open.
+        navigator.serviceWorker.ready.then(render).catch(() => {});
+        navigator.serviceWorker.addEventListener('controllerchange', render);
+    }
+
+    if (testBtn) {
+        testBtn.addEventListener('click', async () => {
+            const cache = await render();
+            if (!cache) {
+                toast(
+                    {
+                        de: 'Noch kein Offline-Cache vorhanden – Seite einmal neu laden.',
+                        en: 'No offline cache yet – reload the page once.',
+                    },
+                    'warning'
+                );
+                return;
             }
-        };
+            toast(
+                {
+                    de: `${cache.pages} Seiten und ${cache.files - cache.pages} weitere Dateien sind offline verfügbar.`,
+                    en: `${cache.pages} pages and ${cache.files - cache.pages} other files are available offline.`,
+                },
+                'success'
+            );
+        });
+    }
+
+    if (updateBtn) {
+        updateBtn.addEventListener('click', async () => {
+            if (!('serviceWorker' in navigator)) return;
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (!registration) throw new Error('no registration');
+                await registration.update();
+                await render();
+                toast(
+                    registration.installing || registration.waiting
+                        ? { de: 'Neue Version gefunden – wird installiert.', en: 'New version found – installing.' }
+                        : { de: 'Der Offline-Cache ist aktuell.', en: 'The offline cache is up to date.' },
+                    'success'
+                );
+            } catch (e) {
+                console.warn('PWA widget: update check failed:', e);
+                toast({ de: 'Update-Prüfung nicht möglich.', en: 'Update check not possible.' }, 'warning');
+            }
+        });
     }
 }
 

@@ -136,7 +136,7 @@ function renderChallenges() {
 
       <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">${challenge.desc}</p>
 
-      <pre tabindex="0" role="region" aria-label="Code-Ausschnitt" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; overflow-x: auto; font-family: monospace; font-size: 0.88rem; margin-bottom: 1.25rem; line-height: 1.5;"><code style="color: #38bdf8;">${escapeHtml(challenge.code)}</code></pre>
+      <pre tabindex="0" role="region" aria-label="Code-Ausschnitt" data-en-aria-label="Code snippet" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; overflow-x: auto; font-family: monospace; font-size: 0.88rem; margin-bottom: 1.25rem; line-height: 1.5;"><code style="color: #38bdf8;">${escapeHtml(challenge.code)}</code></pre>
 
       <!-- Options -->
       <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">

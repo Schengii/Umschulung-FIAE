@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearSearchBtn = document.getElementById('btn-clear-search');
 
     // Event Listeners for Filters & Sorting
-    const persistedSort = localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
+    const persistedSort = AppStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER;
     if (sortSelect) {
         sortSelect.value = persistedSort;
         sortSelect.addEventListener('change', () => {
             const order = sortSelect.value;
-            localStorage.setItem(SORT_KEY, order);
+            AppStorage.setItem(SORT_KEY, order);
             if (allProjects.length) renderAllProjects();
         });
     }
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Compare selection button
         buttonsHTML += `
-        <button type="button" class="btn-compare-select" data-repo="${project.repoName || project.titleDe}" title="Mit anderen Projekten vergleichen">
+        <button type="button" class="btn-compare-select" data-repo="${project.repoName || project.titleDe}" title="Mit anderen Projekten vergleichen" data-en-title="Compare with other projects">
             <i class="fa-solid fa-code-compare"></i> <span>Vergleichen</span>
         </button>`;
 
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
             buttonsHTML += `
-            <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${project.repoName}" title="Direkt hier im Portfolio starten">
+            <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${project.repoName}" title="Direkt hier im Portfolio starten" data-en-title="Launch right here in the portfolio">
                 <span lang="de"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Direkt testen</span>
                 <span lang="en"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Quick Play</span>
             </button>`;
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 2. Sort
-        const sorted = sortProjects(filteredProjects, localStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER);
+        const sorted = sortProjects(filteredProjects, AppStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER);
 
         // 3. Handle No Results
         if (sorted.length === 0) {

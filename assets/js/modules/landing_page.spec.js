@@ -26,6 +26,25 @@ test.describe('Landing Page Tests', () => {
         await expect(html).toHaveAttribute('data-theme', 'dark');
     });
 
+    test('sollte beim ersten Besuch dem hellen System-Farbschema folgen', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'light' });
+        await page.goto('/index.html');
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+        // Nothing is stored until the visitor chooses a theme themselves.
+        expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull();
+    });
+
+    test('sollte ein gewähltes Theme ohne Umweg über das Standard-Theme laden', async ({ page }) => {
+        await page.goto('/index.html');
+        await page.locator('#theme-toggle').click();
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+
+        // components.js runs in <head>: the stored choice must be applied before first paint,
+        // i.e. already when the document starts loading.
+        await page.goto('/pages/home.html', { waitUntil: 'commit' });
+        await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    });
+
     test('sollte den Benutzernamen speichern und zur home.html weiterleiten', async ({ page }) => {
         const nameInput = page.locator('#myText');
         const submitButton = page.locator('#mySubmit');

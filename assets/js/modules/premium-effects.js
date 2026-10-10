@@ -3,15 +3,21 @@
  * and staggered load animations across the entire application.
  */
 
+// Pointer-driven decoration is pointless on touch screens and unwanted with reduced motion.
+const hasFinePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function initPremiumEffects() {
+    const pointerEffects = hasFinePointer() && !prefersReducedMotion();
+
     // 1. Initialize custom cursor spotlight follower
-    initMouseSpotlight();
+    if (pointerEffects) initMouseSpotlight();
 
     // 2. Enhance all card elements with glassmorphism, border glows, and 3D tilt
-    enhanceCards();
+    enhanceCards(pointerEffects);
 
-    // 3. Trigger staggered entrance animations for all cards and interactive sections
-    initStaggeredEntrances();
+    // 3. Trigger staggered entrance animations for the cards visible on load
+    if (!prefersReducedMotion()) initStaggeredEntrances();
 
     // 4. Initialize Button Ripple Interactions
     initButtonRipples();
@@ -66,22 +72,11 @@ function initMouseSpotlight() {
     let currentX = targetX;
     let currentY = targetY;
     let hasMoved = false;
+    let frameId = 0;
 
-    document.addEventListener('mousemove', (e) => {
-        targetX = e.clientX;
-        targetY = e.clientY;
-        if (!hasMoved) {
-            hasMoved = true;
-            document.body.classList.add('cursor-active');
-        }
-    });
-
-    document.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-active');
-        hasMoved = false;
-    });
-
-    // Interpolation (lerp) loop for butter-smooth movement
+    // Interpolation (lerp) for butter-smooth movement. The loop only runs while the glow is
+    // still catching up with the pointer; it used to run for the whole page lifetime, which
+    // kept the main thread busy 60 times a second on an idle page.
     function updateGlowPosition() {
         const ease = 0.08; // Lower is smoother/slower
         currentX += (targetX - currentX) * ease;
@@ -89,18 +84,37 @@ function initMouseSpotlight() {
 
         // Apply hardware-accelerated 3D translation
         glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(updateGlowPosition);
+
+        const settled = Math.abs(targetX - currentX) < 0.5 && Math.abs(targetY - currentY) < 0.5;
+        frameId = settled ? 0 : requestAnimationFrame(updateGlowPosition);
     }
 
-    requestAnimationFrame(updateGlowPosition);
+    document.addEventListener(
+        'mousemove',
+        (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            if (!hasMoved) {
+                hasMoved = true;
+                document.body.classList.add('cursor-active');
+            }
+            if (!frameId) frameId = requestAnimationFrame(updateGlowPosition);
+        },
+        { passive: true }
+    );
+
+    document.addEventListener('mouseleave', () => {
+        document.body.classList.remove('cursor-active');
+        hasMoved = false;
+    });
 }
 
 /**
  * Applies Glassmorphism styles and 3D Tilt interactivity to card elements
+ * @param {boolean} pointerEffects whether hover-driven effects (glow, tilt) make sense here
  */
-function enhanceCards() {
-    const cards = document.querySelectorAll('.card');
-    cards.forEach((card) => {
+function enhanceCards(pointerEffects) {
+    const enhance = (card) => {
         // Prevent double enhancement
         if (card.dataset.premiumEnhanced === 'true') return;
         card.dataset.premiumEnhanced = 'true';
@@ -109,8 +123,10 @@ function enhanceCards() {
         card.classList.add('card-glass', 'card-glow-border');
 
         // Setup 3D tilt listener
-        apply3DTilt(card);
-    });
+        if (pointerEffects) apply3DTilt(card);
+    };
+
+    document.querySelectorAll('.card').forEach(enhance);
 
     // Listen for dynamically added cards in the document
     const observer = new MutationObserver((mutations) => {
@@ -120,26 +136,48 @@ function enhanceCards() {
                     const cardsInNode = /** @type {Element} */ (node).classList?.contains('card')
                         ? [node]
                         : /** @type {Element} */ (node).querySelectorAll?.('.card') || [];
-                    cardsInNode.forEach((card) => {
-                        if (card.dataset.premiumEnhanced !== 'true') {
-                            card.dataset.premiumEnhanced = 'true';
-                            card.classList.add('card-glass', 'card-glow-border');
-                            apply3DTilt(card);
-                        }
-                    });
+                    cardsInNode.forEach(enhance);
                 }
             });
         });
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
+
+    if (pointerEffects) initCardGlowTracking();
+}
+
+/**
+ * Feeds the pointer position to the hovered card (--mouse-x/--mouse-y drive the border
+ * glow in CSS). One delegated listener, at most one style write per frame.
+ */
+function initCardGlowTracking() {
+    let pending = null;
+    let frameId = 0;
+
+    document.addEventListener(
+        'mousemove',
+        (e) => {
+            const card = /** @type {HTMLElement} */ (e.target).closest?.('.card');
+            if (!card) return;
+            pending = { card, x: e.clientX, y: e.clientY };
+            if (frameId) return;
+            frameId = requestAnimationFrame(() => {
+                frameId = 0;
+                const rect = pending.card.getBoundingClientRect();
+                pending.card.style.setProperty('--mouse-x', `${pending.x - rect.left}px`);
+                pending.card.style.setProperty('--mouse-y', `${pending.y - rect.top}px`);
+            });
+        },
+        { passive: true }
+    );
 }
 
 /**
  * Adds dynamic rotation on mouseMove to simulate 3D depth
  */
 function apply3DTilt(element) {
-    // Exclude tilt on touch devices or small screens to prevent layout shifting issues
+    // Exclude tilt on small screens to prevent layout shifting issues
     if (window.matchMedia('(max-width: 768px)').matches) return;
 
     element.classList.add('card-tilt-3d');
@@ -147,22 +185,15 @@ function apply3DTilt(element) {
     element.addEventListener('mousemove', (e) => {
         const rect = element.getBoundingClientRect();
 
-        // Mouse coordinate within card
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
         // Calculate normalized coordinate (-0.5 to 0.5)
-        const xNorm = x / rect.width - 0.5;
-        const yNorm = y / rect.height - 0.5;
+        const xNorm = (e.clientX - rect.left) / rect.width - 0.5;
+        const yNorm = (e.clientY - rect.top) / rect.height - 0.5;
 
         // Set maximum tilt angles in degrees
         const maxTilt = 6;
         const rotateX = -yNorm * maxTilt;
         const rotateY = xNorm * maxTilt;
 
-        // Set variables for border-glow effect and apply transform
-        element.style.setProperty('--mouse-x', `${x}px`);
-        element.style.setProperty('--mouse-y', `${y}px`);
         element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
     });
 
@@ -178,17 +209,26 @@ function apply3DTilt(element) {
 }
 
 /**
- * Sets up staggered entrance animations for cards
+ * Sets up staggered entrance animations for the cards that are on screen at load.
+ *
+ * Only those: the class starts an element at opacity 0, and the delay used to grow with the
+ * element's index on the whole page, so on a page with 60 cards the last ones stayed
+ * invisible for almost three seconds, long after the visitor had scrolled to them.
  */
 function initStaggeredEntrances() {
     const selector = '.card, .welcome-container, .dashboard-card, .timeline-item, .roadmap-node, .news-item';
-    const elements = document.querySelectorAll(selector);
+    const STEP_MS = 45;
+    const MAX_STEPS = 10;
+    let step = 0;
 
-    elements.forEach((el, index) => {
-        if (!el.classList.contains('stagger-entrance')) {
-            el.classList.add('stagger-entrance');
-            // Stagger animation with 45ms step delay
-            el.style.animationDelay = `${index * 45}ms`;
-        }
+    document.querySelectorAll(selector).forEach((el) => {
+        if (el.classList.contains('stagger-entrance')) return;
+        const rect = el.getBoundingClientRect();
+        const onScreen = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!onScreen) return;
+
+        el.classList.add('stagger-entrance');
+        el.style.animationDelay = `${Math.min(step, MAX_STEPS) * STEP_MS}ms`;
+        step++;
     });
 }

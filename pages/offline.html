@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
     <title>Offline - Keine Verbindung</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
@@ -23,7 +24,7 @@
     <main class="main-container offline-main">
         <div class="welcome-container card text-center offline-card">
             <div class="offline-icon-wrapper">
-                <i class="fa-solid fa-wifi-slash"></i>
+                <i class="fa-solid fa-plug-circle-xmark" aria-hidden="true"></i>
             </div>
             <h2 class="text-gradient offline-heading">
                 <span lang="de">Du bist offline</span>

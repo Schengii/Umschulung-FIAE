@@ -23,6 +23,11 @@
  *    used them. LAZY_MODULES below dynamically imports each one only when a
  *    matching element is actually present on the current page, using the
  *    same selector each module already checks internally as its own guard.
+ *
+ * 3) Idle loading: IDLE_MODULES are wanted on every page but not for the first
+ *    paint (chat widget, confetti, easter egg). A static import would put them
+ *    in the module graph that has to download before bootstrap() can run at
+ *    all, so they are imported once the browser is idle instead.
  */
 
 // Import core utilities and constants first.
@@ -42,13 +47,10 @@ import { initBackToTop } from './modules/backtotop.js';
 import { initCookieBanner } from './modules/consent-notice.js';
 import { initPwaInstaller } from './modules/pwa-installer.js';
 import { initKeyboardShortcuts } from './modules/keyboard-shortcuts.js';
-import { initEasterEggs } from './modules/easter-eggs.js';
 import { initAchievements } from './modules/achievements.js';
 import { initPremiumEffects } from './modules/premium-effects.js';
 import { initPremiumEffectsP2 } from './modules/premium-effects-p2.js';
 import { initGameAudio } from './modules/game-audio.js';
-import { initPortfolioCopilot } from './modules/portfolio-copilot.js';
-import { initConfetti } from './modules/confetti.js';
 
 const CORE_INITIALIZERS = [
     initTheme,
@@ -61,13 +63,19 @@ const CORE_INITIALIZERS = [
     initCookieBanner,
     initPwaInstaller,
     initKeyboardShortcuts,
-    initEasterEggs,
     initAchievements,
     initPremiumEffects,
     initPremiumEffectsP2,
     initGameAudio,
-    initPortfolioCopilot,
-    initConfetti,
+];
+
+// [dynamic import path, named export to call] — loaded on every page, but only once the
+// browser is idle. Nothing here may be needed for the first paint or by code that runs
+// during bootstrap; the page scripts only reach for Confetti after a game has been played.
+const IDLE_MODULES = [
+    ['./modules/confetti.js', 'initConfetti'],
+    ['./modules/easter-eggs.js', 'initEasterEggs'],
+    ['./modules/portfolio-copilot.js', 'initPortfolioCopilot'],
 ];
 
 // [dynamic import path, named export to call, CSS selector(s) that gate loading]
@@ -87,6 +95,7 @@ const LAZY_MODULES = [
     ['./modules/learning-progress.js', 'initLearningProgress', '#progress-flashcards-bar'],
     ['./modules/praktikumsbetrieb-media.js', 'initPraktikumsbetriebMedia', '#dfg-gallery-section'],
     ['./dashboard.js', 'initDashboard', '#commit-grid'],
+    ['./modules/progress-backup.js', 'initProgressBackup', '#progress-backup'],
     ['./modules/qr-generator.js', 'initQrGenerator', '#qr-company-input'],
     ['./modules/document-preview.js', 'initDocumentPreview', 'a[href$=".docx"], a[href$=".pptx"]'],
     ['./modules/faq-accordion.js', 'initFaqAccordion', '#faq-accordion-container'],
@@ -137,27 +146,31 @@ function bootstrap() {
         }
     }
 
-    // Optimized card mouse tracking hover glow effect
-    document.addEventListener('mousemove', (e) => {
-        const card = /** @type {HTMLElement} */ (e.target).closest('.card');
-        if (card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
+    const loadIdleModules = () => {
+        for (const [path, exportName] of IDLE_MODULES) {
+            import(path)
+                .then((mod) => mod[exportName]?.())
+                .catch((e) => console.error(`Failed to idle-load ${path}:`, e));
         }
-    });
+    };
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadIdleModules, { timeout: 2000 });
+    } else {
+        setTimeout(loadIdleModules, 200);
+    }
 
     // Connection status change notifications (online/offline)
     window.addEventListener('online', () => {
         if (window.showToast) {
-            window.showToast('Du bist wieder online!', 'success');
+            window.showToast({ de: 'Du bist wieder online!', en: 'You are back online!' }, 'success');
         }
     });
     window.addEventListener('offline', () => {
         if (window.showToast) {
-            window.showToast('Verbindung verloren. Offline-Modus aktiv.', 'warning');
+            window.showToast(
+                { de: 'Verbindung verloren. Offline-Modus aktiv.', en: 'Connection lost. Offline mode active.' },
+                'warning'
+            );
         }
     });
 }

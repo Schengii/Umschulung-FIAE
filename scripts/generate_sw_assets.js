@@ -9,6 +9,13 @@
  * deliberate exception: assets/images/ holds ~3.6MB of screenshots that
  * should NOT all be precached, so that subset stays a curated constant.
  *
+ * It also derives CACHE_NAME from a hash over the content of every precached
+ * file. /assets/ is served with long-lived cache headers and un-hashed file
+ * names, so a forgotten manual version bump left returning visitors on stale
+ * CSS/JS. With a content hash, any change to a precached file makes --check
+ * fail until this script has been re-run, and the regenerated sw.js is
+ * byte-different, which is what makes browsers install the new worker.
+ *
  * Usage:
  *   node scripts/generate_sw_assets.js          # writes the regenerated list into sw.js
  *   node scripts/generate_sw_assets.js --check  # exits 1 if sw.js's list is out of date
@@ -16,6 +23,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const root = path.resolve(__dirname, '..');
 const swPath = path.join(root, 'sw.js');
@@ -93,10 +101,28 @@ function buildAssetsBlock(eol) {
     for (const f of fonts) lines.push(`    '${f}',`);
     for (const v of vendorFontawesome) lines.push(`    '${v}',`);
     lines.push('    // Essential Images');
-    ESSENTIAL_IMAGES.forEach((img, i) => {
-        lines.push(`    '${img}'${i === ESSENTIAL_IMAGES.length - 1 ? '' : ','}`);
-    });
+    for (const img of ESSENTIAL_IMAGES) lines.push(`    '${img}',`);
     return lines.join(eol);
+}
+
+const TEXT_EXTENSIONS = ['.html', '.css', '.js', '.json', '.svg'];
+
+/**
+ * Hash over every precached file, in list order. Text files are normalised to LF first so
+ * a Windows checkout produces the same cache name as the Linux CI runner.
+ */
+function computeCacheHash(assetPaths) {
+    const hash = crypto.createHash('sha256');
+    for (const asset of assetPaths) {
+        hash.update(asset + '\n');
+        const file = path.join(root, asset);
+        if (TEXT_EXTENSIONS.includes(path.extname(asset))) {
+            hash.update(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'));
+        } else {
+            hash.update(fs.readFileSync(file));
+        }
+    }
+    return hash.digest('hex').slice(0, 12);
 }
 
 const swSource = fs.readFileSync(swPath, 'utf8');
@@ -109,23 +135,42 @@ if (!match) {
     process.exit(1);
 }
 
-const newBlock = buildAssetsBlock(eol);
-
-if (check) {
-    if (match[2] === newBlock) {
-        console.log(
-            `✓ sw.js precache list is up to date (${pages.length + css.length + coreJs.length + modulesJs.length + fonts.length + vendorFontawesome.length + ESSENTIAL_IMAGES.length + 3} entries).`
-        );
-        process.exit(0);
-    }
-    console.error('✗ sw.js precache list is out of date — run `npm run generate-sw-assets` and bump CACHE_NAME.');
+const cacheNameRe = /const CACHE_NAME = '([^']*)';/;
+if (!cacheNameRe.test(swSource)) {
+    console.error('✗ Could not locate `const CACHE_NAME = ...` in sw.js');
     process.exit(1);
 }
 
-const newSource = swSource.replace(arrayRe, `$1${newBlock}$3`);
+const assetFiles = [
+    'index.html',
+    '404.html',
+    ...pages,
+    ...css,
+    ...coreJs,
+    ...modulesJs,
+    ...fonts,
+    ...vendorFontawesome,
+    ...ESSENTIAL_IMAGES,
+];
+const newBlock = buildAssetsBlock(eol);
+const newCacheName = `umschulung-fiae-${computeCacheHash(assetFiles)}`;
+const newSource = swSource
+    .replace(arrayRe, `$1${newBlock}$3`)
+    .replace(cacheNameRe, `const CACHE_NAME = '${newCacheName}';`);
+
+if (check) {
+    if (newSource === swSource) {
+        // +1: the './' start URL entry is not a file on disk.
+        console.log(`✓ sw.js precache list and cache name are up to date (${assetFiles.length + 1} entries).`);
+        process.exit(0);
+    }
+    console.error('✗ sw.js precache list or cache name is out of date — run `npm run generate-sw-assets`.');
+    process.exit(1);
+}
+
 if (newSource === swSource) {
-    console.log('✓ sw.js precache list already up to date, nothing to write.');
+    console.log('✓ sw.js already up to date, nothing to write.');
 } else {
     fs.writeFileSync(swPath, newSource, 'utf8');
-    console.log('✓ sw.js precache list regenerated. Remember to bump CACHE_NAME before shipping.');
+    console.log(`✓ sw.js regenerated (${assetFiles.length + 1} entries, cache ${newCacheName}).`);
 }

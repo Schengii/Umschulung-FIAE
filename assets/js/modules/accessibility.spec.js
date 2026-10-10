@@ -33,30 +33,37 @@ const pages = [
     'pages/snake.html',
 ];
 
-test.describe('Accessibility (axe-core, WCAG 2.1 AA)', () => {
-    for (const pageName of pages) {
-        test(`sollte auf ${pageName} keine WCAG 2.1 AA Verstöße haben`, async ({ page }) => {
-            // Measure the settled state: the site collapses transitions under
-            // prefers-reduced-motion, and finishing running animations first keeps axe from
-            // sampling half-transparent colours mid fade-in (flaky color-contrast on CI WebKit).
-            await page.emulateMedia({ reducedMotion: 'reduce' });
-            await page.goto(`/${pageName}`);
-            await settle(page);
-            await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
-            await page.waitForTimeout(500);
+// A first visit follows the system colour scheme, so both themes are real entry states and
+// both get checked (the light theme had contrast failures nobody saw while tests only ever
+// ran in the dark default).
+const colorSchemes = /** @type {const} */ (['dark', 'light']);
 
-            const results = await new AxeBuilder({ page })
-                .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-                .analyze();
+for (const colorScheme of colorSchemes) {
+    test.describe(`Accessibility (axe-core, WCAG 2.1 AA, ${colorScheme} theme)`, () => {
+        for (const pageName of pages) {
+            test(`sollte auf ${pageName} keine WCAG 2.1 AA Verstöße haben`, async ({ page }) => {
+                // Measure the settled state: the site collapses transitions under
+                // prefers-reduced-motion, and finishing running animations first keeps axe from
+                // sampling half-transparent colours mid fade-in (flaky color-contrast on CI WebKit).
+                await page.emulateMedia({ reducedMotion: 'reduce', colorScheme });
+                await page.goto(`/${pageName}`);
+                await settle(page);
+                await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+                await page.waitForTimeout(500);
 
-            const violations = results.violations.map((v) => ({
-                id: v.id,
-                impact: v.impact,
-                help: v.help,
-                nodes: v.nodes.map((n) => n.target.join(' ')),
-            }));
+                const results = await new AxeBuilder({ page })
+                    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+                    .analyze();
 
-            expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
-        });
-    }
-});
+                const violations = results.violations.map((v) => ({
+                    id: v.id,
+                    impact: v.impact,
+                    help: v.help,
+                    nodes: v.nodes.map((n) => n.target.join(' ')),
+                }));
+
+                expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
+            });
+        }
+    });
+}

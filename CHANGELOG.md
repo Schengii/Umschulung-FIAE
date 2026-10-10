@@ -4,6 +4,95 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Audit-Runde: Performance, Deployment, PWA-Cache, drei Lernfunktionen, Aufräumen
+
+Umsetzung der Verbesserungsliste aus dem Projekt-Audit. Die strukturellen Entscheidungen stehen in ADR 0008–0011.
+
+#### Performance — Layout-Shift von bis zu 0,94 auf ≤ 0,03
+- **Befund (Lighthouse gegen den Build, mobil)**: Performance 0,63–0,87, CLS 0,19–0,94. Zwei Ursachen. (1) `<body>` wurde beim Laden mit `transform` animiert; solange die Animation lief, war `<body>` der Bezugsrahmen aller `position: fixed`-Elemente, Cookie-Banner, Toasts und Hintergrund-Glows hingen also am Dokument statt am Viewport und sprangen danach. (2) Header und Breadcrumbs kamen erst bei `DOMContentLoaded`, also nach dem ersten Paint, und schoben den Inhalt um die Header-Höhe nach unten.
+- **Fix**: `<body>` blendet nur noch per `opacity` ein, die Bewegung liegt auf `<main>`. `components.js` fügt Header und Breadcrumbs ein, sobald der Parser den Platzhalter erzeugt (MutationObserver). Achievement-Toasts gleiten per `transform` statt über `bottom`. Statische `<img>` tragen `width`/`height`.
+- **Ergebnis (9 Stichproben-Seiten, lokal)**: CLS 0,000–0,024, Performance 0,88–0,96.
+- **Weitere Ladezeit-Punkte**: Die sechs `@import` in `style.css` (seriell, render-blockierend, auf jeder Seite) sind entfernt; Modul-Stylesheets werden nur noch von den Seiten geladen, die sie brauchen, oder vom Modul nachgeladen (`window.loadStylesheet`). Copilot-Widget, Konfetti und Easter Egg laden erst im Leerlauf (`IDLE_MODULES`). Die Command Palette lädt die Projektdaten (46 KB) erst beim ersten Öffnen statt auf jeder Seite. Der Cursor-Glow lief als Dauer-`requestAnimationFrame`-Schleife und läuft jetzt nur, solange er sich bewegt; Zeiger-Effekte entfallen auf Touch-Geräten und bei `prefers-reduced-motion`. Die Einblend-Verzögerung der Karten wuchs mit dem Index (letzte Karte einer langen Seite knapp 3 s unsichtbar) und ist auf sichtbare Elemente und 450 ms begrenzt.
+
+#### Icons — Font Awesome als Subset (ADR 0009)
+- 103 KB CSS + 300 KB WOFF2 (plus ungenutzte TTF) → 21 KB + 22 KB. `npm run subset-icons` baut die ausgelieferte Kopie aus dem gepinnten npm-Paket; `check-icons` ist CI-Gate; `icons.spec.js` prüft auf jeder Seite, dass jedes Icon ein Glyph hat.
+- **Dabei gefunden**: Fünf Stellen nutzten Font-Awesome-4-Namen (`fa-clock-o`, `fa-file-pdf-o`, `fa-file-text-o`, `fa-keyboard-o`) oder ein Pro-Icon (`fa-wifi-slash`) und waren schon vorher leer. Korrigiert.
+
+#### Deployment — Produktion liefert `dist/` aus (ADR 0008)
+- `vercel.json` setzt `buildCommand`/`outputDirectory`; `.vercelignore` schließt `scripts/` nicht mehr aus.
+- **Build repariert, bevor er live geht**: `build_minified.js` übersprang jedes Verzeichnis namens `dist` (also die Demo-Builds unter `Projekte/*/dist/`, Ziel von sieben Projekt-Links) und kopierte `assets/videos` nicht. Jetzt wird `assets/` vollständig kopiert, und der Build bricht ab, wenn ein in `projects.json` verlinktes lokales Ziel fehlt.
+- **Noch offen (nicht lokal prüfbar)**: das erste Vercel-Preview-Deployment mit dieser Konfiguration ansehen, bevor es auf `main` geht.
+
+#### PWA — Cache-Name aus Inhalts-Hash (ADR 0010)
+- `generate-sw-assets` schreibt `CACHE_NAME` als Hash über alle Precache-Dateien; `check-sw-assets` wird bei jeder inhaltlichen Änderung rot, bis das Skript gelaufen ist. Das ersetzt das manuelle Hochzählen.
+- `sw.js`: nur noch `GET` wird beantwortet; offline wird die gecachte Seite auch bei URLs mit Query-String geliefert (`projekt-detail.html?repo=…`); Cache-Schreibvorgänge hängen an `waitUntil`. `sw.js` läuft jetzt durch ESLint, Prettier und den Typecheck (`jsconfig.sw.json`).
+- Übernimmt ein neuer Service Worker eine offene Seite, erscheint ein Hinweis mit „Neu laden".
+- Cache-Header: CSS/JS/Daten/Vendor revalidieren immer (ETag), Fonts bleiben `immutable`.
+- **Dashboard-Widget „PWA"**: zeigte feste Zahlen („48 Assets", „v25") und erfundene IndexedDB-/Latenzwerte. Jetzt die echten Werte aus Cache Storage, Service-Worker-Registrierung und Netzwerkstatus; die Schaltflächen prüfen die Offline-Verfügbarkeit bzw. suchen nach Updates.
+
+#### Neu — IHK-Prüfungssimulation (`quiz.html`)
+- Der bisherige „Simulator" startete nur einen Timer über denselben fünf Website-Fragen und wertete nichts aus. Neu: Fragenpool mit 63 zweisprachigen Übungsfragen (AP1 21, AP2 24, WISO 18) in 14 Themengebieten (`modules/exam-questions.js`), themen-balancierte Zufallsauswahl, Zeitlimit (über Zeitstempel, nicht über Tick-Zähler), keine Rückmeldung während der Prüfung, Abgabe mit Hinweis auf offene Fragen, automatische Abgabe bei Zeitablauf.
+- Auswertung: Punkte, Note nach IHK-Schlüssel, bestanden ab 50 %, Tabelle je Themengebiet, Durchsicht aller Fragen mit Erklärung. Schwache Themen fließen in die Lernempfehlungen des Dashboards. Neuer Erfolg `exam_passed`.
+- Die Fragen sind eigene Übungsaufgaben im Stil der Prüfung, keine Originalaufgaben; das steht auch auf der Seite.
+
+#### Neu — Lernkarten mit Wiederholungsplanung (`flashcards.html`)
+- Die Leitner-Boxen waren bisher nur ein Etikett: Jede Karte kam jedes Mal. Jetzt hat jede Karte ein Fälligkeitsdatum (Box 2 nach 3 Tagen, Box 3 nach 7 Tagen, neue und falsch beantwortete Karten sofort), es gibt das Deck „Heute fällig" mit Zähler, und jede Karte zeigt ihre nächste Wiederholung. Fälligkeiten zählen ganze Kalendertage und bleiben über die Zeitumstellung auf Mitternacht.
+- Beschädigte gespeicherte Daten (kaputtes JSON) legen die Seite nicht mehr lahm.
+
+#### Neu — Fortschritt exportieren/importieren (`dashboard.html`)
+- Lernstand, Highscores, Erfolge und Einstellungen als JSON-Datei sichern und wieder laden (`modules/progress-backup.js`). Import mit Vorschau und Bestätigung; unbekannte Schlüssel und beschädigte Werte werden verworfen. Bewusst eine Schlüssel-Allowlist: Die Demos unter `Projekte/` teilen sich denselben Origin, ihre Daten werden weder exportiert noch überschrieben.
+
+#### Git-Simulator — Logik als testbare Engine (ADR 0011)
+- `modules/git-engine.js` enthält Zustand, Befehle und Level-Regeln ohne DOM; `git-simulator.js` rendert nur noch.
+- **Behobene Fehler**: `git stash` und `git cherry-pick` fehlten ganz (Level 5 galt nach irgendeinem Commit als bestanden, Level 6 war unlösbar); Level 3 war nach eigener Anleitung nicht bestehbar (Fast-Forward statt Merge-Commit); Level 4 galt schon ohne Rebase als bestanden; die Erfolgsmeldung kam nach jedem weiteren Befehl erneut; Eingaben wurden per `innerHTML` ins Terminal geschrieben.
+- **Neu**: `git status`, `git branch` (Liste) und `git branch -d`, `touch <datei>`; korrekte Unterscheidung von „Already up to date", Fast-Forward und Merge-Commit; nicht mehr erreichbare Commits verschwinden aus dem Graphen; Terminal-Ausgaben zweisprachig; eigene Lane und Farbe je Branch, der Graph wächst in der Höhe mit.
+
+#### Behobene Fehler (bei Umsetzung und Test gefunden)
+- **`Achievements`/`GameAudio` waren für klassische Scripts unsichtbar** (der im letzten Eintrag als „bewusst offen" vermerkte Fund): beide hängen jetzt an `window`. Sound ist standardmäßig aus und hat einen einzigen Schalter im Footer (`sound_enabled`), der die alten Schlüssel `audio_effects_enabled` und `game_audio_muted` ablöst.
+- **Theme**: Der `<head>`-Bootstrap las `portfolio_theme`, geschrieben wurde `theme` – wer das helle Theme gewählt hatte, bekam bei jedem Seitenaufruf zuerst das dunkle. Ein erster Besuch folgt jetzt `prefers-color-scheme`.
+- **Sprache**: wurde erst nach dem Layout gesetzt; englische Besucher sahen kurz den deutschen Text. Jetzt vor dem ersten Paint.
+- **Toasts** hatten außerhalb von `portfolio.html` keinen positionierten Container und erschienen ungestylt im Seitenfluss.
+- **Seitenübergang**: Ein Klick auf einen Download-Link (und die Rückkehr aus dem bfcache) ließ das deckende Overlay stehen.
+- **Erfolge**: `polyglot` wurde auch durch Module ausgelöst, die `langchange` nur zum Neu-Rendern feuern; `cv_downloaded` und `git_master` konnten nie freigeschaltet werden; der Konfetti-Aufruf im Git-Simulator ging an ein nicht existierendes `window.confetti`.
+- **Command Palette**: Der Suchtext wurde bei „keine Treffer" per `innerHTML` eingefügt.
+- **Skill-Matchmaker** funktionierte nur, wenn die Command Palette die Projektdaten vorher geladen hatte.
+- **„Letzte Code-Aktivität" (Startseite)**: fragte die Commits dieses (privaten) Repos ab – immer 404 samt Konsolenfehler – und zeigte dann erfundene Commits mit relativen Daten. Jetzt die zuletzt aktualisierten öffentlichen Repositories aus der GitHub-API (gemeinsamer Cache mit `projekt-detail`), sonst ein ehrlicher Hinweis mit Link zum Profil.
+- **Copilot-Chat** nannte für Zeugnisse/Gehalt noch den entfernten „Token-Schutz" samt früherem Passwort. Antwort verweist jetzt wie die Seite auf Anfrage per E-Mail.
+- **ElektroCheck-Scanner**: Der Bounding-Box-Renderer lag in einem Script, das keine Seite lud; die Mängel-Rahmen wurden nie gezeichnet. Jetzt ein importiertes Modul (`bounding-box-renderer.js`), Rahmen liegen exakt über dem Bild.
+- **Quiz** speicherte bei falschen Antworten `[null]` als „schwache Kategorie".
+- **Kaputte Verweise**: `academy_campus.png` (Link auf der Startseite, `og:image` der News-Seite) existierte nie. Drei `<source>` gaben WebP als `image/png` aus.
+- **`projekt-detail`**: ein beschädigter Cache-Eintrag brach die Seite ab.
+
+#### Barrierefreiheit & Zweisprachigkeit
+- Attribute (`aria-label`, `title`, `placeholder`) waren an rund 100 Stellen nur deutsch oder nur englisch. Neuer Mechanismus `data-en-<attribut>` in `modules/translation.js`, greift auch für später eingefügtes Markup.
+- Toasts sind zweisprachig (`showToast({ de, en })`), ebenso Terminal, Prüfungssimulation, Backup-Karte.
+- Überschriften-Hierarchie auf Startseite, `home`, `lebenslauf`, `berufsfoerderungswerk`, News und Quiz korrigiert; Linktext „hier" ersetzt.
+- Helles Theme: Footer-Metazeile und Achievement-Toast-Titel hatten zu wenig Kontrast. Die axe-Prüfung läuft jetzt in beiden Themes (vorher nur dunkel).
+- Konfetti respektiert `prefers-reduced-motion`.
+
+#### SEO & `<head>`
+- Doppelte Open-Graph-Tags in `index.html` entfernt; `twitter:card` auf sechs Seiten ergänzt; `noindex` auf Fehler- und Offline-Seiten.
+- `npm run update-sitemap` setzt `<lastmod>` je Seite aus dem Git-Datum (vorher ein Pauschaldatum); `check-sitemap` (CI) gleicht Sitemap und indexierbare Seiten ab.
+- `https://www.gstatic.com` aus der CSP aller Seiten und des Headers entfernt (ungenutzt).
+
+#### CI & Tooling
+- `ci.yml`: `permissions: contents: read`, `concurrency` bricht überholte Läufe ab, nur noch `npm ci`, `npm audit` ohne `--omit=dev` (das Projekt hat nur devDependencies – vorher wurde nichts geprüft), neue Gates `check-icons` und `check-sitemap`, zusätzlicher E2E-Lauf gegen `dist/`.
+- Lighthouse-CI misst `dist/`, drei Läufe; Performance (≥ 0,8) und CLS (≤ 0,1) sind jetzt Fehler statt Warnung.
+- `npm run regen` (Subset + Service-Worker-Liste in der richtigen Reihenfolge) und `npm run check` (alle statischen Gates).
+- Der wöchentliche Projekt-Sync aktualisiert Icon-Subset und Service Worker mit.
+
+#### Aufgeräumt
+- **Entfernt**: `assets/js/elektrocheck_overlay.js` (ersetzt durch das Modul), zwei Platzhalter-„PDFs" des früheren Token-Downloads (Textdateien mit `.pdf`-Endung, öffentlich ausgeliefert, nirgends verlinkt), Font-Awesome-TTFs und `fa-v4compatibility`, ungenutzte Konstanten (`IHK_TARGET_DATE`, `SKILL_OBSERVER_THRESHOLD`), totes Global `BoundingBoxRenderer`, tote `#audio-mute-toggle`-Regeln.
+- Direkte `localStorage`-Zugriffe laufen über `AppStorage`; die GitHub-Cache-Schlüssel stehen einmal in `STORAGE_KEYS` statt dreimal als String.
+- `README.md`: veraltete Zahlen (Testanzahl, Seitenzahl, Cache-Version) durch Beschreibungen ersetzt, lokale `file:///`-Links entfernt, Deployment- und Skript-Abschnitt aktualisiert. `CLAUDE.md` und ADR-Index auf dem aktuellen Stand.
+
+#### Tests
+- Unit-Tests (Vitest): 77 → 164 (Git-Engine, Fälligkeitslogik, Prüfungsauswertung und Fragenpool, Backup-Format).
+- Neue E2E-Specs: Icon-Abdeckung, Prüfungssimulation, Wiederholungsplanung, Fortschritts-Backup, ElektroCheck-Scanner; erweitert: Git-Simulator, Barrierefreiheit (beide Themes), Landing-Page (Theme-Start). Stand lokal: Chromium-Suite vollständig grün (152 Tests) vor den letzten Aufräum-Änderungen, danach die betroffenen Specs einzeln. Firefox, WebKit, Pixel 5 und der Lauf gegen `dist/` wurden lokal nicht mehr vollständig durchlaufen (Lauf wegen Speichermangel abgebrochen) und sind über die CI-Matrix zu bestätigen.
+
+#### Nicht im Code lösbar
+- **Branch-Protection** für `main` ist weiterhin nicht aktiv (GitHub-Einstellung). Ohne sie verhindert eine rote CI keinen Merge.
+
 ### CI — Wöchentlicher Sync: CRLF-Altlast in drei CSS-Dateien behoben
 - **Fix**: `assets/css/memory.css`, `assets/css/snake.css` und `Projekte/ManuFaktur/style.css` lagen mit CRLF im Index, obwohl `.gitattributes` `eol=lf` verlangt. Nach dem Checkout galten sie dadurch als geändert, und `peter-evans/create-pull-request` brach im Sync-Workflow mit „local changes would be overwritten“ ab. Die Dateien sind jetzt auf LF normalisiert.
 

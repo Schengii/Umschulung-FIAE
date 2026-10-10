@@ -167,6 +167,8 @@ test.describe('New Interactive Features E2E Verification', () => {
         const badge = page.locator('#pwa-sync-status-badge');
         await expect(badge).toBeVisible();
         const cacheSize = page.locator('#pwa-cache-size');
-        await expect(cacheSize).toContainText('48 Assets');
+        // Real Cache API numbers, available once the service worker has finished installing.
+        await expect(cacheSize).toContainText(/\d+ (Dateien|files)/, { timeout: 20000 });
+        await expect(page.locator('.pwa-cache-name').first()).toContainText('umschulung-fiae-');
     });
 });

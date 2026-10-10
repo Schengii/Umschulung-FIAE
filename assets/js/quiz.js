@@ -197,8 +197,8 @@ function selectAnswer(e) {
         }
     } else {
         selectedBtn.classList.add('incorrect');
+        questionCorrectness[questionIndex] = false; // Mark as incorrect
         if (typeof GameAudio !== 'undefined') {
-            questionCorrectness[questionIndex] = false; // Mark as incorrect
             GameAudio.play('fail');
         }
     }
@@ -222,11 +222,11 @@ function showScore() {
         quizProgress.style.width = '100%';
     }
 
-    // Determine weak categories from quiz
+    // Determine weak categories from quiz. The site quiz itself has no categories (the exam
+    // simulation records its own); without the guard this stored [null].
     const weakCategories = new Set();
     questions.forEach((q, index) => {
-        if (!questionCorrectness[index]) {
-            // If question was answered incorrectly
+        if (!questionCorrectness[index] && q.category) {
             weakCategories.add(q.category);
         }
     });

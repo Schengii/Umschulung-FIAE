@@ -13,7 +13,10 @@ declare function initBlogEnhancements(...args: any[]): any;
 
 interface Window {
     APP: any;
-    BoundingBoxRenderer: any;
+    Achievements: any;
+    GameAudio: any;
+    Confetti: any;
+    loadStylesheet: (assetPath: string) => Promise<void>;
     closeProjectModal: any;
     addLiveCommit: any;
     showToast: any;

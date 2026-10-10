@@ -15,7 +15,7 @@
             url: 'home.html',
         },
         {
-            titleDe: 'Projekt-Portfolio (21 Projekte)',
+            titleDe: 'Projekt-Portfolio',
             titleEn: 'Project Portfolio',
             category: 'Navigation',
             icon: 'fa-briefcase',
@@ -100,13 +100,21 @@
         overlay.className = 'command-palette-overlay';
         overlay.setAttribute('role', 'dialog');
         overlay.setAttribute('aria-modal', 'true');
-        overlay.setAttribute('aria-label', 'Befehlsmenü');
+        overlay.setAttribute('aria-label', 'Befehlsmenü / Command palette');
+        // Hidden until its stylesheet has arrived, so the markup never flashes unstyled.
+        overlay.hidden = true;
+        const stylesReady = window.loadStylesheet
+            ? window.loadStylesheet('assets/css/modules/command_palette.css')
+            : Promise.resolve();
+        stylesReady.then(() => {
+            overlay.hidden = false;
+        });
 
         overlay.innerHTML = `
             <div class="command-palette-modal">
                 <div class="command-palette-header">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="command-palette-input" class="command-palette-input" placeholder="Suche nach Seiten, Projekten, Skills... (oder Tippe 'Git', 'EcoChef', 'SQL')" autocomplete="off">
+                    <input type="text" id="command-palette-input" class="command-palette-input" placeholder="Suche nach Seiten, Projekten, Skills... (oder Tippe 'Git', 'EcoChef', 'SQL')" data-en-placeholder="Search pages, projects, skills... (or type 'Git', 'EcoChef', 'SQL')" autocomplete="off">
                     <span class="command-palette-kbd">ESC</span>
                 </div>
                 <ul id="command-palette-results" class="command-palette-results"></ul>
@@ -155,14 +163,19 @@
             return items;
         }
 
-        // Preload projectsData dynamically if not yet on page
-        if (!window.projectsData) {
+        // The project catalogue (~45 KB) is only needed once the palette is used: fetch it
+        // on first open instead of on every page load.
+        let projectDataRequested = false;
+        function ensureProjectData() {
+            if (window.projectsData || projectDataRequested) return;
+            projectDataRequested = true;
             const isPages =
                 window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
             const dataScript = document.createElement('script');
             dataScript.src = isPages ? '../assets/js/projects_data.js' : 'assets/js/projects_data.js';
             dataScript.onload = () => {
                 window._cachedProjectsData = window.projectsData;
+                if (overlay.classList.contains('open')) renderResults(input.value);
             };
             document.body.appendChild(dataScript);
         }
@@ -193,12 +206,14 @@
             results.innerHTML = '';
 
             if (currentItems.length === 0) {
+                // The search text is user input: set it as text, never as markup.
                 results.innerHTML = `
                     <li style="padding: 1.5rem; text-align: center; color: var(--text-muted);">
                         <i class="fa-solid fa-circle-question fa-2x" style="margin-bottom: 0.5rem; display: block;"></i>
-                        <span>Keine passenden Einträge für "<strong>${filterText}</strong>" gefunden.</span>
+                        <span>${lang === 'de' ? 'Keine passenden Einträge für' : 'No matching entries for'} "<strong></strong>"${lang === 'de' ? ' gefunden' : ''}.</span>
                     </li>
                 `;
+                results.querySelector('strong').textContent = filterText;
                 return;
             }
 
@@ -224,6 +239,7 @@
         }
 
         function openPalette() {
+            ensureProjectData();
             overlay.classList.add('open');
             input.value = '';
             renderResults('');

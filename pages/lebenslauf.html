@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-oiFpz8u4E5Og9ignJlexbpGhZIWa5ii3Ko8Hy4SU8uQ=' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-oiFpz8u4E5Og9ignJlexbpGhZIWa5ii3Ko8Hy4SU8uQ='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lebenslauf - Umschulung IT | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/pages/lebenslauf.html">
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" id="btn-cv-print-header" class="btn btn-sm btn-primary" title="Lebenslauf als PDF speichern / drucken">
+                <button type="button" id="btn-cv-print-header" class="btn btn-sm btn-primary" title="Lebenslauf als PDF speichern / drucken" data-en-title="Save / print CV as PDF">
                     <i class="fa-solid fa-print me-1" aria-hidden="true"></i>
                     <span lang="de">Als PDF exportieren</span>
                     <span lang="en">Export as PDF</span>
@@ -120,7 +120,7 @@
                     <div class="profile-image-wrapper">
                         <picture>
                             <source srcset="../assets/images/maximilian_schenk_portrait.jpg" type="image/jpeg">
-                            <img src="../assets/images/maximilian_schenk_portrait.jpg" alt="Maximilian Schenk Portrait"
+                            <img src="../assets/images/maximilian_schenk_portrait.jpg" width="457" height="686" alt="Maximilian Schenk Portrait"
                                 class="profile-img">
                         </picture>
                     </div>
@@ -270,7 +270,7 @@
                         <div class="qr-item">
                             <picture>
                                 <source srcset="../assets/images/qr_portfolio.png" type="image/png">
-                                <img src="../assets/images/qr_portfolio.png" alt="QR-Code Portfolio" class="qr-image">
+                                <img src="../assets/images/qr_portfolio.png" width="350" height="350" alt="QR-Code Portfolio" class="qr-image">
                             </picture>
                             <div class="qr-label">
                                 <span lang="de">Projekt‑Portfolio</span>
@@ -280,7 +280,7 @@
                         <div class="qr-item">
                             <picture>
                                 <source srcset="../assets/images/qr_interview.png" type="image/png">
-                                <img src="../assets/images/qr_interview.png" alt="QR-Code Interview Simulator"
+                                <img src="../assets/images/qr_interview.png" width="350" height="350" alt="QR-Code Interview Simulator"
                                     class="qr-image">
                             </picture>
                             <div class="qr-label">
@@ -447,8 +447,8 @@
                         <div class="interest-item">
                             <i class="fa fa-robot" aria-hidden="true"></i>
                             <div>
-                                <h4 lang="de">KI &amp; Code-Experimente</h4>
-                                <h4 lang="en">AI &amp; Coding Hacks</h4>
+                                <h3 lang="de">KI &amp; Code-Experimente</h3>
+                                <h3 lang="en">AI &amp; Coding Hacks</h3>
                                 <p lang="de">Entwicklung kleiner Web-Apps mit Anbindungen an LLMs wie OpenAI und Gemini.
                                 </p>
                                 <p lang="en">Building side-projects using REST integrations to LLMs like OpenAI or
@@ -458,8 +458,8 @@
                         <div class="interest-item">
                             <i class="fa fa-line-chart" aria-hidden="true"></i>
                             <div>
-                                <h4 lang="de">Finanzen &amp; Investments</h4>
-                                <h4 lang="en">Finance &amp; Investing</h4>
+                                <h3 lang="de">Finanzen &amp; Investments</h3>
+                                <h3 lang="en">Finance &amp; Investing</h3>
                                 <p lang="de">Analysen und Portfoliostrukturierungen von ETFs, Aktien und digitalen
                                     Werten.</p>
                                 <p lang="en">Tracking market valuations and asset allocations across stocks and digital
@@ -469,8 +469,8 @@
                         <div class="interest-item">
                             <i class="fa fa-dog" aria-hidden="true"></i>
                             <div>
-                                <h4 lang="de">Hundetraining &amp; Natur</h4>
-                                <h4 lang="en">Dog Training &amp; Outdoors</h4>
+                                <h3 lang="de">Hundetraining &amp; Natur</h3>
+                                <h3 lang="en">Dog Training &amp; Outdoors</h3>
                                 <p lang="de">Aktive Beschäftigung mit Hunden, Hundepsychologie und Wanderungen.</p>
                                 <p lang="en">Studying canine behaviors, hiking, and active dog agility training.</p>
                             </div>

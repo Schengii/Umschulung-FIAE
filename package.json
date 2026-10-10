@@ -18,11 +18,11 @@
     "generate-sw-assets": "node scripts/generate_sw_assets.js",
     "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
-    "lint": "eslint assets/js scripts",
-    "lint:fix": "eslint assets/js scripts --fix",
-    "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\"",
-    "format:fix": "prettier --write \"assets/js/**/*.js\" \"scripts/**/*.js\"",
-    "typecheck": "tsc --noEmit -p jsconfig.json",
+    "lint": "eslint assets/js scripts sw.js",
+    "lint:fix": "eslint assets/js scripts sw.js --fix",
+    "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\" sw.js",
+    "format:fix": "prettier --write \"assets/js/**/*.js\" \"scripts/**/*.js\" sw.js",
+    "typecheck": "tsc --noEmit -p jsconfig.json && tsc --noEmit -p jsconfig.sw.json",
     "optimize-images": "node scripts/optimize_images.js",
     "compress-images": "node scripts/compress_images.js",
     "audit-cleanup": "node scripts/audit_cleanup.js",
@@ -32,10 +32,17 @@
     "localize-vendor-assets": "node scripts/localize_vendor_assets.js",
     "add-og-meta": "node scripts/add_og_meta.js",
     "generate-og-image": "node scripts/generate_og_image.js",
-    "generate-qr-codes": "node scripts/generate_qr_codes.js"
+    "generate-qr-codes": "node scripts/generate_qr_codes.js",
+    "subset-icons": "node scripts/subset_fontawesome.js",
+    "check-icons": "node scripts/subset_fontawesome.js --check",
+    "update-sitemap": "node scripts/update_sitemap.js",
+    "check-sitemap": "node scripts/update_sitemap.js --check",
+    "regen": "npm run subset-icons && npm run generate-sw-assets",
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-sw-assets && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@fortawesome/fontawesome-free": "6.5.2",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.2",
     "esbuild": "^0.28.2",
@@ -44,6 +51,7 @@
     "http-server": "^14.1.1",
     "prettier": "^3.9.8",
     "sharp": "^0.35.4",
+    "subset-font": "^2.9.0",
     "typescript": "^7.0.2",
     "vitest": "^5.0.3"
   }

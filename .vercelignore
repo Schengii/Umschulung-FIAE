@@ -1,5 +1,9 @@
 # Vercel Deployment Ignore
-# Verhindert, dass interne Entwicklungsdateien, Skripte und Dokumentationen öffentlich auf Vercel landen
+#
+# Vercel baut das Projekt selbst (`npm run build:dist`, siehe vercel.json / ADR 0008) und
+# liefert ausschließlich dist/ aus. Diese Liste hält nur noch Dateien vom Upload fern, die
+# der Build nicht braucht. scripts/ darf hier NICHT stehen: scripts/build_minified.js ist
+# der Build.
 
 # Git & CI/CD
 .git/
@@ -9,18 +13,21 @@
 .vscode/
 .idea/
 
-# Interne Skripte & Test-Infrastruktur
-scripts/
-test-results/
-playwright.config.js
-lighthouserc.json
-eslint.config.js
-.prettierrc.json
-jsconfig.json
+# Test-Infrastruktur & lokale Artefakte
+/test-results/
+/dist/
+/playwright.config.js
+/lighthouserc.json
+/eslint.config.js
+/.prettierrc.json
+/jsconfig.json
+/jsconfig.sw.json
 
 # Interne Dokumentation & Notizen
-README.md
-CHANGELOG.md
+/README.md
+/CHANGELOG.md
+/CLAUDE.md
+/docs/
 
 # Package Manager Cache & Logs
 npm-debug.log*

@@ -73,7 +73,10 @@ export function initC4Architecture() {
             });
 
             if (window.showToast) {
-                window.showToast(`C4 Zoom auf Level ${lvl} angepasst`, 'info');
+                window.showToast(
+                    { de: `C4-Zoom auf Level ${lvl} angepasst`, en: `C4 zoom set to level ${lvl}` },
+                    'info'
+                );
             }
         });
     });

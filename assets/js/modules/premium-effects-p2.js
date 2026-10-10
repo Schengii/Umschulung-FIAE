@@ -1,6 +1,7 @@
 /**
- * Premium Effects Phase 2 Module — Page transitions and Web Audio API synthesized interface sounds.
+ * Premium Effects Phase 2 Module — Page transitions and synthesized interface sounds.
  */
+import { GameAudio } from './game-audio.js';
 
 export function initPremiumEffectsP2() {
     // 1. Initialize Page Transition Overlay
@@ -8,6 +9,28 @@ export function initPremiumEffectsP2() {
 
     // 2. Initialize UI Audio Core
     initUIAudio();
+}
+
+/**
+ * True for a click that should navigate to another page of this site in the same tab.
+ * Everything else (downloads, new tabs, other schemes, already handled clicks) must be
+ * left alone: the overlay only disappears when a new page loads.
+ * @param {MouseEvent} e
+ * @param {HTMLAnchorElement} link
+ */
+function isPageNavigation(e, link) {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#')) return false;
+    if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return false;
+    if (link.hasAttribute('download') || (link.target && link.target !== '_self')) return false;
+    if (link.protocol !== 'http:' && link.protocol !== 'https:' && link.protocol !== 'file:') return false;
+    // Same document, only the fragment differs: the browser scrolls, nothing loads.
+    if (link.pathname === window.location.pathname && link.search === window.location.search && link.hash) {
+        return false;
+    }
+    // Only documents get a transition; a PDF/PPTX/ZIP link opens or downloads in place.
+    const lastSegment = link.pathname.split('/').pop() || '';
+    return !lastSegment.includes('.') || /\.html?$/i.test(lastSegment);
 }
 
 /**
@@ -32,144 +55,54 @@ function initPageTransitions() {
         overlay.classList.remove('active');
     }, 100);
 
+    // A page restored from the back/forward cache comes back exactly as it was left,
+    // i.e. with the overlay still covering it.
+    window.addEventListener('pageshow', (e) => {
+        if (e.persisted) overlay.classList.remove('active');
+    });
+
     // Intercept internal clicks
     document.addEventListener('click', (e) => {
-        const link = /** @type {HTMLElement} */ (e.target).closest('a');
-        if (!link) return;
+        const link = /** @type {HTMLAnchorElement} */ (/** @type {HTMLElement} */ (e.target).closest('a'));
+        if (!link || !isPageNavigation(e, link)) return;
 
-        const href = link.getAttribute('href');
-        const target = link.getAttribute('target');
+        e.preventDefault();
+        const href = link.href;
 
-        // Check if it is a valid internal navigation link
-        if (
-            href &&
-            !href.startsWith('#') &&
-            !href.startsWith('javascript:') &&
-            !href.startsWith('mailto:') &&
-            !href.startsWith('tel:') &&
-            target !== '_blank' &&
-            !e.ctrlKey &&
-            !e.metaKey &&
-            !e.shiftKey
-        ) {
-            e.preventDefault();
+        // Fade in transition overlay
+        overlay.classList.add('active');
 
-            // Play click sound
-            playAudioCue('click');
-
-            // Fade in transition overlay
-            overlay.classList.add('active');
-
-            // Navigate after fade duration
-            setTimeout(() => {
-                window.location.href = href;
-            }, 350);
-        }
+        // Navigate after fade duration
+        setTimeout(() => {
+            window.location.href = href;
+        }, 350);
     });
 }
 
 /**
- * Synthesizes high-fidelity click and hover UI sound effects using Web Audio API
+ * Hover and click cues on interactive elements. Silent unless the visitor enabled sound
+ * (see GameAudio); checked up front so no AudioContext is created while muted.
  */
-let audioCtx = null;
-
-function getAudioContext() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    return audioCtx;
-}
-
-function playAudioCue(type) {
-    // Check if audio effects are enabled (default: true)
-    if (localStorage.getItem('audio_effects_enabled') === 'false') return;
-
-    try {
-        const ctx = getAudioContext();
-        if (ctx.state === 'suspended') {
-            ctx.resume();
-        }
-
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        const now = ctx.currentTime;
-
-        if (type === 'hover') {
-            // High-pass dynamic blip
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1000, now);
-            osc.frequency.exponentialRampToValueAtTime(450, now + 0.05);
-            gain.gain.setValueAtTime(0.005, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-            osc.start(now);
-            osc.stop(now + 0.05);
-        } else if (type === 'click') {
-            // Rich mechanical click
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(650, now);
-            osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
-            gain.gain.setValueAtTime(0.035, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
-            osc.start(now);
-            osc.stop(now + 0.08);
-        }
-    } catch (err) {
-        console.warn('Audio synthesis failed:', err);
-    }
-}
-
 function initUIAudio() {
-    // Default audio toggle config
-    if (localStorage.getItem('audio_effects_enabled') === null) {
-        localStorage.setItem('audio_effects_enabled', 'true');
-    }
-
-    // Attach hover/click sounds to interactive elements
     const selectors = 'a, button, .card, .nav-item, input, select';
 
     document.addEventListener('mouseover', (e) => {
+        if (GameAudio.isMuted) return;
         const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
-        if (el) {
-            // Debounce or filter out continuous hovers on identical target
-            if (el.dataset.audioHovered !== 'true') {
-                el.dataset.audioHovered = 'true';
-                playAudioCue('hover');
-                setTimeout(() => {
-                    delete el.dataset.audioHovered;
-                }, 250);
-            }
+        // Debounce or filter out continuous hovers on identical target
+        if (el && el.dataset.audioHovered !== 'true') {
+            el.dataset.audioHovered = 'true';
+            GameAudio.play('ui-hover');
+            setTimeout(() => {
+                delete el.dataset.audioHovered;
+            }, 250);
         }
     });
 
     document.addEventListener('click', (e) => {
+        if (GameAudio.isMuted) return;
         const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
-        if (el) {
-            // If the element clicked is the audio toggle itself, handle the state flip
-            if (el.id === 'audio-toggle') {
-                e.preventDefault();
-                e.stopPropagation();
-                const isEnabled = localStorage.getItem('audio_effects_enabled') !== 'false';
-                const newStatus = !isEnabled;
-                localStorage.setItem('audio_effects_enabled', String(newStatus));
-
-                const icon = el.querySelector('i');
-                if (icon) {
-                    icon.className = `fa-solid ${newStatus ? 'fa-volume-high' : 'fa-volume-xmark'}`;
-                }
-
-                if (window.showToast) {
-                    window.showToast(newStatus ? 'Sound-Effekte aktiviert' : 'Sound-Effekte deaktiviert', 'success');
-                }
-
-                if (newStatus) {
-                    playAudioCue('click');
-                }
-                return;
-            }
-            playAudioCue('click');
-        }
+        // The sound toggle plays its own confirmation cue.
+        if (el && el.id !== 'audio-toggle') GameAudio.play('ui-click');
     });
 }

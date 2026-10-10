@@ -93,8 +93,8 @@ const KNOWLEDGE_BASE = [
     },
     {
         keywords: ['zeugnis', 'noten', 'gehalt', 'lebenslauf', 'cv', 'zertifikat', 'resume', 'grades', 'certificate'],
-        responseDe: `Der Lebenslauf und alle Arbeits-/IHK-Zwischenzeugnisse sind auf der Lebenslauf-Seite hinterlegt. Vertrauliche Zeugnisse und Gehaltsangaben sind token-geschützt (Passwort: <code>fiae2026</code>).`,
-        responseEn: `The CV, references, and intermediate IHK certificates are available on the resume page. Confidential certificates & salary expectations are token-protected (Access: <code>fiae2026</code>).`,
+        responseDe: `Den Lebenslauf findest du auf der Lebenslauf-Seite, auch als PDF. Arbeitszeugnisse und Gehaltsvorstellung stehen bewusst nicht öffentlich auf der Seite: Maximilian sendet sie auf Anfrage persönlich per E-Mail zu.`,
+        responseEn: `The CV is available on the resume page, also as a PDF. References and salary expectations are deliberately not public on the site: Maximilian shares them personally by email on request.`,
         link: 'lebenslauf.html',
         linkTextDe: 'Zum interaktiven Lebenslauf',
         linkTextEn: 'View Interactive CV',
@@ -109,7 +109,9 @@ const KNOWLEDGE_BASE = [
     },
 ];
 
-export function initPortfolioCopilot() {
+export async function initPortfolioCopilot() {
+    // Styles first, so the widget never shows up unstyled.
+    if (window.loadStylesheet) await window.loadStylesheet('assets/css/modules/portfolio_copilot.css');
     injectCopilotWidget();
     attachCopilotEvents();
 }
@@ -126,7 +128,7 @@ function injectCopilotWidget() {
 
     container.innerHTML = `
         <!-- Floating Toggle Button -->
-        <button id="copilot-toggle-btn" class="btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="copilot-chat-box" aria-label="FIAE AI Copilot öffnen" title="FIAE AI Copilot Chat">
+        <button id="copilot-toggle-btn" class="btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="copilot-chat-box" aria-label="FIAE AI Copilot öffnen" data-en-aria-label="Open FIAE AI Copilot" title="FIAE AI Copilot Chat">
             <span class="copilot-btn-icon">🤖</span>
             <span class="copilot-btn-text">FIAE AI Copilot</span>
             <span class="copilot-pulse-dot" aria-hidden="true"></span>
@@ -147,10 +149,10 @@ function injectCopilotWidget() {
                     </div>
                 </div>
                 <div class="copilot-header-actions">
-                    <button type="button" id="copilot-clear-btn" class="copilot-icon-btn" title="Chat zurücksetzen" aria-label="Chat zurücksetzen">
+                    <button type="button" id="copilot-clear-btn" class="copilot-icon-btn" title="Chat zurücksetzen" data-en-title="Reset chat" aria-label="Chat zurücksetzen" data-en-aria-label="Reset chat">
                         <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                     </button>
-                    <button type="button" id="copilot-close-btn" class="copilot-icon-btn" title="Schließen" aria-label="Copilot Chat schließen">
+                    <button type="button" id="copilot-close-btn" class="copilot-icon-btn" title="Schließen" data-en-title="Close" aria-label="Copilot Chat schließen" data-en-aria-label="Close Copilot chat">
                         <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -178,8 +180,8 @@ function injectCopilotWidget() {
 
             <!-- Input Bar -->
             <form id="copilot-form">
-                <input type="text" id="copilot-input" placeholder="${currentLang === 'en' ? 'Ask a question...' : 'Frage eingeben...'}" aria-label="Nachricht an Copilot" autocomplete="off">
-                <button type="submit" class="copilot-send-btn" aria-label="Senden" title="Senden">
+                <input type="text" id="copilot-input" placeholder="Frage eingeben..." data-en-placeholder="Ask a question..." aria-label="Nachricht an Copilot" data-en-aria-label="Message to Copilot" autocomplete="off">
+                <button type="submit" class="copilot-send-btn" aria-label="Senden" data-en-aria-label="Send" title="Senden" data-en-title="Send">
                     <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
                 </button>
             </form>
