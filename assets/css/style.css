@@ -3404,7 +3404,9 @@ html[lang="en"] [lang="de"] {
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.5rem;
-    background: var(--bg-card);
+    /* Opaque: --bg-card is translucent, so on a phone the text contrast depended on whatever
+       scrolled behind the toast (axe color-contrast on the light theme). */
+    background: linear-gradient(var(--bg-card), var(--bg-card)), var(--bg-page);
     border: 1px solid var(--border);
     border-left: 4px solid #f59e0b;
     border-radius: var(--radius-md);
