@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateIhkProjectProposal, DEFAULT_PROPOSAL_PHASES } from './ihkProjectProposalEngine';
+import { 
+  evaluateIhkProjectProposal, 
+  DEFAULT_PROPOSAL_PHASES, 
+  generateProjectPhasesWizard,
+  checkScheduleCollisions 
+} from './ihkProjectProposalEngine';
 
-describe('ihkProjectProposalEngine (IHK Projektantrags-Prüfer)', () => {
+describe('ihkProjectProposalEngine (IHK Projektantrags-Prüfer & Zeitplan-Kollisions-Linter)', () => {
   it('genehmigt einen konformen 80h FIAE Antrag', () => {
     const res = evaluateIhkProjectProposal({
       occupationId: 'fiae',
@@ -13,6 +18,15 @@ describe('ihkProjectProposalEngine (IHK Projektantrags-Prüfer)', () => {
     expect(res.isHoursExact).toBe(true);
     expect(res.status).toBe('APPROVED');
     expect(res.errors.length).toBe(0);
+  });
+
+  it('erkennt unlogische Phasenreihenfolge und Zeitkollisionen', () => {
+    const invalidPhases = [
+      { id: '1', name: 'Phase A', startDay: 5, endDay: 3, category: 'analyse' }
+    ];
+    const warnings = checkScheduleCollisions(invalidPhases);
+    expect(warnings.length).toBeGreaterThan(0);
+    expect(warnings[0]).toContain('Starttag');
   });
 
   it('lehnt Antrag ab wenn Stundenkontingent überschritten ist', () => {
@@ -39,5 +53,19 @@ describe('ihkProjectProposalEngine (IHK Projektantrags-Prüfer)', () => {
 
     expect(res.status).toBe('REJECTED');
     expect(res.errors.length).toBeGreaterThan(0);
+  });
+
+  it('generiert IHK-konforme Phasen für FIAE, FISI und IT-SE im Wizard', () => {
+    const fiaePhases = generateProjectPhasesWizard('fiae', 'web_app');
+    const fiaeTotal = fiaePhases.reduce((s, p) => s + p.hours, 0);
+    expect(fiaeTotal).toBe(80);
+
+    const fisiPhases = generateProjectPhasesWizard('fisi', 'cloud_migration');
+    const fisiTotal = fisiPhases.reduce((s, p) => s + p.hours, 0);
+    expect(fisiTotal).toBe(40);
+
+    const itsePhases = generateProjectPhasesWizard('itse', 'custom');
+    const itseTotal = itsePhases.reduce((s, p) => s + p.hours, 0);
+    expect(itseTotal).toBe(40);
   });
 });

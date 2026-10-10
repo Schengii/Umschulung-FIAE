@@ -1,0 +1,10 @@
+/*
+ * Tailwind-Utilities für die Komponenten, die Klassen wie `bg-slate-900` oder
+ * `rounded-2xl` nutzen. Bewusst OHNE Preflight (kein CSS-Reset) und OHNE
+ * @layer für die Utilities: global.css enthält einen ungelayerten Reset (`* { margin:0; padding:0 }`),
+ * der gelayerte Utilities (p-4, space-y-3, ...) sonst überschreiben würde.
+ * Ungelayert schlagen Klassen-Utilities den `*`-Reset (höhere Spezifität);
+ * global.css wird danach geladen und gewinnt bei gleicher Spezifität.
+ */
+@import "tailwindcss/theme.css";
+@tailwind utilities;

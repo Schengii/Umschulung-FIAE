@@ -8,13 +8,15 @@ interface DualPortfolioCompareModalProps {
   onClose: () => void;
   portfolios: Portfolio[];
   baseCurrency?: string;
+  currentPrices?: Record<string, number>;
 }
 
 export const DualPortfolioCompareModal: React.FC<DualPortfolioCompareModalProps> = ({
   isOpen,
   onClose,
   portfolios,
-  baseCurrency = 'EUR'
+  baseCurrency = 'EUR',
+  currentPrices = {}
 }) => {
   const [portfolioIdA, setPortfolioIdA] = useState<string>(portfolios[0]?.id || '');
   const [portfolioIdB, setPortfolioIdB] = useState<string>(portfolios[1]?.id || portfolios[0]?.id || '');
@@ -22,8 +24,8 @@ export const DualPortfolioCompareModal: React.FC<DualPortfolioCompareModalProps>
   const portA = portfolios.find(p => p.id === portfolioIdA) || portfolios[0];
   const portB = portfolios.find(p => p.id === portfolioIdB) || portfolios[1] || portfolios[0];
 
-  const holdingsA = useMemo(() => calculateHoldingsFromTransactions(portA?.transactions || []), [portA]);
-  const holdingsB = useMemo(() => calculateHoldingsFromTransactions(portB?.transactions || []), [portB]);
+  const holdingsA = useMemo(() => calculateHoldingsFromTransactions(portA?.transactions || [], currentPrices), [portA, currentPrices]);
+  const holdingsB = useMemo(() => calculateHoldingsFromTransactions(portB?.transactions || [], currentPrices), [portB, currentPrices]);
 
   const comparison = useMemo(() => compareTwoPortfolios(holdingsA, holdingsB), [holdingsA, holdingsB]);
 

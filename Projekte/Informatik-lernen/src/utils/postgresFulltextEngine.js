@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL Full-Text Search (tsvector & tsquery) Engine
  * Simulates text lexeme parsing, stemming (German/English), stop-word removal,
@@ -13,7 +14,7 @@ export function toTsVector(text = '') {
     .split(/\s+/)
     .filter(w => w.length > 1 && !GERMAN_STOP_WORDS.has(w));
 
-  const lexemeMap = {};
+  const lexemeMap = /** @type {Record<string, number[]>} */ ({});
 
   words.forEach((word, index) => {
     // Simple German stemmer (strip common suffixes)
@@ -36,6 +37,10 @@ export function toTsVector(text = '') {
   };
 }
 
+/**
+ * @param {{ lexemeMap: Record<string, number[]> }} tsVectorResult
+ * @param {string} [queryStr]
+ */
 export function evaluateTsQuery(tsVectorResult, queryStr = 'datenbank & server') {
   const queryTokens = queryStr
     .toLowerCase()

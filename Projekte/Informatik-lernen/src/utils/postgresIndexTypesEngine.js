@@ -1,9 +1,10 @@
+// @ts-check
 /**
  * PostgreSQL Index Types Deep Dive Engine
  * Vergleicht B-Tree, GIN, GiST und BRIN Indizes hinsichtlich Speicherbedarf, Abfragezeit und Einsatzzweck.
  */
 
-export const INDEX_TYPES = {
+export const INDEX_TYPES = /** @type {Record<string, {id: string, name: string, bestFor: string, operators: string[], sizeRatio: number, writeOverhead: string}>} */ ({
   BTREE: {
     id: 'btree',
     name: 'B-Tree (Balanced Tree)',
@@ -36,7 +37,7 @@ export const INDEX_TYPES = {
     sizeRatio: 0.005, // < 1% der Tabellengröße! Speichert nur Min/Max pro 128 Pages
     writeOverhead: 'Extrem niedrig (nur Min/Max Aktualisierung bei Page-Grenzen)'
   }
-};
+});
 
 /**
  * Berechnet geschätzte Speicher- und Geschwindigkeitsmetriken für einen Indextyp

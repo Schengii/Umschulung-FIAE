@@ -5,7 +5,9 @@ import {
   generateMermaidActivity,
   DEFAULT_SEQUENCE_PARTICIPANTS,
   DEFAULT_SEQUENCE_MESSAGES,
-  DEFAULT_ACTIVITY_STEPS 
+  DEFAULT_ACTIVITY_STEPS,
+  IHK_CLASS_DRILL_QUESTIONS,
+  DEFAULT_CLASS_DIAGRAM
 } from './umlEngine';
 
 describe('umlEngine (OMG UML 2.5 & IHK Standard)', () => {
@@ -46,5 +48,16 @@ describe('umlEngine (OMG UML 2.5 & IHK Standard)', () => {
     expect(activityCode).toContain('-->|Ja|');
     expect(activityCode).toContain('-->|Nein|');
     expect(activityCode).toContain('start([((●))');
+  });
+
+  it('enthält IHK Klassendiagramm-Prüfungsfragen und valides Mermaid ClassDiagramm', () => {
+    expect(IHK_CLASS_DRILL_QUESTIONS.length).toBeGreaterThanOrEqual(3);
+    const visQ = IHK_CLASS_DRILL_QUESTIONS.find(q => q.id === 'vis_private');
+    expect(visQ).toBeDefined();
+    expect(visQ?.options.find(o => o.isCorrect)?.text).toContain('- (Private)');
+
+    expect(DEFAULT_CLASS_DIAGRAM).toContain('classDiagram');
+    expect(DEFAULT_CLASS_DIAGRAM).toContain('Kunde');
+    expect(DEFAULT_CLASS_DIAGRAM).toContain('*--');
   });
 });

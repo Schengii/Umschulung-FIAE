@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Prometheus PromQL Metrics & Alerting Rule Generator Engine
  * Evaluates PromQL rate(), sum() by (), and histogram_quantile() expressions,

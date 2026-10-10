@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Network Packet Sniffer & Protocol Dissection Engine
  */
@@ -204,6 +205,7 @@ export const SAMPLE_PACKETS = [
 
 /**
  * Parses raw hex string into formatted 16-byte rows with hex and ASCII
+ * @param {string} hexString
  */
 export function formatHexDump(hexString) {
   if (!hexString) return [];
@@ -239,6 +241,8 @@ export function formatHexDump(hexString) {
 
 /**
  * Filter evaluator for Wireshark-like queries
+ * @param {any} packet
+ * @param {string} filterQuery
  */
 export function evaluatePacketFilter(packet, filterQuery) {
   if (!filterQuery || !filterQuery.trim()) return true;

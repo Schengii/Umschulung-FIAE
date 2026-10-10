@@ -4,9 +4,11 @@ import {
 } from 'lucide-react';
 import {
   calculateContributionMargin,
-  calculateMultiStageContribution
+  calculateMultiStageContribution,
+  CONTRIBUTION_MARGIN_DRILL_QUESTIONS
 } from '../../utils/wisoContributionMarginEngine';
 import { useStore } from '../../store/useStore';
+import LabDrillSection from '../Shared/LabDrillSection';
 import { triggerHaptic } from '../../utils/haptics';
 
 export default function WisoContributionMarginLab({ onRewardXP }) {
@@ -227,6 +229,8 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
           </div>
         </div>
       )}
+
+      <LabDrillSection title="IHK Prüfungs-Drill: Deckungsbeitrag & Break-Even" questions={CONTRIBUTION_MARGIN_DRILL_QUESTIONS} accentColor="#d97706" />
     </div>
   );
 }

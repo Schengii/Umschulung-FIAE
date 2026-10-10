@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * GitHub Actions Workflow CI/CD Simulator Engine
  * DAG Job Resolution (needs), Cache Hit/Miss, Secrets Masking & Step Runners
@@ -49,6 +50,7 @@ export const DEFAULT_WORKFLOW = {
 
 /**
  * Löst die Ausführungsreihenfolge der Jobs anhand von 'needs' auf (DAG)
+ * @param {any[]} jobs
  */
 export function resolveJobDependencyStages(jobs) {
   const jobMap = new Map();
@@ -63,7 +65,7 @@ export function resolveJobDependencyStages(jobs) {
 
   jobs.forEach(j => {
     const deps = j.needs || [];
-    deps.forEach(depId => {
+    deps.forEach((/** @type {any} */ depId) => {
       if (jobMap.has(depId)) {
         graph.get(depId).push(j.id);
         inDegree.set(j.id, (inDegree.get(j.id) || 0) + 1);
@@ -84,10 +86,11 @@ export function resolveJobDependencyStages(jobs) {
     stages.push(currentStage);
     processedCount.value += currentStage.length;
 
-    const nextStage = [];
+    /** @type {any[]} */
+  const nextStage = [];
     currentStage.forEach(currId => {
       const neighbors = graph.get(currId) || [];
-      neighbors.forEach(nextId => {
+      neighbors.forEach((/** @type {any} */ nextId) => {
         const d = inDegree.get(nextId) - 1;
         inDegree.set(nextId, d);
         if (d === 0) nextStage.push(nextId);
@@ -108,6 +111,9 @@ export function resolveJobDependencyStages(jobs) {
 
 /**
  * Maskiert sensible Umgebungsvariablen / Secrets im Log
+ * @param {string} text
+ * @param {Record<string, string>} [secrets]
+ * @returns {string}
  */
 export function maskSecrets(text, secrets = {}) {
   let result = text;
@@ -121,6 +127,9 @@ export function maskSecrets(text, secrets = {}) {
 
 /**
  * Simuliert die Ausführung eines einzelnen Jobs
+ * @param {any} job
+ * @param {{hits: Set<string>}} [cacheState]
+ * @param {Record<string, string>} [secrets]
  */
 export function simulateJobExecution(job, cacheState = { hits: new Set() }, secrets = {}) {
   const stepLogs = [];
@@ -129,7 +138,7 @@ export function simulateJobExecution(job, cacheState = { hits: new Set() }, secr
 
   stepLogs.push(`=== Running Job: ${job.name} on [${job.runs_on}] ===`);
 
-  job.steps.forEach((step, idx) => {
+  job.steps.forEach((/** @type {any} */ step, /** @type {any} */ idx) => {
     let stepDuration = step.durationMs || 500;
     let detail = '';
 
@@ -162,6 +171,8 @@ export function simulateJobExecution(job, cacheState = { hits: new Set() }, secr
 
 /**
  * Führt den gesamten CI/CD Pipeline Workflow sequentiell nach DAG-Stages aus
+ * @param {any} [workflow]
+ * @param {string[]} [initialCache]
  */
 export function executeWorkflowPipeline(workflow = DEFAULT_WORKFLOW, initialCache = []) {
   const { stages, hasCycle, error } = resolveJobDependencyStages(workflow.jobs);
@@ -178,6 +189,7 @@ export function executeWorkflowPipeline(workflow = DEFAULT_WORKFLOW, initialCach
   }
 
   const cacheState = { hits: new Set(initialCache) };
+  /** @type {Record<string, any>} */
   const jobResults = {};
   const allLogs = [`Starting GitHub Actions Workflow: "${workflow.name}"`];
   let totalPipelineDuration = 0;
@@ -186,8 +198,8 @@ export function executeWorkflowPipeline(workflow = DEFAULT_WORKFLOW, initialCach
     allLogs.push(`--> Stage ${stageIdx + 1}: Running jobs in parallel [${stage.join(', ')}]`);
     let stageMaxDuration = 0;
 
-    stage.forEach(jobId => {
-      const job = workflow.jobs.find(j => j.id === jobId);
+    stage.forEach((/** @type {any} */ jobId) => {
+      const job = workflow.jobs.find((/** @type {any} */ j) => j.id === jobId);
       if (!job) return;
       const res = simulateJobExecution(job, cacheState, workflow.env);
       jobResults[jobId] = res;

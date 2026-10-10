@@ -21,7 +21,7 @@ export interface AssetMappingRule {
 
 export interface Transaction {
   id: string;
-  type: 'BUY' | 'SELL' | 'DIVIDEND' | 'DEPOSIT' | 'WITHDRAWAL' | 'STAKING' | 'AIRDROP' | 'MINING' | 'FEE' | 'OPTION_PREMIUM' | 'OPTION_EXPIRE' | 'OPTION_ASSIGN' | 'INTEREST' | 'RENT_INCOME' | 'MAINTENANCE_EXPENSE';
+  type: 'BUY' | 'SELL' | 'DIVIDEND' | 'DEPOSIT' | 'WITHDRAWAL' | 'STAKING' | 'AIRDROP' | 'MINING' | 'FEE' | 'OPTION_PREMIUM' | 'OPTION_EXPIRE' | 'OPTION_ASSIGN' | 'INTEREST' | 'RENT_INCOME' | 'MAINTENANCE_EXPENSE' | 'FX_SWAP';
   date: string;
   ticker: string;
   name: string;
@@ -39,6 +39,10 @@ export interface Transaction {
   strikePrice?: number;
   expirationDate?: string;
   optionType?: 'CALL' | 'PUT';
+  fromCurrency?: 'EUR' | 'USD' | 'CHF' | 'GBP';
+  toCurrency?: 'EUR' | 'USD' | 'CHF' | 'GBP';
+  fromAmount?: number;
+  toAmount?: number;
 }
 
 export interface Holding {
@@ -62,6 +66,7 @@ export interface Holding {
   broker?: string;
   currency?: 'EUR' | 'USD' | 'CHF' | 'GBP';
   teilfreistellungRate?: number;
+  terPercent?: number;
   notes?: string;
   tags?: string[];
 }
@@ -222,6 +227,36 @@ export interface SavingsPlan {
   sector?: Sector;
   region?: Region;
   broker?: string;
+  annualDynamizationPercent?: number; // e.g. 2, 5 percent
+  lastDynamizationDate?: string; // YYYY-MM-DD
+  pausedUntilDate?: string; // e.g. '2026-12-31'
+  minimumEmergencyCashBufferEur?: number; // threshold below which execution pauses
+}
+
+export type DividendAristocratTier = 'KING' | 'ARISTOCRAT' | 'CHAMPION' | 'CONTENDER' | 'CHALLENGER' | 'NONE';
+
+export interface DividendGrowthAnalysis {
+  ticker: string;
+  name: string;
+  yearsOfIncreases: number;
+  tier: DividendAristocratTier;
+  tierLabel: string;
+  tierBadgeColor: string;
+  cagr1y: number;
+  cagr3y: number;
+  cagr5y: number;
+  cagr10y: number;
+  payoutRatioEarningsPercent: number;
+  payoutRatioFcfPercent: number;
+  cutRisk: 'SAFE' | 'MODERATE' | 'HIGH_RISK';
+}
+
+export interface MultiCurrencyCashBalances {
+  EUR: number;
+  USD: number;
+  CHF: number;
+  GBP: number;
+  totalEurEquivalent: number;
 }
 
 export interface Portfolio {
@@ -354,6 +389,210 @@ export interface FireMonteCarloSummary {
   paths: { year: number; p10: number; p50: number; p90: number }[];
 }
 
+export interface PriceAlert {
+  id: string;
+  ticker: string;
+  name: string;
+  condition: 'ABOVE' | 'BELOW' | 'DAILY_DROP_PCT';
+  targetValue: number;
+  currentValue?: number;
+  createdAt: string;
+  triggeredAt?: string;
+  isActive: boolean;
+  notes?: string;
+}
 
+export interface BrokerStats {
+  brokerName: string;
+  holdingsCount: number;
+  totalMarketValueEur: number;
+  totalInvestedEur: number;
+  totalGainEur: number;
+  totalGainPercent: number;
+  totalDividendsEur: number;
+  totalFeesEur: number;
+  transactionsCount: number;
+  shareOfPortfolioPercent: number;
+}
 
+export interface RebalanceCategoryOrder {
+  category: AssetCategory;
+  currentValueEur: number;
+  currentWeightPercent: number;
+  targetWeightPercent: number;
+  targetValueEur: number;
+  driftPercent: number;
+  action: 'BUY' | 'SELL' | 'HOLD';
+  orderValueEur: number;
+  suggestedAssets: {
+    ticker: string;
+    name: string;
+    currentPrice: number;
+    suggestedShares: number;
+    suggestedAmountEur: number;
+  }[];
+}
 
+export interface RebalanceCalculationResult {
+  mode: 'FULL' | 'CASHFLOW_ONLY';
+  freshCapitalEur: number;
+  totalPortfolioValueEur: number;
+  postRebalanceValueEur: number;
+  categoryOrders: RebalanceCategoryOrder[];
+  totalBuyVolumeEur: number;
+  totalSellVolumeEur: number;
+}
+
+export interface FundFeeItem {
+  ticker: string;
+  name: string;
+  category: AssetCategory;
+  currentValueEur: number;
+  terPercent: number;
+  annualCostEur: number;
+  portfolioSharePercent: number;
+}
+
+export interface TerAnalysisResult {
+  totalAnalyzedFundValueEur: number;
+  weightedTerPercent: number;
+  totalAnnualFeeEur: number;
+  tenYearCompoundLossEur: number;
+  twentyYearCompoundLossEur: number;
+  thirtyYearCompoundLossEur: number;
+  potentialSavingVsActiveFundEur: number;
+  funds: FundFeeItem[];
+  projection: {
+    year: number;
+    withoutFeesEur: number;
+    withCurrentTerEur: number;
+    withActiveFundFeeEur: number;
+    cumulativeFeeLossEur: number;
+  }[];
+}
+
+export interface CryptoLossLot {
+  id: string;
+  ticker: string;
+  name: string;
+  buyDate: string;
+  daysHeld: number;
+  daysRemainingInTaxYearWindow: number;
+  amount: number;
+  buyPriceEur: number;
+  currentPriceEur: number;
+  costBasisEur: number;
+  currentValueEur: number;
+  unrealizedLossEur: number;
+  potentialTaxSavingsEur: number;
+  isActionable: boolean;
+}
+
+export interface CryptoTaxLossHarvestingSummary {
+  realizedGainsThisYearEur: number;
+  totalHarvestableLossesEur: number;
+  estimatedTaxSavingsEur: number;
+  taxRatePercent: number;
+  lots: CryptoLossLot[];
+}
+
+export interface CorrelationCluster {
+  id: string;
+  name: string;
+  tickers: string[];
+  averageCorrelation: number;
+  riskDescription: string;
+}
+
+export interface CorrelationAnalysisResult {
+  tickers: string[];
+  names: Record<string, string>;
+  categories: Record<string, AssetCategory>;
+  matrix: Record<string, Record<string, number>>;
+  averageCorrelation: number;
+  diversificationScore: 'OPTIMAL' | 'MODERATE' | 'POOR';
+  diversificationScorePercent: number; // 0 to 100
+  clusters: CorrelationCluster[];
+  recommendations: string[];
+}
+
+export interface FireWithdrawalSimulationParams {
+  currentAge: number;
+  retirementAge: number;
+  targetAge: number; // e.g. 90 or 95
+  currentPortfolioValue: number;
+  annualReturnPercent: number;
+  annualInflationPercent: number;
+  monthlyBaseExpensesEur: number;
+  monthlyHealthInsuranceEur: number;
+  monthlyStatePensionEur: number; // Gesetzliche Rente ab Rentenalter
+  statePensionStartAge: number; // e.g. 67
+  monthlyCompanyPensionEur: number; // bAV / Zusatzrente
+  companyPensionStartAge: number;
+  withdrawalStrategy: 'CONSTANT_INFLATION_ADJUSTED' | 'GUYTON_KLINGER' | 'VPW' | 'FIXED_PERCENTAGE';
+  initialWithdrawalRatePercent: number; // e.g. 3.5% or 4.0%
+  bequestGoalEur: number; // Restvermögen für Erben (0 = vollständiger Verzehr)
+}
+
+export interface FireYearlyDetail {
+  year: number;
+  age: number;
+  startingValue: number;
+  portfolioGrowth: number;
+  statePensionReceived: number;
+  companyPensionReceived: number;
+  grossExpensesNeeded: number;
+  withdrawalAmount: number;
+  healthInsurancePaid: number;
+  taxesPaid: number;
+  endingValue: number;
+  isDepleted: boolean;
+}
+
+export interface FireWithdrawalSimulationResult {
+  isSuccess: boolean;
+  depletionAge?: number;
+  finalPortfolioValueEur: number;
+  totalWithdrawnEur: number;
+  totalPensionReceivedEur: number;
+  minPortfolioValueEur: number;
+  yearlyDetails: FireYearlyDetail[];
+  recommendation: string;
+}
+
+export interface SavingsMilestone {
+  targetAmountEur: number;
+  label: string;
+  fixedScenarioMonth: number;
+  dynamizedScenarioMonth: number;
+  monthsSaved: number;
+}
+
+export interface SavingsGrowthYearPoint {
+  year: number;
+  age: number;
+  fixedTotalEur: number;
+  fixedContributionsEur: number;
+  dynamizedTotalEur: number;
+  dynamizedContributionsEur: number;
+  stepUpTotalEur: number;
+  stepUpContributionsEur: number;
+}
+
+export interface SavingsGrowthComparisonResult {
+  initialCapitalEur: number;
+  monthlyContributionEur: number;
+  annualReturnPercent: number;
+  annualDynamizationPercent: number;
+  stepUpMonthlyEur: number;
+  horizonYears: number;
+  tenYearValueFixed: number;
+  twentyYearValueFixed: number;
+  thirtyYearValueFixed: number;
+  tenYearValueDynamized: number;
+  twentyYearValueDynamized: number;
+  thirtyYearValueDynamized: number;
+  extraWealthFromDynamization30Y: number;
+  milestones: SavingsMilestone[];
+  yearlyTrajectory: SavingsGrowthYearPoint[];
+}

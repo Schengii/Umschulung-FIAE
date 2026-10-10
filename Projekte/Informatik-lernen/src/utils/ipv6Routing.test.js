@@ -3,7 +3,8 @@ import {
   expandIpv6,
   compressIpv6,
   generateEui64,
-  matchRoutingTable
+  matchRoutingTable,
+  calculateIpv6Subnetting
 } from './ipv6Routing';
 
 describe('ipv6Routing', () => {
@@ -50,5 +51,17 @@ describe('ipv6Routing', () => {
     const res3 = matchRoutingTable('8.8.8.8', routes);
     expect(res3.bestMatch.prefixLength).toBe(0);
     expect(res3.bestMatch.iface).toBe('wan0');
+  });
+
+  it('berechnet IPv6 Subnetting & Nibble-Boundaries korrekt', () => {
+    // /48 Basis-Präfix zu /64 Subnetzen (16 Subnetz-Bits = 65.536 Subnetze = 4 Nibbles)
+    const sub = calculateIpv6Subnetting('2001:db8:abcd::', 48, 64, 5);
+    expect(sub.subnetBits).toBe(16);
+    expect(sub.totalSubnets).toBe(65536);
+    expect(sub.isNibbleBoundary).toBe(true);
+    expect(sub.slaacCompliant).toBe(true);
+    expect(sub.generatedSubnets.length).toBe(5);
+    expect(sub.generatedSubnets[0].compressed).toContain('2001:db8:abcd::/64');
+    expect(sub.generatedSubnets[1].compressed).toContain('2001:db8:abcd:1::/64');
   });
 });

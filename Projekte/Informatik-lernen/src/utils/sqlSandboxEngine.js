@@ -1,3 +1,4 @@
+// @ts-check
 import alasql from 'alasql';
 
 /**
@@ -5,6 +6,7 @@ import alasql from 'alasql';
  * Provides in-memory SQL execution, Schema introspection and table seed data.
  */
 
+/** @type {Record<string, string>} */
 export const INITIAL_SQL_SEEDS = {
   ecommerce: `
 CREATE TABLE customers (
@@ -64,6 +66,7 @@ export class SqlSandboxInstance {
     this.executeMultiple(sql);
   }
 
+  /** @param {string} query */
   execute(query) {
     try {
       alasql(`USE ${this.dbName};`);
@@ -88,20 +91,22 @@ export class SqlSandboxInstance {
         raw: result
       };
     } catch (error) {
+      const e = /** @type {Error} */ (error);
       return {
         success: false,
-        error: error.message || String(error),
+        error: e.message || String(e),
         rows: [],
         rowCount: 0
       };
     }
   }
 
+  /** @param {string} sqlScript */
   executeMultiple(sqlScript) {
     const statements = sqlScript
       .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+      .map(/** @param {string} s */ s => s.trim())
+      .filter(/** @param {string} s */ s => s.length > 0);
 
     const results = [];
     for (const stmt of statements) {
@@ -117,13 +122,13 @@ export class SqlSandboxInstance {
       const schema = {};
 
       if (Array.isArray(tables)) {
-        tables.forEach(t => {
+        tables.forEach(/** @param {any} t */ t => {
           const tableName = t.tableid;
           const sample = alasql(`SELECT * FROM ${tableName} LIMIT 1`);
           const countRes = alasql(`SELECT COUNT(*) AS c FROM ${tableName}`);
-          const columns = sample && sample.length > 0 ? Object.keys(sample[0]) : [];
-          const totalRows = countRes && countRes[0] ? countRes[0].c : 0;
-          schema[tableName] = {
+          const columns = sample && (/** @type {any} */ (sample)).length > 0 ? Object.keys((/** @type {any} */ (sample))[0]) : [];
+          const totalRows = countRes && (/** @type {any} */ (countRes))[0] ? (/** @type {any} */ (countRes))[0].c : 0;
+          /** @type {Record<string, any>} */ (schema)[tableName] = {
             columns,
             totalRows
           };
@@ -135,6 +140,7 @@ export class SqlSandboxInstance {
     }
   }
 
+  /** @param {any[]} rows */
   exportToCsv(rows = []) {
     if (!rows || rows.length === 0) return '';
     const headers = Object.keys(rows[0]);
@@ -157,3 +163,78 @@ export class SqlSandboxInstance {
     }
   }
 }
+
+/**
+ * Analysiert eine SQL-Eingabe auf SQL-Injection Vektoren und visualisiert den Unterschied
+ * zwischen naiver String-Konkatenation vs. Prepared Statements (AST / Token-Ebene).
+ * @param {string} userInput
+ * @param {string} [baseQueryTemplate]
+ */
+export function analyzeSqlInjection(userInput = '', baseQueryTemplate = "SELECT * FROM users WHERE username = '$INPUT' AND status = 'active'") {
+  const rawQuery = baseQueryTemplate.replace('$INPUT', userInput);
+
+  // Gefährliche SQL-Injection Patterns (Tautologien, Kommentare, Stacked Queries, UNION)
+  const isTautology = /(?:'|")\s*(?:OR|or|\|\|)\s*(?:1\s*=\s*1|'1'\s*=\s*'1'|[a-zA-Z0-9_]+\s*=\s*[a-zA-Z0-9_]+)/i.test(userInput);
+  const hasCommentBypass = /(--|\/\*|#)/.test(userInput);
+  const hasStackedQuery = /;\s*(?:DROP|DELETE|UPDATE|INSERT|ALTER|TRUNCATE)/i.test(userInput);
+  const hasUnionSelect = /\bUNION\b\s+(?:ALL\s+)?\bSELECT\b/i.test(userInput);
+
+  const isInjected = isTautology || hasCommentBypass || hasStackedQuery || hasUnionSelect;
+
+  let riskLevel = 'SAFE';
+  const detectedVectors = [];
+
+  if (isTautology) {
+    riskLevel = 'CRITICAL';
+    detectedVectors.push('Tautologie (OR 1=1) hebelt WHERE-Bedingung komplett aus');
+  }
+  if (hasCommentBypass) {
+    if (riskLevel !== 'CRITICAL') riskLevel = 'HIGH';
+    detectedVectors.push('SQL-Kommentar (-- / /*) schneidet nachfolgende Filter (z. B. Passwort-Check) ab');
+  }
+  if (hasStackedQuery) {
+    riskLevel = 'CRITICAL';
+    detectedVectors.push('Stacked Query (; DROP/DELETE) ermöglicht Datensabotage');
+  }
+  if (hasUnionSelect) {
+    riskLevel = 'CRITICAL';
+    detectedVectors.push('UNION-Based Injection schleust unautorisierte Datenstrukturen ein');
+  }
+
+  // Ast/Token Struktur veranschaulichen
+  const naiveTokens = [
+    { type: 'KEYWORD', value: 'SELECT * FROM users WHERE' },
+    { type: isInjected ? 'INJECTED_CLAUSE' : 'LITERAL', value: `username = '${userInput}'` },
+    { type: hasCommentBypass ? 'IGNORED_COMMENT' : 'KEYWORD', value: "AND status = 'active'" }
+  ];
+
+  const preparedTokens = [
+    { type: 'PREPARED_STMT', value: 'SELECT * FROM users WHERE username = ? AND status = ?' },
+    { type: 'SAFE_PARAMETER', value: `Param 1 (String): "${userInput.replace(/"/g, '\\"')}"` },
+    { type: 'SAFE_PARAMETER', value: 'Param 2 (String): "active"' }
+  ];
+
+  return {
+    rawQuery,
+    userInput,
+    isInjected,
+    riskLevel,
+    detectedVectors,
+    comparison: {
+      naiveConcatenation: {
+        sql: rawQuery,
+        executionSemantics: isInjected
+          ? 'Der Eingabewert bricht aus dem Literal-String aus und wird direkt vom SQL-Parser als ausführbarer Befehl/Klausel interpretiert!'
+          : 'Query wird als gültiger String-Vergleich ausgeführt.',
+        tokens: naiveTokens
+      },
+      parameterizedQuery: {
+        template: "SELECT * FROM users WHERE username = ? AND status = 'active'",
+        params: [userInput],
+        executionSemantics: 'Die Query-Struktur (AST) steht vorab fest kompiliert. Der Eingabewert wird strikt als Datenwert (String Literal) gebunden. Selbst Sonderzeichen wie \', -- oder OR 1=1 können den Befehlsbaum niemals verändern.',
+        tokens: preparedTokens
+      }
+    }
+  };
+}
+

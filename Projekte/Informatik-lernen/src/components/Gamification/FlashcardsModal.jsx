@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { FLASHCARDS_DATA } from '../../data/flashcardsData';
-import { Layers, CheckCircle2, XCircle, X, Brain, Clock } from 'lucide-react';
+import { Layers, CheckCircle2, XCircle, X, Brain, Clock, Download } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateSM2 } from '../../utils/srsAlgorithm';
+import { exportToAnkiTsv, exportToCsv } from '../../utils/flashcardIoEngine';
 
 export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   const { userState, updateSrsCard } = useStore();
@@ -14,6 +15,31 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
 
   const currentCard = FLASHCARDS_DATA[cardIdx];
   const cardSrs = (userState.srsFlashcards && userState.srsFlashcards[currentCard.id]) || { repetitions: 0, interval: 1, easeFactor: 2.5 };
+
+  const handleDownload = (format) => {
+    let content = '';
+    let filename = '';
+    let mimeType = 'text/plain';
+
+    if (format === 'anki') {
+      content = exportToAnkiTsv(FLASHCARDS_DATA);
+      filename = 'IHK_Lernkarten_Anki.txt';
+    } else {
+      content = exportToCsv(FLASHCARDS_DATA);
+      filename = 'IHK_Lernkarten.csv';
+      mimeType = 'text/csv';
+    }
+
+    const blob = new Blob([content], { type: `${mimeType};charset=utf-8;` });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const handleQualityAnswer = (quality) => {
     setIsFlipped(false);
@@ -88,6 +114,23 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
           <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
             Klicke auf die Karte zum Umdrehen
           </span>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px' }}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => handleDownload('anki')}
+              style={{ fontSize: '0.8rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Download size={13} /> Anki Deck (.txt)
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => handleDownload('csv')}
+              style={{ fontSize: '0.8rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Download size={13} /> Excel / CSV Export
+            </button>
+          </div>
         </div>
 
         {/* Flip Card Area */}

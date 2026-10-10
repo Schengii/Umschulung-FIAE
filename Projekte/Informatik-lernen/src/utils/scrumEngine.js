@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Scrum & Kanban Sprint Engine
  * Manages user stories, story point estimation, sprint burndown calculations and velocity.
@@ -51,14 +52,18 @@ export const INITIAL_USER_STORIES = [
   }
 ];
 
+/**
+ * @param {any[]} stories
+ * @param {number} [sprintDays]
+ */
 export function calculateSprintMetrics(stories, sprintDays = 10) {
-  const totalPoints = stories.reduce((sum, s) => sum + (s.storyPoints || 0), 0);
+  const totalPoints = stories.reduce((/** @type {number} */ sum, s) => sum + (s.storyPoints || 0), 0);
   const completedPoints = stories
     .filter(s => s.status === 'done')
-    .reduce((sum, s) => sum + (s.storyPoints || 0), 0);
+    .reduce((/** @type {number} */ sum, s) => sum + (s.storyPoints || 0), 0);
   const inProgressPoints = stories
     .filter(s => s.status === 'in_progress' || s.status === 'review')
-    .reduce((sum, s) => sum + (s.storyPoints || 0), 0);
+    .reduce((/** @type {number} */ sum, s) => sum + (s.storyPoints || 0), 0);
   const remainingPoints = totalPoints - completedPoints;
 
   const completionRate = totalPoints > 0 ? Math.round((completedPoints / totalPoints) * 100) : 0;
@@ -100,6 +105,11 @@ export function calculateSprintMetrics(stories, sprintDays = 10) {
   };
 }
 
+/**
+ * @param {any[]} stories
+ * @param {string} storyId
+ * @param {string} newStatus
+ */
 export function moveStoryStatus(stories, storyId, newStatus) {
   return stories.map(s => s.id === storyId ? { ...s, status: newStatus } : s);
 }

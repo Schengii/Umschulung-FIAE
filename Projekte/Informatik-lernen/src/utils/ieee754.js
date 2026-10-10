@@ -1,8 +1,10 @@
+// @ts-check
 /**
  * IEEE-754 Floating Point & Computer Architecture Utilities
  * Single (32-bit), Double (64-bit), Two's Complement & Karnaugh-Veitch Minimizer
  */
 
+/** @param {number|string} value */
 export function float32ToBits(value) {
   const floatArr = new Float32Array(1);
   floatArr[0] = Number(value);
@@ -43,6 +45,7 @@ export function float32ToBits(value) {
   };
 }
 
+/** @param {string} bitString */
 export function bitsToFloat32(bitString) {
   const cleanBits = bitString.replace(/[^01]/g, '').slice(0, 32).padEnd(32, '0');
   const uintVal = parseInt(cleanBits, 2);
@@ -81,6 +84,10 @@ export function bitsToFloat32(bitString) {
   };
 }
 
+/**
+ * @param {number|string} value
+ * @param {number} [bits]
+ */
 export function intToTwosComplement(value, bits = 8) {
   const minVal = -Math.pow(2, bits - 1);
   const maxVal = Math.pow(2, bits - 1) - 1;

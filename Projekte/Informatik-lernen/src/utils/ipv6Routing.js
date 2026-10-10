@@ -165,3 +165,60 @@ export function matchRoutingTable(targetIp, routes = []) {
     evaluatedRoutes
   };
 }
+
+/**
+ * Berechnet IPv6-Subnetze und Nibble-Boundaries (4-Bit-Grenzen in Hex).
+ * @param {string} basePrefix - z.B. '2001:db8:abcd::'
+ * @param {number} prefixLength - z.B. 48 oder 56
+ * @param {number} targetSubnetPrefix - z.B. 64 (IHK Standard für SLAAC)
+ * @param {number} [maxSubnetsToShow=8]
+ */
+export function calculateIpv6Subnetting(basePrefix = '2001:db8:abcd::', prefixLength = 48, targetSubnetPrefix = 64, maxSubnetsToShow = 8) {
+  const expanded = expandIpv6(basePrefix);
+  if (!expanded || expanded.split(':').length !== 8) {
+    return { error: 'Ungültiges IPv6 Basis-Präfix' };
+  }
+
+  const subnetBits = Math.max(0, targetSubnetPrefix - prefixLength);
+  const totalSubnets = Math.pow(2, subnetBits);
+  const isNibbleBoundary = prefixLength % 4 === 0 && targetSubnetPrefix % 4 === 0;
+
+  // Zerlege in Hex-Blöcke (Heptette)
+  const blocks = expanded.split(':');
+  const generatedSubnets = [];
+
+  // Berechne Beispiel-Subnetze
+  const limit = Math.min(totalSubnets, maxSubnetsToShow);
+  for (let i = 0; i < limit; i++) {
+    // Offset auf 4. Block (Heptett Index 3) für typische /48 -> /64 Aufteilung
+    const subnetHex = i.toString(16).padStart(Math.ceil(subnetBits / 4), '0');
+    let subBlocks = [...blocks];
+    if (targetSubnetPrefix === 64 && prefixLength === 48) {
+      subBlocks[3] = subnetHex.padStart(4, '0');
+    }
+    const rawSubnet = subBlocks.slice(0, 4).join(':') + '::/' + targetSubnetPrefix;
+    generatedSubnets.push({
+      index: i,
+      subnetHex: '0x' + subnetHex.toUpperCase(),
+      cidr: rawSubnet,
+      compressed: compressIpv6(rawSubnet.replace('/' + targetSubnetPrefix, '')) + '/' + targetSubnetPrefix
+    });
+  }
+
+  return {
+    basePrefix: compressIpv6(basePrefix) + '/' + prefixLength,
+    prefixLength,
+    targetSubnetPrefix,
+    subnetBits,
+    totalSubnets,
+    isNibbleBoundary,
+    nibbleNotice: isNibbleBoundary 
+      ? '✓ Perfekte Nibble-Boundary (Vielfaches von 4 Bit): Jedes Halb-Byte (Nibble) entspricht exakt einer Hexadezimal-Ziffer (0-F).'
+      : '⚠️ Keine Nibble-Boundary (Präfix ist kein Vielfaches von 4): Subnetz-Aufteilung teilt einzelne Hex-Zeichen binär.',
+    slaacCompliant: targetSubnetPrefix === 64,
+    slaacNotice: targetSubnetPrefix === 64 
+      ? '✓ SLAAC-Konform (RFC 4862): /64 ist zwingende Voraussetzung für Stateless Address Autoconfiguration.'
+      : '⚠️ Nicht SLAAC-konform: RFC 4862 verlangt zwingend ein 64-Bit Subnetz-Präfix.',
+    generatedSubnets
+  };
+}

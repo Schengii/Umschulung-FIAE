@@ -1,7 +1,14 @@
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Use the CDN worker to avoid bundling issues with Vite
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+// Use local worker bundled by Vite with fallback for maximum reliability
+try {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url
+  ).toString();
+} catch {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs`;
+}
 
 import type { AssetMappingRule, AssetCategory } from '../types';
 

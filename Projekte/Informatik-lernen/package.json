@@ -1,40 +1,102 @@
 {
   "name": "informatiker-game",
   "private": true,
-  "version": "0.0.0",
+  "version": "3.75.0",
+  "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint src",
     "lint:ci": "oxlint src --deny-warnings",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:fast": "vitest run --exclude=\"**/*A11y*.test.jsx\" --exclude=\"**/*.routing.test.jsx\"",
+    "test:coverage": "vitest run --coverage",
+    "size": "size-limit",
+    "e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "new-lab": "node scripts/new-lab.js",
+    "docs:labs": "node scripts/gen-lab-list.js"
   },
+  "size-limit": [
+    {
+      "name": "Vendor: React/Router/Zustand",
+      "path": "dist/assets/vendor-react-*.js",
+      "gzip": true,
+      "limit": "70 KB"
+    },
+    {
+      "name": "Vendor: UI (framer-motion, lucide, confetti)",
+      "path": "dist/assets/vendor-ui-*.js",
+      "gzip": true,
+      "limit": "70 KB"
+    },
+    {
+      "name": "Vendor: Charts (recharts)",
+      "path": "dist/assets/vendor-charts-*.js",
+      "gzip": true,
+      "limit": "130 KB"
+    },
+    {
+      "name": "Vendor: PDF (jspdf, html2canvas)",
+      "path": "dist/assets/vendor-pdf-*.js",
+      "gzip": true,
+      "limit": "190 KB"
+    },
+    {
+      "name": "Vendor: SQL (alasql)",
+      "path": "dist/assets/vendor-sql-*.js",
+      "gzip": true,
+      "limit": "120 KB"
+    },
+    {
+      "name": "Haupt-Bundle (App-Shell, ohne Labs)",
+      "path": "dist/assets/index-*.js",
+      "gzip": true,
+      "limit": "105 KB"
+    }
+  ],
   "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.2.0",
+    "@fontsource/fira-code": "^5.2.0",
+    "@fontsource/inter": "^5.2.0",
+    "@fontsource/outfit": "^5.2.0",
     "@monaco-editor/react": "^4.7.0",
-    "alasql": "^4.17.3",
+    "@sentry/react": "^11.1.0",
+    "@vercel/analytics": "^2.0.1",
+    "alasql": "^4.19.1",
     "canvas-confetti": "^1.9.4",
-    "framer-motion": "^13.1.0",
+    "framer-motion": "^13.4.6",
     "jspdf": "^4.2.1",
-    "lucide-react": "^1.31.0",
-    "pyodide": "^314.0.3",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2",
+    "lucide-react": "^1.49.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4",
     "recharts": "^3.10.1",
-    "use-sound": "^5.0.0",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
+    "@size-limit/file": "^14.1.0",
+    "@tailwindcss/vite": "^4.1.0",
     "@testing-library/react": "^16.3.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "jsdom": "^29.1.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.2",
+    "axe-core": "^4.13.0",
+    "jsdom": "^30.1.1",
     "oxlint": "^1.75.0",
-    "vite": "^8.2.0",
+    "size-limit": "^14.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
     "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.2"
   }
 }

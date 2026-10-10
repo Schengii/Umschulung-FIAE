@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { SqlSandboxInstance } from './sqlSandboxEngine';
+import { SqlSandboxInstance, analyzeSqlInjection } from './sqlSandboxEngine';
 
 describe('sqlSandboxEngine', () => {
   let sandbox;
@@ -62,4 +62,17 @@ describe('sqlSandboxEngine', () => {
     expect(csv).toContain('id,name,role');
     expect(csv).toContain('"1","Alice","Admin"');
   });
+
+  it('analysiert SQL-Injection (Tautologie & Comment Bypass) und Parameterized Queries', () => {
+    const safeRes = analyzeSqlInjection('admin');
+    expect(safeRes.isInjected).toBe(false);
+    expect(safeRes.riskLevel).toBe('SAFE');
+
+    const injectionRes = analyzeSqlInjection("admin' OR 1=1 --");
+    expect(injectionRes.isInjected).toBe(true);
+    expect(injectionRes.riskLevel).toBe('CRITICAL');
+    expect(injectionRes.detectedVectors.length).toBeGreaterThan(0);
+    expect(injectionRes.comparison.parameterizedQuery.template).toContain('?');
+  });
 });
+

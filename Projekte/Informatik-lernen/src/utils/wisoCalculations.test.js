@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   calculateVorwaertskalkulation,
+  calculateRueckwaertskalkulation,
+  calculateDifferenzkalkulation,
   calculateDeckungsbeitrag,
   calculateNetzplan
 } from './wisoCalculations';
@@ -72,5 +74,42 @@ describe('wisoCalculations', () => {
     expect(nodeC.faz).toBe(5);
     expect(nodeC.fez).toBe(9);
     expect(nodeC.isKritisch).toBe(true);
+  });
+
+  it('berechnet die Rückwärtskalkulation (Maximaler LEP) korrekt', () => {
+    const res = calculateRueckwaertskalkulation({
+      bruttoverkaufspreis: 1190,
+      umsatzsteuerProzent: 19,
+      kundenrabattProzent: 0,
+      kundenskontoProzent: 0,
+      gewinnzuschlagProzent: 25,
+      handlungskostenzuschlagProzent: 25,
+      bezugskosten: 0,
+      lieferskontoProzent: 0,
+      lieferantenrabattProzent: 0
+    });
+
+    expect(res.nettoverkaufspreis).toBe(1000);
+    expect(res.selbstkosten).toBe(800); // 1000 / 1.25 = 800
+    expect(res.bezugspreis).toBe(640); // 800 / 1.25 = 640
+    expect(res.maxListeneinkaufspreis).toBe(640);
+  });
+
+  it('berechnet die Differenzkalkulation (erzielbarer Gewinn) korrekt', () => {
+    const res = calculateDifferenzkalkulation({
+      listeneinkaufspreis: 1000,
+      lieferantenrabattProzent: 10,
+      lieferskontoProzent: 2,
+      bezugskosten: 18,
+      handlungskostenzuschlagProzent: 25,
+      nettoverkaufspreis: 1500,
+      kundenrabattProzent: 5,
+      kundenskontoProzent: 2
+    });
+
+    expect(res.selbstkosten).toBe(1125);
+    expect(res.barverkaufspreis).toBe(1396.5);
+    expect(res.erzielbarerGewinnBetrag).toBe(271.5);
+    expect(res.isRentabel).toBe(true);
   });
 });

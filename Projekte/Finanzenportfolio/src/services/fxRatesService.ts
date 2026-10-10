@@ -46,6 +46,47 @@ export function getEcbReferenceRate(currency: string, dateStr?: string): number 
   return 1.0;
 }
 
+export function updateEcbRateCache(dateKey: string, rates: { USD: number; CHF: number; GBP: number }) {
+  ECB_REFERENCE_RATES_CACHE[dateKey] = rates;
+}
+
+/**
+ * Fetches latest FX rates from the open exchange rate API and saves them into cache & storage.
+ */
+export async function fetchAndCacheLiveEcbRates(): Promise<Record<string, number>> {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/EUR');
+    if (!res.ok) throw new Error(`HTTP status: ${res.status}`);
+    const data = await res.json();
+    if (data && data.rates) {
+      const todayKey = new Date().toISOString().slice(0, 10);
+      const rates = {
+        USD: data.rates.USD || 1.085,
+        CHF: data.rates.CHF || 0.965,
+        GBP: data.rates.GBP || 0.855
+      };
+      updateEcbRateCache(todayKey, rates);
+      updateEcbRateCache('default', rates);
+      return {
+        EUR: 1.0,
+        USD: rates.USD,
+        CHF: rates.CHF,
+        GBP: rates.GBP
+      };
+    }
+  } catch (err) {
+    console.warn('Live ECB/FX sync fallback used:', err);
+  }
+
+  const def = ECB_REFERENCE_RATES_CACHE['default'];
+  return {
+    EUR: 1.0,
+    USD: def.USD,
+    CHF: def.CHF,
+    GBP: def.GBP
+  };
+}
+
 export function convertWithEcbRate(
   amount: number,
   fromCurrency: string,
@@ -61,3 +102,4 @@ export function convertWithEcbRate(
   const amountInEur = amount / rateFrom;
   return amountInEur * rateTo;
 }
+

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * GraphQL Sandbox & AST Compiler Engine
  * Parses, resolves, and simulates in-browser GraphQL Queries & Mutations against mock dataset.
@@ -54,6 +55,9 @@ export const SAMPLE_GRAPHQL_QUERIES = [
   }
 ];
 
+/**
+ * @param {string} queryString
+ */
 export function executeGraphQLQuery(queryString) {
   if (!queryString || !queryString.trim()) {
     return {
@@ -67,7 +71,7 @@ export function executeGraphQLQuery(queryString) {
   const clean = queryString.trim();
 
   // Simple tokenized AST parser
-  const lines = clean.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = clean.split('\n').map((/** @type {string} */ l) => l.trim()).filter(Boolean);
   const operationName = lines[0].replace(/[{()]/g, '').trim();
 
   // Determine requested root fields
@@ -81,7 +85,7 @@ export function executeGraphQLQuery(queryString) {
         kind: 'OperationDefinition',
         operation: 'query',
         name: operationName,
-        selectionSet: []
+        selectionSet: /** @type {any[]} */ ([])
       }
     ]
   };

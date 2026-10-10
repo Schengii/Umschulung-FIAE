@@ -9,6 +9,10 @@ describe('transformerAttentionEngine', () => {
     expect(matrix[0].length).toBe(4);
     const rowSum = matrix[0].reduce((a, b) => a + b, 0);
     expect(Math.abs(rowSum - 1.0)).toBeLessThan(0.05);
+
+    // Test caching: repeated call returns the cached result
+    const cachedMatrix = calculateAttentionMatrix(tokens, 1);
+    expect(cachedMatrix).toEqual(matrix);
   });
 
   it('samples next-token distribution applying temperature and top-k/top-p', () => {

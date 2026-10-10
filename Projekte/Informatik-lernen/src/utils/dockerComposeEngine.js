@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Docker Compose Multi-Container Orchestrator Engine
  * DAG Service Dependency Resolution (depends_on), Network Bridge Isolation & Volume Mounts
@@ -58,21 +59,22 @@ export const DEFAULT_COMPOSE_PROJECT = {
 
 /**
  * Löst die Startreihenfolge der Services basierend auf depends_on auf (Kahn-Topologie / DAG)
+ * @param {any[]} services
  */
 export function resolveDependencyOrder(services) {
   const serviceMap = new Map();
   const inDegree = new Map();
   const graph = new Map();
 
-  services.forEach(s => {
+  services.forEach((/** @type {any} */ s) => {
     serviceMap.set(s.id, s);
     inDegree.set(s.id, 0);
     graph.set(s.id, []);
   });
 
-  services.forEach(s => {
+  services.forEach((/** @type {any} */ s) => {
     const deps = s.depends_on || [];
-    deps.forEach(depId => {
+    deps.forEach((/** @type {any} */ depId) => {
       if (serviceMap.has(depId)) {
         // depId muss VOR s starten: Edge von depId -> s
         graph.get(depId).push(s.id);
@@ -81,6 +83,7 @@ export function resolveDependencyOrder(services) {
     });
   });
 
+  /** @type {any[]} */
   const queue = [];
   inDegree.forEach((degree, id) => {
     if (degree === 0) queue.push(id);
@@ -92,7 +95,7 @@ export function resolveDependencyOrder(services) {
     launchOrder.push(current);
 
     const neighbors = graph.get(current) || [];
-    neighbors.forEach(nextId => {
+    neighbors.forEach((/** @type {any} */ nextId) => {
       const newDegree = inDegree.get(nextId) - 1;
       inDegree.set(nextId, newDegree);
       if (newDegree === 0) {
@@ -112,17 +115,20 @@ export function resolveDependencyOrder(services) {
 
 /**
  * Prüft die Netzwerkerreichbarkeit (Bridge-Isolation) zwischen zwei Services
+ * @param {any} fromServiceId
+ * @param {any} toServiceId
+ * @param {any[]} services
  */
 export function checkNetworkReachability(fromServiceId, toServiceId, services) {
-  const sFrom = services.find(s => s.id === fromServiceId);
-  const sTo = services.find(s => s.id === toServiceId);
+  const sFrom = services.find((/** @type {any} */ s) => s.id === fromServiceId);
+  const sTo = services.find((/** @type {any} */ s) => s.id === toServiceId);
 
   if (!sFrom || !sTo) {
     return { canReach: false, sharedNetworks: [], error: 'Service nicht gefunden' };
   }
 
   const netsFrom = new Set(sFrom.networks || []);
-  const sharedNetworks = (sTo.networks || []).filter(net => netsFrom.has(net));
+  const sharedNetworks = (sTo.networks || []).filter((/** @type {any} */ net) => netsFrom.has(net));
 
   return {
     canReach: sharedNetworks.length > 0,
@@ -212,6 +218,7 @@ export function simulateComposeUp(project = DEFAULT_COMPOSE_PROJECT) {
     logs.push(` Volume ${v}  Created`);
   });
 
+  /** @type {Record<string, string>} */
   const servicesStatus = {};
 
   launchOrder.forEach((sId, index) => {

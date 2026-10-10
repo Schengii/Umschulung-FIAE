@@ -265,6 +265,35 @@ describe('Fama-French 5-Factor Model & Withholding Tax Refund', () => {
     expect(swissItem?.reclaimableTaxPct).toBe(20);
     expect(swissItem?.reclaimableRefundEur).toBe(200); // 1000 * 20% = 200
   });
+
+  it('accurately differentiates church tax between 8% and 9% under German tax law', async () => {
+    const { calculateEnhancedGermanTax } = await import('../performanceUtils');
+    const mockTxs: any[] = [
+      { id: 'tx-buy', type: 'BUY', ticker: 'AAPL', name: 'Apple Inc.', amount: 10, price: 100, category: 'Stock', date: '01.01.2026' },
+      { id: 'tx-gain', type: 'SELL', ticker: 'AAPL', name: 'Apple Inc.', amount: 10, price: 200, category: 'Stock', date: '10.05.2026' }
+    ];
+
+    const tax8 = calculateEnhancedGermanTax(mockTxs, 0, 0, 0, undefined, true, 8.0);
+    const tax9 = calculateEnhancedGermanTax(mockTxs, 0, 0, 0, undefined, true, 9.0);
+
+    expect(tax8.churchTaxEstimateEur).toBeGreaterThan(0);
+    expect(tax9.churchTaxEstimateEur).toBeGreaterThan(0);
+    // 9% church tax should yield a higher church tax estimate than 8%
+    expect(tax9.churchTaxEstimateEur).toBeGreaterThan(tax8.churchTaxEstimateEur);
+  });
+
+  it('calculates dynamic risk metrics including options premiums and interest income', async () => {
+    const { calculateDynamicPortfolioRiskMetrics } = await import('../performanceUtils');
+    const mockTxs: any[] = [
+      { id: 'tx-opt', type: 'OPTION_PREMIUM', ticker: 'AAPL', name: 'Option', amount: 100, price: 2.5, fee: 1.0, tax: 0, category: 'Stock', date: '10.01.2026' },
+      { id: 'tx-int', type: 'INTEREST', ticker: 'CASH', name: 'Zins', amount: 1, price: 50, fee: 0, tax: 0, category: 'Cash', date: '15.01.2026' }
+    ];
+
+    const result = calculateDynamicPortfolioRiskMetrics(mockTxs, {}, 300, 5.0);
+    expect(result).toBeDefined();
+    expect(typeof result.maxDrawdown).toBe('number');
+    expect(typeof result.sharpeRatio).toBe('number');
+  });
 });
 
 

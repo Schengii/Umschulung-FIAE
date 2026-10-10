@@ -1,7 +1,56 @@
+// @ts-check
 /**
  * WebAuthn & FIDO2 Passkey Simulation Engine
  * Veranschaulicht asymmetrische Public-Key-Authentifizierung, Hardware-Tokens (YubiKey/TouchID),
  * Authenticator Data Flags (UP, UV), COSE Key Encoding und Phishing-Resistenz.
+ */
+
+/**
+ * @typedef {object} PublicKeyJwk
+ * @property {string} kty
+ * @property {string} crv
+ * @property {string} x
+ * @property {string} y
+ * @property {string} alg
+ *
+ * @typedef {object} RegisterPasskeyInput
+ * @property {string} [username]
+ * @property {string} [rpId]
+ * @property {string} [origin]
+ * @property {'required' | 'preferred' | 'discouraged'} [userVerification]
+ * @property {'platform' | 'cross-platform'} [authenticatorType]
+ *
+ * @typedef {object} RegisteredCredential
+ * @property {string} credentialId
+ * @property {string} username
+ * @property {string} rpId
+ * @property {string} origin
+ * @property {'platform' | 'cross-platform'} authenticatorType
+ * @property {object} clientDataJSON
+ * @property {object} attestationObject
+ * @property {PublicKeyJwk} storedPublicKey
+ * @property {number} signCount
+ * @property {boolean} isRegistered
+ *
+ * @typedef {object} AuthenticatePasskeyInput
+ * @property {RegisteredCredential} registeredCredential
+ * @property {string} [clientOrigin]
+ * @property {boolean} [simulatedUserPresence]
+ * @property {boolean} [simulatedUserVerified]
+ *
+ * @typedef {object} AuthenticatePasskeyFailure
+ * @property {false} success
+ * @property {string} error
+ * @property {boolean} [isPhishingBlocked]
+ *
+ * @typedef {object} AuthenticatePasskeySuccess
+ * @property {true} success
+ * @property {object} assertion
+ * @property {number} newSignCount
+ * @property {false} isPhishingBlocked
+ * @property {string} message
+ *
+ * @typedef {AuthenticatePasskeyFailure | AuthenticatePasskeySuccess} AuthenticatePasskeyResult
  */
 
 export const FIDO2_ALGORITHMS = {
@@ -12,6 +61,8 @@ export const FIDO2_ALGORITHMS = {
 
 /**
  * Erzeugt eine kryptografische Challenge
+ * @param {number} [length]
+ * @returns {string}
  */
 export function generateChallenge(length = 32) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
@@ -24,6 +75,8 @@ export function generateChallenge(length = 32) {
 
 /**
  * Simuliert die Passkey-Registrierung (navigator.credentials.create)
+ * @param {RegisterPasskeyInput} input
+ * @returns {RegisteredCredential}
  */
 export function registerPasskey({
   username = 'alex.dev@firma.de',
@@ -88,6 +141,8 @@ export function registerPasskey({
 
 /**
  * Simuliert die Passkey-Anmeldung (navigator.credentials.get)
+ * @param {AuthenticatePasskeyInput} input
+ * @returns {AuthenticatePasskeyResult}
  */
 export function authenticatePasskey({
   registeredCredential,
@@ -150,3 +205,44 @@ export function authenticatePasskey({
     message: 'Erfolgreich passwortlos authentifiziert via FIDO2 WebAuthn Signature!'
   };
 }
+
+/**
+ * Prüft, ob der aktuelle Browser und das Betriebssystem echte WebAuthn/FIDO2 Hardware-Tokens unterstützen.
+ * @returns {boolean}
+ */
+export function isWebAuthnSupported() {
+  return typeof window !== 'undefined' &&
+    typeof window.PublicKeyCredential !== 'undefined' &&
+    typeof navigator.credentials !== 'undefined';
+}
+
+/**
+ * Führt einen realen Browser Web Crypto / WebAuthn Testdurchlauf durch, falls Hardware vorhanden ist.
+ * @param {string} _username
+ * @returns {Promise<{ isSupported: boolean, hasPlatformAuthenticator?: boolean, error?: string }>}
+ */
+export async function testRealWebAuthnHardware(_username = 'ihk-azubi@devgame.local') {
+  if (!isWebAuthnSupported()) {
+    return {
+      isSupported: false,
+      error: 'WebAuthn API im aktuellen Browser nicht verfügbar (z.B. unsichere HTTP-Verbindung oder veralteter Client).'
+    };
+  }
+
+  try {
+    const hasPlatformAuthenticator = typeof window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function'
+      ? await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      : false;
+
+    return {
+      isSupported: true,
+      hasPlatformAuthenticator
+    };
+  } catch (err) {
+    return {
+      isSupported: true,
+      error: err instanceof Error ? err.message : String(err)
+    };
+  }
+}
+

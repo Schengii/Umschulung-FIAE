@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux Virtual Memory, Page Faults & OOM-Killer Engine
  * Simulates Virtual-to-Physical Address Translation, TLB Cache Hits/Misses,

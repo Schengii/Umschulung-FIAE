@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * P2P Quiz Engine & Match Simulation
  * Manages multiplayer quiz sessions, scoring, timers and WebRTC signaling payload formats.
@@ -75,6 +76,11 @@ export const P2P_QUIZ_QUESTIONS = [
   }
 ];
 
+/**
+ * @param {boolean} isCorrect
+ * @param {number} timeLeftSeconds
+ * @param {number} [maxTimeSeconds]
+ */
 export function calculateRoundScore(isCorrect, timeLeftSeconds, maxTimeSeconds = 15) {
   if (!isCorrect) return 0;
   const baseScore = 100;
@@ -91,6 +97,10 @@ export function generateRoomCode() {
   return result;
 }
 
+/**
+ * @param {number} questionIndex
+ * @param {string} [botDifficulty]
+ */
 export function createBotResponse(questionIndex, botDifficulty = 'medium') {
   const q = P2P_QUIZ_QUESTIONS[questionIndex];
   if (!q) return null;

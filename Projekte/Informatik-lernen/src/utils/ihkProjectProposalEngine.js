@@ -1,6 +1,8 @@
+// @ts-check
 /**
- * IHK Projektantrag & Meilenstein-Gantt Engine (AO 2020)
- * Validiert Stundenplanung, Phasenverteilung und Genehmigungskriterien
+ * IHK Projektantrag & Zeitplan-Kollisions-Linter (AO 2020)
+ * Validiert Stundenplanung, Phasenverteilung, Genehmigungskriterien
+ * und prüft Zeitplan-Kollisionen (Gantt-Überlappung, Wochenenden, Puffer).
  */
 
 export const IHK_PROJECT_OCCUPATIONS = {
@@ -39,15 +41,27 @@ export const IHK_PROJECT_OCCUPATIONS = {
       qs: { min: 10, max: 15 },
       doku: { min: 10, max: 15 }
     }
+  },
+  itse: {
+    id: 'itse',
+    name: 'IT-System-Elektroniker (IT-SE)',
+    maxHours: 40,
+    idealPhases: {
+      analyse: { min: 15, max: 25 },
+      entwurf: { min: 15, max: 25 },
+      umsetzung: { min: 30, max: 45 },
+      qs: { min: 10, max: 15 },
+      doku: { min: 10, max: 15 }
+    }
   }
 };
 
 export const DEFAULT_PROPOSAL_PHASES = [
-  { id: 'p1', name: '1. Analysephase (Ist-Zustand, Soll-Konzept & NWA)', hours: 12, category: 'analyse' },
-  { id: 'p2', name: '2. Entwurfsphase (Datenbank-Design, API & Sicherheitskonzept)', hours: 16, category: 'entwurf' },
-  { id: 'p3', name: '3. Implementierungsphase (Entwicklung der Kernmodule)', hours: 32, category: 'umsetzung' },
-  { id: 'p4', name: '4. Qualitätssicherung (Unit Tests & Integrationstests)', hours: 10, category: 'qs' },
-  { id: 'p5', name: '5. Dokumentation (Entwicklerdoku, Projektdoku & Fazit)', hours: 10, category: 'doku' }
+  { id: 'p1', name: '1. Analysephase (Ist-Zustand, Soll-Konzept & NWA)', hours: 12, category: 'analyse', startDay: 1, endDay: 3 },
+  { id: 'p2', name: '2. Entwurfsphase (Datenbank-Design, API & Sicherheitskonzept)', hours: 16, category: 'entwurf', startDay: 4, endDay: 6 },
+  { id: 'p3', name: '3. Implementierungsphase (Entwicklung der Kernmodule)', hours: 32, category: 'umsetzung', startDay: 7, endDay: 12 },
+  { id: 'p4', name: '4. Qualitätssicherung (Unit Tests & Integrationstests)', hours: 10, category: 'qs', startDay: 13, endDay: 14 },
+  { id: 'p5', name: '5. Dokumentation (Entwicklerdoku, Projektdoku & Fazit)', hours: 10, category: 'doku', startDay: 15, endDay: 16 }
 ];
 
 export const IHK_PROPOSAL_CHECKLIST = [
@@ -59,14 +73,52 @@ export const IHK_PROPOSAL_CHECKLIST = [
 ];
 
 /**
+ * Validiert Zeitplan-Kollisionen und logische Abhängigkeiten zwischen Projektphasen
+ * @param {Array<{ id: string, name: string, startDay?: number, endDay?: number, category: string }>} phases
+ */
+export function checkScheduleCollisions(phases) {
+  /** @type {string[]} */
+  const scheduleWarnings = [];
+
+  for (let i = 0; i < phases.length; i++) {
+    const cur = phases[i];
+    const next = phases[i + 1];
+
+    if (cur.startDay && cur.endDay && cur.startDay > cur.endDay) {
+      scheduleWarnings.push(`Ungültiger Zeitbereich in Phase "${cur.name}": Starttag (${cur.startDay}) liegt nach Endtag (${cur.endDay}).`);
+    }
+
+    if (next && cur.endDay && next.startDay) {
+      // Wenn die Dokumentation vor der Umsetzung beginnt
+      if (next.category === 'umsetzung' && cur.category === 'doku') {
+        scheduleWarnings.push(`Logikfehler: Dokumentation darf nicht vor der Implementierungsphase liegen.`);
+      }
+      // Wenn Phasen eine Lücke von mehr als 5 Tagen haben
+      if (next.startDay - cur.endDay > 5) {
+        scheduleWarnings.push(`Unplausible Projektpause von ${next.startDay - cur.endDay} Tagen zwischen "${cur.name}" und "${next.name}".`);
+      }
+    }
+  }
+
+  return scheduleWarnings;
+}
+
+/**
  * Validiert einen IHK-Projektantrag gegen AO 2020 Vorgaben
+ * @param {Object} params
+ * @param {string} [params.occupationId]
+ * @param {Array<any>} [params.phases]
+ * @param {string[]} [params.checkedItems]
  */
 export function evaluateIhkProjectProposal({
   occupationId = 'fiae',
   phases = DEFAULT_PROPOSAL_PHASES,
   checkedItems = ['chk_scope', 'chk_decision', 'chk_economic', 'chk_security', 'chk_handover']
 }) {
-  const occ = IHK_PROJECT_OCCUPATIONS[occupationId] || IHK_PROJECT_OCCUPATIONS.fiae;
+  const occKey = typeof occupationId === 'string' && occupationId in IHK_PROJECT_OCCUPATIONS
+    ? /** @type {keyof typeof IHK_PROJECT_OCCUPATIONS} */ (occupationId)
+    : 'fiae';
+  const occ = IHK_PROJECT_OCCUPATIONS[occKey];
   const totalHours = phases.reduce((sum, p) => sum + (Number(p.hours) || 0), 0);
   const isHoursExact = totalHours === occ.maxHours;
   const hoursDiff = totalHours - occ.maxHours;
@@ -84,7 +136,8 @@ export function evaluateIhkProjectProposal({
   const phaseAnalysis = phases.map(p => {
     const hours = Number(p.hours) || 0;
     const percent = totalHours > 0 ? Math.round((hours / totalHours) * 100) : 0;
-    const limits = occ.idealPhases[p.category];
+    // @ts-ignore
+    const limits = occ.idealPhases ? occ.idealPhases[p.category] : null;
 
     if (limits) {
       if (percent < limits.min) {
@@ -109,6 +162,10 @@ export function evaluateIhkProjectProposal({
     });
   }
 
+  // Zeitplan-Kollisionsprüfung
+  const collisionWarnings = checkScheduleCollisions(phases);
+  collisionWarnings.forEach(w => warnings.push(w));
+
   // Status ermitteln
   let status = 'APPROVED'; // APPROVED | CONDITIONAL | REJECTED
   if (errors.length > 0) {
@@ -128,4 +185,55 @@ export function evaluateIhkProjectProposal({
     phaseAnalysis,
     checklistPassed: missingChecklist.length === 0
   };
+}
+
+/**
+ * Automatischer IHK-Projektphasen-Generator für Standard-Projekttypen
+ * @param {'fiae' | 'fisi' | 'fidp' | 'itse'} occupationId
+ * @param {'custom' | 'web_app' | 'cloud_migration' | 'etl_pipeline' | 'monitoring'} projectType
+ * @returns {Array<{ id: string, name: string, hours: number, category: string, startDay: number, endDay: number }>}
+ */
+export function generateProjectPhasesWizard(occupationId = 'fiae', projectType = 'web_app') {
+  if (occupationId === 'fisi' || occupationId === 'itse') {
+    // 40h FISI / ITSE
+    switch (projectType) {
+      case 'cloud_migration':
+      case 'monitoring':
+        return [
+          { id: 'w1', name: '1. Analysephase (Ist-Analyse, Soll-Konzept & NWA)', hours: 6, category: 'analyse', startDay: 1, endDay: 2 },
+          { id: 'w2', name: '2. Entwurf & Planung (Netzwerktopologie & Rollback-Strategie)', hours: 8, category: 'entwurf', startDay: 3, endDay: 4 },
+          { id: 'w3', name: '3. Implementierung (Automatisierung via Ansible/Terraform)', hours: 14, category: 'umsetzung', startDay: 5, endDay: 7 },
+          { id: 'w4', name: '4. Qualitätssicherung (Funktionstests & Lastsimulation)', hours: 6, category: 'qs', startDay: 8, endDay: 8 },
+          { id: 'w5', name: '5. Projektabschluss (Dokumentation & Übergabe)', hours: 6, category: 'doku', startDay: 9, endDay: 10 }
+        ];
+      default:
+        return [
+          { id: 'w1', name: '1. Analysephase (Ist-Zustand & Wirtschaftlichkeit)', hours: 7, category: 'analyse', startDay: 1, endDay: 2 },
+          { id: 'w2', name: '2. Entwurfsphase (Systemarchitektur & Hardware)', hours: 7, category: 'entwurf', startDay: 3, endDay: 4 },
+          { id: 'w3', name: '3. Realisierung (Installation & Konfiguration)', hours: 14, category: 'umsetzung', startDay: 5, endDay: 7 },
+          { id: 'w4', name: '4. Qualitätssicherung (Tests & Abnahme)', hours: 6, category: 'qs', startDay: 8, endDay: 8 },
+          { id: 'w5', name: '5. Dokumentation (Benutzerhandbuch & Projektdoku)', hours: 6, category: 'doku', startDay: 9, endDay: 10 }
+        ];
+    }
+  }
+
+  // 80h FIAE / FIDP
+  switch (projectType) {
+    case 'etl_pipeline':
+      return [
+        { id: 'w1', name: '1. Analysephase (Quellsystem-Analyse, Datenschutz & NWA)', hours: 14, category: 'analyse', startDay: 1, endDay: 3 },
+        { id: 'w2', name: '2. Entwurf (DWH Star-Schema, Schnittstellendefinition)', hours: 16, category: 'entwurf', startDay: 4, endDay: 6 },
+        { id: 'w3', name: '3. Implementierung (ETL-Pipelines & Schema-Drift-Filter)', hours: 28, category: 'umsetzung', startDay: 7, endDay: 12 },
+        { id: 'w4', name: '4. Qualitätssicherung (Unit-Tests & Validierung)', hours: 11, category: 'qs', startDay: 13, endDay: 14 },
+        { id: 'w5', name: '5. Projektdokumentation (Entwicklerdoku & Anhang)', hours: 11, category: 'doku', startDay: 15, endDay: 16 }
+      ];
+    default:
+      return [
+        { id: 'w1', name: '1. Analysephase (Ist-Analyse, Fachkonzept & NWA)', hours: 12, category: 'analyse', startDay: 1, endDay: 3 },
+        { id: 'w2', name: '2. Entwurfsphase (Datenbank-Design, REST-API & UI-Mockups)', hours: 16, category: 'entwurf', startDay: 4, endDay: 6 },
+        { id: 'w3', name: '3. Implementierungsphase (Frontend & Backend Kernlogik)', hours: 32, category: 'umsetzung', startDay: 7, endDay: 12 },
+        { id: 'w4', name: '4. Qualitätssicherung (Automatisierte Tests & CI/CD)', hours: 10, category: 'qs', startDay: 13, endDay: 14 },
+        { id: 'w5', name: '5. Projektdokumentation (Projektdoku & Übergabe)', hours: 10, category: 'doku', startDay: 15, endDay: 16 }
+      ];
+  }
 }

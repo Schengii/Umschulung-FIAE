@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Cloud Architecture Topology, SLA Availability & SPOF Audit Engine
  */
@@ -14,6 +15,7 @@ export const INITIAL_CLOUD_TOPOLOGY = [
 
 /**
  * Calculates overall System SLA availability and downtime
+ * @param {any[]} nodes
  */
 export function calculateSystemSla(nodes) {
   if (!nodes || nodes.length === 0) {
@@ -21,8 +23,9 @@ export function calculateSystemSla(nodes) {
   }
 
   // Tiers represent serial dependencies. Inside tier, redundant nodes act as parallel.
+  /** @type {Record<string|number, any[]>} */
   const tierMap = {};
-  nodes.forEach(node => {
+  nodes.forEach((/** @type {any} */ node) => {
     if (!tierMap[node.tier]) tierMap[node.tier] = [];
     tierMap[node.tier].push(node);
   });
@@ -33,7 +36,7 @@ export function calculateSystemSla(nodes) {
       overallSla *= tierNodes[0].sla;
     } else {
       // Parallel availability: 1 - product(1 - A_i)
-      const unavail = tierNodes.reduce((acc, n) => acc * (1 - n.sla), 1.0);
+      const unavail = tierNodes.reduce((/** @type {number} */ acc, /** @type {any} */ n) => acc * (1 - n.sla), 1.0);
       overallSla *= (1.0 - unavail);
     }
   });
@@ -57,12 +60,13 @@ export function calculateSystemSla(nodes) {
     slaPercent: (overallSla * 100).toFixed(3) + '%',
     annualDowntimeMinutes,
     annualDowntimeText,
-    totalBaseCostMonthly: nodes.reduce((acc, n) => acc + (n.cost || 0), 0)
+    totalBaseCostMonthly: nodes.reduce((/** @type {number} */ acc, /** @type {any} */ n) => acc + (n.cost || 0), 0)
   };
 }
 
 /**
  * Single Point of Failure (SPOF) Security & High Availability Linter
+ * @param {any[]} nodes
  */
 export function auditSpofRisks(nodes) {
   const warnings = [];

@@ -1,0 +1,28 @@
+# Rohdaten & interne Arbeitsdateien – nicht Teil der veröffentlichten Webseite.
+# Bleiben lokal erhalten, werden aber nicht mehr versioniert/deployed (562 MB Ordner).
+archive_sources/
+assets/imgTxt/
+
+# Node (Build & Tests)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Test-Artefakte (Playwright)
+test-results/
+playwright-report/
+.playwright/
+
+# Editor- & OS-Artefakte
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.lighthouseci/

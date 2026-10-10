@@ -1,13 +1,42 @@
+// @ts-check
 /**
  * WireGuard VPN & Zero-Trust Network Access (ZTNA) Cryptokey Routing Engine
  * Simulates 1-RTT NoiseIK cryptographic handshakes, AllowedIPs cryptokey routing,
  * and Zero-Trust policy evaluation based on Device Health & Trust Scores.
  */
 
+/**
+ * @typedef {object} WireguardPeer
+ * @property {string} id
+ * @property {string} name
+ * @property {string} publicKey
+ * @property {string} allowedIps
+ * @property {number} deviceTrustScore
+ * @property {string} osVersion
+ * @property {boolean} firewallActive
+ *
+ * @typedef {object} ZtnaAccessDenied
+ * @property {false} allowed
+ * @property {string} reason
+ *
+ * @typedef {object} ZtnaAccessResult
+ * @property {string} peerId
+ * @property {string} peerName
+ * @property {string} allowedIps
+ * @property {string} targetResource
+ * @property {number} deviceTrustScore
+ * @property {string} handshake
+ * @property {boolean} accessGranted
+ * @property {string} policyResult
+ *
+ * @typedef {ZtnaAccessDenied | ZtnaAccessResult} EvaluateZtnaAccessResult
+ */
+
 export class WireguardZtnaSimulator {
   constructor() {
     this.serverPublicKey = 'yA9d0Fz+P1bC94...server.pub';
     this.serverEndpoint = 'vpn.company.internal:51820';
+    /** @type {WireguardPeer[]} */
     this.peers = [
       {
         id: 'peer-dev-laptop',
@@ -30,6 +59,11 @@ export class WireguardZtnaSimulator {
     ];
   }
 
+  /**
+   * @param {string} [peerId]
+   * @param {string} [targetResource]
+   * @returns {EvaluateZtnaAccessResult}
+   */
   evaluateZtnaAccess(peerId = 'peer-dev-laptop', targetResource = '10.0.1.50 (Prod DB)') {
     const peer = this.peers.find(p => p.id === peerId);
     if (!peer) {

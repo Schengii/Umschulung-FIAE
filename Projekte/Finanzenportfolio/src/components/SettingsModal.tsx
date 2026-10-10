@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Lock, ShieldCheck, RefreshCw, Sun, Moon, History, RotateCcw, Trash2, ShieldAlert, Send } from 'lucide-react';
+import { X, Lock, ShieldCheck, RefreshCw, Sun, Moon, History, RotateCcw, Trash2, ShieldAlert, Send, Fingerprint } from 'lucide-react';
+import { hasRegisteredPasskey, registerPasskeyForVault, unregisterPasskey } from '../services/webAuthnService';
 import { encryptData } from '../services/cryptoStorage';
 import { usePortfolio } from '../context/PortfolioContext';
 
@@ -42,6 +43,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [snapshotSuccess, setSnapshotSuccess] = useState<string | null>(null);
 
   // PIN Change & Disable states
+  
+  const [passkeyActive, setPasskeyActive] = useState<boolean>(() => hasRegisteredPasskey());
+  const [passkeyPinInput, setPasskeyPinInput] = useState<string>('');
+  const [isRegisteringPasskey, setIsRegisteringPasskey] = useState<boolean>(false);
+
   const [isChangingPin, setIsChangingPin] = useState(false);
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
@@ -93,6 +99,29 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setDisablePin('');
     } else {
       alert('Falsche PIN. Verschlüsselung konnte nicht deaktiviert werden.');
+    }
+  };
+
+  
+  const handleEnablePasskey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!passkeyPinInput) return;
+    const res = await registerPasskeyForVault(passkeyPinInput);
+    if (res.success) {
+      setPasskeyActive(true);
+      setIsRegisteringPasskey(false);
+      setPasskeyPinInput('');
+      setEncryptionStatus('Passkey / Biometrie erfolgreich eingerichtet!');
+    } else {
+      alert(res.error || 'Fehler beim Einrichten des Passkeys.');
+    }
+  };
+
+  const handleDisablePasskey = () => {
+    if (confirm('Passkey-Zugriff für dieses Gerät wirklich entfernen?')) {
+      unregisterPasskey();
+      setPasskeyActive(false);
+      setEncryptionStatus('Passkey entfernt. Entsperren erfolgt weiterhin über die Master-PIN.');
     }
   };
 
@@ -196,6 +225,52 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
                   </form>
                 )}
+
+                
+                {/* Biometric Passkey / WebAuthn Options */}
+                <div className="pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-slate-300 font-semibold">
+                      <Fingerprint className="w-4 h-4 text-emerald-400" />
+                      <span>Biometrie & Passkey (Touch ID / Windows Hello)</span>
+                    </div>
+                    {passkeyActive ? (
+                      <button
+                        type="button"
+                        onClick={handleDisablePasskey}
+                        className="px-2.5 py-1 bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 rounded border border-rose-500/30 text-[11px] font-semibold"
+                      >
+                        Passkey entfernen
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsRegisteringPasskey(!isRegisteringPasskey)}
+                        className="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded border border-emerald-500/30 text-[11px] font-semibold"
+                      >
+                        {isRegisteringPasskey ? 'Abbrechen' : 'Passkey aktivieren'}
+                      </button>
+                    )}
+                  </div>
+                  {isRegisteringPasskey && (
+                    <form onSubmit={handleEnablePasskey} className="mt-2 p-3 bg-slate-900 border border-slate-700 rounded-lg space-y-2">
+                      <span className="font-semibold text-slate-300 block">Aktuelle Master-PIN zur Passkey-Verknüpfung:</span>
+                      <div className="flex gap-2">
+                        <input
+                          type="password"
+                          value={passkeyPinInput}
+                          onChange={(e) => setPasskeyPinInput(e.target.value)}
+                          placeholder="Master-PIN bestätigen"
+                          required
+                          className="flex-1 bg-slate-950 border border-slate-700 rounded p-1.5 text-slate-200"
+                        />
+                        <button type="submit" className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 font-semibold text-white rounded text-xs">
+                          Passkey speichern
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
 
                 {isDisablingVault && (
                   <form onSubmit={handleDisableVaultSubmit} className="p-3 bg-slate-900 border border-rose-900/50 rounded-lg space-y-2">
@@ -440,6 +515,43 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Live Market Data API Config & Cache */}
+          <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-xl space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="font-bold text-slate-200 block">Kursdaten-Schnittstellen (Finnhub & Yahoo)</span>
+                <span className="text-slate-400 block">Optionaler Finnhub API-Key für unterbrechungsfreie Echtzeitkurse</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem('finanz_market_prices_cache');
+                    alert('Preiscache erfolgreich geleert! Bei der nächsten Aktualisierung werden frische Kurse geladen.');
+                  }
+                }}
+                className="px-2.5 py-1 text-[11px] font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-700 transition-colors"
+              >
+                Cache leeren
+              </button>
+            </div>
+            <input
+              type="text"
+              defaultValue={typeof localStorage !== 'undefined' ? localStorage.getItem('finanz_finnhub_api_key') || '' : ''}
+              onChange={(e) => {
+                if (typeof localStorage !== 'undefined') {
+                  if (e.target.value.trim()) {
+                    localStorage.setItem('finanz_finnhub_api_key', e.target.value.trim());
+                  } else {
+                    localStorage.removeItem('finanz_finnhub_api_key');
+                  }
+                }
+              }}
+              placeholder="Finnhub API Key (z.B. c12345... von finnhub.io) für Live-Quotes"
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 font-mono text-slate-200 text-xs"
+            />
           </div>
 
           {/* Auto Refresh */}

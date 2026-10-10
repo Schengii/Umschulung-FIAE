@@ -176,7 +176,7 @@ export default function Sm2SpacedRepetitionLab() {
         {/* Ebbinghaus Forgetting Curve Chart */}
         <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-lg)' }}>
           <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <TrendingUp size={18} color="var(--accent-teal)" /> Ebbinghaus-Vergessenskurve $R(t) = e^{-t / S}$
+            <TrendingUp size={18} color="var(--accent-teal)" /> {'Ebbinghaus-Vergessenskurve $R(t) = e^{-t / S}$'}
           </h2>
           <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
             Erwartete Gedächtnis-Behaltensrate für diese Karte über 14 Tage:

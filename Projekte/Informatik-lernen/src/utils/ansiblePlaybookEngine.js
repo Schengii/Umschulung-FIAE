@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Ansible Playbook & Idempotenz Simulator Engine
  * IHK Standard für DevOps, Automatisierung & Systemintegration (FISI)
@@ -61,9 +62,9 @@ export const DEFAULT_ANSIBLE_PLAYBOOK = {
 
 /**
  * Führt einen Ansible Playbook Run auf dem Ziel-System aus
- * @param {Object} playbook Playbook-Definition
- * @param {Array} inventory Server-Liste
- * @param {Object} systemState Aktueller Zustand der Zielserver
+ * @param {any} playbook Playbook-Definition
+ * @param {any[]} inventory Server-Liste
+ * @param {Record<string, any>} systemState Aktueller Zustand der Zielserver
  */
 export function executeAnsiblePlaybook(playbook = DEFAULT_ANSIBLE_PLAYBOOK, inventory = DEFAULT_ANSIBLE_INVENTORY, systemState = {}) {
   const targetHosts = inventory.filter(h => playbook.hosts === 'all' || h.group === playbook.hosts || h.name === playbook.hosts);
@@ -81,12 +82,13 @@ export function executeAnsiblePlaybook(playbook = DEFAULT_ANSIBLE_PLAYBOOK, inve
 
   targetHosts.forEach(host => {
     const hostState = systemState[host.id] || { installedPackages: [], files: {}, services: {} };
+    /** @type {any[]} */
     const taskLogs = [];
     let hostChangedCount = 0;
     let hostOkCount = 0;
     let hostFailedCount = 0;
 
-    (playbook.tasks || []).forEach(task => {
+    (playbook.tasks || []).forEach((/** @type {any} */ task) => {
       let isChanged = false;
       let isFailed = false;
 
@@ -132,8 +134,9 @@ export function executeAnsiblePlaybook(playbook = DEFAULT_ANSIBLE_PLAYBOOK, inve
     });
 
     // Handlers ausführen wenn getriggert
+    /** @type {any[]} */
     const handlerLogs = [];
-    (playbook.handlers || []).forEach(handler => {
+    (playbook.handlers || []).forEach((/** @type {any} */ handler) => {
       if (triggeredHandlers.has(handler.name)) {
         handlerLogs.push({
           name: handler.name,
@@ -144,7 +147,7 @@ export function executeAnsiblePlaybook(playbook = DEFAULT_ANSIBLE_PLAYBOOK, inve
       }
     });
 
-    hostResults[host.id] = {
+    (/** @type {Record<string, any>} */ (hostResults))[host.id] = {
       host: host.name,
       ip: host.ip,
       taskLogs,
@@ -170,6 +173,9 @@ export function executeAnsiblePlaybook(playbook = DEFAULT_ANSIBLE_PLAYBOOK, inve
 /**
  * Validiert ein Ansible YAML Playbook auf Syntax & Best Practices
  */
+/**
+ * @param {any} playbook
+ */
 export function validateAnsiblePlaybook(playbook) {
   const issues = [];
 
@@ -188,7 +194,7 @@ export function validateAnsiblePlaybook(playbook) {
   if (!Array.isArray(playbook.tasks) || playbook.tasks.length === 0) {
     issues.push({ type: 'error', message: 'Playbook enthält keine "tasks".' });
   } else {
-    playbook.tasks.forEach((t, i) => {
+    playbook.tasks.forEach((/** @type {any} */ t, /** @type {number} */ i) => {
       if (!t.name) {
         issues.push({ type: 'warning', message: `Task #${i + 1} hat keinen Namen. Best Practice erfordert sprechende Namen.` });
       }

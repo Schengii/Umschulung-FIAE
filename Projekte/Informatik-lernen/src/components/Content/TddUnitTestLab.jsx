@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import { Play } from 'lucide-react';
+import { runTestCasesInSandbox } from '../../utils/sandboxRunner';
+
+const ADD_TEST_CASES = [
+  { input: [2, 3], expected: 5 },
+  { input: [-1, 1], expected: 0 },
+  { input: [0, 0], expected: 0 }
+];
 
 export default function TddUnitTestLab({ onRewardXP }) {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const [testResult, setTestResult] = useState(null);
 
-  const handleRunTests = () => {
-    try {
-      // Evaluate function
-      // eslint-disable-next-line no-new-func
-      const fn = new Function(`${code}; return add;`)();
-      
-      const test1 = fn(2, 3) === 5;
-      const test2 = fn(-1, 1) === 0;
-      const test3 = fn(0, 0) === 0;
+  const [isRunning, setIsRunning] = useState(false);
 
-      if (test1 && test2 && test3) {
-        setTestResult({ success: true, text: '✅ Alle 3 Unit Tests (Jest) wurden erfolgreich bestanden! (+80 XP)' });
-        onRewardXP(80);
-      } else {
-        setTestResult({ success: false, text: '❌ Test fehlgeschlagen: Die Funktion liefert nicht das erwartete Ergebnis.' });
-      }
-    } catch (e) {
-      setTestResult({ success: false, text: `❌ Syntax Fehler: ${e.message}` });
+  const handleRunTests = async () => {
+    setIsRunning(true);
+    const res = await runTestCasesInSandbox(code, ['add'], ADD_TEST_CASES, {
+      missingFunctionMessage: 'Funktion add() fehlt.'
+    });
+    setIsRunning(false);
+
+    if (!res.success) {
+      setTestResult({ success: false, text: res.timedOut ? `⏱️ ${res.error}` : `❌ Syntax Fehler: ${res.error}` });
+    } else if (res.allPassed) {
+      setTestResult({ success: true, text: '✅ Alle 3 Unit Tests (Jest) wurden erfolgreich bestanden! (+80 XP)' });
+      onRewardXP(80);
+    } else {
+      setTestResult({ success: false, text: '❌ Test fehlgeschlagen: Die Funktion liefert nicht das erwartete Ergebnis.' });
     }
   };
 
@@ -65,8 +70,8 @@ export default function TddUnitTestLab({ onRewardXP }) {
         />
       </div>
 
-      <button className="btn btn-primary" onClick={handleRunTests} style={{ width: '100%', minHeight: '48px', fontSize: '1rem', marginBottom: '20px' }}>
-        <Play size={18} /> Unit Tests ausführen (Jest)
+      <button className="btn btn-primary" onClick={handleRunTests} disabled={isRunning} style={{ width: '100%', minHeight: '48px', fontSize: '1rem', marginBottom: '20px' }}>
+        <Play size={18} /> {isRunning ? 'Tests laufen…' : 'Unit Tests ausführen (Jest)'}
       </button>
 
       {testResult && (

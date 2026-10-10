@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * CORS (Cross-Origin Resource Sharing) Pitfalls Engine
  * Simulates the browser-side preflight/response evaluation for a
@@ -7,6 +8,32 @@
  * attacker-controlled subdomain.
  */
 
+/**
+ * @typedef {'reflect_wildcard' | 'strict_allowlist' | 'loose_regex'} CorsServerConfig
+ *
+ * @typedef {object} EvaluateCorsInput
+ * @property {string} [requestOrigin]
+ * @property {string} [targetSite]
+ * @property {boolean} [withCredentials]
+ * @property {CorsServerConfig} [serverConfig]
+ *
+ * @typedef {object} EvaluateCorsResult
+ * @property {string} requestOrigin
+ * @property {string} targetSite
+ * @property {boolean} withCredentials
+ * @property {CorsServerConfig} serverConfig
+ * @property {string | null} allowOriginHeader
+ * @property {boolean} allowCredentialsHeader
+ * @property {boolean} isWildcardCredentialConflict
+ * @property {boolean} browserAllows
+ * @property {string} serverExplanation
+ * @property {string} verdict
+ */
+
+/**
+ * @param {EvaluateCorsInput} input
+ * @returns {EvaluateCorsResult}
+ */
 export function evaluateCorsRequest({
   requestOrigin = 'https://evil-attacker.com',
   targetSite = 'https://api.devgame.it',
@@ -16,6 +43,7 @@ export function evaluateCorsRequest({
   const allowlist = ['https://app.devgame.it', 'https://admin.devgame.it'];
   const looseRegex = /devgame\.it$/; // intentionally naive: matches "evil-devgame.it" too!
 
+  /** @type {string | null} */
   let allowOriginHeader = null;
   let allowCredentialsHeader = false;
   let serverExplanation = '';
@@ -66,6 +94,7 @@ export function evaluateCorsRequest({
   };
 }
 
+/** @type {{ id: CorsServerConfig, label: string }[]} */
 export const CORS_SCENARIOS = [
   { id: 'reflect_wildcard', label: 'Origin-Reflection ("Access-Control-Allow-Origin: <Origin>")' },
   { id: 'strict_allowlist', label: 'Feste Allowlist bekannter Origins' },

@@ -1,9 +1,13 @@
+import { Logger } from './logger';
 class SpeechServiceClass {
     private recognition: any = null;
     private isListening = false;
     private onCommandCallback: ((cmd: string) => void) | null = null;
     private onStatusCallback: ((status: string) => void) | null = null;
     private onErrorCallback: (() => void) | null = null;
+    private restartTimeout: any = null;
+    private restartAttempts = 0;
+    private readonly maxRestartAttempts = 5;
 
     speak(text: string): void {
         if (!('speechSynthesis' in window)) return;
@@ -69,7 +73,7 @@ class SpeechServiceClass {
                     if (directCommands.includes(command)) {
                         processedCommand = command;
                     } else {
-                        console.log("Ignored ambient sound/speech:", command);
+                        Logger.debug("Ignored ambient sound/speech:", command);
                         return;
                     }
                 }
@@ -81,26 +85,41 @@ class SpeechServiceClass {
 
             this.recognition.onerror = (event: any) => {
                 console.error("Speech recognition error", event.error);
-                if (event.error === 'not-allowed') {
+                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                     this.isListening = false;
+                    clearTimeout(this.restartTimeout);
                     if (this.onStatusCallback) this.onStatusCallback('Zugriff verweigert');
                     if (this.onErrorCallback) this.onErrorCallback();
                 }
             };
 
             this.recognition.onend = () => {
-                // Restart if still marked as listening
                 if (this.isListening) {
-                    try {
-                        this.recognition.start();
-                    } catch (e) {
-                        console.error("Failed to restart speech recognition", e);
+                    if (this.restartAttempts >= this.maxRestartAttempts) {
+                        console.warn('[SpeechService] Exceeded max rapid restarts, stopping listener.');
+                        this.isListening = false;
+                        if (this.onStatusCallback) this.onStatusCallback('Spracherkennung beendet (zu viele Abbrüche)');
+                        if (this.onErrorCallback) this.onErrorCallback();
+                        return;
                     }
+                    this.restartAttempts++;
+                    clearTimeout(this.restartTimeout);
+                    this.restartTimeout = setTimeout(() => {
+                        if (this.isListening && this.recognition) {
+                            try {
+                                this.recognition.start();
+                                setTimeout(() => { this.restartAttempts = 0; }, 5000);
+                            } catch (e) {
+                                console.error("Failed to restart speech recognition", e);
+                            }
+                        }
+                    }, 600);
                 }
             };
         }
 
         try {
+            this.restartAttempts = 0;
             this.recognition.start();
             if (this.onStatusCallback) this.onStatusCallback('Hört zu... (Befehle: weiter, zurück, vorlesen, stoppen)');
         } catch (e) {
@@ -110,6 +129,8 @@ class SpeechServiceClass {
 
     stopListening(): void {
         this.isListening = false;
+        clearTimeout(this.restartTimeout);
+        this.restartAttempts = 0;
         if (this.recognition) {
             try {
                 this.recognition.stop();

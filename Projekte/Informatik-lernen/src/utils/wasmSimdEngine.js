@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * WebAssembly SIMD (Single Instruction, Multiple Data) & Vector Processing Engine
  * Veranschaulicht 128-Bit Vektor-Register (v128) und parallele Lane-Operationen
@@ -6,6 +7,7 @@
 
 /**
  * 128-Bit Float32x4 Addition (4 Lanes à 32-Bit)
+ * @param {number[]} a @param {number[]} b
  */
 export function simdAddF32x4(a, b) {
   return [
@@ -18,6 +20,7 @@ export function simdAddF32x4(a, b) {
 
 /**
  * 128-Bit Float32x4 Multiplikation (4 Lanes à 32-Bit)
+ * @param {number[]} a @param {number[]} b
  */
 export function simdMulF32x4(a, b) {
   return [
@@ -30,6 +33,7 @@ export function simdMulF32x4(a, b) {
 
 /**
  * 128-Bit Float32x4 Skalarprodukt (Dot Product)
+ * @param {number[]} a @param {number[]} b
  */
 export function simdDotProductF32x4(a, b) {
   const mul = simdMulF32x4(a, b);
@@ -38,6 +42,7 @@ export function simdDotProductF32x4(a, b) {
 
 /**
  * 128-Bit Uint8x16 Bildhelligkeits-Filter (16 Bytes / Farbkanäle parallel verarbeiten)
+ * @param {number[]} bytes16 @param {number} delta
  */
 export function simdBrightnessU8x16(bytes16, delta) {
   const result = new Uint8Array(16);
@@ -50,6 +55,7 @@ export function simdBrightnessU8x16(bytes16, delta) {
 
 /**
  * 4x4 Matrix-Multiplikation via SIMD-Vektorisierung (Zeile x Spalte)
+ * @param {number[]} matA @param {number[]} matB
  */
 export function simdMatrixMul4x4(matA, matB) {
   // matA und matB sind 16er Arrays in Row-Major-Reihenfolge
@@ -143,6 +149,7 @@ export function runSimdBenchmark(itemCount = 100000, operation = 'add') {
 
 /**
  * 3x3 Faltungskerne für Bildverarbeitung (Bildfilter)
+ * @type {Record<string, number[][]>}
  */
 export const CONVOLUTION_KERNELS = {
   sobelX: [
@@ -169,6 +176,7 @@ export const CONVOLUTION_KERNELS = {
 
 /**
  * Führt eine 3x3 Faltungsoperation mit simulierter SIMD-Vektorisierung durch
+ * @param {number[]} pixels @param {number} [width] @param {number} [height] @param {string} [filterType]
  */
 export function applySimdConvolutionFilter(pixels, width = 64, height = 64, filterType = 'sobel') {
   const output = new Uint8ClampedArray(width * height);

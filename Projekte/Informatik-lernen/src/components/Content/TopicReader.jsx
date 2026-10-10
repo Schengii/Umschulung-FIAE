@@ -144,10 +144,9 @@ export default function TopicReader({ topicId, onBack, onCompleteTopic, isComple
 
       {/* Topic Theory Article Body */}
       <div className="glass-panel" style={{ padding: '32px', marginBottom: '24px', fontSize: '1.02rem', lineHeight: '1.75' }}>
-        <div
-          dangerouslySetInnerHTML={{ __html: topic.content.replace(/\n/g, '<br/>') }}
-          style={{ whiteSpace: 'pre-line', color: 'var(--text-main)' }}
-        />
+        <div style={{ whiteSpace: 'pre-line', color: 'var(--text-main)' }}>
+          {topic.content}
+        </div>
 
         {/* Code Snippet Box */}
         {topic.codeSnippet && (

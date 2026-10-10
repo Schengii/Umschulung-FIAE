@@ -1,18 +1,25 @@
-const CACHE_NAME = 'eco-chef-v2';
+// The version token in CACHE_NAME is replaced with the build timestamp by webpack (see webpack.config.js)
+const CACHE_NAME = 'eco-chef-__BUILD_VERSION__';
+
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/manifest.json',
-    '/bundle.js',
     '/favicon.ico',
     '/icon-192.png',
     '/icon-512.png'
 ];
 
+// The new worker waits until the page asks for activation (update toast in sw.service.ts)
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('Cache opened, assets pre-cached');
             return cache.addAll(ASSETS_TO_CACHE);
         })
     );
@@ -21,19 +28,45 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
 
+    const url = new URL(event.request.url);
+
+    // Never cache API calls or external dynamic services
+    if (url.pathname.startsWith('/api/') || url.origin !== self.location.origin) {
+        return;
+    }
+
+    // Network-First for HTML documents / navigation (ensures instant deployment updates)
+    if (event.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
+        event.respondWith(
+            fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const copy = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/index.html')))
+        );
+        return;
+    }
+
+    // Stale-While-Revalidate for static assets (JS, CSS, icons)
     event.respondWith(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.match(event.request).then((cachedResponse) => {
-                const fetchedResponse = fetch(event.request).then((networkResponse) => {
-                    if (networkResponse.status === 200) {
-                        cache.put(event.request, networkResponse.clone());
-                    }
-                    return networkResponse;
-                }).catch(() => {
-                    // Ignore network failure, fall back to cache
-                });
+                const fetchPromise = fetch(event.request)
+                    .then((networkResponse) => {
+                        if (networkResponse && networkResponse.status === 200) {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    })
+                    .catch(() => {
+                        // Offline or network error
+                    });
 
-                return cachedResponse || fetchedResponse;
+                return cachedResponse || fetchPromise;
             });
         })
     );
@@ -41,14 +74,17 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cache) => {
-                    if (cache !== CACHE_NAME) {
-                        return caches.delete(cache);
-                    }
-                })
-            );
-        })
+        Promise.all([
+            self.clients.claim(),
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cache) => {
+                        if (cache !== CACHE_NAME) {
+                            return caches.delete(cache);
+                        }
+                    })
+                );
+            })
+        ])
     );
 });

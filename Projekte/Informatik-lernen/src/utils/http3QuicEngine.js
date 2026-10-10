@@ -1,9 +1,11 @@
+// @ts-check
 /**
  * HTTP/3 & QUIC Protocol Engine
  * Simuliert UDP-basiertes QUIC-Multiplexing, Head-of-Line-Blocking-Verhalten bei Paketverlust,
  * 0-RTT/1-RTT Handshakes und Connection-ID Migration im Vergleich zu HTTP/1.1 und HTTP/2 (TCP).
  */
 
+/** @type {Record<string, {name: string, transport: string, maxParallelSockets: number, handshakeRttInitial: number, handshakeRttResumed: number, headOfLineBlockingScope: string, multiplexing: string, connectionMigration: boolean, color: string}>} */
 export const PROTOCOL_SPECS = {
   'HTTP/1.1': {
     name: 'HTTP/1.1 (TCP)',
@@ -42,6 +44,9 @@ export const PROTOCOL_SPECS = {
 
 /**
  * Simuliert Handshake-Latenz
+ * @param {string} protocol
+ * @param {number} [baseRttMs]
+ * @param {boolean} [isResumed]
  */
 export function calculateHandshakeLatency(protocol, baseRttMs = 50, isResumed = false) {
   const spec = PROTOCOL_SPECS[protocol] || PROTOCOL_SPECS['HTTP/3'];
@@ -149,6 +154,7 @@ export function simulateStreamTransfer({
 
 /**
  * Simuliert Connection Migration (z.B. Wechsel von WLAN zu 5G Mobilfunk)
+ * @param {string} protocol
  */
 export function simulateConnectionMigration(protocol) {
   if (protocol === 'HTTP/3') {

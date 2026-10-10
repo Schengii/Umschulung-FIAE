@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * TCO (Total Cost of Ownership) & ROI Calculator
  * Computes multi-year cost comparison between On-Premises and Cloud Infrastructure.

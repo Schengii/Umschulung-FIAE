@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux Systemd Unit Lifecycle & Cgroups v2 Service Engine
  * Simuliert Systemd Service States (inactive, activating, running, failed),
@@ -48,6 +49,10 @@ WantedBy=${config.wantedBy || 'multi-user.target'}
 
 /**
  * Simuliert Zustandsübergänge des Systemd-Dienstes
+ * @param {string} currentState
+ * @param {string} event
+ * @param {typeof DEFAULT_SERVICE_CONFIG} [config]
+ * @param {number} [currentMemoryMb]
  */
 export function transitionServiceState(currentState, event, config = DEFAULT_SERVICE_CONFIG, currentMemoryMb = 80) {
   let nextState = currentState;

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux Namespaces & Cgroups v2 Container Runtime Engine
  * Simulates the 6 core Linux container isolation namespaces (PID, NET, MNT, UTS, IPC, USER)

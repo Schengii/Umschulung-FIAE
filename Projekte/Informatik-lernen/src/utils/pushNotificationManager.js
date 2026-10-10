@@ -59,3 +59,51 @@ function fallbackNotification(title, options) {
     });
   }, 5000);
 }
+
+/**
+ * Prüft, ob der Browser moderne ServiceWorker Push Notifications unterstützt.
+ * @returns {boolean}
+ */
+export const isPushSupported = () => {
+  return typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+};
+
+/**
+ * Erlaubt das Aktivieren / Abonnieren von Push Notifications via ServiceWorker Registration.
+ * @param {string} [applicationServerKey] Optionaler VAPID Public Key
+ * @returns {Promise<{ success: boolean, subscription?: any, error?: string }>}
+ */
+export const subscribeToPushService = async (applicationServerKey) => {
+  if (!isPushSupported()) {
+    return { success: false, error: 'Web Push API wird in diesem Browser oder Kontext nicht unterstützt.' };
+  }
+
+  const permission = await requestPushPermission();
+  if (!permission) {
+    return { success: false, error: 'Benutzer hat die Benachrichtigungsberechtigung abgelehnt.' };
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    let subscription = await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+      const subscribeOptions = {
+        userVisibleOnly: true,
+        ...(applicationServerKey ? { applicationServerKey } : {})
+      };
+      subscription = await registration.pushManager.subscribe(subscribeOptions);
+    }
+
+    return {
+      success: true,
+      subscription
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : String(err)
+    };
+  }
+};
+

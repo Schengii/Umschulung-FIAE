@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-import { Globe, Network, Award, RefreshCw, Send } from 'lucide-react';
+import { Globe, Network, Award, RefreshCw, Send, Binary } from 'lucide-react';
 import { 
   compressIpv6, 
   expandIpv6, 
   generateEui64, 
-  matchRoutingTable 
+  matchRoutingTable,
+  calculateIpv6Subnetting
 } from '../../utils/ipv6Routing';
 import { useStore } from '../../store/useStore';
 
@@ -23,6 +24,14 @@ export default function Ipv6RoutingLab() {
   const [macInput, setMacInput] = useState('00:1A:2B:3C:4D:5E');
   const [ipv6Prefix, setIpv6Prefix] = useState('fe80::');
   const eui64Result = generateEui64(macInput, ipv6Prefix);
+
+  // IPv6 Subnetting State
+  const [subnetBasePrefix, setSubnetBasePrefix] = useState('2001:db8:abcd::');
+  const [subnetPrefixLen, setSubnetPrefixLen] = useState(48);
+  const [targetSubnetLen, setTargetSubnetLen] = useState(64);
+  const subnetResult = useMemo(() => {
+    return calculateIpv6Subnetting(subnetBasePrefix, subnetPrefixLen, targetSubnetLen, 8);
+  }, [subnetBasePrefix, subnetPrefixLen, targetSubnetLen]);
 
   // Routing Table Simulator State
   const routes = [
@@ -79,7 +88,18 @@ export default function Ipv6RoutingLab() {
           }`}
         >
           <Globe className="w-4 h-4" />
-          IPv6 Kompression & Adresstypen
+          IPv6 Kompression &amp; Adresstypen
+        </button>
+        <button
+          onClick={() => setActiveTab('ipv6_subnetting')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+            activeTab === 'ipv6_subnetting'
+              ? 'bg-emerald-600 text-white shadow-md'
+              : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+          }`}
+        >
+          <Binary className="w-4 h-4" />
+          IPv6 Subnetting &amp; Nibble-Boundaries
         </button>
         <button
           onClick={() => setActiveTab('eui64')}
@@ -90,7 +110,7 @@ export default function Ipv6RoutingLab() {
           }`}
         >
           <Network className="w-4 h-4" />
-          SLAAC & EUI-64 Rechner
+          SLAAC &amp; EUI-64 Rechner
         </button>
         <button
           onClick={() => setActiveTab('routing_sim')}
@@ -319,6 +339,139 @@ export default function Ipv6RoutingLab() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: IPv6 Subnetting & Nibble-Boundaries */}
+      {activeTab === 'ipv6_subnetting' && (
+        <div className="space-y-6">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                <Binary className="w-5 h-5 text-emerald-400" />
+                IPv6 Subnetz-Planung &amp; Nibble-Boundaries
+              </h2>
+              <p className="text-slate-300 text-sm">
+                Im IHK-Standard vergeben Provider typischerweise ein <strong>/48</strong> oder <strong>/56</strong> Präfix an Unternehmen. Lokale Subnetze werden zwingend als <strong>/64</strong> dimensioniert, um SLAAC (Stateless Address Autoconfiguration) zu unterstützen.
+              </p>
+            </div>
+
+            {/* Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                  Basis-Präfix
+                </label>
+                <input
+                  type="text"
+                  value={subnetBasePrefix}
+                  onChange={(e) => setSubnetBasePrefix(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-emerald-400 font-mono text-sm"
+                  placeholder="2001:db8:abcd::"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                  Zugewiesene Präfixlänge (Site Prefix)
+                </label>
+                <select
+                  value={subnetPrefixLen}
+                  onChange={(e) => setSubnetPrefixLen(Number(e.target.value))}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-sm"
+                >
+                  <option value={48}>/48 (Enterprise Standard - 65.536 /64 Subnetze)</option>
+                  <option value={52}>/52 (16 Nibble Subnetze - 4.096 /64 Subnetze)</option>
+                  <option value={56}>/56 (KMU / Branch - 256 /64 Subnetze)</option>
+                  <option value={60}>/60 (Home Office - 16 /64 Subnetze)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                  Ziel-Subnetzmaske
+                </label>
+                <select
+                  value={targetSubnetLen}
+                  onChange={(e) => setTargetSubnetLen(Number(e.target.value))}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-sm"
+                >
+                  <option value={64}>/64 (Standard für SLAAC &amp; Endgeräte-LAN)</option>
+                  <option value={112}>/112 (Server-Cluster)</option>
+                  <option value={126}>/126 (Point-to-Point Router Links)</option>
+                  <option value={127}>/127 (RFC 6164 Inter-Router Links)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Metrics & Notices */}
+            {!subnetResult.error && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                  <div className="text-xs text-slate-400">Verfügbare Subnetz-Bits</div>
+                  <div className="text-xl font-bold text-emerald-400 mt-1">{subnetResult.subnetBits} Bits</div>
+                  <div className="text-xs text-slate-500 mt-1">({subnetResult.subnetBits / 4} Nibbles / Hex-Ziffern)</div>
+                </div>
+
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                  <div className="text-xs text-slate-400">Mögliche Subnetze</div>
+                  <div className="text-xl font-bold text-cyan-400 mt-1">{subnetResult.totalSubnets.toLocaleString('de-DE')}</div>
+                  <div className="text-xs text-slate-500 mt-1">2^{subnetResult.subnetBits} Subnetz-Instanzen</div>
+                </div>
+
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                  <div className="text-xs text-slate-400">SLAAC Autoconfig</div>
+                  <div className={`text-xl font-bold mt-1 ${subnetResult.slaacCompliant ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    {subnetResult.slaacCompliant ? '100% Konform' : 'Eingeschränkt'}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">RFC 4862 Vorgabe</div>
+                </div>
+              </div>
+            )}
+
+            {/* Nibble Boundary Notice */}
+            <div className={`p-4 rounded-xl border text-sm ${
+              subnetResult.isNibbleBoundary 
+                ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-200' 
+                : 'bg-amber-950/20 border-amber-500/40 text-amber-200'
+            }`}>
+              <strong>{subnetResult.isNibbleBoundary ? 'Perfekte Nibble-Boundary:' : 'Hinweis Nibble-Boundary:'}</strong>{' '}
+              {subnetResult.nibbleNotice}
+            </div>
+
+            {/* Subnets Table */}
+            {!subnetResult.error && (
+              <div>
+                <h3 className="text-sm font-bold text-white mb-2">
+                  Beispielhafte Subnetz-Zuweisungen (Auszug)
+                </h3>
+                <div className="overflow-x-auto rounded-xl border border-slate-800">
+                  <table className="w-full text-left text-sm font-mono">
+                    <thead className="bg-slate-950 text-slate-400 border-b border-slate-800">
+                      <tr>
+                        <th className="p-3">#</th>
+                        <th className="p-3">Subnetz-ID (Hex)</th>
+                        <th className="p-3">Vollständiges Subnetz-Präfix</th>
+                        <th className="p-3">Verwendungszweck (IHK Empfehlung)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800 bg-slate-900/60">
+                      {subnetResult.generatedSubnets.map((sub, i) => (
+                        <tr key={i} className="text-slate-300 hover:bg-slate-800/40">
+                          <td className="p-3 text-slate-500">{i + 1}</td>
+                          <td className="p-3 text-cyan-400 font-bold">{sub.subnetHex}</td>
+                          <td className="p-3 text-emerald-400 font-bold">{sub.compressed}</td>
+                          <td className="p-3 font-sans text-xs text-slate-400">
+                            {i === 0 ? 'Management VLAN' : i === 1 ? 'Mitarbeiter LAN' : i === 2 ? 'WLAN Gäste (DMZ)' : i === 3 ? 'VoIP Telefonie' : 'Server / Cloud Services'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Terraform / OpenTofu Infrastructure-as-Code (IaC) Simulation Engine
  * Simuliert DAG Resource Graphs, State Diffing (Plan) & Drift Detection
@@ -48,13 +49,14 @@ export const DEFAULT_TERRAFORM_RESOURCES = [
 
 /**
  * Berechnet den Terraform Plan (Diff zwischen gewünschtem Code und aktuellem State)
- * @param {Array} desiredResources Ressourcen im HCL-Code
- * @param {Array} currentStates Ressourcen im aktuellen State
+ * @param {any[]} desiredResources Ressourcen im HCL-Code
+ * @param {any[]} currentStates Ressourcen im aktuellen State
  */
 export function calculateTerraformPlan(desiredResources = [], currentStates = []) {
   const stateMap = new Map();
   currentStates.forEach(r => stateMap.set(r.id, r));
 
+  /** @type {any[]} */
   const planActions = [];
   const desiredIds = new Set();
 
@@ -73,6 +75,7 @@ export function calculateTerraformPlan(desiredResources = [], currentStates = []
     } else {
       const stateRes = stateMap.get(res.id);
       // Vergleiche Attribute
+      /** @type {any[]} */
       const diffs = [];
       const allKeys = new Set([...Object.keys(res.attributes || {}), ...Object.keys(stateRes.attributes || {})]);
       
@@ -131,6 +134,7 @@ export function calculateTerraformPlan(desiredResources = [], currentStates = []
 
 /**
  * Topologische Abhängigkeitsauflösung für Bereitstellungsreihenfolge
+ * @param {any[]} resources
  */
 export function getDeploymentOrder(resources = []) {
   const inDegree = new Map();
@@ -142,13 +146,14 @@ export function getDeploymentOrder(resources = []) {
   });
 
   resources.forEach(r => {
-    (r.dependsOn || []).forEach(parent => {
+    (r.dependsOn || []).forEach(/** @param {any} parent */ parent => {
       if (graph.has(parent)) {
         graph.get(parent).push(r.id);
       }
     });
   });
 
+  /** @type {any[]} */
   const queue = [];
   inDegree.forEach((deg, id) => {
     if (deg === 0) queue.push(id);
@@ -158,7 +163,7 @@ export function getDeploymentOrder(resources = []) {
   while (queue.length > 0) {
     const curr = queue.shift();
     order.push(curr);
-    (graph.get(curr) || []).forEach(child => {
+    (graph.get(curr) || []).forEach(/** @param {any} child */ child => {
       const newDeg = inDegree.get(child) - 1;
       inDegree.set(child, newDeg);
       if (newDeg === 0) queue.push(child);

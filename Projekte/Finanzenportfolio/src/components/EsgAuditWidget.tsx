@@ -1,12 +1,15 @@
 import React, { useMemo } from 'react';
 import { Leaf, ShieldCheck, AlertTriangle, CheckCircle } from 'lucide-react';
 import type { Holding, EsgScoreResult } from '../types';
+import { calculatePortfolioEsgSfdrSummary } from '../utils/sfdrCarbonAuditUtils';
 
 interface EsgAuditWidgetProps {
   holdings: Holding[];
 }
 
 export const EsgAuditWidget: React.FC<EsgAuditWidgetProps> = ({ holdings }) => {
+  const sfdrSummary = useMemo(() => calculatePortfolioEsgSfdrSummary(holdings), [holdings]);
+
   const esgData: EsgScoreResult = useMemo(() => {
     if (holdings.length === 0) {
       return {
@@ -129,6 +132,48 @@ export const EsgAuditWidget: React.FC<EsgAuditWidgetProps> = ({ holdings }) => {
         <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl text-center">
           <span className="text-xs text-purple-400 font-semibold block">Führung (Governance)</span>
           <span className="text-xl font-bold text-slate-200 block mt-1">{esgData.governanceScore} / 100</span>
+        </div>
+      </div>
+
+      {/* SFDR & CO2 Carbon Footprint Section */}
+      <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl space-y-4">
+        <div className="flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+              <Leaf className="w-3.5 h-3.5 text-emerald-400" /> EU SFDR Offenlegungsverordnung & CO₂-Intensität
+            </h4>
+            <p className="text-[11px] text-slate-400 mt-0.5">{sfdrSummary.recommendation}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] px-2.5 py-1 rounded-lg font-bold border ${
+              sfdrSummary.parisAgreementAligned
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+            }`}>
+              {sfdrSummary.parisAgreementAligned ? '🌱 Pariser Klimaabkommen Konform' : '⚠️ Erhöhte Transitionsexposition'}
+            </span>
+          </div>
+        </div>
+
+        {/* SFDR Breakdown Bar */}
+        <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-xl">
+            <span className="text-[10px] text-emerald-400 font-bold block">Artikel 9 (Dunkelgrün / Impact)</span>
+            <span className="text-lg font-extrabold text-emerald-300 block mt-0.5">{sfdrSummary.article9WeightPercent}%</span>
+          </div>
+          <div className="p-3 bg-blue-950/20 border border-blue-500/30 rounded-xl">
+            <span className="text-[10px] text-blue-400 font-bold block">Artikel 8 (Hellgrün / ESG Merkmale)</span>
+            <span className="text-lg font-extrabold text-blue-300 block mt-0.5">{sfdrSummary.article8WeightPercent}%</span>
+          </div>
+          <div className="p-3 bg-slate-900/60 border border-slate-700 rounded-xl">
+            <span className="text-[10px] text-slate-400 font-bold block">Artikel 6 (Konventionell)</span>
+            <span className="text-lg font-extrabold text-slate-300 block mt-0.5">{sfdrSummary.article6WeightPercent}%</span>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center px-3 py-2 bg-slate-900/80 rounded-xl text-xs">
+          <span className="text-slate-400">Portfolio CO₂-Intensität (Scope 1+2 gewichtet):</span>
+          <span className="font-bold text-slate-200">{sfdrSummary.weightedCo2IntensityTons} t CO₂ / Mio. € Umsatz</span>
         </div>
       </div>
 

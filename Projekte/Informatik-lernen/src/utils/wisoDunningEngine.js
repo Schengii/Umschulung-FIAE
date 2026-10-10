@@ -1,9 +1,46 @@
+// @ts-check
 /**
  * IHK WISO Skonto-Effektivzins, Verzugszinsen & Mahnwesen Engine
  * Calculates effective annual interest rates for cash discounts,
  * BGB § 288 default interest & statutory compensation, and categorizes dunning stages.
  */
 
+/**
+ * @typedef {object} SkontoInput
+ * @property {number} [skontoPercent]
+ * @property {number} [zahlungszielTage]
+ * @property {number} [skontofristTage]
+ *
+ * @typedef {object} SkontoResult
+ * @property {number} skontoPercent
+ * @property {number} zahlungszielTage
+ * @property {number} skontofristTage
+ * @property {number} kreditTage
+ * @property {number} effektivzinsPercent
+ * @property {string} recommendation
+ *
+ * @typedef {object} VerzugszinsenInput
+ * @property {number} [rechnungsbetrag]
+ * @property {number} [verzugstage]
+ * @property {boolean} [isB2B]
+ * @property {number} [basiszinssatzPercent]
+ *
+ * @typedef {object} VerzugszinsenResult
+ * @property {number} rechnungsbetrag
+ * @property {number} verzugstage
+ * @property {boolean} isB2B
+ * @property {number} basiszinssatzPercent
+ * @property {number} aufschlagPercent
+ * @property {number} verzugszinsSatzPercent
+ * @property {number} zinsenBetrag
+ * @property {number} mahnpauschaleBetrag
+ * @property {number} gesamtForderung
+ */
+
+/**
+ * @param {SkontoInput} input
+ * @returns {SkontoResult}
+ */
 export function calculateSkontoEffektivzins({
   skontoPercent = 3.0,
   zahlungszielTage = 30,
@@ -25,6 +62,10 @@ export function calculateSkontoEffektivzins({
   };
 }
 
+/**
+ * @param {VerzugszinsenInput} input
+ * @returns {VerzugszinsenResult}
+ */
 export function calculateVerzugszinsen({
   rechnungsbetrag = 10000,
   verzugstage = 45,

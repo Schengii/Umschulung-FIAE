@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Bluetooth Low Energy (BLE) & GATT Telemetry Engine
  * Simulates BLE GATT Server, Services, Characteristics, and raw byte decoding.
@@ -79,6 +80,11 @@ export function generateSensorPacket(baseTemp = 22.5, baseHumidity = 48, baseHea
   };
 }
 
+/**
+ * @param {number} byte0
+ * @param {number} byte1
+ * @returns {number}
+ */
 export function decodeBleTemperatureBytes(byte0, byte1) {
   const combined = (byte1 << 8) | byte0;
   return Number((combined / 100).toFixed(2));

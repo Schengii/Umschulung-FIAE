@@ -4,8 +4,11 @@ import { Database } from 'lucide-react';
 export default function SqlQueryOptimizerLab({ onRewardXP }) {
   const [hasIndexOnEmail, setHasIndexOnEmail] = useState(false);
   const [hasIndexOnStatus, setHasIndexOnStatus] = useState(false);
+  const [hasCompositeIndex, setHasCompositeIndex] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState('user_lookup');
   const [completedQuest, setCompletedQuest] = useState(false);
+  const [drillAnswer, setDrillAnswer] = useState(null);
+  const [drillFeedback, setDrillFeedback] = useState(null);
 
   const queries = {
     user_lookup: {
@@ -47,20 +50,60 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
         desc: 'Filterung und Sortierung werden direkt über den B-Tree Index abgewickelt.'
       },
       requiredIndex: 'status'
+    },
+    composite_range: {
+      title: 'Query 3 (IHK AP2): Verbundener Mehrspalten-Index (Composite Index)',
+      sql: "SELECT customer_id, total_amount, created_at FROM orders WHERE customer_id = 48291 AND created_at >= '2026-01-01' ORDER BY created_at DESC;",
+      tableSize: '3.500.000 Datensätze (Rows)',
+      unindexed: {
+        planType: 'Seq Scan with Filter & Temp Table In-Memory Sort',
+        scannedRows: 3500000,
+        costPoints: 48900,
+        execTimeMs: 720.5,
+        desc: 'Ohne zusammengesetzten Index muss die Datenbank alle 3,5 Mio. Zeilen filtern und im Speicher sortieren.'
+      },
+      indexed: {
+        planType: 'Index Only Scan (Composite B-Tree: idx_orders_cust_created)',
+        scannedRows: 14,
+        costPoints: 8,
+        execTimeMs: 1.4,
+        desc: 'Zusammengesetzter B-Tree-Index deckt Filterung (customer_id) und Sortierung (created_at DESC) perfekt ohne Heap-Zugriff ab!'
+      },
+      requiredIndex: 'composite'
     }
   };
 
   const currentQueryData = queries[selectedQuery];
-  const isOptimal = (selectedQuery === 'user_lookup' && hasIndexOnEmail) || (selectedQuery === 'status_filter' && hasIndexOnStatus);
+  const isOptimal = 
+    (selectedQuery === 'user_lookup' && hasIndexOnEmail) || 
+    (selectedQuery === 'status_filter' && hasIndexOnStatus) ||
+    (selectedQuery === 'composite_range' && hasCompositeIndex);
   const activeStats = isOptimal ? currentQueryData.indexed : currentQueryData.unindexed;
 
   const handleToggleIndex = (type) => {
     if (type === 'email') setHasIndexOnEmail(!hasIndexOnEmail);
     if (type === 'status') setHasIndexOnStatus(!hasIndexOnStatus);
+    if (type === 'composite') setHasCompositeIndex(!hasCompositeIndex);
 
-    if (!completedQuest && ((type === 'email' && !hasIndexOnEmail) || (type === 'status' && !hasIndexOnStatus))) {
+    if (!completedQuest && ((type === 'email' && !hasIndexOnEmail) || (type === 'status' && !hasIndexOnStatus) || (type === 'composite' && !hasCompositeIndex))) {
       setCompletedQuest(true);
       if (onRewardXP) onRewardXP(40);
+    }
+  };
+
+  const handleDrillCheck = (choice) => {
+    setDrillAnswer(choice);
+    if (choice === 'composite') {
+      setDrillFeedback({
+        correct: true,
+        text: 'Volltreffer! Ein Composite Index CREATE INDEX idx ON orders(customer_id, created_at DESC) ermöglicht dem DBMS, den Kunden direkt anzusteuern und die Datumszeilen ohne zusätzlichen Sortierschritt zu lesen.'
+      });
+      if (onRewardXP) onRewardXP(50);
+    } else {
+      setDrillFeedback({
+        correct: false,
+        text: 'Nicht optimal: Ein einfacher Index auf nur einer Spalte erfordert entweder einen nachträglichen Sortierschritt oder einen teuren Bitmap-AND-Merge beider Indizes.'
+      });
     }
   };
 
@@ -76,13 +119,13 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             ⚡ SQL Query Optimizer & EXPLAIN ANALYZE Lab
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>
-            Verstehe Abfragepläne (Execution Plans), B-Tree Indizes, Full Table Scans und I/O-Kosten.
+            Verstehe Abfragepläne (Execution Plans), B-Tree Indizes, Composite Indexes, Full Table Scans und I/O-Kosten.
           </p>
         </div>
       </div>
 
       {/* Query Selector Tabs */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <button
           onClick={() => setSelectedQuery('user_lookup')}
           style={{
@@ -114,6 +157,22 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
         >
           📦 Bestellungen Filter & Sort (1.2 Mio Rows)
         </button>
+
+        <button
+          onClick={() => setSelectedQuery('composite_range')}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            fontWeight: 700,
+            fontSize: '0.88rem',
+            background: selectedQuery === 'composite_range' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+            color: selectedQuery === 'composite_range' ? '#fff' : 'var(--text-muted)',
+            border: '1px solid var(--border-color)',
+            cursor: 'pointer'
+          }}
+        >
+          🎯 IHK Composite Index (3.5 Mio Rows)
+        </button>
       </div>
 
       {/* SQL Statement Preview */}
@@ -134,7 +193,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
           <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Erstelle oder lösche B-Tree Indizes, um den Abfrageplan in Echtzeit zu verändern.</span>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
             onClick={() => handleToggleIndex('email')}
             className="btn btn-sm"
@@ -160,6 +219,19 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
           >
             {hasIndexOnStatus ? '✓ Index aktiv: idx_orders_status' : '+ Index anlegen: ON orders(status)'}
           </button>
+
+          <button
+            onClick={() => handleToggleIndex('composite')}
+            className="btn btn-sm"
+            style={{
+              background: hasCompositeIndex ? '#10b981' : 'var(--bg-card)',
+              color: hasCompositeIndex ? '#fff' : 'var(--text-main)',
+              border: hasCompositeIndex ? '1px solid #10b981' : '1px solid var(--border-color)',
+              fontWeight: 700
+            }}
+          >
+            {hasCompositeIndex ? '✓ Composite Index aktiv: idx_orders_cust_created' : '+ Index anlegen: ON orders(customer_id, created_at)'}
+          </button>
         </div>
       </div>
 
@@ -169,7 +241,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
         border: `2px solid ${isOptimal ? '#10b981' : '#ef4444'}`, 
         borderRadius: '16px', 
         padding: '24px',
-        marginBottom: '20px'
+        marginBottom: '24px'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
@@ -214,6 +286,78 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             Planning Time: 0.12 ms | Execution Time: {activeStats.execTimeMs} ms
           </div>
         </div>
+      </div>
+
+      {/* Interactive IHK Exam Challenge Drill */}
+      <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            🎓 IHK-Prüfungs-Drill: Indexierungs-Architektur &amp; Sort-Vermeidung (+50 XP)
+          </div>
+          <span className="badge badge-indigo">IHK AP2 Fachinformatiker</span>
+        </div>
+        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 1.5 }}>
+          Eine Tabelle <code>orders</code> besitzt 3,5 Mio. Zeilen. Welche Index-Definition ist am effektivsten für die Abfrage:<br />
+          <code>SELECT customer_id, total_amount, created_at FROM orders WHERE customer_id = 48291 AND created_at &gt;= &apos;2026-01-01&apos; ORDER BY created_at DESC;</code>?
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+          <button
+            onClick={() => handleDrillCheck('single_customer')}
+            className="btn btn-secondary"
+            style={{
+              textAlign: 'left',
+              padding: '10px 14px',
+              fontSize: '0.84rem',
+              border: drillAnswer === 'single_customer' ? '2px solid #ef4444' : '1px solid var(--border-color)'
+            }}
+          >
+            A) Nur <code>CREATE INDEX ON orders(customer_id)</code>
+          </button>
+
+          <button
+            onClick={() => handleDrillCheck('two_indices')}
+            className="btn btn-secondary"
+            style={{
+              textAlign: 'left',
+              padding: '10px 14px',
+              fontSize: '0.84rem',
+              border: drillAnswer === 'two_indices' ? '2px solid #ef4444' : '1px solid var(--border-color)'
+            }}
+          >
+            B) Zwei getrennte Indizes: <code>(customer_id)</code> und <code>(created_at)</code>
+          </button>
+
+          <button
+            onClick={() => handleDrillCheck('composite')}
+            className="btn btn-secondary"
+            style={{
+              textAlign: 'left',
+              padding: '10px 14px',
+              fontSize: '0.84rem',
+              border: drillAnswer === 'composite' ? '2px solid #10b981' : '1px solid var(--border-color)'
+            }}
+          >
+            C) Zusammengesetzt: <code>CREATE INDEX ON orders(customer_id, created_at DESC)</code>
+          </button>
+        </div>
+
+        {drillFeedback && (
+          <div style={{
+            padding: '12px 16px',
+            borderRadius: '10px',
+            background: drillFeedback.correct ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            border: `1px solid ${drillFeedback.correct ? '#10b981' : '#ef4444'}`,
+            fontSize: '0.88rem',
+            color: 'var(--text-main)',
+            lineHeight: 1.5
+          }}>
+            <div style={{ fontWeight: 800, marginBottom: '4px', color: drillFeedback.correct ? '#10b981' : '#ef4444' }}>
+              {drillFeedback.correct ? '✓ Vollständig Korrekt (+50 XP erhalten)' : '✗ Fehlerhafte Antwort'}
+            </div>
+            {drillFeedback.text}
+          </div>
+        )}
       </div>
     </div>
   );

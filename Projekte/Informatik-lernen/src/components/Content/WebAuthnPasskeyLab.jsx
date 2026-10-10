@@ -3,7 +3,7 @@ import {
   Key, Fingerprint, CheckCircle2, 
   AlertTriangle, Sparkles 
 } from 'lucide-react';
-import { registerPasskey, authenticatePasskey } from '../../utils/webAuthnEngine';
+import { registerPasskey, authenticatePasskey, testRealWebAuthnHardware } from '../../utils/webAuthnEngine';
 import { useStore } from '../../store/useStore';
 
 export default function WebAuthnPasskeyLab() {
@@ -12,6 +12,7 @@ export default function WebAuthnPasskeyLab() {
   const [authenticatorType, setAuthenticatorType] = useState('platform'); // 'platform' | 'cross-platform'
   const [credential, setCredential] = useState(null);
   const [authResult, setAuthResult] = useState(null);
+  const [hardwareCheckResult, setHardwareCheckResult] = useState(null);
   const [isPhishingDomainActive, setIsPhishingDomainActive] = useState(false);
   const [activeStep, setActiveStep] = useState('register'); // 'register' | 'auth' | 'inspector'
   const [rewardClaimed, setRewardClaimed] = useState(false);
@@ -223,6 +224,26 @@ export default function WebAuthnPasskeyLab() {
                 ✓ Passkey registriert: <code>{credential.credentialId}</code> (Algorithmus: ES256)
               </div>
             )}
+
+            <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <button
+                onClick={async () => {
+                  const res = await testRealWebAuthnHardware(username);
+                  setHardwareCheckResult(res);
+                }}
+                className="btn btn-secondary btn-sm"
+                style={{ width: '100%', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              >
+                <Fingerprint size={14} /> Reale Client-Hardware prüfen (Web Crypto &amp; Platform Authenticator)
+              </button>
+              {hardwareCheckResult && (
+                <div style={{ marginTop: '8px', fontSize: '0.78rem', color: hardwareCheckResult.isSupported ? '#38bdf8' : '#fb7185' }}>
+                  {hardwareCheckResult.isSupported 
+                    ? `✓ WebAuthn unterstützt. Platform-Authenticator (z. B. Windows Hello / TouchID): ${hardwareCheckResult.hasPlatformAuthenticator ? 'Verfügbar' : 'Nicht erkannt / Externes Token erforderlich'}`
+                    : `⚠️ ${hardwareCheckResult.error}`}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Relational ERD Designer & Normalization (1NF - 3NF) Engine
  */
@@ -66,13 +67,15 @@ export const INITIAL_ERD_SCHEMA = {
 
 /**
  * Normalization Rules Linter (1NF, 2NF, 3NF)
+ * @param {any} schema
  */
 export function auditNormalization(schema) {
+  /** @type {any[]} */
   const issues = [];
 
-  schema.entities.forEach(entity => {
+  schema.entities.forEach((/** @type {any} */ entity) => {
     // 1NF Check: Primary key presence
-    const pkFields = entity.fields.filter(f => f.isPk);
+    const pkFields = entity.fields.filter((/** @type {any} */ f) => f.isPk);
     if (pkFields.length === 0) {
       issues.push({
         level: 'ERROR',
@@ -84,7 +87,7 @@ export function auditNormalization(schema) {
     }
 
     // 1NF Check: Multi-value or array indicators in field names
-    entity.fields.forEach(f => {
+    entity.fields.forEach((/** @type {any} */ f) => {
       const lower = f.name.toLowerCase();
       if (lower.includes('list') || lower.includes('tags') || lower.includes('csv') || lower.includes('multiple') || lower.endsWith('s_names')) {
         issues.push({
@@ -100,8 +103,8 @@ export function auditNormalization(schema) {
 
     // 2NF Check: Partial dependency on composite PK
     if (pkFields.length > 1) {
-      const nonPkFields = entity.fields.filter(f => !f.isPk && !f.isFk);
-      nonPkFields.forEach(f => {
+      const nonPkFields = entity.fields.filter((/** @type {any} */ f) => !f.isPk && !f.isFk);
+      nonPkFields.forEach((/** @type {any} */ f) => {
         if (f.name.toLowerCase().includes('customer_name') || f.name.toLowerCase().includes('product_name') || f.name.toLowerCase().includes('category_desc')) {
           issues.push({
             level: 'WARNING',
@@ -116,8 +119,8 @@ export function auditNormalization(schema) {
     }
 
     // 3NF Check: Transitive dependencies (e.g. zip_code -> city)
-    const hasZip = entity.fields.some(f => f.name.toLowerCase().includes('zip') || f.name.toLowerCase().includes('plz'));
-    const hasCity = entity.fields.some(f => f.name.toLowerCase().includes('city') || f.name.toLowerCase().includes('ort') || f.name.toLowerCase().includes('stadt'));
+    const hasZip = entity.fields.some((/** @type {any} */ f) => f.name.toLowerCase().includes('zip') || f.name.toLowerCase().includes('plz'));
+    const hasCity = entity.fields.some((/** @type {any} */ f) => f.name.toLowerCase().includes('city') || f.name.toLowerCase().includes('ort') || f.name.toLowerCase().includes('stadt'));
     if (hasZip && hasCity && entity.name !== 'geo_locations' && entity.name !== 'cities') {
       issues.push({
         level: 'INFO',
@@ -134,6 +137,8 @@ export function auditNormalization(schema) {
 
 /**
  * Generates SQL DDL for PostgreSQL / MySQL / SQLite
+ * @param {any} schema
+ * @param {string} [dialect]
  */
 export function generateSqlDdl(schema, dialect = 'postgres') {
   let sql = `-- ================================================\n`;
@@ -141,19 +146,20 @@ export function generateSqlDdl(schema, dialect = 'postgres') {
   sql += `-- IT-DevGame Relational ERD Studio v3.8\n`;
   sql += `-- ================================================\n\n`;
 
-  schema.entities.forEach(entity => {
+  schema.entities.forEach((/** @type {any} */ entity) => {
     sql += `CREATE TABLE ${entity.name} (\n`;
     const fieldLines = [];
+    /** @type {any[]} */
     const pkFields = [];
 
-    entity.fields.forEach(f => {
+    entity.fields.forEach((/** @type {any} */ f) => {
       let typeDef = f.type;
       if (dialect === 'sqlite' && f.type.startsWith('VARCHAR')) typeDef = 'TEXT';
       if (dialect === 'sqlite' && f.type.startsWith('DECIMAL')) typeDef = 'NUMERIC';
 
       let line = `  ${f.name.padEnd(20)} ${typeDef}`;
       if (!f.isNullable) line += ' NOT NULL';
-      if (f.isPk && entity.fields.filter(x => x.isPk).length === 1) {
+      if (f.isPk && entity.fields.filter((/** @type {any} */ x) => x.isPk).length === 1) {
         line += ' PRIMARY KEY';
         if (dialect === 'postgres' && f.type === 'INTEGER') line = `  ${f.name.padEnd(20)} SERIAL PRIMARY KEY`;
       }
@@ -168,9 +174,9 @@ export function generateSqlDdl(schema, dialect = 'postgres') {
 
     // Add Foreign Key constraints
     schema.relationships
-      .filter(r => r.to === entity.id)
-      .forEach(r => {
-        const fromEntity = schema.entities.find(e => e.id === r.from);
+      .filter((/** @type {any} */ r) => r.to === entity.id)
+      .forEach((/** @type {any} */ r) => {
+        const fromEntity = schema.entities.find((/** @type {any} */ e) => e.id === r.from);
         if (fromEntity) {
           fieldLines.push(`  FOREIGN KEY (${r.toField}) REFERENCES ${fromEntity.name}(${r.fromField}) ON DELETE RESTRICT`);
         }

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Lock, KeyRound, AlertCircle, ShieldAlert } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Lock, KeyRound, AlertCircle, ShieldAlert, Fingerprint, Sparkles } from 'lucide-react';
 import { decryptData } from '../services/cryptoStorage';
+import { hasRegisteredPasskey, authenticateWithPasskey } from '../services/webAuthnService';
 import type { Portfolio } from '../types';
 
 interface VaultUnlockModalProps {
@@ -17,8 +18,32 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
   const [pin, setPin] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isDecrypting, setIsDecrypting] = useState(false);
+  const [passkeyAvailable, setPasskeyAvailable] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setPasskeyAvailable(hasRegisteredPasskey());
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const performDecryption = async (pinToUse: string) => {
+    const encryptedVault = localStorage.getItem('finanz_encrypted_vault');
+    if (!encryptedVault) {
+      setErrorMsg('Kein verschlüsselter Tresor gefunden.');
+      return;
+    }
+
+    const decryptedJson = await decryptData(encryptedVault, pinToUse);
+    const parsedPortfolios: Portfolio[] = JSON.parse(decryptedJson);
+
+    if (Array.isArray(parsedPortfolios)) {
+      onUnlocked(parsedPortfolios);
+    } else {
+      throw new Error('Ungültiges Datenformat');
+    }
+  };
 
   const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,23 +53,28 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
     setErrorMsg(null);
 
     try {
-      const encryptedVault = localStorage.getItem('finanz_encrypted_vault');
-      if (!encryptedVault) {
-        setErrorMsg('Kein verschlüsselter Tresor gefunden.');
-        setIsDecrypting(false);
+      await performDecryption(pin);
+    } catch {
+      setErrorMsg('Falsches Master-Passwort / PIN. Zugriff verweigert.');
+    } finally {
+      setIsDecrypting(false);
+    }
+  };
+
+  const handlePasskeyUnlock = async () => {
+    setIsDecrypting(true);
+    setErrorMsg(null);
+
+    try {
+      const authResult = await authenticateWithPasskey();
+      if (!authResult.success || !authResult.masterPin) {
+        setErrorMsg(authResult.error || 'Biometrischer Login fehlgeschlagen.');
         return;
       }
 
-      const decryptedJson = await decryptData(encryptedVault, pin);
-      const parsedPortfolios: Portfolio[] = JSON.parse(decryptedJson);
-
-      if (Array.isArray(parsedPortfolios)) {
-        onUnlocked(parsedPortfolios);
-      } else {
-        throw new Error('Ungültiges Datenformat');
-      }
-    } catch {
-      setErrorMsg('Falsches Master-Passwort / PIN. Zugriff verweigert.');
+      await performDecryption(authResult.masterPin);
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Fehler beim Passkey-Login.');
     } finally {
       setIsDecrypting(false);
     }
@@ -59,9 +89,26 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
           </div>
           <h2 className="text-2xl font-black tracking-tight text-white">Tresor entsperren</h2>
           <p className="text-xs text-slate-400 max-w-xs">
-            Deine Depotdaten sind mit AES-GCM 256-Bit verschlüsselt. Gib deine Master-PIN ein, um fortzufahren.
+            Deine Depotdaten sind mit AES-GCM 256-Bit verschlüsselt. Entsperre via Master-PIN oder Passkey.
           </p>
         </div>
+
+        {passkeyAvailable && (
+          <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-2xl flex flex-col items-center text-center space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+              <Sparkles className="w-3.5 h-3.5" /> Biometrischer Schnellzugriff aktiviert
+            </div>
+            <button
+              type="button"
+              onClick={handlePasskeyUnlock}
+              disabled={isDecrypting}
+              className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs"
+            >
+              <Fingerprint className="w-4 h-4" />
+              Mit Passkey / Fingerabdruck entsperren
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleUnlock} className="space-y-4">
           <div>
@@ -73,7 +120,7 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               placeholder="Passwort eingeben..."
-              autoFocus
+              autoFocus={!passkeyAvailable}
               className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-mono transition-all"
             />
           </div>
@@ -90,7 +137,7 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
             disabled={isDecrypting || !pin.trim()}
             className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition-all text-sm"
           >
-            {isDecrypting ? 'Entschlüssele...' : 'Tresor Entsperren'}
+            {isDecrypting ? 'Entschlüssele...' : 'Tresor mit PIN entsperren'}
           </button>
         </form>
 
@@ -109,4 +156,4 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
       </div>
     </div>
   );
-}
+};

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * IHK Netzplantechnik (CPM / Critical Path Method nach DIN 69900)
  * Metra-Potenzial-Methode (Vorgangsknoten-Netzplan)
@@ -50,7 +51,7 @@ export const IHK_CPM_TEMPLATES = {
 
 /**
  * Führt die vollständige Netzplanberechnung durch
- * @param {Array} rawNodes Array von Knoten { id, name, duration, predecessors }
+ * @param {Array<any>} rawNodes Array von Knoten { id, name, duration, predecessors }
  * @returns {Object} { nodes, projectDuration, criticalPath, hasCycle, totalNodes }
  */
 export function calculateCpmNetwork(rawNodes = []) {
@@ -84,7 +85,7 @@ export function calculateCpmNetwork(rawNodes = []) {
 
   // 2. Fülle Nachfolgerbeziehungen auf
   nodeMap.forEach((node, id) => {
-    node.predecessors.forEach(predId => {
+    node.predecessors.forEach((/** @type {any} */ predId) => {
       if (nodeMap.has(predId)) {
         nodeMap.get(predId).successors.push(id);
       }
@@ -94,9 +95,10 @@ export function calculateCpmNetwork(rawNodes = []) {
   // 3. Topologische Sortierung (Kahn-Algorithmus) zur Zyklen-Erkennung
   const inDegree = new Map();
   nodeMap.forEach((node, id) => {
-    inDegree.set(id, node.predecessors.filter(p => nodeMap.has(p)).length);
+    inDegree.set(id, node.predecessors.filter((/** @type {any} */ p) => nodeMap.has(p)).length);
   });
 
+  /** @type {any[]} */
   const queue = [];
   inDegree.forEach((deg, id) => {
     if (deg === 0) queue.push(id);
@@ -108,7 +110,7 @@ export function calculateCpmNetwork(rawNodes = []) {
     topoOrder.push(currId);
     const currNode = nodeMap.get(currId);
 
-    currNode.successors.forEach(succId => {
+    currNode.successors.forEach((/** @type {any} */ succId) => {
       const newDeg = inDegree.get(succId) - 1;
       inDegree.set(succId, newDeg);
       if (newDeg === 0) queue.push(succId);
@@ -135,7 +137,7 @@ export function calculateCpmNetwork(rawNodes = []) {
       node.faz = 0;
     } else {
       let maxPredFez = 0;
-      node.predecessors.forEach(predId => {
+      node.predecessors.forEach((/** @type {any} */ predId) => {
         if (nodeMap.has(predId)) {
           maxPredFez = Math.max(maxPredFez, nodeMap.get(predId).fez);
         }
@@ -162,7 +164,7 @@ export function calculateCpmNetwork(rawNodes = []) {
       node.sez = projectDuration;
     } else {
       let minSuccSaz = Infinity;
-      node.successors.forEach(succId => {
+      node.successors.forEach((/** @type {any} */ succId) => {
         if (nodeMap.has(succId)) {
           minSuccSaz = Math.min(minSuccSaz, nodeMap.get(succId).saz);
         }
@@ -184,7 +186,7 @@ export function calculateCpmNetwork(rawNodes = []) {
       node.fp = Math.max(0, projectDuration - node.fez);
     } else {
       let minSuccFaz = Infinity;
-      node.successors.forEach(succId => {
+      node.successors.forEach((/** @type {any} */ succId) => {
         if (nodeMap.has(succId)) {
           minSuccFaz = Math.min(minSuccFaz, nodeMap.get(succId).faz);
         }

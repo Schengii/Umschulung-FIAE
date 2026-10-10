@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import type { Portfolio, Transaction, WatchlistItem, SavingsPlan, AssetMappingRule, PortfolioStats, Holding, PortfolioSnapshot, TaxCountry, RealEstateAsset, DepositLadderItem } from '../types';
+import type { Portfolio, Transaction, WatchlistItem, SavingsPlan, AssetMappingRule, PortfolioStats, Holding, PortfolioSnapshot, TaxCountry, RealEstateAsset, DepositLadderItem, TargetAllocation } from '../types';
 import { fetchLiveExchangeRates, fetchLiveCryptoPrices, fetchLiveStockPrices } from '../services/marketDataApi';
 import { calculateIRR, calculateTTWRR, calculateRealizedGains, calculateCryptoTaxFreeShares, calculateDynamicPortfolioRiskMetrics } from '../components/performanceUtils';
 import { encryptData, decryptData } from '../services/cryptoStorage';
+import { saveToIndexedDB } from '../services/indexedDbStorage';
 
 interface PortfolioContextType {
   portfolios: Portfolio[];
@@ -45,6 +46,7 @@ interface PortfolioContextType {
   addSavingsPlan: (plan: SavingsPlan) => void;
   toggleSavingsPlan: (id: string) => void;
   removeSavingsPlan: (id: string) => void;
+  updateSavingsPlan: (plan: SavingsPlan) => void;
   executeSavingsPlans: () => void;
   executeRebalancingBuys: (buys: { ticker: string; name: string; amount: number; price: number; category: any }[]) => void;
   addMappingRule: (rule: AssetMappingRule) => void;
@@ -59,6 +61,7 @@ interface PortfolioContextType {
   addDepositLadderItem: (item: DepositLadderItem) => void;
   updateDepositLadderItem: (item: DepositLadderItem) => void;
   deleteDepositLadderItem: (id: string) => void;
+  updateTargetAllocations: (allocations: TargetAllocation[]) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | null>(null);
@@ -221,10 +224,11 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     MSFT: 415.50
   });
 
-  // Save to localStorage
+  // Save to localStorage and IndexedDB
   useEffect(() => {
     if (!isVaultLocked) {
       localStorage.setItem('finanz_portfolios', JSON.stringify(portfolios));
+      saveToIndexedDB('finanz_portfolios', portfolios);
     }
   }, [portfolios, isVaultLocked]);
 
@@ -462,9 +466,18 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       else if (tx.type === 'BUY') cash -= (tx.amount * tx.price + tx.fee) / rate;
       else if (tx.type === 'SELL') cash += (tx.amount * tx.price - tx.fee - tx.tax) / rate;
       else if (tx.type === 'DIVIDEND') cash += (tx.amount * tx.price - tx.tax) / rate;
+      else if (tx.type === 'OPTION_PREMIUM') cash += (tx.amount * tx.price - (tx.fee || 0) - (tx.tax || 0)) / rate;
+      else if (tx.type === 'INTEREST') cash += (tx.amount * tx.price - (tx.tax || 0)) / rate;
+      else if (tx.type === 'RENT_INCOME') cash += (tx.amount * tx.price - (tx.tax || 0)) / rate;
+      else if (tx.type === 'MAINTENANCE_EXPENSE') cash -= (tx.amount * tx.price + (tx.fee || 0)) / rate;
+      else if (tx.type === 'FEE') cash -= (tx.amount * tx.price + (tx.fee || 0)) / rate;
+      else if (tx.type === 'FX_SWAP') {
+        if (tx.toAmount && tx.toCurrency === baseCurrency) cash += tx.toAmount;
+        else if (tx.fromAmount && tx.fromCurrency === baseCurrency) cash -= tx.fromAmount;
+      }
     });
     return Math.max(0, cash);
-  }, [activePortfolio.transactions]);
+  }, [activePortfolio.transactions, baseCurrency]);
 
   // Portfolio Stats
   const stats = useMemo(() => {
@@ -636,8 +649,28 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }));
   };
 
+  const updateSavingsPlan = (plan: SavingsPlan) => {
+    setPortfolios(prev => prev.map(p => {
+      if (p.id === activePortfolioId) {
+        return {
+          ...p,
+          savingsPlans: (p.savingsPlans || []).map(sp => sp.id === plan.id ? plan : sp)
+        };
+      }
+      return p;
+    }));
+  };
+
   const executeSavingsPlans = () => {
-    const activePlans = activePortfolio.savingsPlans?.filter(sp => sp.isActive) || [];
+    const activePlans = activePortfolio.savingsPlans?.filter(sp => {
+      if (!sp.isActive) return false;
+      if (sp.pausedUntilDate) {
+        const pauseEnd = new Date(sp.pausedUntilDate);
+        if (pauseEnd > new Date()) return false;
+      }
+      return true;
+    }) || [];
+
     if (activePlans.length === 0) return;
 
     const todayStr = new Date().toLocaleDateString('de-DE');
@@ -798,6 +831,15 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }));
   };
 
+  const updateTargetAllocations = (allocations: TargetAllocation[]) => {
+    setPortfolios(prev => prev.map(p => {
+      if (activePortfolioId === 'FAMILY_ALL' || p.id === activePortfolioId) {
+        return { ...p, targetAllocations: allocations };
+      }
+      return p;
+    }));
+  };
+
   return (
     <PortfolioContext.Provider value={{
       portfolios,
@@ -840,6 +882,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       addSavingsPlan,
       toggleSavingsPlan,
       removeSavingsPlan,
+      updateSavingsPlan,
       executeSavingsPlans,
       executeRebalancingBuys,
       addMappingRule,
@@ -853,7 +896,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       deleteRealEstate,
       addDepositLadderItem,
       updateDepositLadderItem,
-      deleteDepositLadderItem
+      deleteDepositLadderItem,
+      updateTargetAllocations
     }}>
       {children}
     </PortfolioContext.Provider>

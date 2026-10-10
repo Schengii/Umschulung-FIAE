@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux eBPF & XDP (eXpress Data Path) Engine
  * Simulates In-Kernel eBPF C-Code Verification (bounds-checking, loop safety),

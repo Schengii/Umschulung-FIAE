@@ -89,7 +89,7 @@ export const DepositLadderWidget: React.FC<DepositLadderWidgetProps> = ({
           <ShieldAlert size={24} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} />
           <div>
             <div style={{ fontWeight: '600', color: '#ef4444', marginBottom: '0.25rem' }}>
-              Achtung: Gesetzliche Einlagensicherung überschritten (> 100.000 € je Institut)
+              Achtung: Gesetzliche Einlagensicherung überschritten (&gt; 100.000 € je Institut)
             </div>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', opacity: 0.9 }}>
               Folgende Banken weisen ein Anlagevolumen über 100.000 € auf:{' '}

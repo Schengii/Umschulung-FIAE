@@ -1,43 +1,89 @@
 import React, { useState } from 'react';
-import type { Portfolio, TaxCountry } from '../types';
+import type { Portfolio, TaxCountry, Holding } from '../types';
 import {
   calculateEnhancedGermanTax,
   calculateVorabpauschaleDetails,
   calculateCryptoFifoTranches,
   calculateDachTax
 } from './performanceUtils';
-import { FileText, Printer, Copy, Check, X, ShieldAlert, Globe } from 'lucide-react';
+import { calculateLossPoolCarryForward } from '../utils/lossPoolCarryForwardUtils';
+import { calculateSwissWealthTax, SWISS_CANTON_WEALTH_TAX_DATA, type SwissCanton } from '../utils/wealthTaxUtils';
+import { calculateTaxWaterfallLiquidation, buildWaterfallBucketsFromPortfolio } from '../utils/taxWaterfallUtils';
+import { FileText, Printer, Copy, Check, X, ShieldAlert, Globe, Scale, ArrowDownCircle, Layers } from 'lucide-react';
 
 interface TaxReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   portfolio: Portfolio;
   taxExemptionLimit: number;
+  holdings?: Holding[];
+  taxCountry?: TaxCountry;
 }
 
 export const TaxReportModal: React.FC<TaxReportModalProps> = ({
   isOpen,
   onClose,
   portfolio,
-  taxExemptionLimit
+  taxExemptionLimit,
+  holdings = [],
+  taxCountry
 }) => {
-  const [selectedCountry, setSelectedCountry] = useState<TaxCountry>(portfolio.stats.taxCountry || 'DE');
+  const [selectedCountry, setSelectedCountry] = useState<TaxCountry>(
+    taxCountry || (localStorage.getItem('finanz_tax_country') as TaxCountry) || 'DE'
+  );
   const [personalTaxRate, setPersonalTaxRate] = useState<number>(18);
   const [enableGuenstiger, setEnableGuenstiger] = useState<boolean>(true);
   const [hasChurchTax, setHasChurchTax] = useState<boolean>(false);
+  const [churchTaxRate, setChurchTaxRate] = useState<number>(9);
+  const [swissCanton, setSwissCanton] = useState<SwissCanton>('ZH');
+  const [isMarried, setIsMarried] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [activeTaxTab, setActiveTaxTab] = useState<'KAP' | 'SO'>('KAP');
+  const [activeTaxTab, setActiveTaxTab] = useState<'KAP' | 'SO' | 'POOLS' | 'WATERFALL'>('KAP');
+  const [targetWithdrawalEur, setTargetWithdrawalEur] = useState<number>(10000);
 
   if (!isOpen) return null;
 
   const currentYear = new Date().getFullYear();
+
+  const lossPoolDetail = calculateLossPoolCarryForward(
+    portfolio.transactions || [],
+    portfolio.taxLossPools?.stockLossPool || 0,
+    portfolio.taxLossPools?.generalLossPool || 0,
+    currentYear
+  );
+
+  // Effective holdings either from props or reconstructed from transactions
+  const effectiveHoldings: Holding[] = holdings.length > 0
+    ? holdings
+    : (portfolio.transactions || []).map(t => ({
+        ticker: t.ticker,
+        name: t.name,
+        category: t.category,
+        shares: t.amount,
+        averageBuyPrice: t.price,
+        currentPrice: t.price,
+        totalCost: t.amount * t.price,
+        currentValue: t.amount * t.price,
+        totalGain: 0,
+        totalGainPercent: 0,
+        portfolioWeight: 0,
+        yieldOnCost: 0,
+        teilfreistellungRate: 0.30
+      }));
+
+  const totalHoldingsValue = effectiveHoldings.reduce((sum, h) => sum + (h.currentValue || 0), 0);
+  const swissWealthTax = calculateSwissWealthTax({
+    totalAssetsChf: totalHoldingsValue,
+    canton: swissCanton,
+    isMarried
+  });
 
   // DACH Tax calculation
   const dachTax = calculateDachTax(
     portfolio.transactions,
     selectedCountry,
     taxExemptionLimit,
-    portfolio.holdings
+    effectiveHoldings
   );
 
   // Enhanced German Tax for DE details
@@ -47,28 +93,13 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
     portfolio.taxLossPools?.stockLossPool || 0,
     portfolio.taxLossPools?.generalLossPool || 0,
     enableGuenstiger ? personalTaxRate : undefined,
-    hasChurchTax
+    hasChurchTax,
+    churchTaxRate
   );
 
   // Vorabpauschale calculation on real holdings
   const vorabpauschaleRes = calculateVorabpauschaleDetails(
-    portfolio.holdings && portfolio.holdings.length > 0
-      ? portfolio.holdings
-      : portfolio.transactions.map(t => ({
-          ticker: t.ticker,
-          name: t.name,
-          category: t.category,
-          shares: t.amount,
-          averageBuyPrice: t.price,
-          currentPrice: t.price,
-          totalCost: t.amount * t.price,
-          currentValue: t.amount * t.price,
-          totalGain: 0,
-          totalGainPercent: 0,
-          portfolioWeight: 0,
-          yieldOnCost: 0,
-          teilfreistellungRate: 0.30
-        })),
+    effectiveHoldings,
     0.0229
   );
   const vorabpauschale = vorabpauschaleRes.totalVorabpauschale;
@@ -260,6 +291,36 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
             >
               🪙 Anlage SO (§ 22/23 EStG Krypto)
             </button>
+            <button
+              onClick={() => setActiveTaxTab('POOLS')}
+              style={{
+                padding: '0.75rem 1.25rem',
+                border: 'none',
+                background: 'transparent',
+                borderBottom: activeTaxTab === 'POOLS' ? '2px solid #10b981' : '2px solid transparent',
+                color: activeTaxTab === 'POOLS' ? '#10b981' : 'var(--text-muted)',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
+            >
+              ⚖️ Verlusttöpfe & Übertrag (§ 20 Abs. 6 EStG)
+            </button>
+            <button
+              onClick={() => setActiveTaxTab('WATERFALL')}
+              style={{
+                padding: '0.75rem 1.25rem',
+                border: 'none',
+                background: 'transparent',
+                borderBottom: activeTaxTab === 'WATERFALL' ? '2px solid #8b5cf6' : '2px solid transparent',
+                color: activeTaxTab === 'WATERFALL' ? '#8b5cf6' : 'var(--text-muted)',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
+            >
+              🌊 Steuer-Kaskade (Entnahme-Plan)
+            </button>
           </div>
         )}
 
@@ -353,15 +414,49 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
                 </div>
               </div>
 
+              {/* Kantonale Vermögenssteuer Simulator */}
               <div style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1.25rem', background: 'rgba(255,255,255,0.02)' }}>
-                <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.9rem', fontWeight: 'bold' }}>Schweizer Steuernachweis & Vermögenssteuer</h4>
-                <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                  {dachTax.details.map((detail, idx) => (
-                    <li key={idx}>{detail}</li>
-                  ))}
-                  <li>Eidg. Verrechnungssteuer (35% VSt): Wird von Schweizer Banken einbehalten und bei korrekter Deklaration im Wertschriftenverzeichnis vollständig rückerstattet.</li>
-                  <li>Vermögenssteuer: Das Gesamtdepot wird zum Steuerwert per 31.12. deklariert (Sätze kantonal ca. 1 bis 5 Promille).</li>
-                </ul>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 'bold', color: '#10b981' }}>
+                    🇨🇭 Kantonale Vermögenssteuer-Kalkulation (ESTV-Tarif 2026)
+                  </h4>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Wohnkanton:</label>
+                    <select
+                      value={swissCanton}
+                      onChange={(e) => setSwissCanton(e.target.value as SwissCanton)}
+                      style={{ padding: '0.3rem 0.6rem', background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 'bold' }}
+                    >
+                      {Object.values(SWISS_CANTON_WEALTH_TAX_DATA).map((c) => (
+                        <option key={c.code} value={c.code}>{c.code} - {c.cantonName} (~{c.averageTaxRatePromille} ‰)</option>
+                      ))}
+                    </select>
+                    <label style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={isMarried} onChange={(e) => setIsMarried(e.target.checked)} />
+                      Verheiratet
+                    </label>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginTop: '0.75rem' }}>
+                  <div style={{ background: 'var(--card-bg)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Freibetrag ({swissWealthTax.cantonName})</span>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{swissWealthTax.allowanceChf.toLocaleString('de-CH')} CHF</div>
+                  </div>
+                  <div style={{ background: 'var(--card-bg)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Steuerbares Vermögen</span>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{swissWealthTax.taxableAssetsChf.toLocaleString('de-CH')} CHF</div>
+                  </div>
+                  <div style={{ background: 'var(--card-bg)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Geschätzte Vermögenssteuer</span>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#10b981' }}>{swissWealthTax.effectiveTaxDueChf.toLocaleString('de-CH')} CHF/Jahr</div>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>~{swissWealthTax.effectiveTaxDueEur.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {swissWealthTax.summaryNote} Eidg. Verrechnungssteuer (35% VSt) wird bei korrekter Deklaration im Wertschriftenverzeichnis voll rückvergütet.
+                </div>
               </div>
             </>
           ) : activeTaxTab === 'KAP' ? (
@@ -390,14 +485,26 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
                   />
                   <label htmlFor="guenstiger" style={{ fontSize: '0.8rem', cursor: 'pointer' }}>Günstigerprüfung anwenden</label>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
-                  <input
-                    type="checkbox"
-                    id="churchTax"
-                    checked={hasChurchTax}
-                    onChange={e => setHasChurchTax(e.target.checked)}
-                  />
-                  <label htmlFor="churchTax" style={{ fontSize: '0.8rem', cursor: 'pointer' }}>Kirchensteuerpflicht (8-9%)</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                      type="checkbox"
+                      id="churchTax"
+                      checked={hasChurchTax}
+                      onChange={e => setHasChurchTax(e.target.checked)}
+                    />
+                    <label htmlFor="churchTax" style={{ fontSize: '0.8rem', cursor: 'pointer' }}>Kirchensteuerpflicht</label>
+                  </div>
+                  {hasChurchTax && (
+                    <select
+                      value={churchTaxRate}
+                      onChange={e => setChurchTaxRate(Number(e.target.value))}
+                      style={{ padding: '0.2rem 0.5rem', background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '0.75rem', color: 'var(--text-main)' }}
+                    >
+                      <option value={9}>9% (Übrige Bundesländer)</option>
+                      <option value={8}>8% (Bayern & Baden-Württemberg)</option>
+                    </select>
+                  )}
                 </div>
               </div>
 
@@ -487,7 +594,7 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
                 </div>
               </div>
             </>
-          ) : (
+          ) : activeTaxTab === 'SO' ? (
             /* Germany - Anlage SO */
             <>
               <div style={{ background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '1rem', borderRadius: '10px' }}>
@@ -551,6 +658,200 @@ export const TaxReportModal: React.FC<TaxReportModalProps> = ({
                   </p>
                 </div>
               </div>
+            </>
+          ) : activeTaxTab === 'POOLS' ? (
+            /* Germany - Verlusttöpfe & Übertrag (§ 20 Abs. 6 EStG) */
+            <>
+              <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '1rem', borderRadius: '10px' }}>
+                <div style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Scale size={16} /> Verlustverrechnungstöpfe & Übertrag (§ 20 Abs. 6 EStG)
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '0.4rem 0 0 0' }}>
+                  Verluste aus Aktien dürfen nach § 20 Abs. 6 Satz 4 EStG nur mit Aktiengewinnen verrechnet werden. Allgemeine Verluste (ETFs, Derivate, Zinsen) dürfen mit allen Erträgen verrechnet werden. Nicht verrechnete Verluste werden unbegrenzt in das Folgejahr vorgetragen.
+                </p>
+              </div>
+
+              {/* Status Töpfe Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Aktien-Verlusttopf Start</span>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#ef4444', marginTop: '0.25rem' }}>
+                    {lossPoolDetail.initialStockLossPoolEur.toFixed(2)} €
+                  </div>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Vortrag aus Vorjahren</span>
+                </div>
+
+                <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Sonstiger Verlusttopf Start</span>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#3b82f6', marginTop: '0.25rem' }}>
+                    {lossPoolDetail.initialGeneralLossPoolEur.toFixed(2)} €
+                  </div>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>ETFs, Anleihen, Optionen</span>
+                </div>
+
+                <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '1rem', borderRadius: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>Ersparte Steuer durch Verrechnung</span>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#10b981', marginTop: '0.25rem' }}>
+                    {lossPoolDetail.totalTaxSavedByLossOffsetEur.toFixed(2)} €
+                  </div>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>26,375% Abgeltungsteuer + Soli</span>
+                </div>
+              </div>
+
+              {/* Detail Offsetting Table */}
+              <div style={{ border: '1px solid var(--border-color)', borderRadius: '10px', overflow: 'hidden' }}>
+                <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.02)', fontWeight: 'bold', fontSize: '0.85rem' }}>
+                  Verrechnungssimulation & Übertrag ins Folgejahr ({currentYear + 1})
+                </div>
+                <div style={{ padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Realisierte Aktiengewinne im laufenden Jahr:</span>
+                    <strong>{lossPoolDetail.stockGainsEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981' }}>
+                    <span>Verrechnet mit Aktien-Verlusttopf:</span>
+                    <strong>-{lossPoolDetail.stockLossesUsedEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '0.4rem' }}>
+                    <span>Sonstige Erträge (ETFs, Fonds, Dividenden, Zinsen):</span>
+                    <strong>{lossPoolDetail.otherGainsEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981' }}>
+                    <span>Verrechnet mit allgemeinem Verlusttopf:</span>
+                    <strong>-{lossPoolDetail.otherLossesUsedEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '0.5rem', fontWeight: 'bold' }}>
+                    <span>Verbleibende steuerpflichtige Kapitalerträge:</span>
+                    <strong>{lossPoolDetail.totalTaxableCapitalGainsEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', padding: '0.5rem', borderRadius: '6px', marginTop: '0.3rem' }}>
+                    <span style={{ color: '#ef4444', fontWeight: 600 }}>Verlustvortrag Aktien in {currentYear + 1}:</span>
+                    <strong style={{ color: '#ef4444' }}>{lossPoolDetail.finalStockLossPoolEur.toFixed(2)} €</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', padding: '0.5rem', borderRadius: '6px' }}>
+                    <span style={{ color: '#3b82f6', fontWeight: 600 }}>Verlustvortrag Sonstiges in {currentYear + 1}:</span>
+                    <strong style={{ color: '#3b82f6' }}>{lossPoolDetail.finalGeneralLossPoolEur.toFixed(2)} €</strong>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* Germany - Steuer-Kaskade (Entnahme-Plan & Steuer-Reihenfolge) */
+            <>
+              <div style={{ background: 'rgba(139, 92, 246, 0.08)', border: '1px solid rgba(139, 92, 246, 0.25)', padding: '1rem', borderRadius: '12px' }}>
+                <div style={{ fontSize: '0.9rem', color: '#a78bfa', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Layers size={18} /> Steuersparende Liquidations-Kaskade (Entnahme-Planung)
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '0.4rem 0 0 0' }}>
+                  Optimierte Verkaufsreihenfolge (Cash &rarr; Verlustpositionen &rarr; Dividenden &rarr; ETF-Gewinne mit Teilfreistellung), um die effektive Steuerlast bei Entnahmen drastisch zu senken.
+                </p>
+              </div>
+
+              {/* Target Input and Calculation */}
+              {(() => {
+                const buckets = buildWaterfallBucketsFromPortfolio(effectiveHoldings, 5000);
+                const waterfallResult = calculateTaxWaterfallLiquidation(buckets, targetWithdrawalEur, Math.max(0, taxExemptionLimit - enhancedTax.taxableGainsFinalEur));
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                      <div>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block' }}>Gewünschte Netto-Auszahlung:</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Betrag, der nach Steuern auf deinem Girokonto ankommen soll</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input
+                          type="number"
+                          step={1000}
+                          min={1000}
+                          value={targetWithdrawalEur}
+                          onChange={(e) => setTargetWithdrawalEur(Math.max(0, Number(e.target.value)))}
+                          style={{
+                            background: 'rgba(0,0,0,0.3)',
+                            border: '1px solid var(--border-color)',
+                            borderRadius: '6px',
+                            color: '#fff',
+                            padding: '0.4rem 0.75rem',
+                            fontWeight: 'bold',
+                            width: '130px',
+                            textAlign: 'right'
+                          }}
+                        />
+                        <span style={{ fontWeight: 'bold', color: 'var(--text-muted)' }}>€</span>
+                      </div>
+                    </div>
+
+                    {/* Metric Cards */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: '10px' }}>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Brutto-Auflösung</span>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', marginTop: '0.25rem' }}>
+                          {waterfallResult.totalGrossLiquidatedEur.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                        </div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Verkaufsvolumen</span>
+                      </div>
+
+                      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: '10px' }}>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Effektiver Steuersatz</span>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: waterfallResult.effectiveTaxRatePercent <= 10 ? '#10b981' : '#f59e0b', marginTop: '0.25rem' }}>
+                          {waterfallResult.effectiveTaxRatePercent.toFixed(1)} %
+                        </div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>statt 26,375 % Abgeltungsteuer</span>
+                      </div>
+
+                      <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '1rem', borderRadius: '10px' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>Steuerersparnis Kaskade</span>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#10b981', marginTop: '0.25rem' }}>
+                          {waterfallResult.taxSavingsVsNaivePercent.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                        </div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>ggü. unüberlegtem Verkauf</span>
+                      </div>
+                    </div>
+
+                    {/* Step-by-Step Liquidation Sequence */}
+                    <div style={{ border: '1px solid var(--border-color)', borderRadius: '10px', overflow: 'hidden' }}>
+                      <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.02)', fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <ArrowDownCircle size={16} color="#8b5cf6" />
+                        Empfohlene Verkaufsreihenfolge (Schritt für Schritt)
+                      </div>
+                      <div style={{ padding: '0.5rem 1rem' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+                          <thead>
+                            <tr style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border-color)', textAlign: 'left' }}>
+                              <th style={{ padding: '0.5rem 0' }}>Priorität & Asset-Topf</th>
+                              <th style={{ padding: '0.5rem 0' }}>Typ</th>
+                              <th style={{ padding: '0.5rem 0', textAlign: 'right' }}>Brutto-Verkauf</th>
+                              <th style={{ padding: '0.5rem 0', textAlign: 'right' }}>Steuerabzug</th>
+                              <th style={{ padding: '0.5rem 0', textAlign: 'right' }}>Netto-Auszahlung</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {waterfallResult.steps.map((st, idx) => (
+                              <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                                <td style={{ padding: '0.5rem 0', fontWeight: 'bold' }}>
+                                  #{idx + 1} {st.bucketName}
+                                </td>
+                                <td style={{ padding: '0.5rem 0', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                                  {st.category}
+                                </td>
+                                <td style={{ padding: '0.5rem 0', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
+                                  {st.withdrawnGrossEur.toFixed(2)} €
+                                </td>
+                                <td style={{ padding: '0.5rem 0', textAlign: 'right', color: st.taxPaidEur > 0 ? '#ef4444' : '#10b981', fontVariantNumeric: 'tabular-nums' }}>
+                                  {st.taxPaidEur.toFixed(2)} €
+                                </td>
+                                <td style={{ padding: '0.5rem 0', textAlign: 'right', fontWeight: 'bold', color: '#10b981', fontVariantNumeric: 'tabular-nums' }}>
+                                  {st.withdrawnNetEur.toFixed(2)} €
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </>
           )}
         </div>

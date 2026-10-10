@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Kubernetes Cluster Topology & Scheduling Engine
  * Simulates K8s Architecture: Control Plane, Nodes, Deployments, ReplicaSets, Pods, Services & Ingress
@@ -100,18 +101,21 @@ export function createInitialCluster() {
 
 /**
  * Scale a Deployment (Reconciliation Loop)
+ * @param {any} cluster
+ * @param {string} deploymentId
+ * @param {number} targetReplicas
  */
 export function scaleDeployment(cluster, deploymentId, targetReplicas) {
   const nextCluster = JSON.parse(JSON.stringify(cluster));
-  const dep = nextCluster.deployments.find(d => d.id === deploymentId);
+  const dep = nextCluster.deployments.find((/** @type {any} */ d) => d.id === deploymentId);
   if (!dep) return cluster;
 
   dep.replicas = Math.max(0, targetReplicas);
-  const currentPods = nextCluster.pods.filter(p => p.deploymentId === deploymentId);
+  const currentPods = nextCluster.pods.filter((/** @type {any} */ p) => p.deploymentId === deploymentId);
 
   if (currentPods.length < targetReplicas) {
     // Add pending pods
-    const readyNodes = nextCluster.nodes.filter(n => n.status === 'Ready');
+    const readyNodes = nextCluster.nodes.filter((/** @type {any} */ n) => n.status === 'Ready');
     for (let i = currentPods.length; i < targetReplicas; i++) {
       const targetNode = readyNodes[i % readyNodes.length] || readyNodes[0];
       const podIndex = Math.floor(Math.random() * 1000).toString(16);
@@ -129,7 +133,7 @@ export function scaleDeployment(cluster, deploymentId, targetReplicas) {
     }
   } else if (currentPods.length > targetReplicas) {
     // Remove excess pods
-    const remainingPods = nextCluster.pods.filter(p => p.deploymentId !== deploymentId);
+    const remainingPods = nextCluster.pods.filter((/** @type {any} */ p) => p.deploymentId !== deploymentId);
     const keptPods = currentPods.slice(0, targetReplicas);
     nextCluster.pods = [...remainingPods, ...keptPods];
   }
@@ -139,19 +143,21 @@ export function scaleDeployment(cluster, deploymentId, targetReplicas) {
 
 /**
  * Simulate Node Failure and Pod Eviction / Rescheduling
+ * @param {any} cluster
+ * @param {string} nodeId
  */
 export function toggleNodeFailure(cluster, nodeId) {
   const nextCluster = JSON.parse(JSON.stringify(cluster));
-  const node = nextCluster.nodes.find(n => n.id === nodeId);
+  const node = nextCluster.nodes.find((/** @type {any} */ n) => n.id === nodeId);
   if (!node) return cluster;
 
   if (node.status === 'Ready') {
     // Node Crashes
     node.status = 'NotReady';
-    const survivingNodes = nextCluster.nodes.filter(n => n.id !== nodeId && n.status === 'Ready');
+    const survivingNodes = nextCluster.nodes.filter((/** @type {any} */ n) => n.id !== nodeId && n.status === 'Ready');
 
     // Evict and reschedule pods
-    nextCluster.pods = nextCluster.pods.map(pod => {
+    nextCluster.pods = nextCluster.pods.map((/** @type {any} */ pod) => {
       if (pod.nodeId === nodeId) {
         if (survivingNodes.length > 0) {
           const newNode = survivingNodes[Math.floor(Math.random() * survivingNodes.length)];
@@ -178,10 +184,12 @@ export function toggleNodeFailure(cluster, nodeId) {
 
 /**
  * Route Ingress HTTP Request to Service and Endpoint Pods (Round-Robin)
+ * @param {any} cluster
+ * @param {string} requestPath
  */
 export function routeIngressRequest(cluster, requestPath) {
-  const matchedRule = cluster.ingress.rules.find(r => requestPath.startsWith(r.path)) || cluster.ingress.rules[cluster.ingress.rules.length - 1];
-  const service = cluster.services.find(s => s.name === matchedRule.serviceName);
+  const matchedRule = cluster.ingress.rules.find((/** @type {any} */ r) => requestPath.startsWith(r.path)) || cluster.ingress.rules[cluster.ingress.rules.length - 1];
+  const service = cluster.services.find((/** @type {any} */ s) => s.name === matchedRule.serviceName);
 
   if (!service) {
     return { success: false, error: '503 Service Unavailable' };
@@ -191,9 +199,9 @@ export function routeIngressRequest(cluster, requestPath) {
   const selectorKey = Object.keys(service.selector)[0];
   const selectorVal = service.selector[selectorKey];
   
-  const matchingDeployments = cluster.deployments.filter(d => d.labels[selectorKey] === selectorVal);
-  const matchingDepIds = matchingDeployments.map(d => d.id);
-  const healthyEndpoints = cluster.pods.filter(p => matchingDepIds.includes(p.deploymentId) && p.status === 'Running');
+  const matchingDeployments = cluster.deployments.filter((/** @type {any} */ d) => d.labels[selectorKey] === selectorVal);
+  const matchingDepIds = matchingDeployments.map((/** @type {any} */ d) => d.id);
+  const healthyEndpoints = cluster.pods.filter((/** @type {any} */ p) => matchingDepIds.includes(p.deploymentId) && p.status === 'Running');
 
   if (healthyEndpoints.length === 0) {
     return {
@@ -207,7 +215,7 @@ export function routeIngressRequest(cluster, requestPath) {
 
   // Pick random healthy pod for load balancing
   const targetPod = healthyEndpoints[Math.floor(Math.random() * healthyEndpoints.length)];
-  const targetNode = cluster.nodes.find(n => n.id === targetPod.nodeId);
+  const targetNode = cluster.nodes.find((/** @type {any} */ n) => n.id === targetPod.nodeId);
 
   return {
     success: true,

@@ -1,7 +1,13 @@
+// @ts-check
 /**
  * OS Process Scheduling & Banker's Algorithm Engine
  */
 
+/**
+ * @param {any[]} processes
+ * @param {string} [algorithm]
+ * @param {number} [quantum]
+ */
 export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
   if (!processes || processes.length === 0) {
     return { timeline: [], avgTurnaround: 0, avgWaiting: 0, cpuUtilization: 0, processStats: [] };
@@ -16,8 +22,8 @@ export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
     priority: Number(p.priority || 1),
     remaining: Number(p.burst || 1),
     color: p.color || '#6366f1',
-    startTime: null,
-    finishTime: null,
+    startTime: /** @type {number|null} */ (null),
+    finishTime: /** @type {number|null} */ (null),
     waitingTime: 0,
     turnaroundTime: 0
   }));
@@ -90,7 +96,7 @@ export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
     const inQueue = new Set();
     procs.sort((a, b) => a.arrival - b.arrival);
 
-    const checkArrivals = (time, executingProcId = null) => {
+    const checkArrivals = (/** @type {number} */ time, /** @type {number|string|null} */ executingProcId = null) => {
       procs.forEach(p => {
         if (p.arrival <= time && p.remaining > 0 && p.id !== executingProcId && !inQueue.has(p.id)) {
           queue.push(p);
@@ -114,7 +120,7 @@ export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
         continue;
       }
 
-      const current = queue.shift();
+      const current = /** @type {any} */ (queue.shift());
       inQueue.delete(current.id);
 
       if (current.startTime === null) current.startTime = currentTime;
@@ -169,8 +175,8 @@ export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
     }
   }
 
-  const totalTurnaround = procs.reduce((acc, p) => acc + (p.turnaroundTime || 0), 0);
-  const totalWaiting = procs.reduce((acc, p) => acc + (p.waitingTime || 0), 0);
+  const totalTurnaround = procs.reduce((/** @type {number} */ acc, p) => acc + (p.turnaroundTime || 0), 0);
+  const totalWaiting = procs.reduce((/** @type {number} */ acc, p) => acc + (p.waitingTime || 0), 0);
   const busyTicks = timeline.filter(t => t.processId !== 'IDLE').length;
   const cpuUtilization = timeline.length > 0 ? (busyTicks / timeline.length) * 100 : 100;
 
@@ -185,6 +191,11 @@ export function simulateScheduler(processes, algorithm = 'FCFS', quantum = 2) {
 
 /**
  * Banker's Algorithm (Bankier-Algorithmus zur Deadlock-Vermeidung)
+ */
+/**
+ * @param {number[]} available
+ * @param {number[][]} maxMatrix
+ * @param {number[][]} allocMatrix
  */
 export function checkBankersSafety(available, maxMatrix, allocMatrix) {
   const numProcesses = allocMatrix.length;
@@ -238,6 +249,13 @@ export function checkBankersSafety(available, maxMatrix, allocMatrix) {
   return { isSafe: true, safeSequence, needMatrix, work };
 }
 
+/**
+ * @param {number} processIdx
+ * @param {number[]} request
+ * @param {number[]} available
+ * @param {number[][]} maxMatrix
+ * @param {number[][]} allocMatrix
+ */
 export function requestBankersResources(processIdx, request, available, maxMatrix, allocMatrix) {
   const numResources = available.length;
   
@@ -258,7 +276,7 @@ export function requestBankersResources(processIdx, request, available, maxMatri
 
   // 3. Pretend to allocate
   const newAvailable = [...available];
-  const newAlloc = allocMatrix.map(row => [...row]);
+  const newAlloc = allocMatrix.map((/** @type {number[]} */ row) => [...row]);
   
   for (let j = 0; j < numResources; j++) {
     newAvailable[j] -= request[j];

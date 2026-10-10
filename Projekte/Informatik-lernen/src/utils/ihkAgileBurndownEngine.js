@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * IHK Agile vs. Waterfall & Sprint Burndown Calculation Engine
  * Designed for IHK Abschlussprüfung Teil 2 (AP2 Teil A Projektarbeit & Dokumentation)
@@ -6,7 +7,16 @@
  */
 
 /**
+ * @typedef {Object} SprintConfig
+ * @property {number} [totalDays]
+ * @property {number} [initialStoryPoints]
+ * @property {number[]} [dailyCompletedPoints]
+ * @property {Array<{ day: number, points: number, reason: string }>} [scopeAdditions]
+ */
+
+/**
  * Standard-Parameter für einen 10-Tage IHK-Entwicklungs-Sprint
+ * @type {SprintConfig}
  */
 export const DEFAULT_SPRINT_CONFIG = {
   totalDays: 10,
@@ -19,8 +29,8 @@ export const DEFAULT_SPRINT_CONFIG = {
 
 /**
  * Berechnet den täglichen Verlauf des Burndown-Charts
- * @param {Object} config - Sprint-Konfiguration
- * @returns {Object} Burndown-Daten mit Ideal-, Ist- und Scope-Kurve
+ * @param {SprintConfig} [config=DEFAULT_SPRINT_CONFIG] - Sprint-Konfiguration
+ * @returns {any} Burndown-Daten mit Ideal-, Ist- und Scope-Kurve
  */
 export function calculateSprintBurndown(config = DEFAULT_SPRINT_CONFIG) {
   const { totalDays = 10, initialStoryPoints = 50, dailyCompletedPoints = [], scopeAdditions = [] } = config;
@@ -88,6 +98,7 @@ export function calculateSprintBurndown(config = DEFAULT_SPRINT_CONFIG) {
 
 /**
  * Kanban WIP (Work-In-Progress) Bottleneck Analyzer
+ * @param {Array<{ id: string, name?: string, wipLimit: number, cardsCount: number }>} columns
  */
 export function analyzeKanbanWipLimits(columns) {
   const analyzed = columns.map(col => {
@@ -154,6 +165,9 @@ export const IHK_METHOD_COMPARISON = [
 
 /**
  * Generiert die offizielle Begründung für die Methodenwahl im IHK-Projektbericht
+ * @param {string} [projectType='hybrid']
+ * @param {{ role?: string, totalHours?: number, projectName?: string }} [options={}]
+ * @returns {string}
  */
 export function generateIhkMethodologyJustification(projectType = 'hybrid', options = {}) {
   const { role = 'FIAE', totalHours = 80, projectName = 'Entwicklung des Moduls' } = options;

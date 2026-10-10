@@ -12,6 +12,7 @@ import {
 } from '../../utils/customChallengesManager';
 
 import { soundManager } from '../../utils/audioSystem';
+import { runTestCasesInSandbox } from '../../utils/sandboxRunner';
 import { useStore } from '../../store/useStore';
 
 export default function CustomChallengeCreatorLab() {
@@ -35,6 +36,7 @@ export default function CustomChallengeCreatorLab() {
   const [testRunFeedback, setTestRunFeedback] = useState(null);
   const [importJsonText, setImportJsonText] = useState('');
   const [showImportModal, setShowImportModal] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     setCustomList(getStoredCustomChallenges());
@@ -66,7 +68,7 @@ export default function CustomChallengeCreatorLab() {
     return parsed;
   };
 
-  const handleTestSolution = () => {
+  const handleTestSolution = async () => {
     setValidationErrors([]);
     setTestRunFeedback(null);
 
@@ -95,29 +97,27 @@ export default function CustomChallengeCreatorLab() {
     }
 
     // Run against solutionCode
-    try {
-      const userFunc = new Function(`${solutionCode}; if (typeof solve === 'function') return solve; throw new Error('Funktion solve() fehlt.');`)();
-      const results = [];
-      let allOk = true;
+    setIsRunning(true);
+    const run = await runTestCasesInSandbox(solutionCode, ['solve'], parsedTC, {
+      missingFunctionMessage: 'Funktion solve() fehlt.'
+    });
+    setIsRunning(false);
 
-      for (let i = 0; i < parsedTC.length; i++) {
-        const tc = parsedTC[i];
-        const res = userFunc(...tc.input);
-        const passed = JSON.stringify(res) === JSON.stringify(tc.expected);
-        if (!passed) allOk = false;
-        results.push({ testIndex: i + 1, passed, actual: res, expected: tc.expected });
-      }
-
-      setTestRunFeedback({ success: true, allOk, results });
-      if (allOk) {
-        soundManager.playSFX('success');
-      } else {
-        soundManager.playSFX('error');
-      }
-    } catch (codeErr) {
-      setTestRunFeedback({ success: false, error: codeErr.message });
+    const codeError = run.success ? run.testResults.find((tr) => tr.error)?.error : run.error;
+    if (codeError) {
+      setTestRunFeedback({ success: false, error: codeError });
       soundManager.playSFX('error');
+      return;
     }
+
+    const results = run.testResults.map((tr) => ({
+      testIndex: tr.testCaseIndex,
+      passed: tr.passed,
+      actual: tr.actual,
+      expected: tr.expected
+    }));
+    setTestRunFeedback({ success: true, allOk: run.allPassed, results });
+    soundManager.playSFX(run.allPassed ? 'success' : 'error');
   };
 
   const handleSave = () => {
@@ -400,9 +400,10 @@ export default function CustomChallengeCreatorLab() {
           <div className="flex gap-3 pt-2">
             <button
               onClick={handleTestSolution}
+              disabled={isRunning}
               className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition"
             >
-              <Play className="w-3.5 h-3.5 fill-slate-200" /> Lösung Prüfen
+              <Play className="w-3.5 h-3.5 fill-slate-200" /> {isRunning ? 'Prüfe…' : 'Lösung Prüfen'}
             </button>
             <button
               onClick={handleSave}

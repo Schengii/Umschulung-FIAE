@@ -1,240 +1,20 @@
 import type { Transaction, Holding } from '../types';
+import {
+  DEFAULT_EXCHANGE_RATES,
+  parseDateString
+} from '../utils/finance/currencyUtils';
 
-export const DEFAULT_EXCHANGE_RATES = {
-  EUR: 1.0,
-  USD: 1.08,
-  CHF: 0.96,
-  GBP: 0.85,
-};
+export {
+  DEFAULT_EXCHANGE_RATES,
+  convertCurrency,
+  parseDateString
+} from '../utils/finance/currencyUtils';
 
-export function convertCurrency(
-  amount: number,
-  from: 'EUR' | 'USD' | 'CHF' | 'GBP',
-  to: 'EUR' | 'USD' | 'CHF' | 'GBP',
-  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
-): number {
-  if (from === to) return amount;
-  // Convert from input currency to EUR
-  const amountInEur = amount / (rateMap[from] || 1.0);
-  // Convert from EUR to target currency
-  return amountInEur * (rateMap[to] || 1.0);
-}
-
-// Convert string date DD.MM.YYYY to Date object
-export function parseDateString(dateStr: string): Date {
-  const parts = dateStr.split('.');
-  if (parts.length === 3) {
-    return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-  }
-  return new Date(dateStr); // Fallback
-}
-
-export function calculateHoldingsFromTransactions(transactions: Transaction[], prices: Record<string, number> = {}): Holding[] {
-  const assetMap: Record<string, { ticker: string; name: string; category: any; shares: number; totalCost: number }> = {};
-
-  transactions.forEach(tx => {
-    if (tx.type === 'DEPOSIT' || tx.type === 'WITHDRAWAL' || tx.type === 'DIVIDEND' || tx.type === 'STAKING') return;
-    if (!assetMap[tx.ticker]) {
-      assetMap[tx.ticker] = {
-        ticker: tx.ticker,
-        name: tx.name,
-        category: tx.category || 'Stock',
-        shares: 0,
-        totalCost: 0
-      };
-    }
-
-    if (tx.type === 'BUY') {
-      assetMap[tx.ticker].shares += tx.amount;
-      assetMap[tx.ticker].totalCost += (tx.amount * tx.price + tx.fee);
-    } else if (tx.type === 'SELL') {
-      const avgCost = assetMap[tx.ticker].shares > 0 ? assetMap[tx.ticker].totalCost / assetMap[tx.ticker].shares : 0;
-      assetMap[tx.ticker].shares = Math.max(0, assetMap[tx.ticker].shares - tx.amount);
-      assetMap[tx.ticker].totalCost = Math.max(0, assetMap[tx.ticker].totalCost - avgCost * tx.amount);
-    }
-  });
-
-  const totalPortfolioValue = Object.values(assetMap).reduce((sum, a) => sum + a.shares * (prices[a.ticker] || (a.shares > 0 ? a.totalCost / a.shares : 0)), 0);
-
-  return Object.values(assetMap)
-    .filter(a => a.shares > 0.00001)
-    .map(a => {
-      const avgBuy = a.shares > 0 ? a.totalCost / a.shares : 0;
-      const currentPrice = prices[a.ticker] || avgBuy;
-      const currentValue = a.shares * currentPrice;
-      const totalGain = currentValue - a.totalCost;
-      const totalGainPercent = a.totalCost > 0 ? (totalGain / a.totalCost) * 100 : 0;
-
-      return {
-        ticker: a.ticker,
-        name: a.name,
-        category: a.category,
-        shares: a.shares,
-        averageBuyPrice: avgBuy,
-        currentPrice,
-        totalCost: a.totalCost,
-        currentValue,
-        totalGain,
-        totalGainPercent,
-        portfolioWeight: totalPortfolioValue > 0 ? (currentValue / totalPortfolioValue) * 100 : 0,
-        yieldOnCost: 0
-      };
-    });
-}
-
-/**
- * Calculates the Internal Rate of Return (IRR / Interner Zinsfuß) using Newton-Raphson method.
- * Cash flows:
- * - DEPOSIT/WITHDRAWAL are the external cash flows.
- * - If none exist, we treat BUY (negative) and SELL/DIVIDEND (positive) as cash flows.
- * - Final portfolio value + cash balance is a positive cash flow at the end.
- */
-export function calculateIRR(
-  transactions: Transaction[],
-  currentPortfolioValue: number,
-  cashBalance: number,
-  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
-): number {
-  const finalValue = currentPortfolioValue + cashBalance;
-  if (finalValue <= 0 || transactions.length === 0) return 0;
-
-  // Determine external cash flows
-  const hasDeposits = transactions.some(tx => tx.type === 'DEPOSIT' || tx.type === 'WITHDRAWAL');
-
-  interface CashFlow {
-    date: Date;
-    amount: number; // Positive = money out of portfolio (return), Negative = money into portfolio (investment)
-  }
-
-  const flows: CashFlow[] = [];
-
-  if (hasDeposits) {
-    // Deposits are negative (money entering portfolio), withdrawals are positive
-    transactions.forEach(tx => {
-      const txDate = parseDateString(tx.date);
-      const rate = tx.exchangeRate || rateMap[tx.currency || 'EUR'] || 1.0;
-      const amountInEur = tx.amount / rate;
-
-      if (tx.type === 'DEPOSIT') {
-        flows.push({ date: txDate, amount: -amountInEur });
-      } else if (tx.type === 'WITHDRAWAL') {
-        flows.push({ date: txDate, amount: amountInEur });
-      }
-    });
-  } else {
-    // Fallback: use BUY (negative), SELL (positive), DIVIDEND (positive)
-    transactions.forEach(tx => {
-      const txDate = parseDateString(tx.date);
-      const rate = tx.exchangeRate || rateMap[tx.currency || 'EUR'] || 1.0;
-      const buyValue = (tx.amount * tx.price + tx.fee) / rate;
-      const sellValue = (tx.amount * tx.price - tx.fee - tx.tax) / rate;
-      const divValue = (tx.amount * tx.price - tx.tax) / rate;
-
-      if (tx.type === 'BUY') {
-        flows.push({ date: txDate, amount: -buyValue });
-      } else if (tx.type === 'SELL') {
-        flows.push({ date: txDate, amount: sellValue });
-      } else if (tx.type === 'DIVIDEND') {
-        flows.push({ date: txDate, amount: divValue });
-      }
-    });
-  }
-
-  if (flows.length === 0) return 0;
-
-  // Sort flows chronologically
-  flows.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-  // Add the final valuation as a positive cash flow today
-  const today = new Date();
-  flows.push({ date: today, amount: finalValue });
-
-  const firstDate = flows[0].date;
-
-  // NPV calculation helper
-  const npv = (rate: number): number => {
-    let sum = 0;
-    for (const flow of flows) {
-      const years = (flow.date.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-      sum += flow.amount / Math.pow(1 + rate, years);
-    }
-    return sum;
-  };
-
-  // Derivative of NPV helper
-  const npvDerivative = (rate: number): number => {
-    let sum = 0;
-    for (const flow of flows) {
-      const years = (flow.date.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-      if (years === 0) continue;
-      sum -= years * flow.amount / Math.pow(1 + rate, years + 1);
-    }
-    return sum;
-  };
-
-  // Newton-Raphson Solver
-  let guess = 0.1; // 10% start guess
-  const maxIterations = 100;
-  const precision = 1e-6;
-
-  for (let i = 0; i < maxIterations; i++) {
-    const fVal = npv(guess);
-    const dVal = npvDerivative(guess);
-    if (Math.abs(dVal) < precision) break;
-
-    const nextGuess = guess - fVal / dVal;
-    if (Math.abs(nextGuess - guess) < precision) {
-      return isNaN(nextGuess) || !isFinite(nextGuess) ? 0 : nextGuess * 100;
-    }
-    guess = nextGuess;
-  }
-
-  return isNaN(guess) || !isFinite(guess) ? 0 : guess * 100;
-}
-
-/**
- * Calculates the Time-Weighted Rate of Return (TTWRR).
- * For simplicity, we approximate TTWRR by daily/monthly sub-period performance.
- */
-export function calculateTTWRR(
-  transactions: Transaction[],
-  currentPortfolioValue: number,
-  cashBalance: number,
-  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
-): number {
-  // Let's approximate using simple return if there are no complex movements,
-  // or calculate the TWR based on deposits.
-  const finalValue = currentPortfolioValue + cashBalance;
-  if (finalValue <= 0) return 0;
-
-  let totalDeposited = 0;
-  const hasDeposits = transactions.some(tx => tx.type === 'DEPOSIT' || tx.type === 'WITHDRAWAL');
-
-  if (hasDeposits) {
-    transactions.forEach(tx => {
-      const rate = tx.exchangeRate || rateMap[tx.currency || 'EUR'] || 1.0;
-      const amountInEur = tx.amount / rate;
-      if (tx.type === 'DEPOSIT') {
-        totalDeposited += amountInEur;
-      } else if (tx.type === 'WITHDRAWAL') {
-        totalDeposited -= amountInEur;
-      }
-    });
-  } else {
-    transactions.forEach(tx => {
-      const rate = tx.exchangeRate || rateMap[tx.currency || 'EUR'] || 1.0;
-      if (tx.type === 'BUY') {
-        totalDeposited += (tx.amount * tx.price + tx.fee) / rate;
-      } else if (tx.type === 'SELL') {
-        totalDeposited -= (tx.amount * tx.price - tx.fee - tx.tax) / rate;
-      }
-    });
-  }
-
-  if (totalDeposited <= 0) return 0;
-  const returnRate = ((finalValue - totalDeposited) / totalDeposited) * 100;
-  return returnRate;
-}
+export {
+  calculateHoldingsFromTransactions,
+  calculateIRR,
+  calculateTTWRR
+} from '../utils/finance/returnCalculations';
 
 /**
  * Calculates Maximum Drawdown
@@ -402,7 +182,7 @@ export function calculateGermanTax(
         date: parseDateString(tx.date),
         amount: tx.amount,
         price: tx.price,
-        fee: tx.fee,
+        fee: tx.fee || 0,
         rate
       });
     } else if (tx.type === 'SELL') {
@@ -426,9 +206,12 @@ export function calculateGermanTax(
           }
         }
 
+        const buyFee = oldestLot.fee || 0;
+        const sellFee = tx.fee || 0;
+
         if (oldestLot.amount <= remainingToSell) {
-          const lotCost = (oldestLot.amount * oldestLot.price + oldestLot.fee) / oldestLot.rate;
-          const lotRev = (oldestLot.amount * tx.price - tx.fee * (oldestLot.amount / tx.amount)) / rate;
+          const lotCost = (oldestLot.amount * oldestLot.price + buyFee) / oldestLot.rate;
+          const lotRev = (oldestLot.amount * tx.price - sellFee * (oldestLot.amount / tx.amount)) / rate;
           const lotGain = lotRev - lotCost;
           
           rawGainForTx += lotGain;
@@ -438,15 +221,15 @@ export function calculateGermanTax(
           lots.shift();
         } else {
           const fraction = remainingToSell / oldestLot.amount;
-          const lotCostFraction = (remainingToSell * oldestLot.price + oldestLot.fee * fraction) / oldestLot.rate;
-          const lotRevFraction = (remainingToSell * tx.price - tx.fee * (remainingToSell / tx.amount)) / rate;
+          const lotCostFraction = (remainingToSell * oldestLot.price + buyFee * fraction) / oldestLot.rate;
+          const lotRevFraction = (remainingToSell * tx.price - sellFee * (remainingToSell / tx.amount)) / rate;
           const lotGainFraction = lotRevFraction - lotCostFraction;
           
           rawGainForTx += lotGainFraction;
           taxableGainForTx += lotGainFraction * (1 - exemptionFactor);
           
           oldestLot.amount -= remainingToSell;
-          oldestLot.fee -= oldestLot.fee * fraction;
+          oldestLot.fee = buyFee - buyFee * fraction;
           remainingToSell = 0;
         }
       }
@@ -455,7 +238,7 @@ export function calculateGermanTax(
       taxableGains += Math.max(0, taxableGainForTx);
     } else if (tx.type === 'DIVIDEND') {
       // Dividends are fully taxable (with ETF exemption if applicable)
-      const divRevenue = ((tx.amount * tx.price) - tx.tax) / rate;
+      const divRevenue = ((tx.amount * tx.price) - (tx.tax || 0)) / rate;
       let exemptionFactor = 0.0;
       if (tx.category === 'ETF') exemptionFactor = 0.30;
       
@@ -1758,8 +1541,15 @@ export interface DividendSafetyScoreItem {
   safetyScore: number; // 0 to 100
   safetyTier: 'SEHR_SICHER' | 'SICHER' | 'MODERAT' | 'RISKANT';
   payoutRatioEstimate: number; // e.g. 45%
+  payoutRatioFcfEstimate: number; // Free cashflow payout ratio
   consecutiveYearsEstimate: number; // e.g. 28 years
   aristocratStatus: 'KING' | 'ARISTOCRAT' | 'CONTENDER' | 'CHALLENGER' | 'NONE';
+  aristocratLabel: string;
+  cagr1y: number;
+  cagr3y: number;
+  cagr5y: number;
+  cagr10y: number;
+  cutRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
 export function calculateDividendSafetyScores(
@@ -1775,42 +1565,95 @@ export function calculateDividendSafetyScores(
 
   return dividendAssets.map(h => {
     const isEtf = h.category === 'ETF';
-    let consecutiveYears = 10;
+    let consecutiveYears = 8;
     let aristocratStatus: DividendSafetyScoreItem['aristocratStatus'] = 'CHALLENGER';
-    let payoutRatio = 50;
+    let payoutRatio = 48;
+    let payoutRatioFcf = 42;
+    let cagr1y = 4.5;
+    let cagr3y = 5.2;
+    let cagr5y = 5.8;
+    let cagr10y = 6.4;
 
     const t = h.ticker.toUpperCase();
-    if (['JNJ', 'PG', 'KO', 'MMM', 'PEP'].includes(t)) {
-      consecutiveYears = 55;
+    if (['JNJ', 'PG', 'KO', 'MMM', 'PEP', 'EMR', 'GPC'].includes(t)) {
+      consecutiveYears = 58;
       aristocratStatus = 'KING';
-      payoutRatio = 60;
-    } else if (['ALV', 'MUV2', 'AAPL', 'MSFT', 'O', 'MCD'].includes(t)) {
-      consecutiveYears = 26;
+      payoutRatio = 62;
+      payoutRatioFcf = 58;
+      cagr1y = 3.8;
+      cagr3y = 4.2;
+      cagr5y = 4.9;
+      cagr10y = 5.6;
+    } else if (['ALV', 'MUV2', 'O', 'MCD', 'IBM', 'CVX', 'ABBV', 'CAT', 'WMT'].includes(t)) {
+      consecutiveYears = 28;
       aristocratStatus = 'ARISTOCRAT';
-      payoutRatio = 45;
+      payoutRatio = 54;
+      payoutRatioFcf = 51;
+      cagr1y = 5.5;
+      cagr3y = 6.2;
+      cagr5y = 6.8;
+      cagr10y = 7.4;
+    } else if (['AAPL', 'MSFT', 'V', 'MA', 'TXN', 'DHR', 'ASML'].includes(t)) {
+      consecutiveYears = 14;
+      aristocratStatus = 'CONTENDER';
+      payoutRatio = 25;
+      payoutRatioFcf = 22;
+      cagr1y = 8.5;
+      cagr3y = 9.8;
+      cagr5y = 10.6;
+      cagr10y = 11.4;
     } else if (isEtf) {
       consecutiveYears = 15;
       aristocratStatus = 'CONTENDER';
       payoutRatio = 95;
+      payoutRatioFcf = 95;
+      cagr1y = 6.0;
+      cagr3y = 6.5;
+      cagr5y = 7.0;
+      cagr10y = 7.5;
     }
 
     // Calculate composite safety score (0-100)
     let safetyScore = 75;
-    if (aristocratStatus === 'KING') safetyScore = 95;
-    else if (aristocratStatus === 'ARISTOCRAT') safetyScore = 88;
-    else if (isEtf) safetyScore = 92;
+    if (aristocratStatus === 'KING') safetyScore = 96;
+    else if (aristocratStatus === 'ARISTOCRAT') safetyScore = 89;
+    else if (aristocratStatus === 'CONTENDER') safetyScore = 84;
+    else if (isEtf) safetyScore = 93;
 
     if (h.yieldOnCost > 8.0 && !isEtf) {
-      safetyScore -= 30; // High yield trap penalty
+      safetyScore -= 35; // High yield trap penalty
+    } else if (payoutRatioFcf > 85 && !isEtf) {
+      safetyScore -= 20;
     }
 
     safetyScore = Math.max(10, Math.min(99, safetyScore));
 
     let safetyTier: DividendSafetyScoreItem['safetyTier'] = 'SICHER';
-    if (safetyScore >= 85) safetyTier = 'SEHR_SICHER';
-    else if (safetyScore >= 70) safetyTier = 'SICHER';
-    else if (safetyScore >= 50) safetyTier = 'MODERAT';
-    else safetyTier = 'RISKANT';
+    let cutRiskLevel: DividendSafetyScoreItem['cutRiskLevel'] = 'LOW';
+
+    if (safetyScore >= 85) {
+      safetyTier = 'SEHR_SICHER';
+      cutRiskLevel = 'LOW';
+    } else if (safetyScore >= 70) {
+      safetyTier = 'SICHER';
+      cutRiskLevel = 'LOW';
+    } else if (safetyScore >= 50) {
+      safetyTier = 'MODERAT';
+      cutRiskLevel = 'MEDIUM';
+    } else {
+      safetyTier = 'RISKANT';
+      cutRiskLevel = 'HIGH';
+    }
+
+    const aristocratLabel = aristocratStatus === 'KING' 
+      ? '👑 Dividenden-König (50+ Jahre)'
+      : aristocratStatus === 'ARISTOCRAT'
+      ? '⭐ Dividenden-Aristokrat (25+ Jahre)'
+      : aristocratStatus === 'CONTENDER'
+      ? '🏆 Dividend Contender (10+ Jahre)'
+      : aristocratStatus === 'CHALLENGER'
+      ? '🌱 Dividend Challenger (5+ Jahre)'
+      : 'Standard Zahler';
 
     return {
       ticker: h.ticker,
@@ -1819,8 +1662,15 @@ export function calculateDividendSafetyScores(
       safetyScore,
       safetyTier,
       payoutRatioEstimate: payoutRatio,
+      payoutRatioFcfEstimate: payoutRatioFcf,
       consecutiveYearsEstimate: consecutiveYears,
-      aristocratStatus
+      aristocratStatus,
+      aristocratLabel,
+      cagr1y,
+      cagr3y,
+      cagr5y,
+      cagr10y,
+      cutRiskLevel
     };
   });
 }
@@ -2997,6 +2847,12 @@ export function calculateDynamicPortfolioRiskMetrics(
           }
         } else if (tx.type === 'DIVIDEND') {
           cash += (tx.amount * tx.price - tx.tax) / rate;
+        } else if (tx.type === 'OPTION_PREMIUM') {
+          cash += (tx.amount * tx.price - (tx.fee || 0) - (tx.tax || 0)) / rate;
+        } else if (tx.type === 'INTEREST' || tx.type === 'RENT_INCOME') {
+          cash += (tx.amount * tx.price - (tx.tax || 0)) / rate;
+        } else if (tx.type === 'MAINTENANCE_EXPENSE' || tx.type === 'FEE') {
+          cash -= (tx.amount * tx.price + (tx.fee || 0)) / rate;
         }
       }
     });
@@ -3104,6 +2960,7 @@ export function calculateDachTax(
     const taxableIncome = totalDividends;
     const estTaxRate = 20.0;
     const taxDue = taxableIncome * (estTaxRate / 100);
+    const totalDepotValue = holdings.reduce((sum, h) => sum + (h.currentValue || 0), 0);
     return {
       country: 'CH',
       countryName: 'Schweiz (Kursgewinne steuerfrei / Dividenden steuerbar)',
@@ -3116,7 +2973,9 @@ export function calculateDachTax(
         `Kapitalgewinne aus Wertschriften des Privatvermögens sind grundsätzlich steuerfrei`,
         `Dividenden & Zinsen unterliegen der regulären Einkommenssteuer (~20% Durchschnittssatz)`,
         `35% Eidg. Verrechnungssteuer (VSt) auf Schweizer Ausschüttungen wird im Steuernachweis voll rückerstattet`,
-        `Gesamtdepotwert unterliegt der kantonalen Vermögenssteuer (ca. 0,2% - 0,5% p.a.)`
+        totalDepotValue > 0
+          ? `Depot-Vermögenssteuer: Bei ${totalDepotValue.toLocaleString('de-CH', { maximumFractionDigits: 0 })} CHF/EUR ca. ${(totalDepotValue * 0.003).toFixed(2)} CHF/EUR kantonale Vermögenssteuer (~0,3%)`
+          : `Gesamtdepotwert unterliegt der kantonalen Vermögenssteuer (ca. 0,2% - 0,5% p.a.)`
       ]
     };
   }
@@ -3126,6 +2985,7 @@ export function calculateDachTax(
   const allowanceRemaining = Math.max(0, allowanceLimitEur - allowanceUsed);
   const taxableAfterAllowance = Math.max(0, totalRawIncome - allowanceUsed);
   const taxDue = taxableAfterAllowance * 0.26375;
+  const etfHoldingsCount = holdings.filter(h => h.category === 'ETF').length;
 
   return {
     country: 'DE',
@@ -3138,7 +2998,9 @@ export function calculateDachTax(
     details: [
       `Abgeltungsteuer: 25,0% + 5,5% Solidaritätszuschlag (= 26,375%)`,
       `Sparer-Pauschbetrag (§ 20 Abs. 9 EStG): ${allowanceLimitEur.toLocaleString('de-DE')} € hinterlegt`,
-      `Teilfreistellung für Aktien-ETFs (30%) und Mischfonds (15%) berücksichtigt`,
+      etfHoldingsCount > 0
+        ? `Teilfreistellung für deine ${etfHoldingsCount} ETFs (Aktienfonds 30%, Mischfonds 15%) berücksichtigt`
+        : `Teilfreistellung für Aktien-ETFs (30%) und Mischfonds (15%) berücksichtigt`,
       `Kryptogewinne nach 1 Jahr Haltefrist steuerfrei (§ 23 EStG)`
     ]
   };

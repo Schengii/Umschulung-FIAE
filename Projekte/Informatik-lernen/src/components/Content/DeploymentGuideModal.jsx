@@ -57,10 +57,10 @@ export default function DeploymentGuideModal({ isOpen, onClose }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
             <strong style={{ fontSize: '1.05rem', color: 'var(--accent-primary)', display: 'block', marginBottom: '4px' }}>
-              1. Deployment auf Vercel (Empfohlen)
+              1. Deployment auf Vercel (Sofort einsatzbereit)
             </strong>
             <p style={{ margin: '0 0 8px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              Verbinde dein GitHub-Repository `Schengii/Informatik-lernen` mit vercel.com. Vercel baut automatisch deine Vite-App bei jedem Push.
+              Verbinde dein GitHub-Repository `Schengii/Informatik-lernen` mit vercel.com. Eine `vercel.json` mit automatischen SPA-Rewrites (alle Routen auf index.html), Cache-Control für PWA-Assets und Security-Headern ist bereits im Projekt hinterlegt.
             </p>
           </div>
 

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * ITIL 4 ITSM & Service Desk Management Simulator Engine
  */
@@ -57,6 +58,11 @@ export const ITSM_INITIAL_TICKETS = [
   }
 ];
 
+/**
+ * @param {string} impact
+ * @param {string} urgency
+ * @returns {string}
+ */
 export function calculatePriorityMatrix(impact, urgency) {
   if (impact === 'High' && urgency === 'High') return 'P1 (Kritisch)';
   if (impact === 'High' || urgency === 'High') return 'P2 (Hoch)';
@@ -64,6 +70,10 @@ export function calculatePriorityMatrix(impact, urgency) {
   return 'P4 (Niedrig)';
 }
 
+/**
+ * @param {{technicalComplexity: number, rollbackFeasibility: number, businessImpact: number}} param0
+ * @returns {{score: number, riskTier: string}}
+ */
 export function evaluateCabRiskScore({ technicalComplexity, rollbackFeasibility, businessImpact }) {
   // Score: 1 - 5 each
   const totalScore = (technicalComplexity * 0.35) + ((6 - rollbackFeasibility) * 0.35) + (businessImpact * 0.30);

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Flame, Calendar, Trophy, Sparkles } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { toLocalDateKey } from '../../utils/storage';
 
 export default function ActivityHeatmapWidget() {
   const { userState } = useStore();
@@ -14,7 +15,7 @@ export default function ActivityHeatmapWidget() {
   for (let i = 363; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0, 10);
+    const dateStr = toLocalDateKey(d);
     const data = activityHistory[dateStr] || { count: 0, xp: 0 };
     days.push({
       date: dateStr,

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PostgreSQL WAL (Write-Ahead Logging) & LSN Replication Lag Engine
  * Calculates 64-bit Log Sequence Number (LSN) offsets, byte-level replication lag,

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden;
+    background: #0a0d14;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  /* Gradient background blobs */
+  .blob1 {
+    position: absolute; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+    top: -150px; left: -100px;
+  }
+  .blob2 {
+    position: absolute; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%);
+    bottom: -100px; right: -50px;
+  }
+  .blob3 {
+    position: absolute; width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%);
+    top: 50px; right: 200px;
+  }
+  /* Grid lines overlay */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  /* Main card */
+  .card {
+    position: relative; z-index: 10;
+    width: 1100px;
+    padding: 52px 60px;
+    border-radius: 24px;
+    border: 1.5px solid rgba(99,102,241,0.35);
+    background: rgba(15,23,42,0.85);
+    backdrop-filter: blur(12px);
+    display: flex; gap: 48px; align-items: center;
+  }
+  /* Left: logo + badge */
+  .left {
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    flex-shrink: 0;
+  }
+  .logo-box {
+    width: 96px; height: 96px; border-radius: 22px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; font-weight: 800;
+    box-shadow: 0 0 40px rgba(99,102,241,0.45);
+    color: #fff;
+  }
+  .badge {
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(16,185,129,0.4);
+    color: #34d399; font-size: 13px; font-weight: 700;
+    padding: 5px 14px; border-radius: 20px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  /* Right: text */
+  .right { flex: 1; min-width: 0; }
+  .eyebrow {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #6366f1; margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 48px; font-weight: 800; line-height: 1.1;
+    color: #f0f4ff; margin-bottom: 18px;
+  }
+  h1 span { color: #6366f1; }
+  .subtitle {
+    font-size: 20px; color: #94a3b8; line-height: 1.5;
+    margin-bottom: 32px;
+  }
+  /* Pill tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag {
+    background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+    color: #a5b4fc; font-size: 13px; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px;
+  }
+  .tag.green {
+    background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);
+    color: #6ee7b7;
+  }
+  .tag.amber {
+    background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3);
+    color: #fcd34d;
+  }
+  /* Stats row */
+  .stats {
+    margin-top: 28px; display: flex; gap: 36px;
+  }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-num { font-size: 28px; font-weight: 800; color: #f0f4ff; }
+  .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+  /* URL bottom */
+  .url {
+    position: absolute; bottom: 24px; right: 52px; z-index: 10;
+    font-size: 13px; color: #475569; font-family: monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="blob1"></div>
+  <div class="blob2"></div>
+  <div class="blob3"></div>
+  <div class="grid"></div>
+
+  <div class="card">
+    <div class="left">
+      <div class="logo-box">&lt;/&gt;</div>
+      <div class="badge">✓ IHK-Standard</div>
+      <div class="badge" style="border-color:rgba(245,158,11,0.4);color:#fcd34d;background:rgba(245,158,11,0.1);">🎮 Gamified</div>
+    </div>
+    <div class="right">
+      <div class="eyebrow">🚀 Interaktive Lernplattform</div>
+      <h1>IT-<span>DevGame</span></h1>
+      <div class="subtitle">Gamifizierte IHK-Prüfungsvorbereitung &amp; IT-Simulatoren-Hub<br>für FIAE, FISI, FIDP, IT-SE und Junior Developer</div>
+      <div class="tags">
+        <span class="tag">Subnetting & VLSM</span>
+        <span class="tag">SQL & Datenbanken</span>
+        <span class="tag green">Kubernetes & Docker</span>
+        <span class="tag">Security & OAuth</span>
+        <span class="tag amber">WISO & Recht</span>
+        <span class="tag">AI & ML</span>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-num">200+</span>
+          <span class="stat-label">Interaktive Labs</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">DSGVO-konform</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">IHK-Berufe</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">Free</span>
+          <span class="stat-label">Open Source</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="url">informatik-lernen.vercel.app</div>
+</body>
+</html>

@@ -1,6 +1,55 @@
+// @ts-check
 /**
  * IHK Nutzwertanalyse (NWA / Scoring-Modell) Calculation Engine
  * Offizieller IHK-Standard für Entscheidungsbegründungen in Projektdokumentationen & AP1/AP2
+ */
+
+/**
+ * @typedef {object} NwaCriterion
+ * @property {string} id
+ * @property {string} name
+ * @property {number} weight
+ * @property {boolean} isKo
+ * @property {number} minScore
+ *
+ * @typedef {NwaCriterion & { normalizedWeight: number }} NwaNormalizedCriterion
+ *
+ * @typedef {object} NwaOption
+ * @property {string} id
+ * @property {string} name
+ * @property {string} description
+ * @property {Record<string, number>} scores
+ *
+ * @typedef {object} NwaCriterionDetail
+ * @property {string} criterionId
+ * @property {string} criterionName
+ * @property {number} rawScore
+ * @property {number} weight
+ * @property {number} normalizedWeight
+ * @property {number} weightedScore
+ *
+ * @typedef {object} NwaKoViolation
+ * @property {string} criterionId
+ * @property {string} criterionName
+ * @property {number} score
+ * @property {number} required
+ *
+ * @typedef {object} NwaEvaluatedOption
+ * @property {string} id
+ * @property {string} name
+ * @property {string} description
+ * @property {number} finalScore
+ * @property {number} utilityPercent
+ * @property {boolean} isDisqualified
+ * @property {NwaKoViolation[]} koViolations
+ * @property {NwaCriterionDetail[]} criterionDetails
+ *
+ * @typedef {object} NwaAnalysisResult
+ * @property {number} totalWeight
+ * @property {boolean} isWeightValid
+ * @property {NwaNormalizedCriterion[]} criteria
+ * @property {NwaEvaluatedOption[]} results
+ * @property {NwaEvaluatedOption | null} bestOption
  */
 
 export const DEFAULT_NWA_CRITERIA = [
@@ -52,6 +101,8 @@ export const DEFAULT_NWA_OPTIONS = [
 
 /**
  * Validiert und normalisiert Kriteriengewichte auf 100%
+ * @param {NwaCriterion[]} [criteria]
+ * @returns {NwaNormalizedCriterion[]}
  */
 export function normalizeWeights(criteria = []) {
   const totalWeight = criteria.reduce((sum, c) => sum + (Number(c.weight) || 0), 0);
@@ -65,6 +116,8 @@ export function normalizeWeights(criteria = []) {
 
 /**
  * Berechnet die Nutzwertanalyse inklusive K.O.-Kriterien Prüfung und Ranking
+ * @param {{ criteria?: NwaCriterion[], options?: NwaOption[] }} input
+ * @returns {NwaAnalysisResult}
  */
 export function calculateNwa({ criteria = DEFAULT_NWA_CRITERIA, options = DEFAULT_NWA_OPTIONS }) {
   const normalizedCriteria = normalizeWeights(criteria);
@@ -74,7 +127,9 @@ export function calculateNwa({ criteria = DEFAULT_NWA_CRITERIA, options = DEFAUL
   const evaluatedOptions = options.map(opt => {
     let weightedScoreSum = 0;
     let maxPossibleScore = 0;
+    /** @type {NwaCriterionDetail[]} */
     const criterionDetails = [];
+    /** @type {NwaKoViolation[]} */
     const koViolations = [];
 
     normalizedCriteria.forEach(crit => {
@@ -141,6 +196,8 @@ export function calculateNwa({ criteria = DEFAULT_NWA_CRITERIA, options = DEFAUL
 
 /**
  * Erzeugt eine formelle IHK-konforme Markdown-Tabelle für den Projektbericht
+ * @param {NwaAnalysisResult} analysisResult
+ * @returns {string}
  */
 export function generateNwaMarkdownReport(analysisResult) {
   const { criteria, results, bestOption } = analysisResult;

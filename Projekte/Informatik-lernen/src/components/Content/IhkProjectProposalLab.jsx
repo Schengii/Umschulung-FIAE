@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { 
   FileCheck2, AlertCircle, CheckCircle2, Clock, 
-  Copy, AlertTriangle 
+  Copy, AlertTriangle, Sparkles, Wand2
 } from 'lucide-react';
 import { 
   evaluateIhkProjectProposal, 
   IHK_PROJECT_OCCUPATIONS, 
   DEFAULT_PROPOSAL_PHASES, 
-  IHK_PROPOSAL_CHECKLIST 
+  IHK_PROPOSAL_CHECKLIST,
+  generateProjectPhasesWizard
 } from '../../utils/ihkProjectProposalEngine';
 import { useStore } from '../../store/useStore';
 
@@ -147,6 +148,37 @@ export default function IhkProjectProposalLab({ onRewardXP }) {
             {occ.name} (max. {occ.maxHours}h)
           </button>
         ))}
+      </div>
+
+      {/* Project Wizard Presets */}
+      <div style={{ background: 'var(--bg-card-hover)', padding: '16px 20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Wand2 size={18} style={{ color: 'var(--accent-primary)' }} />
+          <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Projekt-Assistent (Schnellvorlagen):</span>
+        </div>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => setPhases(generateProjectPhasesWizard(occupationId, 'web_app'))}
+            style={{ fontSize: '0.8rem' }}
+          >
+            <Sparkles size={13} style={{ marginRight: '4px' }} /> Web/App Entwicklung
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => setPhases(generateProjectPhasesWizard(occupationId, 'cloud_migration'))}
+            style={{ fontSize: '0.8rem' }}
+          >
+            <Sparkles size={13} style={{ marginRight: '4px' }} /> Cloud / Migration
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => setPhases(generateProjectPhasesWizard(occupationId, 'etl_pipeline'))}
+            style={{ fontSize: '0.8rem' }}
+          >
+            <Sparkles size={13} style={{ marginRight: '4px' }} /> ETL &amp; DWH Integration
+          </button>
+        </div>
       </div>
 
       {/* Hours Overview Card */}

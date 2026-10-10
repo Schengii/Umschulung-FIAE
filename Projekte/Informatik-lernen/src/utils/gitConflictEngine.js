@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Git 3-Way Merge Conflict Engine
  * Models file versions, conflict marker parsing, and resolutions.
@@ -28,15 +29,32 @@ export const GIT_CONFLICT_SCENARIOS = [
   }
 ];
 
+/**
+ * @param {string} currentText
+ * @param {string} incomingText
+ * @param {string} [currentBranch]
+ * @param {string} [incomingBranch]
+ * @returns {string}
+ */
 export function generateConflictMarkers(currentText, incomingText, currentBranch = 'HEAD', incomingBranch = 'incoming') {
   return `<<<<<<< ${currentBranch} (Aktuelle Änderung)\n${currentText.trim()}\n=======\n${incomingText.trim()}\n>>>>>>> ${incomingBranch} (Eingehende Änderung)`;
 }
 
+/**
+ * @param {string} text
+ * @returns {boolean}
+ */
 export function hasConflictMarkers(text) {
   if (!text) return false;
   return text.includes('<<<<<<<') || text.includes('=======') || text.includes('>>>>>>>');
 }
 
+/**
+ * @param {string} action
+ * @param {string} currentText
+ * @param {string} incomingText
+ * @returns {string}
+ */
 export function resolveConflictAction(action, currentText, incomingText) {
   switch (action) {
     case 'accept_current':

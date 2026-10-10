@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Linux Btrfs / ZFS Copy-on-Write (CoW) & Snapshot Sandbox Engine
  * Simulates Extent-level B-Tree pointers, shared storage blocks, refcounts,
@@ -39,10 +40,12 @@ export function createInitialFileSystemState() {
 
 /**
  * Berechnet Block-Referenzen und Speicherverbrauch (Deduplizierung vs. Physischer Speicher)
+ * @param {any} fsState
  */
 export function calculateStorageMetrics(fsState) {
+  /** @type {Record<string, number>} */
   const refCounts = {};
-  fsState.diskBlocks.forEach(b => {
+  fsState.diskBlocks.forEach((/** @type {any} */ b) => {
     refCounts[b.id] = 0;
   });
 
@@ -50,9 +53,9 @@ export function calculateStorageMetrics(fsState) {
   const allContainers = [...fsState.subvolumes, ...fsState.snapshots];
   let logicalUsageKb = 0;
 
-  allContainers.forEach(container => {
-    container.files.forEach(file => {
-      file.blockIds.forEach(blkId => {
+  allContainers.forEach((/** @type {any} */ container) => {
+    container.files.forEach((/** @type {any} */ file) => {
+      file.blockIds.forEach((/** @type {any} */ blkId) => {
         if (refCounts[blkId] !== undefined) {
           refCounts[blkId]++;
         }
@@ -83,13 +86,13 @@ export function calculateStorageMetrics(fsState) {
 
 /**
  * Erstellt einen atomaren CoW-Snapshot eines Subvolumes
- * @param {Object} fsState - Aktueller FS-Zustand
+ * @param {any} fsState - Aktueller FS-Zustand
  * @param {string} sourceSubvolId - Quell-Subvolume
  * @param {string} snapshotName - Name des Snapshots (z.B. @snapshot-backup)
  * @param {boolean} isReadonly - Schreibgeschützter Snapshot
  */
 export function createSnapshot(fsState, sourceSubvolId, snapshotName, isReadonly = true) {
-  const source = fsState.subvolumes.find(s => s.id === sourceSubvolId);
+  const source = fsState.subvolumes.find((/** @type {any} */ s) => s.id === sourceSubvolId);
   if (!source) {
     throw new Error(`Quell-Subvolume ${sourceSubvolId} nicht gefunden.`);
   }
@@ -102,7 +105,7 @@ export function createSnapshot(fsState, sourceSubvolId, snapshotName, isReadonly
     isSnapshot: true,
     isReadonly,
     createdAt: new Date().toISOString(),
-    files: source.files.map(f => ({
+    files: source.files.map((/** @type {any} */ f) => ({
       name: f.name,
       blockIds: [...f.blockIds],
       sizeKb: f.sizeKb
@@ -118,9 +121,13 @@ export function createSnapshot(fsState, sourceSubvolId, snapshotName, isReadonly
 /**
  * Copy-on-Write Datei-Modifikation:
  * Überschreibt NICHT den existierenden Block, sondern alloziert einen neuen Block!
+ * @param {any} fsState
+ * @param {string} subvolId
+ * @param {string} fileName
+ * @param {string} newContent
  */
 export function modifyFileWithCow(fsState, subvolId, fileName, newContent) {
-  const targetSubvol = fsState.subvolumes.find(s => s.id === subvolId);
+  const targetSubvol = fsState.subvolumes.find((/** @type {any} */ s) => s.id === subvolId);
   if (!targetSubvol) {
     throw new Error(`Subvolume ${subvolId} nicht gefunden.`);
   }
@@ -128,7 +135,7 @@ export function modifyFileWithCow(fsState, subvolId, fileName, newContent) {
     throw new Error('Operation verweigert: Subvolume ist Read-Only!');
   }
 
-  const targetFile = targetSubvol.files.find(f => f.name === fileName);
+  const targetFile = targetSubvol.files.find((/** @type {any} */ f) => f.name === fileName);
   if (!targetFile) {
     throw new Error(`Datei ${fileName} in Subvolume nicht gefunden.`);
   }
@@ -143,11 +150,11 @@ export function modifyFileWithCow(fsState, subvolId, fileName, newContent) {
   };
 
   // Subvolume Pointer wird auf den neuen Block umgeleitet (CoW Delta)
-  const updatedSubvolumes = fsState.subvolumes.map(s => {
+  const updatedSubvolumes = fsState.subvolumes.map((/** @type {any} */ s) => {
     if (s.id !== subvolId) return s;
     return {
       ...s,
-      files: s.files.map(f => {
+      files: s.files.map((/** @type {any} */ f) => {
         if (f.name !== fileName) return f;
         return {
           ...f,
@@ -167,18 +174,21 @@ export function modifyFileWithCow(fsState, subvolId, fileName, newContent) {
 
 /**
  * Führt ein Rollback eines Subvolumes auf den Zustand eines Snapshots durch
+ * @param {any} fsState
+ * @param {string} subvolId
+ * @param {string} snapshotId
  */
 export function rollbackToSnapshot(fsState, subvolId, snapshotId) {
-  const snapshot = fsState.snapshots.find(s => s.id === snapshotId);
+  const snapshot = fsState.snapshots.find((/** @type {any} */ s) => s.id === snapshotId);
   if (!snapshot) {
     throw new Error(`Snapshot ${snapshotId} nicht gefunden.`);
   }
 
-  const updatedSubvolumes = fsState.subvolumes.map(s => {
+  const updatedSubvolumes = fsState.subvolumes.map((/** @type {any} */ s) => {
     if (s.id !== subvolId) return s;
     return {
       ...s,
-      files: snapshot.files.map(f => ({
+      files: snapshot.files.map((/** @type {any} */ f) => ({
         name: f.name,
         blockIds: [...f.blockIds],
         sizeKb: f.sizeKb
@@ -194,12 +204,13 @@ export function rollbackToSnapshot(fsState, subvolId, snapshotId) {
 
 /**
  * Führt einen btrfs scrub zur Erkennung und Reparatur von Bit-Rot (Silent Data Corruption) durch
+ * @param {any} fsState
  */
 export function executeScrub(fsState) {
   const corruptedBlocks = [];
   const repairedBlocks = [];
 
-  const updatedBlocks = fsState.diskBlocks.map(block => {
+  const updatedBlocks = fsState.diskBlocks.map((/** @type {any} */ block) => {
     if (block.corrupted) {
       corruptedBlocks.push(block.id);
       // Btrfs Self-Healing: Aus Parität/Mirror rekonstruieren

@@ -1,9 +1,48 @@
+// @ts-check
 /**
  * IHK WISO Zins- und Zinseszinsrechnung Engine
  * Implements the German interest method (30/360 days), simple interest calculation,
  * compound interest accumulation (Aufzinsung), and discounting (Abzinsung / Barwert).
  */
 
+/**
+ * @typedef {object} SimpleInterestInput
+ * @property {number} [kapital]
+ * @property {number} [zinssatzPercent]
+ * @property {number} [tage]
+ *
+ * @typedef {object} SimpleInterestResult
+ * @property {number} kapital
+ * @property {number} zinssatzPercent
+ * @property {number} tage
+ * @property {number} zinsen
+ * @property {number} endkapital
+ *
+ * @typedef {object} CompoundInterestInput
+ * @property {number} [anfangskapital]
+ * @property {number} [zinssatzPercent]
+ * @property {number} [jahre]
+ *
+ * @typedef {object} CompoundInterestYear
+ * @property {number} jahr
+ * @property {number} zinsenImJahr
+ * @property {number} kapitalEndeJahr
+ *
+ * @typedef {object} CompoundInterestResult
+ * @property {number} anfangskapital
+ * @property {number} zinssatzPercent
+ * @property {number} jahre
+ * @property {number} aufzinsungsfaktor
+ * @property {number} abzinsungsfaktor
+ * @property {number} endkapital
+ * @property {number} gesamtzinsen
+ * @property {CompoundInterestYear[]} yearlyProgression
+ */
+
+/**
+ * @param {SimpleInterestInput} input
+ * @returns {SimpleInterestResult}
+ */
 export function calculateSimpleInterest({
   kapital = 50000,
   zinssatzPercent = 6.0,
@@ -26,6 +65,10 @@ export function calculateSimpleInterest({
   };
 }
 
+/**
+ * @param {CompoundInterestInput} input
+ * @returns {CompoundInterestResult}
+ */
 export function calculateCompoundInterest({
   anfangskapital = 50000,
   zinssatzPercent = 5.0,

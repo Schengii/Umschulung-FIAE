@@ -5,8 +5,12 @@
   "description": "EcoChef - Dein intelligenter KI-Rezept-Zauberer. Koche nachhaltig mit deinen Kühlschrankzutaten.",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage",
+    "e2e": "playwright test",
+    "type-check": "tsc --noEmit && tsc -p api/tsconfig.json --noEmit",
     "dev": "kill-port --port 4444 && webpack serve --mode=development",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production",
+    "analyze": "webpack --mode=production --env analyze"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -20,30 +24,40 @@
     "plugins": {
       "cordova-plugin-camera": {
         "ANDROIDX_CORE_VERSION": "1.6.+"
-      }
+      },
+      "cordova-plugin-network-information": {}
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.3.5",
+    "@types/qrcode-generator": "^0.0.16",
     "baseline-browser-mapping": "^2.10.0",
-    "cordova-android": "^15.0.0",
+    "cordova-android": "^15.1.0",
     "cordova-plugin-camera": "^8.0.0",
-    "css-loader": "7.1.2",
-    "html-webpack-plugin": "5.6.3",
+    "cordova-plugin-network-information": "^3.0.0",
+    "css-loader": "^7.1.5",
+    "dotenv": "^18.0.6",
+    "fake-indexeddb": "^6.2.5",
+    "html-webpack-plugin": "5.6.8",
     "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.5.2",
     "kill-port": "2.0.1",
-    "mini-css-extract-plugin": "2.9.4",
+    "mini-css-extract-plugin": "2.10.2",
     "ts-jest": "^29.4.11",
-    "ts-loader": "9.5.2",
+    "ts-loader": "^9.6.2",
     "typescript": "^5.9.2",
     "url-loader": "^4.1.1",
-    "webpack": "5.101.1",
-    "webpack-cli": "6.0.1",
-    "webpack-dev-server": "5.2.2"
+    "webpack": "^5.111.1",
+    "webpack-bundle-analyzer": "^5.4.0",
+    "webpack-cli": "7.2.3",
+    "webpack-dev-server": "^6.0.0"
   },
   "dependencies": {
-    "@google/genai": "^1.20.0",
-    "lit": "3.3.1"
+    "@google/genai": "^2.27.0",
+    "lit": "^3.3.3",
+    "qrcode-generator": "^2.0.4",
+    "zod": "^4.6.5"
   }
 }

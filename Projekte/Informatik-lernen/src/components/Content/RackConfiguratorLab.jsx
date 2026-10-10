@@ -4,6 +4,8 @@ import { Server, Sparkles, Plus, Trash2 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { RACK_PRESET_DEVICES, calculateRackMetrics } from '../../utils/rackCalculations';
 
+const createInstanceId = () => `inst_${Date.now()}`;
+
 export default function RackConfiguratorLab() {
   const { awardXP } = useStore();
   const [installedDevices, setInstalledDevices] = useState([
@@ -26,7 +28,7 @@ export default function RackConfiguratorLab() {
     }
     const newInst = {
       ...preset,
-      instanceId: `inst_${Date.now()}`
+      instanceId: createInstanceId()
     };
     setInstalledDevices([...installedDevices, newInst]);
     awardXP(15, 'rack_device_added');

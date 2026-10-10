@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * OpenAPI 3.1 & JSON-Schema Contract Testing Engine
  * Validates REST API payloads against JSON Schema 2020-12 / OpenAPI 3.1 specifications,
@@ -56,10 +57,11 @@ export const SAMPLE_OPENAPI_SPEC_V1 = {
 /**
  * Validiert ein JavaScript/JSON-Objekt gegen ein JSON-Schema
  * @param {any} data - Zu testendes Objekt
- * @param {Object} schema - JSON-Schema / OpenAPI Schema Object
+ * @param {any} schema - JSON-Schema / OpenAPI Schema Object
  * @returns {Object} { valid: boolean, errors: Array }
  */
 export function validatePayloadAgainstSchema(data, schema) {
+  /** @type {any[]} */
   const errors = [];
 
   if (!schema) return { valid: true, errors: [] };
@@ -73,7 +75,7 @@ export function validatePayloadAgainstSchema(data, schema) {
 
     // Required fields
     if (Array.isArray(schema.required)) {
-      schema.required.forEach(field => {
+      schema.required.forEach((/** @type {any} */ field) => {
         if (data[field] === undefined || data[field] === null || data[field] === '') {
           errors.push({ field, rule: 'required', message: `Pflichtfeld '${field}' fehlt oder ist leer.` });
         }
@@ -136,8 +138,11 @@ export function validatePayloadAgainstSchema(data, schema) {
 
 /**
  * Analysiert zwei OpenAPI Spezifikationen auf Breaking Changes (Rückwärtsinkompatibilitäten)
+ * @param {any} specOld
+ * @param {any} specNew
  */
 export function detectContractBreakingChanges(specOld, specNew) {
+  /** @type {any[]} */
   const changes = [];
 
   const oldPaths = specOld?.paths || {};
@@ -197,7 +202,7 @@ export function detectContractBreakingChanges(specOld, specNew) {
         // Neu hinzugefügtes Pflichtfeld im RequestBody? -> BREAKING!
         const oldReqFields = oldReqSchema.required || [];
         const newReqFields = newReqSchema.required || [];
-        newReqFields.forEach(field => {
+        newReqFields.forEach((/** @type {any} */ field) => {
           if (!oldReqFields.includes(field)) {
             changes.push({
               type: 'BREAKING',
@@ -263,10 +268,12 @@ export function detectContractBreakingChanges(specOld, specNew) {
 
 /**
  * Generiert ein realistisches Test-Mock Objekt basierend auf einem Schema
+ * @param {any} schema
  */
 export function generateMockPayload(schema) {
   if (!schema || schema.type !== 'object') return {};
 
+  /** @type {Record<string, any>} */
   const mock = {};
   const props = schema.properties || {};
 
@@ -292,6 +299,8 @@ export function generateMockPayload(schema) {
 
 /**
  * Generiert ein TypeScript DTO Interface
+ * @param {string} interfaceName
+ * @param {any} schema
  */
 export function generateTypeScriptDto(interfaceName, schema) {
   if (!schema || schema.type !== 'object') return '';
@@ -307,7 +316,7 @@ export function generateTypeScriptDto(interfaceName, schema) {
     let tsType = 'unknown';
 
     if (p.enum) {
-      tsType = p.enum.map(val => `'${val}'`).join(' | ');
+      tsType = p.enum.map((/** @type {any} */ val) => `'${val}'`).join(' | ');
     } else if (p.type === 'string') {
       tsType = 'string';
     } else if (p.type === 'number') {
