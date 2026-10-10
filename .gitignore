@@ -25,6 +25,7 @@ Projekte/**/dev-dist/
 .lighthouseci/
 .env
 .env.*
+!.env.example
 .DS_Store
 Thumbs.db
 

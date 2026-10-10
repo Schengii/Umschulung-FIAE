@@ -1,0 +1,59 @@
+#!/bin/sh
+# ==============================================================================
+# Git Pre-Commit Hook: Secret- & .env-Schutz
+# ==============================================================================
+# Verhindert das versehentliche Committen von:
+# 1. .env Dateien (außer .env.example)
+# 2. Privaten Schlüsseln (*.pem, id_rsa, etc.)
+# 3. Typischen API-Keys und Token-Mustern (GitHub, OpenAI, AWS, Stripe, Vercel, etc.)
+# ==============================================================================
+
+# 1. Überprüfung auf gestagete .env-Dateien
+STAGED_ENV_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^(\.env|\.env\..+)$' | grep -v '^\.env\.example$')
+
+if [ -n "$STAGED_ENV_FILES" ]; then
+    echo "======================================================================"
+    echo "❌ [PRE-COMMIT ERROR] Verbotene .env-Datei(en) im Commit entdeckt:"
+    echo "$STAGED_ENV_FILES"
+    echo ""
+    echo "Tipp: Verwende .env.example für Repo-Vorlagen. Entferne die Datei aus dem Staging:"
+    echo "      git reset HEAD <datei>"
+    echo "======================================================================"
+    exit 1
+fi
+
+# 2. Überprüfung auf private Key-Dateien
+STAGED_KEY_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -iE '\.(pem|key|pkcs12|pfx|id_rsa|id_ed25519)$')
+
+if [ -n "$STAGED_KEY_FILES" ]; then
+    echo "======================================================================"
+    echo "❌ [PRE-COMMIT ERROR] Private Key- oder Zertifikatsdatei entdeckt:"
+    echo "$STAGED_KEY_FILES"
+    echo "======================================================================"
+    exit 1
+fi
+
+# 3. Überprüfung des Inhalts auf typische Secret- und API-Key-Muster
+# Patterns:
+# - GitHub Tokens: ghp_, gho_, ghu_, ghs_, ghr_
+# - OpenAI / Claude: sk-proj-, sk-ant-
+# - Slack Tokens: xox[baprs]-
+# - AWS Access Keys: AKIA[0-9A-Z]{16}
+# - Private Keys: -----BEGIN (RSA|EC|OPENSSH|DSA|PRIVATE) KEY-----
+# - Generische Tokens im Format: api_key=..., secret=...
+
+SECRET_MATCHES=$(git diff --cached -U0 | grep -E '^\+[ ]*(export[ ]+)?([A-Z0-9_]*(KEY|SECRET|TOKEN|PASSWORD|AUTH)[A-Z0-9_]*[ ]*[:=][ ]*["\x27]?[A-Za-z0-9_\-\.]{16,}["\x27]?|ghp_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9_]{30,}|sk-(proj|ant)-[A-Za-z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z]{10,}|-----BEGIN[ A-Z0-9_-]+KEY-----)' | grep -vE 'your_.*_here|PLACEHOLDER|ghp_your_|sample_token|mock|dummy|xxxx')
+
+if [ -n "$SECRET_MATCHES" ]; then
+    echo "======================================================================"
+    echo "❌ [PRE-COMMIT ERROR] Mögliches Secret / API-Key im gestageten Diff gefunden!"
+    echo "Auszug der betroffenen Zeilen:"
+    echo "$SECRET_MATCHES"
+    echo ""
+    echo "Bitte entferne sensible Daten vor dem Commit oder nutze Platzhalter."
+    echo "Falls es sich um ein False Positive handelt, prüfe die Zeile oder verwende ggf. 'git commit --no-verify'."
+    echo "======================================================================"
+    exit 1
+fi
+
+exit 0
