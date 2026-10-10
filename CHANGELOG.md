@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### CI — Wöchentlicher Sync: CRLF-Altlast in drei CSS-Dateien behoben
+- **Fix**: `assets/css/memory.css`, `assets/css/snake.css` und `Projekte/ManuFaktur/style.css` lagen mit CRLF im Index, obwohl `.gitattributes` `eol=lf` verlangt. Nach dem Checkout galten sie dadurch als geändert, und `peter-evans/create-pull-request` brach im Sync-Workflow mit „local changes would be overwritten“ ab. Die Dateien sind jetzt auf LF normalisiert.
+
 ### CI — Firefox-E2E: `localhost`-Demo-Backends werden ignoriert
 - **Fix**: `all_projects_launch.spec.js` ignorierte nicht erreichbare Demo-Backends (Firefox: „CORS request did not succeed“) nur auf `127.0.0.1`. `BurgenGame` ruft `http://localhost:3001/api/health` auf, was `E2E (firefox)` auf `main` rot machte. Der Filter erlaubt jetzt beide Loopback-Hostnamen (nie den Test-Server-Port 8080).
 
