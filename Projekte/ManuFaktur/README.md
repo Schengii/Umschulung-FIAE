@@ -27,6 +27,12 @@ ManuFaktur/
 ├── Datenschutz.html            # DSGVO-Datenschutzerklärung
 ├── 404.html                    # Fehlerseite
 │
+├── .env.example                # Vorlage für Umgebungsvariablen (Port, Vercel, Web3Forms)
+├── .claudeignore               # Optimierte Ausschlussliste für Claude Code & KI-Assistenten
+├── CHANGELOG.md                # Dokumentation aller Änderungen (Keep a Changelog)
+├── CLAUDE.md                   # Richtlinien & Architekturführung für Claude Code
+├── SECURITY.md                 # Sicherheitsrichtlinien & CSP-/Datenschutzkonzept
+│
 ├── style.css / style.min.css   # Designsystem (Quelle) / minifizierter Build
 ├── Home.js / Home.min.js       # Zentrale Logik (Quelle) / minifizierter Build
 ├── sw.js                       # Service Worker (Offline-Cache)
@@ -153,7 +159,7 @@ ManuFaktur/
 ## 🚀 Veröffentlichungs-Checkliste (Release Readiness)
 
 1. **Release bauen:** `npm run release` zählt die Asset-Version (`?v=N` in allen Seiten und `sw.js`, `CACHE_NAME`) hoch, erzeugt die Sitemap neu und führt `npm run build` aus. Ergebnis inklusive der generierten Dateien committen.
-2. **Prüfen:** `npm test` (Browser-Tests) und `npm run check:gallery` (Werkdaten ↔ HTML ↔ Bilddateien). Die CI prüft zusätzlich, ob alle generierten Dateien zum Quellstand passen.
+2. **Prüfen:** `npm test` (Browser-Tests), `npm run check:gallery` (Werkdaten ↔ HTML ↔ Bilddateien) und `npm run check:secrets` (stellt sicher, dass keine Secrets oder `.env`-Dateien gestagt sind; wird zusätzlich vom Git Pre-Commit Hook erzwungen). Die CI prüft zusätzlich, ob alle generierten Dateien zum Quellstand passen.
 3. **Web3Forms-Key (`Kontakt.html`):** Access-Key ist hinterlegt; Spam-Schutz per Honeypot-Feld (`botcheck`) ist aktiv.
 4. **Deploy-Ausschlüsse:** `archive_sources/` und `assets/imgTxt/` (Rohdaten, ca. 560 MB) sind per `.gitignore` ausgeschlossen und dürfen auch beim manuellen Hochladen nicht mitkopiert werden.
 5. **Rechtstexte prüfen:** Kleinunternehmer-Formulierung (§ 19 UStG) im Impressum und die Hoster-Angabe (Vercel) in der Datenschutzerklärung müssen zum tatsächlichen Stand passen.
@@ -164,6 +170,7 @@ ManuFaktur/
 
 ```bash
 npm install   # einmalig: Build- und Test-Werkzeuge
+cp .env.example .env  # lokale Umgebungsvariablen anlegen (Windows: Copy-Item .env.example .env)
 npm start     # http://localhost:3000 – mit derselben Content-Security-Policy wie live
 ```
 
@@ -186,6 +193,6 @@ Bearbeitet werden nur die Quellen; alles andere erzeugt `npm run build` und wird
 | `npm run build:css` / `build:js` | minifiziert `style.css` / `Home.js` |
 | `npm run csp:update` | berechnet die CSP-Hashes der JSON-LD-Blöcke und schreibt sie in `vercel.json` **und** `.htaccess` |
 
-Weitere Skripte: `npm run release` (Version hochzählen + Sitemap + Build), `npm run version:check`, `npm run check:gallery`, `npm run sitemap`, `npm run images:srcset` (Thumbnails), `npm run images:og` (Link-Vorschaubilder).
+Weitere Skripte: `npm run release` (Version hochzählen + Sitemap + Build), `npm run version:check`, `npm run check:gallery`, `npm run check:secrets` (Secrets- & Pre-Commit-Prüfung), `npm run sitemap`, `npm run images:srcset` (Thumbnails), `npm run images:og` (Link-Vorschaubilder).
 
 **Wichtig:** Die `.min`-Dateien, das Icon-Subset und die Bereiche zwischen `<!-- partial:… -->`/`<!-- generated:… -->` nie von Hand bearbeiten – sie werden beim nächsten Build überschrieben.

@@ -38,70 +38,14 @@ const CodeTypingSpeedrun = lazy(() => import('./components/Games/CodeTypingSpeed
 
 const CareerRoadmap = lazy(() => import('./components/Content/CareerRoadmap'));
 
-
-
-
-// Neue Labs, Simulatoren & Kampagnen Hub
+// Zentrale Labs, Simulatoren & Hubs
 // Lazy: zieht examData (Fragenkatalog) nicht in den Haupt-Chunk
 const MistakeReviewWidget = lazy(() => import('./components/Gamification/MistakeReviewWidget'));
 const LabsDashboard = lazy(() => import('./components/Content/LabsDashboard'));
 const CampaignQuestHub = lazy(() => import('./components/Content/CampaignQuestHub'));
-
-// Next-Gen High-Value Labs & Generatoren
-
-// Brandneue Fach-Labs & PDF-Spickzettel Generator
-
-// Next-Gen Multiplayer & Coding Studios
-
-// v3.8.0 Flagship Simulatoren, Architecture & IHK Power Studios
-
-// v3.9.0 Cryptography & WebAssembly
-
-// v3.10.0 Next-Gen OAuth PKCE, K8s Topology & WebRTC Mesh Studios
-
-// v3.11.0 Next-Gen Memory, Pool, Dunning & Service Mesh
-
-// v3.12.0 Next-Gen Container, Contribution Margin & Token Exchange
-
-// v3.13.0 Next-Gen eBPF, Postgres Flamegraph, ABC/XYZ & WireGuard ZTNA
-
-// v3.14.0 Next-Gen PromQL, Event-Sourcing, Loan & SFU
-
-// v3.15.0 Next-Gen BPFtrace, Postgres WAL, Andler & OpenTelemetry
-
-// v3.16.0 Next-Gen VXLAN, Partitioning, Interest & Kafka Rebalance
-
-// v3.17.0 Next-Gen BGP Anycast, Postgres Fulltext, NPV & gRPC Protobuf
-
-// v3.18.0 IHK Power Labs: NWA, RAID, VLSM & Projektantrag
-// v3.30.0 IHK CPM, UML & IaC Studios
-// v3.31.0 IHK Audio Fachgespräch, Ansible & Web Worker
-// v3.32.0 IHK Präsentations-Timer & GitHub Actions CI/CD
-// v3.33.0 IHK Projekt-Gantt & WebAssembly SIMD Studio
-// v3.34.0 IHK Wirtschaftlichkeit, WebAuthn Passkeys & Systemd Cgroups
-// v3.35.0 TLS 1.3 Replay, IHK Risikoanalyse, eBPF Cilium & Postgres Index Types
-// v3.36.0 DNSSEC, IHK Burndown, Linux Btrfs CoW & OpenAPI Contract
-// v3.43.0 Flagship Labs: BSI IT-Grundschutz, IPv6 SLAAC NDP, WISO Payroll, Study Plan & Certificate
 const IhkStudyPlanLab = lazy(() => import('./components/Content/IhkStudyPlanLab'));
-// v3.44.0 Clean Architecture, Linux NetNS, Multi-Contribution Margin & IHK Weakness Audit
 const IhkWeaknessAuditLab = lazy(() => import('./components/Content/IhkWeaknessAuditLab'));
-// v3.45.0 OAuth Revocation, RAID 6 Galois, SQLite Worker & Zuschlagskalkulation
-// v3.46.0 Linux Capabilities, BGP Path Selection, Maschinenstundensatz & LLM RAG Chunking
-// v3.47.0 Linux PSI Cgroups, NWA Sensitivity, WebRTC ICE & WISO Leverage
-// v3.48.0 Linux MAC/SELinux, DNS Privacy, WISO Liquiditaet & RAG Semantic Cache
-// v3.49.0 JWT Algorithm Confusion & Security Studio
-// v3.50.0 Window Functions, ArgoCD GitOps & Vector Math Studios
-// v3.51.0 SQL Transaction Isolation & DGUV V3 Elektrotechnik Studios
-// v3.52.0 MEP Simulator, WISO Financing & PKI Chain Validator Studios
-// v3.53.0 Routing Dijkstra/STP, HTTP Caching & Exam Readiness Roadmap Studios
-// v3.54.0 SRP Zero-Knowledge & WISO Contract Breach Studios
-// v3.55.0 WISO Company Forms & mTLS Zero-Trust Mesh Studios
-// v3.56.0 WISO Personalbedarfsplanung & OAuth 2.1 RFC 9449 DPoP Security Studios
-// v3.57.0 IHK Proposal Exporter & BGP Anycast DDoS Scrubber Studios
-// v3.58.0 Cloud IAM, SRE SLO Burn, Kafka Consumer Lag & Linux Auditd eBPF Studios
-// v3.59.0 K8s Gateway API, WISO Break-Even Stufe 2 & DNSSEC Rollover Studios
-// v3.60.0 IHK WISO Doppelte Buchführung & BAB Kostenstellenrechnung
-// v3.61.0 IHK WISO Zahlungsverkehr (SEPA, Wechsel, Skonto/Rabatt/Bonus)
+
 import { LAB_REGISTRY, buildRegistryIndex } from './data/labRegistry';
 import { observeAutoLabels } from './utils/a11yAutoLabel';
 import DashboardQuickAccessGrid from './components/Content/DashboardQuickAccessGrid';

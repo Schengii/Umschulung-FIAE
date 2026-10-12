@@ -1,0 +1,29 @@
+# Git Attributes - Standardize line endings and binary handling
+
+# Standardmäßig LF für alle Textdateien erzwingen
+* text=auto eol=lf
+
+# Spezifische Text-Formate
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.env* text eol=lf
+
+# Binärdateien nicht als Text behandeln
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary

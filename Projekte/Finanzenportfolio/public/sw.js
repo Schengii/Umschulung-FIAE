@@ -1,9 +1,8 @@
-const CACHE_NAME = 'finanz-copilot-cache-v2';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+const CACHE_NAME = 'finanz-copilot-cache-v3';
+// Relative zum Service-Worker-Scope: funktioniert im Root (Vercel/Netlify)
+// und im Unterpfad (GitHub Pages: /Finanzenportfolio/).
+const ASSETS_TO_CACHE = ['./', './index.html', './manifest.json'];
+const INDEX_URL = new URL('./index.html', self.registration.scope).href;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -65,7 +64,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // Fallback to index.html for navigation requests when offline
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match(INDEX_URL);
           }
         });
     })

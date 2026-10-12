@@ -12,9 +12,22 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 ### Hinzugefügt (Added)
 - Screenshots (Dashboard, DNS-Privacy-Lab) in `docs/screenshots/` und im README.
 - `LICENSE` (MIT) und Feld `license` in `package.json`; Hinweis im README.
+- `.env`: Lokale Umgebungsvariablen-Vorlage mit Voreinstellungen für Sentry-Monitoring und Vite-Server (in `.gitignore` geschützt).
+- `.claudeignore`: Umfassend erweiterte Ausschlussregeln für Claude Code (Build-Artefakte, E2E-Reports, Token-Optimierung bei großen Lock-/Archivdateien, Medien und Geheimnisse).
+- Claude Code Slash-Commands (`.claude/commands/`): Automatisierte Befehle `/test`, `/verify`, `/new-lab` und `/review` für standardisierte Workflows mit KI-Assistenten.
+- Community- & GitHub-Dateien: `CONTRIBUTING.md` (ausführlicher Leitfaden für Mitwirkende und KI-Assistenten), `SECURITY.md` (Sicherheitsrichtlinien, Sandbox-Modell, Responsible Disclosure), `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1) sowie `.github/ISSUE_TEMPLATE/config.yml`.
+- Git Pre-Commit Security Hook: `.githooks/pre-commit` verhindert zuverlässig das Committen von `.env`-Dateien, privaten Schlüsseln (`*.pem`, `*.key`) sowie API-Keys (Anthropic, OpenAI, GitHub, AWS etc.); in Git aktiviert über `core.hooksPath .githooks` und Script `"prepare"` in `package.json`.
 
 ### Geändert (Changed)
 - Schriften (Inter, Outfit, Fira Code, Atkinson Hyperlegible) werden lokal über `@fontsource/*` ausgeliefert (`src/styles/fonts.css`) statt per `@import` von Google Fonts – keine Drittanbieter-Anfrage mehr, passend zur DSGVO-Aussage im README.
+- `src/App.jsx`: Historische, auskommentierte Versions-Header entfernt und Lazy-Imports der Hubs/Labs übersichtlich gegliedert.
+- `_Projektuebersicht.md`: Versionsstand auf v3.75.0 synchronisiert und Querverweise zu `CONTRIBUTING.md` und `SECURITY.md` ergänzt.
+
+### Entfernt (Removed)
+- `src/App.css`: Unbenutzte Standard-Vite-Template-Styles (185 Zeilen) restlos entfernt.
+- `src/assets/`: Unbenutzte Standard-Assets (`hero.png`, `react.svg`, `vite.svg`) und leeres Verzeichnis entfernt.
+- `src/components/Navigation/AccessibilityToolbar.jsx`: Veraltete, ungenutzte Toolbar-Komponente (189 Zeilen) entfernt (WCAG-Einstellungen sind vollintegrierter Bestandteil von `Navbar.jsx`).
+- `public/icons.svg`: Ungenutztes Icon-Sprite aus altem Starter-Template entfernt.
 
 ### Behoben (Fixed)
 - 43 Komponenten (u. a. `ActivityHeatmapWidget`, `PomodoroTimerWidget`, `AudioSettingsModal` und viele Labs) nutzen Tailwind-Utility-Klassen, für die es kein CSS gab und die daher ungestylt dargestellt wurden. `tailwindcss` + `@tailwindcss/vite` liefern jetzt nur Theme und Utilities (`src/styles/tailwind.css`, ohne Preflight-Reset und ohne `@layer`, damit der Reset in `global.css` die Abstands-Utilities nicht überschreibt); `global.css` bleibt unverändert und wird danach geladen.

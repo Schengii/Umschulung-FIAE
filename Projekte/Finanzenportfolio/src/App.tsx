@@ -8,7 +8,12 @@ import { SavingsSimulator } from './components/SavingsSimulator';
 import { DividendCalendar } from './components/DividendCalendar';
 import { MappingEditor } from './components/MappingEditor';
 import { usePortfolio } from './context/PortfolioContext';
-import { Wallet, PieChart, Activity, Sliders, Eye, FolderOpen, Calendar, Settings, Upload, FileText, RefreshCw, FileSpreadsheet, Sparkles, Building, Layers } from 'lucide-react';
+import {
+  Wallet, PieChart, Activity, Sliders, Eye, FolderOpen, Calendar, Settings,
+  Upload, FileText, RefreshCw, FileSpreadsheet, Sparkles, Building, Layers,
+  Cloud, ShoppingCart, QrCode, Coins, Columns, Search, Landmark, Repeat,
+  Camera, Bell, Grid, Flame, TrendingUp, Scale, DollarSign, Calculator
+} from 'lucide-react';
 import './App.css';
 
 import { RealEstateTracker } from './components/RealEstateTracker';
@@ -35,9 +40,12 @@ import { NetworkStatusIndicator } from './components/NetworkStatusIndicator';
 import { CorrelationHeatmapModal } from './components/CorrelationHeatmapModal';
 import { FireWithdrawalSimulatorModal } from './components/FireWithdrawalSimulatorModal';
 import { SavingsPlanGrowthModal } from './components/SavingsPlanGrowthModal';
+import { VaultUnlockModal } from './components/VaultUnlockModal';
+import { TaxLossHarvestingModal } from './components/TaxLossHarvestingModal';
+import { VorabpauschaleModal } from './components/VorabpauschaleModal';
+import { OptionIncomeTracker } from './components/OptionIncomeTracker';
 import { loadPriceAlerts, savePriceAlerts, checkPriceAlerts } from './utils/alertUtils';
 import type { PriceAlert } from './types';
-import { Cloud, ShoppingCart, QrCode, Coins, Columns, Search, Landmark, Repeat, Camera, Bell, Grid, Flame, TrendingUp } from 'lucide-react';
 
 const BatchPdfUploadModal = lazy(() => import('./components/BatchPdfUploadModal').then(m => ({ default: m.BatchPdfUploadModal })));
 const TaxReportModal = lazy(() => import('./components/TaxReportModal').then(m => ({ default: m.TaxReportModal })));
@@ -45,12 +53,6 @@ const StressTestModal = lazy(() => import('./components/StressTestModal').then(m
 const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })));
 const CsvImportModal = lazy(() => import('./components/CsvImportModal').then(m => ({ default: m.CsvImportModal })));
 const PdfExportModal = lazy(() => import('./components/PdfExportModal').then(m => ({ default: m.PdfExportModal })));
-
-import { VaultUnlockModal } from './components/VaultUnlockModal';
-import { TaxLossHarvestingModal } from './components/TaxLossHarvestingModal';
-import { VorabpauschaleModal } from './components/VorabpauschaleModal';
-import { OptionIncomeTracker } from './components/OptionIncomeTracker';
-import { Scale, DollarSign, Calculator } from 'lucide-react';
 
 function App() {
   const {
