@@ -38,3 +38,10 @@ Thumbs.db
 
 # Visual Studio per-user state (Copilot snapshots/sessions) - never commit
 .vs/
+
+# Laufzeitdaten und Backups (koennen Zugangsdaten und persoenliche Daten enthalten)
+*.sqlite
+*.sqlite3
+*.db
+*.backup
+*.bak
