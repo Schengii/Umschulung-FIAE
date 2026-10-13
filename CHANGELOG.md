@@ -147,6 +147,11 @@ Umsetzung der Verbesserungsliste aus dem Projekt-Audit. Die strukturellen Entsch
 - 16 neue Vitest-Fälle (61 → 77): `resolveAssetPath` für Seiten in `pages/`, Root-Seiten, Windows-Pfadtrenner und durchgereichte URLs; `event-bus` für Nutzdaten, Abmelden, `onceEvent` und Event-Trennung. ESLint kennt `EventTarget` als Global.
 - Service-Worker-Cache auf `umschulung-fiae-v41` angehoben, Precache-Liste enthält `html-utils.js`.
 
+### Fix: Vercel-Deployment schlug seit dem Pre-Commit-Hook fehl
+
+- **Ursache**: `"prepare": "git config core.hooksPath .githooks"` läuft bei jedem `npm install`. Der Vercel-Build hat kein `.git`-Verzeichnis, `git config` bricht dort mit Fehler ab und damit die gesamte Installation. In GitHub Actions gibt es ein `.git`, deshalb blieb die CI grün. Betroffen waren alle Deployments seit Commit `045957b`.
+- **Fix**: `|| true` wie in den übrigen Repos; der Hook wird lokal weiterhin aktiviert.
+
 ## [1.8.0] — 2026-09-28
 
 ### Barrierefreiheit — WCAG-AA-Kontrastfehler auf Amber-Elementen und Playlist-Icon behoben
