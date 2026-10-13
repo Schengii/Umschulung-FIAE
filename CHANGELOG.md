@@ -4,6 +4,11 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Sicherheit: Laufzeitdaten aus dem Repo entfernt
+
+- **Fix**: `db.sqlite` und `db.json.backup` aus `Projekte/Wohnungssuche KI/backend/data/` entfernt (lokale Laufzeitdaten gehören nicht ins Repo).
+- **Schutz**: `.gitignore` schließt `*.sqlite`, `*.sqlite3`, `*.db`, `*.backup` und `*.bak` aus. Der Pre-Commit-Hook erkennt zusätzlich Google/Gemini-API-Keys (`AIza…`).
+
 ### Audit-Runde: Performance, Deployment, PWA-Cache, drei Lernfunktionen, Aufräumen
 
 Umsetzung der Verbesserungsliste aus dem Projekt-Audit. Die strukturellen Entscheidungen stehen in ADR 0008–0011.

@@ -38,11 +38,14 @@ fi
 # - GitHub Tokens: ghp_, gho_, ghu_, ghs_, ghr_
 # - OpenAI / Claude: sk-proj-, sk-ant-
 # - Slack Tokens: xox[baprs]-
+# - Google/Gemini API-Keys: AIza + 35 Zeichen
 # - AWS Access Keys: AKIA[0-9A-Z]{16}
 # - Private Keys: -----BEGIN (RSA|EC|OPENSSH|DSA|PRIVATE) KEY-----
 # - Generische Tokens im Format: api_key=..., secret=...
+# Provider-Tokens (ghp_, sk-, AKIA, AIza, xox) werden an beliebiger Stelle der Zeile erkannt,
+# z. B. auch in JSON ("geminiApiKey": "AIza..."); nur generische Zuweisungen sind am Zeilenanfang verankert.
 
-SECRET_MATCHES=$(git diff --cached -U0 | grep -E '^\+[ ]*(export[ ]+)?([A-Z0-9_]*(KEY|SECRET|TOKEN|PASSWORD|AUTH)[A-Z0-9_]*[ ]*[:=][ ]*["\x27]?[A-Za-z0-9_\-\.]{16,}["\x27]?|ghp_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9_]{30,}|sk-(proj|ant)-[A-Za-z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z]{10,}|-----BEGIN[ A-Z0-9_-]+KEY-----)' | grep -vE 'your_.*_here|PLACEHOLDER|ghp_your_|sample_token|mock|dummy|xxxx')
+SECRET_MATCHES=$(git diff --cached -U0 | grep -E '^\+[ ]*(export[ ]+)?([A-Z0-9_]*(KEY|SECRET|TOKEN|PASSWORD|AUTH)[A-Z0-9_]*[ ]*[:=][ ]*["\x27]?[A-Za-z0-9_\-\.]{16,}["\x27]?|-----BEGIN[ A-Z0-9_-]+KEY-----)|^\+.*(ghp_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9_]{30,}|sk-(proj|ant)-[A-Za-z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_\-]{35}|xox[baprs]-[0-9A-Za-z]{10,})' | grep -vE 'your_.*_here|PLACEHOLDER|ghp_your_|sample_token|mock|dummy|xxxx')
 
 if [ -n "$SECRET_MATCHES" ]; then
     echo "======================================================================"
