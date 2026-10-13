@@ -38,10 +38,12 @@ test('Footer: Sprach-Umschalter wechselt zu Englisch und zurück', async () => {
   const { page, context, errors } = await open('/Home.html');
   await page.click('#lang-toggle-btn');
   assert.equal(await page.getAttribute('html', 'lang'), 'en');
+  await page.waitForFunction(() => /Welcome/.test(document.querySelector('.welcome h1')?.textContent || ''));
   assert.match(await page.textContent('.welcome h1'), /Welcome/);
   // Der Button wird beim Sprachwechsel neu aufgebaut und muss weiter funktionieren.
   await page.click('#lang-toggle-btn');
   assert.equal(await page.getAttribute('html', 'lang'), 'de');
+  await page.waitForFunction(() => /Willkommen/.test(document.querySelector('.welcome h1')?.textContent || ''));
   await context.close();
   assert.deepEqual(errors, []);
 });
@@ -146,9 +148,21 @@ test('Sprachwechsel: nach Englisch und zurück steht wieder exakt der deutsche H
     });
     const before = await snapshot();
     await page.click('#lang-toggle-btn');
+    // Die Übersetzung wird asynchron angewendet (beim ersten Wechsel erst nach dem Nachladen der
+    // englischen Texte) - auf die Änderung warten statt sofort zu vergleichen (sonst Race/Flake).
+    await page.waitForFunction(
+      (german) => document.querySelector('main').textContent !== german,
+      before.text,
+      { timeout: 10000 }
+    ).catch(() => {});
     const english = await snapshot();
     assert.notEqual(english.text, before.text, `${path}: Englisch unterscheidet sich nicht`);
     await page.click('#lang-toggle-btn');
+    await page.waitForFunction(
+      (german) => document.querySelector('main').textContent === german,
+      before.text,
+      { timeout: 10000 }
+    ).catch(() => {});
     assert.deepEqual(await snapshot(), before, `${path}: deutscher Text hat sich verändert`);
     await context.close();
   }

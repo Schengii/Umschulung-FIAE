@@ -270,19 +270,20 @@ Der **FinanzPortfolio CoPilot** ist eine moderne, datenschutzorientierte Client-
 2. **AES-GCM 256-Bit**: Der lokale Tresor wird mit einem kryptographisch sicheren Schlüssel (abgeleitet via PBKDF2 mit Salt) verschlüsselt.
 3. **Inaktivitäts-Timer**: Nach definierter Zeitspanne ohne Benutzerinteraktion wird das System automatisch gesperrt.
 4. **Wiederherstellung**: Export und Import vollverschlüsselter Backup-Dateien sowie versionierte Snapshots vor Massenimporten.
+5. **🛡️ Git Pre-Commit Hook**: Ein aktiver Pre-Commit Hook (`.githooks/pre-commit`) verhindert das versehentliche Committen von `.env`-Dateien oder API-Keys.
 
 ---
 
 ## 🚦 Entwicklungs- & Testbefehle
 
 ```bash
-# 1. Abhängigkeiten installieren
+# 1. Abhängigkeiten installieren (aktiviert automatisch .githooks via prepare-Script)
 npm install
 
 # 2. Entwicklungs-Server starten
 npm run dev
 
-# 3. Automatisierte Vitest Unit-Tests ausführen (81 Tests in 12 Test-Suites)
+# 3. Automatisierte Vitest Unit-Tests ausführen (123 Tests in 29 Test-Suites)
 npm run test
 
 # 4. TypeScript-Typen prüfen

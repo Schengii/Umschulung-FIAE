@@ -31,6 +31,9 @@ npm run dev
 # Vollständige Test-Suite ausführen (Anzahl wächst laufend – exakte Zahl steht in README.md)
 npm test
 
+# Schneller Testlauf ohne die langsamen A11y- und Routing-Tests (allLabsA11y, *.routing.test.jsx)
+npm run test:fast
+
 # Test-Coverage-Report erzeugen (Statements/Branches/Functions/Lines)
 npm run test:coverage
 
@@ -58,7 +61,13 @@ npm run build
 npm run preview
 ```
 
-CI-Reihenfolge: `lint:ci` → `typecheck` → `test` → `test:coverage` → `build` → `size` → `e2e`.
+CI-Reihenfolge: `lint:ci` → `typecheck` → `test` → `test:coverage` → `build` → `size` → `e2e`. Zusätzlich läuft ein separater Lighthouse-CI-Job (`lighthouserc.json`) gegen den Build.
+
+### 🤖 Claude Code Slash-Befehle (`.claude/commands/`)
+- `/test`: Führt vitest im schnellen oder vollständigen Modus aus und analysiert Fehler.
+- `/verify`: Validiert die vollständige 5-stufige CI-Pipeline vor Commits.
+- `/new-lab`: Schritt-für-Schritt-Anleitung für die Erstellung neuer IHK-Lernmodule inkl. Scaffolding.
+- `/review`: Strukturiertes Review bezüglich Entkopplung, WCAG 2.1 AA A11y, Sandbox-Sicherheit und Doku.
 
 ---
 
@@ -87,6 +96,9 @@ CI-Reihenfolge: `lint:ci` → `typecheck` → `test` → `test:coverage` → `bu
    - Vom Nutzer eingegebener oder importierter JavaScript-Code wird nie per `new Function`/`eval` im Haupt-Thread ausgeführt, sondern über `runInSandbox` bzw. `runTestCasesInSandbox` aus `src/utils/sandboxRunner.js` (Web Worker mit Zeitlimit, ohne Zugriff auf DOM, Speicher und Netzwerk). In Unit-Tests gibt es keinen Worker: dort `{ createWorker: createInlineSandboxWorker }` aus `src/utils/sandboxTestUtils.js` übergeben; das echte Worker-Verhalten prüft `e2e/sandbox-and-settings.spec.js`.
 10. **Anzeige-Einstellungen**:
    - Theme und Barrierefreiheits-Optionen liegen getrennt vom Spielstand unter `informatik_game_ui_prefs_v1` (`src/utils/uiPreferences.js`). Neue Einstellungen dieser Art im Store über `setUiPreference` setzen, damit sie einen Reload überstehen.
+11. **Sicherheit & Git Pre-Commit Hook**:
+   - Der Pre-Commit Hook (`.githooks/pre-commit`, aktiviert über `core.hooksPath .githooks` und `npm run prepare`) blockiert automatisch das Committen von `.env`-Dateien, privaten Schlüsseln sowie echten API-Keys und Tokens (Anthropic `sk-ant-*`, OpenAI, GitHub, AWS etc.).
+   - Weder Entwickler noch KI-Assistenten dürfen vertrauliche Daten oder Zugangsdaten in Git einchecken. Konfigurationsvariablen gehören ausschließlich in `.env` (git-ignoriert) und als leere Dokumentationsvorlage nach `.env.example`.
 
 ---
 

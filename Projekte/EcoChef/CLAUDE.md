@@ -94,14 +94,23 @@ Einzelnes Playwright-Spec: `npx playwright test e2e/tabs.e2e.ts` (Specs heißen 
 - Dev-Key: `GEMINI_API_KEY` aus `.env` wird per DefinePlugin eingebettet. Playwright startet den Dev-Server mit `ECOCHEF_NO_DEV_KEY=1`, damit gemockte E2E-Tests den Proxy nutzen; echte Läufe mit `LIVE_AI=1 npx playwright test ...`.
 - CI prüft zusätzlich `npm audit --omit=dev --audit-level=high`. Ein voller `npm audit` zeigt weiterhin Meldungen, die nur Dev-/Build-Werkzeuge betreffen (Jest-Toolchain, `cordova-android`); die vorgeschlagenen Fixes wären Downgrades und werden nicht übernommen. Die Vercel-Typen liegen lokal in `api/vercel-types.ts` (kein `@vercel/node` mehr).
 
-### Weitere Doku
-`README.md` (Features), `FACHLICHE_DOKUMENTATION.md` (Fachlogik), `BENUTZERANLEITUNG.md` (Nutzersicht).
+### Weitere Doku & Projektdateien
+- [README.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/README.md) (Features & Überblick)
+- [CHANGELOG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/CHANGELOG.md) (Versionshistorie nach Keep a Changelog)
+- [CONTRIBUTING.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/CONTRIBUTING.md) (Mitwirkungs- und Workflow-Leitfaden für Devs & KI)
+- [SECURITY.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/SECURITY.md) (Sicherheitsrichtlinie & Schwachstellenmeldung)
+- [FACHLICHE_DOKUMENTATION.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/FACHLICHE_DOKUMENTATION.md) (Detaillierte Fach- & Architekturlogik)
+- [BENUTZERANLEITUNG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/BENUTZERANLEITUNG.md) (Nutzersicht & Bedienungsanleitung)
 
 ---
 
 ## Code & Quality Guidelines
 
-### 1. API Keys & Sicherheit
+### 1. API Keys, Secrets & Pre-Commit Hook
+- **Automatischer Schutz durch Pre-Commit Hook:**
+  - Im Repository ist ein aktiver Git Hook unter [.githooks/pre-commit](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/.githooks/pre-commit) eingerichtet (`git config core.hooksPath .githooks`).
+  - Der Hook führt [.githooks/check-secrets.js](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/.githooks/check-secrets.js) aus und bricht Commits sofort ab, falls `.env`-Dateien oder API-Keys (Gemini `AIza...`, OpenAI, Private Keys etc.) gestaged wurden.
+  - Manueller Check: `npm run check:secrets`.
 - **NIEMALS** API-Keys im Code committen oder hardcoden!
 - `GEMINI_API_KEY` aus `.env` wird nur im Dev-Build injiziert; Produktions-Bundles enthalten keinen Key und nutzen den Proxy (`api/gemini.ts`) oder den vom Nutzer in den Einstellungen hinterlegten Key (Standard: nur Sitzung).
 - Alle Daten von außen (KI-Antworten, Importe, QR, Sync) werden mit den zod-Schemas aus `models/schemas.ts` validiert; Nutzertext im Prompt immer über `prompt-safety.ts`.
@@ -109,7 +118,7 @@ Einzelnes Playwright-Spec: `npx playwright test e2e/tabs.e2e.ts` (Specs heißen 
 ### 2. Lit Components & TypeScript
 - Verwende strikte Typisierung (`noImplicitAny`).
 - Dekoriere Lit-Properties sauber (`@property`, `@state`).
-- Styles immer in `static styles = css\`...\`` kapseln, um Shadow-DOM-Isolierung und Theme-Variablen zu wahren.
+- Styles immer in `static styles = css`...`` kapseln, um Shadow-DOM-Isolierung und Theme-Variablen zu wahren.
 - Nutze responsive CSS (Mobile First, da primär Mobile/Cordova App).
 
 ### 3. AI & Prompt Engineering (`gemini.service.ts`)
@@ -117,6 +126,11 @@ Einzelnes Playwright-Spec: `npx playwright test e2e/tabs.e2e.ts` (Specs heißen 
 - Validiere und fange Parsing-Fehler robust ab (Fallback auf benutzerfreundliche Fehlermeldungen).
 - Behalte Temperatur und Token-Limits für Rezepterzeugung im Auge.
 
-### 4. Git & Commits
+### 4. Git, Vercel & Release-Workflow
 - Konventionelle Commit-Messages bevorzugen (`feat: ...`, `fix: ...`, `docs: ...`, `refactor: ...`).
-- Keine generierten Dateien (`dist/`, `www/`, `node_modules/`, `platforms/`) committen.
+- Keine generierten Dateien (`dist/`, `www/`, `node_modules/`, `platforms/`, `.vercel/`) committen.
+- Der Git Hook (.githooks/) schützt vor Fehlern; bei Problemen `git reset HEAD <datei>` ausführen.
+- Bei jedem Feature oder Fix den Eintrag in [CHANGELOG.md](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/CHANGELOG.md) unter `[Unreleased]` festhalten.
+- Pull Requests folgen dem Template in `.github/pull_request_template.md`.
+- Vercel-Deployments werden durch [.vercelignore](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/.vercelignore) optimiert; Claude-Sitzungen durch [.claudeignore](file:///c:/Users/sche-/Desktop/Programmieren%20Projekte/EcoChef/.claudeignore).
+

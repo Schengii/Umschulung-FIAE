@@ -5,8 +5,8 @@ tags:
   - tech/react
   - domain/ihk-ausbildung
   - status/active
-version: v3.73.0
-date: 2026-10-06
+version: v3.75.0
+date: 2026-10-10
 ---
 
 # 💻 Informatik-lernen (IT-DevGame) - Projektübersicht
@@ -18,7 +18,9 @@ date: 2026-10-06
 - [[CHANGELOG|📝 Versions- & Änderungshistorie (CHANGELOG.md)]]
 - [[CLAUDE|🛠️ Entwickler- & KI-Leitfaden für Claude (CLAUDE.md)]]
 - [[GEMINI|🤖 Entwickler- & KI-Leitfaden für Gemini & Antigravity (GEMINI.md)]]
-- `.gitignore`, `.gitattributes` & `.claudeignore`
+- [[CONTRIBUTING|🤝 Beitragsleitfaden für Mitwirkende (CONTRIBUTING.md)]]
+- [[SECURITY|🛡️ Sicherheitsrichtlinien (SECURITY.md)]]
+- `.gitignore`, `.gitattributes`, `.claudeignore` & `.githooks/pre-commit`
 
 ---
 

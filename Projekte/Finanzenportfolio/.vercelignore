@@ -1,0 +1,25 @@
+# Vercel Deployment Ignore (.vercelignore)
+# Dateien und Ordner, die beim Vercel-Build nicht hochgeladen werden müssen
+
+# Versionskontrolle & CI
+.git
+.github
+
+# Dokumentation & AI-Konfigurationen
+CLAUDE.md
+GEMINI.md
+CHANGELOG.md
+README.md
+.claudeignore
+
+# Tests & Test-Konfigurationen
+vitest.config.ts
+coverage/
+src/components/__tests__/
+
+# Lokale Entwicklung & Logs
+.env.local
+.env.*.local
+*.log
+.vscode
+.idea

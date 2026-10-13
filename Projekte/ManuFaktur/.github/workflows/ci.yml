@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Repository auschecken
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Node.js einrichten
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
@@ -25,6 +25,9 @@ jobs:
 
       - name: JavaScript linten (ESLint)
         run: npm run lint
+
+      - name: Auf sensible Secrets und .env-Dateien prüfen
+        run: node scripts/check-secrets.js --all
 
       - name: Produktions-Build & CSP-Hashes generieren
         run: npm run build
@@ -49,10 +52,10 @@ jobs:
 
     steps:
       - name: Repository auschecken
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Node.js einrichten
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'

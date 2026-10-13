@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Dokumentation & Leitfaden
+    url: https://github.com/Schengii/Informatik-lernen/blob/main/docs/LABS.md
+    about: Übersicht aller 229+ interaktiven IHK-Lernmodule und Labs.
+  - name: 🤝 Leitfaden für Mitwirkende (Contributing)
+    url: https://github.com/Schengii/Informatik-lernen/blob/main/CONTRIBUTING.md
+    about: Richtlinien für Code, Tests, Barrierefreiheit und Lab-Erstellung.
+  - name: 💬 GitHub Discussions & Fragen
+    url: https://github.com/Schengii/Informatik-lernen/discussions
+    about: Diskutiere neue Features, stelle Fragen oder tausche dich über IHK-Prüfungsthemen aus.

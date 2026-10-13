@@ -18,6 +18,7 @@ Interaktive Lernplattform und Prüfungsvorbereitung für Fachinformatiker (FIAE,
 - [DSGVO & Datenschutz](#-dsgvo--datenschutz)
 - [Installation & Befehle](#-installation--befehle)
 - [Neues Lab anlegen](#-neues-lab-anlegen)
+- [Zusammenarbeit mit Claude & GitHub](#-zusammenarbeit-mit-claude--github)
 - [Dokumentation & Änderungshistorie](#-dokumentation--änderungshistorie)
 
 ## 🎯 Überblick
@@ -36,7 +37,9 @@ Die **vollständige, automatisch erzeugte Lab-Liste** steht in [`docs/LABS.md`](
 ```
 Informatik-lernen/
 ├── .agents/AGENTS.md          Regeln für KI-Agenten
-├── .github/                   CI-Workflow, Dependabot, Issue-/PR-Templates
+├── .claude/                   Claude Code Einstellungen & Slash-Befehle (/test, /verify, /new-lab, /review)
+├── .githooks/pre-commit       Sicherheits-Hook (blockiert .env-Dateien & API-Keys)
+├── .github/                   CI-Workflow, Dependabot, Issue-/PR-Templates, config.yml
 ├── docs/                      LABS.md (generiert), README-Archiv.md (alte Feature-Historie bis v3.74.0)
 ├── e2e/                       Playwright-Tests (Smoke, A11y, PWA, Sandbox, Lab-Interaktionen)
 ├── public/                    Statische Assets, PWA-Icons
@@ -47,8 +50,14 @@ Informatik-lernen/
 │   ├── store/                 Zustand-Store (useStore.js) mit LocalStorage-/IndexedDB-Persistenz
 │   ├── styles/global.css      CSS-Variablen-Design-System
 │   └── utils/                 *Engine.js (reine Logik) + *.test.js, storage, sandboxRunner, uiPreferences
+├── .claudeignore              Token- und Datenschutz-Ausschlüsse für Claude Code & CLI
+├── .env / .env.example        Lokale Umgebungsvariablen (Sentry DSN, Port etc.)
 ├── CHANGELOG.md               Änderungen (Keep a Changelog)
 ├── CLAUDE.md / GEMINI.md      Leitfäden für KI-Assistenten
+├── CONTRIBUTING.md            Entwickler- & Beitragsleitfaden
+├── SECURITY.md                Sicherheitsrichtlinien & Responsible Disclosure
+├── CODE_OF_CONDUCT.md         Contributor Covenant Verhaltenskodex
+├── LICENSE                    MIT-Lizenz
 ├── _Projektuebersicht.md      Projektübersicht
 └── vite.config.js, vercel.json, playwright.config.js, tsconfig.json, .oxlintrc.json
 ```
@@ -99,14 +108,37 @@ npm run new-lab -- RaidLevel "RAID-Level Studio" hardware Intermediate
 
 Das Skript erzeugt Engine, Engine-Test und Lab-Komponente und trägt das Lab am Anfang von `labRegistry.js` und `labModulesData.js` ein. Danach: Engine/UI ausarbeiten, Beschreibung/Tags/Icon anpassen, `npm run docs:labs`, `CHANGELOG.md` und `_Projektuebersicht.md` ergänzen. Details: [CLAUDE.md](CLAUDE.md).
 
+## 🤖 Zusammenarbeit mit Claude & GitHub
+
+Das Repository ist für nahtlose Zusammenarbeit mit Entwicklern und KI-Agenten (insbesondere Anthropic Claude Code und GitHub Actions) optimiert:
+
+- **Umgebungskonfiguration (`.env` & `.env.example`)**: Zentrale Verwaltung optionaler Umgebungsvariablen (wie `VITE_SENTRY_DSN`). `.env` ist in `.gitignore` geschützt.
+- **Token- & Kontext-Optimierung (`.claudeignore`)**: Schließt Build-Artefakte, Playwright-Reports, große Lockfiles (`package-lock.json`), Medien und historische Archive (`README-Archiv.md`) vom KI-Kontext aus, um Latenz und Token-Verbrauch drastisch zu senken.
+- **Claude Slash-Commands (`.claude/commands/`)**:
+  - `/test`: Führt Unit- und Integrationstests gezielt aus und analysiert Testergebnisse.
+  - `/verify`: Prüft die komplette 5-stufige CI-Qualitätspipeline (`lint:ci` → `typecheck` → `test` → `build` → `size`).
+  - `/new-lab`: Führt durch das Scaffolding und die Erstellung neuer IHK-Module inkl. Tests und Registrierung.
+  - `/review`: Überprüft geänderten Code auf Architekturstandards, WCAG 2.1 AA A11y und Security.
+- **Sicherheits-Pre-Commit-Hook (`.githooks/pre-commit`)**: Scannt gestagte Dateien und Diffs vor jedem Commit. Blockiert zuverlässig `.env`-Dateien, private Schlüssel (`*.pem`, `*.key`) und versehentlich eingefügte API-Keys (z. B. Anthropic `sk-ant-*`, OpenAI, GitHub PATs, AWS). Automatisch in Git aktiviert via `npm run prepare` (`git config core.hooksPath .githooks`).
+- **GitHub Community Standards**:
+  - [`CONTRIBUTING.md`](CONTRIBUTING.md): Detaillierter Leitfaden für Mitwirkende und KI-Assistenten.
+  - [`SECURITY.md`](SECURITY.md): Richtlinien für Responsible Disclosure und Schutz der Web-Worker-Sandbox.
+  - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md): Verhaltenskodex nach Contributor Covenant 2.1.
+  - Issue- und PR-Templates (`.github/`): Vorlagen für Bug-Reports, Lab-Requests und Qualitäts-Checklisten.
+
 ## 📝 Dokumentation & Änderungshistorie
 
 - Änderungen je Version: [`CHANGELOG.md`](CHANGELOG.md)
 - Lab-Übersicht: [`docs/LABS.md`](docs/LABS.md)
+- Beitragsleitfaden: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Sicherheitsrichtlinien: [`SECURITY.md`](SECURITY.md)
 - Ausführliche Feature-Beschreibungen und Änderungshistorie bis v3.74.0: [`docs/README-Archiv.md`](docs/README-Archiv.md)
 
-### Aktuelle Version (v3.75.0)
+### Aktuelle Version (v3.75.0) & Unveröffentlichte Optimierungen
 
+- **Projekt- & Code-Bereinigung**: Entfernung ungenutzter Starter-Template-Dateien (`src/App.css`, `src/assets/`, `public/icons.svg`), Eliminierung toter Komponenten (`AccessibilityToolbar.jsx`) und Verschlankung von `App.jsx`.
+- **Sicherheit & Git Pre-Commit Hook**: Automatischer Secret- und .env-Scanner in `.githooks/pre-commit` (in Git aktiviert über `core.hooksPath .githooks` und `npm run prepare`).
+- **Claude- & GitHub-Integration**: `.env`, umfassend erweiterte `.claudeignore`, Claude Slash-Commands (`/test`, `/verify`, `/new-lab`, `/review`), `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` und Issue-Template-Konfiguration.
 - **Dokumentation**: README von rund 2100 auf wenige Dutzend Zeilen verschlankt; frühere Fassung unverändert unter `docs/README-Archiv.md`.
 - **Tooling**: `npm run new-lab` (Lab-Scaffold) und `npm run docs:labs` (automatisch erzeugte Lab-Liste).
 

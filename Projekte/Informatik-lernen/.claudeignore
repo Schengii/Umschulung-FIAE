@@ -1,21 +1,86 @@
-# Dependencies & Build Artifacts
+# ==============================================================================
+# .claudeignore - Ausschlüsse für Claude Code & Claude CLI
+# ==============================================================================
+# Verhindert unnötigen Token-Verbrauch, Kontext-Überladung und Schutz von Geheimnissen.
+
+# ------------------------------------------------------------------------------
+# 1. Abhängigkeiten & Build-Artefakte
+# ------------------------------------------------------------------------------
 node_modules/
 dist/
+dist-ssr/
 dev-dist/
 build/
 coverage/
+.lighthouseci/
 
-# Logs & Runtime
+# ------------------------------------------------------------------------------
+# 2. Test- & E2E-Ergebnisse (Playwright, Vitest)
+# ------------------------------------------------------------------------------
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# ------------------------------------------------------------------------------
+# 3. Geheimnisse & Umgebungsvariablen
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.local
+*.pem
+*.key
+*.cert
+
+# ------------------------------------------------------------------------------
+# 4. Grosse Archive & Lock-Dateien (Token-Optimierung)
+# ------------------------------------------------------------------------------
+# package-lock.json enthält über 450 KB JSON; Claude benötigt für Code-Arbeit meist nur package.json
+package-lock.json
+# Historisches README-Archiv (> 300 KB Text)
+docs/README-Archiv.md
+
+# ------------------------------------------------------------------------------
+# 5. Binärdateien & Medien
+# ------------------------------------------------------------------------------
+docs/screenshots/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.ico
+*.mp3
+*.wav
+*.pdf
+*.zip
+*.tar.gz
+
+# ------------------------------------------------------------------------------
+# 6. Logs & Laufzeit-Ausgaben
+# ------------------------------------------------------------------------------
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# System & IDE
+# ------------------------------------------------------------------------------
+# 7. IDE & Betriebssystem
+# ------------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Git
+# ------------------------------------------------------------------------------
+# 8. Git
+# ------------------------------------------------------------------------------
 .git/
