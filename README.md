@@ -1,5 +1,10 @@
 # Entwickler-Dokumentation & Projekt-Leitfaden — Umschulung FIAE
 
+[![CI](https://github.com/Schengii/Umschulung-FIAE/actions/workflows/ci.yml/badge.svg)](https://github.com/Schengii/Umschulung-FIAE/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/badge/Live-max--schenk.tech-2ea44f)](https://max-schenk.tech)
+[![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](#)
+[![PWA](https://img.shields.io/badge/PWA-offline--f%C3%A4hig-5a0fc8)](https://max-schenk.tech)
+
 Herzlich willkommen im zentralen Portfolio-Repository zur Umschulung als **Fachinformatiker für Anwendungsentwicklung (FIAE)** von Maximilian Schenk.
 
 Diese Anleitung beschreibt den strukturellen Aufbau des Projekts, die Software-Architektur, die Daten-Pipelines sowie die barrierefreien Kernfunktionen. Sie dient als Einstiegshilfe für Entwickler und Prüfer, um sich schnell im Projekt zurechtzufinden.
@@ -218,7 +223,7 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 ## 🌟 Veröffentlichungs-Zusammenfassung (Release 2026)
 
 - **Über 20 Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
-- **WCAG 2.1 AAA Accessibility**: Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
+- **WCAG 2.1 AA Accessibility** (axe-core in der CI; Hochkontrast-Modus mit 7:1): Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
 - **Automatisierte Tests**: Playwright-E2E-Suite in vier Browser-Profilen plus Vitest-Unit-Tests für die Kernlogik (`npm test`, `npm run test:unit`).
 - **Lernwerkzeuge**: Lernkarten mit echter Wiederholungsplanung, IHK-Prüfungssimulation mit Zeitlimit und Auswertung je Themengebiet, Git-Simulator mit sechs Leveln, Export/Import des Lernfortschritts.
