@@ -124,7 +124,7 @@ Die [main.js](assets/js/main.js) wartet auf das Event `fiae:layout-ready` (Heade
 - Keine externen Tracking-Dienste oder Cookies – vollständige DSGVO-Konformität.
 
 ### 3b. Sensible Bewerbungsdaten (Gehalt & Zeugnisse)
-Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf der Seite angezeigt. `lebenslauf.html` verweist stattdessen auf eine formlose Anfrage per E-Mail. Eine frühere Version blendete diese Inhalte hinter einem clientseitigen Token (`fiae2026`) ein — das war lediglich eine XOR-Verschleierung ohne echten Zugriffsschutz (der Schlüssel lag im Klartext im ausgelieferten JavaScript) und wurde entfernt, da für öffentlich verlinkte Bewerbungsunterlagen ein "auf Anfrage"-Hinweis der ehrlichere und sicherere Weg ist.
+Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf der Seite angezeigt. `lebenslauf.html` verweist stattdessen auf eine formlose Anfrage per E-Mail. Eine frühere Version blendete diese Inhalte hinter einem clientseitigen Token ein — das war lediglich eine XOR-Verschleierung ohne echten Zugriffsschutz (der Schlüssel lag im Klartext im ausgelieferten JavaScript) und wurde entfernt, da für öffentlich verlinkte Bewerbungsunterlagen ein "auf Anfrage"-Hinweis der ehrlichere und sicherere Weg ist.
 
 ### 3c. Lokale Drittanbieter-Ressourcen & Datenschutz
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
