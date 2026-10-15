@@ -4,6 +4,10 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+### Lizenz
+
+- **Neu**: `LICENSE` (MIT) hinzugefügt, damit die Nutzungsrechte am Repo klar geregelt sind.
+
 ### Sicherheit: Laufzeitdaten aus dem Repo entfernt
 
 - **Fix**: `db.sqlite` und `db.json.backup` aus `Projekte/Wohnungssuche KI/backend/data/` entfernt (lokale Laufzeitdaten gehören nicht ins Repo).
