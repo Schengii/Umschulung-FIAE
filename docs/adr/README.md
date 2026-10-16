@@ -19,6 +19,7 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0009](0009-font-awesome-als-generiertes-subset.md) | Font Awesome als generiertes Subset | Akzeptiert |
 | [0010](0010-cache-name-aus-inhalts-hash.md) | Cache-Name des Service Workers aus einem Inhalts-Hash | Akzeptiert |
 | [0011](0011-git-simulator-engine-als-eigenes-modul.md) | Git-Simulator: Logik als DOM-freie Engine | Akzeptiert |
+| [0012](0012-unterprojekt-sync-strategie.md) | Synchronisations-Strategie für Unterprojekte (REPO_MAPPING und preserve-Listen) | Akzeptiert |
 
 Hinweis zu 0001 und 0005: Beide beschreiben einen Stand, in dem die Produktion den unminifizierten Repo-Root auslieferte. Das gilt seit 0008 nicht mehr; die übrigen Aussagen (kein Bundler, keine Pfad-Umschreibung, Skriptname `build:dist`) bleiben gültig.
 
