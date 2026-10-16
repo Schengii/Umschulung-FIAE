@@ -27,8 +27,6 @@ const pages = [
     'pages/projekt-detail.html?repo=EcoChef',
     'pages/quiz.html',
     'pages/snake.html',
-    'Projekte/CoOpVersusGame/coop-versus-demo.html',
-    'Projekte/java-playground.html',
 ];
 
 test.beforeEach(async ({ page }) => {

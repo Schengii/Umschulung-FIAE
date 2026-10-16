@@ -18,97 +18,11 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Amazon-2.0",
-    "updatedAt": "2026-10-12T11:37:09.520Z",
+    "updatedAt": "2026-10-16T19:01:55.185Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
     ]
-  },
-  {
-    "repoName": "BurgenGame",
-    "titleDe": "🏰 BurgenGame — Interaktives 2D-Aufbaustrategiespiel",
-    "titleEn": "🏰 BurgenGame — Interactive 2D Strategy Game",
-    "tags": [
-      "HTML5 Canvas",
-      "CSS3",
-      "Vanilla JS (ES6)",
-      "Game Loop",
-      "Persistence"
-    ],
-    "image": "assets/images/burgen_showcase.webp",
-    "images": [
-      "assets/images/burgen_showcase.webp",
-      "assets/images/burgen_gameplay.webp"
-    ],
-    "link": "Projekte/BurgenGame/index.html",
-    "descDe": "Ein vollständig im Browser spielbares 2D-Aufbaustrategiespiel mit Canvas-Rendering, dynamischen Ressourcen-Zyklen, Bau- und Upgradelogik für Gebäude, feindlichen Angriffswellen und persistenter Spielstand-Speicherung.",
-    "descEn": "A fully in-browser 2D city-builder strategy game featuring canvas rendering, dynamic resource cycles, building upgrade logic, enemy attack waves, and persistent save states.",
-    "category": "games",
-    "language": "JavaScript",
-    "codeFiles": [
-      {
-        "name": "index.html",
-        "path": "Projekte/BurgenGame/index.html",
-        "type": "html"
-      },
-      {
-        "name": "main.js",
-        "path": "Projekte/BurgenGame/js/core/main.js",
-        "type": "javascript"
-      },
-      {
-        "name": "canvas.js",
-        "path": "Projekte/BurgenGame/js/core/canvas.js",
-        "type": "javascript"
-      },
-      {
-        "name": "state.js",
-        "path": "Projekte/BurgenGame/js/core/state.js",
-        "type": "javascript"
-      },
-      {
-        "name": "ui.js",
-        "path": "Projekte/BurgenGame/js/core/ui.js",
-        "type": "javascript"
-      }
-    ],
-    "architectureBadges": [
-      {
-        "name": "HTML5 60FPS Canvas",
-        "color": "#f59e0b"
-      },
-      {
-        "name": "Dedicated Web Worker AI",
-        "color": "#8b5cf6"
-      },
-      {
-        "name": "State Machine & Reducer",
-        "color": "#10b981"
-      },
-      {
-        "name": "IndexedDB / LocalStorage",
-        "color": "#0284c7"
-      }
-    ],
-    "keyLearnings": {
-      "challengeDe": "Ruckelfreie 60 FPS Darstellung von Hunderten Truppen & Gebäuden bei gleichzeitiger Ausführung komplexer KI-Bot-Entscheidungen im Hintergrund.",
-      "challengeEn": "Maintaining smooth 60 FPS rendering with hundreds of active units and buildings while running complex AI bot heuristics in the background.",
-      "solutionDe": "Auslagerung der CPU-intensiven KI-Bot-Berechnungen in einen isolierten Web Worker und Implementierung eines optimierten Canvas-Schichten-Renderers mit Delta-Time Interpolation.",
-      "solutionEn": "Offloaded CPU-heavy AI bot decisions to an isolated Web Worker and implemented a layered 2D Canvas renderer with delta-time interpolation.",
-      "architectureHighlightsDe": [
-        "Dedizierter Web Worker für asynchrone AI-Bot-Berechnungen",
-        "Kompakter Reducer-basierter State Manager",
-        "Isometrisches Tile- & Grid-Kollisionssystem"
-      ],
-      "architectureHighlightsEn": [
-        "Dedicated Web Worker for asynchronous AI Bot calculations",
-        "Compact Reducer-based State Manager",
-        "Isometric tile & grid collision resolution"
-      ]
-    },
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/BurgenGame",
-    "updatedAt": "2026-10-12T11:37:09.615Z"
   },
   {
     "repoName": "EcoChef",
@@ -250,7 +164,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
-    "updatedAt": "2026-10-02T15:51:15Z",
+    "updatedAt": "2026-10-16T19:01:55.583Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -275,7 +189,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-10-12T11:37:09.875Z",
+    "updatedAt": "2026-10-16T19:01:55.813Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -300,35 +214,10 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-10-11T10:42:52Z",
+    "updatedAt": "2026-10-16T15:25:24Z",
     "images": [
       "assets/images/finanzenportfolio_showcase.webp",
       "assets/images/analytics_showcase.webp"
-    ]
-  },
-  {
-    "repoName": "Glücksspiel",
-    "titleDe": "🎰 Glücksspiel — Casual Games Plattform",
-    "titleEn": "🎰 Glücksspiel — Casual Mini Games Suite",
-    "tags": [
-      "Vanilla JavaScript",
-      "Web Audio API",
-      "LocalStorage",
-      "CSS3 Animations",
-      "Game Design"
-    ],
-    "image": "assets/images/gluecksspiel_showcase.webp",
-    "link": "Projekte/Glücksspiel/index.html",
-    "descDe": "Eine bunte, animierte Casino-Spiele-Plattform mit klassischen Casual-Mini-Spielen wie Spielautomaten (Slots), Roulette, Plinko, Mines und dem Zauberkessel (Cauldron). Das Projekt zeichnet sich durch flüssige CSS-Animationen, Soundeffekte und ein lokales Guthaben-Management aus.",
-    "descEn": "A vibrant casino mini-games platform featuring slots, roulette, plinko, mines, and cauldron. The project features smooth CSS animations, retro sound effects, and persistent local balance tracking.",
-    "category": "games",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Glücksspiel",
-    "updatedAt": "2026-10-12T11:37:10.043Z",
-    "images": [
-      "assets/images/gluecksspiel_showcase.webp",
-      "assets/images/game_leaderboard.webp"
     ]
   },
   {
@@ -412,32 +301,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-12T09:40:34Z"
-  },
-  {
-    "repoName": "Jobsuche",
-    "titleDe": "💼 Jobsuche — PWA Stellenportal",
-    "titleEn": "💼 Jobsuche — PWA Job Board",
-    "tags": [
-      "HTML5 / CSS3",
-      "Vanilla JS",
-      "REST Integration",
-      "PWA / Offline",
-      "Job Board"
-    ],
-    "image": "assets/images/jobsuche_showcase.webp",
-    "link": "Projekte/Jobbsuche/index.html",
-    "descDe": "Jobsuche ist ein PWA-basiertes Stellenportal für Webentwickler. Es ermöglicht das Suchen, Filtern und Speichern von Jobangeboten. Dank PWA-Technologie können gemerkte Stellen offline eingesehen werden, und Push-Benachrichtigungen informieren über neue Angebote.",
-    "descEn": "Jobsuche is a PWA job board for web developers. It allows users to search, filter, and save job postings. Thanks to PWA technologies, saved jobs are readable offline, and push notifications alert you about new listings.",
-    "category": "web",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Jobsuche",
-    "updatedAt": "2026-10-12T11:37:10.311Z",
-    "images": [
-      "assets/images/jobsuche_showcase.webp",
-      "assets/images/analytics_showcase.webp"
-    ]
+    "updatedAt": "2026-10-16T13:03:15Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -458,93 +322,9 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-12T05:25:33Z",
+    "updatedAt": "2026-10-16T10:12:27Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
-      "assets/images/analytics_showcase.webp"
-    ]
-  },
-  {
-    "repoName": "Maps",
-    "titleDe": "🗺️ Maps — GPS Navigations-App (React Native)",
-    "titleEn": "🗺️ Maps — GPS Navigation App (React Native)",
-    "tags": [
-      "React Native",
-      "Expo",
-      "TypeScript",
-      "GPS / Navigation",
-      "Offline-Routing",
-      "AR-Navigation"
-    ],
-    "image": "assets/images/maps_showcase.webp",
-    "link": "Projekte/Maps/maps-showcase.html",
-    "descDe": "Vollständige React-Native-Navigations-App mit Echtzeit-GPS, Verkehrs-Alerts, Offline-Routing, AR-Navigation, KI-Reiseführer, Wetterradar, E-Ladesäulen, GPX-Track-Export, Group-Ride, Indoor-Maps und CarPlay-/Android-Auto-Integration. DSGVO-konform mit eigenem Einwilligungs-Management.",
-    "descEn": "Full-featured React Native navigation app with real-time GPS, traffic alerts, offline routing, AR navigation, AI tour guide, weather radar, EV charging POIs, GPX track export, group ride, indoor maps, and CarPlay/Android Auto integration. GDPR-compliant with dedicated consent management.",
-    "category": "apps",
-    "language": "TypeScript",
-    "codeFiles": [
-      {
-        "name": "App.tsx",
-        "path": "Projekte/Maps/App.tsx",
-        "type": "typescript"
-      },
-      {
-        "name": "HomeScreen.tsx",
-        "path": "Projekte/Maps/src/screens/HomeScreen.tsx",
-        "type": "typescript"
-      },
-      {
-        "name": "MapViewComponent.tsx",
-        "path": "Projekte/Maps/src/components/MapViewComponent.tsx",
-        "type": "typescript"
-      },
-      {
-        "name": "GdprBanner.tsx",
-        "path": "Projekte/Maps/src/components/GdprBanner.tsx",
-        "type": "typescript"
-      }
-    ],
-    "architectureBadges": [
-      {
-        "name": "React Native / Expo",
-        "color": "#0ea5e9"
-      },
-      {
-        "name": "Context API + Hooks",
-        "color": "#8b5cf6"
-      },
-      {
-        "name": "Offline-Routing Engine",
-        "color": "#10b981"
-      },
-      {
-        "name": "AR Camera Overlay",
-        "color": "#f59e0b"
-      }
-    ],
-    "keyLearnings": {
-      "challengeDe": "Gleichzeitige Verwaltung von GPS-Updates, Routing-Berechnungen, Karten-Tile-Downloads und UI-Animationen ohne spürbare Performance-Einbußen auf Mittelklasse-Mobilgeräten.",
-      "challengeEn": "Simultaneously managing GPS updates, routing calculations, map tile downloads, and UI animations without noticeable performance degradation on mid-range mobile devices.",
-      "solutionDe": "Service-Layer mit klarer Aufgabentrennung: adaptives GPS-Sampling, Offline-Routing-Engine als isolierter Service, LRU-Tile-Cache und Context-basierte Zustandsverteilung ohne Prop-Drilling.",
-      "solutionEn": "Strict service-layer separation: adaptive GPS sampling, isolated offline routing engine, LRU tile cache, and context-based state distribution eliminating prop-drilling.",
-      "architectureHighlightsDe": [
-        "Zwei Context Provider (Location, Navigation) als globale State-Schicht",
-        "20+ spezialisierte Komponenten und Modals für jede Feature-Domäne",
-        "Offline-fähiges Tile-Caching mit LRU-Eviction",
-        "DSGVO-Einwilligungs-Management als eigene Komponente"
-      ],
-      "architectureHighlightsEn": [
-        "Two Context Providers (Location, Navigation) as global state layer",
-        "20+ specialized components and modals for each feature domain",
-        "Offline-capable tile caching with LRU eviction",
-        "GDPR consent management as a standalone component"
-      ]
-    },
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Maps",
-    "updatedAt": "2026-10-12T11:37:10.579Z",
-    "images": [
-      "assets/images/maps_showcase.webp",
       "assets/images/analytics_showcase.webp"
     ]
   },
@@ -584,136 +364,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft",
-    "updatedAt": "2026-10-12T11:37:10.679Z"
-  },
-  {
-    "repoName": "Minecraft-Pokemon",
-    "titleDe": "🐉 Minecraft-Pokémon Voxel RPG (Godot 4 & C#)",
-    "titleEn": "🐉 Minecraft-Pokémon Voxel RPG (Godot 4 & C#)",
-    "tags": [
-      "Godot Engine 4",
-      "C# (.NET)",
-      "3D Voxel Engine",
-      "RPG Battle System",
-      "Breeding & Riding",
-      "Pokédex"
-    ],
-    "image": "assets/images/minecraft_pokemon_showcase.webp",
-    "images": [
-      "assets/images/minecraft_pokemon_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "Projekte/Minecraft-Pokemon/index.html",
-    "descDe": "Ein Crossover-RPG in Godot 4 mit C#: Vereint Voxel-Bau und Survival von Minecraft mit dem Pokémon-Sammelsystem. Features: 21 Spezies, Tag-/Nacht-Spawns (Nachtara & Psiana), Wesen & Natures, rundenbasierter Kampf, Mega-Evolutionen, Zucht-Pension, Land-/Flug-Reiten, Live-Minimap HUD und JSON-Savegames.",
-    "descEn": "A voxel crossover RPG built in Godot 4 with C#. Combines Minecraft building and survival with Pokémon capture mechanics. Features 21 species, day/night spawns (Umbreon & Espeon), nature stats, turn-based combat, mega evolutions, breeding pen, mount/flying mechanics, live minimap HUD, and JSON saves.",
-    "category": "games",
-    "language": "C#",
-    "codeFiles": [
-      {
-        "name": "project.godot",
-        "path": "Projekte/Minecraft-Pokemon/project.godot",
-        "type": "godot"
-      },
-      {
-        "name": "README.md",
-        "path": "Projekte/Minecraft-Pokemon/README.md",
-        "type": "markdown"
-      }
-    ],
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Minecraft-Pokemon",
-    "updatedAt": "2026-10-12T11:37:10.815Z"
-  },
-  {
-    "repoName": "Sims",
-    "titleDe": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
-    "titleEn": "💎 Sims 5 — Next-Gen Web Experience (Sims 4 & Mobile Hybrid)",
-    "tags": [
-      "React",
-      "TypeScript",
-      "2.5D Isometric Engine",
-      "Simlish Audio Synth",
-      "Life Simulation",
-      "House Parties"
-    ],
-    "image": "assets/images/sims_showcase.webp",
-    "images": [
-      "assets/images/sims_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "Projekte/Sims/dist/index.html",
-    "descDe": "Ein interaktives Sims-Erlebnis im Browser. Verbindet Sims 4 mit Sims Mobile: Create-A-Sim (CAS), 2.5D isometrische Canvas-Engine, Bedürfnis- & Stimmungs-System, Hauspartys mit 5-Sterne-Wertung, prozeduraler Simlish-Radiosender (4 Genres), Lebensphasen (Baby bis Senior), Stammbaum und Raum-Baumodus.",
-    "descEn": "An interactive Sims browser experience combining Sims 4 depth with Sims Mobile quests: Create-A-Sim (CAS), 2.5D isometric canvas engine, mood & need management, house parties with 5-star rating, procedural Simlish radio synth, life stages, family tree, and room builder.",
-    "category": "games web",
-    "language": "TypeScript",
-    "codeFiles": [
-      {
-        "name": "index.html",
-        "path": "Projekte/Sims/index.html",
-        "type": "html"
-      },
-      {
-        "name": "package.json",
-        "path": "Projekte/Sims/package.json",
-        "type": "json"
-      },
-      {
-        "name": "README.md",
-        "path": "Projekte/Sims/README.md",
-        "type": "markdown"
-      }
-    ],
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Sims",
-    "updatedAt": "2026-10-12T11:37:10.938Z"
-  },
-  {
-    "repoName": "Urlaubsfotos",
-    "titleDe": "📸 Urlaubsfotos Organizer — Fotogalerie & Filter",
-    "titleEn": "📸 Vacation Photo Organizer — Gallery & Filtering",
-    "tags": [
-      "React",
-      "Vite",
-      "Image Processing",
-      "CSS Grid"
-    ],
-    "image": "assets/images/urlaubsfotos_showcase.webp",
-    "link": "Projekte/Urlaubsfotos/dist/index.html",
-    "descDe": "Eine Webanwendung zur Organisation und Filterung von Urlaubsfotos nach Ort, Datum und Bildqualität mit automatischen Highlights.",
-    "descEn": "A web application to organize and filter vacation photos by location, date, and image quality with automatic highlights.",
-    "category": "web",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Urlaubsfotos",
-    "updatedAt": "2026-10-12T11:37:11.037Z",
-    "images": [
-      "assets/images/urlaubsfotos_showcase.webp",
-      "assets/images/analytics_showcase.webp"
-    ]
-  },
-  {
-    "repoName": "VerkaufsVorlagen",
-    "titleDe": "📄 Verkaufs-Vorlagen — Rechnungs- & Beleg-Generator",
-    "titleEn": "📄 Sales Templates — Invoice & Receipt Generator",
-    "tags": [
-      "React",
-      "Vite",
-      "PDF Generation",
-      "LocalStorage"
-    ],
-    "image": "assets/images/verkaufsvorlagen_showcase.webp",
-    "link": "Projekte/VerkaufsVorlagen/dist/index.html",
-    "descDe": "Ein praktischer Generator für Angebote, Rechnungen und Quittungen. Ermöglicht das Speichern von Kundenprofilen und den direkten PDF-Export.",
-    "descEn": "A handy generator for offers, invoices, and receipts. Allows saving client profiles and exporting directly to PDF.",
-    "category": "web",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/VerkaufsVorlagen",
-    "updatedAt": "2026-10-12T11:37:11.132Z",
-    "images": [
-      "assets/images/verkaufsvorlagen_showcase.webp",
-      "assets/images/analytics_showcase.webp"
-    ]
+    "updatedAt": "2026-10-16T19:01:56.807Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -734,275 +385,10 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-10-12T11:37:11.227Z",
+    "updatedAt": "2026-10-16T19:01:56.999Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
     ]
-  },
-  {
-    "repoName": "arbeitszeiterfassung",
-    "titleDe": "⏱️ Arbeitszeiterfassung — PWA Zeiterfassung",
-    "titleEn": "⏱️ Arbeitszeiterfassung — Time Tracker PWA",
-    "tags": [
-      "PWA / Mobile First",
-      "Firebase Cloud-Sync",
-      "Chart.js & SVG Analytics",
-      "Vanilla JS",
-      "Productivity"
-    ],
-    "image": "assets/images/arbeitszeit_showcase.webp",
-    "link": "Projekte/arbeitszeiterfassung/index.html",
-    "descDe": "Eine PWA auf Enterprise-Niveau zur Erfassung von Arbeitsstunden, Überstunden und Abwesenheiten (Urlaub/Krankheit). Die App bietet Firebase Cloud-Synchronisation, ArbZG-Pausenautomatik, erweiterte Projekt-Analytics per SVG Donut-Chart und einen nativen Dark/Light-Mode.",
-    "descEn": "An enterprise-grade PWA to track daily working hours, overtime, and absences. Features include real-time Firebase Cloud-Sync, automated legal break calculations, advanced project analytics via SVG donut charts, and a native Dark/Light mode switch.",
-    "category": "web",
-    "language": "JavaScript",
-    "codeFiles": [
-      {
-        "name": "index.html",
-        "path": "Projekte/arbeitszeiterfassung/index.html",
-        "type": "html"
-      },
-      {
-        "name": "app.js",
-        "path": "Projekte/arbeitszeiterfassung/js/app.js",
-        "type": "javascript"
-      },
-      {
-        "name": "storage.js",
-        "path": "Projekte/arbeitszeiterfassung/js/storage.js",
-        "type": "javascript"
-      },
-      {
-        "name": "charts.js",
-        "path": "Projekte/arbeitszeiterfassung/js/charts.js",
-        "type": "javascript"
-      }
-    ],
-    "architectureBadges": [
-      {
-        "name": "Offline-First PWA",
-        "color": "#0284c7"
-      },
-      {
-        "name": "Firebase Realtime Sync",
-        "color": "#f59e0b"
-      },
-      {
-        "name": "SVG / Canvas Charts",
-        "color": "#10b981"
-      },
-      {
-        "name": "ArbZG Compliance Engine",
-        "color": "#8b5cf6"
-      }
-    ],
-    "keyLearnings": {
-      "challengeDe": "Konfliktfreie Synchronisation lokaler Zeiterfassungsdaten mit Firebase Firestore bei unbeständigen Netzwerkverbindungen und automatisierte Einhaltung des Arbeitszeitgesetzes (ArbZG).",
-      "challengeEn": "Conflict-free synchronization of local time logs with Firebase Firestore during unstable connections and automated compliance with legal working hour constraints (ArbZG).",
-      "solutionDe": "Implementierung einer Offline-First Queue mit automatischer Retry-Logik und einer modularen ArbZG-Pausenautomatik, die gesetzliche Mindestpausen regelbasiert berechnet.",
-      "solutionEn": "Implemented an Offline-First event queue with exponential backoff retry and a rule-based break computation engine strictly enforcing labor laws.",
-      "architectureHighlightsDe": [
-        "Offline-First Persistenzschicht mit Firebase Realtime Sync",
-        "Dynamische SVG-Donut & Trend-Diagramme",
-        "Export nach PDF, CSV und Excel-konformen Formaten"
-      ],
-      "architectureHighlightsEn": [
-        "Offline-First persistence layer with Firebase Realtime Sync",
-        "Dynamic SVG donut charts and trend analysis",
-        "Automated export to PDF, CSV, and Excel-compatible formats"
-      ]
-    },
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/arbeitszeiterfassung",
-    "updatedAt": "2026-10-12T11:37:11.330Z",
-    "images": [
-      "assets/images/arbeitszeit_showcase.webp",
-      "assets/images/analytics_showcase.webp"
-    ]
-  },
-  {
-    "repoName": "finance-ai-bot",
-    "titleDe": "🤖 Finance AI Bot — Finanzplaner & Chatbot",
-    "titleEn": "🤖 Finance AI Bot — Financial Assistant & Chatbot",
-    "tags": [
-      "NLP / AI Bot",
-      "JavaScript (ES6+)",
-      "Financial Analytics",
-      "Conversational UI",
-      "Flexbox / CSS3"
-    ],
-    "image": "assets/images/finance_bot_showcase.webp",
-    "link": "Projekte/finance-ai-bot/frontend/index.html",
-    "descDe": "Finance AI Bot ist ein interaktiver Finanzplaner-Assistent. Der Chatbot verarbeitet natürliche Sprache, analysiert persönliche Einnahmen und Ausgaben, berechnet Sparraten und hilft Nutzern dabei, ein monatliches Budget spielerisch zu planen.",
-    "descEn": "Finance AI Bot is an interactive financial assistant chatbot. It processes natural language queries to analyze personal income and expenses, calculate savings rates, and help users set and achieve monthly budget targets.",
-    "category": "ai web",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/finance-ai-bot",
-    "updatedAt": "2026-10-02T15:56:56Z",
-    "images": [
-      "assets/images/finance_bot_showcase.webp",
-      "assets/images/ai_chat_showcase.webp"
-    ]
-  },
-  {
-    "repoName": "orbital-scrap",
-    "titleDe": "🚀 OrbitalScrap — Sci-Fi Clicker- & Idle-Game",
-    "titleEn": "🚀 OrbitalScrap — Sci-Fi Clicker & Idle Game",
-    "tags": [
-      "Godot Engine 4",
-      "GDScript",
-      "Incremental Game",
-      "Jolt 3D Physics",
-      "UI & Game Loop"
-    ],
-    "image": "assets/images/orbital_scrap_showcase.webp",
-    "link": "Projekte/orbital-scrap/index.html",
-    "descDe": "Ein inkrementelles Weltraum-Clicker-Spiel, entwickelt in Godot 4.6. Spieler sammeln Weltraumschrott per Mausklick, erwerben automatisierte Sammeldrohnen mit exponentiell steigenden Kosten und optimieren ihre Schrottproduktion pro Sekunde im Hintergrund.",
-    "descEn": "An incremental sci-fi space clicker game built in Godot 4.6. Players gather space scrap manually, purchase autonomous harvesting drones with compounding costs, and monitor their production rates in real time.",
-    "category": "games",
-    "language": "GDScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/orbital-scrap",
-    "updatedAt": "2026-10-12T11:37:11.627Z",
-    "images": [
-      "assets/images/orbital_scrap_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ]
-  },
-  {
-    "repoName": "snake-ascend",
-    "titleDe": "🐍 Snake Ascend: Block Royale",
-    "titleEn": "🐍 Snake Ascend: Block Royale",
-    "tags": [
-      "HTML5 Canvas",
-      "Vanilla JavaScript",
-      "Web Audio API",
-      "Game Design"
-    ],
-    "image": "assets/images/snake_showcase.webp",
-    "images": [
-      "assets/images/snake_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "Projekte/snake-ascend/index.html",
-    "descDe": "Ein Geschicklichkeitsspiel, das Elemente aus Tetris, Doodle Jump, Snake und Clash Royale verbindet: Die Schlange klettert automatisch, Karten aus einer Elixier-Hand platzieren Blöcke als Plattformen, Gegner und Boss-Türme müssen überwunden werden.",
-    "descEn": "A skill game combining elements of Tetris, Doodle Jump, Snake, and Clash Royale: the snake auto-climbs while an elixir-powered hand of cards lets you place platform blocks, dodge enemies, and take down boss towers.",
-    "category": "games",
-    "language": "JavaScript",
-    "stars": 0,
-    "githubUrl": "https://github.com/Schengii/snake-ascend",
-    "updatedAt": "2026-10-12T11:37:11.735Z"
-  },
-  {
-    "repoName": "CoOpVersusGame",
-    "titleDe": "🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototyp",
-    "titleEn": "🎮 CoOpVersusGame — Multiplayer Co-Op/Versus Prototype",
-    "tags": [
-      "Godot Engine 4",
-      "GDScript",
-      "Multiplayer / LAN",
-      "2D Action",
-      "Game Design"
-    ],
-    "image": "assets/images/coopgame_showcase.webp",
-    "images": [
-      "assets/images/coopgame_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "Projekte/CoOpVersusGame/coop-versus-demo.html",
-    "descDe": "Ein plattformübergreifender Multiplayer-Prototyp, entwickelt mit Godot 4.6. Das Spiel bietet ein integriertes Lobby-System für LAN- und Netzwerkverbindungen, kooperative Missionen und Versus-Modi, Boss- und Gegner-KIs, Power-ups sowie interaktive Druckplatten-Rätsel.",
-    "descEn": "A cross-platform multiplayer game prototype built in Godot 4.6. It features a local/network lobby system, cooperative missions, versus modes, intelligent boss/enemy AI, power-ups, and interactive pressure-plate puzzles.",
-    "category": "games",
-    "stars": 2,
-    "language": "GDScript",
-    "githubUrl": "https://github.com/Schengii/CoOpVersusGame",
-    "updatedAt": "2026-10-12T11:37:11.832Z"
-  },
-  {
-    "repoName": null,
-    "titleDe": "🐍 Retro-Klassiker Snake (Javascript)",
-    "titleEn": "🐍 Retro Classic Snake (Javascript)",
-    "tags": [
-      "HTML5 Canvas",
-      "CSS3",
-      "Vanilla JS (ES6)",
-      "LocalStorage"
-    ],
-    "image": "assets/images/snake_showcase.webp",
-    "images": [
-      "assets/images/snake_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "snake.html",
-    "descDe": "Ein responsives Browserspiel, das auf einem HTML5-Canvas gerendert wird. Es verfügt über eine präzise Steuerung, Pausen- und Neustartfunktionen sowie eine persistente Highscore-Speicherung mittels LocalStorage.",
-    "descEn": "A responsive browser game rendered on an HTML5 canvas. Features precise movement controls, start/pause/restart functions, and persistent high score storage using LocalStorage.",
-    "category": "games",
-    "language": "JavaScript"
-  },
-  {
-    "repoName": null,
-    "titleDe": "💡 Interaktives IT-Wissens-Quiz",
-    "titleEn": "💡 Interactive IT Knowledge Quiz",
-    "tags": [
-      "DOM Manipulation",
-      "Dynamic HTML",
-      "UX Design",
-      "Accessibility"
-    ],
-    "image": "assets/images/quiz_showcase.webp",
-    "images": [
-      "assets/images/quiz_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "quiz.html",
-    "descDe": "Ein barrierefreies Web-Quiz mit einer dynamischen Benutzeroberfläche. Das System bietet sofortiges visuelles UX-Feedback (Grün/Rot-Farben), sperrt Mehrfachantworten, zeigt den Lernfortschritt über eine animierte Leiste an und berechnet abschließend eine detaillierte Auswertung.",
-    "descEn": "An accessible web quiz with a dynamic user interface. The system provides instant visual UX feedback, locks choices after submission, displays progress via an animated bar, and shows a detailed scorecard at the end.",
-    "category": "web",
-    "language": "JavaScript"
-  },
-  {
-    "repoName": null,
-    "titleDe": "🧠 Memory — Finde die Paare",
-    "titleEn": "🧠 Memory — Find the Pairs",
-    "tags": [
-      "CSS 3D Transforms",
-      "IntersectionObserver",
-      "Game Logic",
-      "LocalStorage"
-    ],
-    "image": "assets/images/memory_showcase.webp",
-    "images": [
-      "assets/images/memory_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "memory.html",
-    "descDe": "Ein klassisches Gedächtnisspiel mit 8 Paaren programmierungsbezogener Symbole. Features: CSS-Flip-Animationen, Zugzähler, Timer und persistenter Highscore.",
-    "descEn": "A classic memory game with 8 pairs of programming-related symbols. Features: CSS flip animations, move counter, timer, and persistent high score.",
-    "category": "games",
-    "language": "JavaScript"
-  },
-  {
-    "repoName": null,
-    "titleDe": "☕ Java OOP & Spring Boot — Übungsprojekte",
-    "titleEn": "☕ Java OOP & Spring Boot — Practice Projects",
-    "tags": [
-      "Java SE",
-      "OOP",
-      "Spring Boot",
-      "JDBC / SQL",
-      "Unit Testing"
-    ],
-    "image": "assets/images/java_showcase.webp",
-    "images": [
-      "assets/images/java_showcase.webp",
-      "assets/images/java_tests.webp"
-    ],
-    "link": "Projekte/java-playground.html",
-    "descDe": "Eine Sammlung von Java-Übungsanwendungen aus der Umschulung. Enthält Konsolenanwendungen, fortgeschrittene objektorientierte Entwurfsmuster (OOP), JUnit-Tests sowie eine Spring Boot REST-API zur Verwaltung von Kurs- und Schülerdaten.",
-    "descEn": "A collection of Java practice applications from my retraining program. Includes command-line tools, advanced OOP design patterns, JUnit test suites, and a Spring Boot REST API for managing course and student databases.",
-    "category": "web",
-    "language": "Java"
   }
 ];
