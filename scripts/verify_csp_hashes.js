@@ -52,67 +52,81 @@ function hashOf(content) {
     return 'sha256-' + crypto.createHash('sha256').update(normalized, 'utf8').digest('base64');
 }
 
-let hadFailure = false;
-let fixedCount = 0;
+function verifyCspHashes({ files: targetFiles = files, fix: shouldFix = fix } = {}) {
+    let hadFailure = false;
+    let fixedCount = 0;
 
-for (const file of files) {
-    const html = fs.readFileSync(file, 'utf8');
-    const rel = path.relative(root, file);
+    for (const file of targetFiles) {
+        const html = fs.readFileSync(file, 'utf8');
+        const rel = path.relative(root, file);
 
-    const cspMatch = html.match(/(<meta http-equiv="Content-Security-Policy" content=")([^"]*)(")/i);
-    if (!cspMatch) continue; // absence is already caught by check_head_consistency.js
+        const cspMatch = html.match(/(<meta http-equiv="Content-Security-Policy" content=")([^"]*)(")/i);
+        if (!cspMatch) continue; // absence is already caught by check_head_consistency.js
 
-    const cspContent = cspMatch[2];
-    if (/'unsafe-inline'/.test(cspContent) && /script-src[^;]*'unsafe-inline'/.test(cspContent)) {
-        continue; // inline scripts allowed unconditionally here
+        const cspContent = cspMatch[2];
+        if (/'unsafe-inline'/.test(cspContent) && /script-src[^;]*'unsafe-inline'/.test(cspContent)) {
+            continue; // inline scripts allowed unconditionally here
+        }
+
+        const inlineScripts = extractInlineScripts(html);
+        if (inlineScripts.length === 0) continue;
+
+        const requiredHashes = inlineScripts.map(hashOf);
+        // Must match the QUOTED form ('sha256-...') — CSP requires the quotes to
+        // treat this as a hash-source at all; an unquoted sha256-... token is
+        // silently rejected as invalid by the browser, so matching the bare
+        // digest here would wrongly report a fix as complete.
+        const presentHashes = [...cspContent.matchAll(/'(sha256-[A-Za-z0-9+/=]+)'/g)].map((m) => m[1]);
+
+        const missing = requiredHashes.filter((h) => !presentHashes.includes(h));
+        const stale = presentHashes.filter((h) => !requiredHashes.includes(h));
+
+        if (missing.length === 0 && stale.length === 0) continue;
+
+        hadFailure = true;
+        console.error(`✗ ${rel}: CSP script-src hash drift`);
+        if (missing.length) console.error(`    missing (needed by current inline scripts): ${missing.join(', ')}`);
+        if (stale.length) console.error(`    stale (no longer matches any inline script): ${stale.join(', ')}`);
+
+        if (shouldFix) {
+            const scriptSrcMatch = cspContent.match(/script-src([^;]*)/);
+            if (!scriptSrcMatch) {
+                console.error(`    cannot auto-fix ${rel}: no script-src directive found`);
+                continue;
+            }
+            const tokens = scriptSrcMatch[1].trim().split(/\s+/).filter(Boolean);
+            const nonHashTokens = tokens.filter((t) => !/^'?sha256-/.test(t));
+            const quotedHashes = requiredHashes.map((h) => `'${h}'`);
+            const newScriptSrc = ` ${[...nonHashTokens.slice(0, 1), ...quotedHashes, ...nonHashTokens.slice(1)].join(' ')}`;
+            const newCspContent = cspContent.replace(/script-src[^;]*/, `script-src${newScriptSrc}`);
+            const newHtml = html.replace(cspMatch[0], cspMatch[1] + newCspContent + cspMatch[3]);
+            fs.writeFileSync(file, newHtml, 'utf8');
+            fixedCount++;
+            console.error(`    fixed: wrote ${requiredHashes.length} current hash(es)`);
+        }
     }
 
-    const inlineScripts = extractInlineScripts(html);
-    if (inlineScripts.length === 0) continue;
+    return { hadFailure, fixedCount, pageCount: targetFiles.length };
+}
 
-    const requiredHashes = inlineScripts.map(hashOf);
-    // Must match the QUOTED form ('sha256-...') — CSP requires the quotes to
-    // treat this as a hash-source at all; an unquoted sha256-... token is
-    // silently rejected as invalid by the browser, so matching the bare
-    // digest here would wrongly report a fix as complete.
-    const presentHashes = [...cspContent.matchAll(/'(sha256-[A-Za-z0-9+/=]+)'/g)].map((m) => m[1]);
+module.exports = {
+    extractInlineScripts,
+    hashOf,
+    verifyCspHashes,
+};
 
-    const missing = requiredHashes.filter((h) => !presentHashes.includes(h));
-    const stale = presentHashes.filter((h) => !requiredHashes.includes(h));
-
-    if (missing.length === 0 && stale.length === 0) continue;
-
-    hadFailure = true;
-    console.error(`✗ ${rel}: CSP script-src hash drift`);
-    if (missing.length) console.error(`    missing (needed by current inline scripts): ${missing.join(', ')}`);
-    if (stale.length) console.error(`    stale (no longer matches any inline script): ${stale.join(', ')}`);
+if (require.main === module) {
+    const { hadFailure, fixedCount, pageCount } = verifyCspHashes();
 
     if (fix) {
-        const scriptSrcMatch = cspContent.match(/script-src([^;]*)/);
-        if (!scriptSrcMatch) {
-            console.error(`    cannot auto-fix ${rel}: no script-src directive found`);
-            continue;
-        }
-        const tokens = scriptSrcMatch[1].trim().split(/\s+/).filter(Boolean);
-        const nonHashTokens = tokens.filter((t) => !/^'?sha256-/.test(t));
-        const quotedHashes = requiredHashes.map((h) => `'${h}'`);
-        const newScriptSrc = ` ${[...nonHashTokens.slice(0, 1), ...quotedHashes, ...nonHashTokens.slice(1)].join(' ')}`;
-        const newCspContent = cspContent.replace(/script-src[^;]*/, `script-src${newScriptSrc}`);
-        const newHtml = html.replace(cspMatch[0], cspMatch[1] + newCspContent + cspMatch[3]);
-        fs.writeFileSync(file, newHtml, 'utf8');
-        fixedCount++;
-        console.error(`    fixed: wrote ${requiredHashes.length} current hash(es)`);
+        console.log(`\n${fixedCount} file(s) updated.`);
+        process.exit(0);
     }
-}
 
-if (fix) {
-    console.log(`\n${fixedCount} file(s) updated.`);
-    process.exit(0);
-}
-
-if (hadFailure) {
-    console.error('\nCSP hash verification failed — run `node scripts/verify_csp_hashes.js --fix` to repair.');
-    process.exit(1);
-} else {
-    console.log(`✓ CSP script-src hashes match current inline scripts across ${files.length} pages.`);
+    if (hadFailure) {
+        console.error('\nCSP hash verification failed — run `node scripts/verify_csp_hashes.js --fix` to repair.');
+        process.exit(1);
+    } else {
+        console.log(`✓ CSP script-src hashes match current inline scripts across ${pageCount} pages.`);
+    }
 }
