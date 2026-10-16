@@ -104,7 +104,6 @@ const quizProgress = document.getElementById('quiz-progress');
 
 // Spielvariablen
 let currentQuestionIndex = 0;
-// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
 let score = 0;
 let questionCorrectness = []; // Tracks correctness for each question
 

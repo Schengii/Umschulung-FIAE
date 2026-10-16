@@ -2,496 +2,516 @@
  * Modern Accessible Snake Game with DE/EN Translation
  */
 
-const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('canvas'));
-const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('score');
-const highscoreEl = document.getElementById('highscore');
-const startBtn = document.getElementById('start-btn');
-const pauseBtn = /** @type {HTMLButtonElement} */ (document.getElementById('pause-btn'));
+(() => {
+    let canvas = /** @type {HTMLCanvasElement | null} */ (null);
+    let ctx = /** @type {CanvasRenderingContext2D | null} */ (null);
+    let scoreEl = /** @type {HTMLElement | null} */ (null);
+    let highscoreEl = /** @type {HTMLElement | null} */ (null);
+    let startBtn = /** @type {HTMLElement | null} */ (null);
+    let pauseBtn = /** @type {HTMLButtonElement | null} */ (null);
 
-const rows = 20;
-const cols = 20;
-let cellWidth = canvas.width / cols;
-let cellHeight = canvas.height / rows;
+    const rows = 20;
+    const cols = 20;
+    let cellWidth = 20;
+    let cellHeight = 20;
 
-let snake = [{ x: 10, y: 10 }];
-let food = { x: 5, y: 5 };
-let direction = 'RIGHT';
-let nextDirection = 'RIGHT';
-// @ts-ignore - classic script: quiz.js and snake.js both declare a global `score` but are never loaded on the same page
-let score = 0;
-let highscore = 0;
-let highscoreList = [];
-let lastFrameTime = 0;
-let isPlaying = false;
-let isPaused = false;
-const speed = 150;
+    let snake = [{ x: 10, y: 10 }];
+    let food = { x: 5, y: 5 };
+    let direction = 'RIGHT';
+    let nextDirection = 'RIGHT';
+    let score = 0;
+    let highscore = 0;
+    let highscoreList = [];
+    let lastFrameTime = 0;
+    let isPlaying = false;
+    let isPaused = false;
+    const speed = 150;
 
-document.addEventListener('DOMContentLoaded', () => {
-    highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
-    highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
-    if (highscoreEl) highscoreEl.textContent = String(highscore);
-    renderHighscores();
+    document.addEventListener('DOMContentLoaded', () => {
+        canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('canvas'));
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-    document.addEventListener('keydown', handleKeyDown);
-    if (startBtn) startBtn.addEventListener('click', startGame);
-    if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
-});
+        scoreEl = document.getElementById('score');
+        highscoreEl = document.getElementById('highscore');
+        startBtn = document.getElementById('start-btn');
+        pauseBtn = /** @type {HTMLButtonElement} */ (document.getElementById('pause-btn'));
 
-function renderHighscores() {
-    const listBody = document.getElementById('highscore-list-body');
-    if (!listBody) return;
-    listBody.innerHTML = '';
+        cellWidth = canvas.width / cols;
+        cellHeight = canvas.height / rows;
 
-    // Pad list with placeholders if less than 5 entries
-    const displayList = [...highscoreList];
-    while (displayList.length < 5) {
-        displayList.push({ score: '-', date: '-' });
-    }
+        highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
+        highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
+        if (highscoreEl) highscoreEl.textContent = String(highscore);
+        renderHighscores();
 
-    displayList.forEach((entry, idx) => {
-        const row = document.createElement('tr');
-        row.style.borderBottom = '1px solid var(--border)';
-        row.innerHTML = `
+        document.addEventListener('keydown', handleKeyDown);
+        if (startBtn) startBtn.addEventListener('click', startGame);
+        if (pauseBtn) pauseBtn.addEventListener('click', togglePause);
+
+        initMobileControls();
+        draw();
+    });
+
+    function renderHighscores() {
+        const listBody = document.getElementById('highscore-list-body');
+        if (!listBody) return;
+        listBody.innerHTML = '';
+
+        // Pad list with placeholders if less than 5 entries
+        const displayList = [...highscoreList];
+        while (displayList.length < 5) {
+            displayList.push({ score: '-', date: '-' });
+        }
+
+        displayList.forEach((entry, idx) => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid var(--border)';
+            row.innerHTML = `
             <td style="padding: 0.4rem 0.25rem; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-secondary)'};">${idx + 1}</td>
             <td style="padding: 0.4rem 0.25rem; color: var(--text-muted);">${entry.date}</td>
             <td style="padding: 0.4rem 0.25rem; text-align: right; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-primary)'};">${entry.score}</td>
         `;
-        listBody.appendChild(row);
-    });
-}
-
-function getLang() {
-    return document.documentElement.getAttribute('lang') || 'de';
-}
-
-function resizeCanvas() {
-    cellWidth = canvas.width / cols;
-    cellHeight = canvas.height / rows;
-    draw();
-}
-window.addEventListener('resize', resizeCanvas);
-
-function gameLoop(timestamp) {
-    if (!isPlaying) return;
-
-    if (!isPaused) {
-        if (!lastFrameTime) lastFrameTime = timestamp;
-        const elapsed = timestamp - lastFrameTime;
-
-        if (elapsed >= speed) {
-            gameStep();
-            lastFrameTime = timestamp;
-        }
-    } else {
-        lastFrameTime = 0;
-    }
-
-    requestAnimationFrame(gameLoop);
-}
-
-function startGame() {
-    if (isPlaying && !isPaused) return;
-
-    if (isPaused) {
-        isPaused = false;
-        lastFrameTime = 0;
-        requestAnimationFrame(gameLoop);
-        updateButtons();
-        return;
-    }
-
-    snake = [
-        { x: 10, y: 10 },
-        { x: 9, y: 10 },
-        { x: 8, y: 10 },
-    ];
-    direction = 'RIGHT';
-    nextDirection = 'RIGHT';
-    score = 0;
-    if (scoreEl) scoreEl.textContent = String(score);
-    placeFood();
-
-    isPlaying = true;
-    isPaused = false;
-    lastFrameTime = 0;
-    requestAnimationFrame(gameLoop);
-
-    updateButtons();
-}
-
-function togglePause() {
-    if (!isPlaying) return;
-
-    if (isPaused) {
-        isPaused = false;
-        lastFrameTime = 0;
-        requestAnimationFrame(gameLoop);
-    } else {
-        isPaused = true;
-    }
-    updateButtons();
-    draw();
-}
-
-function updateButtons() {
-    const lang = getLang();
-    if (startBtn) {
-        const startText = lang === 'de' ? '<i class="fa fa-refresh"></i> Reset' : '<i class="fa fa-refresh"></i> Reset';
-        const initialStartText =
-            lang === 'de' ? '<i class="fa fa-play"></i> Start' : '<i class="fa fa-play"></i> Start';
-        startBtn.innerHTML = isPlaying ? startText : initialStartText;
-    }
-    if (pauseBtn) {
-        pauseBtn.disabled = !isPlaying;
-
-        let pauseText = '';
-        if (isPaused) {
-            pauseText = lang === 'de' ? '<i class="fa fa-play"></i> Fortsetzen' : '<i class="fa fa-play"></i> Resume';
-        } else {
-            pauseText = lang === 'de' ? '<i class="fa fa-pause"></i> Pause' : '<i class="fa fa-pause"></i> Pause';
-        }
-        pauseBtn.innerHTML = pauseText;
-    }
-}
-
-function gameOver() {
-    isPlaying = false;
-    isPaused = false;
-    lastFrameTime = 0;
-
-    // Trigger screenshake / red-glow flash on the game layout card
-    const container = document.querySelector('.game-layout');
-    if (container) {
-        container.classList.add('crash-flash');
-        setTimeout(() => {
-            container.classList.remove('crash-flash');
-        }, 500);
-    }
-
-    if (typeof GameAudio !== 'undefined') {
-        GameAudio.play('die');
-    }
-
-    // Add live commit on score >= 30
-    if (score >= 30 && typeof window.addLiveCommit === 'function') {
-        window.addLiveCommit();
-    }
-
-    const lang = getLang();
-
-    // Highscore list update
-    if (score > 0) {
-        const currentDate = new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit',
+            listBody.appendChild(row);
         });
-        highscoreList.push({ score: score, date: currentDate });
-        highscoreList.sort((a, b) => b.score - a.score);
+    }
 
-        const indexInTop5 = highscoreList
-            .slice(0, 5)
-            .findIndex((entry) => entry.score === score && entry.date === currentDate);
-        highscoreList = highscoreList.slice(0, 5);
-        AppStorage.setItem('snake_highscore_list', JSON.stringify(highscoreList));
-        renderHighscores();
+    function getLang() {
+        return document.documentElement.getAttribute('lang') || 'de';
+    }
 
-        if (indexInTop5 !== -1 && typeof Confetti !== 'undefined') {
-            Confetti.start();
+    function resizeCanvas() {
+        cellWidth = canvas.width / cols;
+        cellHeight = canvas.height / rows;
+        draw();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function gameLoop(timestamp) {
+        if (!isPlaying) return;
+
+        if (!isPaused) {
+            if (!lastFrameTime) lastFrameTime = timestamp;
+            const elapsed = timestamp - lastFrameTime;
+
+            if (elapsed >= speed) {
+                gameStep();
+                lastFrameTime = timestamp;
+            }
+        } else {
+            lastFrameTime = 0;
         }
+
+        requestAnimationFrame(gameLoop);
     }
 
-    if (score > highscore) {
-        highscore = score;
-        AppStorage.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
-        if (highscoreEl) highscoreEl.textContent = String(highscore);
-    }
+    function startGame() {
+        if (isPlaying && !isPaused) return;
 
-    updateButtons();
-
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#ef4444';
-    ctx.font = 'bold 30px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '16px Inter, sans-serif';
-
-    const scoreText =
-        lang === 'de' ? `Punkte: ${score} | Highscore: ${highscore}` : `Score: ${score} | High Score: ${highscore}`;
-    const restartText = lang === 'de' ? 'Klicke Reset für eine neue Runde' : 'Click Reset for a new round';
-
-    ctx.fillText(scoreText, canvas.width / 2, canvas.height / 2 + 20);
-    ctx.fillText(restartText, canvas.width / 2, canvas.height / 2 + 50);
-}
-
-function gameStep() {
-    direction = nextDirection;
-
-    const head = { x: snake[0].x, y: snake[0].y };
-    switch (direction) {
-        case 'LEFT':
-            head.x--;
-            break;
-        case 'RIGHT':
-            head.x++;
-            break;
-        case 'UP':
-            head.y--;
-            break;
-        case 'DOWN':
-            head.y++;
-            break;
-    }
-
-    if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
-        gameOver();
-        return;
-    }
-
-    for (let i = 0; i < snake.length; i++) {
-        if (snake[i].x === head.x && snake[i].y === head.y) {
-            gameOver();
+        if (isPaused) {
+            isPaused = false;
+            lastFrameTime = 0;
+            requestAnimationFrame(gameLoop);
+            updateButtons();
             return;
         }
+
+        snake = [
+            { x: 10, y: 10 },
+            { x: 9, y: 10 },
+            { x: 8, y: 10 },
+        ];
+        direction = 'RIGHT';
+        nextDirection = 'RIGHT';
+        score = 0;
+        if (scoreEl) scoreEl.textContent = String(score);
+        placeFood();
+
+        isPlaying = true;
+        isPaused = false;
+        lastFrameTime = 0;
+        requestAnimationFrame(gameLoop);
+
+        updateButtons();
     }
 
-    snake.unshift(head);
+    function togglePause() {
+        if (!isPlaying) return;
 
-    if (head.x === food.x && head.y === food.y) {
-        score += 10;
-        if (scoreEl) scoreEl.textContent = String(score);
+        if (isPaused) {
+            isPaused = false;
+            lastFrameTime = 0;
+            requestAnimationFrame(gameLoop);
+        } else {
+            isPaused = true;
+        }
+        updateButtons();
+        draw();
+    }
 
-        if (score >= 50 && typeof Achievements !== 'undefined') {
-            Achievements.unlock('snake_50');
+    function updateButtons() {
+        const lang = getLang();
+        if (startBtn) {
+            const startText =
+                lang === 'de' ? '<i class="fa fa-refresh"></i> Reset' : '<i class="fa fa-refresh"></i> Reset';
+            const initialStartText =
+                lang === 'de' ? '<i class="fa fa-play"></i> Start' : '<i class="fa fa-play"></i> Start';
+            startBtn.innerHTML = isPlaying ? startText : initialStartText;
+        }
+        if (pauseBtn) {
+            pauseBtn.disabled = !isPlaying;
+
+            let pauseText = '';
+            if (isPaused) {
+                pauseText =
+                    lang === 'de' ? '<i class="fa fa-play"></i> Fortsetzen' : '<i class="fa fa-play"></i> Resume';
+            } else {
+                pauseText = lang === 'de' ? '<i class="fa fa-pause"></i> Pause' : '<i class="fa fa-pause"></i> Pause';
+            }
+            pauseBtn.innerHTML = pauseText;
+        }
+    }
+
+    function gameOver() {
+        isPlaying = false;
+        isPaused = false;
+        lastFrameTime = 0;
+
+        // Trigger screenshake / red-glow flash on the game layout card
+        const container = document.querySelector('.game-layout');
+        if (container) {
+            container.classList.add('crash-flash');
+            setTimeout(() => {
+                container.classList.remove('crash-flash');
+            }, 500);
         }
 
         if (typeof GameAudio !== 'undefined') {
-            GameAudio.play('eat');
+            GameAudio.play('die');
         }
 
-        placeFood();
-    } else {
-        snake.pop();
-    }
+        // Add live commit on score >= 30
+        if (score >= 30 && typeof window.addLiveCommit === 'function') {
+            window.addLiveCommit();
+        }
 
-    draw();
-}
+        const lang = getLang();
 
-function placeFood() {
-    let newFoodPos;
-    let isOnSnake = true;
+        // Highscore list update
+        if (score > 0) {
+            const currentDate = new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+            });
+            highscoreList.push({ score: score, date: currentDate });
+            highscoreList.sort((a, b) => b.score - a.score);
 
-    while (isOnSnake) {
-        newFoodPos = {
-            x: Math.floor(Math.random() * cols),
-            y: Math.floor(Math.random() * rows),
-        };
+            const indexInTop5 = highscoreList
+                .slice(0, 5)
+                .findIndex((entry) => entry.score === score && entry.date === currentDate);
+            highscoreList = highscoreList.slice(0, 5);
+            AppStorage.setItem('snake_highscore_list', JSON.stringify(highscoreList));
+            renderHighscores();
 
-        isOnSnake = false;
-        for (let i = 0; i < snake.length; i++) {
-            if (snake[i].x === newFoodPos.x && snake[i].y === newFoodPos.y) {
-                isOnSnake = true;
-                break;
+            if (indexInTop5 !== -1 && typeof Confetti !== 'undefined') {
+                Confetti.start();
             }
         }
-    }
 
-    food = newFoodPos;
-}
-
-function draw() {
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= cols; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * cellWidth, 0);
-        ctx.lineTo(i * cellWidth, canvas.height);
-        ctx.stroke();
-    }
-    for (let i = 0; i <= rows; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, i * cellHeight);
-        ctx.lineTo(canvas.width, i * cellHeight);
-        ctx.stroke();
-    }
-
-    ctx.fillStyle = '#ef4444';
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = '#ef4444';
-    ctx.beginPath();
-    const foodRadius = Math.min(cellWidth, cellHeight) / 2 - 2;
-    ctx.arc(food.x * cellWidth + cellWidth / 2, food.y * cellHeight + cellHeight / 2, foodRadius, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    snake.forEach((part, index) => {
-        const isHead = index === 0;
-        ctx.fillStyle = isHead ? '#3b82f6' : '#60a5fa';
-
-        const x = part.x * cellWidth + 2;
-        const y = part.y * cellHeight + 2;
-        const w = cellWidth - 4;
-        const h = cellHeight - 4;
-        const r = 4;
-
-        ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h);
-        ctx.fill();
-
-        if (isHead) {
-            ctx.fillStyle = '#ffffff';
-            let eyeX1, eyeY1, eyeX2, eyeY2;
-
-            if (direction === 'LEFT' || direction === 'RIGHT') {
-                eyeX1 = x + w / 2;
-                eyeX2 = x + w / 2;
-                eyeY1 = y + h / 4;
-                eyeY2 = y + (3 * h) / 4;
-            } else {
-                eyeX1 = x + w / 4;
-                eyeX2 = x + (3 * w) / 4;
-                eyeY1 = y + h / 2;
-                eyeY2 = y + h / 2;
-            }
-
-            ctx.beginPath();
-            ctx.arc(eyeX1, eyeY1, 2, 0, 2 * Math.PI);
-            ctx.arc(eyeX2, eyeY2, 2, 0, 2 * Math.PI);
-            ctx.fill();
+        if (score > highscore) {
+            highscore = score;
+            AppStorage.setItem(STORAGE_KEYS.SNAKE_HIGHSCORE, highscore);
+            if (highscoreEl) highscoreEl.textContent = String(highscore);
         }
-    });
 
-    const lang = getLang();
+        updateButtons();
 
-    if (isPaused) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+        if (!ctx || !canvas) return;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#f8fafc';
-        ctx.font = 'bold 24px Inter, sans-serif';
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 30px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
-    }
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
 
-    if (!isPlaying && !isPaused) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.5)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#60a5fa';
+        ctx.fillStyle = '#ffffff';
         ctx.font = '16px Inter, sans-serif';
-        ctx.textAlign = 'center';
 
-        const startText = lang === 'de' ? 'Klicke Start zum Spielen' : 'Click Start to play';
-        ctx.fillText(startText, canvas.width / 2, canvas.height / 2);
-    }
-}
+        const scoreText =
+            lang === 'de' ? `Punkte: ${score} | Highscore: ${highscore}` : `Score: ${score} | High Score: ${highscore}`;
+        const restartText = lang === 'de' ? 'Klicke Reset für eine neue Runde' : 'Click Reset for a new round';
 
-function handleKeyDown(e) {
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
-        e.preventDefault();
+        ctx.fillText(scoreText, canvas.width / 2, canvas.height / 2 + 20);
+        ctx.fillText(restartText, canvas.width / 2, canvas.height / 2 + 50);
     }
 
-    if (e.key === ' ' || e.key === 'Spacebar') {
-        togglePause();
-        return;
-    }
+    function gameStep() {
+        direction = nextDirection;
 
-    if (!isPlaying || isPaused) return;
+        const head = { x: snake[0].x, y: snake[0].y };
+        switch (direction) {
+            case 'LEFT':
+                head.x--;
+                break;
+            case 'RIGHT':
+                head.x++;
+                break;
+            case 'UP':
+                head.y--;
+                break;
+            case 'DOWN':
+                head.y++;
+                break;
+        }
 
-    switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-            if (direction !== 'RIGHT') nextDirection = 'LEFT';
-            break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-            if (direction !== 'LEFT') nextDirection = 'RIGHT';
-            break;
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-            if (direction !== 'DOWN') nextDirection = 'UP';
-            break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-            if (direction !== 'UP') nextDirection = 'DOWN';
-            break;
-    }
-}
-
-// Bei Sprachwechsel das Interface anpassen
-document.addEventListener('langchange', () => {
-    updateButtons();
-    draw();
-    renderHighscores();
-});
-
-function initMobileControls() {
-    const upBtn = document.getElementById('dpad-up');
-    const leftBtn = document.getElementById('dpad-left');
-    const rightBtn = document.getElementById('dpad-right');
-    const downBtn = document.getElementById('dpad-down');
-
-    if (!upBtn || !leftBtn || !rightBtn || !downBtn) return;
-
-    const handlePress = (dir) => {
-        if (!isPlaying) {
-            startGame();
+        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
+            gameOver();
             return;
         }
+
+        for (let i = 0; i < snake.length; i++) {
+            if (snake[i].x === head.x && snake[i].y === head.y) {
+                gameOver();
+                return;
+            }
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+            score += 10;
+            if (scoreEl) scoreEl.textContent = String(score);
+
+            if (score >= 50 && typeof Achievements !== 'undefined') {
+                Achievements.unlock('snake_50');
+            }
+
+            if (typeof GameAudio !== 'undefined') {
+                GameAudio.play('eat');
+            }
+
+            placeFood();
+        } else {
+            snake.pop();
+        }
+
+        draw();
+    }
+
+    function placeFood() {
+        let newFoodPos;
+        let isOnSnake = true;
+
+        while (isOnSnake) {
+            newFoodPos = {
+                x: Math.floor(Math.random() * cols),
+                y: Math.floor(Math.random() * rows),
+            };
+
+            isOnSnake = false;
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i].x === newFoodPos.x && snake[i].y === newFoodPos.y) {
+                    isOnSnake = true;
+                    break;
+                }
+            }
+        }
+
+        food = newFoodPos;
+    }
+
+    function draw() {
+        if (!ctx || !canvas) return;
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= cols; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * cellWidth, 0);
+            ctx.lineTo(i * cellWidth, canvas.height);
+            ctx.stroke();
+        }
+        for (let i = 0; i <= rows; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, i * cellHeight);
+            ctx.lineTo(canvas.width, i * cellHeight);
+            ctx.stroke();
+        }
+
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#ef4444';
+        ctx.beginPath();
+        const foodRadius = Math.min(cellWidth, cellHeight) / 2 - 2;
+        ctx.arc(food.x * cellWidth + cellWidth / 2, food.y * cellHeight + cellHeight / 2, foodRadius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        snake.forEach((part, index) => {
+            const isHead = index === 0;
+            ctx.fillStyle = isHead ? '#3b82f6' : '#60a5fa';
+
+            const x = part.x * cellWidth + 2;
+            const y = part.y * cellHeight + 2;
+            const w = cellWidth - 4;
+            const h = cellHeight - 4;
+            const r = 4;
+
+            ctx.beginPath();
+            ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h);
+            ctx.fill();
+
+            if (isHead) {
+                ctx.fillStyle = '#ffffff';
+                let eyeX1, eyeY1, eyeX2, eyeY2;
+
+                if (direction === 'LEFT' || direction === 'RIGHT') {
+                    eyeX1 = x + w / 2;
+                    eyeX2 = x + w / 2;
+                    eyeY1 = y + h / 4;
+                    eyeY2 = y + (3 * h) / 4;
+                } else {
+                    eyeX1 = x + w / 4;
+                    eyeX2 = x + (3 * w) / 4;
+                    eyeY1 = y + h / 2;
+                    eyeY2 = y + h / 2;
+                }
+
+                ctx.beginPath();
+                ctx.arc(eyeX1, eyeY1, 2, 0, 2 * Math.PI);
+                ctx.arc(eyeX2, eyeY2, 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        });
+
+        const lang = getLang();
+
         if (isPaused) {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 24px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
+        }
+
+        if (!isPlaying && !isPaused) {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#60a5fa';
+            ctx.font = '16px Inter, sans-serif';
+            ctx.textAlign = 'center';
+
+            const startText = lang === 'de' ? 'Klicke Start zum Spielen' : 'Click Start to play';
+            ctx.fillText(startText, canvas.width / 2, canvas.height / 2);
+        }
+    }
+
+    function handleKeyDown(e) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+            e.preventDefault();
+        }
+
+        if (e.key === ' ' || e.key === 'Spacebar') {
             togglePause();
             return;
         }
 
-        switch (dir) {
-            case 'UP':
-                if (direction !== 'DOWN') nextDirection = 'UP';
-                break;
-            case 'LEFT':
+        if (!isPlaying || isPaused) return;
+
+        switch (e.key) {
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
                 if (direction !== 'RIGHT') nextDirection = 'LEFT';
                 break;
-            case 'RIGHT':
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
                 if (direction !== 'LEFT') nextDirection = 'RIGHT';
                 break;
-            case 'DOWN':
+            case 'ArrowUp':
+            case 'w':
+            case 'W':
+                if (direction !== 'DOWN') nextDirection = 'UP';
+                break;
+            case 'ArrowDown':
+            case 's':
+            case 'S':
                 if (direction !== 'UP') nextDirection = 'DOWN';
                 break;
         }
-    };
+    }
 
-    const addControlListener = (btn, dir) => {
-        btn.addEventListener(
-            'touchstart',
-            (e) => {
+    // Bei Sprachwechsel das Interface anpassen
+    document.addEventListener('langchange', () => {
+        updateButtons();
+        draw();
+        renderHighscores();
+    });
+
+    function initMobileControls() {
+        const upBtn = document.getElementById('dpad-up');
+        const leftBtn = document.getElementById('dpad-left');
+        const rightBtn = document.getElementById('dpad-right');
+        const downBtn = document.getElementById('dpad-down');
+
+        if (!upBtn || !leftBtn || !rightBtn || !downBtn) return;
+
+        const handlePress = (dir) => {
+            if (!isPlaying) {
+                startGame();
+                return;
+            }
+            if (isPaused) {
+                togglePause();
+                return;
+            }
+
+            switch (dir) {
+                case 'UP':
+                    if (direction !== 'DOWN') nextDirection = 'UP';
+                    break;
+                case 'LEFT':
+                    if (direction !== 'RIGHT') nextDirection = 'LEFT';
+                    break;
+                case 'RIGHT':
+                    if (direction !== 'LEFT') nextDirection = 'RIGHT';
+                    break;
+                case 'DOWN':
+                    if (direction !== 'UP') nextDirection = 'DOWN';
+                    break;
+            }
+        };
+
+        const addControlListener = (btn, dir) => {
+            btn.addEventListener(
+                'touchstart',
+                (e) => {
+                    e.preventDefault();
+                    handlePress(dir);
+                },
+                { passive: false }
+            );
+
+            btn.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 handlePress(dir);
-            },
-            { passive: false }
-        );
+            });
+        };
 
-        btn.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            handlePress(dir);
-        });
-    };
-
-    addControlListener(upBtn, 'UP');
-    addControlListener(leftBtn, 'LEFT');
-    addControlListener(rightBtn, 'RIGHT');
-    addControlListener(downBtn, 'DOWN');
-}
-
-initMobileControls();
-draw();
+        addControlListener(upBtn, 'UP');
+        addControlListener(leftBtn, 'LEFT');
+        addControlListener(rightBtn, 'RIGHT');
+        addControlListener(downBtn, 'DOWN');
+    }
+})();
