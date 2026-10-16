@@ -193,7 +193,7 @@ function updateDashboardGreeting() {
                 lang === 'de'
                     ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`
                     : `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
-            welcomeText.innerHTML = greeting;
+            welcomeText.textContent = greeting;
         }
     }
 }

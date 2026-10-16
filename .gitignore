@@ -16,6 +16,7 @@ node_modules/
 **/*.bin
 test-results/
 playwright-report/
+tmp/
 /dist/
 # NOTE: Projekte/*/dist/ is intentionally NOT ignored — these are the live,
 # committed build outputs served directly as demo links from the portfolio

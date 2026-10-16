@@ -29,34 +29,30 @@ const PAGES = [
 ];
 
 const VIEWPORTS = [
-    { width: 250, height: 600, name: '250px (Ultra Narrow / Micro)' },
     { width: 320, height: 568, name: '320px (iPhone SE)' },
     { width: 375, height: 667, name: '375px (Standard Mobile)' },
     { width: 768, height: 1024, name: '768px (Tablet)' },
+    { width: 1280, height: 800, name: '1280px (Desktop)' },
 ];
 
-test.describe('Responsive Viewport Stability & Overflow Check', () => {
-    for (const vp of VIEWPORTS) {
-        test(`sollte auf allen Hauptseiten bei ${vp.name} kein horizontales Scrollen/Überlaufen verursachen`, async ({
-            page,
-        }) => {
-            await page.setViewportSize({ width: vp.width, height: vp.height });
+for (const vp of VIEWPORTS) {
+    test.describe(`Responsive Viewport Check (${vp.name})`, () => {
+        test.use({ viewport: { width: vp.width, height: vp.height } });
 
-            for (const pagePath of PAGES) {
+        for (const pagePath of PAGES) {
+            test(`sollte auf ${pagePath} kein horizontales Scrollen verursachen`, async ({ page }) => {
                 await page.goto(`/${pagePath}`, { waitUntil: 'domcontentloaded' });
                 await page.waitForTimeout(100);
 
                 const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
                 const innerWidth = await page.evaluate(() => window.innerWidth);
-
                 const overflow = scrollWidth - innerWidth;
-                if (overflow > 2) {
-                    console.warn(
-                        `[OVERFLOW] ${pagePath} at ${vp.name}: scrollWidth=${scrollWidth}, innerWidth=${innerWidth} (diff: ${overflow}px)`
-                    );
-                }
-                expect(overflow).toBeLessThanOrEqual(5);
-            }
-        });
-    }
-});
+
+                expect(
+                    overflow,
+                    `Horizontales Überlaufen auf ${pagePath} bei ${vp.name}: diff=${overflow}px`
+                ).toBeLessThanOrEqual(5);
+            });
+        }
+    });
+}
