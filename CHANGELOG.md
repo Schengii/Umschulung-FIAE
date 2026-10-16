@@ -4,6 +4,31 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-16
+
+### Vollständige Umsetzung des Maßnahmenplans (PLAN.md M01–M20)
+
+- **M01**: PWA Service Worker Precache-Liste und Cache-Hash regeneriert (`sw.js`).
+- **M02**: `scripts/build_minified.js` Dist-Bereinigung mit Windows-Lock-Toleranz und Retry-Logik gehärtet.
+- **M03**: `Permissions-Policy` in `vercel.json` um `microphone=(self)` erweitert für Browser-Spracherkennung.
+- **M04**: Absolute Root-Pfade in Unterprojekt-HTMLs zu relativen Pfaden (`./`) aufgelöst.
+- **M05**: Canvas-Context in `assets/js/snake.js` mit Null-Check und DOMContentLoaded gekapselt.
+- **M06**: Globale Variable `score` in `snake.js` gekapselt und obsolete `@ts-ignore`-Direktive entfernt.
+- **M07**: `SpeechRecognition` in `assets/js/interview.js` mit `isSecureContext`-Guard und sichtbarem Feedback gehärtet.
+- **M08**: Web3Forms in `assets/js/modules/contact-form.js` mit 8-Sekunden Timeout und Mailto-Fallback abgesichert.
+- **M09**: Globale Typdefinitionen in `assets/js/globals.d.ts` für Window-Properties präzisiert.
+- **M10**: Unit-Test für `progress-backup.js` und `STORAGE_KEYS` Synchronisation ergänzt.
+- **M11**: Vitest Worker-Isolation (`isolate: false`) in `vitest.config.js` für schnelle Testläufe konfiguriert.
+- **M12**: Playwright Worker-Anzahl für lokale Entwicklung multiprozessfähig parametrisiert.
+- **M13**: Domain-Konsistenz zwischen CNAME, robots.txt, sitemap.xml und Skripten auf `https://www.max-schenk.tech` harmonisiert.
+- **M14**: GitHub Actions CI `quality`-Job und lokales `npm run check` synchronisiert.
+- **M15**: Unit-Tests für statische Hilfsskripte (`scripts/verify_csp_hashes.test.js`) ergänzt.
+- **M16**: Ausschlussregeln für Alt-Artefakte und Gigabyte-Dependencies in Unterprojekten in `.gitignore` und `scripts/audit_cleanup.js` geschärft.
+- **M17**: E2E-A11y-Tests für Mobile-Drawer-Fokus und `aria-expanded`-Zustand in `accessibility.spec.js` ergänzt.
+- **M18**: ADR 0012 für Unterprojekt-Synchronisations-Strategie (`REPO_MAPPING`, `preserve`-Listen) angelegt.
+- **M19**: Node-Versionsanforderungen (`Node >= 22.12` lokal, `Node 24` in CI) in `README.md` und `package.json` harmonisiert.
+- **M20**: Kontrast-Audit aller 5 Akzentfarben und des High-Contrast-Modus als E2E-Test in `accessibility.spec.js` abgesichert.
+
 ### Lizenz
 
 - **Neu**: `LICENSE` (MIT) hinzugefügt, damit die Nutzungsrechte am Repo klar geregelt sind.
