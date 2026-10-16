@@ -5,5 +5,6 @@ module.exports = defineConfig({
     include: ['assets/js/modules/**/*.test.js'],
     exclude: ['Projekte/**', 'node_modules/**'],
     environment: 'node',
+    isolate: false,
   },
 });
