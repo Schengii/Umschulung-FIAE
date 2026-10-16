@@ -13,7 +13,7 @@
 10. Pfad-Inkonsistenzen: 6 absolute Pfade in Unterprojekten (`Projekte/`) und Domain-Differenzen (`www.` vs. Apex) in SEO-Dateien vorhanden.
 
 ## 2. Maßnahmen
-- [ ] M01 | PWA Service Worker Precache & Cache-Hash regenerieren | P1 | S | sw.js | sw.js:4 | Fertig wenn: `npm run check-sw-assets` und `npm run check` mit Exit Code 0 durchlaufen.
+- [x] M01 | PWA Service Worker Precache & Cache-Hash regenerieren | P1 | S | sw.js | sw.js:4 | Fertig wenn: `npm run check-sw-assets` und `npm run check` mit Exit Code 0 durchlaufen.
 - [ ] M02 | `build_minified.js` dist-Bereinigung mit Windows-Lock-Toleranz und Retry härten | P1 | S | scripts/build_minified.js | scripts/build_minified.js:129 | Fertig wenn: `npm run build:dist` auf Windows bei existierendem `dist/` ohne EPERM-Absturz erfolgreich baut.
 - [ ] M03 | Permissions-Policy in `vercel.json` für Spracherkennung freigeben (`microphone=(self)`) | P1 | S | vercel.json | vercel.json:24 | Fertig wenn: `Permissions-Policy` in `vercel.json` Mikrofon-Zugriff für `self` erlaubt und `SpeechRecognition` in `assets/js/interview.js:361` online nicht blockiert wird.
 - [ ] M04 | Absolute Root-Pfade in Unterprojekt-HTMLs zu relativen Pfaden auflösen | P1 | S | Projekte/Finanzenportfolio/index.html, Projekte/Informatik-lernen/index.html | Projekte/Finanzenportfolio/index.html:5 | Fertig wenn: `node scripts/audit_project_html_paths.js` 0 absolute Root-Pfade meldet.
