@@ -2,10 +2,13 @@ name: Automated Subprojects Sync
 
 on:
   schedule:
-    # Run every Monday at 04:00 UTC
-    - cron: '0 4 * * 1'
+    # Safety net: Run daily at 04:00 UTC
+    - cron: '0 4 * * *'
   workflow_dispatch:
-    # Allows manual triggering via GitHub Actions UI
+    # Manual 1-click trigger via GitHub Actions UI
+  repository_dispatch:
+    # Automated instant trigger via git pushes in subprojects
+    types: [subproject-updated, standalone-push]
 
 permissions:
   contents: write
@@ -39,14 +42,17 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(sync): automated weekly sync of standalone projects"
+          commit-message: "chore(sync): automated sync of standalone projects"
           branch: automated/subprojects-sync
           delete-branch: true
-          title: "chore(sync): automated weekly sync of standalone projects"
+          title: "chore(sync): automated sync of standalone projects"
           body: |
-            Automated weekly sync of the mapped standalone sub-project repositories (`scripts/sync_projects.js`).
+            Automated sync of the mapped standalone sub-project repositories (`scripts/sync_projects.js`).
 
-            This PR is opened by the `sync.yml` workflow instead of pushing directly to `main`, so the regular
-            CI checks (lint, unit tests, E2E tests, data-sync guard) run against the synced changes before they
-            merge. Review the diff and merge once CI is green.
+            Triggered by:
+            - Instant push event from a subproject (`repository_dispatch`)
+            - Daily automated schedule (`cron: '0 4 * * *'`)
+            - Manual trigger (`workflow_dispatch`)
+
+            Review the diff and merge once CI is green.
           labels: automated-sync

@@ -16,22 +16,31 @@ Ein klassischer Einsatz von Git-Submodules schied aus, da Submodules den gesamte
 
 ## Entscheidung
 
-Die Synchronisation erfolgt automatisiert und selektiv über das Skript `scripts/sync_projects.js` (lokal via `npm run sync-projects` und wöchentlich per GitHub Action `.github/workflows/sync.yml`):
+Die Synchronisation erfolgt über ein 3-stufiges, ausfallsicheres Multi-Tier-System mit automatischer Kaskadierung:
 
-1. **Deklaratives `REPO_MAPPING`:**
-   In `scripts/sync_projects.js` ist für jedes angebundene Projekt die Upstream-URL (`https://github.com/Schengii/...`), das Zielverzeichnis unter `Projekte/` und eine optionale `preserve`-Liste definiert.
+1. **Stufe 1 — Event-getriebener Push-Sync (Sofort-Aktualisierung bei Git-Pushes):**
+   In allen 8 aktiven Flaggschiff-Repositories ist ein GitHub Actions Workflow `.github/workflows/notify-portfolio.yml` hinterlegt. Sobald in einem Einzelprojekt auf `main`/`master` gepusht wird, sendet der Workflow ein `repository_dispatch`-Event an das Portfolio-Monorepo (`Schengii/Umschulung-FIAE`). Falls ein `PORTFOLIO_SYNC_PAT`-Secret hinterlegt ist, startet der Portfolio-Sync sofort in Echtzeit.
 
-2. **Schutz lokaler Artefakte via `preserve`:**
-   Vor dem Klonen des aktuellen Upstream-Stands in ein temporäres Verzeichnis werden alle in `preserve` deklarierten Ordner und Dateien (z. B. `dist`, `www`, `index.html`) in das OS-Temp-Verzeichnis gesichert. Das Zielverzeichnis wird bereinigt und mit dem neuen Upstream-Code befüllt. Fehlende geschützte Artefakte (wie z. B. im Portfolio-Repo erstellte Web-Builds) werden anschließend transparent wiederhergestellt.
+2. **Stufe 2 — Automatischer Cron-Zeitplan & 1-Klick-Trigger (Automatisches Sicherheitsnetz):**
+   Sollte Stufe 1 fehlschlagen (z. B. fehlendes PAT, Rate Limits oder Branch-Merge ohne Webhook), greift das tägliche Sicherheitsnetz in `.github/workflows/sync.yml` (`cron: '0 4 * * *'`). Zusätzlich kann der Sync jederzeit manuell mit einem Klick in der GitHub Actions Web-Oberfläche (`workflow_dispatch`) ausgelöst werden.
 
-3. **Strikter Ausschluss von Entwicklungs-Ballast:**
-   Beim Kopieren werden `.git`, `node_modules` und versionsspezifische Lockfiles strikt gefiltert. Die Dateirechte und Pfade bleiben intakt.
+3. **Stufe 3 — Lokaler 1-Befehl-Sync (`npm run sync-projects`):**
+   Für maximale Unabhängigkeit von externen CI-Servern oder vor größeren Releases kann die Synchronisation lokal per `npm run sync-projects` mit einem einzigen Befehl ausgeführt werden. Das Skript klont alle Repositories, sichert geschützte Demos, regeneriert `projects_data.js` und aktualisiert den Service-Worker-Precache.
 
-4. **Archiv-Projekte ohne Remote:**
-   Unterprojekte ohne eigenes Git-Remote (reine lokale Archiv-Demos) sind bewusst nicht in `REPO_MAPPING` aufgeführt und verbleiben statisch im Repository.
+### Technische Absicherung im Detail:
+
+- **Deklaratives `REPO_MAPPING`:**
+  In `scripts/sync_projects.js` ist für jedes angebundene Projekt die Upstream-URL (`https://github.com/Schengii/...`), das Zielverzeichnis unter `Projekte/` und eine optionale `preserve`-Liste definiert.
+
+- **Schutz lokaler Artefakte via `preserve`:**
+  Vor dem Klonen des aktuellen Upstream-Stands in ein temporäres Verzeichnis werden alle in `preserve` deklarierten Ordner und Dateien (z. B. `dist`, `www`, `index.html`) gesichert. Das Zielverzeichnis wird bereinigt und mit dem neuen Upstream-Code befüllt. Web-Builds bleiben dadurch 100 % lauffähig.
+
+- **Strikter Ausschluss von Entwicklungs-Ballast:**
+  Beim Kopieren werden `.git`, `node_modules` und versionsspezifische Lockfiles strikt gefiltert. Windows-spezifische Dateisperren (`EPERM`) werden fehlertolerant behandelt.
 
 ## Konsequenzen
 
-- **Demos bleiben dauerhaft lauffähig:** Ein Upstream-Sync überschreibt vorkompilierte `dist/`-Ordner nicht, wodurch die Web-Demos im Portfolio auch nach Code-Updates im Original-Repo sofort einsatzbereit bleiben.
-- **Keine Bloat-Gefahr:** Das Monorepo bleibt frei von verschachtelten `.git`-Objektdatenbanken und `node_modules`.
-- **Klare Single Source of Truth:** Änderungen am Quellcode eines gemappten Projekts müssen im Upstream-Repository vorgenommen werden. Lokale Edits in nicht in `preserve` gelisteten Dateien würden beim nächsten Sync überschrieben.
+- **Dauerhafte Aktualität ohne manuellen Aufwand:** Änderungen an Einzelprojekten fließen durch die 3 Stufen garantiert zeitnah in das Portfolio ein.
+- **Maximale Ausfallsicherheit:** Versagt eine Methode (z. B. Webhook/PAT), greift binnen 24 Stunden der Cron-Job, oder lokal der 1-Klick-Befehl.
+- **Stabilität & QA-Schutz:** Automatische Syncs in GitHub Actions erstellen einen PR mit vollständigen CI-Checks (Playwright E2E, Vitest, Lighthouse), sodass fehlerhafter Subprojekt-Code niemals unbemerkt die Portfolio-Hauptseite bricht.
+- **Demos bleiben dauerhaft lauffähig:** Vorkompilierte `dist/`-Ordner werden durch `preserve` niemals überschrieben.

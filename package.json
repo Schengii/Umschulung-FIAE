@@ -19,6 +19,7 @@
     "generate-sw-assets": "node scripts/generate_sw_assets.js",
     "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
+    "install-sync-triggers": "node scripts/install_sync_triggers.js",
     "lint": "eslint assets/js scripts sw.js",
     "lint:fix": "eslint assets/js scripts sw.js --fix",
     "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\" sw.js",
