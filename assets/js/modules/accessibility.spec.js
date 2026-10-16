@@ -67,3 +67,44 @@ for (const colorScheme of colorSchemes) {
         }
     });
 }
+
+test.describe('Mobile Navigation Drawer A11y & Focus Management', () => {
+    test.use({ viewport: { width: 375, height: 667 } });
+
+    test('sollte aria-expanded beim Klick auf menu-toggle korrekt umschalten', async ({ page }) => {
+        await page.goto('/pages/home.html');
+        await settle(page);
+
+        const toggle = page.locator('#menu-toggle');
+        const menu = page.locator('#nav-menu');
+
+        await expect(toggle).toBeVisible();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(menu).not.toHaveClass(/open/);
+
+        await toggle.click();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+        await expect(menu).toHaveClass(/open/);
+
+        await toggle.click();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(menu).not.toHaveClass(/open/);
+    });
+
+    test('sollte bei Escape das geöffnete mobile Menü schließen und den Fokus zurückgeben', async ({ page }) => {
+        await page.goto('/pages/home.html');
+        await settle(page);
+
+        const toggle = page.locator('#menu-toggle');
+        const menu = page.locator('#nav-menu');
+
+        await toggle.click();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+        await expect(menu).toHaveClass(/open/);
+
+        await page.keyboard.press('Escape');
+        await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(menu).not.toHaveClass(/open/);
+        await expect(toggle).toBeFocused();
+    });
+});
