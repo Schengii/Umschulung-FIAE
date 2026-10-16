@@ -61,7 +61,12 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
         }
 
         // Check if Web3Forms key is set
-        if (typeof APP !== 'undefined' && APP.WEB3FORMS_KEY) {
+        if (
+            typeof APP !== 'undefined' &&
+            APP.WEB3FORMS_KEY &&
+            typeof APP.WEB3FORMS_KEY === 'string' &&
+            APP.WEB3FORMS_KEY.trim() !== ''
+        ) {
             const submitBtn = /** @type {HTMLButtonElement} */ (form.querySelector('button[type="submit"]'));
             const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
             if (submitBtn) {
@@ -73,12 +78,17 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                 document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
             }
 
+            const controller =
+                typeof window !== 'undefined' && 'AbortController' in window ? new window.AbortController() : null;
+            const timeoutId = controller ? setTimeout(() => controller.abort(), 8000) : null;
+
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                 },
+                signal: controller ? controller.signal : undefined,
                 body: JSON.stringify({
                     access_key: APP.WEB3FORMS_KEY,
                     name: name.value,
@@ -88,7 +98,10 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                     botcheck: false,
                 }),
             })
-                .then((res) => res.json())
+                .then((res) => {
+                    if (timeoutId) clearTimeout(timeoutId);
+                    return res.json();
+                })
                 .then((data) => {
                     if (data.success) {
                         if (feedback) {
