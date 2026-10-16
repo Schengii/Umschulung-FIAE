@@ -108,3 +108,47 @@ test.describe('Mobile Navigation Drawer A11y & Focus Management', () => {
         await expect(toggle).toBeFocused();
     });
 });
+
+test.describe('Accent Colors & High-Contrast WCAG 2.1 AA Contrast Audit', () => {
+    const accents = ['blue', 'emerald', 'violet', 'orange', 'rose'];
+
+    for (const accent of accents) {
+        test(`sollte mit Akzentfarbe "${accent}" WCAG 2.1 AA (4.5:1) Kontrastkriterien einhalten`, async ({ page }) => {
+            await page.emulateMedia({ reducedMotion: 'reduce' });
+            await page.goto('/pages/home.html');
+            await settle(page);
+            await page.evaluate((acc) => {
+                document.documentElement.setAttribute('data-accent', acc);
+            }, accent);
+            await page.waitForTimeout(300);
+
+            const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
+
+            const contrastViolations = results.violations.filter((v) => v.id === 'color-contrast');
+            expect(
+                contrastViolations,
+                `Kontrast-Verstoß bei Akzent ${accent}: ${JSON.stringify(contrastViolations, null, 2)}`
+            ).toEqual([]);
+        });
+    }
+
+    test('sollte im High-Contrast-Modus (data-contrast="high") WCAG 2.1 AA Kontrastkriterien einhalten', async ({
+        page,
+    }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/pages/home.html');
+        await settle(page);
+        await page.evaluate(() => {
+            document.documentElement.setAttribute('data-contrast', 'high');
+        });
+        await page.waitForTimeout(300);
+
+        const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
+
+        const contrastViolations = results.violations.filter((v) => v.id === 'color-contrast');
+        expect(
+            contrastViolations,
+            `Kontrast-Verstoß im High-Contrast-Modus: ${JSON.stringify(contrastViolations, null, 2)}`
+        ).toEqual([]);
+    });
+});

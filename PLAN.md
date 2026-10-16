@@ -32,7 +32,7 @@
 - [x] M17 | E2E-A11y-Test für Mobile-Drawer-Fokus und `aria-expanded`-Zustand ergänzen | P3 | S | assets/js/modules/accessibility.spec.js | assets/js/components.js:194 | Fertig wenn: Playwright-Test bestätigt, dass `aria-expanded` und Fokus beim Öffnen/Schließen des mobilen Menüs korrekt verwaltet werden.
 - [x] M18 | ADR 0012 für Sub-Projekt Synchronisations-Strategie anlegen | P3 | S | docs/adr/0012-unterprojekt-sync-strategie.md, docs/adr/README.md | docs/adr/README.md:20 | Fertig wenn: ADR 0012 im ADR-Index dokumentiert ist und `REPO_MAPPING` sowie `preserve`-Listen erläutert.
 - [x] M19 | Node-Versionsanforderungen in `README.md`, `CLAUDE.md` und `package.json` abgleichen | P3 | S | README.md, CLAUDE.md, package.json | package.json:6 | Fertig wenn: Alle 3 Dokumente einheitlich `Node >= 22.12` lokal und `Node 24` in CI beschreiben.
-- [ ] M20 | Kontrast-Audit aller 5 Akzentfarben im High-Contrast- und Standard-Theme als Test absichern | P3 | M | assets/css/style.css, assets/js/modules/accessibility.spec.js | assets/css/style.css:120 | Fertig wenn: Playwright-Test alle Akzentfarben (`blue`, `green`, `purple`, `amber`, `rose`) gegen WCAG 2.1 AA (4.5:1) prüft.
+- [x] M20 | Kontrast-Audit aller 5 Akzentfarben im High-Contrast- und Standard-Theme als Test absichern | P3 | M | assets/css/style.css, assets/js/modules/accessibility.spec.js | assets/css/style.css:120 | Fertig wenn: Playwright-Test alle Akzentfarben (`blue`, `green`, `purple`, `amber`, `rose`) gegen WCAG 2.1 AA (4.5:1) prüft.
 
 ### Optional (Ideen ohne harten Beleg)
 - [ ] OPT-1 | Automatisierte Lighthouse-CI Reports in PR-Kommentaren verlinken | P3 | M | .github/workflows/ci.yml | - | Fertig wenn: Lighthouse-Audit-Scores als GitHub PR-Kommentar gepostet werden.
