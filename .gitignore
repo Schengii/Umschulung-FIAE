@@ -45,3 +45,6 @@ Thumbs.db
 *.db
 *.backup
 *.bak
+
+# Projektkopien (Archiv): Lockfiles gehören in die Original-Repos, nicht hierher
+Projekte/**/package-lock.json
