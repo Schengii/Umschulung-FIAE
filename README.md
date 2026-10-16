@@ -1,9 +1,9 @@
 # Entwickler-Dokumentation & Projekt-Leitfaden — Umschulung FIAE
 
 [![CI](https://github.com/Schengii/Umschulung-FIAE/actions/workflows/ci.yml/badge.svg)](https://github.com/Schengii/Umschulung-FIAE/actions/workflows/ci.yml)
-[![Live](https://img.shields.io/badge/Live-max--schenk.tech-2ea44f)](https://max-schenk.tech)
+[![Live](https://img.shields.io/badge/Live-www.max--schenk.tech-2ea44f)](https://www.max-schenk.tech)
 [![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](#)
-[![PWA](https://img.shields.io/badge/PWA-offline--f%C3%A4hig-5a0fc8)](https://max-schenk.tech)
+[![PWA](https://img.shields.io/badge/PWA-offline--f%C3%A4hig-5a0fc8)](https://www.max-schenk.tech)
 
 Herzlich willkommen im zentralen Portfolio-Repository zur Umschulung als **Fachinformatiker für Anwendungsentwicklung (FIAE)** von Maximilian Schenk.
 
