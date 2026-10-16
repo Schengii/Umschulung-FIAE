@@ -125,8 +125,31 @@ function findMissingLinkTargets() {
     return missing;
 }
 
+function cleanDistDir(dir) {
+    if (!fs.existsSync(dir)) return;
+    try {
+        fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch (_err) {
+        // On Windows, if a folder handle is held open by another process, recursively clean contents
+        const cleanChildren = (target) => {
+            if (!fs.existsSync(target)) return;
+            for (const entry of fs.readdirSync(target, { withFileTypes: true })) {
+                const fullPath = path.join(target, entry.name);
+                try {
+                    fs.rmSync(fullPath, { recursive: true, force: true, maxRetries: 3, retryDelay: 50 });
+                } catch (_childErr) {
+                    if (entry.isDirectory()) {
+                        cleanChildren(fullPath);
+                    }
+                }
+            }
+        };
+        cleanChildren(dir);
+    }
+}
+
 async function run() {
-    if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true, force: true });
+    cleanDistDir(distDir);
     fs.mkdirSync(distDir, { recursive: true });
 
     for (const entry of COPY_ENTRIES) {
