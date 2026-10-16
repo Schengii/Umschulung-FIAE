@@ -2,17 +2,31 @@
 // <script> files and ES modules (via window.*). Only used by `npm run typecheck`;
 // never loaded in the browser.
 
+interface AppStorageStatic {
+    isAvailable(): boolean;
+    getItem(key: string, defaultValue?: any): any;
+    setItem(key: string, value: any): boolean;
+    removeItem(key: string): boolean;
+}
+
 declare var GameAudio: any;
 declare var Achievements: any;
 declare var Confetti: any;
 declare var Prism: any;
-declare var newsData: any;
+declare var newsData: Array<Record<string, any>>;
 declare function initTranslation(...args: any[]): any;
 declare function showToast(...args: any[]): any;
 declare function initBlogEnhancements(...args: any[]): any;
 
 interface Window {
-    APP: any;
+    APP: {
+        DEFAULT_LANG: string;
+        SEARCHABLE_PAGES: string[];
+        SCROLL_THRESHOLD: number;
+        GITHUB_USERNAME: string;
+        WEB3FORMS_KEY: string;
+    };
+    AppStorage: AppStorageStatic;
     Achievements: any;
     GameAudio: any;
     Confetti: any;
@@ -20,11 +34,11 @@ interface Window {
     closeProjectModal: any;
     addLiveCommit: any;
     showToast: any;
-    projectsData: any;
-    _cachedProjectsData: any;
-    newsData: any;
-    PLACEHOLDER_IMAGE: any;
-    STORAGE_KEYS: any;
+    projectsData: Array<Record<string, any>>;
+    _cachedProjectsData: Array<Record<string, any>> | undefined;
+    newsData: Array<Record<string, any>>;
+    PLACEHOLDER_IMAGE: string;
+    STORAGE_KEYS: Readonly<Record<string, string>>;
     openProjectModal: any;
     deleteCustomCard: any;
     initPraktikumsbetriebMedia: any;
