@@ -399,14 +399,42 @@ class InterviewSimulator {
             this.recognition.onerror = (e) => {
                 console.warn('Speech recognition error:', e.error);
                 this.isRecording = false;
+                if (this.micBtn) {
+                    this.micBtn.classList.remove('recording');
+                    const micIcon = this.micBtn.querySelector('i');
+                    if (micIcon) micIcon.className = 'fa fa-microphone';
+                }
+                if (window.showToast) {
+                    const msg =
+                        e.error === 'not-allowed'
+                            ? { de: 'Mikrofonzugriff wurde verweigert.', en: 'Microphone access denied.' }
+                            : { de: `Spracherkennungsfehler: ${e.error}`, en: `Speech recognition error: ${e.error}` };
+                    window.showToast(msg, 'warning');
+                }
             };
 
             this.micBtn.addEventListener('click', () => {
+                if (window.isSecureContext === false) {
+                    if (window.showToast) {
+                        window.showToast(
+                            {
+                                de: 'Spracherkennung erfordert eine sichere Verbindung (HTTPS).',
+                                en: 'Speech recognition requires a secure context (HTTPS).',
+                            },
+                            'warning'
+                        );
+                    }
+                    return;
+                }
                 if (this.isRecording) {
                     this.recognition.stop();
                 } else {
-                    this.recognition.lang = this.selectedLanguage === 'de' ? 'de-DE' : 'en-US';
-                    this.recognition.start();
+                    try {
+                        this.recognition.lang = this.selectedLanguage === 'de' ? 'de-DE' : 'en-US';
+                        this.recognition.start();
+                    } catch (err) {
+                        console.warn('Speech recognition start failed:', err);
+                    }
                 }
             });
         } else if (this.micBtn) {
