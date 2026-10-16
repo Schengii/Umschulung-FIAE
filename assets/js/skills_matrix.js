@@ -37,6 +37,16 @@ const SKILLS_DATA = [
         refTextEn: 'View TypeScript',
     },
     {
+        name: 'React 19 & Vite',
+        score: 85,
+        category: 'frontend',
+        descDe: 'Moderne SPA-Architekturen, Hooks, Zustand-Store, reaktive Datenflüsse und Vite Tooling.',
+        descEn: 'Modern SPA architectures, Hooks, Zustand store, reactive state flows, and Vite tooling.',
+        refLink: 'portfolio.html',
+        refTextDe: 'React-Projekte ansehen',
+        refTextEn: 'View React Projects',
+    },
+    {
         name: 'Lit (Web Components)',
         score: 80,
         category: 'frontend',
@@ -96,6 +106,26 @@ const SKILLS_DATA = [
         refLink: 'playground.html',
         refTextDe: 'API Fetcher testen',
         refTextEn: 'Test API Fetcher',
+    },
+    {
+        name: 'C++20 & 3D Engine',
+        score: 75,
+        category: 'backend',
+        descDe: 'Moderne C++-Standards (C++20), RAII, Smart Pointer, OpenGL 4.5 Grafikpipeline und CMake.',
+        descEn: 'Modern C++ standards (C++20), RAII, smart pointers, OpenGL 4.5 graphics pipeline, and CMake.',
+        refLink: 'portfolio.html',
+        refTextDe: 'Minecraft Engine ansehen',
+        refTextEn: 'View Minecraft Engine',
+    },
+    {
+        name: 'Generative KI (Gemini & OpenAI)',
+        score: 85,
+        category: 'backend',
+        descDe: 'Strukturierte LLM-Prompts, JSON-Schema-Guards, multimodale Einbettung und RAG-Pipelines.',
+        descEn: 'Structured LLM prompting, JSON schema guards, multimodal embeddings, and RAG pipelines.',
+        refLink: 'portfolio.html',
+        refTextDe: 'KI-Projekte ansehen',
+        refTextEn: 'View AI Projects',
     },
     // Tools
     {

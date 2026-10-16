@@ -142,13 +142,17 @@
                         <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
                         <span lang="de">Spiele</span><span lang="en">Games</span>
                     </button>
-                    <button class="btn-filter" data-filter="java">
-                        <i class="fa-brands fa-java" aria-hidden="true"></i>
-                        <span lang="de">Java</span><span lang="en">Java</span>
+                    <button class="btn-filter" data-filter="typescript">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                        <span lang="de">TypeScript</span><span lang="en">TypeScript</span>
                     </button>
                     <button class="btn-filter" data-filter="javascript">
                         <i class="fa-brands fa-js" aria-hidden="true"></i>
                         <span lang="de">JavaScript</span><span lang="en">JavaScript</span>
+                    </button>
+                    <button class="btn-filter" data-filter="cpp">
+                        <i class="fa-solid fa-cube" aria-hidden="true"></i>
+                        <span lang="de">C++20</span><span lang="en">C++20</span>
                     </button>
                 </div>
 
@@ -239,8 +243,8 @@
                         <div class="code-accordion-title-wrap">
                             <h3 lang="de" class="m-0"><i class="fa fa-code" aria-hidden="true"></i> Code-Qualität &amp; Programmier-Snippets</h3>
                             <h3 lang="en" class="m-0"><i class="fa fa-code" aria-hidden="true"></i> Code Quality &amp; Programming Snippets</h3>
-                            <p lang="de" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Beispiele für sauberen, modularen &amp; wartungsfreundlichen Code (TypeScript, React, Java &amp; Web Workers).</p>
-                            <p lang="en" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Examples of clean, modular &amp; maintainable code (TypeScript, React, Java &amp; Web Workers).</p>
+                            <p lang="de" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Beispiele für sauberen, modularen &amp; wartungsfreundlichen Code (TypeScript, React 19, C++20 &amp; Gemini KI).</p>
+                            <p lang="en" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Examples of clean, modular &amp; maintainable code (TypeScript, React 19, C++20 &amp; Gemini AI).</p>
                         </div>
                         <div class="code-accordion-badge">
                             <span class="code-accordion-badge-text" lang="de">Code anzeigen</span>
@@ -254,10 +258,10 @@
                         <!-- Tabs to select snippets -->
                         <div class="code-tabs">
                             <button type="button" class="code-tab-btn active" data-target="snippet-ecochef">EcoChef (Lit/TS)</button>
-                            <button type="button" class="code-tab-btn" data-target="snippet-burgengame">BurgenGame (Worker AI)</button>
-                            <button type="button" class="code-tab-btn" data-target="snippet-react">React Hook</button>
-                            <button type="button" class="code-tab-btn" data-target="snippet-java">Java Pattern</button>
-                            <button type="button" class="code-tab-btn" data-target="snippet-js">Async Fetch</button>
+                            <button type="button" class="code-tab-btn" data-target="snippet-minecraft">Minecraft (C++20)</button>
+                            <button type="button" class="code-tab-btn" data-target="snippet-elektrocheck">ElektroCheck (AI/PDF)</button>
+                            <button type="button" class="code-tab-btn" data-target="snippet-react">React 19 Hook</button>
+                            <button type="button" class="code-tab-btn" data-target="snippet-pwa">PWA Caching</button>
                         </div>
 
                         <!-- Code Container -->
@@ -289,36 +293,65 @@
                                 Encapsulates Google Gemini 1.5 Pro calls in a modular service layer with strict JSON schema validation and nutrition/carbon footprint analytics.</p>
                         </div>
 
-                        <!-- Snippet BurgenGame: Web Worker AI -->
-                        <div id="snippet-burgengame" class="code-snippet">
-                            <pre><code><span class="token comment">// BurgenGame 2D Engine: Asynchroner AI Worker Hook</span>
-<span class="token keyword">class</span> <span class="token classname">AIBot</span> {
-  <span class="token keyword">constructor</span>(stateManager, ui) {
-    <span class="token keyword">this</span>.stateManager = stateManager;
-    <span class="token keyword">this</span>.ui = ui;
-    <span class="token keyword">this</span>.<span class="token function">initWorker</span>();
-  }
+                        <!-- Snippet Minecraft: C++20 Voxel Engine -->
+                        <div id="snippet-minecraft" class="code-snippet" style="display: none;">
+                            <pre><code><span class="token comment">// Minecraft C++20 Voxel Engine: Redstone Propagation &amp; Block Updates</span>
+<span class="token keyword">struct</span> <span class="token classname">BlockUpdate</span> {
+    glm::ivec3 position;
+    uint8_t signalStrength;
+};
 
-  <span class="token function">initWorker</span>() {
-    <span class="token keyword">this</span>.worker = <span class="token keyword">new</span> <span class="token classname">Worker</span>(<span class="token string">'js/workers/ai_worker.js'</span>);
-    <span class="token keyword">this</span>.worker.postMessage({
-      type: <span class="token string">'INIT'</span>,
-      config: { personality: <span class="token string">'builder'</span>, autoAttack: <span class="token boolean">true</span> }
-    });
+<span class="token keyword">void</span> <span class="token classname">RedstoneSimulator</span>::<span class="token function">propagateSignal</span>(glm::ivec3 source, uint8_t power) {
+    std::queue&lt;BlockUpdate&gt; updateQueue;
+    updateQueue.push({source, power});
 
-    <span class="token keyword">this</span>.worker.onmessage = (e) => {
-      <span class="token keyword">const</span> { action, args, message } = e.data;
-      <span class="token keyword">if</span> (<span class="token keyword">typeof this</span>.stateManager[action] === <span class="token string">'function'</span>) {
-        <span class="token keyword">this</span>.stateManager[action](...args);
-        <span class="token keyword">this</span>.ui.<span class="token function">showFloatingNotification</span>(message);
-      }
-    };
-  }
+    <span class="token keyword">while</span> (!updateQueue.empty()) {
+        <span class="token keyword">auto</span> current = updateQueue.front();
+        updateQueue.pop();
+
+        <span class="token keyword">if</span> (current.signalStrength == 0) <span class="token keyword">continue</span>;
+
+        <span class="token keyword">for</span> (<span class="token keyword">const auto</span>&amp; dir : ADJACENT_DIRECTIONS) {
+            glm::ivec3 target = current.position + dir;
+            <span class="token keyword">if</span> (world.getBlock(target).type == BlockType::RedstoneWire) {
+                uint8_t newPower = current.signalStrength - 1;
+                <span class="token keyword">if</span> (newPower &gt; world.getSignal(target)) {
+                    world.setSignal(target, newPower);
+                    updateQueue.push({target, newPower});
+                }
+            }
+        }
+    }
 }</code></pre>
-                            <p lang="de" class="code-desc"><strong>BurgenGame Web Worker Bot Architecture:</strong>
-                                Entlastet den 60-FPS-Haupt-Renderthread, indem KI-Bot-Taktikentscheidungen in einem parallelen Web Worker asynchron berechnet und per Message-Channel ausgeführt werden.</p>
-                            <p lang="en" class="code-desc"><strong>BurgenGame Web Worker Bot Architecture:</strong>
-                                Keeps the 60 FPS main rendering thread silky-smooth by offloading bot decisions to a parallel Web Worker communicating via message-passing.</p>
+                            <p lang="de" class="code-desc"><strong>Minecraft C++20 Voxel Simulation:</strong>
+                                Effiziente Breadth-First-Propagation für Redstone-Schaltungen in einer 3D-Voxel-Welt mit Zero-Allocation Chunks und OpenGL 4.5 Mesh-Rendering.</p>
+                            <p lang="en" class="code-desc"><strong>Minecraft C++20 Voxel Simulation:</strong>
+                                Efficient breadth-first signal propagation for Redstone circuits in a 3D voxel engine with zero-allocation chunks and OpenGL 4.5 mesh rendering.</p>
+                        </div>
+
+                        <!-- Snippet ElektroCheck: AI Report Extractor -->
+                        <div id="snippet-elektrocheck" class="code-snippet" style="display: none;">
+                            <pre><code><span class="token comment">// ElektroCheck AI: DGUV V3 PDF Report Parser mit OpenAI JSON-Guard</span>
+<span class="token keyword">export async function</span> <span class="token function">analyzeInspectionPdf</span>(pdfText: <span class="token keyword">string</span>): <span class="token classname">Promise</span>&lt;<span class="token classname">DguvReport</span>&gt; {
+  <span class="token keyword">const</span> response = <span class="token keyword">await</span> openai.chat.completions.<span class="token function">create</span>({
+    model: <span class="token string">'gpt-4o'</span>,
+    response_format: { type: <span class="token string">'json_object'</span> },
+    messages: [
+      {
+        role: <span class="token string">'system'</span>,
+        content: <span class="token string">'Extrahiere Prüflinge, R_iso, R_pe, Grenzwerte und Mängel nach DGUV V3.'</span>
+      },
+      { role: <span class="token string">'user'</span>, content: pdfText }
+    ]
+  });
+
+  <span class="token keyword">const</span> parsed = JSON.<span class="token function">parse</span>(response.choices[0].message.content);
+  <span class="token keyword">return</span> DguvReportSchema.<span class="token function">parse</span>(parsed); <span class="token comment">// Zod runtime validation</span>
+}</code></pre>
+                            <p lang="de" class="code-desc"><strong>ElektroCheck AI DGUV-Analyse (Node.js &amp; OpenAI):</strong>
+                                Strukturiert unstrukturierte Prüfprotokoll-PDFs in typsichere Datenobjekte mit Zod-Validierung und automatischer Mängelbewertung.</p>
+                            <p lang="en" class="code-desc"><strong>ElektroCheck AI DGUV Analytics (Node.js &amp; OpenAI):</strong>
+                                Transforms unstructured electrical inspection PDFs into type-safe models using OpenAI JSON mode and Zod runtime schema validation.</p>
                         </div>
 
                         <!-- Snippet 1: React Hook -->
@@ -370,74 +403,32 @@
                                 race conditions on component unmount, and structured loading/error state management.</p>
                         </div>
 
-                        <!-- Snippet 2: Java Pattern -->
-                        <div id="snippet-java" class="code-snippet">
-                            <pre><code><span class="token comment">// Strategy Pattern für Rabattberechnungen</span>
-<span class="token keyword">public interface</span> <span class="token classname">DiscountStrategy</span> {
-    <span class="token keyword">double</span> <span class="token function">applyDiscount</span>(<span class="token keyword">double</span> price);
-}
+                        <!-- Snippet PWA Service Worker -->
+                        <div id="snippet-pwa" class="code-snippet" style="display: none;">
+                            <pre><code><span class="token comment">// PWA Stale-While-Revalidate Caching mit Offline-Fallback</span>
+self.<span class="token function">addEventListener</span>(<span class="token string">'fetch'</span>, (event) => {
+  <span class="token keyword">if</span> (event.request.method !== <span class="token string">'GET'</span>) <span class="token keyword">return</span>;
 
-<span class="token comment">// Konkrete Implementierung: Prozentualer Rabatt</span>
-<span class="token keyword">public class</span> <span class="token classname">PercentageDiscount</span> <span class="token keyword">implements</span> <span class="token classname">DiscountStrategy</span> {
-    <span class="token keyword">private final double</span> rate;
+  event.<span class="token function">respondWith</span>(
+    caches.<span class="token function">open</span>(CACHE_NAME).<span class="token function">then</span>(<span class="token keyword">async</span> (cache) => {
+      <span class="token keyword">const</span> cachedResponse = <span class="token keyword">await</span> cache.<span class="token function">match</span>(event.request);
+      <span class="token keyword">const</span> networkFetch = <span class="token function">fetch</span>(event.request)
+        .<span class="token function">then</span>((networkResponse) => {
+          <span class="token keyword">if</span> (networkResponse.ok) {
+            cache.<span class="token function">put</span>(event.request, networkResponse.<span class="token function">clone</span>());
+          }
+          <span class="token keyword">return</span> networkResponse;
+        })
+        .<span class="token function">catch</span>(() => cachedResponse || caches.<span class="token function">match</span>(<span class="token string">'offline.html'</span>));
 
-    <span class="token keyword">public</span> <span class="token classname">PercentageDiscount</span>(<span class="token keyword">double</span> rate) {
-        <span class="token keyword">this</span>.rate = rate;
-    }
-
-    <span class="token annotation">@Override</span>
-    <span class="token keyword">public double</span> <span class="token function">applyDiscount</span>(<span class="token keyword">double</span> price) {
-        <span class="token keyword">return</span> price * (<span class="token number">1.0</span> - rate);
-    }
-}
-
-<span class="token comment">// Kontext-Klasse (Warenkorb)</span>
-<span class="token keyword">public class</span> <span class="token classname">ShoppingCart</span> {
-    <span class="token keyword">private</span> <span class="token classname">DiscountStrategy</span> strategy;
-
-    <span class="token keyword">public void</span> <span class="token function">setDiscountStrategy</span>(<span class="token classname">DiscountStrategy</span> strategy) {
-        <span class="token keyword">this</span>.strategy = strategy;
-    }
-
-    <span class="token keyword">public double</span> <span class="token function">calculateTotal</span>(<span class="token keyword">double</span> subtotal) {
-        <span class="token keyword">if</span> (strategy == <span class="token keyword">null</span>) <span class="token keyword">return</span> subtotal;
-        <span class="token keyword">return</span> strategy.applyDiscount(subtotal);
-    }
-}</code></pre>
-                            <p lang="de" class="code-desc"><strong>Java Strategy Pattern:</strong> Demonstriert das
-                                Open-Closed-Prinzip (SOLID). Neue Rabattarten können ohne Modifikation des bestehenden
-                                Warenkorbs über neue Klassen erweitert werden.</p>
-                            <p lang="en" class="code-desc"><strong>Java Strategy Pattern:</strong> Demonstrates the
-                                Open-Closed Principle (SOLID). New discount algorithms can be easily added by creating
-                                new strategy implementations without changing the shopping cart context class.</p>
-                        </div>
-
-                        <!-- Snippet 3: JS Fetch Wrapper -->
-                        <div id="snippet-js" class="code-snippet">
-                            <pre><code><span class="token comment">// Fetch-Abfrage mit automatischem Offline-Fallback</span>
-<span class="token keyword">async function</span> <span class="token function">fetchWithFallback</span>(url, fallbackFile) {
-  <span class="token keyword">try</span> {
-    <span class="token keyword">const</span> response = <span class="token keyword">await</span> <span class="token function">fetch</span>(url);
-    <span class="token keyword">if</span> (!response.ok) {
-      <span class="token keyword">throw new</span> <span class="token classname">Error</span>(<span class="token string">`Server returned status: ${response.status}`</span>);
-    }
-    <span class="token keyword">return await</span> response.json();
-  } <span class="token keyword">catch</span> (error) {
-    <span class="token comment">// Fallback im Offline-Modus</span>
-    console.warn(<span class="token string">"Backend unreachable. Loading offline mock-data..."</span>, error);
-    <span class="token keyword">const</span> mockRes = <span class="token keyword">await</span> <span class="token function">fetch</span>(fallbackFile);
-    <span class="token keyword">if</span> (!mockRes.ok) {
-      <span class="token keyword">throw new</span> <span class="token classname">Error</span>(<span class="token string">"Failed to load mock fallback file."</span>);
-    }
-    <span class="token keyword">return await</span> mockRes.json();
-  }
-}</code></pre>
-                            <p lang="de" class="code-desc"><strong>JS Async Fetcher mit Offline Fallback:</strong>
-                                Sichert die Funktionsfähigkeit der Applikation bei Netzwerkausfällen oder inaktivem
-                                Server, indem lokale Mock-Daten geladen werden (Showcase-Modus).</p>
-                            <p lang="en" class="code-desc"><strong>JS Async Fetcher with Offline Fallback:</strong>
-                                Resolves fetch failures during network timeouts or inactive servers by falling back to
-                                local static JSON mock datasets to guarantee application usability.</p>
+      <span class="token keyword">return</span> cachedResponse || networkFetch;
+    })
+  );
+});</code></pre>
+                            <p lang="de" class="code-desc"><strong>PWA Cache-First mit Stale-While-Revalidate:</strong>
+                                Garantiert sofortige Ladezeiten auch ohne Internetverbindung und aktualisiert den lokalen Cache im Hintergrund für maximale Zuverlässigkeit.</p>
+                            <p lang="en" class="code-desc"><strong>PWA Cache-First with Stale-While-Revalidate:</strong>
+                                Delivers instant page loads even offline, silently refreshing cached assets in the background for maximum reliability.</p>
                         </div>
                     </div>
                 </div>

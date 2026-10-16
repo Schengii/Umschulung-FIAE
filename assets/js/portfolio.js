@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const SORT_KEY = 'portfolio_sort_order';
     const DEFAULT_SORT_ORDER = 'desc';
 
-    // State for filtering and pagination (Page 1 = 7 projects, subsequent pages = 6 projects)
+    // State for filtering and pagination (Page 1 = 8 projects to show all curated flagships seamlessly)
     let allProjects = [];
     let currentPage = 1;
-    const FIRST_PAGE_PROJECTS = 7;
-    const SUBSEQUENT_PAGE_PROJECTS = 6;
+    const FIRST_PAGE_PROJECTS = 8;
+    const SUBSEQUENT_PAGE_PROJECTS = 8;
     let currentSearchTerm = '';
     let currentCategory = 'all';
     const clearSearchBtn = document.getElementById('btn-clear-search');
@@ -246,12 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Quick-Sandbox trigger: only for projects playable directly in the in-page modal
         const SANDBOX_PLAYABLE_REPOS = [
             'EcoChef',
-            'BurgenGame',
-            'Sims',
+            'ElektroCheck-AI',
+            'Amazon-2.0',
+            'Informatik-lernen',
             'ManuFaktur',
-            'Glücksspiel',
-            'CoOpVersusGame',
-            'Urlaubsfotos',
+            'Wohnungssuche-KI',
         ];
         if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
             buttonsHTML += `
@@ -335,14 +334,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 proj.highlight ||
                 proj.isHighlight ||
                 proj.repoName === 'EcoChef' ||
-                proj.repoName === 'ElektroCheck' ||
-                proj.repoName === 'CoOpVersusGame' ||
+                proj.repoName === 'ElektroCheck-AI' ||
+                proj.repoName === 'Amazon-2.0' ||
+                proj.repoName === 'Minecraft' ||
                 (proj.stars && proj.stars >= 5);
             const matchesCategory =
                 currentCategory === 'all' ||
                 (currentCategory === 'highlight' && isHighlight) ||
                 (proj.category && proj.category.includes(currentCategory)) ||
-                (proj.language && proj.language.toLowerCase() === currentCategory);
+                (proj.language && proj.language.toLowerCase() === currentCategory) ||
+                (currentCategory === 'cpp' &&
+                    (proj.language === 'C++' ||
+                        (proj.tags && proj.tags.some((t) => t.toLowerCase().includes('c++'))))) ||
+                (currentCategory === 'typescript' &&
+                    (proj.language?.toLowerCase() === 'typescript' ||
+                        (proj.tags && proj.tags.some((t) => t.toLowerCase().includes('typescript')))));
 
             if (!matchesCategory) return false;
 
