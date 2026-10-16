@@ -63,14 +63,14 @@ jobs:
       - name: Check Code Formatting (Prettier)
         run: npm run format:check
 
+      - name: JSDoc Type Check
+        run: npm run typecheck
+
       - name: Run Vitest Unit Test Suite
         run: npm run test:unit
 
       - name: Verify Production Build (esbuild minify)
         run: npm run build:dist
-
-      - name: JSDoc Type Check
-        run: npm run typecheck
 
   e2e:
     # One job per Playwright project so the browsers run in parallel (a single
