@@ -8,17 +8,28 @@
 /**
  * Standard IHK Prüfungstermine
  */
-export const IHK_EXAM_DATES = [
-  { id: 'winter_2026', name: 'Winterprüfung 2026/2027 (AP1 & AP2)', date: '2026-11-25' },
-  { id: 'summer_2027', name: 'Sommerprüfung 2027 (AP1 & AP2)', date: '2027-05-05' },
-  { id: 'winter_2027', name: 'Winterprüfung 2027/2028 (AP1 & AP2)', date: '2027-11-24' }
-];
+/**
+ * Standard IHK Prüfungstermine generieren
+ * @param {number} [baseYear=new Date().getFullYear()]
+ * @returns {Array<{ id: string, name: string, date: string }>}
+ */
+export function getIhkExamDates(baseYear = new Date().getFullYear()) {
+  return [
+    { id: `winter_${baseYear}`, name: `Winterprüfung ${baseYear}/${baseYear + 1} (AP1 & AP2)`, date: `${baseYear}-11-25` },
+    { id: `summer_${baseYear + 1}`, name: `Sommerprüfung ${baseYear + 1} (AP1 & AP2)`, date: `${baseYear + 1}-05-05` },
+    { id: `winter_${baseYear + 1}`, name: `Winterprüfung ${baseYear + 1}/${baseYear + 2} (AP1 & AP2)`, date: `${baseYear + 1}-11-24` }
+  ];
+}
+
+export const IHK_EXAM_DATES = getIhkExamDates();
 
 export const IHK_DISCIPLINES = [
   { id: 'fiae', name: 'Fachinformatiker Anwendungsentwicklung (FIAE)' },
   { id: 'fisi', name: 'Fachinformatiker Systemintegration (FISI)' },
   { id: 'fidp', name: 'Fachinformatiker Daten- und Prozessanalyse (FIDP)' },
-  { id: 'itse', name: 'IT-Systemelektroniker (IT-SE)' }
+  { id: 'fidv', name: 'Fachinformatiker Digitale Vernetzung (FIDV)' },
+  { id: 'itse', name: 'IT-Systemelektroniker (IT-SE)' },
+  { id: 'itsm', name: 'Kaufleute für IT-Systemmanagement (ITSM)' }
 ];
 
 /**
@@ -46,23 +57,38 @@ export const STUDY_TRACKS = {
     { title: 'Datenschutz-Folgenabschätzung (DSFA) & BSI Schutzbedarf', tags: ['#DSFA', '#BSI', '#Datenschutz'], recommendedLab: 'bsi_grundschutz_lab' },
     { title: 'WISO: Deckungsbeitrag, Break-Even & Lohnabrechnung', tags: ['#WISO', '#Lohn', '#Controlling'], recommendedLab: 'wiso_payroll_lab' }
   ],
+  fidv: [
+    { title: 'Cyber-physische Systeme, Edge Gateway & MQTT/OPC-UA', tags: ['#IoT', '#MQTT', '#OPCUA'], recommendedLab: 'ble_sensor' },
+    { title: 'Industrielle Netzwerke, VLAN Trunking & Redundanz', tags: ['#VLAN', '#Trunking', '#RSTP'], recommendedLab: 'vlan_trunking_lab' },
+    { title: 'BSI IT-Grundschutz für vernetzte Systeme & ICS', tags: ['#BSI', '#ICS', '#Security'], recommendedLab: 'bsi_grundschutz_lab' },
+    { title: 'WISO: Kosten- und Leistungsrechnung & Lohn', tags: ['#WISO', '#Kalkulation'], recommendedLab: 'wiso_payroll_lab' }
+  ],
   itse: [
     { title: 'IPv6 Routing & Subnetting (VLSM/CIDR)', tags: ['#IPv6', '#Subnetting'], recommendedLab: 'ipv6_ndp_lab' },
     { title: 'Rack-Konfiguration & USV Strombedarfsberechnung', tags: ['#Hardware', '#Rack', '#USV'], recommendedLab: 'rack_configurator' },
     { title: 'BSI IT-Grundschutz (Zutritt, USV & Redundanz)', tags: ['#BSI', '#Hardware'], recommendedLab: 'bsi_grundschutz_lab' },
     { title: 'WISO: Kosten- und Leistungsrechnung & Lohn', tags: ['#WISO', '#Kalkulation'], recommendedLab: 'wiso_payroll_lab' }
+  ],
+  itsm: [
+    { title: 'IT-Service-Management (ITIL 4, SLAs & Incident Management)', tags: ['#ITSM', '#ITIL', '#ServiceDesk'], recommendedLab: 'itsm_simulator' },
+    { title: 'Beschaffung, Nutzwertanalyse & Angebotsvergleich', tags: ['#NWA', '#Beschaffung', '#WISO'], recommendedLab: 'wiso_kalkulation' },
+    { title: 'BSI IT-Grundschutz, DSGVO & Lizenzmanagement', tags: ['#BSI', '#DSGVO', '#Compliance'], recommendedLab: 'bsi_grundschutz_lab' },
+    { title: 'WISO: Handelskalkulation, Deckungsbeitrag & Finanzierung', tags: ['#WISO', '#Finanzierung', '#Kalkulation'], recommendedLab: 'wiso_payroll_lab' }
   ]
 };
 
 /**
- * Errechnet verbleibende Tage und Wochen bis zum Prüfungsdatum
+ * Errechnet verbleibende Tage und Wochen bis zum Prüfungsdatum über UTC-Mitternacht
  * @param {string} targetDateStr - z. B. '2026-11-25'
  * @param {Date} [currentDate=new Date()]
  */
 export function calculateExamCountdown(targetDateStr, currentDate = new Date()) {
-  const target = new Date(targetDateStr);
-  const diffMs = target.getTime() - currentDate.getTime();
-  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const [tY, tM, tD] = targetDateStr.split('-').map(Number);
+  const targetUtc = Date.UTC(tY, tM - 1, tD);
+  const currentUtc = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+  const diffMs = targetUtc - currentUtc;
+  const diffDays = Math.ceil(diffMs / 86400000);
   const remainingWeeks = Math.max(0, Math.ceil(diffDays / 7));
 
   return {
@@ -74,7 +100,7 @@ export function calculateExamCountdown(targetDateStr, currentDate = new Date()) 
 
 /**
  * Generiert einen adaptiven Wochenplan
- * @param {string} discipline - 'fiae' | 'fisi' | 'fidp' | 'itse'
+ * @param {string} discipline - 'fiae' | 'fisi' | 'fidp' | 'fidv' | 'itse' | 'itsm'
  * @param {number} totalWeeks - Verfügbare Wochen
  */
 export function generateAdaptiveStudyPlan(discipline, totalWeeks = 8) {
@@ -92,7 +118,7 @@ export function generateAdaptiveStudyPlan(discipline, totalWeeks = 8) {
       title: isMockExamWeek ? `Woche ${w}: Prüfungssimulation & Wissens-Audit` : `Woche ${w}: ${currentTopic.title}`,
       focus: currentTopic.title,
       tags: currentTopic.tags,
-      recommendedLab: isMockExamWeek ? 'exam_simulator' : currentTopic.recommendedLab,
+      recommendedLab: isMockExamWeek ? 'exam' : currentTopic.recommendedLab,
       targetHours: 6,
       completed: false
     });

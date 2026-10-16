@@ -1,9 +1,11 @@
 #include "RedstoneEngine.hpp"
+
 #include "World.hpp"
+
+#include <algorithm>
 #include <iostream>
 #include <queue>
 #include <vector>
-#include <algorithm>
 
 namespace Minecraft {
 
@@ -17,11 +19,7 @@ int RedstoneEngine::getSignalStrength(World& world, const glm::ivec3& pos) {
         return 15;
     }
 
-    glm::ivec3 offsets[6] = {
-        {0, 1, 0}, {0, -1, 0},
-        {1, 0, 0}, {-1, 0, 0},
-        {0, 0, 1}, {0, 0, -1}
-    };
+    glm::ivec3 offsets[6] = {{0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1}};
 
     int maxSignal = 0;
     for (const auto& off : offsets) {
@@ -42,7 +40,8 @@ int RedstoneEngine::getRepeaterOutput(World& world, const glm::ivec3& pos, int d
     return 0;
 }
 
-bool RedstoneEngine::tryPushPiston(World& world, const glm::ivec3& pistonPos, const glm::ivec3& pushDir, bool isSticky) {
+bool RedstoneEngine::tryPushPiston(World& world, const glm::ivec3& pistonPos, const glm::ivec3& pushDir,
+                                   bool isSticky) {
     (void)isSticky;
     const int MAX_PUSH_BLOCKS = 12;
     std::vector<glm::ivec3> blocksToPush;
@@ -56,7 +55,8 @@ bool RedstoneEngine::tryPushPiston(World& world, const glm::ivec3& pistonPos, co
         }
 
         // Non-pushable blocks (Bedrock, Obsidian, Portals)
-        if (type == BlockType::Bedrock || type == BlockType::Obsidian || type == BlockType::NetherPortal || type == BlockType::EndPortal) {
+        if (type == BlockType::Bedrock || type == BlockType::Obsidian || type == BlockType::NetherPortal ||
+            type == BlockType::EndPortal) {
             return false;
         }
 
@@ -97,11 +97,7 @@ bool RedstoneEngine::tryRetractStickyPiston(World& world, const glm::ivec3& pist
 }
 
 void RedstoneEngine::triggerPistonMechanisms(World& world, const glm::ivec3& sourcePos) {
-    glm::ivec3 offsets[6] = {
-        {0, 1, 0}, {0, -1, 0},
-        {1, 0, 0}, {-1, 0, 0},
-        {0, 0, 1}, {0, 0, -1}
-    };
+    glm::ivec3 offsets[6] = {{0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1}};
 
     for (const auto& off : offsets) {
         glm::ivec3 neighbor = sourcePos + off;
@@ -115,11 +111,7 @@ void RedstoneEngine::triggerPistonMechanisms(World& world, const glm::ivec3& sou
 }
 
 void RedstoneEngine::updateRedstoneNetwork(World& world, const glm::ivec3& sourcePos) {
-    glm::ivec3 offsets[6] = {
-        {0, 1, 0}, {0, -1, 0},
-        {1, 0, 0}, {-1, 0, 0},
-        {0, 0, 1}, {0, 0, -1}
-    };
+    glm::ivec3 offsets[6] = {{0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1}};
 
     // Breadth-First Propagation up to 15 blocks
     struct QueueNode {
@@ -130,7 +122,7 @@ void RedstoneEngine::updateRedstoneNetwork(World& world, const glm::ivec3& sourc
     std::queue<QueueNode> q;
     int initialStrength = getSignalStrength(world, sourcePos);
     if (initialStrength > 0) {
-        q.push({ sourcePos, initialStrength });
+        q.push({sourcePos, initialStrength});
     }
 
     int visitedCount = 0;
@@ -139,7 +131,8 @@ void RedstoneEngine::updateRedstoneNetwork(World& world, const glm::ivec3& sourc
         q.pop();
         visitedCount++;
 
-        if (current.strength <= 1) continue;
+        if (current.strength <= 1)
+            continue;
 
         for (const auto& off : offsets) {
             glm::ivec3 neighbor = current.pos + off;
@@ -148,7 +141,7 @@ void RedstoneEngine::updateRedstoneNetwork(World& world, const glm::ivec3& sourc
             if (neighborType == BlockType::RedstoneWire || neighborType == BlockType::RedstoneLamp) {
                 int nextStrength = current.strength - 1;
                 if (nextStrength > 0) {
-                    q.push({ neighbor, nextStrength });
+                    q.push({neighbor, nextStrength});
                 }
             } else if (neighborType == BlockType::Piston || neighborType == BlockType::StickyPiston) {
                 triggerPistonMechanisms(world, neighbor);
@@ -157,8 +150,11 @@ void RedstoneEngine::updateRedstoneNetwork(World& world, const glm::ivec3& sourc
     }
 }
 
-int RedstoneEngine::getComparatorOutput(World& world, const glm::ivec3& pos, const glm::ivec3& rearDir, const std::vector<ItemStack>* containerInv) {
-    (void)world; (void)pos; (void)rearDir;
+int RedstoneEngine::getComparatorOutput(World& world, const glm::ivec3& pos, const glm::ivec3& rearDir,
+                                        const std::vector<ItemStack>* containerInv) {
+    (void)world;
+    (void)pos;
+    (void)rearDir;
     if (!containerInv || containerInv->empty()) {
         return 0;
     }
@@ -172,25 +168,29 @@ int RedstoneEngine::getComparatorOutput(World& world, const glm::ivec3& pos, con
         }
     }
 
-    if (totalItems <= 0) return 0;
+    if (totalItems <= 0)
+        return 0;
 
     float fullness = static_cast<float>(totalItems) / static_cast<float>(maxCapacity);
     int signal = static_cast<int>(std::floor(fullness * 14.0f)) + 1;
     return std::clamp(signal, 1, 15);
 }
 
-bool RedstoneEngine::processHopperTransfer(World& world, const glm::ivec3& hopperPos, const glm::ivec3& targetDir, std::vector<ItemStack>* hopperInv, std::vector<ItemStack>* destInv) {
+bool RedstoneEngine::processHopperTransfer(World& world, const glm::ivec3& hopperPos, const glm::ivec3& targetDir,
+                                           std::vector<ItemStack>* hopperInv, std::vector<ItemStack>* destInv) {
     // If hopper is powered by redstone, it is locked and does not transfer
     if (isPowered(world, hopperPos)) {
         return false;
     }
 
     (void)targetDir;
-    if (!hopperInv || !destInv) return false;
+    if (!hopperInv || !destInv)
+        return false;
 
     // Find first non-empty item in hopper
     for (auto& item : *hopperInv) {
-        if (item.isEmpty()) continue;
+        if (item.isEmpty())
+            continue;
 
         // Try inserting 1 count of this item into destInv
         for (auto& destSlot : *destInv) {
@@ -198,12 +198,14 @@ bool RedstoneEngine::processHopperTransfer(World& world, const glm::ivec3& hoppe
                 destSlot = item;
                 destSlot.count = 1;
                 item.count--;
-                if (item.count <= 0) item.clear();
+                if (item.count <= 0)
+                    item.clear();
                 return true;
             } else if (destSlot.type == item.type && destSlot.count < destSlot.maxStackSize) {
                 destSlot.count++;
                 item.count--;
-                if (item.count <= 0) item.clear();
+                if (item.count <= 0)
+                    item.clear();
                 return true;
             }
         }
@@ -212,4 +214,4 @@ bool RedstoneEngine::processHopperTransfer(World& world, const glm::ivec3& hoppe
     return false;
 }
 
-}
+} // namespace Minecraft

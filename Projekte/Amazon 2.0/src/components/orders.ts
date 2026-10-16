@@ -1,9 +1,10 @@
-// ============================================================
-// Amazon 2.0 – Orders Modal & Live Tracking Component
-// ============================================================
 import type { AppState, Order, OrderStatus } from '../types';
 import { formatPrice, formatDate, formatRelativeTime } from '../utils/formatters';
 import { showToast } from './toast';
+import { saveOrders } from '../store';
+import { addNotification } from './notifications';
+import { playSound } from '../utils/audio';
+import { openInvoiceModal } from './invoice';
 
 let ordersModal: HTMLElement | null = null;
 let trackingModal: HTMLElement | null = null;
@@ -95,7 +96,27 @@ export function openOrdersModal(state: AppState): void {
     btn.addEventListener('click', () => {
       const orderId = btn.getAttribute('data-order-id')!;
       const order = state.orders.find(o => o.id === orderId);
-      if (order) printInvoice(order);
+      if (order) openInvoiceModal(order, state);
+    });
+  });
+
+  // Wire AirDrop buttons
+  modal.querySelectorAll('.airdrop-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const orderId = btn.getAttribute('data-order-id')!;
+      import('./p2pAirDropModal').then(({ openP2PAirDropModal }) =>
+        openP2PAirDropModal(`Amazon2_Rechnung_${orderId}.pdf`)
+      );
+    });
+  });
+
+  // Wire Cold Chain buttons
+  modal.querySelectorAll('.cold-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const orderId = btn.getAttribute('data-order-id')!;
+      import('./coldChainModal').then(({ openColdChainModal }) =>
+        openColdChainModal(`COLD-SENSOR-#${orderId}`)
+      );
     });
   });
 
@@ -141,6 +162,12 @@ function renderOrder(order: Order, _state: AppState): string {
         <div class="order-actions">
           <button class="invoice-btn btn-secondary-sm" data-order-id="${order.id}">
             📄 Rechnung (PDF)
+          </button>
+          <button class="airdrop-btn btn-secondary-sm" data-order-id="${order.id}" title="Rechnung per WebRTC AirDrop senden">
+            ⚡ AirDrop
+          </button>
+          <button class="cold-btn btn-secondary-sm" data-order-id="${order.id}" title="IoT Kühlketten- & Frischeprotokoll ansehen">
+            🌡️ Frische-Sensor
           </button>
           <button class="track-btn btn-primary-sm" data-order-id="${order.id}">
             🚚 Live-Karte & Tracking
@@ -363,4 +390,56 @@ function printInvoice(order: Order): void {
 function closeOrdersModal(): void {
   ordersModal?.classList.remove('open');
   document.body.style.overflow = '';
+}
+
+/**
+ * Periodically checks placed orders and simulates real-time progression:
+ * processing (0-30s) -> shipped (30-75s) -> delivered (75s+)
+ */
+export function startOrderProgression(state: AppState): void {
+  setInterval(() => {
+    const now = Date.now();
+    let changed = false;
+
+    state.orders.forEach(order => {
+      const ageSec = (now - order.placedAt) / 1000;
+
+      if (order.status === 'processing' && ageSec >= 25) {
+        order.status = 'shipped';
+        order.trackingNumber = order.trackingNumber || `TRK-${Date.now().toString(36).toUpperCase()}`;
+        changed = true;
+
+        playSound('quest');
+        showToast(`🚚 Deine Bestellung ${order.id} wurde versendet!`, 'info');
+        addNotification(state, {
+          type: 'order',
+          title: `🚚 Paket versendet: ${order.id}`,
+          message: `Dein Paket wurde an den Zustelldienst übergeben. Sendungsnummer: ${order.trackingNumber}`,
+          read: false,
+          createdAt: Date.now(),
+        });
+      } else if (order.status === 'shipped' && ageSec >= 65) {
+        order.status = 'delivered';
+        order.isReturnable = true;
+        changed = true;
+
+        playSound('success');
+        showToast(`🎉 Paket zugestellt: Bestellung ${order.id}`, 'success');
+        addNotification(state, {
+          type: 'order',
+          title: `✅ Bestellung ${order.id} zugestellt!`,
+          message: `Dein Paket wurde erfolgreich zugestellt. Viel Freude mit deiner Bestellung!`,
+          read: false,
+          createdAt: Date.now(),
+        });
+      }
+    });
+
+    if (changed) {
+      saveOrders();
+      if (ordersModal && ordersModal.classList.contains('open')) {
+        openOrdersModal(state);
+      }
+    }
+  }, 8000);
 }

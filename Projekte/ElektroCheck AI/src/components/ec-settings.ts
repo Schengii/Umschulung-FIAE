@@ -5,6 +5,7 @@ import "@vaadin/text-area";
 import "@vaadin/text-field";
 import wizardStyles from "./ec-diagnosis-wizard.css?inline";
 import "./ec-datasheet-manager";
+import { ACCESS_TOKEN_STORAGE_KEY } from "../utils/auth-headers";
 
 @customElement("ec-settings")
 export class EcSettings extends LitElement {
@@ -17,6 +18,8 @@ export class EcSettings extends LitElement {
   @property({ type: String }) inspectorName = "";
   @property({ type: String }) inspectorCompany = "";
   @property({ type: String }) inspectorId = "";
+  /** Angemeldeter Nutzer (leer ohne Login) */
+  @property({ type: String }) userEmail = "";
 
   @state() private _tempApiKey = "";
   @state() private _tempPerplexityApiKey = "";
@@ -24,23 +27,40 @@ export class EcSettings extends LitElement {
   @state() private _tempInspectorName = "";
   @state() private _tempInspectorCompany = "";
   @state() private _tempInspectorId = "";
+  @state() private _tempAccessToken = "";
 
   connectedCallback() {
     super.connectedCallback();
     this._tempApiKey = this.apiKey;
     this._tempPerplexityApiKey = this.perplexityApiKey;
-    this._tempBackendUrl = this.backendUrl || "http://localhost:3000";
+    this._tempBackendUrl = this.backendUrl || "";
     this._tempInspectorName = this.inspectorName;
     this._tempInspectorCompany = this.inspectorCompany;
     this._tempInspectorId = this.inspectorId;
+    try {
+      this._tempAccessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) || "";
+    } catch {
+      this._tempAccessToken = "";
+    }
   }
 
   render() {
     return html`
-      <div class="modal-overlay settings-overlay">
+      <div class="modal-overlay settings-overlay" role="dialog" aria-modal="true" aria-label="Einstellungen">
         <div class="card settings-card">
           <h3 class="m-0">⚙️ Einstellungen</h3>
           
+          ${this.userEmail
+            ? html`
+                <div class="legal-box" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span class="legal-text">👤 Angemeldet als <strong>${this.userEmail}</strong></span>
+                  <vaadin-button theme="tertiary error" @click="${() => this.dispatchEvent(new CustomEvent("logout"))}"
+                    >Abmelden</vaadin-button
+                  >
+                </div>
+              `
+            : ""}
+
           <vaadin-text-area
             class="w-100 mt-1"
             label="Gemini API Key (Optional)"
@@ -66,6 +86,16 @@ export class EcSettings extends LitElement {
             .value="${this._tempBackendUrl}"
             @value-changed="${(e: CustomEvent) =>
               (this._tempBackendUrl = e.detail.value)}"
+          ></vaadin-text-field>
+
+          <vaadin-text-field
+            class="w-100 mt-1"
+            label="Dienst-Zugriffstoken (optional)"
+            helper-text="Nur für Dienst-Zugriff ohne Login (APP_ACCESS_TOKEN); mit Magic-Link-Login nicht nötig"
+            type="password"
+            .value="${this._tempAccessToken}"
+            @value-changed="${(e: CustomEvent) =>
+              (this._tempAccessToken = e.detail.value)}"
           ></vaadin-text-field>
 
           <h4 class="privacy-title mt-1" style="color: var(--primary); margin-bottom: 4px; font-size: 0.95rem; font-weight: bold;">👤 Prüferprofil</h4>
@@ -114,9 +144,12 @@ export class EcSettings extends LitElement {
           <div class="privacy-danger-zone mt-1">
             <h4 class="privacy-title">🔒 Datenschutz & Daten</h4>
             <p style="font-size: 0.8rem; margin: 0 0 10px 0;">Verwalten Sie Ihre lokalen Daten gemäß DSGVO.</p>
-            <div style="display: flex; gap: 8px;">
-              <vaadin-button theme="secondary" @click="${this._handleExport}" style="flex: 1;"
-                >💾 Exportieren</vaadin-button
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <vaadin-button theme="secondary" @click="${() => this._handleExport('json')}" style="flex: 1;"
+                >💾 JSON</vaadin-button
+              >
+              <vaadin-button theme="secondary" @click="${() => this._handleExport('csv')}" style="flex: 1;"
+                >📊 CSV</vaadin-button
               >
               <vaadin-button theme="error" @click="${this._handleDelete}" style="flex: 1;"
                 >🗑️ Löschen</vaadin-button
@@ -143,6 +176,11 @@ export class EcSettings extends LitElement {
   }
 
   private _handleSave() {
+    try {
+      localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, this._tempAccessToken.trim());
+    } catch {
+      // Speicher nicht verfügbar – Token gilt nur bis zum Neuladen nicht
+    }
     this.dispatchEvent(
       new CustomEvent("save-settings", {
         detail: {
@@ -166,8 +204,8 @@ export class EcSettings extends LitElement {
     );
   }
 
-  private _handleExport() {
-    this.dispatchEvent(new CustomEvent("export-data"));
+  private _handleExport(format: 'json' | 'csv' = 'json') {
+    this.dispatchEvent(new CustomEvent("export-data", { detail: { format } }));
   }
 
   private _handleDelete() {

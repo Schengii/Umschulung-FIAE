@@ -1,12 +1,13 @@
 #ifndef FONTRENDERER_HPP
 #define FONTRENDERER_HPP
 
+#include "../renderer/Shader.hpp"
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-#include <glm/glm.hpp>
-#include <glad/glad.h>
-#include "../renderer/Shader.hpp"
 
 namespace Minecraft {
 
@@ -19,7 +20,7 @@ public:
     void resize(int windowWidth, int windowHeight);
 
     // Renders 2D text at (x, y) with optional drop shadow
-    void renderText(const std::string& text, float x, float y, float scale = 1.0f, 
+    void renderText(const std::string& text, float x, float y, float scale = 1.0f,
                     const glm::vec4& color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), bool dropShadow = true);
 
     float getTextWidth(const std::string& text, float scale = 1.0f) const;
@@ -39,6 +40,6 @@ private:
     bool m_IsInitialized = false;
 };
 
-}
+} // namespace Minecraft
 
 #endif // FONTRENDERER_HPP

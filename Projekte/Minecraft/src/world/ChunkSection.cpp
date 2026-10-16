@@ -1,12 +1,10 @@
 #include "ChunkSection.hpp"
+
 #include "Chunk.hpp"
 
 namespace Minecraft {
 
-ChunkSection::ChunkSection(int sectionY)
-    : m_SectionY(sectionY), m_Mesh(std::make_unique<ChunkMesh>())
-{
-}
+ChunkSection::ChunkSection(int sectionY) : m_SectionY(sectionY), m_Mesh(std::make_unique<ChunkMesh>()) {}
 
 ChunkSection::~ChunkSection() = default;
 
@@ -14,7 +12,8 @@ void ChunkSection::notifyBlockChange(BlockType oldType, BlockType newType) {
     if (oldType == BlockType::Air && newType != BlockType::Air) {
         m_NonAirCount++;
     } else if (oldType != BlockType::Air && newType == BlockType::Air) {
-        if (m_NonAirCount > 0) m_NonAirCount--;
+        if (m_NonAirCount > 0)
+            m_NonAirCount--;
     }
     m_IsDirty = true;
 }
@@ -50,4 +49,4 @@ void ChunkSection::renderTransparent() const {
     }
 }
 
-}
+} // namespace Minecraft

@@ -107,7 +107,8 @@ export const LAB_REGISTRY = [
   },
   {
     tabs: ['cheat_sheets'],
-    load: () => import('../components/Content/IhkCheatSheetPdfGenerator')
+    load: () => import('../components/Content/IhkCheatSheetPdfGenerator'),
+    xp: { prop: 'onRewardXP', badge: 'exam_passed' }
   },
   {
     tabs: ['p2p_duell'],
@@ -420,7 +421,8 @@ export const LAB_REGISTRY = [
   },
   {
     tabs: ['zkp_crypto'],
-    load: () => import('../components/Content/ZkpCryptoVisualizerLab')
+    load: () => import('../components/Content/ZkpCryptoVisualizerLab'),
+    xp: { prop: 'onRewardXP', badge: 'security_expert' }
   },
   {
     tabs: ['oauth_pkce_studio', 'oauth_pkce', 'pkce'],
@@ -1063,6 +1065,16 @@ export const LAB_REGISTRY = [
     tabs: ['app_workshop'],
     load: () => import('../components/Content/AppWorkshop'),
     xp: { prop: 'onCompleteWorkshop', badge: 'app_builder' }
+  },
+  {
+    tabs: ['ihk_study_plan_lab', 'ihk_study_plan', 'pruefungsplaner'],
+    load: () => import('../components/Content/IhkStudyPlanLab'),
+    xp: { prop: 'onRewardXP', badge: 'study_plan_master' }
+  },
+  {
+    tabs: ['ihk_weakness_audit_lab', 'ihk_weakness_audit', 'schwachstellen_audit'],
+    load: () => import('../components/Content/IhkWeaknessAuditLab'),
+    xp: { prop: 'onRewardXP', badge: 'weakness_audit_master' }
   }
 ];
 

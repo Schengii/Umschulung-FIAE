@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function ExamReadinessLab({ onRewardXP }) {
-  const [currentDate] = useState(new Date());
+  const [currentDate] = useState(() => new Date());
   const [completedScores, setCompletedScores] = useState({
     ap1: { completed: 12, scoreSum: 1080 },
     ap2_1: { completed: 8, scoreSum: 640 },

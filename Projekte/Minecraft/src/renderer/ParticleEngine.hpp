@@ -1,19 +1,20 @@
 #ifndef PARTICLEENGINE_HPP
 #define PARTICLEENGINE_HPP
 
-#include <glm/glm.hpp>
-#include <vector>
-#include <memory>
-#include <glad/glad.h>
 #include "../renderer/Camera.hpp"
 #include "../renderer/Shader.hpp"
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <memory>
+#include <vector>
 
 namespace Minecraft {
 
 struct Particle {
-    glm::vec3 position{ 0.0f };
-    glm::vec3 velocity{ 0.0f };
-    glm::vec4 color{ 1.0f };
+    glm::vec3 position{0.0f};
+    glm::vec3 velocity{0.0f};
+    glm::vec4 color{1.0f};
     float size = 0.1f;
     float life = 1.0f;
     float maxLife = 1.0f;
@@ -45,6 +46,6 @@ private:
     bool m_IsInitialized = false;
 };
 
-}
+} // namespace Minecraft
 
 #endif // PARTICLEENGINE_HPP

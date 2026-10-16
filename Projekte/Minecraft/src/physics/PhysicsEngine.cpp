@@ -1,7 +1,9 @@
 #include "PhysicsEngine.hpp"
+
 #include "../world/World.hpp"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
 
 namespace Minecraft {
 
@@ -10,7 +12,7 @@ bool PhysicsEngine::isPointInWater(World& world, const glm::vec3& point) {
     int y = static_cast<int>(std::floor(point.y));
     int z = static_cast<int>(std::floor(point.z));
     BlockType type = world.getBlock(x, y, z);
-    return type == BlockType::Water;
+    return BlockData::isWater(type);
 }
 
 bool PhysicsEngine::isPointInLava(World& world, const glm::vec3& point) {
@@ -18,14 +20,16 @@ bool PhysicsEngine::isPointInLava(World& world, const glm::vec3& point) {
     int y = static_cast<int>(std::floor(point.y));
     int z = static_cast<int>(std::floor(point.z));
     BlockType type = world.getBlock(x, y, z);
-    return type == BlockType::Lava;
+    return BlockData::isLava(type);
 }
 
 bool PhysicsEngine::isHeadUnderwater(World& world, const glm::vec3& position) {
     return isPointInWater(world, position + glm::vec3(0.0f, 1.6f, 0.0f));
 }
 
-void PhysicsEngine::updatePlayer(World& world, glm::vec3& position, glm::vec3& velocity, bool& isGrounded, bool& inWater, bool isFlying, bool isSneaking, float deltaTime, bool isGliding, const glm::vec3& lookDir) {
+void PhysicsEngine::updatePlayer(World& world, glm::vec3& position, glm::vec3& velocity, bool& isGrounded,
+                                 bool& inWater, bool isFlying, bool isSneaking, float deltaTime, bool isGliding,
+                                 const glm::vec3& lookDir) {
     if (isFlying) {
         position += velocity * deltaTime;
         velocity *= 0.85f;
@@ -44,7 +48,8 @@ void PhysicsEngine::updatePlayer(World& world, glm::vec3& position, glm::vec3& v
     if (inWater) {
         // Water physics: Buoyancy & Swimming drag
         velocity.y -= 4.0f * deltaTime; // Reduced gravity in water
-        if (velocity.y < -3.0f) velocity.y = -3.0f; // Terminal velocity in water
+        if (velocity.y < -3.0f)
+            velocity.y = -3.0f; // Terminal velocity in water
 
         velocity.x *= 0.85f;
         velocity.z *= 0.85f;
@@ -208,4 +213,4 @@ void PhysicsEngine::updateBoat(World& world, glm::vec3& position, glm::vec3& vel
     }
 }
 
-}
+} // namespace Minecraft

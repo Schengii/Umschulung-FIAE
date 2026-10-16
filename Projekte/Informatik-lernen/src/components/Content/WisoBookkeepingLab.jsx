@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { BookOpen, Check, X, TrendingUp, TrendingDown, Info, ChevronRight, RotateCcw, Award } from 'lucide-react';
-import { useStore } from '../../store/useStore';
 import {
   KONTENRAHMEN,
   IHK_SZENARIEN,
@@ -14,7 +13,6 @@ import {
 const XP_REWARD = 65;
 
 export default function WisoBookkeepingLab({ onXPGain }) {
-  const addXP = useStore((s) => s.addXP);
   const [aktivesTab, setAktivesTab] = useState('lernen');
   const [gewaehltesSzenario, setGewaehltesSzenario] = useState(IHK_SZENARIEN[0]);
   const [userSoll, setUserSoll] = useState('');
@@ -47,14 +45,13 @@ export default function WisoBookkeepingLab({ onXPGain }) {
       ]);
       setFeedback({ typ: 'korrekt', text: `✓ Richtig! ${gewaehltesSzenario.erlaeuterung}` });
       if (neu.size === IHK_SZENARIEN.length && !xpVergeben) {
-        const xpFn = onXPGain || addXP;
-        xpFn?.(XP_REWARD, 'IHK WISO Doppelte Buchführung');
+        onXPGain?.(XP_REWARD, 'IHK WISO Doppelte Buchführung');
         setXpVergeben(true);
       }
     } else {
       setFeedback({ typ: 'falsch', text: `✗ Nicht korrekt. Prüfe Soll- und Haben-Konto sowie den Betrag.` });
     }
-  }, [userSoll, userHaben, userBetrag, gewaehltesSzenario, geloesteAufgaben, xpVergeben, onXPGain, addXP]);
+  }, [userSoll, userHaben, userBetrag, gewaehltesSzenario, geloesteAufgaben, xpVergeben, onXPGain]);
 
   const reset = () => {
     setUserSoll('');

@@ -2,8 +2,9 @@
 #define ENCHANTINGENGINE_HPP
 
 #include "../inventory/ItemStack.hpp"
-#include <vector>
+
 #include <string>
+#include <vector>
 
 namespace Minecraft {
 
@@ -11,10 +12,10 @@ class World;
 
 enum class Enchantment {
     None = 0,
-    Sharpness = 1,    // Increases sword melee damage (+1.5 damage per tier)
-    Efficiency = 2,   // Increases tool mining speed (+25% per tier)
-    Protection = 3,   // Increases armor damage reduction (+4% per tier)
-    Unbreaking = 4    // Reduces durability damage chance
+    Sharpness = 1,  // Increases sword melee damage (+1.5 damage per tier)
+    Efficiency = 2, // Increases tool mining speed (+25% per tier)
+    Protection = 3, // Increases armor damage reduction (+4% per tier)
+    Unbreaking = 4  // Reduces durability damage chance
 };
 
 struct EnchantmentOption {
@@ -34,6 +35,6 @@ public:
     static float getEnchantedDefenseBonus(const ItemStack& armor);
 };
 
-}
+} // namespace Minecraft
 
 #endif // ENCHANTINGENGINE_HPP

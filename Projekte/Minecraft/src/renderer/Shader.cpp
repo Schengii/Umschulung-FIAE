@@ -1,8 +1,9 @@
 #include "Shader.hpp"
-#include <glm/gtc/type_ptr.hpp>
+
 #include <fstream>
-#include <sstream>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <sstream>
 
 namespace Minecraft {
 
@@ -104,4 +105,4 @@ GLuint Shader::compileShader(GLenum type, const std::string& source) {
     return shader;
 }
 
-}
+} // namespace Minecraft

@@ -1,10 +1,11 @@
 #ifndef SKYBOX_HPP
 #define SKYBOX_HPP
 
-#include <glm/glm.hpp>
-#include "../renderer/Shader.hpp"
 #include "../renderer/Camera.hpp"
+#include "../renderer/Shader.hpp"
 #include "../vendor/glad/glad.h"
+
+#include <glm/glm.hpp>
 #include <memory>
 
 namespace Minecraft {
@@ -29,6 +30,6 @@ private:
     bool m_CloudsInitialized = false;
 };
 
-}
+} // namespace Minecraft
 
 #endif // SKYBOX_HPP

@@ -1,8 +1,7 @@
-// ============================================================
-// Amazon 2.0 – Product Compare Dock Component
-// ============================================================
 import type { AppState, Product } from '../types';
 import { formatPrice, renderStars } from '../utils/formatters';
+import { showToast } from './toast';
+import { triggerRenderProducts } from '../store';
 
 type AddToCartCallback = (product: Product, qty?: number) => void;
 
@@ -29,7 +28,7 @@ export function toggleCompareProduct(
     state.compareList.splice(idx, 1);
   } else {
     if (state.compareList.length >= 4) {
-      import('./toast').then(({ showToast }) => showToast('Maximal 4 Produkte vergleichen', 'warning'));
+      showToast('Maximal 4 Produkte vergleichen', 'warning');
       return;
     }
     const product = state.products.find(p => p.id === productId);
@@ -78,20 +77,49 @@ function renderCompareDock(state: AppState, onAddToCart: AddToCartCallback): voi
       const idx = state.compareList.findIndex(p => p.id === id);
       if (idx >= 0) state.compareList.splice(idx, 1);
       renderCompareDock(state, onAddToCart);
-      // Trigger re-render to update compare buttons in catalog
-      import('../store').then(({ triggerRenderProducts }) => triggerRenderProducts());
+      triggerRenderProducts();
     });
   });
 
   document.getElementById('clearCompareBtn')?.addEventListener('click', () => {
     state.compareList.length = 0;
     renderCompareDock(state, onAddToCart);
-    import('../store').then(({ triggerRenderProducts }) => triggerRenderProducts());
+    triggerRenderProducts();
   });
 
   document.getElementById('openCompareModalBtn')?.addEventListener('click', () => {
     openCompareModal(state, onAddToCart);
   });
+}
+
+function generateAIComparisonSummary(products: Product[]): string {
+  if (products.length < 2) return '';
+
+  const sortedByPrice = [...products].sort((a, b) => a.price - b.price);
+  const sortedByRating = [...products].sort((a, b) => b.rating - a.rating);
+
+  const cheapest = sortedByPrice[0];
+  const mostExpensive = sortedByPrice[sortedByPrice.length - 1];
+  const topRated = sortedByRating[0];
+
+  const priceDiffPct = Math.round(((mostExpensive.price - cheapest.price) / mostExpensive.price) * 100);
+
+  return `
+    <div class="compare-ai-summary-box">
+      <div class="ai-summary-badge">
+        <span class="ai-sparkle-icon">✨</span>
+        <strong>KI-Vergleichs-Fazit & Kaufempfehlung</strong>
+      </div>
+      <p class="ai-summary-text">
+        Unter den <strong>${products.length} verglichenen Produkten</strong> ist das <strong>${cheapest.title}</strong> mit <strong>${formatPrice(cheapest.price)}</strong> der klare <em>Preis-Leistungs-Sieger</em> (${priceDiffPct}% günstiger als ${mostExpensive.brand}).
+        ${topRated.id !== cheapest.id ? `Wenn dir höchste Kundenzufriedenheit am wichtigsten ist, glänzt das <strong>${topRated.title}</strong> mit Spitzen-Bewertungen von <strong>${topRated.rating} ★</strong> (${topRated.reviewCount} Rezensionen).` : 'Es führt zudem auch die Kundenzufriedenheits-Wertung mit exzellenten Kundenbewertungen an.'}
+      </p>
+      <div class="ai-summary-tags">
+        <span class="ai-tag price-pick">💰 Preis-Tipp: ${cheapest.brand} (${formatPrice(cheapest.price)})</span>
+        <span class="ai-tag rating-pick">🏆 Premium-Wahl: ${topRated.brand} (${topRated.rating} ★)</span>
+      </div>
+    </div>
+  `;
 }
 
 function openCompareModal(state: AppState, onAddToCart: AddToCartCallback): void {
@@ -110,11 +138,14 @@ function openCompareModal(state: AppState, onAddToCart: AddToCartCallback): void
 
   const products = state.compareList;
   const allSpecs = [...new Set(products.flatMap(p => Object.keys(p.specs ?? {})))];
+  const aiSummaryHtml = generateAIComparisonSummary(products);
 
   compareModal.innerHTML = `
     <div class="modal-dialog compare-dialog">
       <button class="modal-close" id="compareClose" aria-label="Schließen">✕</button>
       <h2 class="modal-heading">⚖ Produkte vergleichen</h2>
+
+      ${aiSummaryHtml}
 
       <div class="compare-table-wrap">
         <table class="compare-table" role="table">

@@ -1,9 +1,8 @@
-// ============================================================
-// Amazon 2.0 – AI Spec Sheet Matrix & Comparison Engine
-// ============================================================
 import type { AppState, Product } from '../types';
 import { formatPrice, renderStars } from '../utils/formatters';
 import { showToast } from './toast';
+import { saveCart } from '../store';
+import { playSound } from '../utils/audio';
 
 let matrixModal: HTMLElement | null = null;
 
@@ -112,20 +111,18 @@ export function openSpecMatrixModal(state: AppState, p1?: Product, p2?: Product)
   matrixModal.addEventListener('click', e => { if (e.target === matrixModal) closeModal(); });
 
   document.getElementById('buyP1Btn')?.addEventListener('click', () => {
-    import('../store').then(({ saveCart }) => {
-      state.cart.push({ product: prod1, qty: 1, addedAt: Date.now() });
-      saveCart();
-      showToast(`🛒 "${prod1.title}" zum Warenkorb hinzugefügt!`, 'cart');
-      closeModal();
-    });
+    state.cart.push({ product: prod1, qty: 1, addedAt: Date.now() });
+    saveCart();
+    playSound('cart');
+    showToast(`🛒 "${prod1.title}" zum Warenkorb hinzugefügt!`, 'cart');
+    closeModal();
   });
 
   document.getElementById('buyP2Btn')?.addEventListener('click', () => {
-    import('../store').then(({ saveCart }) => {
-      state.cart.push({ product: prod2, qty: 1, addedAt: Date.now() });
-      saveCart();
-      showToast(`🛒 "${prod2.title}" zum Warenkorb hinzugefügt!`, 'cart');
-      closeModal();
-    });
+    state.cart.push({ product: prod2, qty: 1, addedAt: Date.now() });
+    saveCart();
+    playSound('cart');
+    showToast(`🛒 "${prod2.title}" zum Warenkorb hinzugefügt!`, 'cart');
+    closeModal();
   });
 }

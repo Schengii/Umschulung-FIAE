@@ -3,6 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { DiagnosisResult } from "../services/ai-types";
 import "@vaadin/progress-bar";
 import wizardStyles from "./ec-diagnosis-wizard.css?inline";
+import { getLeaflet, type LeafletApi, type LeafletLayerGroup, type LeafletMap } from "../utils/leaflet-types";
+import type { Ticket } from "../services/ticket-service";
 
 @customElement("ec-dashboard")
 export class EcDashboard extends LitElement {
@@ -171,37 +173,112 @@ export class EcDashboard extends LitElement {
   ];
 
   @property({ type: Array }) history: DiagnosisResult[] = [];
-  private _map: any = null;
+  @property({ type: Array }) tickets: Ticket[] = [];
+  private _map: LeafletMap | null = null;
+  private _markersLayer: LeafletLayerGroup | null = null;
 
   firstUpdated() {
-    if (this.history && this.history.length > 0) {
-      setTimeout(() => {
-        this._initMap();
-      }, 150);
+    if ((this.history && this.history.length > 0) || (this.tickets && this.tickets.length > 0)) {
+      setTimeout(() => this._initMap(), 150);
     }
   }
 
   updated(changedProperties: Map<string | number | symbol, unknown>) {
     super.updated(changedProperties);
-    if (changedProperties.has("history") && this.history && this.history.length > 0) {
+    const hasData = (this.history && this.history.length > 0) || (this.tickets && this.tickets.length > 0);
+    if ((changedProperties.has("history") || changedProperties.has("tickets")) && hasData) {
       setTimeout(() => {
-        this._initMap();
+        if (this._map) {
+          this._updateMarkers();
+        } else {
+          this._initMap();
+        }
       }, 150);
+    }
+  }
+
+  private _buildMarkers(L: LeafletApi, map: LeafletMap) {
+    if (this._markersLayer) {
+      this._markersLayer.clearLayers();
+    } else {
+      this._markersLayer = L.layerGroup().addTo(map);
+    }
+    const markersLayer = this._markersLayer;
+
+    let hasMarkers = false;
+    let sumLat = 0, sumLng = 0, count = 0;
+
+    const allItems: Array<Partial<DiagnosisResult> & { status?: string }> = [
+      ...this.history,
+      ...this.tickets
+    ];
+
+    allItems.forEach((item) => {
+      const location = item.location;
+      if (!location) return;
+      const match = location.match(/Lat:\s*([-\d.]+),\s*Lng:\s*([-\d.]+)/i);
+      if (!match) return;
+      const lat = parseFloat(match[1]);
+      const lng = parseFloat(match[2]);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      sumLat += lat; sumLng += lng; count++;
+      const safety = (item.safetyLevel || "SAFE").toUpperCase();
+      const markerColor = safety === "DANGER" ? "#ef4444" : safety === "WARNING" ? "#f59e0b" : "#10b981";
+
+      const customIcon = L.divIcon({
+        className: "custom-map-marker",
+        html: `<div style="background-color: ${markerColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.5);"></div>`,
+        iconSize: [14, 14], iconAnchor: [7, 7]
+      });
+
+      const popupEl = document.createElement('div');
+      popupEl.style.cssText = 'color: black; font-family: sans-serif; font-size: 0.8rem;';
+      const title = document.createElement('strong');
+      title.style.cssText = `color: ${markerColor}; font-size: 0.85rem;`;
+      title.textContent = item.deviceName || 'Gerät';
+      const defectLabel = document.createElement('strong');
+      defectLabel.textContent = 'Defekt: ';
+      const statusLabel = document.createElement('strong');
+      statusLabel.textContent = 'Status: ';
+      popupEl.append(
+        title, document.createElement('br'),
+        defectLabel, document.createTextNode(item.identifiedDefect || 'Kein Defekt'),
+        document.createElement('br'),
+        statusLabel, document.createTextNode(safety)
+      );
+
+      L.marker([lat, lng], { icon: customIcon }).addTo(markersLayer).bindPopup(popupEl);
+      hasMarkers = true;
+    });
+
+    if (hasMarkers && count > 0) {
+      map.setView([sumLat / count, sumLng / count], 10);
+    }
+  }
+
+  private _updateMarkers() {
+    const L = getLeaflet();
+    if (!this._map || !L) return;
+    try {
+      this._buildMarkers(L, this._map);
+    } catch (e) {
+      console.error("Fehler beim Aktualisieren der Kartenmarker:", e);
     }
   }
 
   private _initMap() {
     const mapContainer = this.shadowRoot?.getElementById("leaflet-map");
-    if (!mapContainer || !(window as any).L) return;
+    const L = getLeaflet();
+    if (!mapContainer || !L) return;
 
     if (this._map) {
+      this._markersLayer = null;
       this._map.remove();
       this._map = null;
     }
 
     try {
-      const L = (window as any).L;
-      // Default: Center Germany
       const map = L.map(mapContainer).setView([51.1657, 10.4515], 5);
       this._map = map;
 
@@ -210,63 +287,14 @@ export class EcDashboard extends LitElement {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
 
-      let hasMarkers = false;
-      let sumLat = 0;
-      let sumLng = 0;
-      let count = 0;
-
-      this.history.forEach((item) => {
-        const location = (item as any).location;
-        if (!location) return;
-        const match = location.match(/Lat:\s*([-\d.]+),\s*Lng:\s*([-\d.]+)/i);
-        if (match) {
-          const lat = parseFloat(match[1]);
-          const lng = parseFloat(match[2]);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            sumLat += lat;
-            sumLng += lng;
-            count++;
-
-            const safety = (item.safetyLevel || "SAFE").toUpperCase();
-            const markerColor =
-              safety === "DANGER"
-                ? "#ef4444"
-                : safety === "WARNING"
-                ? "#f59e0b"
-                : "#10b981";
-
-            const customIcon = L.divIcon({
-              className: "custom-map-marker",
-              html: `<div style="background-color: ${markerColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 6px rgba(0,0,0,0.5);"></div>`,
-              iconSize: [14, 14],
-              iconAnchor: [7, 7]
-            });
-
-            L.marker([lat, lng], { icon: customIcon })
-              .addTo(map)
-              .bindPopup(`
-                <div style="color: black; font-family: sans-serif; font-size: 0.8rem;">
-                  <strong style="color: ${markerColor}; font-size: 0.85rem;">${item.deviceName || "Gerät"}</strong><br/>
-                  <strong>Defekt:</strong> ${item.identifiedDefect || "Kein Defekt"}<br/>
-                  <strong>Status:</strong> ${safety}
-                </div>
-              `);
-            
-            hasMarkers = true;
-          }
-        }
-      });
-
-      if (hasMarkers && count > 0) {
-        map.setView([sumLat / count, sumLng / count], 10);
-      }
+      this._buildMarkers(L, map);
     } catch (e) {
       console.error("Fehler beim Initialisieren der Leaflet-Karte:", e);
     }
   }
 
   render() {
-    if (this.history.length === 0) {
+    if (this.history.length === 0 && this.tickets.length === 0) {
       return html`
         <div class="card empty-dashboard">
           <h3 class="text-muted m-0">Keine Daten vorhanden</h3>
@@ -275,10 +303,18 @@ export class EcDashboard extends LitElement {
       `;
     }
 
-    const totalDiagnoses = this.history.length;
+    const allRecords: Array<Partial<DiagnosisResult> & { status?: string }> = [
+      ...this.history,
+      ...this.tickets.filter(t => !this.history.some(h => (h as { id?: string }).id === t.id))
+    ];
+
+    const totalDiagnoses = allRecords.length;
+    const totalTickets = this.tickets.length;
+    const openTickets = this.tickets.filter(t => (t.status || 'open') !== 'closed').length;
+    const closedTickets = this.tickets.filter(t => t.status === 'closed').length;
 
     // 1. Safety Level Distribution Calculations
-    const safetyCounts = this.history.reduce(
+    const safetyCounts = allRecords.reduce(
       (acc, item) => {
         const lvl = (item.safetyLevel || "SAFE").toUpperCase();
         if (lvl === "DANGER") acc.danger++;
@@ -305,7 +341,7 @@ export class EcDashboard extends LitElement {
     const dangerOffset = -(safeDash + warningDash);
 
     // 2. Top Device Calculations for Bar Chart
-    const deviceCounts = this.history.reduce(
+    const deviceCounts = allRecords.reduce(
       (acc, item) => {
         const name = item.deviceName || "Unbekannt";
         acc[name] = (acc[name] || 0) + 1;
@@ -321,7 +357,7 @@ export class EcDashboard extends LitElement {
     const maxCount = Math.max(...sortedDevices.map(([, count]) => count), 1);
 
     const avgDifficulty = (
-      this.history.reduce(
+      allRecords.reduce(
         (sum, item) => sum + (item.repairDifficulty || 1),
         0,
       ) / totalDiagnoses
@@ -333,13 +369,20 @@ export class EcDashboard extends LitElement {
         
         <div class="dashboard-stats" style="margin-top: 1rem;">
           <div class="stat-card">
-            <div class="stat-value-primary">${totalDiagnoses}</div>
+            <div class="stat-value-primary">${totalTickets > 0 ? totalTickets : totalDiagnoses}</div>
             <div class="stat-label">Gesamt-Tickets</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value-warning">${avgDifficulty} / 5</div>
-            <div class="stat-label">Ø Schwierigkeit</div>
-          </div>
+          ${totalTickets > 0 ? html`
+            <div class="stat-card">
+              <div class="stat-value-warning">${openTickets} offen / ${closedTickets} erledigt</div>
+              <div class="stat-label">Ticket-Status</div>
+            </div>
+          ` : html`
+            <div class="stat-card">
+              <div class="stat-value-warning">${avgDifficulty} / 5</div>
+              <div class="stat-label">Ø Schwierigkeit</div>
+            </div>
+          `}
         </div>
 
         <div class="dashboard-grid">

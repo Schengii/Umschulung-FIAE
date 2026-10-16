@@ -1,11 +1,11 @@
 #include "Camera.hpp"
+
 #include <algorithm>
 
 namespace Minecraft {
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-    : m_Position(position), m_WorldUp(up), m_Yaw(yaw), m_Pitch(pitch)
-{
+    : m_Position(position), m_WorldUp(up), m_Yaw(yaw), m_Pitch(pitch) {
     m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
     updateCameraVectors();
 }
@@ -38,7 +38,7 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
     xoffset *= m_MouseSensitivity;
     yoffset *= m_MouseSensitivity;
 
-    m_Yaw   += xoffset;
+    m_Yaw += xoffset;
     m_Pitch += yoffset;
 
     if (constrainPitch) {
@@ -51,6 +51,12 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
     updateCameraVectors();
 }
 
+void Camera::setRotation(float yaw, float pitch) {
+    m_Yaw = yaw;
+    m_Pitch = std::clamp(pitch, -89.0f, 89.0f);
+    updateCameraVectors();
+}
+
 void Camera::updateCameraVectors() {
     glm::vec3 front;
     front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
@@ -59,7 +65,7 @@ void Camera::updateCameraVectors() {
     m_Front = glm::normalize(front);
 
     m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
-    m_Up    = glm::normalize(glm::cross(m_Right, m_Front));
+    m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 }
 
-}
+} // namespace Minecraft

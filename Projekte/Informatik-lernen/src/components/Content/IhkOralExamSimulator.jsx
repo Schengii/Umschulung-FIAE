@@ -83,9 +83,15 @@ export default function IhkOralExamSimulator({ onRewardXP }) {
   useEffect(() => {
     let interval = null;
     if (isTimerRunning && timeLeft > 0) {
-      interval = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
-    } else if (timeLeft === 0 && isTimerRunning) {
-      setIsTimerRunning(false);
+      interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            setIsTimerRunning(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
     return () => clearInterval(interval);
   }, [isTimerRunning, timeLeft]);

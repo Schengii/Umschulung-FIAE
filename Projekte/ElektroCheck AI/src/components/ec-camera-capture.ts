@@ -1,7 +1,12 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state, query } from "lit/decorators.js";
 import "@vaadin/button";
-import { Html5Qrcode } from "html5-qrcode";
+import type { Html5Qrcode } from "html5-qrcode";
+import { fitWithin } from "../utils/image-resize";
+
+// Taschenlampe ist (noch) nicht in den DOM-Typen enthalten
+type TorchCapabilities = MediaTrackCapabilities & { torch?: boolean };
+type TorchConstraint = MediaTrackConstraintSet & { torch?: boolean };
 
 @customElement("ec-camera-capture")
 export class EcCameraCapture extends LitElement {
@@ -16,7 +21,7 @@ export class EcCameraCapture extends LitElement {
   @query("video") private _video!: HTMLVideoElement;
   @query("#ui-canvas") private _uiCanvas!: HTMLCanvasElement;
 
-  private _qrScanner: any = null;
+  private _qrScanner: Html5Qrcode | null = null;
 
   static styles = css`
     :host {
@@ -33,6 +38,11 @@ export class EcCameraCapture extends LitElement {
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border, #64748b);
       max-width: 100%;
+    }
+    .media-box vaadin-button[theme="secondary"] {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
     video, img {
       width: 100%;
@@ -119,14 +129,14 @@ export class EcCameraCapture extends LitElement {
       });
       if (this._video) this._video.srcObject = this._stream;
       this._checkTorchCapabilities();
-    } catch (e) {
+    } catch (_e) {
       try {
         this._stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: this._facingMode },
         });
         if (this._video) this._video.srcObject = this._stream;
         this._checkTorchCapabilities();
-      } catch (fallbackError) {
+      } catch (_fallbackError) {
         alert("Kamera konnte nicht gestartet werden. Bitte Berechtigungen prüfen.");
       }
     }
@@ -142,7 +152,7 @@ export class EcCameraCapture extends LitElement {
       this._hasTorch = false;
       return;
     }
-    const capabilities = (track as any).getCapabilities?.() || {};
+    const capabilities: TorchCapabilities = track.getCapabilities?.() || {};
     this._hasTorch = !!capabilities.torch;
   }
 
@@ -178,12 +188,12 @@ export class EcCameraCapture extends LitElement {
     if (!this._stream) return;
     const track = this._stream.getVideoTracks()[0];
     if (!track) return;
-    const capabilities = (track as any).getCapabilities?.() || {};
+    const capabilities: TorchCapabilities = track.getCapabilities?.() || {};
     if (capabilities.torch) {
       try {
         this._isTorchOn = !this._isTorchOn;
         await track.applyConstraints({
-          advanced: [{ torch: this._isTorchOn } as any]
+          advanced: [{ torch: this._isTorchOn } as TorchConstraint]
         });
       } catch (e) {
         console.error("Taschenlampe konnte nicht gesteuert werden", e);
@@ -209,6 +219,8 @@ export class EcCameraCapture extends LitElement {
     };
 
     try {
+      // Bibliothek erst beim ersten QR-Scan laden
+      const { Html5Qrcode } = await import("html5-qrcode");
       this._qrScanner = new Html5Qrcode("qr-reader");
       const config = { fps: 10, qrbox: { width: 250, height: 250 } };
       const strictConstraints =
@@ -225,7 +237,7 @@ export class EcCameraCapture extends LitElement {
           },
           () => {},
         );
-      } catch (strictError) {
+      } catch (_strictError) {
         await this._qrScanner.start(
           { facingMode: this._facingMode },
           config,
@@ -235,7 +247,7 @@ export class EcCameraCapture extends LitElement {
           () => {},
         );
       }
-    } catch (err) {
+    } catch (_err) {
       alert("QR-Scanner konnte nicht gestartet werden. Berechtigungen prüfen.");
       this.stopQRScanner();
     } finally {
@@ -275,7 +287,7 @@ export class EcCameraCapture extends LitElement {
         return;
       }
 
-      const MAX_WIDTH = 800;
+      const MAX_WIDTH = 1280;
       let w = this._video.videoWidth;
       let h = this._video.videoHeight;
 
@@ -287,7 +299,7 @@ export class EcCameraCapture extends LitElement {
       this._uiCanvas.width = w;
       this._uiCanvas.height = h;
       this._uiCanvas.getContext("2d")?.drawImage(this._video, 0, 0, w, h);
-      capturedDataUrl = this._uiCanvas.toDataURL("image/jpeg", 0.7);
+      capturedDataUrl = this._uiCanvas.toDataURL("image/jpeg", 0.75);
     }
 
     if (capturedDataUrl) {
@@ -298,9 +310,11 @@ export class EcCameraCapture extends LitElement {
 
   captureAndScanTypePlate() {
     if (!this._video || !this._uiCanvas) return;
-    this._uiCanvas.width = this._video.videoWidth;
-    this._uiCanvas.height = this._video.videoHeight;
-    this._uiCanvas.getContext("2d")?.drawImage(this._video, 0, 0);
+    // Typenschild-Text braucht Auflösung, aber das Backend-Limit (4 MB) darf nicht überschritten werden
+    const { width, height } = fitWithin(this._video.videoWidth, this._video.videoHeight, 1920);
+    this._uiCanvas.width = width;
+    this._uiCanvas.height = height;
+    this._uiCanvas.getContext("2d")?.drawImage(this._video, 0, 0, width, height);
     const img = this._uiCanvas.toDataURL("image/jpeg", 0.8);
     this.stopCamera();
     this.dispatchEvent(new CustomEvent("ocr-scan-requested", { detail: { image: img } }));

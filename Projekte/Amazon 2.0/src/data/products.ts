@@ -42,6 +42,11 @@ export const PRODUCTS: Product[] = [
       'Treiber': '30mm',
       'Gewicht': '250g',
     },
+    variants: [
+      { id: 'v-black', name: 'Mattschwarz', type: 'color', colorCode: '#1a1a1a', priceModifier: 0, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80' },
+      { id: 'v-silver', name: 'Platinsilber', type: 'color', colorCode: '#d1d5db', priceModifier: 0, image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&auto=format&fit=crop&q=80' },
+      { id: 'v-blue', name: 'Mitternachtsblau', type: 'color', colorCode: '#1e3a8a', priceModifier: 15, image: 'https://images.unsplash.com/photo-1590658006821-04f4008d5717?w=600&auto=format&fit=crop&q=80' },
+    ],
     priceHistory: [
       { date: '2026-02-01', price: 379.99 },
       { date: '2026-03-01', price: 349.99 },
@@ -133,6 +138,11 @@ export const PRODUCTS: Product[] = [
       'Speicher': '128 GB',
       'Akku': '10.090 mAh',
     },
+    variants: [
+      { id: 'v-128gb', name: '128 GB WiFi', type: 'storage', priceModifier: 0 },
+      { id: 'v-256gb', name: '256 GB WiFi (+80€)', type: 'storage', priceModifier: 80 },
+      { id: 'v-5g', name: '256 GB 5G (+140€)', type: 'storage', priceModifier: 140 },
+    ],
     priceHistory: [
       { date: '2026-01-01', price: 499.00 },
       { date: '2026-03-01', price: 449.00 },

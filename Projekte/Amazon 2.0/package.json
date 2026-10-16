@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "check:secrets": "node ./scripts/pre-commit-check.mjs"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

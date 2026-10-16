@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Build outputs & caches
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+.vercel/
+.cache/
+.temp/
+temp/
+tmp/
+
+# Android & Capacitor native artifacts
+frontend/android/
+**/android/build/
+**/.gradle/
+*.apk
+*.aab
+*.dex
+*.class
+*.jar
+
+# Git internals
+.git/
+.githooks/
+
+# Database files & heavy binary data
+*.sqlite
+*.sqlite3
+*.db
+*.bin
+*.dat
+scraped_data/
+listings_cache/
+
+# Lock files (save huge amount of Claude token quota)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Media & Binary assets
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.ico
+*.pdf
+*.zip
+*.tar.gz
+*.mp3
+*.mp4
+*.wav

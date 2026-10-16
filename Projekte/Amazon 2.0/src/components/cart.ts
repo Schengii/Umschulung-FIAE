@@ -1,9 +1,7 @@
-// ============================================================
-// Amazon 2.0 – Cart Drawer Component
-// ============================================================
-import type { AppState, CartItem } from '../types';
+import type { AppState, CartItem, SavedForLaterItem } from '../types';
 import { formatPrice } from '../utils/formatters';
 import { showToast } from './toast';
+import { moveToSavedForLater, moveBackToCart, saveCart } from '../store';
 
 type CartUpdateCallback = (productId: string, qty: number) => void;
 type CheckoutCallback = () => void;
@@ -45,6 +43,7 @@ export function renderCartDrawer(
 
   const total = state.cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
   const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  const savedList = state.savedForLater || [];
 
   // Coupon discount
   let discountAmount = 0;
@@ -116,6 +115,18 @@ export function renderCartDrawer(
           </button>
         </div>
       `}
+
+      <!-- Saved For Later Section -->
+      ${savedList.length > 0 ? `
+        <div class="saved-for-later-section">
+          <div class="saved-for-later-header">
+            <h3>📌 Für später gemerkt (${savedList.length})</h3>
+          </div>
+          <div class="saved-for-later-items">
+            ${savedList.map(item => renderSavedItem(item)).join('')}
+          </div>
+        </div>
+      ` : ''}
     </div>
   `;
 
@@ -140,12 +151,62 @@ export function renderCartDrawer(
     });
   });
 
+  // Save for later button
+  drawerEl.querySelectorAll('.btn-save-for-later').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const productId = btn.getAttribute('data-product-id')!;
+      const itemToSave = state.cart.find(i => i.product.id === productId);
+      if (itemToSave) {
+        const savedQty = itemToSave.qty;
+        const savedProd = itemToSave.product;
+        moveToSavedForLater(productId);
+        renderCartDrawer(state, onUpdate, onCheckout);
+        showToast(`„${savedProd.title}“ für später gemerkt.`, 'info', {
+          action: {
+            text: 'Rückgängig',
+            onClick: () => {
+              moveBackToCart(productId);
+              const reAdded = state.cart.find(i => i.product.id === productId);
+              if (reAdded) reAdded.qty = savedQty;
+              saveCart();
+              renderCartDrawer(state, onUpdate, onCheckout);
+              showToast('Wieder in den Warenkorb verschoben!', 'success');
+            },
+          },
+        });
+      }
+    });
+  });
+
+  // Move back to cart from saved
+  drawerEl.querySelectorAll('.btn-move-to-cart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const productId = btn.getAttribute('data-product-id')!;
+      moveBackToCart(productId);
+      renderCartDrawer(state, onUpdate, onCheckout);
+      showToast('Artikel wieder in den Warenkorb gelegt!', 'success');
+    });
+  });
+
   // Remove buttons
   drawerEl.querySelectorAll('.cart-item-remove').forEach(btn => {
     btn.addEventListener('click', () => {
       const productId = btn.getAttribute('data-product-id')!;
-      onUpdate(productId, 0);
-      showToast('Artikel entfernt', 'info');
+      const removedItem = state.cart.find(i => i.product.id === productId);
+      if (removedItem) {
+        const prevQty = removedItem.qty;
+        const prevProduct = removedItem.product;
+        onUpdate(productId, 0);
+        showToast(`„${prevProduct.title}“ entfernt`, 'info', {
+          action: {
+            text: 'Rückgängig',
+            onClick: () => {
+              onUpdate(productId, prevQty);
+              showToast('Artikel wiederhergestellt!', 'success');
+            },
+          },
+        });
+      }
     });
   });
 }
@@ -166,8 +227,28 @@ function renderCartItem(item: CartItem): string {
           <span class="qty-display" aria-label="Menge: ${item.qty}">${item.qty}</span>
           <button class="qty-btn" data-product-id="${item.product.id}" data-delta="1" aria-label="Menge erhöhen">+</button>
         </div>
+        <div class="cart-item-secondary-actions">
+          <button class="btn-save-for-later" data-product-id="${item.product.id}" title="Für später merken">
+            📌 Für später merken
+          </button>
+        </div>
       </div>
       <button class="cart-item-remove" data-product-id="${item.product.id}" aria-label="Aus Warenkorb entfernen">✕</button>
+    </div>
+  `;
+}
+
+function renderSavedItem(item: SavedForLaterItem): string {
+  return `
+    <div class="saved-item" data-saved-item="${item.product.id}">
+      <img src="${item.product.images[0]}" alt="${item.product.title}" class="saved-item-img" width="55" height="55" />
+      <div class="saved-item-info">
+        <p class="saved-item-title">${item.product.title}</p>
+        <span class="saved-item-price">${formatPrice(item.product.price)}</span>
+        <button class="btn btn-sm btn-primary btn-move-to-cart" data-product-id="${item.product.id}">
+          🛒 In den Warenkorb
+        </button>
+      </div>
     </div>
   `;
 }

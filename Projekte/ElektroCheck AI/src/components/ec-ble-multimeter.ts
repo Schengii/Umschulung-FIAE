@@ -42,11 +42,11 @@ export class EcBleMultimeter extends LitElement {
     }
     .connected {
       background: #dcfce7;
-      color: #15803d;
+      color: #166534;
     }
     .disconnected {
       background: #f1f5f9;
-      color: #64748b;
+      color: #334155;
     }
     .display-panel {
       background: #090d16;
@@ -144,7 +144,7 @@ export class EcBleMultimeter extends LitElement {
             ❌ Trennen
           </button>
           
-          <select @change="${(e: Event) => this._autoTarget = (e.target as HTMLSelectElement).value as any}">
+          <select aria-label="Zielfeld für den Messwert" @change="${(e: Event) => this._autoTarget = (e.target as HTMLSelectElement).value as "R_PE" | "R_ISO" | "I_LEAK"}">
             <option value="R_PE">Schutzleiter (R_PE)</option>
             <option value="R_ISO">Isolationsw. (R_ISO)</option>
             <option value="I_LEAK">Ableitstrom (I_leak)</option>

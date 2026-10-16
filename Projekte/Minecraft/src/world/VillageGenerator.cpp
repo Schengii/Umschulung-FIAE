@@ -1,6 +1,8 @@
 #include "VillageGenerator.hpp"
-#include "World.hpp"
+
 #include "../ecs/MobEngine.hpp"
+#include "World.hpp"
+
 #include <cmath>
 
 namespace Minecraft {
@@ -110,4 +112,4 @@ void VillageGenerator::generateFarmPlot(World& world, int x, int y, int z) {
     }
 }
 
-}
+} // namespace Minecraft

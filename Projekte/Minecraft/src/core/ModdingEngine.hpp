@@ -1,11 +1,12 @@
 #ifndef MODDINGENGINE_HPP
 #define MODDINGENGINE_HPP
 
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <memory>
 #include "../world/Block.hpp"
+
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace Minecraft {
 
@@ -47,6 +48,6 @@ private:
     std::vector<CustomRecipeDef> m_CustomRecipes;
 };
 
-}
+} // namespace Minecraft
 
 #endif // MODDINGENGINE_HPP

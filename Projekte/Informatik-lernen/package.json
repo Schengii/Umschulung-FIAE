@@ -1,7 +1,7 @@
 {
   "name": "informatiker-game",
   "private": true,
-  "version": "3.75.0",
+  "version": "3.77.0",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -99,5 +99,9 @@
     "vite": "^8.3.3",
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.2"
+  },
+  "overrides": {
+    "dompurify": "^3.4.17",
+    "braces": "^3.0.3"
   }
 }

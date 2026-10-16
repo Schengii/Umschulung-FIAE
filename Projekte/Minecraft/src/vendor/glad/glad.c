@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 PFNGLCLEARPROC glClear = NULL;
+PFNGLGETERRORPROC glGetError = NULL;
 PFNGLCLEARCOLORPROC glClearColor = NULL;
 PFNGLVIEWPORTPROC glViewport = NULL;
 PFNGLENABLEPROC glEnable = NULL;
@@ -92,6 +93,7 @@ static void* load(GLADloadproc loadproc, const char *name) {
 
 int gladLoadGLLoader(GLADloadproc loadproc) {
     glClear = (PFNGLCLEARPROC)load(loadproc, "glClear");
+    glGetError = (PFNGLGETERRORPROC)load(loadproc, "glGetError");
     glClearColor = (PFNGLCLEARCOLORPROC)load(loadproc, "glClearColor");
     glViewport = (PFNGLVIEWPORTPROC)load(loadproc, "glViewport");
     glEnable = (PFNGLENABLEPROC)load(loadproc, "glEnable");

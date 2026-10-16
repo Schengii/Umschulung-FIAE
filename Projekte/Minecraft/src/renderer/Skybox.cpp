@@ -1,10 +1,11 @@
-#include <glad/glad.h>
 #include "Skybox.hpp"
-#include <vector>
-#include <cmath>
+
 #include <algorithm>
-#include <glm/gtc/type_ptr.hpp>
+#include <cmath>
+#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 #ifndef GL_LEQUAL
 #define GL_LEQUAL 0x0203
@@ -16,50 +17,24 @@
 namespace Minecraft {
 
 Skybox::Skybox() {
-    float skyboxVertices[] = {
-        // Positions          
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
+    float skyboxVertices[] = {// Positions
+                              -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f,
+                              1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f,
 
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
+                              -1.0f, -1.0f, 1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  -1.0f,
+                              -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,
 
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
+                              1.0f,  -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
+                              1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f,
 
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
+                              -1.0f, -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
+                              1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f, -1.0f, 1.0f,
 
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
+                              -1.0f, 1.0f,  -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,
+                              1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  -1.0f,
 
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f
-    };
+                              -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f,
+                              1.0f,  -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f};
 
     if (glGenVertexArrays && glGenBuffers) {
         glGenVertexArrays(1, &m_VAO);
@@ -89,21 +64,18 @@ Skybox::~Skybox() {
 }
 
 void Skybox::initCloudBuffers() {
-    if (m_CloudsInitialized || !glCreateShader || !glGenVertexArrays) return;
+    if (m_CloudsInitialized || !glCreateShader || !glGenVertexArrays)
+        return;
 
     m_CloudShader = std::make_unique<Shader>("assets/shaders/ui.vert", "assets/shaders/ui.frag");
 
     // Grid of cloud planes at Y=128
     const float CLOUD_EXTENT = 512.0f;
-    float cloudQuad[] = {
-        -CLOUD_EXTENT,  CLOUD_EXTENT, 0.0f, 1.0f,
-         CLOUD_EXTENT, -CLOUD_EXTENT, 1.0f, 0.0f,
-        -CLOUD_EXTENT, -CLOUD_EXTENT, 0.0f, 0.0f,
+    float cloudQuad[] = {-CLOUD_EXTENT, CLOUD_EXTENT, 0.0f,          1.0f,          CLOUD_EXTENT, -CLOUD_EXTENT,
+                         1.0f,          0.0f,         -CLOUD_EXTENT, -CLOUD_EXTENT, 0.0f,         0.0f,
 
-        -CLOUD_EXTENT,  CLOUD_EXTENT, 0.0f, 1.0f,
-         CLOUD_EXTENT,  CLOUD_EXTENT, 1.0f, 1.0f,
-         CLOUD_EXTENT, -CLOUD_EXTENT, 1.0f, 0.0f
-    };
+                         -CLOUD_EXTENT, CLOUD_EXTENT, 0.0f,          1.0f,          CLOUD_EXTENT, CLOUD_EXTENT,
+                         1.0f,          1.0f,         CLOUD_EXTENT,  -CLOUD_EXTENT, 1.0f,         0.0f};
 
     glGenVertexArrays(1, &m_CloudVAO);
     glGenBuffers(1, &m_CloudVBO);
@@ -123,8 +95,11 @@ void Skybox::initCloudBuffers() {
 }
 
 void Skybox::render(const glm::mat4& view, const glm::mat4& projection, float timeOfDay) {
-    (void)view; (void)projection; (void)timeOfDay;
-    if (m_VAO == 0) return;
+    (void)view;
+    (void)projection;
+    (void)timeOfDay;
+    if (m_VAO == 0)
+        return;
 
     glDepthFunc(GL_LEQUAL);
     glBindVertexArray(m_VAO);
@@ -134,7 +109,8 @@ void Skybox::render(const glm::mat4& view, const glm::mat4& projection, float ti
 }
 
 void Skybox::renderClouds(const Camera& camera, float timeOfDay, float totalTime) {
-    if (!m_CloudShader || m_CloudVAO == 0) return;
+    if (!m_CloudShader || m_CloudVAO == 0)
+        return;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -150,7 +126,8 @@ void Skybox::renderClouds(const Camera& camera, float timeOfDay, float totalTime
     glm::vec3 playerPos = camera.getPosition();
 
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(playerPos.x + std::fmod(driftX, 32.0f), 128.0f, playerPos.z + std::fmod(driftZ, 32.0f)));
+    model = glm::translate(
+        model, glm::vec3(playerPos.x + std::fmod(driftX, 32.0f), 128.0f, playerPos.z + std::fmod(driftZ, 32.0f)));
     model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     m_CloudShader->setMat4("u_Projection", proj * view * model);
@@ -176,4 +153,4 @@ void Skybox::renderClouds(const Camera& camera, float timeOfDay, float totalTime
     glDisable(GL_BLEND);
 }
 
-}
+} // namespace Minecraft

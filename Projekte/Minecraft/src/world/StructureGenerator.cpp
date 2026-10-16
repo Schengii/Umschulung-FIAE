@@ -1,5 +1,7 @@
 #include "StructureGenerator.hpp"
+
 #include "World.hpp"
+
 #include <cmath>
 
 namespace Minecraft {
@@ -15,7 +17,8 @@ void StructureGenerator::generateTree(World& world, int x, int y, int z, bool is
     for (int lx = -2; lx <= 2; ++lx) {
         for (int lz = -2; lz <= 2; ++lz) {
             for (int ly = height - 2; ly <= height + 1; ++ly) {
-                if (std::abs(lx) == 2 && std::abs(lz) == 2 && ly == height + 1) continue;
+                if (std::abs(lx) == 2 && std::abs(lz) == 2 && ly == height + 1)
+                    continue;
                 if (world.getBlock(x + lx, y + ly, z + lz) == BlockType::Air) {
                     world.setBlock(x + lx, y + ly, z + lz, BlockType::Leaves);
                 }
@@ -152,7 +155,8 @@ void StructureGenerator::generateStronghold(World& world, int x, int y, int z) {
     // End Portal Frame Rim at Y=1 around lava pool
     for (int dx = 2; dx <= 6; ++dx) {
         for (int dz = 2; dz <= 6; ++dz) {
-            if ((dx == 2 || dx == 6 || dz == 2 || dz == 6) && !(dx == 2 && dz == 2) && !(dx == 2 && dz == 6) && !(dx == 6 && dz == 2) && !(dx == 6 && dz == 6)) {
+            if ((dx == 2 || dx == 6 || dz == 2 || dz == 6) && !(dx == 2 && dz == 2) && !(dx == 2 && dz == 6) &&
+                !(dx == 6 && dz == 2) && !(dx == 6 && dz == 6)) {
                 world.setBlock(x + dx, y + 1, z + dz, BlockType::EndPortalFrame);
             }
         }
@@ -319,9 +323,9 @@ void StructureGenerator::generateWoodlandMansion(World& world, int x, int y, int
 
     // Ground Floor Grand Dining Room & Upper Treasury
     world.setBlock(x + 7, y + 1, z + 7, BlockType::CraftingTable);
-    world.setBlock(x + 7, y + 6, z + 7, BlockType::Spawner); // Illager / Evoker spawner
-    world.setBlock(x + 7, y + 6, z + 9, BlockType::Chest);   // Grand Treasure chest
+    world.setBlock(x + 7, y + 6, z + 7, BlockType::Spawner);      // Illager / Evoker spawner
+    world.setBlock(x + 7, y + 6, z + 9, BlockType::Chest);        // Grand Treasure chest
     world.setBlock(x + 7, y + 6, z + 5, BlockType::EmeraldBlock); // Secret emerald vault
 }
 
-}
+} // namespace Minecraft

@@ -121,7 +121,8 @@ export function evaluateUserCode(payload) {
 const BLOCKED_WORKER_GLOBALS = [
   'indexedDB', 'caches', 'navigator',
   'fetch', 'XMLHttpRequest', 'WebSocket', 'WebTransport', 'EventSource',
-  'importScripts', 'BroadcastChannel', 'Worker', 'SharedWorker'
+  'importScripts', 'BroadcastChannel', 'Worker', 'SharedWorker',
+  'WebAssembly', 'SharedArrayBuffer'
 ];
 
 /**

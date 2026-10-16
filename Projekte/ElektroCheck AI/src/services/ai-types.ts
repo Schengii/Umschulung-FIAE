@@ -5,6 +5,10 @@ export interface DiagnosisResult {
   estimatedRepairCost: string;
   repairDifficulty: 1 | 2 | 3 | 4 | 5;
   recommendation: string;
+  /** Standort, z.B. "Lat: 51.1, Lng: 10.4" oder Anschrift */
+  location?: string;
+  /** Optionaler Haftungshinweis für den PDF-Export */
+  disclaimer?: string;
 
   actionSteps?: { 
     id: number; 
@@ -42,4 +46,22 @@ export interface ThermalAnalysisResult {
     completed: boolean;
   }[];
   safetyTips: string[];
+}
+
+export interface TypePlateResult {
+  componentName: string;
+  extractedText: string;
+  datasheetSearchUrl: string;
+}
+
+export interface MultimeterReading {
+  value: number | null;
+  unit: string;
+}
+
+export interface SchematicAnalysisResult {
+  diagramTitle: string;
+  identifiedComponents: Array<{ tag: string; name: string; terminals: string }>;
+  detectedErrors: Array<{ severity: 'INFO' | 'WARNING' | 'CRITICAL'; description: string; vdeReference: string }>;
+  summary: string;
 }

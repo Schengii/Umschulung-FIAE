@@ -1,9 +1,7 @@
-// ============================================================
-// Amazon 2.0 – Social Shopping & Referral Hub Component
-// ============================================================
 import type { AppState } from '../types';
 import { showToast } from './toast';
-import { saveWishlist } from '../store';
+import { saveBalance, emit } from '../store';
+import { playSound } from '../utils/audio';
 
 let shareModal: HTMLElement | null = null;
 
@@ -94,10 +92,10 @@ export function openShareWishlistModal(state: AppState): void {
   // Simulate Referral Bonus
   document.getElementById('simulateReferralBtn')?.addEventListener('click', () => {
     state.userBalance.amount += 15.0;
-    saveWishlist();
+    saveBalance();
+    emit('balance:changed');
+    playSound('success');
     showToast('🎉 Bravo! +15,00 € Guthaben wurde deinem Konto gutgeschrieben!', 'success');
     closeModal();
-    // Emit balance change
-    import('../store').then(({ emit }) => emit('balance:changed'));
   });
 }

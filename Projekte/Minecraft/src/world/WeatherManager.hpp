@@ -6,12 +6,7 @@
 
 namespace Minecraft {
 
-enum class WeatherState {
-    Clear,
-    Rain,
-    Snow,
-    Thunderstorm
-};
+enum class WeatherState { Clear, Rain, Snow, Thunderstorm };
 
 struct RainParticle {
     glm::vec3 position;
@@ -29,7 +24,9 @@ public:
 
     WeatherState getWeatherState() const { return m_State; }
     float getRainIntensity() const { return m_RainIntensity; }
-    bool isRaining() const { return m_State == WeatherState::Rain || m_State == WeatherState::Thunderstorm || m_State == WeatherState::Snow; }
+    bool isRaining() const {
+        return m_State == WeatherState::Rain || m_State == WeatherState::Thunderstorm || m_State == WeatherState::Snow;
+    }
     bool isThundering() const { return m_State == WeatherState::Thunderstorm; }
 
     const std::vector<RainParticle>& getParticles() const { return m_Particles; }
@@ -43,6 +40,6 @@ private:
     void spawnWeatherParticles(const glm::vec3& playerPos);
 };
 
-}
+} // namespace Minecraft
 
 #endif // WEATHERMANAGER_HPP

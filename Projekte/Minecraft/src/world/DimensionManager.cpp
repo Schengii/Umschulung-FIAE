@@ -1,22 +1,47 @@
 #include "DimensionManager.hpp"
-#include "StructureGenerator.hpp"
+
 #include "../audio/AudioManager.hpp"
+#include "StructureGenerator.hpp"
+
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 
 namespace Minecraft {
 
-DimensionManager::DimensionManager() {
-    m_Overworld = std::make_unique<World>(4);
-    m_NetherWorld = std::make_unique<World>(2);
-    m_EndWorld = std::make_unique<World>(2);
+DimensionManager::DimensionManager(uint32_t seed, std::string baseSaveDir, int overworldRenderDistance) : m_Seed(seed) {
+    auto pool = std::make_shared<ThreadPool>(4);
+    m_Overworld = std::make_unique<World>(overworldRenderDistance, seed, baseSaveDir + "/overworld", pool);
+    m_NetherWorld = std::make_unique<World>(2, seed, baseSaveDir + "/nether", pool);
+    m_EndWorld = std::make_unique<World>(2, seed, baseSaveDir + "/end", pool);
 
-    generateNetherTerrain(*m_NetherWorld);
-    generateEndTerrain(*m_EndWorld);
+    // The hand-built spawn layouts are generated once per save; afterwards the saved chunks win,
+    // otherwise every launch would overwrite whatever the player built there.
+    auto generateOnce = [this](World& world, void (DimensionManager::*generate)(World&)) {
+        namespace fs = std::filesystem;
+        const fs::path marker = fs::path(world.getSaveDir()) / ".terrain_generated";
+        if (fs::exists(marker))
+            return;
+        (this->*generate)(world);
+        world.saveAll();
+        std::error_code ec;
+        fs::create_directories(world.getSaveDir(), ec);
+        std::ofstream(marker).put('1');
+    };
+    generateOnce(*m_NetherWorld, &DimensionManager::generateNetherTerrain);
+    generateOnce(*m_EndWorld, &DimensionManager::generateEndTerrain);
 
     m_CurrentWorld = std::move(m_Overworld);
 }
 
 DimensionManager::~DimensionManager() = default;
+
+void DimensionManager::saveAll() {
+    for (World* w : {m_Overworld.get(), m_NetherWorld.get(), m_EndWorld.get(), m_CurrentWorld.get()}) {
+        if (w)
+            w->saveAll();
+    }
+}
 
 void DimensionManager::update(const glm::vec3& playerPos, float deltaTime) {
     if (m_CurrentWorld) {
@@ -25,7 +50,8 @@ void DimensionManager::update(const glm::vec3& playerPos, float deltaTime) {
 }
 
 void DimensionManager::switchDimension(DimensionType newDim) {
-    if (m_CurrentDimension == newDim) return;
+    if (m_CurrentDimension == newDim)
+        return;
 
     // Save current world into its proper slot
     if (m_CurrentDimension == DimensionType::Overworld) {
@@ -54,7 +80,8 @@ void DimensionManager::switchDimension(DimensionType newDim) {
 }
 
 bool DimensionManager::checkPortalTeleport(const glm::vec3& playerPos, glm::vec3& outTeleportPos) {
-    if (!m_CurrentWorld) return false;
+    if (!m_CurrentWorld)
+        return false;
     int px = static_cast<int>(std::floor(playerPos.x));
     int py = static_cast<int>(std::floor(playerPos.y));
     int pz = static_cast<int>(std::floor(playerPos.z));
@@ -94,15 +121,19 @@ void DimensionManager::generateNetherTerrain(World& nether) {
                 nether.setBlock(x, y, z, BlockType::Lava);
             }
             for (int y = 15; y < 45; ++y) {
-                if ((x + z) % 3 == 0) nether.setBlock(x, y, z, BlockType::SoulSand);
-                else nether.setBlock(x, y, z, BlockType::Netherrack);
+                if ((x + z) % 3 == 0)
+                    nether.setBlock(x, y, z, BlockType::SoulSand);
+                else
+                    nether.setBlock(x, y, z, BlockType::Netherrack);
             }
             for (int y = 45; y < 90; ++y) {
                 nether.setBlock(x, y, z, BlockType::Air); // Nether cave space
             }
             for (int y = 90; y < 127; ++y) {
-                if (y == 100 && (x * z) % 5 == 0) nether.setBlock(x, y, z, BlockType::Glowstone);
-                else nether.setBlock(x, y, z, BlockType::Netherrack);
+                if (y == 100 && (x * z) % 5 == 0)
+                    nether.setBlock(x, y, z, BlockType::Glowstone);
+                else
+                    nether.setBlock(x, y, z, BlockType::Netherrack);
             }
         }
     }
@@ -126,7 +157,7 @@ void DimensionManager::generateEndTerrain(World& endWorld) {
     }
 
     // 4 Obsidian Pillars around the main island
-    int pillarCoords[4][2] = { { 10, 10 }, { -10, 10 }, { 10, -10 }, { -10, -10 } };
+    int pillarCoords[4][2] = {{10, 10}, {-10, 10}, {10, -10}, {-10, -10}};
     for (const auto& coord : pillarCoords) {
         int px = coord[0];
         int pz = coord[1];
@@ -149,4 +180,4 @@ void DimensionManager::generateEndTerrain(World& endWorld) {
     endWorld.setBlock(0, 59, 0, BlockType::Bedrock);
 }
 
-}
+} // namespace Minecraft

@@ -1,7 +1,9 @@
 #include "WeatherManager.hpp"
+
 #include "../audio/AudioManager.hpp"
-#include <cstdlib>
+
 #include <algorithm>
+#include <cstdlib>
 
 namespace Minecraft {
 
@@ -10,10 +12,14 @@ WeatherManager::~WeatherManager() = default;
 
 void WeatherManager::setWeather(WeatherState state) {
     m_State = state;
-    if (state == WeatherState::Clear) m_RainIntensity = 0.0f;
-    else if (state == WeatherState::Rain) m_RainIntensity = 0.6f;
-    else if (state == WeatherState::Snow) m_RainIntensity = 0.5f;
-    else if (state == WeatherState::Thunderstorm) m_RainIntensity = 1.0f;
+    if (state == WeatherState::Clear)
+        m_RainIntensity = 0.0f;
+    else if (state == WeatherState::Rain)
+        m_RainIntensity = 0.6f;
+    else if (state == WeatherState::Snow)
+        m_RainIntensity = 0.5f;
+    else if (state == WeatherState::Thunderstorm)
+        m_RainIntensity = 1.0f;
 }
 
 void WeatherManager::update(const glm::vec3& playerPos, float deltaTime) {
@@ -26,7 +32,7 @@ void WeatherManager::update(const glm::vec3& playerPos, float deltaTime) {
     // Weather particle updates
     spawnWeatherParticles(playerPos);
 
-    for (auto it = m_Particles.begin(); it != m_Particles.end(); ) {
+    for (auto it = m_Particles.begin(); it != m_Particles.end();) {
         it->position += it->velocity * deltaTime;
         it->lifetime -= deltaTime;
         if (it->lifetime <= 0.0f || it->position.y < playerPos.y - 10.0f) {
@@ -48,7 +54,8 @@ void WeatherManager::update(const glm::vec3& playerPos, float deltaTime) {
 }
 
 void WeatherManager::spawnWeatherParticles(const glm::vec3& playerPos) {
-    if (m_Particles.size() > 200) return;
+    if (m_Particles.size() > 200)
+        return;
 
     for (int i = 0; i < 5; ++i) {
         RainParticle p;
@@ -59,4 +66,4 @@ void WeatherManager::spawnWeatherParticles(const glm::vec3& playerPos) {
     }
 }
 
-}
+} // namespace Minecraft

@@ -1,4 +1,5 @@
 #include "FrustumCuller.hpp"
+
 #include <cmath>
 
 namespace Minecraft {
@@ -41,9 +42,12 @@ void FrustumCuller::update(const glm::mat4& vp) {
 bool FrustumCuller::isBoxVisible(const glm::vec3& min, const glm::vec3& max) const {
     for (const auto& plane : m_Planes) {
         glm::vec3 positive = min;
-        if (plane.normal.x >= 0) positive.x = max.x;
-        if (plane.normal.y >= 0) positive.y = max.y;
-        if (plane.normal.z >= 0) positive.z = max.z;
+        if (plane.normal.x >= 0)
+            positive.x = max.x;
+        if (plane.normal.y >= 0)
+            positive.y = max.y;
+        if (plane.normal.z >= 0)
+            positive.z = max.z;
 
         if (plane.distanceToPoint(positive) < 0.0f) {
             return false;
@@ -52,4 +56,4 @@ bool FrustumCuller::isBoxVisible(const glm::vec3& min, const glm::vec3& max) con
     return true;
 }
 
-}
+} // namespace Minecraft

@@ -29,6 +29,6 @@ public:
     static glm::vec3 getFoliageColor(BiomeType type);
 };
 
-}
+} // namespace Minecraft
 
 #endif // BIOME_HPP

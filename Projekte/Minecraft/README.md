@@ -5,6 +5,9 @@
 [![OpenGL](https://img.shields.io/badge/OpenGL-4.5-green.svg)](https://www.opengl.org/)
 [![CMake](https://img.shields.io/badge/CMake-%3E%3D3.20-orange.svg)](https://cmake.org/)
 [![Build & Test](https://github.com/Schengii/Minecraft/actions/workflows/build.yml/badge.svg)](.github/workflows/build.yml)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Ready-blueviolet.svg)](CLAUDE.md)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-Supported-4285F4.svg)](GEMINI.md)
+[![Vercel](https://img.shields.io/badge/Vercel-Showcase%20Ready-black.svg?logo=vercel)](vercel.json)
 
 A high-performance, modular 3D voxel game engine written in **C++20** and **OpenGL 4.5**, modeled after Minecraft. Features high-throughput multithreaded chunk generation, $16 \times 16 \times 16$ sub-chunk section slicing, asynchronous CPU meshing with exact atlas UV tiling, Amanatides & Woo 3D DDA fast voxel raycasting, real-time cascaded dynamic shadow mapping with 3x3 PCF filtering, volumetric God-Ray solar light shafts, multi-story Woodland Mansion procedural generation, Smithing Table Netherite equipment upgrading, GPU instanced explosion debris emitters, shoreline water foam & crest highlights, multi-threaded asynchronous network packet queuing, procedural pixel-art texture atlas generation, 3D hierarchical mob models, 3-headed Wither boss mechanics, multiplayer remote player models with nametags, client-side prediction with dead-reckoning interpolation, screen-space ambient occlusion (SSAO), procedural skybox clouds at $Y=128$, PBR specular & Fresnel water shaders, environmental player hazards (oxygen/drowning, fire/lava burning, fall damage), animal breeding & feeding mechanics, pig & horse mount saddling and steering, dynamic fluid flow level height calculations, Ocean Monuments, Sunken Shipwrecks, Nether Bastion remnants, Elytra aerodynamic gliding physics, End City towers, atmospheric distance fog with sun in-scattering, mouse scroll hotbar selection, right-click stack splitting, infinite water source generation, console command engine, first-person hand animations, bitmap typography rendering, interactive container GUIs (chests and animated furnaces), continuous mining with tool speed multipliers, non-blocking UDP socket multiplayer networking, vertex ambient occlusion (smooth lighting), ACES filmic tone mapping & bloom post-processing, data-driven modding engine, brewing stand & status effect systems, cellular automaton redstone, hopper item transfer & comparator reading, piston mechanics, 3D A* mob pathfinding, fluid dynamics, Anvil region saving, and material-based spatial audio.
 
@@ -112,7 +115,7 @@ A high-performance, modular 3D voxel game engine written in **C++20** and **Open
 ---
 
 ### 🔲 Tiled Greedy Meshing & Zero UV Distortion (`ChunkMesh.cpp`)
-- **Per-Block UV Sub-Sprite Clamping**: Merged coplanar rectangular faces emit tiled sub-quads mapped precisely to $[u, u+1/16] \times [v, v+1/16]$ atlas texture tiles.
+- **Per-Block UV Sub-Sprite Clamping**: Coplanar faces of the same block and light level are grouped (for ambient-occlusion sampling), and one quad is emitted per block face, each mapped precisely to $[u, u+1/16] \times [v, v+1/16]$ atlas texture tiles.
 - **Bilinear AO Interpolation**: Preserves smooth per-vertex ambient occlusion gradients across merged surfaces without texture stretching or atlas bleeding.
 
 ---
@@ -232,7 +235,7 @@ A high-performance, modular 3D voxel game engine written in **C++20** and **Open
 ---
 
 ### 🧩 Sub-Chunk Vertical Slicing (`ChunkSection`)
-- **$16 \times 16 \times 16$ Chunk Sections**: Chunks are partitioned into 16 vertical sections. Block edits only trigger re-meshing for the affected sub-chunk, reducing modification meshing CPU overhead by **93%**.
+- **$16 \times 16 \times 16$ Chunk Sections**: Chunks are partitioned into 16 vertical sections that track their non-air block counts. Block edits flag the affected chunk (and bordering neighbours) dirty; `World::remeshDirtyChunks` rebuilds them within a per-frame time budget, using a snapshot that includes the neighbouring chunks' border blocks and light.
 
 ---
 
@@ -286,14 +289,94 @@ nmake Minecraft
 ### Running the Engine
 ```powershell
 .\build\Minecraft.exe
+.\build\Minecraft.exe --autostart --seed myworld --render-distance 8   # skip the menu
+.\build\Minecraft.exe --autostart --frames 300                          # smoke test: exits, fails on GL errors
 ```
+Worlds are stored per seed in `world_saves/seed_<seed>/` (chunks, player, inventory, chests, furnaces). Type a seed in the main menu (empty = random); numbers are used directly, any other text is hashed.
 
 ### Running Automated Engine Unit Tests
 ```powershell
-nmake TestEngine
-.\build\TestEngine.exe
+cmake --build build --target TestEngine
+.\build\TestEngine.exe            # all tests (non-zero exit code on failure)
+.\build\TestEngine.exe Network    # only tests whose name contains "Network"
+ctest --test-dir build --output-on-failure
 ```
-> **100% Pass Rate**: All **90 automated test suites** execute and validate every engine subsystem across DDA raycasting, Woodland Mansions, Smithing Table upgrades, GPU explosion emitters, Shoreline Water Foam, Cascaded Shadow Mapping (CSM), Volumetric God-Rays, Ocean Monuments, Sunken Shipwrecks, Screen-Space Ambient Occlusion (SSAO), async network packet queuing, dead-reckoning client prediction, volumetric distance fog, animal breeding, mount riding & saddling, dynamic fluid levels, Nether Bastions, Elytra gliding aerodynamics, End City structures, player hazards (oxygen, lava, fall damage), mouse scroll selection, inventory stack-splitting, infinite water fluids, console commands, Redstone Comparators, Hopper automation, Biome colormaps, Stronghold dungeons, mob AI, procedural clouds, and UDP socket networking.
+Optional: `-DMC_SANITIZE=ON` (AddressSanitizer) or `-DMC_TSAN=ON` (ThreadSanitizer, GCC/Clang).
+> **111 automated tests** (assertions are active in every build type). They execute and validate every engine subsystem across DDA raycasting, Woodland Mansions, Smithing Table upgrades, GPU explosion emitters, Shoreline Water Foam, Cascaded Shadow Mapping (CSM), Volumetric God-Rays, Ocean Monuments, Sunken Shipwrecks, Screen-Space Ambient Occlusion (SSAO), async network packet queuing, dead-reckoning client prediction, volumetric distance fog, animal breeding, mount riding & saddling, dynamic fluid levels, Nether Bastions, Elytra gliding aerodynamics, End City structures, player hazards (oxygen, lava, fall damage), mouse scroll selection, inventory stack-splitting, infinite water fluids, console commands, Redstone Comparators, Hopper automation, Biome colormaps, Stronghold dungeons, mob AI, procedural clouds, and UDP socket networking.
+
+---
+
+## ⚙️ Environment Configuration (`.env`)
+
+Engine parameters, graphics quality presets, networking hosts, and test behavior can be configured using environment variables or a local `.env` file (copied from [.env.example](.env.example)):
+
+```powershell
+# Copy template to local configuration
+copy .env.example .env
+```
+
+| Variable | Default | Description |
+|:---|:---|:---|
+| `APP_ENV` | `development` | Runtime environment mode (`development`, `production`, `testing`) |
+| `LOG_LEVEL` | `INFO` | Console logging verbosity (`TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`) |
+| `VIEW_DISTANCE` | `12` | Active chunk render distance radius |
+| `SHADOWS_ENABLED` | `1` | Enable 3-stage Cascaded Dynamic Shadow Mapping (CSM) |
+| `SHADOW_RESOLUTION` | `2048` | Depth map resolution for shadow cascades |
+| `BLOOM_ENABLED` | `1` | Fullscreen quad HDR bloom extraction pass |
+| `SSAO_ENABLED` | `1` | Screen-Space Ambient Occlusion post-processing |
+| `DEFAULT_SEED` | `133742` | Default world generation seed |
+| `SERVER_HOST` / `PORT`| `127.0.0.1` / `25565` | UDP multiplayer network socket binding |
+| `WEB_DOCS_PORT` | `3000` | Local port for the web documentation & showcase preview |
+
+---
+
+## 🤖 AI Assistant Workflows (Claude Code & Google Gemini)
+
+This repository is optimized for seamless, high-signal collaboration with modern AI coding agents:
+
+- **Claude Code**: Detailed architectural rules and invariant definitions are located in [`CLAUDE.md`](CLAUDE.md). Claude-specific slash commands are ready in `.claude/commands/`:
+  - `/build` — CMake build execution with target diagnostics
+  - `/test` — TestEngine execution and failure reporting
+  - `/add-block` — Scaffolding instructions for adding new voxel blocks
+  - `/check-secrets` — Validate staged commits against secret & .env leak rules
+- **Google Gemini & Antigravity**: Comprehensive instructions are provided in [`GEMINI.md`](GEMINI.md). Universal agent rules are codified in [`AGENTS.md`](AGENTS.md).
+- **Pre-Commit Security Guard**: Activated via `git config core.hooksPath .githooks`. Automatically blocks `.env` files and API keys (Anthropic, OpenAI, GitHub PAT, AWS) from being staged or committed.
+- **Context Optimization**: Large compilation databases, world save files, binary objects, and build folders are strictly excluded via [`.claudeignore`](.claudeignore) and [`.geminiignore`](.geminiignore) to keep agent context windows focused and efficient.
+
+---
+
+## 🌐 Interactive Web Showcase & Vercel Deployment
+
+A high-tech documentation portal and interactive 3D voxel simulator is available in the [`web/`](web/) directory:
+
+- **Interactive 3D Voxel Lab**: Live browser-based canvas simulating sunlight angles, smooth vertex ambient occlusion, and Day/Night atmospheric sky palettes.
+- **Subsystem & Block Browser**: Filterable registry detailing block hardness, harvest tools, light emission, and Anvil save structures.
+- **Controls & Keybindings**: Searchable cheatsheet for game controls.
+
+### Local Web Preview
+```powershell
+# Run using Node / npx
+npm run dev
+# or: npx serve web -p 3000
+```
+
+### Instant Deployment to Vercel
+The repository includes a ready-to-use [`vercel.json`](vercel.json) deployment manifest with clean URLs and HTTP security headers:
+```powershell
+# Deploy with Vercel CLI
+vercel --prod
+```
+Or import the repository directly into your [Vercel Dashboard](https://vercel.com/new).
+
+---
+
+## 🤝 Contributing & Community
+
+Please review our community guidelines before submitting pull requests:
+- [CONTRIBUTING.md](CONTRIBUTING.md) — Coding conventions, C++20 rules, and branching strategy.
+- [SECURITY.md](SECURITY.md) — UDP packet parsing security and vulnerability reporting.
+- [CHANGELOG.md](CHANGELOG.md) — Historical log of engine releases and additions.
+- [.github/pull_request_template.md](.github/pull_request_template.md) — Pre-flight checklist for pull requests.
 
 ---
 

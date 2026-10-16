@@ -9,6 +9,9 @@ export const KEYS = {
   cart: `${PREFIX}cart`,
   orders: `${PREFIX}orders`,
   wishlist: `${PREFIX}wishlist`,
+  wishlistGroups: `${PREFIX}wishlist_groups`,
+  savedForLater: `${PREFIX}saved_for_later`,
+  subscriptions: `${PREFIX}subscriptions`,
   compare: `${PREFIX}compare`,
   recentlyViewed: `${PREFIX}recently_viewed`,
   activeCoupons: `${PREFIX}active_coupons`,
@@ -22,13 +25,28 @@ export const KEYS = {
   balance: `${PREFIX}balance`,
   theme: `${PREFIX}theme`,
   filters: `${PREFIX}filters`,
+  stockOverrides: `${PREFIX}stock_overrides`,
+  searchHistory: `${PREFIX}search_history`,
 } as const;
 
 export type StorageKey = (typeof KEYS)[keyof typeof KEYS];
 
-export function readStorage<T>(key: string, fallback: T): T {
+function getLocalStorage(): Storage | null {
   try {
-    const raw = localStorage.getItem(key);
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      return window.localStorage;
+    }
+  } catch {
+    // In restricted iframe or node environment
+  }
+  return null;
+}
+
+export function readStorage<T>(key: string, fallback: T): T {
+  const storage = getLocalStorage();
+  if (!storage) return fallback;
+  try {
+    const raw = storage.getItem(key);
     return raw !== null ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
@@ -36,19 +54,33 @@ export function readStorage<T>(key: string, fallback: T): T {
 }
 
 export function writeStorage(key: string, value: unknown): void {
+  const storage = getLocalStorage();
+  if (!storage) return;
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    storage.setItem(key, JSON.stringify(value));
   } catch (e) {
     console.warn('[Amazon 2.0] localStorage write failed:', key, e);
   }
 }
 
 export function removeStorage(key: string): void {
-  localStorage.removeItem(key);
+  const storage = getLocalStorage();
+  if (!storage) return;
+  try {
+    storage.removeItem(key);
+  } catch {
+    // ignore
+  }
 }
 
 export function clearAllStorage(): void {
-  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+  const storage = getLocalStorage();
+  if (!storage) return;
+  try {
+    Object.values(KEYS).forEach(k => storage.removeItem(k));
+  } catch {
+    // ignore
+  }
 }
 
 /**

@@ -1,8 +1,9 @@
 #ifndef CAVEDECORATOR_HPP
 #define CAVEDECORATOR_HPP
 
-#include <glm/glm.hpp>
 #include "Block.hpp"
+
+#include <glm/glm.hpp>
 
 namespace Minecraft {
 
@@ -15,6 +16,6 @@ public:
     static void generateStalactite(World& world, int x, int y, int z, int height);
 };
 
-}
+} // namespace Minecraft
 
 #endif // CAVEDECORATOR_HPP

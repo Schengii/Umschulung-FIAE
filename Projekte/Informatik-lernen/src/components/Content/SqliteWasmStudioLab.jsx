@@ -7,34 +7,29 @@ import { useStore } from '../../store/useStore';
 
 export default function SqliteWasmStudioLab() {
   const { awardXP } = useStore();
-  const [sandbox, setSandbox] = useState(null);
-  const [schema, setSchema] = useState({});
+  const [sandbox] = useState(() => {
+    const inst = new SqlSandboxInstance();
+    inst.loadSeed('ecommerce');
+    return inst;
+  });
+  const [schema, setSchema] = useState(() => sandbox.getSchema());
   const [queryInput, setQueryInput] = useState(`SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
 FROM customers c
 INNER JOIN orders o ON c.id = o.customer_id
 ORDER BY o.total_amount DESC;`);
   
-  const [queryResult, setQueryResult] = useState(null);
+  const [queryResult, setQueryResult] = useState(() => sandbox.execute(`SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+ORDER BY o.total_amount DESC;`));
   const [activePreset, setActivePreset] = useState('ecommerce');
   const [xpClaimed, setXpClaimed] = useState(false);
 
   useEffect(() => {
-    const inst = new SqlSandboxInstance();
-    inst.loadSeed('ecommerce');
-    setSandbox(inst);
-    setSchema(inst.getSchema());
-
-    // Initial query run
-    const initialRes = inst.execute(`SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
-FROM customers c
-INNER JOIN orders o ON c.id = o.customer_id
-ORDER BY o.total_amount DESC;`);
-    setQueryResult(initialRes);
-
     return () => {
-      inst.destroy();
+      sandbox.destroy();
     };
-  }, []);
+  }, [sandbox]);
 
   const handleExecute = () => {
     if (!sandbox) return;

@@ -87,9 +87,10 @@ describe('sandboxEvaluator: evaluateUserCode', () => {
 
 describe('sandboxEvaluator: lockDownWorkerScope', () => {
   it('sperrt Netzwerk- und Speicher-Schnittstellen auch auf dem Prototyp', () => {
-    const proto = { fetch: () => 'netz', indexedDB: {} };
+    const proto = { fetch: () => 'netz', indexedDB: {}, WebAssembly: {} };
     const scope = Object.create(proto);
     scope.WebSocket = function WebSocket() {};
+    scope.SharedArrayBuffer = function SharedArrayBuffer() {};
     scope.performance = { now: () => 0 };
 
     lockDownWorkerScope(scope);
@@ -97,6 +98,8 @@ describe('sandboxEvaluator: lockDownWorkerScope', () => {
     expect(scope.fetch).toBeUndefined();
     expect(scope.indexedDB).toBeUndefined();
     expect(scope.WebSocket).toBeUndefined();
+    expect(scope.WebAssembly).toBeUndefined();
+    expect(scope.SharedArrayBuffer).toBeUndefined();
     expect(scope.performance).toBeDefined();
     expect(() => { 'use strict'; proto.fetch = () => 'wieder da'; }).toThrow();
   });

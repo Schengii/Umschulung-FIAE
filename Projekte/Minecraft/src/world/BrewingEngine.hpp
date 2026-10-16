@@ -2,22 +2,14 @@
 #define BREWINGENGINE_HPP
 
 #include "../inventory/ItemStack.hpp"
+
+#include <array>
 #include <string>
 #include <vector>
-#include <array>
 
 namespace Minecraft {
 
-enum class PotionType {
-    WaterBottle,
-    Awkward,
-    Speed,
-    JumpBoost,
-    NightVision,
-    InstantHealth,
-    Regeneration,
-    Poison
-};
+enum class PotionType { WaterBottle, Awkward, Speed, JumpBoost, NightVision, InstantHealth, Regeneration, Poison };
 
 struct BrewingRecipe {
     BlockType ingredient;
@@ -38,6 +30,6 @@ public:
     static bool brewBottles(BlockType ingredient, std::array<PotionType, 3>& bottles);
 };
 
-}
+} // namespace Minecraft
 
 #endif // BREWINGENGINE_HPP

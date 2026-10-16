@@ -28,7 +28,6 @@ export default function OsProcessSchedulerLab() {
 
   // Banker's Algorithm State
   const [bankerAvailable, setBankerAvailable] = useState([3, 3, 2]); // R1, R2, R3
-  const bankerMax = BANKER_MAX;
   const [bankerAlloc, setBankerAlloc] = useState([
     [0, 1, 0], // P0
     [2, 0, 0], // P1
@@ -49,8 +48,8 @@ export default function OsProcessSchedulerLab() {
 
   // Run Banker's Safety Check
   const bankerSafety = useMemo(() => {
-    return checkBankersSafety(bankerAvailable, bankerMax, bankerAlloc);
-  }, [bankerAvailable, bankerMax, bankerAlloc]);
+    return checkBankersSafety(bankerAvailable, BANKER_MAX, bankerAlloc);
+  }, [bankerAvailable, bankerAlloc]);
 
   const handleAddProcess = () => {
     const nextId = processes.length ? Math.max(...processes.map(p => p.id)) + 1 : 1;

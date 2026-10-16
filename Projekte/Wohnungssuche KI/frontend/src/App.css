@@ -203,10 +203,6 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
   transform: translateY(-1px) scale(1.02);
 }
-  background: var(--bg-surface-hover);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));

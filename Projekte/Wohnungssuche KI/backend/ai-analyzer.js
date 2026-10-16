@@ -106,8 +106,10 @@ export async function evaluateListing(listing, preferences, apiKey) {
     poiText = `
   - Supermärkte (Umkreis 1km): ${smList}
   - ÖPNV-Haltestellen (Umkreis 1km): ${ptList}
-  - Parks & Grünflächen (Umkreis 1km): ${pkList}
-   const prompt = `
+  - Parks & Grünflächen (Umkreis 1km): ${pkList}`;
+  }
+
+  const prompt = `
 Du bist ein persönlicher Assistent für die Wohnungssuche in Deutschland.
 Deine Aufgabe ist es, ein Wohnungsangebot mit den Kriterien und Präferenzen des Nutzers zu vergleichen und eine ehrliche, hilfreiche Bewertung abzugeben.
 
@@ -196,7 +198,7 @@ Analysiere das Angebot und erstelle eine JSON-Antwort mit folgenden Feldern:
   }
 }
 Antworte NUR mit dem reinen JSON-Objekt, ohne Markdown-Formatierung wie \`\`\`json.
-\`;
+`;
 
   try {
     const result = await generateContentWithRetry(model, {
@@ -407,9 +409,6 @@ Wichtige Regeln für die Analyse:
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       generationConfig: {
         responseMimeType: 'application/json'
-      }
-    });
-
       }
     });
 

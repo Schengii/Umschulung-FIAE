@@ -1,8 +1,11 @@
+import { withAccessToken } from "../utils/auth-headers";
 import { LitElement, html, css, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "@vaadin/button";
 import "@vaadin/text-field";
 import wizardStyles from "./ec-diagnosis-wizard.css?inline";
+import { calculateCableSizing, type InstallationMethod } from "../utils/vde-cable-sizing";
+import { fetchWithTimeout, GEMINI_TIMEOUT_MS } from "../utils/fetch-timeout";
 
 @customElement("ec-vde-calculator")
 export class EcVdeCalculator extends LitElement {
@@ -116,6 +119,11 @@ export class EcVdeCalculator extends LitElement {
   @state() private _measuredZs: number = 1.2;
   @state() private _u0: number = 230;
 
+  // DIN VDE 0298-4 Dimensionierung State
+  @state() private _installMethod: InstallationMethod = "B2";
+  @state() private _ambientTemp: number = 30;
+  @state() private _groupingCount: number = 1;
+
   private _calculate() {
     const kappa = this._material === "cu" ? 56 : 34;
     const U = this._system === "single" ? 230 : 400;
@@ -178,19 +186,19 @@ export class EcVdeCalculator extends LitElement {
 Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustande kommt, welche Risiken bestehen (z.B. Brandgefahr, Funktionsstörung) und was empfohlen wird.`;
 
     try {
-      const savedBackendUrl = localStorage.getItem("electrocheck_backend_url") || "http://localhost:3000";
-      const headers: HeadersInit = { "Content-Type": "application/json" };
+      const savedBackendUrl = localStorage.getItem("electrocheck_backend_url") || "";
+      const headers: Record<string, string> = withAccessToken({ "Content-Type": "application/json" });
       const savedApiKey = localStorage.getItem("electrocheck_gemini_api_key");
       if (savedApiKey) headers["x-gemini-api-key"] = savedApiKey;
 
-      const response = await fetch(`${savedBackendUrl}/api/gemini/diagnosis`, {
+      const response = await fetchWithTimeout(`${savedBackendUrl}/api/gemini/diagnosis`, {
         method: "POST",
         headers,
         body: JSON.stringify({
           description: query,
           imageBase64: null
         })
-      });
+      }, GEMINI_TIMEOUT_MS);
 
       if (response.ok) {
         const data = await response.json();
@@ -222,7 +230,7 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
         <div class="calc-grid">
           <div class="form-group">
             <label>Phasensystem</label>
-            <select .value="${this._system}" @change="${(e: Event) => this._system = (e.target as HTMLSelectElement).value as any}">
+            <select aria-label="Phasensystem" .value="${this._system}" @change="${(e: Event) => this._system = (e.target as HTMLSelectElement).value as typeof this._system}">
               <option value="single">Wechselstrom (1-phasig / 230V)</option>
               <option value="three">Drehstrom (3-phasig / 400V)</option>
             </select>
@@ -230,7 +238,7 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
 
           <div class="form-group">
             <label>Leitermaterial</label>
-            <select .value="${this._material}" @change="${(e: Event) => this._material = (e.target as HTMLSelectElement).value as any}">
+            <select aria-label="Leitermaterial" .value="${this._material}" @change="${(e: Event) => this._material = (e.target as HTMLSelectElement).value as typeof this._material}">
               <option value="cu">Kupfer (Cu)</option>
               <option value="al">Aluminium (Al)</option>
             </select>
@@ -238,7 +246,7 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
 
           <div class="form-group">
             <label>Nennquerschnitt (A) in mm²</label>
-            <select .value="${this._crossSection.toString()}" @change="${(e: Event) => this._crossSection = parseFloat((e.target as HTMLSelectElement).value)}">
+            <select aria-label="Nennquerschnitt (A) in mm²" .value="${this._crossSection.toString()}" @change="${(e: Event) => this._crossSection = parseFloat((e.target as HTMLSelectElement).value)}">
               <option value="1.5">1.5 mm²</option>
               <option value="2.5">2.5 mm²</option>
               <option value="4">4.0 mm²</option>
@@ -253,17 +261,17 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
 
           <div class="form-group">
             <label>Nennstrom (I) in A</label>
-            <input type="number" .value="${this._current.toString()}" @input="${(e: Event) => this._current = parseFloat((e.target as HTMLInputElement).value) || 0}" />
+            <input aria-label="Nennstrom (I) in A" type="number" .value="${this._current.toString()}" @input="${(e: Event) => this._current = parseFloat((e.target as HTMLInputElement).value) || 0}" />
           </div>
 
           <div class="form-group">
             <label>Einfache Leitungslänge (L) in m</label>
-            <input type="number" .value="${this._length.toString()}" @input="${(e: Event) => this._length = parseFloat((e.target as HTMLInputElement).value) || 0}" />
+            <input aria-label="Einfache Leitungslänge (L) in m" type="number" .value="${this._length.toString()}" @input="${(e: Event) => this._length = parseFloat((e.target as HTMLInputElement).value) || 0}" />
           </div>
 
           <div class="form-group">
             <label>Leistungsfaktor (cos φ)</label>
-            <input type="number" step="0.05" min="0.5" max="1.0" .value="${this._cosPhi.toString()}" @input="${(e: Event) => this._cosPhi = parseFloat((e.target as HTMLInputElement).value) || 1.0}" />
+            <input aria-label="Leistungsfaktor (cos φ)" type="number" step="0.05" min="0.5" max="1.0" .value="${this._cosPhi.toString()}" @input="${(e: Event) => this._cosPhi = parseFloat((e.target as HTMLInputElement).value) || 1.0}" />
           </div>
         </div>
 
@@ -321,7 +329,7 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
         <div class="calc-grid">
           <div class="form-group">
             <label>Charakteristik (MCB)</label>
-            <select .value="${this._mcbType}" @change="${(e: Event) => this._mcbType = (e.target as HTMLSelectElement).value as any}">
+            <select aria-label="Charakteristik (MCB)" .value="${this._mcbType}" @change="${(e: Event) => this._mcbType = (e.target as HTMLSelectElement).value as typeof this._mcbType}">
               <option value="B">Typ B (Ia = 5x In)</option>
               <option value="C">Typ C (Ia = 10x In)</option>
               <option value="D">Typ D (Ia = 20x In)</option>
@@ -330,7 +338,7 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
 
           <div class="form-group">
             <label>Nennstrom (In) in A</label>
-            <select .value="${this._mcbCurrent.toString()}" @change="${(e: Event) => this._mcbCurrent = parseInt((e.target as HTMLSelectElement).value)}">
+            <select aria-label="Nennstrom (In) in A" .value="${this._mcbCurrent.toString()}" @change="${(e: Event) => this._mcbCurrent = parseInt((e.target as HTMLSelectElement).value)}">
               <option value="6">6 A</option>
               <option value="10">10 A</option>
               <option value="13">13 A</option>
@@ -346,12 +354,12 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
 
           <div class="form-group">
             <label>Gemessene Impedanz (Zs) in Ω</label>
-            <input type="number" step="0.05" min="0.01" .value="${this._measuredZs.toString()}" @input="${(e: Event) => this._measuredZs = parseFloat((e.target as HTMLInputElement).value) || 0}" />
+            <input aria-label="Gemessene Impedanz (Zs) in Ω" type="number" step="0.05" min="0.01" .value="${this._measuredZs.toString()}" @input="${(e: Event) => this._measuredZs = parseFloat((e.target as HTMLInputElement).value) || 0}" />
           </div>
 
           <div class="form-group">
             <label>Netzspannung gegen Erde (U0) in V</label>
-            <input type="number" .value="${this._u0.toString()}" @input="${(e: Event) => this._u0 = parseFloat((e.target as HTMLInputElement).value) || 230}" />
+            <input aria-label="Netzspannung gegen Erde (U0) in V" type="number" .value="${this._u0.toString()}" @input="${(e: Event) => this._u0 = parseFloat((e.target as HTMLInputElement).value) || 230}" />
           </div>
         </div>
 
@@ -407,6 +415,111 @@ Erkläre kurz und präzise in 2-3 Sätzen auf Deutsch, warum dieser Wert zustand
           </div>
         </div>
       </div>
+
+      <!-- Leitungsdimensionierung nach DIN VDE 0298-4 -->
+      ${(() => {
+        const sizing = calculateCableSizing({
+          currentInA: this._current,
+          installationMethod: this._installMethod,
+          loadedCores: this._system === "single" ? 2 : 3,
+          ambientTempC: this._ambientTemp,
+          groupingCount: this._groupingCount,
+          conductorMaterial: this._material === "cu" ? "Cu" : "Al",
+          lengthMeters: this._length,
+          cosPhi: this._cosPhi,
+        });
+
+        return html`
+          <div class="calc-card" style="margin-top: 2rem;">
+            <h3 class="m-0" style="color: var(--primary); display: flex; align-items: center; gap: 8px;">
+              📏 DIN VDE 0298-4 Leitungsdimensionierung & Strombelastbarkeit (Iz)
+            </h3>
+            <p style="font-size: 0.85rem; margin-top: 4px;">
+              Ermittlung des erforderlichen Querschnitts unter Berücksichtigung von Verlegeart, Umgebungstemperatur und Häufung.
+            </p>
+
+            <div class="calc-grid">
+              <div class="form-group">
+                <label>Verlegeart (DIN VDE 0298-4)</label>
+                <select aria-label="Verlegeart (DIN VDE 0298-4)"
+                  .value="${this._installMethod}"
+                  @change="${(e: Event) => this._installMethod = (e.target as HTMLSelectElement).value as InstallationMethod}"
+                >
+                  <option value="A1">A1 – Adern in wärmegedämmten Wänden</option>
+                  <option value="A2">A2 – Mehradriges Kabel in wärmegedämmter Wand</option>
+                  <option value="B1">B1 – Adern im Elektroinstallationsrohr auf/in Wand</option>
+                  <option value="B2">B2 – Kabel im Rohr oder Kanal auf/in Wand (Standard)</option>
+                  <option value="C">C – Direkt auf oder in der Wand / unter Putz</option>
+                  <option value="E">E – Frei in Luft / auf Kabelpritsche</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Umgebungstemperatur (°C)</label>
+                <input aria-label="Umgebungstemperatur (°C)"
+                  type="number"
+                  min="5"
+                  max="60"
+                  step="5"
+                  .value="${String(this._ambientTemp)}"
+                  @change="${(e: Event) => this._ambientTemp = Number((e.target as HTMLInputElement).value) || 30}"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Häufung (Anzahl Kabel gebündelt)</label>
+                <input aria-label="Häufung (Anzahl Kabel gebündelt)"
+                  type="number"
+                  min="1"
+                  max="20"
+                  step="1"
+                  .value="${String(this._groupingCount)}"
+                  @change="${(e: Event) => this._groupingCount = Number((e.target as HTMLInputElement).value) || 1}"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Betriebsstrom / Schutzorgan (In in A)</label>
+                <input aria-label="Betriebsstrom / Schutzorgan (In in A)"
+                  type="number"
+                  min="6"
+                  max="125"
+                  step="1"
+                  .value="${String(this._current)}"
+                  @change="${(e: Event) => this._current = Number((e.target as HTMLInputElement).value) || 16}"
+                />
+              </div>
+            </div>
+
+            <div class="summary-box">
+              <div class="summary-row">
+                <span>Temperatur-Faktor (fT):</span>
+                <strong>${sizing.tempCorrectionFactor} (bei ${this._ambientTemp}°C)</strong>
+              </div>
+              <div class="summary-row">
+                <span>Häufungs-Faktor (fH):</span>
+                <strong>${sizing.groupingCorrectionFactor} (${this._groupingCount} Leitung(en))</strong>
+              </div>
+              <div class="summary-row">
+                <span>Gesamter Reduktionsfaktor (fGesamt):</span>
+                <strong>${sizing.totalCorrectionFactor}</strong>
+              </div>
+              <div class="summary-row">
+                <span>Erforderliche Mindest-Belastbarkeit (Iz erf.):</span>
+                <strong>${sizing.requiredIzA} A</strong>
+              </div>
+              <div class="summary-row" style="border-top: 1px solid var(--border); margin-top: 6px; padding-top: 8px;">
+                <span style="font-weight: bold; color: var(--primary);">Empfohlener Norm-Querschnitt:</span>
+                <strong style="font-size: 1.15rem; color: var(--primary);">${sizing.recommendedCrossSectionMm2} mm² ${this._material === "cu" ? "Cu" : "Al"}</strong>
+              </div>
+            </div>
+
+            <div class="result-badge ${sizing.voltageDropPassed ? "badge-success" : "badge-danger"}">
+              ℹ️ ${sizing.reason}
+            </div>
+          </div>
+        `;
+      })()}
     `;
   }
 }

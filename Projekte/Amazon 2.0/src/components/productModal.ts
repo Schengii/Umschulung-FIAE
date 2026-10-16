@@ -1,9 +1,15 @@
 // ============================================================
-// Amazon 2.0 – Product Modal Component
+// Amazon 2.0 – Product Modal Component with Variants & Bundles
 // ============================================================
-import type { AppState, Product, Review, QAItem } from '../types';
+import type { AppState, Product, ProductVariant, Review, QAItem } from '../types';
 import { formatPrice, renderStars, formatDiscount, sanitizeHtml } from '../utils/formatters';
 import { renderPriceHistoryChart } from './priceHistoryChart';
+import { playSound } from '../utils/audio';
+import { showToast } from './toast';
+
+import { renderDeliveryWidget } from './deliveryWidget';
+import { openPriceAlertModal } from './priceAlerts';
+import { subscribeToProduct, calculateSubscriptionDiscount } from './subscriptions';
 
 type AddToCartCallback = (product: Product, qty: number) => void;
 type BuyNowCallback = (product: Product, qty: number) => void;
@@ -38,10 +44,14 @@ export function openProductModal(
 ): void {
   const modal = getModal();
   const allReviews = [...(product.reviews ?? []), ...(product.customReviews ?? [])];
-  const discount = product.discount ? formatDiscount(product.originalPrice!, product.price) : null;
-
+  
+  let selectedVariant: ProductVariant | undefined = product.variants?.[0];
+  let currentPrice = product.price + (selectedVariant?.priceModifier ?? 0);
   let currentImg = 0;
   let selectedQty = 1;
+  const subDiscount = calculateSubscriptionDiscount(currentPrice, 1);
+
+  const discount = product.discount ? formatDiscount(product.originalPrice!, currentPrice) : null;
 
   modal.innerHTML = `
     <div class="modal-dialog product-modal-dialog">
@@ -58,10 +68,21 @@ export function openProductModal(
             `).join('')}
           </div>
           <div class="gallery-main">
-            <img id="productModalMainImg" src="${product.images[0]}" alt="${product.title}" class="gallery-main-img" />
-            <button id="launch3DBtn" class="btn-3d-launcher" title="3D Ansicht & AR Modus starten">
-              📦 3D & AR Ansicht
-            </button>
+            <img id="productModalMainImg" src="${selectedVariant?.image ?? product.images[0]}" alt="${product.title}" class="gallery-main-img" />
+            <div class="gallery-launchers-row">
+              <button id="launch3DBtn" class="btn-3d-launcher" title="3D Ansicht & AR Modus starten">
+                📦 3D & AR
+              </button>
+              <button id="launchHologramBtn" class="btn-3d-launcher" style="background: linear-gradient(135deg, #0891b2, #06b6d4);" title="WebXR AR Tabletop Hologram Projector">
+                🕶️ Hologramm
+              </button>
+              <button id="launchRaytraceBtn" class="btn-3d-launcher" style="background: linear-gradient(135deg, #4f46e5, #9333ea);" title="WebGPU 3D Raytracing Shader Studio">
+                ⚡ Raytracing
+              </button>
+              <button id="launchSmartFitBtn" class="btn-3d-launcher" style="background: linear-gradient(135deg, #059669, #10b981);" title="Computer-Vision Smart-Fitting Größen-KI">
+                📐 Größen-KI
+              </button>
+            </div>
             ${product.images.length > 1 ? `
               <button class="gallery-arrow gallery-prev" id="galleryPrev" aria-label="Vorheriges Bild">‹</button>
               <button class="gallery-arrow gallery-next" id="galleryNext" aria-label="Nächstes Bild">›</button>
@@ -76,13 +97,13 @@ export function openProductModal(
 
           <div class="modal-rating-row">
             ${renderStars(product.rating)}
-            <a href="#reviews-section" class="review-count-link">${allReviews.length} Bewertungen</a>
+            <a href="#reviews-section" class="review-count-link" id="jumpReviewsLink">${allReviews.length} Bewertungen</a>
             ${product.isPrime ? '<span class="prime-badge">⭐ Prime</span>' : ''}
           </div>
 
           <div class="modal-price-section">
-            ${discount ? `<span class="modal-discount-badge">${discount}</span>` : ''}
-            <span class="modal-price">${formatPrice(product.price)}</span>
+            ${discount ? `<span class="modal-discount-badge" id="modalDiscountBadge">${discount}</span>` : ''}
+            <span class="modal-price" id="modalActivePrice">${formatPrice(currentPrice)}</span>
             ${product.originalPrice ? `
               <span class="modal-original-price">
                 UVP: <s>${formatPrice(product.originalPrice)}</s>
@@ -90,27 +111,69 @@ export function openProductModal(
             ` : ''}
           </div>
 
-          ${product.isLightningDeal ? `
-            <div class="modal-lightning-deal">
-              ⚡ <strong>Blitzangebot</strong> – ${product.lightningDealProgress}% bereits verkauft
-              <div class="deal-progress-bar">
-                <div class="deal-progress-fill" style="width: ${product.lightningDealProgress}%"></div>
+          ${product.variants && product.variants.length > 0 ? `
+            <div class="product-variants-section">
+              <div class="variant-group-header">
+                <strong>Ausführung / Variante:</strong>
+                <span id="selectedVariantName">${selectedVariant?.name ?? ''}</span>
+              </div>
+              <div class="variants-picker" id="variantsPicker">
+                ${product.variants.map((v, idx) => `
+                  <button 
+                    class="variant-btn ${idx === 0 ? 'active' : ''} ${v.type === 'color' ? 'variant-color-btn' : ''}" 
+                    data-variant-id="${v.id}"
+                    data-variant-idx="${idx}"
+                    title="${v.name}"
+                  >
+                    ${v.colorCode ? `<span class="variant-color-dot" style="background-color: ${v.colorCode};"></span>` : ''}
+                    <span class="variant-btn-label">${v.name}</span>
+                  </button>
+                `).join('')}
               </div>
             </div>
           ` : ''}
 
-          <div class="modal-availability ${product.inStock ? 'in-stock' : 'out-stock'}">
-            ${product.inStock
-              ? `✓ Auf Lager${product.stockQty && product.stockQty <= 10 ? ` – Nur noch ${product.stockQty}!` : ''}`
-              : '⚠ Derzeit nicht verfügbar'}
+          <!-- Subscribe & Save / One-time Purchase Selector -->
+          <div class="modal-purchase-type-box">
+            <label class="purchase-type-option active" id="optionOneTimeLabel">
+              <input type="radio" name="modalPurchaseType" id="modalPurchaseOneTime" value="onetime" checked />
+              <div class="purchase-type-info">
+                <strong>Einmalige Lieferung</strong>
+                <span class="purchase-type-price">${formatPrice(currentPrice)}</span>
+              </div>
+            </label>
+            <label class="purchase-type-option" id="optionSubLabel">
+              <input type="radio" name="modalPurchaseType" id="modalPurchaseSub" value="subscribe" />
+              <div class="purchase-type-info">
+                <strong>📦 Spar-Abo (-${subDiscount.discountPercent}%)</strong>
+                <span class="purchase-type-price text-success">${formatPrice(subDiscount.discountedPrice)}</span>
+              </div>
+            </label>
+
+            <div class="sub-schedule-select-wrapper hidden" id="subScheduleWrapper">
+              <label for="modalSubInterval" class="sub-schedule-label">Lieferintervall:</label>
+              <select id="modalSubInterval" class="modal-sub-interval-select">
+                <option value="1">Jeden Monat (-10%)</option>
+                <option value="2">Alle 2 Monate (-10%)</option>
+                <option value="3">Alle 3 Monate (-12%)</option>
+                <option value="6">Alle 6 Monate (-15%)</option>
+              </select>
+            </div>
           </div>
 
-          ${product.isPrime ? '<p class="modal-prime-delivery">📦 Kostenlose Prime-Lieferung morgen</p>' : ''}
+          <!-- Dynamic Delivery & Live Express Countdown Widget -->
+          <div id="productDeliveryWidgetContainer"></div>
 
-          <div class="modal-qty-row">
+          <div class="modal-availability ${product.inStock ? 'in-stock' : 'out-stock'}">
+            ${product.inStock
+              ? `✓ Auf Lager${product.stockQty && product.stockQty <= 10 ? ` – Nur noch ${product.stockQty} Stück verfügbar!` : ''}`
+              : '⚠ Derzeit vergriffen (Ausverkauft)'}
+          </div>
+
+          <div class="modal-qty-row" id="modalQtyRow">
             <label class="qty-label" for="modalQtySelect">Menge:</label>
-            <select id="modalQtySelect" class="modal-qty-select" aria-label="Menge auswählen">
-              ${Array.from({ length: Math.min(10, product.stockQty ?? 10) }, (_, i) =>
+            <select id="modalQtySelect" class="modal-qty-select" aria-label="Menge auswählen" ${!product.inStock ? 'disabled' : ''}>
+              ${Array.from({ length: Math.min(10, product.stockQty && product.stockQty > 0 ? product.stockQty : 1) }, (_, i) =>
                 `<option value="${i + 1}">${i + 1}</option>`
               ).join('')}
             </select>
@@ -123,6 +186,24 @@ export function openProductModal(
             <button class="modal-buy-now-btn" id="modalBuyNow" ${!product.inStock ? 'disabled' : ''}>
               ⚡ Sofort kaufen
             </button>
+            <button class="modal-haggle-btn" id="modalHaggleBtn" title="Verhandle einen Sonderrabatt mit unserem KI-Verkäufer">
+              💬 Verhandeln
+            </button>
+            <button class="modal-alert-btn" id="modalPriceAlertBtn" title="Preisalarm bei Preissenkung setzen">
+              🔔 Preisalarm
+            </button>
+            <button class="modal-forecast-btn" id="modalForecastBtn" title="30-Tage KI-Preisprognose & Kaufzeitpunkt-Empfehlung">
+              📈 KI-Prognose
+            </button>
+            <button class="modal-carbon-btn" id="modalCarbonBtn" title="CO2-Ökobilanz & Klimakompensation">
+              🌿 CO₂-Bilanz
+            </button>
+            <button class="modal-review-studio-btn" id="modalReviewStudioBtn" title="WASM Video-Review Studio öffnen">
+              🎬 Video-Review
+            </button>
+            <button class="modal-customs-btn" id="modalCustomsBtn" title="Zoll- & Importgebühren Rechner">
+              🌍 Zoll-Rechner
+            </button>
           </div>
 
           <div class="modal-description">
@@ -132,7 +213,7 @@ export function openProductModal(
 
           ${product.features && product.features.length > 0 ? `
             <div class="modal-features">
-              <h3>Highlights</h3>
+              <h3>Highlights & Ausstattung</h3>
               <ul>
                 ${product.features.map(f => `<li>✓ ${f}</li>`).join('')}
               </ul>
@@ -146,10 +227,11 @@ export function openProductModal(
         <div class="tab-nav" role="tablist">
           <button class="tab-btn active" role="tab" aria-selected="true" data-tab="specs">Technische Daten</button>
           <button class="tab-btn" role="tab" aria-selected="false" data-tab="reviews">Bewertungen (${allReviews.length})</button>
+          <button class="tab-btn" role="tab" aria-selected="false" data-tab="shorts">📹 Video-Shorts & Unboxing</button>
           <button class="tab-btn" role="tab" aria-selected="false" data-tab="qa">Fragen & Antworten</button>
           <button class="tab-btn" role="tab" aria-selected="false" data-tab="price-history">Preisverlauf</button>
           ${product.bundleWith && product.bundleWith.length > 0 ? `
-            <button class="tab-btn" role="tab" aria-selected="false" data-tab="bundle">Bundle-Deals</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="bundle">🎁 Bundle & Zubehör</button>
           ` : ''}
         </div>
 
@@ -173,42 +255,52 @@ export function openProductModal(
               <div class="rating-big">${product.rating.toFixed(1)}</div>
               <div>
                 ${renderStars(product.rating)}
-                <p>${allReviews.length} Bewertungen</p>
+                <p>${allReviews.length} Kundenbewertungen</p>
               </div>
             </div>
             <div class="reviews-list">
               ${allReviews.length > 0
                 ? allReviews.map(r => renderReview(r)).join('')
-                : '<p class="no-content">Noch keine Bewertungen. Sei der Erste!</p>'
+                : '<p class="no-content">Noch keine Bewertungen vorhanden. Teile als Erster deine Meinung!</p>'
               }
             </div>
             <div class="add-review-section">
-              <h4>Bewertung schreiben</h4>
+              <h4>Eigene Bewertung verfassen</h4>
               <form id="reviewForm" class="review-form" novalidate>
                 <div class="form-group">
-                  <label for="reviewAuthor">Name *</label>
-                  <input type="text" id="reviewAuthor" class="form-input" placeholder="Dein Name" required />
+                  <label for="reviewAuthor">Dein Name *</label>
+                  <input type="text" id="reviewAuthor" class="form-input" placeholder="z. B. Alex M." required />
                 </div>
                 <div class="form-group">
-                  <label for="reviewRating">Bewertung *</label>
+                  <label>Sternebewertung *</label>
                   <div class="star-input" id="starInput" role="group" aria-label="Sternebewertung">
                     ${[1,2,3,4,5].map(n => `
                       <button type="button" class="star-input-btn" data-star="${n}" aria-label="${n} Stern${n > 1 ? 'e' : ''}">★</button>
                     `).join('')}
                   </div>
-                  <input type="hidden" id="reviewRating" value="0" />
+                  <input type="hidden" id="reviewRating" value="5" />
                 </div>
                 <div class="form-group">
-                  <label for="reviewTitle">Titel *</label>
-                  <input type="text" id="reviewTitle" class="form-input" placeholder="Kurze Zusammenfassung" required />
+                  <label for="reviewTitle">Überschrift *</label>
+                  <input type="text" id="reviewTitle" class="form-input" placeholder="Was ist das Wichtigste?" required />
                 </div>
                 <div class="form-group">
-                  <label for="reviewBody">Bewertung *</label>
-                  <textarea id="reviewBody" class="form-textarea" rows="4" placeholder="Teile deine Erfahrungen…" required></textarea>
+                  <label for="reviewBody">Erfahrungsbericht *</label>
+                  <textarea id="reviewBody" class="form-textarea" rows="4" placeholder="Beschreibe, was dir gefällt oder nicht gefällt…" required></textarea>
                 </div>
-                <button type="submit" class="btn-primary" id="reviewSubmitBtn">Bewertung absenden</button>
+                <button type="submit" class="btn-primary" id="reviewSubmitBtn">Bewertung jetzt veröffentlichen</button>
               </form>
             </div>
+          </div>
+        </div>
+
+        <!-- Video Shorts Tab -->
+        <div class="tab-pane" id="tab-shorts">
+          <div class="product-shorts-preview-box">
+            <div class="shorts-callout-icon">📹</div>
+            <h3>Kunden-Unboxings & Video-Reviews</h3>
+            <p>Erlebe „${product.title}“ im echten Alltagstest mit interaktiven Unboxing-Reels von verifizierten Käufern.</p>
+            <button class="btn-primary" id="launchProductShortsBtn">🎬 Video-Shorts jetzt abspielen</button>
           </div>
         </div>
 
@@ -217,19 +309,19 @@ export function openProductModal(
           <div class="qa-list">
             ${(product.qa ?? []).length > 0
               ? (product.qa ?? []).map(q => renderQA(q)).join('')
-              : '<p class="no-content">Noch keine Fragen gestellt.</p>'
+              : '<p class="no-content">Noch keine Fragen gestellt. Stelle deine Frage direkt an die Community!</p>'
             }
           </div>
           <div class="add-qa-section">
             <h4>Frage stellen</h4>
             <form id="qaForm" class="qa-form" novalidate>
               <div class="form-group">
-                <label for="qaAuthor">Name *</label>
+                <label for="qaAuthor">Dein Name *</label>
                 <input type="text" id="qaAuthor" class="form-input" placeholder="Dein Name" required />
               </div>
               <div class="form-group">
-                <label for="qaQuestion">Frage *</label>
-                <textarea id="qaQuestion" class="form-textarea" rows="3" placeholder="Stelle deine Frage zum Produkt…" required></textarea>
+                <label for="qaQuestion">Deine Frage *</label>
+                <textarea id="qaQuestion" class="form-textarea" rows="3" placeholder="Gibt es offene Fragen zu Maßen, Kompatibilität oder Zubehör?" required></textarea>
               </div>
               <button type="submit" class="btn-primary" id="qaSubmitBtn">Frage absenden</button>
             </form>
@@ -258,48 +350,205 @@ export function openProductModal(
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Focus trap
+  // Focus trap & Close
   const closeBtn = document.getElementById('productModalClose');
-  closeBtn?.addEventListener('click', closeProductModal);
-  closeBtn?.focus();
+  closeBtn?.addEventListener('click', () => {
+    playSound('click');
+    closeProductModal();
+  });
 
   // Gallery
   const mainImg = document.getElementById('productModalMainImg') as HTMLImageElement;
   function showImg(idx: number) {
     currentImg = (idx + product.images.length) % product.images.length;
-    mainImg.src = product.images[currentImg];
+    if (mainImg) mainImg.src = product.images[currentImg];
     modal.querySelectorAll('.gallery-thumb').forEach((t, i) => t.classList.toggle('active', i === currentImg));
   }
 
   modal.querySelectorAll('.gallery-thumb').forEach(thumb => {
-    thumb.addEventListener('click', () => showImg(Number(thumb.getAttribute('data-img-idx'))));
+    thumb.addEventListener('click', () => {
+      playSound('click');
+      showImg(Number(thumb.getAttribute('data-img-idx')));
+    });
   });
   document.getElementById('galleryPrev')?.addEventListener('click', () => showImg(currentImg - 1));
   document.getElementById('galleryNext')?.addEventListener('click', () => showImg(currentImg + 1));
 
+  // Variant selector wiring
+  if (product.variants && product.variants.length > 0) {
+    const variantBtns = modal.querySelectorAll('.variant-btn');
+    variantBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        playSound('click');
+        const vIdx = Number(btn.getAttribute('data-variant-idx'));
+        selectedVariant = product.variants![vIdx];
+
+        variantBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const varLabel = document.getElementById('selectedVariantName');
+        if (varLabel) varLabel.textContent = selectedVariant.name;
+
+        currentPrice = product.price + (selectedVariant.priceModifier ?? 0);
+        const priceEl = document.getElementById('modalActivePrice');
+        if (priceEl) priceEl.textContent = formatPrice(currentPrice);
+
+        if (selectedVariant.image && mainImg) {
+          mainImg.src = selectedVariant.image;
+        }
+      });
+    });
+  }
+
+  // Render Delivery Estimator & Live Countdown Widget
+  renderDeliveryWidget('productDeliveryWidgetContainer');
+
+  // Purchase Type Toggle (One-Time vs Subscribe & Save)
+  let isSubscriptionSelected = false;
+  let selectedInterval = 1;
+
+  const oneTimeRadio = document.getElementById('modalPurchaseOneTime') as HTMLInputElement;
+  const subRadio = document.getElementById('modalPurchaseSub') as HTMLInputElement;
+  const optionOneTimeLabel = document.getElementById('optionOneTimeLabel');
+  const optionSubLabel = document.getElementById('optionSubLabel');
+  const subScheduleWrapper = document.getElementById('subScheduleWrapper');
+  const subIntervalSelect = document.getElementById('modalSubInterval') as HTMLSelectElement;
+  const addCartBtn = document.getElementById('modalAddToCart') as HTMLButtonElement;
+  const buyNowBtn = document.getElementById('modalBuyNow') as HTMLButtonElement;
+
+  function updatePurchaseTypeUI(isSub: boolean) {
+    isSubscriptionSelected = isSub;
+    optionOneTimeLabel?.classList.toggle('active', !isSub);
+    optionSubLabel?.classList.toggle('active', isSub);
+    subScheduleWrapper?.classList.toggle('hidden', !isSub);
+
+    if (isSub) {
+      const disc = calculateSubscriptionDiscount(currentPrice, selectedInterval);
+      if (addCartBtn) addCartBtn.innerHTML = `📦 Spar-Abo einrichten (${formatPrice(disc.discountedPrice)})`;
+      if (buyNowBtn) buyNowBtn.style.display = 'none';
+    } else {
+      if (addCartBtn) addCartBtn.innerHTML = '🛒 In den Warenkorb';
+      if (buyNowBtn) buyNowBtn.style.display = '';
+    }
+  }
+
+  oneTimeRadio?.addEventListener('change', () => updatePurchaseTypeUI(false));
+  subRadio?.addEventListener('change', () => updatePurchaseTypeUI(true));
+
+  subIntervalSelect?.addEventListener('change', () => {
+    selectedInterval = parseInt(subIntervalSelect.value, 10);
+    updatePurchaseTypeUI(true);
+  });
+
+  // Price Alert Button
+  document.getElementById('modalPriceAlertBtn')?.addEventListener('click', () => {
+    playSound('alert');
+    openPriceAlertModal(product, state);
+  });
+
   // 3D Viewer Launch
   document.getElementById('launch3DBtn')?.addEventListener('click', () => {
+    playSound('quest');
     import('./product3DViewer').then(({ open3DViewerModal }) => open3DViewerModal(product));
+  });
+
+  // WebXR AR Tabletop Hologram Projector Launch
+  document.getElementById('launchHologramBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./hologramProjector').then(({ openHologramProjectorModal }) => openHologramProjectorModal(product));
+  });
+
+  // WebGPU Raytracing Studio Launch
+  document.getElementById('launchRaytraceBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./raytracingViewer').then(({ openRaytracingStudioModal }) => openRaytracingStudioModal(product));
+  });
+
+  // Smart-Fitting AI Launch
+  document.getElementById('launchSmartFitBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./smartFitting').then(({ openSmartFittingModal }) => openSmartFittingModal(product));
+  });
+
+  // AI Price Forecast Launch
+  document.getElementById('modalForecastBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./priceForecastModal').then(({ openPriceForecastModal }) => openPriceForecastModal(product));
+  });
+
+  // Carbon Offset Launch
+  document.getElementById('modalCarbonBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./carbonOffsetModal').then(({ openCarbonOffsetModal }) => openCarbonOffsetModal(product));
+  });
+
+  // WASM Video Review Studio Launch
+  document.getElementById('modalReviewStudioBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./reviewStudioModal').then(({ openReviewStudioModal }) => openReviewStudioModal(product));
+  });
+
+  // Cross-Border Customs Launch
+  document.getElementById('modalCustomsBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./crossBorderCustomsModal').then(({ openCrossBorderCustomsModal }) => openCrossBorderCustomsModal(product));
+  });
+
+  // Video Shorts Launch
+  document.getElementById('launchProductShortsBtn')?.addEventListener('click', () => {
+    playSound('quest');
+    import('./videoShorts').then(({ openVideoShortsModal }) => openVideoShortsModal(state, product.id));
+  });
+
+  // Price Haggler Launch
+  document.getElementById('modalHaggleBtn')?.addEventListener('click', () => {
+    playSound('click');
+    import('./priceHaggler').then(({ openPriceHagglerModal }) => openPriceHagglerModal(state, product));
+  });
+
+  // Jump to reviews link
+  document.getElementById('jumpReviewsLink')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const reviewsTabBtn = modal.querySelector('.tab-btn[data-tab="reviews"]') as HTMLButtonElement;
+    reviewsTabBtn?.click();
   });
 
   // Qty
   const qtySelect = document.getElementById('modalQtySelect') as HTMLSelectElement;
   qtySelect?.addEventListener('change', () => { selectedQty = Number(qtySelect.value); });
 
-  // Add to cart
+  // Add to cart with variant or Subscribe & Save
   document.getElementById('modalAddToCart')?.addEventListener('click', () => {
-    onAddToCart(product, selectedQty);
+    if (isSubscriptionSelected) {
+      subscribeToProduct(product, selectedInterval, state);
+      closeProductModal();
+    } else {
+      playSound('cart');
+      const productToAdd: Product = {
+        ...product,
+        price: currentPrice,
+        selectedVariant: selectedVariant,
+      };
+      onAddToCart(productToAdd, selectedQty);
+    }
   });
 
-  // Buy now
+  // Buy now with variant
   document.getElementById('modalBuyNow')?.addEventListener('click', () => {
-    onBuyNow(product, selectedQty);
+    playSound('checkout');
+    const productToAdd: Product = {
+      ...product,
+      price: currentPrice,
+      selectedVariant: selectedVariant,
+    };
+    onBuyNow(productToAdd, selectedQty);
     closeProductModal();
   });
 
   // Tabs
   modal.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      playSound('click');
       const tab = btn.getAttribute('data-tab')!;
       modal.querySelectorAll('.tab-btn').forEach(b => {
         b.classList.remove('active');
@@ -310,12 +559,10 @@ export function openProductModal(
       btn.setAttribute('aria-selected', 'true');
       document.getElementById(`tab-${tab}`)?.classList.add('active');
 
-      // Render price history chart on demand
       if (tab === 'price-history' && product.priceHistory) {
         renderPriceHistoryChart(product.priceHistory, product.price, 'priceHistoryChart');
       }
 
-      // Render bundle products on demand
       if (tab === 'bundle' && product.bundleWith && state) {
         renderBundleProducts(product, state, onAddToCart);
       }
@@ -323,9 +570,10 @@ export function openProductModal(
   });
 
   // Star rating input
-  let selectedRating = 0;
+  let selectedRating = 5;
   modal.querySelectorAll('.star-input-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      playSound('click');
       selectedRating = Number(btn.getAttribute('data-star'));
       (document.getElementById('reviewRating') as HTMLInputElement).value = String(selectedRating);
       modal.querySelectorAll('.star-input-btn').forEach((b, i) => {
@@ -343,16 +591,21 @@ export function openProductModal(
     });
   });
 
+  // Initial star states
+  modal.querySelectorAll('.star-input-btn').forEach((b, i) => {
+    b.classList.toggle('active', i < 5);
+  });
+
   // Review form
   document.getElementById('reviewForm')?.addEventListener('submit', e => {
     e.preventDefault();
     const author = sanitizeHtml((document.getElementById('reviewAuthor') as HTMLInputElement).value.trim());
-    const rating = Number((document.getElementById('reviewRating') as HTMLInputElement).value);
+    const rating = Number((document.getElementById('reviewRating') as HTMLInputElement).value) || 5;
     const title = sanitizeHtml((document.getElementById('reviewTitle') as HTMLInputElement).value.trim());
     const body = sanitizeHtml((document.getElementById('reviewBody') as HTMLTextAreaElement).value.trim());
 
     if (!author || !rating || !title || !body) {
-      // Show error on invalid fields
+      showToast('Bitte fülle alle Pflichtfelder aus!', 'warning');
       return;
     }
 
@@ -362,11 +615,13 @@ export function openProductModal(
       title,
       body,
       date: new Date().toISOString().split('T')[0],
-      verified: false,
-      helpful: 0,
+      verified: true,
+      helpful: 1,
     };
 
+    playSound('success');
     onAddReview(product.id, newReview);
+    showToast('Danke für deine Bewertung! ⭐', 'success');
     closeProductModal();
   });
 
@@ -376,22 +631,30 @@ export function openProductModal(
     const author = sanitizeHtml((document.getElementById('qaAuthor') as HTMLInputElement).value.trim());
     const question = sanitizeHtml((document.getElementById('qaQuestion') as HTMLTextAreaElement).value.trim());
 
-    if (!author || !question) return;
+    if (!author || !question) {
+      showToast('Bitte Name und Frage eingeben', 'warning');
+      return;
+    }
 
     const newQA: QAItem = {
       question,
-      answer: 'Diese Frage wurde noch nicht beantwortet.',
+      answer: 'Vielen Dank für deine Frage! Unser Support-Team prüft diese in Kürze.',
       date: new Date().toISOString().split('T')[0],
       author,
     };
 
+    playSound('success');
     onAddQA(product.id, newQA);
+    showToast('Deine Frage wurde erfolgreich übermittelt!', 'success');
     closeProductModal();
   });
 
   // Escape key
   const onKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') { closeProductModal(); document.removeEventListener('keydown', onKeydown); }
+    if (e.key === 'Escape') {
+      closeProductModal();
+      document.removeEventListener('keydown', onKeydown);
+    }
   };
   document.addEventListener('keydown', onKeydown);
 }
@@ -410,7 +673,7 @@ function renderReview(r: Review): string {
       </div>
       <h4 class="review-title">${r.title}</h4>
       <p class="review-body">${r.body}</p>
-      <p class="review-helpful">Hilfreich: ${r.helpful}</p>
+      <p class="review-helpful">Hilfreich für ${r.helpful} Kunden</p>
     </div>
   `;
 }
@@ -440,42 +703,60 @@ function renderBundleProducts(product: Product, state: AppState, onAddToCart: Ad
     .filter(Boolean) as Product[];
 
   if (bundleItems.length === 0) {
-    container.innerHTML = '<p>Keine Bundle-Produkte verfügbar.</p>';
+    container.innerHTML = '<p class="no-content">Keine Bundle-Produkte verfügbar.</p>';
     return;
   }
 
-  const bundleTotal = product.price + bundleItems.reduce((s, p) => s + p.price, 0);
-  const bundleDiscount = bundleTotal * 0.05; // 5% bundle discount
+  const allItems = [product, ...bundleItems];
+  const bundleRawTotal = allItems.reduce((s, p) => s + p.price, 0);
+  const bundleDiscount = bundleRawTotal * 0.10; // 10% Bundle Rabatt
+  const bundleFinalTotal = bundleRawTotal - bundleDiscount;
 
   container.innerHTML = `
     <div class="bundle-section">
+      <div class="bundle-badge">⚡ 10% Spar-Bundle</div>
       <h4>Wird oft zusammen gekauft</h4>
-      <div class="bundle-products">
-        <div class="bundle-main-product">
-          <img src="${product.images[0]}" alt="${product.title}" width="80" height="80" />
-          <p>${product.title}</p>
-          <strong>${formatPrice(product.price)}</strong>
+      <p class="bundle-desc">Kaufe das Komplett-Set und spare 10% auf alle Zubehörartikel:</p>
+      
+      <div class="bundle-products-grid">
+        <div class="bundle-product-card main-card">
+          <span class="bundle-role-badge">Hauptartikel</span>
+          <img src="${product.images[0]}" alt="${product.title}" width="90" height="90" />
+          <p class="bundle-prod-title">${product.title}</p>
+          <strong class="bundle-prod-price">${formatPrice(product.price)}</strong>
         </div>
+
         ${bundleItems.map(bp => `
-          <div class="bundle-sep">+</div>
-          <div class="bundle-side-product" data-bundle-product="${bp.id}">
-            <img src="${bp.images[0]}" alt="${bp.title}" width="80" height="80" />
-            <p>${bp.title}</p>
-            <strong>${formatPrice(bp.price)}</strong>
+          <div class="bundle-plus">+</div>
+          <div class="bundle-product-card">
+            <span class="bundle-role-badge accessory">Zubehör</span>
+            <img src="${bp.images[0]}" alt="${bp.title}" width="90" height="90" />
+            <p class="bundle-prod-title">${bp.title}</p>
+            <strong class="bundle-prod-price">${formatPrice(bp.price)}</strong>
           </div>
         `).join('')}
       </div>
-      <div class="bundle-total">
-        <p>Zusammen: <s>${formatPrice(bundleTotal)}</s> → <strong>${formatPrice(bundleTotal - bundleDiscount)}</strong></p>
-        <small>5% Bundle-Rabatt</small>
-        <button class="btn-primary bundle-add-all-btn" id="bundleAddAll">Alle in den Warenkorb</button>
+
+      <div class="bundle-summary-box">
+        <div class="bundle-pricing">
+          <span class="bundle-total-label">Gesamtpreis für ${allItems.length} Artikel:</span>
+          <div class="bundle-price-row">
+            <s class="bundle-old-price">${formatPrice(bundleRawTotal)}</s>
+            <strong class="bundle-new-price">${formatPrice(bundleFinalTotal)}</strong>
+            <span class="bundle-save-tag">Du sparst ${formatPrice(bundleDiscount)}!</span>
+          </div>
+        </div>
+        <button class="btn-primary bundle-add-all-btn" id="bundleAddAll">
+          🛒 Alle ${allItems.length} Artikel in den Warenkorb (-10%)
+        </button>
       </div>
     </div>
   `;
 
   document.getElementById('bundleAddAll')?.addEventListener('click', () => {
-    bundleItems.forEach(bp => onAddToCart(bp, 1));
-    onAddToCart(product, 1);
+    playSound('cart');
+    allItems.forEach(item => onAddToCart(item, 1));
+    showToast(`Alle ${allItems.length} Bundle-Artikel mit 10% Rabatt hinzugefügt! 🎉`, 'success');
     closeProductModal();
   });
 }

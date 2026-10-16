@@ -1,0 +1,22 @@
+{
+  "name": "minecraft-cpp-engine-docs",
+  "version": "0.3.0",
+  "description": "Interactive Web Showcase and Documentation Portal for Minecraft C++ OpenGL Voxel Engine",
+  "main": "web/index.html",
+  "scripts": {
+    "dev": "npx serve web -p 3000",
+    "start": "npx serve web -p 3000",
+    "build": "echo 'Static web assets ready for Vercel deployment.'"
+  },
+  "keywords": [
+    "minecraft",
+    "voxel-engine",
+    "opengl",
+    "cpp20",
+    "documentation",
+    "showcase",
+    "vercel"
+  ],
+  "author": "Schengii",
+  "license": "MIT"
+}

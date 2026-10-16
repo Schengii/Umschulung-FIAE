@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Calculator, Info, ChevronRight, Award, HelpCircle } from 'lucide-react';
-import { useStore } from '../../store/useStore';
 import {
   berechneBab,
   berechneZuschlagskalkulation,
@@ -15,7 +14,6 @@ import {
 const XP_REWARD = 65;
 
 export default function WisoBabLab({ onXPGain }) {
-  const addXP = useStore((s) => s.addXP);
   const [aktivesTab, setAktivesTab] = useState('bab');
   const [xpVergeben, setXpVergeben] = useState(false);
 
@@ -79,8 +77,7 @@ export default function WisoBabLab({ onXPGain }) {
 
   const handleKalkXP = () => {
     if (!kalkuliertXp) {
-      const xpFn = onXPGain || addXP;
-      xpFn?.(XP_REWARD, 'IHK WISO BAB & Kostenstellenrechnung');
+      onXPGain?.(XP_REWARD, 'IHK WISO BAB & Kostenstellenrechnung');
       setKalkuliertXp(true);
       setXpVergeben(true);
     }
@@ -93,8 +90,7 @@ export default function WisoBabLab({ onXPGain }) {
       0
     );
     if (score === IHK_BAB_DRILL_QUESTIONS.length && !drillXpVergeben) {
-      const xpFn = onXPGain || addXP;
-      xpFn?.(40, 'IHK WISO BAB-Meister Drill');
+      onXPGain?.(40, 'IHK WISO BAB-Meister Drill');
       setDrillXpVergeben(true);
     }
   };

@@ -1,8 +1,9 @@
 #include "FontRenderer.hpp"
-#include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
+
 #include <algorithm>
 #include <cctype>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 namespace Minecraft {
 
@@ -198,8 +199,7 @@ static const uint8_t GLYPH_DATA[95][8] = {
     // 125: '}'
     {0x70, 0x18, 0x18, 0x0E, 0x18, 0x18, 0x70, 0x00},
     // 126: '~'
-    {0x3B, 0x6E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-};
+    {0x3B, 0x6E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
 FontRenderer::FontRenderer() {
     init();
@@ -223,8 +223,10 @@ FontRenderer& FontRenderer::getInstance() {
 }
 
 void FontRenderer::init() {
-    if (m_IsInitialized) return;
-    if (!glCreateShader || !glGenVertexArrays) return;
+    if (m_IsInitialized)
+        return;
+    if (!glCreateShader || !glGenVertexArrays)
+        return;
 
     m_Shader = std::make_unique<Shader>("assets/shaders/ui.vert", "assets/shaders/ui.frag");
 
@@ -257,7 +259,8 @@ void FontRenderer::resize(int windowWidth, int windowHeight) {
 }
 
 void FontRenderer::generateFontAtlas() {
-    if (!glGenTextures) return;
+    if (!glGenTextures)
+        return;
 
     // 16x16 grid of 8x8 glyphs -> 128x128 atlas texture
     const int ATLAS_SIZE = 128;
@@ -308,15 +311,18 @@ float FontRenderer::getTextHeight(float scale) const {
     return 8.0f * scale;
 }
 
-void FontRenderer::renderText(const std::string& text, float x, float y, float scale, const glm::vec4& color, bool dropShadow) {
-    if (text.empty() || !m_Shader || m_FontTexture == 0 || m_VAO == 0) return;
+void FontRenderer::renderText(const std::string& text, float x, float y, float scale, const glm::vec4& color,
+                              bool dropShadow) {
+    if (text.empty() || !m_Shader || m_FontTexture == 0 || m_VAO == 0)
+        return;
 
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     m_Shader->use();
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth), static_cast<float>(m_WindowHeight), 0.0f, -1.0f, 1.0f);
+    glm::mat4 projection =
+        glm::ortho(0.0f, static_cast<float>(m_WindowWidth), static_cast<float>(m_WindowHeight), 0.0f, -1.0f, 1.0f);
     m_Shader->setMat4("u_Projection", projection);
     m_Shader->setBool("u_UseTexture", true);
 
@@ -345,7 +351,8 @@ void FontRenderer::renderText(const std::string& text, float x, float y, float s
             }
 
             int charIdx = static_cast<int>(c) - 32;
-            if (charIdx < 0 || charIdx >= 95) charIdx = 0; // fallback to space
+            if (charIdx < 0 || charIdx >= 95)
+                charIdx = 0; // fallback to space
 
             int tileX = charIdx % 16;
             int tileY = charIdx / 16;
@@ -360,15 +367,9 @@ void FontRenderer::renderText(const std::string& text, float x, float y, float s
             float y1 = posY + charH;
 
             // Two triangles for glyph quad
-            float quad[24] = {
-                x0, y1, u0, v1,
-                x1, y0, u1, v0,
-                x0, y0, u0, v0,
+            float quad[24] = {x0, y1, u0, v1, x1, y0, u1, v0, x0, y0, u0, v0,
 
-                x0, y1, u0, v1,
-                x1, y1, u1, v1,
-                x1, y0, u1, v0
-            };
+                              x0, y1, u0, v1, x1, y1, u1, v1, x1, y0, u1, v0};
             vertices.insert(vertices.end(), std::begin(quad), std::end(quad));
 
             curX += charW;
@@ -397,4 +398,4 @@ void FontRenderer::renderText(const std::string& text, float x, float y, float s
     glEnable(GL_DEPTH_TEST);
 }
 
-}
+} // namespace Minecraft

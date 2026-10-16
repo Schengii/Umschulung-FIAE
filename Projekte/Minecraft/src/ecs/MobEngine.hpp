@@ -1,38 +1,29 @@
 #ifndef MOBENGINE_HPP
 #define MOBENGINE_HPP
 
+#include "../world/Block.hpp"
+
+#include <deque>
 #include <glm/glm.hpp>
 #include <vector>
-#include <deque>
-#include "../world/Block.hpp"
 
 namespace Minecraft {
 
 class World;
 
-enum class MobType {
-    Pig,
-    Cow,
-    Zombie,
-    Skeleton,
-    Creeper,
-    EnderDragon,
-    Villager,
-    IronGolem,
-    Wither
-};
+enum class MobType { Pig, Cow, Zombie, Skeleton, Creeper, EnderDragon, Villager, IronGolem, Wither };
 
 struct Mob {
-    glm::vec3 position{ 0.0f };
-    glm::vec3 velocity{ 0.0f };
+    glm::vec3 position{0.0f};
+    glm::vec3 velocity{0.0f};
     float health = 20.0f;
     float maxHealth = 20.0f;
     MobType type = MobType::Zombie;
     bool isGrounded = false;
     float fuseTimer = 0.0f;
     float attackCooldown = 0.0f;
-    float hurtTime = 0.0f;       // Visual hit feedback
-    float limbSwing = 0.0f;      // Walking animation
+    float hurtTime = 0.0f;  // Visual hit feedback
+    float limbSwing = 0.0f; // Walking animation
     float yaw = 0.0f;
     float pitch = 0.0f;
     bool inLove = false;
@@ -59,14 +50,25 @@ public:
     MobEngine();
 
     void spawnMob(MobType type, const glm::vec3& position);
-    void update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime, class ItemEntityManager* itemMgr = nullptr);
-    bool checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage, class ItemEntityManager* itemMgr = nullptr);
+    // Re-inserts a mob with explicit state (used when loading a save). Returns false for unknown types or bad data.
+    bool restoreMob(MobType type, const glm::vec3& position, float health, float maxHealth, float yaw, float age,
+                    bool saddled);
+    void clear() {
+        m_Mobs.clear();
+        m_Arrows.clear();
+        m_WitherSkulls.clear();
+    }
+    void update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime,
+                class ItemEntityManager* itemMgr = nullptr);
+    bool checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage,
+                           class ItemEntityManager* itemMgr = nullptr);
     bool feedAnimal(size_t mobIndex, BlockType foodType);
     bool saddleMob(size_t mobIndex);
     bool steerMountedMob(size_t mobIndex, const glm::vec3& moveDir, float deltaTime);
     void checkNaturalSpawning(World& world, const glm::vec3& playerPos, float deltaTime);
 
-    static std::deque<glm::ivec3> findPath3D(World& world, const glm::ivec3& start, const glm::ivec3& target, int maxSteps = 30);
+    static std::deque<glm::ivec3> findPath3D(World& world, const glm::ivec3& start, const glm::ivec3& target,
+                                             int maxSteps = 30);
 
     const std::vector<Mob>& getMobs() const { return m_Mobs; }
     const std::vector<ArrowEntity>& getArrows() const { return m_Arrows; }
@@ -79,6 +81,6 @@ private:
     float m_SpawnTimer = 0.0f;
 };
 
-}
+} // namespace Minecraft
 
 #endif // MOBENGINE_HPP

@@ -1,8 +1,9 @@
-#include <glad/glad.h>
 #include "TextureAtlas.hpp"
-#include <iostream>
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
+#include <glad/glad.h>
+#include <iostream>
 
 namespace Minecraft {
 
@@ -27,7 +28,8 @@ glm::vec2 TextureAtlas::getBlockUV(BlockType type, Direction face) {
     return BlockData::getTextureUV(type, face);
 }
 
-void TextureAtlas::fillTile(std::vector<uint8_t>& pixels, int atlasW, int tileX, int tileY, const uint8_t color[4], float noiseIntensity) {
+void TextureAtlas::fillTile(std::vector<uint8_t>& pixels, int atlasW, int tileX, int tileY, const uint8_t color[4],
+                            float noiseIntensity) {
     int startX = tileX * 16;
     int startY = tileY * 16;
 
@@ -37,7 +39,10 @@ void TextureAtlas::fillTile(std::vector<uint8_t>& pixels, int atlasW, int tileX,
             int py = startY + y;
             int index = (py * atlasW + px) * 4;
 
-            float n = ((std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f) - std::floor((std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f))) * 2.0f - 1.0f;
+            float n = ((std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f) -
+                       std::floor((std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f))) *
+                          2.0f -
+                      1.0f;
             float factor = 1.0f + n * noiseIntensity;
 
             pixels[index + 0] = static_cast<uint8_t>(std::clamp(color[0] * factor, 0.0f, 255.0f));
@@ -62,43 +67,70 @@ void TextureAtlas::fillTilePattern(std::vector<uint8_t>& pixels, int atlasW, int
 
             // Pattern Types
             if (patternType == 1) { // Grass Top (Green lush with noise)
-                r = 85 + (x * 3) % 20; g = 150 + (y * 5) % 35; b = 45;
+                r = 85 + (x * 3) % 20;
+                g = 150 + (y * 5) % 35;
+                b = 45;
             } else if (patternType == 2) { // Grass Side (Green top border, Dirt bottom)
                 if (y < 4) {
-                    r = 85 + (x * 3) % 20; g = 150 + (y * 5) % 35; b = 45;
+                    r = 85 + (x * 3) % 20;
+                    g = 150 + (y * 5) % 35;
+                    b = 45;
                 } else {
-                    r = 130 + (x * 7) % 25; g = 85 + (y * 3) % 15; b = 50;
+                    r = 130 + (x * 7) % 25;
+                    g = 85 + (y * 3) % 15;
+                    b = 50;
                 }
             } else if (patternType == 3) { // Dirt (Rich brown)
-                r = 130 + (x * 7) % 25; g = 85 + (y * 3) % 15; b = 50;
+                r = 130 + (x * 7) % 25;
+                g = 85 + (y * 3) % 15;
+                b = 50;
             } else if (patternType == 4) { // Stone (Granular grey)
                 int val = 125 + ((x * 13 + y * 7) % 30);
                 r = g = b = val;
             } else if (patternType == 5) { // Oak Planks (Wood grain strips)
                 int strip = (y / 4);
                 int val = 170 + (strip * 15) + (x % 10);
-                r = val; g = val - 40; b = val - 80;
+                r = val;
+                g = val - 40;
+                b = val - 80;
             } else if (patternType == 6) { // Diamond Ore (Stone with cyan flecks)
                 int val = 125 + ((x * 13 + y * 7) % 30);
                 if ((x % 5 == 2 && y % 4 == 1) || (x % 6 == 4 && y % 5 == 3)) {
-                    r = 40; g = 230; b = 230;
+                    r = 40;
+                    g = 230;
+                    b = 230;
                 } else {
                     r = g = b = val;
                 }
             } else if (patternType == 7) { // Water (Deep translucent blue)
-                r = 30; g = 90 + (x % 20); b = 220; a = 180;
+                r = 30;
+                g = 90 + (x % 20);
+                b = 220;
+                a = 180;
             } else if (patternType == 8) { // Lava (Warm incandescent orange/red)
-                r = 240; g = 110 + (y * 8) % 50; b = 20;
+                r = 240;
+                g = 110 + (y * 8) % 50;
+                b = 20;
             } else if (patternType == 9) { // Glass (Clear with white border reflection)
                 if (x == 0 || x == 15 || y == 0 || y == 15 || (x == y && x < 6)) {
-                    r = 230; g = 245; b = 255; a = 200;
+                    r = 230;
+                    g = 245;
+                    b = 255;
+                    a = 200;
                 } else {
-                    r = 200; g = 230; b = 255; a = 40;
+                    r = 200;
+                    g = 230;
+                    b = 255;
+                    a = 40;
                 }
             } else if (patternType == 10) { // Glowstone (Luminescent yellow/gold)
-                r = 255; g = 210 + (x * 5) % 40; b = 100;
+                r = 255;
+                g = 210 + (x * 5) % 40;
+                b = 100;
             } else if (patternType == 11) { // Netherrack (Deep bloodstone crimson)
-                r = 110 + (x * 9) % 35; g = 25; b = 25;
+                r = 110 + (x * 9) % 35;
+                g = 25;
+                b = 25;
             }
 
             pixels[index + 0] = r;
@@ -137,7 +169,8 @@ void TextureAtlas::generateDefaultAtlas(std::vector<uint8_t>& outPixels, int atl
 }
 
 void TextureAtlas::init() {
-    if (m_IsInitialized || !glGenTextures) return;
+    if (m_IsInitialized || !glGenTextures)
+        return;
 
     std::vector<uint8_t> pixels;
     generateDefaultAtlas(pixels, 256, 256);
@@ -159,7 +192,8 @@ void TextureAtlas::init() {
 }
 
 void TextureAtlas::bind(unsigned int unit) const {
-    if (!m_TextureID || !glBindTexture) return;
+    if (!m_TextureID || !glBindTexture)
+        return;
     if (glActiveTexture) {
         glActiveTexture(GL_TEXTURE0 + unit);
     }
@@ -172,4 +206,4 @@ void TextureAtlas::unbind() const {
     }
 }
 
-}
+} // namespace Minecraft

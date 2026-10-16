@@ -35,8 +35,8 @@ export const scheduleDailyReminder = async (title, options = {}) => {
       // Wir simulieren einen Push nach 5 Sekunden für den Showcase
       setTimeout(() => {
         registration.showNotification(title, {
-          icon: '/pwa-192x192.png',
-          badge: '/pwa-192x192.png',
+          icon: '/favicon.svg',
+          badge: '/favicon.svg',
           vibrate: [200, 100, 200],
           ...options
         });
@@ -53,10 +53,11 @@ export const scheduleDailyReminder = async (title, options = {}) => {
 
 function fallbackNotification(title, options) {
   setTimeout(() => {
-    new Notification(title, {
-      icon: '/pwa-192x192.png',
+    const notification = new Notification(title, {
+      icon: '/favicon.svg',
       ...options
     });
+    return notification;
   }, 5000);
 }
 

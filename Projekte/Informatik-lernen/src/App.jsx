@@ -43,8 +43,6 @@ const CareerRoadmap = lazy(() => import('./components/Content/CareerRoadmap'));
 const MistakeReviewWidget = lazy(() => import('./components/Gamification/MistakeReviewWidget'));
 const LabsDashboard = lazy(() => import('./components/Content/LabsDashboard'));
 const CampaignQuestHub = lazy(() => import('./components/Content/CampaignQuestHub'));
-const IhkStudyPlanLab = lazy(() => import('./components/Content/IhkStudyPlanLab'));
-const IhkWeaknessAuditLab = lazy(() => import('./components/Content/IhkWeaknessAuditLab'));
 
 import { LAB_REGISTRY, buildRegistryIndex } from './data/labRegistry';
 import { observeAutoLabels } from './utils/a11yAutoLabel';
@@ -193,10 +191,6 @@ export default function App() {
             onRewardXP={(xp) => awardXP(xp, 'campaign_step')}
           />
         );
-      case activeTab === 'ihk_study_plan_lab' || activeTab === 'ihk_study_plan' || activeTab === 'pruefungsplaner':
-        return <IhkStudyPlanLab onNavigateTab={(tab) => setActiveTab(tab)} onRewardXP={(xp) => awardXP(xp, 'study_plan_master')} />;
-      case activeTab === 'ihk_weakness_audit_lab' || activeTab === 'ihk_weakness_audit' || activeTab === 'schwachstellen_audit':
-        return <IhkWeaknessAuditLab onNavigateTab={(tab) => setActiveTab(tab)} onRewardXP={(xp) => awardXP(xp, 'weakness_audit_master')} />;
       case activeTab === 'roadmaps':
         return <CareerRoadmap userState={userState} />;
       case activeTab === 'exam':
@@ -214,7 +208,7 @@ export default function App() {
             ? (xp, b) => { recordLabCompletion(labKey); return awardXP(xp, b || badge); }
             : (xp) => { recordLabCompletion(labKey); return awardXP(xp, badge); };
         }
-        return <RegistryLab {...xpProps} />;
+        return <RegistryLab onNavigateTab={setActiveTab} userState={userState} {...xpProps} />;
       }
     }
   })();

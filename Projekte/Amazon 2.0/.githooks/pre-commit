@@ -1,0 +1,13 @@
+#!/bin/sh
+# ==============================================================================
+# Amazon 2.0 – Git Pre-Commit Hook
+# Blockiert .env-Dateien und sensible API-Keys / Secrets vor jedem Commit.
+# ==============================================================================
+
+if command -v node >/dev/null 2>&1; then
+  node ./scripts/pre-commit-check.mjs
+  exit $?
+else
+  echo "⚠️ Warnung: Node.js ist im aktuellen PATH nicht verfügbar. Pre-Commit Secret-Check übersprungen."
+  exit 0
+fi

@@ -1,31 +1,98 @@
-# Dependency directories
-node_modules/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Local configuration files
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data & temporary storage
+pids
+*.pid
+*.seed
+*.pid.lock
+.temp/
+temp/
+tmp/
+.cache/
+
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Production Build Outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+frontend/dist/
+
+# Environment Variables & Secrets (CRITICAL)
 .env
 .env.local
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+!.env.example
 
-# IDEs and editors
+# Vercel
+.vercel/
+
+# Android & Capacitor Build Artifacts
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/capacitor-cordova-android-plugins/build/
+*.apk
+*.aab
+*.jks
+*.keystore
+local.properties
+.gradle/
+
+# SQLite & local databases and uploads
+*.sqlite
+*.sqlite3
+*.db
+backend/data/db.json
+backend/data/db.json.tmp
+backend/data/uploads/
+
+# Scraper & AI cache / dumps
+cache/
+scraped_data/
+listings_cache/
+
+# IDE & Editor Configs
 .idea/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Local database and uploads
-backend/data/db.json
-backend/data/db.json.tmp
-backend/data/uploads/
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
 
-# Production builds
-# (frontend/dist/ wird bewusst mit eingecheckt, da die Portfolio-Demo den gebauten Stand direkt served)
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# AI Assistant temporary traces
+.claude/
+.gemini/

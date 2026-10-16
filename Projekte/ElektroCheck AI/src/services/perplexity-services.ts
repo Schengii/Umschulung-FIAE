@@ -1,7 +1,9 @@
+import { withAccessToken } from "../utils/auth-headers";
+import { fetchWithTimeout } from "../utils/fetch-timeout";
 export class PerplexityService {
   private defaultBackendUrl: string;
 
-  constructor(backendUrl: string = "http://localhost:3000") {
+  constructor(backendUrl: string = "") {
     this.defaultBackendUrl = backendUrl;
   }
 
@@ -11,19 +13,19 @@ export class PerplexityService {
   }
 
   private _getHeaders(): HeadersInit {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
     const savedApiKey = localStorage.getItem("electrocheck_perplexity_api_key");
     if (savedApiKey) {
       headers["x-perplexity-api-key"] = savedApiKey;
     }
-    return headers;
+    return withAccessToken(headers);
   }
 
   async search(query: string): Promise<string> {
     const backendUrl = this._getBackendUrl();
-    const response = await fetch(`${backendUrl}/api/perplexity/search`, {
+    const response = await fetchWithTimeout(`${backendUrl}/api/perplexity/search`, {
       method: "POST",
       headers: this._getHeaders(),
       body: JSON.stringify({ query }),

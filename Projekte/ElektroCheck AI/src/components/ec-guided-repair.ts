@@ -4,6 +4,7 @@ import "@vaadin/button";
 import "@vaadin/progress-bar";
 import wizardStyles from "./ec-diagnosis-wizard.css?inline";
 import type { DiagnosisResult } from "../services/ai-types";
+import { voiceAssistant } from "../services/voice-assistant-service";
 
 @customElement("ec-guided-repair")
 export class EcGuidedRepair extends LitElement {
@@ -14,7 +15,6 @@ export class EcGuidedRepair extends LitElement {
 
   @state() private _isSpeaking: boolean = false;
   @state() private _isListening: boolean = false;
-  private _recognition: any = null;
 
   disconnectedCallback() {
     this._stopSpeech();
@@ -23,78 +23,48 @@ export class EcGuidedRepair extends LitElement {
   }
 
   private _stopSpeech() {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
+    voiceAssistant.stopSpeaking();
     this._isSpeaking = false;
   }
 
   private _startVoiceControl() {
-    const SpeechConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechConstructor) {
+    if (!voiceAssistant.isSupported()) {
       alert("Spracherkennung wird von Ihrem Browser leider nicht unterstützt.");
       return;
     }
-    
-    try {
-      this._recognition = new SpeechConstructor();
-      this._recognition.continuous = true;
-      this._recognition.lang = 'de-DE';
-      this._recognition.interimResults = false;
 
-      this._recognition.onresult = (event: any) => {
-        const lastResult = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-        console.log("Sprachbefehl erkannt:", lastResult);
-        
-        if (this.result && this.result.actionSteps && this.result.actionSteps[this.stepIndex]) {
-          if (lastResult.includes("weiter") || lastResult.includes("nächst") || lastResult.includes("next")) {
-            this._handleNext(this.result.actionSteps.length);
-          } else if (lastResult.includes("zurück") || lastResult.includes("back")) {
-            this._handleBack();
-          } else if (lastResult.includes("vorlesen") || lastResult.includes("sprich") || lastResult.includes("lies")) {
-            this._speakStep(this.result.actionSteps[this.stepIndex].text);
-          } else if (lastResult.includes("stopp") || lastResult.includes("halt")) {
-            this._stopSpeech();
-          }
-        }
-      };
+    const started = voiceAssistant.startListening((command, _rawText) => {
+      if (!this.result?.actionSteps?.length) return;
+      const totalSteps = this.result.actionSteps.length;
 
-      this._recognition.onend = () => {
-        if (this._isListening) {
-          try {
-            this._recognition.start();
-          } catch (e) {
-            console.warn("Fehler beim Neustarten der Spracherkennung:", e);
-          }
-        }
-      };
+      switch (command) {
+        case "NEXT":
+          this._handleNext(totalSteps);
+          break;
+        case "BACK":
+          this._handleBack();
+          break;
+        case "READ":
+          this._speakStep(this.result.actionSteps[this.stepIndex].text);
+          break;
+        case "STOP":
+          this._stopSpeech();
+          break;
+        default:
+          break;
+      }
+    });
 
-      this._recognition.onerror = (e: any) => {
-        console.error("Spracherkennungsfehler:", e);
-        if (e.error === 'not-allowed') {
-          alert("Mikrofon-Berechtigung verweigert.");
-          this._isListening = false;
-        }
-      };
-
+    if (started) {
       this._isListening = true;
-      this._recognition.start();
-    } catch (err) {
-      console.error("Fehler beim Initialisieren der Spracherkennung:", err);
+    } else {
       alert("Spracherkennung konnte nicht gestartet werden.");
     }
   }
 
   private _stopVoiceControl() {
+    voiceAssistant.stopListening();
     this._isListening = false;
-    if (this._recognition) {
-      try {
-        this._recognition.stop();
-      } catch (e) {
-        console.warn("Fehler beim Stoppen der Spracherkennung:", e);
-      }
-      this._recognition = null;
-    }
   }
 
   private _toggleVoiceControl() {
@@ -131,7 +101,7 @@ export class EcGuidedRepair extends LitElement {
           <div style="display: flex; flex-direction: column; gap: 8px; margin: 4px 0; padding: 12px; background: var(--bg-app); border: 1px solid var(--border); border-radius: var(--radius-s); align-items: center;">
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
               <span style="font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 6px; color: var(--text-primary);">
-                🗣️ Sprachsteuerung:
+                🗣️ Freihand-Sprachsteuerung:
               </span>
               <vaadin-button
                 theme="${this._isListening ? "primary error" : "secondary"}"
@@ -143,7 +113,7 @@ export class EcGuidedRepair extends LitElement {
             </div>
             ${this._isListening ? html`
               <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">
-                Sagen Sie: <strong>"Weiter"</strong> | <strong>"Zurück"</strong> | <strong>"Vorlesen"</strong> | <strong>"Stopp"</strong>
+                Sprechbefehle: <strong>"Weiter"</strong> | <strong>"Zurück"</strong> | <strong>"Vorlesen"</strong> | <strong>"Stopp"</strong>
               </div>
             ` : ""}
           </div>
@@ -191,7 +161,6 @@ export class EcGuidedRepair extends LitElement {
   private _handleNext(totalSteps: number) {
     this._stopSpeech();
     
-    // Markiere aktuellen Schritt als abgeschlossen
     this.dispatchEvent(
       new CustomEvent("step-completed", {
         detail: { index: this.stepIndex },
@@ -216,22 +185,16 @@ export class EcGuidedRepair extends LitElement {
   }
 
   private _speakStep(text: string) {
-    if ("speechSynthesis" in window) {
-      if (this._isSpeaking) {
-        window.speechSynthesis.cancel();
-        this._isSpeaking = false;
-        return;
-      }
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "de-DE";
-      utterance.onend = () => {
-        this._isSpeaking = false;
-      };
-      utterance.onerror = () => {
-        this._isSpeaking = false;
-      };
+    if (this._isSpeaking) {
+      this._stopSpeech();
+      return;
+    }
+
+    if (voiceAssistant.isTtsSupported()) {
       this._isSpeaking = true;
-      window.speechSynthesis.speak(utterance);
+      voiceAssistant.speak(text, () => {
+        this._isSpeaking = false;
+      });
     } else {
       alert("Sprachausgabe wird von Ihrem Browser leider nicht unterstützt.");
     }

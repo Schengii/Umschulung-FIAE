@@ -14,9 +14,7 @@ struct ItemStack {
     int enchantmentLevel = 0; // 0 = non-enchanted, 1..5 = tier
     int enchantmentType = 0;  // 1 = Sharpness, 2 = Efficiency, 3 = Protection, 4 = Unbreaking
 
-    bool isEmpty() const {
-        return type == BlockType::Air || count <= 0;
-    }
+    bool isEmpty() const { return type == BlockType::Air || count <= 0; }
 
     void clear() {
         type = BlockType::Air;
@@ -28,6 +26,6 @@ struct ItemStack {
     }
 };
 
-}
+} // namespace Minecraft
 
 #endif // ITEMSTACK_HPP

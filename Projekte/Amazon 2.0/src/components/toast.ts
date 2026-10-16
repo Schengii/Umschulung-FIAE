@@ -4,9 +4,15 @@
 
 export type ToastType = 'success' | 'error' | 'info' | 'cart' | 'wishlist' | 'warning';
 
-interface ToastOptions {
+export interface ToastAction {
+  text: string;
+  onClick: () => void;
+}
+
+export interface ToastOptions {
   duration?: number;
   icon?: string;
+  action?: ToastAction;
 }
 
 let toastContainer: HTMLElement | null = null;
@@ -36,8 +42,9 @@ export function showToast(
   type: ToastType = 'info',
   opts: ToastOptions = {}
 ): void {
+  if (typeof document === 'undefined') return;
   const container = getContainer();
-  const { duration = 3500, icon } = opts;
+  const { duration = 4000, icon, action } = opts;
 
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
@@ -45,6 +52,7 @@ export function showToast(
   toast.innerHTML = `
     <span class="toast-icon">${icon ?? ICONS[type]}</span>
     <span class="toast-msg">${message}</span>
+    ${action ? `<button class="toast-action-btn" id="toastActionBtn">${action.text}</button>` : ''}
     <button class="toast-close" aria-label="Schließen">✕</button>
   `;
 
@@ -52,6 +60,19 @@ export function showToast(
     toast.classList.add('toast-exit');
     toast.addEventListener('animationend', () => toast.remove(), { once: true });
   };
+
+  if (action) {
+    const actionBtn = toast.querySelector('.toast-action-btn');
+    if (actionBtn) {
+      actionBtn.addEventListener('click', () => {
+        try {
+          action.onClick();
+        } finally {
+          close();
+        }
+      });
+    }
+  }
 
   toast.querySelector('.toast-close')!.addEventListener('click', close);
   container.appendChild(toast);

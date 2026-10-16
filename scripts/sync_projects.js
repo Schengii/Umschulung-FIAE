@@ -5,6 +5,21 @@ const path = require('path');
 const os = require('os');
 
 const REPO_MAPPING = {
+    'Amazon 2.0': {
+        url: 'https://github.com/Schengii/Amazon2.0.git',
+        targetDir: 'Projekte/Amazon 2.0',
+        preserve: ['dist'],
+    },
+    EcoChef: {
+        url: 'https://github.com/Schengii/eco-chef.git',
+        targetDir: 'Projekte/EcoChef',
+        preserve: ['www', 'dist'],
+    },
+    'ElektroCheck AI': {
+        url: 'https://github.com/Schengii/elektroCheck-ai.git',
+        targetDir: 'Projekte/ElektroCheck AI',
+        preserve: ['dist'],
+    },
     Finanzenportfolio: {
         url: 'https://github.com/Schengii/Finanzenportfolio.git',
         targetDir: 'Projekte/Finanzenportfolio',
@@ -13,55 +28,23 @@ const REPO_MAPPING = {
     'Informatik-lernen': {
         url: 'https://github.com/Schengii/Informatik-lernen.git',
         targetDir: 'Projekte/Informatik-lernen',
+        preserve: ['index.html'],
+    },
+    ManuFaktur: {
+        url: 'https://github.com/Schengii/ManuFaktur.git',
+        targetDir: 'Projekte/ManuFaktur',
     },
     Minecraft: {
         url: 'https://github.com/Schengii/Minecraft.git',
         targetDir: 'Projekte/Minecraft',
         preserve: ['index.html'],
     },
-    Sims: {
-        url: 'https://github.com/Schengii/Sims.git',
-        targetDir: 'Projekte/Sims',
-        preserve: ['dist'],
-    },
-    EcoChef: {
-        url: 'https://github.com/Schengii/eco-chef.git',
-        targetDir: 'Projekte/EcoChef',
-        preserve: ['www'],
-    },
-    BurgenGame: {
-        url: 'https://github.com/Schengii/BurgenGame.git',
-        targetDir: 'Projekte/BurgenGame',
-    },
-    CoOpVersusGame: {
-        url: 'https://github.com/Schengii/CoOpVersusGame.git',
-        targetDir: 'Projekte/CoOpVersusGame',
-    },
-    Jobbsuche: {
-        url: 'https://github.com/Schengii/Jobbsuche.git',
-        targetDir: 'Projekte/Jobbsuche',
-    },
-    ManuFaktur: {
-        url: 'https://github.com/Schengii/ManuFaktur.git',
-        targetDir: 'Projekte/ManuFaktur',
-    },
-    'Minecraft-Pokemon': {
-        url: 'https://github.com/Schengii/Minecraft-Pokemon.git',
-        targetDir: 'Projekte/Minecraft-Pokemon',
-    },
-    arbeitszeiterfassung: {
-        url: 'https://github.com/Schengii/arbeitszeiterfassung.git',
-        targetDir: 'Projekte/arbeitszeiterfassung',
-        preserve: ['dist'],
+    'Wohnungssuche KI': {
+        url: 'https://github.com/Schengii/Wohnungssuche-KI.git',
+        targetDir: 'Projekte/Wohnungssuche KI',
+        preserve: ['frontend/dist'],
     },
 };
-
-// The following sub-projects under Projekte/ have no local .git remote to verify
-// an upstream URL against, so they are intentionally left out of REPO_MAPPING
-// rather than guessed: 'Amazon 2.0', 'ElektroCheck AI', 'Glücksspiel', 'Maps',
-// 'orbital-scrap', 'Urlaubsfotos', 'VerkaufsVorlagen', 'Wohnungssuche KI',
-// 'finance-ai-bot', 'snake-ascend'. Add them once a confirmed GitHub repo URL
-// exists for each.
 
 const rootDir = path.resolve(__dirname, '..');
 
@@ -129,18 +112,29 @@ async function syncProject(projectName, config) {
         if (fs.existsSync(targetFullPath)) {
             const existing = fs.readdirSync(targetFullPath);
             for (const file of existing) {
-                if (preserveList.includes(file)) {
+                if (preserveList.includes(file) || file === 'node_modules') {
                     continue;
                 }
                 const filePath = path.join(targetFullPath, file);
-                fs.rmSync(filePath, { recursive: true, force: true });
+                try {
+                    fs.rmSync(filePath, { recursive: true, force: true });
+                } catch (rmErr) {
+                    console.warn(`⚠️ Konnte ${file} nicht entfernen (übersprungen):`, rmErr.message);
+                }
             }
         } else {
             fs.mkdirSync(targetFullPath, { recursive: true });
         }
 
-        // Copy new contents into target directory (excluding .git)
-        copyRecursive(tempDir, targetFullPath, ['.git']);
+        // Copy new contents into target directory (excluding .git, node_modules, etc.)
+        copyRecursive(tempDir, targetFullPath, [
+            '.git',
+            'node_modules',
+            '.github',
+            '.venv',
+            '__pycache__',
+            '.DS_Store',
+        ]);
 
         // Restore preserved directories/files if they were not in remote repo
         for (const [item, backupPath] of preservedBackups.entries()) {

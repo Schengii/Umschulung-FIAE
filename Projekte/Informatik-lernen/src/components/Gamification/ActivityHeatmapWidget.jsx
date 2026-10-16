@@ -1,17 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Flame, Calendar, Trophy, Sparkles } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { toLocalDateKey } from '../../utils/storage';
 
-export default function ActivityHeatmapWidget() {
-  const { userState } = useStore();
-  const activityHistory = userState.activityHistory || {};
-
-  // Letzte 52 Wochen (364 Tage) generieren
+function generateHeatmapDays(activityHistory) {
   const today = new Date();
   const days = [];
-  
   for (let i = 363; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
@@ -24,6 +19,17 @@ export default function ActivityHeatmapWidget() {
       dayOfWeek: d.getDay() // 0 = So, 1 = Mo, ...
     });
   }
+  return days;
+}
+
+const EMPTY_HISTORY = {};
+
+export default function ActivityHeatmapWidget() {
+  const { userState } = useStore();
+  const activityHistory = userState.activityHistory || EMPTY_HISTORY;
+
+  // Letzte 52 Wochen (364 Tage) generieren
+  const days = useMemo(() => generateHeatmapDays(activityHistory), [activityHistory]);
 
   // Gesamt-Aktivitäten & Max Streak berechnen
   const totalActions = Object.values(activityHistory).reduce((sum, item) => sum + (item.count || 0), 0);

@@ -1,8 +1,6 @@
-// ============================================================
-// Amazon 2.0 – Recently Viewed Component
-// ============================================================
 import type { AppState, Product } from '../types';
 import { formatPrice, renderStars } from '../utils/formatters';
+import { writeStorage, KEYS } from '../utils/persist';
 
 type ProductClickCallback = (product: Product) => void;
 type AddToCartCallback = (product: Product, qty?: number) => void;
@@ -20,9 +18,7 @@ export function trackRecentlyViewed(state: AppState, productId: string): void {
   // Trim to max
   state.recentlyViewed = state.recentlyViewed.slice(0, MAX_RECENTLY_VIEWED);
 
-  import('../utils/persist').then(({ writeStorage, KEYS }) => {
-    writeStorage(KEYS.recentlyViewed, state.recentlyViewed);
-  });
+  writeStorage(KEYS.recentlyViewed, state.recentlyViewed);
 }
 
 export function renderRecentlyViewed(
@@ -80,9 +76,7 @@ export function renderRecentlyViewed(
 
   document.getElementById('clearRecentlyViewedBtn')?.addEventListener('click', () => {
     state.recentlyViewed = [];
-    import('../utils/persist').then(({ writeStorage, KEYS }) => {
-      writeStorage(KEYS.recentlyViewed, []);
-    });
+    writeStorage(KEYS.recentlyViewed, []);
     renderRecentlyViewed(state, onProductClick, onAddToCart);
   });
 }

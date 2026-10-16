@@ -1,11 +1,20 @@
 @echo off
-echo === Starte Backend (Port 5000) ===
-start "Wohnungs KI Backend" cmd /k "pushd "%~dp0backend" && "C:\Program Files\nodejs\node.exe" server.js"
+title Wohnungssuche KI - Starter
+echo ==============================================
+echo   Wohnungssuche KI - Startet Services
+echo ==============================================
+echo.
 
-echo === Starte Frontend (Port 5222) ===
-start "Wohnungs KI Frontend" cmd /k "pushd "%~dp0frontend" && "C:\Program Files\nodejs\npm.cmd" run dev"
+echo [1/2] Starte Backend Server (Port 5000)...
+start "Wohnungssuche KI Backend" cmd /k "cd /d "%~dp0backend" && node server.js"
+
+echo [2/2] Starte Frontend Vite Server (Port 5222)...
+start "Wohnungssuche KI Frontend" cmd /k "cd /d "%~dp0frontend" && npm run dev"
 
 echo.
-echo Beide Server wurden in separaten Fenstern gestartet.
-echo Backend:  http://localhost:5000
-echo Frontend: http://localhost:5222
+echo ==============================================
+echo [OK] Beide Dienste wurden gestartet:
+echo   - Backend API:  http://localhost:5000
+echo   - Frontend Web: http://localhost:5222
+echo ==============================================
+echo.

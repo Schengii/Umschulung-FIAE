@@ -1,11 +1,10 @@
 #include "Window.hpp"
+
 #include <iostream>
 
 namespace Minecraft {
 
-Window::Window(int width, int height, const std::string& title)
-    : m_Width(width), m_Height(height), m_Title(title) 
-{
+Window::Window(int width, int height, const std::string& title) : m_Width(width), m_Height(height), m_Title(title) {
     if (!glfwInit()) {
         std::cerr << "[Window Error] Failed to initialize GLFW!" << std::endl;
         exit(EXIT_FAILURE);
@@ -58,6 +57,10 @@ void Window::swapBuffers() {
     glfwSwapBuffers(m_Window);
 }
 
+void Window::setVSync(bool enabled) {
+    glfwSwapInterval(enabled ? 1 : 0);
+}
+
 void Window::setCursorCaptured(bool captured) {
     m_CursorCaptured = captured;
     if (captured) {
@@ -76,4 +79,4 @@ void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height) 
     }
 }
 
-}
+} // namespace Minecraft

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft C++ OpenGL Voxel Engine — Showcase & Docs</title>
+  <meta name="description" content="High-performance C++20 and OpenGL 4.5 voxel game engine with multithreaded meshing, dynamic CSM shadows, and ECS entities. Deployable with Vercel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-cube">⛏️</span>
+        <div class="brand-text">
+          <span class="brand-title">Minecraft C++ Engine</span>
+          <span class="brand-subtitle">OpenGL 4.5 • C++20</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#demo" class="nav-link">Interactive Demo</a>
+        <a href="#subsystems" class="nav-link">Subsystems</a>
+        <a href="#blocks" class="nav-link">Block Library</a>
+        <a href="#controls" class="nav-link">Controls</a>
+        <a href="#build" class="nav-link">Build & CI</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="https://github.com/Schengii/Minecraft" target="_blank" rel="noopener noreferrer" class="btn btn-outline" id="github-repo-btn">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Version 0.3.0 • Verified on Windows & Ubuntu CI</span>
+      </div>
+      <h1 class="hero-title">
+        High-Performance <span class="text-gradient">Minecraft Voxel Engine</span> in Modern C++20
+      </h1>
+      <p class="hero-desc">
+        A 1:1 architectural voxel engine built from scratch with OpenGL 4.5 Core, multithreaded chunk generation, Amanatides & Woo 3D DDA raycasting, Cascaded Dynamic Shadow Mapping, Anvil region saving, and non-blocking UDP multiplayer.
+      </p>
+
+      <div class="hero-tags">
+        <span class="tech-tag">C++20</span>
+        <span class="tech-tag">OpenGL 4.5</span>
+        <span class="tech-tag">GLFW 3.4</span>
+        <span class="tech-tag">GLM 1.0</span>
+        <span class="tech-tag">EnTT 3.13</span>
+        <span class="tech-tag">Claude & Gemini Ready</span>
+        <span class="tech-tag">Vercel Deployed</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#build" class="btn btn-primary">
+          <span>Get Started</span>
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a href="#demo" class="btn btn-secondary">Explore 3D Voxel Demo</a>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-tests">111 / 111</div>
+          <div class="stat-label">Automated Unit Tests</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">OpenGL 4.5</div>
+          <div class="stat-label">Core Rendering Profile</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">16×16×16</div>
+          <div class="stat-label">Sub-Chunk Sections</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3 Cascades</div>
+          <div class="stat-label">Dynamic Shadow Maps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive 3D Voxel & Lighting Simulator -->
+  <section class="section demo-section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Interactive <span class="text-gradient">Voxel & Lighting Lab</span></h2>
+        <p class="section-subtitle">Real-time simulation of engine rendering styles, time-of-day atmospheric colors, and voxel blocks directly in your browser.</p>
+      </div>
+
+      <div class="lab-container">
+        <div class="canvas-panel">
+          <canvas id="voxel-canvas" width="600" height="420"></canvas>
+          <div class="canvas-overlay">
+            <span class="overlay-badge" id="hud-time">Time: 12:00 (Day)</span>
+            <span class="overlay-badge" id="hud-fps">Simulated 60 FPS</span>
+          </div>
+        </div>
+
+        <div class="controls-panel">
+          <h3>Simulation Controls</h3>
+          
+          <div class="control-group">
+            <label for="time-slider">Time of Day (Sun & Fog Angle)</label>
+            <input type="range" id="time-slider" min="0" max="24" step="0.5" value="12">
+            <div class="time-presets">
+              <button class="btn-chip active" data-time="12">Noon</button>
+              <button class="btn-chip" data-time="18">Sunset</button>
+              <button class="btn-chip" data-time="0">Midnight</button>
+              <button class="btn-chip" data-time="6">Sunrise</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="block-selector">Voxel Block Model</label>
+            <select id="block-selector" class="custom-select">
+              <option value="grass">Grass Block</option>
+              <option value="diamond_ore">Diamond Ore</option>
+              <option value="gold_ore">Gold Ore</option>
+              <option value="tnt">TNT Explosive</option>
+              <option value="obsidian">Obsidian</option>
+              <option value="crafting_table">Crafting Table</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label>Shading & Post-Processing Flags</label>
+            <div class="toggle-list">
+              <label class="toggle-item">
+                <input type="checkbox" id="toggle-ao" checked>
+                <span>Vertex Ambient Occlusion (Smooth Lighting)</span>
+              </label>
+              <label class="toggle-item">
+                <input type="checkbox" id="toggle-shadows" checked>
+                <span>Directional CSM Shadows</span>
+              </label>
+              <label class="toggle-item">
+                <input type="checkbox" id="toggle-fog" checked>
+                <span>Atmospheric Distance Fog</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="info-callout">
+            <div class="callout-title">💡 Engine Implementation Note</div>
+            <p>In the C++ engine, shadow calculation uses 3 light-space cascaded matrices ($r=15\text{m}, 40\text{m}, 90\text{m}$) with 3x3 Percentage-Closer Filtering (PCF) and slope-scaled depth bias to eliminate shadow acne.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Subsystems Grid -->
+  <section class="section subsystems-section" id="subsystems">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Engine <span class="text-gradient">Architecture & Subsystems</span></h2>
+        <p class="section-subtitle">Modular, clean, and decoupling-focused design following modern C++20 conventions.</p>
+      </div>
+
+      <div class="subsystems-grid">
+        <!-- Subsystem 1 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">⚡</div>
+          <h3>Multithreaded Chunk Pipeline</h3>
+          <p>Worker threads generate terrain noise (FastNoiseLite) and build vertex/index arrays without touching the OpenGL context. The main thread performs bounded batch GPU buffer uploads.</p>
+          <ul class="subsystem-list">
+            <li>16 vertical <code>ChunkSection</code>s per chunk</li>
+            <li>Greedy meshing with sub-voxel face culling</li>
+            <li>Asynchronous mesh snapshots across boundaries</li>
+          </ul>
+        </div>
+
+        <!-- Subsystem 2 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">🎯</div>
+          <h3>Amanatides & Woo 3D DDA Raycast</h3>
+          <p>Mathematically exact fast voxel traversal algorithm. Guarantees zero sampling gaps and instant hit detection for block placement, continuous mining, and combat.</p>
+          <ul class="subsystem-list">
+            <li>Calculates exact hit surface normals</li>
+            <li>Sub-millimeter bounding box precision</li>
+            <li>Instant interaction across chunk boundaries</li>
+          </ul>
+        </div>
+
+        <!-- Subsystem 3 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">🌅</div>
+          <h3>Atmosphere & CSM Shadows</h3>
+          <p>Cascaded Shadow Mapping (3 frustum cascades) rendered to high-resolution depth textures with 3x3 PCF filtering, radial screen-space God-Rays, and ACES filmic tone mapping.</p>
+          <ul class="subsystem-list">
+            <li>Dynamic day, sunset, and night color gradients</li>
+            <li>Procedural cloud layer at $Y = 128$</li>
+            <li>Screen-Space Ambient Occlusion (SSAO)</li>
+          </ul>
+        </div>
+
+        <!-- Subsystem 4 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">💾</div>
+          <h3>Anvil Region Save System</h3>
+          <p>Persistence modeled after Minecraft's Anvil format. 32×32 chunks per <code>.mca</code> file with localized sector tables, atomic game state saves, and inventory persistence.</p>
+          <ul class="subsystem-list">
+            <li>Saves chunks only when modified</li>
+            <li>Thread-safe <code>RegionManager</code> singleton</li>
+            <li>Atomic <code>game.dat</code> player data writes</li>
+          </ul>
+        </div>
+
+        <!-- Subsystem 5 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">🤖</div>
+          <h3>EnTT ECS & Mob AI</h3>
+          <p>Entity Component System powered by EnTT 3.13. Hierarchical box meshes for mobs, animals, and remote players. 3D A* pathfinding, breeding, and mount riding mechanics.</p>
+          <ul class="subsystem-list">
+            <li>Zombies, Skeletons, Creepers, Spiders, Animals</li>
+            <li>3-headed Wither boss with explosive projectiles</li>
+            <li>Dead-reckoning client prediction interpolation</li>
+          </ul>
+        </div>
+
+        <!-- Subsystem 6 -->
+        <div class="subsystem-card">
+          <div class="subsystem-icon">🌐</div>
+          <h3>UDP Multiplayer Networking</h3>
+          <p>Non-blocking UDP socket manager supporting Windows Winsock2 and POSIX sockets with replay attack mitigation, sequence counters, and high-frequency delta sync.</p>
+          <ul class="subsystem-list">
+            <li>Cryptographic 64-bit session tokens</li>
+            <li>Main-thread queued packet dispatch</li>
+            <li>Remote player rendering with nametags</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block & Recipe Inspector -->
+  <section class="section blocks-section" id="blocks">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Block & Item <span class="text-gradient">Registry Library</span></h2>
+        <p class="section-subtitle">Explore supported block types, mining hardness tiers, and simulation characteristics.</p>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="block-search" class="search-input" placeholder="Search blocks (e.g., Diamond, Obsidian, Redstone, Wood)...">
+        <div class="category-pills">
+          <button class="pill active" data-category="all">All</button>
+          <button class="pill" data-category="ores">Ores & Minerals</button>
+          <button class="pill" data-category="nature">Nature & Terrain</button>
+          <button class="pill" data-category="technical">Redstone & Logic</button>
+        </div>
+      </div>
+
+      <div class="blocks-grid" id="blocks-container">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls Reference -->
+  <section class="section controls-section" id="controls">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Keybindings & <span class="text-gradient">Controls</span></h2>
+        <p class="section-subtitle">Full keyboard and mouse mapping configured in <code>Application.cpp</code>.</p>
+      </div>
+
+      <div class="controls-table-wrapper">
+        <table class="controls-table">
+          <thead>
+            <tr>
+              <th>Key / Input</th>
+              <th>Action</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></td><td>Move Forward, Left, Backward, Right</td><td>Movement</td></tr>
+            <tr><td><kbd>Space</kbd></td><td>Jump / Swim upward / Ascend in Fly Mode</td><td>Movement</td></tr>
+            <tr><td><kbd>L-Shift</kbd></td><td>Sneak (prevents falling off ledges) / Descend</td><td>Movement</td></tr>
+            <tr><td><kbd>L-Ctrl</kbd></td><td>Sprint (increases velocity & dynamic FOV)</td><td>Movement</td></tr>
+            <tr><td><kbd>F</kbd></td><td>Toggle Flight Mode (Creative Flying)</td><td>Movement</td></tr>
+            <tr><td><kbd>Left Click (Hold)</kbd></td><td>Continuous Mining / Attack Mob</td><td>Interaction</td></tr>
+            <tr><td><kbd>Right Click</kbd></td><td>Place block / Open Chest / Furnace / Redstone / Half-Stack</td><td>Interaction</td></tr>
+            <tr><td><kbd>E</kbd></td><td>Open / Close Inventory & Crafting GUI</td><td>Interface</td></tr>
+            <tr><td><kbd>Escape</kbd></td><td>Pause Menu / Close Active Dialog</td><td>Interface</td></tr>
+            <tr><td><kbd>F3</kbd></td><td>Toggle Debug Screen (FPS, Coords, Chunk, Biome)</td><td>Debug</td></tr>
+            <tr><td><kbd>F4</kbd></td><td>Cycle Time of Day (Day &rarr; Sunset &rarr; Night)</td><td>Simulation</td></tr>
+            <tr><td><kbd>1</kbd> - <kbd>9</kbd> / <kbd>Scroll</kbd></td><td>Select Hotbar Slot</td><td>Inventory</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build, Test & Collaboration -->
+  <section class="section build-section" id="build">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Build & <span class="text-gradient">Collaboration Setup</span></h2>
+        <p class="section-subtitle">Multi-agent and deployment workflows tailored for Claude, Gemini, GitHub CI, and Vercel.</p>
+      </div>
+
+      <div class="tools-grid">
+        <!-- Claude Tool Card -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-logo">🟣</span>
+            <h3>Claude Code</h3>
+          </div>
+          <p>Configured with <code>CLAUDE.md</code>, <code>.claudeignore</code>, and slash commands in <code>.claude/commands/</code>.</p>
+          <div class="code-box">
+            <code>/build - Fast CMake build<br>/test - Execute engine tests<br>/add-block - Scaffold new block</code>
+          </div>
+        </div>
+
+        <!-- Gemini Tool Card -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-logo">🔵</span>
+            <h3>Google Gemini</h3>
+          </div>
+          <p>Configured with <code>GEMINI.md</code>, <code>AGENTS.md</code>, and <code>.geminiignore</code> for clean context management.</p>
+          <div class="code-box">
+            <code>Antigravity workflows<br>Context-optimized index<br>C++20 architecture rules</code>
+          </div>
+        </div>
+
+        <!-- GitHub Tool Card -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-logo">⚪</span>
+            <h3>GitHub CI/CD</h3>
+          </div>
+          <p>Cross-platform builds on Windows MSVC and Ubuntu Linux with automated CTest execution on every commit.</p>
+          <div class="code-box">
+            <code>.github/workflows/build.yml<br>Issue & PR Templates<br>Clang-format verification</code>
+          </div>
+        </div>
+
+        <!-- Vercel Tool Card -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-logo">▲</span>
+            <h3>Vercel</h3>
+          </div>
+          <p>Instant static edge deployment configured via <code>vercel.json</code>, clean URLs, and modern asset caching.</p>
+          <div class="code-box">
+            <code>vercel.json deployed<br>High-speed global CDN<br>Zero build latency</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quickstart Code Snippet -->
+      <div class="quickstart-container">
+        <div class="quickstart-header">
+          <span>Quickstart (Powershell)</span>
+          <button class="btn-copy" id="btn-copy-code">Copy Commands</button>
+        </div>
+        <pre class="code-pre"><code id="code-snippet"># 1. Configure with CMake
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+# 2. Build game and test suite
+cmake --build build --config Release --target Minecraft
+cmake --build build --config Release --target TestEngine
+
+# 3. Run automated tests (111 tests)
+.\build\TestEngine.exe
+
+# 4. Launch Minecraft!
+.\build\Minecraft.exe</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <span class="footer-brand">⛏️ Minecraft C++ Engine</span>
+        <p>Created by Schengii. Licensed under MIT. Built with C++20 and OpenGL 4.5 Core.</p>
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/Schengii/Minecraft" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#subsystems">Subsystems</a>
+        <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Deploy to Vercel</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

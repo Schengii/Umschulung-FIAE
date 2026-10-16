@@ -10,6 +10,10 @@ import { triggerHaptic } from '../../utils/haptics';
 const REGISTRY_INDEX = buildRegistryIndex();
 const resolveLabKey = (id) => REGISTRY_INDEX.get(id)?.tabs[0] ?? id;
 
+function getTodayGermanDate() {
+  return new Date().toLocaleDateString('de-DE');
+}
+
 export default function LabsDashboard({ onSelectLab }) {
   const { userState } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
@@ -67,7 +71,7 @@ export default function LabsDashboard({ onSelectLab }) {
 
   // Generierung des Textes für das Ausbildungsberichtsheft
   const generateBerichtsheftText = () => {
-    const today = new Date().toLocaleDateString('de-DE');
+    const today = getTodayGermanDate();
     const xpTotal = userState?.xp || 0;
     const level = userState?.level || 1;
     const completedCount = userState?.completedTopics?.length || 0;

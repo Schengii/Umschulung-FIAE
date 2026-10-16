@@ -1,26 +1,31 @@
 #include "LightEngine.hpp"
+
 #include "Chunk.hpp"
 #include "World.hpp"
-#include <queue>
+
 #include <algorithm>
 #include <cmath>
+#include <queue>
 
 namespace Minecraft {
 
 int LightEngine::getLightEmission(BlockType type) {
     switch (type) {
-        case BlockType::Lava:
-        case BlockType::Glowstone:
-        case BlockType::RedstoneLamp:
-            return 15;
-        case BlockType::RedstoneTorch:
-            return 14;
-        case BlockType::NetherPortal:
-            return 11;
-        case BlockType::TNT:
-            return 7;
-        default:
-            return 0;
+    case BlockType::Lava:
+    case BlockType::FlowingLava1:
+    case BlockType::FlowingLava2:
+    case BlockType::FlowingLava3:
+    case BlockType::Glowstone:
+    case BlockType::RedstoneLamp:
+        return 15;
+    case BlockType::RedstoneTorch:
+        return 14;
+    case BlockType::NetherPortal:
+        return 11;
+    case BlockType::TNT:
+        return 7;
+    default:
+        return 0;
     }
 }
 
@@ -46,16 +51,17 @@ void LightEngine::calculateSunlight(Chunk& chunk, World* world) {
     }
 
     // BFS Horizontal Sunlight Spread
-    int dx[6] = { 1, -1, 0, 0, 0, 0 };
-    int dy[6] = { 0, 0, 1, -1, 0, 0 };
-    int dz[6] = { 0, 0, 0, 0, 1, -1 };
+    int dx[6] = {1, -1, 0, 0, 0, 0};
+    int dy[6] = {0, 0, 1, -1, 0, 0};
+    int dz[6] = {0, 0, 0, 0, 1, -1};
 
     while (!sunQueue.empty()) {
         glm::ivec3 pos = sunQueue.front();
         sunQueue.pop();
 
         int currentLight = chunk.getSunlight(pos.x, pos.y, pos.z);
-        if (currentLight <= 1) continue;
+        if (currentLight <= 1)
+            continue;
 
         for (int i = 0; i < 6; ++i) {
             int nx = pos.x + dx[i];
@@ -98,16 +104,17 @@ void LightEngine::calculateBlocklight(Chunk& chunk, World* world) {
         }
     }
 
-    int dx[6] = { 1, -1, 0, 0, 0, 0 };
-    int dy[6] = { 0, 0, 1, -1, 0, 0 };
-    int dz[6] = { 0, 0, 0, 0, 1, -1 };
+    int dx[6] = {1, -1, 0, 0, 0, 0};
+    int dy[6] = {0, 0, 1, -1, 0, 0};
+    int dz[6] = {0, 0, 0, 0, 1, -1};
 
     while (!blockQueue.empty()) {
         glm::ivec3 pos = blockQueue.front();
         blockQueue.pop();
 
         int currentLight = chunk.getBlocklight(pos.x, pos.y, pos.z);
-        if (currentLight <= 1) continue;
+        if (currentLight <= 1)
+            continue;
 
         for (int i = 0; i < 6; ++i) {
             int nx = pos.x + dx[i];
@@ -136,13 +143,14 @@ void LightEngine::propagateCrossChunk(World& world, Chunk& chunk) {
     int cx = chunk.getChunkX();
     int cz = chunk.getChunkZ();
 
-    int neighborOffsets[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+    int neighborOffsets[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     for (int i = 0; i < 4; ++i) {
         int nx = cx + neighborOffsets[i][0];
         int nz = cz + neighborOffsets[i][1];
         Chunk* neighbor = world.getChunk(nx, nz);
-        if (!neighbor) continue;
+        if (!neighbor)
+            continue;
 
         bool updated = false;
         for (int y = 0; y < CHUNK_SIZE_Y; ++y) {
@@ -199,7 +207,8 @@ void LightEngine::addBlockLight(World& world, const glm::ivec3& pos, int intensi
     int chunkZ = static_cast<int>(std::floor(static_cast<float>(pos.z) / CHUNK_SIZE_Z));
 
     Chunk* chunk = world.getChunk(chunkX, chunkZ);
-    if (!chunk) return;
+    if (!chunk)
+        return;
 
     int lx = (pos.x % CHUNK_SIZE_X + CHUNK_SIZE_X) % CHUNK_SIZE_X;
     int lz = (pos.z % CHUNK_SIZE_Z + CHUNK_SIZE_Z) % CHUNK_SIZE_Z;
@@ -209,9 +218,9 @@ void LightEngine::addBlockLight(World& world, const glm::ivec3& pos, int intensi
     std::queue<glm::ivec3> q;
     q.push(pos);
 
-    int dx[6] = { 1, -1, 0, 0, 0, 0 };
-    int dy[6] = { 0, 0, 1, -1, 0, 0 };
-    int dz[6] = { 0, 0, 0, 0, 1, -1 };
+    int dx[6] = {1, -1, 0, 0, 0, 0};
+    int dy[6] = {0, 0, 1, -1, 0, 0};
+    int dz[6] = {0, 0, 0, 0, 1, -1};
 
     while (!q.empty()) {
         glm::ivec3 cur = q.front();
@@ -221,22 +230,26 @@ void LightEngine::addBlockLight(World& world, const glm::ivec3& pos, int intensi
         int ccx = static_cast<int>(std::floor(static_cast<float>(cur.x) / CHUNK_SIZE_X));
         int ccz = static_cast<int>(std::floor(static_cast<float>(cur.z) / CHUNK_SIZE_Z));
         Chunk* c = world.getChunk(ccx, ccz);
-        if (!c) continue;
+        if (!c)
+            continue;
 
         int clx = (cur.x % CHUNK_SIZE_X + CHUNK_SIZE_X) % CHUNK_SIZE_X;
         int clz = (cur.z % CHUNK_SIZE_Z + CHUNK_SIZE_Z) % CHUNK_SIZE_Z;
         curLight = c->getBlocklight(clx, cur.y, clz);
 
-        if (curLight <= 1) continue;
+        if (curLight <= 1)
+            continue;
 
         for (int i = 0; i < 6; ++i) {
             glm::ivec3 next = cur + glm::ivec3(dx[i], dy[i], dz[i]);
-            if (next.y < 0 || next.y >= CHUNK_SIZE_Y) continue;
+            if (next.y < 0 || next.y >= CHUNK_SIZE_Y)
+                continue;
 
             int ncx = static_cast<int>(std::floor(static_cast<float>(next.x) / CHUNK_SIZE_X));
             int ncz = static_cast<int>(std::floor(static_cast<float>(next.z) / CHUNK_SIZE_Z));
             Chunk* nc = world.getChunk(ncx, ncz);
-            if (!nc) continue;
+            if (!nc)
+                continue;
 
             int nlx = (next.x % CHUNK_SIZE_X + CHUNK_SIZE_X) % CHUNK_SIZE_X;
             int nlz = (next.z % CHUNK_SIZE_Z + CHUNK_SIZE_Z) % CHUNK_SIZE_Z;
@@ -273,4 +286,4 @@ void LightEngine::updateBlockLight(World& world, const glm::ivec3& pos) {
     }
 }
 
-}
+} // namespace Minecraft

@@ -17,11 +17,19 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
 
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setSearch('');
       setSelectedIndex(0);
-      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => inputRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 

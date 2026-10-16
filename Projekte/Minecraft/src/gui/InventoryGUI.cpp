@@ -1,6 +1,8 @@
 #include "InventoryGUI.hpp"
-#include "FontRenderer.hpp"
+
 #include "../renderer/TextureAtlas.hpp"
+#include "FontRenderer.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
 
@@ -8,9 +10,7 @@ static const int MOUSE_BUTTON_RIGHT = 1;
 
 namespace Minecraft {
 
-InventoryGUI::InventoryGUI(int windowWidth, int windowHeight)
-    : m_Width(windowWidth), m_Height(windowHeight)
-{
+InventoryGUI::InventoryGUI(int windowWidth, int windowHeight) : m_Width(windowWidth), m_Height(windowHeight) {
     if (glCreateShader && glGenVertexArrays) {
         m_UIShader = std::make_unique<Shader>("assets/shaders/ui.vert", "assets/shaders/ui.frag");
         initBuffers();
@@ -19,8 +19,10 @@ InventoryGUI::InventoryGUI(int windowWidth, int windowHeight)
 }
 
 InventoryGUI::~InventoryGUI() {
-    if (m_VAO && glDeleteVertexArrays) glDeleteVertexArrays(1, &m_VAO);
-    if (m_VBO && glDeleteBuffers) glDeleteBuffers(1, &m_VBO);
+    if (m_VAO && glDeleteVertexArrays)
+        glDeleteVertexArrays(1, &m_VAO);
+    if (m_VBO && glDeleteBuffers)
+        glDeleteBuffers(1, &m_VBO);
 }
 
 void InventoryGUI::resize(int width, int height) {
@@ -30,15 +32,9 @@ void InventoryGUI::resize(int width, int height) {
 }
 
 void InventoryGUI::initBuffers() {
-    float quadVertices[] = {
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 0.0f,
+    float quadVertices[] = {0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f
-    };
+                            0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f};
 
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_VBO);
@@ -57,7 +53,8 @@ void InventoryGUI::initBuffers() {
 }
 
 void InventoryGUI::render(Inventory& inventory, bool isOpen) {
-    if (!isOpen) return;
+    if (!isOpen)
+        return;
 
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
@@ -73,13 +70,17 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
     float winY = (m_Height - winHeight) / 2.0f;
 
     // Window shadow & body
-    renderQuad(glm::vec2(winX - 4.0f, winY - 4.0f), glm::vec2(winWidth + 8.0f, winHeight + 8.0f), glm::vec4(0.08f, 0.08f, 0.08f, 0.95f));
+    renderQuad(glm::vec2(winX - 4.0f, winY - 4.0f), glm::vec2(winWidth + 8.0f, winHeight + 8.0f),
+               glm::vec4(0.08f, 0.08f, 0.08f, 0.95f));
     renderQuad(glm::vec2(winX, winY), glm::vec2(winWidth, winHeight), glm::vec4(0.22f, 0.22f, 0.22f, 0.98f));
-    renderQuad(glm::vec2(winX + 2.0f, winY + 2.0f), glm::vec2(winWidth - 4.0f, 26.0f), glm::vec4(0.18f, 0.18f, 0.18f, 0.98f));
+    renderQuad(glm::vec2(winX + 2.0f, winY + 2.0f), glm::vec2(winWidth - 4.0f, 26.0f),
+               glm::vec4(0.18f, 0.18f, 0.18f, 0.98f));
 
     // Window Titles
-    FontRenderer::getInstance().renderText("Crafting", winX + 220.0f, winY + 10.0f, 1.0f, glm::vec4(0.85f, 0.85f, 0.85f, 1.0f));
-    FontRenderer::getInstance().renderText("Inventory", winX + 25.0f, winY + 125.0f, 1.0f, glm::vec4(0.85f, 0.85f, 0.85f, 1.0f));
+    FontRenderer::getInstance().renderText("Crafting", winX + 220.0f, winY + 10.0f, 1.0f,
+                                           glm::vec4(0.85f, 0.85f, 0.85f, 1.0f));
+    FontRenderer::getInstance().renderText("Inventory", winX + 25.0f, winY + 125.0f, 1.0f,
+                                           glm::vec4(0.85f, 0.85f, 0.85f, 1.0f));
 
     float slotSize = 36.0f;
     float padding = 4.0f;
@@ -87,13 +88,15 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
     float startY = winY + 140.0f;
 
     auto renderSlotItem = [&](const ItemStack& stack, float x, float y, float size) {
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty())
+            return;
         glm::vec2 uv = TextureAtlas::getBlockUV(stack.type, Direction::TOP);
         float uvSize = 1.0f / 16.0f;
 
         m_UIShader->use();
         m_UIShader->setBool("u_UseTexture", true);
-        if (glActiveTexture) glActiveTexture(GL_TEXTURE0);
+        if (glActiveTexture)
+            glActiveTexture(GL_TEXTURE0);
         TextureAtlas::getInstance().bind(0);
         m_UIShader->setInt("u_Texture", 0);
         m_UIShader->setVec4("u_Color", glm::vec4(1.0f));
@@ -102,37 +105,28 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
         model = glm::translate(model, glm::vec3(x, y, 0.0f));
         model = glm::scale(model, glm::vec3(size, size, 1.0f));
 
-        glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_Width), static_cast<float>(m_Height), 0.0f, -1.0f, 1.0f);
+        glm::mat4 projection =
+            glm::ortho(0.0f, static_cast<float>(m_Width), static_cast<float>(m_Height), 0.0f, -1.0f, 1.0f);
         m_UIShader->setMat4("u_Projection", projection * model);
 
-        float quad[24] = {
-            0.0f, 1.0f, uv.x, uv.y + uvSize,
-            1.0f, 0.0f, uv.x + uvSize, uv.y,
-            0.0f, 0.0f, uv.x, uv.y,
-            0.0f, 1.0f, uv.x, uv.y + uvSize,
-            1.0f, 1.0f, uv.x + uvSize, uv.y + uvSize,
-            1.0f, 0.0f, uv.x + uvSize, uv.y
-        };
+        float quad[24] = {0.0f, 1.0f, uv.x,          uv.y + uvSize, 1.0f, 0.0f, uv.x + uvSize, uv.y,
+                          0.0f, 0.0f, uv.x,          uv.y,          0.0f, 1.0f, uv.x,          uv.y + uvSize,
+                          1.0f, 1.0f, uv.x + uvSize, uv.y + uvSize, 1.0f, 0.0f, uv.x + uvSize, uv.y};
         glBindVertexArray(m_VAO);
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(quad), quad);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        float defaultQuad[24] = {
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 1.0f, 1.0f,
-            1.0f, 0.0f, 1.0f, 0.0f
-        };
+        float defaultQuad[24] = {0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                                 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f};
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(defaultQuad), defaultQuad);
         glBindVertexArray(0);
         TextureAtlas::getInstance().unbind();
 
         if (stack.count > 1) {
             std::string countStr = std::to_string(stack.count);
-            FontRenderer::getInstance().renderText(countStr, x + size - 10.0f, y + size - 10.0f, 1.0f, glm::vec4(1.0f), true);
+            FontRenderer::getInstance().renderText(countStr, x + size - 10.0f, y + size - 10.0f, 1.0f, glm::vec4(1.0f),
+                                                   true);
         }
     };
 
@@ -143,9 +137,11 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
             float x = startX + col * (slotSize + padding);
             float y = startY + row * (slotSize + padding);
 
-            glm::vec4 slotColor = (slotIdx == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f) : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
+            glm::vec4 slotColor = (slotIdx == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f)
+                                                                   : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
             renderQuad(glm::vec2(x, y), glm::vec2(slotSize, slotSize), slotColor);
-            renderQuad(glm::vec2(x + 2.0f, y + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f), glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
+            renderQuad(glm::vec2(x + 2.0f, y + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f),
+                       glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
 
             const ItemStack& stack = inventory.getSlot(slotIdx);
             renderSlotItem(stack, x + 4.0f, y + 4.0f, slotSize - 8.0f);
@@ -156,9 +152,11 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
     float hotbarY = startY + 3 * (slotSize + padding) + 15.0f;
     for (int col = 0; col < 9; ++col) {
         float x = startX + col * (slotSize + padding);
-        glm::vec4 slotColor = (col == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f) : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
+        glm::vec4 slotColor =
+            (col == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f) : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
         renderQuad(glm::vec2(x, hotbarY), glm::vec2(slotSize, slotSize), slotColor);
-        renderQuad(glm::vec2(x + 2.0f, hotbarY + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f), glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
+        renderQuad(glm::vec2(x + 2.0f, hotbarY + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f),
+                   glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
 
         const ItemStack& stack = inventory.getSlot(col);
         renderSlotItem(stack, x + 4.0f, hotbarY + 4.0f, slotSize - 8.0f);
@@ -173,9 +171,11 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
             float x = craftX + c * (slotSize + padding);
             float y = craftY + r * (slotSize + padding);
 
-            glm::vec4 slotColor = (craftIdx + 100 == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f) : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
+            glm::vec4 slotColor = (craftIdx + 100 == m_SelectedSlotIndex) ? glm::vec4(1.0f, 0.84f, 0.0f, 0.9f)
+                                                                          : glm::vec4(0.15f, 0.15f, 0.15f, 0.85f);
             renderQuad(glm::vec2(x, y), glm::vec2(slotSize, slotSize), slotColor);
-            renderQuad(glm::vec2(x + 2.0f, y + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f), glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
+            renderQuad(glm::vec2(x + 2.0f, y + 2.0f), glm::vec2(slotSize - 4.0f, slotSize - 4.0f),
+                       glm::vec4(0.28f, 0.28f, 0.28f, 0.9f));
 
             const ItemStack& craftStack = inventory.getCraftingInput(craftIdx);
             renderSlotItem(craftStack, x + 4.0f, y + 4.0f, slotSize - 8.0f);
@@ -183,13 +183,17 @@ void InventoryGUI::render(Inventory& inventory, bool isOpen) {
     }
 
     // Render Crafting Arrow Icon ->
-    FontRenderer::getInstance().renderText("->", craftX + 2 * (slotSize + padding) + 6.0f, craftY + (slotSize + padding) / 2.0f + 6.0f, 1.5f, glm::vec4(0.7f, 0.7f, 0.7f, 1.0f));
+    FontRenderer::getInstance().renderText("->", craftX + 2 * (slotSize + padding) + 6.0f,
+                                           craftY + (slotSize + padding) / 2.0f + 6.0f, 1.5f,
+                                           glm::vec4(0.7f, 0.7f, 0.7f, 1.0f));
 
     // Render Crafting Result Slot
     float resultX = craftX + 2 * (slotSize + padding) + 32.0f;
     float resultY = craftY + (slotSize + padding) / 2.0f - 2.0f;
-    renderQuad(glm::vec2(resultX, resultY), glm::vec2(slotSize + 8.0f, slotSize + 8.0f), glm::vec4(1.0f, 0.84f, 0.0f, 0.9f));
-    renderQuad(glm::vec2(resultX + 2.0f, resultY + 2.0f), glm::vec2(slotSize + 4.0f, slotSize + 4.0f), glm::vec4(0.32f, 0.32f, 0.32f, 0.95f));
+    renderQuad(glm::vec2(resultX, resultY), glm::vec2(slotSize + 8.0f, slotSize + 8.0f),
+               glm::vec4(1.0f, 0.84f, 0.0f, 0.9f));
+    renderQuad(glm::vec2(resultX + 2.0f, resultY + 2.0f), glm::vec2(slotSize + 4.0f, slotSize + 4.0f),
+               glm::vec4(0.32f, 0.32f, 0.32f, 0.95f));
 
     const ItemStack& outputStack = inventory.getCraftingOutput();
     renderSlotItem(outputStack, resultX + 4.0f, resultY + 4.0f, slotSize);
@@ -249,7 +253,8 @@ void InventoryGUI::handleMouseClick(Inventory& inventory, double mouseX, double 
     // Check Crafting Output Slot
     float resultX = craftX + 2 * (slotSize + padding) + 32.0f;
     float resultY = craftY + (slotSize + padding) / 2.0f - 2.0f;
-    bool clickedResult = (mouseX >= resultX && mouseX <= resultX + slotSize + 8.0f && mouseY >= resultY && mouseY <= resultY + slotSize + 8.0f);
+    bool clickedResult = (mouseX >= resultX && mouseX <= resultX + slotSize + 8.0f && mouseY >= resultY &&
+                          mouseY <= resultY + slotSize + 8.0f);
 
     if (clickedCraftSlot != -1) {
         if (m_SelectedSlotIndex >= 0 && m_SelectedSlotIndex < 36) {
@@ -260,11 +265,17 @@ void InventoryGUI::handleMouseClick(Inventory& inventory, double mouseX, double 
                     dst = src;
                     dst.count = 1;
                     src.count--;
-                    if (src.count <= 0) { src.clear(); m_SelectedSlotIndex = -1; }
+                    if (src.count <= 0) {
+                        src.clear();
+                        m_SelectedSlotIndex = -1;
+                    }
                 } else if (dst.type == src.type && dst.count < dst.maxStackSize) {
                     dst.count++;
                     src.count--;
-                    if (src.count <= 0) { src.clear(); m_SelectedSlotIndex = -1; }
+                    if (src.count <= 0) {
+                        src.clear();
+                        m_SelectedSlotIndex = -1;
+                    }
                 }
             } else {
                 std::swap(src, dst);
@@ -288,7 +299,8 @@ void InventoryGUI::handleMouseClick(Inventory& inventory, double mouseX, double 
                     ItemStack& input = inventory.getCraftingInput(i);
                     if (!input.isEmpty()) {
                         input.count--;
-                        if (input.count <= 0) input.clear();
+                        if (input.count <= 0)
+                            input.clear();
                     }
                 }
                 inventory.updateCraftingRecipe();
@@ -323,11 +335,17 @@ void InventoryGUI::handleMouseClick(Inventory& inventory, double mouseX, double 
                         dst = src;
                         dst.count = 1;
                         src.count--;
-                        if (src.count <= 0) { src.clear(); m_SelectedSlotIndex = -1; }
+                        if (src.count <= 0) {
+                            src.clear();
+                            m_SelectedSlotIndex = -1;
+                        }
                     } else if (dst.type == src.type && dst.count < dst.maxStackSize) {
                         dst.count++;
                         src.count--;
-                        if (src.count <= 0) { src.clear(); m_SelectedSlotIndex = -1; }
+                        if (src.count <= 0) {
+                            src.clear();
+                            m_SelectedSlotIndex = -1;
+                        }
                     } else {
                         inventory.swapSlots(m_SelectedSlotIndex, clickedSlot);
                         m_SelectedSlotIndex = -1;
@@ -350,7 +368,8 @@ void InventoryGUI::renderQuad(const glm::vec2& position, const glm::vec2& size, 
     model = glm::translate(model, glm::vec3(position, 0.0f));
     model = glm::scale(model, glm::vec3(size, 1.0f));
 
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_Width), static_cast<float>(m_Height), 0.0f, -1.0f, 1.0f);
+    glm::mat4 projection =
+        glm::ortho(0.0f, static_cast<float>(m_Width), static_cast<float>(m_Height), 0.0f, -1.0f, 1.0f);
     m_UIShader->setMat4("u_Projection", projection * model);
 
     glBindVertexArray(m_VAO);
@@ -358,4 +377,4 @@ void InventoryGUI::renderQuad(const glm::vec2& position, const glm::vec2& size, 
     glBindVertexArray(0);
 }
 
-}
+} // namespace Minecraft

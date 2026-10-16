@@ -7,18 +7,18 @@
 namespace Minecraft {
 
 struct TransformComponent {
-    glm::vec3 position{ 0.0f };
-    glm::vec3 rotation{ 0.0f };
-    glm::vec3 scale{ 1.0f };
+    glm::vec3 position{0.0f};
+    glm::vec3 rotation{0.0f};
+    glm::vec3 scale{1.0f};
 };
 
 struct VelocityComponent {
-    glm::vec3 velocity{ 0.0f };
+    glm::vec3 velocity{0.0f};
 };
 
 struct BoundingBoxComponent {
-    glm::vec3 minOffset{ -0.3f, 0.0f, -0.3f };
-    glm::vec3 maxOffset{  0.3f, 1.8f,  0.3f };
+    glm::vec3 minOffset{-0.3f, 0.0f, -0.3f};
+    glm::vec3 maxOffset{0.3f, 1.8f, 0.3f};
 };
 
 struct PlayerComponent {
@@ -33,6 +33,6 @@ struct TagComponent {
     std::string tag = "Entity";
 };
 
-}
+} // namespace Minecraft
 
 #endif // COMPONENTS_HPP

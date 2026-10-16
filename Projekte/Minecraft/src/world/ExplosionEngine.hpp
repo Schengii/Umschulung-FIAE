@@ -9,9 +9,10 @@ class World;
 
 class ExplosionEngine {
 public:
-    static void createExplosion(World& world, const glm::vec3& center, float radius = 4.0f, glm::vec3* playerVel = nullptr, const glm::vec3* playerPos = nullptr);
+    static void createExplosion(World& world, const glm::vec3& center, float radius = 4.0f,
+                                glm::vec3* playerVel = nullptr, const glm::vec3* playerPos = nullptr);
 };
 
-}
+} // namespace Minecraft
 
 #endif // EXPLOSIONENGINE_HPP

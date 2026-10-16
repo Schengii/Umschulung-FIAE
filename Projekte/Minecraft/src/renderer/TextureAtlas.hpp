@@ -1,11 +1,12 @@
 #ifndef TEXTUREATLAS_HPP
 #define TEXTUREATLAS_HPP
 
+#include "../world/Block.hpp"
+
+#include <cstdint>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
-#include <cstdint>
-#include "../world/Block.hpp"
 
 namespace Minecraft {
 
@@ -31,10 +32,11 @@ private:
     GLuint m_TextureID = 0;
     bool m_IsInitialized = false;
 
-    static void fillTile(std::vector<uint8_t>& pixels, int atlasW, int tileX, int tileY, const uint8_t color[4], float noiseIntensity = 0.1f);
+    static void fillTile(std::vector<uint8_t>& pixels, int atlasW, int tileX, int tileY, const uint8_t color[4],
+                         float noiseIntensity = 0.1f);
     static void fillTilePattern(std::vector<uint8_t>& pixels, int atlasW, int tileX, int tileY, int patternType);
 };
 
-}
+} // namespace Minecraft
 
 #endif // TEXTUREATLAS_HPP

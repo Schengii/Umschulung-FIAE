@@ -1,9 +1,10 @@
 #ifndef POSTPROCESSING_HPP
 #define POSTPROCESSING_HPP
 
+#include "Shader.hpp"
+
 #include <glad/glad.h>
 #include <memory>
-#include "Shader.hpp"
 
 namespace Minecraft {
 
@@ -14,7 +15,9 @@ public:
 
     void resize(unsigned int width, unsigned int height);
     void bindForWriting();
-    void unbindAndRender(bool isUnderwater, bool hasNightVision = false, bool bloomEnabled = true, bool ssaoEnabled = true, bool godRaysEnabled = true, const glm::vec2& sunScreenPos = glm::vec2(0.5f, 0.75f));
+    void unbindAndRender(bool isUnderwater, bool hasNightVision = false, bool bloomEnabled = true,
+                         bool ssaoEnabled = true, bool godRaysEnabled = true,
+                         const glm::vec2& sunScreenPos = glm::vec2(0.5f, 0.75f));
 
     GLuint getColorTexture() const { return m_ColorTex; }
     bool isBloomEnabled() const { return m_BloomEnabled; }
@@ -41,6 +44,6 @@ private:
     void initQuad();
 };
 
-}
+} // namespace Minecraft
 
 #endif // POSTPROCESSING_HPP

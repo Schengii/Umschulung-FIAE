@@ -2,6 +2,7 @@
 #define INVENTORY_HPP
 
 #include "ItemStack.hpp"
+
 #include <array>
 
 namespace Minecraft {
@@ -14,6 +15,8 @@ public:
     const ItemStack& getSlot(int index) const;
 
     bool addItem(BlockType type, int count = 1);
+    // Debug/creative helper: replaces the hotbar with a stack of common building blocks.
+    void fillCreativeHotbar();
     void setSlot(int index, BlockType type, int count);
     void swapSlots(int indexA, int indexB);
 
@@ -27,6 +30,6 @@ private:
     ItemStack m_CraftingOutput;
 };
 
-}
+} // namespace Minecraft
 
 #endif // INVENTORY_HPP

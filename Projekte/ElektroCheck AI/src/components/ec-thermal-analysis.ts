@@ -3,7 +3,9 @@ import { customElement, state, query } from "lit/decorators.js";
 import wizardStyles from "./ec-diagnosis-wizard.css?inline";
 import { GeminiAIService } from "../services/gemini-services";
 import { ThermalAnalysisResult } from "../services/ai-types";
-import { buildThermalPdfDocDefinition } from "../utils/pdf-generator";
+import { buildThermalPdfDocDefinition, downloadPdf } from "../utils/pdf-generator";
+import { getErrorMessage } from "../utils/error";
+import { resizeImage } from "../utils/image-resize";
 import "@vaadin/button";
 import "@vaadin/text-area";
 import "@vaadin/progress-bar";
@@ -244,12 +246,12 @@ export class EcThermalAnalysis extends LitElement {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this._capturedImage = reader.result as string;
-      this._result = null;
-    };
-    reader.readAsDataURL(file);
+    resizeImage(file)
+      .then((image) => {
+        this._capturedImage = image;
+        this._result = null;
+      })
+      .catch((err) => alert(`Bild konnte nicht geladen werden: ${getErrorMessage(err)}`));
   }
 
   private async _loadDemoImage() {
@@ -299,8 +301,8 @@ export class EcThermalAnalysis extends LitElement {
       // Draw hotspots on canvas
       await this.updateComplete;
       this._drawHotspots();
-    } catch (e: any) {
-      alert(`Fehler bei der Analyse: ${e.message || e}`);
+    } catch (e) {
+      alert(`Fehler bei der Analyse: ${getErrorMessage(e)}`);
       this._isLoading = false;
       if (this._loadingInterval) clearInterval(this._loadingInterval);
     }
@@ -395,16 +397,7 @@ export class EcThermalAnalysis extends LitElement {
         }
       );
 
-      const pdfMakeMod = await import("pdfmake/build/pdfmake");
-      const pdfFontsMod = await import("pdfmake/build/vfs_fonts");
-      const pdfMake = (pdfMakeMod as any).default || pdfMakeMod;
-      const pdfFonts = (pdfFontsMod as any).default || pdfFontsMod;
-
-      pdfMake.vfs = (pdfFonts as any).pdfMake ? (pdfFonts as any).pdfMake.vfs : (pdfFonts as any).vfs;
-      
-      pdfMake.createPdf(docDef).download(
-        `Wärmebild_Protokoll_${new Date().toISOString().slice(0, 10)}.pdf`
-      );
+      await downloadPdf(docDef, `Wärmebild_Protokoll_${new Date().toISOString().slice(0, 10)}.pdf`);
     } catch (e) {
       alert("Fehler bei der PDF-Erstellung.");
     } finally {

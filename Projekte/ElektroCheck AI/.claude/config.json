@@ -1,0 +1,4 @@
+{
+  "$schema": "https://json.schemastore.org/partial-claude-code-settings.json",
+  "cleanupPeriodDays": 30
+}

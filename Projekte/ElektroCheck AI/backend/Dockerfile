@@ -1,16 +1,22 @@
-FROM node:20-alpine
+# Build-Kontext ist das Repo-Root (siehe docker-compose.yml), weil der Express-Adapter
+# die Vercel-Functions aus /api importiert.
+FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Abhängigkeiten der Vercel-Functions (/api) – bewusst ohne das komplette Frontend-package.json
+RUN printf '{"name":"electrocheck-api","private":true,"type":"module","dependencies":{"@google/genai":"^2.28.0","@upstash/redis":"^1.39.0","ajv":"^8.12.0"}}' > package.json \
+  && npm install --omit=dev --ignore-scripts
 
-# Install dependencies (production only, skip devDeps unless tests are run inside container)
-RUN npm ci --only=production
+# Abhängigkeiten des Express-Adapters
+COPY backend/package*.json ./backend/
+RUN cd backend && npm ci --omit=dev
 
-# Copy backend source code
-COPY . .
+COPY api ./api
+COPY backend ./backend
 
+WORKDIR /app/backend
+ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

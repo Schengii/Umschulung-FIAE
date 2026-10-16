@@ -1,23 +1,16 @@
 #ifndef MENU_GUI_HPP
 #define MENU_GUI_HPP
 
+#include "../renderer/Shader.hpp"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <memory>
 #include <string>
-#include "../renderer/Shader.hpp"
 
 namespace Minecraft {
 
-enum class MenuAction {
-    None,
-    StartNewWorld,
-    LoadWorld,
-    OpenSettings,
-    CloseSettings,
-    ResumeGame,
-    QuitGame
-};
+enum class MenuAction { None, StartNewWorld, LoadWorld, OpenSettings, CloseSettings, ResumeGame, QuitGame };
 
 class MenuGUI {
 public:
@@ -27,7 +20,8 @@ public:
     void resize(int width, int height);
     MenuAction renderMainMenu(double mouseX, double mouseY, bool mouseClicked, std::string& outSeed);
     MenuAction renderPauseMenu(double mouseX, double mouseY, bool mouseClicked);
-    MenuAction renderSettingsMenu(double mouseX, double mouseY, bool mouseClicked, int& renderDistance, float& fov, bool& vsync);
+    MenuAction renderSettingsMenu(double mouseX, double mouseY, bool mouseClicked, int& renderDistance, float& fov,
+                                  bool& vsync);
 
 private:
     void initBuffers();
@@ -42,6 +36,6 @@ private:
     GLuint m_VBO = 0;
 };
 
-}
+} // namespace Minecraft
 
 #endif // MENU_GUI_HPP

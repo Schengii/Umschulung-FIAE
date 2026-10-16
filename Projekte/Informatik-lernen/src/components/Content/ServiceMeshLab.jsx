@@ -31,7 +31,7 @@ export default function ServiceMeshLab({ onRewardXP }) {
 
   const handleMtlsChange = (mode) => {
     setMtlsMode(mode);
-    mesh.mtlsMode = mode;
+    mesh.setMtlsMode(mode);
     triggerHaptic('SELECTION');
     setTick(t => t + 1);
   };

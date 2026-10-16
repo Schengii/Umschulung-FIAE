@@ -1,9 +1,11 @@
 #include "EntityRenderer.hpp"
-#include "TextureAtlas.hpp"
+
 #include "../gui/FontRenderer.hpp"
+#include "TextureAtlas.hpp"
+
+#include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <cmath>
 
 namespace Minecraft {
 
@@ -17,12 +19,15 @@ EntityRenderer::EntityRenderer() {
 }
 
 EntityRenderer::~EntityRenderer() {
-    if (m_CubeVAO && glDeleteVertexArrays) glDeleteVertexArrays(1, &m_CubeVAO);
-    if (m_CubeVBO && glDeleteBuffers) glDeleteBuffers(1, &m_CubeVBO);
+    if (m_CubeVAO && glDeleteVertexArrays)
+        glDeleteVertexArrays(1, &m_CubeVAO);
+    if (m_CubeVBO && glDeleteBuffers)
+        glDeleteBuffers(1, &m_CubeVBO);
 }
 
 void EntityRenderer::init() {
-    if (m_IsInitialized || !glCreateShader || !glGenVertexArrays) return;
+    if (m_IsInitialized || !glCreateShader || !glGenVertexArrays)
+        return;
 
     m_EntityShader = std::make_unique<Shader>("assets/shaders/block.vert", "assets/shaders/block.frag");
     initCubeBuffers();
@@ -32,53 +37,40 @@ void EntityRenderer::init() {
 void EntityRenderer::initCubeBuffers() {
     float cubeVertices[] = {
         // Front face (+Z)
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, -0.5f, -0.5f, 0.5f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
 
         // Back face (-Z)
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, -0.5f, -0.5f,
+        -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 
         // Left face (-X)
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, -0.5f, -0.5f, -0.5f, -1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f, -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, -0.5f, 0.5f, 0.5f,
+        -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 
         // Right face (+X)
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 1.0f,
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
 
         // Top face (+Y)
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 0.0f,
+        1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
 
         // Bottom face (-Y)
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,  1.0f, 1.0f
-    };
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, -0.5f, 0.5f, 0.0f, -1.0f,
+        0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, -0.5f, -0.5f,
+        -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f};
 
     if (glGenVertexArrays && glGenBuffers) {
         glGenVertexArrays(1, &m_CubeVAO);
@@ -104,12 +96,12 @@ void EntityRenderer::initCubeBuffers() {
     }
 }
 
-void EntityRenderer::renderBox(const glm::mat4& viewProj, const glm::vec3& position, 
-                               const glm::vec3& rotation, const glm::vec3& scale, 
-                               const glm::vec3& pivot, const glm::vec4& color, 
+void EntityRenderer::renderBox(const glm::mat4& viewProj, const glm::vec3& position, const glm::vec3& rotation,
+                               const glm::vec3& scale, const glm::vec3& pivot, const glm::vec4& color,
                                BlockType texType) {
     (void)texType;
-    if (m_CubeVAO == 0 || !m_EntityShader) return;
+    if (m_CubeVAO == 0 || !m_EntityShader)
+        return;
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
@@ -126,53 +118,76 @@ void EntityRenderer::renderBox(const glm::mat4& viewProj, const glm::vec3& posit
     glBindVertexArray(0);
 }
 
-void EntityRenderer::renderHumanoid(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& skinColor, const glm::vec4& clothesColor) {
+void EntityRenderer::renderHumanoid(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& skinColor,
+                                    const glm::vec4& clothesColor) {
     float swing = std::sin(mob.limbSwing) * 35.0f;
     glm::vec3 pos = mob.position;
 
     // Head
-    renderBox(viewProj, pos + glm::vec3(0.0f, 1.6f, 0.0f), glm::vec3(mob.pitch, mob.yaw, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f), skinColor);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 1.6f, 0.0f), glm::vec3(mob.pitch, mob.yaw, 0.0f),
+              glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f), skinColor);
 
     // Body
-    renderBox(viewProj, pos + glm::vec3(0.0f, 1.05f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.5f, 0.7f, 0.25f), glm::vec3(0.0f), clothesColor);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 1.05f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.5f, 0.7f, 0.25f), glm::vec3(0.0f), clothesColor);
 
     // Arms
     if (mob.type == MobType::Zombie) {
-        renderBox(viewProj, pos + glm::vec3(-0.35f, 1.25f, 0.0f), glm::vec3(-90.0f, mob.yaw, 0.0f), glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
-        renderBox(viewProj, pos + glm::vec3(0.35f, 1.25f, 0.0f), glm::vec3(-90.0f, mob.yaw, 0.0f), glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
+        renderBox(viewProj, pos + glm::vec3(-0.35f, 1.25f, 0.0f), glm::vec3(-90.0f, mob.yaw, 0.0f),
+                  glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
+        renderBox(viewProj, pos + glm::vec3(0.35f, 1.25f, 0.0f), glm::vec3(-90.0f, mob.yaw, 0.0f),
+                  glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
     } else {
-        renderBox(viewProj, pos + glm::vec3(-0.35f, 1.25f, 0.0f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
-        renderBox(viewProj, pos + glm::vec3(0.35f, 1.25f, 0.0f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
+        renderBox(viewProj, pos + glm::vec3(-0.35f, 1.25f, 0.0f), glm::vec3(swing, mob.yaw, 0.0f),
+                  glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
+        renderBox(viewProj, pos + glm::vec3(0.35f, 1.25f, 0.0f), glm::vec3(-swing, mob.yaw, 0.0f),
+                  glm::vec3(0.2f, 0.65f, 0.2f), glm::vec3(0.0f, 0.25f, 0.0f), skinColor);
     }
 
     // Legs
-    renderBox(viewProj, pos + glm::vec3(-0.15f, 0.45f, 0.0f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.22f, 0.7f, 0.22f), glm::vec3(0.0f, 0.35f, 0.0f), clothesColor * 0.8f);
-    renderBox(viewProj, pos + glm::vec3(0.15f, 0.45f, 0.0f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.22f, 0.7f, 0.22f), glm::vec3(0.0f, 0.35f, 0.0f), clothesColor * 0.8f);
+    renderBox(viewProj, pos + glm::vec3(-0.15f, 0.45f, 0.0f), glm::vec3(-swing, mob.yaw, 0.0f),
+              glm::vec3(0.22f, 0.7f, 0.22f), glm::vec3(0.0f, 0.35f, 0.0f), clothesColor * 0.8f);
+    renderBox(viewProj, pos + glm::vec3(0.15f, 0.45f, 0.0f), glm::vec3(swing, mob.yaw, 0.0f),
+              glm::vec3(0.22f, 0.7f, 0.22f), glm::vec3(0.0f, 0.35f, 0.0f), clothesColor * 0.8f);
 }
 
 void EntityRenderer::renderCreeper(const glm::mat4& viewProj, const Mob& mob) {
     float swing = std::sin(mob.limbSwing) * 28.0f;
     glm::vec3 pos = mob.position;
-    glm::vec4 color = (mob.fuseTimer > 0.0f && static_cast<int>(mob.fuseTimer * 10) % 2 == 0) ? glm::vec4(1.0f, 1.0f, 1.0f, 1.0f) : glm::vec4(0.15f, 0.75f, 0.2f, 1.0f);
+    glm::vec4 color = (mob.fuseTimer > 0.0f && static_cast<int>(mob.fuseTimer * 10) % 2 == 0)
+                          ? glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
+                          : glm::vec4(0.15f, 0.75f, 0.2f, 1.0f);
 
-    renderBox(viewProj, pos + glm::vec3(0.0f, 1.4f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f), color);
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.8f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.45f, 0.7f, 0.25f), glm::vec3(0.0f), color);
-    renderBox(viewProj, pos + glm::vec3(-0.16f, 0.25f, 0.16f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
-    renderBox(viewProj, pos + glm::vec3(0.16f, 0.25f, 0.16f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
-    renderBox(viewProj, pos + glm::vec3(-0.16f, 0.25f, -0.16f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
-    renderBox(viewProj, pos + glm::vec3(0.16f, 0.25f, -0.16f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 1.4f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f),
+              glm::vec3(0.0f), color);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.8f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.45f, 0.7f, 0.25f), glm::vec3(0.0f), color);
+    renderBox(viewProj, pos + glm::vec3(-0.16f, 0.25f, 0.16f), glm::vec3(swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
+    renderBox(viewProj, pos + glm::vec3(0.16f, 0.25f, 0.16f), glm::vec3(-swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
+    renderBox(viewProj, pos + glm::vec3(-0.16f, 0.25f, -0.16f), glm::vec3(-swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
+    renderBox(viewProj, pos + glm::vec3(0.16f, 0.25f, -0.16f), glm::vec3(swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), color * 0.85f);
 }
 
 void EntityRenderer::renderQuadruped(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& bodyColor) {
     float swing = std::sin(mob.limbSwing) * 30.0f;
     glm::vec3 pos = mob.position;
 
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.65f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.6f, 0.5f, 0.9f), glm::vec3(0.0f), bodyColor);
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.85f, 0.55f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.0f), bodyColor * 1.05f);
-    renderBox(viewProj, pos + glm::vec3(-0.2f, 0.25f, 0.3f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
-    renderBox(viewProj, pos + glm::vec3(0.2f, 0.25f, 0.3f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
-    renderBox(viewProj, pos + glm::vec3(-0.2f, 0.25f, -0.3f), glm::vec3(-swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
-    renderBox(viewProj, pos + glm::vec3(0.2f, 0.25f, -0.3f), glm::vec3(swing, mob.yaw, 0.0f), glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.65f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.6f, 0.5f, 0.9f),
+              glm::vec3(0.0f), bodyColor);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.85f, 0.55f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.0f), bodyColor * 1.05f);
+    renderBox(viewProj, pos + glm::vec3(-0.2f, 0.25f, 0.3f), glm::vec3(swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
+    renderBox(viewProj, pos + glm::vec3(0.2f, 0.25f, 0.3f), glm::vec3(-swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
+    renderBox(viewProj, pos + glm::vec3(-0.2f, 0.25f, -0.3f), glm::vec3(-swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
+    renderBox(viewProj, pos + glm::vec3(0.2f, 0.25f, -0.3f), glm::vec3(swing, mob.yaw, 0.0f),
+              glm::vec3(0.18f, 0.45f, 0.18f), glm::vec3(0.0f), bodyColor * 0.9f);
 }
 
 void EntityRenderer::renderDragon(const glm::mat4& viewProj, const Mob& mob, float totalTime) {
@@ -181,10 +196,14 @@ void EntityRenderer::renderDragon(const glm::mat4& viewProj, const Mob& mob, flo
     glm::vec4 dragonColor(0.12f, 0.12f, 0.15f, 1.0f);
 
     renderBox(viewProj, pos, glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(1.5f, 1.2f, 3.5f), glm::vec3(0.0f), dragonColor);
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.6f, 2.2f), glm::vec3(-15.0f, mob.yaw, 0.0f), glm::vec3(0.9f, 0.9f, 1.4f), glm::vec3(0.0f), dragonColor * 1.1f);
-    renderBox(viewProj, pos + glm::vec3(-1.8f, 0.5f, 0.0f), glm::vec3(0.0f, mob.yaw, wingFlap), glm::vec3(2.5f, 0.15f, 1.8f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec4(0.2f, 0.1f, 0.25f, 1.0f));
-    renderBox(viewProj, pos + glm::vec3(1.8f, 0.5f, 0.0f), glm::vec3(0.0f, mob.yaw, -wingFlap), glm::vec3(2.5f, 0.15f, 1.8f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec4(0.2f, 0.1f, 0.25f, 1.0f));
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.0f, -2.5f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.6f, 0.6f, 2.5f), glm::vec3(0.0f), dragonColor);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.6f, 2.2f), glm::vec3(-15.0f, mob.yaw, 0.0f),
+              glm::vec3(0.9f, 0.9f, 1.4f), glm::vec3(0.0f), dragonColor * 1.1f);
+    renderBox(viewProj, pos + glm::vec3(-1.8f, 0.5f, 0.0f), glm::vec3(0.0f, mob.yaw, wingFlap),
+              glm::vec3(2.5f, 0.15f, 1.8f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec4(0.2f, 0.1f, 0.25f, 1.0f));
+    renderBox(viewProj, pos + glm::vec3(1.8f, 0.5f, 0.0f), glm::vec3(0.0f, mob.yaw, -wingFlap),
+              glm::vec3(2.5f, 0.15f, 1.8f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec4(0.2f, 0.1f, 0.25f, 1.0f));
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.0f, -2.5f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.6f, 0.6f, 2.5f),
+              glm::vec3(0.0f), dragonColor);
 }
 
 void EntityRenderer::renderWither(const glm::mat4& viewProj, const Mob& mob, float totalTime) {
@@ -193,24 +212,30 @@ void EntityRenderer::renderWither(const glm::mat4& viewProj, const Mob& mob, flo
     glm::vec4 witherColor(0.14f, 0.14f, 0.16f, 1.0f);
 
     // Central Body & Spine Ribcage
-    renderBox(viewProj, pos + glm::vec3(0.0f, 1.1f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.9f, 0.35f, 0.35f), glm::vec3(0.0f), witherColor);
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.35f, 0.7f, 0.25f), glm::vec3(0.0f), witherColor * 0.9f);
-    renderBox(viewProj, pos + glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f), glm::vec3(0.25f, 0.45f, 0.2f), glm::vec3(0.0f), witherColor * 0.8f);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 1.1f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.9f, 0.35f, 0.35f), glm::vec3(0.0f), witherColor);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.35f, 0.7f, 0.25f), glm::vec3(0.0f), witherColor * 0.9f);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, mob.yaw, 0.0f),
+              glm::vec3(0.25f, 0.45f, 0.2f), glm::vec3(0.0f), witherColor * 0.8f);
 
     // Central Head (0.6 x 0.6 x 0.6)
-    renderBox(viewProj, pos + glm::vec3(0.0f, 1.65f, 0.0f), glm::vec3(mob.pitch, mob.yaw, 0.0f), glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0.0f), witherColor * 1.1f);
+    renderBox(viewProj, pos + glm::vec3(0.0f, 1.65f, 0.0f), glm::vec3(mob.pitch, mob.yaw, 0.0f),
+              glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0.0f), witherColor * 1.1f);
 
     // Left Head (smaller, looking slightly outward)
-    renderBox(viewProj, pos + glm::vec3(-0.65f, 1.5f, 0.0f), glm::vec3(mob.pitch, mob.yaw - 20.0f, 0.0f), glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0.0f), witherColor * 1.05f);
+    renderBox(viewProj, pos + glm::vec3(-0.65f, 1.5f, 0.0f), glm::vec3(mob.pitch, mob.yaw - 20.0f, 0.0f),
+              glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0.0f), witherColor * 1.05f);
 
     // Right Head (smaller, looking slightly outward)
-    renderBox(viewProj, pos + glm::vec3(0.65f, 1.5f, 0.0f), glm::vec3(mob.pitch, mob.yaw + 20.0f, 0.0f), glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0.0f), witherColor * 1.05f);
+    renderBox(viewProj, pos + glm::vec3(0.65f, 1.5f, 0.0f), glm::vec3(mob.pitch, mob.yaw + 20.0f, 0.0f),
+              glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0.0f), witherColor * 1.05f);
 }
 
-void EntityRenderer::render(const Camera& camera, const MobEngine& mobEngine, 
-                            const ItemEntityManager& itemMgr, float totalTime,
-                            const NetworkManager* netManager) {
-    if (!m_EntityShader) return;
+void EntityRenderer::render(const Camera& camera, const MobEngine& mobEngine, const ItemEntityManager& itemMgr,
+                            float totalTime, const NetworkManager* netManager) {
+    if (!m_EntityShader)
+        return;
 
     m_EntityShader->use();
     glm::mat4 proj = camera.getProjectionMatrix(16.0f / 9.0f);
@@ -226,7 +251,8 @@ void EntityRenderer::render(const Camera& camera, const MobEngine& mobEngine,
     m_EntityShader->setBool("u_IsUnderwater", false);
     m_EntityShader->setBool("u_HasHandheldLight", false);
 
-    if (glActiveTexture) glActiveTexture(GL_TEXTURE0);
+    if (glActiveTexture)
+        glActiveTexture(GL_TEXTURE0);
     TextureAtlas::getInstance().bind(0);
     m_EntityShader->setInt("u_Texture", 0);
 
@@ -235,33 +261,37 @@ void EntityRenderer::render(const Camera& camera, const MobEngine& mobEngine,
         glm::vec4 tint = (mob.hurtTime > 0.0f) ? glm::vec4(1.0f, 0.2f, 0.2f, 1.0f) : glm::vec4(1.0f);
 
         switch (mob.type) {
-            case MobType::Zombie:
-                renderHumanoid(viewProj, mob, glm::vec4(0.2f, 0.65f, 0.3f, 1.0f) * tint, glm::vec4(0.2f, 0.3f, 0.8f, 1.0f) * tint);
-                break;
-            case MobType::Skeleton:
-                renderHumanoid(viewProj, mob, glm::vec4(0.85f, 0.85f, 0.85f, 1.0f) * tint, glm::vec4(0.7f, 0.7f, 0.7f, 1.0f) * tint);
-                break;
-            case MobType::Creeper:
-                renderCreeper(viewProj, mob);
-                break;
-            case MobType::Pig:
-                renderQuadruped(viewProj, mob, glm::vec4(0.95f, 0.65f, 0.65f, 1.0f) * tint);
-                break;
-            case MobType::Cow:
-                renderQuadruped(viewProj, mob, glm::vec4(0.45f, 0.35f, 0.25f, 1.0f) * tint);
-                break;
-            case MobType::Villager:
-                renderHumanoid(viewProj, mob, glm::vec4(0.8f, 0.6f, 0.45f, 1.0f) * tint, glm::vec4(0.55f, 0.35f, 0.2f, 1.0f) * tint);
-                break;
-            case MobType::IronGolem:
-                renderHumanoid(viewProj, mob, glm::vec4(0.85f, 0.85f, 0.8f, 1.0f) * tint, glm::vec4(0.8f, 0.8f, 0.75f, 1.0f) * tint);
-                break;
-            case MobType::EnderDragon:
-                renderDragon(viewProj, mob, totalTime);
-                break;
-            case MobType::Wither:
-                renderWither(viewProj, mob, totalTime);
-                break;
+        case MobType::Zombie:
+            renderHumanoid(viewProj, mob, glm::vec4(0.2f, 0.65f, 0.3f, 1.0f) * tint,
+                           glm::vec4(0.2f, 0.3f, 0.8f, 1.0f) * tint);
+            break;
+        case MobType::Skeleton:
+            renderHumanoid(viewProj, mob, glm::vec4(0.85f, 0.85f, 0.85f, 1.0f) * tint,
+                           glm::vec4(0.7f, 0.7f, 0.7f, 1.0f) * tint);
+            break;
+        case MobType::Creeper:
+            renderCreeper(viewProj, mob);
+            break;
+        case MobType::Pig:
+            renderQuadruped(viewProj, mob, glm::vec4(0.95f, 0.65f, 0.65f, 1.0f) * tint);
+            break;
+        case MobType::Cow:
+            renderQuadruped(viewProj, mob, glm::vec4(0.45f, 0.35f, 0.25f, 1.0f) * tint);
+            break;
+        case MobType::Villager:
+            renderHumanoid(viewProj, mob, glm::vec4(0.8f, 0.6f, 0.45f, 1.0f) * tint,
+                           glm::vec4(0.55f, 0.35f, 0.2f, 1.0f) * tint);
+            break;
+        case MobType::IronGolem:
+            renderHumanoid(viewProj, mob, glm::vec4(0.85f, 0.85f, 0.8f, 1.0f) * tint,
+                           glm::vec4(0.8f, 0.8f, 0.75f, 1.0f) * tint);
+            break;
+        case MobType::EnderDragon:
+            renderDragon(viewProj, mob, totalTime);
+            break;
+        case MobType::Wither:
+            renderWither(viewProj, mob, totalTime);
+            break;
         }
     }
 
@@ -269,21 +299,27 @@ void EntityRenderer::render(const Camera& camera, const MobEngine& mobEngine,
     for (const auto& item : itemMgr.getItems()) {
         float bob = std::sin(totalTime * 4.0f) * 0.08f;
         glm::vec3 itemPos = item.position + glm::vec3(0.0f, 0.15f + bob, 0.0f);
-        renderBox(viewProj, itemPos, glm::vec3(0.0f, item.rotation, 0.0f), glm::vec3(0.35f, 0.35f, 0.35f), glm::vec3(0.0f), glm::vec4(1.0f), item.itemType);
+        renderBox(viewProj, itemPos, glm::vec3(0.0f, item.rotation, 0.0f), glm::vec3(0.35f, 0.35f, 0.35f),
+                  glm::vec3(0.0f), glm::vec4(1.0f), item.itemType);
     }
 
     // 3. Render Flying Arrows
     for (const auto& arrow : mobEngine.getArrows()) {
-        if (!arrow.active) continue;
+        if (!arrow.active)
+            continue;
         float yaw = glm::degrees(std::atan2(arrow.velocity.x, arrow.velocity.z));
-        float pitch = glm::degrees(std::atan2(arrow.velocity.y, glm::length(glm::vec2(arrow.velocity.x, arrow.velocity.z))));
-        renderBox(viewProj, arrow.position, glm::vec3(-pitch, yaw, 0.0f), glm::vec3(0.06f, 0.06f, 0.6f), glm::vec3(0.0f), glm::vec4(0.6f, 0.4f, 0.2f, 1.0f));
+        float pitch =
+            glm::degrees(std::atan2(arrow.velocity.y, glm::length(glm::vec2(arrow.velocity.x, arrow.velocity.z))));
+        renderBox(viewProj, arrow.position, glm::vec3(-pitch, yaw, 0.0f), glm::vec3(0.06f, 0.06f, 0.6f),
+                  glm::vec3(0.0f), glm::vec4(0.6f, 0.4f, 0.2f, 1.0f));
     }
 
     // 4. Render Wither Skulls
     for (const auto& skull : mobEngine.getWitherSkulls()) {
-        if (!skull.active) continue;
-        renderBox(viewProj, skull.position, glm::vec3(0.0f, totalTime * 90.0f, 0.0f), glm::vec3(0.35f, 0.35f, 0.35f), glm::vec3(0.0f), glm::vec4(0.1f, 0.1f, 0.12f, 1.0f));
+        if (!skull.active)
+            continue;
+        renderBox(viewProj, skull.position, glm::vec3(0.0f, totalTime * 90.0f, 0.0f), glm::vec3(0.35f, 0.35f, 0.35f),
+                  glm::vec3(0.0f), glm::vec4(0.1f, 0.1f, 0.12f, 1.0f));
     }
 
     // 5. Render Remote Multiplayer Players
@@ -311,10 +347,11 @@ void EntityRenderer::renderRemotePlayers(const Camera& camera, const NetworkMana
     }
 }
 
-void EntityRenderer::renderFirstPersonHand(const Camera& camera, BlockType heldItem, 
-                                          float swingProgress, float walkBobbing, float totalTime) {
+void EntityRenderer::renderFirstPersonHand(const Camera& camera, BlockType heldItem, float swingProgress,
+                                           float walkBobbing, float totalTime) {
     (void)totalTime;
-    if (m_CubeVAO == 0 || !m_EntityShader) return;
+    if (m_CubeVAO == 0 || !m_EntityShader)
+        return;
 
     glDisable(GL_CULL_FACE);
     glClear(GL_DEPTH_BUFFER_BIT); // Always draw hand on top of scene
@@ -332,7 +369,8 @@ void EntityRenderer::renderFirstPersonHand(const Camera& camera, BlockType heldI
     m_EntityShader->setBool("u_IsUnderwater", false);
     m_EntityShader->setBool("u_HasHandheldLight", false);
 
-    if (glActiveTexture) glActiveTexture(GL_TEXTURE0);
+    if (glActiveTexture)
+        glActiveTexture(GL_TEXTURE0);
     TextureAtlas::getInstance().bind(0);
     m_EntityShader->setInt("u_Texture", 0);
 
@@ -365,4 +403,4 @@ void EntityRenderer::renderFirstPersonHand(const Camera& camera, BlockType heldI
     glEnable(GL_CULL_FACE);
 }
 
-}
+} // namespace Minecraft

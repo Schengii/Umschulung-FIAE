@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { CreditCard, Info, ChevronRight, Award, CheckCircle2, AlertCircle, Calculator, FileText } from 'lucide-react';
-import { useStore } from '../../store/useStore';
 import {
   ZAHLUNGSARTEN,
   PREISNACHLAESSE,
@@ -13,7 +12,6 @@ import {
 const XP_REWARD = 60;
 
 export default function WisoPaymentMethodsLab({ onXPGain }) {
-  const addXP = useStore((s) => s.addXP);
   const [aktivesTab, setAktivesTab] = useState('zahlungsarten');
   const [gewaehltZahlungsart, setGewaehltZahlungsart] = useState(ZAHLUNGSARTEN[0]);
   const [xpVergeben, setXpVergeben] = useState(false);
@@ -53,8 +51,7 @@ export default function WisoPaymentMethodsLab({ onXPGain }) {
     geloestNeu.add(id);
     setGeloeste(geloestNeu);
     if (geloestNeu.size >= IHK_ZAHLUNGSAUFGABEN.length && !xpVergeben) {
-      const xpFn = onXPGain || addXP;
-      xpFn?.(XP_REWARD, 'IHK WISO Zahlungsverkehr');
+      onXPGain?.(XP_REWARD, 'IHK WISO Zahlungsverkehr');
       setXpVergeben(true);
     }
   };

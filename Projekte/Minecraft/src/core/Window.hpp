@@ -2,8 +2,8 @@
 #define WINDOW_HPP
 
 #define GLFW_INCLUDE_NONE
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <string>
 
 namespace Minecraft {
@@ -16,12 +16,13 @@ public:
     bool shouldClose() const;
     void pollEvents();
     void swapBuffers();
-    
+
     GLFWwindow* getNativeWindow() const { return m_Window; }
     int getWidth() const { return m_Width; }
     int getHeight() const { return m_Height; }
     float getAspectRatio() const { return static_cast<float>(m_Width) / static_cast<float>(m_Height); }
 
+    void setVSync(bool enabled);
     void setCursorCaptured(bool captured);
     bool isCursorCaptured() const { return m_CursorCaptured; }
 
@@ -35,6 +36,6 @@ private:
     static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 };
 
-}
+} // namespace Minecraft
 
 #endif // WINDOW_HPP

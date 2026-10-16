@@ -54,6 +54,11 @@ p {
 .link-primary:hover { text-decoration: underline; }
 .no-underline { text-decoration: none; }
 
+vaadin-text-area vaadin-button[theme~="tertiary"] {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 /* =========================================
    3. HEADER & NAVIGATION (Mobile-First)
    ========================================= */
@@ -809,7 +814,7 @@ vaadin-button {
 }
 
 vaadin-button[theme~="secondary"] {
-  background-color: #f1f5f9;
+  background-color: var(--bg-app, #f1f5f9);
   color: var(--text-primary);
   border: 1px solid var(--border);
 }

@@ -14,10 +14,11 @@ public:
 
     void bindForWriting();
     void unbind(unsigned int currentWinWidth, unsigned int currentWinHeight);
-    
+
     GLuint getDepthMapTexture() const { return m_DepthMapTex; }
     glm::mat4 getLightSpaceMatrix(const glm::vec3& sunDir, const glm::vec3& targetPos) const;
-    glm::mat4 getLightSpaceMatrixCascade(const glm::vec3& sunDir, const glm::vec3& targetPos, float cascadeRadius) const;
+    glm::mat4 getLightSpaceMatrixCascade(const glm::vec3& sunDir, const glm::vec3& targetPos,
+                                         float cascadeRadius) const;
 
 private:
     GLuint m_FBO = 0;
@@ -26,6 +27,6 @@ private:
     unsigned int m_Height = 2048;
 };
 
-}
+} // namespace Minecraft
 
 #endif // SHADOWMAP_HPP

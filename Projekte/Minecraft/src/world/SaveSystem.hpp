@@ -20,6 +20,6 @@ private:
     static void createDirectoryIfNotExists(const std::string& dir);
 };
 
-}
+} // namespace Minecraft
 
 #endif // SAVESYSTEM_HPP

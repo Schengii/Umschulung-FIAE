@@ -1,13 +1,40 @@
-node_modules
-dist-ssr
+# Dependencies
+node_modules/
+
+# Production Builds
+dist/
+dev-dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# Environment variables & secrets
 .env
-.env*.local
-.vercel
+.env.*
+!.env.example
+!.env.template
+backend/.env
+backend/.env.*
+!backend/.env.template
+
+# Vercel Deployment Cache
+.vercel/
+
+# Logs & Temporary Files
 *.log
+*.tmp
+*.temp
+tmp/
+
+# IDEs & System
 .vscode/*
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+.idea/
+.vs/
+.superpowers/
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
@@ -16,3 +43,6 @@ dist-ssr
 android/app/build
 android/app/src/main/assets/public
 node_modules
+
+# Visual Studio
+.vs/

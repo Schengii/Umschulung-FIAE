@@ -34,6 +34,6 @@ private:
     GLuint compileShader(GLenum type, const std::string& source);
 };
 
-}
+} // namespace Minecraft
 
 #endif // SHADER_HPP

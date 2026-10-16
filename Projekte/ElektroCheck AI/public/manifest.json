@@ -1,11 +1,14 @@
 {
-  "name": "ElectroCheck AI Diagnose",
+  "name": "ElectroCheck AI",
   "short_name": "ElectroCheck",
-  "description": "KI-gestützte Fehlerdiagnose für Elektrogeräte",
+  "description": "KI-gestützte Fehlerdiagnose für Elektroinstallationen nach DGUV V3 / DIN VDE",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f4f8",
-  "theme_color": "#2c3e50",
+  "orientation": "portrait-primary",
+  "background_color": "#090d16",
+  "theme_color": "#005fcc",
+  "lang": "de",
+  "categories": ["utilities", "productivity"],
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -15,21 +18,8 @@
     {
       "src": "/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  
-  "screenshots": [
-    {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1920x1080",
       "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "1080x1920",
-      "type": "image/png"
+      "purpose": "any maskable"
     }
   ]
 }

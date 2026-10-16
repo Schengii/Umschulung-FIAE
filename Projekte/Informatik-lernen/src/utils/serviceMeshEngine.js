@@ -23,6 +23,11 @@ export class ServiceMeshSimulator {
     return { v1: this.canaryWeightV1, v2: this.canaryWeightV2 };
   }
 
+  /** @param {string} mode */
+  setMtlsMode(mode) {
+    this.mtlsMode = mode;
+  }
+
   routeRequest(requestId = 101) {
     // 1. mTLS Handshake & SPIFFE Verification
     let mtlsStatus = 'ESTABLISHED';

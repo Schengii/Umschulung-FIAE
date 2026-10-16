@@ -2,6 +2,7 @@
 #define LIGHTENGINE_HPP
 
 #include "Block.hpp"
+
 #include <glm/glm.hpp>
 #include <queue>
 
@@ -28,6 +29,6 @@ public:
     static void propagateCrossChunk(World& world, Chunk& chunk);
 };
 
-}
+} // namespace Minecraft
 
 #endif // LIGHTENGINE_HPP

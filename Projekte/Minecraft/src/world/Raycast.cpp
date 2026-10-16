@@ -1,21 +1,21 @@
 #include "Raycast.hpp"
+
 #include "World.hpp"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
 
 namespace Minecraft {
 
 RaycastResult Raycast::raycast(World& world, const glm::vec3& origin, const glm::vec3& direction, float maxDistance) {
     RaycastResult result;
-    if (glm::length(direction) < 1e-6f) return result;
+    if (glm::length(direction) < 1e-6f)
+        return result;
 
     glm::vec3 rayDir = glm::normalize(direction);
 
-    glm::ivec3 currentPos(
-        static_cast<int>(std::floor(origin.x)),
-        static_cast<int>(std::floor(origin.y)),
-        static_cast<int>(std::floor(origin.z))
-    );
+    glm::ivec3 currentPos(static_cast<int>(std::floor(origin.x)), static_cast<int>(std::floor(origin.y)),
+                          static_cast<int>(std::floor(origin.z)));
 
     int stepX = (rayDir.x > 0.0f) ? 1 : ((rayDir.x < 0.0f) ? -1 : 0);
     int stepY = (rayDir.y > 0.0f) ? 1 : ((rayDir.y < 0.0f) ? -1 : 0);
@@ -25,16 +25,16 @@ RaycastResult Raycast::raycast(World& world, const glm::vec3& origin, const glm:
     float tDeltaY = (std::abs(rayDir.y) > 1e-6f) ? std::abs(1.0f / rayDir.y) : 1e30f;
     float tDeltaZ = (std::abs(rayDir.z) > 1e-6f) ? std::abs(1.0f / rayDir.z) : 1e30f;
 
-    float tMaxX = (stepX > 0) ? (std::floor(origin.x) + 1.0f - origin.x) * tDeltaX :
-                  ((stepX < 0) ? (origin.x - std::floor(origin.x)) * tDeltaX : 1e30f);
-    float tMaxY = (stepY > 0) ? (std::floor(origin.y) + 1.0f - origin.y) * tDeltaY :
-                  ((stepY < 0) ? (origin.y - std::floor(origin.y)) * tDeltaY : 1e30f);
-    float tMaxZ = (stepZ > 0) ? (std::floor(origin.z) + 1.0f - origin.z) * tDeltaZ :
-                  ((stepZ < 0) ? (origin.z - std::floor(origin.z)) * tDeltaZ : 1e30f);
+    float tMaxX = (stepX > 0) ? (std::floor(origin.x) + 1.0f - origin.x) * tDeltaX
+                              : ((stepX < 0) ? (origin.x - std::floor(origin.x)) * tDeltaX : 1e30f);
+    float tMaxY = (stepY > 0) ? (std::floor(origin.y) + 1.0f - origin.y) * tDeltaY
+                              : ((stepY < 0) ? (origin.y - std::floor(origin.y)) * tDeltaY : 1e30f);
+    float tMaxZ = (stepZ > 0) ? (std::floor(origin.z) + 1.0f - origin.z) * tDeltaZ
+                              : ((stepZ < 0) ? (origin.z - std::floor(origin.z)) * tDeltaZ : 1e30f);
 
     // Initial check for block at origin
     BlockType startType = world.getBlock(currentPos.x, currentPos.y, currentPos.z);
-    if (startType != BlockType::Air && startType != BlockType::Water) {
+    if (startType != BlockType::Air && !BlockData::isWater(startType)) {
         result.hit = true;
         result.blockPos = currentPos;
         result.previousPos = currentPos;
@@ -76,10 +76,11 @@ RaycastResult Raycast::raycast(World& world, const glm::vec3& origin, const glm:
             }
         }
 
-        if (currentDist > maxDistance) break;
+        if (currentDist > maxDistance)
+            break;
 
         BlockType type = world.getBlock(currentPos.x, currentPos.y, currentPos.z);
-        if (type != BlockType::Air && type != BlockType::Water) {
+        if (type != BlockType::Air && !BlockData::isWater(type)) {
             result.hit = true;
             result.blockPos = currentPos;
             result.previousPos = lastBlockPos;
@@ -92,4 +93,4 @@ RaycastResult Raycast::raycast(World& world, const glm::vec3& origin, const glm:
     return result;
 }
 
-}
+} // namespace Minecraft

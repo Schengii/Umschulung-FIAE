@@ -46,10 +46,14 @@ describe('Catalog Filtering Engine Suite', () => {
   });
 
   it('filters products by text search query', () => {
-    const state = { ...mockState, filters: { ...mockState.filters, searchQuery: 'Kopfhörer' } };
+    const state = { ...mockState, filters: { ...mockState.filters, searchQuery: 'Sony' } };
     const results = filterProducts(state);
     expect(results.length).toBeGreaterThan(0);
-    expect(results.every(p => p.title.toLowerCase().includes('kopfhörer') || p.description.toLowerCase().includes('kopfhörer') || p.category.toLowerCase().includes('kopfhörer'))).toBe(true);
+    expect(results.every(p => 
+      p.title.toLowerCase().includes('sony') || 
+      p.brand.toLowerCase().includes('sony') || 
+      p.description.toLowerCase().includes('sony')
+    )).toBe(true);
   });
 
   it('filters products by category', () => {

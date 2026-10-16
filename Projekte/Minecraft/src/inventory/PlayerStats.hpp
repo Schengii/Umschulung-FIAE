@@ -2,20 +2,14 @@
 #define PLAYERSTATS_HPP
 
 #include "ItemStack.hpp"
+
+#include <algorithm>
 #include <array>
 #include <vector>
-#include <algorithm>
 
 namespace Minecraft {
 
-enum class StatusEffect {
-    None,
-    Speed,
-    JumpBoost,
-    NightVision,
-    Regeneration,
-    Poison
-};
+enum class StatusEffect { None, Speed, JumpBoost, NightVision, Regeneration, Poison };
 
 struct ActiveEffect {
     StatusEffect effect = StatusEffect::None;
@@ -74,7 +68,10 @@ public:
 
     // Animal Mount Riding Mechanics
     bool isRiding() const { return m_IsRiding; }
-    void setRiding(bool riding, int mobIdx = -1) { m_IsRiding = riding; m_RiddenMobIndex = mobIdx; }
+    void setRiding(bool riding, int mobIdx = -1) {
+        m_IsRiding = riding;
+        m_RiddenMobIndex = mobIdx;
+    }
     int getRiddenMobIndex() const { return m_RiddenMobIndex; }
 
     const std::vector<ActiveEffect>& getActiveEffects() const { return m_ActiveEffects; }
@@ -97,6 +94,6 @@ private:
     std::vector<ActiveEffect> m_ActiveEffects;
 };
 
-}
+} // namespace Minecraft
 
 #endif // PLAYERSTATS_HPP

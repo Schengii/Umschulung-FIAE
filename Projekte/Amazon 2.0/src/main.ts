@@ -2,7 +2,19 @@
 // Amazon 2.0 – Main Application Controller
 // ============================================================
 import './style.css';
-import { state, on, emit, saveCart, saveOrders, saveWishlist, saveCompare, saveFilters, saveTheme, triggerRenderProducts } from './store';
+import {
+  state,
+  on,
+  emit,
+  saveCart,
+  saveOrders,
+  saveWishlist,
+  saveCompare,
+  saveFilters,
+  saveTheme,
+  triggerRenderProducts,
+  addProductReview,
+} from './store';
 import { HERO_SLIDES } from './data/heroSlides';
 
 // Component imports
@@ -11,14 +23,14 @@ import { initCatalog, renderProducts } from './components/catalog';
 import { initCart, renderCartDrawer, toggleCartDrawer } from './components/cart';
 import { openProductModal } from './components/productModal';
 import { openCheckoutModal } from './components/checkout';
-import { openOrdersModal } from './components/orders';
+import { openOrdersModal, startOrderProgression } from './components/orders';
 import { initWishlist, openWishlistModal } from './components/wishlist';
 import { initCompare, toggleCompareProduct } from './components/compare';
 import { trackRecentlyViewed, renderRecentlyViewed } from './components/recentlyViewed';
 import { initCoupons, openCouponsModal } from './components/coupons';
 import { openProfileModal } from './components/profile';
 import { showToast } from './components/toast';
-import { openNotificationsModal } from './components/notifications';
+import { openNotificationsModal, addNotification } from './components/notifications';
 import { openGiftCardModal, updateGiftBalanceHeaderDisplay } from './components/giftCards';
 import { startLightningTimers, renderLightningDealsSection } from './components/lightningDeals';
 import { initCommandPalette } from './components/commandPalette';
@@ -26,8 +38,10 @@ import { renderRecommendationsSection } from './components/recommendations';
 import { openReturnModal } from './components/returns';
 import { openSellerModal, injectSellerListings } from './components/seller';
 import { openPrimeModal } from './components/prime';
+import { initSocialProof } from './components/socialProof';
 import type { Product, Review, QAItem } from './types';
-import { writeStorage, KEYS } from './utils/persist';
+import { writeStorage, readStorage, KEYS } from './utils/persist';
+import { playSound } from './utils/audio';
 
 // ── Bootstrap ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.filters.category = catId;
       triggerRenderProducts();
     },
+    onProductClick: handleProductClick,
     onCartClick: toggleCartDrawer,
     onOrdersClick: () => openOrdersModal(state),
     onWishlistClick: () => openWishlistModal(state, handleMoveWishlistToCart, handleRemoveFromWishlist),
@@ -127,6 +142,17 @@ document.addEventListener('DOMContentLoaded', () => {
     openProduct: (product) => handleProductClick(product),
   });
 
+  // 10b. Initialize Keyboard Shortcuts Overlay & Hotkeys
+  import('./components/keyboardShortcuts').then(({ initGlobalShortcuts }) => {
+    initGlobalShortcuts({
+      openCart: toggleCartDrawer,
+      openOrders: () => openOrdersModal(state),
+      openWishlist: () => openWishlistModal(state, handleMoveWishlistToCart, handleRemoveFromWishlist),
+      openGiftCards: () => openGiftCardModal(state, () => updateGiftBalanceHeaderDisplay(state)),
+      toggleTheme: handleToggleTheme,
+    });
+  });
+
   // 11. Seller Marketplace
   injectSellerListings(state);
 
@@ -136,13 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // 13. Smart AI Live Support Chat
   import('./components/supportChat').then(({ initSupportChat }) => initSupportChat(state));
 
-  // 14. Return modal event listener
+  // 14. Social Proof Live Engine, Order Progression Simulator, Multiplayer & Radio Player
+  initSocialProof(state, handleProductClick);
+  startOrderProgression(state);
+  import('./components/multiplayerCart').then(({ initMultiplayer }) => initMultiplayer(state));
+  import('./components/shoppingRadio').then(({ initShoppingRadio }) => initShoppingRadio());
+
+  // 15. Return modal event listener
   document.addEventListener('openReturnModal', (e) => {
     const customEvent = e as CustomEvent;
     if (customEvent.detail?.order) openReturnModal(state, customEvent.detail.order);
   });
 
-  // 15. Subscribe to store events
+  // 16. Subscribe to store events
   on('products:render', doRenderProducts);
   on('cart:changed', () => {
     updateHeaderUI(state);
@@ -156,7 +188,242 @@ document.addEventListener('DOMContentLoaded', () => {
     updateHeaderUI(state);
   });
 
-  // 16. Wire Seller, Prime & Advanced feature nav buttons
+  // 17. Wire Seller, Prime & Advanced feature nav buttons
+  document.getElementById('shortsNavBtn')?.addEventListener('click', () => {
+    import('./components/videoShorts').then(({ openVideoShortsModal }) =>
+      openVideoShortsModal(state)
+    );
+  });
+  document.getElementById('partyNavBtn')?.addEventListener('click', () => {
+    import('./components/coBrowsingParty').then(({ openCoBrowsingPartyModal }) =>
+      openCoBrowsingPartyModal(state)
+    );
+  });
+  document.getElementById('agentNavBtn')?.addEventListener('click', () => {
+    import('./components/autonomousAgentModal').then(({ openAutonomousAgentModal }) =>
+      openAutonomousAgentModal(state)
+    );
+  });
+  document.getElementById('rocketNavBtn')?.addEventListener('click', () => {
+    import('./components/suborbitRocketModal').then(({ openSuborbitRocketModal }) =>
+      openSuborbitRocketModal()
+    );
+  });
+  document.getElementById('sleepNavBtn')?.addEventListener('click', () => {
+    import('./components/sleepErgoModal').then(({ openSleepErgoModal }) =>
+      openSleepErgoModal(state)
+    );
+  });
+  document.getElementById('merchantStakeNavBtn')?.addEventListener('click', () => {
+    import('./components/merchantLiquidityModal').then(({ openMerchantLiquidityModal }) =>
+      openMerchantLiquidityModal()
+    );
+  });
+  document.getElementById('geoNavBtn')?.addEventListener('click', () => {
+    import('./components/geothermalModal').then(({ openGeothermalModal }) =>
+      openGeothermalModal()
+    );
+  });
+  document.getElementById('audioHoloNavBtn')?.addEventListener('click', () => {
+    import('./components/neuralAcousticModal').then(({ openNeuralAcousticModal }) =>
+      openNeuralAcousticModal()
+    );
+  });
+  document.getElementById('freeportNavBtn')?.addEventListener('click', () => {
+    import('./components/freeportModal').then(({ openFreeportModal }) =>
+      openFreeportModal()
+    );
+  });
+  document.getElementById('hyperloopNavBtn')?.addEventListener('click', () => {
+    import('./components/hyperloopModal').then(({ openHyperloopModal }) =>
+      openHyperloopModal()
+    );
+  });
+  document.getElementById('stratoNavBtn')?.addEventListener('click', () => {
+    import('./components/stratosphereModal').then(({ openStratosphereModal }) =>
+      openStratosphereModal()
+    );
+  });
+  document.getElementById('lightfieldNavBtn')?.addEventListener('click', () => {
+    import('./components/lightfieldModal').then(({ openLightfieldModal }) =>
+      openLightfieldModal(state)
+    );
+  });
+  document.getElementById('emotionNavBtn')?.addEventListener('click', () => {
+    import('./components/facialEmotionModal').then(({ openFacialEmotionModal }) =>
+      openFacialEmotionModal()
+    );
+  });
+  document.getElementById('rollupNavBtn')?.addEventListener('click', () => {
+    import('./components/layer3RollupModal').then(({ openLayer3RollupModal }) =>
+      openLayer3RollupModal()
+    );
+  });
+  document.getElementById('maritimeNavBtn')?.addEventListener('click', () => {
+    import('./components/maritimeModal').then(({ openMaritimeModal }) =>
+      openMaritimeModal()
+    );
+  });
+  document.getElementById('qkdNavBtn')?.addEventListener('click', () => {
+    import('./components/qkdModal').then(({ openQKDModal }) =>
+      openQKDModal()
+    );
+  });
+  document.getElementById('roverNavBtn')?.addEventListener('click', () => {
+    import('./components/groundRoverModal').then(({ openGroundRoverModal }) =>
+      openGroundRoverModal()
+    );
+  });
+  document.getElementById('exoNavBtn')?.addEventListener('click', () => {
+    import('./components/exoskeletonModal').then(({ openExoskeletonModal }) =>
+      openExoskeletonModal()
+    );
+  });
+  document.getElementById('ramanNavBtn')?.addEventListener('click', () => {
+    import('./components/ramanSpectrometryModal').then(({ openRamanSpectrometryModal }) =>
+      openRamanSpectrometryModal()
+    );
+  });
+  document.getElementById('solarNavBtn')?.addEventListener('click', () => {
+    import('./components/solarGridModal').then(({ openSolarGridModal }) =>
+      openSolarGridModal()
+    );
+  });
+  document.getElementById('healNavBtn')?.addEventListener('click', () => {
+    import('./components/selfHealingWarrantyModal').then(({ openSelfHealingWarrantyModal }) =>
+      openSelfHealingWarrantyModal()
+    );
+  });
+  document.getElementById('scentNavBtn')?.addEventListener('click', () => {
+    import('./components/digitalOlfactionModal').then(({ openDigitalOlfactionModal }) =>
+      openDigitalOlfactionModal()
+    );
+  });
+  document.getElementById('bciNavBtn')?.addEventListener('click', () => {
+    import('./components/bciMindModal').then(({ openBCIMindModal }) =>
+      openBCIMindModal(state)
+    );
+  });
+  document.getElementById('vrNavBtn')?.addEventListener('click', () => {
+    import('./components/vrSpatialModal').then(({ openVRSpatialModal }) =>
+      openVRSpatialModal(state)
+    );
+  });
+  document.getElementById('lightningNavBtn')?.addEventListener('click', () => {
+    import('./components/lightningStreamModal').then(({ openLightningStreamModal }) =>
+      openLightningStreamModal()
+    );
+  });
+  document.getElementById('dnaNavBtn')?.addEventListener('click', () => {
+    import('./components/dnaNutritionModal').then(({ openDNANutritionModal }) =>
+      openDNANutritionModal(state)
+    );
+  });
+  document.getElementById('satNavBtn')?.addEventListener('click', () => {
+    import('./components/satelliteTrackingModal').then(({ openSatelliteTrackingModal }) =>
+      openSatelliteTrackingModal()
+    );
+  });
+  document.getElementById('eyeNavBtn')?.addEventListener('click', () => {
+    import('./components/eyeTrackingModal').then(({ openEyeTrackingModal }) =>
+      openEyeTrackingModal()
+    );
+  });
+  document.getElementById('zkNavBtn')?.addEventListener('click', () => {
+    import('./components/zkProofModal').then(({ openZKProofModal }) =>
+      openZKProofModal()
+    );
+  });
+  document.getElementById('multimodalNavBtn')?.addEventListener('click', () => {
+    import('./components/multimodalSearchModal').then(({ openMultimodalSearchModal }) =>
+      openMultimodalSearchModal(state)
+    );
+  });
+  document.getElementById('pqcNavBtn')?.addEventListener('click', () => {
+    import('./components/postQuantumModal').then(({ openPostQuantumModal }) =>
+      openPostQuantumModal()
+    );
+  });
+  document.getElementById('healthNavBtn')?.addEventListener('click', () => {
+    import('./components/healthErgoModal').then(({ openHealthErgoModal }) =>
+      openHealthErgoModal(state)
+    );
+  });
+  document.getElementById('droneNavBtn')?.addEventListener('click', () => {
+    import('./components/droneTrackerModal').then(({ openDroneTrackerModal }) =>
+      openDroneTrackerModal()
+    );
+  });
+  document.getElementById('pricingNavBtn')?.addEventListener('click', () => {
+    import('./components/dynamicPricingModal').then(({ openDynamicPricingModal }) =>
+      openDynamicPricingModal(state)
+    );
+  });
+  document.getElementById('mirrorNavBtn')?.addEventListener('click', () => {
+    import('./components/smartMirror').then(({ openSmartMirrorModal }) =>
+      openSmartMirrorModal(state)
+    );
+  });
+  document.getElementById('crdtNavBtn')?.addEventListener('click', () => {
+    import('./components/crdtSyncModal').then(({ openCrdtSyncModal }) =>
+      openCrdtSyncModal()
+    );
+  });
+  document.getElementById('barcodeNavBtn')?.addEventListener('click', () => {
+    import('./components/barcodeScannerModal').then(({ openBarcodeScannerModal }) =>
+      openBarcodeScannerModal(state)
+    );
+  });
+  document.getElementById('passkeyNavBtn')?.addEventListener('click', () => {
+    import('./components/passkeyModal').then(({ openPasskeyModal }) =>
+      openPasskeyModal()
+    );
+  });
+  document.getElementById('voicePersonasNavBtn')?.addEventListener('click', () => {
+    import('./components/voicePersonaModal').then(({ openVoicePersonaModal }) =>
+      openVoicePersonaModal()
+    );
+  });
+  document.getElementById('p2pNavBtn')?.addEventListener('click', () => {
+    import('./components/p2pReviewModal').then(({ openP2PReviewModal }) =>
+      openP2PReviewModal()
+    );
+  });
+  document.getElementById('smartHomeNavBtn')?.addEventListener('click', () => {
+    import('./components/smartHomePlanner').then(({ openSmartHomePlannerModal }) =>
+      openSmartHomePlannerModal(state)
+    );
+  });
+  document.getElementById('cryptoSwapNavBtn')?.addEventListener('click', () => {
+    import('./components/cryptoSwap').then(({ openCryptoSwapModal }) =>
+      openCryptoSwapModal(state)
+    );
+  });
+  document.getElementById('influencerNavBtn')?.addEventListener('click', () => {
+    import('./components/virtualInfluencer').then(({ openVirtualInfluencerModal }) =>
+      openVirtualInfluencerModal(state)
+    );
+  });
+  document.getElementById('guardNavBtn')?.addEventListener('click', () => {
+    import('./components/priceDropGuard').then(({ openPriceDropGuardModal }) =>
+      openPriceDropGuardModal(state)
+    );
+  });
+  document.getElementById('defiNavBtn')?.addEventListener('click', () => {
+    import('./components/defiCashback').then(({ openDeFiCashbackModal }) =>
+      openDeFiCashbackModal(state)
+    );
+  });
+  document.getElementById('roomAdvisorNavBtn')?.addEventListener('click', () => {
+    import('./components/roomAdvisor').then(({ openRoomAdvisorModal }) =>
+      openRoomAdvisorModal(state)
+    );
+  });
+  document.getElementById('multiplayerNavBtn')?.addEventListener('click', () => {
+    import('./components/multiplayerCart').then(({ openMultiplayerModal }) =>
+      openMultiplayerModal(state, handleAddToCart)
+    );
+  });
   document.getElementById('sellerNavBtn')?.addEventListener('click', () => {
     openSellerModal(state, () => {
       doRenderProducts();
@@ -235,7 +502,7 @@ function initHeroCarousel(): void {
           <img 
             src="${slide.image}" 
             class="carousel-img" 
-            alt="${slide.title}"
+            alt="${slide.title}" 
             ${idx !== 0 ? 'loading="lazy"' : ''}
             width="400" height="280"
           />
@@ -285,12 +552,14 @@ function initHeroCarousel(): void {
   }
 
   document.getElementById('heroNextBtn')?.addEventListener('click', () => {
+    playSound('click');
     stopAutoplay();
     showSlide(currentSlide + 1);
     startAutoplay();
   });
 
   document.getElementById('heroPrevBtn')?.addEventListener('click', () => {
+    playSound('click');
     stopAutoplay();
     showSlide(currentSlide - 1);
     startAutoplay();
@@ -298,6 +567,7 @@ function initHeroCarousel(): void {
 
   dots.forEach((dot, idx) => {
     dot.addEventListener('click', () => {
+      playSound('click');
       stopAutoplay();
       showSlide(idx);
       startAutoplay();
@@ -307,6 +577,7 @@ function initHeroCarousel(): void {
   // Slide CTA buttons
   container.querySelectorAll('.slide-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      playSound('click');
       const cat = btn.getAttribute('data-slide-cat') ?? 'all';
       state.filters.category = cat;
       triggerRenderProducts();
@@ -388,6 +659,7 @@ function renderQuickCards(): void {
 
   container.querySelectorAll('.quick-card-link').forEach(link => {
     link.addEventListener('click', () => {
+      playSound('click');
       const cat = link.getAttribute('data-cat')!;
       state.filters.category = cat;
       const catSelect = document.getElementById('searchCategorySelect') as HTMLSelectElement;
@@ -412,22 +684,14 @@ function handleProductClick(product: Product): void {
       openCheckoutModal(state, handleOrderPlaced);
     },
     (productId, newReview: Review) => {
-      const prod = state.products.find(p => p.id === productId);
-      if (prod) {
-        prod.customReviews = prod.customReviews ?? [];
-        prod.customReviews.unshift(newReview);
-        const customObj = JSON.parse(localStorage.getItem(KEYS.customReviews) ?? '{}') as Record<string, Review[]>;
-        customObj[productId] = prod.customReviews;
-        writeStorage(KEYS.customReviews, customObj);
-        doRenderProducts();
-      }
+      addProductReview(productId, newReview);
     },
     (productId, newQA: QAItem) => {
       const prod = state.products.find(p => p.id === productId);
       if (prod) {
         prod.qa = prod.qa ?? [];
         prod.qa.unshift(newQA);
-        const qaObj = JSON.parse(localStorage.getItem(KEYS.qa) ?? '{}') as Record<string, QAItem[]>;
+        const qaObj = readStorage<Record<string, QAItem[]>>(KEYS.qa, {});
         qaObj[productId] = prod.qa;
         writeStorage(KEYS.qa, qaObj);
         doRenderProducts();
@@ -448,6 +712,7 @@ function handleAddToCart(product: Product, qty = 1): void {
   saveCart();
   renderCartDrawer(state, handleCartUpdate, () => openCheckoutModal(state, handleOrderPlaced));
   toggleCartDrawer();
+  playSound('cart');
   showToast(`"${product.title}" zum Warenkorb hinzugefügt (${qty}×)`, 'cart');
 }
 
@@ -472,16 +737,14 @@ function handleOrderPlaced(order: import('./types').Order): void {
   showToast(`Bestellung #${order.id} erfolgreich aufgegeben! 🎉`, 'success');
 
   // Add notification
-  import('./components/notifications').then(({ addNotification }) => {
-    addNotification(state, {
-      type: 'order',
-      title: `Bestellung ${order.id} eingegangen`,
-      message: `Deine Bestellung über ${order.total.toFixed(2).replace('.', ',')}€ wird bearbeitet.`,
-      read: false,
-      createdAt: Date.now(),
-    });
-    updateNotificationBadge(state.notifications.filter(n => !n.read).length);
+  addNotification(state, {
+    type: 'order',
+    title: `Bestellung ${order.id} eingegangen`,
+    message: `Deine Bestellung über ${order.total.toFixed(2).replace('.', ',')}€ wird bearbeitet.`,
+    read: false,
+    createdAt: Date.now(),
   });
+  updateNotificationBadge(state.notifications.filter(n => !n.read).length);
 }
 
 function handleToggleTheme(): void {

@@ -25,6 +25,15 @@ export interface PriceHistoryEntry {
   price: number;
 }
 
+export interface ProductVariant {
+  id: string;
+  name: string;
+  type: 'color' | 'storage' | 'size';
+  priceModifier?: number;
+  colorCode?: string;
+  image?: string;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -48,6 +57,8 @@ export interface Product {
   description: string;
   features?: string[];
   specs?: Record<string, string>;
+  variants?: ProductVariant[];
+  selectedVariant?: ProductVariant;
   reviews?: Review[];
   customReviews?: Review[];
   qa?: QAItem[];
@@ -84,6 +95,15 @@ export interface ShippingAddress {
   country: string;
 }
 
+// ----- Gift Options ------------------------------------------
+export interface GiftOptions {
+  isGift: boolean;
+  wrapType?: 'none' | 'classic' | 'premium' | 'eco';
+  greetingMessage?: string;
+  senderName?: string;
+  hidePricesOnSlip?: boolean;
+}
+
 export interface Order {
   id: string;
   items: OrderItem[];
@@ -96,6 +116,11 @@ export interface Order {
   trackingNumber?: string;
   isReturnable?: boolean;
   returnedAt?: number;
+  giftOptions?: GiftOptions;
+  invoiceNumber?: string;
+  subtotal?: number;
+  taxAmount?: number;
+  discountAmount?: number;
 }
 
 // ----- Coupon ------------------------------------------------
@@ -111,7 +136,7 @@ export interface Coupon {
 }
 
 // ----- Notification ------------------------------------------
-export type NotificationType = 'order' | 'deal' | 'price_alert' | 'system' | 'return';
+export type NotificationType = 'order' | 'deal' | 'price_alert' | 'system' | 'return' | 'subscription';
 
 export interface Notification {
   id: string;
@@ -140,9 +165,44 @@ export interface UserProfile {
 export interface PriceAlert {
   id: string;
   productId: string;
+  productTitle?: string;
+  productImage?: string;
+  originalPrice: number;
   targetPrice: number;
   createdAt: number;
   triggered: boolean;
+}
+
+// ----- Subscribe & Save --------------------------------------
+export interface Subscription {
+  id: string;
+  productId: string;
+  productTitle: string;
+  productImage: string;
+  originalPrice: number;
+  discountedPrice: number;
+  discountPercent: number;
+  intervalMonths: number; // 1, 2, 3, 6
+  nextDeliveryDate: string;
+  status: 'active' | 'paused' | 'cancelled';
+  createdAt: number;
+  shippingAddress: ShippingAddress;
+  paymentMethod: string;
+}
+
+// ----- Save For Later ----------------------------------------
+export interface SavedForLaterItem {
+  product: Product;
+  savedAt: number;
+}
+
+// ----- Wishlist Group (Multi-Wishlists) -----------------------
+export interface WishlistGroup {
+  id: string;
+  title: string;
+  isDefault?: boolean;
+  items: Product[];
+  createdAt: number;
 }
 
 // ----- User Balance (Gift Cards) ----------------------------
@@ -199,6 +259,9 @@ export interface AppState {
   cart: CartItem[];
   orders: Order[];
   wishlist: Product[];
+  wishlistGroups?: WishlistGroup[];
+  savedForLater?: SavedForLaterItem[];
+  subscriptions?: Subscription[];
   compareList: Product[];
   recentlyViewed: Product[];
   activeCoupons: Coupon[];
@@ -218,6 +281,10 @@ export interface AppState {
 export type StoreEvent =
   | 'cart:changed'
   | 'wishlist:changed'
+  | 'wishlistGroups:changed'
+  | 'savedForLater:changed'
+  | 'subscriptions:changed'
+  | 'priceAlerts:changed'
   | 'orders:changed'
   | 'compare:changed'
   | 'filters:changed'
@@ -228,3 +295,4 @@ export type StoreEvent =
   | 'products:render';
 
 export type EventCallback<T = unknown> = (data?: T) => void;
+

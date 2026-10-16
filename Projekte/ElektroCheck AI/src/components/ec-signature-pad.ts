@@ -157,6 +157,8 @@ export class EcSignaturePad extends LitElement {
             ? html`<div class="canvas-placeholder">Hier unterschreiben</div>`
             : ""}
           <canvas
+            role="img"
+            aria-label="Unterschriftenfeld: mit Finger oder Stift unterschreiben"
             @pointerdown="${this._handlePointerDown}"
             @pointermove="${this._handlePointerMove}"
             @pointerup="${this._handlePointerUp}"

@@ -1,7 +1,11 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
+#ifndef GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_NONE
+#endif
 #include <GLFW/glfw3.h>
+#include <string>
 #include <unordered_map>
 
 namespace Minecraft {
@@ -20,6 +24,9 @@ public:
     static void resetScroll() { s_ScrollY = 0.0; }
     static void updateMouseDelta();
 
+    // Characters typed since the last call (UTF-32 code points limited to printable ASCII), e.g. for text fields.
+    static std::string consumeTypedChars();
+
 private:
     static GLFWwindow* s_Window;
     static double s_MouseX;
@@ -30,11 +37,13 @@ private:
     static double s_MouseDY;
     static double s_ScrollY;
     static bool s_FirstMouse;
+    static std::string s_TypedChars;
 
     static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
     static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+    static void charCallback(GLFWwindow* window, unsigned int codepoint);
 };
 
-}
+} // namespace Minecraft
 
 #endif // INPUT_HPP

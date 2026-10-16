@@ -1,6 +1,7 @@
 #include "TimeManager.hpp"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
 
 namespace Minecraft {
 
@@ -80,4 +81,4 @@ float TimeManager::getAmbientLight() const {
     }
 }
 
-}
+} // namespace Minecraft

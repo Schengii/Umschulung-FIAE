@@ -37,10 +37,17 @@ export const SM2_SAMPLE_CARDS = [
 ];
 
 export default function Sm2SpacedRepetitionLab() {
-  const { awardXP } = useStore();
-  const [cards, setCards] = useState(SM2_SAMPLE_CARDS);
+  const { userState, updateSrsCard, awardXP } = useStore();
+  const [cards, setCards] = useState(() => {
+    const srsData = userState?.srsFlashcards || {};
+    return SM2_SAMPLE_CARDS.map(c => {
+      const srs = srsData[`sm2_${c.id}`];
+      return srs ? { ...c, ...srs } : c;
+    });
+  });
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [reviewedCards, setReviewedCards] = useState(new Set());
 
   const currentCard = cards[currentIdx] || cards[0];
 
@@ -50,6 +57,7 @@ export default function Sm2SpacedRepetitionLab() {
   }, [currentCard]);
 
   const handleRateCard = (grade) => {
+    const cardId = `sm2_${currentCard.id}`;
     const updated = calculateSm2NextReview({
       grade,
       repetitions: currentCard.repetitions,
@@ -61,7 +69,15 @@ export default function Sm2SpacedRepetitionLab() {
     setCards(nextCards);
     setIsFlipped(false);
     setCurrentIdx((currentIdx + 1) % cards.length);
-    awardXP(20, 'sm2_reviewed');
+
+    // Sync mit zentralem Zustand
+    updateSrsCard(cardId, updated);
+
+    // Endlos-XP deckeln: XP nur einmalig pro Karte und Sitzung vergeben
+    if (!reviewedCards.has(cardId)) {
+      setReviewedCards(prev => new Set(prev).add(cardId));
+      awardXP(20, 'sm2_reviewed');
+    }
   };
 
   const [pushEnabled, setPushEnabled] = useState(false);

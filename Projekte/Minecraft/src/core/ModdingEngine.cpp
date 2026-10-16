@@ -1,4 +1,5 @@
 #include "ModdingEngine.hpp"
+
 #include <iostream>
 #include <sstream>
 
@@ -15,14 +16,16 @@ void ModdingEngine::clear() {
 }
 
 bool ModdingEngine::registerBlock(const CustomBlockDef& def) {
-    if (def.id.empty()) return false;
+    if (def.id.empty())
+        return false;
     m_CustomBlocks[def.id] = def;
     std::cout << "[ModdingEngine] Registered Custom Block: " << def.name << " (" << def.id << ")" << std::endl;
     return true;
 }
 
 bool ModdingEngine::registerRecipe(const CustomRecipeDef& def) {
-    if (def.resultId.empty()) return false;
+    if (def.resultId.empty())
+        return false;
     m_CustomRecipes.push_back(def);
     std::cout << "[ModdingEngine] Registered Custom Recipe -> " << def.resultId << " x" << def.resultCount << std::endl;
     return true;
@@ -38,10 +41,12 @@ const CustomBlockDef* ModdingEngine::getBlockDef(const std::string& id) const {
 
 bool ModdingEngine::loadModManifest(const std::string& manifestJSON) {
     // Lightweight parser for simple key-value block registration
-    if (manifestJSON.empty()) return false;
+    if (manifestJSON.empty())
+        return false;
 
     // Simple JSON property inspection
-    if (manifestJSON.find("\"type\": \"block\"") != std::string::npos || manifestJSON.find("\"type\":\"block\"") != std::string::npos) {
+    if (manifestJSON.find("\"type\": \"block\"") != std::string::npos ||
+        manifestJSON.find("\"type\":\"block\"") != std::string::npos) {
         CustomBlockDef def;
         def.id = "modded_block";
         def.name = "Modded Block";
@@ -53,4 +58,4 @@ bool ModdingEngine::loadModManifest(const std::string& manifestJSON) {
     return true;
 }
 
-}
+} // namespace Minecraft

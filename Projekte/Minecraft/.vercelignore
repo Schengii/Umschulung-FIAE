@@ -1,0 +1,33 @@
+# Ignore C++ Engine build directories and binaries
+build/
+build_msvc/
+bin/
+out/
+dist/
+CMakeFiles/
+*.exe
+*.obj
+*.o
+*.a
+*.lib
+*.dll
+*.pdb
+*.ilk
+
+# Save files and compilation cache
+world_saves/
+compile_commands.json
+compile_flags.txt
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# IDEs & Agents
+.idea/
+.vs/
+.vscode/
+.claude/
+.gemini/
+.git/

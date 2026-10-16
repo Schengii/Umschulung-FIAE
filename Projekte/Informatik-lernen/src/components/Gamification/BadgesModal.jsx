@@ -1,39 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BADGES } from '../../utils/storage';
 import { Trophy, X } from 'lucide-react';
 
-export default function BadgesModal({ isOpen, onClose, userState }) {
+export default function BadgesModal({ isOpen, onClose, userState = {} }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(5, 8, 14, 0.85)',
-      backdropFilter: 'blur(12px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000,
-      padding: '20px'
-    }}>
-      <div style={{
-        maxWidth: '700px',
-        width: '100%',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        background: 'var(--bg-secondary)',
-        border: '1px solid var(--border-highlight)',
-        borderRadius: 'var(--radius-xl)',
-        padding: '32px',
-        position: 'relative'
-      }}>
+    <div 
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(5, 8, 14, 0.85)',
+        backdropFilter: 'blur(12px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2000,
+        padding: '20px'
+      }}
+    >
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="badges-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: '700px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--border-highlight)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '32px',
+          position: 'relative'
+        }}
+      >
         
         <button
           onClick={onClose}
+          aria-label="Schließen"
           style={{
             position: 'absolute',
             top: '20px',
@@ -55,16 +76,16 @@ export default function BadgesModal({ isOpen, onClose, userState }) {
 
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <Trophy size={48} color="var(--accent-amber)" style={{ margin: '0 auto 12px auto' }} />
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Deine Entwickler-Erfolge</h2>
+          <h2 id="badges-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800' }}>Deine Entwickler-Erfolge</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem' }}>
-            Gesammelte XP: <strong style={{ color: 'var(--accent-amber)' }}>{userState.xp} XP</strong> | Aktuelles Level: <strong style={{ color: 'var(--accent-cyan)' }}>Level {userState.level}</strong>
+            Gesammelte XP: <strong style={{ color: 'var(--accent-amber)' }}>{userState?.xp || 0} XP</strong> | Aktuelles Level: <strong style={{ color: 'var(--accent-cyan)' }}>Level {userState?.level || 1}</strong>
           </p>
         </div>
 
         {/* Badges Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
           {BADGES.map(badge => {
-            const isUnlocked = userState.unlockedBadges.includes(badge.id) || userState.xp > 100;
+            const isUnlocked = Array.isArray(userState?.unlockedBadges) && userState.unlockedBadges.includes(badge.id);
 
             return (
               <div

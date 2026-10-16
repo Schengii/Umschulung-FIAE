@@ -4,6 +4,7 @@
 import type { AppState, Product, Filters } from '../types';
 import { formatPrice, renderStars, formatDiscount } from '../utils/formatters';
 import { CATEGORIES } from '../data/heroSlides';
+import { fuzzySearchProducts } from '../utils/fuzzySearch';
 
 interface CatalogCallbacks {
   onProductClick: (product: Product) => void;
@@ -236,7 +237,32 @@ export function renderProducts(state: AppState): void {
   const resultCount = document.getElementById('resultCount');
   if (!grid) return;
 
-  const filtered = filterProducts(state);
+  const { results: filtered, didYouMean } = filterProductsWithFuzzy(state);
+
+  // Did-You-Mean banner handling
+  let didYouMeanEl = document.getElementById('didYouMeanBanner');
+  if (didYouMean && state.filters.searchQuery) {
+    if (!didYouMeanEl) {
+      didYouMeanEl = document.createElement('div');
+      didYouMeanEl.id = 'didYouMeanBanner';
+      didYouMeanEl.className = 'did-you-mean-banner';
+      grid.parentElement?.insertBefore(didYouMeanEl, grid);
+    }
+    didYouMeanEl.innerHTML = `
+      <span>💡 Meintest du vielleicht: </span>
+      <button class="did-you-mean-link" id="acceptDidYouMeanBtn">${didYouMean}</button>?
+    `;
+    didYouMeanEl.classList.remove('hidden');
+
+    document.getElementById('acceptDidYouMeanBtn')?.addEventListener('click', () => {
+      state.filters.searchQuery = didYouMean;
+      const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+      if (searchInput) searchInput.value = didYouMean;
+      renderProducts(state);
+    });
+  } else if (didYouMeanEl) {
+    didYouMeanEl.classList.add('hidden');
+  }
 
   // Show/hide no results
   if (noResults) noResults.classList.toggle('hidden', filtered.length > 0);
@@ -363,18 +389,15 @@ function renderProductCard(product: Product, state: AppState): string {
   `;
 }
 
-export function filterProducts(state: AppState): Product[] {
+export function filterProductsWithFuzzy(state: AppState): { results: Product[]; didYouMean?: string } {
   let { products, filters } = state;
+  let didYouMean: string | undefined;
 
-  // Search
+  // Typo-tolerant Fuzzy Search
   if (filters.searchQuery) {
-    const q = filters.searchQuery.toLowerCase();
-    products = products.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q) ||
-      p.tags?.some(t => t.toLowerCase().includes(q))
-    );
+    const searchRes = fuzzySearchProducts(filters.searchQuery, products);
+    products = searchRes.results;
+    didYouMean = searchRes.didYouMean;
   }
 
   // Category
@@ -433,5 +456,9 @@ export function filterProducts(state: AppState): Product[] {
       break;
   }
 
-  return products;
+  return { results: products, didYouMean };
+}
+
+export function filterProducts(state: AppState): Product[] {
+  return filterProductsWithFuzzy(state).results;
 }

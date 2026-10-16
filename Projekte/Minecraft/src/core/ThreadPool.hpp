@@ -1,15 +1,15 @@
 #ifndef THREAD_POOL_HPP
 #define THREAD_POOL_HPP
 
-#include <vector>
-#include <queue>
-#include <thread>
-#include <mutex>
+#include <atomic>
 #include <condition_variable>
 #include <functional>
 #include <future>
-#include <atomic>
+#include <mutex>
+#include <queue>
 #include <stdexcept>
+#include <thread>
+#include <vector>
 
 namespace Minecraft {
 
@@ -18,15 +18,13 @@ public:
     explicit ThreadPool(size_t threads = std::thread::hardware_concurrency());
     ~ThreadPool();
 
-    template<class F, class... Args>
-    auto enqueue(F&& f, Args&&... args) 
-        -> std::future<typename std::invoke_result<F, Args...>::type> {
+    template <class F, class... Args>
+    auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type> {
         using return_type = typename std::invoke_result<F, Args...>::type;
 
         auto task = std::make_shared<std::packaged_task<return_type()>>(
-            std::bind(std::forward<F>(f), std::forward<Args>(args)...)
-        );
-        
+            std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+
         std::future<return_type> res = task->get_future();
         {
             std::unique_lock<std::mutex> lock(m_QueueMutex);
@@ -44,12 +42,12 @@ public:
 private:
     std::vector<std::thread> m_Workers;
     std::queue<std::function<void()>> m_Tasks;
-    
+
     mutable std::mutex m_QueueMutex;
     std::condition_variable m_Condition;
     std::atomic<bool> m_Stop{false};
 };
 
-}
+} // namespace Minecraft
 
 #endif // THREAD_POOL_HPP

@@ -38,3 +38,6 @@ playwright/.cache
 
 # Lokale Claude-Code-Einstellungen
 .claude/settings.local.json
+
+# Temporary reports
+tmp/

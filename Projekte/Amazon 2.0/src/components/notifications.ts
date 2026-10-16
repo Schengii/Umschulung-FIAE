@@ -96,6 +96,7 @@ const TYPE_ICONS: Record<NotificationType, string> = {
   price_alert: '📉',
   system: '🔔',
   return: '↩',
+  subscription: '📦',
 };
 
 function renderNotification(n: Notification): string {

@@ -3,9 +3,10 @@
 
 #include "Block.hpp"
 #include "ChunkMesh.hpp"
+
+#include <glm/glm.hpp>
 #include <memory>
 #include <vector>
-#include <glm/glm.hpp>
 
 namespace Minecraft {
 
@@ -47,6 +48,6 @@ private:
     std::unique_ptr<MeshData> m_PendingMeshData;
 };
 
-}
+} // namespace Minecraft
 
 #endif // CHUNKSECTION_HPP

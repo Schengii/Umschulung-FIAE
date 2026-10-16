@@ -12,8 +12,8 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
   const [scoreData, setScoreData] = useState(null);
   
   // Real-time Exam Timer (90 or 15 mins)
-  const [timeLeft, setTimeLeft] = useState(90 * 60);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(() => (IHK_EXAM_MODES[0]?.durationMinutes || 90) * 60);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
 
   const currentMode = IHK_EXAM_MODES.find(m => m.id === activeModeId) || IHK_EXAM_MODES[0];
   
@@ -83,15 +83,17 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
     }
   }, [filteredQuestions, selectedAnswers, onCompleteExam, onRecordResults]);
 
-  useEffect(() => {
-    setTimeLeft(currentMode.durationMinutes * 60);
+  const handleSelectMode = (modeId) => {
+    setActiveModeId(modeId);
+    const mode = IHK_EXAM_MODES.find(m => m.id === modeId) || IHK_EXAM_MODES[0];
+    setTimeLeft(mode.durationMinutes * 60);
     setIsTimerRunning(true);
     setSelectedAnswers({});
     setBookmarkedQuestions({});
     setQuestionFilter('all');
     setIsSubmitted(false);
     setScoreData(null);
-  }, [activeModeId, currentMode.durationMinutes]);
+  };
 
   useEffect(() => {
     let interval = null;
@@ -152,7 +154,7 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
             {IHK_EXAM_MODES.map(mode => (
               <button
                 key={mode.id}
-                onClick={() => setActiveModeId(mode.id)}
+                onClick={() => handleSelectMode(mode.id)}
                 style={{
                   padding: '6px 14px',
                   borderRadius: '20px',

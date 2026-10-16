@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Calendar, Target, Clock, ChevronRight, Zap, Activity } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateExamReadiness } from '../../utils/examReadinessEngine';
@@ -20,6 +20,16 @@ function nextPresetIsoDate(preset) {
   return target.toISOString().slice(0, 10);
 }
 
+function calculateDaysRemaining(targetDateStr) {
+  if (!targetDateStr) return null;
+  const target = new Date(targetDateStr);
+  const now = new Date();
+  target.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
+  const diffMs = target.getTime() - now.getTime();
+  return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+}
+
 export default function ExamCountdownWidget({ setActiveTab }) {
   const { userState, setUserState } = useStore();
   const [targetDateStr, setTargetDateStr] = useState(() => {
@@ -29,22 +39,7 @@ export default function ExamCountdownWidget({ setActiveTab }) {
     return userState.examTargetType || 'ap2';
   });
 
-  const [daysRemaining, setDaysRemaining] = useState(null);
-
-  useEffect(() => {
-    if (!targetDateStr) {
-      setDaysRemaining(null);
-      return;
-    }
-    const target = new Date(targetDateStr);
-    const now = new Date();
-    // Zeitanteil normalisieren
-    target.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    const diffMs = target.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    setDaysRemaining(diffDays);
-  }, [targetDateStr]);
+  const daysRemaining = useMemo(() => calculateDaysRemaining(targetDateStr), [targetDateStr]);
 
   const handleSaveDate = (newDateStr, newType = examType) => {
     setTargetDateStr(newDateStr);

@@ -2,9 +2,10 @@
 #define CROPSENGINE_HPP
 
 #include "Block.hpp"
-#include <unordered_map>
+
 #include <cstdint>
 #include <glm/glm.hpp>
+#include <unordered_map>
 
 namespace Minecraft {
 
@@ -31,12 +32,11 @@ public:
 private:
     static std::unordered_map<int64_t, CropState> s_Crops;
     static int64_t posKey(int x, int y, int z) {
-        return (static_cast<int64_t>(x) & 0x3FFFFFF) |
-               ((static_cast<int64_t>(z) & 0x3FFFFFF) << 26) |
+        return (static_cast<int64_t>(x) & 0x3FFFFFF) | ((static_cast<int64_t>(z) & 0x3FFFFFF) << 26) |
                ((static_cast<int64_t>(y) & 0xFFF) << 52);
     }
 };
 
-}
+} // namespace Minecraft
 
 #endif // CROPSENGINE_HPP

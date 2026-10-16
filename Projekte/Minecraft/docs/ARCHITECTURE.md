@@ -88,7 +88,8 @@ Die Engine ist in eigenständige, lose gekoppelte Subsysteme unterteilt:
 - **`LightEngine`**: 3D BFS-Algorithmus zur Berechnung von Sonnenlicht, Blocklicht und **Chunk-übergreifender Licht-Propagation**.
 - **`RedstoneEngine`**: Zellularer Automat für Signalfortpflanzung (0–15), Fackeln, Hebel, Repeater-Verzögerung sowie **Piston-/Sticky-Piston-Blockverschiebung** (bis zu 12 Blöcke).
 - **`FluidEngine`**: Zellularer Automat für Wasser- und Lava-Ausbreitung.
-- **`RegionFile` (`.mca`)**: Anvil Region-Dateiformat (32x32 Chunks pro Region) für Binär-Disk-I/O.
+- **`RegionFile` (`.mca`)**: Anvil Region-Dateiformat (32x32 Chunks pro Region) für Binär-Disk-I/O. Zugriffe laufen über den mutex-geschützten `RegionManager`; Sektoren werden beim Überschreiben wiederverwendet.
+- **`GameSave`**: `game.dat` mit Spieler, Tageszeit, Inventar, Kisten und Öfen (atomares Schreiben).
 
 ### ECS & Mob Subsystem (`src/ecs/`)
 - **`MobEngine`**: 
@@ -105,14 +106,14 @@ Die Engine ist in eigenständige, lose gekoppelte Subsysteme unterteilt:
 - **`PlayerStats`**: Verwaltet Gesundheit, Hunger, Rüstung sowie **aktive Trank-Statuseffekte**.
 
 ### Audio & Netzwerk (`src/audio/`, `src/net/`)
-- **`AudioManager`**: Materialabhängige Schrittgeräusche (Gras, Stein, Holz, Sand, Wasser) und 3D Spatial Audio mit Entfernungs-Dämpfung.
-- **`NetworkManager`**: Nicht-blockierende UDP-Sockets (Winsock2 / POSIX) mit binärer Paket-Serialisierung für Multiplayer.
+- **`AudioManager`**: Materialabhängige Schrittgeräusche, Blockabbau-Effekte und 3D-Spatial-Audio. Die Ausgabe erfolgt über die plattformübergreifende `miniaudio`-Integration (`AudioDevice.cpp`), die synthetisierte PCM-Wellenformen (`SoundSynth.cpp`) in Echtzeit streamt und mischt.
+- **`NetworkManager`**: Nicht-blockierende UDP-Sockets (`ws2_32` unter Windows, POSIX-Sockets unter Unix). Das Protokoll arbeitet mit kryptografischen 64-Bit Session-Tokens aus OS-Entropie, sequenzierten Paket-Headern zur Replay-Abwehr, Positions-Dead-Reckoning-Interpolation und Client-Side-Prediction sowie synchronem Main-Thread-Packet-Dispatching.
 
 ---
 
 ## 3. Test-Suite & Verifikation
 
-Das Projekt verfügt über **56 automatisierte Unit-Tests** in `TestEngine.exe`, die 100% der Engine-Funktionen abdecken:
+`TestEngine.exe` enthält **111 automatisierte Tests** (`ctest` führt sie aus; `TestEngine.exe <Filter>` startet nur passende Tests). `assert` ist in allen Build-Typen aktiv und ein fehlgeschlagener Check bricht nur den jeweiligen Test ab. Tests 91–111 decken die Kernsysteme ab (Kamera, thread-sichere Region-Dateien, Dirty-Save, Seeds, Nachbar-Chunks beim Meshing, Bäume über Chunkgrenzen, Welt-/Spielstand-Persistenz, Werkzeug-Härte, Netzwerk-Validierung, Audio-Queue). Die älteren Beschreibungen unten stammen aus der ersten Ausbaustufe:
 - Tests 1–15: Redstone, Fluide, Werkzeuge, Explosionen, Nether, Mobs, Hunger, Kisten & Öfen.
 - Tests 16–30: RegionFile-Streaming, Licht-BFS, Greedy Meshing, Tränke, Village, Farming, Fahrzeuge, Vertex AO.
 - Tests 31–45: Pistone, Repeater, A* Wegfindung, Spatial Audio, Modding Engine, Nether-Biome, Post-Processing.

@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shield, FileText, ExternalLink, X, Heart, Code2, HelpCircle, GitBranch } from 'lucide-react';
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 export default function DsgvoFooterModal() {
   const [activeModal, setActiveModal] = useState(null); // 'datenschutz' | 'impressum' | 'dsgvo' | 'faq' | null
+
+  useEffect(() => {
+    if (!activeModal) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveModal(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal]);
 
   return (
     <footer
@@ -165,7 +178,7 @@ export default function DsgvoFooterModal() {
           }}
         >
           <div>
-            © {new Date().getFullYear()} <strong>IT-DevGame</strong> • Entwickelt mit <Heart size={13} style={{ color: 'var(--accent-rose)', display: 'inline', verticalAlign: 'middle' }} /> für IT-Begeisterte &amp; Prüflinge.
+            © {CURRENT_YEAR} <strong>IT-DevGame</strong> • Entwickelt mit <Heart size={13} style={{ color: 'var(--accent-rose)', display: 'inline', verticalAlign: 'middle' }} /> für IT-Begeisterte &amp; Prüflinge.
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
@@ -220,6 +233,9 @@ export default function DsgvoFooterModal() {
           onClick={() => setActiveModal(null)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dsgvo-footer-modal-title"
             className="glass-panel animate-fade-in"
             style={{
               background: 'var(--bg-card)',
@@ -246,7 +262,7 @@ export default function DsgvoFooterModal() {
 
             {activeModal === 'barrierefreiheit' && (
               <div>
-                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
+                <h2 id="dsgvo-footer-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
                   <Shield style={{ color: 'var(--accent-primary)' }} /> Barrierefreiheit &amp; Inklusion (WCAG 2.1 AAA)
                 </h2>
                 <div style={{ lineHeight: '1.7', fontSize: '0.9rem' }}>
@@ -271,7 +287,7 @@ export default function DsgvoFooterModal() {
 
             {activeModal === 'dsgvo' && (
               <div>
-                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
+                <h2 id="dsgvo-footer-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
                   <Shield style={{ color: 'var(--accent-teal)' }} /> DSGVO &amp; Datenschutzerklärung
                 </h2>
                 <div style={{ lineHeight: '1.7', fontSize: '0.9rem' }}>
@@ -293,7 +309,7 @@ export default function DsgvoFooterModal() {
 
             {activeModal === 'impressum' && (
               <div>
-                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
+                <h2 id="dsgvo-footer-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
                   <FileText style={{ color: 'var(--accent-primary)' }} /> Impressum &amp; Rechtliche Hinweise
                 </h2>
                 <div style={{ lineHeight: '1.7', fontSize: '0.9rem' }}>
@@ -314,7 +330,7 @@ export default function DsgvoFooterModal() {
 
             {activeModal === 'faq' && (
               <div>
-                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
+                <h2 id="dsgvo-footer-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', color: 'var(--text-main)', fontSize: '1.4rem' }}>
                   <HelpCircle style={{ color: 'var(--accent-amber)' }} /> Häufig gestellte Fragen (FAQ)
                 </h2>
                 <div style={{ lineHeight: '1.7', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '14px' }}>

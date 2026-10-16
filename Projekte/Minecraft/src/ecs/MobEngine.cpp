@@ -1,12 +1,14 @@
 #include "MobEngine.hpp"
-#include "ItemEntity.hpp"
-#include "../world/World.hpp"
-#include "../world/ExplosionEngine.hpp"
-#include "../physics/PhysicsEngine.hpp"
+
 #include "../audio/AudioManager.hpp"
+#include "../physics/PhysicsEngine.hpp"
+#include "../world/ExplosionEngine.hpp"
+#include "../world/World.hpp"
+#include "ItemEntity.hpp"
+
+#include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <algorithm>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
@@ -26,21 +28,49 @@ void MobEngine::spawnMob(MobType type, const glm::vec3& position) {
     Mob mob;
     mob.type = type;
     mob.position = position;
-    if (type == MobType::Zombie) mob.health = 20.0f;
-    else if (type == MobType::Skeleton) mob.health = 20.0f;
-    else if (type == MobType::Creeper) mob.health = 20.0f;
-    else if (type == MobType::EnderDragon) mob.health = 200.0f;
-    else if (type == MobType::Wither) mob.health = 300.0f;
-    else if (type == MobType::IronGolem) mob.health = 100.0f;
-    else if (type == MobType::Villager) mob.health = 20.0f;
-    else mob.health = 10.0f; // Pig / Cow
+    if (type == MobType::Zombie)
+        mob.health = 20.0f;
+    else if (type == MobType::Skeleton)
+        mob.health = 20.0f;
+    else if (type == MobType::Creeper)
+        mob.health = 20.0f;
+    else if (type == MobType::EnderDragon)
+        mob.health = 200.0f;
+    else if (type == MobType::Wither)
+        mob.health = 300.0f;
+    else if (type == MobType::IronGolem)
+        mob.health = 100.0f;
+    else if (type == MobType::Villager)
+        mob.health = 20.0f;
+    else
+        mob.health = 10.0f; // Pig / Cow
     mob.maxHealth = mob.health;
     m_Mobs.push_back(mob);
 }
 
-std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& start, const glm::ivec3& target, int maxSteps) {
+bool MobEngine::restoreMob(MobType type, const glm::vec3& position, float health, float maxHealth, float yaw, float age,
+                           bool saddled) {
+    if (static_cast<int>(type) < 0 || static_cast<int>(type) > static_cast<int>(MobType::Wither))
+        return false;
+    if (!std::isfinite(position.x) || !std::isfinite(position.y) || !std::isfinite(position.z))
+        return false;
+    if (!(health > 0.0f) || !(maxHealth >= health) || !std::isfinite(yaw) || !std::isfinite(age))
+        return false;
+    spawnMob(type, position);
+    Mob& mob = m_Mobs.back();
+    mob.health = health;
+    mob.maxHealth = maxHealth;
+    mob.yaw = yaw;
+    mob.age = age;
+    mob.isSaddled = saddled;
+    return true;
+}
+
+std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& start, const glm::ivec3& target,
+                                             int maxSteps) {
     std::deque<glm::ivec3> path;
-    if (start == target) return path;
+    if (start == target)
+        return path;
 
     struct Node {
         glm::ivec3 pos;
@@ -53,8 +83,7 @@ std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& sta
     std::priority_queue<Node, std::vector<Node>, decltype(comp)> openSet(comp);
 
     auto hashPos = [](const glm::ivec3& v) -> int64_t {
-        return (static_cast<int64_t>(v.x) & 0x3FFFFFF) |
-               ((static_cast<int64_t>(v.z) & 0x3FFFFFF) << 26) |
+        return (static_cast<int64_t>(v.x) & 0x3FFFFFF) | ((static_cast<int64_t>(v.z) & 0x3FFFFFF) << 26) |
                ((static_cast<int64_t>(v.y) & 0xFFF) << 52);
     };
 
@@ -63,12 +92,12 @@ std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& sta
 
     int64_t startKey = hashPos(start);
     gScore[startKey] = 0.0f;
-    openSet.push({ start, 0.0f, glm::distance(glm::vec3(start), glm::vec3(target)) });
+    openSet.push({start, 0.0f, glm::distance(glm::vec3(start), glm::vec3(target))});
 
     glm::ivec3 neighborDeltas[10] = {
-        {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1},       // Cardinal
-        {1, 1, 0}, {-1, 1, 0}, {0, 1, 1}, {0, 1, -1},       // Step-up jump
-        {0, -1, 0}, {0, -2, 0}                               // Step-down drop
+        {1, 0, 0},  {-1, 0, 0}, {0, 0, 1}, {0, 0, -1}, // Cardinal
+        {1, 1, 0},  {-1, 1, 0}, {0, 1, 1}, {0, 1, -1}, // Step-up jump
+        {0, -1, 0}, {0, -2, 0}                         // Step-down drop
     };
 
     int steps = 0;
@@ -95,15 +124,18 @@ std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& sta
 
         for (const auto& delta : neighborDeltas) {
             glm::ivec3 neighbor = current.pos + delta;
-            if (neighbor.y < 0 || neighbor.y >= CHUNK_SIZE_Y) continue;
+            if (neighbor.y < 0 || neighbor.y >= CHUNK_SIZE_Y)
+                continue;
 
             // Check if foot is non-solid and head is non-solid, and block below foot is solid
             BlockType footBlock = world.getBlock(neighbor.x, neighbor.y, neighbor.z);
             BlockType headBlock = world.getBlock(neighbor.x, neighbor.y + 1, neighbor.z);
             BlockType groundBlock = world.getBlock(neighbor.x, neighbor.y - 1, neighbor.z);
 
-            if (BlockData::isSolid(footBlock) || BlockData::isSolid(headBlock)) continue;
-            if (!BlockData::isSolid(groundBlock)) continue;
+            if (BlockData::isSolid(footBlock) || BlockData::isSolid(headBlock))
+                continue;
+            if (!BlockData::isSolid(groundBlock))
+                continue;
 
             float tentativeG = current.gCost + glm::distance(glm::vec3(current.pos), glm::vec3(neighbor));
             int64_t nKey = hashPos(neighbor);
@@ -111,7 +143,7 @@ std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& sta
             if (gScore.find(nKey) == gScore.end() || tentativeG < gScore[nKey]) {
                 gScore[nKey] = tentativeG;
                 cameFrom[nKey] = current.pos;
-                openSet.push({ neighbor, tentativeG, glm::distance(glm::vec3(neighbor), glm::vec3(target)) });
+                openSet.push({neighbor, tentativeG, glm::distance(glm::vec3(neighbor), glm::vec3(target))});
             }
         }
     }
@@ -129,14 +161,16 @@ std::deque<glm::ivec3> MobEngine::findPath3D(World& world, const glm::ivec3& sta
     return path;
 }
 
-void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime, ItemEntityManager* itemMgr) {
+void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel, float& playerHealth, float deltaTime,
+                       ItemEntityManager* itemMgr) {
     // 1. Update Mobs
-    for (auto it = m_Mobs.begin(); it != m_Mobs.end(); ) {
+    for (auto it = m_Mobs.begin(); it != m_Mobs.end();) {
         Mob& mob = *it;
 
         if (mob.hurtTime > 0.0f) {
             mob.hurtTime -= deltaTime * 3.0f;
-            if (mob.hurtTime < 0.0f) mob.hurtTime = 0.0f;
+            if (mob.hurtTime < 0.0f)
+                mob.hurtTime = 0.0f;
         }
 
         if (mob.attackCooldown > 0.0f) {
@@ -194,7 +228,8 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
         // --- Zombie AI ---
         if (mob.type == MobType::Zombie) {
             if (distToPlayer < 22.0f && distToPlayer > 1.2f) {
-                glm::vec3 dir = glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
+                glm::vec3 dir =
+                    glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
                 float speed = 3.5f;
 
                 glm::vec3 frontCheck = mob.position + dir * 0.6f;
@@ -227,7 +262,8 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
         // --- Skeleton AI ---
         else if (mob.type == MobType::Skeleton) {
             if (distToPlayer < 24.0f && distToPlayer > 8.0f) {
-                glm::vec3 dir = glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
+                glm::vec3 dir =
+                    glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
                 mob.velocity.x = dir.x * 2.8f;
                 mob.velocity.z = dir.z * 2.8f;
                 mob.limbSwing += deltaTime * 6.0f;
@@ -246,7 +282,8 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
         // --- Creeper AI ---
         else if (mob.type == MobType::Creeper) {
             if (distToPlayer < 18.0f && distToPlayer > 2.5f) {
-                glm::vec3 dir = glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
+                glm::vec3 dir =
+                    glm::normalize(glm::vec3(playerPos.x - mob.position.x, 0.0f, playerPos.z - mob.position.z));
                 mob.velocity.x = dir.x * 3.2f;
                 mob.velocity.z = dir.z * 3.2f;
                 mob.fuseTimer = 0.0f;
@@ -282,7 +319,8 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
         // --- Wither 3-Headed Boss AI ---
         else if (mob.type == MobType::Wither) {
             mob.limbSwing += deltaTime * 2.0f;
-            glm::vec3 hoverTarget = playerPos + glm::vec3(std::cos(mob.limbSwing) * 5.0f, 7.5f, std::sin(mob.limbSwing) * 5.0f);
+            glm::vec3 hoverTarget =
+                playerPos + glm::vec3(std::cos(mob.limbSwing) * 5.0f, 7.5f, std::sin(mob.limbSwing) * 5.0f);
             mob.position += (hoverTarget - mob.position) * deltaTime * 2.0f;
 
             if (mob.attackCooldown <= 0.0f && distToPlayer < 35.0f) {
@@ -321,7 +359,7 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
     }
 
     // 2. Update Arrows
-    for (auto it = m_Arrows.begin(); it != m_Arrows.end(); ) {
+    for (auto it = m_Arrows.begin(); it != m_Arrows.end();) {
         ArrowEntity& arrow = *it;
         arrow.velocity.y -= 9.8f * deltaTime;
         arrow.position += arrow.velocity * deltaTime;
@@ -343,7 +381,7 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
     }
 
     // 3. Update Wither Skulls
-    for (auto it = m_WitherSkulls.begin(); it != m_WitherSkulls.end(); ) {
+    for (auto it = m_WitherSkulls.begin(); it != m_WitherSkulls.end();) {
         WitherSkullEntity& skull = *it;
         skull.position += skull.velocity * deltaTime;
 
@@ -367,9 +405,11 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
     // 4. Animal Breeding Pair Reproduction
     std::vector<Mob> babySpawns;
     for (size_t i = 0; i < m_Mobs.size(); ++i) {
-        if (!m_Mobs[i].inLove || m_Mobs[i].age < 0.0f) continue;
+        if (!m_Mobs[i].inLove || m_Mobs[i].age < 0.0f)
+            continue;
         for (size_t j = i + 1; j < m_Mobs.size(); ++j) {
-            if (!m_Mobs[j].inLove || m_Mobs[j].age < 0.0f || m_Mobs[i].type != m_Mobs[j].type) continue;
+            if (!m_Mobs[j].inLove || m_Mobs[j].age < 0.0f || m_Mobs[i].type != m_Mobs[j].type)
+                continue;
             float pairDist = glm::distance(m_Mobs[i].position, m_Mobs[j].position);
             if (pairDist < 3.5f) {
                 m_Mobs[i].inLove = false;
@@ -395,10 +435,12 @@ void MobEngine::update(World& world, glm::vec3& playerPos, glm::vec3& playerVel,
 
 void MobEngine::checkNaturalSpawning(World& world, const glm::vec3& playerPos, float deltaTime) {
     m_SpawnTimer += deltaTime;
-    if (m_SpawnTimer < 3.0f) return;
+    if (m_SpawnTimer < 3.0f)
+        return;
     m_SpawnTimer = 0.0f;
 
-    if (m_Mobs.size() >= 24) return; // Mob cap
+    if (m_Mobs.size() >= 24)
+        return; // Mob cap
 
     // Attempt random spawn location around player (radius 24 to 44 blocks)
     float angle = static_cast<float>(rand() % 360) * 0.0174533f;
@@ -418,22 +460,29 @@ void MobEngine::checkNaturalSpawning(World& world, const glm::vec3& playerPos, f
             if (ground == BlockType::Grass) {
                 // Passive mob spawn
                 int r = rand() % 3;
-                if (r == 0) spawnMob(MobType::Pig, spawnPos);
-                else if (r == 1) spawnMob(MobType::Cow, spawnPos);
-                else spawnMob(MobType::Villager, spawnPos);
+                if (r == 0)
+                    spawnMob(MobType::Pig, spawnPos);
+                else if (r == 1)
+                    spawnMob(MobType::Cow, spawnPos);
+                else
+                    spawnMob(MobType::Villager, spawnPos);
             } else if (ground == BlockType::Stone || ground == BlockType::Dirt || ground == BlockType::Sand) {
                 // Hostile mob spawn in darkness
                 int r = rand() % 3;
-                if (r == 0) spawnMob(MobType::Zombie, spawnPos);
-                else if (r == 1) spawnMob(MobType::Skeleton, spawnPos);
-                else spawnMob(MobType::Creeper, spawnPos);
+                if (r == 0)
+                    spawnMob(MobType::Zombie, spawnPos);
+                else if (r == 1)
+                    spawnMob(MobType::Skeleton, spawnPos);
+                else
+                    spawnMob(MobType::Creeper, spawnPos);
             }
             break;
         }
     }
 }
 
-bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage, ItemEntityManager* itemMgr) {
+bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& playerDir, float reach, int damage,
+                                  ItemEntityManager* itemMgr) {
     (void)itemMgr;
     for (auto& mob : m_Mobs) {
         glm::vec3 toMob = (mob.position + glm::vec3(0, 1, 0)) - playerPos;
@@ -443,7 +492,7 @@ bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& p
             float dot = glm::dot(playerDir, dirToMob);
             if (dot > 0.65f) {
                 mob.health -= damage;
-                mob.hurtTime = 1.0f; // Visual red flash
+                mob.hurtTime = 1.0f;                                   // Visual red flash
                 mob.velocity += playerDir * 6.0f + glm::vec3(0, 4, 0); // Knockback
                 AudioManager::playSound3D(SoundEffect::MobHit, mob.position, playerPos, glm::vec3(0, 0, -1));
                 return true;
@@ -454,13 +503,17 @@ bool MobEngine::checkPlayerAttack(const glm::vec3& playerPos, const glm::vec3& p
 }
 
 bool MobEngine::feedAnimal(size_t mobIndex, BlockType foodType) {
-    if (mobIndex >= m_Mobs.size()) return false;
+    if (mobIndex >= m_Mobs.size())
+        return false;
     Mob& mob = m_Mobs[mobIndex];
-    if (mob.type != MobType::Pig && mob.type != MobType::Cow) return false;
-    if (mob.age < 0.0f) return false; // Already a baby
+    if (mob.type != MobType::Pig && mob.type != MobType::Cow)
+        return false;
+    if (mob.age < 0.0f)
+        return false; // Already a baby
 
     bool validFood = false;
-    if (mob.type == MobType::Pig && (foodType == BlockType::CarrotCrop || foodType == BlockType::PotatoCrop || foodType == BlockType::Apple)) {
+    if (mob.type == MobType::Pig &&
+        (foodType == BlockType::CarrotCrop || foodType == BlockType::PotatoCrop || foodType == BlockType::Apple)) {
         validFood = true;
     } else if (mob.type == MobType::Cow && (foodType == BlockType::WheatCrop || foodType == BlockType::Apple)) {
         validFood = true;
@@ -475,10 +528,13 @@ bool MobEngine::feedAnimal(size_t mobIndex, BlockType foodType) {
 }
 
 bool MobEngine::saddleMob(size_t mobIndex) {
-    if (mobIndex >= m_Mobs.size()) return false;
+    if (mobIndex >= m_Mobs.size())
+        return false;
     Mob& mob = m_Mobs[mobIndex];
-    if (mob.type != MobType::Pig && mob.type != MobType::Cow) return false;
-    if (mob.age < 0.0f) return false; // Baby animals cannot be saddled
+    if (mob.type != MobType::Pig && mob.type != MobType::Cow)
+        return false;
+    if (mob.age < 0.0f)
+        return false; // Baby animals cannot be saddled
 
     if (!mob.isSaddled) {
         mob.isSaddled = true;
@@ -488,9 +544,11 @@ bool MobEngine::saddleMob(size_t mobIndex) {
 }
 
 bool MobEngine::steerMountedMob(size_t mobIndex, const glm::vec3& moveDir, float deltaTime) {
-    if (mobIndex >= m_Mobs.size()) return false;
+    if (mobIndex >= m_Mobs.size())
+        return false;
     Mob& mob = m_Mobs[mobIndex];
-    if (!mob.isSaddled) return false;
+    if (!mob.isSaddled)
+        return false;
 
     float mountSpeed = 6.0f;
     mob.velocity.x = moveDir.x * mountSpeed;
@@ -500,4 +558,4 @@ bool MobEngine::steerMountedMob(size_t mobIndex, const glm::vec3& moveDir, float
     return true;
 }
 
-}
+} // namespace Minecraft

@@ -1,6 +1,8 @@
 #include "CropsEngine.hpp"
-#include "World.hpp"
+
 #include "../ecs/ItemEntity.hpp"
+#include "World.hpp"
+
 #include <algorithm>
 
 namespace Minecraft {
@@ -28,12 +30,13 @@ bool CropsEngine::plantCrop(World& world, int x, int y, int z, BlockType cropTyp
     // Check adjacent water blocks for soil hydration
     for (int dx = -4; dx <= 4; ++dx) {
         for (int dz = -4; dz <= 4; ++dz) {
-            if (world.getBlock(x + dx, y - 1, z + dz) == BlockType::Water) {
+            if (BlockData::isWater(world.getBlock(x + dx, y - 1, z + dz))) {
                 state.isHydrated = true;
                 break;
             }
         }
-        if (state.isHydrated) break;
+        if (state.isHydrated)
+            break;
     }
 
     s_Crops[posKey(x, y, z)] = state;
@@ -51,7 +54,8 @@ bool CropsEngine::applyBoneMeal(World& world, int x, int y, int z) {
 
 void CropsEngine::updateCropGrowth(World& world, float deltaTime) {
     for (auto& [key, state] : s_Crops) {
-        if (state.growthStage >= 7) continue;
+        if (state.growthStage >= 7)
+            continue;
 
         // Hydrated crops grow 3x faster
         float rate = state.isHydrated ? 3.0f : 1.0f;
@@ -101,4 +105,4 @@ void CropsEngine::clear() {
     s_Crops.clear();
 }
 
-}
+} // namespace Minecraft

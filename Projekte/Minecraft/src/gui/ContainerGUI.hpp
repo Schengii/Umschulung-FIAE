@@ -1,23 +1,20 @@
 #ifndef CONTAINERGUI_HPP
 #define CONTAINERGUI_HPP
 
-#include <vector>
-#include <memory>
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include "../inventory/ItemStack.hpp"
 #include "../inventory/Inventory.hpp"
+#include "../inventory/ItemStack.hpp"
+#include "../renderer/Shader.hpp"
 #include "../world/ChestBlock.hpp"
 #include "../world/FurnaceBlock.hpp"
-#include "../renderer/Shader.hpp"
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <memory>
+#include <vector>
 
 namespace Minecraft {
 
-enum class ContainerType {
-    None,
-    Chest,
-    Furnace
-};
+enum class ContainerType { None, Chest, Furnace };
 
 class ContainerGUI {
 public:
@@ -43,7 +40,7 @@ private:
     int m_WindowWidth = 1280;
     int m_WindowHeight = 720;
     ContainerType m_ActiveContainer = ContainerType::None;
-    glm::ivec3 m_ActivePos{ 0 };
+    glm::ivec3 m_ActivePos{0};
 
     std::vector<ItemStack>* m_ActiveChestInv = nullptr;
     FurnaceData* m_ActiveFurnaceData = nullptr;
@@ -54,6 +51,6 @@ private:
     GLuint m_VBO = 0;
 };
 
-}
+} // namespace Minecraft
 
 #endif // CONTAINERGUI_HPP

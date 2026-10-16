@@ -1,9 +1,7 @@
-// ============================================================
-// Amazon 2.0 – Smart AI Customer Support & Live Chat Widget
-// ============================================================
 import type { AppState } from '../types';
 import { formatPrice } from '../utils/formatters';
 import { showToast } from './toast';
+import { idbGet, idbSet, STORES } from '../utils/indexedDB';
 
 let chatEl: HTMLElement | null = null;
 let isOpen = false;
@@ -14,7 +12,7 @@ interface ChatMessage {
   timestamp: string;
 }
 
-const chatHistory: ChatMessage[] = [
+let chatHistory: ChatMessage[] = [
   {
     sender: 'bot',
     text: 'Hallo! 👋 Ich bin dein KI-Kundenservice Assistent von Amazon 2.0. Wie kann ich dir heute helfen?',
@@ -29,6 +27,14 @@ function getFormattedTime(): string {
 
 export function initSupportChat(state: AppState): void {
   if (chatEl) return;
+
+  // Restore history from IndexedDB if available
+  idbGet<ChatMessage[]>(STORES.chatLogs, 'history', []).then((saved) => {
+    if (saved && saved.length > 0) {
+      chatHistory = saved;
+      updateChatBody();
+    }
+  });
 
   chatEl = document.createElement('div');
   chatEl.id = 'supportChatWidget';
@@ -127,11 +133,13 @@ function handleUserSend(state: AppState): void {
 
 function addUserMessage(text: string): void {
   chatHistory.push({ sender: 'user', text, timestamp: getFormattedTime() });
+  idbSet(STORES.chatLogs, 'history', chatHistory);
   updateChatBody();
 }
 
 function addBotMessage(text: string): void {
   chatHistory.push({ sender: 'bot', text, timestamp: getFormattedTime() });
+  idbSet(STORES.chatLogs, 'history', chatHistory);
   updateChatBody();
 }
 

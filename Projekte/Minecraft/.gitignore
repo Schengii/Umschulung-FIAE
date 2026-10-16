@@ -1,7 +1,9 @@
 # Build directory
 build/
+build_msvc/
 bin/
 out/
+dist/
 .cache/
 
 # Visual Studio / IDEs
@@ -33,3 +35,18 @@ Makefile
 
 # Saved World Data
 world_saves/
+
+# Environment and sensitive configuration
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Claude Code / local agent sessions
+.claude/memory/
+.claude/cache/
+.gemini/
+
+# Vercel & Web tooling
+.vercel/
+node_modules/

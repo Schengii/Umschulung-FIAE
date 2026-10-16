@@ -1,7 +1,11 @@
+import { getErrorMessage } from '../utils/error';
+import { resizeImage } from '../utils/image-resize';
+import { withAccessToken } from "../utils/auth-headers";
+import { fetchWithTimeout, GEMINI_TIMEOUT_MS } from "../utils/fetch-timeout";
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-export interface SchematicResult {
+interface SchematicResult {
   diagramTitle: string;
   identifiedComponents: Array<{ tag: string; name: string; terminals: string }>;
   detectedErrors: Array<{ severity: 'INFO' | 'WARNING' | 'CRITICAL'; description: string; vdeReference: string }>;
@@ -124,12 +128,13 @@ export class EcSchematicAnalyzer extends LitElement {
       </div>
 
       <div class="upload-zone" @click="${() => this.shadowRoot?.querySelector<HTMLInputElement>('#file-input')?.click()}">
-        <input type="file" id="file-input" accept="image/*" style="display:none" @change="${this._handleFileSelect}">
+        <input type="file" id="file-input" aria-label="Schaltplan-Bild auswählen" accept="image/*" style="display:none" @change="${this._handleFileSelect}">
         <div>📁 Klicken oder Bild / Stromlaufplan hierher ziehen</div>
-        ${this._imagePreview ? html`<img src="${this._imagePreview}" class="preview">` : ''}
+        ${this._imagePreview ? html`<img src="${this._imagePreview}" alt="Vorschau des hochgeladenen Schaltplans" class="preview">` : ''}
       </div>
 
       <textarea
+        aria-label="Anmerkungen oder Fragen zur Schaltung"
         rows="2"
         placeholder="Optional: Besondere Anmerkungen oder Fragen zur Schaltung..."
         .value="${this._notes}"
@@ -175,14 +180,15 @@ export class EcSchematicAnalyzer extends LitElement {
     `;
   }
 
-  private _handleFileSelect(e: Event) {
+  private async _handleFileSelect(e: Event) {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this._imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    try {
+      // Pläne brauchen mehr Auflösung als Fotos; das Backend-Limit wird in resizeImage eingehalten
+      this._imagePreview = await resizeImage(file, { maxSide: 2200, quality: 0.85 });
+    } catch (err) {
+      this._errorMessage = getErrorMessage(err, 'Bild konnte nicht geladen werden.');
+    }
   }
 
   private async _analyzeSchematic() {
@@ -191,22 +197,23 @@ export class EcSchematicAnalyzer extends LitElement {
     this._errorMessage = null;
 
     try {
-      const res = await fetch('http://localhost:3000/api/gemini/schematic-analysis', {
+      const backendUrl = localStorage.getItem("electrocheck_backend_url")?.trim() || "";
+      const res = await fetchWithTimeout(`${backendUrl}/api/gemini/schematic-analysis`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withAccessToken({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           imageBase64: this._imagePreview,
           notes: this._notes
         })
-      });
+      }, GEMINI_TIMEOUT_MS);
 
       if (!res.ok) {
         throw new Error(`Fehler bei der Analyse: ${res.statusText}`);
       }
 
       this._result = await res.json();
-    } catch (err: any) {
-      this._errorMessage = err.message || 'Schaltplan konnte nicht analysiert werden.';
+    } catch (err) {
+      this._errorMessage = getErrorMessage(err, 'Schaltplan konnte nicht analysiert werden.');
     } finally {
       this._isLoading = false;
     }

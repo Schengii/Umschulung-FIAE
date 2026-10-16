@@ -1,8 +1,9 @@
-#include <glad/glad.h>
 #include "ParticleEngine.hpp"
+
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
-#include <algorithm>
+#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Minecraft {
@@ -12,12 +13,15 @@ ParticleEngine::ParticleEngine() {
 }
 
 ParticleEngine::~ParticleEngine() {
-    if (m_VAO && glDeleteVertexArrays) glDeleteVertexArrays(1, &m_VAO);
-    if (m_VBO && glDeleteBuffers) glDeleteBuffers(1, &m_VBO);
+    if (m_VAO && glDeleteVertexArrays)
+        glDeleteVertexArrays(1, &m_VAO);
+    if (m_VBO && glDeleteBuffers)
+        glDeleteBuffers(1, &m_VBO);
 }
 
 void ParticleEngine::init() {
-    if (m_IsInitialized || !glCreateShader || !glGenVertexArrays) return;
+    if (m_IsInitialized || !glCreateShader || !glGenVertexArrays)
+        return;
     m_Shader = std::make_unique<Shader>("assets/shaders/ui.vert", "assets/shaders/ui.frag");
     initBuffers();
     m_IsInitialized = true;
@@ -108,7 +112,8 @@ void ParticleEngine::spawnExplosionDebris(const glm::vec3& explosionPos, int cou
 
         p.position = explosionPos + glm::vec3(rx * 0.5f, ry * 0.5f, rz * 0.5f);
         p.velocity = glm::vec3(rx * 8.0f, 6.0f + ry * 5.0f, rz * 8.0f);
-        p.color = (i % 2 == 0) ? glm::vec4(1.0f, 0.45f, 0.1f, 1.0f) : glm::vec4(0.3f, 0.3f, 0.3f, 0.9f); // Flame or smoke
+        p.color =
+            (i % 2 == 0) ? glm::vec4(1.0f, 0.45f, 0.1f, 1.0f) : glm::vec4(0.3f, 0.3f, 0.3f, 0.9f); // Flame or smoke
         p.size = 0.12f;
         p.life = 0.8f + (rand() % 50 / 100.0f);
         p.maxLife = p.life;
@@ -121,7 +126,7 @@ void ParticleEngine::clear() {
 }
 
 void ParticleEngine::update(float deltaTime) {
-    for (auto it = m_Particles.begin(); it != m_Particles.end(); ) {
+    for (auto it = m_Particles.begin(); it != m_Particles.end();) {
         it->life -= deltaTime;
         if (it->life <= 0.0f) {
             it = m_Particles.erase(it);
@@ -134,7 +139,8 @@ void ParticleEngine::update(float deltaTime) {
 }
 
 void ParticleEngine::render(const Camera& camera) {
-    if (m_Particles.empty() || m_VAO == 0 || !m_Shader) return;
+    if (m_Particles.empty() || m_VAO == 0 || !m_Shader)
+        return;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -145,15 +151,9 @@ void ParticleEngine::render(const Camera& camera) {
     glm::mat4 view = camera.getViewMatrix();
 
     // Render using standard single billboard quad with transforms
-    float quadVertices[24] = {
-        -0.5f,  0.5f, 0.0f, 1.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f,
+    float quadVertices[24] = {-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, -0.5f, 1.0f, 0.0f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-        -0.5f,  0.5f, 0.0f, 1.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-         0.5f, -0.5f, 1.0f, 0.0f
-    };
+                              -0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.5f,  1.0f, 1.0f, 0.5f,  -0.5f, 1.0f, 0.0f};
 
     glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -169,9 +169,15 @@ void ParticleEngine::render(const Camera& camera) {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, p.position);
         // Billboard: Face the camera directly
-        model[0][0] = view[0][0]; model[0][1] = view[1][0]; model[0][2] = view[2][0];
-        model[1][0] = view[0][1]; model[1][1] = view[1][1]; model[1][2] = view[2][1];
-        model[2][0] = view[0][2]; model[2][1] = view[1][2]; model[2][2] = view[2][2];
+        model[0][0] = view[0][0];
+        model[0][1] = view[1][0];
+        model[0][2] = view[2][0];
+        model[1][0] = view[0][1];
+        model[1][1] = view[1][1];
+        model[1][2] = view[2][1];
+        model[2][0] = view[0][2];
+        model[2][1] = view[1][2];
+        model[2][2] = view[2][2];
         model = glm::scale(model, glm::vec3(p.size));
 
         m_Shader->setMat4("u_Projection", proj * view * model);
@@ -185,4 +191,4 @@ void ParticleEngine::render(const Camera& camera) {
     glDisable(GL_BLEND);
 }
 
-}
+} // namespace Minecraft

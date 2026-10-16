@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { PlusCircle, Save, Trash2, Download, Upload, CheckCircle2, AlertCircle, Play, Code2, Layers } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -17,7 +17,7 @@ import { useStore } from '../../store/useStore';
 
 export default function CustomChallengeCreatorLab() {
   const { awardXP } = useStore();
-  const [customList, setCustomList] = useState([]);
+  const [customList, setCustomList] = useState(() => getStoredCustomChallenges());
   
   // Editor Form State
   const [title, setTitle] = useState('');
@@ -37,10 +37,6 @@ export default function CustomChallengeCreatorLab() {
   const [importJsonText, setImportJsonText] = useState('');
   const [showImportModal, setShowImportModal] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    setCustomList(getStoredCustomChallenges());
-  }, []);
 
   const handleAddTestCase = () => {
     setTestCases(prev => [...prev, { inputStr: '[]', expectedStr: '""' }]);

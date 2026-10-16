@@ -1,6 +1,8 @@
 #include "EnchantingEngine.hpp"
-#include "World.hpp"
+
 #include "ToolSystem.hpp"
+#include "World.hpp"
+
 #include <algorithm>
 
 namespace Minecraft {
@@ -23,27 +25,29 @@ int EnchantingEngine::countNearbyBookshelves(World& world, int tableX, int table
 
 std::vector<EnchantmentOption> EnchantingEngine::getEnchantmentOptions(const ItemStack& item, int bookshelfCount) {
     std::vector<EnchantmentOption> options;
-    if (item.isEmpty()) return options;
+    if (item.isEmpty())
+        return options;
 
     int maxTier = 1 + bookshelfCount / 4; // Up to Tier 4-5 with 15 bookshelves
 
     if (item.type == BlockType::IronSword || item.type == BlockType::DiamondSword) {
-        options.push_back({ Enchantment::Sharpness, std::min(5, maxTier), 1, 0 });
-        options.push_back({ Enchantment::Unbreaking, std::min(3, maxTier), 2, 4 });
+        options.push_back({Enchantment::Sharpness, std::min(5, maxTier), 1, 0});
+        options.push_back({Enchantment::Unbreaking, std::min(3, maxTier), 2, 4});
     } else if (ToolSystem::isTool(item.type)) {
-        options.push_back({ Enchantment::Efficiency, std::min(5, maxTier), 1, 0 });
-        options.push_back({ Enchantment::Unbreaking, std::min(3, maxTier), 2, 4 });
+        options.push_back({Enchantment::Efficiency, std::min(5, maxTier), 1, 0});
+        options.push_back({Enchantment::Unbreaking, std::min(3, maxTier), 2, 4});
     } else {
         // Armor (Helmet, Chestplate, Leggings, Boots represented with Pickaxe durability slots)
-        options.push_back({ Enchantment::Protection, std::min(4, maxTier), 1, 0 });
-        options.push_back({ Enchantment::Unbreaking, std::min(3, maxTier), 2, 4 });
+        options.push_back({Enchantment::Protection, std::min(4, maxTier), 1, 0});
+        options.push_back({Enchantment::Unbreaking, std::min(3, maxTier), 2, 4});
     }
 
     return options;
 }
 
 bool EnchantingEngine::applyEnchantment(ItemStack& item, Enchantment ench, int level) {
-    if (item.isEmpty()) return false;
+    if (item.isEmpty())
+        return false;
     item.enchantmentType = static_cast<int>(ench);
     item.enchantmentLevel = level;
     return true;
@@ -70,4 +74,4 @@ float EnchantingEngine::getEnchantedDefenseBonus(const ItemStack& armor) {
     return 0.0f;
 }
 
-}
+} // namespace Minecraft

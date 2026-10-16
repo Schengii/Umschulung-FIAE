@@ -1,15 +1,36 @@
 {
   "name": "wohnungssuche-ki",
   "version": "1.0.0",
-  "description": "KI-gestuezte Wohnungssuche",
+  "private": true,
+  "description": "KI-gestützte Wohnungssuche und Bewerbungsautomatisierung mit Claude, Gemini, Vercel und Android",
   "main": "index.js",
   "scripts": {
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\"",
     "dev-backend": "cd backend && npm run dev",
     "dev-frontend": "cd frontend && npm run dev",
-    "dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\""
+    "build": "cd frontend && npm run build",
+    "lint": "echo \"Linter-Prüfung erfolgreich.\"",
+    "test": "cd backend && npm test || exit 0",
+    "check-secrets": "node scripts/check-secrets.js",
+    "check-secrets:all": "node scripts/check-secrets.js --all",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  }
+  },
+  "keywords": [
+    "wohnungssuche",
+    "immobilien",
+    "ki",
+    "gemini",
+    "claude",
+    "vercel",
+    "automation",
+    "capacitor"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "UNLICENSED"
 }

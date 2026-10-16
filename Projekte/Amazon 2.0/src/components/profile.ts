@@ -1,10 +1,10 @@
-// ============================================================
-// Amazon 2.0 – User Profile Modal Component
-// ============================================================
 import type { AppState, UserProfile, ShippingAddress } from '../types';
 import { formatDate, sanitizeHtml } from '../utils/formatters';
-import { writeStorage, KEYS } from '../utils/persist';
+import { writeStorage, clearAllStorage, KEYS } from '../utils/persist';
 import { showToast } from './toast';
+import { emit } from '../store';
+import { renderSubscriptionsList } from './subscriptions';
+import { renderPriceAlertsList } from './priceAlerts';
 
 type RefreshCallback = () => void;
 
@@ -71,7 +71,9 @@ export function openProfileModal(state: AppState, onRefresh: RefreshCallback): v
         </div>
 
         <div class="tab-nav">
-          <button class="tab-btn ${activeTab === 'info' ? 'active' : ''}" data-tab="info">Profil bearbeiten</button>
+          <button class="tab-btn ${activeTab === 'info' ? 'active' : ''}" data-tab="info">Profil</button>
+          <button class="tab-btn ${activeTab === 'subscriptions' ? 'active' : ''}" data-tab="subscriptions">📦 Spar-Abos (${(state.subscriptions || []).length})</button>
+          <button class="tab-btn ${activeTab === 'priceAlerts' ? 'active' : ''}" data-tab="priceAlerts">🔔 Preisalarme (${state.priceAlerts.length})</button>
           <button class="tab-btn ${activeTab === 'addresses' ? 'active' : ''}" data-tab="addresses">Adressen</button>
           <button class="tab-btn ${activeTab === 'payment' ? 'active' : ''}" data-tab="payment">Zahlung</button>
           <button class="tab-btn ${activeTab === 'settings' ? 'active' : ''}" data-tab="settings">Einstellungen</button>
@@ -92,6 +94,16 @@ export function openProfileModal(state: AppState, onRefresh: RefreshCallback): v
             </div>
             <button type="submit" class="btn-primary" id="saveProfileBtn">Profil speichern</button>
           </form>
+        </div>
+
+        <!-- Subscriptions Tab -->
+        <div class="tab-pane ${activeTab === 'subscriptions' ? 'active' : ''}" id="tab-subscriptions">
+          <div id="profileSubsContainer"></div>
+        </div>
+
+        <!-- Price Alerts Tab -->
+        <div class="tab-pane ${activeTab === 'priceAlerts' ? 'active' : ''}" id="tab-priceAlerts">
+          <div id="profileAlertsContainer"></div>
         </div>
 
         <!-- Addresses Tab -->
@@ -183,6 +195,15 @@ export function openProfileModal(state: AppState, onRefresh: RefreshCallback): v
         </div>
       </div>
     `;
+
+    // Render Subscriptions & Alerts if active
+    if (activeTab === 'subscriptions') {
+      const subContainer = modal.querySelector<HTMLElement>('#profileSubsContainer');
+      if (subContainer) renderSubscriptionsList(state, subContainer);
+    } else if (activeTab === 'priceAlerts') {
+      const alertsContainer = modal.querySelector<HTMLElement>('#profileAlertsContainer');
+      if (alertsContainer) renderPriceAlertsList(state, alertsContainer);
+    }
 
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -276,23 +297,19 @@ export function openProfileModal(state: AppState, onRefresh: RefreshCallback): v
 
     // Theme toggle
     document.getElementById('themeToggle')?.addEventListener('click', () => {
-      import('../store').then(({ state: appState, emit }) => {
-        appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', appState.theme);
-        writeStorage(KEYS.theme, appState.theme);
-        emit('theme:changed');
-        renderModal();
-      });
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', state.theme);
+      writeStorage(KEYS.theme, state.theme);
+      emit('theme:changed');
+      renderModal();
     });
 
     // Clear data
     document.getElementById('clearDataBtn')?.addEventListener('click', () => {
       if (confirm('Alle gespeicherten Daten wirklich löschen?')) {
-        import('../utils/persist').then(({ clearAllStorage }) => {
-          clearAllStorage();
-          showToast('Alle Daten gelöscht. Seite wird neu geladen…', 'info');
-          setTimeout(() => location.reload(), 1500);
-        });
+        clearAllStorage();
+        showToast('Alle Daten gelöscht. Seite wird neu geladen…', 'info');
+        setTimeout(() => location.reload(), 1500);
       }
     });
 

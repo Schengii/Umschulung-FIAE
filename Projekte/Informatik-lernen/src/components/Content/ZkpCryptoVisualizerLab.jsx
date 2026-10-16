@@ -1,36 +1,29 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Shield, Key, EyeOff, CheckCircle2, ShieldAlert, ArrowRight } from 'lucide-react';
-import { useStore } from '../../store/useStore';
 import { EllipticCurve, simulateSchnorrZkp } from '../../utils/zkpCryptoEngine';
 
 const ORDER_N = 19n;
 const PRIVATE_KEY_X = 7n; // Secret
 const G = [5n, 1n];
+const CURVE = new EllipticCurve(2n, 2n, 17n);
 
-export default function ZkpCryptoVisualizerLab() {
-  const { awardXP } = useStore();
+export default function ZkpCryptoVisualizerLab({ onRewardXP }) {
   const [step, setStep] = useState(0);
   const [zkpData, setZkpData] = useState(null);
   const [xpClaimed, setXpClaimed] = useState(false);
 
-  // Setup our simple curve (memoized: a fresh instance every render would
-  // re-trigger the effect below on every store update, since awardXP()
-  // itself updates the store this component is subscribed to)
-  const curve = useMemo(() => new EllipticCurve(2n, 2n, 17n), []);
-
-  useEffect(() => {
-    if (step === 1 && !zkpData) {
-      const data = simulateSchnorrZkp(curve, G, ORDER_N, PRIVATE_KEY_X);
-      setZkpData(data);
-    }
-    if (step === 4 && !xpClaimed) {
-      setXpClaimed(true);
-      awardXP(45, 'Zero-Knowledge Proof Verifier');
-    }
-  }, [step, zkpData, curve, xpClaimed, awardXP]);
-
   const nextStep = () => {
-    if (step < 4) setStep(step + 1);
+    if (step < 4) {
+      const next = step + 1;
+      setStep(next);
+      if (next === 1 && !zkpData) {
+        setZkpData(simulateSchnorrZkp(CURVE, G, ORDER_N, PRIVATE_KEY_X));
+      }
+      if (next === 4 && !xpClaimed) {
+        setXpClaimed(true);
+        if (onRewardXP) onRewardXP(45, 'Zero-Knowledge Proof Verifier');
+      }
+    }
   };
 
   const reset = () => {

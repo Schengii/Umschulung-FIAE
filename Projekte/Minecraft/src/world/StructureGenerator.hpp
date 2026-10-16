@@ -1,8 +1,9 @@
 #ifndef STRUCTUREGENERATOR_HPP
 #define STRUCTUREGENERATOR_HPP
 
-#include <glm/glm.hpp>
 #include "Block.hpp"
+
+#include <glm/glm.hpp>
 
 namespace Minecraft {
 
@@ -25,6 +26,6 @@ public:
     static void generateWoodlandMansion(World& world, int x, int y, int z);
 };
 
-}
+} // namespace Minecraft
 
 #endif // STRUCTUREGENERATOR_HPP

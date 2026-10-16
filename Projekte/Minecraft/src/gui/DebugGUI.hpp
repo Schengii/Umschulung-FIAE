@@ -15,6 +15,6 @@ public:
     void render(float fps, const glm::vec3& playerPos, const glm::vec3& playerFront, float& timeTicks, bool& isFlying);
 };
 
-}
+} // namespace Minecraft
 
 #endif // DEBUGGUI_HPP

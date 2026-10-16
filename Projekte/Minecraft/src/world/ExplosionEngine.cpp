@@ -1,14 +1,17 @@
 #include "ExplosionEngine.hpp"
-#include "World.hpp"
-#include "Block.hpp"
+
 #include "../audio/AudioManager.hpp"
+#include "Block.hpp"
+#include "World.hpp"
+
 #include <cmath>
 #include <iostream>
 #include <vector>
 
 namespace Minecraft {
 
-void ExplosionEngine::createExplosion(World& world, const glm::vec3& center, float radius, glm::vec3* playerVel, const glm::vec3* playerPos) {
+void ExplosionEngine::createExplosion(World& world, const glm::vec3& center, float radius, glm::vec3* playerVel,
+                                      const glm::vec3* playerPos) {
     std::cout << "[ExplosionEngine] BOOM at (" << center.x << ", " << center.y << ", " << center.z << ")" << std::endl;
     AudioManager::playSound(SoundEffect::BlockBreak);
 
@@ -52,4 +55,4 @@ void ExplosionEngine::createExplosion(World& world, const glm::vec3& center, flo
     }
 }
 
-}
+} // namespace Minecraft

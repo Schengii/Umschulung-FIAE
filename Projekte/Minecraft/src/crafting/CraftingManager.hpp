@@ -2,6 +2,7 @@
 #define CRAFTINGMANAGER_HPP
 
 #include "../inventory/ItemStack.hpp"
+
 #include <array>
 
 namespace Minecraft {
@@ -13,6 +14,6 @@ public:
     static ItemStack matchSmithingUpgrade(const ItemStack& baseItem, const ItemStack& upgradeMaterial);
 };
 
-}
+} // namespace Minecraft
 
 #endif // CRAFTINGMANAGER_HPP

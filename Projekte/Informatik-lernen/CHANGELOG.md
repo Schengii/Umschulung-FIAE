@@ -9,7 +9,63 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 
 ## [Unveröffentlicht]
 
+### Bereinigung & Code-Qualität (Chore)
+- **Projekt-Bereinigung & Analyse (chore/cleanup)**:
+  - Phase 0: Baseline-Sicherung für Build (1.27s), Oxlint (704 Dateien, 0 Warnungen) und Vitest (1.223 Tests bestanden).
+  - Phase 1: Projektweite Tiefenanalyse auf Duplikate, ungenutzte Exporte, leere Ordner und Code Smells ohne Beanstandung von Fehlern.
+  - Phase 2: Gezielte Härtung und Bereinigung mit hoher Sicherheit:
+    - `src/utils/pushNotificationManager.js`: Vermeidung ungenutzter Instanziierung (`new Notification`).
+    - `src/components/Content/OsProcessSchedulerLab.jsx`: Entfernung des redundanten lokalen Alias `bankerMax` und Bereinigung der `useMemo`-Dependencies.
+    - `src/components/Content/VideoHub.jsx`: Härtung des YouTube-`<iframe>` durch explizite `sandbox`-Attribute (`allow-scripts allow-same-origin allow-presentation`).
+  - Phase 3: Validierung der Zielstruktur nach Stack-Konventionen (`src/`, `docs/`, `e2e/`, `scripts/`, `public/`).
+
+## [3.77.0] - 2026-10-16
+
 ### Hinzugefügt (Added)
+- **Vollständige Lab-Mastery-Badges (162 Badges)**: Alle 149 in `src/data/labRegistry.js` vergebenen Mastery-Badges (`stp_rstp_master`, `bpmn_process_master`, `struktogramm_master` etc.) sind nun vollständig in `src/utils/storage.js` (`BADGES`) mit Icons und Beschreibungen registriert.
+- **Isolierte Test-Suiten**:
+  - `src/components/Gamification/FlashcardsModal.test.jsx`: Unit-Tests für Fälligkeits-Priorisierung via SuperMemo-2 (SM-2), Kartendrehung und TSV/CSV-Export.
+  - `src/utils/pushNotificationManager.test.js`: Vollständige Mocks und Tests für `scheduleDailyReminder`, Service-Worker-Benachrichtigung und Fallback-Handling.
+  - `src/utils/ihkWeaknessAuditEngine.test.js`: Umfassende Tests für `mapQuestionToLernfeld` über alle 12 IHK-Lernfelder (LF 1–12), inklusive Drill-Format (`frage`/`kategorie`).
+
+### Behoben (Fixed)
+- **CI & Oxlint-Bereinigung**: 0 Warnungen und 0 Fehler im CI-Modus (`npm run lint:ci`) über alle 704 Dateien. Behebung von Immutabilitätsverletzungen (`ServiceMeshLab`), synchronen State-Updates in Effects (`LinuxMemoryLab`, `SqliteWasmStudioLab`), unerwünschten State-Resets (`CommandPaletteModal`, `PomodoroTimerWidget`), Event-Driven-Transitions (`ZkpCryptoVisualizerLab`, `P2pQuizDuellLab`) und Date/Math-Purity-Warnungen.
+- **BadgesModal Stabilität**: Übergabe von `userState` im `ModalContainer` korrigiert und defensive Fallbacks hinzugefügt, wodurch der TypeError beim Öffnen des Badges-Modals behoben wurde.
+- **FlashcardsModal Belohnungen**: Übergabe von `onRewardXP={awardXP}` im `ModalContainer` ergänzt, sodass gemeisterte Karteikarten zuverlässig XP vergeben.
+- **404 PWA-Icons in PushNotificationManager**: Fehlerhafte Pfade (`/pwa-192x192.png`) durch das existierende SVG-Icon (`/favicon.svg`) ersetzt.
+- **Dead Store Imports**: Ungenutzte `addXP`-Destrukturierungen in `WisoPaymentMethodsLab`, `WisoBookkeepingLab` und `WisoBabLab` entfernt.
+- **Sm2SpacedRepetitionLab Synchronisation**: Karten-Updates werden nun mit `userState.srsFlashcards` synchronisiert und Endlos-XP-Exploits durch Sitzungs-Deckelung verhindert.
+
+### Geändert (Changed)
+- **Komponenten-Entkopplung**:
+  - `IhkCheatSheetPdfGenerator`: Von direktem `useStore`-Zugriff entkoppelt, konsumiert `onRewardXP` als Prop und ist in `labRegistry.js` registriert.
+  - `LinuxMemoryLab` & `ZkpCryptoVisualizerLab`: Entkoppelt von direktem Store-Zugriff, XP-Vergabe über Props standardisiert.
+  - `ihkWeaknessAuditEngine`: `mapQuestionToLernfeld` als reine Engine-Funktion ausgelagert, Duplikat in `IhkWeaknessAuditLab` entfernt.
+- **Sicherheit**:
+  - `src/utils/sandboxEvaluator.js`: Web-Worker-Scope Lockdown um `WebAssembly` und `SharedArrayBuffer` in `BLOCKED_WORKER_GLOBALS` erweitert, um Speicherangriffe und Timing-Attacken fremden Nutzercodes zu unterbinden.
+- **Performance**:
+  - `OauthRevocationIntrospectionLab`: `Date.now()` Hotspot in der Token-Rendering-Schleife eliminiert; Zeitstempel wird einmalig vor der Iteration bestimmt.
+- **Barrierefreiheit (WCAG 2.1 AA)**:
+  - `BadgesModal` und `FlashcardsModal` mit semantischen ARIA-Attributen (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`) und `Escape`-Tastatursteuerung ausgestattet.
+
+- **A11y (CI, axe `aria-allowed-attr`)**: `IhkStudyPlanLab` setzte `aria-checked` auf `role="listitem"`, das Attribut ist dort nicht erlaubt (7 Treffer in `allLabsA11y.test.jsx`). Entfernt; der Zustand steht weiterhin im Text und `aria-label` des Abhaken-Buttons.
+- **Lint (CI)**: `IhkStudyPlanLab` und `IhkWeaknessAuditLab` nutzten `|| {}` im Render und erzeugten damit bei jedem Render eine neue `useMemo`-Abhängigkeit. Stabile Modul-Konstante `EMPTY_OBJECT` ersetzt das Fallback-Objekt; `npm run lint:ci` (`--deny-warnings`) meldet dazu keine Warnung mehr.
+- **Sicherheits-Header (P1)**: `vercel.json` um `Content-Security-Policy`, `Strict-Transport-Security`, `Permissions-Policy` und `X-Content-Type-Options` ergänzt.
+
+## [3.76.0] - 2026-10-12
+
+### Hinzugefügt (Added)
+- **IHK Prüfungsplaner & Schwachstellen-Audit**: Vollständige Registrierung in `labRegistry.js` (`ihk_study_plan_lab`, `ihk_weakness_audit_lab` mit kanonischen Routen und Aliasen) sowie Entkopplung von der UI-Root in `App.jsx`.
+- **Fachrichtungen & Dynamische Termine**: `ihkStudyPlanEngine.js` unterstützt nun alle 6 Fachrichtungen (FIAE, FISI, FIDP, FIDV, IT-SE, ITSM) und berechnet Prüfungstermine für das aktuelle und Folgejahr dynamisch.
+- **Fehlerjournal-Integration**: `IhkWeaknessAuditLab` verarbeitet jetzt Live-Daten aus dem realen `userState.mistakeJournal` und mappt falsch beantwortete Prüfungs- und Drill-Fragen auf die jeweiligen IHK-Lernfelder (LF 1–12).
+- **Lernplan-Persistenz**: Abgehakte Wochen (`completedWeeks` / `studyPlanWeeks`) werden im `userState` gesichert und überstehen Reloads sowie Tab-Wechsel.
+- **Spaced Repetition & Anki**: Fällige Flashcards werden im `FlashcardsModal` via SM-2 Due-Date priorisiert (`dueDate <= today`).
+- **Test-Suiten**: Isolierte Komponenten-Tests in `IhkStudyPlanLab.test.jsx` und `IhkWeaknessAuditLab.test.jsx` sowie Randfall-Tests für beide Engines.
+
+### Geändert (Changed)
+- **Barrierefreiheit & Dark-Mode Styling**: Farbschemata in `IhkStudyPlanLab` und `IhkWeaknessAuditLab` verwenden nun semantische CSS-Variablen (`var(--text-main)`, `var(--bg-card)`, `var(--border-color)` etc.) und barrierefreie ARIA-Listen-Semantik (`role="list"`, `role="listitem"`, `aria-checked`).
+- **Storage-Konsistenz**: Multi-Tab-Synchronisation via `BroadcastChannel('it_devgame_sync')` auf das Event `{ type: 'SYNC_STATE' }` standardisiert; Storage-Key-Listener auf `informatik_game_state_v1` harmonisiert.
+- **Datenbereinigung**: Redundante `#WISO`-Tags in `labModulesData.js` bereinigt und Badge-Bedingungen in `BadgesModal.jsx` korrigiert.
 - Screenshots (Dashboard, DNS-Privacy-Lab) in `docs/screenshots/` und im README.
 - `LICENSE` (MIT) und Feld `license` in `package.json`; Hinweis im README.
 - `.env`: Lokale Umgebungsvariablen-Vorlage mit Voreinstellungen für Sentry-Monitoring und Vite-Server (in `.gitignore` geschützt).

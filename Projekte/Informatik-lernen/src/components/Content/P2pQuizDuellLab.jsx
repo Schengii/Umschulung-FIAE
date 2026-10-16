@@ -42,7 +42,8 @@ export default function P2pQuizDuellLab() {
     setCurrentQuestionIdx(0);
     setRoundHistory([]);
     setPlayerSelected(null);
-    setBotSelectedData(null);
+    const difficulty = opponentType.replace('bot_', '');
+    setBotSelectedData(createBotResponse(0, difficulty));
     setTimeLeft(15);
     setGameState('in_game');
     soundManager.playSFX('click');
@@ -84,16 +85,11 @@ export default function P2pQuizDuellLab() {
   // Timer Effect
   useEffect(() => {
     if (gameState === 'in_game') {
-      // Simulate Bot Response delay
-      const difficulty = opponentType.replace('bot_', '');
-      const botResponse = createBotResponse(currentQuestionIdx, difficulty);
-      setBotSelectedData(botResponse);
-
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timerRef.current);
-            evaluateRound(null, botResponse, 0);
+            evaluateRound(null, botSelectedData, 0);
             return 0;
           }
           return prev - 1;
@@ -102,7 +98,7 @@ export default function P2pQuizDuellLab() {
     }
 
     return () => clearInterval(timerRef.current);
-  }, [gameState, currentQuestionIdx, opponentType, evaluateRound]);
+  }, [gameState, botSelectedData, evaluateRound]);
 
   const handlePlayerAnswer = (optionIdx) => {
     if (playerSelected !== null || gameState !== 'in_game') return;
@@ -113,9 +109,11 @@ export default function P2pQuizDuellLab() {
 
   const handleNextRound = () => {
     if (currentQuestionIdx + 1 < P2P_QUIZ_QUESTIONS.length) {
-      setCurrentQuestionIdx(prev => prev + 1);
+      const nextIdx = currentQuestionIdx + 1;
+      setCurrentQuestionIdx(nextIdx);
       setPlayerSelected(null);
-      setBotSelectedData(null);
+      const difficulty = opponentType.replace('bot_', '');
+      setBotSelectedData(createBotResponse(nextIdx, difficulty));
       setTimeLeft(15);
       setGameState('in_game');
       soundManager.playSFX('click');

@@ -2,10 +2,14 @@ import React from 'react';
 import { Award, Download, X } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
+function getFormattedToday() {
+  return new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
 export default function CertificateModal({ isOpen, onClose, userState }) {
   if (!isOpen) return null;
 
-  const today = new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' });
+  const today = getFormattedToday();
 
   const handleDownloadPDF = () => {
     try {

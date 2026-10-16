@@ -16,20 +16,24 @@ export default function PomodoroTimerWidget() {
     let timer = null;
     if (isRunning && timeLeft > 0) {
       timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            soundManager.playSFX('timerBell');
+            if (mode === 'focus') {
+              awardXP(50);
+              setCompletedSessions((c) => c + 1);
+              setMode('break');
+              setIsRunning(false);
+              return 5 * 60;
+            } else {
+              setMode('focus');
+              setIsRunning(false);
+              return 25 * 60;
+            }
+          }
+          return prev - 1;
+        });
       }, 1000);
-    } else if (isRunning && timeLeft === 0) {
-      soundManager.playSFX('timerBell');
-      if (mode === 'focus') {
-        awardXP(50);
-        setCompletedSessions((c) => c + 1);
-        setMode('break');
-        setTimeLeft(5 * 60);
-      } else {
-        setMode('focus');
-        setTimeLeft(25 * 60);
-      }
-      setIsRunning(false);
     }
     return () => clearInterval(timer);
   }, [isRunning, timeLeft, mode, awardXP]);

@@ -1,9 +1,11 @@
 #include "SaveSystem.hpp"
+
 #include "Chunk.hpp"
-#include "World.hpp"
 #include "RegionFile.hpp"
-#include <fstream>
+#include "World.hpp"
+
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 namespace Minecraft {
@@ -22,13 +24,23 @@ void SaveSystem::createDirectoryIfNotExists(const std::string& dir) {
 
 bool SaveSystem::saveChunk(const Chunk& chunk, const std::string& saveDir) {
     createDirectoryIfNotExists(saveDir);
-    return RegionManager::getInstance().saveChunk(chunk.getChunkX(), chunk.getChunkZ(), chunk.getBlocks(), chunk.getLight(), saveDir);
+    constexpr size_t VOLUME = 16 * 256 * 16;
+    std::vector<BlockType> blocks(VOLUME);
+    std::vector<uint8_t> light(VOLUME);
+    chunk.exportBlocks(blocks.data());
+    chunk.exportLight(light.data());
+    return RegionManager::getInstance().saveChunk(chunk.getChunkX(), chunk.getChunkZ(),
+                                                  reinterpret_cast<const BlockType(*)[256][16]>(blocks.data()),
+                                                  reinterpret_cast<const uint8_t(*)[256][16]>(light.data()), saveDir);
 }
 
 bool SaveSystem::loadChunk(Chunk& chunk, const std::string& saveDir) {
     // 1. Try loading from Anvil .mca Region Files
-    BlockType tempBlocks[16][256][16];
-    uint8_t tempLight[16][256][16];
+    constexpr size_t VOLUME = 16 * 256 * 16;
+    std::vector<BlockType> blockBuffer(VOLUME);
+    std::vector<uint8_t> lightBuffer(VOLUME);
+    auto tempBlocks = reinterpret_cast<BlockType(*)[256][16]>(blockBuffer.data());
+    auto tempLight = reinterpret_cast<uint8_t(*)[256][16]>(lightBuffer.data());
     if (RegionManager::getInstance().loadChunk(chunk.getChunkX(), chunk.getChunkZ(), tempBlocks, tempLight, saveDir)) {
         for (int x = 0; x < 16; ++x) {
             for (int y = 0; y < 256; ++y) {
@@ -45,10 +57,12 @@ bool SaveSystem::loadChunk(Chunk& chunk, const std::string& saveDir) {
     // 2. Legacy fallback: Single .bin file per chunk
     std::string filePath = getChunkFilePath(chunk.getChunkX(), chunk.getChunkZ(), saveDir);
 
-    if (!fs::exists(filePath)) return false;
+    if (!fs::exists(filePath))
+        return false;
 
     std::ifstream inFile(filePath, std::ios::binary);
-    if (!inFile.is_open()) return false;
+    if (!inFile.is_open())
+        return false;
 
     for (int x = 0; x < CHUNK_SIZE_X; ++x) {
         for (int y = 0; y < CHUNK_SIZE_Y; ++y) {
@@ -71,4 +85,4 @@ void SaveSystem::saveWorld(World& world, const std::string& saveDir) {
     std::cout << "[SaveSystem] World save complete." << std::endl;
 }
 
-}
+} // namespace Minecraft

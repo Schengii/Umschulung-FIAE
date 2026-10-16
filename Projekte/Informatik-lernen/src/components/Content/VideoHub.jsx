@@ -37,6 +37,7 @@ export default function VideoHub({ onCompleteVideo }) {
               <iframe
                 src={activeVideo.embedUrl}
                 title={activeVideo.title}
+                sandbox="allow-scripts allow-same-origin allow-presentation"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 style={{

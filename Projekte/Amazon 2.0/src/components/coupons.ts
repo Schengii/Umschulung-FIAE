@@ -1,10 +1,8 @@
-// ============================================================
-// Amazon 2.0 – Coupons Modal Component
-// ============================================================
 import type { AppState, Coupon } from '../types';
 import { formatDate } from '../utils/formatters';
 import { writeStorage, KEYS } from '../utils/persist';
 import { showToast } from './toast';
+import { SAMPLE_COUPONS } from '../data/heroSlides';
 
 type RefreshCallback = () => void;
 
@@ -167,20 +165,17 @@ function redeemCoupon(state: AppState, code: string, onRefresh: RefreshCallback)
     return;
   }
 
-  // Known codes from data
-  import('../data/heroSlides').then(({ SAMPLE_COUPONS }) => {
-    const knownCoupon = SAMPLE_COUPONS.find(c => c.code === code);
-    if (knownCoupon) {
-      state.activeCoupons.push({ ...knownCoupon, isActive: true } as Coupon);
-      // Deactivate others
-      state.activeCoupons.forEach(c => { c.isActive = c.code === code; });
-      writeStorage(KEYS.activeCoupons, state.activeCoupons);
-      onRefresh();
-      showToast(`🎉 Gutschein "${code}" eingelöst!`, 'success');
-    } else {
-      showToast(`Gutscheincode "${code}" ist ungültig.`, 'error');
-    }
-  });
+  const knownCoupon = SAMPLE_COUPONS.find(c => c.code === code);
+  if (knownCoupon) {
+    state.activeCoupons.push({ ...knownCoupon, isActive: true } as Coupon);
+    // Deactivate others
+    state.activeCoupons.forEach(c => { c.isActive = c.code === code; });
+    writeStorage(KEYS.activeCoupons, state.activeCoupons);
+    onRefresh();
+    showToast(`🎉 Gutschein "${code}" eingelöst!`, 'success');
+  } else {
+    showToast(`Gutscheincode "${code}" ist ungültig.`, 'error');
+  }
 }
 
 function closeCouponsModal(): void {

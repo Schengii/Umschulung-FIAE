@@ -1,9 +1,7 @@
-// ============================================================
-// Amazon 2.0 – Gamified Quests & Mystery Box Rewards Engine
-// ============================================================
 import type { AppState } from '../types';
 import { showToast } from './toast';
-import { saveWishlist } from '../store';
+import { saveBalance, emit } from '../store';
+import { playSound } from '../utils/audio';
 
 let questModal: HTMLElement | null = null;
 
@@ -93,10 +91,12 @@ export function openRewardsQuestModal(state: AppState): void {
 
         if (win.type === 'balance') {
           state.userBalance.amount += win.amount ?? 10;
-          saveWishlist();
-          import('../store').then(({ emit }) => emit('balance:changed'));
+          saveBalance();
+          emit('balance:changed');
+          playSound('quest');
           showToast(`🎉 GEWONNEN! ${win.title} auf dein Konto gutgeschrieben!`, 'success');
         } else {
+          playSound('success');
           showToast(`🎉 GEWONNEN! Gutscheincode ${win.code} freigeschaltet!`, 'success');
         }
       }, 1600);

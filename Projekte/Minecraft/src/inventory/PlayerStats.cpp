@@ -4,7 +4,7 @@ namespace Minecraft {
 
 PlayerStats::PlayerStats() {
     for (auto& slot : m_ArmorSlots) {
-        slot = { BlockType::Air, 0, 64 };
+        slot = {BlockType::Air, 0, 64};
     }
 }
 
@@ -30,7 +30,7 @@ void PlayerStats::applyArmorDurabilityDamage() {
         if (slot.type != BlockType::Air && slot.durability > 0) {
             slot.durability--;
             if (slot.durability <= 0) {
-                slot = { BlockType::Air, 0, 64 };
+                slot = {BlockType::Air, 0, 64};
             }
         }
     }
@@ -44,12 +44,13 @@ void PlayerStats::addEffect(StatusEffect effect, float duration, int amplifier) 
             return;
         }
     }
-    m_ActiveEffects.push_back({ effect, duration, amplifier });
+    m_ActiveEffects.push_back({effect, duration, amplifier});
 }
 
 bool PlayerStats::hasEffect(StatusEffect effect) const {
     for (const auto& active : m_ActiveEffects) {
-        if (active.effect == effect && active.duration > 0.0f) return true;
+        if (active.effect == effect && active.duration > 0.0f)
+            return true;
     }
     return false;
 }
@@ -76,7 +77,7 @@ float PlayerStats::getJumpMultiplier() const {
 
 void PlayerStats::update(float deltaTime) {
     // 1. Update Status Effects
-    for (auto it = m_ActiveEffects.begin(); it != m_ActiveEffects.end(); ) {
+    for (auto it = m_ActiveEffects.begin(); it != m_ActiveEffects.end();) {
         it->duration -= deltaTime;
         if (it->effect == StatusEffect::Regeneration && it->duration > 0.0f) {
             setHealth(m_Health + 1.0f * deltaTime);
@@ -126,7 +127,8 @@ void PlayerStats::update(float deltaTime) {
 }
 
 float PlayerStats::applyFallDamage(float distance) {
-    if (distance <= 3.0f) return 0.0f;
+    if (distance <= 3.0f)
+        return 0.0f;
     float rawDamage = distance - 3.0f;
     float actualDamage = applyDamageReduction(rawDamage);
     setHealth(m_Health - actualDamage);
@@ -154,7 +156,7 @@ void PlayerStats::updateEnvironmentalEffects(bool isHeadUnderwater, bool inLava,
 
     // Lava & Fire Burning
     if (inLava) {
-        m_FireTicks = 300.0f; // 15 seconds of fire
+        m_FireTicks = 300.0f;                   // 15 seconds of fire
         setHealth(m_Health - 4.0f * deltaTime); // direct contact damage
     } else if (inWater) {
         m_FireTicks = 0.0f; // extinguished in water
@@ -169,4 +171,4 @@ void PlayerStats::updateEnvironmentalEffects(bool isHeadUnderwater, bool inLava,
     }
 }
 
-}
+} // namespace Minecraft

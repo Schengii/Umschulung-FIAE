@@ -3,6 +3,7 @@
 
 #include "../inventory/Inventory.hpp"
 #include "../renderer/Shader.hpp"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <memory>
@@ -31,6 +32,6 @@ private:
     GLuint m_VBO = 0;
 };
 
-}
+} // namespace Minecraft
 
 #endif // INVENTORYGUI_HPP

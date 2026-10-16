@@ -1,13 +1,23 @@
 @echo off
-title Wohnungs-KI Beenden
+title Wohnungssuche KI - Dienste Beenden
 echo ==============================================
-echo   Beende alle Wohnungs-KI Hintergrunddienste
+echo   Beende Wohnungssuche KI Hintergrunddienste
 echo ==============================================
 echo.
 
-taskkill /F /IM node.exe
+echo Beende Prozesse auf Port 5000 (Backend)...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":5000" ^| findstr "LISTENING"') do (
+    taskkill /F /PID %%a >nul 2>&1
+)
+
+echo Beende Prozesse auf Port 5222 (Frontend)...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":5222" ^| findstr "LISTENING"') do (
+    taskkill /F /PID %%a >nul 2>&1
+)
 
 echo.
-echo [OK] Alle Node.js und Wohnungs-KI Prozesse wurden beendet.
+echo ==============================================
+echo [OK] Hintergrunddienste auf Ports 5000 und 5222 beendet.
+echo ==============================================
 echo.
 pause

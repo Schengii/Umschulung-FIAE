@@ -1,4 +1,5 @@
 #include "CaveDecorator.hpp"
+
 #include "World.hpp"
 
 namespace Minecraft {
@@ -36,4 +37,4 @@ void CaveDecorator::generateStalactite(World& world, int x, int y, int z, int he
     }
 }
 
-}
+} // namespace Minecraft

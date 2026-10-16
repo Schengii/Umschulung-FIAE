@@ -21,10 +21,10 @@ public:
     float getAmbientLight() const;
 
 private:
-    float m_TimeTicks = 6000.0f; // Start at Noon (6000 ticks)
+    float m_TimeTicks = 6000.0f;       // Start at Noon (6000 ticks)
     float m_DayLengthSeconds = 300.0f; // 5 minutes per full day/night cycle
 };
 
-}
+} // namespace Minecraft
 
 #endif // TIMEMANAGER_HPP

@@ -20,6 +20,6 @@ public:
     static bool eatFood(PlayerStats& stats, BlockType type);
 };
 
-}
+} // namespace Minecraft
 
 #endif // FOODSYSTEM_HPP

@@ -59,6 +59,7 @@ typedef khronos_sizei_t GLsizeiptr;
 
 #define GL_DEPTH_BUFFER_BIT 0x00000100
 #define GL_COLOR_BUFFER_BIT 0x00004000
+#define GL_NO_ERROR 0
 #define GL_FALSE 0
 #define GL_TRUE 1
 #define GL_TRIANGLES 0x0004
@@ -121,6 +122,7 @@ typedef khronos_sizei_t GLsizeiptr;
 #define GL_DEPTH24_STENCIL8 0x88F0
 
 typedef void (GLAD_API_PTR *PFNGLCLEARPROC)(GLbitfield mask);
+typedef GLenum (GLAD_API_PTR *PFNGLGETERRORPROC)(void);
 typedef void (GLAD_API_PTR *PFNGLCLEARCOLORPROC)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 typedef void (GLAD_API_PTR *PFNGLVIEWPORTPROC)(GLint x, GLint y, GLsizei width, GLsizei height);
 typedef void (GLAD_API_PTR *PFNGLENABLEPROC)(GLenum cap);
@@ -192,6 +194,7 @@ typedef void (GLAD_API_PTR *PFNGLDRAWARRAYSPROC)(GLenum mode, GLint first, GLsiz
 typedef void (GLAD_API_PTR *PFNGLDRAWELEMENTSPROC)(GLenum mode, GLsizei count, GLenum type, const void *indices);
 
 GLAD_GLAPI PFNGLCLEARPROC glClear;
+GLAD_GLAPI PFNGLGETERRORPROC glGetError;
 GLAD_GLAPI PFNGLCLEARCOLORPROC glClearColor;
 GLAD_GLAPI PFNGLVIEWPORTPROC glViewport;
 GLAD_GLAPI PFNGLENABLEPROC glEnable;

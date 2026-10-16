@@ -81,6 +81,34 @@ const PRESET_ENDPOINTS = [
   }
 ];
 
+function tryParseJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return str;
+  }
+}
+
+function createFallbackMockResponse(method, url, requestBody) {
+  return {
+    status: method === 'POST' || method === 'PUT' ? 201 : 200,
+    statusText: method === 'POST' || method === 'PUT' ? '201 Created' : '200 OK',
+    timeMs: Math.floor(Math.random() * 60) + 20,
+    size: `${(Math.random() * 2 + 0.5).toFixed(1)} KB`,
+    data: {
+      timestamp: new Date().toISOString(),
+      requestMethod: method,
+      targetUrl: url,
+      status: 'success',
+      payloadReceived: requestBody ? tryParseJson(requestBody) : null
+    }
+  };
+}
+
+function createHistoryItem(resultStatus, method, url) {
+  return { id: Date.now(), method, url, status: resultStatus, time: new Date().toLocaleTimeString() };
+}
+
 export default function ApiMockStudioLab({ onRewardXP }) {
   const [method, setMethod] = useState('GET');
   const [url, setUrl] = useState('https://api.devgame.it/v1/users');
@@ -100,41 +128,15 @@ export default function ApiMockStudioLab({ onRewardXP }) {
 
   const handleSendRequest = () => {
     let matchedPreset = PRESET_ENDPOINTS.find(p => p.url === url && p.method === method);
-    
-    let result;
-    if (matchedPreset) {
-      result = matchedPreset.mockResponse;
-    } else {
-      result = {
-        status: method === 'POST' || method === 'PUT' ? 201 : 200,
-        statusText: method === 'POST' || method === 'PUT' ? '201 Created' : '200 OK',
-        timeMs: Math.floor(Math.random() * 60) + 20,
-        size: `${(Math.random() * 2 + 0.5).toFixed(1)} KB`,
-        data: {
-          timestamp: new Date().toISOString(),
-          requestMethod: method,
-          targetUrl: url,
-          status: 'success',
-          payloadReceived: requestBody ? tryParseJson(requestBody) : null
-        }
-      };
-    }
+    const result = matchedPreset ? matchedPreset.mockResponse : createFallbackMockResponse(method, url, requestBody);
 
     setResponse(result);
     setHistory(prev => [
-      { id: Date.now(), method, url, status: result.status, time: new Date().toLocaleTimeString() },
+      createHistoryItem(result.status, method, url),
       ...prev.slice(0, 9)
     ]);
 
     if (onRewardXP) onRewardXP(25);
-  };
-
-  const tryParseJson = (str) => {
-    try {
-      return JSON.parse(str);
-    } catch {
-      return str;
-    }
   };
 
   const handleCopyResponse = () => {

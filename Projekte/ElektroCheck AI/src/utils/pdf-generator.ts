@@ -1,3 +1,4 @@
+import type { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
 import { DiagnosisResult, ThermalAnalysisResult } from "../services/ai-types";
 
 /**
@@ -8,9 +9,17 @@ export function buildPdfDocDefinition(
   capturedImage: string | null,
   disclaimerText: string,
   dguvData?: {
+    protectionClass?: string;
     rPe?: string;
     rIso?: string;
     iLeak?: string;
+    iTouch?: string;
+    rcdTripTimeMs?: string;
+    rcdTripCurrentMa?: string;
+    loopImpedanceZs?: string;
+    equipmentName?: string;
+    inventoryNumber?: string;
+    nextInspectionDate?: string;
     status: string;
     details: string[];
     signatureUrl?: string | null;
@@ -19,15 +28,28 @@ export function buildPdfDocDefinition(
     name?: string;
     company?: string;
     id?: string;
+  },
+  roiData?: {
+    totalRepairCost: number;
+    replacementPrice: number;
+    ratioPercent: number;
+    recommendation: string;
+  },
+  gbuData?: {
+    location: string;
+    initialRiskLevel: string;
+    residualRiskLevel: string;
+    isAcceptable: boolean;
   }
-): any {
+): TDocumentDefinitions {
   const today = new Date().toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 
-  const docDefinition: any = {
+  // Bedingte Blöcke (cond ? {...} : {}) sind für pdfmake gültig, aber nicht für dessen strenge Typen
+  const docDefinition = {
     content: [
       {
         text: "ElectroCheck AI - Wartungsprotokoll",
@@ -63,12 +85,11 @@ export function buildPdfDocDefinition(
           body: [
             [
               {
-                text: `KOMPONENTE: ${result.deviceName}`,
+                text: `KOMPONENTE: ${dguvData?.equipmentName || result.deviceName}`,
                 fillColor: "#eeeeee",
                 border: [false, false, false, false],
                 bold: true,
                 fontSize: 14,
-                padding: [8, 8, 8, 8],
               },
             ],
           ],
@@ -107,14 +128,14 @@ export function buildPdfDocDefinition(
       { text: result.identifiedDefect, margin: [0, 0, 0, 10] },
       { text: "Handlungsempfehlung:", bold: true, margin: [0, 10, 0, 2] },
       { text: result.recommendation, margin: [0, 0, 0, 10] },
-      (result as any).location
+      result.location
         ? {
             text: [
               { text: "📍 Anlagenstandort: ", bold: true },
               {
-                text: (result as any).location,
+                text: result.location,
                 color: "#005fcc",
-                link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((result as any).location.replace("Lat: ", "").replace(", Lng: ", ","))}`,
+                link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(result.location.replace("Lat: ", "").replace(", Lng: ", ","))}`,
               },
             ],
             margin: [0, 0, 0, 10],
@@ -144,7 +165,7 @@ export function buildPdfDocDefinition(
             },
             {
               text: result.customerExperience,
-              fontStyle: "italic",
+              italics: true,
               color: "#444444",
               margin: [10, 0, 0, 10],
             },
@@ -163,8 +184,8 @@ export function buildPdfDocDefinition(
       dguvData
         ? [
             {
-              text: "⚡ SICHERHEITSPRÜFUNG NACH DGUV V3 (VDE 0701-0702)",
-              fontSize: 16,
+              text: `⚡ SICHERHEITSPRÜFUNG NACH DGUV V3 (VDE 0701-0702) - ${dguvData.protectionClass || "SK I"}`,
+              fontSize: 15,
               bold: true,
               margin: [0, 20, 0, 5],
               color: "#005fcc",
@@ -182,6 +203,14 @@ export function buildPdfDocDefinition(
                 },
               ],
             },
+            dguvData.inventoryNumber
+              ? {
+                  text: `Prüflings- / Inventarnummer: ${dguvData.inventoryNumber}`,
+                  bold: true,
+                  fontSize: 10,
+                  margin: [0, 5, 0, 5],
+                }
+              : {},
             {
               table: {
                 widths: ["*", "auto", "auto"],
@@ -189,51 +218,129 @@ export function buildPdfDocDefinition(
                   [
                     { text: "Prüfparameter", bold: true, fillColor: "#eeeeee" },
                     { text: "Messwert", bold: true, fillColor: "#eeeeee" },
-                    { text: "Grenzwert", bold: true, fillColor: "#eeeeee" },
+                    { text: "Norm-Grenzwert", bold: true, fillColor: "#eeeeee" },
                   ],
-                  [
-                    { text: "Schutzleiterwiderstand (R_PE)" },
-                    { text: dguvData.rPe ? `${dguvData.rPe} Ω` : "n.a." },
-                    { text: "≤ 0.3 Ω" },
-                  ],
+                  ...(dguvData.protectionClass === "SK_I"
+                    ? [
+                        [
+                          { text: "Schutzleiterwiderstand (R_PE)" },
+                          { text: dguvData.rPe ? `${dguvData.rPe} Ω` : "n.a." },
+                          { text: "≤ 0.3 Ω (+0.1 Ω / 7.5m)" },
+                        ],
+                      ]
+                    : []),
                   [
                     { text: "Isolationswiderstand (R_ISO)" },
                     { text: dguvData.rIso ? `${dguvData.rIso} MΩ` : "n.a." },
-                    { text: "≥ 1.0 MΩ" },
+                    {
+                      text:
+                        dguvData.protectionClass === "SK_II"
+                          ? "≥ 2.0 MΩ"
+                          : dguvData.protectionClass === "SK_III"
+                          ? "≥ 0.25 MΩ"
+                          : "≥ 1.0 MΩ",
+                    },
                   ],
+                  ...(dguvData.protectionClass === "SK_I"
+                    ? [
+                        [
+                          { text: "Ableitstrom (I_PE)" },
+                          { text: dguvData.iLeak ? `${dguvData.iLeak} mA` : "n.a." },
+                          { text: "≤ 3.5 mA" },
+                        ],
+                      ]
+                    : []),
+                  ...(dguvData.protectionClass === "SK_II"
+                    ? [
+                        [
+                          { text: "Berührungsstrom (I_B)" },
+                          { text: dguvData.iTouch ? `${dguvData.iTouch} mA` : "n.a." },
+                          { text: "≤ 0.5 mA" },
+                        ],
+                      ]
+                    : []),
+                  ...(dguvData.protectionClass === "INSTALLATION_VDE0100"
+                    ? [
+                        ...(dguvData.rPe ? [[{ text: "PE-Durchgängigkeit (R_PE)" }, { text: `${dguvData.rPe} Ω` }, { text: "≤ 1.0 Ω" }]] : []),
+                        ...(dguvData.rcdTripTimeMs ? [[{ text: "RCD Auslösezeit (t_a)" }, { text: `${dguvData.rcdTripTimeMs} ms` }, { text: "≤ 300 ms" }]] : []),
+                        ...(dguvData.rcdTripCurrentMa ? [[{ text: "RCD Auslösestrom (I_ΔN)" }, { text: `${dguvData.rcdTripCurrentMa} mA` }, { text: "15 - 30 mA" }]] : []),
+                        ...(dguvData.loopImpedanceZs ? [[{ text: "Schleifenimpedanz (Z_s)" }, { text: `${dguvData.loopImpedanceZs} Ω` }, { text: "≤ Grenzimp. LSS" }]] : [])
+                      ]
+                    : []),
                   [
-                    { text: "Ableitstrom (I_leak)" },
-                    { text: dguvData.iLeak ? `${dguvData.iLeak} mA` : "n.a." },
-                    { text: "≤ 3.5 mA" },
-                  ],
-                  [
-                    { text: "Gesamtbewertung", bold: true, colSpan: 2 },
+                    { text: "Gesamtbewertung / Prüfsiegel", bold: true, colSpan: 2 },
                     {},
                     {
-                      text: dguvData.status,
+                      text: `${dguvData.status}${dguvData.nextInspectionDate ? " (Nächste Prüf.: " + dguvData.nextInspectionDate + ")" : ""}`,
                       bold: true,
                       color: dguvData.status === "BESTANDEN" ? "#0b8a5a" : "#dc2626",
                     },
                   ],
                 ],
               },
-              margin: [0, 15, 0, 15],
+              margin: [0, 10, 0, 15],
             },
             dguvData.signatureUrl
               ? [
-                  { 
-                    text: `Unterschrift der Elektrofachkraft:${inspectorData?.name ? " " + inspectorData.name : ""}`, 
-                    bold: true, 
-                    fontSize: 11, 
-                    margin: [0, 10, 0, 5] 
+                  {
+                    text: `Unterschrift der Prüffachkraft:${inspectorData?.name ? " " + inspectorData.name : ""}`,
+                    bold: true,
+                    fontSize: 11,
+                    margin: [0, 5, 0, 5],
                   },
                   {
                     image: dguvData.signatureUrl,
                     width: 120,
-                    margin: [10, 0, 0, 10]
-                  }
+                    margin: [10, 0, 0, 10],
+                  },
                 ]
-              : []
+              : [],
+          ]
+        : [],
+      roiData
+        ? [
+            {
+              text: "📊 WIRTSCHAFTLICHKEITS-ANALYSE (REPARATUR VS. NEUKAUF)",
+              fontSize: 14,
+              bold: true,
+              margin: [0, 15, 0, 5],
+              color: "#005fcc",
+            },
+            {
+              table: {
+                widths: ["*", "auto"],
+                body: [
+                  [{ text: "Gesamte Reparaturkosten (Material + Arbeit)", bold: true }, { text: `${roiData.totalRepairCost.toFixed(2)} €` }],
+                  [{ text: "Wiederbeschaffungswert (Neupreis)", bold: true }, { text: `${roiData.replacementPrice.toFixed(2)} €` }],
+                  [{ text: "Reparaturquote", bold: true }, { text: `${roiData.ratioPercent}%` }],
+                  [{ text: "Kundenempfehlung", bold: true }, { text: roiData.recommendation, bold: true, color: "#005fcc" }],
+                ],
+              },
+              margin: [0, 5, 0, 15],
+            },
+          ]
+        : [],
+      gbuData
+        ? [
+            {
+              text: "🛡️ GEFÄHRDUNGSBEURTEILUNG (BETRSICHV / ARBSCHG)",
+              fontSize: 14,
+              bold: true,
+              margin: [0, 15, 0, 5],
+              color: "#005fcc",
+            },
+            {
+              table: {
+                widths: ["*", "auto"],
+                body: [
+                  [{ text: "Arbeitsort / Anlage", bold: true }, { text: gbuData.location }],
+                  [{ text: "Ausgangsrisiko (vor Schutzmaßnahmen)", bold: true }, { text: gbuData.initialRiskLevel }],
+                  [{ text: "Restrisiko (nach 5 Sicherheitsregeln)", bold: true }, { text: gbuData.residualRiskLevel, bold: true, color: gbuData.isAcceptable ? "#0b8a5a" : "#dc2626" }],
+                  [{ text: "Arbeitsfreigabe", bold: true }, { text: gbuData.isAcceptable ? "FREIGEGEBEN (Restrisiko akzeptabel)" : "SPERRE (Schutzmaßnahmen unzureichend)", bold: true, color: gbuData.isAcceptable ? "#0b8a5a" : "#dc2626" }],
+                ],
+              },
+              margin: [0, 5, 0, 15],
+            },
           ]
         : [],
       result.sparePartSearchTerm
@@ -271,17 +378,17 @@ export function buildPdfDocDefinition(
         margin: [0, 20, 0, 5],
       },
       {
-        text: (result as any).disclaimer || disclaimerText,
+        text: result.disclaimer || disclaimerText,
         fontSize: 9,
         color: "#444444",
         alignment: "justify",
-        fontStyle: "italic",
+        italics: true,
       },
     ],
     defaultStyle: { fontSize: 11, lineHeight: 1.3 },
   };
 
-  return docDefinition;
+  return docDefinition as TDocumentDefinitions;
 }
 
 export function buildThermalPdfDocDefinition(
@@ -293,14 +400,14 @@ export function buildThermalPdfDocDefinition(
     company?: string;
     id?: string;
   }
-): any {
+): TDocumentDefinitions {
   const today = new Date().toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 
-  const hotspotsBody: any[] = [
+  const hotspotsBody: TableCell[][] = [
     [
       { text: "Bauteil / Bereich", bold: true, fillColor: "#eeeeee" },
       { text: "Temperatur", bold: true, fillColor: "#eeeeee" },
@@ -362,7 +469,6 @@ export function buildThermalPdfDocDefinition(
                 bold: true,
                 fontSize: 14,
                 color: result.overallStatus === "CRITICAL" ? "#991b1b" : result.overallStatus === "MONITOR" ? "#92400e" : "#065f46",
-                padding: [8, 8, 8, 8],
               },
             ],
           ],
@@ -435,10 +541,67 @@ export function buildThermalPdfDocDefinition(
         fontSize: 9,
         color: "#444444",
         alignment: "justify",
-        fontStyle: "italic",
+        italics: true,
       },
     ],
     defaultStyle: { fontSize: 11, lineHeight: 1.3 },
-  };
+  } as TDocumentDefinitions;
 }
+
+// pdfmake ≥ 0.3: Promise-basierte API (die frühere Callback-Variante wird nicht mehr aufgerufen)
+interface PdfDocument {
+  getBlob(): Promise<Blob>;
+  download(filename?: string): Promise<void>;
+}
+
+interface PdfMakeInstance {
+  vfs?: Record<string, string>;
+  addVirtualFileSystem?(vfs: Record<string, string>): void;
+  createPdf(docDefinition: TDocumentDefinitions): PdfDocument;
+}
+
+/** pdfmake ≥ 0.3: das Modul selbst ist das Schriftarchiv ({ "Roboto-Regular.ttf": base64, … }); ältere Versionen kapseln es in .pdfMake.vfs bzw. .vfs */
+type VfsFontsModule = Record<string, unknown> & {
+  default?: VfsFontsModule;
+  pdfMake?: { vfs: Record<string, string> };
+  vfs?: Record<string, string>;
+};
+
+let cachedPdfMake: PdfMakeInstance | null = null;
+
+/**
+ * Lädt pdfmake und vfs_fonts dynamisch (Lazy Loading) erst bei Bedarf
+ */
+async function loadPdfMake(): Promise<PdfMakeInstance> {
+  if (cachedPdfMake) return cachedPdfMake;
+
+  const pdfMakeMod = (await import("pdfmake/build/pdfmake")) as unknown as { default?: PdfMakeInstance } & PdfMakeInstance;
+  const pdfFontsMod = (await import("pdfmake/build/vfs_fonts")) as unknown as VfsFontsModule;
+  const pdfMake: PdfMakeInstance = pdfMakeMod.default || pdfMakeMod;
+  const pdfFonts: VfsFontsModule = pdfFontsMod.default || pdfFontsMod;
+
+  const vfs = pdfFonts.pdfMake?.vfs ?? pdfFonts.vfs ?? (pdfFonts as Record<string, string>);
+  if (pdfMake.addVirtualFileSystem) pdfMake.addVirtualFileSystem(vfs);
+  else pdfMake.vfs = vfs;
+
+  cachedPdfMake = pdfMake;
+  return pdfMake;
+}
+
+/**
+ * Erstellt einen Blob für die PDF-Vorschau
+ */
+export async function generatePdfBlob(docDefinition: TDocumentDefinitions): Promise<Blob> {
+  const pdfMake = await loadPdfMake();
+  return pdfMake.createPdf(docDefinition).getBlob();
+}
+
+/**
+ * Startet den direkten Download einer PDF-Datei
+ */
+export async function downloadPdf(docDefinition: TDocumentDefinitions, filename: string): Promise<void> {
+  const pdfMake = await loadPdfMake();
+  await pdfMake.createPdf(docDefinition).download(filename);
+}
+
 

@@ -4,6 +4,8 @@
 import type { AppState, Order } from '../types';
 import { formatPrice, generateOrderId, formatDate } from '../utils/formatters';
 import { showToast } from './toast';
+import { deductStock } from '../store';
+import { playSound } from '../utils/audio';
 
 type OrderPlacedCallback = (order: Order) => void;
 
@@ -95,17 +97,45 @@ export function openCheckoutModal(state: AppState, onOrderPlaced: OrderPlacedCal
               <span class="delivery-price">${shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}</span>
             </div>
           </label>
-          ${state.userProfile.isPrime ? `
-            <label class="delivery-option">
-              <input type="radio" name="delivery" value="prime-express" />
-              <div>
-                <strong>⭐ Prime Express</strong>
-                <span class="delivery-date">Heute bis 22:00 Uhr</span>
-                <span class="delivery-price">Kostenlos</span>
+        <!-- Gift Options Section -->
+        <div class="checkout-gift-options">
+          <label class="gift-toggle-label">
+            <input type="checkbox" id="checkoutIsGiftCheckbox" />
+            <span>🎁 Als Geschenk bestellen (+2,99 €)</span>
+          </label>
+          <div class="gift-details-panel hidden" id="giftDetailsPanel">
+            <div class="gift-wrap-selector">
+              <label class="gift-field-label">Verpackungsstil wählen:</label>
+              <div class="gift-wrap-chips">
+                <label class="wrap-chip active">
+                  <input type="radio" name="wrapType" value="classic" checked />
+                  <span>🎀 Klassisch Rot</span>
+                </label>
+                <label class="wrap-chip">
+                  <input type="radio" name="wrapType" value="premium" />
+                  <span>✨ Gold Edition</span>
+                </label>
+                <label class="wrap-chip">
+                  <input type="radio" name="wrapType" value="eco" />
+                  <span>🌿 Eco Vintage</span>
+                </label>
               </div>
+            </div>
+            <div class="gift-message-group">
+              <label for="giftSenderInput" class="gift-field-label">Absender-Name:</label>
+              <input type="text" id="giftSenderInput" class="gift-input" value="${state.userProfile.name}" placeholder="Dein Name" />
+            </div>
+            <div class="gift-message-group">
+              <label for="giftMessageInput" class="gift-field-label">Kostenlose persönliche Grußkarte:</label>
+              <textarea id="giftMessageInput" class="gift-textarea" rows="2" placeholder="Alles Gute zum Geburtstag! Viel Freude damit..."></textarea>
+            </div>
+            <label class="gift-hide-prices-label">
+              <input type="checkbox" id="giftHidePricesCheckbox" checked />
+              <span>Preise auf dem Lieferschein ausblenden (Geschenkbeleg)</span>
             </label>
-          ` : ''}
+          </div>
         </div>
+
         <button class="btn-primary" id="step1NextBtn">Weiter zur Zahlung →</button>
       </div>
 
@@ -255,6 +285,29 @@ export function openCheckoutModal(state: AppState, onOrderPlaced: OrderPlacedCal
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
+  // Gift Options Toggle Wiring
+  const isGiftCb = document.getElementById('checkoutIsGiftCheckbox') as HTMLInputElement;
+  const giftPanel = document.getElementById('giftDetailsPanel');
+  let giftCost = 0;
+
+  isGiftCb?.addEventListener('change', () => {
+    if (isGiftCb.checked) {
+      giftPanel?.classList.remove('hidden');
+      giftCost = 2.99;
+    } else {
+      giftPanel?.classList.add('hidden');
+      giftCost = 0;
+    }
+  });
+
+  // Gift Wrap Chips Wiring
+  modal.querySelectorAll('.wrap-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      modal.querySelectorAll('.wrap-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
   // Wire close
   document.getElementById('checkoutClose')?.addEventListener('click', closeCheckoutModal);
 
@@ -331,7 +384,7 @@ export function openCheckoutModal(state: AppState, onOrderPlaced: OrderPlacedCal
       open3DSecureModal(() => finalizeOrder());
     } else if (selectedPaymentType === 'crypto') {
       import('./cryptoPayment').then(({ openCryptoPaymentModal }) => {
-        openCryptoPaymentModal(total, () => finalizeOrder());
+        openCryptoPaymentModal(total + giftCost, () => finalizeOrder());
       });
     } else if (selectedPaymentType === 'applepay') {
       showToast('🍏 Biometrische Autorisierung via Face ID...', 'info');
@@ -357,16 +410,37 @@ export function openCheckoutModal(state: AppState, onOrderPlaced: OrderPlacedCal
     else if (selectedPaymentType === 'applepay') paymentMethodName = 'Apple Pay';
     else if (selectedPaymentType === 'invoice') paymentMethodName = 'Kauf auf Rechnung';
 
+    const orderId = generateOrderId();
     const trackingNum = 'TRK-' + Date.now().toString(36).toUpperCase();
+    const invoiceNum = `INV-2026-${orderId.slice(-6).toUpperCase()}`;
+
+    // Read gift options
+    const isGift = isGiftCb?.checked || false;
+    let selectedWrap: 'none' | 'classic' | 'premium' | 'eco' = 'none';
+    if (isGift) {
+      const checkedWrap = modal.querySelector<HTMLInputElement>('input[name="wrapType"]:checked');
+      selectedWrap = (checkedWrap?.value as any) || 'classic';
+    }
+    const senderName = (modal.querySelector<HTMLInputElement>('#giftSenderInput')?.value || state.userProfile.name).trim();
+    const greetingMessage = (modal.querySelector<HTMLTextAreaElement>('#giftMessageInput')?.value || '').trim();
+    const hidePrices = (modal.querySelector<HTMLInputElement>('#giftHidePricesCheckbox')?.checked) ?? true;
+
+    const finalOrderTotal = Math.round((total + giftCost) * 100) / 100;
+    const finalNet = finalOrderTotal / 1.19;
+    const finalVat = finalOrderTotal - finalNet;
 
     const order: Order = {
-      id: generateOrderId(),
+      id: orderId,
+      invoiceNumber: invoiceNum,
       items: state.cart.map(i => ({
         product: i.product,
         qty: i.qty,
         priceAtPurchase: i.product.price,
       })),
-      total,
+      total: finalOrderTotal,
+      subtotal,
+      taxAmount: Math.round(finalVat * 100) / 100,
+      discountAmount: discount,
       status: 'processing',
       placedAt: Date.now(),
       estimatedDelivery: formatDate(deliveryDate),
@@ -374,15 +448,24 @@ export function openCheckoutModal(state: AppState, onOrderPlaced: OrderPlacedCal
       paymentMethod: paymentMethodName,
       trackingNumber: trackingNum,
       isReturnable: true,
+      giftOptions: isGift ? {
+        isGift: true,
+        wrapType: selectedWrap,
+        senderName,
+        greetingMessage,
+        hidePricesOnSlip: hidePrices,
+      } : undefined,
     };
 
+    deductStock(state.cart);
+    playSound('checkout');
     onOrderPlaced(order);
 
     // Update confirmation step
     const confirmOrderId = document.getElementById('confirmOrderId');
     if (confirmOrderId) confirmOrderId.textContent = `Bestellung ${order.id}`;
     const confirmTracking = document.getElementById('confirmTracking');
-    if (confirmTracking) confirmTracking.textContent = `Sendungsnummer: ${trackingNum}`;
+    if (confirmTracking) confirmTracking.textContent = `Sendungsnummer: ${trackingNum} • Rechnungs-Nr.: ${invoiceNum}`;
 
     goToStep(3);
   }

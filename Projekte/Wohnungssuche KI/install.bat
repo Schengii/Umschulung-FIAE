@@ -1,29 +1,22 @@
 @echo off
-pause
-
+title Wohnungssuche KI - Installation
+echo ==============================================
+echo   Wohnungssuche KI - Paketinstallation
+echo ==============================================
 echo.
-echo === Wohnungssuche KI - Installation ===
-echo.
 
-cd /d "%~dp0backend"
-npm install
+cd /d "%~dp0"
+call npm run install-all
 if errorlevel 1 (
     echo.
-    echo FEHLER bei Backend!
-    pause
-    exit /b 1
-)
-
-cd /d "%~dp0frontend"
-npm install
-if errorlevel 1 (
-    echo.
-    echo FEHLER bei Frontend!
+    echo [FEHLER] Die Installation ist fehlgeschlagen!
     pause
     exit /b 1
 )
 
 echo.
-echo Fertig! Alle Pakete installiert.
+echo ==============================================
+echo [OK] Alle Pakete wurden erfolgreich installiert.
+echo ==============================================
+echo.
 pause
-

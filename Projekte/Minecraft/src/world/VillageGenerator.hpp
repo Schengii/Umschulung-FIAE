@@ -2,6 +2,7 @@
 #define VILLAGEGENERATOR_HPP
 
 #include "Block.hpp"
+
 #include <glm/glm.hpp>
 
 namespace Minecraft {
@@ -18,6 +19,6 @@ public:
     static void generateWell(World& world, int x, int y, int z);
 };
 
-}
+} // namespace Minecraft
 
 #endif // VILLAGEGENERATOR_HPP

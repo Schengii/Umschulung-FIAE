@@ -1,11 +1,12 @@
 #include "PostProcessing.hpp"
+
 #include <iostream>
 
 namespace Minecraft {
 
-PostProcessing::PostProcessing(unsigned int width, unsigned int height) 
-    : m_Width(width), m_Height(height) {
-    if (!glGenFramebuffers) return;
+PostProcessing::PostProcessing(unsigned int width, unsigned int height) : m_Width(width), m_Height(height) {
+    if (!glGenFramebuffers)
+        return;
 
     m_Shader = std::make_unique<Shader>("assets/shaders/postprocess.vert", "assets/shaders/postprocess.frag");
 
@@ -18,15 +19,21 @@ PostProcessing::PostProcessing(unsigned int width, unsigned int height)
 }
 
 PostProcessing::~PostProcessing() {
-    if (m_ColorTex && glDeleteTextures) glDeleteTextures(1, &m_ColorTex);
-    if (m_RBO && glDeleteRenderbuffers) glDeleteRenderbuffers(1, &m_RBO);
-    if (m_FBO && glDeleteFramebuffers) glDeleteFramebuffers(1, &m_FBO);
-    if (m_QuadVAO && glDeleteVertexArrays) glDeleteVertexArrays(1, &m_QuadVAO);
-    if (m_QuadVBO && glDeleteBuffers) glDeleteBuffers(1, &m_QuadVBO);
+    if (m_ColorTex && glDeleteTextures)
+        glDeleteTextures(1, &m_ColorTex);
+    if (m_RBO && glDeleteRenderbuffers)
+        glDeleteRenderbuffers(1, &m_RBO);
+    if (m_FBO && glDeleteFramebuffers)
+        glDeleteFramebuffers(1, &m_FBO);
+    if (m_QuadVAO && glDeleteVertexArrays)
+        glDeleteVertexArrays(1, &m_QuadVAO);
+    if (m_QuadVBO && glDeleteBuffers)
+        glDeleteBuffers(1, &m_QuadVBO);
 }
 
 void PostProcessing::resize(unsigned int width, unsigned int height) {
-    if (width == 0 || height == 0 || !glBindFramebuffer) return;
+    if (width == 0 || height == 0 || !glBindFramebuffer)
+        return;
     m_Width = width;
     m_Height = height;
 
@@ -46,19 +53,23 @@ void PostProcessing::resize(unsigned int width, unsigned int height) {
 }
 
 void PostProcessing::bindForWriting() {
-    if (!glBindFramebuffer) return;
+    if (!glBindFramebuffer)
+        return;
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
     glViewport(0, 0, m_Width, m_Height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void PostProcessing::unbindAndRender(bool isUnderwater, bool hasNightVision, bool bloomEnabled, bool ssaoEnabled, bool godRaysEnabled, const glm::vec2& sunScreenPos) {
-    if (!glBindFramebuffer) return;
+void PostProcessing::unbindAndRender(bool isUnderwater, bool hasNightVision, bool bloomEnabled, bool ssaoEnabled,
+                                     bool godRaysEnabled, const glm::vec2& sunScreenPos) {
+    if (!glBindFramebuffer)
+        return;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, m_Width, m_Height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (!m_Shader) return;
+    if (!m_Shader)
+        return;
     m_Shader->use();
     m_Shader->setBool("u_IsUnderwater", isUnderwater);
     m_Shader->setBool("u_HasNightVision", hasNightVision);
@@ -77,17 +88,12 @@ void PostProcessing::unbindAndRender(bool isUnderwater, bool hasNightVision, boo
 }
 
 void PostProcessing::initQuad() {
-    if (!glGenVertexArrays) return;
-    float quadVertices[] = {
-        // positions   // texCoords
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
+    if (!glGenVertexArrays)
+        return;
+    float quadVertices[] = {// positions   // texCoords
+                            -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 1.0f, 0.0f,
 
-        -1.0f,  1.0f,  0.0f, 1.0f,
-         1.0f, -1.0f,  1.0f, 0.0f,
-         1.0f,  1.0f,  1.0f, 1.0f
-    };
+                            -1.0f, 1.0f, 0.0f, 1.0f, 1.0f,  -1.0f, 1.0f, 0.0f, 1.0f, 1.0f,  1.0f, 1.0f};
 
     glGenVertexArrays(1, &m_QuadVAO);
     glGenBuffers(1, &m_QuadVBO);
@@ -103,4 +109,4 @@ void PostProcessing::initQuad() {
     glBindVertexArray(0);
 }
 
-}
+} // namespace Minecraft

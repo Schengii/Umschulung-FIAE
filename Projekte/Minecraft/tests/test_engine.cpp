@@ -1,64 +1,94 @@
-#include <iostream>
-#include <cassert>
-#include <filesystem>
-#include <cstring>
-#include <glm/glm.hpp>
-#include "../src/world/World.hpp"
-#include "../src/world/Block.hpp"
-#include "../src/world/ChunkSection.hpp"
-#include "../src/world/RedstoneEngine.hpp"
-#include "../src/world/FluidEngine.hpp"
-#include "../src/world/ExplosionEngine.hpp"
-#include "../src/world/ToolSystem.hpp"
-#include "../src/world/WeatherManager.hpp"
-#include "../src/world/Biome.hpp"
-#include "../src/world/CaveDecorator.hpp"
-#include "../src/world/Raycast.hpp"
-#include "../src/world/ChestBlock.hpp"
-#include "../src/world/FurnaceBlock.hpp"
-#include "../src/world/StructureGenerator.hpp"
-#include "../src/world/DimensionManager.hpp"
-#include "../src/world/CropsEngine.hpp"
-#include "../src/world/VillageGenerator.hpp"
-#include "../src/world/TradingEngine.hpp"
-#include "../src/world/EnchantingEngine.hpp"
-#include "../src/world/BrewingEngine.hpp"
-#include "../src/world/RegionFile.hpp"
-#include "../src/world/LightEngine.hpp"
-#include "../src/core/ThreadPool.hpp"
-#include "../src/core/ModdingEngine.hpp"
-#include "../src/core/CommandParser.hpp"
-#include "../src/core/Application.hpp"
-#include "../src/inventory/PlayerStats.hpp"
-#include "../src/inventory/FoodSystem.hpp"
-#include "../src/renderer/TextureAtlas.hpp"
-#include "../src/renderer/PostProcessing.hpp"
-#include "../src/gui/ContainerGUI.hpp"
-#include "../src/crafting/CraftingManager.hpp"
-#include "../src/physics/PhysicsEngine.hpp"
-#include "../src/ecs/MobEngine.hpp"
-#include "../src/ecs/ItemEntity.hpp"
-#include "../src/renderer/ParticleEngine.hpp"
-#include "../src/renderer/FrustumCuller.hpp"
+// The tests rely on assert(); never let a Release build (NDEBUG) compile them away.
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
 #include "../src/audio/AudioManager.hpp"
-#include "../src/net/NetworkManager.hpp"
-#include "../src/world/ChunkMesh.hpp"
+#include "../src/core/Application.hpp"
+#include "../src/core/CommandParser.hpp"
+#include "../src/core/ModdingEngine.hpp"
+#include "../src/core/ThreadPool.hpp"
+#include "../src/crafting/CraftingManager.hpp"
+#include "../src/ecs/ItemEntity.hpp"
+#include "../src/ecs/MobEngine.hpp"
+#include "../src/gui/ContainerGUI.hpp"
 #include "../src/gui/FontRenderer.hpp"
+#include "../src/inventory/FoodSystem.hpp"
+#include "../src/inventory/PlayerStats.hpp"
+#include "../src/net/NetworkManager.hpp"
+#include "../src/physics/PhysicsEngine.hpp"
 #include "../src/renderer/EntityRenderer.hpp"
+#include "../src/renderer/FrustumCuller.hpp"
+#include "../src/renderer/ParticleEngine.hpp"
+#include "../src/renderer/PostProcessing.hpp"
 #include "../src/renderer/Skybox.hpp"
+#include "../src/renderer/TextureAtlas.hpp"
+#include "../src/world/Biome.hpp"
+#include "../src/world/Block.hpp"
+#include "../src/world/BrewingEngine.hpp"
+#include "../src/world/CaveDecorator.hpp"
+#include "../src/world/ChestBlock.hpp"
+#include "../src/world/ChunkMesh.hpp"
+#include "../src/world/ChunkSection.hpp"
+#include "../src/world/CropsEngine.hpp"
+#include "../src/world/DimensionManager.hpp"
+#include "../src/world/EnchantingEngine.hpp"
+#include "../src/world/ExplosionEngine.hpp"
+#include "../src/world/FluidEngine.hpp"
+#include "../src/world/FurnaceBlock.hpp"
+#include "../src/world/LightEngine.hpp"
+#include "../src/world/Raycast.hpp"
+#include "../src/world/RedstoneEngine.hpp"
+#include "../src/world/RegionFile.hpp"
+#include "../src/world/StructureGenerator.hpp"
+#include "../src/world/ToolSystem.hpp"
+#include "../src/world/TradingEngine.hpp"
+#include "../src/world/VillageGenerator.hpp"
+#include "../src/world/WeatherManager.hpp"
+#include "../src/world/World.hpp"
+
+#include <cassert>
+#include <cstring>
+#include <filesystem>
+#include <glm/glm.hpp>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 using namespace Minecraft;
+
+// ---- Minimal test harness -------------------------------------------------
+// A failed assert() throws, which aborts only the current test function; main() collects
+// all failures, prints a summary and returns a non-zero exit code if any test failed.
+struct TestFailure : std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
+
+static void checkImpl(bool ok, const char* expr, const char* file, int line) {
+    if (!ok) {
+        throw TestFailure(std::string("assertion failed: ") + expr + "  [" + file + ":" + std::to_string(line) + "]");
+    }
+}
+#undef assert
+#define assert(expr) checkImpl(static_cast<bool>(expr), #expr, __FILE__, __LINE__)
 
 void testGreedyMeshing() {
     std::cout << "[TEST] 18. Greedy Meshing Quad Optimization & Vertex Compression..." << std::endl;
     Chunk chunk(0, 0);
+    // Start from an empty chunk so that only the flat slab below contributes geometry.
+    for (int x = 0; x < 16; ++x)
+        for (int y = 0; y < 256; ++y)
+            for (int z = 0; z < 16; ++z)
+                chunk.setBlock(x, y, z, BlockType::Air);
     for (int x = 0; x < 16; ++x) {
         for (int z = 0; z < 16; ++z) {
             chunk.setBlock(x, 10, z, BlockType::Grass);
         }
     }
     MeshData data = ChunkMesh::buildMeshData(chunk);
-    assert(data.vertices.size() > 0 && data.vertices.size() < 16 * 16 * 24);
+    // 256 top + 256 bottom quads + 4 * 16 side quads, 4 vertices each.
+    assert(data.vertices.size() == (256 + 256 + 64) * 4);
+    assert(data.vertices.size() < 16 * 16 * 24);
     assert(data.indices.size() > 0);
     std::cout << "  -> Greedy Meshing tests PASSED!" << std::endl;
 }
@@ -66,10 +96,10 @@ void testGreedyMeshing() {
 void testExtendedCrafting() {
     std::cout << "[TEST] 19. Extended 3x3 Crafting Table Recipes (Swords, Axes)..." << std::endl;
     std::array<ItemStack, 9> grid;
-    grid.fill({ BlockType::Air, 0, 64 });
-    grid[1] = { BlockType::IronOre, 1, 64 };
-    grid[4] = { BlockType::IronOre, 1, 64 };
-    grid[7] = { BlockType::Stick, 1, 64 };
+    grid.fill({BlockType::Air, 0, 64});
+    grid[1] = {BlockType::IronOre, 1, 64};
+    grid[4] = {BlockType::IronOre, 1, 64};
+    grid[7] = {BlockType::Stick, 1, 64};
 
     ItemStack result = CraftingManager::matchRecipe3x3(grid);
     assert(result.type == BlockType::IronSword);
@@ -80,14 +110,14 @@ void testRedstone() {
     std::filesystem::remove_all("world_saves");
     std::cout << "[TEST] 1. RedstoneEngine Signal Network & Logic..." << std::endl;
     World world(1);
-    
+
     world.setBlock(10, 60, 10, BlockType::Lever);
     bool powered = RedstoneEngine::isPowered(world, glm::ivec3(10, 60, 11));
     assert(powered == true);
-    
+
     int strength = RedstoneEngine::getSignalStrength(world, glm::ivec3(10, 60, 10));
     assert(strength == 15);
-    
+
     RedstoneEngine::updateRedstoneNetwork(world, glm::ivec3(10, 60, 10));
     std::cout << "  -> RedstoneEngine tests PASSED!" << std::endl;
 }
@@ -96,18 +126,21 @@ void testFluids() {
     std::filesystem::remove_all("world_saves");
     std::cout << "[TEST] 2. FluidEngine Water/Lava Cellular Automaton Spreading..." << std::endl;
     World world(1);
-    
+
     world.setBlock(0, 70, 0, BlockType::Water);
     world.setBlock(0, 69, 0, BlockType::Air);
-    
+
+    FluidEngine::resetTimers();
     FluidEngine::updateFluids(world, glm::vec3(0, 70, 0));
-    assert(world.getBlock(0, 69, 0) == BlockType::Water);
-    
+    // The block below a source fills with falling (flowing) water.
+    assert(BlockData::isWater(world.getBlock(0, 69, 0)));
+
     world.setBlock(5, 70, 5, BlockType::Lava);
     world.setBlock(5, 69, 5, BlockType::Air);
+    FluidEngine::resetTimers();
     FluidEngine::updateFluids(world, glm::vec3(5, 70, 5));
-    assert(world.getBlock(5, 69, 5) == BlockType::Lava);
-    
+    assert(BlockData::isLava(world.getBlock(5, 69, 5)));
+
     std::cout << "  -> FluidEngine tests PASSED!" << std::endl;
 }
 
@@ -116,20 +149,20 @@ void testToolSystem() {
     float diamondSpeed = ToolSystem::getMiningSpeed(BlockType::Obsidian, BlockType::DiamondPickaxe);
     float handSpeed = ToolSystem::getMiningSpeed(BlockType::Obsidian, BlockType::Air);
     assert(diamondSpeed > handSpeed);
-    
+
     int maxDur = ToolSystem::getToolInfo(BlockType::DiamondPickaxe).maxDurability;
     assert(maxDur == 1561);
-    
+
     int woodDur = ToolSystem::getToolInfo(BlockType::WoodPickaxe).maxDurability;
     assert(woodDur == 59);
-    
+
     std::cout << "  -> ToolSystem tests PASSED!" << std::endl;
 }
 
 void testExplosionEngine() {
     std::cout << "[TEST] 4. ExplosionEngine Spherical Destruction & TNT Chain Reactions..." << std::endl;
     World world(1);
-    
+
     for (int x = -2; x <= 2; ++x) {
         for (int y = 50; y <= 54; ++y) {
             for (int z = -2; z <= 2; ++z) {
@@ -137,7 +170,7 @@ void testExplosionEngine() {
             }
         }
     }
-    
+
     ExplosionEngine::createExplosion(world, glm::vec3(0, 52, 0), 2.5f);
     assert(world.getBlock(0, 52, 0) == BlockType::Air);
     std::cout << "  -> ExplosionEngine tests PASSED!" << std::endl;
@@ -147,13 +180,11 @@ void testThreadPool() {
     std::cout << "[TEST] 5. ThreadPool Task Scheduling..." << std::endl;
     ThreadPool pool(4);
     std::atomic<int> counter = 0;
-    
+
     for (int i = 0; i < 20; ++i) {
-        pool.enqueue([&counter]() {
-            counter++;
-        });
+        pool.enqueue([&counter]() { counter++; });
     }
-    
+
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     assert(counter.load() == 20);
     std::cout << "  -> ThreadPool tests PASSED!" << std::endl;
@@ -164,33 +195,33 @@ void testChestAndFurnace() {
     ChestManager chestMgr;
     glm::ivec3 chestPos(10, 64, 10);
     chestMgr.createChest(chestPos);
-    
+
     chestMgr.setSlot(chestPos, 0, BlockType::DiamondOre, 32);
     auto* chestInv = chestMgr.getChestInventory(chestPos);
     assert(chestInv != nullptr && (*chestInv)[0].count == 32);
-    
+
     FurnaceManager furnaceMgr;
     glm::ivec3 furnacePos(20, 64, 20);
     FurnaceData* furnace = furnaceMgr.getFurnace(furnacePos);
     assert(furnace != nullptr);
-    furnace->input = { BlockType::IronOre, 5, 64 };
-    furnace->fuel = { BlockType::CoalOre, 2, 64 };
+    furnace->input = {BlockType::IronOre, 5, 64};
+    furnace->fuel = {BlockType::CoalOre, 2, 64};
     furnaceMgr.update(15.0f);
-    
+
     std::cout << "  -> Chest & Furnace tests PASSED!" << std::endl;
 }
 
 void testNetherDimension() {
     std::cout << "[TEST] 7. DimensionManager Nether World Generation & Portals..." << std::endl;
     DimensionManager dm;
-    assert(dm.getCurrentType() == DimensionType::Overworld);
-    
+    assert(dm.getCurrentDimension() == DimensionType::Overworld);
+
     dm.switchDimension(DimensionType::Nether);
-    assert(dm.getCurrentType() == DimensionType::Nether);
-    
+    assert(dm.getCurrentDimension() == DimensionType::Nether);
+
     World* netherWorld = dm.getCurrentWorld();
     assert(netherWorld != nullptr);
-    
+
     std::cout << "  -> Nether Dimension tests PASSED!" << std::endl;
 }
 
@@ -198,14 +229,18 @@ void testItemEntities() {
     std::cout << "[TEST] 8. ItemEntityManager Physics & Player Magnetic Pickup..." << std::endl;
     ItemEntityManager itemMgr;
     itemMgr.spawnItemDrop(BlockType::DiamondOre, 5, glm::vec3(0.0f, 65.0f, 0.0f));
-    
+
     assert(itemMgr.getEntities().size() == 1);
-    
+
     World world(1);
     glm::vec3 playerPos(0.2f, 65.0f, 0.2f);
     std::vector<std::pair<BlockType, int>> pickedUp;
-    itemMgr.update(world, playerPos, pickedUp, 0.1f);
-    
+    // Freshly dropped items have a short pickup delay and fly up first, so simulate a couple of seconds.
+    for (int i = 0; i < 20 && pickedUp.empty(); ++i) {
+        playerPos = itemMgr.getEntities().front().position;
+        itemMgr.update(world, playerPos, pickedUp, 0.1f);
+    }
+
     assert(!pickedUp.empty());
     assert(itemMgr.getEntities().empty());
     std::cout << "  -> ItemEntityManager tests PASSED!" << std::endl;
@@ -215,22 +250,22 @@ void testMobEngineAdvanced() {
     std::cout << "[TEST] 9. MobEngine AI, Pathfinder & Combat Interactions..." << std::endl;
     MobEngine mobEngine;
     World world(1);
-    
+
     mobEngine.spawnMob(MobType::Zombie, glm::vec3(5.0f, 65.0f, 5.0f));
     mobEngine.spawnMob(MobType::Skeleton, glm::vec3(10.0f, 65.0f, 10.0f));
     mobEngine.spawnMob(MobType::Creeper, glm::vec3(3.0f, 65.0f, 3.0f));
-    
+
     assert(mobEngine.getMobs().size() == 3);
-    
+
     glm::vec3 playerPos(0.0f, 65.0f, 0.0f);
     glm::vec3 playerVel(0.0f);
     float playerHealth = 20.0f;
-    
+
     mobEngine.update(world, playerPos, playerVel, playerHealth, 0.1f);
-    
+
     bool hit = mobEngine.checkPlayerAttack(playerPos, glm::normalize(glm::vec3(1.0f, 0.0f, 1.0f)), 5.0f, 10);
     assert(hit == true);
-    
+
     std::cout << "  -> MobEngine tests PASSED!" << std::endl;
 }
 
@@ -238,10 +273,10 @@ void testPlayerStatsAndArmor() {
     std::cout << "[TEST] 10. PlayerStats Health, Armor & Damage Calculations..." << std::endl;
     PlayerStats stats;
     assert(stats.getHealth() == 20.0f);
-    
-    stats.getArmorSlot(0) = { BlockType::DiamondPickaxe, 1, 1 };
-    stats.getArmorSlot(1) = { BlockType::DiamondPickaxe, 1, 1 };
-    
+
+    stats.getArmorSlot(0) = {BlockType::DiamondPickaxe, 1, 1};
+    stats.getArmorSlot(1) = {BlockType::DiamondPickaxe, 1, 1};
+
     float reduced = stats.applyDamageReduction(10.0f);
     assert(reduced < 10.0f);
     std::cout << "  -> PlayerStats tests PASSED!" << std::endl;
@@ -251,10 +286,10 @@ void testWeatherManager() {
     std::cout << "[TEST] 11. WeatherManager Rain, Thunder & Dynamic Snow Cover..." << std::endl;
     WeatherManager wm;
     assert(wm.getWeatherState() == WeatherState::Clear);
-    
+
     wm.setWeather(WeatherState::Rain);
     assert(wm.getWeatherState() == WeatherState::Rain);
-    
+
     wm.setWeather(WeatherState::Thunderstorm);
     assert(wm.isThundering() == true);
     std::cout << "  -> WeatherManager tests PASSED!" << std::endl;
@@ -274,7 +309,7 @@ void testContainerGUI() {
     glm::ivec3 chestPos(10, 64, 10);
     chestMgr.createChest(chestPos);
     chestMgr.setSlot(chestPos, 4, BlockType::IronOre, 16);
-    
+
     gui.openChest(chestPos, chestMgr.getChestInventory(chestPos));
     assert(gui.isOpen() == true);
     std::cout << "  -> ContainerGUI tests PASSED!" << std::endl;
@@ -285,10 +320,10 @@ void testNetworkManager() {
     NetworkManager net;
     assert(net.startServer(25565) == true);
     assert(net.isServer() == true);
-    
+
     net.sendPlayerPosition(glm::vec3(10.0f, 65.0f, 10.0f), 45.0f, 0.0f);
     net.sendBlockChange(glm::ivec3(5, 60, 5), BlockType::Stone);
-    
+
     net.disconnect();
     assert(net.isConnected() == false);
     std::cout << "  -> NetworkManager tests PASSED!" << std::endl;
@@ -399,14 +434,14 @@ void testJungleBiomeAndBamboo() {
 
 void testArmorCraftingSuite() {
     std::cout << "[TEST] 22. Iron & Diamond Full Armor Set Crafting Recipes..." << std::endl;
-    
+
     std::array<ItemStack, 9> helmGrid;
-    helmGrid.fill({ BlockType::Air, 0, 64 });
-    helmGrid[0] = { BlockType::IronOre, 1, 64 };
-    helmGrid[1] = { BlockType::IronOre, 1, 64 };
-    helmGrid[2] = { BlockType::IronOre, 1, 64 };
-    helmGrid[3] = { BlockType::IronOre, 1, 64 };
-    helmGrid[5] = { BlockType::IronOre, 1, 64 };
+    helmGrid.fill({BlockType::Air, 0, 64});
+    helmGrid[0] = {BlockType::IronOre, 1, 64};
+    helmGrid[1] = {BlockType::IronOre, 1, 64};
+    helmGrid[2] = {BlockType::IronOre, 1, 64};
+    helmGrid[3] = {BlockType::IronOre, 1, 64};
+    helmGrid[5] = {BlockType::IronOre, 1, 64};
     ItemStack helmResult = CraftingManager::matchRecipe3x3(helmGrid);
     assert(helmResult.type == BlockType::IronPickaxe && helmResult.durability == 165);
 
@@ -432,7 +467,7 @@ void testTheEndDimensionAndDragon() {
     std::cout << "[TEST] 24. The End Dimension, End Stone Island & Ender Dragon Boss AI..." << std::endl;
     DimensionManager dm;
     dm.switchDimension(DimensionType::TheEnd);
-    assert(dm.getCurrentType() == DimensionType::TheEnd);
+    assert(dm.getCurrentDimension() == DimensionType::TheEnd);
 
     World* endWorld = dm.getCurrentWorld();
     assert(endWorld != nullptr);
@@ -512,7 +547,7 @@ void testVillageAndVillagers() {
     assert(world.getBlock(0, 60, 0) == BlockType::Stone);
     assert(world.getBlock(0, 59, 0) == BlockType::Water);
     assert(world.getBlock(7, 60, 0) == BlockType::Planks);
-    assert(world.getBlock(0, 61, 8) == BlockType::Furnace);
+    assert(world.getBlock(-1, 61, 8) == BlockType::Furnace);
 
     assert(mobEngine.getMobs().size() == 4);
     std::cout << "  -> Village & Villager tests PASSED!" << std::endl;
@@ -523,8 +558,8 @@ void testVillagerTradingEngine() {
     auto blacksmithTrades = TradingEngine::getTradesForProfession(VillagerProfession::Blacksmith);
     assert(blacksmithTrades.size() >= 2);
 
-    ItemStack ironSlot = { BlockType::IronOre, 8, 64 };
-    ItemStack emptySlot = { BlockType::Air, 0, 64 };
+    ItemStack ironSlot = {BlockType::IronOre, 8, 64};
+    ItemStack emptySlot = {BlockType::Air, 0, 64};
     ItemStack resultSlot;
 
     bool tradeSuccess = TradingEngine::executeTrade(VillagerProfession::Blacksmith, 0, ironSlot, emptySlot, resultSlot);
@@ -547,7 +582,7 @@ void testEnchantingAndAnvilSystem() {
     int bookshelves = EnchantingEngine::countNearbyBookshelves(world, 0, 60, 0);
     assert(bookshelves >= 4);
 
-    ItemStack sword = { BlockType::DiamondSword, 1, 1, 1561, 1561 };
+    ItemStack sword = {BlockType::DiamondSword, 1, 1, 1561, 1561};
     auto options = EnchantingEngine::getEnchantmentOptions(sword, bookshelves);
     assert(!options.empty());
     assert(options[0].type == Enchantment::Sharpness);
@@ -791,7 +826,7 @@ void testBrewingEngineRecipesAndPotions() {
     PotionType speed = BrewingEngine::getBrewResult(BlockType::Sugar, PotionType::Awkward);
     assert(speed == PotionType::Speed);
 
-    std::array<PotionType, 3> standBottles = { PotionType::Awkward, PotionType::Awkward, PotionType::WaterBottle };
+    std::array<PotionType, 3> standBottles = {PotionType::Awkward, PotionType::Awkward, PotionType::WaterBottle};
     bool brewed = BrewingEngine::brewBottles(BlockType::Sugar, standBottles);
     assert(brewed == true);
     assert(standBottles[0] == PotionType::Speed);
@@ -839,7 +874,7 @@ void testModdingEngineBlockAndRecipeRegistry() {
     CustomRecipeDef rubyRecipe;
     rubyRecipe.resultId = "ruby_sword";
     rubyRecipe.resultCount = 1;
-    rubyRecipe.pattern = { "ruby_gem", "ruby_gem", "stick" };
+    rubyRecipe.pattern = {"ruby_gem", "ruby_gem", "stick"};
     modding.registerRecipe(rubyRecipe);
     assert(modding.getAllRecipes().size() == 1);
 
@@ -880,7 +915,6 @@ void testPostProcessingShaderParameters() {
     std::cout << "  -> Post-Processing Pipeline tests PASSED!" << std::endl;
 }
 
-
 void testFontRendererAndTypography() {
     std::cout << "[TEST] 46. FontRenderer Bitmap Atlas, Text Metrics & Glyph Widths..." << std::endl;
     FontRenderer& fr = FontRenderer::getInstance();
@@ -894,7 +928,6 @@ void testFontRendererAndTypography() {
 
 void testEntityRendererAndModels() {
     std::cout << "[TEST] 47. 3D Entity & Mob Renderer Hierarchical Transforms..." << std::endl;
-    EntityRenderer& er = EntityRenderer::getInstance();
     MobEngine mobEngine;
     ItemEntityManager itemMgr;
     Camera cam(glm::vec3(0, 10, 0));
@@ -930,7 +963,7 @@ void testContainerGUIInteractions() {
     ContainerGUI gui(1280, 720);
     Inventory playerInv;
     std::vector<ItemStack> chestInv(27);
-    chestInv[0] = { BlockType::GoldOre, 12, 64 };
+    chestInv[0] = {BlockType::GoldOre, 12, 64};
     gui.openChest(glm::ivec3(0, 64, 0), &chestInv);
     assert(gui.isOpen() == true);
     assert(gui.getActiveContainer() == ContainerType::Chest);
@@ -1162,7 +1195,8 @@ void testInfiniteWaterAndObsidianFormation() {
     world.setBlock(11, 64, 10, BlockType::Lava);
     FluidEngine::updateFluids(world, glm::vec3(10.0f, 64.0f, 10.0f));
 
-    assert(world.getBlock(11, 64, 10) == BlockType::Obsidian || world.getBlock(10, 64, 10) == BlockType::Obsidian || world.getBlock(10, 64, 10) == BlockType::Stone || world.getBlock(11, 64, 10) == BlockType::Stone);
+    assert(world.getBlock(11, 64, 10) == BlockType::Obsidian || world.getBlock(10, 64, 10) == BlockType::Obsidian ||
+           world.getBlock(10, 64, 10) == BlockType::Stone || world.getBlock(11, 64, 10) == BlockType::Stone);
 
     std::cout << "  -> Infinite Water & Obsidian tests PASSED!" << std::endl;
 }
@@ -1176,28 +1210,34 @@ void testInGameConsoleCommands() {
     Camera camera(glm::vec3(0, 65, 0));
     bool isFlying = false;
 
-    bool cmd1 = CommandParser::execute("/time set day", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd1 =
+        CommandParser::execute("/time set day", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
     assert(cmd1 == true);
     assert(timeMgr.getTimeOfDay() == 1000.0f);
 
-    bool cmd2 = CommandParser::execute("/time set night", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd2 =
+        CommandParser::execute("/time set night", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
     assert(cmd2 == true);
     assert(timeMgr.getTimeOfDay() == 14000.0f);
 
-    bool cmd3 = CommandParser::execute("/gamemode creative", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd3 = CommandParser::execute("/gamemode creative", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera,
+                                       &isFlying);
     assert(cmd3 == true);
     assert(isFlying == true);
 
-    bool cmd4 = CommandParser::execute("/gamemode survival", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd4 = CommandParser::execute("/gamemode survival", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera,
+                                       &isFlying);
     assert(cmd4 == true);
     assert(isFlying == false);
 
-    bool cmd5 = CommandParser::execute("/give diamond 5", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd5 =
+        CommandParser::execute("/give diamond 5", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
     assert(cmd5 == true);
     assert(inventory.getSlot(0).type == BlockType::DiamondOre);
     assert(inventory.getSlot(0).count == 5);
 
-    bool cmd6 = CommandParser::execute("/weather clear", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
+    bool cmd6 =
+        CommandParser::execute("/weather clear", &timeMgr, &weatherMgr, &playerStats, &inventory, &camera, &isFlying);
     assert(cmd6 == true);
     assert(weatherMgr.isRaining() == false);
 
@@ -1233,8 +1273,8 @@ void testRedstoneComparatorAndContainerReading() {
     std::cout << "[TEST] 63. Redstone Comparator & Container Fullness Reading..." << std::endl;
     World world(1);
     std::vector<ItemStack> chest(27);
-    chest[0] = { BlockType::DiamondOre, 64, 64 };
-    chest[1] = { BlockType::GoldOre, 64, 64 };
+    chest[0] = {BlockType::DiamondOre, 64, 64};
+    chest[1] = {BlockType::GoldOre, 64, 64};
 
     // Comparator measuring chest
     int sigEmpty = RedstoneEngine::getComparatorOutput(world, glm::ivec3(0, 64, 0), glm::ivec3(0, 0, 1), nullptr);
@@ -1245,7 +1285,7 @@ void testRedstoneComparatorAndContainerReading() {
 
     // Completely fill chest
     for (int i = 0; i < 27; ++i) {
-        chest[i] = { BlockType::IronOre, 64, 64 };
+        chest[i] = {BlockType::IronOre, 64, 64};
     }
     int sigFull = RedstoneEngine::getComparatorOutput(world, glm::ivec3(0, 64, 0), glm::ivec3(0, 0, 1), &chest);
     assert(sigFull == 15);
@@ -1259,10 +1299,11 @@ void testHopperTransferAndLocking() {
     std::vector<ItemStack> hopperInv(5);
     std::vector<ItemStack> destChest(27);
 
-    hopperInv[0] = { BlockType::Obsidian, 5, 64 };
+    hopperInv[0] = {BlockType::Obsidian, 5, 64};
 
     // Unpowered hopper transfers 1 item into destination container
-    bool transferred = RedstoneEngine::processHopperTransfer(world, glm::ivec3(5, 64, 5), glm::ivec3(0, -1, 0), &hopperInv, &destChest);
+    bool transferred = RedstoneEngine::processHopperTransfer(world, glm::ivec3(5, 64, 5), glm::ivec3(0, -1, 0),
+                                                             &hopperInv, &destChest);
     assert(transferred == true);
     assert(hopperInv[0].count == 4);
     assert(destChest[0].type == BlockType::Obsidian);
@@ -1270,7 +1311,8 @@ void testHopperTransferAndLocking() {
 
     // Power the hopper with a redstone torch next to it -> hopper locks
     world.setBlock(5, 64, 6, BlockType::RedstoneTorch);
-    bool lockedTransfer = RedstoneEngine::processHopperTransfer(world, glm::ivec3(5, 64, 5), glm::ivec3(0, -1, 0), &hopperInv, &destChest);
+    bool lockedTransfer = RedstoneEngine::processHopperTransfer(world, glm::ivec3(5, 64, 5), glm::ivec3(0, -1, 0),
+                                                                &hopperInv, &destChest);
     assert(lockedTransfer == false); // Locked, no transfer
     assert(hopperInv[0].count == 4);
 
@@ -1284,8 +1326,8 @@ void testBiomeColormapsAndFoliage() {
     glm::vec3 swampGrass = Biome::getGrassColor(BiomeType::Swamp);
 
     assert(jungleGrass.g > jungleGrass.r); // Vibrant green
-    assert(desertGrass.r > 0.7f); // Yellowish dry tone
-    assert(swampGrass.g < jungleGrass.g); // Darker murky swamp tone
+    assert(desertGrass.r > 0.7f);          // Yellowish dry tone
+    assert(swampGrass.g < jungleGrass.g);  // Darker murky swamp tone
 
     glm::vec3 jungleLeaves = Biome::getFoliageColor(BiomeType::Jungle);
     assert(jungleLeaves.g > 0.7f);
@@ -1300,7 +1342,7 @@ void testStrongholdAndOceanRuinGeneration() {
     // Generate Stronghold at (100, 30, 100)
     StructureGenerator::generateStronghold(world, 100, 30, 100);
     assert(world.getBlock(100, 30, 100) == BlockType::StoneBricks);
-    assert(world.getBlock(104, 30, 104) == BlockType::Lava); // Central lava pool
+    assert(world.getBlock(104, 30, 104) == BlockType::Lava);    // Central lava pool
     assert(world.getBlock(104, 32, 101) == BlockType::Spawner); // Spawner block
 
     // Generate Ocean Ruin at (-50, 40, -50)
@@ -1369,10 +1411,10 @@ void testEndCityGeneration() {
     World world(1);
     StructureGenerator::generateEndCity(world, 50, 60, 50);
 
-    assert(world.getBlock(50, 60, 50) == BlockType::Obsidian); // Base wall
-    assert(world.getBlock(53, 69, 53) == BlockType::Spawner);  // Shulker spawner chamber
-    assert(world.getBlock(53, 69, 55) == BlockType::Chest);    // Loot chest
-    assert(world.getBlock(53, 74, 53) == BlockType::Glowstone);// Beacon pinnacle
+    assert(world.getBlock(50, 60, 50) == BlockType::Obsidian);  // Base wall
+    assert(world.getBlock(53, 69, 53) == BlockType::Spawner);   // Shulker spawner chamber
+    assert(world.getBlock(53, 69, 55) == BlockType::Chest);     // Loot chest
+    assert(world.getBlock(53, 74, 53) == BlockType::Glowstone); // Beacon pinnacle
 
     std::cout << "  -> End City Structure tests PASSED!" << std::endl;
 }
@@ -1457,7 +1499,9 @@ void testDeadReckoningInterpolation() {
 
     // Angle interpolation across 360 boundary
     float angle = NetworkManager::interpolateAngle(350.0f, 10.0f, 0.5f);
-    assert(angle >= 0.0f && angle <= 360.0f);
+    // 350 -> 10 must take the short way across 0/360 (result 360 == 0), not the long way through 180.
+    assert(std::fabs(std::fmod(angle, 360.0f)) < 1e-3f);
+    assert(std::fabs(NetworkManager::interpolateAngle(10.0f, 350.0f, 0.5f) - 0.0f) < 1e-3f);
 
     std::cout << "  -> Dead-Reckoning tests PASSED!" << std::endl;
 }
@@ -1519,8 +1563,8 @@ void testCascadedShadowFrustums() {
     glm::vec3 target(0.0f, 64.0f, 0.0f);
 
     glm::mat4 nearCascade = shadowMap.getLightSpaceMatrixCascade(sunDir, target, 15.0f);
-    glm::mat4 midCascade  = shadowMap.getLightSpaceMatrixCascade(sunDir, target, 40.0f);
-    glm::mat4 farCascade  = shadowMap.getLightSpaceMatrixCascade(sunDir, target, 90.0f);
+    glm::mat4 midCascade = shadowMap.getLightSpaceMatrixCascade(sunDir, target, 40.0f);
+    glm::mat4 farCascade = shadowMap.getLightSpaceMatrixCascade(sunDir, target, 90.0f);
 
     assert(nearCascade != midCascade);
     assert(midCascade != farCascade);
@@ -1542,7 +1586,7 @@ void testPostProcessingSSAOAndNightVision() {
 
 void testUltimateEngineStabilityAndRegression() {
     std::cout << "[TEST] 80. Ultimate System-wide Regression & Stability Check..." << std::endl;
-    World world(12345);
+    World world(1, 12345);
     world.setBlock(0, 64, 0, BlockType::Grass);
     assert(world.getBlock(0, 64, 0) == BlockType::Grass);
 
@@ -1571,10 +1615,10 @@ void testOceanMonumentGeneration() {
     World world(1);
     StructureGenerator::generateOceanMonument(world, 100, 30, 100);
 
-    assert(world.getBlock(100, 30, 100) == BlockType::Stone);       // Outer wall
-    assert(world.getBlock(106, 31, 106) == BlockType::GoldOre);     // Gold core
-    assert(world.getBlock(106, 32, 106) == BlockType::Chest);       // Treasure chest
-    assert(world.getBlock(106, 34, 106) == BlockType::Spawner);     // Guardian spawner
+    assert(world.getBlock(100, 30, 100) == BlockType::Stone);   // Outer wall
+    assert(world.getBlock(106, 31, 106) == BlockType::GoldOre); // Gold core
+    assert(world.getBlock(106, 32, 106) == BlockType::Chest);   // Treasure chest
+    assert(world.getBlock(106, 34, 106) == BlockType::Spawner); // Guardian spawner
 
     std::cout << "  -> Ocean Monument tests PASSED!" << std::endl;
 }
@@ -1584,9 +1628,9 @@ void testShipwreckGeneration() {
     World world(1);
     StructureGenerator::generateShipwreck(world, 50, 20, 50);
 
-    assert(world.getBlock(50, 20, 50) == BlockType::OakLog);        // Hull rib
-    assert(world.getBlock(51, 21, 52) == BlockType::Chest);         // Captain's chest
-    assert(world.getBlock(55, 23, 52) == BlockType::OakLog);        // Mast
+    assert(world.getBlock(50, 20, 50) == BlockType::OakLog); // Hull rib
+    assert(world.getBlock(51, 21, 52) == BlockType::Chest);  // Captain's chest
+    assert(world.getBlock(55, 23, 52) == BlockType::OakLog); // Mast
 
     std::cout << "  -> Sunken Shipwreck tests PASSED!" << std::endl;
 }
@@ -1609,7 +1653,7 @@ void testWorldTopBlockAndMapColors() {
 
 void testGrandFinalEngineRegression() {
     std::cout << "[TEST] 85. Grand Final System-wide Architecture & Regression..." << std::endl;
-    World world(999);
+    World world(1, 999);
     world.setBlock(0, 64, 0, BlockType::EmeraldBlock);
     assert(world.getBlock(0, 64, 0) == BlockType::EmeraldBlock);
 
@@ -1632,14 +1676,14 @@ void testWoodlandMansionGeneration() {
 
 void testSmithingTableUpgrades() {
     std::cout << "[TEST] 87. Smithing Table Upgrades & Netherite Tier..." << std::endl;
-    ItemStack diamondSword{ BlockType::DiamondSword, 1, 1 };
-    ItemStack netherrack{ BlockType::Netherrack, 1, 64 };
+    ItemStack diamondSword{BlockType::DiamondSword, 1, 1};
+    ItemStack netherrack{BlockType::Netherrack, 1, 64};
     ItemStack upgradedSword = CraftingManager::matchSmithingUpgrade(diamondSword, netherrack);
     assert(upgradedSword.type == BlockType::DiamondSword);
     assert(upgradedSword.count == 1);
 
-    ItemStack diamondPick{ BlockType::DiamondPickaxe, 1, 1 };
-    ItemStack obsidian{ BlockType::Obsidian, 1, 64 };
+    ItemStack diamondPick{BlockType::DiamondPickaxe, 1, 1};
+    ItemStack obsidian{BlockType::Obsidian, 1, 64};
     ItemStack upgradedPick = CraftingManager::matchSmithingUpgrade(diamondPick, obsidian);
     assert(upgradedPick.type == BlockType::DiamondPickaxe);
     assert(upgradedPick.count == 1);
@@ -1677,139 +1721,182 @@ void testWaterFoamShaderLogic() {
 
 void testUltimateMasterRegression90() {
     std::cout << "[TEST] 90. Grand Master 90-Suite System Integration & Architecture..." << std::endl;
-    World world(12345);
+    World world(1, 12345);
     world.setBlock(50, 70, 50, BlockType::Obsidian);
     assert(world.getBlock(50, 70, 50) == BlockType::Obsidian);
 
     std::cout << "  -> Grand Master 90-Suite Regression tests PASSED!" << std::endl;
 }
 
-int main() {
+#include "test_core_systems.inl"
+
+int main(int argc, char** argv) {
+    // Optional substring filter: `TestEngine.exe Redstone` runs only matching tests.
+    const char* filter = argc > 1 ? argv[1] : nullptr;
+
     std::cout << "========================================" << std::endl;
     std::cout << " Running Minecraft Engine Test Suite   " << std::endl;
     std::cout << "========================================" << std::endl;
 
     std::filesystem::remove_all("world_saves");
+    AudioManager::setMuted(true); // keep the test run silent
 
-    testRedstone();
-    testFluids();
-    testToolSystem();
-    testExplosionEngine();
-    testThreadPool();
-    testChestAndFurnace();
-    testNetherDimension();
-    testItemEntities();
-    testMobEngineAdvanced();
-    testPlayerStatsAndArmor();
-    testWeatherManager();
-    testCaveDecorator();
-    testContainerGUI();
-    testNetworkManager();
-    testHungerAndFoodSystem();
-    testRegionFileAndChunkStreaming();
-    testLightEnginePropagation();
-    testGreedyMeshing();
-    testExtendedCrafting();
-    testMenuAndParticles();
-    testJungleBiomeAndBamboo();
-    testArmorCraftingSuite();
-    testFrustumCullingInWorld();
-    testTheEndDimensionAndDragon();
-    testCropsAndFarmingSystem();
-    testVehicleAndRailPhysics();
-    testVillageAndVillagers();
-    testVillagerTradingEngine();
-    testEnchantingAndAnvilSystem();
+    int executed = 0;
+    std::vector<std::string> failures;
+    auto run = [&](const char* name, void (*fn)()) {
+        if (filter && !std::strstr(name, filter))
+            return;
+        ++executed;
+        try {
+            fn();
+        } catch (const std::exception& e) {
+            failures.push_back(std::string(name) + ": " + e.what());
+            std::cout << "  !! FAILED " << name << ": " << e.what() << std::endl;
+        }
+    };
+#define RUN_TEST(fn) run(#fn, fn)
 
-    // Phase 1 Tests
-    testVertexAOAndAsyncMeshing();
-    testPistonPushAndPullMechanics();
-    testRepeaterAndRedstoneLogic();
-    testMobPathfinding3DAndFeedback();
-    testPhysicsAutoStepAndSneak();
-    testSpatialAudioCalculations();
-    testBinaryPacketSerialization();
-    testChunkUnloaderAndMemoryManagement();
+    RUN_TEST(testRedstone);
+    RUN_TEST(testFluids);
+    RUN_TEST(testToolSystem);
+    RUN_TEST(testExplosionEngine);
+    RUN_TEST(testThreadPool);
+    RUN_TEST(testChestAndFurnace);
+    RUN_TEST(testNetherDimension);
+    RUN_TEST(testItemEntities);
+    RUN_TEST(testMobEngineAdvanced);
+    RUN_TEST(testPlayerStatsAndArmor);
+    RUN_TEST(testWeatherManager);
+    RUN_TEST(testCaveDecorator);
+    RUN_TEST(testContainerGUI);
+    RUN_TEST(testNetworkManager);
+    RUN_TEST(testHungerAndFoodSystem);
+    RUN_TEST(testRegionFileAndChunkStreaming);
+    RUN_TEST(testLightEnginePropagation);
+    RUN_TEST(testGreedyMeshing);
+    RUN_TEST(testExtendedCrafting);
+    RUN_TEST(testMenuAndParticles);
+    RUN_TEST(testJungleBiomeAndBamboo);
+    RUN_TEST(testArmorCraftingSuite);
+    RUN_TEST(testFrustumCullingInWorld);
+    RUN_TEST(testTheEndDimensionAndDragon);
+    RUN_TEST(testCropsAndFarmingSystem);
+    RUN_TEST(testVehicleAndRailPhysics);
+    RUN_TEST(testVillageAndVillagers);
+    RUN_TEST(testVillagerTradingEngine);
+    RUN_TEST(testEnchantingAndAnvilSystem);
+    RUN_TEST(testVertexAOAndAsyncMeshing);
+    RUN_TEST(testPistonPushAndPullMechanics);
+    RUN_TEST(testRepeaterAndRedstoneLogic);
+    RUN_TEST(testMobPathfinding3DAndFeedback);
+    RUN_TEST(testPhysicsAutoStepAndSneak);
+    RUN_TEST(testSpatialAudioCalculations);
+    RUN_TEST(testBinaryPacketSerialization);
+    RUN_TEST(testChunkUnloaderAndMemoryManagement);
+    RUN_TEST(testTextureAtlasAndPixelArtPatterns);
+    RUN_TEST(testChunkSectionsAndLocalizedMeshing);
+    RUN_TEST(testAdvancedMineshaftAndDesertTemple);
+    RUN_TEST(testBrewingEngineRecipesAndPotions);
+    RUN_TEST(testPlayerStatusEffectsAndMultipliers);
+    RUN_TEST(testModdingEngineBlockAndRecipeRegistry);
+    RUN_TEST(testExtendedNetherBiomesAndFortresses);
+    RUN_TEST(testPostProcessingShaderParameters);
+    RUN_TEST(testFontRendererAndTypography);
+    RUN_TEST(testEntityRendererAndModels);
+    RUN_TEST(testContinuousMiningAndToolProgress);
+    RUN_TEST(testContainerGUIInteractions);
+    RUN_TEST(testSocketNetworkingAndSync);
+    RUN_TEST(testNaturalMobSpawningAndDespawn);
+    RUN_TEST(testSkyboxCloudsAndDrift);
+    RUN_TEST(testWitherBossEngineAndSkulls);
+    RUN_TEST(testPBRSpecularShadersAndFresnel);
+    RUN_TEST(testRemotePlayerRenderingAndInterpolation);
+    RUN_TEST(testMaterialFootstepsAndAudioSynthesizer);
+    RUN_TEST(testDDARaycastExactTraversal);
+    RUN_TEST(testOxygenDrowningAndFireMechanics);
+    RUN_TEST(testFallDamageCalculation);
+    RUN_TEST(testInfiniteWaterAndObsidianFormation);
+    RUN_TEST(testInGameConsoleCommands);
+    RUN_TEST(testHotbarScrollAndStackSplitting);
+    RUN_TEST(testRedstoneComparatorAndContainerReading);
+    RUN_TEST(testHopperTransferAndLocking);
+    RUN_TEST(testBiomeColormapsAndFoliage);
+    RUN_TEST(testStrongholdAndOceanRuinGeneration);
+    RUN_TEST(testAnimalBreedingAndFeeding);
+    RUN_TEST(testElytraGlidingAerodynamics);
+    RUN_TEST(testEndCityGeneration);
+    RUN_TEST(testAtmosphericDistanceFogCalculations);
+    RUN_TEST(testNetherBastionGeneration);
+    RUN_TEST(testMountSaddlingAndSteering);
+    RUN_TEST(testFluidHeightInterpolation);
+    RUN_TEST(testDeadReckoningInterpolation);
+    RUN_TEST(testSSAOShaderParameters);
+    RUN_TEST(testFullIntegrationSuite);
+    RUN_TEST(testAsyncNetworkPacketQueue);
+    RUN_TEST(testCascadedShadowFrustums);
+    RUN_TEST(testPostProcessingSSAOAndNightVision);
+    RUN_TEST(testUltimateEngineStabilityAndRegression);
+    RUN_TEST(testGodRaysShaderParameters);
+    RUN_TEST(testOceanMonumentGeneration);
+    RUN_TEST(testShipwreckGeneration);
+    RUN_TEST(testWorldTopBlockAndMapColors);
+    RUN_TEST(testGrandFinalEngineRegression);
+    RUN_TEST(testWoodlandMansionGeneration);
+    RUN_TEST(testSmithingTableUpgrades);
+    RUN_TEST(testParticleEngineExplosions);
+    RUN_TEST(testWaterFoamShaderLogic);
+    RUN_TEST(testUltimateMasterRegression90);
 
-    // Phase 2 Tests
-    testTextureAtlasAndPixelArtPatterns();
-    testChunkSectionsAndLocalizedMeshing();
-    testAdvancedMineshaftAndDesertTemple();
-    testBrewingEngineRecipesAndPotions();
-    testPlayerStatusEffectsAndMultipliers();
-
-    // Phase 3 Tests
-    testModdingEngineBlockAndRecipeRegistry();
-    testExtendedNetherBiomesAndFortresses();
-    testPostProcessingShaderParameters();
-
-    // Phase 4 Extensions (New Subsystems)
-    testFontRendererAndTypography();
-    testEntityRendererAndModels();
-    testContinuousMiningAndToolProgress();
-    testContainerGUIInteractions();
-    testSocketNetworkingAndSync();
-    testNaturalMobSpawningAndDespawn();
-
-    // Phase 5 Next-Gen Subsystems
-    testSkyboxCloudsAndDrift();
-    testWitherBossEngineAndSkulls();
-    testPBRSpecularShadersAndFresnel();
-    testRemotePlayerRenderingAndInterpolation();
-    testMaterialFootstepsAndAudioSynthesizer();
-
-    // Phase 6 Modern Enhancements
-    testDDARaycastExactTraversal();
-    testOxygenDrowningAndFireMechanics();
-    testFallDamageCalculation();
-    testInfiniteWaterAndObsidianFormation();
-    testInGameConsoleCommands();
-    testHotbarScrollAndStackSplitting();
-
-    // Phase 7 Automation, Ecosystem & Structures
-    testRedstoneComparatorAndContainerReading();
-    testHopperTransferAndLocking();
-    testBiomeColormapsAndFoliage();
-    testStrongholdAndOceanRuinGeneration();
-
-    // Phase 8 Advanced Dynamics & Dimensions
-    testAnimalBreedingAndFeeding();
-    testElytraGlidingAerodynamics();
-    testEndCityGeneration();
-    testAtmosphericDistanceFogCalculations();
-
-    // Phase 9 Nether Bastions, Mounts & Fluid Interpolation
-    testNetherBastionGeneration();
-    testMountSaddlingAndSteering();
-    testFluidHeightInterpolation();
-
-    // Phase 10 Prediction, SSAO & Full Integration
-    testDeadReckoningInterpolation();
-    testSSAOShaderParameters();
-    testFullIntegrationSuite();
-
-    // Phase 11 Cascaded Shadows, Async Queues & Ultimate Regression
-    testAsyncNetworkPacketQueue();
-    testCascadedShadowFrustums();
-    testPostProcessingSSAOAndNightVision();
-    testUltimateEngineStabilityAndRegression();
-
-    // Phase 12 Volumetric God-Rays, Ocean Monuments & Map Colors
-    testGodRaysShaderParameters();
-    testOceanMonumentGeneration();
-    testShipwreckGeneration();
-    testWorldTopBlockAndMapColors();
-    testGrandFinalEngineRegression();
-
-    // Phase 13 Mansions, Smithing & Master 90-Suite Check
-    testWoodlandMansionGeneration();
-    testSmithingTableUpgrades();
-    testParticleEngineExplosions();
-    testWaterFoamShaderLogic();
-    testUltimateMasterRegression90();
+    // Phase 14 Core-system hardening: camera, persistence, seeds, chunk borders, saves, network
+    RUN_TEST(testCameraKeepsOrientationWhenMoved);
+    RUN_TEST(testRegionManagerIsThreadSafe);
+    RUN_TEST(testRegionFileReusesSectors);
+    RUN_TEST(testChunksAreOnlySavedWhenModified);
+    RUN_TEST(testSeedControlsTerrain);
+    RUN_TEST(testMeshingSeesNeighbourChunks);
+    RUN_TEST(testWorldBordersAndNegativeCoordinates);
+    RUN_TEST(testWorldSavesAndReloadsModifiedChunks);
+    RUN_TEST(testDimensionsKeepSeparateSaves);
+    RUN_TEST(testTreesCrossChunkBorders);
+    RUN_TEST(testToolHardnessAndUnbreakableBlocks);
+    RUN_TEST(testInventoryStartsEmpty);
+    RUN_TEST(testContainerRemovalReturnsItems);
+    RUN_TEST(testGameSaveRoundTripAndCorruption);
+    RUN_TEST(testNetworkInputValidation);
+    RUN_TEST(testNetworkSocketLifecycle);
+    RUN_TEST(testNetworkEnvelopeAndSequences);
+    RUN_TEST(testNetworkServerIsAuthoritative);
+    RUN_TEST(testNetworkConsoleCommands);
+    RUN_TEST(testAudioMuteAndBoundedQueue);
+    RUN_TEST(testSoundSynthesis);
+    RUN_TEST(testSoundMixerAndSpatialAudio);
+    RUN_TEST(testSectionMeshingMatchesFullMesh);
+    RUN_TEST(testAudioDeviceSmoke);
+    RUN_TEST(testSectionedStorageSavesMemory);
+    RUN_TEST(testSectionConnectivity);
+    RUN_TEST(testOcclusionCullingScenario);
+    RUN_TEST(testOcclusionCullingNeverHidesVisibleTerrain);
+    RUN_TEST(testOcclusionCullingRespectsFrustum);
+    RUN_TEST(testChunkPositionHashDistribution);
+    RUN_TEST(testFluidTickStillSpreadsWater);
+    RUN_TEST(testWorldStreamsChunksAsynchronously);
+    RUN_TEST(testWorldShutdownWithTasksInFlight);
+    RUN_TEST(testMobsArePersisted);
+    RUN_TEST(testWaterFlowsWithLevelsAndDrains);
+    RUN_TEST(testLavaFlowsSlowerAndShorter);
+    RUN_TEST(testFluidBlockHelpers);
+    RUN_TEST(testNetherEditsSurviveRelaunch);
+    RUN_TEST(testEditDuringChunkLoadIsKept);
+    RUN_TEST(testRegionRewriteKeepsOldDataOnFailure);
+    RUN_TEST(testGameSaveRejectsInvalidValues);
+    RUN_TEST(testNetworkTokenIs64BitAndCoordinatesAreSafe);
+    RUN_TEST(testEditsRelightTheChunk);
+    RUN_TEST(testNeighbourRemeshSkipsEmptySections);
 
     std::cout << "========================================" << std::endl;
-    std::cout << " ALL 90 ENGINE TESTS PASSED 100%!       " << std::endl;
+    std::cout << " Tests run: " << executed << ", failed: " << failures.size() << std::endl;
+    for (const auto& f : failures)
+        std::cout << "  - " << f << std::endl;
     std::cout << "========================================" << std::endl;
-    return 0;
+    return failures.empty() && executed > 0 ? 0 : 1;
 }

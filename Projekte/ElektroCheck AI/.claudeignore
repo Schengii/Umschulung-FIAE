@@ -1,0 +1,72 @@
+# Claude ignore patterns (Anthropic Claude Code / Claude Desktop / Antigravity)
+# Verhindert, dass irrelevante, generierte oder sensitive Dateien den Kontext überlasten.
+
+# Dependencies & Lockfiles
+node_modules/
+package-lock.json
+backend/package-lock.json
+
+# Build- & Distribution-Artefakte
+dist/
+dev-dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+*.map
+
+# Vercel Deployment-Artefakte & Cache
+.vercel/
+
+# Test-Artefakte & Code Coverage
+coverage/
+test-results/
+playwright-report/
+
+# Mobile Builds (Capacitor / Android)
+android/app/build/
+android/app/src/main/assets/public/
+android/.gradle/
+android/build/
+android/captures/
+*.apk
+*.aab
+
+# Geheimnisse & Umgebungsvariablen (Kritisch!)
+.env
+.env.*
+!.env.example
+!.env.template
+backend/.env
+backend/.env.*
+!backend/.env.template
+
+# IDEs, Editoren & Systemdateien
+.git/
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.vs/
+.superpowers/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+
+# Binärdateien & Medien (Schont Token-Kontingent)
+*.pdf
+docs/Test PDFs/
+docs/*.docx
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.ico
+*.mp4
+*.webm
+
+# Lokale Daten & Caches
+backend/data/
+*.sqlite
+*.db

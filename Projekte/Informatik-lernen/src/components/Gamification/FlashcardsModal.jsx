@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FLASHCARDS_DATA } from '../../data/flashcardsData';
 import { Layers, CheckCircle2, XCircle, X, Brain, Clock, Download } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateSM2 } from '../../utils/srsAlgorithm';
 import { exportToAnkiTsv, exportToCsv } from '../../utils/flashcardIoEngine';
+import { getTodayDateKey } from '../../utils/storage';
 
 export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   const { userState, updateSrsCard } = useStore();
@@ -11,10 +12,44 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // M18: Due-Date Filter & Priorisierung
+  // Fällige Karten (dueDate <= today oder noch nie gelernt) zuerst sortieren
+  const todayKey = getTodayDateKey();
+  const sortedCards = useMemo(() => {
+    const srsData = userState.srsFlashcards || {};
+    return [...FLASHCARDS_DATA].sort((a, b) => {
+      const srsA = srsData[a.id];
+      const srsB = srsData[b.id];
+
+      const dueA = !srsA || !srsA.dueDate || srsA.dueDate <= todayKey;
+      const dueB = !srsB || !srsB.dueDate || srsB.dueDate <= todayKey;
+
+      if (dueA && !dueB) return -1;
+      if (!dueA && dueB) return 1;
+
+      // Wenn beide noch nicht fällig sind, nach frühestem Fälligkeitsdatum sortieren
+      const dateA = srsA?.dueDate || '9999-99-99';
+      const dateB = srsB?.dueDate || '9999-99-99';
+      return dateA.localeCompare(dateB);
+    });
+  }, [userState.srsFlashcards, todayKey]);
+
   if (!isOpen) return null;
 
-  const currentCard = FLASHCARDS_DATA[cardIdx];
+  const currentCard = sortedCards[cardIdx] || sortedCards[0];
   const cardSrs = (userState.srsFlashcards && userState.srsFlashcards[currentCard.id]) || { repetitions: 0, interval: 1, easeFactor: 2.5 };
+  const isDue = !cardSrs.dueDate || cardSrs.dueDate <= todayKey;
 
   const handleDownload = (format) => {
     let content = '';
@@ -57,7 +92,7 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
       if (onRewardXP) onRewardXP(quality === 5 ? 20 : 15);
     }
 
-    setCardIdx((prev) => (prev + 1) % FLASHCARDS_DATA.length);
+    setCardIdx((prev) => (prev + 1) % sortedCards.length);
   };
 
   return (
@@ -79,6 +114,9 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="flashcards-modal-title"
         className="glass-panel animate-fade-in"
         style={{
           maxWidth: '650px',
@@ -106,9 +144,9 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
 
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>
-            <Layers size={14} /> Karteikarten ({cardIdx + 1} von {FLASHCARDS_DATA.length}) • {completedCount} gemeistert
+            <Layers size={14} /> Karteikarten ({cardIdx + 1} von {sortedCards.length}) • {completedCount} gemeistert
           </span>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
+          <h2 id="flashcards-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
             IT-Karteikarten Trainer
           </h2>
           <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
@@ -154,9 +192,16 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
             marginBottom: '24px'
           }}
         >
-          <span className="badge badge-teal" style={{ marginBottom: '12px' }}>
-            {currentCard.category} • {currentCard.difficulty}
-          </span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '12px' }}>
+            <span className="badge badge-teal">
+              {currentCard.category} • {currentCard.difficulty}
+            </span>
+            {isDue && (
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
+                Heute fällig
+              </span>
+            )}
+          </div>
           <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 10px' }}>
             {isFlipped ? '💡 Lösung / Erklärung:' : currentCard.front}
           </h3>

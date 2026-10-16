@@ -1,15 +1,16 @@
 #ifndef ENTITYRENDERER_HPP
 #define ENTITYRENDERER_HPP
 
-#include <vector>
-#include <memory>
+#include "../ecs/ItemEntity.hpp"
+#include "../ecs/MobEngine.hpp"
+#include "../net/NetworkManager.hpp"
+#include "../renderer/Camera.hpp"
+#include "../renderer/Shader.hpp"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "../ecs/MobEngine.hpp"
-#include "../ecs/ItemEntity.hpp"
-#include "../renderer/Shader.hpp"
-#include "../renderer/Camera.hpp"
-#include "../net/NetworkManager.hpp"
+#include <memory>
+#include <vector>
 
 namespace Minecraft {
 
@@ -19,25 +20,24 @@ public:
     ~EntityRenderer();
 
     void init();
-    void render(const Camera& camera, const MobEngine& mobEngine, 
-                const ItemEntityManager& itemMgr, float totalTime,
+    void render(const Camera& camera, const MobEngine& mobEngine, const ItemEntityManager& itemMgr, float totalTime,
                 const NetworkManager* netManager = nullptr);
 
     // Renders the held block/tool in first-person view
-    void renderFirstPersonHand(const Camera& camera, BlockType heldItem, 
-                               float swingProgress, float walkBobbing, float totalTime);
+    void renderFirstPersonHand(const Camera& camera, BlockType heldItem, float swingProgress, float walkBobbing,
+                               float totalTime);
 
     void renderRemotePlayers(const Camera& camera, const NetworkManager& netManager, float totalTime);
 
 private:
     EntityRenderer();
     void initCubeBuffers();
-    void renderBox(const glm::mat4& viewProj, const glm::vec3& position, 
-                   const glm::vec3& rotation, const glm::vec3& scale, 
-                   const glm::vec3& pivot, const glm::vec4& color, 
+    void renderBox(const glm::mat4& viewProj, const glm::vec3& position, const glm::vec3& rotation,
+                   const glm::vec3& scale, const glm::vec3& pivot, const glm::vec4& color,
                    BlockType texType = BlockType::Air);
 
-    void renderHumanoid(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& skinColor, const glm::vec4& clothesColor);
+    void renderHumanoid(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& skinColor,
+                        const glm::vec4& clothesColor);
     void renderCreeper(const glm::mat4& viewProj, const Mob& mob);
     void renderQuadruped(const glm::mat4& viewProj, const Mob& mob, const glm::vec4& bodyColor);
     void renderDragon(const glm::mat4& viewProj, const Mob& mob, float totalTime);
@@ -49,6 +49,6 @@ private:
     bool m_IsInitialized = false;
 };
 
-}
+} // namespace Minecraft
 
 #endif // ENTITYRENDERER_HPP
