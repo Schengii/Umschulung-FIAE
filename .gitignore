@@ -48,3 +48,12 @@ Thumbs.db
 
 # Projektkopien (Archiv): Lockfiles gehören in die Original-Repos, nicht hierher
 Projekte/**/package-lock.json
+Projekte/**/.git/
+Projekte/**/.idea/
+Projekte/**/.gradle/
+Projekte/**/.godot/
+Projekte/**/platforms/
+Projekte/**/plugins/
+Projekte/**/capacitor-cordova-android-plugins/
+Projekte/**/world_saves/
+Projekte/**/.husky/
