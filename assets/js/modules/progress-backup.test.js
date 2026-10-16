@@ -156,3 +156,31 @@ describe('backupFileName', () => {
         expect(backupFileName(new Date(2026, 2, 5))).toBe('fiae-lernfortschritt-2026-03-05.json');
     });
 });
+
+describe('STORAGE_KEYS synchronization', () => {
+    it('covers all non-cache persistent keys from STORAGE_KEYS in the backup allowlist', () => {
+        const STORAGE_KEYS = {
+            THEME: 'theme',
+            LANG: 'lang',
+            USERNAME: 'username',
+            COOKIE_CONSENT: 'cookieConsent',
+            SNAKE_HIGHSCORE: 'snake_highscore',
+            MEMORY_BEST_MOVES: 'memoryBestMoves',
+            MEMORY_BEST_TIME: 'memoryBestTime',
+            PORTFOLIO_CUSTOM_PROJECTS: 'portfolio_custom_projects',
+            LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES: 'learning_recommendations_quiz_weak_categories',
+            LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS: 'learning_recommendations_flashcards_wrong_counts',
+            GITHUB_PROJECTS_CACHE: 'github_projects_cache',
+            GITHUB_PROJECTS_CACHE_TIME: 'github_projects_cache_time',
+            EXAM_RESULTS: 'exam_results',
+        };
+        const ignoredKeys = new Set(['cookieConsent', 'github_projects_cache', 'github_projects_cache_time']);
+        for (const [name, key] of Object.entries(STORAGE_KEYS)) {
+            if (ignoredKeys.has(key)) {
+                expect(isBackupKey(key), `Transient key ${name} should not be backed up`).toBe(false);
+            } else {
+                expect(isBackupKey(key), `Persistent key ${name} (${key}) must be accepted by isBackupKey`).toBe(true);
+            }
+        }
+    });
+});
