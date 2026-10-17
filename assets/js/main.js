@@ -121,6 +121,7 @@ const LAZY_MODULES = [
     // on portfolio.html instead (see quick-sandbox.js bottom).
     ['./modules/executive-dossier.js', 'initExecutiveDossier', '[data-open-dossier]'],
     ['./modules/challenge-lab.js', 'initChallengeLab', '.page-challenge-lab, #lab-challenges-list'],
+    ['./modules/portfolio_exporter.js', 'initPortfolioExporter', '.portfolio-filters'],
 ];
 
 /**
