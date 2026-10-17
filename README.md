@@ -172,9 +172,14 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 - **Node.js**: `Node >= 22.12` lokal (siehe `.nvmrc` / `package.json#engines`, Vitest 5 verlangt Node >= 22.12; CI nutzt Node 24).
 - **npm**: Passendes npm (wird mit Node.js ausgeliefert).
 
-### 1. Abhängigkeiten installieren
+### 1. Abhängigkeiten installieren & Git-Hooks aktivieren
 ```bash
 npm install
+# Aktiviert die Hooks (.githooks/pre-commit & pre-push) via prepare-Script:
+npm run prepare
+# Alternativ manuell:
+git config core.hooksPath .githooks
+
 npx playwright install chromium
 ```
 
