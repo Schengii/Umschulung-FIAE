@@ -54,7 +54,7 @@ export function initIcalGenerator() {
             `DTEND:${endISO}`,
             'END:VEVENT',
             'END:VCALENDAR',
-        ].join('\n');
+        ].join('\r\n');
 
         // Notify Maximilian directly via mailto — without this, the slot below only ever
         // creates a calendar entry for the visitor, and he would never actually learn
