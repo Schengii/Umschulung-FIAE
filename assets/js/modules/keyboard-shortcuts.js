@@ -33,22 +33,24 @@ export function initKeyboardShortcuts() {
             return;
         }
 
-        // T — Toggle theme
-        if (e.key === 't' || e.key === 'T') {
+        const hasModifier = e.ctrlKey || e.metaKey || e.altKey;
+
+        // T — Toggle theme (only without modifiers)
+        if (!hasModifier && (e.key === 't' || e.key === 'T')) {
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) themeToggle.click();
             return;
         }
 
-        // L — Toggle language
-        if (e.key === 'l' || e.key === 'L') {
+        // L — Toggle language (only without modifiers)
+        if (!hasModifier && (e.key === 'l' || e.key === 'L')) {
             const langToggle = document.getElementById('lang-toggle');
             if (langToggle) langToggle.click();
             return;
         }
 
-        // ? — Show shortcuts help
-        if (e.key === '?') {
+        // ? — Show shortcuts help (only without modifiers)
+        if (!hasModifier && e.key === '?') {
             toggleShortcutsHelp();
             return;
         }
