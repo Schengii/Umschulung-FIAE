@@ -8,6 +8,7 @@ const pages = [
     'pages/portfolio.html',
     'pages/ihk-cockpit.html',
     'pages/challenge-lab.html',
+    'pages/git-simulator.html',
     'pages/links.html',
     'pages/ausbildungsablauf.html',
     'pages/ueber-mich.html',
