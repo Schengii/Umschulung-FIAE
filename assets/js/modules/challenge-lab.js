@@ -101,8 +101,10 @@ function calculateFinalPrice(cartItems) {
             },
             {
                 id: 'b',
-                text_de: 'Weil sie auf den externen State `discountMultiplier` zugreift und einen Nebeneffekt (`console.log`) hat',
-                text_en: 'Because it accesses mutable external state `discountMultiplier` and produces a side effect (`console.log`)',
+                text_de:
+                    'Weil sie auf den externen State `discountMultiplier` zugreift und einen Nebeneffekt (`console.log`) hat',
+                text_en:
+                    'Because it accesses mutable external state `discountMultiplier` and produces a side effect (`console.log`)',
                 correct: true,
             },
             {
@@ -132,8 +134,7 @@ function calculateFinalPrice(cartItems) {
         xp: 50,
         desc_de:
             'Welche Zeitkomplexität im Worst Case besitzt die binäre Suche (Binary Search) auf einem sortierten Array mit n Elementen?',
-        desc_en:
-            'What is the worst-case time complexity of binary search on a sorted array with n elements?',
+        desc_en: 'What is the worst-case time complexity of binary search on a sorted array with n elements?',
         code: `function binarySearch(arr, target) {
   let left = 0, right = arr.length - 1;
   while (left <= right) {
@@ -146,7 +147,12 @@ function calculateFinalPrice(cartItems) {
 }`,
         options: [
             { id: 'a', text_de: 'O(1) — Konstante Laufzeit', text_en: 'O(1) — Constant time', correct: false },
-            { id: 'b', text_de: 'O(log n) — Logarithmische Laufzeit', text_en: 'O(log n) — Logarithmic time', correct: true },
+            {
+                id: 'b',
+                text_de: 'O(log n) — Logarithmische Laufzeit',
+                text_en: 'O(log n) — Logarithmic time',
+                correct: true,
+            },
             { id: 'c', text_de: 'O(n) — Lineare Laufzeit', text_en: 'O(n) — Linear time', correct: false },
             { id: 'd', text_de: 'O(n²) — Quadratische Laufzeit', text_en: 'O(n²) — Quadratic time', correct: false },
         ],

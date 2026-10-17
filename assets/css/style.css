@@ -3162,6 +3162,23 @@ html[lang="en"] [lang="de"] {
     color: var(--primary-hover);
 }
 
+.exam-speak-btn {
+    background: none;
+    border: none;
+    font-size: 1.15rem;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+    margin-left: auto;
+    line-height: 1;
+}
+.exam-speak-btn:hover {
+    transform: scale(1.15);
+    color: var(--primary-hover);
+}
+
 /* Flashcard navigation buttons container */
 .flashcard-nav-container {
     display: flex;

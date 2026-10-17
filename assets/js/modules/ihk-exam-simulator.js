@@ -148,6 +148,7 @@ function element(tag, attributes = {}, ...children) {
     for (const [name, value] of Object.entries(attributes)) {
         if (name === 'class') node.className = value;
         else if (name === 'text') node.textContent = value;
+        else if (name === 'html') node.innerHTML = value;
         else node.setAttribute(name, value);
     }
     node.append(...children.filter((child) => child !== null && child !== undefined));
@@ -338,6 +339,7 @@ export function initIhkExamSimulator() {
 
     function finish(timedOut) {
         if (!run || run.view !== 'running') return;
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         stopTimer();
         run.view = 'result';
         run.timedOut = timedOut;
@@ -461,6 +463,31 @@ export function initIhkExamSimulator() {
             finish(false);
         });
 
+        const speakBtn =
+            'speechSynthesis' in window
+                ? element('button', {
+                      type: 'button',
+                      class: 'exam-speak-btn',
+                      'aria-label': t('Frage und Optionen vorlesen', 'Read question and options aloud'),
+                      title: t('Frage und Optionen vorlesen', 'Read question and options aloud'),
+                      html: '<i class="fa-solid fa-volume-high" aria-hidden="true"></i>',
+                  })
+                : null;
+
+        if (speakBtn) {
+            speakBtn.addEventListener('click', () => {
+                if (!('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel();
+                const qText = question.question[language] || '';
+                const optsText = order[index]
+                    .map((ai, i) => `${String.fromCharCode(65 + i)}: ${question.answers[ai][language]}`)
+                    .join('. ');
+                const utterance = new SpeechSynthesisUtterance(`${qText}. ${optsText}`);
+                utterance.lang = language === 'en' ? 'en-US' : 'de-DE';
+                window.speechSynthesis.speak(utterance);
+            });
+        }
+
         examPanel.replaceChildren(
             element(
                 'div',
@@ -471,7 +498,8 @@ export function initIhkExamSimulator() {
                         `Question ${index + 1} of ${questions.length}`
                     ),
                 }),
-                element('span', { class: 'exam-topic-chip', text: EXAM_TOPICS[question.topic][language] })
+                element('span', { class: 'exam-topic-chip', text: EXAM_TOPICS[question.topic][language] }),
+                speakBtn
             ),
             element('h3', { class: 'exam-question', id: questionId, text: question.question[language] }),
             options,
@@ -492,6 +520,7 @@ export function initIhkExamSimulator() {
 
     function goTo(index) {
         if (!run || index < 0 || index >= run.questions.length) return;
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         run.index = index;
         submitArmed = false;
         renderQuestion();
