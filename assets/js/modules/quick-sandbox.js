@@ -126,7 +126,7 @@ function attachEventListeners() {
     const modal = document.getElementById('quick-sandbox-modal');
     const btnClose = document.getElementById('btn-sandbox-close');
     const btnReload = document.getElementById('btn-sandbox-reload');
-    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
+    const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('sandbox-iframe'));
     const loader = document.getElementById('sandbox-loader');
 
     if (btnClose && modal) {
@@ -171,13 +171,27 @@ function attachEventListeners() {
     });
 }
 
+function resolveSandboxUrl(urlPath) {
+    if (!urlPath) return '';
+    if (urlPath.startsWith('http://') || urlPath.startsWith('https://')) return urlPath;
+    const isPagesFolder =
+        window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+    if (!isPagesFolder && urlPath.startsWith('../')) {
+        return urlPath.substring(3);
+    }
+    if (isPagesFolder && !urlPath.startsWith('../')) {
+        return '../' + urlPath.replace(/^\.\//, '');
+    }
+    return urlPath;
+}
+
 export function openSandbox(projKey) {
     const project =
         PLAYABLE_PROJECTS[projKey] ||
         (projKey ? PLAYABLE_PROJECTS[projKey.replace(/\s+/g, '-')] : null) ||
         (projKey ? PLAYABLE_PROJECTS[projKey.replace(/-/g, ' ')] : null);
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
+    const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('sandbox-iframe'));
     const title = document.getElementById('sandbox-title');
     const badge = document.getElementById('sandbox-badge');
     const desc = document.getElementById('sandbox-desc');
@@ -186,7 +200,8 @@ export function openSandbox(projKey) {
 
     if (!modal || !iframe) return;
 
-    const url = project ? project.url : `../Projekte/${projKey}/index.html`;
+    const rawUrl = project ? project.url : `../Projekte/${projKey}/index.html`;
+    const url = resolveSandboxUrl(rawUrl);
     const name = project ? project.title : projKey;
     const type = project ? project.type : 'Web Application';
     const description = project ? project.desc : 'Live Sandbox Runner';
@@ -204,7 +219,7 @@ export function openSandbox(projKey) {
 
 export function closeSandbox() {
     const modal = document.getElementById('quick-sandbox-modal');
-    const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
+    const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('sandbox-iframe'));
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
     document.body.style.overflow = '';
