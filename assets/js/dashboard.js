@@ -3,6 +3,7 @@
  * Loaded dynamically as a module.
  */
 import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
+import { Achievements } from './modules/achievements.js';
 
 export function initDashboard() {
     const isDashboardPage =
@@ -654,11 +655,6 @@ function renderAchievementsWidget() {
     const progressPercent = document.getElementById('achievements-progress-percent');
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
-
-    if (typeof Achievements === 'undefined') {
-        console.warn('Achievements module not loaded.');
-        return;
-    }
 
     const definitions = Achievements.definitions;
     const unlockedIds = Achievements.getUnlocked();
