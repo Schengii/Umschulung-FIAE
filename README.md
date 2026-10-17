@@ -58,9 +58,11 @@ Umschulung-FIAE/
 │   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
 │   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
 │   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller Projekte
-│   │       ├── git-engine.js            # DOM-freie Logik des Git-Simulators (Vitest-getestet)
-│   │       ├── exam-questions.js        # Fragenpool der Prüfungssimulation (DE/EN)
-│   │       ├── progress-backup.js       # Export/Import des lokal gespeicherten Fortschritts
+│   │       ├── git-engine.js            # DOM-freie Logik des Git-Simulators inkl. Rebase -i (Vitest-getestet)
+│   │       ├── daily-question.js        # Prüfungsfrage des Tages mit Streak-Tracking & Persistenz
+│   │       ├── c4-architecture.js       # Interaktives C4-Modell mit Komponenten-Drilldown & Code-Links
+│   │       ├── exam-questions.js        # Zweisprachiger Fragenpool der Prüfungssimulation (DE/EN)
+│   │       ├── progress-backup.js       # Export/Import des Fortschritts inkl. QR-Code Device Sync
 │   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)

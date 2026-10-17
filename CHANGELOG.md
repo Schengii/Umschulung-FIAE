@@ -4,6 +4,23 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-17
+
+### Vollständige Umsetzung des Optimierungsplans (PLAN.md OPT-01–OPT-12)
+
+- **OPT-01**: Git-Hook `.githooks/pre-push` implementiert, der vor jedem `git push` automatisiert `npm run check` ausführt und fehlerhafte Stände blockiert.
+- **OPT-02**: GitHub Actions CI Workflow (`ci.yml`) auf `actions/checkout@v7` mit `fetch-depth: 0` gehärtet.
+- **OPT-03**: GitHub Actions Step Summary Tabelle für den Lighthouse CI-Audit implementiert für übersichtliche Score-Reports direkt im GitHub Actions UI.
+- **OPT-04**: Dynamische Zweisprachigkeit (DE/EN) für alle Clean Code & RegEx Interactive Challenge Labs (`challenge-lab.js`) realisiert.
+- **OPT-05**: Dediziertes Print-Stylesheet (`print.css`) in `pages/lebenslauf.html` eingebunden für sauberen DIN-A4-Ausdruck ohne störende Web-Navigationselemente.
+- **OPT-06**: Barrierefreie Web Speech API Vorlesefunktion mit zweisprachiger Sprachsynthese (`SpeechSynthesisUtterance`) für Leitner-Lernkarten (`flashcards.js`) integriert.
+- **OPT-07**: Web Speech API Audio-Vorlesefunktion für IHK-Prüfungsfragen und Antwortoptionen (`ihk-exam-simulator.js`) hinzugefügt.
+- **OPT-08**: Interaktives „Prüfungsfrage des Tages“-Widget auf dem Dashboard mit Streak-Tracking, lokaler Persistenz und 10 Vitest Unit-Tests (`daily-question.js`, `daily-question.test.js`) umgesetzt.
+- **OPT-09**: Device-to-Device State Transfer via QR-Code Sync-URL (`#sync=...`) in `progress-backup.js` für nahtloses Übertragen von Lernfortschritten und Noten zwischen Desktop und Smartphone bereitgestellt.
+- **OPT-10**: Interaktives Komponenten-Drilldown im C4-Architekturdiagramm (`c4-architecture.js`) mit Verantwortlichkeiten, Quellcode-Links zu GitHub und Detail-Panels realisiert.
+- **OPT-11**: In-Memory Simulation von interactivem Git Rebase (`git rebase -i`, `--squash`, `--drop`) in `git-engine.js` implementiert und mit 6 Vitest Unit-Tests abgesichert.
+- **OPT-12**: Vollständige Zweisprachigkeit aller 63 IHK-Prüfungsfragen (AP1, AP2, WISO) sowie reaktive Sprachumschaltung und Unit-Tests im IHK-Prüfungssimulator validiert.
+
 ## [1.2.0] - 2026-10-17
 
 ### Vollständige Umsetzung des Maßnahmenplans (PLAN.md M01–M25)

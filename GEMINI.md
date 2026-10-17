@@ -46,3 +46,6 @@ Node ≥ 22.12 (`.nvmrc`/`engines`, CI nutzt 24; Vitest 5 läuft nicht auf Node 
 - Reines statisches Vanilla HTML5, CSS3 und modularisiertes JavaScript (ES-Module für Komponenten und Features, klassische Skripte nur für Bootstrap in `components.js` und Seiten-Tools).
 - Hohe Barrierefreiheit (WCAG 2.1 AA/AAA) standardmäßig verankert.
 - Keine externen CDNs zur Laufzeit; alle Fonts, Icons und Vendor-Bibliotheken werden aus `assets/vendor/` bezogen.
+- Git-Hook `.githooks/pre-push` prüft vor jedem `git push` automatisch alle statischen CI-Gates via `npm run check`.
+- Reine Logik mit Vitest-Coverage: `git-engine.js` (inkl. `git rebase -i`), `daily-question.js`, `progress-backup.js` (inkl. QR-Sync), `c4-architecture.js`, `leitner-box.js`, `ihk-exam-simulator.js`.
+
