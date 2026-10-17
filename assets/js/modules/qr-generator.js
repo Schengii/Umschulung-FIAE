@@ -5,7 +5,7 @@
 export function initQrGenerator() {
     const companyInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-company-input'));
     const nameInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-name-input'));
-    const targetSelect = /** @type {HTMLInputElement} */ (document.getElementById('qr-target-select'));
+    const targetSelect = /** @type {HTMLSelectElement} */ (document.getElementById('qr-target-select'));
 
     const placeholder = document.getElementById('qr-code-placeholder');
     const imageContainer = document.getElementById('qr-code-image-container');
