@@ -4,6 +4,8 @@
  */
 import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
 import { Achievements } from './modules/achievements.js';
+import { EXAM_QUESTIONS, EXAM_TOPICS } from './modules/exam-questions.js';
+import { getLocalDateKey, getDailyQuestionIndex, loadDailyState, recordDailyAnswer } from './modules/daily-question.js';
 
 export function initDashboard() {
     const isDashboardPage =
@@ -14,6 +16,7 @@ export function initDashboard() {
     renderProjectCount();
     renderRecentProjects();
     initQaMetrics();
+    initDailyQuestionWidget();
     renderLearningRecommendations();
     initCommitGrid();
     renderAchievementsWidget();
@@ -387,6 +390,109 @@ function initQaMetrics() {
             barChartSvg.innerHTML = svgContent;
         }
     }
+}
+
+/* ==========================================================================
+   DAILY EXAM QUESTION WIDGET (OPT-08)
+   ========================================================================== */
+function initDailyQuestionWidget() {
+    const container = document.getElementById('daily-question-container');
+    const streakCount = document.getElementById('daily-streak-count');
+    if (!container) return;
+
+    function render() {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const dateKey = getLocalDateKey();
+        const index = getDailyQuestionIndex(dateKey, EXAM_QUESTIONS.length);
+        const question = EXAM_QUESTIONS[index];
+        const state = loadDailyState();
+
+        if (streakCount) {
+            streakCount.textContent = String(state.streak);
+        }
+
+        const answeredToday = state.answered[dateKey];
+        const isAnswered = Boolean(answeredToday);
+
+        const topicInfo = EXAM_TOPICS[question.topic] || { de: question.topic, en: question.topic };
+        const topicName = topicInfo[lang] || topicInfo.de;
+
+        container.replaceChildren();
+
+        const metaRow = document.createElement('div');
+        metaRow.className = 'daily-question-meta';
+
+        const topicBadge = document.createElement('span');
+        topicBadge.className = 'exam-topic-chip';
+        topicBadge.textContent = topicName;
+        metaRow.appendChild(topicBadge);
+
+        if (isAnswered && answeredToday) {
+            const statusBadge = document.createElement('span');
+            statusBadge.className = `daily-status-badge ${answeredToday.isCorrect ? 'correct' : 'incorrect'}`;
+            statusBadge.innerHTML = answeredToday.isCorrect
+                ? `<i class="fa-solid fa-circle-check" aria-hidden="true"></i> ${lang === 'en' ? 'Solved' : 'Gelöst'}`
+                : `<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> ${lang === 'en' ? 'Attempted' : 'Beantwortet'}`;
+            metaRow.appendChild(statusBadge);
+        }
+
+        const qTitle = document.createElement('h4');
+        qTitle.className = 'daily-question-title';
+        qTitle.textContent = question.question[lang] || question.question.de;
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'daily-question-options';
+
+        question.answers.forEach((ans, aIdx) => {
+            const optBtn = document.createElement('button');
+            optBtn.type = 'button';
+            optBtn.className = 'daily-opt-btn';
+            const letter = String.fromCharCode(65 + aIdx);
+            const answerText = ans[lang] || ans.de;
+
+            optBtn.innerHTML = `<strong>${letter}:</strong> <span>${answerText}</span>`;
+
+            if (isAnswered && answeredToday) {
+                optBtn.disabled = true;
+                if (aIdx === question.correct) {
+                    optBtn.classList.add('correct');
+                }
+                if (aIdx === answeredToday.answeredIndex && !answeredToday.isCorrect) {
+                    optBtn.classList.add('incorrect');
+                }
+            } else {
+                optBtn.addEventListener('click', () => {
+                    const isCorrect = aIdx === question.correct;
+                    recordDailyAnswer(dateKey, aIdx, isCorrect);
+                    render();
+                });
+            }
+
+            optionsList.appendChild(optBtn);
+        });
+
+        container.appendChild(metaRow);
+        container.appendChild(qTitle);
+        container.appendChild(optionsList);
+
+        if (isAnswered && answeredToday) {
+            const explanationBox = document.createElement('div');
+            explanationBox.className = `daily-explanation ${answeredToday.isCorrect ? 'success' : 'info'}`;
+            const expTitle = answeredToday.isCorrect
+                ? lang === 'en'
+                    ? 'Correct!'
+                    : 'Richtig!'
+                : lang === 'en'
+                  ? 'Explanation:'
+                  : 'Erklärung:';
+            const expText = question.explanation[lang] || question.explanation.de;
+            explanationBox.innerHTML = `<strong>${expTitle}</strong> ${expText}`;
+            container.appendChild(explanationBox);
+        }
+    }
+
+    render();
+    document.addEventListener('langchange', render);
 }
 
 /* ==========================================================================

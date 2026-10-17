@@ -26,7 +26,7 @@
 - [x] OPT-07 | Native Screenreader Sprachausgabe für IHK-Prüfungsfragen im Exam-Simulator bereitstellen | P3 | M | assets/js/modules/ihk-exam-simulator.js, pages/quiz.html | assets/js/modules/ihk-exam-simulator.js:350 | Fertig wenn: Prüfungsfrage und Antwortoptionen per Klick auditiv ausgegeben werden können.
 
 ### Phase 3: Lern-Features, PWA & Architektur-Vertiefung
-- [ ] OPT-08 | „Prüfungsfrage des Tages“-Widget auf dem Dashboard mit Streak-Bonus integrieren | P2 | M | pages/dashboard.html, assets/js/dashboard.js | pages/dashboard.html:115, assets/js/dashboard.js:320 | Fertig wenn: Auf dem Dashboard täglich eine zufällige, tagespersistierte IHK-Frage gelöst werden kann und Sofort-Feedback anzeigt.
+- [x] OPT-08 | „Prüfungsfrage des Tages“-Widget auf dem Dashboard mit Streak-Bonus integrieren | P2 | M | pages/dashboard.html, assets/js/dashboard.js | pages/dashboard.html:115, assets/js/dashboard.js:320 | Fertig wenn: Auf dem Dashboard täglich eine zufällige, tagespersistierte IHK-Frage gelöst werden kann und Sofort-Feedback anzeigt.
 - [ ] OPT-09 | Lernstands- & Backup-Transfer via QR-Code (Device-to-Device Sync) umsetzen | P3 | M | assets/js/modules/progress-backup.js, pages/dashboard.html | assets/js/modules/progress-backup.js:75 | Fertig wenn: Der Backup-State als kompakter QR-Code gerendert wird, der mobil gescannt und importiert werden kann.
 - [ ] OPT-10 | Interaktive Quellcode- & Komponenten-Verknüpfung im C4-Architektur-Modul ausbauen | P3 | M | assets/js/modules/c4-architecture.js, pages/architecture.html | assets/js/modules/c4-architecture.js:45 | Fertig wenn: Klick auf C4-Container Detail-Panels mit Modul-Verantwortlichkeiten und direkten GitHub-Verlinkungen öffnet.
 

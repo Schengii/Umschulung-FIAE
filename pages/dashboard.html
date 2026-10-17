@@ -113,6 +113,29 @@
 
                     <hr>
 
+                    <!-- Daily Exam Question Widget (OPT-08) -->
+                    <div class="mt-2rem daily-question-card" id="daily-question-card" aria-labelledby="daily-question-title">
+                        <div class="daily-question-header">
+                            <h3 id="daily-question-title">
+                                <span lang="de"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Prüfungsfrage des Tages</span>
+                                <span lang="en"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Exam Question of the Day</span>
+                            </h3>
+                            <div class="daily-streak-badge" id="daily-streak-badge" aria-label="Streak-Bonus">
+                                <i class="fa-solid fa-fire" aria-hidden="true"></i>
+                                <span id="daily-streak-count">0</span>
+                                <span lang="de">Tage Streak</span>
+                                <span lang="en">days streak</span>
+                            </div>
+                        </div>
+                        <p lang="de">Täglich eine neue IHK-Prüfungsfrage zur gezielten Wissensauffrischung mit kontinuierlichem Streak-Bonus.</p>
+                        <p lang="en">A new IHK exam question every day for targeted knowledge refresh with continuous streak bonus.</p>
+                        <div id="daily-question-container" class="daily-question-container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <hr>
+
                     <!-- Developer Metrics & QA Dashboard -->
                     <div class="mt-2rem">
                         <h3>

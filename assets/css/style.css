@@ -2552,6 +2552,189 @@ html[lang="en"] [lang="de"] {
     transition: opacity 0.15s ease;
 }
 
+/* Daily Exam Question Widget (OPT-08) */
+.daily-question-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.daily-question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.daily-question-header h3 {
+    margin: 0;
+}
+
+.daily-streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15));
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    color: #d97706;
+    font-size: 0.85rem;
+}
+
+[data-theme="dark"] .daily-streak-badge {
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.4);
+}
+
+.daily-question-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.daily-question-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.exam-topic-chip {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.daily-status-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.daily-status-badge.correct {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.daily-status-badge.incorrect {
+    background: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .daily-status-badge.correct {
+    color: #34d399;
+}
+
+[data-theme="dark"] .daily-status-badge.incorrect {
+    color: #f87171;
+}
+
+.daily-question-title {
+    margin: 0.25rem 0 0.5rem 0;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.daily-question-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.daily-opt-btn {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.daily-opt-btn:hover:not(:disabled) {
+    background: var(--primary-light, rgba(59, 130, 246, 0.08));
+    border-color: var(--primary);
+}
+
+.daily-opt-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.daily-opt-btn.correct {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    color: #047857 !important;
+    font-weight: 600;
+}
+
+.daily-opt-btn.incorrect {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #b91c1c !important;
+}
+
+[data-theme="dark"] .daily-opt-btn.correct {
+    color: #34d399 !important;
+}
+
+[data-theme="dark"] .daily-opt-btn.incorrect {
+    color: #f87171 !important;
+}
+
+.daily-opt-btn:disabled {
+    cursor: default;
+}
+
+.daily-explanation {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.daily-explanation.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+.daily-explanation.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #1e40af;
+}
+
+[data-theme="dark"] .daily-explanation.success {
+    color: #a7f3d0;
+}
+
+[data-theme="dark"] .daily-explanation.info {
+    color: #bfdbfe;
+}
+
 /* ==========================================================================
    FEATURE 2: INTERAKTIVE LERNROADMAP
    ========================================================================== */
