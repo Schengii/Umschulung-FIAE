@@ -68,25 +68,15 @@ Umschulung-FIAE/
 │   ├── vendor/                  # Lokale Drittbibliotheken (Font-Awesome-Subset, Prism)
 │   └── images/                  # Optimierte WebP-Screenshots, Bilder & Favicons
 │
-├── Projekte/                    # Unterordner für eigenständige IHK- & Praxis-Übungsprojekte
+├── Projekte/                    # Unterordner für eigenständige Flaggschiff-Projekte
+│   ├── Amazon 2.0/              # E-Commerce Plattform (TypeScript, Vite, PWA, Design System)
 │   ├── EcoChef/                 # IHK-Abschlussprojekt (Lit/TypeScript PWA mit Gemini KI)
 │   ├── ElektroCheck AI/         # Intelligente Prüfberichtsanalyse (React/Vite & OpenAI API)
+│   ├── Finanzenportfolio/       # Vermögensplaner & Analytics Dashboard (React/Recharts)
+│   ├── Informatik-lernen/       # Interaktive FIAE-Lernplattform (TypeScript & Vite)
+│   ├── ManuFaktur/              # Kunst- & Bildergalerie mit Merkliste (Responsive Vanilla JS)
 │   ├── Minecraft/               # 3D Voxel Engine (C++20 & OpenGL 4.5 mit Redstone & Biomen)
-│   ├── Minecraft-Pokemon/       # Voxel Crossover RPG (Godot 4.x & C# .NET)
-│   ├── Sims/                    # Next-Gen Sims 5 Web Experience (React 2.5D & Audio Synth)
-│   ├── BurgenGame/              # Interaktives 2D-Aufbaustrategiespiel (Canvas & JS)
-│   ├── CoOpVersusGame/          # Multiplayer Co-Op/Versus Game Prototype (Godot 4.6)
-│   ├── finance-ai-bot/          # Finanzplaner & Conversational Chatbot (NLP)
-│   ├── Finanzenportfolio/       # Vermögensplaner & Dashboard (React/Recharts)
-│   ├── Glücksspiel/             # Casual Mini Games Suite (Slots, Roulette, Plinko)
-│   ├── Jobbsuche/               # PWA Stellenportal für Entwickler
-│   ├── ManuFaktur/              # Kunst- & Bildergalerie mit Merkliste
-│   ├── orbital-scrap/           # Sci-Fi Clicker- & Idle-Game (Godot 4.6)
-│   ├── Urlaubsfotos/            # Fotogalerie & Filter-Organizer (React/Vite)
-│   ├── VerkaufsVorlagen/        # Rechnungs- & Beleg-Generator (React/PDF)
-│   ├── Wohnungssuche KI/        # Automatisiere Wohnungssuche mit Web-Scraper & KI
-│   ├── arbeitszeiterfassung/    # PWA Zeiterfassung mit Firebase Cloud-Sync
-│   └── java-playground.html     # Java OOP & Spring Boot Übungsprojekte Showcase
+│   └── Wohnungssuche KI/        # Automatisierte Wohnungssuche mit KI-Exposé-Bewertung
 │
 └── scripts/                     # Automatisierungs- & Build-Skripte (Node.js)
     ├── generate_projects_data.js # Scannt Projekte/ und generiert projects.json & projects_data.js
@@ -234,7 +224,7 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 
 ### ⚙️ Code-Refactoring & neue Module (August 2026)
 - **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.
-- **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*BurgenGame*, *EcoChef*, *Sims 2.5D*, *ManuFaktur*) ohne Verlassen des Portfolios.
+- **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*EcoChef*, *Amazon 2.0*, *ElektroCheck AI*, *ManuFaktur*) ohne Verlassen des Portfolios.
 - **Lokaler Client-seitiger KI-Portfolio-Copilot (`portfolio-copilot.js`)**: 100% offline-fähiges Chat-Widget für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
 - **Executive Dossier 2.0 & Rollenbasierter PDF-Generator (`executive-dossier.js`)**: Maßgeschneiderter 1-Klick-Export für Fullstack-, Backend- oder IHK-Prüfer-Profile.
 - **Clean-Code & RegEx Challenge-Lab (`challenge-lab.html` & `challenge-lab.js`)**: Interaktives Coding-Lab zu IT-Sicherheit (SQL-Injection), RegEx, Pure Functions und Big-O mit XP-Gamification.

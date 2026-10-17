@@ -64,12 +64,12 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
         await page.goto('/pages/portfolio.html');
         await settle(page);
 
-        // Click on BurgenGame Sandbox Button
-        await page.click('button[data-sandbox-project="BurgenGame"]');
+        // Click on ManuFaktur Sandbox Button
+        await page.click('button[data-sandbox-project="ManuFaktur"]');
         const modal = page.locator('#quick-sandbox-modal');
         await expect(modal).toBeVisible();
         const iframe = page.locator('#sandbox-iframe');
-        await expect(iframe).toHaveAttribute('src', '../Projekte/BurgenGame/index.html');
+        await expect(iframe).toHaveAttribute('src', '../Projekte/ManuFaktur/index.html');
 
         // Close Sandbox
         await page.click('#btn-sandbox-close');

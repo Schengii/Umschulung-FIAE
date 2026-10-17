@@ -51,19 +51,19 @@ const KNOWLEDGE_BASE = [
     },
     {
         keywords: ['react', 'web', 'frontend', 'typescript', 'javascript', 'html', 'css', 'pwa', 'lit', 'vite'],
-        responseDe: `Im Web-/Frontend-Bereich nutzt Maximilian u.a. <strong>React 19, TypeScript, Lit Web Components, Vite und Tailwind/Vanilla CSS</strong>. Zu den Vorzeigeprojekten gehören *EcoChef*, *ElektroCheck AI*, *Finanzenportfolio* und *Urlaubsfotos*.`,
-        responseEn: `In frontend & web technologies, Maximilian works with <strong>React 19, TypeScript, Lit Web Components, Vite, and modern CSS</strong>. Showcase projects include *EcoChef*, *ElektroCheck AI*, *Finanzenportfolio*, and *Urlaubsfotos*.`,
+        responseDe: `Im Web-/Frontend-Bereich nutzt Maximilian u.a. <strong>React 19, TypeScript, Lit Web Components, Vite und Tailwind/Vanilla CSS</strong>. Zu den Vorzeigeprojekten gehören *EcoChef*, *ElektroCheck AI*, *Amazon 2.0* und *Finanzenportfolio*.`,
+        responseEn: `In frontend & web technologies, Maximilian works with <strong>React 19, TypeScript, Lit Web Components, Vite, and modern CSS</strong>. Showcase projects include *EcoChef*, *ElektroCheck AI*, *Amazon 2.0*, and *Finanzenportfolio*.`,
         link: 'portfolio.html?filter=web',
         linkTextDe: 'Web & PWA Projekte im Portfolio',
         linkTextEn: 'Web & PWA Projects',
     },
     {
         keywords: ['c++', 'c#', 'godot', 'engine', 'game', 'opengl', 'minecraft', 'spiele', 'games', 'gaming'],
-        responseDe: `Für System- und Spieleprogrammierung setzt Maximilian auf <strong>C++20 mit OpenGL 4.5</strong> (eigene 3D Voxel Engine mit Biomen und Redstone) sowie <strong>Godot 4.x mit C# .NET</strong> (RPG *Minecraft-Pokemon*, *Orbital Scrap*).`,
-        responseEn: `For systems and game programming, Maximilian utilizes <strong>C++20 with OpenGL 4.5</strong> (custom 3D voxel engine with biomes & redstone logic) and <strong>Godot 4.x with C# .NET</strong> (RPG *Minecraft-Pokemon*, *Orbital Scrap*).`,
+        responseDe: `Für System- und Spieleprogrammierung setzt Maximilian auf <strong>C++20 mit OpenGL 4.5</strong> (eigene 3D Voxel Engine mit Biomen, Chunk-Rendering und Redstone-Logik) sowie modulare Game-Architekturen.`,
+        responseEn: `For systems and game programming, Maximilian utilizes <strong>C++20 with OpenGL 4.5</strong> (custom 3D voxel engine with biomes, chunk rendering & redstone logic) and modular game architectures.`,
         link: 'portfolio.html?filter=game',
-        linkTextDe: 'C++ & Godot Games im Portfolio',
-        linkTextEn: 'C++ & Godot Games',
+        linkTextDe: 'C++ & Games im Portfolio',
+        linkTextEn: 'C++ & Games',
     },
     {
         keywords: [
@@ -85,8 +85,8 @@ const KNOWLEDGE_BASE = [
     },
     {
         keywords: ['ki', 'ai', 'gemini', 'openai', 'nlp', 'machine learning', 'bot', 'llm', 'copilot'],
-        responseDe: `Im KI-Bereich hat Maximilian praktische Apps mit <strong>Google Gemini API, OpenAI API und lokalem NLP</strong> entwickelt: *EcoChef* (Rezept-KI), *ElektroCheck AI* (intelligente Prüfberichtsanalyse) und *finance-ai-bot*.`,
-        responseEn: `In AI engineering, Maximilian has built production apps with <strong>Google Gemini API, OpenAI API, and local NLP algorithms</strong>: *EcoChef* (recipe AI), *ElektroCheck AI* (automated test report audit), and *finance-ai-bot*.`,
+        responseDe: `Im KI-Bereich hat Maximilian praktische Apps mit <strong>Google Gemini API, OpenAI API und lokalem NLP</strong> entwickelt: *EcoChef* (Rezept-KI), *ElektroCheck AI* (intelligente Prüfberichtsanalyse) und *Wohnungssuche KI*.`,
+        responseEn: `In AI engineering, Maximilian has built production apps with <strong>Google Gemini API, OpenAI API, and local NLP algorithms</strong>: *EcoChef* (recipe AI), *ElektroCheck AI* (automated test report audit), and *Wohnungssuche KI*.`,
         link: 'portfolio.html?filter=ki',
         linkTextDe: 'Alle KI & AI-Projekte ansehen',
         linkTextEn: 'View All AI Projects',

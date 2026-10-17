@@ -248,8 +248,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'EcoChef',
             'ElektroCheck-AI',
             'Amazon-2.0',
+            'Finanzenportfolio',
             'Informatik-lernen',
             'ManuFaktur',
+            'Minecraft',
             'Wohnungssuche-KI',
         ];
         if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
@@ -439,14 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // projects kept in the portfolio but pushed to the back of the list
     // instead of competing with the curated ones for first impressions.
     const FEATURED_REPOS = [
-        'arbeitszeiterfassung',
-        'BurgenGame',
         'ElektroCheck-AI',
+        'Amazon-2.0',
         'Finanzenportfolio',
         'Wohnungssuche-KI',
-        'CoOpVersusGame',
+        'Informatik-lernen',
+        'ManuFaktur',
+        'Minecraft',
     ];
-    const DEPRIORITIZED_REPOS = ['Glücksspiel'];
+    const DEPRIORITIZED_REPOS = [];
 
     function projectTier(repoName) {
         if (repoName === 'EcoChef') return 0;

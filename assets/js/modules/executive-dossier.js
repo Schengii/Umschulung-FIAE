@@ -11,24 +11,24 @@ const DOSSIER_TEMPLATES = {
             'Spezialisierung auf performante Single-Page- & Progressive-Web-Apps mit nativer Browser-Architektur, Offline-First-Konzepten und moderner UI/UX nach WCAG 2.1 AAA.',
         highlights: [
             'EcoChef (Lit/TS PWA + Gemini KI) — IHK Abschlussprojekt',
+            'Amazon 2.0 (TypeScript/Vite PWA E-Commerce Shop)',
             'ElektroCheck AI (React/Vite + OpenAI API)',
             'Finanzenportfolio (React + Recharts Dashboards)',
-            'Urlaubsfotos (React/Vite PWA mit Filter-Engine)',
         ],
         skills: 'TypeScript, JavaScript ES6+, React 19, Lit Web Components, HTML5/CSS3, PWA (Service Worker, IndexedDB), Vite, Playwright E2E',
     },
     backend: {
-        title: 'Executive Dossier: Systems Engineering & C++ / Godot',
-        role: 'Software Architect & Game Engine Developer',
+        title: 'Executive Dossier: Systems Engineering & C++ / Architecture',
+        role: 'Software Architect & Systems Developer',
         summary:
             'Fokus auf objektorientierte Systementwicklung, hardwarenahe Programmierung, algorithmische Komplexität und performante Grafik-Engines.',
         highlights: [
             'Minecraft 3D Voxel Engine (C++20, OpenGL 4.5, Biome & Redstone)',
-            'Minecraft-Pokemon RPG (Godot 4.x, C# .NET)',
-            'Orbital Scrap (Godot 4.6 Sci-Fi Idle Game)',
+            'Informatik-lernen (TypeScript/Vite Lernplattform & Algorithmen)',
+            'ManuFaktur (Responsive Web-Architektur & Kunstgalerie)',
             'SQL & Relational DB Playground (PostgreSQL / SQLite)',
         ],
-        skills: 'C++20, Modern C# .NET, Godot Engine 4.x, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading',
+        skills: 'C++20, Modern TypeScript / JavaScript, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading',
     },
     ihk: {
         title: 'IHK Prüfungs-Dossier: Fachinformatiker Anwendungsentwicklung',

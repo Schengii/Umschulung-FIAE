@@ -10,17 +10,29 @@ const PLAYABLE_PROJECTS = {
         type: 'PWA Web App',
         desc: 'Intelligenter KI-Rezept- & Nachhaltigkeitsplaner mit Lit, TypeScript & Gemini KI.',
     },
-    BurgenGame: {
-        title: 'BurgenGame — 2D Aufbaustrategie',
-        url: '../Projekte/BurgenGame/index.html',
-        type: 'HTML5 Canvas Game',
-        desc: 'Echtzeit-Burgbau, Ressourcenmanagement und Verteidigungsstrategie mit Vanilla JS.',
+    'Amazon-2.0': {
+        title: 'Amazon 2.0 — Modern E-Commerce Platform',
+        url: '../Projekte/Amazon 2.0/dist/index.html',
+        type: 'TypeScript / Vite PWA',
+        desc: 'Modernes Shop-System mit Produktfilter, Warenkorb, Command Palette und Dark Mode.',
     },
-    Sims: {
-        title: 'Sims 5 Next-Gen Web Experience',
-        url: '../Projekte/Sims/dist/index.html',
-        type: '2.5D Isometric Simulation',
-        desc: 'Sims Simulation mit isometrischem Canvas-Rendering, dynamischen Bedürfnissen und Synthesizer-Audio.',
+    'ElektroCheck-AI': {
+        title: 'ElektroCheck AI — DGUV V3 Prüfbericht-Auditor',
+        url: '../Projekte/ElektroCheck AI/index.html',
+        type: 'KI Web-Applikation',
+        desc: 'Automatisierte Prüfberichtsanalyse und Mängelerkennung nach DGUV V3 mit KI.',
+    },
+    Finanzenportfolio: {
+        title: 'Finanzenportfolio — Asset Management & Analytics',
+        url: '../Projekte/Finanzenportfolio/dist/index.html',
+        type: 'React / Vite Dashboard',
+        desc: 'Umfassendes Finanz- und Krypto-Tracking mit Recharts und Portfolio-Rebalancing.',
+    },
+    'Informatik-lernen': {
+        title: 'Informatik-lernen — Interaktive Lernplattform',
+        url: '../Projekte/Informatik-lernen/dist/index.html',
+        type: 'TypeScript Lernplattform',
+        desc: 'Interaktive FIAE-Lernmodule für Algorithmen, Datenstrukturen und SQL-Design.',
     },
     ManuFaktur: {
         title: 'ManuFaktur — Digitale Kunstgalerie',
@@ -28,23 +40,17 @@ const PLAYABLE_PROJECTS = {
         type: 'Web Application',
         desc: 'Moderne Kunstausstellung & Merkliste mit responsivem Design und dynamischen Filtern.',
     },
-    Glücksspiel: {
-        title: 'Casino & Casual Games Suite',
-        url: '../Projekte/Glücksspiel/index.html',
-        type: 'Mini Game Suite',
-        desc: 'Slots, Roulette und Plinko mit Physik-Simulation und Soundeffekten.',
+    Minecraft: {
+        title: 'Minecraft Voxel Engine — Web Preview & Showcase',
+        url: '../Projekte/Minecraft/index.html',
+        type: '3D Voxel Engine Demo',
+        desc: 'C++20 & OpenGL Voxel Engine mit Biomen, Chunk-Rendering und Redstone-Logik.',
     },
-    CoOpVersusGame: {
-        title: 'Co-Op Versus Multiplayer Prototype',
-        url: '../Projekte/CoOpVersusGame/coop-versus-demo.html',
-        type: 'Godot / HTML5 Prototype',
-        desc: 'Multiplayer Co-Op Game Prototyp mit dynamischer Level-Generierung.',
-    },
-    Urlaubsfotos: {
-        title: 'Urlaubsfotos — Modern Gallery PWA',
-        url: '../Projekte/Urlaubsfotos/dist/index.html',
-        type: 'React / Vite PWA',
-        desc: 'Fotogalerie mit EXIF-Metadaten-Filter, Tags und Lightbox-Modus.',
+    'Wohnungssuche-KI': {
+        title: 'Wohnungssuche KI — KI-Immobilien-Scout',
+        url: '../Projekte/Wohnungssuche KI/index.html',
+        type: 'Fullstack KI-Plattform',
+        desc: 'Automatisierte Wohnungssuche mit KI-Exposé-Bewertung und Mietpreisspiegel-Vergleich.',
     },
 };
 
@@ -166,7 +172,10 @@ function attachEventListeners() {
 }
 
 export function openSandbox(projKey) {
-    const project = PLAYABLE_PROJECTS[projKey];
+    const project =
+        PLAYABLE_PROJECTS[projKey] ||
+        (projKey ? PLAYABLE_PROJECTS[projKey.replace(/\s+/g, '-')] : null) ||
+        (projKey ? PLAYABLE_PROJECTS[projKey.replace(/-/g, ' ')] : null);
     const modal = document.getElementById('quick-sandbox-modal');
     const iframe = /** @type {HTMLImageElement} */ (document.getElementById('sandbox-iframe'));
     const title = document.getElementById('sandbox-title');
