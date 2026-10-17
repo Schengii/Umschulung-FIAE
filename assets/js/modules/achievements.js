@@ -99,9 +99,9 @@ export const Achievements = {
 
     getUnlocked() {
         const key = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.ACHIEVEMENTS) || 'achievements';
-        const data = AppStorage.getItem(key, '[]');
+        const data = typeof AppStorage !== 'undefined' ? AppStorage.getItem(key, '[]') : '[]';
         try {
-            return JSON.parse(data);
+            return JSON.parse(data) || [];
         } catch {
             return [];
         }
@@ -114,17 +114,22 @@ export const Achievements = {
     unlock(id) {
         if (!this.definitions[id] || this.isUnlocked(id)) return;
 
+        const key = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.ACHIEVEMENTS) || 'achievements';
         const unlocked = this.getUnlocked();
         unlocked.push(id);
-        AppStorage.setItem('achievements', JSON.stringify(unlocked));
+        if (typeof AppStorage !== 'undefined') {
+            AppStorage.setItem(key, JSON.stringify(unlocked));
+        }
 
-        this.showNotification(id);
-        document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
+        if (typeof document !== 'undefined') {
+            this.showNotification(id);
+            document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
+        }
     },
 
     showNotification(id) {
         const def = this.definitions[id];
-        if (!def) return;
+        if (!def || typeof document === 'undefined') return;
 
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
@@ -152,7 +157,7 @@ export const Achievements = {
         requestAnimationFrame(() => toast.classList.add('show'));
 
         // Play sound (silent unless the visitor enabled sound)
-        if (window.GameAudio) {
+        if (typeof window !== 'undefined' && window.GameAudio) {
             window.GameAudio.play('success');
         }
 
@@ -167,7 +172,9 @@ export const Achievements = {
 
 // The page scripts (quiz.js, snake.js, memory.js, interview.js, ...) are classic <script>
 // files and cannot import this module; they reach it through the global.
-window.Achievements = Achievements;
+if (typeof window !== 'undefined') {
+    window.Achievements = Achievements;
+}
 
 export function initAchievements() {
     // Track first visit
