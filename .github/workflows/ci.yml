@@ -160,3 +160,35 @@ jobs:
           configPath: './lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
+
+      - name: Publish Lighthouse Scores to GitHub Step Summary
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = '.lighthouseci/manifest.json';
+          if (!fs.existsSync(path)) {
+            console.log('No Lighthouse manifest found.');
+            process.exit(0);
+          }
+          try {
+            const runs = JSON.parse(fs.readFileSync(path, 'utf8'));
+            let md = '### 🚀 Lighthouse CI Quality Audit Scores\n\n';
+            md += '| URL | Performance | Accessibility | Best Practices | SEO |\n';
+            md += '| :-- | :---------: | :-----------: | :------------: | :-: |\n';
+            runs.forEach(r => {
+              const s = r.summary || {};
+              const u = r.url.replace('http://localhost', '');
+              const p = Math.round((s.performance || 0) * 100);
+              const a = Math.round((s.accessibility || 0) * 100);
+              const b = Math.round((s['best-practices'] || 0) * 100);
+              const seo = Math.round((s.seo || 0) * 100);
+              md += '| ' + u + ' | ' + (p >= 80 ? '🟢 ' : '🔴 ') + p + '% | ' + (a >= 90 ? '🟢 ' : '🔴 ') + a + '% | ' + (b >= 90 ? '🟢 ' : '🔴 ') + b + '% | ' + (seo >= 90 ? '🟢 ' : '🔴 ') + seo + '% |\n';
+            });
+            if (process.env.GITHUB_STEP_SUMMARY) {
+              fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+            }
+          } catch (e) {
+            console.error('Error generating summary:', e);
+          }
+          "
