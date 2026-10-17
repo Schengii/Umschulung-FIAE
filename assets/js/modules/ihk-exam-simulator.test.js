@@ -165,7 +165,26 @@ describe('evaluateExam', () => {
         expect(evaluateExam([], [])).toMatchObject({ total: 0, percent: 0, passed: false });
     });
 
-    it('has a label for every grade', () => {
+    it('has a label for every grade in German and English', () => {
         expect(Object.keys(GRADE_LABELS)).toEqual(['1', '2', '3', '4', '5', '6']);
+        for (const grade of Object.values(GRADE_LABELS)) {
+            expect(grade.de).toBeTruthy();
+            expect(grade.en).toBeTruthy();
+        }
+    });
+
+    it('has bilingual titles for all exam modes (AP1, AP2, WISO)', () => {
+        for (const mode of Object.values(EXAM_MODES)) {
+            expect(mode.de).toBeTruthy();
+            expect(mode.en).toBeTruthy();
+        }
+    });
+
+    it('has bilingual labels and categories for all topics', () => {
+        for (const topic of Object.values(EXAM_TOPICS)) {
+            expect(topic.de).toBeTruthy();
+            expect(topic.en).toBeTruthy();
+            expect(topic.category).toBeTruthy();
+        }
     });
 });

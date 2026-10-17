@@ -32,7 +32,7 @@
 
 ### Phase 4: Vertiefte Simulation & Fragen-Bilingualität
 - [x] OPT-11 | Git-Simulator Rebase-Erweiterung (`git rebase -i` Simulation) in Engine ergänzen | P3 | M | assets/js/modules/git-engine.js, assets/js/modules/git-engine.test.js | assets/js/modules/git-engine.js:180 | Fertig wenn: Interaktives Rebase (Pick/Squash) in der Engine simuliert und durch mindestens 5 neue Vitest-Tests abgesichert ist.
-- [ ] OPT-12 | Zweisprachigkeit (DE/EN) für Kern-IHK-Prüfungsfragen (AP1 & WISO) ausrollen | P3 | L | assets/js/modules/exam-questions.js, assets/js/modules/ihk-exam-simulator.js | assets/js/modules/exam-questions.js:16 | Fertig wenn: Kernfragen bei aktivem englischen Modus in verständlicher englischer Übersetzung gerendert werden.
+- [x] OPT-12 | Zweisprachigkeit (DE/EN) für Kern-IHK-Prüfungsfragen (AP1 & WISO) ausrollen | P3 | L | assets/js/modules/exam-questions.js, assets/js/modules/ihk-exam-simulator.js | assets/js/modules/exam-questions.js:16 | Fertig wenn: Kernfragen bei aktivem englischen Modus in verständlicher englischer Übersetzung gerendert werden.
 
 ### Abgeschlossene Basis-Maßnahmen (Referenz)
 - [x] M01–M25 | Alle Basis-Optimierungen (Iframe-Permissions, QR-Download, Paths, Hotkeys, Testing, Typings, CNAME) erfolgreich abgeschlossen und freigegeben.
