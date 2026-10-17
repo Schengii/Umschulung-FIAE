@@ -39,6 +39,7 @@ interface Window {
     newsData: Array<Record<string, any>>;
     PLACEHOLDER_IMAGE: string;
     STORAGE_KEYS: Readonly<Record<string, string>>;
+    resolveAssetPath: (pathStr: string) => string;
     openProjectModal: any;
     deleteCustomCard: any;
     initPraktikumsbetriebMedia: any;

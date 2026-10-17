@@ -98,7 +98,8 @@ export const Achievements = {
     },
 
     getUnlocked() {
-        const data = AppStorage.getItem('achievements', '[]');
+        const key = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.ACHIEVEMENTS) || 'achievements';
+        const data = AppStorage.getItem(key, '[]');
         try {
             return JSON.parse(data);
         } catch {

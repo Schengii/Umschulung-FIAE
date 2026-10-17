@@ -5,7 +5,7 @@
  * Also owns the site-wide sound switch (footer button `#audio-toggle`). Sound is off until
  * the visitor turns it on: nothing on this site may make noise unasked.
  */
-const SOUND_KEY = 'sound_enabled';
+const SOUND_KEY = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.SOUND_ENABLED) || 'sound_enabled';
 
 export const GameAudio = {
     audioCtx: null,

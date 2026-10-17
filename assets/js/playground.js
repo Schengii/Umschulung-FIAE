@@ -1251,9 +1251,12 @@ class CodePlayground {
         if (window.addLiveCommit) {
             window.addLiveCommit();
         } else {
-            let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
+            const commitKey =
+                (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.GITHUB_LIVE_COMMITS_TODAY) ||
+                'github_live_commits_today';
+            let liveCommitsToday = parseInt(AppStorage.getItem(commitKey, 0)) || 0;
             liveCommitsToday++;
-            AppStorage.setItem('github_live_commits_today', liveCommitsToday);
+            AppStorage.setItem(commitKey, liveCommitsToday);
         }
     }
 }
