@@ -311,8 +311,14 @@ class ArchitectureExplorer {
 
         // If switching to diagram tab, show initial details
         if (tab === 'ecochef') {
+            if (this.panelEcochef && this.detailsPane) {
+                this.panelEcochef.appendChild(this.detailsPane);
+            }
             this.showComponentDetails('ecochef', 'client');
         } else if (tab === 'elektrocheck') {
+            if (this.panelElektrocheck && this.detailsPane) {
+                this.panelElektrocheck.appendChild(this.detailsPane);
+            }
             this.showComponentDetails('elektrocheck', 'client');
         }
     }
@@ -431,6 +437,8 @@ class ArchitectureExplorer {
         if (this.detailsDesc) {
             this.detailsDesc.textContent = this.selectedLanguage === 'de' ? comp.descDe : comp.descEn;
         }
+
+        window.dispatchEvent(new CustomEvent('c4componentchange', { detail: { project, component } }));
     }
 
     renderApiRoutes() {
