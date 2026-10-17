@@ -13,7 +13,7 @@
 10. Domänen-Divergenz: `CNAME` nutzt Apex-Domain (`max-schenk.tech`), während `sitemap.xml` und `robots.txt` `www.max-schenk.tech` kanonisieren.
 
 ## 2. Maßnahmen
-- [ ] M01 | Permissions & Frame-Ancestors in `vercel.json` für gleiche Herkunft freigeben | P1 | S | vercel.json | vercel.json:12 | Fertig wenn: `X-Frame-Options: SAMEORIGIN` und `frame-ancestors 'self'` in `vercel.json` gesetzt sind und `quick-sandbox.js` Projekte im Iframe einbetten darf.
+- [x] M01 | Permissions & Frame-Ancestors in `vercel.json` für gleiche Herkunft freigeben | P1 | S | vercel.json | vercel.json:12 | Fertig wenn: `X-Frame-Options: SAMEORIGIN` und `frame-ancestors 'self'` in `vercel.json` gesetzt sind und `quick-sandbox.js` Projekte im Iframe einbetten darf.
 - [ ] M02 | QR-Code Generator Download von externer Fetch-Verbindung entkoppeln oder CSP anpassen | P1 | S | assets/js/modules/qr-generator.js, vercel.json, pages/links.html | assets/js/modules/qr-generator.js:153 | Fertig wenn: Der QR-Code-Download ohne CSP-`connect-src`-Fehler im Browser zuverlässig die PNG-Datei speichert.
 - [ ] M03 | Pfade für Wohnungssuche KI und Informatik-Lernen in `quick-sandbox.js` korrigieren | P1 | S | assets/js/modules/quick-sandbox.js | assets/js/modules/quick-sandbox.js:51 | Fertig wenn: Klick auf beide Sandboxes in `portfolio.html` existierende Dateien öffnet und keine 404-Meldungen erzeugt.
 - [ ] M04 | Relative Pfadauflösung in `quick-sandbox.js` für Root- und Pages-Ebene vereinheitlichen | P1 | S | assets/js/modules/quick-sandbox.js | assets/js/modules/quick-sandbox.js:189 | Fertig wenn: Sandbox-Trigger sowohl von `index.html` als auch aus `pages/*.html` gültige Iframe-URLs auflösen.
