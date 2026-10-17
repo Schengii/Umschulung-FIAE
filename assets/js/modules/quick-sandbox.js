@@ -30,7 +30,7 @@ const PLAYABLE_PROJECTS = {
     },
     'Informatik-lernen': {
         title: 'Informatik-lernen — Interaktive Lernplattform',
-        url: '../Projekte/Informatik-lernen/dist/index.html',
+        url: '../Projekte/Informatik-lernen/index.html',
         type: 'TypeScript Lernplattform',
         desc: 'Interaktive FIAE-Lernmodule für Algorithmen, Datenstrukturen und SQL-Design.',
     },
@@ -48,7 +48,7 @@ const PLAYABLE_PROJECTS = {
     },
     'Wohnungssuche-KI': {
         title: 'Wohnungssuche KI — KI-Immobilien-Scout',
-        url: '../Projekte/Wohnungssuche KI/index.html',
+        url: '../Projekte/Wohnungssuche KI/frontend/dist/index.html',
         type: 'Fullstack KI-Plattform',
         desc: 'Automatisierte Wohnungssuche mit KI-Exposé-Bewertung und Mietpreisspiegel-Vergleich.',
     },
