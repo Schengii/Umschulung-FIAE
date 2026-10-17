@@ -16,6 +16,8 @@ export function initPortfolioExporter() {
     exportBtn.style.marginLeft = 'auto';
     exportBtn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> <span lang="de">PDF-OnePager</span><span lang="en">PDF One-Pager</span>`;
     exportBtn.setAttribute('title', 'Druckoptimiertes One-Pager Dossier erstellen');
+    exportBtn.setAttribute('data-de-title', 'Druckoptimiertes One-Pager Dossier erstellen');
+    exportBtn.setAttribute('data-en-title', 'Create print-optimized one-pager dossier');
 
     exportBtn.addEventListener('click', () => {
         if (typeof showToast === 'function') {
