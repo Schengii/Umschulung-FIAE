@@ -15,7 +15,7 @@
 ## 2. Maßnahmen
 
 ### Phase 1: Developer Experience & CI/CD-Härtung
-- [ ] OPT-01 | Pre-Push Git Hook mit automatisiertem CI-Schnellcheck einrichten | P1 | S | .githooks/pre-push, package.json | .githooks/pre-commit:1, package.json:9 | Fertig wenn: Ein `git push` lokal vorab `npm run check` ausführt und bei Fehlern den Push zuverlässig blockiert.
+- [x] OPT-01 | Pre-Push Git Hook mit automatisiertem CI-Schnellcheck einrichten | P1 | S | .githooks/pre-push, package.json | .githooks/pre-commit:1, package.json:9 | Fertig wenn: Ein `git push` lokal vorab `npm run check` ausführt und bei Fehlern den Push zuverlässig blockiert.
 - [ ] OPT-02 | Vollständige Git-Historie im CI-Checkout für exakte Sitemap-Lastmod aktivieren | P1 | S | .github/workflows/ci.yml | .github/workflows/ci.yml:25 | Fertig wenn: `actions/checkout` mit `fetch-depth: 0` konfiguriert ist und `update_sitemap.js --check` echte Commit-Daten prüft.
 - [ ] OPT-03 | Visuelle Lighthouse-CI Score-Tabelle in GitHub Step Summary schreiben | P2 | S | .github/workflows/ci.yml | .github/workflows/ci.yml:130 | Fertig wenn: Nach dem Lighthouse-Lauf die Ergebnisse (Performance, A11y, Best Practices, SEO) als Markdown-Tabelle in `$GITHUB_STEP_SUMMARY` erscheinen.
 

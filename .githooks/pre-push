@@ -1,0 +1,24 @@
+#!/bin/sh
+# ==============================================================================
+# Git Pre-Push Hook: Lokaler CI-Schnellcheck
+# ==============================================================================
+# Führt alle statischen CI-Gates (Data-Sync, Head, CSP, Icons, Sitemap, SW-Assets,
+# Project-Links, Lint, Format, Typecheck, Unit-Tests) vor dem Push aus.
+# Verhindert fehlerhafte Commits in Remote-Branches und GitHub Actions CI.
+# ==============================================================================
+
+echo "🔍 [PRE-PUSH] Führe automatischen CI-Schnellcheck (npm run check) aus..."
+npm run check
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+    echo "======================================================================"
+    echo "❌ [PRE-PUSH ERROR] 'npm run check' ist fehlgeschlagen!"
+    echo "Der Push wurde abgebrochen, um fehlerhafte CI-Läufe auf GitHub zu vermeiden."
+    echo "Bitte behebe die Fehler lokal und versuche es erneut."
+    echo "======================================================================"
+    exit $EXIT_CODE
+fi
+
+echo "✅ [PRE-PUSH] Alle CI-Gates erfolgreich bestanden. Push wird fortgesetzt."
+exit 0
