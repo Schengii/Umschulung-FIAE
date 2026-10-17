@@ -79,6 +79,20 @@ export function initQrGenerator() {
             resultDetails.style.display = 'block';
         };
 
+        img.onerror = () => {
+            placeholder.style.display = 'none';
+            instructionText.style.display = 'none';
+            imageContainer.style.display = 'block';
+            resultDetails.style.display = 'block';
+            imageContainer.innerHTML = `
+                <div class="qr-error-notice" style="color: var(--danger, #ef4444); text-align: center; padding: 1rem;">
+                    <i class="fa fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 0.5rem;" aria-hidden="true"></i>
+                    <p lang="de">QR-Code konnte nicht geladen werden (Offline oder API nicht erreichbar). Der personalisierte Link oben bleibt gültig.</p>
+                    <p lang="en">QR code could not be loaded (offline or service unreachable). The personalised link above remains valid.</p>
+                </div>
+            `;
+        };
+
         imageContainer.appendChild(img);
     }
 

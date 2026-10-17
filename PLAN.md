@@ -36,7 +36,7 @@
 - [x] M21 | iCal-Zeilenumbrüche in `ical-generator.js` auf RFC-5545 CRLF normieren | P3 | S | assets/js/modules/ical-generator.js | assets/js/modules/ical-generator.js:57 | Fertig wenn: `.ics`-Dateien mit `\r\n` generiert werden und in Outlook/Apple Calendar valide importieren.
 - [x] M22 | JSON-LD Breadcrumb-Struktur auf `pages/games.html` ergänzen | P3 | S | pages/games.html | pages/games.html:27 | Fertig wenn: `games.html` ein standardkonformes `BreadcrumbList`-Schema im `<head>` besitzt.
 - [x] M23 | Fehlendes `data-en-title` Attribut auf Print-Button in `portfolio_exporter.js` nachtragen | P3 | S | assets/js/modules/portfolio_exporter.js | assets/js/modules/portfolio_exporter.js:21 | Fertig wenn: Beim Umschalten auf Englisch der Tooltip des Buttons übersetzt wird.
-- [ ] M24 | Fehlenden `onerror`-Fallback bei QR-Code-Ladevorgang in `qr-generator.js` absichern | P3 | S | assets/js/modules/qr-generator.js | assets/js/modules/qr-generator.js:75 | Fertig wenn: Bei Offline-Verbindung oder Ladefehler eine sichtbare Fehlermeldung statt eines Endlos-Loaders erscheint.
+- [x] M24 | Fehlenden `onerror`-Fallback bei QR-Code-Ladevorgang in `qr-generator.js` absichern | P3 | S | assets/js/modules/qr-generator.js | assets/js/modules/qr-generator.js:75 | Fertig wenn: Bei Offline-Verbindung oder Ladefehler eine sichtbare Fehlermeldung statt eines Endlos-Loaders erscheint.
 - [ ] M25 | Kanonische Domain-Ausrichtung zwischen `CNAME`, `robots.txt` und `sitemap.xml` festlegen | P3 | S | CNAME, robots.txt, sitemap.xml | CNAME:1 | Fertig wenn: Hostname in `CNAME` und Sitemap/Robots einheitlich (bevorzugt `www.max-schenk.tech`) synchronisiert sind.
 
 ### Optional (Ideen ohne harten Beleg)
