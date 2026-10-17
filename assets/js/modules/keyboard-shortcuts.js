@@ -20,8 +20,13 @@ export function initKeyboardShortcuts() {
         )
             return;
 
-        // Ctrl+K or Cmd+K — Focus search bar
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        // Ctrl+K or Cmd+K — Focus search bar only if Command Palette is not present
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+            const hasCommandPalette = document.getElementById('command-palette-overlay');
+            if (hasCommandPalette) {
+                // Command palette handles Ctrl+K directly to avoid dual focus conflicts
+                return;
+            }
             e.preventDefault();
             const searchBar = /** @type {HTMLInputElement} */ (
                 document.getElementById('searchbar') || document.getElementById('portfolio-searchbar')
