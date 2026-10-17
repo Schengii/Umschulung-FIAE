@@ -21,7 +21,7 @@
 
 ### Phase 2: Internationalisierung & Barrierefreiheit
 - [x] OPT-04 | Zweisprachige (DE/EN) Datenstruktur & Umschaltung im Challenge-Lab implementieren | P2 | M | assets/js/modules/challenge-lab.js, pages/challenge-lab.html | assets/js/modules/challenge-lab.js:8 | Fertig wenn: Alle 3 Code-Challenges Titel, Beschreibung, Optionen und Erklärung bei Klick auf den Sprachschalter dynamisch auf Englisch übersetzen.
-- [ ] OPT-05 | Print-Stylesheet `print.css` auf `pages/lebenslauf.html` einbinden | P2 | S | pages/lebenslauf.html | pages/lebenslauf.html:65 | Fertig wenn: `<link rel="stylesheet" href="../assets/css/print.css" media="print">` eingebunden ist und Druckansichten ohne Buttons formatiert werden.
+- [x] OPT-05 | Print-Stylesheet `print.css` auf `pages/lebenslauf.html` einbinden | P2 | S | pages/lebenslauf.html | pages/lebenslauf.html:65 | Fertig wenn: `<link rel="stylesheet" href="../assets/css/print.css" media="print">` eingebunden ist und Druckansichten ohne Buttons formatiert werden.
 - [ ] OPT-06 | Native Screenreader Web Speech API Sprachausgabe für Flashcards ergänzen | P3 | M | assets/js/flashcards.js, pages/flashcards.html | assets/js/flashcards.js:210 | Fertig wenn: Ein Audio-Button auf der Karte Frage und Antwort über `window.speechSynthesis` barrierefrei und datenschutzfreundlich (ohne externe API) vorliest.
 - [ ] OPT-07 | Native Screenreader Sprachausgabe für IHK-Prüfungsfragen im Exam-Simulator bereitstellen | P3 | M | assets/js/modules/ihk-exam-simulator.js, pages/quiz.html | assets/js/modules/ihk-exam-simulator.js:350 | Fertig wenn: Prüfungsfrage und Antwortoptionen per Klick auditiv ausgegeben werden können.
 
