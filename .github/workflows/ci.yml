@@ -57,6 +57,9 @@ jobs:
       - name: Verify Service Worker Precache List And Cache Name Are Up To Date
         run: npm run check-sw-assets
 
+      - name: Verify All Project Links Exist On Disk
+        run: npm run check-project-links
+
       - name: Lint JavaScript
         run: npm run lint
 

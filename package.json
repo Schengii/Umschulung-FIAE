@@ -40,7 +40,7 @@
     "update-sitemap": "node scripts/update_sitemap.js",
     "check-sitemap": "node scripts/update_sitemap.js --check",
     "regen": "npm run subset-icons && npm run generate-sw-assets",
-    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-sw-assets && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
