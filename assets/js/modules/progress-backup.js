@@ -53,6 +53,7 @@ const EXACT_KEYS = new Set([
     'portfolio_contrast',
     'sound_enabled',
     'interview_tts_enabled',
+    'fiae_daily_question_state',
 ]);
 
 const KEY_PREFIXES = ['fiae_progress_phase_', 'news_likes_'];
@@ -72,6 +73,7 @@ const JSON_KEYS = new Set([
     'achievements',
     'visited_pages',
     'portfolio_custom_projects',
+    'fiae_daily_question_state',
 ]);
 
 /** @param {string} key */
@@ -173,6 +175,39 @@ export function backupFileName(now = new Date()) {
     return `fiae-lernfortschritt-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
 }
 
+/**
+ * Serializes a backup object to a base64 payload string for QR-Code sync.
+ * @param {object} backup
+ * @returns {string}
+ */
+export function serializeBackupToPayload(backup) {
+    const json = JSON.stringify(backup);
+    return globalThis.btoa(encodeURIComponent(json));
+}
+
+/**
+ * Deserializes a backup payload from a base64 string.
+ * @param {string} payload
+ * @returns {{ entries: [string, string][], skipped: number, exportedAt: string | null }}
+ */
+export function deserializeBackupFromPayload(payload) {
+    const json = decodeURIComponent(globalThis.atob(payload));
+    return parseBackup(json);
+}
+
+/**
+ * Constructs a QR code image URL for device-to-device transfer.
+ * @param {object} backup
+ * @param {string} [baseUrl]
+ * @returns {string}
+ */
+export function getSyncQrCodeUrl(backup, baseUrl = 'https://www.max-schenk.tech/pages/dashboard.html') {
+    const payload = serializeBackupToPayload(backup);
+    const cleanUrl = baseUrl.split('#')[0].split('?')[0];
+    const syncUrl = `${cleanUrl}#sync=${payload}`;
+    return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(syncUrl)}&margin=10`;
+}
+
 /* ------------------------------------------------------------------------------------ */
 /* Dashboard card                                                                        */
 /* ------------------------------------------------------------------------------------ */
@@ -197,6 +232,10 @@ export function initProgressBackup() {
 
     const exportButton = card.querySelector('#backup-export-btn');
     const importButton = card.querySelector('#backup-import-btn');
+    const qrButton = card.querySelector('#backup-qr-btn');
+    const qrDisplay = /** @type {HTMLElement} */ (card.querySelector('#backup-qr-display'));
+    const qrImg = /** @type {HTMLImageElement} */ (card.querySelector('#backup-qr-img'));
+    const qrClose = card.querySelector('#backup-qr-close');
     const fileInput = /** @type {HTMLInputElement} */ (card.querySelector('#backup-file-input'));
     const status = card.querySelector('#backup-status');
     const confirmBox = /** @type {HTMLElement} */ (card.querySelector('#backup-confirm'));
@@ -213,6 +252,56 @@ export function initProgressBackup() {
 
     /** @type {[string, string][] | null} */
     let pending = null;
+
+    if (qrButton && qrDisplay && qrImg) {
+        qrButton.addEventListener('click', () => {
+            let backup;
+            try {
+                backup = createBackup(window.localStorage);
+            } catch (_e) {
+                say(
+                    'Der Browser erlaubt keinen Zugriff auf die gespeicherten Daten.',
+                    'The browser does not allow access to the stored data.',
+                    true
+                );
+                return;
+            }
+            if (Object.keys(backup.data).length === 0) {
+                say('Es gibt noch nichts zu sichern.', 'There is nothing to back up yet.');
+                return;
+            }
+            qrImg.src = getSyncQrCodeUrl(backup, window.location.href);
+            qrDisplay.hidden = false;
+        });
+
+        qrClose?.addEventListener('click', () => {
+            qrDisplay.hidden = true;
+        });
+    }
+
+    // Process incoming sync from URL hash: #sync=<base64>
+    if (window.location.hash.startsWith('#sync=')) {
+        const payload = window.location.hash.slice(6);
+        try {
+            const incoming = deserializeBackupFromPayload(payload);
+            pending = incoming.entries;
+            const date = incoming.exportedAt
+                ? new Date(incoming.exportedAt).toLocaleDateString(lang() === 'en' ? 'en-GB' : 'de-DE')
+                : '?';
+            const skipped = incoming.skipped;
+            confirmText.textContent =
+                lang() === 'en'
+                    ? `QR Sync received from ${date} with ${pending.length} entries${skipped ? ` (${skipped} unknown entries are ignored)` : ''}. Importing replaces the progress stored in this browser.`
+                    : `QR-Sync empfangen vom ${date} mit ${pending.length} Einträgen${skipped ? ` (${skipped} unbekannte Einträge werden ignoriert)` : ''}. Der Import ersetzt den in diesem Browser gespeicherten Fortschritt.`;
+            status.textContent = '';
+            confirmBox.hidden = false;
+            /** @type {HTMLElement} */ (confirmButton)?.focus();
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (_err) {
+            say('Ungültiger QR-Sync-Code empfangen.', 'Invalid QR sync data received.', true);
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+    }
 
     exportButton.addEventListener('click', () => {
         let backup;

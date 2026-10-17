@@ -11,6 +11,9 @@ import {
     createBackup,
     isBackupKey,
     parseBackup,
+    serializeBackupToPayload,
+    deserializeBackupFromPayload,
+    getSyncQrCodeUrl,
 } from './progress-backup.js';
 
 /** Minimal in-memory stand-in for window.localStorage. */
@@ -177,5 +180,39 @@ describe('STORAGE_KEYS synchronization', () => {
                 expect(isBackupKey(key), `Persistent key ${name} (${key}) must be accepted by isBackupKey`).toBe(true);
             }
         }
+    });
+});
+
+describe('QR sync payload encoding and decoding', () => {
+    it('serializes and deserializes backup payloads round-trip', () => {
+        const backup = {
+            app: BACKUP_APP_ID,
+            version: BACKUP_VERSION,
+            exportedAt: '2026-10-17T12:00:00.000Z',
+            data: {
+                theme: 'dark',
+                quiz_best_score: '9',
+                fiae_daily_question_state: JSON.stringify({ streak: 5 }),
+            },
+        };
+        const payload = serializeBackupToPayload(backup);
+        expect(typeof payload).toBe('string');
+        const restored = deserializeBackupFromPayload(payload);
+        expect(restored.entries).toEqual([
+            ['theme', 'dark'],
+            ['quiz_best_score', '9'],
+            ['fiae_daily_question_state', JSON.stringify({ streak: 5 })],
+        ]);
+    });
+
+    it('generates valid QR code URL with sync hash', () => {
+        const backup = {
+            app: BACKUP_APP_ID,
+            version: BACKUP_VERSION,
+            data: { theme: 'light' },
+        };
+        const url = getSyncQrCodeUrl(backup, 'https://www.max-schenk.tech/pages/dashboard.html');
+        expect(url).toContain('https://api.qrserver.com/v1/create-qr-code/');
+        expect(url).toContain(encodeURIComponent('https://www.max-schenk.tech/pages/dashboard.html#sync='));
     });
 });

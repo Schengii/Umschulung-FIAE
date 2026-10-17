@@ -3722,6 +3722,42 @@ html[lang="en"] [lang="de"] {
     color: #fca5a5;
 }
 
+.backup-qr-display {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.backup-qr-display[hidden] {
+    display: none;
+}
+
+.backup-qr-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.backup-qr-img {
+    background: #ffffff;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    max-width: 220px;
+    height: auto;
+}
+
+.backup-qr-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-width: 280px;
+    margin: 0;
+}
+
 /* Recent code activity (home) */
 .git-activity-item {
     margin-bottom: 8px;

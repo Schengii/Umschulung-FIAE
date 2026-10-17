@@ -372,7 +372,23 @@
                             <i class="fa-solid fa-upload" aria-hidden="true"></i>
                             <span lang="de">Importieren</span><span lang="en">Import</span>
                         </button>
+                        <button type="button" id="backup-qr-btn" class="btn-secondary">
+                            <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
+                            <span lang="de">QR-Sync</span><span lang="en">QR Sync</span>
+                        </button>
                         <input type="file" id="backup-file-input" class="sr-only" accept="application/json,.json" tabindex="-1" aria-label="Sicherungsdatei auswählen" data-en-aria-label="Choose backup file">
+                    </div>
+                    <div id="backup-qr-display" class="backup-qr-display" hidden>
+                        <div class="backup-qr-box">
+                            <img id="backup-qr-img" class="backup-qr-img" alt="QR-Code für Lernstands-Synchronisierung" width="220" height="220">
+                            <p class="backup-qr-hint">
+                                <span lang="de">Scanne diesen Code mit deinem Smartphone oder Tablet, um deinen Lernstand direkt auf dieses Gerät zu übertragen.</span>
+                                <span lang="en">Scan this code with your smartphone or tablet camera to transfer your learning progress directly to that device.</span>
+                            </p>
+                            <button type="button" id="backup-qr-close" class="btn-secondary">
+                                <span lang="de">Schließen</span><span lang="en">Close</span>
+                            </button>
+                        </div>
                     </div>
                     <div id="backup-confirm" class="backup-confirm" hidden>
                         <p id="backup-confirm-text"></p>

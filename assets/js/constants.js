@@ -37,6 +37,7 @@ const STORAGE_KEYS = Object.freeze({
     KNOWN_FLASHCARDS: 'known_flashcards',
     FLASHCARD_TOTAL_COUNT: 'flashcard_total_count',
     FLASHCARD_CORRECT_COUNT: 'flashcard_correct_count',
+    DAILY_QUESTION_STATE: 'fiae_daily_question_state',
 });
 
 const APP = Object.freeze({
