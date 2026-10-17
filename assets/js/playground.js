@@ -1118,6 +1118,9 @@ class CodePlayground {
 
         // Message receiver from iFrame
         window.addEventListener('message', (e) => {
+            if (this.previewIframe && e.source !== this.previewIframe.contentWindow) {
+                return;
+            }
             if (e.data && e.data.type === 'CONSOLE_LOG') {
                 this.appendLog(e.data.message, 'log');
             } else if (e.data && e.data.type === 'CONSOLE_ERROR') {
