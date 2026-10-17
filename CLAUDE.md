@@ -33,13 +33,13 @@ Node ≥ 22.12 (`.nvmrc`/`engines`, CI nutzt 24; Vitest 5 läuft nicht auf Node 
 
 ## CI-Gates (müssen vor Push grün sein)
 
-`.github/workflows/ci.yml` hat drei parallele Jobs: `quality` (`npm audit`, `check-sync`, `check-head`, `check-csp`, `check-icons`, `check-sitemap`, `check-sw-assets`, `lint`, `format:check`, `typecheck`, `test:unit`, `build:dist`), `e2e` (Matrix: ein Job je Playwright-Projekt chromium/firefox/webkit/mobile-chrome, plus ein Chromium-Lauf gegen `dist/`) und `lighthouse` (misst `dist/`; Performance ≥ 0,8, a11y/SEO/Best Practices ≥ 0,9 und CLS ≤ 0,1 sind harte Schwellen). Lokal deckt `npm run check` den `quality`-Job bis auf Audit und Build ab. Typische Auslöser:
+`.github/workflows/ci.yml` hat drei parallele Jobs: `quality` (`npm audit`, `check-sync`, `check-head`, `check-csp`, `check-icons`, `check-sitemap`, `check-sw-assets`, `check-project-links`, `lint`, `format:check`, `typecheck`, `test:unit`, `build:dist`), `e2e` (Matrix: ein Job je Playwright-Projekt chromium/firefox/webkit/mobile-chrome, plus ein Chromium-Lauf gegen `dist/`) und `lighthouse` (misst `dist/`; Performance ≥ 0,8, a11y/SEO/Best Practices ≥ 0,9 und CLS ≤ 0,1 sind harte Schwellen). Lokal deckt `npm run check` den `quality`-Job bis auf Audit und Build ab. Typische Auslöser:
 
 - **Jede Änderung an HTML/CSS/JS/Fonts, auch ohne neue Datei** → `npm run generate-sw-assets`. Das Skript schreibt die Precache-Liste **und** `CACHE_NAME` in `sw.js`; der Name enthält einen Hash über den Inhalt aller Precache-Dateien (ADR 0010), wird also nie von Hand gepflegt. `check-sw-assets` schlägt fehl, sobald irgendeine Precache-Datei anders ist als beim letzten Lauf. Immer als **letzten** Schritt ausführen, nach allem, was Dateien verändert. Bilder sind bewusst eine kuratierte Konstante und werden nicht automatisch precached.
 - **Neues Font-Awesome-Icon** → `npm run subset-icons` (oder `npm run regen`). Ausgeliefert wird ein generiertes Subset (ADR 0009); ein Icon, das dort fehlt, bleibt leer. Klassennamen müssen wörtlich im Quelltext stehen, zusammengesetzte Namen (`` `fa-${x}` ``) lässt das Skript nicht zu. Nur Font-Awesome-6-Namen verwenden (kein `fa-…-o`).
 - **Inline-`<script>` geändert oder CSP geändert** → `npm run check-csp:fix`. Jede Seite hat einen eigenen CSP-`<meta>`-Tag mit `sha256`-Hashes für Inline-Scripts; zusätzlich liefert `vercel.json` eine permissivere Header-CSP als Sicherheitsnetz (ADR 0003). Beide Stellen bei neuen externen Ressourcen anfassen.
 - **Neue Seite** → `<head>`-Boilerplate muss `check-head` bestehen (Seiten werden nicht aus Template generiert, sondern von Hand gepflegt und nur auf Vorhandensein geprüft), plus Eintrag in `sitemap.xml`/Navigation. `check-sitemap` verlangt jede indexierbare Seite in der Sitemap; Fehler-/Offline-Seiten tragen `noindex`. `npm run update-sitemap` setzt `<lastmod>` aus dem Git-Datum.
-- **Projektdaten** → siehe unten, `generate-data` + `check-sync`.
+- **Projektdaten & Links** → siehe unten, `generate-data` + `check-sync` + `check-project-links`.
 
 ## Architektur
 

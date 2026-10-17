@@ -4,6 +4,36 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-17
+
+### Vollständige Umsetzung des Maßnahmenplans (PLAN.md M01–M25)
+
+- **M01**: `vercel.json` mit `X-Frame-Options: SAMEORIGIN` und `frame-ancestors 'self'` konfiguriert für sicheres Iframe-Embedding der Quick-Sandbox.
+- **M02**: QR-Code-Generator mit `connect-src` CSP-Freigabe für `https://api.qrserver.com` und automatischem Download-Fallback gehärtet.
+- **M03**: Pfade in `quick-sandbox.js` validiert und auf existierende Unterprojekte synchronisiert.
+- **M04**: Kontextuelle Pfadauflösung (`resolveSandboxUrl`) in `quick-sandbox.js` für Root- und `pages/`-Aufrufe implementiert.
+- **M05**: Zweisprachige Beschreibungs-Interpolation in `projekt-detail.js` sauber getrennt (`descDe` / `descEn`).
+- **M06**: Globale Hotkey-Guards in `keyboard-shortcuts.js` gegen `Ctrl`, `Alt`, `Meta` Tastenkombinationen abgesichert.
+- **M07**: `Ctrl+K`-Handling zwischen Tastenkombinationen und Command Palette harmonisiert.
+- **M08**: Message-Origin-Validation (`e.source === previewIframe.contentWindow`) in `playground.js` gehärtet.
+- **M09**: `scripts/check_all_project_links.js` mit Exit Code 1 bei Fehlern versehen und in CI/`npm run check` integriert.
+- **M10**: `pages/git-simulator.html` in WCAG 2.1 AA E2E Axe-Core-Testsuite aufgenommen.
+- **M11**: `pages/git-simulator.html` in globale Seiten-Stabilitäts-Prüfung (`all_pages.spec.js`) integriert.
+- **M12**: `STORAGE_KEYS` in `constants.js` um alle 30 Site-Keys vervollständigt und Magic Strings abgelöst.
+- **M13**: `STORAGE_KEYS`-Synchronisation in `progress-backup.test.js` dynamisch an `constants.js` angebunden.
+- **M14**: Achievements-Einbindung in `dashboard.js` auf sauberen ESM-Import umgestellt.
+- **M15**: JSDoc-Typdeklarationen in `quick-sandbox.js` (`HTMLIFrameElement`) und `qr-generator.js` (`HTMLSelectElement`) korrigiert.
+- **M16**: 9 Vitest Unit-Tests für `portfolio-copilot.js` (Intent-Matching, Keyword-Scoring, Link-Resolution) erstellt.
+- **M17**: 6 Vitest Unit-Tests für `achievements.js` (Unlock-Logik, Event-Dispatching, Duplikatsvermeidung) erstellt.
+- **M18**: Auswertungslogik aus `interview.js` in `interview-evaluator.js` extrahiert und mit 8 Unit-Tests abgesichert.
+- **M19**: Dynamische Inline-Styles in `document-preview.js` in `assets/css/modules/document_preview.css` ausgelagert.
+- **M20**: `portfolio_exporter.js` von IIFE auf ESM-Modulstruktur umgestellt und per `main.js` lazy geladen.
+- **M21**: iCal-Zeilenumbrüche in `ical-generator.js` standardkonform auf RFC-5545 CRLF (`\r\n`) normiert.
+- **M22**: JSON-LD `BreadcrumbList`-Schema in `pages/games.html` ergänzt und CSP-Hashes synchronisiert.
+- **M23**: Zweisprachige Tooltip-Übersetzung (`data-en-title`) für den One-Pager-Button in `portfolio_exporter.js` nachgetragen.
+- **M24**: Sichtbarer `onerror`-Fallback bei fehlschlagendem QR-Code-Ladevorgang in `qr-generator.js` ergänzt.
+- **M25**: Kanonische Domain-Ausrichtung im `CNAME` auf `www.max-schenk.tech` mit Sitemap und Robots synchronisiert.
+
 ## [1.1.0] - 2026-10-16
 
 ### Vollständige Umsetzung des Maßnahmenplans (PLAN.md M01–M20)
