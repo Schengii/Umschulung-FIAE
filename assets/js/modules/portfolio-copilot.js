@@ -6,13 +6,18 @@
 /**
  * Resolves internal page URLs correctly regardless of whether the current page
  * is in root (index.html) or in the /pages/ subdirectory.
+ * @param {string} targetPage
+ * @param {string} [currentPath]
  */
-function resolvePageLink(targetPage) {
+export function resolvePageLink(
+    targetPage,
+    currentPath = typeof window !== 'undefined' ? window.location?.pathname : ''
+) {
     if (!targetPage) return '#';
     if (targetPage.startsWith('http://') || targetPage.startsWith('https://') || targetPage.startsWith('#')) {
         return targetPage;
     }
-    const path = window.location.pathname;
+    const path = currentPath || '';
     const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
     if (isPagesFolder) {
         return targetPage;
@@ -20,7 +25,7 @@ function resolvePageLink(targetPage) {
     return 'pages/' + targetPage;
 }
 
-const KNOWLEDGE_BASE = [
+export const KNOWLEDGE_BASE = [
     {
         keywords: [
             'wer',
@@ -316,22 +321,7 @@ function handleUserQuery(queryText) {
     messages.scrollTop = messages.scrollHeight;
 
     // Find best match in knowledge base
-    const lower = queryText.toLowerCase();
-    let bestMatch = null;
-    let maxScore = 0;
-
-    for (const item of KNOWLEDGE_BASE) {
-        let score = 0;
-        for (const kw of item.keywords) {
-            if (lower.includes(kw)) {
-                score += kw.length > 3 ? 2 : 1;
-            }
-        }
-        if (score > maxScore) {
-            maxScore = score;
-            bestMatch = item;
-        }
-    }
+    const { bestMatch, maxScore } = findBestMatch(queryText, KNOWLEDGE_BASE);
 
     // Generate bot reply after a realistic micro-delay
     setTimeout(() => {
@@ -365,4 +355,31 @@ function handleUserQuery(queryText) {
         messages.appendChild(botMsg);
         messages.scrollTop = messages.scrollHeight;
     }, 280);
+}
+
+/**
+ * Finds the knowledge base entry with the highest keyword score.
+ * @param {string} queryText
+ * @param {typeof KNOWLEDGE_BASE} [knowledgeBase]
+ * @returns {{ bestMatch: (typeof KNOWLEDGE_BASE)[0] | null, maxScore: number }}
+ */
+export function findBestMatch(queryText, knowledgeBase = KNOWLEDGE_BASE) {
+    const lower = (queryText || '').toLowerCase();
+    let bestMatch = null;
+    let maxScore = 0;
+
+    for (const item of knowledgeBase) {
+        let score = 0;
+        for (const kw of item.keywords) {
+            if (lower.includes(kw)) {
+                score += kw.length > 3 ? 2 : 1;
+            }
+        }
+        if (score > maxScore) {
+            maxScore = score;
+            bestMatch = item;
+        }
+    }
+
+    return { bestMatch, maxScore };
 }
