@@ -296,9 +296,58 @@ document.addEventListener('DOMContentLoaded', () => {
         return [...cardsDatabase, ...customCards];
     }
 
+    const speakBtn = document.getElementById('speak-card-btn');
+    const speakAnswerBtn = document.getElementById('speak-answer-btn');
+
+    function speakText(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/<[^>]*>/g, '').trim();
+        if (!clean) return;
+
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const utterance = new SpeechSynthesisUtterance(clean);
+        utterance.lang = lang === 'en' ? 'en-US' : 'de-DE';
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    if (speakBtn) {
+        if (!('speechSynthesis' in window)) {
+            speakBtn.style.display = 'none';
+        } else {
+            speakBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = filteredDeck[currentIndex];
+                if (!card) return;
+                const lang = document.documentElement.getAttribute('lang') || 'de';
+                const questionText =
+                    lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de;
+                speakText(questionText);
+            });
+        }
+    }
+
+    if (speakAnswerBtn) {
+        if (!('speechSynthesis' in window)) {
+            speakAnswerBtn.style.display = 'none';
+        } else {
+            speakAnswerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = filteredDeck[currentIndex];
+                if (!card) return;
+                const lang = document.documentElement.getAttribute('lang') || 'de';
+                const answerText = lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de;
+                speakText(answerText);
+            });
+        }
+    }
+
     // 1. Flip card logic
     cardEl.addEventListener('click', (e) => {
         if (starBtn && starBtn.contains(/** @type {Node} */ (e.target))) return;
+        if (speakBtn && speakBtn.contains(/** @type {Node} */ (e.target))) return;
+        if (speakAnswerBtn && speakAnswerBtn.contains(/** @type {Node} */ (e.target))) return;
 
         isFlipped = !isFlipped;
         if (isFlipped) {

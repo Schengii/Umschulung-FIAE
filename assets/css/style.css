@@ -3136,6 +3136,32 @@ html[lang="en"] [lang="de"] {
     cursor: pointer;
 }
 
+/* Speak audio buttons on flashcards */
+#speak-card-btn,
+#speak-answer-btn {
+    position: absolute;
+    top: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--primary);
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    padding: 0.25rem;
+    line-height: 1;
+}
+#speak-card-btn {
+    right: 3.5rem;
+}
+#speak-answer-btn {
+    right: 1.25rem;
+}
+#speak-card-btn:hover,
+#speak-answer-btn:hover {
+    transform: scale(1.15);
+    color: var(--primary-hover);
+}
+
 /* Flashcard navigation buttons container */
 .flashcard-nav-container {
     display: flex;
