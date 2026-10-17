@@ -348,8 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="project-description">
-                <p lang="de">${description}</p>
-                <p lang="en">${description}</p>
+                <p lang="de">${project.descDe || description || ''}</p>
+                <p lang="en">${project.descEn || project.descDe || description || ''}</p>
             </div>
 
             ${keyLearningsHTML}
