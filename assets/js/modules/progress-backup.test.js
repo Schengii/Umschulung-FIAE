@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
 import { describe, it, expect } from 'vitest';
 import {
     BACKUP_APP_ID,
@@ -159,21 +161,14 @@ describe('backupFileName', () => {
 
 describe('STORAGE_KEYS synchronization', () => {
     it('covers all non-cache persistent keys from STORAGE_KEYS in the backup allowlist', () => {
-        const STORAGE_KEYS = {
-            THEME: 'theme',
-            LANG: 'lang',
-            USERNAME: 'username',
-            COOKIE_CONSENT: 'cookieConsent',
-            SNAKE_HIGHSCORE: 'snake_highscore',
-            MEMORY_BEST_MOVES: 'memoryBestMoves',
-            MEMORY_BEST_TIME: 'memoryBestTime',
-            PORTFOLIO_CUSTOM_PROJECTS: 'portfolio_custom_projects',
-            LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES: 'learning_recommendations_quiz_weak_categories',
-            LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS: 'learning_recommendations_flashcards_wrong_counts',
-            GITHUB_PROJECTS_CACHE: 'github_projects_cache',
-            GITHUB_PROJECTS_CACHE_TIME: 'github_projects_cache_time',
-            EXAM_RESULTS: 'exam_results',
-        };
+        const constantsCode = fs.readFileSync(new URL('../constants.js', import.meta.url), 'utf8');
+        const context = {};
+        context.window = context;
+        vm.createContext(context);
+        vm.runInContext(constantsCode, context);
+        const STORAGE_KEYS = context.STORAGE_KEYS;
+
+        expect(STORAGE_KEYS, 'STORAGE_KEYS should be exported on global context').toBeDefined();
         const ignoredKeys = new Set(['cookieConsent', 'github_projects_cache', 'github_projects_cache_time']);
         for (const [name, key] of Object.entries(STORAGE_KEYS)) {
             if (ignoredKeys.has(key)) {

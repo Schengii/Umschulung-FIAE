@@ -86,7 +86,9 @@ const PLACEHOLDER_IMAGE =
     );
 
 // Expose constants to global window scope for backwards compatibility with non-module scripts
-window.STORAGE_KEYS = STORAGE_KEYS;
-window.APP = APP;
-window.resolveAssetPath = resolveAssetPath;
-window.PLACEHOLDER_IMAGE = PLACEHOLDER_IMAGE;
+if (typeof window !== 'undefined') {
+    window.STORAGE_KEYS = STORAGE_KEYS;
+    window.APP = APP;
+    window.resolveAssetPath = resolveAssetPath;
+    window.PLACEHOLDER_IMAGE = PLACEHOLDER_IMAGE;
+}
