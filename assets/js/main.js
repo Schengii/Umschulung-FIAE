@@ -113,6 +113,7 @@ const LAZY_MODULES = [
     ['./modules/ical-generator.js', 'initIcalGenerator', '#confirm-booking-btn'],
     ['./modules/ihk-exam-simulator.js', 'initIhkExamSimulator', '.quiz-container'],
     ['./modules/c4-architecture.js', 'initC4Architecture', '.arch-tabs-bar'],
+    ['./modules/interview-evaluator.js', 'initInterviewEvaluator', '#setup-card'],
     ['./modules/ihk-cockpit.js', 'initIhkCockpit', '.page-ihk-cockpit, #panel-nwa'],
     // Note: quick-sandbox.js is intentionally NOT lazy-loaded here — its trigger buttons are
     // injected dynamically into portfolio.js's project cards, which can render after this

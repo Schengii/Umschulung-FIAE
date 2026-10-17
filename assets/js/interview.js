@@ -598,21 +598,11 @@ class InterviewSimulator {
         const keywords = this.selectedLanguage === 'de' ? q.keywordsDe : q.keywordsEn;
         const modelAnswer = this.selectedLanguage === 'de' ? q.modelAnswerDe : q.modelAnswerEn;
 
-        // Match analysis
-        const cleanedAnswer = userAnswer.toLowerCase();
-        const matched = [];
-        const missing = [];
-
-        keywords.forEach((kw) => {
-            const regex = new RegExp(`\\b${kw}|${kw}\\b`, 'i');
-            if (cleanedAnswer.includes(kw.toLowerCase()) || regex.test(cleanedAnswer)) {
-                matched.push(kw);
-            } else {
-                missing.push(kw);
-            }
-        });
-
-        const scorePercentage = keywords.length > 0 ? Math.round((matched.length / keywords.length) * 100) : 100;
+        // Match analysis via InterviewEvaluator or fallback
+        const { matched, missing, scorePercentage } =
+            typeof window !== 'undefined' && window.InterviewEvaluator
+                ? window.InterviewEvaluator.evaluateAnswerKeywords(userAnswer, keywords)
+                : this._fallbackEvaluateKeywords(userAnswer, keywords);
 
         this.matchedKeywordsCount += matched.length;
         this.totalPossibleKeywords += keywords.length;
@@ -637,28 +627,11 @@ class InterviewSimulator {
         });
 
         // Generate response bubble content
-        let ratingDe = '';
-        let ratingEn = '';
-        let bubbleClass = '';
-
-        if (scorePercentage >= 85) {
-            ratingDe = '🏆 Exzellent!';
-            ratingEn = '🏆 Excellent!';
-            bubbleClass = 'feedback-excellent';
-        } else if (scorePercentage >= 55) {
-            ratingDe = '⭐ Sehr gut!';
-            ratingEn = '⭐ Very Good!';
-            bubbleClass = 'feedback-good';
-        } else if (scorePercentage >= 25) {
-            ratingDe = '👍 Guter Ansatz!';
-            ratingEn = '👍 Good start!';
-            bubbleClass = 'feedback-fair';
-        } else {
-            ratingDe = '💡 Ausbaufähig!';
-            ratingEn = '💡 Needs work!';
-            bubbleClass = 'feedback-poor';
-        }
-
+        const feedback =
+            typeof window !== 'undefined' && window.InterviewEvaluator
+                ? window.InterviewEvaluator.getRatingFeedback(scorePercentage)
+                : this._fallbackRatingFeedback(scorePercentage);
+        const { ratingDe, ratingEn, bubbleClass } = feedback;
         const rating = this.selectedLanguage === 'de' ? ratingDe : ratingEn;
 
         // Increment commits today!
@@ -847,6 +820,38 @@ class InterviewSimulator {
         if (indicator) {
             indicator.remove();
         }
+    }
+
+    _fallbackEvaluateKeywords(userAnswer, keywords = []) {
+        const cleanedAnswer = (userAnswer || '').toLowerCase();
+        const matched = [];
+        const missing = [];
+
+        keywords.forEach((kw) => {
+            const regex = new RegExp(`\\b${kw}|${kw}\\b`, 'i');
+            if (cleanedAnswer.includes(kw.toLowerCase()) || regex.test(cleanedAnswer)) {
+                matched.push(kw);
+            } else {
+                missing.push(kw);
+            }
+        });
+
+        const total = keywords ? keywords.length : 0;
+        const scorePercentage = total > 0 ? Math.round((matched.length / total) * 100) : 100;
+        return { matched, missing, scorePercentage };
+    }
+
+    _fallbackRatingFeedback(scorePercentage) {
+        if (scorePercentage >= 85) {
+            return { ratingDe: '🏆 Exzellent!', ratingEn: '🏆 Excellent!', bubbleClass: 'feedback-excellent' };
+        }
+        if (scorePercentage >= 55) {
+            return { ratingDe: '⭐ Sehr gut!', ratingEn: '⭐ Very Good!', bubbleClass: 'feedback-good' };
+        }
+        if (scorePercentage >= 25) {
+            return { ratingDe: '👍 Guter Ansatz!', ratingEn: '👍 Good start!', bubbleClass: 'feedback-fair' };
+        }
+        return { ratingDe: '💡 Ausbaufähig!', ratingEn: '💡 Needs work!', bubbleClass: 'feedback-poor' };
     }
 }
 
