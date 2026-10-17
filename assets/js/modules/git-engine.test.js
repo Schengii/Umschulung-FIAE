@@ -8,6 +8,7 @@ import {
     executeCommand,
     headCommitId,
     isLevelComplete,
+    resolveRevision,
     tokenize,
 } from './git-engine.js';
 
@@ -233,6 +234,72 @@ describe('git rebase', () => {
         const result = executeCommand(state, 'git rebase main');
         expect(result.changed).toBe(false);
         expect(state.branches.feature).toBe('c2');
+    });
+
+    it('displays interactive pick todo list for git rebase -i <target>', () => {
+        const state = run(['git checkout feature', 'git rebase -i main'], diverged());
+        const tip = state.commits[state.branches.feature];
+        expect(tip.message).toBe('feature work');
+        expect(tip.parentId).toBe('c3');
+    });
+
+    it('squashes multiple commits into one with git rebase -i <target> --squash', () => {
+        const state = run([
+            'git checkout -b feature',
+            'git commit -m "step 1"',
+            'git commit -m "step 2"',
+            'git rebase -i main --squash',
+        ]);
+        const tip = state.commits[state.branches.feature];
+        expect(tip.message).toBe('step 1 / step 2');
+        expect(tip.parentId).toBe('c1');
+        expect(state.commits.c2).toBeUndefined();
+        expect(state.commits.c3).toBeUndefined();
+    });
+
+    it('squashes recent commits using HEAD~n syntax with git rebase -i HEAD~2 --squash', () => {
+        const state = run(['git commit -m "feat A"', 'git commit -m "feat B"', 'git rebase -i HEAD~2 --squash']);
+        const tip = state.commits[state.branches.main];
+        expect(tip.message).toBe('feat A / feat B');
+        expect(tip.parentId).toBe('c1');
+    });
+
+    it('drops specified commit during rebase with --drop <hash>', () => {
+        const state = run([
+            'git checkout -b feature',
+            'git commit -m "first part"',
+            'git commit -m "bad commit"',
+            'git commit -m "second part"',
+        ]);
+        const badHash = state.commits[state.commits[state.branches.feature].parentId].id; // c3
+        executeCommand(state, `git rebase -i main --drop ${badHash}`);
+        const tip = state.commits[state.branches.feature];
+        expect(tip.message).toBe('second part');
+        const parent = state.commits[tip.parentId];
+        expect(parent.message).toBe('first part');
+        expect(parent.parentId).toBe('c1');
+    });
+
+    it('resolves revisions correctly via resolveRevision', () => {
+        const state = run([
+            'git commit -m "c2"',
+            'git commit -m "c3"',
+            'git checkout -b feature',
+            'git commit -m "c4"',
+        ]);
+        expect(resolveRevision(state, 'main')).toBe('c3');
+        expect(resolveRevision(state, 'feature')).toBe('c4');
+        expect(resolveRevision(state, 'HEAD')).toBe('c4');
+        expect(resolveRevision(state, 'HEAD~1')).toBe('c3');
+        expect(resolveRevision(state, 'HEAD~2')).toBe('c2');
+        expect(resolveRevision(state, 'c1')).toBe('c1');
+        expect(resolveRevision(state, 'unknown')).toBeNull();
+    });
+
+    it('rejects rebase on unknown revision or missing target', () => {
+        const state = createInitialState();
+        expect(kinds(executeCommand(state, 'git rebase'))).toEqual(['error']);
+        expect(kinds(executeCommand(state, 'git rebase -i unknown-target'))).toEqual(['error']);
     });
 });
 

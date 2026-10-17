@@ -31,7 +31,7 @@
 - [x] OPT-10 | Interaktive Quellcode- & Komponenten-Verknüpfung im C4-Architektur-Modul ausbauen | P3 | M | assets/js/modules/c4-architecture.js, pages/architecture.html | assets/js/modules/c4-architecture.js:45 | Fertig wenn: Klick auf C4-Container Detail-Panels mit Modul-Verantwortlichkeiten und direkten GitHub-Verlinkungen öffnet.
 
 ### Phase 4: Vertiefte Simulation & Fragen-Bilingualität
-- [ ] OPT-11 | Git-Simulator Rebase-Erweiterung (`git rebase -i` Simulation) in Engine ergänzen | P3 | M | assets/js/modules/git-engine.js, assets/js/modules/git-engine.test.js | assets/js/modules/git-engine.js:180 | Fertig wenn: Interaktives Rebase (Pick/Squash) in der Engine simuliert und durch mindestens 5 neue Vitest-Tests abgesichert ist.
+- [x] OPT-11 | Git-Simulator Rebase-Erweiterung (`git rebase -i` Simulation) in Engine ergänzen | P3 | M | assets/js/modules/git-engine.js, assets/js/modules/git-engine.test.js | assets/js/modules/git-engine.js:180 | Fertig wenn: Interaktives Rebase (Pick/Squash) in der Engine simuliert und durch mindestens 5 neue Vitest-Tests abgesichert ist.
 - [ ] OPT-12 | Zweisprachigkeit (DE/EN) für Kern-IHK-Prüfungsfragen (AP1 & WISO) ausrollen | P3 | L | assets/js/modules/exam-questions.js, assets/js/modules/ihk-exam-simulator.js | assets/js/modules/exam-questions.js:16 | Fertig wenn: Kernfragen bei aktivem englischen Modus in verständlicher englischer Übersetzung gerendert werden.
 
 ### Abgeschlossene Basis-Maßnahmen (Referenz)

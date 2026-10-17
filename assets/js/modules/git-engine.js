@@ -60,7 +60,7 @@ const HELP_DE = [
     '  git checkout <name|hash>      Auf Branch/Commit wechseln (auch: git switch)',
     '  git checkout -b <name>        Branch erstellen und aktivieren',
     '  git merge <name>              Branch in den aktuellen Branch integrieren',
-    '  git rebase <name>             Eigene Commits auf <name> neu aufsetzen',
+    '  git rebase [-i] <name>        Eigene Commits auf <name> neu aufsetzen (auch -i / --squash)',
     '  git cherry-pick <hash>        Einzelnen Commit kopieren',
     '  git reset --hard <hash>       Aktuellen Branch zurücksetzen',
     '  git stash | stash pop | stash list   Änderungen zwischenlagern',
@@ -78,7 +78,7 @@ const HELP_EN = [
     '  git checkout <name|hash>      Switch to a branch/commit (also: git switch)',
     '  git checkout -b <name>        Create and switch to a branch',
     '  git merge <name>              Integrate a branch into the current one',
-    '  git rebase <name>             Replay your commits on top of <name>',
+    '  git rebase [-i] <name>        Replay commits on top of <name> (supports -i / --squash)',
     '  git cherry-pick <hash>        Copy a single commit',
     '  git reset --hard <hash>       Reset the current branch',
     '  git stash | stash pop | stash list   Shelve changes',
@@ -164,6 +164,30 @@ function ownCommits(state, tipId, baseId) {
         id = commit.parentId;
     }
     return own;
+}
+
+/**
+ * Resolves a branch name, commit hash, or HEAD~n reference to a commit ID.
+ * @param {GitState} state
+ * @param {string} ref
+ * @returns {string | null}
+ */
+export function resolveRevision(state, ref) {
+    if (!ref) return null;
+    if (state.branches[ref]) return state.branches[ref];
+    if (state.commits[ref]) return ref;
+    if (ref === 'HEAD') return headCommitId(state);
+    if (/^HEAD~\d+$/.test(ref)) {
+        const count = parseInt(ref.slice(5), 10);
+        let curr = headCommitId(state);
+        for (let i = 0; i < count; i++) {
+            const c = state.commits[curr];
+            if (!c || !c.parentId) return null;
+            curr = c.parentId;
+        }
+        return curr;
+    }
+    return null;
 }
 
 /**
@@ -449,17 +473,33 @@ export function executeCommand(state, input) {
         }
 
         case 'rebase': {
-            const onto = rest[0];
+            const isInteractive = rest.includes('-i') || rest.includes('--interactive');
+            const isSquash = rest.includes('--squash') || rest.includes('-s');
+            const dropIdx = rest.indexOf('--drop');
+            const dropHash = dropIdx !== -1 ? rest[dropIdx + 1] : null;
+
+            const targetArgs = rest.filter(
+                (arg, i) =>
+                    arg !== '-i' &&
+                    arg !== '--interactive' &&
+                    arg !== '--squash' &&
+                    arg !== '-s' &&
+                    arg !== '--drop' &&
+                    (dropIdx === -1 || i !== dropIdx + 1)
+            );
+
+            const onto = targetArgs[0];
             if (!onto) {
                 fail(
-                    'Ziel-Branch fehlt. Verwendung: git rebase <branch>',
-                    'Target branch missing. Usage: git rebase <branch>'
+                    'Ziel-Branch oder Revision fehlt. Verwendung: git rebase [-i] <branch|HEAD~n>',
+                    'Target branch or revision missing. Usage: git rebase [-i] <branch|HEAD~n>'
                 );
                 return result;
             }
-            const ontoId = state.branches[onto];
+
+            const ontoId = resolveRevision(state, onto);
             if (!ontoId) {
-                fail(`Branch '${onto}' existiert nicht.`, `Branch '${onto}' does not exist.`);
+                fail(`Branch oder Revision '${onto}' existiert nicht.`, `Branch or revision '${onto}' does not exist.`);
                 return result;
             }
             if (!branch) {
@@ -469,7 +509,7 @@ export function executeCommand(state, input) {
                 );
                 return result;
             }
-            if (ancestorsOf(state, headId).has(ontoId)) {
+            if (!isInteractive && !isSquash && !dropHash && ancestorsOf(state, headId).has(ontoId)) {
                 say(
                     'system',
                     `Bereits aktuell: '${branch}' baut schon auf '${onto}' auf.`,
@@ -477,9 +517,58 @@ export function executeCommand(state, input) {
                 );
                 return result;
             }
+            if (headId === ontoId) {
+                say(
+                    'system',
+                    `Bereits aktuell: '${branch}' baut schon auf '${onto}' auf.`,
+                    `Already up to date: '${branch}' is already based on '${onto}'.`
+                );
+                return result;
+            }
+
             const replay = ownCommits(state, headId, ontoId);
+
+            if (isSquash) {
+                if (replay.length === 0) {
+                    say('system', 'Keine Commits zum Zusammenfassen vorhanden.', 'No commits to squash.');
+                    return result;
+                }
+                const squashedMessage = replay.map((c) => c.message).join(' / ');
+                const squashedCommit = addCommit(state, {
+                    message: squashedMessage,
+                    parentId: ontoId,
+                    branch,
+                    rebasedFrom: replay.map((c) => c.id).join('+'),
+                });
+                state.branches[branch] = squashedCommit.id;
+                collectGarbage(state);
+                say(
+                    'success',
+                    `Erfolgreich rebased: ${replay.length} Commit(s) zu ${squashedCommit.id} zusammengefasst (squashed) auf '${onto}'.`,
+                    `Successfully rebased: squashed ${replay.length} commit(s) into ${squashedCommit.id} on top of '${onto}'.`
+                );
+                result.success = true;
+                result.changed = true;
+                break;
+            }
+
+            let toReplay = replay;
+            if (dropHash) {
+                toReplay = replay.filter((c) => c.id !== dropHash);
+            }
+
+            if (isInteractive) {
+                const todoLinesDe = toReplay.map((c) => `  pick ${c.id} ${c.message}`).join('\n');
+                const todoLinesEn = toReplay.map((c) => `  pick ${c.id} ${c.message}`).join('\n');
+                say(
+                    'system',
+                    `Interaktiver Rebase auf '${onto}':\n${todoLinesDe}`,
+                    `Interactive rebase onto '${onto}':\n${todoLinesEn}`
+                );
+            }
+
             let tip = ontoId;
-            for (const original of replay) {
+            for (const original of toReplay) {
                 tip = addCommit(state, {
                     message: original.message,
                     parentId: tip,
@@ -489,20 +578,24 @@ export function executeCommand(state, input) {
             }
             state.branches[branch] = tip;
             collectGarbage(state);
-            if (replay.length === 0) {
+
+            if (toReplay.length === 0) {
                 say(
                     'system',
                     `Fast-Forward durchgeführt. ${branch} zeigt nun auf Commit ${tip}.`,
                     `Fast-forward. ${branch} now points to commit ${tip}.`
                 );
             } else {
+                const modeMsgDe = isInteractive ? 'Interaktives Rebase erfolgreich' : 'Erfolgreich rebased';
+                const modeMsgEn = isInteractive ? 'Interactive rebase successful' : 'Successfully rebased';
                 say(
                     'success',
-                    `Erfolgreich rebased: ${replay.length} Commit(s) von '${branch}' neu auf '${onto}' aufgesetzt.`,
-                    `Successfully rebased: replayed ${replay.length} commit(s) of '${branch}' on top of '${onto}'.`
+                    `${modeMsgDe}: ${toReplay.length} Commit(s) von '${branch}' neu auf '${onto}' aufgesetzt.`,
+                    `${modeMsgEn}: replayed ${toReplay.length} commit(s) of '${branch}' on top of '${onto}'.`
                 );
             }
             result.success = true;
+            result.changed = true;
             break;
         }
 
