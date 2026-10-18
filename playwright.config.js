@@ -12,7 +12,9 @@ module.exports = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined,
+  // Two workers locally as in CI: the default (half the cores) overloads the dev server and makes
+  // otherwise stable specs time out (A04).
+  workers: process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : 2,
   reporter: 'line',
   use: {
     baseURL,
