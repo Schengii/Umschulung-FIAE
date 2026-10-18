@@ -1,66 +1,81 @@
-# Umsetzungs- & Optimierungsplan Umschulung-FIAE (PLAN.md)
+# PLAN.md – Analyse & Umsetzungsplan Umschulung-FIAE
 
-## 1. Ist-Zustand (max. 10 Zeilen)
-1. Statische Web-PWA (Vanilla HTML5/CSS3/ES-Module, kein Bundler, Auslieferung von `dist/` via Vercel, 29 HTML-Seiten, 25 Teilprojekte).
-2. Quality-Gates & Tests: `npm run check` (Data-Sync, Head, CSP, Icons, Sitemap, SW-Assets, ESLint, Prettier, TypeScript, 193 Unit-Tests) ist 100 % grün.
-3. Erfolgreiche Vorstufe: Alle 25 Basis-Maßnahmen (M01–M25 aus Vorversion) sowie Cookie-Datenschutz-Transparenz (P2) sind vollständig umgesetzt und getestet.
-4. CI & Git-Hooks: Pre-Commit-Hook aktiv, aber kein Pre-Push-Hook; CI-Checkout (`ci.yml`) klont flach (ohne `fetch-depth: 0`), was Lastmod-Zeitstempel verfälscht.
-5. Lighthouse-CI: Audit prüft harte Schwellenwerte, schreibt die Scores (Performance/A11y/SEO) jedoch nicht visuell in die GitHub Step Summary.
-6. Print-Optimierung: `assets/css/print.css` ist in `portfolio.html` und `projekt-detail.html` eingebunden, fehlt jedoch auf `pages/lebenslauf.html`.
-7. Internationalisierung: Website-Rahmen ist zweisprachig (DE/EN), interaktive Labs (`challenge-lab.js`) und Fragen (`exam-questions.js`) sind rein deutsch.
-8. Barrierefreiheit (WCAG 2.2): Hoher Kontrast & Legasthenie-Modus vorhanden, Screenreader-Vorlesefunktion (Web Speech API) für Quiz/Flashcards fehlt noch.
-9. Gamification & Lernen: Dashboard zeigt Streak/Noten, bietet aber noch kein tägliches „Frage des Tages“-Widget und keinen QR-Sync für Mobilgeräte.
-10. Architektur & Simulation: C4-Architektur (`c4-architecture.js`) ist statisch tab-basiert; Git-Simulator unterstützt lineares, aber kein interaktives Rebase.
+Stand: 2026-10-18 · Version 1.3.0 · Vorgänger-Plan (OPT-01–OPT-12, M01–M25) ist vollständig umgesetzt und über die Git-Historie nachlesbar.
+Diese Datei ist die einzige Arbeitsgrundlage für Umsetzung und Tests. Beim Abhaken Datum und Commit in der Zeile ergänzen.
 
-## 2. Maßnahmen
+## 1. Ist-Zustand
 
-### Phase 1: Developer Experience & CI/CD-Härtung
-- [x] OPT-01 | Pre-Push Git Hook mit automatisiertem CI-Schnellcheck einrichten | P1 | S | .githooks/pre-push, package.json | .githooks/pre-commit:1, package.json:9 | Fertig wenn: Ein `git push` lokal vorab `npm run check` ausführt und bei Fehlern den Push zuverlässig blockiert.
-- [x] OPT-02 | Vollständige Git-Historie im CI-Checkout für exakte Sitemap-Lastmod aktivieren | P1 | S | .github/workflows/ci.yml | .github/workflows/ci.yml:25 | Fertig wenn: `actions/checkout` mit `fetch-depth: 0` konfiguriert ist und `update_sitemap.js --check` echte Commit-Daten prüft.
-- [x] OPT-03 | Visuelle Lighthouse-CI Score-Tabelle in GitHub Step Summary schreiben | P2 | S | .github/workflows/ci.yml | .github/workflows/ci.yml:130 | Fertig wenn: Nach dem Lighthouse-Lauf die Ergebnisse (Performance, A11y, Best Practices, SEO) als Markdown-Tabelle in `$GITHUB_STEP_SUMMARY` erscheinen.
+1. Statische Vanilla-JS-PWA, 29 HTML-Seiten, 8 Unterprojekte unter `Projekte/`, Auslieferung von `dist/` über Vercel (ADR 0008).
+2. Gemessen lokal: `npm run check` grün (Sync, Head, CSP, Icons, Sitemap, SW-Assets, Project-Links, ESLint, Prettier, Typecheck, 215 Unit-Tests in 18 Dateien). `npm audit`: 0 Schwachstellen. `npm run build:dist` grün (79 JS, 24 CSS).
+3. Gemessen lokal: Playwright Chromium: 246 grün, 12 rot. 8 davon bestehen einzeln mit 2 Workern (Last-Flakes bei Standard-Parallelität), 4 sind deterministisch rot (A01, A02).
+4. CI auf `main` (Lauf 39050707971, 2026-10-17) ist rot: in allen 4 Browser-Projekten und im `dist`-Lauf scheitern dieselben 4 Tests; mobile-chrome hat 2 zusätzliche axe-Fehler auf `git-simulator.html` (A03). Lighthouse und Quality-Job sind grün. Damit schlägt der Pre-Push-Hook nicht an: er prüft nur `npm run check`, keine E2E.
+5. Der Sync-PR (Lauf 39111310043) steht auf `action_required`, seine CI läuft nicht (D03).
+6. Datenschutz: Der Lernstand-QR (`progress-backup.js`) schickt die Backup-Daten an `api.qrserver.com`, ohne Hinweis in `datenschutz.html` und gegen die Konvention „keine externen Dienste“ (C01).
+7. Lokale Toolchain weicht vom Lockfile ab: ESLint 9.39.5 installiert, Lock verlangt 10.12.0 (A00). Alle Lint-Ergebnisse oben stammen von 9.39.5.
+8. Qualitätsregeln sind dünn: ESLint hat nur 3 Regeln (kein `recommended`), `strict: false` im Typecheck, kein Coverage-Messwert (B02, B03; Typ-Strenge siehe Optional).
+9. Barrierefreiheit insgesamt gut (axe-Specs in beiden Themes), Lücken: 2 Seiten ohne Skip-Link, kein Gate dafür (B01); native `alert/confirm/prompt` in 3 Dateien (C03).
+10. Größte Dateien: `style.css` (7886 Zeilen), `playground.js` (1266), `exam-questions.js` (1170), `dashboard.js` (852). Keine Performance-Regression belegt, daher keine Perf-Maßnahme (siehe Optional).
 
-### Phase 2: Internationalisierung & Barrierefreiheit
-- [x] OPT-04 | Zweisprachige (DE/EN) Datenstruktur & Umschaltung im Challenge-Lab implementieren | P2 | M | assets/js/modules/challenge-lab.js, pages/challenge-lab.html | assets/js/modules/challenge-lab.js:8 | Fertig wenn: Alle 3 Code-Challenges Titel, Beschreibung, Optionen und Erklärung bei Klick auf den Sprachschalter dynamisch auf Englisch übersetzen.
-- [x] OPT-05 | Print-Stylesheet `print.css` auf `pages/lebenslauf.html` einbinden | P2 | S | pages/lebenslauf.html | pages/lebenslauf.html:65 | Fertig wenn: `<link rel="stylesheet" href="../assets/css/print.css" media="print">` eingebunden ist und Druckansichten ohne Buttons formatiert werden.
-- [x] OPT-06 | Native Screenreader Web Speech API Sprachausgabe für Flashcards ergänzen | P3 | M | assets/js/flashcards.js, pages/flashcards.html | assets/js/flashcards.js:210 | Fertig wenn: Ein Audio-Button auf der Karte Frage und Antwort über `window.speechSynthesis` barrierefrei und datenschutzfreundlich (ohne externe API) vorliest.
-- [x] OPT-07 | Native Screenreader Sprachausgabe für IHK-Prüfungsfragen im Exam-Simulator bereitstellen | P3 | M | assets/js/modules/ihk-exam-simulator.js, pages/quiz.html | assets/js/modules/ihk-exam-simulator.js:350 | Fertig wenn: Prüfungsfrage und Antwortoptionen per Klick auditiv ausgegeben werden können.
+## 2. Maßnahmen (Reihenfolge = Abarbeitung)
 
-### Phase 3: Lern-Features, PWA & Architektur-Vertiefung
-- [x] OPT-08 | „Prüfungsfrage des Tages“-Widget auf dem Dashboard mit Streak-Bonus integrieren | P2 | M | pages/dashboard.html, assets/js/dashboard.js | pages/dashboard.html:115, assets/js/dashboard.js:320 | Fertig wenn: Auf dem Dashboard täglich eine zufällige, tagespersistierte IHK-Frage gelöst werden kann und Sofort-Feedback anzeigt.
-- [x] OPT-09 | Lernstands- & Backup-Transfer via QR-Code (Device-to-Device Sync) umsetzen | P3 | M | assets/js/modules/progress-backup.js, pages/dashboard.html | assets/js/modules/progress-backup.js:75 | Fertig wenn: Der Backup-State als kompakter QR-Code gerendert wird, der mobil gescannt und importiert werden kann.
-- [x] OPT-10 | Interaktive Quellcode- & Komponenten-Verknüpfung im C4-Architektur-Modul ausbauen | P3 | M | assets/js/modules/c4-architecture.js, pages/architecture.html | assets/js/modules/c4-architecture.js:45 | Fertig wenn: Klick auf C4-Container Detail-Panels mit Modul-Verantwortlichkeiten und direkten GitHub-Verlinkungen öffnet.
+### Phase 0 – Basis (Umgebung, CI wieder grün)
+- [ ] A00 | Lokale Toolchain auf Lockfile bringen (`npm ci`) | P1 | S | node_modules, package-lock.json | node_modules/eslint/package.json:3 (9.39.5) vs package-lock.json:2469 (10.12.0) | Fertig wenn: `npx eslint --version` = 10.12.0 und `npm run check` ist danach grün (neue Lint-Funde stehen als eigene Einträge hier)
+- [ ] A01 | Veraltete Spec zum Executive Dossier korrigieren | P1 | S | assets/js/modules/advanced_features.spec.js | advanced_features.spec.js:93 erwartet „Game Engine Developer“, executive-dossier.js:22 liefert „Software Architect & Systems Developer“ | Fertig wenn: `npx playwright test advanced_features --project=chromium` grün und der Erwartungswert kommt aus der gleichen Datenquelle wie das Modul oder stimmt wörtlich damit überein
+- [ ] A02 | Icon-Spec auf nicht mehr vorhandene Projektseiten bereinigen | P1 | S | assets/js/modules/icons.spec.js | icons.spec.js:16-18 nennt `Projekte/java-playground.html`, `Projekte/CoOpVersusGame/…`, `Projekte/Maps/…`; `ls Projekte` zeigt nur 8 Ordner, Entfernung in Commit 8e8a126 | Fertig wenn: Liste enthält nur Dateien, die `fs.existsSync` bestätigt (Spec scheitert bei fehlender Datei laut, statt eine 404-Seite zu prüfen); `npx playwright test icons --project=chromium` grün
+- [ ] A03 | Scrollbaren Terminal-Bereich per Tastatur erreichbar machen | P1 | S | pages/git-simulator.html | git-simulator.html:166 `#terminal-output` ohne `tabindex`; CI-Log Lauf 39050707971, mobile-chrome, `scrollable-region-focusable` (dark und light) | Fertig wenn: `tabindex="0"`, `role="log"` und zweisprachiges `aria-label` (DE + `data-en-aria-label`) gesetzt; `npx playwright test accessibility git_simulator --project=mobile-chrome` grün; danach `npm run check-csp` und `npm run generate-sw-assets`
+- [ ] A04 | Lokale Playwright-Parallelität begrenzen | P2 | S | playwright.config.js | playwright.config.js:16 (`workers: undefined` lokal); Volllauf: 8 Fehler, einzeln mit `PW_WORKERS=2` alle grün; CHANGELOG.md:251 beschreibt dieselbe Überlastung | Fertig wenn: lokaler Standard 2 Worker (CI bleibt 2); zwei aufeinanderfolgende Chromium-Volläufe mit 0 Fehlern
 
-### Phase 4: Vertiefte Simulation & Fragen-Bilingualität
-- [x] OPT-11 | Git-Simulator Rebase-Erweiterung (`git rebase -i` Simulation) in Engine ergänzen | P3 | M | assets/js/modules/git-engine.js, assets/js/modules/git-engine.test.js | assets/js/modules/git-engine.js:180 | Fertig wenn: Interaktives Rebase (Pick/Squash) in der Engine simuliert und durch mindestens 5 neue Vitest-Tests abgesichert ist.
-- [x] OPT-12 | Zweisprachigkeit (DE/EN) für Kern-IHK-Prüfungsfragen (AP1 & WISO) ausrollen | P3 | L | assets/js/modules/exam-questions.js, assets/js/modules/ihk-exam-simulator.js | assets/js/modules/exam-questions.js:16 | Fertig wenn: Kernfragen bei aktivem englischen Modus in verständlicher englischer Übersetzung gerendert werden.
+### Phase 1 – Rückfälle verhindern (Gates, Tooling)
+- [ ] B01 | Skip-Link auf allen Seiten mit `<main id="main-content">` erzwingen | P2 | S | pages/ihk-cockpit.html, pages/challenge-lab.html, scripts/check_head_consistency.js | `grep -c skip-link`: 0 in ihk-cockpit.html und challenge-lab.html (beide haben `<main id="main-content">` in Zeile 34), Vorlage pages/home.html:57 | Fertig wenn: beide Seiten haben `<a href="#main-content" class="skip-link">` (zweisprachig wie home.html); `check-head` schlägt bei einer Seite mit `<main id="main-content">` ohne Skip-Link fehl (negativ getestet)
+- [ ] B02 | ESLint-Regelbasis erweitern | P2 | M | eslint.config.js, package.json | eslint.config.js:76-81 nur `no-unused-vars`, `no-undef`, `no-empty`, `no-console`; `@eslint/js` ist keine devDependency | Fertig wenn: `@eslint/js` recommended plus `eqeqeq`, `no-var`, `prefer-const` und `no-alert` (als `warn`, bis C03 erledigt ist) aktiv; `npm run lint` 0 Fehler; automatisch behebbare Funde in einem eigenen Commit
+- [ ] B03 | Coverage für Unit-Tests messbar machen | P3 | S | vitest.config.js, package.json | vitest.config.js:1-9 ohne `coverage`; 58 Modul-Dateien, 17 `*.test.js` unter assets/js/modules | Fertig wenn: `npm run test:unit -- --coverage` erzeugt einen Bericht (`@vitest/coverage-v8`, nur für `assets/js/modules/**` ohne DOM-Init-Dateien); Ausgangswert steht in CHANGELOG.md; noch keine Schwelle erzwungen
+- [ ] B04 | Flakes und Wiederholungen in der CI sichtbar machen | P3 | S | playwright.config.js, .github/workflows/ci.yml | playwright.config.js:15 `reporter: 'line'`, :12 `retries: 2` in CI verdeckt Flakes; CHANGELOG.md:200-203 dokumentiert Retry-abhängige Tests | Fertig wenn: CI nutzt zusätzlich den `github`-Reporter und die Step-Summary listet Tests mit `flaky`-Status; lokal bleibt `line`
+- [ ] B05 | Lighthouse-URL-Liste an die Sitemap koppeln | P3 | S | lighthouserc.json, scripts/ (neuer Check) | lighthouserc.json:4-23 listet 19 URLs; es fehlen `challenge-lab`, `datenschutz`, `games`, `impressum`, `memory`, `projekt-detail`, `snake` | Fertig wenn: jede indexierbare Seite aus `sitemap.xml` ist in der Liste oder in einer begründeten Ausnahmeliste; Check-Skript in `npm run check` und `ci.yml`; Lighthouse-Laufzeit (Basis 12 min, Lauf 39050707971) bleibt unter 20 min
 
-### Abgeschlossene Basis-Maßnahmen (Referenz)
-- [x] M01–M25 | Alle Basis-Optimierungen (Iframe-Permissions, QR-Download, Paths, Hotkeys, Testing, Typings, CNAME) erfolgreich abgeschlossen und freigegeben.
+### Phase 2 – Datenschutz & Sicherheit
+- [ ] C01 | QR-Code für den Lernstand lokal erzeugen statt über Drittanbieter | P1 | M | assets/js/modules/progress-backup.js, assets/js/modules/qr-generator.js, assets/vendor/ (lokale Bibliothek), vercel.json, pages/links.html, pages/datenschutz.html | progress-backup.js:200-208 und qr-generator.js:62-63 bauen `https://api.qrserver.com/v1/create-qr-code/?…data=…` (Backup-Payload steckt in `data=`); vercel.json:32 `connect-src` und `img-src https:` erlauben es; `grep qrserver pages/datenschutz.html` leer; Konvention „keine externen Dienste“ in CLAUDE.md | Fertig wenn: QR wird clientseitig gerendert (Bibliothek lokal, Lizenz geprüft); E2E-Netzwerkassertion: kein Request an `api.qrserver.com` auf Dashboard, Impressum und Links; `qrserver` kommt weder in `vercel.json` noch in einer Seiten-CSP vor; `progress-backup.test.js` angepasst (Test prüft heute die externe URL, Zeile 215); `check-csp:fix`, `generate-sw-assets`, `check-icons` grün
+- [ ] C02 | Doppelte Escape-Funktion entfernen | P3 | S | assets/js/modules/username-greeting.js | username-greeting.js:201-209 `escapeHTML` dupliziert `escapeHtml` aus html-utils.js:8-16 (ES-Modul, also importierbar) | Fertig wenn: Import aus `html-utils.js`, lokale Funktion gelöscht, `npx playwright test landing_page new_features --project=chromium` und Unit-Tests grün
+- [ ] C03 | Native Dialoge durch die vorhandene Modal-/Toast-Komponente ersetzen | P2 | M | assets/js/flashcards.js, assets/js/git-simulator.js, assets/js/interview.js, assets/js/modal.js, assets/js/toast.js | flashcards.js:714 `confirm(`, git-simulator.js:418 `prompt(`, interview.js:490 `alert(` | Fertig wenn: kein `alert(`/`confirm(`/`prompt(` mehr in `assets/js/**` (außer Specs); `no-alert` in B02 auf `error`; Dialoge sind tastaturbedienbar (Fokus, Esc) und zweisprachig; `flashcards_spaced_repetition`, `git_simulator`, `flashcards_escaping` grün
+- [ ] C04 | Direkten `window.localStorage`-Zugriff in `daily-question.js` auf die Konvention bringen | P3 | S | assets/js/modules/daily-question.js | daily-question.js:67 und :90 `storage = window.localStorage`; CLAUDE.md erlaubt direkten Zugriff nur in components.js und progress-backup.js; Schlüssel steht schon in progress-backup.js:56,76 | Fertig wenn: Standard-Storage ist der globale `AppStorage` (Parameter-Injektion für Tests bleibt); `daily-question.test.js` unverändert grün; keine `localStorage`-Treffer außerhalb der beiden erlaubten Dateien
+
+### Phase 3 – Tests, Doku, Prozess
+- [ ] D01 | Reine Logik aus `dashboard.js` in ein getestetes Modul ziehen | P3 | L | assets/js/dashboard.js, assets/js/modules/ (neu), Test daneben | dashboard.js hat 852 Zeilen, 18 Funktionen, 13 `innerHTML`-Stellen und keinen Unit-Test; das Muster „DOM-freie Logik + Vitest“ steht in CLAUDE.md (Abschnitt Zustand & Daten) | Fertig wenn: Berechnungen (Streak, Noten, Fortschritt) liegen in einem DOM-freien Modul mit mindestens 8 Vitest-Fällen; `dashboard.js` ruft nur noch auf und rendert; Dashboard-Specs (`new_features`, `progress_backup`, `accessibility`) grün
+- [ ] D02 | `GEMINI.md` nicht mehr als abweichende Kopie von `CLAUDE.md` pflegen | P3 | S | GEMINI.md, CLAUDE.md | `diff` zeigt Abweichungen schon in Zeile 40 und 42 (Rest der Datei identisch) | Fertig wenn: GEMINI.md enthält nur den Gemini-spezifischen Kopf und verweist für den Rest auf CLAUDE.md, oder ein Check-Skript in `npm run check` meldet Abweichungen
+- [ ] D03 | CI auf dem Sync-PR zum Laufen bringen | P2 | S | .github/workflows/sync.yml | `gh run list`: Lauf 39111310043 (Branch automated/subprojects-sync) steht auf `action_required`; sync.yml:44-48 nutzt `GITHUB_TOKEN` für `create-pull-request` | Fertig wenn: Ursache bestimmt (Repo-Einstellung „Approve workflows“ oder Token-Eigenschaft; heute nicht verifiziert) und behoben; der nächste Sync-PR zeigt ohne manuelle Freigabe grüne oder rote Checks
+- [ ] D04 | Pre-Push-Hook um einen schnellen E2E-Smoke ergänzen | P3 | S | .githooks/pre-push, package.json | pre-push führt nur `npm run check` aus (pre-push:11); die 4 roten E2E-Tests (A01-A03) blieben damit unbemerkt, CI auf main ist seit mindestens 2026-10-17 rot | Fertig wenn: Hook startet zusätzlich eine Smoke-Auswahl (z. B. `icons`, `accessibility`, `advanced_features` auf Chromium, unter 2 min) und blockiert bei Fehlern; Umgehung per `SKIP_E2E=1` dokumentiert
+- [ ] D05 | Abschluss und Dokumentation | P1 | S | CHANGELOG.md, sw.js | CLAUDE.md-Regel „Relevante Features/Fixes in CHANGELOG.md eintragen“; `generate-sw-assets` immer als letzter Schritt | Fertig wenn: CHANGELOG-Eintrag je Phase; `npm run regen`, dann `npm run check`; `npx playwright test` in allen 4 Projekten und `E2E_ROOT=dist` Chromium grün; CI-Lauf auf dem Branch grün
 
 ## 3. Vorgehen je Phase
 
-### Phase 1: Developer Experience & CI/CD-Härtung (OPT-01 – OPT-03)
-- **Reihenfolge**: Zuerst OPT-01 (`.githooks/pre-push` Hook), danach OPT-02 (`ci.yml` fetch-depth), anschließend OPT-03 (`ci.yml` Lighthouse Step Summary).
-- **Test nach Phase 1**: Lokaler Testlauf von `git push` mit Test-Fehlern; CI-Trigger prüfen.
-- **Rollback**: `git checkout -- .githooks/pre-push .github/workflows/ci.yml package.json`.
+Allgemein: Ein Branch `fix/plan-<phase>`, ein Commit je Maßnahme (ID in der Commit-Nachricht). Vor Beginn `git status` sauber. Nach jeder Maßnahme die genannten gezielten Tests, nach jeder Phase die Phasen-Prüfung. `npm run generate-sw-assets` immer zuletzt, wenn HTML/CSS/JS/Fonts betroffen sind; bei Inline-Script-Änderungen vorher `npm run check-csp:fix`.
 
-### Phase 2: Internationalisierung & Barrierefreiheit (OPT-04 – OPT-07)
-- **Reihenfolge**: OPT-04 (`challenge-lab.js` DE/EN), OPT-05 (`lebenslauf.html` print.css), OPT-06 (`flashcards.js` SpeechSynthesis), OPT-07 (`ihk-exam-simulator.js` SpeechSynthesis).
-- **Test nach Phase 2**: `npm run check-head`, `npm run check-csp`, `npm run test:unit`, Browser-Test von Audio & Druckvorschau.
-- **Rollback**: `git checkout -- assets/js/modules/challenge-lab.js pages/lebenslauf.html assets/js/flashcards.js assets/js/modules/ihk-exam-simulator.js`.
+| Phase | Reihenfolge | Test nach der Phase | Rollback |
+|---|---|---|---|
+| 0 | A00 → A02 → A01 → A03 → A04 | `npm run check`; `npx playwright test --project=chromium` zweimal 0 Fehler; `npx playwright test accessibility git_simulator --project=mobile-chrome` | `git revert` der Commits (reine Spec-/Markup-Änderungen); A00 ist umkehrbar mit `npm ci` |
+| 1 | B01 → B02 → B03 → B04 → B05 | `npm run check`; `check-head` negativ getestet (B01); CI-Lauf auf dem Branch inkl. Lighthouse | `git revert`; B02 notfalls Regeln einzeln auf `warn` statt Revert |
+| 2 | C01 → C02 → C04 → C03 | `npm run check`; Specs `progress_backup`, `landing_page`, `flashcards_*`, `git_simulator`, `accessibility` auf Chromium und mobile-chrome; manueller QR-Scan des Sync-Codes (Ausnahme: nicht automatisierbar) | `git revert` je Maßnahme; C01 zuerst als eigener PR, weil es CSP und Vendor-Dateien berührt |
+| 3 | D01 → D02 → D03 → D04 → D05 | `npm run check`; Dashboard-Specs; Volllauf aller 4 Browser-Projekte und `dist` | `git revert`; D01 liegt hinter unveränderter Dashboard-Oberfläche, Revert ohne Datenmigration möglich |
 
-### Phase 3: Lern-Features, PWA & Architektur-Vertiefung (OPT-08 – OPT-10)
-- **Reihenfolge**: OPT-08 (`dashboard.html`/`dashboard.js` Frage des Tages), OPT-09 (`progress-backup.js` QR-Sync), OPT-10 (`c4-architecture.js` Drilldown).
-- **Test nach Phase 3**: `npm run test:unit`, Dashboard-Funktionstests im Browser, Service-Worker-Aktualisierung (`npm run regen`).
-- **Rollback**: `git checkout -- pages/dashboard.html assets/js/dashboard.js assets/js/modules/progress-backup.js assets/js/modules/c4-architecture.js`.
-
-### Phase 4: Vertiefte Simulation & Fragen-Bilingualität (OPT-11 – OPT-12)
-- **Reihenfolge**: OPT-11 (`git-engine.js` Rebase & Unit-Tests), OPT-12 (`exam-questions.js` englische Übersetzungen).
-- **Test nach Phase 4**: `npm run test:unit` (alle Engine-Tests grün), `npm run check`.
-- **Rollback**: `git checkout -- assets/js/modules/git-engine.js assets/js/modules/git-engine.test.js assets/js/modules/exam-questions.js`.
+Reihenfolgegründe: A00 zuerst, damit alle weiteren Lint-/Check-Ergebnisse auf der Lock-Version beruhen. Phase 0 vor allem anderen, damit die CI wieder aussagekräftig ist. B02 (`no-alert` als `warn`) vor C03, danach auf `error`. C01 vor D05, weil es CSP und Precache-Liste ändert.
 
 ## 4. Risiken und offene Fragen
-- **Risiko 1 (Web Speech API Browser-Kompatibilität)**: Nicht jeder Browser (z. B. manche ältere Mobile-Browser) unterstützt die native Web Speech API fehlerfrei. Gegenmaßnahme: Vor Initialisierung stets Feature-Detection (`'speechSynthesis' in window`) durchführen und Buttons bei fehlendem Support dezent ausblenden (`display: none`).
-- **Risiko 2 (QR-Code Datenlimit bei Device-to-Device Sync)**: Ein vollständiger Backup-State kann bei hunderten beantworteten Flashcards zu viele Zeichen für einen Standard-QR-Code der Version 4/5 enthalten. Gegenmaßnahme: Vor dem QR-Code-Rendern die Payload per Base64/Lz-String komprimieren oder nur den Hash/Schlüsselstand transferieren.
-- **Risiko 3 (Service Worker Precache & CSP-Hashes)**: Änderungen an HTML-Seiten oder neuen Modulen erfordern Precache- und Hash-Aktualisierungen. Gegenmaßnahme: Nach jeder Phase strikt `npm run regen` und `npm run check-csp:fix` ausführen.
-- **Offene Frage 1**: Sollen die Sprachausgaben (Web Speech API) standardmäßig auf Deutsch sprechen oder der aktuell aktiven Site-Sprache (`document.documentElement.lang`) folgen? (Empfehlung: Dynamisch nach aktiver Sprache wählen).
+
+- **R1 (A00):** ESLint 10 kann neue Funde liefern, die ESLint 9.39.5 nicht meldet. Sie werden als eigene Einträge ergänzt, nicht stillschweigend behoben.
+- **R2 (C01):** QR-Kapazität. Ein großer Lernstand passt eventuell nicht in einen lokal erzeugten QR (feste Obergrenze je Fehlerkorrektur). Vorab Größe eines realistischen Backups messen; Rückfall: Export als Datei (existiert bereits).
+- **R3 (C01):** Neue Vendor-Bibliothek muss Lizenz, CSP-Hash/`script-src`, Precache-Liste und `check-icons` erfüllen. Nichts Externes laden (ADR 0003).
+- **R4 (B05):** Mehr Lighthouse-URLs verlängern den CI-Job (heute 12 min bei 19 URLs × 3 Läufe). Gegenmaßnahme: `numberOfRuns` für die neuen Seiten oder Ausnahmeliste.
+- **R5 (C03):** Der Git-Simulator nutzt `prompt()` für Eingaben; ein Modal mit Eingabefeld ändert den Ablauf der Specs `git_simulator`.
+- **R6 (A04):** 2 Worker verlängern den lokalen Volllauf (Chromium bisher 6,5 min).
+- **R7 (alle):** `Projekte/**` wird vom Sync überschrieben und darf nicht angefasst werden (CLAUDE.md). Keine Maßnahme ändert dort Dateien.
+- **Offene Frage O1 (D03):** Ist `action_required` eine Repo-Einstellung oder eine Eigenschaft des Tokens? Das lässt sich nur in den GitHub-Repo-Einstellungen prüfen, nicht aus dem Code.
+- **Offene Frage O2 (A01):** Soll die Spec dem aktuellen Modultext folgen (empfohlen, kleinster Eingriff) oder soll das Dossier-Profil „Backend“ wieder „Game Engine Developer“ heißen? Inhaltliche Entscheidung des Eigentümers.
+- **Offene Frage O3 (C01):** Soll `api.qrserver.com` auch für die statischen QR-Bilder aus `scripts/generate_qr_codes.js` entfallen? Das Skript läuft nur zur Entwicklungszeit; Ergebnisbilder liegen bereits im Repo.
+- **Nicht geprüft:** Firefox-, WebKit- und mobile-chrome-Läufe lokal (nur über die CI-Logs von 2026-10-17 bewertet); `dist`-E2E lokal; Lighthouse-Werte lokal.
+
+## Optional (ohne Beleg im Code oder nur indirekt belegt, nicht Teil der Abarbeitung)
+
+- `style-src 'unsafe-inline'` abbauen: nötig wegen 305 `style="`-Vorkommen in `assets/js` und 19 in `pages/*.html`; großer Umbau, Nutzen nur mit nonce/Hash-Strategie für Styles (neue ADR).
+- TypeScript schrittweise verschärfen: `--noImplicitAny` ergibt 576 Fehler (276 in `assets/js/modules`), `--strict` 949; pro Verzeichnis eine eigene Konfiguration als CI-Gate.
+- `style.css` (7886 Zeilen, 116 KB minifiziert) in Kern und seitenspezifische Module teilen; erst sinnvoll, wenn Lighthouse-Performance eine Schwelle verfehlt.
+- `playground.js` (1266 Zeilen) in Module zerlegen.
+- Dependabot-Gruppen: Playwright 1.64, Vitest 5.0.5, Prettier 3.9.10 stehen als Updates an (Dependabot ist konfiguriert, `.github/dependabot.yml`).
