@@ -5,6 +5,9 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  # Lets sync.yml start the checks on the automated sync branch: a pull request opened with
+  # GITHUB_TOKEN does not get its own pull_request run (and one that does may wait for approval).
+  workflow_dispatch:
 
 # Read-only token: no job here writes to the repository.
 permissions:
