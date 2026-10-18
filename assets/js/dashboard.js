@@ -520,7 +520,7 @@ function renderLearningRecommendations() {
 
     const sortedRecommendations = rankLearningRecommendations(weakQuizCategories, flashcardsWrongCounts);
 
-    let recommendationsHtml = '';
+    let recommendationsHtml;
     if (sortedRecommendations.length > 0) {
         recommendationsHtml = sortedRecommendations
             .map(

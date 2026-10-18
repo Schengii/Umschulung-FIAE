@@ -480,7 +480,7 @@ class ArchitectureExplorer {
         const summary = this.selectedLanguage === 'de' ? route.summaryDe : route.summaryEn;
         const desc = this.selectedLanguage === 'de' ? route.descriptionDe : route.descriptionEn;
 
-        let requestBodyHTML = '';
+        let requestBodyHTML;
         if (route.requestBody) {
             const bodyJSON = JSON.stringify(route.requestBody, null, 4);
             requestBodyHTML = `

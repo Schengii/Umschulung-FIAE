@@ -51,7 +51,7 @@
         const image = card.dataset.image || '';
         const link = card.dataset.link || '';
         const github = card.dataset.github || '';
-        let tags = [];
+        let tags;
         try {
             tags = card.dataset.tags ? JSON.parse(decodeURIComponent(card.dataset.tags)) : [];
         } catch (_) {
@@ -69,7 +69,7 @@
                 ? window.projectsData.find((p) => p.repoName === repoName)
                 : null;
 
-        let images = [];
+        let images;
         try {
             images = card.dataset.images ? JSON.parse(decodeURIComponent(card.dataset.images)) : [];
             images = images.filter((img) => img);

@@ -84,8 +84,7 @@ module.exports = [
       'no-var': 'error',
       'prefer-const': 'error',
       'no-alert': 'error',
-      // New in the ESLint 10 recommended set; existing sites are listed in PLAN.md (Neu gefunden).
-      'no-useless-assignment': 'warn',
+      'no-useless-assignment': 'error',
     },
   },
   eslintConfigPrettier,

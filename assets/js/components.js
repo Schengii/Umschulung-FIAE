@@ -728,7 +728,7 @@ function initAccessibilityControls() {
     if (btnFontScale) {
         btnFontScale.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-font-scale');
-            let nextVal = '';
+            let nextVal;
             if (!current) {
                 document.documentElement.setAttribute('data-font-scale', 'large');
                 AppStorage.setItem('portfolio_font_scale', 'large');

@@ -708,8 +708,8 @@ class InterviewSimulator {
         const summaryDe = document.getElementById('result-summary-de');
         const summaryEn = document.getElementById('result-summary-en');
 
-        let deSummaryText = '';
-        let enSummaryText = '';
+        let deSummaryText;
+        let enSummaryText;
 
         if (overallPercentage >= 80) {
             deSummaryText =

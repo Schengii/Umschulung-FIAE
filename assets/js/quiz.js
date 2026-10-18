@@ -269,7 +269,7 @@ function showScore() {
     }
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    let feedback = '';
+    let feedback;
 
     if (lang === 'de') {
         if (percentage === 100) {
