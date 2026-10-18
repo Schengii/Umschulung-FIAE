@@ -15,7 +15,11 @@ module.exports = defineConfig({
   // Two workers locally as in CI: the default (half the cores) overloads the dev server and makes
   // otherwise stable specs time out (A04).
   workers: process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : 2,
-  reporter: 'line',
+  // CI: annotate failures in the PR and keep a JSON report so scripts/summarize_playwright_flaky.js
+  // can list tests that only passed on a retry (B04).
+  reporter: process.env.CI
+    ? [['github'], ['line'], ['json', { outputFile: 'playwright-report/results.json' }]]
+    : 'line',
   use: {
     baseURL,
     trace: 'on-first-retry',
