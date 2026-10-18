@@ -5,6 +5,13 @@
 import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
 import { Achievements } from './modules/achievements.js';
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './modules/exam-questions.js';
+import {
+    rankLearningRecommendations,
+    getRecommendationCategoryName,
+    getRecommendationLink,
+    getContributionLevel,
+    buildContributionData,
+} from './modules/dashboard-logic.js';
 import { getLocalDateKey, getDailyQuestionIndex, loadDailyState, recordDailyAnswer } from './modules/daily-question.js';
 
 export function initDashboard() {
@@ -511,58 +518,15 @@ function renderLearningRecommendations() {
         AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
     );
 
-    const recommendations = {};
-
-    // Process quiz recommendations
-    weakQuizCategories.forEach((cat) => {
-        recommendations[cat] = (recommendations[cat] || 0) + 2; // Higher weight for quiz
-    });
-
-    // Process flashcard recommendations
-    for (const cat in flashcardsWrongCounts) {
-        recommendations[cat] = (recommendations[cat] || 0) + flashcardsWrongCounts[cat];
-    }
-
-    // Sort recommendations by weight (descending)
-    const sortedRecommendations = Object.entries(recommendations)
-        .sort(([, a], [, b]) => b - a)
-        .map(([cat]) => cat);
+    const sortedRecommendations = rankLearningRecommendations(weakQuizCategories, flashcardsWrongCounts);
 
     let recommendationsHtml = '';
     if (sortedRecommendations.length > 0) {
         recommendationsHtml = sortedRecommendations
-            .map((cat) => {
-                let categoryName = cat; // Default to category key
-                // Map internal category keys to user-friendly names
-                switch (cat) {
-                    case 'tech':
-                        categoryName = lang === 'de' ? 'Technische Fragen' : 'Technical Questions';
-                        break;
-                    case 'project':
-                        categoryName = lang === 'de' ? 'Projektfragen' : 'Project Questions';
-                        break;
-                    case 'personal':
-                        categoryName = lang === 'de' ? 'Persönliche Fragen' : 'Personal Questions';
-                        break;
-                    case 'ihk':
-                        categoryName = lang === 'de' ? 'IHK-Fragen' : 'IHK Questions';
-                        break;
-                    case 'software':
-                        categoryName = lang === 'de' ? 'Softwareentwicklung' : 'Software Development';
-                        break;
-                    case 'database':
-                        categoryName = lang === 'de' ? 'Datenbanken' : 'Databases';
-                        break;
-                    case 'network':
-                        categoryName = lang === 'de' ? 'Netzwerke & Sicherheit' : 'Networking & Security';
-                        break;
-                    case 'wiso':
-                        categoryName = lang === 'de' ? 'Wirtschaft & Soziales' : 'Business & Society';
-                        break;
-                    // Add more mappings as needed
-                }
-                return `<li><a href="${getRecommendationLink(cat)}">${categoryName}</a></li>`;
-            })
+            .map(
+                (cat) =>
+                    `<li><a href="${getRecommendationLink(cat)}">${getRecommendationCategoryName(cat, lang)}</a></li>`
+            )
             .join('');
     } else {
         recommendationsHtml = `<li><span lang="de">Keine spezifischen Empfehlungen. Mach ein Quiz oder lerne Lernkarten!</span><span lang="en">No specific recommendations yet. Take a quiz or study flashcards!</span></li>`;
@@ -592,63 +556,9 @@ function initCommitGrid() {
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
-    // Dates setup
     // Representing ~1 year of activity (53 weeks * 7 days = 371 cells)
-    const totalDays = 371;
-    const today = new Date();
-    const cellsData = [];
-
-    // Simple seeded LCG PRNG for historical contributions
-    let seed = 42;
-    function random() {
-        const x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
-    }
-
-    let totalCommits = 0;
-    let currentStreak = 0;
-    let maxStreak = 0;
-
-    // Load custom live commits added today
     const liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
-
-    // Generate contribution data going back from today
-    for (let i = totalDays - 1; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
-
-        let commits = 0;
-        const dayOfWeek = date.getDay(); // 0 is Sunday, 6 Saturday
-
-        // Historical simulation: Umschulungszeit started 2024. Let's make weekends light, weekdays busier.
-        if (i === 0) {
-            // Today
-            commits = liveCommitsToday;
-        } else {
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            const randVal = random();
-            if (isWeekend) {
-                commits = randVal > 0.9 ? Math.floor(randVal * 3) : 0;
-            } else {
-                commits = randVal > 0.4 ? Math.floor(randVal * 8) : 0;
-            }
-        }
-
-        totalCommits += commits;
-
-        // Streak check
-        if (commits > 0) {
-            currentStreak++;
-            if (currentStreak > maxStreak) maxStreak = currentStreak;
-        } else {
-            currentStreak = 0;
-        }
-
-        cellsData.push({
-            date: date,
-            commits: commits,
-        });
-    }
+    const { cells: cellsData, totalCommits, maxStreak } = buildContributionData(new Date(), liveCommitsToday);
 
     // Render cells
     gridContainer.innerHTML = '';
@@ -666,14 +576,7 @@ function initCommitGrid() {
         const cellEl = document.createElement('div');
         cellEl.className = 'commit-cell';
 
-        // Map commit counts to 5 levels (0 to 4)
-        let level = 0;
-        if (cell.commits > 0) {
-            if (cell.commits <= 2) level = 1;
-            else if (cell.commits <= 4) level = 2;
-            else if (cell.commits <= 6) level = 3;
-            else level = 4;
-        }
+        const level = getContributionLevel(cell.commits);
 
         cellEl.classList.add(`level-${level}`);
 
@@ -709,24 +612,6 @@ function initCommitGrid() {
     }
     if (streakSpan) {
         streakSpan.textContent = lang === 'de' ? `Beste Strähne: ${maxStreak} Tage` : `Best Streak: ${maxStreak} days`;
-    }
-}
-
-function getRecommendationLink(category) {
-    // Map categories to relevant pages
-    switch (category) {
-        case 'tech':
-        case 'project':
-        case 'personal':
-        case 'ihk':
-            return 'interview-trainer.html'; // Interview Trainer covers these
-        case 'software':
-        case 'database':
-        case 'network':
-        case 'wiso':
-            return 'flashcards.html'; // Flashcards cover these
-        default:
-            return 'quiz.html'; // Fallback to quiz
     }
 }
 

@@ -21,3 +21,27 @@ test.describe('Dashboard: Frage des Tages', () => {
         await expect(page.locator('#daily-question-card .daily-opt-btn').first()).toBeDisabled();
     });
 });
+
+// dashboard.js delegates its calculations to modules/dashboard-logic.js (D01); the rendered result
+// must stay the same.
+test.describe('Dashboard: Aktivitätsraster und Lernempfehlungen', () => {
+    test('sollte 371 Tage, Summen und Empfehlungen aus den gespeicherten Schwächen rendern', async ({ page }) => {
+        await page.goto('/pages/dashboard.html');
+        await page.evaluate(() => {
+            localStorage.setItem('github_live_commits_today', '5');
+            localStorage.setItem('learning_recommendations_quiz_weak_categories', '["wiso"]');
+            localStorage.setItem('learning_recommendations_flashcards_wrong_counts', '{"database": 4}');
+        });
+        await page.reload();
+        await settle(page);
+
+        await expect(page.locator('#commit-grid .commit-cell')).toHaveCount(371);
+        await expect(page.locator('#commit-grid .commit-cell').last()).toHaveClass(/level-3/);
+        await expect(page.locator('#commit-grid-streak')).toContainText('Beste Strähne');
+
+        const links = page.locator('.card[aria-labelledby="recommendations-title"] a');
+        await expect(links).toHaveCount(2);
+        await expect(links.first()).toHaveAttribute('href', 'flashcards.html');
+        await expect(links.first()).toHaveText('Datenbanken');
+    });
+});
