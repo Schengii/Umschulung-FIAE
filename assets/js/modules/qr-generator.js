@@ -2,6 +2,8 @@
  * QR-Code & Link Generator Module
  * Generates recruiter personalized landing page links and downloadable QR codes.
  */
+import { createQrDataUrl } from './qr-local.js';
+
 export function initQrGenerator() {
     const companyInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-company-input'));
     const nameInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-name-input'));
@@ -59,13 +61,9 @@ export function initQrGenerator() {
         // Update the textual URL preview
         generatedLinkInput.value = targetUrl;
 
-        // Generate QR code URL (using the free api.qrserver.com API, 300x300, 10px margin)
-        const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(targetUrl)}&margin=10`;
-
-        // Load QR Code image
+        // Render the QR code locally; the personalised link never leaves the browser.
         imageContainer.innerHTML = '';
         const img = document.createElement('img');
-        img.src = qrApiUrl;
         img.alt = `QR Code pointing to ${targetUrl}`;
         img.style.width = '180px';
         img.style.height = '180px';
@@ -87,13 +85,18 @@ export function initQrGenerator() {
             imageContainer.innerHTML = `
                 <div class="qr-error-notice" style="color: var(--danger, #ef4444); text-align: center; padding: 1rem;">
                     <i class="fa fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 0.5rem;" aria-hidden="true"></i>
-                    <p lang="de">QR-Code konnte nicht geladen werden (Offline oder API nicht erreichbar). Der personalisierte Link oben bleibt gültig.</p>
-                    <p lang="en">QR code could not be loaded (offline or service unreachable). The personalised link above remains valid.</p>
+                    <p lang="de">QR-Code konnte nicht geladen werden (der Link ist zu lang für einen QR-Code). Der personalisierte Link oben bleibt gültig.</p>
+                    <p lang="en">QR code could not be loaded (the link is too long for a QR code). The personalised link above remains valid.</p>
                 </div>
             `;
         };
 
         imageContainer.appendChild(img);
+        try {
+            img.src = createQrDataUrl(targetUrl);
+        } catch (_e) {
+            img.onerror(new Event('error'));
+        }
     }
 
     // Event listeners with simple debouncing for typing fields
@@ -155,39 +158,25 @@ export function initQrGenerator() {
             if (!urlInput) return;
 
             const companyVal = companyInput.value.trim() || 'Recruiter';
-            const cleanFilename = `qr_code_${companyVal.toLowerCase().replace(/[^a-z0-9]/g, '_')}.png`;
+            const cleanFilename = `qr_code_${companyVal.toLowerCase().replace(/[^a-z0-9]/g, '_')}.svg`;
 
             // Get current loaded image element src
             const img = imageContainer.querySelector('img');
             if (!img) return;
 
-            const qrUrl = img.src;
+            // The QR code is a local SVG data URL, so it can be saved directly (no fetch needed).
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = cleanFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-            // Fetch image blob to bypass standard download behavior and trigger saving dialog
-            fetch(qrUrl)
-                .then((response) => response.blob())
-                .then((blob) => {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = blobUrl;
-                    link.download = cleanFilename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(blobUrl);
-
-                    // Show success toast
-                    if (typeof window.showToast === 'function') {
-                        const lang = document.documentElement.getAttribute('lang') || 'de';
-                        const msg = lang === 'de' ? 'QR-Code Download gestartet!' : 'QR code download started!';
-                        window.showToast(msg, 'success');
-                    }
-                })
-                .catch((err) => {
-                    console.error('Failed to download QR code image blob:', err);
-                    // Fallback to opening in a new tab
-                    window.open(qrUrl, '_blank');
-                });
+            if (typeof window.showToast === 'function') {
+                const lang = document.documentElement.getAttribute('lang') || 'de';
+                const msg = lang === 'de' ? 'QR-Code Download gestartet!' : 'QR code download started!';
+                window.showToast(msg, 'success');
+            }
         });
     }
 
