@@ -666,12 +666,9 @@ function initAccessibilityControls() {
             a11yDropdown.style.display = 'none';
             const accentDropdown = document.getElementById('accent-dropdown');
             if (accentDropdown) accentDropdown.style.display = 'none';
-            const navMenu = document.getElementById('nav-menu');
-            if (navMenu && navMenu.classList.contains('open')) {
-                navMenu.classList.remove('open');
-                const menuToggle = document.getElementById('menu-toggle');
-                if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
-            }
+            // The mobile menu is closed by modules/navigation.js, which also returns the focus to the
+            // toggle. Closing it here as well ran first and left that handler nothing to do, so the
+            // focus was lost whenever the toggle had not been focused by the click (Safari/WebKit).
         }
     });
 

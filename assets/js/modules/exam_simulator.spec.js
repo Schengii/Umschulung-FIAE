@@ -3,6 +3,13 @@ import { settle } from '../../../scripts/e2e-helpers.js';
 
 // The IHK exam simulation on quiz.html: timed run, hand-in, grade and breakdown per topic.
 test.describe('IHK-Prüfungssimulation', () => {
+    // The infinite header/footer animations starve requestAnimationFrame in WebKit (about 6 fps
+    // instead of 45 in a local run), and every Playwright click waits on animation frames for its
+    // "stable" check. Reduced motion (which the site honours) removes that load, and the 15-question
+    // walkthrough gets more time than the 30 s default.
+    test.use({ reducedMotion: 'reduce' });
+    test.setTimeout(90_000);
+
     const panel = (page) => page.locator('.exam-panel');
 
     async function startExam(page, mode) {
