@@ -56,6 +56,9 @@ jobs:
       - name: Verify Sitemap Lists Every Indexable Page
         run: npm run check-sitemap
 
+      - name: Verify Lighthouse Audits Every Sitemap Page
+        run: npm run check-lighthouse-urls
+
       - name: Verify Service Worker Precache List And Cache Name Are Up To Date
         run: npm run check-sw-assets
 

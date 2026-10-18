@@ -21,7 +21,13 @@
         "http://localhost/pages/kostentraeger.html",
         "http://localhost/pages/praktikumsbetrieb.html",
         "http://localhost/pages/links.html",
-        "http://localhost/pages/news.html"
+        "http://localhost/pages/news.html",
+        "http://localhost/pages/challenge-lab.html",
+        "http://localhost/pages/games.html",
+        "http://localhost/pages/snake.html",
+        "http://localhost/pages/memory.html",
+        "http://localhost/pages/impressum.html",
+        "http://localhost/pages/datenschutz.html"
       ],
       "numberOfRuns": 3
     },
