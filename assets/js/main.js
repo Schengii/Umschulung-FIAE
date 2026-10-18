@@ -34,6 +34,7 @@
 // These are assumed to set up global constants and functions.
 import './constants.js';
 import './toast.js';
+import './dialog.js';
 
 // Modules needed on (almost) every page: header/nav/footer controls, global
 // keyboard shortcuts, site-wide widgets, and cheap page-whitelist checks.

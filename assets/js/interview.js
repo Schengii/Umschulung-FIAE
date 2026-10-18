@@ -487,11 +487,10 @@ class InterviewSimulator {
         this.selectedCategories = Array.from(checkedBoxes).map((cb) => cb.value);
 
         if (this.selectedCategories.length === 0) {
-            alert(
-                this.selectedLanguage === 'de'
-                    ? 'Bitte wähle mindestens eine Kategorie aus!'
-                    : 'Please select at least one category!'
-            );
+            window.showAlert({
+                de: 'Bitte wähle mindestens eine Kategorie aus!',
+                en: 'Please select at least one category!',
+            });
             return;
         }
 
