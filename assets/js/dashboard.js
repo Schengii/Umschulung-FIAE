@@ -601,7 +601,7 @@ function initCommitGrid() {
     // Simple seeded LCG PRNG for historical contributions
     let seed = 42;
     function random() {
-        let x = Math.sin(seed++) * 10000;
+        const x = Math.sin(seed++) * 10000;
         return x - Math.floor(x);
     }
 
@@ -610,7 +610,7 @@ function initCommitGrid() {
     let maxStreak = 0;
 
     // Load custom live commits added today
-    let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
+    const liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
 
     // Generate contribution data going back from today
     for (let i = totalDays - 1; i >= 0; i--) {

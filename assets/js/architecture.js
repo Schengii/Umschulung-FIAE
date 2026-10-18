@@ -365,9 +365,9 @@ class ArchitectureExplorer {
             const fov = 400;
 
             const projected = nodes.map((n) => {
-                let x = n.x * Math.cos(this.rotY) - n.z * Math.sin(this.rotY);
+                const x = n.x * Math.cos(this.rotY) - n.z * Math.sin(this.rotY);
                 let z = n.x * Math.sin(this.rotY) + n.z * Math.cos(this.rotY);
-                let y = n.y * Math.cos(this.rotX) - z * Math.sin(this.rotX);
+                const y = n.y * Math.cos(this.rotX) - z * Math.sin(this.rotX);
                 z = n.y * Math.sin(this.rotX) + z * Math.cos(this.rotX);
 
                 const scale = fov / (fov + z + 200);

@@ -148,8 +148,8 @@ function startQuiz() {
 function showQuestion() {
     resetState();
     const questions = getActiveQuestions();
-    let currentQuestion = questions[currentQuestionIndex];
-    let questionNo = currentQuestionIndex + 1;
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionNo = currentQuestionIndex + 1;
 
     // Setzen der Frage
     questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;

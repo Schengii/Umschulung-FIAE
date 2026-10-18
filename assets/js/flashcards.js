@@ -280,11 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Load data from LocalStorage
-    let starredIds = readStored('flashcards_starred', []);
+    const starredIds = readStored('flashcards_starred', []);
     let customCards = readStored('flashcards_custom', []);
-    let boxLevels = readStored('flashcards_box_levels', {});
+    const boxLevels = readStored('flashcards_box_levels', {});
     // cardId -> timestamp of the day the card is due again (see leitner-box.js)
-    let dueDates = readStored('flashcards_due_dates', {});
+    const dueDates = readStored('flashcards_due_dates', {});
 
     let currentCategory = 'all';
     let filteredDeck = [];
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Record learning recommendations
-                let wrongCounts = JSON.parse(
+                const wrongCounts = JSON.parse(
                     AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
                 );
                 wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;

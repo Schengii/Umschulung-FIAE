@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const githubRepoMap = new Map(githubRepos.map((repo) => [repo.name.toLowerCase(), repo]));
 
             // Combine all projects into one list
-            let allProjects = [
+            const allProjects = [
                 ...staticProjects.map((proj) => {
                     const enriched = { ...proj };
                     if (enriched.repoName) {
