@@ -4,6 +4,33 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-18
+
+### Umsetzung des Plans aus der Projektanalyse (PLAN.md A00–D05)
+
+#### Behoben
+- **A01/A02/A03**: Die rote E2E-Basis der CI ist behoben: Dossier-Spec folgt dem aktuellen Modultext, `icons.spec.js` prüft nur noch vorhandene Projektseiten, `#terminal-output` im Git-Simulator ist per Tastatur erreichbar (`tabindex="0"`, `role="log"`, zweisprachiges `aria-label`; axe `scrollable-region-focusable` auf mobile-chrome).
+- **A04**: Playwright nutzt lokal 2 Worker wie die CI (Standard verursachte Last-Flakes); zwei Chromium-Volläufe 255/255 grün.
+- **A00**: Lokale Toolchain per `npm ci` auf das Lockfile gebracht (ESLint 10.12.0).
+
+#### Datenschutz & Sicherheit
+- **C01**: QR-Codes (Lernstand-Sync, Recruiter-Link) werden lokal erzeugt (`qrcode-generator` 2.0.4, `assets/vendor/qrcode/`, `modules/qr-local.js`). Es geht kein Lernstand mehr an `api.qrserver.com`; der Dienst ist aus `vercel.json` und `links.html` entfernt. Der Recruiter-QR lässt sich direkt als SVG herunterladen. Neue Tests: `qr-local.test.js`, `qr_local.spec.js` (Netzwerkassertion).
+- **C02/C04**: Doppelte Escape-Funktion in `username-greeting.js` entfernt, `daily-question.js` nutzt `AppStorage`.
+- **C03**: Native `alert/confirm/prompt` durch `assets/js/dialog.js` ersetzt (`<dialog>`, `showAlert/showConfirm/showPrompt`, zweisprachig); ESLint `no-alert` ist Fehler. Neue Spec `dialogs.spec.js`.
+
+#### Qualität & Tooling
+- **B01**: Skip-Link auf `ihk-cockpit.html` und `challenge-lab.html`; `check-head` erzwingt ihn bei jeder Seite mit `<main id="main-content">`.
+- **B02**: ESLint nutzt `@eslint/js` recommended plus `eqeqeq`, `no-var`, `prefer-const`, `no-alert`; `no-useless-assignment` als Warnung (12 Fundstellen, siehe PLAN.md „Neu gefunden“).
+- **B03**: `npm run test:coverage` (Ausgangswert `assets/js/modules`: 17,2 % Statements).
+- **B04**: CI: `github`-/JSON-Reporter und Step-Summary mit Tests, die nur im Retry bestehen (`scripts/summarize_playwright_flaky.js`).
+- **B05**: `lighthouserc.json` deckt alle 25 Sitemap-Seiten ab, `npm run check-lighthouse-urls` ist Teil von `check` und CI.
+- **D01**: Dashboard-Logik DOM-frei in `modules/dashboard-logic.js` mit 13 Vitest-Fällen; `dashboard.js` 852 → 737 Zeilen.
+- **D02**: `GEMINI.md` verweist auf `CLAUDE.md` statt eine abweichende Kopie zu pflegen.
+- **D04**: Pre-Push-Hook führt zusätzlich einen kurzen E2E-Smoke aus (`SKIP_E2E=1` überspringt).
+
+#### Blockiert
+- **D03**: Sync-PR-CI wartet auf manuelle Freigabe, weil die Repo-Einstellung „Approval for running workflows“ auf `first_time_contributors` steht. Änderung ist eine Entscheidung des Repo-Eigentümers.
+
 ## [1.3.0] - 2026-10-17
 
 ### Vollständige Umsetzung des Optimierungsplans (PLAN.md OPT-01–OPT-12)
