@@ -32,11 +32,12 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **N01**: Alle `no-useless-assignment`-Meldungen bereinigt, die Regel ist jetzt ein Fehler.
 - **N03**: `scripts/generate_qr_codes.js` rendert die statischen QR-PNGs lokal (`qr-local.js` + `sharp`), kein QR-Webdienst mehr.
 - **N04**: Lighthouse-CI fand auf `challenge-lab.html` einen CLS von 0,18 (Footer sprang nach dem JS-Rendern der Karten); `.challenge-list-container` reserviert jetzt Höhe, gemessene Layout-Shifts: 0.
+- **N02**: Escape im mobilen Menü gab in Safari/WebKit den Fokus nicht zurück, weil `components.js` und `navigation.js` beide Escape behandelten und der erste Handler das Menü ohne Fokus-Rückgabe schloss; doppelte Logik entfernt. `exam_simulator.spec.js` läuft in WebKit stabil (Dauer-Animationen drückten requestAnimationFrame auf 6 fps; Spec nutzt Reduced Motion und 90 s Timeout).
+- **N05**: Projekte per `npm run sync-projects` auf den Stand der Standalone-Repos gebracht; vite/vitest/nodemailer in den Manifesten von ElektroCheck AI und Wohnungssuche KI sind auf gepatchten Versionen (schließt die 16 Dependabot-Alarme nach dem Merge).
+- **N06**: `ci.yml` hat `workflow_dispatch`; `sync.yml` startet die CI nach dem Anlegen/Aktualisieren des Sync-PRs selbst (wirksam ab dem Merge in main). Die Repo-Einstellung „Approval for running workflows“ bleibt unverändert.
 
-#### Blockiert
-- **D03/N06**: Sync-PR-CI wartet auf manuelle Freigabe, weil die Repo-Einstellung „Approval for running workflows“ auf `first_time_contributors` steht. Änderung ist eine Entscheidung des Repo-Eigentümers.
-- **N02**: Instabile Specs in lokalem WebKit/Windows (Actionability „stable“), auf der Baseline ebenfalls rot, CI grün; kein Produktcode-Problem.
-- **N05**: 16 Dependabot-Alarme liegen ausschließlich in `Projekte/**` (vitest, vite, nodemailer) und sind in den Standalone-Repos zu beheben.
+#### Offen
+- Der alte Sync-PR #35 überschneidet sich mit N05 und kann nach dem Merge geschlossen werden.
 
 ## [1.3.0] - 2026-10-17
 
