@@ -58,3 +58,4 @@ Projekte/**/plugins/
 Projekte/**/capacitor-cordova-android-plugins/
 Projekte/**/world_saves/
 Projekte/**/.husky/
+coverage/
