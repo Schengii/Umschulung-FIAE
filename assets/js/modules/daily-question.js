@@ -61,10 +61,10 @@ export function calculateStreak(lastDateKey, currentDateKey, currentStreak) {
 
 /**
  * Load state from storage.
- * @param {Storage} [storage]
+ * @param {{ getItem(key: string): string | null, setItem(key: string, value: string): unknown }} [storage] defaults to the global AppStorage wrapper
  * @returns {{ streak: number, lastDate: string|null, answered: Record<string, { answeredIndex: number, isCorrect: boolean }> }}
  */
-export function loadDailyState(storage = window.localStorage) {
+export function loadDailyState(storage = AppStorage) {
     try {
         const raw = storage.getItem(STORAGE_KEY);
         if (!raw) return { streak: 0, lastDate: null, answered: {} };
@@ -84,10 +84,10 @@ export function loadDailyState(storage = window.localStorage) {
  * @param {string} dateKey
  * @param {number} answeredIndex
  * @param {boolean} isCorrect
- * @param {Storage} [storage]
+ * @param {{ getItem(key: string): string | null, setItem(key: string, value: string): unknown }} [storage] defaults to the global AppStorage wrapper
  * @returns {{ streak: number, lastDate: string, answered: Record<string, { answeredIndex: number, isCorrect: boolean }> }}
  */
-export function recordDailyAnswer(dateKey, answeredIndex, isCorrect, storage = window.localStorage) {
+export function recordDailyAnswer(dateKey, answeredIndex, isCorrect, storage = AppStorage) {
     const state = loadDailyState(storage);
     const newStreak = calculateStreak(state.lastDate, dateKey, state.streak);
     state.streak = newStreak;
