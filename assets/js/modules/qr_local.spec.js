@@ -14,9 +14,9 @@ function trackQrServiceRequests(page) {
 test.describe('QR-Codes lokal erzeugen', () => {
     test('Dashboard: QR-Sync rendert lokal und ohne Drittanbieter-Anfrage', async ({ page }) => {
         const qrServiceRequests = trackQrServiceRequests(page);
-        await page.goto('/pages/dashboard.html');
+        await page.goto('/pages/dashboard.html', { waitUntil: 'domcontentloaded' });
         await page.evaluate(() => localStorage.setItem('quiz_best_score', '4'));
-        await page.reload();
+        await page.reload({ waitUntil: 'domcontentloaded' });
         await settle(page);
 
         await page.locator('#backup-qr-btn').click();
@@ -29,7 +29,7 @@ test.describe('QR-Codes lokal erzeugen', () => {
 
     test('Links: Recruiter-QR rendert lokal und lässt sich herunterladen', async ({ page }) => {
         const qrServiceRequests = trackQrServiceRequests(page);
-        await page.goto('/pages/links.html');
+        await page.goto('/pages/links.html', { waitUntil: 'domcontentloaded' });
         await settle(page);
 
         await page.locator('#qr-company-input').fill('Testfirma');

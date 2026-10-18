@@ -164,13 +164,17 @@ export function initQrGenerator() {
             const img = imageContainer.querySelector('img');
             if (!img) return;
 
-            // The QR code is a local SVG data URL, so it can be saved directly (no fetch needed).
+            // The QR code is a local SVG data URL, and is turned into a blob for saving (a fetch on data: would be blocked by connect-src).
+            // A blob URL (not the data URL itself) so every browser reports a real file download.
+            const svg = decodeURIComponent(img.src.slice(img.src.indexOf(',') + 1));
+            const blobUrl = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
             const link = document.createElement('a');
-            link.href = img.src;
+            link.href = blobUrl;
             link.download = cleanFilename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 
             if (typeof window.showToast === 'function') {
                 const lang = document.documentElement.getAttribute('lang') || 'de';

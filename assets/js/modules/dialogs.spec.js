@@ -35,7 +35,9 @@ test.describe('Eigene Dialoge statt window.alert/confirm/prompt', () => {
         await settle(page);
 
         const before = await page.locator('#terminal-output').innerText();
-        await page.locator('#btn-quick-branch').click();
+        // Keyboard activation: Safari does not focus a button on mouse click, so the opener would be <body>.
+        await page.locator('#btn-quick-branch').focus();
+        await page.keyboard.press('Enter');
         await expect(page.locator('dialog.app-dialog')).toBeVisible();
         await page.keyboard.press('Escape');
         await expect(page.locator('dialog.app-dialog')).toHaveCount(0);
