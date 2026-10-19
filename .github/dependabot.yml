@@ -16,6 +16,10 @@ updates:
       # Ab 6.7 steht der Glyph in `--fa:...`, das Skript fände 0 Icons; Major wie Minor bleiben gepinnt.
       - dependency-name: '@fortawesome/fontawesome-free'
         update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      # Playwright 1.64 macht in der CI die WebKit-Specs auf portfolio.html rot (Klick wartet ewig auf
+      # "stable"); lokal reproduzierbar nicht. Bis die Ursache geklärt ist, bleibt 1.63 exakt gepinnt.
+      - dependency-name: '@playwright/test'
+        versions: ['>=1.64.0']
     commit-message:
       prefix: 'chore(deps)'
 

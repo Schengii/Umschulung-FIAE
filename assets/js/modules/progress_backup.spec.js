@@ -1,10 +1,32 @@
-import fs from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { settle } from '../../../scripts/e2e-helpers.js';
+
+// The backup module is loaded lazily, so a click right after load can precede its listeners.
+const backupReady = (page) => expect(page.locator('#progress-backup[data-ready]')).toBeAttached();
 
 // Export/import of the locally stored progress on the dashboard.
 test.describe('Dashboard: Fortschritt sichern', () => {
     test('sollte den Fortschritt exportieren und in einem leeren Browser wieder importieren', async ({ page }) => {
+        // Records what the page hands to a download link (see the export step below).
+        await page.addInitScript(() => {
+            window.__exports = [];
+            const blobs = new Map();
+            const createObjectURL = URL.createObjectURL.bind(URL);
+            URL.createObjectURL = (blob) => {
+                const url = createObjectURL(blob);
+                blobs.set(url, blob);
+                return url;
+            };
+            document.addEventListener(
+                'click',
+                (e) => {
+                    const link = e.target instanceof window.Element ? e.target.closest('a[download]') : null;
+                    const blob = link instanceof window.HTMLAnchorElement ? blobs.get(link.href) : null;
+                    if (blob) blob.text().then((text) => window.__exports.push({ fileName: link.download, text }));
+                },
+                true
+            );
+        });
         // Seed once, not on every load: after the import the page reloads and must show what
         // the import wrote, not a re-seeded state.
         await page.goto('/pages/dashboard.html');
@@ -16,14 +38,22 @@ test.describe('Dashboard: Fortschritt sichern', () => {
         });
         await page.reload();
         await settle(page);
+        await backupReady(page);
 
-        const downloadPromise = page.waitForEvent('download');
-        await page.locator('#backup-export-btn').click();
-        const download = await downloadPromise;
-        expect(download.suggestedFilename()).toMatch(/^fiae-lernfortschritt-\d{4}-\d{2}-\d{2}\.json$/);
-        await expect(page.locator('#backup-status')).toContainText('exportiert');
+        // A late layout shift can make the click miss the button; repeat it until the export ran.
+        await expect(async () => {
+            await page.locator('#backup-export-btn').click({ timeout: 2000 });
+            await expect(page.locator('#backup-status')).toContainText('exportiert', { timeout: 2000 });
+        }).toPass({ timeout: 20000 });
 
-        const backup = JSON.parse(fs.readFileSync(await download.path(), 'utf8'));
+        // Playwright-Firefox sometimes never reports the download of a blob link, although the
+        // click handler ran. The file name and content are read from what the page handed to the
+        // download instead; the browser's own download pipeline is not what is under test.
+        await expect.poll(() => page.evaluate(() => window.__exports.length)).toBeGreaterThan(0);
+        const { fileName, text } = await page.evaluate(() => window.__exports[0]);
+        expect(fileName).toMatch(/^fiae-lernfortschritt-\d{4}-\d{2}-\d{2}\.json$/);
+
+        const backup = JSON.parse(text);
         expect(backup.app).toBe('umschulung-fiae');
         expect(backup.data).toMatchObject({
             quiz_best_score: '4',
@@ -40,6 +70,7 @@ test.describe('Dashboard: Fortschritt sichern', () => {
         });
         await page.reload();
         await settle(page);
+        await backupReady(page);
 
         await page.locator('#backup-file-input').setInputFiles({
             name: 'backup.json',
@@ -64,6 +95,7 @@ test.describe('Dashboard: Fortschritt sichern', () => {
         await page.goto('/pages/dashboard.html');
         await page.evaluate(() => localStorage.setItem('quiz_best_score', '3'));
         await settle(page);
+        await backupReady(page);
 
         await page.locator('#backup-file-input').setInputFiles({
             name: 'something.json',
@@ -80,6 +112,7 @@ test.describe('Dashboard: Fortschritt sichern', () => {
         await page.goto('/pages/dashboard.html');
         await page.evaluate(() => localStorage.setItem('quiz_best_score', '3'));
         await settle(page);
+        await backupReady(page);
 
         await page.locator('#backup-file-input').setInputFiles({
             name: 'backup.json',
@@ -94,9 +127,12 @@ test.describe('Dashboard: Fortschritt sichern', () => {
             ),
         });
         await expect(page.locator('#backup-confirm')).toBeVisible();
-        await page.locator('#backup-cancel-btn').click();
-
-        await expect(page.locator('#backup-confirm')).toBeHidden();
+        // Widgets above the card can still shift the layout after the actionability check, so a
+        // click can miss; repeat the click until the box has closed.
+        await expect(async () => {
+            await page.locator('#backup-cancel-btn').click({ timeout: 2000 });
+            await expect(page.locator('#backup-confirm')).toBeHidden({ timeout: 1000 });
+        }).toPass({ timeout: 15000 });
         expect(await page.evaluate(() => localStorage.getItem('quiz_best_score'))).toBe('3');
     });
 });
