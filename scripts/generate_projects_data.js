@@ -102,7 +102,13 @@ async function build() {
                 console.log(`Enriched ${project.repoName}: ${project.stars} stars`);
             } else {
                 project.stars = project.stars || 0;
-                project.githubUrl = `https://github.com/Schengii/${project.repoName}`;
+                // Kein öffentliches Repo (privat, archiviert oder umbenannt): ein Link auf
+                // github.com/Schengii/<repo> würde für Besucher in einer 404 enden. Stattdessen
+                // auf den Projektordner im Monorepo verlinken, sonst keinen Link ausgeben.
+                const folderMatch = /^Projekte\/([^/]+)\//.exec(project.link || '');
+                project.githubUrl = folderMatch
+                    ? `https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/${encodeURIComponent(decodeURIComponent(folderMatch[1]))}`
+                    : undefined;
                 project.updatedAt = new Date().toISOString();
                 project.language = project.language || '';
                 console.log(`Fallback for ${project.repoName} (No API info)`);
