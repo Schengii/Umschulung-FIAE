@@ -12,9 +12,10 @@ updates:
           - 'minor'
           - 'patch'
     ignore:
-      # Das Icon-Subset (ADR 0009) nutzt nur Font-Awesome-6-Namen; ein Major-Sprung bricht es.
+      # Das Icon-Subset (ADR 0009) parst Font-Awesome-Regeln der Form `.fa-x:before{content:...}`.
+      # Ab 6.7 steht der Glyph in `--fa:...`, das Skript fände 0 Icons; Major wie Minor bleiben gepinnt.
       - dependency-name: '@fortawesome/fontawesome-free'
-        update-types: ['version-update:semver-major']
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
     commit-message:
       prefix: 'chore(deps)'
 
