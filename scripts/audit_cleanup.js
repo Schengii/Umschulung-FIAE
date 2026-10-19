@@ -22,9 +22,11 @@ const EXCLUDED_DIRS = new Set([
     'world_saves',
 ]);
 
+/** @param {string} dir */
 function getDirSummary(dir) {
     let size = 0;
     let fileCount = 0;
+    /** @param {string} current */
     function traverse(current) {
         try {
             const list = fs.readdirSync(current);

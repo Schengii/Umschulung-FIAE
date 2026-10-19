@@ -90,7 +90,7 @@ function renderGitActivity() {
         return li;
     };
 
-    const render = (repos) => {
+    const render = (/** @type {Array<Record<string, any>>} */ repos) => {
         const recent = repos
             .filter((repo) => !repo.fork && repo.pushed_at)
             .sort((a, b) => Date.parse(b.pushed_at) - Date.parse(a.pushed_at))
@@ -136,6 +136,7 @@ function renderGitActivity() {
         listElement.replaceChildren(li);
     };
 
+    /** @type {Array<Record<string, any>> | null} */
     let lastRepos = null;
     const update = () => (lastRepos ? render(lastRepos) : renderUnavailable());
 

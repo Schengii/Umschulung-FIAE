@@ -61,13 +61,16 @@ function initMemoryGame() {
         { name: 'css3', icon: 'fa-brands fa-css3-alt', color: '#1572b6' },
     ];
     let cards = [];
+    /** @type {HTMLElement[]} */
     let flippedCards = [];
     let matchedCount = 0;
     let moves = 0;
+    /** @type {ReturnType<typeof setInterval> | null} */
     let timerInterval = null;
     let seconds = 0;
     let gameStarted = false;
 
+    /** @param {any[]} array */
     function shuffle(array) {
         const arr = [...array];
         for (let i = arr.length - 1; i > 0; i--) {
@@ -129,6 +132,7 @@ function initMemoryGame() {
         }, 1000);
     }
 
+    /** @param {HTMLElement} card */
     function flipCard(card) {
         // Ignore if already flipped, matched, or two cards are already showing
         if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length >= 2) {
@@ -194,7 +198,7 @@ function initMemoryGame() {
 
         // Save to leaderboard
         memoryLeaderboard.push({ moves: moves, time: seconds });
-        memoryLeaderboard.sort((a, b) => {
+        memoryLeaderboard.sort((/** @type {Record<string, any>} */ a, /** @type {Record<string, any>} */ b) => {
             if (a.moves !== b.moves) {
                 return a.moves - b.moves;
             }
@@ -202,7 +206,7 @@ function initMemoryGame() {
         });
         const _indexInTop5 = memoryLeaderboard
             .slice(0, 5)
-            .findIndex((entry) => entry.moves === moves && entry.time === seconds);
+            .findIndex((/** @type {Record<string, any>} */ entry) => entry.moves === moves && entry.time === seconds);
         memoryLeaderboard = memoryLeaderboard.slice(0, 5);
         AppStorage.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
         renderMemoryHighscores();

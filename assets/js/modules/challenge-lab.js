@@ -3,7 +3,7 @@
  * @description Interaktives Clean-Code, RegEx und Security Challenge Lab mit Sofort-Feedback
  */
 
-const CHALLENGES = [
+export const CHALLENGES = [
     {
         id: 'c1',
         title_de: 'Lab 1: SQL-Injection Sicherheitslücke aufspüren',
@@ -251,6 +251,10 @@ function renderChallenges() {
     });
 }
 
+/**
+ * @param {string} challengeId
+ * @param {string} optionId
+ */
 function handleAnswer(challengeId, optionId) {
     const challenge = CHALLENGES.find((c) => c.id === challengeId);
     if (!challenge) return;
@@ -306,6 +310,7 @@ function updateProgressHeader() {
     }
 }
 
+/** @param {string} str */
 function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

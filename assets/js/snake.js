@@ -21,6 +21,7 @@
     let nextDirection = 'RIGHT';
     let score = 0;
     let highscore = 0;
+    /** @type {Array<Record<string, any>>} */
     let highscoreList = [];
     let lastFrameTime = 0;
     let isPlaying = false;
@@ -89,6 +90,7 @@
     }
     window.addEventListener('resize', resizeCanvas);
 
+    /** @param {number} timestamp */
     function gameLoop(timestamp) {
         if (!isPlaying) return;
 
@@ -417,6 +419,7 @@
         }
     }
 
+    /** @param {KeyboardEvent} e */
     function handleKeyDown(e) {
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
             e.preventDefault();
@@ -468,6 +471,7 @@
 
         if (!upBtn || !leftBtn || !rightBtn || !downBtn) return;
 
+        /** @param {string} dir */
         const handlePress = (dir) => {
             if (!isPlaying) {
                 startGame();
@@ -494,6 +498,10 @@
             }
         };
 
+        /**
+         * @param {HTMLElement} btn
+         * @param {string} dir
+         */
         const addControlListener = (btn, dir) => {
             btn.addEventListener(
                 'touchstart',

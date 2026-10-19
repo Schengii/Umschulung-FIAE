@@ -1,6 +1,10 @@
 /**
  * Age Calculator Module — Dynamic age calculation from birth date
  * Replaces inline script from home.html
+ * @param {number} birthYear
+ * @param {number} birthMonth
+ * @param {number} birthDay
+ * @param {Date} [today]
  */
 export function calculateAge(birthYear, birthMonth, birthDay, today = new Date()) {
     let age = today.getFullYear() - birthYear;

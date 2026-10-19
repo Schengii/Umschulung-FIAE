@@ -20,6 +20,7 @@ export function initQrGenerator() {
 
     if (!companyInput || !nameInput || !targetSelect) return;
 
+    /** @type {ReturnType<typeof setTimeout> | null} */
     let debounceTimeout = null;
 
     // Helper to calculate the base URL path

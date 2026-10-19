@@ -29,6 +29,7 @@ export function initTheme() {
     });
 }
 
+/** @param {string} theme */
 function updateThemeIcon(theme) {
     const icon = document.querySelector('#theme-toggle i');
     if (!icon) return;

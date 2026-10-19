@@ -3,10 +3,16 @@
  * Spawns colorful paper particles on victory/highscores.
  */
 const Confetti = {
+    /** @type {HTMLCanvasElement | null} */
     canvas: null,
+    /** @type {CanvasRenderingContext2D | null} */
     ctx: null,
+    /** @type {Array<Record<string, any>>} */
     particles: [],
+    /** @type {number | null} */
     animationId: null,
+    /** @type {(() => void) | null} */
+    resizeHandler: null,
     isActive: false,
 
     start(durationMs = 3000) {

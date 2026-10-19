@@ -58,6 +58,7 @@ module.exports = [
         Request: 'readonly',
         Response: 'readonly',
         HTMLImageElement: 'readonly',
+        getComputedStyle: 'readonly',
         clients: 'readonly',
         // Cross-file browser globals. Classic <script> includes define them in the shared
         // global scope (constants.js: APP, STORAGE_KEYS; components.js: AppStorage;
@@ -85,6 +86,18 @@ module.exports = [
       'prefer-const': 'error',
       'no-alert': 'error',
       'no-useless-assignment': 'error',
+    },
+  },
+  {
+    // The happy-dom unit tests use the DOM constructors the page code relies on.
+    files: ['**/*.test.js'],
+    languageOptions: {
+      globals: {
+        KeyboardEvent: 'readonly',
+        File: 'readonly',
+        Storage: 'readonly',
+        globalThis: 'readonly',
+      },
     },
   },
   eslintConfigPrettier,

@@ -299,6 +299,7 @@ function setupElektroCheckScanner() {
 
     if (!runBtn || !clearBtn || !laser || !statusBox || !resultsCard || !resultsList) return;
 
+    /** @type {BoundingBoxRenderer | null} */
     let bboxRenderer = null;
 
     const defects = [

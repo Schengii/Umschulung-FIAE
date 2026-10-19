@@ -21,7 +21,7 @@ const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 const sitemapPages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, ''));
 
 const config = JSON.parse(fs.readFileSync(path.join(root, 'lighthouserc.json'), 'utf8'));
-const audited = new Set(config.ci.collect.url.map((url) => url.replace('http://localhost/', '')));
+const audited = new Set(config.ci.collect.url.map((/** @type {string} */ url) => url.replace('http://localhost/', '')));
 
 const missing = sitemapPages.filter((page) => !audited.has(page) && !EXCLUDED.has(page));
 const unknown = [...audited].filter((page) => !sitemapPages.includes(page));

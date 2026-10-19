@@ -70,6 +70,7 @@ export function initTranslation() {
     });
 }
 
+/** @param {string} lang */
 function updateLangToggleButton(lang) {
     const langToggle = document.getElementById('lang-toggle');
     if (!langToggle) return;

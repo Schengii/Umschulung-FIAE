@@ -2,6 +2,7 @@
  * PWA Installer Module — Shows custom floating install prompt banner
  */
 export function initPwaInstaller() {
+    /** @type {(Event & {prompt: () => void, userChoice: Promise<{outcome: string}>}) | null} */
     let deferredPrompt = null;
 
     // Listen for beforeinstallprompt event
@@ -9,7 +10,7 @@ export function initPwaInstaller() {
         // Prevent default browser prompt
         e.preventDefault();
         // Stash the event so it can be triggered later
-        deferredPrompt = e;
+        deferredPrompt = /** @type {typeof deferredPrompt} */ (e);
 
         // Show the banner
         const banner = document.getElementById('pwa-install-banner');

@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+/** @type {Record<string, Record<string, any>>} */
 const REPO_MAPPING = {
     'Amazon 2.0': {
         url: 'https://github.com/Schengii/Amazon2.0.git',
@@ -48,6 +49,12 @@ const REPO_MAPPING = {
 
 const rootDir = path.resolve(__dirname, '..');
 
+/**
+ * @param {string} src
+ * @param {string} dest
+ * @param {string[]} [ignoreList]
+ * @param {string[]} [preserveList]
+ */
 function copyRecursive(src, dest, ignoreList = [], preserveList = []) {
     if (!fs.existsSync(dest)) {
         fs.mkdirSync(dest, { recursive: true });
@@ -71,6 +78,10 @@ function copyRecursive(src, dest, ignoreList = [], preserveList = []) {
     }
 }
 
+/**
+ * @param {string} projectName
+ * @param {Record<string, any>} config
+ */
 async function syncProject(projectName, config) {
     const targetFullPath = path.resolve(rootDir, config.targetDir);
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `fiae-sync-${projectName}-`));

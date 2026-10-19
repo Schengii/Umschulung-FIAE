@@ -105,6 +105,7 @@ const quizProgress = document.getElementById('quiz-progress');
 // Spielvariablen
 let currentQuestionIndex = 0;
 let score = 0;
+/** @type {boolean[]} */
 let questionCorrectness = []; // Tracks correctness for each question
 
 function getActiveQuestions() {
@@ -182,8 +183,9 @@ function resetState() {
     }
 }
 
+/** @param {Event} e */
 function selectAnswer(e) {
-    const selectedBtn = e.target;
+    const selectedBtn = /** @type {HTMLElement} */ (e.target);
     const isCorrect = selectedBtn.dataset.correct === 'true';
     const questionIndex = currentQuestionIndex; // Capture current question index
 
@@ -224,7 +226,7 @@ function showScore() {
     // Determine weak categories from quiz. The site quiz itself has no categories (the exam
     // simulation records its own); without the guard this stored [null].
     const weakCategories = new Set();
-    questions.forEach((q, index) => {
+    questions.forEach((/** @type {Record<string, any>} */ q, index) => {
         if (!questionCorrectness[index] && q.category) {
             weakCategories.add(q.category);
         }

@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 2. Draw axis lines and text labels
-        skills.forEach((s, i) => {
+        skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
             const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
             const targetX = cx + maxRadius * Math.cos(angle);
             const targetY = cy + maxRadius * Math.sin(angle);
@@ -281,8 +281,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 3. Draw score polygon path
+        /** @type {string[]} */
         const polyPoints = [];
-        skills.forEach((s, i) => {
+        skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
             const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
             const scoreRad = maxRadius * (s.score / 100);
             const px = cx + scoreRad * Math.cos(angle);
@@ -296,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         svgEl.appendChild(radarPoly);
 
         // 4. Draw interactive circles (dots) on each vertex
-        skills.forEach((s, i) => {
+        skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
             const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
             const scoreRad = maxRadius * (s.score / 100);
             const px = cx + scoreRad * Math.cos(angle);

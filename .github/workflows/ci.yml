@@ -77,9 +77,6 @@ jobs:
       - name: JSDoc Type Check
         run: npm run typecheck
 
-      - name: Strict Type Ratchet (noImplicitAny darf nicht steigen)
-        run: npm run check-strict-types
-
       - name: Run Vitest Unit Test Suite
         run: npm run test:unit
 

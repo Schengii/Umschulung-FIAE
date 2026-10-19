@@ -27,6 +27,7 @@ if (!fs.existsSync(reportPath)) {
 }
 
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+/** @type {string[]} */
 const flaky = [];
 for (const suite of report.suites || []) collect(suite, flaky);
 

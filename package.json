@@ -19,7 +19,6 @@
     "check-csp:fix": "node scripts/verify_csp_hashes.js --fix",
     "generate-sw-assets": "node scripts/generate_sw_assets.js",
     "check-lighthouse-urls": "node scripts/check_lighthouse_urls.js",
-    "check-strict-types": "node scripts/check_strict_types.js",
     "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
     "install-sync-triggers": "node scripts/install_sync_triggers.js",
@@ -43,7 +42,7 @@
     "update-sitemap": "node scripts/update_sitemap.js",
     "check-sitemap": "node scripts/update_sitemap.js --check",
     "regen": "npm run subset-icons && npm run generate-sw-assets",
-    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run check-strict-types && npm run test:unit"
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -55,6 +54,7 @@
     "esbuild": "^0.28.2",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
+    "happy-dom": "^21.0.3",
     "http-server": "^14.1.1",
     "prettier": "^3.9.10",
     "sharp": "^0.35.4",

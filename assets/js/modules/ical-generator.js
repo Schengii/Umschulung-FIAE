@@ -8,6 +8,7 @@ export function initIcalGenerator() {
     const successDiv = document.getElementById('booking-success');
     if (!bookingBtn || !slotsContainer) return;
 
+    /** @type {string | null} */
     let selectedTime = null;
 
     slotsContainer.querySelectorAll('.btn-slot').forEach((btn) => {

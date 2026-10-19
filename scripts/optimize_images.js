@@ -18,6 +18,7 @@ if (!fs.existsSync(imgDir)) {
 
 const files = fs.readdirSync(imgDir);
 let totalBytes = 0;
+/** @type {Array<{file: string, kb: string | number}>} */
 const largeFiles = [];
 
 files.forEach((file) => {

@@ -46,6 +46,7 @@ function initTabs() {
 /* -------------------------------------------------------------
  * 1. Nutzwertanalyse (NWA)
  * ------------------------------------------------------------- */
+/** @type {Record<string, Record<string, any>>} */
 const NWA_PRESETS = {
     framework: {
         titleA: 'Option A (Lit 3.x / Web Components)',
@@ -93,6 +94,7 @@ function initNwa() {
     renderNwaTable();
 }
 
+/** @param {string} presetKey */
 function applyPreset(presetKey) {
     const preset = NWA_PRESETS[presetKey];
     if (!preset) return;
@@ -115,7 +117,7 @@ function renderNwaTable() {
     let totalScoreA = 0;
     let totalScoreB = 0;
 
-    currentCriteria.forEach((item, index) => {
+    currentCriteria.forEach((/** @type {Record<string, any>} */ item, /** @type {number} */ index) => {
         sumWeight += item.weight;
         const nutzwertA = (item.weight * item.scoreA) / 10;
         const nutzwertB = (item.weight * item.scoreB) / 10;
@@ -332,6 +334,7 @@ const FACHGESPRAECH_QUESTIONS = [
 let currentQuestionIndex = -1;
 let answeredCount = 0;
 let score = 0;
+/** @type {ReturnType<typeof setInterval> | null} */
 let timerInterval = null;
 let timeLeft = 90;
 
@@ -435,6 +438,7 @@ function revealAnswer() {
     }
 }
 
+/** @param {boolean} isGood */
 function gradeAnswer(isGood) {
     answeredCount++;
     if (isGood) score += 10;

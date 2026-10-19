@@ -9,6 +9,13 @@ export function initContactForm() {
     _bindContactForm('hire-me-form', 'hire-me-name', 'hire-me-email', 'hire-me-message', 'hire-me-feedback');
 }
 
+/**
+ * @param {string} formId
+ * @param {string} nameId
+ * @param {string} emailId
+ * @param {string} messageId
+ * @param {string} feedbackId
+ */
 function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
     const form = /** @type {HTMLFormElement} */ (document.getElementById(formId));
     if (!form) return;
@@ -171,6 +178,11 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
     });
 }
 
+/**
+ * @param {string} name
+ * @param {string} email
+ * @param {string} message
+ */
 function _triggerMailto(name, email, message) {
     const subject = encodeURIComponent(`Portfolio Kontakt von ${name}`);
     const body = encodeURIComponent(`${message}\n\n--\nGesendet von: ${name} (${email})`);

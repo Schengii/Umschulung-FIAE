@@ -3,20 +3,24 @@
  * Computes matching score between recruiter requirements and candidate's tech stack.
  */
 
+/**
+ * @param {Array<Record<string, any>>} activeSkills
+ * @param {Array<Record<string, any>>} projects
+ */
 export function computeMatchScore(activeSkills, projects) {
     if (!activeSkills || activeSkills.length === 0) return 0;
 
     let totalMaxMatch = 0;
     (projects || []).forEach((p) => {
         const tags =
-            (p.tags || []).map((t) => t.toLowerCase()).join(' ') +
+            (p.tags || []).map((/** @type {string} */ t) => t.toLowerCase()).join(' ') +
             ' ' +
             (p.language || '').toLowerCase() +
             ' ' +
             (p.descDe || '').toLowerCase();
         let matches = 0;
         activeSkills.forEach((s) => {
-            if (s.tags.some((t) => tags.includes(t))) {
+            if (s.tags.some((/** @type {string} */ t) => tags.includes(t))) {
                 matches++;
             }
         });
@@ -54,7 +58,7 @@ export function initSkillMatchmaker() {
     let projects = Array.isArray(window.projectsData) ? window.projectsData : [];
     if (projects.length === 0) {
         fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json'))
-            .then((res) => (res.ok ? res.json() : []))
+            .then((res) => (res.ok ? res.json() : /** @type {Array<Record<string, any>>} */ ([])))
             .then((data) => {
                 if (Array.isArray(data)) {
                     projects = data;

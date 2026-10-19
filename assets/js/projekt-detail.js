@@ -1,3 +1,5 @@
+/** @typedef {Record<string, any>} ProjectDetailData */
+
 document.addEventListener('DOMContentLoaded', () => {
     const detailContainer = document.getElementById('project-detail-container');
     const breadcrumbCurrent = document.getElementById('breadcrumb-current-project');
@@ -10,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Stored values can be damaged (manual edits, a half-written entry on a full quota); a
     // parse error there must not take the whole detail page down.
+    /** @param {string | null | undefined} text */
     function parseStoredList(text) {
         try {
             const parsed = JSON.parse(text || '[]');
@@ -57,17 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fetch all project data sources
             const [staticProjects, githubRepos, customProjects] = await Promise.all([
                 fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json')).then((res) =>
-                    res.ok ? res.json() : []
+                    res.ok
+                        ? /** @type {Promise<ProjectDetailData[]>} */ (res.json())
+                        : /** @type {ProjectDetailData[]} */ ([])
                 ),
                 fetchGitHubRepos(),
                 parseStoredList(AppStorage.getItem(STORAGE_KEYS.PORTFOLIO_CUSTOM_PROJECTS)),
             ]);
 
-            const githubRepoMap = new Map(githubRepos.map((repo) => [repo.name.toLowerCase(), repo]));
+            const githubRepoMap = new Map(
+                githubRepos.map((/** @type {ProjectDetailData} */ repo) => [repo.name.toLowerCase(), repo])
+            );
 
             // Combine all projects into one list
             const allProjects = [
-                ...staticProjects.map((proj) => {
+                ...staticProjects.map((/** @type {ProjectDetailData} */ proj) => {
                     const enriched = { ...proj };
                     if (enriched.repoName) {
                         const ghRepo = githubRepoMap.get(enriched.repoName.toLowerCase());
@@ -114,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /** @param {ProjectDetailData} project */
     function renderProjectDetails(project) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const title = lang === 'de' ? project.titleDe : project.titleEn;
@@ -124,7 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
             breadcrumbCurrent.textContent = title;
         }
 
-        const tagsHTML = (project.tags || []).map((tag) => `<span class="tech-tag">${tag}</span>`).join(' ');
+        const tagsHTML = (project.tags || [])
+            .map((/** @type {string} */ tag) => `<span class="tech-tag">${tag}</span>`)
+            .join(' ');
 
         let buttonsHTML = '<div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">';
         if (project.link) {
@@ -169,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3 lang="en"><i class="fa-solid fa-file-powerpoint" style="color: #d24726;"></i> Project Presentations</h3>
                 <div class="download-card-container">
             `;
-            project.downloadPpts.forEach((ppt) => {
+            project.downloadPpts.forEach((/** @type {ProjectDetailData} */ ppt) => {
                 const pptUrl = (window.resolveAssetPath || ((p) => p))(ppt.url);
                 mediaHTML += `
                     <a href="${pptUrl}" class="ppt-download-card" download>
@@ -263,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="architecture-badges-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0;">
                     ${project.architectureBadges
                         .map(
-                            (b) => `
+                            (/** @type {ProjectDetailData} */ b) => `
                         <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
                             <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i>${b.name}
                         </span>
@@ -312,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <ul style="margin: 0.35rem 0 0 1.2rem; padding: 0;">
                                     ${kl.architectureHighlightsDe
                                         .map(
-                                            (hDe, i) => `
+                                            (/** @type {string} */ hDe, /** @type {number} */ i) => `
                                         <li>
                                             <span lang="de">${hDe}</span>
                                             <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
@@ -382,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
     }
 
+    /** @param {ProjectDetailData} project */
     function initProjectVideoPlayer(project) {
         const videoEl = /** @type {HTMLVideoElement} */ (document.getElementById('project-video-player'));
         const tracksContainer = document.getElementById('project-video-tracks');
@@ -420,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         tracksContainer.innerHTML = '';
-        project.videoPlaylist.forEach((videoItem, index) => {
+        project.videoPlaylist.forEach((/** @type {ProjectDetailData} */ videoItem, /** @type {number} */ index) => {
             const btn = document.createElement('button');
             btn.className = 'playlist-track-btn';
 
@@ -457,16 +468,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVideoUI(false);
     }
 
+    /**
+     * @param {ProjectDetailData} currentProject
+     * @param {ProjectDetailData[]} allProjects
+     */
     function renderRelatedProjects(currentProject, allProjects) {
         if (!relatedSection || !relatedContainer) return;
 
-        const currentTags = new Set((currentProject.tags || []).map((t) => t.toLowerCase()));
+        const currentTags = new Set((currentProject.tags || []).map((/** @type {string} */ t) => t.toLowerCase()));
         const currentId = currentProject.repoName || currentProject.titleDe;
 
         const related = allProjects
             .filter((p) => (p.repoName || p.titleDe) !== currentId) // Exclude self
             .map((p) => {
-                const otherTags = new Set((p.tags || []).map((t) => t.toLowerCase()));
+                const otherTags = new Set((p.tags || []).map((/** @type {string} */ t) => t.toLowerCase()));
                 const commonTags = new Set([...currentTags].filter((tag) => otherTags.has(tag)));
                 return { project: p, score: commonTags.size };
             })
@@ -482,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /** @param {ProjectDetailData} project */
     function generateRelatedCard(project) {
         const url = project.repoName
             ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
@@ -502,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    /** @param {ProjectDetailData} project */
     function initIhkStepper(project) {
         const prevBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-prev-btn'));
         const nextBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-next-btn'));
@@ -554,6 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSlide();
     }
 
+    /** @param {ProjectDetailData} project */
     function initCodeExplorer(project) {
         const treeContainer = document.getElementById('explorer-tree');
         const activeFileEl = document.getElementById('explorer-active-file');
@@ -563,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         treeContainer.innerHTML = '';
 
-        project.codeFiles.forEach((fileItem, index) => {
+        project.codeFiles.forEach((/** @type {ProjectDetailData} */ fileItem, /** @type {number} */ index) => {
             const item = document.createElement('div');
             item.className = 'tree-item';
             item.setAttribute('role', 'button');
@@ -617,6 +635,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * @param {string} filePath
+     * @param {string} fileType
+     */
     async function loadCodeFile(filePath, fileType) {
         const codeView = document.getElementById('explorer-code-view');
         if (!codeView) return;
@@ -642,6 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /** @param {ProjectDetailData} project */
     function initLiveDemoModal(project) {
         const startBtn = document.getElementById('start-live-demo');
         if (!startBtn) return;

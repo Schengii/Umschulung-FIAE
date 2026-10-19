@@ -36,6 +36,7 @@ export function initImpressumEnhancements() {
 
     if (!slots.length || !confirmBtn || !successDiv) return;
 
+    /** @type {string | null} */
     let selectedSlot = null;
 
     slots.forEach((slot) => {

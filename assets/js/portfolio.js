@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const DEFAULT_SORT_ORDER = 'desc';
 
     // State for filtering and pagination (Page 1 = 8 projects to show all curated flagships seamlessly)
+    /** @type {Array<Record<string, any>>} */
     let allProjects = [];
     let currentPage = 1;
     const FIRST_PAGE_PROJECTS = 8;
@@ -172,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dynamic Card Generator
+    /** @param {Record<string, any>} project */
     function generateDynamicCardHTML(project) {
         const isGame = project.category && project.category.includes('games');
         const isAi = project.category && project.category.includes('ai');
@@ -179,7 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build tags (guard against null/empty)
         const tags = Array.isArray(project.tags) ? project.tags : [];
         const tagsHTML =
-            tags.length > 0 ? tags.map((tag) => `<span class="tech-tag">${tag}</span>`).join('\n        ') : '';
+            tags.length > 0
+                ? tags.map((/** @type {string} */ tag) => `<span class="tech-tag">${tag}</span>`).join('\n        ')
+                : '';
 
         // Build image
         let imageHTML = '';
@@ -270,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (project.category) {
             categoryClass = project.category
                 .split(' ')
-                .map((c) => `filter-${c}`)
+                .map((/** @type {string} */ c) => `filter-${c}`)
                 .join(' ');
         } else {
             categoryClass = 'filter-web';
@@ -347,10 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 (proj.language && proj.language.toLowerCase() === currentCategory) ||
                 (currentCategory === 'cpp' &&
                     (proj.language === 'C++' ||
-                        (proj.tags && proj.tags.some((t) => t.toLowerCase().includes('c++'))))) ||
+                        (proj.tags && proj.tags.some((/** @type {string} */ t) => t.toLowerCase().includes('c++'))))) ||
                 (currentCategory === 'typescript' &&
                     (proj.language?.toLowerCase() === 'typescript' ||
-                        (proj.tags && proj.tags.some((t) => t.toLowerCase().includes('typescript')))));
+                        (proj.tags &&
+                            proj.tags.some((/** @type {string} */ t) => t.toLowerCase().includes('typescript')))));
 
             if (!matchesCategory) return false;
 
@@ -359,14 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const titleEn = (proj.titleEn || '').toLowerCase();
                 const descDe = (proj.descDe || '').toLowerCase();
                 const descEn = (proj.descEn || '').toLowerCase();
-                const tags = (proj.tags || []).map((t) => t.toLowerCase());
+                const tags = (proj.tags || []).map((/** @type {string} */ t) => t.toLowerCase());
 
                 return (
                     titleDe.includes(currentSearchTerm) ||
                     titleEn.includes(currentSearchTerm) ||
                     descDe.includes(currentSearchTerm) ||
                     descEn.includes(currentSearchTerm) ||
-                    tags.some((tag) => tag.includes(currentSearchTerm))
+                    tags.some((/** @type {string} */ tag) => tag.includes(currentSearchTerm))
                 );
             }
             return true;
@@ -404,11 +409,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(new CustomEvent('langchange', { detail: activeLang }));
     }
 
+    /** @param {number} totalProjects */
     function calculateTotalPages(totalProjects) {
         if (totalProjects <= FIRST_PAGE_PROJECTS) return 1;
         return 1 + Math.ceil((totalProjects - FIRST_PAGE_PROJECTS) / SUBSEQUENT_PAGE_PROJECTS);
     }
 
+    /** @param {number} totalProjects */
     function renderPagination(totalProjects) {
         if (!paginationContainer) return;
         paginationContainer.innerHTML = '';
@@ -449,8 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'ManuFaktur',
         'Minecraft',
     ];
+    /** @type {string[]} */
     const DEPRIORITIZED_REPOS = [];
 
+    /** @param {string} repoName */
     function projectTier(repoName) {
         if (repoName === 'EcoChef') return 0;
         if (FEATURED_REPOS.includes(repoName)) return 1;
@@ -458,6 +467,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return 2;
     }
 
+    /**
+     * @param {Array<Record<string, any>>} projects
+     * @param {string} order
+     */
     function sortProjects(projects, order) {
         return [...projects].sort((a, b) => {
             const tierA = projectTier(a.repoName);
@@ -487,6 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSearchbarPlaceholder(e.detail || 'de');
     });
 
+    /** @param {string} lang */
     function updateSearchbarPlaceholder(lang) {
         if (!searchInput) return;
         searchInput.placeholder = lang === 'de' ? '🔍 Projekte durchsuchen...' : '🔍 Search projects...';
@@ -575,6 +589,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Game Modal Functions
+    /**
+     * @param {string} gameUrl
+     * @param {string} gameTitle
+     */
     function openGameModal(gameUrl, gameTitle) {
         let modal = document.getElementById('game-modal');
         if (!modal) {
@@ -595,83 +613,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             document.body.appendChild(modal);
 
-            // Inject game modal styles
-            const style = document.createElement('style');
-            style.textContent = `
-                .game-modal {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 10000;
-                    opacity: 0;
-                    pointer-events: none;
-                    transition: opacity 0.3s ease;
-                }
-                .game-modal.show {
-                    opacity: 1;
-                    pointer-events: all;
-                }
-                .game-modal-backdrop {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.85);
-                    backdrop-filter: blur(5px);
-                }
-                .game-modal-content {
-                    position: relative;
-                    width: 95%;
-                    max-width: 950px;
-                    background: var(--bg-card);
-                    border: 1px solid var(--border);
-                    border-radius: var(--radius-lg, 12px);
-                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-                    overflow: hidden;
-                    transform: scale(0.95);
-                    transition: transform 0.3s ease;
-                }
-                .game-modal.show .game-modal-content {
-                    transform: scale(1);
-                }
-                .game-modal-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 0.75rem 1.25rem;
-                    border-bottom: 1px solid var(--border);
-                }
-                .game-modal-title {
-                    margin: 0;
-                    font-size: 1.15rem;
-                    font-weight: 700;
-                    color: var(--text-primary);
-                }
-                .game-modal-close {
-                    background: none;
-                    border: none;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    cursor: pointer;
-                    color: var(--text-muted);
-                    transition: color 0.2s;
-                }
-                .game-modal-close:hover {
-                    color: var(--primary);
-                }
-                .game-modal-body {
-                    padding: 0;
-                    background: #000;
-                }
-            `;
-            document.head.appendChild(style);
-
             modal.querySelector('.game-modal-close').addEventListener('click', closeGameModal);
             modal.querySelector('.game-modal-backdrop').addEventListener('click', closeGameModal);
         }
@@ -685,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'hidden';
 
         // Keyboard handler for Game Modal Escape
-        const handleEsc = (e) => {
+        const handleEsc = (/** @type {KeyboardEvent} */ e) => {
             if (e.key === 'Escape') {
                 closeGameModal();
                 document.removeEventListener('keydown', handleEsc);

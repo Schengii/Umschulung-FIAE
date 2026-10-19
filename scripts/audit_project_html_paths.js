@@ -4,6 +4,10 @@ const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const projekteDir = path.join(rootDir, 'Projekte');
 
+/**
+ * @param {string} dir
+ * @returns {string[]}
+ */
 function scanHtmlFiles(dir) {
     const results = [];
     const files = fs.readdirSync(dir);
@@ -24,7 +28,7 @@ console.log(`Auditing ${htmlFiles.length} HTML files in Projekte/...`);
 
 let issuesFound = 0;
 
-htmlFiles.forEach((filePath) => {
+htmlFiles.forEach((/** @type {string} */ filePath) => {
     const relPath = path.relative(rootDir, filePath);
     const content = fs.readFileSync(filePath, 'utf8');
 

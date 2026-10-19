@@ -6,6 +6,7 @@
 (function () {
     'use strict';
 
+    /** @type {Array<Record<string, any>>} */
     const selectedProjects = [];
     const MAX_COMPARE = 3;
 
@@ -121,7 +122,7 @@
                 const title = lang === 'de' ? p.titleDe : p.titleEn;
                 const badges = (p.architectureBadges || [])
                     .map(
-                        (b) =>
+                        (/** @type {Record<string, any>} */ b) =>
                             `<span class="badge" style="background: ${b.color}15; color: ${b.color}; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${b.name}</span>`
                     )
                     .join(' ');
@@ -147,7 +148,7 @@
                     <div class="compare-feature-row">
                         <strong>Tech-Stack &amp; Frameworks</strong>
                         <div class="tech-tags" style="margin-top: 4px;">
-                            ${(p.tags || []).map((t) => `<span class="tech-tag" style="font-size: 0.7rem;">${t}</span>`).join('')}
+                            ${(p.tags || []).map((/** @type {string} */ t) => `<span class="tech-tag" style="font-size: 0.7rem;">${t}</span>`).join('')}
                         </div>
                     </div>
 

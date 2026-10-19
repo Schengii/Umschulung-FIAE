@@ -13,6 +13,7 @@ function initSkillBridge() {
 
     if (!bridgeButtons.length || !displayEl) return;
 
+    /** @type {Record<string, Record<string, any>>} */
     const bridgeData = {
         trouble: {
             titleDe: 'Systematisches Troubleshooting',
@@ -34,6 +35,7 @@ function initSkillBridge() {
         },
     };
 
+    /** @param {string} key */
     function updateBridge(key) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const item = bridgeData[key];
@@ -73,6 +75,7 @@ function initCertificatesCarousel() {
 
     let currentSlide = 0;
 
+    /** @param {number} index */
     function showSlide(index) {
         slides.forEach((slide, i) => {
             slide.style.display = i === index ? 'block' : 'none';

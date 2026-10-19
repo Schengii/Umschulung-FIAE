@@ -12,6 +12,7 @@ export function initRoadmap() {
     if (!roadmapItems.length || !drawer || !overlay || !closeBtn || !drawerContent) return;
 
     // Database of phase details
+    /** @type {Record<string, Record<string, any>>} */
     const phaseData = {
         1: {
             title_de: 'Phase 1: Grundlagen & Algorithmen',
@@ -163,6 +164,10 @@ export function initRoadmap() {
         if (e.key === 'Escape') closeDrawer();
     });
 
+    /**
+     * @param {Record<string, any>} data
+     * @param {string} phaseId
+     */
     function openDrawer(data, phaseId) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
@@ -172,7 +177,7 @@ export function initRoadmap() {
         // Topics HTML (Interactive Checklist)
         const topics = lang === 'de' ? data.topics_de : data.topics_en;
         const topicsListHTML = topics
-            .map((t, idx) => {
+            .map((/** @type {string} */ t, /** @type {number} */ idx) => {
                 const storageKey = `fiae_progress_phase_${phaseId}_topic_${idx}`;
                 const checked = AppStorage.getItem(storageKey) === 'true' ? 'checked' : '';
                 return `
@@ -269,6 +274,7 @@ export function initRoadmap() {
         document.body.style.overflow = ''; // Enable page scrolling
     }
 
+    /** @param {string} str */
     function escapeHTML(str) {
         return str
             .replace(/&/g, '&amp;')

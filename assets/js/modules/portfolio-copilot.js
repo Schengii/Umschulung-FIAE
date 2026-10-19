@@ -296,6 +296,7 @@ function resetChatHistory() {
     `;
 }
 
+/** @param {string} queryText */
 function handleUserQuery(queryText) {
     const messages = document.getElementById('copilot-messages');
     if (!messages) return;

@@ -43,6 +43,7 @@
         }
     });
 
+    /** @param {HTMLElement} card */
     function openModal(card) {
         const titleDe = card.dataset.titleDe || '';
         const titleEn = card.dataset.titleEn || '';
@@ -59,7 +60,7 @@
         }
 
         const tagsHTML = tags.length
-            ? `<div class="tech-tags">${tags.map((t) => `<span class="tech-tag">${t}</span>`).join('')}</div>`
+            ? `<div class="tech-tags">${tags.map((/** @type {string} */ t) => `<span class="tech-tag">${t}</span>`).join('')}</div>`
             : '';
 
         // Check if there is a video playlist in window.projectsData
@@ -72,7 +73,7 @@
         let images;
         try {
             images = card.dataset.images ? JSON.parse(decodeURIComponent(card.dataset.images)) : [];
-            images = images.filter((img) => img);
+            images = images.filter((/** @type {string} */ img) => img);
         } catch (_) {
             images = image ? [image] : [];
         }
@@ -114,7 +115,7 @@
             hasCarousel = true;
             const slides = images
                 .map(
-                    (img) => `
+                    (/** @type {string} */ img) => `
             <img src="${(window.resolveAssetPath || ((p) => p))(img)}" class="carousel-slide-img" alt="${titleDe}" data-img-fallback="fallback">
         `
                 )
@@ -122,7 +123,7 @@
 
             const dots = images
                 .map(
-                    (_, idx) => `
+                    (/** @type {unknown} */ _, /** @type {number} */ idx) => `
             <button class="carousel-dot${idx === 0 ? ' active' : ''}" data-index="${idx}" aria-label="Slide ${idx + 1}"></button>
         `
                 )
@@ -208,7 +209,7 @@
               <ul style="margin: 0.35rem 0 0 1.2rem; padding: 0;">
                 ${kl.architectureHighlightsDe
                     .map(
-                        (hDe, i) => `
+                        (/** @type {string} */ hDe, /** @type {number} */ i) => `
                   <li>
                     <span lang="de">${hDe}</span>
                     <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
@@ -294,6 +295,7 @@
             let activeIdx = 0;
             const maxIdx = images.length - 1;
 
+            /** @param {number} newIdx */
             const updateCarousel = (newIdx) => {
                 activeIdx = newIdx;
                 track.style.transform = `translateX(-${activeIdx * 100}%)`;
