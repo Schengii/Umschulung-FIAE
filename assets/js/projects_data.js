@@ -18,7 +18,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Amazon-2.0",
-    "updatedAt": "2026-10-18T19:30:00.099Z",
+    "updatedAt": "2026-10-18T08:24:11.454Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +164,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
-    "updatedAt": "2026-10-18T19:30:00.307Z",
+    "updatedAt": "2026-10-18T08:24:11.549Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -189,7 +189,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-10-18T19:30:00.505Z",
+    "updatedAt": "2026-10-18T08:24:11.650Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -364,7 +364,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft",
-    "updatedAt": "2026-10-18T19:30:01.466Z"
+    "updatedAt": "2026-10-18T08:24:12.191Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -385,7 +385,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-10-18T19:30:02.142Z",
+    "updatedAt": "2026-10-18T08:24:12.288Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
