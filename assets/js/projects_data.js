@@ -18,7 +18,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Amazon-2.0",
-    "updatedAt": "2026-10-18T08:24:11.454Z",
+    "updatedAt": "2026-10-19T17:42:13.126Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +164,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/EcoChef",
-    "updatedAt": "2026-10-18T08:24:11.549Z",
+    "updatedAt": "2026-10-19T17:42:13.265Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -189,7 +189,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ElektroCheck-AI",
-    "updatedAt": "2026-10-18T08:24:11.650Z",
+    "updatedAt": "2026-10-19T17:42:13.411Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -214,7 +214,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-10-17T10:52:48Z",
+    "updatedAt": "2026-10-19T17:25:59Z",
     "images": [
       "assets/images/finanzenportfolio_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -301,7 +301,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-17T18:00:12Z"
+    "updatedAt": "2026-10-19T17:25:11Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -322,7 +322,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-18T08:15:10Z",
+    "updatedAt": "2026-10-19T17:18:41Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -364,7 +364,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Minecraft",
-    "updatedAt": "2026-10-18T08:24:12.191Z"
+    "updatedAt": "2026-10-19T17:42:14.167Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -385,7 +385,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-10-18T08:24:12.288Z",
+    "updatedAt": "2026-10-19T17:42:14.299Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
