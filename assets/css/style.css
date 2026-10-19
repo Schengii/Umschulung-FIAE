@@ -7925,3 +7925,56 @@ textarea:focus-visible,
     justify-content: flex-end;
     gap: 0.75rem;
 }
+
+/* ==========================================================================
+   Layout and contrast fixes (light theme, narrow screens)
+   ========================================================================== */
+
+/* premium-effects.js adds .card-glass to every .card; its !important background (a translucent
+   white in the light theme) hid the white text of the green status card. A darker green keeps
+   white text above 4.5:1 in both themes. */
+.card.status-widget.card-glass {
+    background: linear-gradient(135deg, #047857, #065f46) !important;
+    border: none !important;
+    color: white;
+}
+
+.card.status-widget.card-glass :is(h2, h3, .status-title) {
+    color: white;
+}
+
+.card.status-widget.card-glass :is(p, .status-text) {
+    color: #ecfdf5;
+}
+
+.card.status-widget.card-glass .btn-secondary {
+    color: white;
+    border-color: white;
+    background: transparent;
+}
+
+/* Grid children default to min-width: auto and grew to the width of their widest content (the
+   contribution heatmap, long headings), which pushed the column past the viewport and got it
+   clipped. */
+.layout-grid > *,
+.simulator-layout > * {
+    min-width: 0;
+}
+
+@media screen and (max-width: 900px) {
+    .layout-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .simulator-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* "DE | EN" wrapped onto two lines at phone width. */
+.topnav #lang-toggle {
+    white-space: nowrap;
+    gap: 0.35rem;
+}

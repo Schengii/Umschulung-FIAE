@@ -543,3 +543,14 @@
     color: var(--primary);
 }
 
+
+/* Let the download cards shrink and wrap instead of running past a phone viewport. */
+.ppt-download-card {
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.ppt-download-card > * {
+    min-width: 0;
+}

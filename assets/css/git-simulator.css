@@ -360,3 +360,8 @@
     flex-grow: 1;
     padding: 0;
 }
+
+/* A text input keeps an intrinsic minimum width and pushed the terminal past a phone viewport. */
+#terminal-input {
+    min-width: 0;
+}
