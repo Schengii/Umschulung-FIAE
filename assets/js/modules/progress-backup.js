@@ -398,4 +398,7 @@ export function initProgressBackup() {
         // Every widget on the page read its data at load time.
         setTimeout(() => window.location.reload(), 800);
     });
+
+    // The module loads lazily; the E2E specs wait for this before they click.
+    card.setAttribute('data-ready', 'true');
 }
