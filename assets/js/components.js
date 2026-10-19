@@ -553,6 +553,11 @@ document.addEventListener('DOMContentLoaded', () => {
     earlyLayoutObserver.disconnect();
     // Fallback for anything the observer did not catch.
     injectHeader();
+    // Pages with their own <h1> would otherwise have two; the banner title then is plain text.
+    const bannerTitle = document.querySelector('.app-header .header-title');
+    if (bannerTitle && document.querySelector('h1:not(.app-header h1)')) {
+        bannerTitle.setAttribute('role', 'presentation');
+    }
     initBreadcrumbs();
 
     const path = window.location.pathname;
