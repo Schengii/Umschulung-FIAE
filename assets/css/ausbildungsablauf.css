@@ -1,0 +1,116 @@
+/* Rules that only apply on pages/ausbildungsablauf.html (split out of style.css). */
+/* ==========================================================================
+   FEATURE 2: INTERAKTIVE LERNROADMAP
+   ========================================================================== */
+.roadmap-timeline {
+    position: relative;
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+}
+
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+}
+
+.roadmap-item:hover .roadmap-badge {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-on-primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.roadmap-item:hover .roadmap-badge i {
+    color: white;
+}
+
+/* Detail Drawer (Roadmap) */
+.roadmap-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    max-width: 90vw;
+    height: 100vh;
+    background-color: var(--bg-card);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.roadmap-drawer.open {
+    right: 0;
+}
+
+.roadmap-drawer-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roadmap-drawer-content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.roadmap-drawer-close:hover {
+    color: var(--primary);
+}
+
+.roadmap-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.roadmap-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.code-snippet-wrapper pre {
+    margin: 0;
+    padding: 1.25rem 1rem 1rem 1rem;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.code-copy-btn:hover {
+    background: var(--primary);
+    color: var(--text-on-primary);
+    border-color: var(--primary);
+}
+
+.aside-image-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0;
+}
+.grid-3-col {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    gap: 1rem !important;
+}

@@ -58,6 +58,7 @@ module.exports = [
         Request: 'readonly',
         Response: 'readonly',
         HTMLImageElement: 'readonly',
+        getComputedStyle: 'readonly',
         clients: 'readonly',
         // Cross-file browser globals. Classic <script> includes define them in the shared
         // global scope (constants.js: APP, STORAGE_KEYS; components.js: AppStorage;

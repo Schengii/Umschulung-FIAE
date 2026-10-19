@@ -1,0 +1,1000 @@
+/**
+ * @file playground-templates.js
+ * @description Starter templates of the code playground (playground.html): each entry has a
+ * bilingual title and the HTML, CSS and JavaScript that are loaded into the three editors.
+ * Pure data, kept apart from playground.js (the editor and preview logic).
+ */
+
+/** @type {Record<string, Record<string, any>>} */
+export const PLAYGROUND_TEMPLATES = {
+    counter: {
+        titleDe: 'Zähler-Button (Interactive Button)',
+        titleEn: 'Counter Button (Interactive Button)',
+        html: `<div class="app-container">
+    <h2>Zähler-Demo</h2>
+    <p>Klicke auf den Button, um den Wert zu erhöhen!</p>
+    <button id="counter-btn" class="btn">Klicks: <span id="count">0</span></button>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #0f172a;
+    color: #f8fafc;
+}
+.app-container {
+    text-align: center;
+    padding: 2rem;
+    background: #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid #334155;
+}
+.btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+.btn:active {
+    transform: translateY(0);
+}`,
+        js: `// Button Zähler-Logik
+const button = document.getElementById('counter-btn');
+const display = document.getElementById('count');
+let count = 0;
+
+button.addEventListener('click', () => {
+    count++;
+    display.textContent = count;
+    console.log('Button geklickt! Neuer Zählerstand:', count);
+
+    // Audio-Effekt simulieren im iFrame
+    if (count % 10 === 0) {
+        console.log('🎉 Jubiläum! 10er Marke erreicht!');
+    }
+});`,
+    },
+    flexbox: {
+        titleDe: 'CSS Flexbox Layout-Switcher',
+        titleEn: 'CSS Flexbox Layout Switcher',
+        html: `<div class="container">
+    <div class="controls">
+        <button id="toggle-dir-btn">Layout umschalten (Direction)</button>
+    </div>
+    <div class="flex-wrapper" id="flex-wrapper">
+        <div class="box box-1">Box 1</div>
+        <div class="box box-2">Box 2</div>
+        <div class="box box-3">Box 3</div>
+    </div>
+</div>`,
+        css: `body {
+    font-family: sans-serif;
+    margin: 0;
+    background: #111827;
+    color: #f3f4f6;
+    padding: 1.5rem;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.controls {
+    margin-bottom: 1rem;
+}
+button {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.flex-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px dashed #4b5563;
+    transition: flex-direction 0.3s ease;
+    min-height: 200px;
+}
+.box {
+    flex: 1;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 6px;
+    color: white;
+    font-size: 1.2rem;
+}
+.box-1 { background: #ef4444; }
+.box-2 { background: #3b82f6; }
+.box-3 { background: #f59e0b; }`,
+        js: `// Flexbox Umschalter
+const wrapper = document.getElementById('flex-wrapper');
+const button = document.getElementById('toggle-dir-btn');
+
+button.addEventListener('click', () => {
+    const currentDir = wrapper.style.flexDirection || 'row';
+    const nextDir = currentDir === 'row' ? 'column' : 'row';
+    wrapper.style.flexDirection = nextDir;
+    console.log('Flex-direction geändert zu:', nextDir);
+});`,
+    },
+    canvas: {
+        titleDe: 'HTML5 Canvas Ball-Physik',
+        titleEn: 'HTML5 Canvas Ball Physics',
+        html: `<div class="canvas-container">
+    <h3>Bouncing Ball (Physics Loop)</h3>
+    <canvas id="physics-canvas" width="400" height="250"></canvas>
+    <p class="desc">Klicke in den Canvas, um den Ball nach oben zu kicken!</p>
+</div>`,
+        css: `body {
+    font-family: Arial, sans-serif;
+    background: #18181b;
+    color: #e4e4e7;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.canvas-container {
+    text-align: center;
+}
+canvas {
+    background: #09090b;
+    border: 2px solid #27272a;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.desc {
+    font-size: 0.85rem;
+    color: #a1a1aa;
+}`,
+        js: `// Canvas Physik Loop
+const canvas = document.getElementById('physics-canvas');
+const ctx = canvas.getContext('2d');
+
+let ball = {
+    x: 200,
+    y: 50,
+    radius: 16,
+    vx: 3,
+    vy: 0,
+    gravity: 0.2,
+    bounce: 0.75
+};
+
+canvas.addEventListener('click', () => {
+    ball.vy = -6; // Kick up!
+    console.log('⚽ Ball gekickt! Y-Geschwindigkeit:', ball.vy);
+});
+
+function draw() {
+    // Clear
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Physics update
+    ball.vy += ball.gravity;
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    
+    // Boundary collision X
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.vx = -ball.vx;
+        ball.x = ball.x + ball.radius > canvas.width ? canvas.width - ball.radius : ball.radius;
+    }
+    
+    // Boundary collision Y
+    if (ball.y + ball.radius > canvas.height) {
+        ball.y = canvas.height - ball.radius;
+        ball.vy = -ball.vy * ball.bounce;
+        // Stop tiny wobbles
+        if (Math.abs(ball.vy) < 1) ball.vy = 0;
+    }
+    
+    // Draw ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = '#f43f5e';
+    ctx.fill();
+    ctx.closePath();
+    
+    requestAnimationFrame(draw);
+}
+
+console.log('Physik-Simulation gestartet.');
+draw();`,
+    },
+    'sps-logic': {
+        titleDe: 'SPS Selbsthalteschaltung (SPS/PLC Simulator)',
+        titleEn: 'PLC Latch Circuit (PLC Simulator)',
+        html: `<div class="sps-simulator">
+    <h2>⚡ SPS / PLC Logik-Simulator ⚡</h2>
+    <p>Simuliere eine Selbsthalteschaltung (Start/Stop-Latch-Schaltkreis) in Echtzeit.</p>
+    
+    <div class="field-panel">
+        <div class="panel-section">
+            <h3>Taster / Push Buttons</h3>
+            <button id="s1-btn" class="push-button s1-no">START (S1 - Schließer)</button>
+            <button id="s0-btn" class="push-button s0-nc">STOPP (S0 - Öffner)</button>
+        </div>
+        
+        <div class="panel-section">
+            <h3>Ausgang / Output</h3>
+            <div class="motor-box">
+                <div class="motor-icon" id="motor-indicator">⚙️</div>
+                <div class="motor-label">Motor (Q0.0): <span id="q0-text">AUS / OFF</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ladder-diagram">
+        <h3>Kontaktplan (KOP) / Ladder Diagram</h3>
+        <div class="ladder-rung">
+            <div class="rail left-rail"></div>
+            
+            <div class="rung-path">
+                <div class="rung-branch">
+                    <div class="branch-top path-segment" id="path-top">
+                        <span class="contact no-contact" id="c-s1">S1 (Start)</span>
+                    </div>
+                    <div class="branch-bottom path-segment" id="path-bottom">
+                        <span class="contact no-contact" id="c-q0">Q0.0</span>
+                    </div>
+                </div>
+                <div class="rung-connector path-segment" id="path-connector"></div>
+                <div class="rung-series path-segment" id="path-series">
+                    <span class="contact nc-contact" id="c-s0">S0 (Stopp)</span>
+                </div>
+                <div class="rung-coil path-segment" id="path-coil">
+                    <span class="coil" id="coil-q0">Q0.0</span>
+                </div>
+            </div>
+            
+            <div class="rail right-rail"></div>
+        </div>
+    </div>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    margin: 0;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.sps-simulator {
+    width: 100%;
+    max-width: 500px;
+    background: #1e293b;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+h2, h3 {
+    text-align: center;
+    margin-top: 0;
+}
+h2 {
+    color: #38bdf8;
+    font-size: 1.4rem;
+}
+h3 {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.field-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.panel-section {
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.push-button {
+    padding: 0.75rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+    user-select: none;
+}
+.s1-no {
+    background: #064e3b;
+    color: #6ee7b7;
+    border: 2px solid #047857;
+}
+.s1-no.active {
+    background: #059669;
+    box-shadow: 0 0 12px #059669;
+}
+.s0-nc {
+    background: #450a0a;
+    color: #ef4444;
+    border: 2px solid #b91c1c;
+}
+.s0-nc.active {
+    background: #991b1b;
+    color: #fca5a5;
+}
+.motor-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.motor-icon {
+    font-size: 3rem;
+    margin-bottom: 0.25rem;
+    transition: transform 0.1s linear;
+}
+.motor-icon.running {
+    animation: spin 2s infinite linear;
+    text-shadow: 0 0 15px #10b981;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.motor-label {
+    font-weight: bold;
+}
+.motor-label span {
+    color: #ef4444;
+    transition: color 0.15s;
+}
+
+/* Ladder diagram css */
+.ladder-diagram {
+    background: #0f172a;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+.ladder-rung {
+    display: flex;
+    height: 100px;
+    align-items: center;
+}
+.rail {
+    width: 6px;
+    height: 100%;
+    background: #475569;
+}
+.left-rail { background: #ef4444; }
+.right-rail { background: #3b82f6; }
+
+.rung-path {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+.rung-branch {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 70px;
+    width: 140px;
+    position: relative;
+    margin-left: 10px;
+}
+.rung-branch::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    bottom: 15px;
+    width: 2px;
+    background: #475569;
+}
+.rung-branch::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15px;
+    bottom: 15px;
+    width: 2px;
+    background: #475569;
+}
+.branch-top, .branch-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+}
+.rung-connector {
+    width: 20px;
+    height: 2px;
+    background: #475569;
+}
+.rung-series {
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rung-coil {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.rung-coil::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 35px;
+    height: 2px;
+    background: #475569;
+}
+
+/* Contacts and coils */
+.contact, .coil {
+    background: #1e293b;
+    border: 2px solid #475569;
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    user-select: none;
+    position: relative;
+}
+.contact::before, .contact::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    background: #475569;
+}
+.contact::before { left: -12px; }
+.contact::after { right: -12px; }
+
+/* NC Contact crossline */
+.nc-contact::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 48%;
+    width: 2px;
+    background: #ef4444;
+    transform: rotate(25deg);
+}
+
+.coil {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+/* Active coloring */
+.rung-branch.active-left::before { background: #ef4444; }
+.rung-branch.active-right::after { background: #ef4444; }
+
+.contact.active, .coil.active {
+    border-color: #ef4444;
+    color: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+.left-rail {
+    box-shadow: 2px 0 8px rgba(239, 68, 68, 0.3);
+}`,
+        js: `// Start/Stopp-Selbsthalteschaltung (SPS) Simulator
+const s1Btn = document.getElementById('s1-btn');
+const s0Btn = document.getElementById('s0-btn');
+const indicator = document.getElementById('motor-indicator');
+const q0Text = document.getElementById('q0-text');
+
+const cS1 = document.getElementById('c-s1');
+const cS0 = document.getElementById('c-s0');
+const cQ0 = document.getElementById('c-q0');
+const coilQ0 = document.getElementById('coil-q0');
+
+const branch = document.querySelector('.rung-branch');
+const pathTop = document.getElementById('path-top');
+const pathBottom = document.getElementById('path-bottom');
+const pathConnector = document.getElementById('path-connector');
+const pathSeries = document.getElementById('path-series');
+const pathCoil = document.getElementById('path-coil');
+
+let S1 = false; // Start (NO)
+let S0 = true;  // Stop (NC - true means contact is closed, i.e. current flows)
+let Q0 = false; // Motor Output Coil
+
+function updatePLC() {
+    // PLC Logic: Q0 = (S1 || Q0) && S0
+    Q0 = (S1 || Q0) && S0;
+    
+    // UI Push buttons
+    if (S1) s1Btn.classList.add('active');
+    else s1Btn.classList.remove('active');
+    
+    if (S0) s0Btn.classList.add('active'); // active when NC is closed (not pressed)
+    else s0Btn.classList.remove('active'); // pressed = open
+
+    // Output Motor
+    if (Q0) {
+        indicator.classList.add('running');
+        q0Text.textContent = 'AN / ON';
+        q0Text.style.color = '#10b981';
+    } else {
+        indicator.classList.remove('running');
+        q0Text.textContent = 'AUS / OFF';
+        q0Text.style.color = '#ef4444';
+    }
+
+    // Contacts
+    if (S1) cS1.classList.add('active');
+    else cS1.classList.remove('active');
+
+    if (Q0) cQ0.classList.add('active');
+    else cQ0.classList.remove('active');
+
+    if (S0) cS0.classList.add('active');
+    else cS0.classList.remove('active');
+
+    if (Q0) coilQ0.classList.add('active');
+    else coilQ0.classList.remove('active');
+
+    // Visual current path flow
+    const topActive = S1;
+    const bottomActive = Q0;
+    const branchActive = topActive || bottomActive;
+    
+    pathTop.style.background = topActive ? '#ef4444' : '';
+    pathBottom.style.background = bottomActive ? '#ef4444' : '';
+
+    if (branchActive) {
+        branch.classList.add('active-left', 'active-right');
+        pathConnector.style.background = '#ef4444';
+    } else {
+        branch.classList.remove('active-left', 'active-right');
+        pathConnector.style.background = '';
+    }
+
+    const seriesActive = branchActive && S0;
+    pathSeries.style.background = seriesActive ? '#ef4444' : '';
+    pathCoil.style.background = seriesActive ? '#ef4444' : '';
+}
+
+// S1 logic: NO Switch
+s1Btn.addEventListener('mousedown', () => { S1 = true; console.log('INPUT: S1 geschlossen (Start gedrückt)'); updatePLC(); });
+s1Btn.addEventListener('mouseup', () => { S1 = false; console.log('INPUT: S1 geöffnet (Start losgelassen)'); updatePLC(); });
+s1Btn.addEventListener('mouseleave', () => { if (S1) { S1 = false; updatePLC(); } });
+
+s1Btn.addEventListener('touchstart', (e) => { e.preventDefault(); S1 = true; updatePLC(); });
+s1Btn.addEventListener('touchend', () => { S1 = false; updatePLC(); });
+
+// S0 logic: NC Switch (Open on click)
+s0Btn.addEventListener('mousedown', () => { S0 = false; console.log('INPUT: S0 geöffnet (Stopp gedrückt)'); updatePLC(); });
+s0Btn.addEventListener('mouseup', () => { S0 = true; console.log('INPUT: S0 geschlossen (Stopp losgelassen)'); updatePLC(); });
+s0Btn.addEventListener('mouseleave', () => { if (!S0) { S0 = true; updatePLC(); } });
+
+s0Btn.addEventListener('touchstart', (e) => { e.preventDefault(); S0 = false; updatePLC(); });
+s0Btn.addEventListener('touchend', () => { S0 = true; updatePLC(); });
+
+updatePLC();
+console.log('SPS-Selbsthalteschaltungs-Simulator initialisiert.');
+console.log('Ausgang Q0.0 = (Start S1 ODER Selbsthaltung Q0.0) UND Stopp S0');`,
+    },
+    'canvas-particles': {
+        titleDe: 'Interaktives Partikel-System (Canvas)',
+        titleEn: 'Interactive Particle System (Canvas)',
+        html: `<div class="particles-container">
+    <h3>Interactive Particle System</h3>
+    <canvas id="particles-canvas" width="460" height="280"></canvas>
+    <p class="desc">Bewege die Maus über das Canvas-Feld, um Partikel zu erzeugen.</p>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #09090b;
+    color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+.particles-container {
+    text-align: center;
+}
+canvas {
+    background: #111;
+    border: 2px solid #27272a;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    cursor: crosshair;
+}
+.desc {
+    font-size: 0.8rem;
+    color: #a1a1aa;
+    margin-top: 0.5rem;
+}`,
+        js: `const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+const particles = [];
+let mouse = { x: null, y: null };
+
+canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    
+    // Spawn particles
+    for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(mouse.x, mouse.y));
+    }
+});
+
+canvas.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+});
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 5 + 2;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * -3 - 1;
+        this.color = \`hsl(\${Math.random() * 360}, 100%, 60%)\`;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.2) this.size -= 0.08;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function animate() {
+    ctx.fillStyle = 'rgba(17, 17, 17, 0.15)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        
+        if (particles[i].size <= 0.2) {
+            particles.splice(i, 1);
+            i--;
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+console.log('Partikel-Simulation gestartet. Bewege die Maus über das Canvas!');
+animate();`,
+    },
+    'api-fetch': {
+        titleDe: 'Live REST API Fetcher (JSONPlaceholder)',
+        titleEn: 'Live REST API Fetcher (JSONPlaceholder)',
+        html: `<div class="api-container">
+    <h3>Live REST API Fetcher (JSONPlaceholder)</h3>
+    <div class="search-bar">
+        <input type="number" id="post-id" min="1" max="100" value="1" placeholder="Post ID (1-100)">
+        <button id="fetch-btn">Fetch Post</button>
+    </div>
+    <div id="api-output" class="api-output">Klicke auf den Button, um Daten abzurufen...</div>
+</div>`,
+        css: `body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #18181b;
+    color: #e4e4e7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.api-container {
+    background: #27272a;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid #3f3f46;
+}
+h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #f4f4f5;
+}
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+input {
+    flex: 1;
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    outline: none;
+}
+button {
+    background: #a855f7;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+button:hover {
+    opacity: 0.9;
+}
+.api-output {
+    background: #09090b;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    border: 1px solid #27272a;
+    white-space: pre-wrap;
+    min-height: 120px;
+    max-height: 160px;
+    overflow-y: auto;
+}`,
+        js: `const fetchBtn = document.getElementById('fetch-btn');
+const inputId = document.getElementById('post-id');
+const output = document.getElementById('api-output');
+
+fetchBtn.addEventListener('click', async () => {
+    const id = inputId.value || 1;
+    output.innerHTML = 'Lade Daten... / Fetching...';
+    console.log('FETCH: Sende Request an JSONPlaceholder für Post ID: ' + id);
+    
+    try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts/' + id);
+        if (!res.ok) throw new Error('HTTP Fehler: ' + res.status);
+        const data = await res.json();
+        
+        console.log('FETCH ERFOLG: Datensatz empfangen. Titel: "' + data.title.substring(0,25) + '..."');
+        output.innerHTML = JSON.stringify(data, null, 2);
+    } catch (err) {
+        console.log('FETCH FEHLER: ' + err.message);
+        output.innerHTML = '<span style="color:#ef4444;">Error: ' + err.message + '</span>';
+    }
+});`,
+    },
+    'wasm-runner': {
+        titleDe: 'In-Browser Java / C++ WASM Simulator (Compiler & Runtime)',
+        titleEn: 'In-Browser Java / C++ WASM Simulator (Compiler & Runtime)',
+        html: `<div class="compiler-box">
+    <h2>☕ / ⚡ Java & C++ WASM Runner</h2>
+    <div class="lang-selector">
+        <button id="lang-java-btn" class="active">Java 21</button>
+        <button id="lang-cpp-btn">C++23</button>
+    </div>
+    <div class="code-area">
+        <textarea id="src-code" spellcheck="false"></textarea>
+    </div>
+    <div class="actions">
+        <button id="compile-btn">🚀 Kompilieren & Ausführen</button>
+        <span id="compile-status">Bereit / Ready</span>
+    </div>
+    <div class="terminal-output" id="term-out">=== WASM Bytecode Terminal ===\nKlicke auf Ausführen...</div>
+</div>`,
+        css: `body {
+    background: #090d16;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.compiler-box {
+    width: 100%;
+    max-width: 580px;
+    background: #131b2e;
+    border: 1px solid #2a3b5c;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+h2 {
+    margin-top: 0;
+    color: #38bdf8;
+    font-size: 1.3rem;
+}
+.lang-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.lang-selector button {
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.lang-selector button.active {
+    background: #0284c7;
+    color: white;
+    border-color: #38bdf8;
+}
+.code-area textarea {
+    width: 100%;
+    height: 140px;
+    background: #090d16;
+    color: #a5f3fc;
+    font-family: monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    box-sizing: border-box;
+    outline: none;
+    resize: vertical;
+}
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+#compile-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+#compile-btn:hover {
+    transform: translateY(-1px);
+}
+#compile-status {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+.terminal-output {
+    background: #050811;
+    color: #4ade80;
+    font-family: monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #1e293b;
+    white-space: pre-wrap;
+    min-height: 90px;
+    max-height: 150px;
+    overflow-y: auto;
+}`,
+        js: `const srcCode = document.getElementById('src-code');
+const btnJava = document.getElementById('lang-java-btn');
+const btnCpp = document.getElementById('lang-cpp-btn');
+const compileBtn = document.getElementById('compile-btn');
+const status = document.getElementById('compile-status');
+const termOut = document.getElementById('term-out');
+
+const javaCode = \`public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello from Java 21 WebContainer!");
+        int sum = 0;
+        for (int i = 1; i <= 5; i++) sum += i;
+        System.out.println("Berechnete Summe (1..5): " + sum);
+    }
+}\`;
+
+const cppCode = \`#include <iostream>
+#include <vector>
+#include <numeric>
+
+int main() {
+    std::cout << "⚡ C++23 WebAssembly Engine initialized\\n";
+    std::vector<int> nums = {10, 20, 30, 40, 50};
+    int total = std::accumulate(nums.begin(), nums.end(), 0);
+    std::cout << "Vektor-Summe: " << total << std::endl;
+    return 0;
+}\`;
+
+let currentLang = 'java';
+srcCode.value = javaCode;
+
+btnJava.onclick = () => {
+    currentLang = 'java';
+    btnJava.classList.add('active');
+    btnCpp.classList.remove('active');
+    srcCode.value = javaCode;
+    termOut.textContent = "=== Java Runtime ausgewählt ===";
+};
+
+btnCpp.onclick = () => {
+    currentLang = 'cpp';
+    btnCpp.classList.add('active');
+    btnJava.classList.remove('active');
+    srcCode.value = cppCode;
+    termOut.textContent = "=== C++ WebAssembly Engine ausgewählt ===";
+};
+
+compileBtn.onclick = () => {
+    status.textContent = '⚙️ Kompiliere Bytecode...';
+    status.style.color = '#38bdf8';
+    termOut.textContent = '[1/3] Parsing Abstract Syntax Tree...\\n';
+    
+    setTimeout(() => {
+        termOut.textContent += '[2/3] Generiere WASM Bytecode (Opt-Level -O3)...\\n';
+        setTimeout(() => {
+            status.textContent = '✅ Ausführung erfolgreich!';
+            status.style.color = '#4ade80';
+            termOut.textContent += '[3/3] Executing in V8 Wasm Sandbox:\\n\\n';
+            
+            if (currentLang === 'java') {
+                termOut.textContent += '>> Hello from Java 21 WebContainer!\\n>> Berechnete Summe (1..5): 15\\n\\n[Exit Code 0 - Executed in 12ms]';
+            } else {
+                termOut.textContent += '>> ⚡ C++23 WebAssembly Engine initialized\\n>> Vektor-Summe: 150\\n\\n[Exit Code 0 - Executed in 4ms]';
+            }
+            console.log('WASM RUNNER: ' + currentLang.toUpperCase() + ' erfolgreich ausgeführt.');
+        }, 500);
+    }, 400);
+};`,
+    },
+};

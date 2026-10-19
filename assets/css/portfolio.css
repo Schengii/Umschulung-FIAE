@@ -1,0 +1,469 @@
+/* Rules that only apply on pages/portfolio.html (split out of style.css). */
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.btn-clear-search:hover {
+    color: var(--text-primary);
+}
+
+/* Skill-Level Prozentsätze */
+.skill-85 {
+    --skill-level: 85%;
+}
+
+.skill-80 {
+    --skill-level: 80%;
+}
+
+.skill-75 {
+    --skill-level: 75%;
+}
+
+.skill-70 {
+    --skill-level: 70%;
+}
+
+.skill-65 {
+    --skill-level: 65%;
+}
+
+/* Utility Margin Classes */
+.mt-1rem {
+    margin-top: 1rem;
+}
+
+/* ==========================================================================
+   SKILL RADAR CHART
+   ========================================================================== */
+.skill-radar-svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.radar-polygon {
+    opacity: 0;
+}
+
+.testimonial-item {
+    display: none;
+    animation: testimonialFade 0.5s ease-out;
+}
+
+.testimonial-item.active {
+    display: block;
+}
+
+.testimonial-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 0;
+}
+
+.testimonial-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ==========================================================================
+   PORTFOLIO — PROJECT CARDS & GRID
+   ========================================================================== */
+
+/* Container for the dynamic project grid */
+#dynamic-projects-container,
+#custom-projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Card header: title + stars on same row */
+.project-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Stars badge */
+.stars-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #451a03;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Project image */
+.project-image-container {
+    margin: 1rem 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 16 / 9;
+    background: var(--bg-page);
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.04);
+}
+
+/* Project action buttons */
+.project-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-top: auto;
+}
+
+/* ==========================================================================
+   PORTFOLIO — SEARCH BAR
+   ========================================================================== */
+
+.project-search-input {
+    display: block;
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 1.25rem;
+}
+
+.project-search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.project-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.sort-select {
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.sort-select:focus {
+    border-color: var(--primary);
+}
+
+/* ==========================================================================
+   PORTFOLIO — PAGINATION
+   ========================================================================== */
+
+.pagination-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-pagination:hover,
+.btn-pagination.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-on-primary);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+}
+
+/* ==========================================================================
+   PORTFOLIO — GITHUB ERROR DISPLAY
+   ========================================================================== */
+
+.github-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1.25rem;
+    color: #ef4444;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+@media (max-width: 640px) {
+
+    #dynamic-projects-container,
+    #custom-projects-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.highlight-badge {
+    align-self: flex-start;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--text-on-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (min-width: 768px) {
+    .project-card.highlight-project {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .project-card.highlight-project .project-image-container {
+        margin: 0;
+        height: 100%;
+        min-height: 280px;
+        aspect-ratio: auto;
+    }
+
+    .project-card.highlight-project .highlight-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .project-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn-project {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* Portfolio Specific Classes */
+.no-results-box {
+    display: none;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.no-results-box i {
+    margin-bottom: 1rem;
+}
+
+.skeleton-line.w-80 {
+    width: 80%;
+}
+
+.skill-radar-container-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+#github-loading,
+#github-error {
+    display: none;
+}
+
+/* Modal details image carousel */
+.modal-carousel-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+}
+.carousel-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+    transition: var(--transition);
+}
+.carousel-btn:hover {
+    background: var(--primary);
+    color: var(--text-on-primary);
+}
+.carousel-btn.prev-btn {
+    left: 10px;
+}
+.carousel-btn.next-btn {
+    right: 10px;
+}
+.carousel-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.35rem;
+    z-index: 10;
+}
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: var(--transition);
+}
+.carousel-dot.active {
+    background: var(--primary);
+    transform: scale(1.2);
+}
+
+/* Responsive 3er-Reihen Portfolio Grid */
+@media (min-width: 1024px) {
+    #dynamic-projects-container,
+    #custom-projects-container {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    #dynamic-projects-container,
+    #custom-projects-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* 13. Code Showcase Interactive Accordion Card */
+.code-showcase-card {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.code-accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    gap: 1.25rem;
+    padding: 0.25rem 0;
+    transition: color 0.2s ease;
+}
+
+.code-accordion-header:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.code-accordion-header:hover h3 {
+    color: var(--primary);
+}
+
+.code-accordion-title-wrap {
+    flex: 1;
+}
+
+.code-accordion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    color: var(--primary);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+.code-accordion-header:hover .code-accordion-badge,
+.code-showcase-card.open .code-accordion-badge {
+    background: var(--primary);
+    color: var(--text-on-primary);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+.accordion-chevron {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 0.8rem;
+}
+
+.code-showcase-card.open .accordion-chevron {
+    transform: rotate(180deg);
+}
+
+.code-accordion-content {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--border);
+    animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}

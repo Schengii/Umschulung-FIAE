@@ -20,15 +20,14 @@ const items = () => [...document.querySelectorAll('.faq-item')];
 const trigger = (n) => items()[n].querySelector('.faq-trigger');
 
 describe('faq-accordion', () => {
-    it('does nothing without its container', () => {
-        resetDocument('');
+    it('does not inject a <style> element (the rules live in modules/faq_accordion.css)', () => {
         initFaqAccordion();
         expect(document.head.querySelector('style')).toBeNull();
     });
 
-    it('injects its stylesheet once per init', () => {
-        initFaqAccordion();
-        expect(document.head.querySelectorAll('style')).toHaveLength(1);
+    it('does nothing without its container', () => {
+        resetDocument('');
+        expect(() => initFaqAccordion()).not.toThrow();
     });
 
     it('opens a panel and sets aria-expanded', () => {

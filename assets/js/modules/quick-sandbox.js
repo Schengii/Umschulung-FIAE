@@ -114,13 +114,7 @@ function injectModalHtml() {
 
     document.body.appendChild(modal);
 
-    // Keyframes for loader
-    if (!document.getElementById('sandbox-keyframes')) {
-        const style = document.createElement('style');
-        style.id = 'sandbox-keyframes';
-        style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
-        document.head.appendChild(style);
-    }
+    // The loader keyframes live in assets/css/modules/portfolio_modals.css (CSP: no injected <style>).
 }
 
 function attachEventListeners() {

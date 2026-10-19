@@ -63,6 +63,10 @@ const CHECKS = [
     { name: 'og:image', re: /<meta property="og:image"/i, requiredFor: 'full' },
 ];
 
+// Styles come from files: no inline <style> and no 'unsafe-inline' for style elements (ADR 0013).
+// playground.html runs user code in a srcdoc iframe that inherits its CSP, so it is the one exception.
+const STYLE_EXCEPTIONS = new Set(['playground.html']);
+
 let hadFailure = false;
 
 for (const file of files) {
@@ -82,6 +86,22 @@ for (const file of files) {
         )
     ) {
         missing.push('skip link (a.skip-link[href="#main-content"])');
+    }
+
+    const problems = [];
+    if (!STYLE_EXCEPTIONS.has(path.basename(file))) {
+        if (/<style[\s>]/i.test(html)) problems.push('inline <style> element (move the rules into assets/css)');
+        const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/i);
+        if (csp && /(^|;)\s*style-src\s[^;]*'unsafe-inline'/i.test(csp[1])) {
+            problems.push(
+                "CSP style-src allows 'unsafe-inline' (use style-src 'self'; style-src-attr 'unsafe-inline')"
+            );
+        }
+    }
+
+    if (problems.length > 0) {
+        hadFailure = true;
+        console.error(`✗ ${rel}: ${problems.join('; ')}`);
     }
 
     if (missing.length > 0) {

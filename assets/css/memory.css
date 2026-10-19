@@ -1,3 +1,78 @@
+/* Rules that only apply on pages/memory.html (split out of style.css). */
+/* Memory Game */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 1.5rem auto;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    perspective: 800px;
+}
+
+.memory-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+}
+
+.memory-card.flipped .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--text-on-primary);
+    font-size: 1.5rem;
+}
+
+.memory-card-back {
+    background-color: var(--bg-page);
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-back {
+    border-color: #10b981;
+    background-color: #d1fae5;
+}
+
+[data-theme="dark"] .memory-card.matched .memory-card-back {
+    background-color: #064e3b;
+    border-color: #10b981;
+}
+
+.memory-card:hover:not(.flipped):not(.matched) .memory-card-front {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+}
+
+.memory-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.memory-stats span {
+    color: var(--primary);
+}
+@media screen and (max-width: 900px) {
+
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+    }
+}
+
 .memory-intro {
     text-align: center;
     max-width: 500px;

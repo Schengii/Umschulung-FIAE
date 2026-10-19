@@ -1,0 +1,84 @@
+/* News: page rules (formerly an inline <style> block) and card/highlight rules (formerly injected by news.js). */
+.news-controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.filter-bar-news {
+    margin-bottom: 0;
+}
+.search-container-news {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    width: 100%;
+}
+.search-icon-news {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+}
+.search-input-news {
+    padding-left: 2.5rem;
+    height: 38px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    outline: none;
+    font-size: 0.9rem;
+    width: 100%;
+}
+.archive-list-news {
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+@keyframes flash-highlight {
+    0% { box-shadow: 0 0 0 4px var(--primary); }
+    100% { box-shadow: none; }
+}
+.highlight-flash {
+    animation: flash-highlight 2.5s ease-out;
+    border-color: var(--primary) !important;
+}
+.news-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+.news-card-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+.copy-article-btn {
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.copy-article-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+.news-no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}

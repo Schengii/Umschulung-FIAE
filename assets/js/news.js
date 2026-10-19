@@ -10,55 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLanguage = document.documentElement.getAttribute('lang') || 'de';
     }
 
-    // Inject highlight flash styles and share button style
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes flash-highlight {
-            0% { box-shadow: 0 0 0 4px var(--primary); }
-            100% { box-shadow: none; }
-        }
-        .highlight-flash {
-            animation: flash-highlight 2.5s ease-out;
-            border-color: var(--primary) !important;
-        }
-        .news-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .news-card-header h2 {
-            margin: 0;
-            font-size: 1.4rem;
-        }
-        .copy-article-btn {
-            background: var(--bg-page);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            cursor: pointer;
-            border-radius: 20px;
-            padding: 0.35rem 0.85rem;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
-        }
-        .copy-article-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-        .news-no-results {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-muted);
-        }
-    `;
-    document.head.appendChild(style);
-
     function renderNews(filter = 'all') {
         if (!newsArticlesContainer) return;
         newsArticlesContainer.innerHTML = ''; // Clear existing articles
