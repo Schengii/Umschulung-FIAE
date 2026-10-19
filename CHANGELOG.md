@@ -9,6 +9,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - Dependabot ignoriert Minor-Updates von `@fortawesome/fontawesome-free` (ab 6.7 stehen Glyphen in `--fa`, das Icon-Subset-Skript fände 0 Icons).
 
 #### Behoben
+- **Styling**: Status-Karte auf `home`/`portfolio` im hellen Theme lesbar (`.card-glass` überschrieb den grünen Hintergrund, weiße Schrift auf Weiß; jetzt dunkleres Grün mit AA-Kontrast). Mobile Überläufe behoben: Grid-Kinder mit `min-width: 0` (Dashboard, Flashcards, Praktikumsbetrieb, Git-Simulator), PPT-Download-Karten und Terminal-Eingabe schrumpfen, Sprachschalter bricht nicht mehr um, Telemetrie-Buttons im Dashboard mit `color`.
+- **Mobile/E2E**: Git-Simulator-Terminal-Eingabe auf schmalen Viewports mit `flex-wrap` umgebrochen und sichtbar gehalten; `snake.js` `resizeCanvas` gegen Null-Zugriff vor DOMContentLoaded abgesichert.
 - **E2E**: `@playwright/test` bleibt exakt auf 1.63.0 (1.64 lässt die WebKit-Specs auf `portfolio.html` in der CI am Klick scheitern); Dependabot ignoriert `>=1.64`. `progress_backup.spec.js` wartet auf `data-ready` des lazy geladenen Moduls, wiederholt verlorene Klicks und liest den Export aus dem Blob statt aus dem in Firefox unzuverlässigen Download-Event.
 - **A11y**: doppelte `h1` auf Seiten mit eigener Überschrift (Banner-Titel wird dort `role="presentation"`).
 - **A11y**: neue axe-4.14-Regel `label-content-name-mismatch` (WCAG 2.5.3) behoben: Sprach- und Audio-Schalter, Video-Playlist, PPT-Download-Karten und Kontakt-Links auf `home.html` tragen den sichtbaren Text im zugänglichen Namen.

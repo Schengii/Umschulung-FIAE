@@ -82,6 +82,7 @@
     }
 
     function resizeCanvas() {
+        if (!canvas) return;
         cellWidth = canvas.width / cols;
         cellHeight = canvas.height / rows;
         draw();
