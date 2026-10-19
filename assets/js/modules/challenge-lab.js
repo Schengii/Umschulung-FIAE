@@ -3,7 +3,7 @@
  * @description Interaktives Clean-Code, RegEx und Security Challenge Lab mit Sofort-Feedback
  */
 
-const CHALLENGES = [
+export const CHALLENGES = [
     {
         id: 'c1',
         title_de: 'Lab 1: SQL-Injection Sicherheitslücke aufspüren',

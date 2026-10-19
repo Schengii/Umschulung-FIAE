@@ -6,8 +6,8 @@
  * used by skills_matrix.js. Kept dependency-free (no DOM) so it can be unit-tested directly.
  */
 
-/** Skills shown for the radar chart's 'all' category (kept to max 6 axes). */
 /**
+ * Skills shown for the radar chart's 'all' category (kept to max 6 axes).
  * @param {SkillItem[]} skills
  * @param {string} category
  * @param {string[]} repsForAll
@@ -19,8 +19,8 @@ export function filterRadarSkills(skills, category, repsForAll) {
     return skills.filter((s) => s.category === category);
 }
 
-/** Skills shown in the list view for a given category tab. */
 /**
+ * Skills shown in the list view for a given category tab.
  * @param {SkillItem[]} skills
  * @param {string} category
  */
@@ -29,8 +29,8 @@ export function filterListSkills(skills, category) {
     return skills.filter((s) => s.category === category);
 }
 
-/** Sorts a skills list by the given sort mode ('alpha'|'level-desc'|'level-asc'|'default'). */
 /**
+ * Sorts a skills list by the given sort mode ('alpha'|'level-desc'|'level-asc'|'default').
  * @param {SkillItem[]} skills
  * @param {string} mode
  */

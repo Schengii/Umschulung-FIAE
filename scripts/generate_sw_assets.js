@@ -118,8 +118,8 @@ const TEXT_EXTENSIONS = ['.html', '.css', '.js', '.json', '.svg'];
 /**
  * Hash over every precached file, in list order. Text files are normalised to LF first so
  * a Windows checkout produces the same cache name as the Linux CI runner.
+ * @param {string[]} assetPaths
  */
-/** @param {string[]} assetPaths */
 function computeCacheHash(assetPaths) {
     const hash = crypto.createHash('sha256');
     for (const asset of assetPaths) {

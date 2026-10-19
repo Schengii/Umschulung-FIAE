@@ -87,5 +87,17 @@ module.exports = [
       'no-useless-assignment': 'error',
     },
   },
+  {
+    // The happy-dom unit tests use the DOM constructors the page code relies on.
+    files: ['**/*.test.js'],
+    languageOptions: {
+      globals: {
+        KeyboardEvent: 'readonly',
+        File: 'readonly',
+        Storage: 'readonly',
+        globalThis: 'readonly',
+      },
+    },
+  },
   eslintConfigPrettier,
 ];

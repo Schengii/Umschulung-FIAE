@@ -51,8 +51,6 @@ export function initSearchAndFilter() {
 /**
  * Pure evaluation function for card filtering.
  * Determines whether a card matches the given category and search query.
- */
-/**
  * @param {DOMTokenList | string[]} categoryClassList
  * @param {string} textContent
  * @param {string} [activeCategory]

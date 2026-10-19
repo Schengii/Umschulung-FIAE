@@ -1,8 +1,6 @@
 /**
  * Age Calculator Module — Dynamic age calculation from birth date
  * Replaces inline script from home.html
- */
-/**
  * @param {number} birthYear
  * @param {number} birthMonth
  * @param {number} birthDay

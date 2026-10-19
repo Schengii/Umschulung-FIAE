@@ -76,8 +76,8 @@ function collectSourceFiles() {
     return files.sort();
 }
 
-/** Splits a stylesheet into its top-level comments and rules (at-rules stay one block). */
 /**
+ * Splits a stylesheet into its top-level comments and rules (at-rules stay one block).
  * @param {string} css
  * @returns {CssBlock[]}
  */
@@ -119,8 +119,10 @@ function splitTopLevel(css) {
     return blocks;
 }
 
-/** Resolves CSS escapes (`\f015`, `\30 `) in the value of a `content` string. */
-/** @param {string} value */
+/**
+ * Resolves CSS escapes (`\f015`, `\30 `) in the value of a `content` string.
+ * @param {string} value
+ */
 function decodeCssString(value) {
     let out = '';
     for (let i = 0; i < value.length; i++) {

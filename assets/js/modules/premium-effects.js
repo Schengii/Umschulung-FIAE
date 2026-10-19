@@ -176,8 +176,8 @@ function initCardGlowTracking() {
 
 /**
  * Adds dynamic rotation on mouseMove to simulate 3D depth
+ * @param {HTMLElement} element
  */
-/** @param {HTMLElement} element */
 function apply3DTilt(element) {
     // Exclude tilt on small screens to prevent layout shifting issues
     if (window.matchMedia('(max-width: 768px)').matches) return;

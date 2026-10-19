@@ -9,7 +9,8 @@ export function initContactForm() {
     _bindContactForm('hire-me-form', 'hire-me-name', 'hire-me-email', 'hire-me-message', 'hire-me-feedback');
 }
 
-/** @param {string} formId
+/**
+ * @param {string} formId
  * @param {string} nameId
  * @param {string} emailId
  * @param {string} messageId
