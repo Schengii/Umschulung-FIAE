@@ -36,6 +36,9 @@ interface Window {
     closeProjectModal: any;
     addLiveCommit: any;
     showToast: any;
+    showAlert: (message: string | { de: string; en: string }) => Promise<void>;
+    showConfirm: (message: string | { de: string; en: string }) => Promise<boolean>;
+    showPrompt: (message: string | { de: string; en: string }, defaultValue?: string) => Promise<string | null>;
     projectsData: Array<Record<string, any>>;
     _cachedProjectsData: Array<Record<string, any>> | undefined;
     newsData: Array<Record<string, any>>;

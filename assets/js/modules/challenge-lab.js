@@ -163,7 +163,7 @@ function calculateFinalPrice(cartItems) {
     },
 ];
 
-let solvedChallenges = new Set();
+const solvedChallenges = new Set();
 let totalXp = 0;
 
 function getCurrentLang() {

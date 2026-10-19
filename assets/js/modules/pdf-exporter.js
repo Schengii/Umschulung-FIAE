@@ -36,7 +36,7 @@ function generateFactsheetModal() {
         fromSession('recruiter_name') || AppStorage.getItem('recruiter_name') || 'Sehr geehrte Damen und Herren';
 
     const modalId = 'pdf-export-modal';
-    let existingModal = document.getElementById(modalId);
+    const existingModal = document.getElementById(modalId);
     if (existingModal) existingModal.remove();
 
     const modal = document.createElement('div');

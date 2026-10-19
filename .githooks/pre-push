@@ -3,7 +3,7 @@
 # Git Pre-Push Hook: Lokaler CI-Schnellcheck
 # ==============================================================================
 # Führt alle statischen CI-Gates (Data-Sync, Head, CSP, Icons, Sitemap, SW-Assets,
-# Project-Links, Lint, Format, Typecheck, Unit-Tests) vor dem Push aus.
+# Project-Links, Lint, Format, Typecheck, Unit-Tests) und einen kurzen E2E-Smoke vor dem Push aus.
 # Verhindert fehlerhafte Commits in Remote-Branches und GitHub Actions CI.
 # ==============================================================================
 
@@ -18,6 +18,21 @@ if [ $EXIT_CODE -ne 0 ]; then
     echo "Bitte behebe die Fehler lokal und versuche es erneut."
     echo "======================================================================"
     exit $EXIT_CODE
+fi
+
+# E2E-Smoke (Chromium, ca. 1 Minute): fängt rote Specs ab, die `npm run check` nicht sieht.
+# Überspringen mit SKIP_E2E=1 git push
+if [ "${SKIP_E2E:-0}" != "1" ]; then
+    echo "🔍 [PRE-PUSH] Führe E2E-Smoke (icons, advanced_features, git_simulator) aus..."
+    npx playwright test icons advanced_features git_simulator --project=chromium --reporter=line
+    SMOKE_CODE=$?
+    if [ $SMOKE_CODE -ne 0 ]; then
+        echo "======================================================================"
+        echo "❌ [PRE-PUSH ERROR] E2E-Smoke ist fehlgeschlagen! Push abgebrochen."
+        echo "Zum bewussten Überspringen: SKIP_E2E=1 git push"
+        echo "======================================================================"
+        exit $SMOKE_CODE
+    fi
 fi
 
 echo "✅ [PRE-PUSH] Alle CI-Gates erfolgreich bestanden. Push wird fortgesetzt."

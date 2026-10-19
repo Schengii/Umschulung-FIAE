@@ -6,7 +6,7 @@
 (function () {
     'use strict';
 
-    let selectedProjects = [];
+    const selectedProjects = [];
     const MAX_COMPARE = 3;
 
     function initProjectCompare() {

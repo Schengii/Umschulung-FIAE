@@ -415,36 +415,37 @@ function playAudio(soundId) {
  * Quick action buttons: ask for the one argument a command needs and run it.
  */
 function setupQuickActions() {
-    const ask = (de, en, fallback = '') => (prompt(currentLang() === 'de' ? de : en, fallback) || '').trim();
+    const ask = async (de, en, fallback = '') => ((await window.showPrompt({ de, en }, fallback)) || '').trim();
     const branchList = () => Object.keys(gitState.branches).join(', ');
     const on = (id, handler) => document.getElementById(id)?.addEventListener('click', handler);
 
-    on('btn-quick-commit', () => {
-        const message = ask('Commit-Nachricht:', 'Commit message:', 'Feat: Add new components') || 'manual commit';
+    on('btn-quick-commit', async () => {
+        const message =
+            (await ask('Commit-Nachricht:', 'Commit message:', 'Feat: Add new components')) || 'manual commit';
         // The message is passed as one quoted argument; quotes inside it would end it early.
         runCommand(`git commit -m "${message.replace(/"/g, "'")}"`);
     });
 
-    on('btn-quick-branch', () => {
-        const name = ask('Neuer Branch-Name:', 'New branch name:');
+    on('btn-quick-branch', async () => {
+        const name = await ask('Neuer Branch-Name:', 'New branch name:');
         if (name) runCommand(`git branch ${name}`);
     });
 
-    on('btn-quick-checkout', () => {
-        const name = ask(
+    on('btn-quick-checkout', async () => {
+        const name = await ask(
             `Wechseln zu Branch oder Commit (${branchList()}):`,
             `Switch to branch or commit (${branchList()}):`
         );
         if (name) runCommand(`git checkout ${name}`);
     });
 
-    on('btn-quick-merge', () => {
-        const name = ask(`Branch hineinmergen (${branchList()}):`, `Branch to merge in (${branchList()}):`);
+    on('btn-quick-merge', async () => {
+        const name = await ask(`Branch hineinmergen (${branchList()}):`, `Branch to merge in (${branchList()}):`);
         if (name) runCommand(`git merge ${name}`);
     });
 
-    on('btn-quick-rebase', () => {
-        const name = ask(
+    on('btn-quick-rebase', async () => {
+        const name = await ask(
             `Rebase auf welchen Branch? (${branchList()}):`,
             `Rebase onto which branch? (${branchList()}):`
         );

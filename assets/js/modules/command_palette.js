@@ -139,7 +139,7 @@
             const pagePrefix = isPages ? '' : 'pages/';
 
             /** @type {Array<Record<string, any>>} */
-            let items = NAV_ITEMS.map((item) => ({
+            const items = NAV_ITEMS.map((item) => ({
                 ...item,
                 url: pagePrefix + item.url,
             }));

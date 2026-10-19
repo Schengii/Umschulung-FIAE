@@ -2,6 +2,8 @@
  * Username & Recruiter Greeting Module — Welcome page and dashboard personalization
  * Supports session-based recruiter greetings via URL query parameters (?c=Company or ?n=Name).
  */
+import { escapeHtml } from './html-utils.js';
+
 export function initUsernameGreeting() {
     const mySubmit = document.getElementById('mySubmit');
     const myText = /** @type {HTMLInputElement} */ (document.getElementById('myText'));
@@ -107,8 +109,8 @@ function updateDashboardGreeting() {
                 if (welcomeTitle) {
                     welcomeTitle.innerHTML =
                         lang === 'de'
-                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong> vom Team <strong>${escapeHTML(company)}</strong>!`
-                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong> from the team at <strong>${escapeHTML(company)}</strong>!`;
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHtml(name)}</strong> vom Team <strong>${escapeHtml(company)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHtml(name)}</strong> from the team at <strong>${escapeHtml(company)}</strong>!`;
                 }
                 if (welcomeDesc) {
                     welcomeDesc.innerHTML =
@@ -120,8 +122,8 @@ function updateDashboardGreeting() {
                 if (welcomeTitle) {
                     welcomeTitle.innerHTML =
                         lang === 'de'
-                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, Team von <strong>${escapeHTML(company)}</strong>!`
-                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome to the team at <strong>${escapeHTML(company)}</strong>!`;
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, Team von <strong>${escapeHtml(company)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome to the team at <strong>${escapeHtml(company)}</strong>!`;
                 }
                 if (welcomeDesc) {
                     welcomeDesc.innerHTML =
@@ -133,8 +135,8 @@ function updateDashboardGreeting() {
                 if (welcomeTitle) {
                     welcomeTitle.innerHTML =
                         lang === 'de'
-                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHTML(name)}</strong>!`
-                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHTML(name)}</strong>!`;
+                            ? `<i class="fa fa-handshake" aria-hidden="true"></i> Herzlich willkommen, <strong>${escapeHtml(name)}</strong>!`
+                            : `<i class="fa fa-handshake" aria-hidden="true"></i> Warm welcome, <strong>${escapeHtml(name)}</strong>!`;
                 }
                 if (welcomeDesc) {
                     welcomeDesc.innerHTML =
@@ -196,14 +198,4 @@ function updateDashboardGreeting() {
             welcomeText.textContent = greeting;
         }
     }
-}
-
-function escapeHTML(str) {
-    if (!str) return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
 }

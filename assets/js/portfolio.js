@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set category class for filtering
         const languageClass = project.language ? `filter-${project.language.toLowerCase()}` : '';
-        let categoryClass = '';
+        let categoryClass;
         if (project.category) {
             categoryClass = project.category
                 .split(' ')

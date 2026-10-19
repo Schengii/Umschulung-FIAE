@@ -74,6 +74,16 @@ for (const file of files) {
         .filter((check) => !check.re.test(html))
         .map((check) => check.name);
 
+    // Conditional rule: a page with a main landmark target needs a skip link to it (WCAG 2.4.1).
+    if (
+        /<main[^>]*id="main-content"/i.test(html) &&
+        !/<a[^>]*href="#main-content"[^>]*class="skip-link"|<a[^>]*class="skip-link"[^>]*href="#main-content"/i.test(
+            html
+        )
+    ) {
+        missing.push('skip link (a.skip-link[href="#main-content"])');
+    }
+
     if (missing.length > 0) {
         hadFailure = true;
         console.error(`✗ ${rel}: missing ${missing.join(', ')}`);

@@ -1,3 +1,4 @@
+const js = require('@eslint/js');
 const eslintConfigPrettier = require('eslint-config-prettier');
 
 module.exports = [
@@ -11,6 +12,7 @@ module.exports = [
       'assets/js/projects_data.js',
     ],
   },
+  js.configs.recommended,
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -78,6 +80,11 @@ module.exports = [
       'no-undef': 'error',
       'no-empty': 'warn',
       'no-console': 'off',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'no-alert': 'error',
+      'no-useless-assignment': 'error',
     },
   },
   eslintConfigPrettier,

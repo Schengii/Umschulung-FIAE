@@ -12,8 +12,14 @@ module.exports = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined,
-  reporter: 'line',
+  // Two workers locally as in CI: the default (half the cores) overloads the dev server and makes
+  // otherwise stable specs time out (A04).
+  workers: process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : 2,
+  // CI: annotate failures in the PR and keep a JSON report so scripts/summarize_playwright_flaky.js
+  // can list tests that only passed on a retry (B04).
+  reporter: process.env.CI
+    ? [['github'], ['line'], ['json', { outputFile: 'playwright-report/results.json' }]]
+    : 'line',
   use: {
     baseURL,
     trace: 'on-first-retry',

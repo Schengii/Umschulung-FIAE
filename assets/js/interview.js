@@ -487,11 +487,10 @@ class InterviewSimulator {
         this.selectedCategories = Array.from(checkedBoxes).map((cb) => cb.value);
 
         if (this.selectedCategories.length === 0) {
-            alert(
-                this.selectedLanguage === 'de'
-                    ? 'Bitte wähle mindestens eine Kategorie aus!'
-                    : 'Please select at least one category!'
-            );
+            window.showAlert({
+                de: 'Bitte wähle mindestens eine Kategorie aus!',
+                en: 'Please select at least one category!',
+            });
             return;
         }
 
@@ -709,8 +708,8 @@ class InterviewSimulator {
         const summaryDe = document.getElementById('result-summary-de');
         const summaryEn = document.getElementById('result-summary-en');
 
-        let deSummaryText = '';
-        let enSummaryText = '';
+        let deSummaryText;
+        let enSummaryText;
 
         if (overallPercentage >= 80) {
             deSummaryText =

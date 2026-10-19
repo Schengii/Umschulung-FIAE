@@ -5,6 +5,9 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  # Lets sync.yml start the checks on the automated sync branch: a pull request opened with
+  # GITHUB_TOKEN does not get its own pull_request run (and one that does may wait for approval).
+  workflow_dispatch:
 
 # Read-only token: no job here writes to the repository.
 permissions:
@@ -55,6 +58,9 @@ jobs:
 
       - name: Verify Sitemap Lists Every Indexable Page
         run: npm run check-sitemap
+
+      - name: Verify Lighthouse Audits Every Sitemap Page
+        run: npm run check-lighthouse-urls
 
       - name: Verify Service Worker Precache List And Cache Name Are Up To Date
         run: npm run check-sw-assets
@@ -124,6 +130,10 @@ jobs:
         run: npx playwright test --project=${{ matrix.project }}
         env:
           E2E_ROOT: ${{ matrix.root }}
+
+      - name: List Flaky Tests (passed only after a retry)
+        if: always()
+        run: node scripts/summarize_playwright_flaky.js
 
       - name: Upload Playwright Results on Failure
         if: failure()

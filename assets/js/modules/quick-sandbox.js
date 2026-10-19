@@ -143,6 +143,8 @@ function attachEventListeners() {
         btnReload.addEventListener('click', () => {
             if (iframe.src) {
                 if (loader) loader.style.display = 'flex';
+                // Re-assigning src is the intended way to reload the sandbox iframe.
+                // eslint-disable-next-line no-self-assign
                 iframe.src = iframe.src;
             }
         });

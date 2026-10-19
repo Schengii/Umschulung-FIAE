@@ -63,11 +63,13 @@ Umschulung-FIAE/
 │   │       ├── c4-architecture.js       # Interaktives C4-Modell mit Komponenten-Drilldown & Code-Links
 │   │       ├── exam-questions.js        # Zweisprachiger Fragenpool der Prüfungssimulation (DE/EN)
 │   │       ├── progress-backup.js       # Export/Import des Fortschritts inkl. QR-Code Device Sync
+│   │       ├── qr-local.js              # Lokaler QR-Renderer (SVG) auf Basis von assets/vendor/qrcode, ohne Drittanbieter
+│   │       ├── dashboard-logic.js       # DOM-freie Dashboard-Logik (Lernempfehlungen, Aktivitätsraster), Vitest-getestet
 │   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
 │   ├── fonts/                   # Lokale WOFF2 Fonts (Inter & Outfit - 100% DSGVO-konform)
-│   ├── vendor/                  # Lokale Drittbibliotheken (Font-Awesome-Subset, Prism)
+│   ├── vendor/                  # Lokale Drittbibliotheken (Font-Awesome-Subset, Prism, qrcode-generator)
 │   └── images/                  # Optimierte WebP-Screenshots, Bilder & Favicons
 │
 ├── Projekte/                    # Unterordner für eigenständige Flaggschiff-Projekte
@@ -122,6 +124,7 @@ Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Icon-Font (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Font Awesome wird als **generiertes Subset** ausgeliefert: `npm run subset-icons` baut CSS und WOFF2 aus dem npm-Paket und behält nur die tatsächlich verwendeten Icons (ca. 21 KB CSS + 22 KB Fonts statt 103 KB + 300 KB). Ein neues Icon erscheint erst nach diesem Befehl; `check-icons` prüft das in der CI (ADR 0009).
+  - **QR-Codes** (Lernstand-Sync im Dashboard, Recruiter-Link-Generator) werden lokal im Browser erzeugt (`qrcode-generator`, MIT, `assets/vendor/qrcode/`). Es geht kein Lernstand und kein Link an einen QR-Webdienst; `api.qrserver.com` ist aus den CSPs entfernt. Ist ein Lernstand für einen QR-Code zu groß, weist die Oberfläche auf den Datei-Export hin.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
   - Die Content-Security-Policy (CSP) ist strikt gehärtet.
 - **Google Maps 2-Klick-Datenschutzlösung**: Karten im Impressum werden standardmäßig blockiert und erst nach aktiver Nutzereinwilligung dynamisch geladen.
@@ -162,6 +165,8 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run localize-vendor-assets` | `localize_vendor_assets.js` | Ersetzt externe CDN-Referenzen in den Seiten durch die lokalen `assets/vendor/`-Kopien |
 | `npm run add-og-meta` | `add_og_meta.js` | Ergänzt fehlende OpenGraph/Twitter-Meta-Tags (idempotent) |
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
+| `npm run check-lighthouse-urls` | `check_lighthouse_urls.js` | Prüft, dass `lighthouserc.json` jede Seite der `sitemap.xml` abdeckt |
+| `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` (Ausgangswert ca. 17 % Statements, kein Schwellenwert) |
 | `npm run generate-qr-codes` | `generate_qr_codes.js` | Erzeugt QR-Codes für Kernseiten (Lebenslauf/PDF-Export) |
 
 ---
@@ -175,7 +180,8 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 ### 1. Abhängigkeiten installieren & Git-Hooks aktivieren
 ```bash
 npm install
-# Aktiviert die Hooks (.githooks/pre-commit & pre-push) via prepare-Script:
+# Aktiviert die Hooks (.githooks/pre-commit & pre-push) via prepare-Script.
+# pre-push führt `npm run check` plus einen kurzen E2E-Smoke aus (überspringen: SKIP_E2E=1 git push):
 npm run prepare
 # Alternativ manuell:
 git config core.hooksPath .githooks
@@ -205,7 +211,7 @@ Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrier
 ```bash
 npm run test:unit
 ```
-Testet die reine Kernlogik (Git-Engine, Leitner-Box, Prüfungsauswertung, Backup-Format, Notenrechner/QA-Score, Skills-Matrix-Filter) isoliert ohne Browser — Konfiguration in `vitest.config.js`.
+Testet die reine Kernlogik (Git-Engine, Leitner-Box, Prüfungsauswertung, Backup-Format, Notenrechner/QA-Score, Skills-Matrix-Filter) isoliert ohne Browser — Konfiguration in `vitest.config.js`. `npm run test:coverage` erzeugt zusätzlich einen Coverage-Bericht.
 
 ### 6. Linting
 ```bash

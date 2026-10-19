@@ -90,7 +90,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
 
         // Switch to Backend profile
         await page.click('button.dossier-type-btn[data-type="backend"]');
-        await expect(roleText).toContainText('Game Engine Developer');
+        await expect(roleText).toContainText('Software Architect & Systems Developer');
 
         // Close Dossier
         await page.click('#btn-close-dossier');

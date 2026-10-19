@@ -196,16 +196,16 @@ export function deserializeBackupFromPayload(payload) {
 }
 
 /**
- * Constructs a QR code image URL for device-to-device transfer.
+ * Constructs the link a QR code for device-to-device transfer points to. The QR image itself is
+ * rendered locally (qr-local.js); the payload never goes to a third-party service.
  * @param {object} backup
  * @param {string} [baseUrl]
  * @returns {string}
  */
-export function getSyncQrCodeUrl(backup, baseUrl = 'https://www.max-schenk.tech/pages/dashboard.html') {
+export function getSyncUrl(backup, baseUrl = 'https://www.max-schenk.tech/pages/dashboard.html') {
     const payload = serializeBackupToPayload(backup);
     const cleanUrl = baseUrl.split('#')[0].split('?')[0];
-    const syncUrl = `${cleanUrl}#sync=${payload}`;
-    return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(syncUrl)}&margin=10`;
+    return `${cleanUrl}#sync=${payload}`;
 }
 
 /* ------------------------------------------------------------------------------------ */
@@ -254,7 +254,7 @@ export function initProgressBackup() {
     let pending = null;
 
     if (qrButton && qrDisplay && qrImg) {
-        qrButton.addEventListener('click', () => {
+        qrButton.addEventListener('click', async () => {
             let backup;
             try {
                 backup = createBackup(window.localStorage);
@@ -270,8 +270,19 @@ export function initProgressBackup() {
                 say('Es gibt noch nichts zu sichern.', 'There is nothing to back up yet.');
                 return;
             }
-            qrImg.src = getSyncQrCodeUrl(backup, window.location.href);
-            qrDisplay.hidden = false;
+            try {
+                const { createQrDataUrl } = await import('./qr-local.js');
+                qrImg.src = createQrDataUrl(getSyncUrl(backup, window.location.href));
+                qrDisplay.hidden = false;
+            } catch (_e) {
+                // Too much data for a single QR code (or the module failed to load).
+                qrDisplay.hidden = true;
+                say(
+                    'Der Lernstand ist zu groß für einen QR-Code. Bitte stattdessen die Backup-Datei exportieren.',
+                    'The progress data is too large for a QR code. Please export the backup file instead.',
+                    true
+                );
+            }
         });
 
         qrClose?.addEventListener('click', () => {

@@ -148,8 +148,8 @@ function startQuiz() {
 function showQuestion() {
     resetState();
     const questions = getActiveQuestions();
-    let currentQuestion = questions[currentQuestionIndex];
-    let questionNo = currentQuestionIndex + 1;
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionNo = currentQuestionIndex + 1;
 
     // Setzen der Frage
     questionElement.innerHTML = `${questionNo}. ${currentQuestion.question}`;
@@ -269,7 +269,7 @@ function showScore() {
     }
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    let feedback = '';
+    let feedback;
 
     if (lang === 'de') {
         if (percentage === 100) {

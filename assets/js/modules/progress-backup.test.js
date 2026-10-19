@@ -13,7 +13,7 @@ import {
     parseBackup,
     serializeBackupToPayload,
     deserializeBackupFromPayload,
-    getSyncQrCodeUrl,
+    getSyncUrl,
 } from './progress-backup.js';
 
 /** Minimal in-memory stand-in for window.localStorage. */
@@ -205,14 +205,14 @@ describe('QR sync payload encoding and decoding', () => {
         ]);
     });
 
-    it('generates valid QR code URL with sync hash', () => {
+    it('builds the sync link with the payload in the hash', () => {
         const backup = {
             app: BACKUP_APP_ID,
             version: BACKUP_VERSION,
             data: { theme: 'light' },
         };
-        const url = getSyncQrCodeUrl(backup, 'https://www.max-schenk.tech/pages/dashboard.html');
-        expect(url).toContain('https://api.qrserver.com/v1/create-qr-code/');
-        expect(url).toContain(encodeURIComponent('https://www.max-schenk.tech/pages/dashboard.html#sync='));
+        const url = getSyncUrl(backup, 'https://www.max-schenk.tech/pages/dashboard.html');
+        expect(url.startsWith('https://www.max-schenk.tech/pages/dashboard.html#sync=')).toBe(true);
+        expect(url).not.toContain('qrserver');
     });
 });

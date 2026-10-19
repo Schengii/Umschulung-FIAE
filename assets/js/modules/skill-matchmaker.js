@@ -47,7 +47,7 @@ export function initSkillMatchmaker() {
         { id: 'git', label: '🛠️ Git & CI/CD', tags: ['git', 'pwa', 'accessibility', 'playwright', 'testing'] },
     ];
 
-    let selectedSkills = new Set(['java', 'js', 'htmlcss', 'sql']);
+    const selectedSkills = new Set(['java', 'js', 'htmlcss', 'sql']);
 
     // home.html does not load projects_data.js; fetch the catalogue instead of relying on
     // another script happening to have put window.projectsData there.

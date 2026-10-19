@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const likeKey = `news_likes_${articleId}`;
         const liked = AppStorage.getItem(likeKey) === 'true';
 
-        let baseCount = parseInt(AppStorage.getItem(`${likeKey}_count`) || '0', 10);
+        const baseCount = parseInt(AppStorage.getItem(`${likeKey}_count`) || '0', 10);
         if (liked) {
             AppStorage.setItem(likeKey, 'false');
             btn.style.color = 'var(--text-secondary)';

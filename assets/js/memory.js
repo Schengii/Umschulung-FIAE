@@ -229,7 +229,7 @@ function initMemoryGame() {
             const secs = seconds % 60;
             const timeStr = `${mins}:${String(secs).padStart(2, '0')}`;
 
-            let html = '';
+            let html;
             if (lang === 'de') {
                 html = `<h3>🎉 Gewonnen!</h3>
                     <p>Du hast ${moves} Züge gebraucht und ${timeStr} Minuten benötigt.</p>`;

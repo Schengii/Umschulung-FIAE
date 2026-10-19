@@ -95,7 +95,7 @@ export function initHeroSection() {
 }
 
 function initHeroParticles(container) {
-    let existingCanvas = container.querySelector('.hero-particles, .hero-particles-canvas');
+    const existingCanvas = container.querySelector('.hero-particles, .hero-particles-canvas');
     if (existingCanvas) {
         existingCanvas.remove();
     }

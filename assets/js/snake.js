@@ -162,7 +162,7 @@
         if (pauseBtn) {
             pauseBtn.disabled = !isPlaying;
 
-            let pauseText = '';
+            let pauseText;
             if (isPaused) {
                 pauseText =
                     lang === 'de' ? '<i class="fa fa-play"></i> Fortsetzen' : '<i class="fa fa-play"></i> Resume';

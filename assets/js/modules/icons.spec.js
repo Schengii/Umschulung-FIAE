@@ -13,9 +13,12 @@ const pages = [
         .filter((file) => file.endsWith('.html'))
         .map((file) => `pages/${file}`),
     // Stand-alone project pages that link to the root vendor copy instead of their own.
-    'Projekte/java-playground.html',
-    'Projekte/CoOpVersusGame/coop-versus-demo.html',
-    'Projekte/Maps/maps-showcase.html',
+    // Only checked while they exist in the repo (the sync no longer ships them).
+    ...[
+        'Projekte/java-playground.html',
+        'Projekte/CoOpVersusGame/coop-versus-demo.html',
+        'Projekte/Maps/maps-showcase.html',
+    ].filter((file) => fs.existsSync(file)),
 ];
 
 test.describe('Font Awesome Subset', () => {

@@ -321,6 +321,9 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    /* The cards are rendered by JS after load; without a reserved height the footer sits
+       inside the first screen and jumps down when they appear (CLS 0.18 in Lighthouse). */
+    min-height: 100vh;
 }
 
 /* Portfolio Quick Bar */

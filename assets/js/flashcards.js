@@ -280,11 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Load data from LocalStorage
-    let starredIds = readStored('flashcards_starred', []);
+    const starredIds = readStored('flashcards_starred', []);
     let customCards = readStored('flashcards_custom', []);
-    let boxLevels = readStored('flashcards_box_levels', {});
+    const boxLevels = readStored('flashcards_box_levels', {});
     // cardId -> timestamp of the day the card is due again (see leitner-box.js)
-    let dueDates = readStored('flashcards_due_dates', {});
+    const dueDates = readStored('flashcards_due_dates', {});
 
     let currentCategory = 'all';
     let filteredDeck = [];
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Record learning recommendations
-                let wrongCounts = JSON.parse(
+                const wrongCounts = JSON.parse(
                     AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
                 );
                 wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
@@ -708,16 +708,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Global custom card delete handle
-    window.deleteCustomCard = function (id) {
-        const lang = document.documentElement.getAttribute('lang') || 'de';
-        if (
-            !confirm(
-                lang === 'de'
-                    ? 'Möchtest du diese Karte wirklich löschen?'
-                    : 'Are you sure you want to delete this card?'
-            )
-        )
-            return;
+    window.deleteCustomCard = async function (id) {
+        const confirmed = await window.showConfirm({
+            de: 'Möchtest du diese Karte wirklich löschen?',
+            en: 'Are you sure you want to delete this card?',
+        });
+        if (!confirmed) return;
 
         customCards = customCards.filter((c) => c.id !== id);
         AppStorage.setItem('flashcards_custom', JSON.stringify(customCards));

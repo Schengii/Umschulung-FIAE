@@ -4,6 +4,41 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-18
+
+### Umsetzung des Plans aus der Projektanalyse (PLAN.md A00–D05)
+
+#### Behoben
+- **A01/A02/A03**: Die rote E2E-Basis der CI ist behoben: Dossier-Spec folgt dem aktuellen Modultext, `icons.spec.js` prüft nur noch vorhandene Projektseiten, `#terminal-output` im Git-Simulator ist per Tastatur erreichbar (`tabindex="0"`, `role="log"`, zweisprachiges `aria-label`; axe `scrollable-region-focusable` auf mobile-chrome).
+- **A04**: Playwright nutzt lokal 2 Worker wie die CI (Standard verursachte Last-Flakes); zwei Chromium-Volläufe 255/255 grün.
+- **A00**: Lokale Toolchain per `npm ci` auf das Lockfile gebracht (ESLint 10.12.0).
+
+#### Datenschutz & Sicherheit
+- **C01**: QR-Codes (Lernstand-Sync, Recruiter-Link) werden lokal erzeugt (`qrcode-generator` 2.0.4, `assets/vendor/qrcode/`, `modules/qr-local.js`). Es geht kein Lernstand mehr an `api.qrserver.com`; der Dienst ist aus `vercel.json` und `links.html` entfernt. Der Recruiter-QR lässt sich direkt als SVG herunterladen. Neue Tests: `qr-local.test.js`, `qr_local.spec.js` (Netzwerkassertion).
+- **C02/C04**: Doppelte Escape-Funktion in `username-greeting.js` entfernt, `daily-question.js` nutzt `AppStorage`.
+- **C03**: Native `alert/confirm/prompt` durch `assets/js/dialog.js` ersetzt (`<dialog>`, `showAlert/showConfirm/showPrompt`, zweisprachig); ESLint `no-alert` ist Fehler. Neue Spec `dialogs.spec.js`.
+
+#### Qualität & Tooling
+- **B01**: Skip-Link auf `ihk-cockpit.html` und `challenge-lab.html`; `check-head` erzwingt ihn bei jeder Seite mit `<main id="main-content">`.
+- **B02**: ESLint nutzt `@eslint/js` recommended plus `eqeqeq`, `no-var`, `prefer-const`, `no-alert`; `no-useless-assignment` als Warnung (12 Fundstellen, siehe PLAN.md „Neu gefunden“).
+- **B03**: `npm run test:coverage` (Ausgangswert `assets/js/modules`: 17,2 % Statements).
+- **B04**: CI: `github`-/JSON-Reporter und Step-Summary mit Tests, die nur im Retry bestehen (`scripts/summarize_playwright_flaky.js`).
+- **B05**: `lighthouserc.json` deckt alle 25 Sitemap-Seiten ab, `npm run check-lighthouse-urls` ist Teil von `check` und CI.
+- **D01**: Dashboard-Logik DOM-frei in `modules/dashboard-logic.js` mit 13 Vitest-Fällen; `dashboard.js` 852 → 737 Zeilen.
+- **D02**: `GEMINI.md` verweist auf `CLAUDE.md` statt eine abweichende Kopie zu pflegen.
+- **D04**: Pre-Push-Hook führt zusätzlich einen kurzen E2E-Smoke aus (`SKIP_E2E=1` überspringt).
+
+#### Nachträge (N01–N06)
+- **N01**: Alle `no-useless-assignment`-Meldungen bereinigt, die Regel ist jetzt ein Fehler.
+- **N03**: `scripts/generate_qr_codes.js` rendert die statischen QR-PNGs lokal (`qr-local.js` + `sharp`), kein QR-Webdienst mehr.
+- **N04**: Lighthouse-CI fand auf `challenge-lab.html` einen CLS von 0,18 (Footer sprang nach dem JS-Rendern der Karten); `.challenge-list-container` reserviert jetzt Höhe, gemessene Layout-Shifts: 0.
+- **N02**: Escape im mobilen Menü gab in Safari/WebKit den Fokus nicht zurück, weil `components.js` und `navigation.js` beide Escape behandelten und der erste Handler das Menü ohne Fokus-Rückgabe schloss; doppelte Logik entfernt. `exam_simulator.spec.js` läuft in WebKit stabil (Dauer-Animationen drückten requestAnimationFrame auf 6 fps; Spec nutzt Reduced Motion und 90 s Timeout).
+- **N05**: Projekte per `npm run sync-projects` auf den Stand der Standalone-Repos gebracht; vite/vitest/nodemailer in den Manifesten von ElektroCheck AI und Wohnungssuche KI sind auf gepatchten Versionen (schließt die 16 Dependabot-Alarme nach dem Merge).
+- **N06**: `ci.yml` hat `workflow_dispatch`; `sync.yml` startet die CI nach dem Anlegen/Aktualisieren des Sync-PRs selbst (wirksam ab dem Merge in main). Die Repo-Einstellung „Approval for running workflows“ bleibt unverändert.
+
+#### Offen
+- Der alte Sync-PR #35 überschneidet sich mit N05 und kann nach dem Merge geschlossen werden.
+
 ## [1.3.0] - 2026-10-17
 
 ### Vollständige Umsetzung des Optimierungsplans (PLAN.md OPT-01–OPT-12)

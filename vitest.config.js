@@ -6,5 +6,11 @@ module.exports = defineConfig({
     exclude: ['Projekte/**', 'node_modules/**'],
     environment: 'node',
     isolate: false,
+    coverage: {
+      provider: 'v8',
+      include: ['assets/js/modules/**/*.js'],
+      exclude: ['**/*.test.js', '**/*.spec.js'],
+      reporter: ['text-summary', 'text'],
+    },
   },
 });
