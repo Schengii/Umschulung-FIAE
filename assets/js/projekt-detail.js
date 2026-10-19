@@ -170,10 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="download-card-container">
             `;
             project.downloadPpts.forEach((ppt) => {
-                const pptTitle = lang === 'de' ? ppt.titleDe : ppt.titleEn;
                 const pptUrl = (window.resolveAssetPath || ((p) => p))(ppt.url);
                 mediaHTML += `
-                    <a href="${pptUrl}" class="ppt-download-card" download aria-label="Download ${pptTitle}">
+                    <a href="${pptUrl}" class="ppt-download-card" download>
                         <div class="ppt-icon-wrapper">
                             <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
                         </div>
@@ -424,7 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
         project.videoPlaylist.forEach((videoItem, index) => {
             const btn = document.createElement('button');
             btn.className = 'playlist-track-btn';
-            btn.setAttribute('aria-label', `Play video: ${videoItem.titleDe}`);
 
             btn.innerHTML = `
                 <div class="track-icon">
