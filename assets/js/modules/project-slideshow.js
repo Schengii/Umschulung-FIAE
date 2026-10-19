@@ -14,6 +14,7 @@ export function initSlideshow() {
 
     let currentSlide = 0;
 
+    /** @param {number} index */
     function showSlide(index) {
         slides[currentSlide].classList.remove('active');
         currentSlide = (index + slides.length) % slides.length;
@@ -44,6 +45,7 @@ export function initSlideshow() {
         document.removeEventListener('keydown', handleKeyNavigation);
     });
 
+    /** @param {KeyboardEvent} e */
     function handleKeyNavigation(e) {
         if (e.key === 'ArrowLeft') {
             e.preventDefault();

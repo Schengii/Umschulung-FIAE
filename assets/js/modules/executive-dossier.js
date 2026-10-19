@@ -3,6 +3,7 @@
  * @description Rollenspezifischer 1-Klick Dossier & PDF-Generator für Recruiter & Prüfer
  */
 
+/** @type {Record<string, Record<string, any>>} */
 const DOSSIER_TEMPLATES = {
     fullstack: {
         title: 'Executive Dossier: Fullstack & Frontend Engineering',
@@ -180,6 +181,7 @@ export function openDossierModal(initialType = 'fullstack') {
     modal.style.display = 'flex';
 }
 
+/** @param {string} typeKey */
 function renderDossierPreview(typeKey) {
     const data = DOSSIER_TEMPLATES[typeKey] || DOSSIER_TEMPLATES.fullstack;
 
@@ -193,6 +195,6 @@ function renderDossierPreview(typeKey) {
     if (skillsEl) skillsEl.textContent = data.skills;
 
     if (highlightsEl) {
-        highlightsEl.innerHTML = data.highlights.map((h) => `<li>${h}</li>`).join('');
+        highlightsEl.innerHTML = data.highlights.map((/** @type {string} */ h) => `<li>${h}</li>`).join('');
     }
 }

@@ -9,6 +9,7 @@
 import { createLevelState, executeCommand, headCommitId, isLevelComplete } from './modules/git-engine.js';
 
 // Level texts (static, trusted markup). The goals themselves are LEVEL_RULES in the engine.
+/** @type {Record<string, {titleDe: string, titleEn: string, descDe: string, descEn: string}>} */
 const LEVEL_TEXTS = {
     sandbox: {
         titleDe: 'Freie Sandbox',
@@ -55,6 +56,7 @@ const LEVEL_TEXTS = {
 };
 
 // Colours for well-known branch names; every other branch takes the next palette entry.
+/** @type {Record<string, string>} */
 const BRANCH_COLORS = {
     main: '#3b82f6', // Blue
     'feature/login': '#a855f7', // Violet
@@ -79,11 +81,14 @@ let levelCompleted = false;
 let descriptionRendered = false;
 
 // DOM Elements
-let terminalOutput;
-let terminalInput;
-let levelSelect;
-let levelDescription;
-let gitSvg;
+/** @type {HTMLElement | null} */
+let terminalOutput = null;
+/** @type {HTMLElement | null} */
+let levelSelect = null;
+/** @type {HTMLElement | null} */
+let levelDescription = null;
+/** @type {SVGElement | null} */
+let gitSvg = null;
 
 const currentLang = () => document.documentElement.getAttribute('lang') || 'de';
 
@@ -107,7 +112,7 @@ function writeLine(line) {
     } else if (line.de === line.en) {
         row.textContent = line.de;
     } else {
-        for (const lang of ['de', 'en']) {
+        for (const lang of /** @type {const} */ (['de', 'en'])) {
             const span = document.createElement('span');
             span.lang = lang;
             span.textContent = line[lang];
@@ -122,14 +127,23 @@ function writeLine(line) {
     }
 }
 
+/**
+ * @param {string} de
+ * @param {string} [en]
+ */
 function writeSystemLine(de, en = de) {
     writeLine({ kind: 'system', de, en });
 }
 
+/**
+ * @param {string} de
+ * @param {string} [en]
+ */
 function writeSuccessLine(de, en = de) {
     writeLine({ kind: 'success', de, en });
 }
 
+/** @param {string} command */
 function writeCommandEcho(command) {
     if (!terminalOutput) return;
     const row = document.createElement('div');
@@ -178,14 +192,24 @@ function layoutLanes() {
     };
 }
 
+/**
+ * @param {string} tag
+ * @param {Record<string, string | number>} [attributes]
+ * @param {string} [text]
+ * @returns {SVGElement}
+ */
 function svgElement(tag, attributes = {}, text) {
-    const element = document.createElementNS(SVG_NS, tag);
+    const element = /** @type {SVGElement} */ (document.createElementNS(SVG_NS, tag));
     for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, String(value));
     if (text !== undefined) element.textContent = text;
     return element;
 }
 
-/** Draws a reference label (branch name or HEAD) with its pointer line. */
+/**
+ * Draws a reference label (branch name or HEAD) with its pointer line.
+ * @param {Element} group
+ * @param {{x: number, y: number, pointToY: number, width: number, text: string, stroke: string, fill: string}} label
+ */
 function drawLabel(group, { x, y, pointToY, width, text, stroke, fill }) {
     group.append(
         svgElement('line', { x1: x, y1: y - 10, x2: x, y2: pointToY, class: 'ref-pointer', stroke }),
@@ -221,11 +245,12 @@ function renderGraph() {
 
     const commits = Object.values(gitState.commits);
     const lanes = layoutLanes();
+    /** @param {import('./modules/git-engine.js').Commit} commit */
     const position = (commit) => ({ x: 60 + commit.depth * 85, y: lanes.laneY(commit.branch) });
 
     // The SVG grows with the graph (the container scrolls).
     const maxDepth = Math.max(...commits.map((commit) => commit.depth), 3);
-    gitSvg.setAttribute('width', String(Math.max(120 + maxDepth * 85, gitSvg.parentElement.clientWidth)));
+    gitSvg.setAttribute('width', String(Math.max(120 + maxDepth * 85, gitSvg.parentElement?.clientWidth ?? 0)));
     gitSvg.setAttribute('height', String(lanes.height));
 
     // 1. Connection lines
@@ -276,7 +301,9 @@ function renderGraph() {
     }
 
     // 3. Branch labels and the HEAD pointer, stacked below their commit
+    /** @type {Record<string, number>} */
     const labelCount = {};
+    /** @param {import('./modules/git-engine.js').Commit} commit */
     const nextLabelY = (commit) => {
         const index = labelCount[commit.id] || 0;
         labelCount[commit.id] = index + 1;
@@ -333,6 +360,7 @@ function renderGraph() {
 
 /**
  * Runs one command line through the engine and renders the result.
+ * @param {string} commandStr
  */
 function runCommand(commandStr) {
     const command = commandStr.trim();
@@ -383,6 +411,7 @@ function resetSimulator() {
     renderLevelBadge();
 }
 
+/** @param {string} levelId */
 function handleLevelChange(levelId) {
     currentLevelId = LEVEL_TEXTS[levelId] ? levelId : 'sandbox';
     resetSimulator();
@@ -405,6 +434,7 @@ function checkLevelProgress() {
     renderLevelBadge();
 }
 
+/** @param {string} soundId */
 function playAudio(soundId) {
     if (typeof GameAudio !== 'undefined') {
         GameAudio.play(soundId);
@@ -415,8 +445,17 @@ function playAudio(soundId) {
  * Quick action buttons: ask for the one argument a command needs and run it.
  */
 function setupQuickActions() {
+    /**
+     * @param {string} de
+     * @param {string} en
+     * @param {string} [fallback]
+     */
     const ask = async (de, en, fallback = '') => ((await window.showPrompt({ de, en }, fallback)) || '').trim();
     const branchList = () => Object.keys(gitState.branches).join(', ');
+    /**
+     * @param {string} id
+     * @param {() => void} handler
+     */
     const on = (id, handler) => document.getElementById(id)?.addEventListener('click', handler);
 
     on('btn-quick-commit', async () => {
@@ -460,40 +499,41 @@ function setupQuickActions() {
  */
 export function initGitSimulator() {
     terminalOutput = document.getElementById('terminal-output');
-    terminalInput = document.getElementById('terminal-input');
+    const input = /** @type {HTMLInputElement | null} */ (document.getElementById('terminal-input'));
     levelSelect = document.getElementById('level-select');
     levelDescription = document.getElementById('level-description');
-    gitSvg = document.getElementById('git-svg');
+    gitSvg = /** @type {SVGElement | null} */ (/** @type {unknown} */ (document.getElementById('git-svg')));
 
-    if (!terminalInput || !gitSvg) return;
+    if (!input || !gitSvg) return;
 
     // Command History State
+    /** @type {string[]} */
     const commandHistory = [];
     let historyIndex = -1;
 
     // Terminal Input events with history navigation
-    terminalInput.addEventListener('keydown', (e) => {
+    input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            const cmd = terminalInput.value;
+            const cmd = input.value;
             if (cmd.trim()) {
                 commandHistory.push(cmd);
                 historyIndex = commandHistory.length;
             }
-            terminalInput.value = '';
+            input.value = '';
             runCommand(cmd);
         } else if (e.key === 'ArrowUp') {
             if (commandHistory.length > 0 && historyIndex > 0) {
                 historyIndex--;
-                terminalInput.value = commandHistory[historyIndex];
+                input.value = commandHistory[historyIndex];
                 e.preventDefault();
             }
         } else if (e.key === 'ArrowDown') {
             if (historyIndex < commandHistory.length - 1) {
                 historyIndex++;
-                terminalInput.value = commandHistory[historyIndex];
+                input.value = commandHistory[historyIndex];
             } else {
                 historyIndex = commandHistory.length;
-                terminalInput.value = '';
+                input.value = '';
             }
             e.preventDefault();
         }

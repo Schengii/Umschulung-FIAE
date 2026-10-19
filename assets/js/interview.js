@@ -290,6 +290,7 @@ const INTERVIEW_QUESTIONS = [
 
 // interview.js is a classic script (no imports), so it carries its own copy of the
 // escaping helper from modules/html-utils.js.
+/** @param {unknown} value */
 function escapeHtml(value) {
     return String(value ?? '')
         .replace(/&/g, '&amp;')
@@ -301,13 +302,16 @@ function escapeHtml(value) {
 
 class InterviewSimulator {
     constructor() {
+        /** @type {string[]} */
         this.selectedCategories = [];
         this.selectedLanguage = 'de';
+        /** @type {Array<Record<string, any>>} */
         this.currentQuestions = [];
         this.currentIndex = 0;
         this.score = 0;
         this.totalPossibleKeywords = 0;
         this.matchedKeywordsCount = 0;
+        /** @type {Array<Record<string, any>>} */
         this.history = []; // records of questions, answers, and scores
 
         this.chatContainer = document.getElementById('chat-history');
@@ -386,7 +390,7 @@ class InterviewSimulator {
                 this.updateLabels();
             };
 
-            this.recognition.onresult = (e) => {
+            this.recognition.onresult = (/** @type {{results: ArrayLike<ArrayLike<{transcript: string}>>}} */ e) => {
                 const transcript = e.results[0][0].transcript;
                 if (this.inputText) {
                     const currentVal = this.inputText.value.trim();
@@ -396,7 +400,7 @@ class InterviewSimulator {
                 }
             };
 
-            this.recognition.onerror = (e) => {
+            this.recognition.onerror = (/** @type {{error: string}} */ e) => {
                 console.warn('Speech recognition error:', e.error);
                 this.isRecording = false;
                 if (this.micBtn) {
@@ -519,6 +523,7 @@ class InterviewSimulator {
         this.sendBotQuestion();
     }
 
+    /** @param {string} text */
     speak(text) {
         if (!this.ttsEnabled || !window.speechSynthesis) return;
 
@@ -592,6 +597,7 @@ class InterviewSimulator {
         }, 1200);
     }
 
+    /** @param {string} userAnswer */
     evaluateAnswer(userAnswer) {
         const q = this.currentQuestions[this.currentIndex];
         const keywords = this.selectedLanguage === 'de' ? q.keywordsDe : q.keywordsEn;
@@ -640,8 +646,8 @@ class InterviewSimulator {
             <div class="feedback-bubble ${bubbleClass}">
                 <strong>${rating} (${scorePercentage}%)</strong><br>
                 <div style="margin: 0.5rem 0;">
-                    <span lang="de"><strong>Gefundene Kriterien:</strong> ${matched.length > 0 ? matched.map((m) => `<span class="badge-match">${m}</span>`).join(' ') : 'Keine'}</span>
-                    <span lang="en"><strong>Found Criteria:</strong> ${matched.length > 0 ? matched.map((m) => `<span class="badge-match">${m}</span>`).join(' ') : 'None'}</span>
+                    <span lang="de"><strong>Gefundene Kriterien:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${m}</span>`).join(' ') : 'Keine'}</span>
+                    <span lang="en"><strong>Found Criteria:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${m}</span>`).join(' ') : 'None'}</span>
                 </div>
                 <div style="margin-top: 0.8rem; border-top: 1px solid var(--border); padding-top: 0.5rem;">
                     <p style="font-style: italic; margin-bottom: 0.25rem;">
@@ -749,8 +755,8 @@ class InterviewSimulator {
                             <strong>Score: ${h.score}%</strong>
                         </div>
                         <p style="margin-bottom: 0.5rem;"><strong>Deine Antwort / Your Answer:</strong><br><span class="small-muted">${escapeHtml(h.answer)}</span></p>
-                        <p style="margin-bottom: 0.5rem;"><strong>Erreichte Stichpunkte:</strong> ${h.matched.map((m) => `<span class="badge-match" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">${m}</span>`).join(' ') || 'Keine'}</p>
-                        <p style="margin-bottom: 0;"><strong>Fehlende Stichpunkte:</strong> ${h.missing.map((m) => `<span class="badge-match" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">${m}</span>`).join(' ') || 'Keine'}</p>
+                        <p style="margin-bottom: 0.5rem;"><strong>Erreichte Stichpunkte:</strong> ${h.matched.map((/** @type {string} */ m) => `<span class="badge-match" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">${m}</span>`).join(' ') || 'Keine'}</p>
+                        <p style="margin-bottom: 0;"><strong>Fehlende Stichpunkte:</strong> ${h.missing.map((/** @type {string} */ m) => `<span class="badge-match" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">${m}</span>`).join(' ') || 'Keine'}</p>
                     </div>
                 `;
                 reviewContainer.insertAdjacentHTML('beforeend', cardHTML);
@@ -772,6 +778,11 @@ class InterviewSimulator {
         );
     }
 
+    /**
+     * @param {string} sender
+     * @param {string} text
+     * @param {boolean} [isHTML]
+     */
     appendMessage(sender, text, isHTML = false) {
         const wrapper = document.createElement('div');
         wrapper.className = `chat-message-wrapper ${sender}-wrapper`;
@@ -821,9 +832,15 @@ class InterviewSimulator {
         }
     }
 
+    /**
+     * @param {string} userAnswer
+     * @param {string[]} [keywords]
+     */
     _fallbackEvaluateKeywords(userAnswer, keywords = []) {
         const cleanedAnswer = (userAnswer || '').toLowerCase();
+        /** @type {string[]} */
         const matched = [];
+        /** @type {string[]} */
         const missing = [];
 
         keywords.forEach((kw) => {
@@ -840,6 +857,7 @@ class InterviewSimulator {
         return { matched, missing, scorePercentage };
     }
 
+    /** @param {number} scorePercentage */
     _fallbackRatingFeedback(scorePercentage) {
         if (scorePercentage >= 85) {
             return { ratingDe: '🏆 Exzellent!', ratingEn: '🏆 Excellent!', bubbleClass: 'feedback-excellent' };

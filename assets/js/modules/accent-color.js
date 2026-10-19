@@ -52,6 +52,7 @@ export function initAccentColor() {
         });
     });
 
+    /** @param {string} activeVal */
     function updateActiveDot(activeVal) {
         dots.forEach((dot) => {
             if (dot.getAttribute('data-accent-val') === activeVal) {

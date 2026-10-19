@@ -22,6 +22,8 @@
  *   node scripts/subset_fontawesome.js --check  # exits 1 if the committed subset is stale
  */
 
+/** @typedef {{type: string, text?: string, prelude?: string, body?: string}} CssBlock one top-level comment or rule of a stylesheet */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -33,8 +35,14 @@ const check = process.argv.includes('--check');
 
 const FONT_FILES = ['fa-solid-900.woff2', 'fa-regular-400.woff2', 'fa-brands-400.woff2'];
 const SKIP_DIR_NAMES = new Set(['node_modules', '.git', 'dist', '.vite']);
-const isTestFile = (f) => /\.(test|spec)\.js$/.test(f);
+const isTestFile = (/** @type {string} */ f) => /\.(test|spec)\.js$/.test(f);
 
+/**
+ * @param {string} dir
+ * @param {string[]} extensions
+ * @param {string[]} [out]
+ * @returns {string[]}
+ */
 function walk(dir, extensions, out = []) {
     if (!fs.existsSync(dir)) return out;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -69,6 +77,10 @@ function collectSourceFiles() {
 }
 
 /** Splits a stylesheet into its top-level comments and rules (at-rules stay one block). */
+/**
+ * @param {string} css
+ * @returns {CssBlock[]}
+ */
 function splitTopLevel(css) {
     const blocks = [];
     let i = 0;
@@ -108,6 +120,7 @@ function splitTopLevel(css) {
 }
 
 /** Resolves CSS escapes (`\f015`, `\30 `) in the value of a `content` string. */
+/** @param {string} value */
 function decodeCssString(value) {
     let out = '';
     for (let i = 0; i < value.length; i++) {
@@ -132,6 +145,7 @@ const ICON_SELECTOR = /^\.(fa-[a-z0-9-]+):{1,2}before$/;
 const ICON_BODY = /^content:"((?:[^"\\]|\\.)*)";?$/;
 
 /** @returns {{names: string[], glyph: string} | null} the icon names a rule defines, if it is an icon rule */
+/** @param {CssBlock} block */
 function parseIconRule(block) {
     if (block.type !== 'rule') return null;
     const body = ICON_BODY.exec(block.body.trim());
@@ -145,11 +159,12 @@ function parseIconRule(block) {
     return { names, glyph: decodeCssString(body[1]) };
 }
 
+/** @param {CssBlock} block */
 function rewriteFontFace(block) {
     const family = /font-family:"([^"]+)"/.exec(block.body)?.[1];
     // "FontAwesome" is the Font Awesome 4 family name; nothing here uses the v4 class names.
     if (family === 'FontAwesome') return null;
-    const body = block.body.replace(/src:[^;}]+/, (src) => {
+    const body = block.body.replace(/src:[^;}]+/, (/** @type {string} */ src) => {
         const woff2 = /url\([^)]+\.woff2\) format\("woff2"\)/.exec(src);
         if (!woff2) throw new Error(`@font-face for "${family}" has no WOFF2 source`);
         return `src:${woff2[0]}`;
@@ -223,7 +238,7 @@ function buildSubset() {
     };
 }
 
-const normalise = (text) => text.replace(/\r\n/g, '\n');
+const normalise = (/** @type {string} */ text) => text.replace(/\r\n/g, '\n');
 
 async function run() {
     const subset = buildSubset();
@@ -267,7 +282,7 @@ async function run() {
         fontBytes += result.length;
     }
 
-    const kb = (bytes) => `${(bytes / 1024).toFixed(1)} KB`;
+    const kb = (/** @type {number} */ bytes) => `${(bytes / 1024).toFixed(1)} KB`;
     console.log(
         `✓ Font Awesome subset written: ${subset.used.size} of ${subset.defined.size} icon names ` +
             `from ${subset.sourceFiles.length} files, CSS ${kb(Buffer.byteLength(subset.css))}, fonts ${kb(fontBytes)}.`

@@ -110,6 +110,7 @@ function initNumberCounters() {
                     const duration = 1400; // ms
                     const startTime = performance.now();
 
+                    /** @param {number} currentTime */
                     function updateCount(currentTime) {
                         const elapsed = currentTime - startTime;
                         const progress = Math.min(elapsed / duration, 1);
@@ -159,6 +160,7 @@ function initTechParticles() {
     let width = (canvas.width = hero.offsetWidth);
     let height = (canvas.height = hero.offsetHeight);
 
+    /** @type {Array<Record<string, any>>} */
     const particles = [];
     const particleCount = Math.min(36, Math.floor((width * height) / 18000));
 

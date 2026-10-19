@@ -9,7 +9,7 @@ console.log(`Checking ${projects.length} project links...`);
 
 let missingCount = 0;
 
-projects.forEach((proj, idx) => {
+projects.forEach((/** @type {Record<string, any>} */ proj, /** @type {number} */ idx) => {
     const rawLink = proj.link;
     if (!rawLink) {
         console.warn(`[${idx + 1}/${projects.length}] ${proj.titleDe}: Missing link property!`);

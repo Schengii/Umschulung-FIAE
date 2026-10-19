@@ -48,6 +48,7 @@ const APP = Object.freeze({
     WEB3FORMS_KEY: 'a170fb6a-e47b-43d7-ac1c-2c09ad6c7289',
 });
 
+/** @param {string} pathStr */
 function resolveAssetPath(pathStr) {
     if (!pathStr || typeof pathStr !== 'string') return pathStr;
     if (

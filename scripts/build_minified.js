@@ -49,8 +49,12 @@ const SKIP_DIR_NAMES = new Set([
 ]);
 
 // Sources that live next to the shipped code but are development-only.
-const isDevOnlyFile = (name) => /\.(test|spec)\.js$/.test(name) || name.endsWith('.d.ts');
+const isDevOnlyFile = (/** @type {string} */ name) => /\.(test|spec)\.js$/.test(name) || name.endsWith('.d.ts');
 
+/**
+ * @param {string} src
+ * @param {string} dest
+ */
 function copyRecursive(src, dest) {
     const stat = fs.statSync(src);
     if (stat.isDirectory()) {
@@ -66,6 +70,10 @@ function copyRecursive(src, dest) {
     }
 }
 
+/**
+ * @param {string} srcDir
+ * @param {string[]} extList
+ */
 async function minifyDir(srcDir, extList) {
     const files = [];
     (function walk(dir) {
@@ -125,13 +133,14 @@ function findMissingLinkTargets() {
     return missing;
 }
 
+/** @param {string} dir */
 function cleanDistDir(dir) {
     if (!fs.existsSync(dir)) return;
     try {
         fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
     } catch (_err) {
         // On Windows, if a folder handle is held open by another process, recursively clean contents
-        const cleanChildren = (target) => {
+        const cleanChildren = (/** @type {string} */ target) => {
             if (!fs.existsSync(target)) return;
             for (const entry of fs.readdirSync(target, { withFileTypes: true })) {
                 const fullPath = path.join(target, entry.name);

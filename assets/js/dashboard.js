@@ -50,6 +50,10 @@ function initPwaTelemetry() {
     if (!statusBadge && !cacheSize) return;
 
     const isEnglish = () => document.documentElement.getAttribute('lang') === 'en';
+    /**
+     * @param {string | {de: string, en: string}} text
+     * @param {string} [type]
+     */
     const toast = (text, type) => window.showToast && window.showToast(text, type);
     const hasCacheApi = 'caches' in window;
 
@@ -251,7 +255,7 @@ function renderRecentProjects() {
                 <ul style="list-style:none; padding:0; margin-top:1rem;">
                     ${recent
                         .map(
-                            (p) => `
+                            (/** @type {Record<string, any>} */ p) => `
                         <li style="padding:0.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
                             <span style="font-weight:600;">${p.title}</span>
                             <a href="${p.link}" style="font-size:0.85rem;">
@@ -408,7 +412,7 @@ function initDailyQuestionWidget() {
     if (!container) return;
 
     function render() {
-        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const lang = /** @type {'de' | 'en'} */ (document.documentElement.getAttribute('lang') || 'de');
         const dateKey = getLocalDateKey();
         const index = getDailyQuestionIndex(dateKey, EXAM_QUESTIONS.length);
         const question = EXAM_QUESTIONS[index];
@@ -647,7 +651,7 @@ function renderAchievementsWidget() {
 
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
-    const definitions = Achievements.definitions;
+    const definitions = /** @type {Record<string, any>} */ (Achievements.definitions);
     const unlockedIds = Achievements.getUnlocked();
     const totalCount = Object.keys(definitions).length;
     const unlockedCount = unlockedIds.length;

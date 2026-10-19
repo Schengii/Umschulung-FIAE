@@ -209,6 +209,7 @@ sw.addEventListener('activate', (e) => {
  * Offline answer for a page navigation: the cached page itself, then the same page without
  * its query string (projekt-detail.html?repo=... reads the query client-side, so one cached
  * copy serves every project), then the offline page. Always resolves to a real Response.
+ * @param {Request} request
  */
 async function offlineDocument(request) {
     return (

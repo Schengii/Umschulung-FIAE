@@ -23,6 +23,7 @@ export function initPdfExporter() {
 
 function generateFactsheetModal() {
     // sessionStorage throws when storage is blocked; the export must still work then.
+    /** @param {string} key */
     const fromSession = (key) => {
         try {
             return sessionStorage.getItem(key);

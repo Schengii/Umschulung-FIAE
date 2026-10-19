@@ -81,6 +81,10 @@ export function isBackupKey(key) {
     return EXACT_KEYS.has(key) || KEY_PREFIXES.some((prefix) => key.startsWith(prefix));
 }
 
+/**
+ * @param {string} key
+ * @param {unknown} value
+ */
 function isValidValue(key, value) {
     if (typeof value !== 'string') return false;
     if (!JSON_KEYS.has(key)) return true;
@@ -171,7 +175,7 @@ export function applyBackup(storage, entries) {
 
 /** fiae-lernfortschritt-2026-03-10.json */
 export function backupFileName(now = new Date()) {
-    const pad = (value) => String(value).padStart(2, '0');
+    const pad = (/** @type {number | string} */ value) => String(value).padStart(2, '0');
     return `fiae-lernfortschritt-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.json`;
 }
 
@@ -245,7 +249,7 @@ export function initProgressBackup() {
     if (!exportButton || !importButton || !fileInput || !status || !confirmBox || !confirmText) return;
 
     const lang = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de');
-    const say = (de, en, isError = false) => {
+    const say = (/** @type {string} */ de, /** @type {string} */ en, isError = false) => {
         status.textContent = lang() === 'en' ? en : de;
         status.classList.toggle('backup-status-error', isError);
     };

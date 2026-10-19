@@ -34,7 +34,7 @@ export function emitEvent(eventName, detail = {}) {
  * @returns {() => void} Unsubscribe-Funktion
  */
 export function onEvent(eventName, callback) {
-    const handler = (e) => callback(e);
+    const handler = (/** @type {CustomEvent} */ e) => callback(e);
     window.addEventListener(eventName, handler);
     return () => window.removeEventListener(eventName, handler);
 }
@@ -45,7 +45,7 @@ export function onEvent(eventName, callback) {
  * @param {(e: CustomEvent) => void} callback
  */
 export function onceEvent(eventName, callback) {
-    const handler = (e) => {
+    const handler = (/** @type {CustomEvent} */ e) => {
         window.removeEventListener(eventName, handler);
         callback(e);
     };

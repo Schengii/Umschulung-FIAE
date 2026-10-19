@@ -131,6 +131,7 @@
         const input = /** @type {HTMLInputElement} */ (overlay.querySelector('#command-palette-input'));
         const results = overlay.querySelector('#command-palette-results');
         let selectedIndex = 0;
+        /** @type {Array<Record<string, any>>} */
         let currentItems = [];
 
         function getCombinedCatalog() {
@@ -284,6 +285,7 @@
             }
         });
 
+        /** @param {Element[] | NodeListOf<Element>} itemsEls */
         function updateSelection(itemsEls) {
             itemsEls.forEach((el, idx) => {
                 if (idx === selectedIndex) {

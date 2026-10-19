@@ -269,6 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const dueSummaryEl = document.getElementById('due-summary');
 
     // A damaged entry (manual edit, interrupted write) must not take the page down.
+    /**
+     * @param {string} key
+     * @param {any} fallback
+     */
     const readStored = (key, fallback) => {
         try {
             const value = JSON.parse(AppStorage.getItem(key, 'null'));
@@ -287,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dueDates = readStored('flashcards_due_dates', {});
 
     let currentCategory = 'all';
+    /** @type {Array<Record<string, any>>} */
     let filteredDeck = [];
     let currentIndex = 0;
     let isFlipped = false;
@@ -299,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const speakBtn = document.getElementById('speak-card-btn');
     const speakAnswerBtn = document.getElementById('speak-answer-btn');
 
+    /** @param {string} text */
     function speakText(text) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
@@ -467,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hintEl.textContent = lang === 'de' ? card.hint_de || card.hint_en : card.hint_en || card.hint_de;
         // Built-in cards may contain trusted markup; user-created cards are plain text.
         const isCustom = typeof card.id === 'string' && card.id.startsWith('custom_');
-        const cardText = (text) => (isCustom ? escapeHtml(text) : text);
+        const cardText = (/** @type {string} */ text) => (isCustom ? escapeHtml(text) : text);
         questionEl.innerHTML = cardText(
             lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de
         );
@@ -684,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         customListEl.innerHTML = customCards
             .map(
-                (c) => `
+                (/** @type {Record<string, any>} */ c) => `
             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.5rem; font-size:0.8rem;">
                 <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">
                     <strong>[${escapeHtml(String(c.category).toUpperCase())}]</strong> ${escapeHtml(c.hint_de)}
@@ -708,14 +714,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Global custom card delete handle
-    window.deleteCustomCard = async function (id) {
+    window.deleteCustomCard = async function (/** @type {string | number} */ id) {
         const confirmed = await window.showConfirm({
             de: 'Möchtest du diese Karte wirklich löschen?',
             en: 'Are you sure you want to delete this card?',
         });
         if (!confirmed) return;
 
-        customCards = customCards.filter((c) => c.id !== id);
+        customCards = customCards.filter((/** @type {Record<string, any>} */ c) => c.id !== id);
         AppStorage.setItem('flashcards_custom', JSON.stringify(customCards));
 
         // Clean stats level

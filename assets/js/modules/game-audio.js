@@ -8,6 +8,7 @@
 const SOUND_KEY = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.SOUND_ENABLED) || 'sound_enabled';
 
 export const GameAudio = {
+    /** @type {AudioContext | null} */
     audioCtx: null,
     isMuted: true,
 
@@ -70,6 +71,7 @@ export const GameAudio = {
         button.setAttribute('aria-pressed', String(!this.isMuted));
     },
 
+    /** @param {string} type */
     play(type) {
         if (this.isMuted) return;
 

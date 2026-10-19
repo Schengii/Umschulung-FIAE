@@ -12,7 +12,9 @@
  */
 export function evaluateAnswerKeywords(userAnswer, keywords = []) {
     const cleanedAnswer = (userAnswer || '').toLowerCase();
+    /** @type {string[]} */
     const matched = [];
+    /** @type {string[]} */
     const missing = [];
 
     (keywords || []).forEach((kw) => {

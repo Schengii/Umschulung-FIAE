@@ -6,6 +6,7 @@
     "checkJs": true,
     "allowJs": true,
     "strict": false,
+    "noImplicitAny": true,
     "noEmit": true,
     "lib": ["WebWorker", "ESNext"],
     "types": [],

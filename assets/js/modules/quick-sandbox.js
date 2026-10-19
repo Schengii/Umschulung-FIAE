@@ -3,6 +3,7 @@
  * @description Schwebendes In-Browser Live-Play Modal für Web-/Canvas-/Game-Projekte
  */
 
+/** @type {Record<string, Record<string, any>>} */
 const PLAYABLE_PROJECTS = {
     EcoChef: {
         title: 'EcoChef — IHK PWA Abschlussprojekt',
@@ -173,6 +174,7 @@ function attachEventListeners() {
     });
 }
 
+/** @param {string} urlPath */
 function resolveSandboxUrl(urlPath) {
     if (!urlPath) return '';
     if (urlPath.startsWith('http://') || urlPath.startsWith('https://')) return urlPath;
@@ -187,6 +189,7 @@ function resolveSandboxUrl(urlPath) {
     return urlPath;
 }
 
+/** @param {string} projKey */
 export function openSandbox(projKey) {
     const project =
         PLAYABLE_PROJECTS[projKey] ||

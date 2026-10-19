@@ -108,6 +108,10 @@ const AppStorage = {
             return false;
         }
     },
+    /**
+     * @param {string} key
+     * @param {any} [defaultValue]
+     */
     getItem(key, defaultValue = null) {
         if (this.isAvailable()) {
             const val = localStorage.getItem(key);
@@ -115,6 +119,10 @@ const AppStorage = {
         }
         return defaultValue;
     },
+    /**
+     * @param {string} key
+     * @param {any} value
+     */
     setItem(key, value) {
         if (this.isAvailable()) {
             try {
@@ -126,6 +134,7 @@ const AppStorage = {
         }
         return false;
     },
+    /** @param {string} key */
     removeItem(key) {
         if (this.isAvailable()) {
             localStorage.removeItem(key);
@@ -138,6 +147,7 @@ const AppStorage = {
 /* ============================================================
    HEADER
    ============================================================ */
+/** @param {string} currentPage */
 function renderHeader(currentPage) {
     return `
     <header class="app-header">
@@ -154,6 +164,7 @@ function renderHeader(currentPage) {
 /* ============================================================
    NAVIGATION
    ============================================================ */
+/** @param {string} currentPage */
 function renderNav(currentPage) {
     const path = window.location.pathname;
     const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
@@ -183,6 +194,7 @@ function renderNav(currentPage) {
         'challenge-lab.html',
     ];
 
+    /** @param {string | string[]} pages */
     const active = (pages) => {
         if (Array.isArray(pages)) return pages.includes(currentPage) ? ' active' : '';
         return currentPage === pages ? ' active' : '';
@@ -462,6 +474,7 @@ function renderCookieBanner() {
 /* ============================================================
    BREADCRUMB
    ============================================================ */
+/** @param {Array<{label_de: string, label_en: string, href?: string}>} items */
 function renderBreadcrumb(items) {
     // items = [{ label_de, label_en, href }, ...]
     // Last item is current page (no link)

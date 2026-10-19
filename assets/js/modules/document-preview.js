@@ -29,6 +29,10 @@ export function initDocumentPreview() {
     const backdrop = modal.querySelector('.doc-preview-backdrop');
     const body = modal.querySelector('.doc-preview-body');
 
+    /**
+     * @param {HTMLElement} element
+     * @param {string} fileUrl
+     */
     const openPreviewModal = (element, fileUrl) => {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const isImage = /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(fileUrl);

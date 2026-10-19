@@ -114,7 +114,7 @@ function initMouseSpotlight() {
  * @param {boolean} pointerEffects whether hover-driven effects (glow, tilt) make sense here
  */
 function enhanceCards(pointerEffects) {
-    const enhance = (card) => {
+    const enhance = (/** @type {HTMLElement} */ card) => {
         // Prevent double enhancement
         if (card.dataset.premiumEnhanced === 'true') return;
         card.dataset.premiumEnhanced = 'true';
@@ -152,6 +152,7 @@ function enhanceCards(pointerEffects) {
  * glow in CSS). One delegated listener, at most one style write per frame.
  */
 function initCardGlowTracking() {
+    /** @type {{card: HTMLElement, x: number, y: number} | null} */
     let pending = null;
     let frameId = 0;
 
@@ -176,6 +177,7 @@ function initCardGlowTracking() {
 /**
  * Adds dynamic rotation on mouseMove to simulate 3D depth
  */
+/** @param {HTMLElement} element */
 function apply3DTilt(element) {
     // Exclude tilt on small screens to prevent layout shifting issues
     if (window.matchMedia('(max-width: 768px)').matches) return;

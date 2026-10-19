@@ -3,6 +3,7 @@
  * Handles interactive SVG hotspot clicks and simulated Swagger API playground
  */
 
+/** @type {Record<string, Record<string, any>>} */
 const ARCHITECTURE_DATA = {
     // --- ECOCHEF COMPONENT DETAILS ---
     ecochef: {
@@ -95,8 +96,8 @@ const API_ROUTES = [
         descriptionDe:
             'Gibt eine Liste aller gespeicherten Rezepte inklusive deren Zutaten und berechneten CO₂-Footprints zurück.',
         descriptionEn: 'Returns a list of all stored recipes, including their ingredients and computed CO₂ footprints.',
-        parameters: [],
-        requestBody: null,
+        parameters: /** @type {any[]} */ ([]),
+        requestBody: /** @type {any} */ (null),
         responseMock: [
             {
                 id: 1,
@@ -126,7 +127,7 @@ const API_ROUTES = [
             'Erstellt ein neues Rezept. Das System berechnet den CO₂-Wert basierend auf den Zutaten automatisch im Service-Layer.',
         descriptionEn:
             'Creates a new recipe. The system automatically computes the CO₂ footprint based on the ingredients in the service layer.',
-        parameters: [],
+        parameters: /** @type {any[]} */ ([]),
         requestBody: {
             titleDe: 'Tomatensalat',
             titleEn: 'Tomato Salad',
@@ -155,7 +156,7 @@ const API_ROUTES = [
             'Sendet extrahierten Berichtstext an die KI-Engine. Gibt gefundene Mängel, Fristen und Risikoeinstufungen zurück.',
         descriptionEn:
             'Sends extracted report text to the AI engine. Returns detected defects, deadlines, and risk evaluations.',
-        parameters: [],
+        parameters: /** @type {any[]} */ ([]),
         requestBody: {
             reportText:
                 'Prüfung nach DGUV Vorschrift 3. Gerät: Kaffeemaschine. Standort: Küche EG. Isolationswiderstand: 0.1 MOhm (Grenzwert 0.3 MOhm). Sichtprüfung: Netzkabel beschädigt. Nächster Prüftermin: überfällig seit 05.2026.',
@@ -285,6 +286,7 @@ class ArchitectureExplorer {
         this.renderApiRoutes();
     }
 
+    /** @param {string} tab */
     switchTab(tab) {
         this.activeTab = tab;
 
@@ -417,6 +419,10 @@ class ArchitectureExplorer {
         this.animId3d = requestAnimationFrame(render);
     }
 
+    /**
+     * @param {string} project
+     * @param {string} component
+     */
     showComponentDetails(project, component) {
         const projData = ARCHITECTURE_DATA[project];
         if (!projData) return;

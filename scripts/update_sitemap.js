@@ -28,7 +28,7 @@ const ORIGIN = 'https://www.max-schenk.tech/';
 // Reachable only with a query string (?repo=…); the bare URL has no content of its own.
 const PARAMETERISED_PAGES = new Set(['pages/projekt-detail.html']);
 
-const isNoIndex = (html) => /<meta name="robots" content="[^"]*noindex/i.test(html);
+const isNoIndex = (/** @type {string} */ html) => /<meta name="robots" content="[^"]*noindex/i.test(html);
 
 function listPages() {
     const pagesDir = path.join(root, 'pages');
@@ -42,11 +42,13 @@ function listPages() {
     ];
 }
 
+/** @param {string} file */
 function lastModified(file) {
+    /** @param {...string} args */
     const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
     if (git('status', '--porcelain', '--', file)) {
         const now = new Date();
-        const pad = (n) => String(n).padStart(2, '0');
+        const pad = (/** @type {number} */ n) => String(n).padStart(2, '0');
         return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
     }
     return git('log', '-1', '--format=%cs', '--', file);

@@ -251,6 +251,10 @@ function renderChallenges() {
     });
 }
 
+/**
+ * @param {string} challengeId
+ * @param {string} optionId
+ */
 function handleAnswer(challengeId, optionId) {
     const challenge = CHALLENGES.find((c) => c.id === challengeId);
     if (!challenge) return;
@@ -306,6 +310,7 @@ function updateProgressHeader() {
     }
 }
 
+/** @param {string} str */
 function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

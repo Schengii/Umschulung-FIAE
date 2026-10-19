@@ -4,6 +4,7 @@
  * and intercepts console logs/errors from iFrame to display them in a mock console.
  */
 
+/** @type {Record<string, Record<string, any>>} */
 const PLAYGROUND_TEMPLATES = {
     counter: {
         titleDe: 'Zähler-Button (Interactive Button)',
@@ -1033,6 +1034,10 @@ class CodePlayground {
         if (this.btnCss) this.btnCss.addEventListener('click', () => this.switchTab('css'));
         if (this.btnJs) this.btnJs.addEventListener('click', () => this.switchTab('js'));
 
+        /**
+         * @param {HTMLInputElement | HTMLTextAreaElement} editor
+         * @param {HTMLElement} linesEl
+         */
         const updateLineNumbers = (editor, linesEl) => {
             if (!editor || !linesEl) return;
             const linesCount = editor.value.split('\n').length;
@@ -1043,6 +1048,7 @@ class CodePlayground {
             linesEl.textContent = linesHtml;
         };
 
+        /** @type {Record<string, string>} */
         const brackets = {
             '{': '}',
             '[': ']',
@@ -1141,6 +1147,7 @@ class CodePlayground {
         this.loadTemplate('counter');
     }
 
+    /** @param {string} tab */
     switchTab(tab) {
         this.activeTab = tab;
 
@@ -1163,6 +1170,7 @@ class CodePlayground {
         if (tab === 'js' && this.jsWrapper) this.jsWrapper.classList.remove('collapsed');
     }
 
+    /** @param {string} key */
     loadTemplate(key) {
         const templ = PLAYGROUND_TEMPLATES[key];
         if (!templ) return;
@@ -1234,6 +1242,10 @@ class CodePlayground {
         }
     }
 
+    /**
+     * @param {string} message
+     * @param {string} type
+     */
     appendLog(message, type) {
         if (!this.consoleLogBox) return;
 

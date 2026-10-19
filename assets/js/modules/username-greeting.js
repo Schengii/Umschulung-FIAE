@@ -76,6 +76,7 @@ export function initUsernameGreeting() {
     document.addEventListener('langchange', updateDashboardGreeting);
 }
 
+/** @param {string} username */
 function updateWelcomeH1(username) {
     const myH1 = document.getElementById('myH1');
     if (!myH1) return;

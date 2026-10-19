@@ -8,10 +8,12 @@ const projectsJsonFile = path.resolve(__dirname, '..', 'assets', 'data', 'projec
 const projectsBaseDir = path.resolve(__dirname, '..', 'Projekte');
 
 // Static projects that are not scanned
+/** @type {Array<Record<string, any>>} */
 const staticProjects = [];
 
 // Scan local folders for portfolio-metadata.json
 function scanLocalProjects() {
+    /** @type {Array<Record<string, any>>} */
     const scanned = [];
     if (!fs.existsSync(projectsBaseDir)) {
         console.warn(`Base projects directory not found: ${projectsBaseDir}`);
@@ -40,6 +42,7 @@ function scanLocalProjects() {
     return scanned;
 }
 
+/** @param {string} repoName */
 function fetchRepoInfo(repoName) {
     return new Promise((resolve) => {
         if (!repoName) return resolve(null);

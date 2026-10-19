@@ -6,6 +6,7 @@
     "checkJs": true,
     "allowJs": true,
     "strict": false,
+    "noImplicitAny": true,
     "noEmit": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["node"],
@@ -15,7 +16,8 @@
   "include": [
     "assets/js/**/*.js",
     "assets/js/**/*.d.ts",
-    "scripts/**/*.js"
+    "scripts/**/*.js",
+    "scripts/**/*.d.ts"
   ],
   "exclude": [
     "**/*.test.js",

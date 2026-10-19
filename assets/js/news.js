@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const content = currentLanguage === 'de' ? article.content_de : article.content_en;
 
                 let contentHtml = '';
-                content.forEach((paragraph) => {
+                content.forEach((/** @type {string} */ paragraph) => {
                     contentHtml += `<p>${highlightText(paragraph, query)}</p>`;
                 });
 
@@ -252,6 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * @param {string} text
+     * @param {string} query
+     */
     function highlightText(text, query) {
         if (!query) return text;
         const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
@@ -261,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    /** @param {string} string */
     function escapeRegex(string) {
         return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
     }

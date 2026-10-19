@@ -29,14 +29,21 @@ const root = path.resolve(__dirname, '..');
 const swPath = path.join(root, 'sw.js');
 const check = process.argv.includes('--check');
 
+/** @param {string} p */
 function toPosix(p) {
     return p.split(path.sep).join('/');
 }
 
+/**
+ * @param {string} dir
+ * @param {{recursive?: boolean, extensions?: string[]}} [options]
+ * @returns {string[]}
+ */
 function listFiles(dir, { recursive = false, extensions = [] } = {}) {
     const abs = path.join(root, dir);
     if (!fs.existsSync(abs)) return [];
     const entries = fs.readdirSync(abs, { withFileTypes: true });
+    /** @type {string[]} */
     let out = [];
     for (const entry of entries) {
         const rel = toPosix(path.join(dir, entry.name));
@@ -51,7 +58,7 @@ function listFiles(dir, { recursive = false, extensions = [] } = {}) {
 }
 
 // Test/spec files live alongside their modules but must never ship to production.
-const isTestFile = (f) => /\.(test|spec)\.js$/.test(f);
+const isTestFile = (/** @type {string} */ f) => /\.(test|spec)\.js$/.test(f);
 
 const pages = listFiles('pages', { extensions: ['.html'] }).sort();
 
@@ -60,7 +67,7 @@ const css = listFiles('assets/css', { recursive: true, extensions: ['.css'] }).s
 const coreJs = listFiles('assets/js', { extensions: ['.js'] }).sort();
 
 const modulesJs = listFiles('assets/js/modules', { extensions: ['.js'] })
-    .filter((f) => !isTestFile(f))
+    .filter((/** @type {string} */ f) => !isTestFile(f))
     .sort();
 
 const fonts = listFiles('assets/fonts', { extensions: ['.woff2'] }).sort();
@@ -85,6 +92,7 @@ const ESSENTIAL_IMAGES = [
     'assets/images/icon-512-maskable.png',
 ];
 
+/** @param {string} eol */
 function buildAssetsBlock(eol) {
     const lines = [];
     lines.push("    './',");
@@ -111,6 +119,7 @@ const TEXT_EXTENSIONS = ['.html', '.css', '.js', '.json', '.svg'];
  * Hash over every precached file, in list order. Text files are normalised to LF first so
  * a Windows checkout produces the same cache name as the Linux CI runner.
  */
+/** @param {string[]} assetPaths */
 function computeCacheHash(assetPaths) {
     const hash = crypto.createHash('sha256');
     for (const asset of assetPaths) {

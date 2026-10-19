@@ -3,6 +3,7 @@
  * Tracks user accomplishments across the portfolio site.
  */
 export const Achievements = {
+    /** @type {Record<string, Record<string, any>>} */
     definitions: {
         first_visit: {
             icon: '👋',
@@ -107,10 +108,12 @@ export const Achievements = {
         }
     },
 
+    /** @param {string} id */
     isUnlocked(id) {
         return this.getUnlocked().includes(id);
     },
 
+    /** @param {string} id */
     unlock(id) {
         if (!this.definitions[id] || this.isUnlocked(id)) return;
 
@@ -127,6 +130,7 @@ export const Achievements = {
         }
     },
 
+    /** @param {string} id */
     showNotification(id) {
         const def = this.definitions[id];
         if (!def || typeof document === 'undefined') return;

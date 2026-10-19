@@ -7,6 +7,7 @@
  * ?: Show shortcuts help
  */
 export function initKeyboardShortcuts() {
+    /** @type {HTMLElement | null} */
     let helpModal = null;
 
     document.addEventListener('keydown', (e) => {

@@ -94,6 +94,7 @@ export function initHeroSection() {
     }
 }
 
+/** @param {HTMLElement} container */
 function initHeroParticles(container) {
     const existingCanvas = container.querySelector('.hero-particles, .hero-particles-canvas');
     if (existingCanvas) {
@@ -122,9 +123,13 @@ function initHeroParticles(container) {
     ];
 
     const particleCount = Math.min(85, Math.max(45, Math.floor((width * height) / 8500)));
+    /** @type {HeroParticle[]} */
     const particles = [];
 
     class HeroParticle {
+        radius = 0;
+        baseRadius = 0;
+
         constructor() {
             this.reset(true);
         }
@@ -142,6 +147,10 @@ function initHeroParticles(container) {
             this.pulsePhase = Math.random() * Math.PI * 2;
         }
 
+        /**
+         * @param {number | null} mouseX
+         * @param {number | null} mouseY
+         */
         update(mouseX, mouseY) {
             this.x += this.vx;
             this.y += this.vy;
@@ -172,6 +181,7 @@ function initHeroParticles(container) {
             return dynamicAlpha;
         }
 
+        /** @param {number} dynamicAlpha */
         draw(dynamicAlpha) {
             ctx.save();
             ctx.beginPath();
@@ -193,7 +203,9 @@ function initHeroParticles(container) {
         particles.push(new HeroParticle());
     }
 
+    /** @type {number | null} */
     let mouseX = null;
+    /** @type {number | null} */
     let mouseY = null;
 
     container.addEventListener('mousemove', (e) => {
@@ -214,6 +226,7 @@ function initHeroParticles(container) {
     }
     window.addEventListener('resize', resize, { passive: true });
 
+    /** @type {number | undefined} */
     let animId;
     function render() {
         ctx.clearRect(0, 0, width, height);
