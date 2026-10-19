@@ -64,7 +64,8 @@ export const GameAudio = {
             : isEnglish
               ? 'Turn sound off'
               : 'Sound ausschalten';
-        button.setAttribute('aria-label', label);
+        // Der sichtbare Text „Audio“ muss im zugänglichen Namen stehen (WCAG 2.5.3).
+        button.setAttribute('aria-label', `Audio: ${label}`);
         button.setAttribute('title', label);
         button.setAttribute('aria-pressed', String(!this.isMuted));
     },

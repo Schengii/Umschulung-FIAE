@@ -8,10 +8,17 @@
  * date the boxes were only a label and every card came up every time.
  */
 
+/** @typedef {{id: string|number}} LeitnerCard */
+/** @typedef {Record<string|number, number|undefined>} BoxLevels card id -> box (1..MAX_BOX_LEVEL) */
+/** @typedef {Record<string|number, number|undefined>} DueDates card id -> due timestamp */
+
 export const MAX_BOX_LEVEL = 3;
 export const MIN_BOX_LEVEL = 1;
 
-/** Card answered correctly: advance one box, capped at MAX_BOX_LEVEL. */
+/**
+ * Card answered correctly: advance one box, capped at MAX_BOX_LEVEL.
+ * @param {number|undefined} currentLevel
+ */
 export function advanceBoxLevel(currentLevel) {
     return Math.min(MAX_BOX_LEVEL, (currentLevel || MIN_BOX_LEVEL) + 1);
 }
@@ -21,8 +28,13 @@ export function resetBoxLevel() {
     return MIN_BOX_LEVEL;
 }
 
-/** Counts how many cards sit in each box (1..MAX_BOX_LEVEL). */
+/**
+ * Counts how many cards sit in each box (1..MAX_BOX_LEVEL).
+ * @param {LeitnerCard[]} cards
+ * @param {BoxLevels} boxLevels
+ */
 export function computeBoxStats(cards, boxLevels) {
+    /** @type {Record<number, number>} */
     const counts = { 1: 0, 2: 0, 3: 0 };
     cards.forEach((card) => {
         const level = boxLevels[card.id] || MIN_BOX_LEVEL;
@@ -31,9 +43,18 @@ export function computeBoxStats(cards, boxLevels) {
     return counts;
 }
 
-/** Filters a full card deck down to one Leitner category ('box1'|'box2'|'box3'). */
+/**
+ * Filters a full card deck down to one Leitner category ('box1'|'box2'|'box3').
+ * @template {LeitnerCard} T
+ * @param {T[]} cards
+ * @param {BoxLevels} boxLevels
+ * @param {string} boxCategory
+ * @returns {T[]}
+ */
 export function filterByBox(cards, boxLevels, boxCategory) {
-    const targetLevel = { box1: 1, box2: 2, box3: 3 }[boxCategory];
+    /** @type {Record<string, number>} */
+    const levelOfCategory = { box1: 1, box2: 2, box3: 3 };
+    const targetLevel = levelOfCategory[boxCategory];
     if (!targetLevel) return [...cards];
     if (targetLevel === MIN_BOX_LEVEL) {
         return cards.filter((c) => (boxLevels[c.id] || MIN_BOX_LEVEL) === targetLevel);
@@ -46,9 +67,13 @@ export function filterByBox(cards, boxLevels, boxCategory) {
  * practice only boxes 2 and 3 get a date: a correct answer always leaves box 1, and a wrong
  * answer puts the card back into box 1 without a date, i.e. due immediately.
  */
+/** @type {Readonly<Record<number, number>>} */
 export const REVIEW_INTERVAL_DAYS = Object.freeze({ 1: 1, 2: 3, 3: 7 });
 
-/** Local midnight of the day `timestamp` falls on. */
+/**
+ * Local midnight of the day `timestamp` falls on.
+ * @param {number} timestamp
+ */
 export function startOfDay(timestamp) {
     const date = new Date(timestamp);
     date.setHours(0, 0, 0, 0);
@@ -70,18 +95,33 @@ export function nextDueDate(level, now) {
     return date.getTime();
 }
 
-/** A card without a due date was never reviewed (or was answered wrongly) and is due. */
+/**
+ * A card without a due date was never reviewed (or was answered wrongly) and is due.
+ * @param {number|undefined} dueAt
+ * @param {number} now
+ */
 export function isDue(dueAt, now) {
     return !dueAt || dueAt <= now;
 }
 
-/** The cards of a deck that should be reviewed now. */
+/**
+ * The cards of a deck that should be reviewed now.
+ * @template {LeitnerCard} T
+ * @param {T[]} cards
+ * @param {DueDates} dueDates
+ * @param {number} now
+ * @returns {T[]}
+ */
 export function filterDue(cards, dueDates, now) {
     return cards.filter((card) => isDue(dueDates[card.id], now));
 }
 
-/** Whole days from today until the due day; 0 when the card is due. */
+/**
+ * Whole days from today until the due day; 0 when the card is due.
+ * @param {number|undefined} dueAt
+ * @param {number} now
+ */
 export function daysUntilDue(dueAt, now) {
     if (isDue(dueAt, now)) return 0;
-    return Math.round((startOfDay(dueAt) - startOfDay(now)) / 86400000);
+    return Math.round((startOfDay(/** @type {number} */ (dueAt)) - startOfDay(now)) / 86400000);
 }

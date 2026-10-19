@@ -118,12 +118,18 @@ export function tokenize(input) {
     return tokens;
 }
 
-/** Commit id HEAD currently resolves to. */
+/**
+ * Commit id HEAD currently resolves to.
+ * @param {GitState} state
+ */
 export function headCommitId(state) {
     return state.branches[state.head] || state.head;
 }
 
-/** Name of the checked-out branch, or null when HEAD is detached. */
+/**
+ * Name of the checked-out branch, or null when HEAD is detached.
+ * @param {GitState} state
+ */
 export function currentBranch(state) {
     return state.branches[state.head] ? state.head : null;
 }
@@ -151,6 +157,9 @@ export function ancestorsOf(state, id) {
 /**
  * The commits on the first-parent chain of `tipId` that are not part of `baseId`'s history,
  * oldest first — i.e. the work a branch has on top of another one.
+ * @param {GitState} state
+ * @param {string} tipId
+ * @param {string} baseId
  * @returns {Commit[]}
  */
 function ownCommits(state, tipId, baseId) {
@@ -193,6 +202,7 @@ export function resolveRevision(state, ref) {
 /**
  * Drops commits no branch (and no detached HEAD) can reach any more, like `git log --all`
  * no longer showing them. Returns how many were removed.
+ * @param {GitState} state
  */
 function collectGarbage(state) {
     const reachable = new Set();
@@ -209,6 +219,10 @@ function collectGarbage(state) {
     return removed;
 }
 
+/**
+ * @param {GitState} state
+ * @param {Partial<Commit> & {parentId: string | null, message: string, branch: string}} fields
+ */
 function addCommit(state, fields) {
     state.commitCount++;
     const id = `c${state.commitCount}`;
@@ -219,7 +233,11 @@ function addCommit(state, fields) {
     return state.commits[id];
 }
 
-/** Moves the current branch (or a detached HEAD) to `commitId`. */
+/**
+ * Moves the current branch (or a detached HEAD) to `commitId`.
+ * @param {GitState} state
+ * @param {string} commitId
+ */
 function moveHead(state, commitId) {
     const branch = currentBranch(state);
     if (branch) state.branches[branch] = commitId;
@@ -235,7 +253,9 @@ function moveHead(state, commitId) {
 export function executeCommand(state, input) {
     /** @type {CommandResult} */
     const result = { lines: [], clear: false, changed: false, success: false };
+    /** @type {(kind: OutputLine['kind'], de: string, en?: string, extra?: Partial<OutputLine>) => number} */
     const say = (kind, de, en = de, extra = {}) => result.lines.push({ kind, de, en, ...extra });
+    /** @param {string} de @param {string} en */
     const fail = (de, en) => say('error', `error: ${de}`, `error: ${en}`);
 
     const args = tokenize(input);
@@ -739,7 +759,12 @@ export function executeCommand(state, input) {
     return result;
 }
 
-/** True when `tipId`'s own commits on top of `baseId` exist and all came from a rebase. */
+/**
+ * True when `tipId`'s own commits on top of `baseId` exist and all came from a rebase.
+ * @param {GitState} state
+ * @param {string} tipId
+ * @param {string} baseId
+ */
 function isRebasedOnto(state, tipId, baseId) {
     if (!ancestorsOf(state, tipId).has(baseId)) return false;
     const own = ownCommits(state, tipId, baseId);
@@ -815,7 +840,11 @@ export function createLevelState(levelId) {
     return state;
 }
 
-/** @returns {boolean} whether the goal of `levelId` is reached in `state` */
+/**
+ * @param {string} levelId
+ * @param {GitState} state
+ * @returns {boolean} whether the goal of `levelId` is reached in `state`
+ */
 export function isLevelComplete(levelId, state) {
     const rules = LEVEL_RULES[levelId];
     return Boolean(rules) && rules.check(state);

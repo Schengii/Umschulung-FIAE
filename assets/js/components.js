@@ -324,7 +324,7 @@ function renderNav(currentPage) {
                 </div>
 
                 <!-- Language Toggle -->
-                <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 65px;" aria-label="Sprache umschalten"></button>
+                <button id="lang-toggle" class="theme-toggle" style="font-size: 0.85rem; min-width: 65px;" aria-label="DE | EN: Sprache umschalten"></button>
 
                 <!-- Dark Mode Toggle -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Design umschalten" data-en-aria-label="Toggle theme" title="Dark / Light Mode">
@@ -412,7 +412,7 @@ function renderFooter() {
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
                     &nbsp;&middot;&nbsp;
-                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Sound einschalten" title="Sound einschalten" aria-pressed="false">
+                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Audio: Sound einschalten" title="Sound einschalten" aria-pressed="false">
                         <i class="fa-solid ${AppStorage.getItem('sound_enabled') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
                         <span>Audio</span>
                     </button>
@@ -553,6 +553,11 @@ document.addEventListener('DOMContentLoaded', () => {
     earlyLayoutObserver.disconnect();
     // Fallback for anything the observer did not catch.
     injectHeader();
+    // Pages with their own <h1> would otherwise have two; the banner title then is plain text.
+    const bannerTitle = document.querySelector('.app-header .header-title');
+    if (bannerTitle && document.querySelector('h1:not(.app-header h1)')) {
+        bannerTitle.setAttribute('role', 'presentation');
+    }
     initBreadcrumbs();
 
     const path = window.location.pathname;

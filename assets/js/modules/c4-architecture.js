@@ -4,6 +4,7 @@
  * and interactive component drilldowns with module responsibilities and GitHub source links.
  */
 
+/** @type {Record<string, string>} level number as string -> description */
 export const C4_DESCRIPTIONS = {
     1: 'High-Level System Overview: Interaktion zwischen Nutzer, Frontend & Cloud-Services',
     2: 'Container Diagramm: Schnittstellen zwischen Web-App, Spring Boot API & Database',
@@ -13,6 +14,7 @@ export const C4_DESCRIPTIONS = {
 /**
  * Detailed responsibilities and source repository links for each C4 container/component.
  */
+/** @type {Record<string, Record<string, {responsibilitiesDe: string, responsibilitiesEn: string, sourcePath: string, githubUrl: string}>>} */
 export const COMPONENT_DETAILS = {
     ecochef: {
         client: {
@@ -74,6 +76,10 @@ export const COMPONENT_DETAILS = {
     },
 };
 
+/**
+ * @param {string|number|undefined} level
+ * @param {string|undefined} component
+ */
 export function getHotspotStyleForLevel(level, component) {
     const lvl = String(level);
     if (lvl === '1') {

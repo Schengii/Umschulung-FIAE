@@ -4,6 +4,13 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt
+- **Typ-Ratsche**: `npm run check-strict-types` (`scripts/check_strict_types.js`, in `npm run check` und CI) zählt `noImplicitAny`-Fehler je Datei und vergleicht sie mit `scripts/strict-types-baseline.json`. Neue Fehler lassen den Check scheitern, Verbesserungen müssen per `--update` festgeschrieben werden. Ausgangswert 571 Fehler in 74 Dateien; `leitner-box`, `git-engine`, `ihk-exam-simulator`, `exam-questions` und `c4-architecture` sind jetzt fehlerfrei (492 in 69 Dateien).
+- Dependabot ignoriert Minor-Updates von `@fortawesome/fontawesome-free` (ab 6.7 stehen Glyphen in `--fa`, das Icon-Subset-Skript fände 0 Icons).
+
+#### Behoben
+- **A11y**: neue axe-4.14-Regel `label-content-name-mismatch` (WCAG 2.5.3) behoben: Sprach- und Audio-Schalter, Video-Playlist, PPT-Download-Karten und Kontakt-Links auf `home.html` tragen den sichtbaren Text im zugänglichen Namen.
+
 ## [1.4.0] - 2026-10-18
 
 ### Umsetzung des Plans aus der Projektanalyse (PLAN.md A00–D05)

@@ -46,7 +46,18 @@ export const EXAM_TOPICS = {
     },
 };
 
-/** Compact constructor: answers are [de, en] pairs. */
+/**
+ * Compact constructor: answers are [de, en] pairs.
+ * @param {string} id
+ * @param {ExamQuestion['exam']} exam
+ * @param {string} topic
+ * @param {string} de
+ * @param {string} en
+ * @param {[string, string][]} answers
+ * @param {number} correct
+ * @param {string} explanationDe
+ * @param {string} explanationEn
+ */
 function q(id, exam, topic, de, en, answers, correct, explanationDe, explanationEn) {
     return {
         id,

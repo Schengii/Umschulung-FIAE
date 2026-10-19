@@ -255,7 +255,6 @@ function setupEcoChefVideoPlayer() {
     ECOCHEF_VIDEO_DATA.forEach((videoItem, index) => {
         const btn = document.createElement('button');
         btn.className = 'playlist-track-btn';
-        btn.setAttribute('aria-label', `Play video: ${videoItem.titleDe}`);
 
         btn.innerHTML = `
             <div class="track-icon">

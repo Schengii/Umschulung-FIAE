@@ -76,9 +76,9 @@ function updateLangToggleButton(lang) {
 
     if (lang === 'de') {
         langToggle.innerHTML = '<i class="fa fa-globe" aria-hidden="true"></i> DE | <strong>EN</strong>';
-        langToggle.setAttribute('aria-label', 'Switch to English');
+        langToggle.setAttribute('aria-label', 'DE | EN: Switch to English');
     } else {
         langToggle.innerHTML = '<i class="fa fa-globe" aria-hidden="true"></i> <strong>DE</strong> | EN';
-        langToggle.setAttribute('aria-label', 'Auf Deutsch umstellen');
+        langToggle.setAttribute('aria-label', 'DE | EN: Auf Deutsch umstellen');
     }
 }

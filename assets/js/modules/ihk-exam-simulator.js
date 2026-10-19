@@ -12,7 +12,12 @@
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './exam-questions.js';
 import { getIhkGrade } from './grade-calculator.js';
 
-/** Questions per run and time limit of each exam part (about 80 seconds per question). */
+/** @typedef {import('./exam-questions.js').ExamQuestion} ExamQuestion */
+
+/**
+ * Questions per run and time limit of each exam part (about 80 seconds per question).
+ * @type {Readonly<Record<string, {questionCount: number, durationSeconds: number, de: string, en: string}>>}
+ */
 export const EXAM_MODES = Object.freeze({
     ap1: {
         questionCount: 15,
@@ -34,6 +39,7 @@ export const EXAM_MODES = Object.freeze({
     },
 });
 
+/** @type {Readonly<Record<number, {de: string, en: string}>>} */
 export const GRADE_LABELS = Object.freeze({
     1: { de: 'sehr gut', en: 'very good' },
     2: { de: 'gut', en: 'good' },
@@ -46,6 +52,7 @@ export const GRADE_LABELS = Object.freeze({
 /** The written IHK exam is passed with at least 50 points (grade 4). */
 export const PASS_PERCENT = 50;
 
+/** @param {number} secondsRemaining */
 export function formatTimerText(secondsRemaining) {
     const clamped = Math.max(0, secondsRemaining);
     const mins = String(Math.floor(clamped / 60)).padStart(2, '0');
@@ -78,18 +85,21 @@ export function shuffle(items, random = Math.random) {
  * @param {() => number} [random]
  */
 export function pickExamQuestions(pool, exam, count, random = Math.random) {
+    /** @type {Map<string, import('./exam-questions.js').ExamQuestion[]>} */
     const byTopic = new Map();
     for (const question of pool) {
         if (question.exam !== exam) continue;
-        if (!byTopic.has(question.topic)) byTopic.set(question.topic, []);
-        byTopic.get(question.topic).push(question);
+        const queue = byTopic.get(question.topic) || [];
+        queue.push(question);
+        byTopic.set(question.topic, queue);
     }
     const queues = shuffle([...byTopic.values()], random).map((questions) => shuffle(questions, random));
 
+    /** @type {import('./exam-questions.js').ExamQuestion[]} */
     const picked = [];
     while (picked.length < count && queues.some((queue) => queue.length > 0)) {
         for (const queue of queues) {
-            if (picked.length < count && queue.length > 0) picked.push(queue.pop());
+            if (picked.length < count && queue.length > 0) picked.push(/** @type {ExamQuestion} */ (queue.pop()));
         }
     }
     return shuffle(picked, random);
@@ -143,6 +153,12 @@ export function evaluateExam(questions, answers) {
 /* Page integration                                                                      */
 /* ------------------------------------------------------------------------------------ */
 
+/**
+ * @param {string} tag
+ * @param {Record<string, string>} [attributes]
+ * @param {...(Node | string | null | undefined)} children
+ * @returns {HTMLElement}
+ */
 function element(tag, attributes = {}, ...children) {
     const node = document.createElement(tag);
     for (const [name, value] of Object.entries(attributes)) {
@@ -160,9 +176,10 @@ export function initIhkExamSimulator() {
     if (!quizContainer) return;
 
     const lang = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de');
+    /** @param {string} de @param {string} en */
     const t = (de, en) => (lang() === 'en' ? en : de);
 
-    /** @type {{mode: string, questions: any[], order: number[][], answers: (number|null)[], index: number, deadline: number, view: 'intro'|'running'|'result', timedOut: boolean} | null} */
+    /** @type {{mode: string, questions: import('./exam-questions.js').ExamQuestion[], order: number[][], answers: (number|null)[], index: number, deadline: number, view: 'intro'|'running'|'result', timedOut: boolean} | null} */
     let run = null;
     let mode = 'standard';
     let timerId = 0;
@@ -231,6 +248,7 @@ export function initIhkExamSimulator() {
         }
     }
 
+    /** @param {string} examMode @param {ReturnType<typeof evaluateExam>} result */
     function saveResult(examMode, result) {
         const results = readResults();
         const previous = results[examMode] || { attempts: 0, best: 0 };
@@ -244,6 +262,7 @@ export function initIhkExamSimulator() {
 
         // Weak topics feed the learning recommendations on the dashboard.
         if (result.weakTopics.length > 0) {
+            /** @type {string[]} */
             let weak = [];
             try {
                 const stored = JSON.parse(
@@ -292,6 +311,7 @@ export function initIhkExamSimulator() {
     }
 
     // ---- views ---------------------------------------------------------------------------
+    /** @param {string} nextMode */
     function selectMode(nextMode) {
         stopTimer();
         mode = nextMode;
@@ -326,7 +346,7 @@ export function initIhkExamSimulator() {
             mode,
             questions,
             order: questions.map((question) => shuffle(question.answers.map((_answer, index) => index))),
-            answers: questions.map(() => null),
+            answers: questions.map(() => /** @type {number | null} */ (null)),
             index: 0,
             deadline: Date.now() + config.durationSeconds * 1000,
             view: 'running',
@@ -337,6 +357,7 @@ export function initIhkExamSimulator() {
         startTimer();
     }
 
+    /** @param {boolean} timedOut */
     function finish(timedOut) {
         if (!run || run.view !== 'running') return;
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
@@ -439,10 +460,14 @@ export function initIhkExamSimulator() {
             steps.appendChild(step);
         });
 
-        const previous = element('button', { type: 'button', class: 'btn-secondary', text: t('Zurück', 'Back') });
+        const previous = /** @type {HTMLButtonElement} */ (
+            element('button', { type: 'button', class: 'btn-secondary', text: t('Zurück', 'Back') })
+        );
         previous.disabled = index === 0;
         previous.addEventListener('click', () => goTo(index - 1));
-        const next = element('button', { type: 'button', class: 'btn-secondary', text: t('Weiter', 'Next') });
+        const next = /** @type {HTMLButtonElement} */ (
+            element('button', { type: 'button', class: 'btn-secondary', text: t('Weiter', 'Next') })
+        );
         next.disabled = index === questions.length - 1;
         next.addEventListener('click', () => goTo(index + 1));
 
@@ -518,6 +543,7 @@ export function initIhkExamSimulator() {
         );
     }
 
+    /** @param {number} index */
     function goTo(index) {
         if (!run || index < 0 || index >= run.questions.length) return;
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
