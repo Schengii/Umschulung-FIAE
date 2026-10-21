@@ -3,8 +3,10 @@ name: Portfolio CI & E2E Quality Audit
 on:
   push:
     branches: [ main, master ]
+    paths-ignore: ['**.md', 'docs/**']
   pull_request:
     branches: [ main, master ]
+    paths-ignore: ['**.md', 'docs/**']
   # Lets sync.yml start the checks on the automated sync branch: a pull request opened with
   # GITHUB_TOKEN does not get its own pull_request run (and one that does may wait for approval).
   workflow_dispatch:
@@ -92,19 +94,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      # Pull requests: only chromium (source + dist build). The full browser matrix
+      # (firefox, webkit, mobile-chrome) runs on push to main and workflow_dispatch
+      # to save GitHub Actions minutes.
       matrix:
-        include:
-          - project: chromium
-            browser: chromium
-          - project: firefox
-            browser: firefox
-          - project: webkit
-            browser: webkit
-          - project: mobile-chrome
-            browser: chromium
-          - project: chromium
-            browser: chromium
-            root: dist
+        include: ${{ fromJSON(github.event_name == 'pull_request' && '[{"project":"chromium","browser":"chromium"},{"project":"chromium","browser":"chromium","root":"dist"}]' || '[{"project":"chromium","browser":"chromium"},{"project":"firefox","browser":"firefox"},{"project":"webkit","browser":"webkit"},{"project":"mobile-chrome","browser":"chromium"},{"project":"chromium","browser":"chromium","root":"dist"}]') }}
 
     steps:
       - name: Checkout Repository
@@ -145,6 +139,8 @@ jobs:
           if-no-files-found: ignore
 
   lighthouse:
+    # Runs on push to main / manual dispatch only (saves Actions minutes on PRs).
+    if: github.event_name != 'pull_request'
     name: Lighthouse Quality Audit (performance, a11y, SEO, best-practices enforced)
     runs-on: ubuntu-latest
     steps:
