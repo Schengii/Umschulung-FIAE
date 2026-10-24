@@ -239,8 +239,12 @@
             });
         }
 
+        /** @type {HTMLElement | null} */
+        let opener = null;
+
         function openPalette() {
             ensureProjectData();
+            opener = /** @type {HTMLElement | null} */ (document.activeElement);
             overlay.classList.add('open');
             input.value = '';
             renderResults('');
@@ -249,6 +253,9 @@
 
         function closePalette() {
             overlay.classList.remove('open');
+            // Hand the focus back, otherwise keyboard users restart from the top of the page.
+            if (opener && opener !== document.body && opener.isConnected) opener.focus();
+            opener = null;
         }
 
         // Global Keyboard Shortcut: Ctrl+K or Cmd+K
