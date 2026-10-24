@@ -1,6 +1,6 @@
 {
   "name": "umschulung-fiae",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Portfolio Maximilian Schenk",
   "engines": {
     "node": ">=22.12"
