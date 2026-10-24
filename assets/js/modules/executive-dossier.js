@@ -68,13 +68,13 @@ function injectDossierModal() {
     modal.style.padding = '1rem';
 
     modal.innerHTML = `
-    <div class="card" style="width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; background: var(--bg-card, #1e293b); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="dossier-title" style="width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; background: var(--bg-card, #1e293b); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
         <div>
-          <h3 style="margin: 0; font-size: 1.25rem;">📄 Executive Dossier Generator 2.0</h3>
+          <h3 id="dossier-title" style="margin: 0; font-size: 1.25rem;">📄 Executive Dossier Generator 2.0</h3>
           <span style="font-size: 0.8rem; color: var(--text-secondary);">Maßgeschneidertes Profil für Recruiter & Prüfer</span>
         </div>
-        <button id="btn-close-dossier" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">✕</button>
+        <button id="btn-close-dossier" aria-label="Schließen" data-en-aria-label="Close" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-secondary);">✕</button>
       </div>
 
       <!-- Template Switcher -->
@@ -135,14 +135,18 @@ function attachDossierEvents() {
     const typeBtns = document.querySelectorAll('.dossier-type-btn');
 
     if (btnClose && modal) {
-        btnClose.addEventListener('click', () => (modal.style.display = 'none'));
+        btnClose.addEventListener('click', closeDossierModal);
     }
 
     if (modal) {
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.style.display = 'none';
+            if (e.target === modal) closeDossierModal();
         });
     }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.style.display !== 'none') closeDossierModal();
+    });
 
     typeBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -173,12 +177,25 @@ function attachDossierEvents() {
     });
 }
 
+/** Element that had the focus when the dossier opened, so closing can hand it back. */
+let dossierOpener = /** @type {HTMLElement | null} */ (null);
+
 export function openDossierModal(initialType = 'fullstack') {
     const modal = document.getElementById('executive-dossier-modal');
     if (!modal) return;
 
+    dossierOpener = /** @type {HTMLElement | null} */ (document.activeElement);
     renderDossierPreview(initialType);
     modal.style.display = 'flex';
+    document.getElementById('btn-close-dossier')?.focus();
+}
+
+function closeDossierModal() {
+    const modal = document.getElementById('executive-dossier-modal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    if (dossierOpener && dossierOpener.isConnected) dossierOpener.focus();
+    dossierOpener = null;
 }
 
 /** @param {string} typeKey */
