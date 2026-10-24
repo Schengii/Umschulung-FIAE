@@ -62,6 +62,9 @@ jobs:
       - name: Verify Every DE/EN Text Has Its Counterpart
         run: npm run check-bilingual
 
+      - name: Verify the Search Index Matches the Pages
+        run: npm run check-search-index
+
       - name: Verify Lighthouse Audits Every Sitemap Page
         run: npm run check-lighthouse-urls
 
