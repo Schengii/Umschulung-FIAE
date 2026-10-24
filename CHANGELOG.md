@@ -5,6 +5,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ## [Unreleased]
 
 #### Hinzugefügt
+- **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 45 % (Statements, Branches, Functions, Lines); Ist-Wert ca. 49 %, Ziel schrittweise 60 %.
+- `progress-backup.test.js` gleicht alle im Code genutzten `AppStorage`-Schlüssel mit der Backup-Allowlist ab (neue Schlüssel müssen dort oder in einer begründeten Ausschlussliste stehen); neuer Test `recruiter-filter.test.js`.
 - **Unit-Tests für DOM-Module** (happy-dom): Theme, Akzentfarbe, Navigation, Übersetzung, Lernfortschritt, Cookie-Banner, FAQ, Back-to-Top, Easter Egg, Kontaktformular, Tastaturkürzel, iCal-Terminbuchung, Challenge Lab, Roadmap, Command Palette, Begrüßung (inkl. Escaping der Recruiter-Parameter), Suche und Filter, Skill-Matchmaker, Achievements, Backup-Karte (Export, Import, QR, `#sync=`) und die Bedienung der IHK-Prüfungssimulation. 437 Tests (vorher 215), Coverage von `assets/js/modules` von 17 % auf rund 49 % Statements. Test-Helfer in `scripts/test-support/`. Vitest läuft jetzt mit `isolate: true`, weil die DOM-Tests Listener am `document` registrieren.
 - **E2E `csp_violations.spec.js`**: besucht alle Seiten, öffnet die Command Palette und schlägt bei jeder CSP-Verletzung oder jedem `<style>`-Element fehl; Kontrolltests für `style`-Attribute (erlaubt) und eingeschleuste `<style>`-Elemente (blockiert).
 - `playground-templates.test.js`: jede Vorlage hat Titel, HTML, CSS und parsebares JS, jede Schaltfläche der Seite eine Vorlage.
@@ -12,6 +14,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - `noImplicitAny` ist in `jsconfig.json` und `jsconfig.sw.json` dauerhaft aktiv; die Ratsche `check-strict-types` entfällt. Typdeklaration `scripts/subset-font.d.ts`.
 
 #### Geändert
+- **Header-CSP (`vercel.json`):** `style-src` ohne `'unsafe-inline'` (nur `style-src-attr`), eigene Header-Regel für `/pages/playground.html`; `microphone=(self)` bleibt (Spracheingabe im Interview-Trainer). `eslint` und `happy-dom` auf die neuesten Patch-Versionen.
 - **Typen:** alle 508 impliziten `any`-Fehler in `assets/js`, `scripts` und `sw.js` per JSDoc-Typen behoben (vorher 492 nach der Ratsche, 571 beim ersten Messen).
 - **CSP:** die Seiten-CSP erlaubt `style-src 'self'` plus `style-src-attr 'unsafe-inline'` (ADR 0013). Die Inline-`<style>`-Blöcke von `dashboard`, `flashcards`, `git-simulator`, `news`, `offline` und `404` sowie die per JS eingefügten Styles von `faq-accordion`, `news`, `portfolio` und `quick-sandbox` liegen jetzt in CSS-Dateien. `check-head` lehnt `<style>`-Elemente und `'unsafe-inline'` für `style-src` ab (Ausnahme `playground.html`, dessen Vorschau-iframe die CSP erbt).
 - **CSS:** `style.css` ist von 177 KB auf 130 KB Quelltext geschrumpft (-27 %); 344 seitenspezifische Regeln stehen in `assets/css/<seite>.css` (`home`, `portfolio`, `dashboard`, `projekt-detail`, `ueber-mich`, `ausbildungsablauf`, `links`, `flashcards`, `memory`, `praktikumsbetrieb`; ADR 0014). Berechnete Styles aller Seiten, Hover-/Fokus-Zustände und neun Interaktionsszenarien vor und nach dem Umbau verglichen: identisch.

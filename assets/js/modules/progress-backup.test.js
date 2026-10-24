@@ -216,3 +216,41 @@ describe('QR sync payload encoding and decoding', () => {
         expect(url).not.toContain('qrserver');
     });
 });
+
+describe('storage keys vs. backup allowlist', () => {
+    // Keys that are deliberately not part of a backup. A new key has to land either in the
+    // allowlist of progress-backup.js or here, with a reason, so it cannot be forgotten.
+    const NOT_BACKED_UP = {
+        cookieConsent: 'consent is a per-device decision',
+        has_visited: 'one-off first-visit flag',
+        pwa_dismissed: 'one-off install prompt flag',
+        audio_effects_enabled: 'device-specific audio setting',
+        game_audio_muted: 'device-specific audio setting',
+        recruiter_name: 'personal data, stays on the device',
+        recruiter_company: 'personal data, stays on the device',
+    };
+
+    function collectSourceFiles(dir) {
+        return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+            const full = `${dir}/${entry.name}`;
+            if (entry.isDirectory()) return collectSourceFiles(full);
+            return /\.js$/.test(entry.name) && !/\.(test|spec)\.js$/.test(entry.name) ? [full] : [];
+        });
+    }
+
+    it('lists every AppStorage key as backed up or explicitly excluded', () => {
+        const usedKeys = new Set();
+        const pattern = /AppStorage\.[a-zA-Z]+\(\s*['"]([a-zA-Z_0-9.-]+)['"]/g;
+        for (const file of collectSourceFiles('assets/js')) {
+            for (const match of fs.readFileSync(file, 'utf8').matchAll(pattern)) usedKeys.add(match[1]);
+        }
+        expect(usedKeys.size).toBeGreaterThan(10);
+
+        const unclassified = [...usedKeys].filter((key) => !isBackupKey(key) && !(key in NOT_BACKED_UP));
+        expect(unclassified).toEqual([]);
+    });
+
+    it('does not exclude a key that is also in the allowlist', () => {
+        for (const key of Object.keys(NOT_BACKED_UP)) expect(isBackupKey(key), key).toBe(false);
+    });
+});
