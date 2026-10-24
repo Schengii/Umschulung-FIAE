@@ -118,7 +118,7 @@ describe('qr generator', () => {
         vi.spyOn(URL, 'createObjectURL').mockImplementation(createObjectURL);
         vi.spyOn(URL, 'revokeObjectURL').mockImplementation(revokeObjectURL);
         const names = [];
-        vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function () {
+        vi.spyOn(window.HTMLAnchorElement.prototype, 'click').mockImplementation(function () {
             names.push(this.download);
         });
 
