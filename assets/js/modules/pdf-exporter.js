@@ -2,6 +2,7 @@
  * Recruiter PDF Factsheet Exporter Module
  * Generates an optimized 1-page application factsheet for recruiters or triggers print PDF view.
  */
+import { escapeHtml } from './html-utils.js';
 
 export function initPdfExporter() {
     // lebenslauf.html's plain "print this page" buttons (moved off inline
@@ -72,7 +73,7 @@ function generateFactsheetModal() {
                         recruiterCompany !== 'Ihr Unternehmen'
                             ? `
                         <div class="badge badge-info margin-top-0-5rem font-size-0-8rem padding-4px-8px">
-                            Exklusiv zusammengestellt für ${recruiterCompany}
+                            Exklusiv zusammengestellt für ${escapeHtml(recruiterCompany)}
                         </div>
                     `
                             : ''

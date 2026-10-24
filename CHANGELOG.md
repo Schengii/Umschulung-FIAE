@@ -5,13 +5,14 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ## [Unreleased]
 
 #### Hinzugefügt
-- **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 45 % (Statements, Branches, Functions, Lines); Ist-Wert ca. 49 %, Ziel schrittweise 60 %.
+- **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 55 % (Statements, Functions, Lines) und 50 % (Branches); Ist-Wert ca. 60 %, Ziel schrittweise 60 %.
 - `progress-backup.test.js` gleicht alle im Code genutzten `AppStorage`-Schlüssel mit der Backup-Allowlist ab (neue Schlüssel müssen dort oder in einer begründeten Ausschlussliste stehen); neuer Test `recruiter-filter.test.js`.
 - **Unit-Tests für DOM-Module** (happy-dom): Theme, Akzentfarbe, Navigation, Übersetzung, Lernfortschritt, Cookie-Banner, FAQ, Back-to-Top, Easter Egg, Kontaktformular, Tastaturkürzel, iCal-Terminbuchung, Challenge Lab, Roadmap, Command Palette, Begrüßung (inkl. Escaping der Recruiter-Parameter), Suche und Filter, Skill-Matchmaker, Achievements, Backup-Karte (Export, Import, QR, `#sync=`) und die Bedienung der IHK-Prüfungssimulation. 437 Tests (vorher 215), Coverage von `assets/js/modules` von 17 % auf rund 49 % Statements. Test-Helfer in `scripts/test-support/`. Vitest läuft jetzt mit `isolate: true`, weil die DOM-Tests Listener am `document` registrieren.
 - **E2E `csp_violations.spec.js`**: besucht alle Seiten, öffnet die Command Palette und schlägt bei jeder CSP-Verletzung oder jedem `<style>`-Element fehl; Kontrolltests für `style`-Attribute (erlaubt) und eingeschleuste `<style>`-Elemente (blockiert).
 - `playground-templates.test.js`: jede Vorlage hat Titel, HTML, CSS und parsebares JS, jede Schaltfläche der Seite eine Vorlage.
 - ADR 0013 (Styles nur aus Dateien) und ADR 0014 (seitenspezifische Stylesheets).
 - `noImplicitAny` ist in `jsconfig.json` und `jsconfig.sw.json` dauerhaft aktiv; die Ratsche `check-strict-types` entfällt. Typdeklaration `scripts/subset-font.d.ts`.
+- Neue Unit-Tests: `qr-generator`, `portfolio_exporter`, `pdf-exporter`, `ihk-cockpit` (Nutzwertanalyse, Phasenplan, Fachgespräch-Timer) und `effects-smoke.test.js` (Effekt-Module: Guard-Selektoren, `prefers-reduced-motion`).
 
 #### Geändert
 - **Header-CSP (`vercel.json`):** `style-src` ohne `'unsafe-inline'` (nur `style-src-attr`), eigene Header-Regel für `/pages/playground.html`; `microphone=(self)` bleibt (Spracheingabe im Interview-Trainer). `eslint` und `happy-dom` auf die neuesten Patch-Versionen.
@@ -24,6 +25,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - Dependabot ignoriert Minor-Updates von `@fortawesome/fontawesome-free` (ab 6.7 stehen Glyphen in `--fa`, das Icon-Subset-Skript fände 0 Icons).
 
 #### Behoben
+- **XSS:** `pdf-exporter.js` schrieb den gespeicherten Firmennamen roh in `innerHTML` (Factsheet); jetzt mit `escapeHtml`.
 - **Styling**: Status-Karte auf `home`/`portfolio` im hellen Theme lesbar (`.card-glass` überschrieb den grünen Hintergrund, weiße Schrift auf Weiß; jetzt dunkleres Grün mit AA-Kontrast). Mobile Überläufe behoben: Grid-Kinder mit `min-width: 0` (Dashboard, Flashcards, Praktikumsbetrieb, Git-Simulator), PPT-Download-Karten und Terminal-Eingabe schrumpfen, Sprachschalter bricht nicht mehr um, Telemetrie-Buttons im Dashboard mit `color`.
 - **Mobile/E2E**: Git-Simulator-Terminal-Eingabe auf schmalen Viewports mit `flex-wrap` umgebrochen und sichtbar gehalten; `snake.js` `resizeCanvas` gegen Null-Zugriff vor DOMContentLoaded abgesichert.
 - **E2E**: `@playwright/test` bleibt exakt auf 1.63.0 (1.64 lässt die WebKit-Specs auf `portfolio.html` in der CI am Klick scheitern); Dependabot ignoriert `>=1.64`. `progress_backup.spec.js` wartet auf `data-ready` des lazy geladenen Moduls, wiederholt verlorene Klicks und liest den Export aus dem Blob statt aus dem in Firefox unzuverlässigen Download-Event.
