@@ -4,6 +4,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-24
+
 #### Hinzugefügt
 - **Lernplan als Kalenderdatei** (`flashcards.html`, `modules/study-calendar.js`): exportiert die Fälligkeiten der Leitner-Box als `.ics` (ein Ganztagstermin je Tag mit Kartenanzahl, Erinnerung 9 Uhr, 60 Tage Vorschau, überfällige Karten zählen für heute). Die Datei entsteht im Browser; RFC-5545-Escaping und Zeilenfaltung sind getestet (Unit + E2E).
 - **Backup-Erinnerung im Dashboard** (`progress-backup.js`, `describeBackupAge`): unter „Fortschritt sichern“ steht, wann zuletzt exportiert wurde (heute, gestern, vor N Tagen); nach 14 Tagen oder ohne Export trotz vorhandener Daten wird sie hervorgehoben. Der Zeitstempel `last_backup_at` liegt bewusst nicht in der Backup-Allowlist (eine wiederhergestellte Datei darf die Erinnerung nicht zurücksetzen) und steht mit Begründung in der Ausschlussliste des Allowlist-Tests.
