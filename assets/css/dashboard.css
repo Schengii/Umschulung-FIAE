@@ -235,6 +235,21 @@
     color: var(--text-secondary);
 }
 
+.backup-reminder {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.backup-reminder-due {
+    color: #b45309;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .backup-reminder-due {
+    color: #fbbf24;
+}
+
 .backup-actions {
     display: flex;
     flex-wrap: wrap;
