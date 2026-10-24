@@ -80,8 +80,8 @@ jobs:
       - name: JSDoc Type Check
         run: npm run typecheck
 
-      - name: Run Vitest Unit Test Suite
-        run: npm run test:unit
+      - name: Run Vitest Unit Test Suite (with coverage thresholds)
+        run: npm run test:coverage
 
       - name: Verify Production Build (esbuild minify)
         run: npm run build:dist

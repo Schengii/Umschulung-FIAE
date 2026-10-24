@@ -17,6 +17,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **`check-bilingual`** (`scripts/check_bilingual.js`, Teil von `npm run check` und CI): meldet `lang="de"`/`lang="en"`-Elemente ohne Gegenstück.
 
 #### Geändert
+- **Auslieferung:** das EcoChef-Video auf `praktikumsbetrieb.html` lädt erst bei der Wiedergabe (`preload="none"`; der `moov`-Block der MP4-Dateien liegt am Ende, `metadata` zog schon beim Laden der Seite Daten). `scripts/delivery_budget.test.js` sichert Precache (keine Medien, unter 3 MB, Dateien vorhanden), `width`/`height` an Bildern und Video-`preload` ab.
+- **CI:** der `quality`-Job führt die Unit-Tests mit `npm run test:coverage` aus, damit die Schwellen gelten (ADR 0015, neu). `check-bilingual` steht in CLAUDE.md. Dependabot-Ignore-Regeln tragen eine Wiedervorlage (2027-01-31).
 - **Header-CSP (`vercel.json`):** `style-src` ohne `'unsafe-inline'` (nur `style-src-attr`), eigene Header-Regel für `/pages/playground.html`; `microphone=(self)` bleibt (Spracheingabe im Interview-Trainer). `eslint` und `happy-dom` auf die neuesten Patch-Versionen.
 - **Typen:** alle 508 impliziten `any`-Fehler in `assets/js`, `scripts` und `sw.js` per JSDoc-Typen behoben (vorher 492 nach der Ratsche, 571 beim ersten Messen).
 - **CSP:** die Seiten-CSP erlaubt `style-src 'self'` plus `style-src-attr 'unsafe-inline'` (ADR 0013). Die Inline-`<style>`-Blöcke von `dashboard`, `flashcards`, `git-simulator`, `news`, `offline` und `404` sowie die per JS eingefügten Styles von `faq-accordion`, `news`, `portfolio` und `quick-sandbox` liegen jetzt in CSS-Dateien. `check-head` lehnt `<style>`-Elemente und `'unsafe-inline'` für `style-src` ab (Ausnahme `playground.html`, dessen Vorschau-iframe die CSP erbt).

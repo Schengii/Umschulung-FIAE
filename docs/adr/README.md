@@ -22,6 +22,7 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0012](0012-unterprojekt-sync-strategie.md) | Synchronisations-Strategie für Unterprojekte (REPO_MAPPING und preserve-Listen) | Akzeptiert |
 | [0013](0013-styles-nur-aus-dateien.md) | Styles nur aus Dateien: `style-src 'self'` plus `style-src-attr` | Akzeptiert, ergänzt 0003 |
 | [0014](0014-seitenspezifische-stylesheets.md) | Seitenspezifische Stylesheets statt einer großen `style.css` | Akzeptiert |
+| [0015](0015-coverage-ratsche.md) | Coverage-Ratsche statt fester Zielquote | Akzeptiert |
 
 Hinweis zu 0001 und 0005: Beide beschreiben einen Stand, in dem die Produktion den unminifizierten Repo-Root auslieferte. Das gilt seit 0008 nicht mehr; die übrigen Aussagen (kein Bundler, keine Pfad-Umschreibung, Skriptname `build:dist`) bleiben gültig.
 
