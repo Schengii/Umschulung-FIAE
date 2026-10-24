@@ -51,7 +51,7 @@ test.describe('Fokus-Rückgabe von Overlays', () => {
         await page.goto('/pages/home.html');
         await settle(page);
 
-        const opener = page.locator('#nav-menu a').first();
+        const opener = page.locator('a.skip-link');
         await opener.focus();
         await expect(opener).toBeFocused();
 
@@ -68,7 +68,7 @@ test.describe('Fokus-Rückgabe von Overlays', () => {
         await page.goto('/pages/home.html');
         await settle(page);
 
-        const opener = page.locator('#nav-menu a').first();
+        const opener = page.locator('a.skip-link');
         await opener.focus();
         await page.keyboard.press('Control+KeyK');
         await expect(page.locator('#command-palette-input')).toBeFocused();
@@ -80,7 +80,7 @@ test.describe('Fokus-Rückgabe von Overlays', () => {
         await page.goto('/pages/home.html');
         await settle(page);
 
-        const opener = page.locator('#nav-menu a').first();
+        const opener = page.locator('a.skip-link');
         await opener.focus();
         await page.evaluate(() => {
             // @ts-ignore global from dialog.js
@@ -102,9 +102,12 @@ test.describe('Kontrast je Akzentfarbe und Theme (axe color-contrast)', () => {
             for (const accent of accents) {
                 test(`${pageName} (${colorScheme}, Akzent ${accent})`, async ({ page }) => {
                     await page.emulateMedia({ reducedMotion: 'reduce', colorScheme });
+                    // Start with the accent instead of switching it after load: a switch leaves colour
+                    // transitions running, and WebKit then reports the previous text colour.
+                    await page.addInitScript((value) => localStorage.setItem('portfolio_accent', value), accent);
                     await page.goto(`/${pageName}`);
                     await settle(page);
-                    await page.evaluate((value) => document.documentElement.setAttribute('data-accent', value), accent);
+                    await expect(page.locator('html')).toHaveAttribute('data-accent', accent);
                     await page.evaluate(() =>
                         Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})))
                     );
