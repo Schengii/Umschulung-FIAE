@@ -14,7 +14,7 @@ module.exports = defineConfig({
       exclude: ['**/*.test.js', '**/*.spec.js'],
       reporter: ['text-summary', 'text'],
       // Ratchet: just below the current value so coverage cannot silently drop; raise it step by step (goal 60 %).
-      thresholds: { statements: 55, branches: 50, functions: 55, lines: 55 },
+      thresholds: { statements: 65, branches: 58, functions: 65, lines: 65 },
     },
   },
 });

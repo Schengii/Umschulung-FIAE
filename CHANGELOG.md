@@ -5,6 +5,14 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ## [Unreleased]
 
 #### Hinzugefügt
+- Unit-Tests für `executive-dossier`, `document-preview`, `project_compare`, `bounding-box-renderer` und `premium-effects-p2`; Helfer `trackDocumentListeners` in `scripts/test-support/dom-helpers.js` (entfernt `document`-Listener von Modulen, die pro Test neu importiert werden). Coverage ca. 70 %, Schwellen jetzt 65 % (Branches 58 %).
+
+#### Behoben
+- **A11y:** Executive-Dossier ist ein beschrifteter modaler Dialog (`role="dialog"`, `aria-modal`, benannter Schließen-Button), schließt mit Escape und gibt den Fokus zurück; die Dokument-Vorschau setzt den Fokus auf den Schließen-Button und gibt ihn zurück.
+- **Sicherheit:** `document-preview.js` escaped Titel und Datei-URL in `innerHTML` und setzt `rel="noopener"` am Vollbild-Link.
+- **E2E (flaky):** `qr_local.spec.js` wartet auf das Lazy-Modul und die Bild-Decodierung (Firefox); `elektrocheck_scanner.spec.js` startet mit akzeptiertem Cookie-Banner, der den Button überdeckte (WebKit/Firefox), und wiederholt einen verlorenen Klick.
+
+#### Hinzugefügt
 - **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 55 % (Statements, Functions, Lines) und 50 % (Branches); Ist-Wert ca. 60 %, Ziel schrittweise 60 %.
 - `progress-backup.test.js` gleicht alle im Code genutzten `AppStorage`-Schlüssel mit der Backup-Allowlist ab (neue Schlüssel müssen dort oder in einer begründeten Ausschlussliste stehen); neuer Test `recruiter-filter.test.js`.
 - **Unit-Tests für DOM-Module** (happy-dom): Theme, Akzentfarbe, Navigation, Übersetzung, Lernfortschritt, Cookie-Banner, FAQ, Back-to-Top, Easter Egg, Kontaktformular, Tastaturkürzel, iCal-Terminbuchung, Challenge Lab, Roadmap, Command Palette, Begrüßung (inkl. Escaping der Recruiter-Parameter), Suche und Filter, Skill-Matchmaker, Achievements, Backup-Karte (Export, Import, QR, `#sync=`) und die Bedienung der IHK-Prüfungssimulation. 437 Tests (vorher 215), Coverage von `assets/js/modules` von 17 % auf rund 49 % Statements. Test-Helfer in `scripts/test-support/`. Vitest läuft jetzt mit `isolate: true`, weil die DOM-Tests Listener am `document` registrieren.
