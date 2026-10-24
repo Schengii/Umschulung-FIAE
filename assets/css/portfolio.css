@@ -467,3 +467,20 @@
     border-top: 1px dashed var(--border);
     animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.project-updated {
+    margin: 0.25rem 0 0.5rem;
+}
+
+.project-updated-stale {
+    color: #b45309;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .project-updated-stale {
+    color: #fbbf24;
+}
+
+.projects-data-freshness {
+    margin: 0 0 0.75rem;
+}

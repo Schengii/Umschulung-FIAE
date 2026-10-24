@@ -161,7 +161,52 @@
                 });
             }
 
+            // Headings of the content pages (assets/data/search-index.json), once it has been fetched.
+            for (const page of contentIndex) {
+                for (const heading of page.h || []) {
+                    items.push({
+                        titleDe: heading.de,
+                        titleEn: heading.en,
+                        category: page.t?.de || page.p,
+                        categoryEn: page.t?.en || page.p,
+                        icon: 'fa-hashtag',
+                        // Matched by the heading only: the page name would list every section of a
+                        // page for each search for that page.
+                        titleOnly: true,
+                        url: `${pagePrefix}${page.p}${heading.id ? `#${heading.id}` : ''}`,
+                    });
+                }
+            }
+
             return items;
+        }
+
+        // The headings of all content pages (~15 KB), fetched on first open like the project catalogue.
+        /** @type {Array<{p: string, t?: {de: string, en: string}, h?: Array<{id: string, de: string, en: string}>}>} */
+        let contentIndex = [];
+        let contentIndexRequested = false;
+        function ensureContentIndex() {
+            if (contentIndexRequested || typeof fetch !== 'function') return;
+            contentIndexRequested = true;
+            const isPages =
+                window.location.pathname.includes('/pages/') || window.location.pathname.includes('\\pages\\');
+            fetch(`${isPages ? '../' : ''}assets/data/search-index.json`)
+                .then(
+                    (response) => /** @type {Promise<unknown>} */ (response.ok ? response.json() : Promise.resolve([]))
+                )
+                .then((data) => {
+                    if (!Array.isArray(data)) return;
+                    contentIndex = data;
+                    if (overlay.classList.contains('open')) renderResults(input.value);
+                })
+                .catch(() => {
+                    // Offline or blocked: the palette still finds pages and projects.
+                });
+        }
+
+        /** @param {unknown} text */
+        function escapeText(text) {
+            return String(text ?? '').replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
         }
 
         // The project catalogue (~45 KB) is only needed once the palette is used: fetch it
@@ -192,8 +237,9 @@
                 currentItems = allItems
                     .filter((item) => {
                         const title = (lang === 'de' ? item.titleDe : item.titleEn) || item.titleDe;
-                        const cat = item.category || '';
+                        const cat = ((lang === 'en' && item.categoryEn) || item.category || '') + '';
                         const tags = item.tags || '';
+                        if (item.titleOnly) return title.toLowerCase().includes(term);
                         return (
                             title.toLowerCase().includes(term) ||
                             cat.toLowerCase().includes(term) ||
@@ -225,8 +271,8 @@
                 li.innerHTML = `
                     <div class="item-icon"><i class="fa-solid ${item.icon}"></i></div>
                     <div class="item-details">
-                        <div class="item-title">${title}</div>
-                        <div class="item-category">${item.category}</div>
+                        <div class="item-title">${escapeText(title)}</div>
+                        <div class="item-category">${escapeText((lang === 'en' && item.categoryEn) || item.category)}</div>
                     </div>
                     <i class="fa-solid fa-arrow-turn-down" style="font-size: 0.75rem; opacity: 0.4;"></i>
                 `;
@@ -244,6 +290,7 @@
 
         function openPalette() {
             ensureProjectData();
+            ensureContentIndex();
             opener = /** @type {HTMLElement | null} */ (document.activeElement);
             overlay.classList.add('open');
             input.value = '';

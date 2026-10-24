@@ -232,3 +232,11 @@
     flex-direction: column;
     gap: 0.5rem;
 }
+
+.study-calendar-btn {
+    margin-top: 0.5rem;
+}
+
+.study-calendar-hint {
+    margin-top: 0.5rem;
+}

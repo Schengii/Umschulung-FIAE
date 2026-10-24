@@ -324,3 +324,16 @@
 .exam-review-explanation {
     color: var(--text-muted);
 }
+
+.exam-overview {
+    margin: 1rem 0;
+}
+
+.exam-overview summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.exam-overview .exam-topic-table {
+    margin-top: 0.75rem;
+}

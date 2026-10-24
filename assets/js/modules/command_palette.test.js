@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 
 // command_palette.js is a self-starting IIFE: importing it builds one overlay and registers
 // one global key handler. It is imported once and every test starts with the palette closed.
@@ -21,7 +21,27 @@ const type = (text) => {
     input().dispatchEvent(new Event('input', { bubbles: true }));
 };
 
+// What assets/data/search-index.json would deliver; the palette fetches it on the first opening.
+const SEARCH_INDEX = [
+    {
+        p: 'flashcards.html',
+        t: { de: 'Lernkarten', en: 'Flashcards' },
+        h: [
+            { id: 'leitner-stats-title', de: 'Leitner-Box Statistik', en: 'Leitner box statistics' },
+            { id: '', de: 'Normalisierung <b>fett</b>', en: 'Normalisation' },
+        ],
+    },
+];
+const fetchedUrls = [];
+
 beforeAll(async () => {
+    vi.stubGlobal(
+        'fetch',
+        vi.fn(async (url) => {
+            fetchedUrls.push(url);
+            return { ok: true, json: async () => SEARCH_INDEX };
+        })
+    );
     window.happyDOM.setURL('http://localhost/index.html');
     // The catalogue script cannot be fetched in the test; report it as loaded instead of failing.
     window.happyDOM.settings.handleDisabledFileLoadingAsSuccess = true;
@@ -165,5 +185,56 @@ describe('command palette', () => {
         items()[0].click();
         expect(window.location.href).toBe('http://localhost/pages/projekt-detail.html?repo=Demo%20Repo');
         window.happyDOM.setURL('http://localhost/index.html');
+    });
+});
+
+describe('content search', () => {
+    const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    it('fetched the index once, on the first opening only', async () => {
+        openPalette();
+        await flush();
+        pressKey('Escape');
+        openPalette();
+        expect(fetchedUrls).toEqual(['assets/data/search-index.json']);
+    });
+
+    it('finds a heading of a content page and links to its anchor', async () => {
+        openPalette();
+        await flush();
+        type('leitner');
+        expect(titles()).toEqual(['Leitner-Box Statistik']);
+        expect(items()[0].querySelector('.item-category').textContent).toBe('Lernkarten');
+    });
+
+    it('searches in the page language and names the page in that language', async () => {
+        document.documentElement.setAttribute('lang', 'en');
+        openPalette();
+        await flush();
+        type('statistics');
+        expect(titles()).toEqual(['Leitner box statistics']);
+        expect(items()[0].querySelector('.item-category').textContent).toBe('Flashcards');
+    });
+
+    it('opens the page at the section anchor, or without one when the heading has none', async () => {
+        openPalette();
+        await flush();
+        type('leitner');
+        items()[0].click();
+        expect(window.location.href).toBe('http://localhost/pages/flashcards.html#leitner-stats-title');
+        window.happyDOM.setURL('http://localhost/index.html');
+
+        type('normalisierung');
+        items()[0].click();
+        expect(window.location.href).toBe('http://localhost/pages/flashcards.html');
+        window.happyDOM.setURL('http://localhost/index.html');
+    });
+
+    it('shows headings as text, never as markup', async () => {
+        openPalette();
+        await flush();
+        type('normalisierung');
+        expect(titles()).toEqual(['Normalisierung <b>fett</b>']);
+        expect(items()[0].querySelector('.item-title b')).toBeNull();
     });
 });

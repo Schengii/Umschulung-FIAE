@@ -41,7 +41,7 @@ function choose(question, answerIndex) {
 
 /** Answers every question with the right (true), a wrong (false) or no (null) answer. */
 function answerAll(mode, how) {
-    const { questionCount } = EXAM_MODES[mode];
+    const questionCount = $$('.exam-step').length;
     for (let i = 0; i < questionCount; i++) {
         const question = currentQuestion();
         if (how !== null) choose(question, how ? question.correct : (question.correct + 1) % 4);
@@ -59,6 +59,8 @@ beforeEach(() => {
     storage = installPageGlobals();
     Object.assign(globalThis.STORAGE_KEYS, {
         EXAM_RESULTS: 'exam_results',
+        EXAM_TOPIC_STATS: 'exam_topic_stats',
+        EXAM_WRONG_QUESTIONS: 'exam_wrong_questions',
         LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES: 'weak_categories',
     });
     audio = { play: vi.fn() };
@@ -82,8 +84,8 @@ describe('exam simulator: mode selection', () => {
         expect(() => initIhkExamSimulator()).not.toThrow();
     });
 
-    it('renders four mode buttons with the standard quiz selected', () => {
-        expect($$('.btn-exam-mode')).toHaveLength(4);
+    it('renders five mode buttons with the standard quiz selected', () => {
+        expect($$('.btn-exam-mode')).toHaveLength(5);
         expect(modeButton('standard').getAttribute('aria-pressed')).toBe('true');
         expect(modeButton('ap1').getAttribute('aria-pressed')).toBe('false');
         expect(panel().hidden).toBe(true);
@@ -312,5 +314,105 @@ describe('exam simulator: hand in', () => {
                 if (i < questionCount - 1) buttonByText('Next').click();
             }
         }
+    });
+});
+
+describe('exam simulator: statistics and repeating weaknesses', () => {
+    const savedStats = () => JSON.parse(storage.getItem('exam_topic_stats') ?? '{}');
+    const savedWrong = () => JSON.parse(storage.getItem('exam_wrong_questions') ?? '[]');
+
+    it('records topic statistics and the wrongly answered questions after a run', () => {
+        startExam('ap1');
+        answerAll('ap1', false);
+        $('#exam-submit-btn').click();
+
+        const stats = savedStats();
+        const total = Object.values(stats).reduce((sum, entry) => sum + entry.total, 0);
+        expect(total).toBe(EXAM_MODES.ap1.questionCount);
+        expect(Object.values(stats).every((entry) => entry.correct === 0)).toBe(true);
+        expect(savedWrong()).toHaveLength(EXAM_MODES.ap1.questionCount);
+    });
+
+    it('removes questions from the open mistakes once they are answered correctly', () => {
+        startExam('ap1');
+        answerAll('ap1', false);
+        $('#exam-submit-btn').click();
+        const before = savedWrong().length;
+
+        modeButton('weak').click();
+        $('#exam-start-btn').click();
+        answerAll('weak', true);
+        $('#exam-submit-btn').click();
+
+        expect(savedWrong().length).toBeLessThan(before);
+    });
+
+    it('asks to take a simulation first while nothing is known', () => {
+        modeButton('weak').click();
+        expect($('#exam-weak-empty')).not.toBeNull();
+        expect($('#exam-start-btn')).toBeNull();
+    });
+
+    it('starts a revision run with the open mistakes and the shorter time limit', () => {
+        storage.setItem(
+            'exam_wrong_questions',
+            JSON.stringify(EXAM_QUESTIONS.slice(0, 4).map((question) => question.id))
+        );
+        modeButton('weak').click();
+        expect(panel().textContent).toContain('12:00');
+        expect($('#exam-start-btn').textContent).toBe('Wiederholung starten');
+        $('#exam-start-btn').click();
+        expect($$('.exam-step').length).toBeGreaterThanOrEqual(4);
+        expect(currentQuestion()).toBeTruthy();
+    });
+
+    it('does not count the revision run as an exam attempt of its own part', () => {
+        storage.setItem('exam_wrong_questions', JSON.stringify([EXAM_QUESTIONS[0].id]));
+        modeButton('weak').click();
+        $('#exam-start-btn').click();
+        answerAll('weak', true);
+        $('#exam-submit-btn').click();
+        expect(Object.keys(savedResults())).toEqual(['weak']);
+    });
+
+    it('shows the standing per topic in the intro once enough answers exist', () => {
+        storage.setItem(
+            'exam_topic_stats',
+            JSON.stringify({ sql: { total: 10, correct: 3 }, network: { total: 2, correct: 2 } })
+        );
+        modeButton('ap2').click();
+        const rows = $$('#exam-topic-overview tbody tr');
+        expect(rows).toHaveLength(1);
+        expect(rows[0].textContent).toContain('3 / 10');
+        expect(rows[0].textContent).toContain('30 %');
+        expect(rows[0].classList.contains('exam-topic-weak')).toBe(true);
+    });
+
+    it('hides the overview while there is too little data or the data is damaged', () => {
+        modeButton('ap2').click();
+        expect($('#exam-topic-overview')).toBeNull();
+        storage.setItem('exam_topic_stats', 'kaputt');
+        modeButton('ap1').click();
+        expect($('#exam-topic-overview')).toBeNull();
+    });
+
+    it('offers to repeat weaknesses and to practise flashcards after a bad run', () => {
+        startExam('ap1');
+        answerAll('ap1', false);
+        $('#exam-submit-btn').click();
+        expect($('#exam-repeat-weak-btn')).not.toBeNull();
+        expect($('.exam-nav a[href="flashcards.html"]')).not.toBeNull();
+
+        $('#exam-repeat-weak-btn').click();
+        expect(modeButton('weak').getAttribute('aria-pressed')).toBe('true');
+        expect($('#exam-start-btn')).not.toBeNull();
+    });
+
+    it('offers neither after a perfect first run', () => {
+        startExam('ap1');
+        answerAll('ap1', true);
+        $('#exam-submit-btn').click();
+        expect($('#exam-repeat-weak-btn')).toBeNull();
+        expect($('.exam-nav a[href="flashcards.html"]')).toBeNull();
     });
 });
