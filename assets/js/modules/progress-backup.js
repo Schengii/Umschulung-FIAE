@@ -85,6 +85,27 @@ export function isBackupKey(key) {
     return EXACT_KEYS.has(key) || KEY_PREFIXES.some((prefix) => key.startsWith(prefix));
 }
 
+/** The dashboard suggests a new backup after this many days. */
+export const BACKUP_REMINDER_DAYS = 14;
+
+/**
+ * What the dashboard should say about the last file export. The timestamp is kept in
+ * `last_backup_at`, deliberately outside the backup itself: restoring an old file must not make
+ * the browser believe that it was backed up today.
+ * @param {string | null | undefined} lastBackupIso ISO timestamp of the last export
+ * @param {Date} now
+ * @param {boolean} hasData whether there is anything worth backing up
+ * @returns {{state: 'empty' | 'never' | 'recent' | 'stale', days: number}}
+ */
+export function describeBackupAge(lastBackupIso, now, hasData) {
+    if (!hasData) return { state: 'empty', days: 0 };
+    const last = lastBackupIso ? Date.parse(lastBackupIso) : NaN;
+    if (Number.isNaN(last)) return { state: 'never', days: 0 };
+    // A clock that went backwards must not produce "-3 days".
+    const days = Math.max(0, Math.floor((now.getTime() - last) / 86_400_000));
+    return { state: days >= BACKUP_REMINDER_DAYS ? 'stale' : 'recent', days };
+}
+
 /**
  * @param {string} key
  * @param {unknown} value
@@ -246,6 +267,7 @@ export function initProgressBackup() {
     const qrClose = card.querySelector('#backup-qr-close');
     const fileInput = /** @type {HTMLInputElement} */ (card.querySelector('#backup-file-input'));
     const status = card.querySelector('#backup-status');
+    const reminder = card.querySelector('#backup-reminder');
     const confirmBox = /** @type {HTMLElement} */ (card.querySelector('#backup-confirm'));
     const confirmText = card.querySelector('#backup-confirm-text');
     const confirmButton = card.querySelector('#backup-confirm-btn');
@@ -260,6 +282,40 @@ export function initProgressBackup() {
 
     /** @type {[string, string][] | null} */
     let pending = null;
+
+    /** Shows when the last file export was made and nudges after BACKUP_REMINDER_DAYS. */
+    function renderReminder() {
+        if (!reminder) return;
+        let age;
+        try {
+            const hasData = Object.keys(createBackup(window.localStorage).data).length > 0;
+            age = describeBackupAge(window.localStorage.getItem('last_backup_at'), new Date(), hasData);
+        } catch (_e) {
+            age = { state: /** @type {const} */ ('empty'), days: 0 };
+        }
+        const days = age.days;
+        const ago = {
+            de: days === 0 ? 'heute' : days === 1 ? 'gestern' : `vor ${days} Tagen`,
+            en: days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`,
+        };
+        const messages = {
+            empty: null,
+            never: {
+                de: 'Noch keine Sicherung exportiert. Sichere deinen Fortschritt als Datei, bevor Website-Daten gelöscht werden.',
+                en: 'No backup exported yet. Save your progress as a file before the site data gets cleared.',
+            },
+            recent: { de: `Letzte Sicherung: ${ago.de}.`, en: `Last backup: ${ago.en}.` },
+            stale: {
+                de: `Letzte Sicherung ${ago.de}. Zeit für eine neue.`,
+                en: `Last backup ${ago.en}. Time for a new one.`,
+            },
+        }[age.state];
+        reminder.hidden = !messages;
+        reminder.classList.toggle('backup-reminder-due', age.state === 'stale' || age.state === 'never');
+        if (messages) reminder.textContent = messages[lang()];
+    }
+    window.addEventListener('fiae:lang-change', renderReminder);
+    renderReminder();
 
     if (qrButton && qrDisplay && qrImg) {
         qrButton.addEventListener('click', async () => {
@@ -348,6 +404,12 @@ export function initProgressBackup() {
         link.remove();
         // Give the download a moment to start before the URL goes away.
         setTimeout(() => URL.revokeObjectURL(url), 1000);
+        try {
+            window.localStorage.setItem('last_backup_at', new Date().toISOString());
+        } catch (_e) {
+            // Storage blocked: the export worked, only the reminder stays as it was.
+        }
+        renderReminder();
         say(`${count} Einträge exportiert.`, `Exported ${count} entries.`);
     });
 
