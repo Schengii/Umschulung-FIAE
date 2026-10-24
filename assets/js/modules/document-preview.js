@@ -1,6 +1,8 @@
 /**
  * Document Preview Module — Interactive preview modals for images, DOCX, and PPTX files.
  */
+import { escapeHtml } from './html-utils.js';
+
 export function initDocumentPreview() {
     // 1. Create and inject modal markup if not already present
     let modal = document.getElementById('doc-preview-modal');
@@ -9,6 +11,7 @@ export function initDocumentPreview() {
         modal.id = 'doc-preview-modal';
         modal.className = 'doc-preview-modal hidden';
         modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
         modal.setAttribute('aria-hidden', 'true');
         modal.innerHTML = `
             <div class="doc-preview-backdrop"></div>
@@ -28,6 +31,8 @@ export function initDocumentPreview() {
     const closeBtn = modal.querySelector('.doc-preview-close');
     const backdrop = modal.querySelector('.doc-preview-backdrop');
     const body = modal.querySelector('.doc-preview-body');
+    /** Element that had the focus when the preview opened, so closing can hand it back. */
+    let opener = /** @type {HTMLElement | null} */ (null);
 
     /**
      * @param {HTMLElement} element
@@ -56,10 +61,10 @@ export function initDocumentPreview() {
             const btnRow = document.createElement('div');
             btnRow.className = 'doc-preview-btn-row';
             btnRow.innerHTML = `
-                <a href="${fileUrl}" target="_blank" class="btn-primary small-btn">
+                <a href="${escapeHtml(fileUrl)}" target="_blank" rel="noopener" class="btn-primary small-btn">
                     <i class="fa fa-external-link"></i> ${lang === 'de' ? 'Vollbild' : 'Full Screen'}
                 </a>
-                <a href="${fileUrl}" download class="btn-secondary small-btn">
+                <a href="${escapeHtml(fileUrl)}" download class="btn-secondary small-btn">
                     <i class="fa fa-download"></i> ${lang === 'de' ? 'Herunterladen' : 'Download'}
                 </a>
             `;
@@ -89,7 +94,7 @@ export function initDocumentPreview() {
             body.innerHTML = `
                 <div class="doc-preview-file-card">
                     <i class="${iconClass} doc-preview-file-icon ${iconColorClass}"></i>
-                    <div class="doc-preview-file-title">${fileTitle}</div>
+                    <div class="doc-preview-file-title">${escapeHtml(fileTitle)}</div>
                     <div class="doc-preview-file-meta">${fileTypeLabel}</div>
                     <p style="margin: 0; color: var(--text-secondary); max-width: 480px; font-size: 0.9rem;">
                         ${
@@ -99,7 +104,7 @@ export function initDocumentPreview() {
                         }
                     </p>
                     <div class="doc-preview-btn-row">
-                        <a href="${fileUrl}" download class="btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.95rem;">
+                        <a href="${escapeHtml(fileUrl)}" download class="btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.95rem;">
                             <i class="fa fa-download"></i> ${lang === 'de' ? 'Datei herunterladen' : 'Download File'}
                         </a>
                     </div>
@@ -112,12 +117,16 @@ export function initDocumentPreview() {
         modal.classList.add('show');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        opener = /** @type {HTMLElement | null} */ (document.activeElement);
+        /** @type {HTMLElement | null} */ (closeBtn).focus();
     };
 
     const closePreviewModal = () => {
         modal.classList.remove('show');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        if (opener && opener.isConnected) opener.focus();
+        opener = null;
         setTimeout(() => {
             if (!modal.classList.contains('show')) {
                 modal.classList.add('hidden');

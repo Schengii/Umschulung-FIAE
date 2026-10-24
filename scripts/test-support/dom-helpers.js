@@ -51,4 +51,28 @@ function resetDocument(bodyHtml = '') {
     for (const name of ['data-theme', 'data-accent', 'lang']) document.documentElement.removeAttribute(name);
 }
 
-module.exports = { createMemoryStorage, installPageGlobals, removePageGlobals, resetDocument };
+/**
+ * Records the listeners a module adds to `document` so a test can remove them again. Tests that
+ * re-import a module per case (vi.resetModules) would otherwise pile up the listeners of every
+ * earlier instance, and all of them would react to the next event.
+ * @returns {() => void} removes the recorded listeners and restores document.addEventListener
+ */
+function trackDocumentListeners() {
+    const original = document.addEventListener.bind(document);
+    /** @type {Array<[string, any, any]>} */
+    const added = [];
+    document.addEventListener = (
+        /** @type {string} */ type,
+        /** @type {any} */ listener,
+        /** @type {any} */ options
+    ) => {
+        added.push([type, listener, options]);
+        original(type, listener, options);
+    };
+    return () => {
+        document.addEventListener = original;
+        for (const [type, listener, options] of added) document.removeEventListener(type, listener, options);
+    };
+}
+
+module.exports = { createMemoryStorage, installPageGlobals, removePageGlobals, resetDocument, trackDocumentListeners };

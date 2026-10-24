@@ -94,6 +94,7 @@ module.exports = [
     languageOptions: {
       globals: {
         KeyboardEvent: 'readonly',
+        MouseEvent: 'readonly',
         File: 'readonly',
         Storage: 'readonly',
         globalThis: 'readonly',
