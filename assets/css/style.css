@@ -180,6 +180,8 @@ html[data-accent="violet"] {
     --accent-light: rgba(244, 114, 182, 0.15);
     --text-on-primary: #0f172a;
     --bg-nav-active: #8b5cf6;
+    /* Dark text sits on the light primary; the light theme's #7c3aed fill would only give 3.1:1. */
+    --chip-active-bg: #a78bfa;
 }
 
 html[data-accent="orange"] {
