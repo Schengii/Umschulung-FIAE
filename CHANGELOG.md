@@ -13,6 +13,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - ADR 0013 (Styles nur aus Dateien) und ADR 0014 (seitenspezifische Stylesheets).
 - `noImplicitAny` ist in `jsconfig.json` und `jsconfig.sw.json` dauerhaft aktiv; die Ratsche `check-strict-types` entfällt. Typdeklaration `scripts/subset-font.d.ts`.
 - Neue Unit-Tests: `qr-generator`, `portfolio_exporter`, `pdf-exporter`, `ihk-cockpit` (Nutzwertanalyse, Phasenplan, Fachgespräch-Timer) und `effects-smoke.test.js` (Effekt-Module: Guard-Selektoren, `prefers-reduced-motion`).
+- **A11y-Specs** `a11y_motion_focus.spec.js`: keine Dauer-Animation/Partikel/Cursor-Glow unter `prefers-reduced-motion`, Fokus-Rückgabe von Command Palette und `showConfirm`, Kontrast (axe) je Akzentfarbe in beiden Themes auf `home` und `portfolio`.
+- **`check-bilingual`** (`scripts/check_bilingual.js`, Teil von `npm run check` und CI): meldet `lang="de"`/`lang="en"`-Elemente ohne Gegenstück.
 
 #### Geändert
 - **Header-CSP (`vercel.json`):** `style-src` ohne `'unsafe-inline'` (nur `style-src-attr`), eigene Header-Regel für `/pages/playground.html`; `microphone=(self)` bleibt (Spracheingabe im Interview-Trainer). `eslint` und `happy-dom` auf die neuesten Patch-Versionen.
@@ -25,6 +27,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - Dependabot ignoriert Minor-Updates von `@fortawesome/fontawesome-free` (ab 6.7 stehen Glyphen in `--fa`, das Icon-Subset-Skript fände 0 Icons).
 
 #### Behoben
+- **A11y:** Command Palette gibt den Fokus beim Schließen an das auslösende Element zurück.
+- **A11y/Kontrast:** aktive Filter-Chips im dunklen Theme mit Akzent Violett hatten 3,1:1 (dunkle Schrift auf `#7c3aed`); der Hintergrund ist dort jetzt `#a78bfa`.
 - **XSS:** `pdf-exporter.js` schrieb den gespeicherten Firmennamen roh in `innerHTML` (Factsheet); jetzt mit `escapeHtml`.
 - **Styling**: Status-Karte auf `home`/`portfolio` im hellen Theme lesbar (`.card-glass` überschrieb den grünen Hintergrund, weiße Schrift auf Weiß; jetzt dunkleres Grün mit AA-Kontrast). Mobile Überläufe behoben: Grid-Kinder mit `min-width: 0` (Dashboard, Flashcards, Praktikumsbetrieb, Git-Simulator), PPT-Download-Karten und Terminal-Eingabe schrumpfen, Sprachschalter bricht nicht mehr um, Telemetrie-Buttons im Dashboard mit `color`.
 - **Mobile/E2E**: Git-Simulator-Terminal-Eingabe auf schmalen Viewports mit `flex-wrap` umgebrochen und sichtbar gehalten; `snake.js` `resizeCanvas` gegen Null-Zugriff vor DOMContentLoaded abgesichert.
