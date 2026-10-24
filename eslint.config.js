@@ -47,6 +47,7 @@ module.exports = [
         Node: 'readonly',
         Prism: 'readonly',
         Blob: 'readonly',
+        TextEncoder: 'readonly',
         URL: 'readonly',
         alert: 'readonly',
         confirm: 'readonly',
