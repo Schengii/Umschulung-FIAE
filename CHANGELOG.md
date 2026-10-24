@@ -4,6 +4,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-24
+
 #### Hinzugefügt
 - **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 55 % (Statements, Functions, Lines) und 50 % (Branches); Ist-Wert ca. 60 %, Ziel schrittweise 60 %.
 - `progress-backup.test.js` gleicht alle im Code genutzten `AppStorage`-Schlüssel mit der Backup-Allowlist ab (neue Schlüssel müssen dort oder in einer begründeten Ausschlussliste stehen); neuer Test `recruiter-filter.test.js`.
