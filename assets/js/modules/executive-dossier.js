@@ -162,9 +162,7 @@ function attachDossierEvents() {
     });
 
     if (btnPrint) {
-        btnPrint.addEventListener('click', () => {
-            window.print();
-        });
+        btnPrint.addEventListener('click', printDossier);
     }
 
     // Trigger from anywhere with [data-open-dossier]
@@ -188,6 +186,23 @@ export function openDossierModal(initialType = 'fullstack') {
     renderDossierPreview(initialType);
     modal.style.display = 'flex';
     document.getElementById('btn-close-dossier')?.focus();
+}
+
+/**
+ * Prints the dossier alone: print.css hides everything else while `printing-dossier` is set on
+ * the body, so the page behind the dialog does not end up on paper.
+ */
+function printDossier() {
+    document.body.classList.add('printing-dossier');
+    const done = () => {
+        window.removeEventListener('afterprint', done);
+        document.body.classList.remove('printing-dossier');
+    };
+    // Some browsers (Safari) return from print() before the page is rendered for paper, so the class
+    // may only go once `afterprint` fires; the timer covers a browser that never fires it.
+    window.addEventListener('afterprint', done);
+    window.setTimeout(done, 60_000);
+    window.print();
 }
 
 function closeDossierModal() {
