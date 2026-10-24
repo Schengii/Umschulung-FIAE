@@ -19,11 +19,16 @@ test.describe('QR-Codes lokal erzeugen', () => {
         await page.reload({ waitUntil: 'domcontentloaded' });
         await settle(page);
 
-        await page.locator('#backup-qr-btn').click();
         const img = page.locator('#backup-qr-img');
-        await expect(img).toBeVisible();
+        // progress-backup.js is a lazy module: a click that lands before its handler is bound does
+        // nothing, so retry the (idempotent) click until the code appears.
+        await expect(async () => {
+            await page.locator('#backup-qr-btn').click();
+            await expect(img).toBeVisible({ timeout: 1000 });
+        }).toPass({ timeout: 15000 });
         await expect(img).toHaveAttribute('src', /^data:image\/svg\+xml/);
-        expect(await img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBe(true);
+        // Decoding a data: URL is asynchronous, Firefox reports `complete` a moment after `visible`.
+        await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBe(true);
         expect(qrServiceRequests).toEqual([]);
     });
 
