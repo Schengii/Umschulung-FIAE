@@ -4,8 +4,6 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
-## [1.5.0] - 2026-10-24
-
 #### Hinzugefügt
 - **Lernplan als Kalenderdatei** (`flashcards.html`, `modules/study-calendar.js`): exportiert die Fälligkeiten der Leitner-Box als `.ics` (ein Ganztagstermin je Tag mit Kartenanzahl, Erinnerung 9 Uhr, 60 Tage Vorschau, überfällige Karten zählen für heute). Die Datei entsteht im Browser; RFC-5545-Escaping und Zeilenfaltung sind getestet (Unit + E2E).
 - **Backup-Erinnerung im Dashboard** (`progress-backup.js`, `describeBackupAge`): unter „Fortschritt sichern“ steht, wann zuletzt exportiert wurde (heute, gestern, vor N Tagen); nach 14 Tagen oder ohne Export trotz vorhandener Daten wird sie hervorgehoben. Der Zeitstempel `last_backup_at` liegt bewusst nicht in der Backup-Allowlist (eine wiederhergestellte Datei darf die Erinnerung nicht zurücksetzen) und steht mit Begründung in der Ausschlussliste des Allowlist-Tests.
@@ -16,6 +14,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **A11y:** Executive-Dossier ist ein beschrifteter modaler Dialog (`role="dialog"`, `aria-modal`, benannter Schließen-Button), schließt mit Escape und gibt den Fokus zurück; die Dokument-Vorschau setzt den Fokus auf den Schließen-Button und gibt ihn zurück.
 - **Sicherheit:** `document-preview.js` escaped Titel und Datei-URL in `innerHTML` und setzt `rel="noopener"` am Vollbild-Link.
 - **E2E (flaky):** `qr_local.spec.js` wartet auf das Lazy-Modul und die Bild-Decodierung (Firefox); `elektrocheck_scanner.spec.js` startet mit akzeptiertem Cookie-Banner, der den Button überdeckte (WebKit/Firefox), und wiederholt einen verlorenen Klick.
+
+## [1.5.0] - 2026-10-24
 
 #### Hinzugefügt
 - **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 55 % (Statements, Functions, Lines) und 50 % (Branches); Ist-Wert ca. 60 %, Ziel schrittweise 60 %.
