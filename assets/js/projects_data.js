@@ -18,7 +18,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Amazon%202.0",
-    "updatedAt": "2026-10-19T18:03:49.842Z",
+    "updatedAt": "2026-10-27T09:25:30.552Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -164,7 +164,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-10-19T18:03:50.053Z",
+    "updatedAt": "2026-10-27T09:25:30.710Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -189,7 +189,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/ElektroCheck%20AI",
-    "updatedAt": "2026-10-19T18:03:50.262Z",
+    "updatedAt": "2026-10-27T09:25:30.825Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -214,7 +214,7 @@ window.projectsData = [
     "language": "TypeScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Finanzenportfolio",
-    "updatedAt": "2026-10-19T17:25:59Z",
+    "updatedAt": "2026-10-25T14:11:28Z",
     "images": [
       "assets/images/finanzenportfolio_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -301,7 +301,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-19T17:25:11Z"
+    "updatedAt": "2026-10-22T09:57:38Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -322,7 +322,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-19T17:18:41Z",
+    "updatedAt": "2026-10-22T09:57:43Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -364,7 +364,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Minecraft",
-    "updatedAt": "2026-10-19T18:03:51.295Z"
+    "updatedAt": "2026-10-27T09:25:31.452Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -385,7 +385,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Wohnungssuche%20KI",
-    "updatedAt": "2026-10-19T18:03:51.560Z",
+    "updatedAt": "2026-10-27T09:25:31.569Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
