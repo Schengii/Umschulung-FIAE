@@ -91,13 +91,8 @@ function setTheme(theme) {
     } catch (e) {}
     
     document.documentElement.setAttribute('data-theme', currentTheme);
-    if (document.body) {
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-        }
-    }
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) themeMeta.setAttribute('content', currentTheme === 'dark' ? '#0a101e' : '#7a5a1f');
     updateThemeButtonUI();
 }
 
@@ -264,7 +259,7 @@ function getNavHTML(activePage) {
     <nav aria-label="${isEn ? 'Main navigation' : 'Hauptmenü'}">
       <div class="nav-brand">
         <a href="Home.html" class="headline" aria-label="${isEn ? 'ManuFAKTUR Home' : 'ManuFAKTUR Startseite'}" title="${isEn ? 'Home' : 'Startseite'}">
-          <img src="assets/images/logos/logo-transparent.png" alt="ManuFAKTUR Schenk Logo" class="nav-logo">
+          <img width="256" height="152" src="assets/images/logos/logo-transparent-256.webp" alt="ManuFAKTUR Schenk Logo" class="nav-logo">
         </a>
       </div>
       <button class="hamburger" aria-label="${isEn ? 'Open menu' : 'Menü öffnen'}" aria-expanded="false">
@@ -344,9 +339,6 @@ function getFooterHTML() {
 
     // Theme & Lang sofort anwenden
     document.documentElement.setAttribute('data-theme', currentTheme);
-    if (document.body && currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
     document.documentElement.setAttribute('lang', currentLang);
 
     // Header nur auf Nicht-Hero-Seiten injizieren
@@ -1367,7 +1359,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Share Link Button & Web Share API
         window.shareCurrentArtwork = function() {
-            const shareUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, 'Bildergalerie.html') + (itemId ? '#' + itemId : '');
+            // werk/ID.html liefert die Link-Vorschau (Open Graph) und leitet zur Galerie weiter
+            const shareUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, itemId ? 'werk/' + itemId + '.html' : 'Bildergalerie.html');
             const shareTitle = `${realTitle} – ManuFAKTUR Schenk`;
             const shareText = isEn
                 ? `Check out this hand-painted artwork "${realTitle}" (${displayTechnik}, ${realMasse}) by Manuela Schenk:`
