@@ -1,0 +1,14 @@
+title = "Schengii gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Demo data of the learning labs and generated bundles (false positives)"
+paths = [
+  '''^dist/''',
+  '''^src/utils/jwtConfusionEngine\.js$''',
+  '''^src/components/Content/ApiMockStudioLab\.jsx$''',
+  '''^src/components/Content/WebSocketProtocolLab\.jsx$''',
+  '''^src/data/websocketData\.js$''',
+]
