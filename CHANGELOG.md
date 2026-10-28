@@ -4,15 +4,21 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
-## [1.5.0] - 2026-10-24
-
 #### Hinzugefügt
+- **Suche über Seiteninhalte** (Command Palette, Strg+K): `scripts/build_search_index.js` erzeugt `assets/data/search-index.json` (Überschriften h2/h3 aller Inhaltsseiten mit DE/EN-Text und Abschnittsanker, ca. 15 KB); die Palette lädt ihn beim ersten Öffnen und springt direkt zum Abschnitt. Treffer erscheinen nach Seiten und Projekten und werden nur über die Überschrift gefunden. `npm run check-search-index` (in `check` und CI) schlägt bei veraltetem Index fehl, `npm run regen` erzeugt ihn neu. Titel und Kategorien der Palette werden jetzt als Text ausgegeben.
+- **Stand der Projektdaten** (`portfolio.html`, `modules/project-freshness.js`): jede Projektkarte zeigt „Stand: Datum (vor N Tagen)“ aus `updatedAt`, ab 90 Tagen mit dem Hinweis „evtl. veraltet“; über der Liste steht das neueste Datum („Projektdaten zuletzt aktualisiert“), damit veraltete Demos auffallen. Neu gezeichnete Karten (Filter, Sortierung, Seiten) werden per `MutationObserver` ergänzt.
+- **Dossier-Druck** (`home`, `portfolio`): „Drucken / Als PDF speichern“ im Executive-Dossier druckte bisher die ganze Seite samt Dialog. Jetzt markiert der Button den `body` (`printing-dossier`, Rückbau bei `afterprint`, Sicherheitsnetz nach 60 s), und `print.css` blendet alles außer dem Dossier-Blatt aus; `home.html` bindet `print.css` ein. Unit- und E2E-Test (emuliertes Druckmedium).
+- **Lernplan als Kalenderdatei** (`flashcards.html`, `modules/study-calendar.js`): exportiert die Fälligkeiten der Leitner-Box als `.ics` (ein Ganztagstermin je Tag mit Kartenanzahl, Erinnerung 9 Uhr, 60 Tage Vorschau, überfällige Karten zählen für heute). Die Datei entsteht im Browser; RFC-5545-Escaping und Zeilenfaltung sind getestet (Unit + E2E).
+- **Backup-Erinnerung im Dashboard** (`progress-backup.js`, `describeBackupAge`): unter „Fortschritt sichern“ steht, wann zuletzt exportiert wurde (heute, gestern, vor N Tagen); nach 14 Tagen oder ohne Export trotz vorhandener Daten wird sie hervorgehoben. Der Zeitstempel `last_backup_at` liegt bewusst nicht in der Backup-Allowlist (eine wiederhergestellte Datei darf die Erinnerung nicht zurücksetzen) und steht mit Begründung in der Ausschlussliste des Allowlist-Tests.
+- **IHK-Simulator: Auswertung über alle Versuche und „Schwächen wiederholen“** (`quiz.html`): neue reine Logik `modules/exam-statistics.js` (Quote je Themengebiet, Liste offener Fehler, Auswahl der Wiederholungsfragen). Die Startansicht jedes Modus zeigt „Dein Stand je Themengebiet“; der neue Modus „🎯 Schwächen wiederholen“ (10 Fragen, 12 Min.) nimmt zuerst offene Fehler, dann die schwächsten Themen; eine richtig beantwortete Frage verschwindet aus der Liste. Nach einer Prüfung führen Schaltflächen zur Wiederholung und zu den passenden Lernkarten. Neue Speicherschlüssel `exam_topic_stats` und `exam_wrong_questions` stehen in der Backup-Allowlist.
 - Unit-Tests für `executive-dossier`, `document-preview`, `project_compare`, `bounding-box-renderer` und `premium-effects-p2`; Helfer `trackDocumentListeners` in `scripts/test-support/dom-helpers.js` (entfernt `document`-Listener von Modulen, die pro Test neu importiert werden). Coverage ca. 70 %, Schwellen jetzt 65 % (Branches 58 %).
 
 #### Behoben
 - **A11y:** Executive-Dossier ist ein beschrifteter modaler Dialog (`role="dialog"`, `aria-modal`, benannter Schließen-Button), schließt mit Escape und gibt den Fokus zurück; die Dokument-Vorschau setzt den Fokus auf den Schließen-Button und gibt ihn zurück.
 - **Sicherheit:** `document-preview.js` escaped Titel und Datei-URL in `innerHTML` und setzt `rel="noopener"` am Vollbild-Link.
 - **E2E (flaky):** `qr_local.spec.js` wartet auf das Lazy-Modul und die Bild-Decodierung (Firefox); `elektrocheck_scanner.spec.js` startet mit akzeptiertem Cookie-Banner, der den Button überdeckte (WebKit/Firefox), und wiederholt einen verlorenen Klick.
+
+## [1.5.0] - 2026-10-24
 
 #### Hinzugefügt
 - **Coverage-Ratsche:** `vitest.config.js` verlangt mindestens 55 % (Statements, Functions, Lines) und 50 % (Branches); Ist-Wert ca. 60 %, Ziel schrittweise 60 %.

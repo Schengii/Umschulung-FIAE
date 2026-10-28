@@ -20,6 +20,7 @@ const PAGE = `
         <div id="backup-qr-display" hidden><img id="backup-qr-img" alt=""><button id="backup-qr-close" type="button">x</button></div>
         <input id="backup-file-input" type="file">
         <p id="backup-status"></p>
+        <p id="backup-reminder" hidden></p>
         <div id="backup-confirm" hidden>
             <p id="backup-confirm-text"></p>
             <button id="backup-confirm-btn" type="button">Ja</button>
@@ -274,5 +275,82 @@ describe('progress backup card: #sync= link', () => {
         initProgressBackup();
         expect(status()).toBe('Ungültiger QR-Sync-Code empfangen.');
         expect(confirmBox().hidden).toBe(true);
+    });
+});
+
+describe('progress backup card: reminder', () => {
+    const reminder = () => $('#backup-reminder');
+    const daysAgo = (days) => new Date(Date.now() - days * 86_400_000).toISOString();
+
+    it('stays hidden while there is nothing to back up', () => {
+        initProgressBackup();
+        expect(reminder().hidden).toBe(true);
+    });
+
+    it('asks for a first backup when data exists but no export was made', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        initProgressBackup();
+        expect(reminder().hidden).toBe(false);
+        expect(reminder().textContent).toContain('Noch keine Sicherung');
+        expect(reminder().classList.contains('backup-reminder-due')).toBe(true);
+    });
+
+    it('names the age of a recent backup without nagging', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        window.localStorage.setItem('last_backup_at', daysAgo(2));
+        initProgressBackup();
+        expect(reminder().textContent).toBe('Letzte Sicherung: vor 2 Tagen.');
+        expect(reminder().classList.contains('backup-reminder-due')).toBe(false);
+    });
+
+    it('speaks of today and yesterday', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        window.localStorage.setItem('last_backup_at', daysAgo(0));
+        initProgressBackup();
+        expect(reminder().textContent).toBe('Letzte Sicherung: heute.');
+        window.localStorage.setItem('last_backup_at', daysAgo(1));
+        window.dispatchEvent(new Event('fiae:lang-change'));
+        expect(reminder().textContent).toBe('Letzte Sicherung: gestern.');
+    });
+
+    it('nudges after two weeks', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        window.localStorage.setItem('last_backup_at', daysAgo(20));
+        initProgressBackup();
+        expect(reminder().textContent).toBe('Letzte Sicherung vor 20 Tagen. Zeit für eine neue.');
+        expect(reminder().classList.contains('backup-reminder-due')).toBe(true);
+    });
+
+    it('follows the page language', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        window.localStorage.setItem('last_backup_at', daysAgo(20));
+        initProgressBackup();
+        document.documentElement.setAttribute('lang', 'en');
+        window.dispatchEvent(new Event('fiae:lang-change'));
+        expect(reminder().textContent).toBe('Last backup 20 days ago. Time for a new one.');
+    });
+
+    it('records an export and shows it right away', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        URL.createObjectURL = vi.fn(() => 'blob:backup');
+        URL.revokeObjectURL = vi.fn();
+        const realCreate = document.createElement.bind(document);
+        vi.spyOn(document, 'createElement').mockImplementation((tag) => {
+            const element = realCreate(tag);
+            if (tag === 'a') element.click = () => {};
+            return element;
+        });
+        initProgressBackup();
+        expect(reminder().textContent).toContain('Noch keine Sicherung');
+        $('#backup-export-btn').click();
+        expect(window.localStorage.getItem('last_backup_at')).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+        expect(reminder().textContent).toBe('Letzte Sicherung: heute.');
+        expect(reminder().classList.contains('backup-reminder-due')).toBe(false);
+    });
+
+    it('does not take the reminder timestamp into the backup file', () => {
+        window.localStorage.setItem('quiz_best_score', '80');
+        window.localStorage.setItem('last_backup_at', daysAgo(1));
+        expect(Object.keys(createBackup(window.localStorage).data)).toEqual(['quiz_best_score']);
     });
 });

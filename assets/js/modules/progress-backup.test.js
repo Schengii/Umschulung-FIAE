@@ -14,6 +14,8 @@ import {
     serializeBackupToPayload,
     deserializeBackupFromPayload,
     getSyncUrl,
+    describeBackupAge,
+    BACKUP_REMINDER_DAYS,
 } from './progress-backup.js';
 
 /** Minimal in-memory stand-in for window.localStorage. */
@@ -221,6 +223,7 @@ describe('storage keys vs. backup allowlist', () => {
     // Keys that are deliberately not part of a backup. A new key has to land either in the
     // allowlist of progress-backup.js or here, with a reason, so it cannot be forgotten.
     const NOT_BACKED_UP = {
+        last_backup_at: 'time of the last export; restoring an old file must not reset it',
         cookieConsent: 'consent is a per-device decision',
         has_visited: 'one-off first-visit flag',
         pwa_dismissed: 'one-off install prompt flag',
@@ -252,5 +255,37 @@ describe('storage keys vs. backup allowlist', () => {
 
     it('does not exclude a key that is also in the allowlist', () => {
         for (const key of Object.keys(NOT_BACKED_UP)) expect(isBackupKey(key), key).toBe(false);
+    });
+});
+
+describe('describeBackupAge', () => {
+    const now = new Date('2026-10-24T12:00:00.000Z');
+    const daysAgo = (days) => new Date(now.getTime() - days * 86_400_000).toISOString();
+
+    it('stays silent while there is nothing to back up', () => {
+        expect(describeBackupAge(null, now, false)).toEqual({ state: 'empty', days: 0 });
+        expect(describeBackupAge(daysAgo(40), now, false).state).toBe('empty');
+    });
+
+    it.each([null, undefined, '', 'kein Datum'])('reports "never" for %s', (value) => {
+        expect(describeBackupAge(value, now, true)).toEqual({ state: 'never', days: 0 });
+    });
+
+    it('counts whole days and calls a fresh backup recent', () => {
+        expect(describeBackupAge(daysAgo(0), now, true)).toEqual({ state: 'recent', days: 0 });
+        expect(describeBackupAge(daysAgo(3.9), now, true)).toEqual({ state: 'recent', days: 3 });
+        expect(describeBackupAge(daysAgo(BACKUP_REMINDER_DAYS - 1), now, true).state).toBe('recent');
+    });
+
+    it('turns stale exactly at the reminder threshold', () => {
+        expect(describeBackupAge(daysAgo(BACKUP_REMINDER_DAYS), now, true)).toEqual({
+            state: 'stale',
+            days: BACKUP_REMINDER_DAYS,
+        });
+        expect(describeBackupAge(daysAgo(200), now, true).state).toBe('stale');
+    });
+
+    it('never reports negative days when the clock went backwards', () => {
+        expect(describeBackupAge(daysAgo(-5), now, true)).toEqual({ state: 'recent', days: 0 });
     });
 });

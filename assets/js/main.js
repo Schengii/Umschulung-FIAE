@@ -97,6 +97,8 @@ const LAZY_MODULES = [
     ['./modules/praktikumsbetrieb-media.js', 'initPraktikumsbetriebMedia', '#dfg-gallery-section'],
     ['./dashboard.js', 'initDashboard', '#commit-grid'],
     ['./modules/progress-backup.js', 'initProgressBackup', '#progress-backup'],
+    ['./modules/study-calendar.js', 'initStudyCalendar', '#study-calendar-btn'],
+    ['./modules/project-freshness.js', 'initProjectFreshness', '#dynamic-projects-container'],
     ['./modules/qr-generator.js', 'initQrGenerator', '#qr-company-input'],
     ['./modules/document-preview.js', 'initDocumentPreview', 'a[href$=".docx"], a[href$=".pptx"]'],
     ['./modules/faq-accordion.js', 'initFaqAccordion', '#faq-accordion-container'],

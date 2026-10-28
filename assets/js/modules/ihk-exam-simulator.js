@@ -11,6 +11,14 @@
 
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './exam-questions.js';
 import { getIhkGrade } from './grade-calculator.js';
+import {
+    addRunToTopicStats,
+    parseTopicStats,
+    parseWrongQuestions,
+    pickWeaknessQuestions,
+    rankTopics,
+    updateWrongQuestions,
+} from './exam-statistics.js';
 
 /** @typedef {import('./exam-questions.js').ExamQuestion} ExamQuestion */
 
@@ -38,6 +46,23 @@ export const EXAM_MODES = Object.freeze({
         en: 'WISO – Economics and social studies',
     },
 });
+
+/**
+ * "Repeat weaknesses": a shorter run made of the questions still answered wrongly and the
+ * weakest topics (see exam-statistics.js). Kept apart from EXAM_MODES because it has no
+ * question pool of its own.
+ */
+export const WEAKNESS_MODE = Object.freeze({
+    questionCount: 10,
+    durationSeconds: 12 * 60,
+    de: 'Schwächen wiederholen – deine offenen Fragen und schwächsten Themen',
+    en: 'Repeat weaknesses – your open questions and weakest topics',
+});
+
+/** @param {string} mode */
+function modeConfig(mode) {
+    return mode === 'weak' ? WEAKNESS_MODE : EXAM_MODES[mode];
+}
 
 /** @type {Readonly<Record<number, {de: string, en: string}>>} */
 export const GRADE_LABELS = Object.freeze({
@@ -202,6 +227,7 @@ export function initIhkExamSimulator() {
         ['ap1', '⏱️ AP1-Simulation', '⏱️ AP1 simulation'],
         ['ap2', '⚡ AP2-Simulation', '⚡ AP2 simulation'],
         ['wiso', '💼 WISO-Simulation', '💼 WISO simulation'],
+        ['weak', '🎯 Schwächen wiederholen', '🎯 Repeat weaknesses'],
     ];
     for (const [key] of MODE_BUTTONS) {
         const button = element('button', { type: 'button', class: 'btn-exam-mode', 'data-mode': key });
@@ -280,6 +306,37 @@ export function initIhkExamSimulator() {
         }
     }
 
+    function readTopicStats() {
+        return parseTopicStats(AppStorage.getItem(STORAGE_KEYS.EXAM_TOPIC_STATS, '{}'));
+    }
+
+    function readWrongQuestions() {
+        return parseWrongQuestions(AppStorage.getItem(STORAGE_KEYS.EXAM_WRONG_QUESTIONS, '[]'));
+    }
+
+    /** Adds the finished run to the statistics over all runs and to the list of open mistakes. */
+    function recordStatistics() {
+        AppStorage.setItem(
+            STORAGE_KEYS.EXAM_TOPIC_STATS,
+            JSON.stringify(addRunToTopicStats(readTopicStats(), run.questions, run.answers))
+        );
+        AppStorage.setItem(
+            STORAGE_KEYS.EXAM_WRONG_QUESTIONS,
+            JSON.stringify(updateWrongQuestions(readWrongQuestions(), run.questions, run.answers))
+        );
+    }
+
+    /** @returns {import('./exam-questions.js').ExamQuestion[]} */
+    function pickWeaknessRun() {
+        return pickWeaknessQuestions(
+            EXAM_QUESTIONS,
+            readWrongQuestions(),
+            readTopicStats(),
+            WEAKNESS_MODE.questionCount,
+            shuffle
+        );
+    }
+
     // ---- timer ---------------------------------------------------------------------------
     function stopTimer() {
         clearInterval(timerId);
@@ -324,7 +381,7 @@ export function initIhkExamSimulator() {
         timerDisplay.classList.remove('exam-timer-low');
         renderFrame();
         if (isExam) {
-            timerValue.textContent = formatTimerText(EXAM_MODES[mode].durationSeconds);
+            timerValue.textContent = formatTimerText(modeConfig(mode).durationSeconds);
             run = {
                 mode,
                 questions: [],
@@ -340,8 +397,10 @@ export function initIhkExamSimulator() {
     }
 
     function startRun() {
-        const config = EXAM_MODES[mode];
-        const questions = pickExamQuestions(EXAM_QUESTIONS, mode, config.questionCount);
+        const config = modeConfig(mode);
+        const questions =
+            mode === 'weak' ? pickWeaknessRun() : pickExamQuestions(EXAM_QUESTIONS, mode, config.questionCount);
+        if (questions.length === 0) return;
         run = {
             mode,
             questions,
@@ -366,6 +425,7 @@ export function initIhkExamSimulator() {
         run.timedOut = timedOut;
         const result = evaluateExam(run.questions, run.answers);
         saveResult(run.mode, result);
+        recordStatistics();
         if (result.passed && window.Achievements) window.Achievements.unlock('exam_passed');
         if (window.GameAudio) window.GameAudio.play(result.passed ? 'success' : 'fail');
         render();
@@ -379,24 +439,85 @@ export function initIhkExamSimulator() {
         else renderResult();
     }
 
+    /** "Your standing per topic" over all runs, or null while there is not enough data. */
+    function renderTopicOverview() {
+        const language = lang();
+        const ranked = rankTopics(readTopicStats());
+        if (ranked.length === 0) return null;
+        const rows = ranked.map((entry) => {
+            const label = EXAM_TOPICS[entry.topic]?.[language] ?? entry.topic;
+            return element(
+                'tr',
+                { class: entry.percent < PASS_PERCENT ? 'exam-topic-weak' : '' },
+                element('th', { scope: 'row', text: label }),
+                element('td', { text: `${entry.correct} / ${entry.total}` }),
+                element('td', { text: `${entry.percent} %` })
+            );
+        });
+        return element(
+            'details',
+            { class: 'exam-overview', id: 'exam-topic-overview' },
+            element('summary', {
+                text: t('Dein Stand je Themengebiet (alle Versuche)', 'Your standing per topic (all attempts)'),
+            }),
+            element(
+                'table',
+                { class: 'exam-topic-table' },
+                element(
+                    'thead',
+                    {},
+                    element(
+                        'tr',
+                        {},
+                        element('th', { scope: 'col', text: t('Themengebiet', 'Topic') }),
+                        element('th', { scope: 'col', text: t('Richtig', 'Correct') }),
+                        element('th', { scope: 'col', text: t('Quote', 'Rate') })
+                    )
+                ),
+                element('tbody', {}, ...rows)
+            )
+        );
+    }
+
     function renderIntro() {
-        const config = EXAM_MODES[run.mode];
+        const config = modeConfig(run.mode);
         const stored = readResults()[run.mode];
+        const isWeakness = run.mode === 'weak';
+        const available = isWeakness ? pickWeaknessRun().length : config.questionCount;
         const start = element('button', {
             type: 'button',
             class: 'btn-primary exam-start-btn',
             id: 'exam-start-btn',
-            text: t('Prüfung starten', 'Start exam'),
+            text: isWeakness ? t('Wiederholung starten', 'Start revision') : t('Prüfung starten', 'Start exam'),
         });
         start.addEventListener('click', startRun);
+        if (isWeakness && available === 0) {
+            examPanel.replaceChildren(
+                element('h3', { class: 'exam-heading', text: t(config.de, config.en) }),
+                element('p', {
+                    id: 'exam-weak-empty',
+                    text: t(
+                        'Noch keine Schwächen erfasst. Mach zuerst eine Simulation (AP1, AP2 oder WISO); falsch beantwortete Fragen und schwache Themen erscheinen dann hier.',
+                        'No weaknesses recorded yet. Take a simulation first (AP1, AP2 or WISO); wrongly answered questions and weak topics will then show up here.'
+                    ),
+                }),
+                renderTopicOverview()
+            );
+            return;
+        }
 
         examPanel.replaceChildren(
             element('h3', { class: 'exam-heading', text: t(config.de, config.en) }),
             element('p', {
-                text: t(
-                    `${config.questionCount} zufällig ausgewählte Fragen, Zeitlimit ${formatTimerText(config.durationSeconds)} Minuten. Während der Prüfung gibt es keine Rückmeldung; die Auswertung folgt nach der Abgabe.`,
-                    `${config.questionCount} randomly selected questions, time limit ${formatTimerText(config.durationSeconds)} minutes. There is no feedback during the exam; the evaluation follows after you hand in.`
-                ),
+                text: isWeakness
+                    ? t(
+                          `${available} Fragen aus deinen offenen Fehlern und den schwächsten Themengebieten, Zeitlimit ${formatTimerText(config.durationSeconds)} Minuten. Eine richtig beantwortete Frage verschwindet aus der Liste.`,
+                          `${available} questions from your open mistakes and your weakest topics, time limit ${formatTimerText(config.durationSeconds)} minutes. A question answered correctly drops off the list.`
+                      )
+                    : t(
+                          `${config.questionCount} zufällig ausgewählte Fragen, Zeitlimit ${formatTimerText(config.durationSeconds)} Minuten. Während der Prüfung gibt es keine Rückmeldung; die Auswertung folgt nach der Abgabe.`,
+                          `${config.questionCount} randomly selected questions, time limit ${formatTimerText(config.durationSeconds)} minutes. There is no feedback during the exam; the evaluation follows after you hand in.`
+                      ),
             }),
             element('p', {
                 class: 'exam-note',
@@ -414,6 +535,7 @@ export function initIhkExamSimulator() {
                       ),
                   })
                 : null,
+            renderTopicOverview(),
             start
         );
     }
@@ -621,6 +743,24 @@ export function initIhkExamSimulator() {
         });
         again.addEventListener('click', () => selectMode(run.mode));
 
+        const hasOpenMistakes = readWrongQuestions().length > 0;
+        const repeat = hasOpenMistakes
+            ? element('button', {
+                  type: 'button',
+                  class: 'btn-secondary',
+                  id: 'exam-repeat-weak-btn',
+                  text: t('🎯 Schwächen wiederholen', '🎯 Repeat weaknesses'),
+              })
+            : null;
+        repeat?.addEventListener('click', () => selectMode('weak'));
+        const flashcardsLink = result.weakTopics.length
+            ? element('a', {
+                  class: 'btn-secondary',
+                  href: 'flashcards.html',
+                  text: t('Passende Lernkarten üben', 'Practise matching flashcards'),
+              })
+            : null;
+
         const weakNames = result.weakTopics.map((topic) => EXAM_TOPICS[topic][language]).join(', ');
 
         examPanel.replaceChildren(
@@ -648,7 +788,7 @@ export function initIhkExamSimulator() {
                 : null,
             element('h3', { class: 'exam-subheading', text: t('Fragen im Überblick', 'Question review') }),
             review,
-            again
+            element('div', { class: 'exam-nav' }, again, repeat, flashcardsLink)
         );
     }
 

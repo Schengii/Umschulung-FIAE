@@ -13,12 +13,19 @@ test.describe('IHK-Prüfungssimulation', () => {
     const panel = (page) => page.locator('.exam-panel');
 
     async function startExam(page, mode) {
+        // The fixed cookie banner would cover buttons at the bottom of the result view.
+        await page.addInitScript(() => localStorage.setItem('cookieConsent', 'accepted'));
         await page.goto('/pages/quiz.html');
         await settle(page);
         await page.locator(`button[data-mode="${mode}"]`).click();
         await expect(page.locator('#exam-timer-display')).toBeVisible();
-        await page.locator('#exam-start-btn').click();
-        await expect(panel(page).locator('.exam-question')).toBeVisible();
+        // A click can get lost on Firefox while the page is still settling, so repeat it until the first
+        // question is on screen (the start button is gone once the run has begun).
+        const question = panel(page).locator('.exam-question');
+        await expect(async () => {
+            if (!(await question.isVisible())) await page.locator('#exam-start-btn').click({ timeout: 2000 });
+            await expect(question).toBeVisible({ timeout: 1500 });
+        }).toPass({ timeout: 20000 });
     }
 
     /** Question text -> text of the right answer, read from the module the page itself uses. */
@@ -100,7 +107,13 @@ test.describe('IHK-Prüfungssimulation', () => {
         await startExam(page, 'ap1');
         await expect(page.locator('#answer-buttons')).toBeHidden();
 
-        await page.locator('#lang-toggle').click();
+        // A lost click (Firefox, page still settling) would leave the language unchanged; the toggle is
+        // synchronous, so only click while the page is still German.
+        const html = page.locator('html');
+        await expect(async () => {
+            if ((await html.getAttribute('lang')) !== 'en') await page.locator('#lang-toggle').click({ timeout: 2000 });
+            await expect(html).toHaveAttribute('lang', 'en', { timeout: 1500 });
+        }).toPass({ timeout: 20000 });
         await expect(panel(page).locator('.exam-question-meta')).toContainText('Question 1 of 15');
         await expect(page.locator('#exam-submit-btn')).toHaveText('Hand in exam');
 
@@ -108,5 +121,25 @@ test.describe('IHK-Prüfungssimulation', () => {
         await expect(panel(page)).toBeHidden();
         await expect(page.locator('#exam-timer-display')).toBeHidden();
         await expect(page.locator('#answer-buttons')).toBeVisible();
+    });
+
+    test('sollte nach einer schwachen Prüfung die Schwächen wiederholen lassen', async ({ page }) => {
+        await startExam(page, 'wiso');
+        await page.locator('#exam-submit-btn').click();
+        await page.locator('#exam-submit-btn').click();
+        await expect(page.locator('#exam-score')).toContainText('0 von 12 richtig');
+
+        const stats = await page.evaluate(() => JSON.parse(localStorage.getItem('exam_topic_stats')));
+        expect(Object.values(stats).reduce((sum, entry) => sum + entry.total, 0)).toBe(12);
+        const wrong = await page.evaluate(() => JSON.parse(localStorage.getItem('exam_wrong_questions')));
+        expect(wrong).toHaveLength(12);
+
+        // Keyboard activation: the result page is several screens long and the smooth scroll after the
+        // hand-in is still running, which makes pointer clicks on its lower buttons miss their target.
+        await page.locator('#exam-repeat-weak-btn').focus();
+        await page.keyboard.press('Enter');
+        await expect(panel(page).locator('.exam-heading')).toContainText('Schwächen wiederholen');
+        await page.locator('#exam-start-btn').click();
+        await expect(panel(page).locator('.exam-question-meta')).toContainText('Frage 1 von 10');
     });
 });

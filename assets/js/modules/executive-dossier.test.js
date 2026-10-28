@@ -106,9 +106,28 @@ describe('executive dossier', () => {
         expect(el('dossier-role-text').textContent).toContain('Frontend & PWA');
     });
 
-    it('prints from the print button', async () => {
+    it('prints the dossier alone: the body is marked while printing and released afterwards', async () => {
         await start();
+        let markedDuringPrint = false;
+        window.print = vi.fn(() => {
+            markedDuringPrint = document.body.classList.contains('printing-dossier');
+        });
         el('btn-print-dossier').click();
         expect(window.print).toHaveBeenCalledTimes(1);
+        expect(markedDuringPrint).toBe(true);
+        // Still marked right after print() returns: Safari renders the pages later.
+        expect(document.body.classList.contains('printing-dossier')).toBe(true);
+        window.dispatchEvent(new Event('afterprint'));
+        expect(document.body.classList.contains('printing-dossier')).toBe(false);
+    });
+
+    it('releases the print mode after a minute even if afterprint never fires', async () => {
+        vi.useFakeTimers();
+        await start();
+        el('btn-print-dossier').click();
+        expect(document.body.classList.contains('printing-dossier')).toBe(true);
+        vi.advanceTimersByTime(60_000);
+        expect(document.body.classList.contains('printing-dossier')).toBe(false);
+        vi.useRealTimers();
     });
 });
