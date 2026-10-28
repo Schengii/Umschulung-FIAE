@@ -15,7 +15,6 @@ const STORAGE_KEYS = Object.freeze({
     MEMORY_BEST_MOVES: 'memoryBestMoves',
     MEMORY_BEST_TIME: 'memoryBestTime',
     MEMORY_HIGHSCORE_LIST: 'memory_highscore_list',
-    PORTFOLIO_CUSTOM_PROJECTS: 'portfolio_custom_projects',
     PORTFOLIO_ACCENT: 'portfolio_accent',
     PORTFOLIO_DYSLEXIA: 'portfolio_dyslexia',
     PORTFOLIO_COLORBLIND: 'portfolio_colorblind',

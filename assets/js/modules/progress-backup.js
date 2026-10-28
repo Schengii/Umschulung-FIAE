@@ -24,6 +24,7 @@ const EXACT_KEYS = new Set([
     'flashcards_due_dates',
     'flashcards_starred',
     'flashcards_custom',
+    'flashcards_extended_enabled',
     'known_flashcards',
     'flashcard_total_count',
     'flashcard_correct_count',
@@ -44,7 +45,6 @@ const EXACT_KEYS = new Set([
     'achievements',
     'visited_pages',
     // personal content and settings
-    'portfolio_custom_projects',
     'username',
     'theme',
     'lang',
@@ -76,7 +76,6 @@ const JSON_KEYS = new Set([
     'memory_highscore_list',
     'achievements',
     'visited_pages',
-    'portfolio_custom_projects',
     'fiae_daily_question_state',
 ]);
 

@@ -13,8 +13,9 @@ module.exports = defineConfig({
       include: ['assets/js/modules/**/*.js'],
       exclude: ['**/*.test.js', '**/*.spec.js'],
       reporter: ['text-summary', 'text'],
-      // Ratchet: just below the current value so coverage cannot silently drop; raise it step by step (goal 60 %).
-      thresholds: { statements: 65, branches: 58, functions: 65, lines: 65 },
+      // Ratchet (ADR 0015): just below the current value so coverage cannot silently drop; raise it
+      // when the actual value stays well above (2026-10-28: 81 / 73 / 83 / 82 %).
+      thresholds: { statements: 78, branches: 70, functions: 80, lines: 79 },
     },
   },
 });

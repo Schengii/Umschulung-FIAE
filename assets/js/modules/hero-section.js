@@ -3,6 +3,29 @@
  * Adds a visually stunning centered hero section with glowing neon typography
  * and an interactive constellation particle matrix.
  */
+const PHRASES = {
+    de: [
+        'Fachinformatiker für Anwendungsentwicklung',
+        'Frontend & Full-Stack Webentwickler',
+        'Clean Code, TDD & moderne Softwarearchitektur',
+        'KI-Nutzung, Automation & Modern Tools',
+        'Sofort einsatzbereit & motiviert 🚀',
+    ],
+    en: [
+        'IT Specialist — Application Development',
+        'Frontend & Full-Stack Web Developer',
+        'Clean Code, TDD & Modern Software Architecture',
+        'AI Engineering, Automation & Modern Tools',
+        'Available & Ready for Action 🚀',
+    ],
+};
+
+/** @param {unknown} lang */
+export const heroPhrases = (lang) => (lang === 'en' ? PHRASES.en : PHRASES.de);
+
+const prefersReducedMotion = () =>
+    typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function initHeroSection() {
     const heroContainer = document.getElementById('hero-section');
     if (!heroContainer) return;
@@ -12,22 +35,17 @@ export function initHeroSection() {
     // 1. Typing animation with smooth pacing
     const typingEl = document.getElementById('hero-typing');
     if (typingEl) {
-        const phrases =
-            lang === 'de'
-                ? [
-                      'Fachinformatiker für Anwendungsentwicklung',
-                      'Frontend & Full-Stack Webentwickler',
-                      'Clean Code, TDD & moderne Softwarearchitektur',
-                      'KI-Nutzung, Automation & Modern Tools',
-                      'Sofort einsatzbereit & motiviert 🚀',
-                  ]
-                : [
-                      'IT Specialist — Application Development',
-                      'Frontend & Full-Stack Web Developer',
-                      'Clean Code, TDD & Modern Software Architecture',
-                      'AI Engineering, Automation & Modern Tools',
-                      'Available & Ready for Action 🚀',
-                  ];
+        const phrases = [...heroPhrases(lang)];
+
+        // Moving text that never stops is a problem with prefers-reduced-motion (WCAG 2.2.2):
+        // show the first phrase and keep it.
+        if (prefersReducedMotion()) {
+            typingEl.textContent = phrases[0];
+            document.addEventListener('langchange', (e) => {
+                typingEl.textContent = heroPhrases(/** @type {CustomEvent} */ (e).detail)[0];
+            });
+            return;
+        }
 
         let phraseIndex = 0;
         let charIndex = 0;
@@ -62,23 +80,7 @@ export function initHeroSection() {
         typeWriter();
 
         document.addEventListener('langchange', (e) => {
-            const newLang = e.detail;
-            const newPhrases =
-                newLang === 'de'
-                    ? [
-                          'Fachinformatiker für Anwendungsentwicklung',
-                          'Frontend & Full-Stack Webentwickler',
-                          'Clean Code, TDD & moderne Softwarearchitektur',
-                          'KI-Nutzung, Automation & Modern Tools',
-                          'Sofort einsatzbereit & motiviert 🚀',
-                      ]
-                    : [
-                          'IT Specialist — Application Development',
-                          'Frontend & Full-Stack Web Developer',
-                          'Clean Code, TDD & Modern Software Architecture',
-                          'AI Engineering, Automation & Modern Tools',
-                          'Available & Ready for Action 🚀',
-                      ];
+            const newPhrases = heroPhrases(/** @type {CustomEvent} */ (e).detail);
 
             phrases.length = 0;
             phrases.push(...newPhrases);
@@ -89,7 +91,7 @@ export function initHeroSection() {
     }
 
     // 2. High-Density Dynamic Particle Constellation
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!prefersReducedMotion()) {
         initHeroParticles(heroContainer);
     }
 }

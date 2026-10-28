@@ -4,6 +4,9 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.75rem;
+    /* .game-layout is a centred flex column: without a width the grid shrinks to its content,
+       and the cards (aspect-ratio, absolutely positioned faces) have none, so they collapsed to 0×0. */
+    width: 100%;
     max-width: 480px;
     margin: 1.5rem auto;
 }

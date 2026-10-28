@@ -18,7 +18,9 @@ export function evaluateAnswerKeywords(userAnswer, keywords = []) {
     const missing = [];
 
     (keywords || []).forEach((kw) => {
-        const regex = new RegExp(`\\b${kw}|${kw}\\b`, 'i');
+        // Keywords such as "C++" or "Node.js" contain regex characters.
+        const pattern = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b${pattern}|${pattern}\\b`, 'i');
         if (cleanedAnswer.includes(kw.toLowerCase()) || regex.test(cleanedAnswer)) {
             matched.push(kw);
         } else {
@@ -63,21 +65,5 @@ export function getRatingFeedback(scorePercentage) {
         ratingDe: '💡 Ausbaufähig!',
         ratingEn: '💡 Needs work!',
         bubbleClass: 'feedback-poor',
-    };
-}
-
-export function initInterviewEvaluator() {
-    if (typeof window !== 'undefined') {
-        window.InterviewEvaluator = {
-            evaluateAnswerKeywords,
-            getRatingFeedback,
-        };
-    }
-}
-
-if (typeof window !== 'undefined') {
-    window.InterviewEvaluator = {
-        evaluateAnswerKeywords,
-        getRatingFeedback,
     };
 }

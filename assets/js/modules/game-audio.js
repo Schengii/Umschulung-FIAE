@@ -157,8 +157,8 @@ export const GameAudio = {
     },
 };
 
-// The page scripts (quiz.js, snake.js, memory.js, interview.js, ...) are classic <script>
-// files and cannot import this module; they reach it through the global.
+// Page scripts reach it through the global, behind a `typeof` guard: classic scripts cannot
+// import, and the page modules stay usable on pages that do not load main.js.
 window.GameAudio = GameAudio;
 
 export function initGameAudio() {

@@ -3,7 +3,19 @@
  * Handles dynamic project loading from static projectsData and GitHub API,
  * LocalStorage caching for GitHub data, search, filtering, pagination,
  * testimonial carousel, contact form submission, and language changes.
+ * Filter, sort, pagination and deep links are DOM-free in modules/portfolio-logic.js.
  */
+import { escapeHtml } from './modules/html-utils.js';
+import {
+    SANDBOX_PLAYABLE_REPOS,
+    cleanSearchParam,
+    filterProjects,
+    matchesDeepLink,
+    pageForIndex,
+    pageSlice,
+    sortProjects,
+    totalPages,
+} from './modules/portfolio-logic.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Moved off an inline onclick attribute (CSP script-src hardening)
@@ -26,8 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     /** @type {Array<Record<string, any>>} */
     let allProjects = [];
     let currentPage = 1;
-    const FIRST_PAGE_PROJECTS = 8;
-    const SUBSEQUENT_PAGE_PROJECTS = 8;
     let currentSearchTerm = '';
     let currentCategory = 'all';
     const clearSearchBtn = document.getElementById('btn-clear-search');
@@ -99,11 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (techParam || searchParam) {
-            const rawQuery = techParam || searchParam;
-            const cleanQuery = rawQuery
-                .replace(/<[^>]*>/g, '')
-                .toLowerCase()
-                .trim();
+            const cleanQuery = cleanSearchParam(techParam || searchParam);
             if (searchInput) searchInput.value = cleanQuery;
             currentSearchTerm = cleanQuery;
         }
@@ -112,34 +118,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetQuery = repoParam || hash;
         if (!targetQuery) return;
 
-        // Find project in allProjects
-        const index = allProjects.findIndex((proj) => {
-            const titleDe = (proj.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            const titleEn = (proj.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            const repoName = (proj.repoName || '').toLowerCase();
-            const cleanHash = targetQuery.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-
-            return titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash;
-        });
+        // Find the project in the list as it is rendered (filtered and sorted)
+        const index = visibleProjects().findIndex((proj) => matchesDeepLink(proj, targetQuery));
 
         if (index !== -1) {
-            if (index < FIRST_PAGE_PROJECTS) {
-                currentPage = 1;
-            } else {
-                currentPage = 2 + Math.floor((index - FIRST_PAGE_PROJECTS) / SUBSEQUENT_PAGE_PROJECTS);
-            }
+            currentPage = pageForIndex(index);
             hashHandled = true;
             renderAllProjects(); // Render the correct page
 
             // Find card in DOM and open it after render
             setTimeout(() => {
                 const cards = document.querySelectorAll('.project-card');
-                const cleanHash = targetQuery.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
                 for (const card of cards) {
-                    const titleDe = (card.dataset.titleDe || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    const titleEn = (card.dataset.titleEn || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    const repoName = (card.dataset.repoName || '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                    if (titleDe.includes(cleanHash) || titleEn.includes(cleanHash) || repoName === cleanHash) {
+                    const target = {
+                        titleDe: card.dataset.titleDe,
+                        titleEn: card.dataset.titleEn,
+                        repoName: card.dataset.repoName,
+                    };
+                    if (matchesDeepLink(target, targetQuery)) {
                         if (typeof window.openProjectModal === 'function') {
                             window.openProjectModal(card);
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -172,6 +168,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /** @param {string} value class name part: letters, digits and dashes only */
+    const normalizeClass = (value) =>
+        String(value)
+            .toLowerCase()
+            .replace(/[^a-z0-9-]/g, '');
+
+    /**
+     * data-* attributes of a card; the project modal reads them back through dataset.
+     * @param {Record<string, any>} project
+     * @param {string} imagesAttr
+     * @param {string} tagsAttr
+     */
+    const cardDataAttributes = (project, imagesAttr, tagsAttr) =>
+        [
+            ['repo-name', project.repoName],
+            ['title-de', project.titleDe],
+            ['title-en', project.titleEn],
+            ['desc-de', project.descDe],
+            ['desc-en', project.descEn],
+            ['image', project.image],
+            ['images', imagesAttr],
+            ['link', project.link],
+            ['github', project.githubUrl],
+            ['tags', tagsAttr],
+        ]
+            .map(([name, value]) => `data-${name}="${escapeHtml(value || '')}"`)
+            .join(' ');
+
+    /** Filtered and sorted projects, in the order they are rendered. */
+    function visibleProjects() {
+        const filtered = filterProjects(allProjects, { category: currentCategory, search: currentSearchTerm });
+        return sortProjects(filtered, AppStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER);
+    }
+
     // Dynamic Card Generator
     /** @param {Record<string, any>} project */
     function generateDynamicCardHTML(project) {
@@ -182,7 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const tags = Array.isArray(project.tags) ? project.tags : [];
         const tagsHTML =
             tags.length > 0
-                ? tags.map((/** @type {string} */ tag) => `<span class="tech-tag">${tag}</span>`).join('\n        ')
+                ? tags
+                      .map((/** @type {string} */ tag) => `<span class="tech-tag">${escapeHtml(tag)}</span>`)
+                      .join('\n        ')
                 : '';
 
         // Build image
@@ -191,14 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const resolvedImg = (window.resolveAssetPath || ((p) => p))(project.image);
             imageHTML = `
             <div class="project-image-container">
-                <img src="${resolvedImg}" alt="${project.titleDe}" width="400" height="225" loading="lazy" class="project-image" data-img-fallback="fallback">
+                <img src="${escapeHtml(resolvedImg)}" alt="${escapeHtml(project.titleDe)}" width="400" height="225" loading="lazy" class="project-image" data-img-fallback="fallback">
             </div>`;
         }
 
         // Build stars badge
         let starsHTML = '';
         if (project.stars !== undefined && project.stars > 0) {
-            starsHTML = `<span class="stars-badge" title="${project.stars} Stars on GitHub"><i class="fa fa-star" aria-hidden="true"></i> ${project.stars}</span>`;
+            starsHTML = `<span class="stars-badge" title="${escapeHtml(project.stars)} Stars on GitHub"><i class="fa fa-star" aria-hidden="true"></i> ${escapeHtml(project.stars)}</span>`;
         }
 
         // Build buttons
@@ -227,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const resolvedLink = (window.resolveAssetPath || ((p) => p))(project.link);
             buttonsHTML += `
-            <a href="${resolvedLink}" class="btn-secondary btn-project" target="_blank" rel="noopener">
+            <a href="${escapeHtml(resolvedLink)}" class="btn-secondary btn-project" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextDe}</span>
                 <span lang="en"><i class="fa ${btnIcon}" aria-hidden="true"></i> ${btnTextEn}</span>
             </a>`;
@@ -235,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (project.githubUrl) {
             buttonsHTML += `
-            <a href="${project.githubUrl}" class="btn-secondary btn-project btn-github" target="_blank" rel="noopener">
+            <a href="${escapeHtml(project.githubUrl)}" class="btn-secondary btn-project btn-github" target="_blank" rel="noopener">
                 <span lang="de"><i class="fa-brands fa-github" aria-hidden="true"></i> Quellcode</span>
                 <span lang="en"><i class="fa-brands fa-github" aria-hidden="true"></i> View Source</span>
             </a>`;
@@ -243,24 +275,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Compare selection button
         buttonsHTML += `
-        <button type="button" class="btn-compare-select" data-repo="${project.repoName || project.titleDe}" title="Mit anderen Projekten vergleichen" data-en-title="Compare with other projects">
+        <button type="button" class="btn-compare-select" data-repo="${escapeHtml(project.repoName || project.titleDe)}" title="Mit anderen Projekten vergleichen" data-en-title="Compare with other projects">
             <i class="fa-solid fa-code-compare"></i> <span>Vergleichen</span>
         </button>`;
 
         // Quick-Sandbox trigger: only for projects playable directly in the in-page modal
-        const SANDBOX_PLAYABLE_REPOS = [
-            'EcoChef',
-            'ElektroCheck-AI',
-            'Amazon-2.0',
-            'Finanzenportfolio',
-            'Informatik-lernen',
-            'ManuFaktur',
-            'Minecraft',
-            'Wohnungssuche-KI',
-        ];
         if (project.repoName && SANDBOX_PLAYABLE_REPOS.includes(project.repoName)) {
             buttonsHTML += `
-            <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${project.repoName}" title="Direkt hier im Portfolio starten" data-en-title="Launch right here in the portfolio">
+            <button type="button" class="btn-secondary btn-project btn-sandbox-launch" data-sandbox-project="${escapeHtml(project.repoName)}" title="Direkt hier im Portfolio starten" data-en-title="Launch right here in the portfolio">
                 <span lang="de"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Direkt testen</span>
                 <span lang="en"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Quick Play</span>
             </button>`;
@@ -269,12 +291,12 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonsHTML += '</div>';
 
         // Set category class for filtering
-        const languageClass = project.language ? `filter-${project.language.toLowerCase()}` : '';
+        const languageClass = project.language ? `filter-${normalizeClass(project.language)}` : '';
         let categoryClass;
         if (project.category) {
             categoryClass = project.category
                 .split(' ')
-                .map((/** @type {string} */ c) => `filter-${c}`)
+                .map((/** @type {string} */ c) => `filter-${normalizeClass(c)}`)
                 .join(' ');
         } else {
             categoryClass = 'filter-web';
@@ -292,20 +314,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 JSON.stringify(project.images || (project.image ? [project.image] : []))
             );
             return `
-            <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+            <article class="card project-card highlight-project fade-in visible ${categoryClass} ${languageClass}" ${cardDataAttributes(project, safeImagesAttr, safeTagsAttr)}>
                 ${imageHTML}
                 <div class="highlight-content-wrapper">
                     ${highlightBadgeHTML}
                     <div class="project-card-header">
-                        <h3 lang="de">${project.titleDe}</h3>
-                        <h3 lang="en">${project.titleEn}</h3>
+                        <h3 lang="de">${escapeHtml(project.titleDe)}</h3>
+                        <h3 lang="en">${escapeHtml(project.titleEn)}</h3>
                         ${starsHTML}
                     </div>
                     <div class="tech-tags">
                         ${tagsHTML}
                     </div>
-                    <p lang="de">${project.descDe}</p>
-                    <p lang="en">${project.descEn}</p>
+                    <p lang="de">${escapeHtml(project.descDe)}</p>
+                    <p lang="en">${escapeHtml(project.descEn)}</p>
                     ${buttonsHTML}
                 </div>
             </article>`;
@@ -315,18 +337,18 @@ document.addEventListener('DOMContentLoaded', () => {
             JSON.stringify(project.images || (project.image ? [project.image] : []))
         );
         return `
-        <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" data-repo-name="${project.repoName || ''}" data-title-de="${project.titleDe}" data-title-en="${project.titleEn}" data-desc-de="${project.descDe}" data-desc-en="${project.descEn}" data-image="${project.image || ''}" data-images="${safeImagesAttr}" data-link="${project.link || ''}" data-github="${project.githubUrl || ''}" data-tags="${safeTagsAttr}">
+        <article class="card project-card fade-in visible ${categoryClass} ${languageClass}" ${cardDataAttributes(project, safeImagesAttr, safeTagsAttr)}>
             <div class="project-card-header">
-                <h3 lang="de">${project.titleDe}</h3>
-                <h3 lang="en">${project.titleEn}</h3>
+                <h3 lang="de">${escapeHtml(project.titleDe)}</h3>
+                <h3 lang="en">${escapeHtml(project.titleEn)}</h3>
                 ${starsHTML}
             </div>
             <div class="tech-tags">
                 ${tagsHTML}
             </div>
             ${imageHTML}
-            <p lang="de">${project.descDe}</p>
-            <p lang="en">${project.descEn}</p>
+            <p lang="de">${escapeHtml(project.descDe)}</p>
+            <p lang="en">${escapeHtml(project.descEn)}</p>
             ${buttonsHTML}
         </article>`;
     }
@@ -334,53 +356,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderAllProjects() {
         if (!dynamicContainer) return;
 
-        // 1. Filter
-        const filteredProjects = allProjects.filter((proj) => {
-            const isHighlight =
-                proj.highlight ||
-                proj.isHighlight ||
-                proj.repoName === 'EcoChef' ||
-                proj.repoName === 'ElektroCheck-AI' ||
-                proj.repoName === 'Amazon-2.0' ||
-                proj.repoName === 'Minecraft' ||
-                (proj.stars && proj.stars >= 5);
-            const matchesCategory =
-                currentCategory === 'all' ||
-                (currentCategory === 'highlight' && isHighlight) ||
-                (proj.category && proj.category.includes(currentCategory)) ||
-                (proj.language && proj.language.toLowerCase() === currentCategory) ||
-                (currentCategory === 'cpp' &&
-                    (proj.language === 'C++' ||
-                        (proj.tags && proj.tags.some((/** @type {string} */ t) => t.toLowerCase().includes('c++'))))) ||
-                (currentCategory === 'typescript' &&
-                    (proj.language?.toLowerCase() === 'typescript' ||
-                        (proj.tags &&
-                            proj.tags.some((/** @type {string} */ t) => t.toLowerCase().includes('typescript')))));
+        // 1. Filter and sort
+        const sorted = visibleProjects();
 
-            if (!matchesCategory) return false;
-
-            if (currentSearchTerm) {
-                const titleDe = (proj.titleDe || '').toLowerCase();
-                const titleEn = (proj.titleEn || '').toLowerCase();
-                const descDe = (proj.descDe || '').toLowerCase();
-                const descEn = (proj.descEn || '').toLowerCase();
-                const tags = (proj.tags || []).map((/** @type {string} */ t) => t.toLowerCase());
-
-                return (
-                    titleDe.includes(currentSearchTerm) ||
-                    titleEn.includes(currentSearchTerm) ||
-                    descDe.includes(currentSearchTerm) ||
-                    descEn.includes(currentSearchTerm) ||
-                    tags.some((/** @type {string} */ tag) => tag.includes(currentSearchTerm))
-                );
-            }
-            return true;
-        });
-
-        // 2. Sort
-        const sorted = sortProjects(filteredProjects, AppStorage.getItem(SORT_KEY) || DEFAULT_SORT_ORDER);
-
-        // 3. Handle No Results
+        // Handle No Results
         if (sorted.length === 0) {
             dynamicContainer.innerHTML = '';
             if (noResultsContainer) noResultsContainer.style.display = 'block';
@@ -389,18 +368,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (noResultsContainer) noResultsContainer.style.display = 'none';
 
-        // 4. Paginate (Page 1 = 7 projects, Page 2+ = 6 projects)
-        let startIndex, endIndex;
-        if (currentPage === 1) {
-            startIndex = 0;
-            endIndex = FIRST_PAGE_PROJECTS;
-        } else {
-            startIndex = FIRST_PAGE_PROJECTS + (currentPage - 2) * SUBSEQUENT_PAGE_PROJECTS;
-            endIndex = startIndex + SUBSEQUENT_PAGE_PROJECTS;
-        }
-        const paginatedProjects = sorted.slice(startIndex, endIndex);
+        // 2. Paginate
+        const paginatedProjects = pageSlice(sorted, currentPage);
 
-        // 5. Render
+        // 3. Render
         dynamicContainer.innerHTML = paginatedProjects.map((proj) => generateDynamicCardHTML(proj)).join('\n');
 
         renderPagination(sorted.length);
@@ -410,20 +381,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /** @param {number} totalProjects */
-    function calculateTotalPages(totalProjects) {
-        if (totalProjects <= FIRST_PAGE_PROJECTS) return 1;
-        return 1 + Math.ceil((totalProjects - FIRST_PAGE_PROJECTS) / SUBSEQUENT_PAGE_PROJECTS);
-    }
-
-    /** @param {number} totalProjects */
     function renderPagination(totalProjects) {
         if (!paginationContainer) return;
         paginationContainer.innerHTML = '';
-        const totalPages = calculateTotalPages(totalProjects);
+        const pageCount = totalPages(totalProjects);
 
-        if (totalPages <= 1) return;
+        if (pageCount <= 1) return;
 
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 1; i <= pageCount; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = String(i);
             pageBtn.className = 'btn-filter btn-pagination';
@@ -437,56 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             paginationContainer.appendChild(pageBtn);
         }
-    }
-
-    // EcoChef is the IHK graduation project and always leads (it also gets
-    // the large hero treatment below, see project.repoName === 'EcoChef').
-    // FEATURED_REPOS are the next-strongest, most relevant projects for a
-    // recruiter scanning the page - they're pinned near the top regardless
-    // of GitHub star count, which otherwise rewards older hobby repos over
-    // newer, more representative work. DEPRIORITIZED_REPOS is the opposite:
-    // projects kept in the portfolio but pushed to the back of the list
-    // instead of competing with the curated ones for first impressions.
-    const FEATURED_REPOS = [
-        'ElektroCheck-AI',
-        'Amazon-2.0',
-        'Finanzenportfolio',
-        'Wohnungssuche-KI',
-        'Informatik-lernen',
-        'ManuFaktur',
-        'Minecraft',
-    ];
-    /** @type {string[]} */
-    const DEPRIORITIZED_REPOS = [];
-
-    /** @param {string} repoName */
-    function projectTier(repoName) {
-        if (repoName === 'EcoChef') return 0;
-        if (FEATURED_REPOS.includes(repoName)) return 1;
-        if (DEPRIORITIZED_REPOS.includes(repoName)) return 3;
-        return 2;
-    }
-
-    /**
-     * @param {Array<Record<string, any>>} projects
-     * @param {string} order
-     */
-    function sortProjects(projects, order) {
-        return [...projects].sort((a, b) => {
-            const tierA = projectTier(a.repoName);
-            const tierB = projectTier(b.repoName);
-            if (tierA !== tierB) return tierA - tierB;
-
-            // Within the featured tier, keep FEATURED_REPOS in the curated
-            // order above rather than re-sorting them by star count too.
-            if (tierA === 1) {
-                return FEATURED_REPOS.indexOf(a.repoName) - FEATURED_REPOS.indexOf(b.repoName);
-            }
-
-            const starsA = a.stars || 0;
-            const starsB = b.stars || 0;
-            return order === 'asc' ? starsA - starsB : starsB - starsA;
-        });
     }
 
     // Initial Load

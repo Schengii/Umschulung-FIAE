@@ -65,3 +65,11 @@ describe('getRatingFeedback', () => {
         expect(feedback.ratingEn).toContain('Needs work');
     });
 });
+
+describe('evaluateAnswerKeywords with regex characters', () => {
+    it('matches keywords such as C++ and Node.js without throwing', () => {
+        const result = evaluateAnswerKeywords('Ich nutze C++ und Node.js', ['C++', 'Node.js', '(Java)']);
+        expect(result.matched).toEqual(['C++', 'Node.js']);
+        expect(result.missing).toEqual(['(Java)']);
+    });
+});

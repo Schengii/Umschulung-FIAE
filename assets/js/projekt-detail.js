@@ -1,3 +1,20 @@
+/**
+ * Project detail page. The data handling (merge with the GitHub API, URL guards, related
+ * projects) lives DOM-free in modules/project-detail-logic.js; this file renders.
+ */
+import { escapeHtml } from './modules/html-utils.js';
+import {
+    detailUrl,
+    findProject,
+    isCacheFresh,
+    mergeProjects,
+    parseStoredList,
+    relatedProjects,
+    safeColor,
+    safeUrl,
+    withSafeLink,
+} from './modules/project-detail-logic.js';
+
 /** @typedef {Record<string, any>} ProjectDetailData */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,23 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const CACHE_TIME_KEY = STORAGE_KEYS.GITHUB_PROJECTS_CACHE_TIME;
     const CACHE_DURATION = 3600000; // 1 hour
 
-    // Stored values can be damaged (manual edits, a half-written entry on a full quota); a
-    // parse error there must not take the whole detail page down.
-    /** @param {string | null | undefined} text */
-    function parseStoredList(text) {
-        try {
-            const parsed = JSON.parse(text || '[]');
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (_e) {
-            return [];
-        }
-    }
-
     async function fetchGitHubRepos() {
         const cachedData = AppStorage.getItem(CACHE_KEY);
         const cachedTime = AppStorage.getItem(CACHE_TIME_KEY);
         const cachedRepos = parseStoredList(cachedData);
-        if (cachedRepos.length && cachedTime && Date.now() - parseInt(cachedTime, 10) < CACHE_DURATION) {
+        if (isCacheFresh(cachedRepos, cachedTime, Date.now(), CACHE_DURATION)) {
             return cachedRepos;
         }
         try {
@@ -58,47 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Fetch all project data sources
-            const [staticProjects, githubRepos, customProjects] = await Promise.all([
+            const [staticProjects, githubRepos] = await Promise.all([
                 fetch((window.resolveAssetPath || ((p) => p))('assets/data/projects.json')).then((res) =>
                     res.ok
                         ? /** @type {Promise<ProjectDetailData[]>} */ (res.json())
                         : /** @type {ProjectDetailData[]} */ ([])
                 ),
                 fetchGitHubRepos(),
-                parseStoredList(AppStorage.getItem(STORAGE_KEYS.PORTFOLIO_CUSTOM_PROJECTS)),
             ]);
 
-            const githubRepoMap = new Map(
-                githubRepos.map((/** @type {ProjectDetailData} */ repo) => [repo.name.toLowerCase(), repo])
-            );
-
-            // Combine all projects into one list
-            const allProjects = [
-                ...staticProjects.map((/** @type {ProjectDetailData} */ proj) => {
-                    const enriched = { ...proj };
-                    if (enriched.repoName) {
-                        const ghRepo = githubRepoMap.get(enriched.repoName.toLowerCase());
-                        if (ghRepo) {
-                            enriched.stars = ghRepo.stargazers_count || 0;
-                            enriched.githubUrl = ghRepo.html_url;
-                            enriched.updatedAt = ghRepo.updated_at;
-                            enriched.tags = [...new Set([...(enriched.tags || []), ...(ghRepo.topics || [])])];
-                            if (ghRepo.homepage && ghRepo.homepage.trim() !== '') {
-                                enriched.link = ghRepo.homepage;
-                            }
-                        }
-                    }
-                    return enriched;
-                }),
-                ...customProjects,
-            ];
-
-            // Find the requested project
-            const project = allProjects.find(
-                (p) =>
-                    (repoIdentifier && p.repoName === repoIdentifier) ||
-                    (titleIdentifier && p.titleDe === titleIdentifier)
-            );
+            const allProjects = mergeProjects(staticProjects, githubRepos);
+            const project = findProject(allProjects, repoIdentifier, titleIdentifier);
 
             if (project) {
                 renderProjectDetails(project);
@@ -121,8 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /** @param {ProjectDetailData} project */
-    function renderProjectDetails(project) {
+    /** @param {ProjectDetailData} rawProject */
+    function renderProjectDetails(rawProject) {
+        // A link with another scheme than http(s) is dropped before the buttons and the demo iframe use it.
+        const project = withSafeLink(rawProject);
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const title = lang === 'de' ? project.titleDe : project.titleEn;
         const description = lang === 'de' ? project.descDe : project.descEn;
@@ -133,17 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const tagsHTML = (project.tags || [])
-            .map((/** @type {string} */ tag) => `<span class="tech-tag">${tag}</span>`)
+            .map((/** @type {string} */ tag) => `<span class="tech-tag">${escapeHtml(tag)}</span>`)
             .join(' ');
 
         let buttonsHTML = '<div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">';
         if (project.link) {
             buttonsHTML += `
                 <button id="start-live-demo" class="btn-primary"><i class="fa fa-play-circle"></i> <span lang="de">Live-Demo starten 🚀</span><span lang="en">Start Live Demo 🚀</span></button>
-                <a href="${project.link}" class="btn-secondary" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> <span lang="de">Im neuen Tab öffnen</span><span lang="en">Open in New Tab</span></a>
+                <a href="${safeUrl(project.link)}" class="btn-secondary" target="_blank" rel="noopener"><i class="fa fa-external-link"></i> <span lang="de">Im neuen Tab öffnen</span><span lang="en">Open in New Tab</span></a>
             `;
         } else if (project.githubUrl) {
-            buttonsHTML += `<a href="${project.githubUrl}" class="btn-primary" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <span lang="de">Quellcode</span><span lang="en">Source Code</span></a>`;
+            buttonsHTML += `<a href="${safeUrl(project.githubUrl)}" class="btn-primary" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> <span lang="de">Quellcode</span><span lang="en">Source Code</span></a>`;
         }
         buttonsHTML += '</div>';
 
@@ -182,18 +159,18 @@ document.addEventListener('DOMContentLoaded', () => {
             project.downloadPpts.forEach((/** @type {ProjectDetailData} */ ppt) => {
                 const pptUrl = (window.resolveAssetPath || ((p) => p))(ppt.url);
                 mediaHTML += `
-                    <a href="${pptUrl}" class="ppt-download-card" download>
+                    <a href="${safeUrl(pptUrl)}" class="ppt-download-card" download>
                         <div class="ppt-icon-wrapper">
                             <i class="fa-solid fa-file-powerpoint" aria-hidden="true"></i>
                         </div>
                         <div class="ppt-info">
                             <div class="ppt-title">
-                                <span lang="de">${ppt.titleDe}</span>
-                                <span lang="en">${ppt.titleEn}</span>
+                                <span lang="de">${escapeHtml(ppt.titleDe)}</span>
+                                <span lang="en">${escapeHtml(ppt.titleEn)}</span>
                             </div>
                             <div class="ppt-meta">
                                 <span>PowerPoint (.pptx)</span>
-                                <span>Größe / Size: ${ppt.size}</span>
+                                <span>Größe / Size: ${escapeHtml(ppt.size)}</span>
                             </div>
                         </div>
                         <div class="ppt-btn">
@@ -274,8 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${project.architectureBadges
                         .map(
                             (/** @type {ProjectDetailData} */ b) => `
-                        <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
-                            <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i>${b.name}
+                        <span class="badge" style="background: color-mix(in srgb, ${safeColor(b.color)} 8%, transparent); color: ${safeColor(b.color)}; border: 1px solid color-mix(in srgb, ${safeColor(b.color)} 25%, transparent); font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                            <i class="fa-solid fa-layer-group" style="margin-right: 5px;"></i>${escapeHtml(b.name)}
                         </span>
                     `
                         )
@@ -302,8 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span lang="de">Technische Herausforderung:</span>
                                 <span lang="en">Technical Challenge:</span>
                             </strong>
-                            <p style="margin: 0;" lang="de">${kl.challengeDe}</p>
-                            <p style="margin: 0;" lang="en">${kl.challengeEn}</p>
+                            <p style="margin: 0;" lang="de">${escapeHtml(kl.challengeDe)}</p>
+                            <p style="margin: 0;" lang="en">${escapeHtml(kl.challengeEn)}</p>
                         </div>
                         <div style="margin-bottom: 0.75rem;">
                             <strong style="color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
@@ -311,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span lang="de">Architektur-Lösung:</span>
                                 <span lang="en">Architecture Solution:</span>
                             </strong>
-                            <p style="margin: 0;" lang="de">${kl.solutionDe}</p>
-                            <p style="margin: 0;" lang="en">${kl.solutionEn}</p>
+                            <p style="margin: 0;" lang="de">${escapeHtml(kl.solutionDe)}</p>
+                            <p style="margin: 0;" lang="en">${escapeHtml(kl.solutionEn)}</p>
                         </div>
                         ${
                             kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0
@@ -324,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                         .map(
                                             (/** @type {string} */ hDe, /** @type {number} */ i) => `
                                         <li>
-                                            <span lang="de">${hDe}</span>
-                                            <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
+                                            <span lang="de">${escapeHtml(hDe)}</span>
+                                            <span lang="en">${escapeHtml((kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe)}</span>
                                         </li>
                                     `
                                         )
@@ -343,12 +320,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectImgResolved = project.image ? (window.resolveAssetPath || ((p) => p))(project.image) : '';
 
         detailContainer.innerHTML = `
-            ${projectImgResolved ? `<img src="${projectImgResolved}" alt="${title}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" data-img-fallback="contain">` : ''}
+            ${projectImgResolved ? `<img src="${safeUrl(projectImgResolved)}" alt="${escapeHtml(title)}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" data-img-fallback="contain">` : ''}
             
-            <h2 lang="de">${project.titleDe}</h2>
-            <h2 lang="en">${project.titleEn}</h2>
+            <h2 lang="de">${escapeHtml(project.titleDe)}</h2>
+            <h2 lang="en">${escapeHtml(project.titleEn)}</h2>
 
-            ${project.stars > 0 ? `<p style="color: var(--text-muted);"><i class="fa fa-star" style="color: #eab308;"></i> ${project.stars} Stars auf GitHub</p>` : ''}
+            ${project.stars > 0 ? `<p style="color: var(--text-muted);"><i class="fa fa-star" style="color: #eab308;"></i> ${escapeHtml(project.stars)} Stars auf GitHub</p>` : ''}
 
             ${archBadgesHTML}
 
@@ -357,8 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="project-description">
-                <p lang="de">${project.descDe || description || ''}</p>
-                <p lang="en">${project.descEn || project.descDe || description || ''}</p>
+                <p lang="de">${escapeHtml(project.descDe || description || '')}</p>
+                <p lang="en">${escapeHtml(project.descEn || project.descDe || description || '')}</p>
             </div>
 
             ${keyLearningsHTML}
@@ -441,10 +418,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="track-title-wrapper">
                     <div class="track-title">
-                        <span lang="de">${videoItem.titleDe}</span>
-                        <span lang="en">${videoItem.titleEn}</span>
+                        <span lang="de">${escapeHtml(videoItem.titleDe)}</span>
+                        <span lang="en">${escapeHtml(videoItem.titleEn)}</span>
                     </div>
-                    <div class="track-duration">${videoItem.duration} Min</div>
+                    <div class="track-duration">${escapeHtml(videoItem.duration)} Min</div>
                 </div>
             `;
 
@@ -475,22 +452,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderRelatedProjects(currentProject, allProjects) {
         if (!relatedSection || !relatedContainer) return;
 
-        const currentTags = new Set((currentProject.tags || []).map((/** @type {string} */ t) => t.toLowerCase()));
-        const currentId = currentProject.repoName || currentProject.titleDe;
-
-        const related = allProjects
-            .filter((p) => (p.repoName || p.titleDe) !== currentId) // Exclude self
-            .map((p) => {
-                const otherTags = new Set((p.tags || []).map((/** @type {string} */ t) => t.toLowerCase()));
-                const commonTags = new Set([...currentTags].filter((tag) => otherTags.has(tag)));
-                return { project: p, score: commonTags.size };
-            })
-            .filter((item) => item.score > 0) // Only include projects with at least one common tag
-            .sort((a, b) => b.score - a.score) // Sort by most common tags
-            .slice(0, 3); // Take top 3
+        const related = relatedProjects(currentProject, allProjects);
 
         if (related.length > 0) {
-            relatedContainer.innerHTML = related.map((item) => generateRelatedCard(item.project)).join('');
+            relatedContainer.innerHTML = related.map((project) => generateRelatedCard(project)).join('');
             relatedSection.style.display = 'block';
             const lang = document.documentElement.getAttribute('lang') || 'de';
             document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
@@ -499,20 +464,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** @param {ProjectDetailData} project */
     function generateRelatedCard(project) {
-        const url = project.repoName
-            ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
-            : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;
+        const url = detailUrl(project);
 
         const imgResolved = project.image ? (window.resolveAssetPath || ((p) => p))(project.image) : '';
 
         return `
-            <a href="${url}" class="related-project-card">
-                ${imgResolved ? `<img src="${imgResolved}" alt="" loading="lazy" data-img-fallback="fallback">` : ''}
+            <a href="${escapeHtml(url)}" class="related-project-card">
+                ${imgResolved ? `<img src="${safeUrl(imgResolved)}" alt="" loading="lazy" data-img-fallback="fallback">` : ''}
                 <div class="related-project-info">
-                    <h4 lang="de">${project.titleDe}</h4>
-                    <h4 lang="en">${project.titleEn}</h4>
-                    <p lang="de">${(project.tags || []).slice(0, 3).join(', ')}</p>
-                    <p lang="en">${(project.tags || []).slice(0, 3).join(', ')}</p>
+                    <h4 lang="de">${escapeHtml(project.titleDe)}</h4>
+                    <h4 lang="en">${escapeHtml(project.titleEn)}</h4>
+                    <p lang="de">${escapeHtml((project.tags || []).slice(0, 3).join(', '))}</p>
+                    <p lang="en">${escapeHtml((project.tags || []).slice(0, 3).join(', '))}</p>
                 </div>
             </a>
         `;
@@ -537,8 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             container.innerHTML = `
                 <div class="stepper-slide active">
-                    <h4>${lang === 'de' ? slideItem.titleDe : slideItem.titleEn}</h4>
-                    <p style="margin-top: 1rem; line-height: 1.6; color: var(--text-secondary);">${lang === 'de' ? slideItem.descDe : slideItem.descEn}</p>
+                    <h4>${escapeHtml(lang === 'de' ? slideItem.titleDe : slideItem.titleEn)}</h4>
+                    <p style="margin-top: 1rem; line-height: 1.6; color: var(--text-secondary);">${escapeHtml(lang === 'de' ? slideItem.descDe : slideItem.descEn)}</p>
                 </div>
             `;
 
@@ -595,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             item.innerHTML = `
                 <i class="${iconClass}" aria-hidden="true"></i>
-                <span>${fileItem.name}</span>
+                <span>${escapeHtml(fileItem.name)}</span>
             `;
 
             const openFile = () => {

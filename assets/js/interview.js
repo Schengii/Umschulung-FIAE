@@ -2,6 +2,8 @@
  * Interview Simulator / Bewerbungs-Trainer Logic
  * Client-side evaluation based on keyword criteria & model answers.
  */
+import { escapeHtml } from './modules/html-utils.js';
+import { evaluateAnswerKeywords, getRatingFeedback } from './modules/interview-evaluator.js';
 
 const INTERVIEW_QUESTIONS = [
     // --- FACHFRAGEN ---
@@ -287,18 +289,6 @@ const INTERVIEW_QUESTIONS = [
             'Waterfall is sequential: requirements → design → implementation → testing → delivery. Changes afterwards are costly. Scrum is iterative: development happens in Sprints (1-4 weeks), delivering a working increment each time. Roles: Product Owner (manages backlog), Scrum Master (facilitates, removes blockers), Development Team. Ceremonies: Sprint Planning, Daily Stand-up, Sprint Review, Retrospective.',
     },
 ];
-
-// interview.js is a classic script (no imports), so it carries its own copy of the
-// escaping helper from modules/html-utils.js.
-/** @param {unknown} value */
-function escapeHtml(value) {
-    return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
 
 class InterviewSimulator {
     constructor() {
@@ -603,11 +593,8 @@ class InterviewSimulator {
         const keywords = this.selectedLanguage === 'de' ? q.keywordsDe : q.keywordsEn;
         const modelAnswer = this.selectedLanguage === 'de' ? q.modelAnswerDe : q.modelAnswerEn;
 
-        // Match analysis via InterviewEvaluator or fallback
-        const { matched, missing, scorePercentage } =
-            typeof window !== 'undefined' && window.InterviewEvaluator
-                ? window.InterviewEvaluator.evaluateAnswerKeywords(userAnswer, keywords)
-                : this._fallbackEvaluateKeywords(userAnswer, keywords);
+        // Keyword match (modules/interview-evaluator.js)
+        const { matched, missing, scorePercentage } = evaluateAnswerKeywords(userAnswer, keywords);
 
         this.matchedKeywordsCount += matched.length;
         this.totalPossibleKeywords += keywords.length;
@@ -632,10 +619,7 @@ class InterviewSimulator {
         });
 
         // Generate response bubble content
-        const feedback =
-            typeof window !== 'undefined' && window.InterviewEvaluator
-                ? window.InterviewEvaluator.getRatingFeedback(scorePercentage)
-                : this._fallbackRatingFeedback(scorePercentage);
+        const feedback = getRatingFeedback(scorePercentage);
         const { ratingDe, ratingEn, bubbleClass } = feedback;
         const rating = this.selectedLanguage === 'de' ? ratingDe : ratingEn;
 
@@ -646,15 +630,15 @@ class InterviewSimulator {
             <div class="feedback-bubble ${bubbleClass}">
                 <strong>${rating} (${scorePercentage}%)</strong><br>
                 <div style="margin: 0.5rem 0;">
-                    <span lang="de"><strong>Gefundene Kriterien:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${m}</span>`).join(' ') : 'Keine'}</span>
-                    <span lang="en"><strong>Found Criteria:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${m}</span>`).join(' ') : 'None'}</span>
+                    <span lang="de"><strong>Gefundene Kriterien:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${escapeHtml(m)}</span>`).join(' ') : 'Keine'}</span>
+                    <span lang="en"><strong>Found Criteria:</strong> ${matched.length > 0 ? matched.map((/** @type {string} */ m) => `<span class="badge-match">${escapeHtml(m)}</span>`).join(' ') : 'None'}</span>
                 </div>
                 <div style="margin-top: 0.8rem; border-top: 1px solid var(--border); padding-top: 0.5rem;">
                     <p style="font-style: italic; margin-bottom: 0.25rem;">
                         <span lang="de"><strong>Musterlösung:</strong></span>
                         <span lang="en"><strong>Model Answer:</strong></span>
                     </p>
-                    <p class="small-muted" style="margin-bottom: 0;">${modelAnswer}</p>
+                    <p class="small-muted" style="margin-bottom: 0;">${escapeHtml(modelAnswer)}</p>
                 </div>
                 <button class="btn-primary small-btn next-question-btn" style="margin-top: 1rem; width: auto;" id="next-btn-${this.currentIndex}">
                     <span lang="de">Nächste Frage <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
@@ -830,45 +814,6 @@ class InterviewSimulator {
         if (indicator) {
             indicator.remove();
         }
-    }
-
-    /**
-     * @param {string} userAnswer
-     * @param {string[]} [keywords]
-     */
-    _fallbackEvaluateKeywords(userAnswer, keywords = []) {
-        const cleanedAnswer = (userAnswer || '').toLowerCase();
-        /** @type {string[]} */
-        const matched = [];
-        /** @type {string[]} */
-        const missing = [];
-
-        keywords.forEach((kw) => {
-            const regex = new RegExp(`\\b${kw}|${kw}\\b`, 'i');
-            if (cleanedAnswer.includes(kw.toLowerCase()) || regex.test(cleanedAnswer)) {
-                matched.push(kw);
-            } else {
-                missing.push(kw);
-            }
-        });
-
-        const total = keywords ? keywords.length : 0;
-        const scorePercentage = total > 0 ? Math.round((matched.length / total) * 100) : 100;
-        return { matched, missing, scorePercentage };
-    }
-
-    /** @param {number} scorePercentage */
-    _fallbackRatingFeedback(scorePercentage) {
-        if (scorePercentage >= 85) {
-            return { ratingDe: '🏆 Exzellent!', ratingEn: '🏆 Excellent!', bubbleClass: 'feedback-excellent' };
-        }
-        if (scorePercentage >= 55) {
-            return { ratingDe: '⭐ Sehr gut!', ratingEn: '⭐ Very Good!', bubbleClass: 'feedback-good' };
-        }
-        if (scorePercentage >= 25) {
-            return { ratingDe: '👍 Guter Ansatz!', ratingEn: '👍 Good start!', bubbleClass: 'feedback-fair' };
-        }
-        return { ratingDe: '💡 Ausbaufähig!', ratingEn: '💡 Needs work!', bubbleClass: 'feedback-poor' };
     }
 }
 

@@ -17,7 +17,6 @@ declare var newsData: Array<Record<string, any>>;
 declare function initTranslation(...args: any[]): any;
 declare function showToast(...args: any[]): any;
 declare function initBlogEnhancements(...args: any[]): any;
-declare var InterviewEvaluator: any;
 
 interface Window {
     APP: {
@@ -29,7 +28,6 @@ interface Window {
     };
     AppStorage: AppStorageStatic;
     Achievements: any;
-    InterviewEvaluator: any;
     GameAudio: any;
     Confetti: any;
     loadStylesheet: (assetPath: string) => Promise<void>;

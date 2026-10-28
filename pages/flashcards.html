@@ -48,6 +48,18 @@
                 </div>
 
                 <div class="flashcards-layout">
+                    <!-- Optional deck imported from the vault (scripts/import_vault_flashcards.js) -->
+                    <div class="extended-deck-panel">
+                        <label class="extended-deck-label" for="extended-deck-toggle">
+                            <input type="checkbox" id="extended-deck-toggle" aria-describedby="extended-deck-desc">
+                            <span lang="de">Erweiterte IHK-Kartei einbeziehen</span><span lang="en">Include the extended IHK card index</span>
+                        </label>
+                        <span class="extended-deck-status" id="extended-deck-status" aria-live="polite"></span>
+                        <p class="small-muted extended-deck-desc" id="extended-deck-desc">
+                            <span lang="de">Rund 2 000 Karten aus meinen Lernunterlagen zu AP1, AP2 und WiSo. Sie liegen nur auf Deutsch vor, werden erst beim Einschalten geladen und erscheinen unter „Heute fällig“, sobald du sie einmal beantwortet hast.</span><span lang="en">About 2,000 cards from my study notes for AP1, AP2 and economics. They are available in German only, load when you switch them on and appear under "Due today" once you have answered them.</span>
+                        </p>
+                    </div>
+
                     <!-- Category Tabs -->
                     <div class="category-tabs" id="category-tabs">
                         <button class="category-tab active" data-cat="all">
@@ -68,6 +80,9 @@
                         </button>
                         <button class="category-tab" data-cat="wiso">
                             <span lang="de">WiSo</span><span lang="en">Economics</span>
+                        </button>
+                        <button class="category-tab" data-cat="extended" hidden>
+                            <span lang="de">IHK-Kartei</span><span lang="en">IHK index</span>
                         </button>
                         <button class="category-tab" data-cat="custom">
                             <span lang="de">Eigene</span><span lang="en">Custom</span>

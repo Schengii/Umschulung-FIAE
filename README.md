@@ -36,7 +36,7 @@ Umschulung-FIAE/
 │   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName) mit Code-Explorer & Live-Demo
 │   ├── architecture.html       # Interaktives C4-Architekturdiagramm & 3D Dependency Graph
 │   ├── challenge-lab.html      # Clean Code & RegEx Interactive Challenge Lab
-│   ├── flashcards.html         # IHK-Lernkarten mit Leitner-Boxen und Fälligkeitsterminen (Spaced Repetition)
+│   ├── flashcards.html         # IHK-Lernkarten mit Leitner-Boxen, Fälligkeitsterminen und optionaler IHK-Kartei (rund 2 000 Karten)
 │   ├── quiz.html               # Website-Quiz und IHK-Prüfungssimulation (AP1, AP2, WISO) mit Zeitlimit
 │   ├── interview-trainer.html  # Interaktiver Bewerbungs-Trainer für FIAE
 │   ├── playground.html         # In-Browser Web Sandbox & WASM Code Runner
@@ -137,7 +137,7 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 
 ### 5. Qualitätssicherung & Tests
 - **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Git-Simulator, Prüfungssimulation, Lernkarten, Fortschritts-Backup, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
-- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Git-Engine, Leitner-Box/Fälligkeiten, Prüfungsauswertung und Fragenpool, Backup-Format, Notenrechner, Skills-Filter.
+- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Git-Engine, Leitner-Box/Fälligkeiten, Kartenstapel, Prüfungsauswertung und Fragenpool, Backup-Format, Notenrechner, Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung), Snake, Memory und Quiz — sowie die Generator-Skripte unter `scripts/`.
 - **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc), dazu die Konsistenz-Checks aus Abschnitt 6.
 - **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
 - Konkrete Testzahlen stehen bewusst nicht hier, sie veralten sofort — `npm test` und `npm run test:unit` geben den aktuellen Stand aus.
@@ -166,7 +166,8 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run add-og-meta` | `add_og_meta.js` | Ergänzt fehlende OpenGraph/Twitter-Meta-Tags (idempotent) |
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
 | `npm run check-lighthouse-urls` | `check_lighthouse_urls.js` | Prüft, dass `lighthouserc.json` jede Seite der `sitemap.xml` abdeckt |
-| `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` (Ausgangswert ca. 17 % Statements, kein Schwellenwert) |
+| `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` mit Schwellenwert (Ratsche, ADR 0015); die CI führt die Unit-Tests über diesen Befehl aus |
+| `npm run import-flashcards` | `import_vault_flashcards.js` | Erzeugt die IHK-Kartei `assets/data/flashcards-extended.json` aus den Karteikarten im Obsidian-Vault (nur lokal); `npm run check-flashcards` prüft sie in `check` und CI |
 | `npm run generate-qr-codes` | `generate_qr_codes.js` | Erzeugt QR-Codes für Kernseiten (Lebenslauf/PDF-Export) |
 
 ---

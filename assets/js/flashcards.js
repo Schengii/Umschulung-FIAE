@@ -1,15 +1,19 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
+import { advanceBoxLevel, resetBoxLevel, computeBoxStats, nextDueDate, daysUntilDue } from './modules/leitner-box.js';
 import {
-    advanceBoxLevel,
-    resetBoxLevel,
-    computeBoxStats,
-    filterByBox,
-    filterDue,
-    nextDueDate,
-    daysUntilDue,
-} from './modules/leitner-box.js';
+    EXTENDED_DECK_PATH,
+    EXTENDED_ENABLED_KEY,
+    cardText,
+    cardsForTab,
+    combineDeck,
+    dueCards,
+    hasTrustedMarkup,
+    isExtendedCard,
+    masteryCards,
+    parseExtendedDeck,
+} from './modules/flashcard-deck.js';
 import { escapeHtml } from './modules/html-utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -291,21 +295,93 @@ document.addEventListener('DOMContentLoaded', () => {
     const dueDates = readStored('flashcards_due_dates', {});
 
     let currentCategory = 'all';
-    /** @type {Array<Record<string, any>>} */
+    /** @type {import('./modules/flashcard-deck.js').Card[]} */
     let filteredDeck = [];
     let currentIndex = 0;
     let isFlipped = false;
 
-    // Combine database and custom cards
+    // Optional IHK-Kartei from the vault (German only), fetched on first use
+    /** @type {import('./modules/flashcard-deck.js').Card[]} */
+    let extendedCards = [];
+    let includeExtended = AppStorage.getItem(EXTENDED_ENABLED_KEY) === 'true';
+    const extendedToggle = /** @type {HTMLInputElement | null} */ (document.getElementById('extended-deck-toggle'));
+    const extendedStatus = document.getElementById('extended-deck-status');
+    const extendedTab = /** @type {HTMLElement | null} */ (tabContainer?.querySelector('[data-cat="extended"]'));
+
+    // Combine database, custom cards and (if switched on) the IHK-Kartei
     function getFullDatabase() {
-        return [...cardsDatabase, ...customCards];
+        return combineDeck({ core: cardsDatabase, custom: customCards, extended: extendedCards, includeExtended });
+    }
+
+    function renderExtendedStatus() {
+        if (extendedTab) extendedTab.hidden = !includeExtended;
+        if (!extendedStatus) return;
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        if (!includeExtended) {
+            extendedStatus.textContent = '';
+        } else if (extendedCards.length === 0) {
+            extendedStatus.textContent = lang === 'de' ? 'Wird geladen …' : 'Loading …';
+        } else {
+            extendedStatus.textContent =
+                lang === 'de'
+                    ? `${extendedCards.length} Karten aktiv`
+                    : `${extendedCards.length} cards active (German only)`;
+        }
+    }
+
+    async function loadExtendedDeck() {
+        if (extendedCards.length > 0) return true;
+        try {
+            const url = (window.resolveAssetPath || ((/** @type {string} */ p) => `../${p}`))(EXTENDED_DECK_PATH);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            extendedCards = parseExtendedDeck(await response.json());
+            return extendedCards.length > 0;
+        } catch (error) {
+            console.warn('IHK-Kartei konnte nicht geladen werden.', error);
+            window.showToast?.(
+                {
+                    de: 'Die IHK-Kartei konnte nicht geladen werden. Bitte später erneut versuchen.',
+                    en: 'The IHK card index could not be loaded. Please try again later.',
+                },
+                'error'
+            );
+            return false;
+        }
+    }
+
+    /** @param {boolean} enabled */
+    async function setExtendedEnabled(enabled) {
+        includeExtended = enabled;
+        renderExtendedStatus();
+        if (enabled && !(await loadExtendedDeck())) {
+            includeExtended = false;
+            if (extendedToggle) extendedToggle.checked = false;
+        }
+        AppStorage.setItem(EXTENDED_ENABLED_KEY, String(includeExtended));
+        if (!includeExtended && currentCategory === 'extended') {
+            tabContainer?.querySelector('.category-tab.active')?.classList.remove('active');
+            tabContainer?.querySelector('[data-cat="all"]')?.classList.add('active');
+            currentCategory = 'all';
+        }
+        renderExtendedStatus();
+        filterDeck();
+        if (extendedToggle) extendedToggle.dataset.ready = 'true';
+    }
+
+    if (extendedToggle) {
+        extendedToggle.checked = includeExtended;
+        extendedToggle.addEventListener('change', () => setExtendedEnabled(extendedToggle.checked));
     }
 
     const speakBtn = document.getElementById('speak-card-btn');
     const speakAnswerBtn = document.getElementById('speak-answer-btn');
 
-    /** @param {string} text */
-    function speakText(text) {
+    /**
+     * @param {string} text
+     * @param {boolean} [german] force a German voice (imported cards exist only in German)
+     */
+    function speakText(text, german = false) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
         const clean = text.replace(/<[^>]*>/g, '').trim();
@@ -313,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const utterance = new SpeechSynthesisUtterance(clean);
-        utterance.lang = lang === 'en' ? 'en-US' : 'de-DE';
+        utterance.lang = lang === 'en' && !german ? 'en-US' : 'de-DE';
         utterance.rate = 1.0;
         window.speechSynthesis.speak(utterance);
     }
@@ -327,9 +403,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = filteredDeck[currentIndex];
                 if (!card) return;
                 const lang = document.documentElement.getAttribute('lang') || 'de';
-                const questionText =
-                    lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de;
-                speakText(questionText);
+                const { text, germanOnly } = cardText(card, 'question', lang);
+                speakText(text, germanOnly);
             });
         }
     }
@@ -343,8 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = filteredDeck[currentIndex];
                 if (!card) return;
                 const lang = document.documentElement.getAttribute('lang') || 'de';
-                const answerText = lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de;
-                speakText(answerText);
+                const { text, germanOnly } = cardText(card, 'answer', lang);
+                speakText(text, germanOnly);
             });
         }
     }
@@ -405,21 +480,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterDeck() {
-        const fullDatabase = getFullDatabase();
-
-        if (currentCategory === 'all') {
-            filteredDeck = [...fullDatabase];
-        } else if (currentCategory === 'marked') {
-            filteredDeck = fullDatabase.filter((c) => starredIds.includes(c.id));
-        } else if (currentCategory === 'custom') {
-            filteredDeck = [...customCards];
-        } else if (currentCategory === 'due') {
-            filteredDeck = filterDue(fullDatabase, dueDates, Date.now());
-        } else if (currentCategory === 'box1' || currentCategory === 'box2' || currentCategory === 'box3') {
-            filteredDeck = filterByBox(fullDatabase, boxLevels, currentCategory);
-        } else {
-            filteredDeck = fullDatabase.filter((c) => c.category === currentCategory);
-        }
+        filteredDeck = cardsForTab(getFullDatabase(), currentCategory, {
+            starredIds,
+            boxLevels,
+            dueDates,
+            now: Date.now(),
+        });
 
         currentIndex = 0;
         resetCardState();
@@ -431,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // at the same position, which now holds the next card.
     function dropAnsweredDueCard() {
         const position = currentIndex;
-        filteredDeck = filterDue(getFullDatabase(), dueDates, Date.now());
+        filteredDeck = dueCards(getFullDatabase(), boxLevels, dueDates, Date.now());
         currentIndex = filteredDeck.length === 0 ? 0 : position % filteredDeck.length;
         resetCardState();
         renderCard();
@@ -469,17 +535,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const card = filteredDeck[currentIndex];
 
-        // Populate front/back details (multilingual fallback for custom cards)
-        hintEl.textContent = lang === 'de' ? card.hint_de || card.hint_en : card.hint_en || card.hint_de;
-        // Built-in cards may contain trusted markup; user-created cards are plain text.
-        const isCustom = typeof card.id === 'string' && card.id.startsWith('custom_');
-        const cardText = (/** @type {string} */ text) => (isCustom ? escapeHtml(text) : text);
-        questionEl.innerHTML = cardText(
-            lang === 'de' ? card.question_de || card.question_en : card.question_en || card.question_de
-        );
-        answerEl.innerHTML = cardText(
-            lang === 'de' ? card.answer_de || card.answer_en : card.answer_en || card.answer_de
-        );
+        // Populate front/back details (multilingual fallback for custom and imported cards)
+        hintEl.textContent = cardText(card, 'hint', lang).text;
+        if (isExtendedCard(card)) {
+            const source = document.createElement('span');
+            source.className = 'flashcard-source-badge';
+            source.textContent = lang === 'de' ? 'IHK-Kartei' : 'IHK card index · German';
+            hintEl.append(' ', source);
+        }
+        // Built-in and imported cards contain trusted markup; user-created cards are plain text.
+        const markup = (/** @type {string} */ text) => (hasTrustedMarkup(card) ? text : escapeHtml(text));
+        // No lang attribute here: the site hides [lang="de"] in English mode.
+        questionEl.innerHTML = markup(cardText(card, 'question', lang).text);
+        answerEl.innerHTML = markup(cardText(card, 'answer', lang).text);
 
         // Box indicator and next review date next to the hint
         const currentLevel = boxLevels[card.id] || 1;
@@ -565,8 +633,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                const totalCards = getFullDatabase().length;
-                if (knownCards.length >= totalCards && typeof Achievements !== 'undefined') {
+                const masteryIds = masteryCards(getFullDatabase()).map((card) => card.id);
+                const allMastered = masteryIds.every((id) => knownCards.includes(id));
+                if (allMastered && typeof Achievements !== 'undefined') {
                     Achievements.unlock('flashcard_master');
                 }
             }
@@ -762,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
 
         // Cards due for review today
-        const dueCount = filterDue(fullDatabase, dueDates, Date.now()).length;
+        const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now()).length;
         if (dueCountEl) dueCountEl.textContent = String(dueCount);
         if (dueSummaryEl) {
             const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -787,9 +856,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCard();
         renderCustomList();
         renderStats();
+        renderExtendedStatus();
     });
 
     // Initial load
     filterDeck();
     renderCustomList();
+    if (includeExtended) setExtendedEnabled(true);
+    else {
+        renderExtendedStatus();
+        if (extendedToggle) extendedToggle.dataset.ready = 'true';
+    }
 });

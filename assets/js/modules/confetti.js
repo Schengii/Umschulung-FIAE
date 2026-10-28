@@ -61,13 +61,16 @@ const Confetti = {
 
         const startTime = Date.now();
         const loop = () => {
-            const elapsed = Date.now() - startTime;
-            if (elapsed > durationMs && this.particles.every((p) => p.y > this.canvas.height)) {
+            // While the duration runs, fallen particles start again at the top; afterwards they
+            // fall out of the screen and the loop ends. (Respawning forever kept every particle
+            // on screen, so the stop condition never held and the animation never ended.)
+            const running = Date.now() - startTime <= durationMs;
+            if (!running && this.particles.every((p) => p.y > this.canvas.height)) {
                 this.stop();
                 return;
             }
 
-            this.update();
+            this.update(running);
             this.draw();
             this.animationId = requestAnimationFrame(loop);
         };
@@ -82,7 +85,8 @@ const Confetti = {
         }
     },
 
-    update() {
+    /** @param {boolean} [respawn] start fallen particles again at the top */
+    update(respawn = true) {
         const height = this.canvas.height;
         const width = this.canvas.width;
 
@@ -93,7 +97,7 @@ const Confetti = {
             p.tilt = Math.sin(p.tiltAngle - p.r / 2) * 10;
 
             // Loop or reset if off screen before duration ends
-            if (p.y > height + 20) {
+            if (respawn && p.y > height + 20) {
                 p.y = -20;
                 p.x = Math.random() * width;
             }

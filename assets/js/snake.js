@@ -1,6 +1,16 @@
 /**
- * Modern Accessible Snake Game with DE/EN Translation
+ * Modern Accessible Snake Game with DE/EN Translation.
+ * The rules (movement, collisions, food, highscores) are DOM-free in modules/snake-logic.js.
  */
+import { escapeHtml } from './modules/html-utils.js';
+import {
+    addHighscore,
+    keyToDirection,
+    parseHighscores,
+    placeFood as findFoodCell,
+    step,
+    turn,
+} from './modules/snake-logic.js';
 
 (() => {
     let canvas = /** @type {HTMLCanvasElement | null} */ (null);
@@ -17,11 +27,13 @@
 
     let snake = [{ x: 10, y: 10 }];
     let food = { x: 5, y: 5 };
+    /** @type {import('./modules/snake-logic.js').Direction} */
     let direction = 'RIGHT';
+    /** @type {import('./modules/snake-logic.js').Direction} */
     let nextDirection = 'RIGHT';
     let score = 0;
     let highscore = 0;
-    /** @type {Array<Record<string, any>>} */
+    /** @type {import('./modules/snake-logic.js').HighscoreEntry[]} */
     let highscoreList = [];
     let lastFrameTime = 0;
     let isPlaying = false;
@@ -43,7 +55,7 @@
         cellHeight = canvas.height / rows;
 
         highscore = parseInt(AppStorage.getItem(STORAGE_KEYS.SNAKE_HIGHSCORE, 0)) || 0;
-        highscoreList = JSON.parse(AppStorage.getItem('snake_highscore_list', '[]')) || [];
+        highscoreList = parseHighscores(AppStorage.getItem('snake_highscore_list', '[]'));
         if (highscoreEl) highscoreEl.textContent = String(highscore);
         renderHighscores();
 
@@ -61,6 +73,7 @@
         listBody.innerHTML = '';
 
         // Pad list with placeholders if less than 5 entries
+        /** @type {Array<{score: number | string, date: string}>} */
         const displayList = [...highscoreList];
         while (displayList.length < 5) {
             displayList.push({ score: '-', date: '-' });
@@ -71,8 +84,8 @@
             row.style.borderBottom = '1px solid var(--border)';
             row.innerHTML = `
             <td style="padding: 0.4rem 0.25rem; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-secondary)'};">${idx + 1}</td>
-            <td style="padding: 0.4rem 0.25rem; color: var(--text-muted);">${entry.date}</td>
-            <td style="padding: 0.4rem 0.25rem; text-align: right; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-primary)'};">${entry.score}</td>
+            <td style="padding: 0.4rem 0.25rem; color: var(--text-muted);">${escapeHtml(entry.date)}</td>
+            <td style="padding: 0.4rem 0.25rem; text-align: right; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-primary)'};">${escapeHtml(entry.score)}</td>
         `;
             listBody.appendChild(row);
         });
@@ -208,13 +221,9 @@
                 month: '2-digit',
                 year: '2-digit',
             });
-            highscoreList.push({ score: score, date: currentDate });
-            highscoreList.sort((a, b) => b.score - a.score);
-
-            const indexInTop5 = highscoreList
-                .slice(0, 5)
-                .findIndex((entry) => entry.score === score && entry.date === currentDate);
-            highscoreList = highscoreList.slice(0, 5);
+            const result = addHighscore(highscoreList, score, currentDate);
+            highscoreList = result.list;
+            const indexInTop5 = result.rank;
             AppStorage.setItem('snake_highscore_list', JSON.stringify(highscoreList));
             renderHighscores();
 
@@ -254,39 +263,15 @@
 
     function gameStep() {
         direction = nextDirection;
-
-        const head = { x: snake[0].x, y: snake[0].y };
-        switch (direction) {
-            case 'LEFT':
-                head.x--;
-                break;
-            case 'RIGHT':
-                head.x++;
-                break;
-            case 'UP':
-                head.y--;
-                break;
-            case 'DOWN':
-                head.y++;
-                break;
-        }
-
-        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
+        const result = step({ snake, food, direction, score }, { cols, rows });
+        if (result.over) {
             gameOver();
             return;
         }
+        snake = result.snake;
 
-        for (let i = 0; i < snake.length; i++) {
-            if (snake[i].x === head.x && snake[i].y === head.y) {
-                gameOver();
-                return;
-            }
-        }
-
-        snake.unshift(head);
-
-        if (head.x === food.x && head.y === food.y) {
-            score += 10;
+        if (result.ate) {
+            score = result.score;
             if (scoreEl) scoreEl.textContent = String(score);
 
             if (score >= 50 && typeof Achievements !== 'undefined') {
@@ -297,34 +282,19 @@
                 GameAudio.play('eat');
             }
 
-            placeFood();
-        } else {
-            snake.pop();
+            // A full board has no free cell left: the round is won and over.
+            if (!result.food) {
+                gameOver();
+                return;
+            }
+            food = result.food;
         }
 
         draw();
     }
 
     function placeFood() {
-        let newFoodPos;
-        let isOnSnake = true;
-
-        while (isOnSnake) {
-            newFoodPos = {
-                x: Math.floor(Math.random() * cols),
-                y: Math.floor(Math.random() * rows),
-            };
-
-            isOnSnake = false;
-            for (let i = 0; i < snake.length; i++) {
-                if (snake[i].x === newFoodPos.x && snake[i].y === newFoodPos.y) {
-                    isOnSnake = true;
-                    break;
-                }
-            }
-        }
-
-        food = newFoodPos;
+        food = findFoodCell(snake, cols, rows) || food;
     }
 
     function draw() {
@@ -432,28 +402,8 @@
 
         if (!isPlaying || isPaused) return;
 
-        switch (e.key) {
-            case 'ArrowLeft':
-            case 'a':
-            case 'A':
-                if (direction !== 'RIGHT') nextDirection = 'LEFT';
-                break;
-            case 'ArrowRight':
-            case 'd':
-            case 'D':
-                if (direction !== 'LEFT') nextDirection = 'RIGHT';
-                break;
-            case 'ArrowUp':
-            case 'w':
-            case 'W':
-                if (direction !== 'DOWN') nextDirection = 'UP';
-                break;
-            case 'ArrowDown':
-            case 's':
-            case 'S':
-                if (direction !== 'UP') nextDirection = 'DOWN';
-                break;
-        }
+        const requested = keyToDirection(e.key);
+        if (requested) nextDirection = turn(direction, requested);
     }
 
     // Bei Sprachwechsel das Interface anpassen
@@ -471,7 +421,7 @@
 
         if (!upBtn || !leftBtn || !rightBtn || !downBtn) return;
 
-        /** @param {string} dir */
+        /** @param {import('./modules/snake-logic.js').Direction} dir */
         const handlePress = (dir) => {
             if (!isPlaying) {
                 startGame();
@@ -482,25 +432,12 @@
                 return;
             }
 
-            switch (dir) {
-                case 'UP':
-                    if (direction !== 'DOWN') nextDirection = 'UP';
-                    break;
-                case 'LEFT':
-                    if (direction !== 'RIGHT') nextDirection = 'LEFT';
-                    break;
-                case 'RIGHT':
-                    if (direction !== 'LEFT') nextDirection = 'RIGHT';
-                    break;
-                case 'DOWN':
-                    if (direction !== 'UP') nextDirection = 'DOWN';
-                    break;
-            }
+            nextDirection = turn(direction, dir);
         };
 
         /**
          * @param {HTMLElement} btn
-         * @param {string} dir
+         * @param {import('./modules/snake-logic.js').Direction} dir
          */
         const addControlListener = (btn, dir) => {
             btn.addEventListener(

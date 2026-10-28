@@ -1,3 +1,13 @@
+// Site quiz about the retraining (not the IHK exam simulation). Scoring is DOM-free in
+// modules/quiz-logic.js.
+import {
+    feedbackLevel,
+    isNewBest,
+    parseBestScore,
+    percentage as percentageOf,
+    weakCategories,
+} from './modules/quiz-logic.js';
+
 // Fragen für das Quiz auf Deutsch und Englisch
 const questionsDE = [
     {
@@ -117,7 +127,8 @@ function renderBestScore() {
     const bestScoreEl = document.getElementById('quiz-best-score');
     if (!bestScoreEl) return;
     const lang = document.documentElement.getAttribute('lang') || 'de';
-    const bestScore = AppStorage.getItem('quiz_best_score');
+    // A number or null: the stored value never reaches innerHTML as text.
+    const bestScore = parseBestScore(AppStorage.getItem('quiz_best_score'));
     const totalQuestions = getActiveQuestions().length;
 
     if (bestScore !== null) {
@@ -225,23 +236,15 @@ function showScore() {
 
     // Determine weak categories from quiz. The site quiz itself has no categories (the exam
     // simulation records its own); without the guard this stored [null].
-    const weakCategories = new Set();
-    questions.forEach((/** @type {Record<string, any>} */ q, index) => {
-        if (!questionCorrectness[index] && q.category) {
-            weakCategories.add(q.category);
-        }
-    });
-    if (weakCategories.size > 0) {
-        AppStorage.setItem(
-            STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES,
-            JSON.stringify([...weakCategories])
-        );
+    const weak = weakCategories(questions, questionCorrectness);
+    if (weak.length > 0) {
+        AppStorage.setItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_QUIZ_WEAK_CATEGORIES, JSON.stringify(weak));
     }
 
-    const percentage = Math.round((score / questions.length) * 100);
+    const percentage = percentageOf(score, questions.length);
+    const level = feedbackLevel(percentage);
 
-    const bestScore = parseInt(AppStorage.getItem('quiz_best_score') || -1);
-    if (score > bestScore) {
+    if (isNewBest(AppStorage.getItem('quiz_best_score'), score)) {
         AppStorage.setItem('quiz_best_score', score);
         renderBestScore();
     }
@@ -256,13 +259,7 @@ function showScore() {
 
     // Sound play
     if (typeof GameAudio !== 'undefined') {
-        if (percentage === 100) {
-            GameAudio.play('win');
-        } else if (percentage >= 60) {
-            GameAudio.play('success');
-        } else {
-            GameAudio.play('die');
-        }
+        GameAudio.play({ perfect: 'win', good: 'success', retry: 'die' }[level]);
     }
 
     // Trigger commit on score >= 3
@@ -274,13 +271,11 @@ function showScore() {
     let feedback;
 
     if (lang === 'de') {
-        if (percentage === 100) {
-            feedback = 'Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉';
-        } else if (percentage >= 60) {
-            feedback = 'Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍';
-        } else {
-            feedback = 'Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚';
-        }
+        feedback = {
+            perfect: 'Hervorragend! Du hast alle Fragen perfekt beantwortet! 🎉',
+            good: 'Gut gemacht! Du hast die meisten Fragen richtig beantwortet. 👍',
+            retry: 'Schade! Lies dir die Webseite am besten noch einmal durch und probiere es erneut. 📚',
+        }[level];
 
         questionElement.innerHTML = `
             <div style="text-align: center; padding: 1rem 0;">
@@ -295,13 +290,11 @@ function showScore() {
 
         nextButton.innerHTML = '<i class="fa fa-refresh"></i> Quiz neu starten';
     } else {
-        if (percentage === 100) {
-            feedback = 'Excellent! You answered all questions perfectly! 🎉';
-        } else if (percentage >= 60) {
-            feedback = 'Well done! You answered most questions correctly. 👍';
-        } else {
-            feedback = 'Too bad! Please read the website content again and try once more. 📚';
-        }
+        feedback = {
+            perfect: 'Excellent! You answered all questions perfectly! 🎉',
+            good: 'Well done! You answered most questions correctly. 👍',
+            retry: 'Too bad! Please read the website content again and try once more. 📚',
+        }[level];
 
         questionElement.innerHTML = `
             <div style="text-align: center; padding: 1rem 0;">

@@ -43,7 +43,7 @@ export function initSkillRadar() {
         // Label position (slightly outside)
         const labelX = center + Math.cos(angle) * (maxRadius + 22);
         const labelY = center + Math.sin(angle) * (maxRadius + 22);
-        svg += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" fill="var(--text-secondary)" font-size="10" font-family="var(--font-sans)" class="radar-label" style="cursor:pointer;" data-skill="${skill.name}">${skill.name}</text>`;
+        svg += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" fill="var(--text-secondary)" font-size="10" font-family="var(--font-sans)" class="radar-label" style="cursor:pointer;" data-skill="${skill.name}" tabindex="0" role="button" aria-label="Projekte filtern: ${skill.name}" data-en-aria-label="Filter projects: ${skill.name}">${skill.name}</text>`;
     });
 
     // Draw skill polygon
@@ -82,6 +82,16 @@ export function initSkillRadar() {
                 document.dispatchEvent(new CustomEvent('radarfilter', { detail: skillName }));
             }
         }
+    });
+
+    // Keyboard access to the labels (the dots are the same filter for the mouse)
+    container.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const target = /** @type {HTMLElement} */ (e.target).closest('.radar-label');
+        const skillName = target?.getAttribute('data-skill');
+        if (!skillName) return;
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('radarfilter', { detail: skillName }));
     });
 
     // Animate radar on scroll

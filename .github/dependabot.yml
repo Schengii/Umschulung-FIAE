@@ -12,12 +12,11 @@ updates:
           - 'minor'
           - 'patch'
     ignore:
-      # Das Icon-Subset (ADR 0009) parst Font-Awesome-Regeln der Form `.fa-x:before{content:...}`.
-      # Ab 6.7 steht der Glyph in `--fa:...`, das Skript fände 0 Icons; Major wie Minor bleiben gepinnt.
-      # Wiedervorlage: entfällt, sobald `scripts/subset_fontawesome.js` das neue Format liest (ADR 0009); spätestens
-      # bis 2027-01-31 prüfen.
+      # Das Icon-Subset (ADR 0009) liest beide Formate (`:before{content:...}` bis 6.6, `--fa:...` ab 6.7),
+      # Minor-Updates laufen deshalb wieder. Font Awesome 7 bleibt gesperrt: neue Klassennamen und
+      # Font-Familien, die Seiten nutzen bewusst nur FA-6-Namen (CLAUDE.md). Wiedervorlage 2027-01-31.
       - dependency-name: '@fortawesome/fontawesome-free'
-        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+        update-types: ['version-update:semver-major']
       # Playwright 1.64 macht in der CI die WebKit-Specs auf portfolio.html rot (Klick wartet ewig auf
       # "stable"); lokal reproduzierbar nicht. Bis die Ursache geklärt ist, bleibt 1.63 exakt gepinnt.
       # Wiedervorlage: bei jedem neuen Playwright-Minor die WebKit-Specs lokal und in einem Test-PR prüfen,

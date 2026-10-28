@@ -66,6 +66,9 @@ function injectModalHtml() {
     const modal = document.createElement('div');
     modal.id = 'quick-sandbox-modal';
     modal.className = 'modal-backdrop';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'sandbox-title');
     modal.style.display = 'none';
     modal.style.position = 'fixed';
     modal.style.inset = '0';
@@ -89,9 +92,9 @@ function injectModalHtml() {
         </div>
 
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <button id="btn-sandbox-reload" class="btn btn-sm btn-outline" title="Neu laden" data-en-title="Reload" style="padding: 0.35rem 0.6rem;">🔄</button>
-          <a id="btn-sandbox-newtab" href="#" target="_blank" class="btn btn-sm btn-secondary" title="In neuem Tab öffnen" data-en-title="Open in new tab" style="padding: 0.35rem 0.6rem;">↗️ Neuer Tab</a>
-          <button id="btn-sandbox-close" class="btn btn-sm btn-primary" title="Schließen" data-en-title="Close" style="padding: 0.35rem 0.75rem; background: #ef4444; border-color: #ef4444;">✕</button>
+          <button id="btn-sandbox-reload" type="button" class="btn btn-sm btn-outline" title="Neu laden" data-en-title="Reload" aria-label="Neu laden" data-en-aria-label="Reload" style="padding: 0.35rem 0.6rem;"><span aria-hidden="true">🔄</span></button>
+          <a id="btn-sandbox-newtab" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-secondary" title="In neuem Tab öffnen" data-en-title="Open in new tab" style="padding: 0.35rem 0.6rem;"><span aria-hidden="true">↗️</span> <span lang="de">Neuer Tab</span><span lang="en">New tab</span></a>
+          <button id="btn-sandbox-close" type="button" class="btn btn-sm btn-primary" title="Schließen" data-en-title="Close" aria-label="Schließen" data-en-aria-label="Close" style="padding: 0.35rem 0.75rem; background: #ef4444; border-color: #ef4444;"><span aria-hidden="true">✕</span></button>
         </div>
       </div>
 
@@ -99,15 +102,15 @@ function injectModalHtml() {
       <div style="flex: 1; position: relative; background: #000;">
         <div id="sandbox-loader" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.9); z-index: 2;">
           <div style="width: 40px; height: 40px; border: 3px solid rgba(14, 165, 233, 0.2); border-top-color: var(--accent-color, #0ea5e9); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 0.75rem;"></div>
-          <span style="color: var(--text-secondary); font-size: 0.9rem;">Lade Live-Sandbox...</span>
+          <span style="color: var(--text-secondary); font-size: 0.9rem;"><span lang="de">Lade Live-Sandbox …</span><span lang="en">Loading live sandbox …</span></span>
         </div>
-        <iframe id="sandbox-iframe" src="" style="width: 100%; height: 100%; border: none;" allow="autoplay; fullscreen; clipboard-write; encrypted-media"></iframe>
+        <iframe id="sandbox-iframe" src="" title="Projekt-Vorschau" data-en-title="Project preview" style="width: 100%; height: 100%; border: none;" allow="autoplay; fullscreen; clipboard-write; encrypted-media"></iframe>
       </div>
 
       <!-- Footer Info -->
       <div style="padding: 0.5rem 1.25rem; font-size: 0.8rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.1);">
         <span id="sandbox-desc">In-Browser Instant Execution</span>
-        <span>Drücke <kbd style="background: rgba(255,255,255,0.1); padding: 0.1rem 0.3rem; border-radius: 3px;">ESC</kbd> zum Schließen</span>
+        <span><span lang="de">Drücke <kbd style="background: rgba(255,255,255,0.1); padding: 0.1rem 0.3rem; border-radius: 3px;">ESC</kbd> zum Schließen</span><span lang="en">Press <kbd style="background: rgba(255,255,255,0.1); padding: 0.1rem 0.3rem; border-radius: 3px;">ESC</kbd> to close</span></span>
       </div>
     </div>
   `;
@@ -168,8 +171,12 @@ function attachEventListeners() {
     });
 }
 
+/** Element that opened the sandbox; gets the focus back on close. */
+/** @type {HTMLElement | null} */
+let returnFocusTo = null;
+
 /** @param {string} urlPath */
-function resolveSandboxUrl(urlPath) {
+export function resolveSandboxUrl(urlPath) {
     if (!urlPath) return '';
     if (urlPath.startsWith('http://') || urlPath.startsWith('https://')) return urlPath;
     const isPagesFolder =
@@ -212,16 +219,21 @@ export function openSandbox(projKey) {
 
     if (loader) loader.style.display = 'flex';
     iframe.src = url;
+    returnFocusTo = /** @type {HTMLElement | null} */ (document.activeElement);
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.getElementById('btn-sandbox-close')?.focus();
 }
 
 export function closeSandbox() {
     const modal = document.getElementById('quick-sandbox-modal');
     const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('sandbox-iframe'));
+    const wasOpen = Boolean(modal && modal.style.display !== 'none');
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
     document.body.style.overflow = '';
+    if (wasOpen && returnFocusTo && document.contains(returnFocusTo)) returnFocusTo.focus();
+    returnFocusTo = null;
 }
 
 // Self-init when loaded directly as a page module (e.g. on portfolio.html), since its

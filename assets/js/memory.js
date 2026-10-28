@@ -1,7 +1,9 @@
 /**
  * Memory Card Game — Match pairs of programming-related icons.
  * Features: Flip animations, move counter, timer, best score persistence.
+ * Deck, time format and leaderboard are DOM-free in modules/memory-logic.js.
  */
+import { addScore, buildDeck, formatTime, isNewBest as beatsBest, parseLeaderboard } from './modules/memory-logic.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initMemoryGame();
@@ -16,13 +18,14 @@ function initMemoryGame() {
 
     if (!grid) return;
 
-    let memoryLeaderboard = JSON.parse(AppStorage.getItem('memory_highscore_list', '[]')) || [];
+    let memoryLeaderboard = parseLeaderboard(AppStorage.getItem('memory_highscore_list', '[]'));
 
     function renderMemoryHighscores() {
         const listBody = document.getElementById('memory-highscore-list-body');
         if (!listBody) return;
         listBody.innerHTML = '';
 
+        /** @type {Array<{moves: number | string, time: number | string}>} */
         const displayList = [...memoryLeaderboard];
         while (displayList.length < 5) {
             displayList.push({ moves: '-', time: '-' });
@@ -31,12 +34,8 @@ function initMemoryGame() {
         displayList.forEach((entry, idx) => {
             const row = document.createElement('tr');
             row.style.borderBottom = '1px solid var(--border)';
-            let timeStr = '-';
-            if (entry.time !== '-') {
-                const mins = Math.floor(entry.time / 60);
-                const secs = entry.time % 60;
-                timeStr = `${mins}:${String(secs).padStart(2, '0')}`;
-            }
+            // Values are numbers from parseLeaderboard or the '-' placeholder, never stored text.
+            const timeStr = typeof entry.time === 'number' ? formatTime(entry.time) : '-';
             row.innerHTML = `
                 <td style="padding: 0.4rem 0.25rem; font-weight: bold; color: ${idx === 0 ? 'var(--primary)' : 'var(--text-secondary)'};">${idx + 1}</td>
                 <td style="padding: 0.4rem 0.25rem; color: var(--text-primary); font-weight: 500;">${entry.moves}</td>
@@ -70,16 +69,6 @@ function initMemoryGame() {
     let seconds = 0;
     let gameStarted = false;
 
-    /** @param {any[]} array */
-    function shuffle(array) {
-        const arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
     function createBoard() {
         // Reset state
         grid.innerHTML = '';
@@ -94,13 +83,17 @@ function initMemoryGame() {
         if (resultContainer) resultContainer.style.display = 'none';
 
         // Create card pairs
-        const deck = shuffle([...symbols, ...symbols]);
+        const deck = buildDeck(symbols);
 
         deck.forEach((symbol, index) => {
             const card = document.createElement('div');
             card.className = 'memory-card';
             card.dataset.symbol = symbol.name;
             card.dataset.index = String(index);
+            // Keyboard access: the cards are focusable buttons (Enter/Space flip them).
+            card.setAttribute('role', 'button');
+            card.tabIndex = 0;
+            setCardLabel(card, index, null);
 
             card.innerHTML = `
                 <div class="memory-card-inner">
@@ -114,20 +107,46 @@ function initMemoryGame() {
             `;
 
             card.addEventListener('click', () => flipCard(card));
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    flipCard(card);
+                }
+            });
             grid.appendChild(card);
             cards.push(card);
         });
     }
+
+    /**
+     * @param {HTMLElement} card
+     * @param {number} index
+     * @param {string | null} symbolName shown symbol, null while the card is face down
+     */
+    function setCardLabel(card, index, symbolName) {
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const label =
+            lang === 'de'
+                ? `Karte ${index + 1}${symbolName ? `: ${symbolName}` : ', verdeckt'}`
+                : `Card ${index + 1}${symbolName ? `: ${symbolName}` : ', face down'}`;
+        card.setAttribute('aria-label', label);
+    }
+
+    /** @param {HTMLElement} card */
+    const labelOf = (card) =>
+        setCardLabel(
+            card,
+            Number(card.dataset.index),
+            card.classList.contains('flipped') || card.classList.contains('matched') ? card.dataset.symbol : null
+        );
 
     function startTimer() {
         if (gameStarted) return;
         gameStarted = true;
         timerInterval = setInterval(() => {
             seconds++;
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
             if (timerDisplay) {
-                timerDisplay.textContent = `${mins}:${String(secs).padStart(2, '0')}`;
+                timerDisplay.textContent = formatTime(seconds);
             }
         }, 1000);
     }
@@ -142,6 +161,7 @@ function initMemoryGame() {
         startTimer();
 
         card.classList.add('flipped');
+        labelOf(card);
         flippedCards.push(card);
 
         if (flippedCards.length === 2) {
@@ -175,6 +195,8 @@ function initMemoryGame() {
             setTimeout(() => {
                 card1.classList.remove('flipped');
                 card2.classList.remove('flipped');
+                labelOf(card1);
+                labelOf(card2);
                 flippedCards = [];
             }, 800);
         }
@@ -197,17 +219,7 @@ function initMemoryGame() {
         }
 
         // Save to leaderboard
-        memoryLeaderboard.push({ moves: moves, time: seconds });
-        memoryLeaderboard.sort((/** @type {Record<string, any>} */ a, /** @type {Record<string, any>} */ b) => {
-            if (a.moves !== b.moves) {
-                return a.moves - b.moves;
-            }
-            return a.time - b.time;
-        });
-        const _indexInTop5 = memoryLeaderboard
-            .slice(0, 5)
-            .findIndex((/** @type {Record<string, any>} */ entry) => entry.moves === moves && entry.time === seconds);
-        memoryLeaderboard = memoryLeaderboard.slice(0, 5);
+        memoryLeaderboard = addScore(memoryLeaderboard, moves, seconds).list;
         AppStorage.setItem('memory_highscore_list', JSON.stringify(memoryLeaderboard));
         renderMemoryHighscores();
 
@@ -216,22 +228,16 @@ function initMemoryGame() {
         }
 
         // Save best score
-        const bestMoves = AppStorage.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES);
-        const _bestTime = AppStorage.getItem(STORAGE_KEYS.MEMORY_BEST_TIME);
-        let isNewBest = false;
-
-        if (!bestMoves || moves < parseInt(bestMoves)) {
+        const isNewBest = beatsBest(AppStorage.getItem(STORAGE_KEYS.MEMORY_BEST_MOVES), moves);
+        if (isNewBest) {
             AppStorage.setItem(STORAGE_KEYS.MEMORY_BEST_MOVES, moves);
             AppStorage.setItem(STORAGE_KEYS.MEMORY_BEST_TIME, seconds);
-            isNewBest = true;
         }
 
         // Show result
         if (resultContainer) {
             const lang = document.documentElement.getAttribute('lang') || 'de';
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            const timeStr = `${mins}:${String(secs).padStart(2, '0')}`;
+            const timeStr = formatTime(seconds);
 
             let html;
             if (lang === 'de') {
@@ -250,6 +256,11 @@ function initMemoryGame() {
 
     // Init
     createBoard();
+
+    // Card labels follow the language switch
+    document.addEventListener('langchange', () => {
+        grid.querySelectorAll('.memory-card').forEach((card) => labelOf(/** @type {HTMLElement} */ (card)));
+    });
 
     if (restartBtn) {
         restartBtn.addEventListener('click', () => {

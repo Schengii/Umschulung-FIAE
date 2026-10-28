@@ -31,3 +31,4 @@ Ergebnis: rund 21 KB CSS und 22 KB Fonts.
 - Die Suche ist bewusst großzügig (jedes `fa-…`-Wort in den durchsuchten Dateien zählt); einzelne unbenutzte Icons im Subset sind möglich, fehlende nicht.
 - Font-Awesome-4-Namen (`fa-clock-o`, `fa-file-pdf-o` …) haben in Font Awesome 6 kein Glyph. Fünf solche Stellen waren schon vor dem Subset leer und wurden beim Einführen des Tests korrigiert.
 - Ein Versions-Upgrade ist eine Änderung der gepinnten Version in `package.json` plus `npm run subset-icons`.
+- **Nachtrag 2026-10-28:** Ab 6.7 steht der Glyph nicht mehr in `.fa-x:before{content:"…"}`, sondern in `.fa-x{--fa:"…"}`; die Basisklassen (`.fa`, `.fa-solid` …) setzen `content:var(--fa)`. Das Skript liest beide Formate und schreibt die Selektoren in der Form zurück, in der sie im Paket stehen. Damit ist 6.7.2 eingespielt und Dependabot sperrt nur noch Major-Updates (Font Awesome 7 hat neue Klassennamen und Font-Familien).

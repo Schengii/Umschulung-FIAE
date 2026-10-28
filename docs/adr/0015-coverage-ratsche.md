@@ -19,3 +19,7 @@
 - `test:coverage` schlägt fehl, wenn die Quote unter die Schwelle fällt. Der `quality`-Job der CI führt die Unit-Tests deshalb über diesen Befehl aus; lokal läuft `npm run check` weiter mit `test:unit` (schneller), die Schwelle prüft dort nur `npm run test:coverage`.
 - Die Gesamtquote sagt wenig über die Qualität einzelner Module; die Schwelle ersetzt kein Review.
 - Neue Persistenz-Schlüssel oder Medien im Precache brechen einen Test und zwingen zu einer bewussten Entscheidung.
+
+## Nachtrag 2026-10-28
+
+Mit den Logik-Modulen der Seiten-Scripts (`flashcard-deck`, `portfolio-logic`, `project-detail-logic`, `snake-logic`, `memory-logic`, `quiz-logic`) und Tests für die bisher ungetesteten Module liegt der Ist-Wert bei 81 % Statements, 73 % Branches, 83 % Functions und 82 % Lines. Die Schwellen stehen jetzt bei 78 / 70 / 80 / 79 %.

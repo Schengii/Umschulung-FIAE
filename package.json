@@ -44,13 +44,15 @@
     "check-bilingual": "node scripts/check_bilingual.js",
     "build-search-index": "node scripts/build_search_index.js",
     "check-search-index": "node scripts/build_search_index.js --check",
+    "import-flashcards": "node scripts/import_vault_flashcards.js",
+    "check-flashcards": "node scripts/import_vault_flashcards.js --check",
     "regen": "npm run subset-icons && npm run build-search-index && npm run generate-sw-assets",
-    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-flashcards && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@fortawesome/fontawesome-free": "6.7.2",
     "@playwright/test": "1.63.0",
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.5",

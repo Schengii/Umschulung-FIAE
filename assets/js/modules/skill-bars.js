@@ -27,6 +27,15 @@ export function initSkillBars() {
         if (document.getElementById('portfolio-searchbar')) {
             bar.style.cursor = 'pointer';
             bar.title = 'Klicken, um Projekte nach dieser Technologie zu filtern / Click to filter projects';
+            // Keyboard access: the bar acts as a button (Enter/Space filter like a click).
+            bar.setAttribute('role', 'button');
+            bar.tabIndex = 0;
+            bar.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    bar.click();
+                }
+            });
 
             // Add a small hover scale effect using JavaScript or CSS injection
             bar.addEventListener('mouseenter', () => {

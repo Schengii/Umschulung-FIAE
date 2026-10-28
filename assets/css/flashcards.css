@@ -240,3 +240,52 @@
 .study-calendar-hint {
     margin-top: 0.5rem;
 }
+
+/* Optional IHK-Kartei (imported from the vault) */
+.extended-deck-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+}
+.extended-deck-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.extended-deck-label input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--primary);
+}
+.extended-deck-status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.extended-deck-desc {
+    flex-basis: 100%;
+    margin: 0;
+}
+.flashcard-source-badge {
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+.flashcard-answer ul,
+.flashcard-question ul {
+    margin: 0.25rem 0;
+    padding-left: 1.25rem;
+    text-align: left;
+}
+.category-tab[hidden] {
+    display: none;
+}

@@ -143,22 +143,29 @@ function decodeCssString(value) {
     return out;
 }
 
-const ICON_SELECTOR = /^\.(fa-[a-z0-9-]+):{1,2}before$/;
-const ICON_BODY = /^content:"((?:[^"\\]|\\.)*)";?$/;
+// Two formats: up to 6.6 every icon is `.fa-name:before{content:"\f015"}`; from 6.7 on it is
+// `.fa-name{--fa:"\f015"}` and the base classes (.fa, .fa-solid, ...) set `content:var(--fa)`.
+const ICON_SELECTOR = /^\.(fa-[a-z0-9-]+)(:{1,2}before)?$/;
+const ICON_BODY = /^(content|--fa):"((?:[^"\\]|\\.)*)";?$/;
 
-/** @returns {{names: string[], glyph: string} | null} the icon names a rule defines, if it is an icon rule */
-/** @param {CssBlock} block */
+/**
+ * The icon names a rule defines, if it is an icon rule.
+ * @param {CssBlock} block
+ * @returns {{names: string[], glyph: string, pseudo: string} | null} pseudo is ':before' for the old format, '' for the new one
+ */
 function parseIconRule(block) {
     if (block.type !== 'rule') return null;
     const body = ICON_BODY.exec(block.body.trim());
     if (!body) return null;
+    const oldFormat = body[1] === 'content';
     const names = [];
     for (const selector of block.prelude.split(',')) {
         const match = ICON_SELECTOR.exec(selector.trim());
-        if (!match) return null;
+        // content:"…" belongs on :before, --fa on the class itself; anything else is no icon rule.
+        if (!match || Boolean(match[2]) !== oldFormat) return null;
         names.push(match[1]);
     }
-    return { names, glyph: decodeCssString(body[1]) };
+    return { names, glyph: decodeCssString(body[2]), pseudo: oldFormat ? ':before' : '' };
 }
 
 /** @param {CssBlock} block */
@@ -214,7 +221,7 @@ function buildSubset() {
         }
         const kept = icon.names.filter((name) => used.has(name));
         if (kept.length === 0) continue;
-        out.push(`${kept.map((name) => `.${name}:before`).join(',')}{${block.body}}`);
+        out.push(`${kept.map((name) => `.${name}${icon.pseudo}`).join(',')}{${block.body}}`);
         glyphs += icon.glyph;
     }
 
