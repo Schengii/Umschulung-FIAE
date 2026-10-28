@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // "Print / save as PDF" of the executive dossier must put the dossier on paper, not the page
 // behind the dialog. window.print() cannot be driven in a test, so the print layout is checked

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // Native alert/confirm/prompt are replaced by the <dialog>-based helpers in assets/js/dialog.js (C03).
 function failOnNativeDialogs(page) {

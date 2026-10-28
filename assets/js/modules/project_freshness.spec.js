@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The portfolio shows when each project's data was last updated and the newest date overall.
 test.describe('Projektdaten-Stand (portfolio.html)', () => {

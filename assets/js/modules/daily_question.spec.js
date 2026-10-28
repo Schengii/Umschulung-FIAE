@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The daily question reads and writes through the AppStorage wrapper (C04): answering must still
 // persist in the existing storage key, and the answer must survive a reload.

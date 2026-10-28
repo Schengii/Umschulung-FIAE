@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The backup module is loaded lazily, so a click right after load can precede its listeners.
 const backupReady = (page) => expect(page.locator('#progress-backup[data-ready]')).toBeAttached();

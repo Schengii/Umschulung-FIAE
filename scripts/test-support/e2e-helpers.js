@@ -1,7 +1,7 @@
 /**
  * @file e2e-helpers.js
  * @description Shared helpers for the Playwright specs in assets/js/modules.
- * Lives in scripts/ (not next to the specs) so the service-worker precache and
+ * Lives in scripts/test-support/ (not next to the specs) so the service-worker precache and
  * the production build never pick it up.
  */
 

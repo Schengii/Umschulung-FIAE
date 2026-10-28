@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 test.describe('Advanced Features & Tools E2E Verification', () => {
     test('sollte das IHK-Cockpit mit Nutzwertanalyse, Phasenplan und Fachgespräch steuern', async ({ page }) => {

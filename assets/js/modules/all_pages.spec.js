@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { stubGithubApi, settle } from '../../../scripts/e2e-helpers.js';
+import { stubGithubApi, settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 const pages = [
     'index.html',

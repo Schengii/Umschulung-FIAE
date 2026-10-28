@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { stubGithubApi, settle } from '../../../scripts/e2e-helpers.js';
+import { stubGithubApi, settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // Every page carries its own strict CSP in a <meta> tag: styles come from files ('self'),
 // only style="" attributes are still allowed (style-src-attr). This spec visits all pages,

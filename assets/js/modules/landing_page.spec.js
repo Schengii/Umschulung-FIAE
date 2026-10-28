@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { stubGithubApi } from '../../../scripts/e2e-helpers.js';
+import { stubGithubApi } from '../../../scripts/test-support/e2e-helpers.js';
 
 test.describe('Landing Page Tests', () => {
     test.beforeEach(async ({ page }) => {

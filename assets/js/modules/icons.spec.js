@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // Font Awesome is shipped as a generated subset (scripts/subset_fontawesome.js). An icon
 // that fell out of it does not throw anywhere, it just renders as nothing, so every page

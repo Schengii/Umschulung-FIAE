@@ -13,6 +13,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **IHK-Simulator: Auswertung über alle Versuche und „Schwächen wiederholen“** (`quiz.html`): neue reine Logik `modules/exam-statistics.js` (Quote je Themengebiet, Liste offener Fehler, Auswahl der Wiederholungsfragen). Die Startansicht jedes Modus zeigt „Dein Stand je Themengebiet“; der neue Modus „🎯 Schwächen wiederholen“ (10 Fragen, 12 Min.) nimmt zuerst offene Fehler, dann die schwächsten Themen; eine richtig beantwortete Frage verschwindet aus der Liste. Nach einer Prüfung führen Schaltflächen zur Wiederholung und zu den passenden Lernkarten. Neue Speicherschlüssel `exam_topic_stats` und `exam_wrong_questions` stehen in der Backup-Allowlist.
 - Unit-Tests für `executive-dossier`, `document-preview`, `project_compare`, `bounding-box-renderer` und `premium-effects-p2`; Helfer `trackDocumentListeners` in `scripts/test-support/dom-helpers.js` (entfernt `document`-Listener von Modulen, die pro Test neu importiert werden). Coverage ca. 70 %, Schwellen jetzt 65 % (Branches 58 %).
 
+#### Geändert
+- **Aufräumen:** `pages/404.html` entfernt (fast gleiche Kopie der ausgelieferten Root-`404.html`, nirgends verlinkt; fällt damit auch aus dem SW-Precache). Der Playwright-Helfer `scripts/e2e-helpers.js` liegt jetzt in `scripts/test-support/` neben `dom-helpers.js`.
+
 #### Behoben
 - **A11y:** Executive-Dossier ist ein beschrifteter modaler Dialog (`role="dialog"`, `aria-modal`, benannter Schließen-Button), schließt mit Escape und gibt den Fokus zurück; die Dokument-Vorschau setzt den Fokus auf den Schließen-Button und gibt ihn zurück.
 - **Sicherheit:** `document-preview.js` escaped Titel und Datei-URL in `innerHTML` und setzt `rel="noopener"` am Vollbild-Link.

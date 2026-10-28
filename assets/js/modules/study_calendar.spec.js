@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The flashcards page exports the Leitner due dates as a calendar file, created in the browser.
 test.describe('Lernplan als Kalenderdatei (flashcards.html)', () => {

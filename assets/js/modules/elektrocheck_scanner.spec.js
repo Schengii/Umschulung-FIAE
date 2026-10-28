@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The ElektroCheck scanner demo draws the detected defects as boxes over the photo. The
 // renderer used to live in a script no page loaded, so the boxes never appeared.

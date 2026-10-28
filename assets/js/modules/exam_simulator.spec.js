@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // The IHK exam simulation on quiz.html: timed run, hand-in, grade and breakdown per topic.
 test.describe('IHK-Prüfungssimulation', () => {

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 // Complements accessibility.spec.js: ongoing animation under prefers-reduced-motion, focus
 // hand-back of overlays and colour contrast for every accent colour in both themes.

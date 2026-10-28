@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { settle } from '../../../scripts/e2e-helpers.js';
+import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 import AxeBuilder from '@axe-core/playwright';
 
 // Complements the Lighthouse a11y score gate (page-level, category threshold)
