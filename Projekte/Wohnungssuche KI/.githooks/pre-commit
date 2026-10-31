@@ -1,6 +1,0 @@
-#!/bin/sh
-# Git Pre-Commit Hook für Wohnungssuche KI
-# Verhindert versehentliches Einchecken von .env-Dateien und API-Keys
-
-node scripts/check-secrets.js
-exit $?

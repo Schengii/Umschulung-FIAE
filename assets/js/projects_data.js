@@ -17,8 +17,7 @@ window.projectsData = [
     "category": "web",
     "language": "TypeScript",
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Amazon%202.0",
-    "updatedAt": "2026-10-31T10:00:40.350Z",
+    "updatedAt": "2026-10-27T09:25:30.552Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -188,8 +187,7 @@ window.projectsData = [
     "category": "ai",
     "language": "JavaScript",
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/ElektroCheck%20AI",
-    "updatedAt": "2026-10-31T10:00:40.614Z",
+    "updatedAt": "2026-10-27T09:25:30.825Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -350,21 +348,8 @@ window.projectsData = [
     "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
     "category": "games",
     "language": "C++",
-    "codeFiles": [
-      {
-        "name": "CMakeLists.txt",
-        "path": "Projekte/Minecraft/CMakeLists.txt",
-        "type": "cmake"
-      },
-      {
-        "name": "README.md",
-        "path": "Projekte/Minecraft/README.md",
-        "type": "markdown"
-      }
-    ],
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Minecraft",
-    "updatedAt": "2026-10-31T10:00:41.329Z"
+    "updatedAt": "2026-10-27T09:25:31.452Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -384,8 +369,7 @@ window.projectsData = [
     "category": "ai web",
     "language": "JavaScript",
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/Wohnungssuche%20KI",
-    "updatedAt": "2026-10-31T10:00:41.459Z",
+    "updatedAt": "2026-10-27T09:25:31.569Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
