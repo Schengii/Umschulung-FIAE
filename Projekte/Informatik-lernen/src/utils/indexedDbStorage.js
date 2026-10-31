@@ -12,14 +12,14 @@ export const STORES = ['notes', 'flashcards', 'custom_challenges', 'keyvalue'];
 const memoryFallback = new Map();
 STORES.forEach(store => memoryFallback.set(store, new Map()));
 
-function isIndexedDbAvailable() {
+export function isIndexedDbAvailable() {
   return typeof window !== 'undefined' && typeof window.indexedDB !== 'undefined';
 }
 
 /**
  * Öffnet die IndexedDB Verbindung oder liefert Fallback
  */
-function openDatabase() {
+export function openDatabase() {
   return new Promise((resolve) => {
     if (!isIndexedDbAvailable()) {
       resolve({ isFallback: true });

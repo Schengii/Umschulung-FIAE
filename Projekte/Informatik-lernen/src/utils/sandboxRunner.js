@@ -39,7 +39,7 @@
  * @property {() => SandboxWorkerLike} [createWorker] - Nur für Tests.
  */
 
-const DEFAULT_SANDBOX_TIMEOUT_MS = 3000;
+export const DEFAULT_SANDBOX_TIMEOUT_MS = 3000;
 const DEFAULT_STARTUP_TIMEOUT_MS = 10000;
 
 /** @returns {SandboxWorkerLike} */

@@ -21,14 +21,12 @@ export class SqliteWorkerBridge {
    */
   async init(preset = 'ecommerce') {
     this.activePreset = preset;
-    // Lokale Referenz: destroy() kann this.instance während der Wartezeit leeren
-    const instance = new SqlSandboxInstance();
-    this.instance = instance;
-    await instance.loadSeed(preset);
+    this.instance = new SqlSandboxInstance();
+    this.instance.loadSeed(preset);
     this.isInitialized = true;
     return {
       success: true,
-      tables: Object.keys(await instance.getSchema())
+      tables: Object.keys(this.instance.getSchema())
     };
   }
 
@@ -44,35 +42,36 @@ export class SqliteWorkerBridge {
 
     const startTime = performance.now();
 
-    // alasql läuft ohnehin im Worker (sqlWorkerClient.js); die Verzögerung
-    // simuliert für die Lab-Anzeige zusätzlich den Message-Dispatch.
-    await new Promise((resolve) => setTimeout(resolve, simulateWorkerThread ? 10 : 0));
+    return new Promise((resolve) => {
+      // In browser/node, simulate async worker message dispatch
+      setTimeout(() => {
+        if (!this.instance) {
+          resolve({
+            success: false,
+            error: 'Database not initialized',
+            executionTimeMs: 0,
+            rows: [],
+            columns: [],
+            workerThread: simulateWorkerThread
+          });
+          return;
+        }
 
-    const instance = this.instance;
-    if (!instance) {
-      return {
-        success: false,
-        error: 'Database not initialized',
-        executionTimeMs: 0,
-        rows: [],
-        columns: [],
-        workerThread: simulateWorkerThread
-      };
-    }
+        const res = this.instance.execute(sql);
+        const duration = Math.round((performance.now() - startTime) * 100) / 100;
+        const rows = res.rows || [];
+        const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
 
-    const res = await instance.execute(sql);
-    const duration = Math.round((performance.now() - startTime) * 100) / 100;
-    const rows = res.rows || [];
-    const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
-
-    return {
-      ...res,
-      rows,
-      columns,
-      executionTimeMs: duration,
-      workerThread: simulateWorkerThread,
-      schema: await instance.getSchema()
-    };
+        resolve({
+          ...res,
+          rows,
+          columns,
+          executionTimeMs: duration,
+          workerThread: simulateWorkerThread,
+          schema: this.instance.getSchema()
+        });
+      }, simulateWorkerThread ? 10 : 0);
+    });
   }
 
   /**
@@ -86,14 +85,14 @@ export class SqliteWorkerBridge {
     const setupSql = `
       CREATE TABLE IF NOT EXISTS benchmark_logs (id INT, tag STRING, val INT, created_at STRING);
     `;
-    await this.instance?.execute(setupSql);
+    this.instance?.execute(setupSql);
 
     const startTime = performance.now();
-    const inserts = Array.from({ length: rowCount }, (_, i) =>
-      `INSERT INTO benchmark_logs VALUES (${i}, 'tag_${i % 10}', ${i * 42}, '2026-09-25')`);
-    await this.instance?.run(inserts);
+    for (let i = 0; i < rowCount; i++) {
+      this.instance?.execute(`INSERT INTO benchmark_logs VALUES (${i}, 'tag_${i % 10}', ${i * 42}, '2026-09-25')`);
+    }
 
-    const queryRes = await this.instance?.execute(`
+    const queryRes = this.instance?.execute(`
       SELECT tag, COUNT(*) as cnt, AVG(val) as avg_val 
       FROM benchmark_logs 
       GROUP BY tag 

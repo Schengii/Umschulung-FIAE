@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function DashboardQuickAccessGrid({ setActiveTab }) {
   const quickCards = [
@@ -226,7 +225,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
 
       <div className="grid-responsive" style={{ marginBottom: '40px' }}>
         {quickCards.map((card) => (
-          <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveTab(card.id))}
+          <div
             key={card.id}
             className="glass-panel glass-panel-hover"
             onClick={() => setActiveTab(card.id)}

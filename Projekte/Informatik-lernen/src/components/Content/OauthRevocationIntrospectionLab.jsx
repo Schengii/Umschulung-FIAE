@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { OAuthRevocationIntrospectionEngine } from '../../utils/oauthRevocationIntrospectionEngine';
 import { useStore } from '../../store/useStore';
-import { onActivationKey } from '../Shared/keyActivation';
 
 function getCurrentEpochSeconds() {
   return Math.floor(Date.now() / 1000);
@@ -73,9 +72,9 @@ export default function OauthRevocationIntrospectionLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'var(--gradient-card)',
+        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
         borderRadius: '16px',
-        border: '1px solid var(--border-color)'
+        border: '1px solid rgba(255, 255, 255, 0.1)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -107,7 +106,7 @@ export default function OauthRevocationIntrospectionLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: 'var(--accent-emerald)', 
+              color: '#10b981', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -121,7 +120,7 @@ export default function OauthRevocationIntrospectionLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(245, 158, 11, 0.15)', 
-              color: 'var(--accent-amber)', 
+              color: '#f59e0b', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -134,14 +133,14 @@ export default function OauthRevocationIntrospectionLab() {
       </div>
 
       {/* Grid Layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Token Inventory */}
         <div style={{
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid var(--border-color)'
+          border: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginTop: 0, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Key size={18} color="#f59e0b" /> Aktiver Token-Speicher (Auth-Server)
@@ -155,12 +154,7 @@ export default function OauthRevocationIntrospectionLab() {
                 const isExpired = nowSec >= t.exp;
 
                 return (
-                <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => {
-                    setSelectedToken(t.token);
-                    handleIntrospect(t.token);
-                  })}
-                  aria-label={`Token ${t.token} auswählen und prüfen`}
-                  aria-pressed={isSelected}
+                <div 
                   key={t.token}
                   onClick={() => {
                     setSelectedToken(t.token);
@@ -170,13 +164,13 @@ export default function OauthRevocationIntrospectionLab() {
                     padding: '12px 14px',
                     borderRadius: '10px',
                     cursor: 'pointer',
-                    background: isSelected ? 'rgba(245, 158, 11, 0.15)' : 'var(--bg-tertiary)',
+                    background: isSelected ? 'rgba(245, 158, 11, 0.15)' : 'rgba(0, 0, 0, 0.2)',
                     border: isSelected ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.05)',
                     transition: 'all 0.2s ease'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <code style={{ fontSize: '0.88rem', fontWeight: 600, color: isSelected ? 'var(--accent-amber)' : 'var(--text-main)' }}>
+                    <code style={{ fontSize: '0.88rem', fontWeight: 600, color: isSelected ? '#f59e0b' : 'var(--text-main)' }}>
                       {t.token}
                     </code>
                     <span style={{
@@ -185,7 +179,7 @@ export default function OauthRevocationIntrospectionLab() {
                       borderRadius: '12px',
                       fontWeight: 600,
                       background: isRevoked ? 'rgba(239, 68, 68, 0.2)' : isExpired ? 'rgba(148, 163, 184, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                      color: isRevoked ? 'var(--accent-rose)' : isExpired ? 'var(--text-dim)' : 'var(--accent-emerald)'
+                      color: isRevoked ? '#ef4444' : isExpired ? '#94a3b8' : '#10b981'
                     }}>
                       {isRevoked ? 'Revoked' : isExpired ? 'Expired' : 'Active'}
                     </span>
@@ -201,7 +195,7 @@ export default function OauthRevocationIntrospectionLab() {
           </div>
 
           {/* Create Token Mini-Form */}
-          <form onSubmit={handleCreateToken} style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+          <form onSubmit={handleCreateToken} style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <h3 style={{ fontSize: '0.9rem', margin: '0 0 10px 0', color: 'var(--text-muted)' }}>Neuen Test-Token ausstellen</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <input 
@@ -210,11 +204,11 @@ export default function OauthRevocationIntrospectionLab() {
                 onChange={(e) => setNewSub(e.target.value)} 
                 placeholder="Subject (Nutzer-ID)" 
                 style={{
-                  background: 'var(--bg-tertiary)',
-                  border: '1px solid var(--border-color)',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: '6px',
                   padding: '8px 10px',
-                  color: 'var(--text-main)',
+                  color: '#ffffff',
                   fontSize: '0.85rem'
                 }}
               />
@@ -224,11 +218,11 @@ export default function OauthRevocationIntrospectionLab() {
                 onChange={(e) => setNewScope(e.target.value)} 
                 placeholder="Scope (z. B. api:read)" 
                 style={{
-                  background: 'var(--bg-tertiary)',
-                  border: '1px solid var(--border-color)',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: '6px',
                   padding: '8px 10px',
-                  color: 'var(--text-main)',
+                  color: '#ffffff',
                   fontSize: '0.85rem'
                 }}
               />
@@ -237,11 +231,11 @@ export default function OauthRevocationIntrospectionLab() {
                   value={newType} 
                   onChange={(e) => setNewType(/** @type {'access_token' | 'refresh_token'} */ (e.target.value))}
                   style={{
-                    background: 'var(--bg-tertiary)',
-                    border: '1px solid var(--border-color)',
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '6px',
                     padding: '8px 10px',
-                    color: 'var(--text-main)',
+                    color: '#ffffff',
                     fontSize: '0.85rem',
                     flex: 1
                   }}
@@ -252,7 +246,7 @@ export default function OauthRevocationIntrospectionLab() {
                 <button
                   type="submit"
                   style={{
-                    background: 'var(--accent-amber)',
+                    background: '#f59e0b',
                     color: '#000000',
                     border: 'none',
                     borderRadius: '6px',
@@ -274,7 +268,7 @@ export default function OauthRevocationIntrospectionLab() {
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid var(--border-color)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           flexDirection: 'column'
         }}>
@@ -291,8 +285,8 @@ export default function OauthRevocationIntrospectionLab() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                background: 'var(--accent-cyan)',
-                color: 'var(--text-on-accent)',
+                background: '#3b82f6',
+                color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
                 padding: '10px 14px',
@@ -311,7 +305,7 @@ export default function OauthRevocationIntrospectionLab() {
                 justifyContent: 'center',
                 gap: '8px',
                 background: 'rgba(239, 68, 68, 0.2)',
-                color: 'var(--accent-rose)',
+                color: '#ef4444',
                 border: '1px solid rgba(239, 68, 68, 0.4)',
                 borderRadius: '8px',
                 padding: '10px 14px',
@@ -326,19 +320,19 @@ export default function OauthRevocationIntrospectionLab() {
           {/* Introspection Result Box */}
           <div style={{
             flex: 1,
-            background: 'var(--bg-tertiary)',
+            background: 'rgba(0, 0, 0, 0.3)',
             borderRadius: '10px',
             padding: '14px',
             fontFamily: 'monospace',
             fontSize: '0.85rem',
             overflowX: 'auto',
-            border: '1px solid var(--border-color)'
+            border: '1px solid rgba(255, 255, 255, 0.05)'
           }}>
             <div style={{ color: 'var(--text-muted)', marginBottom: '8px', fontSize: '0.78rem' }}>
               POST /oauth/introspect (RFC 7662 Response)
             </div>
             {introspectionResult ? (
-              <pre style={{ margin: 0, color: introspectionResult.active ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
+              <pre style={{ margin: 0, color: introspectionResult.active ? '#10b981' : '#ef4444' }}>
                 {JSON.stringify(introspectionResult, null, 2)}
               </pre>
             ) : (
@@ -354,7 +348,7 @@ export default function OauthRevocationIntrospectionLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid var(--border-color)'
+        border: '1px solid rgba(255, 255, 255, 0.08)'
       }}>
         <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Terminal size={18} color="#a855f7" /> RFC 7009 Revocation Log & Audit Trail
@@ -370,14 +364,14 @@ export default function OauthRevocationIntrospectionLab() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'var(--bg-tertiary)',
+                background: 'rgba(0, 0, 0, 0.25)',
                 padding: '8px 12px',
                 borderRadius: '6px',
                 fontSize: '0.82rem'
               }}>
                 <span style={{ color: 'var(--text-muted)' }}>[{log.timestamp}]</span>
-                <span style={{ fontWeight: 600, color: 'var(--accent-amber)' }}>{log.token}</span>
-                <span style={{ color: 'var(--accent-emerald)' }}>HTTP {log.httpStatus} OK</span>
+                <span style={{ fontWeight: 600, color: '#f59e0b' }}>{log.token}</span>
+                <span style={{ color: '#10b981' }}>HTTP {log.httpStatus} OK</span>
                 <span style={{ color: 'var(--text-muted)' }}>{log.message}</span>
               </div>
             ))}

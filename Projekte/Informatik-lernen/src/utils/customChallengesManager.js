@@ -5,7 +5,7 @@
 
 
 
-const CUSTOM_CHALLENGES_STORAGE_KEY = 'it_game_custom_challenges';
+export const CUSTOM_CHALLENGES_STORAGE_KEY = 'it_game_custom_challenges';
 
 export function getStoredCustomChallenges() {
   try {

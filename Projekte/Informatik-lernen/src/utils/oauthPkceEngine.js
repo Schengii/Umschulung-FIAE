@@ -70,7 +70,7 @@
  * @param {string} ascii
  * @returns {Uint8Array}
  */
-function sha256Sync(ascii) {
+export function sha256Sync(ascii) {
   /**
    * @param {number} value
    * @param {number} amount
@@ -153,7 +153,7 @@ function sha256Sync(ascii) {
  * @param {Uint8Array} uint8Array
  * @returns {string}
  */
-function base64UrlEncode(uint8Array) {
+export function base64UrlEncode(uint8Array) {
   let binary = '';
   const len = uint8Array.byteLength;
   for (let i = 0; i < len; i++) {

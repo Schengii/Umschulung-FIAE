@@ -1,12 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { useDialogA11y } from '../Shared/useDialogA11y';
+import React, { useState } from 'react';
 import { GLOSSARY_TERMS } from '../../data/glossaryData';
 import { BookOpen, Search, X, Volume2, Pause } from 'lucide-react';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function GlossaryModal({ isOpen, onClose }) {
-  const dialogRef = useRef(null);
-  useDialogA11y(isOpen, onClose, dialogRef);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [activeTermId, setActiveTermId] = useState(GLOSSARY_TERMS[0].id);
@@ -49,7 +45,6 @@ export default function GlossaryModal({ isOpen, onClose }) {
   };
 
   return (
-    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -65,7 +60,7 @@ export default function GlossaryModal({ isOpen, onClose }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClick={onClose}
     >
       <div
         className="glass-panel animate-fade-in"
@@ -82,16 +77,12 @@ export default function GlossaryModal({ isOpen, onClose }) {
           boxShadow: 'var(--shadow-card)',
           position: 'relative'
         }}
-        ref={dialogRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="glossary-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '14px' }}>
           <div>
-            <h2 id="glossary-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)' }}>
               <BookOpen size={28} style={{ color: 'var(--accent-primary)' }} /> Interaktives IT-Lexikon & Fachbegriffe
             </h2>
             <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
@@ -145,7 +136,7 @@ export default function GlossaryModal({ isOpen, onClose }) {
                   fontSize: '0.85rem',
                   fontWeight: '700',
                   background: selectedCategory === cat ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-                  color: selectedCategory === cat ? 'var(--text-on-accent)' : 'var(--text-muted)',
+                  color: selectedCategory === cat ? '#ffffff' : 'var(--text-muted)',
                   border: selectedCategory === cat ? 'none' : '1px solid var(--border-color)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap'
@@ -158,13 +149,13 @@ export default function GlossaryModal({ isOpen, onClose }) {
         </div>
 
         {/* Glossary Main Grid (Sidebar List + Detail View) */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(min(250px, 100%), 1fr) 2fr', gap: '20px', flex: 1, overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 1fr) 2fr', gap: '20px', flex: 1, overflow: 'hidden' }}>
           {/* Terms List */}
           <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '6px' }}>
             {filteredTerms.map((t) => {
               const isSelected = activeTermId === t.id;
               return (
-                <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveTermId(t.id))}
+                <div
                   key={t.id}
                   onClick={() => setActiveTermId(t.id)}
                   style={{
@@ -244,7 +235,7 @@ export default function GlossaryModal({ isOpen, onClose }) {
                   <strong style={{ fontSize: '0.88rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
                     💡 Praxis-Beispiel:
                   </strong>
-                  <code style={{ width: '100%', display: 'block', padding: '12px', background: 'var(--bg-card)', color: 'var(--text-main)', borderRadius: '8px', fontSize: '0.9rem' }}>
+                  <code style={{ width: '100%', display: 'block', padding: '12px', background: '#0f172a', color: '#f8fafc', borderRadius: '8px', fontSize: '0.9rem' }}>
                     {activeTerm.example}
                   </code>
                 </div>

@@ -1,11 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { useDialogA11y } from '../Shared/useDialogA11y';
+import React, { useState } from 'react';
 import { Download, Upload, ShieldCheck, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { exportUserDataJSON, importUserDataJSON, flushUserState, loadUserState } from '../../utils/storage';
 
 export default function BackupModal({ isOpen, onClose, onStateRestored }) {
-  const dialogRef = useRef(null);
-  useDialogA11y(isOpen, onClose, dialogRef);
   const [importStatus, setImportStatus] = useState(null);
 
   if (!isOpen) return null;
@@ -36,7 +33,6 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
   };
 
   return (
-    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -52,7 +48,7 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClick={onClose}
     >
       <div
         className="glass-panel animate-fade-in"
@@ -66,11 +62,7 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
           boxShadow: 'var(--shadow-card)',
           position: 'relative'
         }}
-        ref={dialogRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="backup-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
@@ -82,7 +74,7 @@ export default function BackupModal({ isOpen, onClose, onStateRestored }) {
 
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <ShieldCheck size={36} style={{ color: 'var(--accent-teal)', marginBottom: '8px' }} />
-          <h2 id="backup-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
             Daten-Backup & Wiederherstellung
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem' }}>

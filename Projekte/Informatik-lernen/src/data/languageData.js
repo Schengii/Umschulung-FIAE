@@ -1,4 +1,4 @@
-export const PROGRAMMING_LANGUAGES = [
+export const LANGUAGE_MODULES = [
   {
     id: 'python',
     name: 'Python Masterclass (W3Schools Style)',
@@ -272,3 +272,4 @@ fn calculate_length(s: &String) -> usize {
   }
 ];
 
+export const PROGRAMMING_LANGUAGES = LANGUAGE_MODULES;

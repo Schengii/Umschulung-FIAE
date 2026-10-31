@@ -1,12 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { useDialogA11y } from '../Shared/useDialogA11y';
+import React, { useState } from 'react';
 import { VOCABULARY_LIST } from '../../data/vocabularyData';
 import { BookMarked, Search, Volume2, X } from 'lucide-react';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function VocabularyTrainerModal({ isOpen, onClose }) {
-  const dialogRef = useRef(null);
-  useDialogA11y(isOpen, onClose, dialogRef);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeVocabId, setActiveVocabId] = useState(VOCABULARY_LIST[0].id);
 
@@ -28,7 +24,6 @@ export default function VocabularyTrainerModal({ isOpen, onClose }) {
   };
 
   return (
-    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -44,7 +39,7 @@ export default function VocabularyTrainerModal({ isOpen, onClose }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClick={onClose}
     >
       <div
         className="glass-panel animate-fade-in"
@@ -61,15 +56,11 @@ export default function VocabularyTrainerModal({ isOpen, onClose }) {
           display: 'flex',
           flexDirection: 'column'
         }}
-        ref={dialogRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="vocabulary-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
           <div>
-            <h2 id="vocabulary-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: 0, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)' }}>
               <BookMarked size={28} style={{ color: 'var(--accent-teal)' }} /> IT-Vokabeltrainer & Fachbegriffe
             </h2>
             <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
@@ -110,10 +101,10 @@ export default function VocabularyTrainerModal({ isOpen, onClose }) {
         </div>
 
         {/* Grid List & Details */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(min(240px, 100%), 1fr) 2fr', gap: '20px', flex: 1, overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(240px, 1fr) 2fr', gap: '20px', flex: 1, overflow: 'hidden' }}>
           <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {filteredVocab.map((v) => (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveVocabId(v.id))}
+              <div
                 key={v.id}
                 onClick={() => setActiveVocabId(v.id)}
                 style={{

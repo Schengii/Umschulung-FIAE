@@ -125,9 +125,8 @@ export default function ErdDesignerLab() {
       </div>
 
       {/* ERD Entity Cards Grid */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         {schema.entities.map(entity => (
-          // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Karte ist Mausabkürzung; Tastatur über den Namens-Button
           <div
             key={entity.id}
             onClick={() => setSelectedEntityId(entity.id)}
@@ -143,18 +142,7 @@ export default function ErdDesignerLab() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Table size={18} color="var(--accent-indigo)" />
-                {/* Tastaturweg zur Auswahl (die Karte selbst ist nur Mausabkürzung) */}
-                <button
-                  type="button"
-                  aria-pressed={selectedEntityId === entity.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedEntityId(entity.id);
-                  }}
-                  style={{ font: 'inherit', fontWeight: '800', fontSize: '1.05rem', color: 'var(--text-main)', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                >
-                  {entity.name}
-                </button>
+                <span style={{ fontWeight: '800', fontSize: '1.05rem', color: 'var(--text-main)' }}>{entity.name}</span>
               </div>
               <button
                 onClick={(e) => {
@@ -249,8 +237,8 @@ export default function ErdDesignerLab() {
         </div>
 
         <pre style={{
-          background: 'var(--bg-card)',
-          color: 'var(--accent-cyan)',
+          background: '#0f172a',
+          color: '#38bdf8',
           padding: '20px',
           borderRadius: 'var(--radius-md)',
           fontFamily: 'monospace',

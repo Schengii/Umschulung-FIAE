@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { Code, Play, RotateCcw, Terminal } from 'lucide-react';
 import { runInSandbox } from '../../utils/sandboxRunner';
-import { loadLocalMonaco } from '../../utils/monacoLoader';
 
 export default function MonacoStudioLab({ onRewardXP }) {
   const [language, setLanguage] = useState('javascript');
@@ -10,18 +9,6 @@ export default function MonacoStudioLab({ onRewardXP }) {
   const [consoleLogs, setConsoleLogs] = useState([]);
 
   const [isRunning, setIsRunning] = useState(false);
-  // 'loading' | 'ready' | 'failed' - Monaco kommt aus dem eigenen Bundle (siehe monacoLoader.js).
-  const [editorStatus, setEditorStatus] = useState('loading');
-
-  useEffect(() => {
-    let active = true;
-    loadLocalMonaco()
-      .then(() => active && setEditorStatus('ready'))
-      .catch(() => active && setEditorStatus('failed'));
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const handleRunCode = async () => {
     setConsoleLogs([]);
@@ -75,32 +62,22 @@ export default function MonacoStudioLab({ onRewardXP }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         {/* Monaco Editor Container */}
         <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-          {editorStatus === 'ready' ? (
-            <Editor
-              height="320px"
-              language={language}
-              theme="vs-dark"
-              value={code}
-              onChange={(val) => setCode(val || '')}
-              options={{
-                fontSize: 14,
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-                automaticLayout: true
-              }}
-            />
-          ) : (
-            <textarea
-              aria-label="Code-Editor"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              readOnly={editorStatus === 'loading'}
-              style={{ width: '100%', height: '320px', boxSizing: 'border-box', background: '#1e1e1e', color: '#d4d4d4', border: 'none', padding: '12px', fontFamily: 'var(--font-mono, monospace)', fontSize: '14px', resize: 'none' }}
-            />
-          )}
+          <Editor
+            height="320px"
+            language={language}
+            theme="vs-dark"
+            value={code}
+            onChange={(val) => setCode(val || '')}
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              automaticLayout: true
+            }}
+          />
           <div style={{ background: 'var(--bg-primary)', padding: '12px 16px', display: 'flex', gap: '12px' }}>
             <button className="btn btn-primary" onClick={handleRunCode} disabled={isRunning}>
               <Play size={16} /> {isRunning ? 'Läuft…' : 'Code Ausführen'}
@@ -118,8 +95,8 @@ export default function MonacoStudioLab({ onRewardXP }) {
           </h4>
           <div
             style={{
-              background: 'var(--bg-card)',
-              color: 'var(--accent-cyan)',
+              background: '#0f172a',
+              color: '#38bdf8',
               padding: '20px',
               borderRadius: 'var(--radius-lg)',
               fontFamily: 'monospace',

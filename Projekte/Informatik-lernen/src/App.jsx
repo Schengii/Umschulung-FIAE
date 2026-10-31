@@ -52,7 +52,6 @@ import { USER_ROLES } from './data/userProfiles';
 import { TOPICS } from './data/topicsData';
 
 import { BookOpen, Sparkles, ArrowRight, CheckCircle, Sprout, Compass } from 'lucide-react';
-import { onActivationKey } from './components/Shared/keyActivation';
 
 // Tabs, die nicht über die `activeLabElement`-Tabelle laufen, sondern als
 // eigene JSX-Blöcke weiter unten gerendert werden. Alles, was weder hier noch
@@ -95,14 +94,8 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   // Führende/abschließende Slashes entfernen, damit auch `/labs/` das Lab öffnet.
-  const routePath = location.pathname.replace(/^\/+|\/+$/g, '') || 'dashboard';
-  // Wissensartikel haben eine eigene Adresse (`/wissen/<topicId>`), damit Zurück-Taste,
-  // Lesezeichen und die Command Palette direkt auf einen Artikel zeigen können.
-  const topicRoute = routePath.match(/^wissen\/([\w-]+)$/);
-  const activeTab = topicRoute ? 'wissen' : routePath;
-  const selectedTopicId = topicRoute ? topicRoute[1] : null;
+  const activeTab = location.pathname.replace(/^\/+|\/+$/g, '') || 'dashboard';
   const setActiveTab = (tab) => navigate(`/${tab}`);
-  const setSelectedTopicId = (topicId) => navigate(topicId ? `/wissen/${topicId}` : '/wissen');
 
   // Lab-Fortschritt: jeder Aufruf eines Registry-Labs zählt als Besuch
   // (Schlüssel = erste Tab-ID des Registry-Eintrags, auch bei Alias-Routen).
@@ -122,6 +115,9 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Topic Reader state
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
 
   // Active Mini-Game Selector
   const [activeGameId, setActiveGameId] = useState('sql');
@@ -300,7 +296,7 @@ export default function App() {
                       <button
                         className="btn btn-primary"
                         onClick={() => setActiveTab('campaign')}
-                        style={{ minHeight: '48px', fontSize: '0.95rem', background: 'var(--gradient-cta)', gap: '8px' }}
+                        style={{ minHeight: '48px', fontSize: '0.95rem', background: 'var(--gradient-cyber)', gap: '8px' }}
                       >
                         <Compass size={18} /> Story Kampagne
                       </button>
@@ -371,11 +367,8 @@ export default function App() {
                 {selectedTopicId ? (
                   <Suspense fallback={<LabLoadingFallback />}>
                     <TopicReader
-                      key={selectedTopicId}
                       topicId={selectedTopicId}
                       onBack={() => setSelectedTopicId(null)}
-                      onSelectTopic={setSelectedTopicId}
-                      onNavigate={setActiveTab}
                       onCompleteTopic={handleCompleteTopic}
                       isCompleted={userState.completedTopics.includes(selectedTopicId)}
                     />
@@ -398,7 +391,7 @@ export default function App() {
                       {filteredTopics.map((topic) => {
                         const isDone = userState.completedTopics.includes(topic.id);
                         return (
-                          <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedTopicId(topic.id))}
+                          <div
                             key={topic.id}
                             className="glass-panel glass-panel-hover"
                             onClick={() => setSelectedTopicId(topic.id)}
@@ -451,7 +444,7 @@ export default function App() {
                         fontWeight: '700',
                         fontSize: '0.92rem',
                         background: activeGameId === g.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-                        color: activeGameId === g.id ? 'var(--text-on-accent)' : 'var(--text-main)',
+                        color: activeGameId === g.id ? '#ffffff' : 'var(--text-main)',
                         border: activeGameId === g.id ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)',
                         cursor: 'pointer',
                         whiteSpace: 'nowrap'

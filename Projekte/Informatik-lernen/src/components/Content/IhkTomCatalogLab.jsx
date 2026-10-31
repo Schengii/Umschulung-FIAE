@@ -85,7 +85,7 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
       </div>
 
       {/* Audit KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div style={{ padding: '18px', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>Compliance-Score</span>
           <div style={{ fontSize: '2rem', fontWeight: '900', color: audit.scorePercent >= 75 ? 'var(--accent-emerald, #10b981)' : 'var(--accent-amber, #f59e0b)', margin: '4px 0' }}>
@@ -136,7 +136,7 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
               borderRadius: '8px',
               border: '1px solid var(--border-color)',
               background: selectedCategory === cat.id ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-              color: selectedCategory === cat.id ? 'var(--text-on-accent)' : 'var(--text-muted)',
+              color: selectedCategory === cat.id ? '#fff' : 'var(--text-muted)',
               fontSize: '0.85rem',
               fontWeight: '600',
               cursor: 'pointer'
@@ -150,7 +150,6 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
       {/* TOM Measures List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {filteredMeasures.map(measure => (
-          // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Karte ist Mausabkürzung; Tastatur über die Checkbox in der Karte
           <div
             key={measure.id}
             onClick={() => toggleMeasure(measure.id)}
@@ -188,9 +187,7 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
               <input
                 type="checkbox"
                 checked={measure.isImplemented}
-                aria-label={`${measure.title} umgesetzt`}
-                onChange={() => toggleMeasure(measure.id)}
-                onClick={(e) => e.stopPropagation()}
+                onChange={() => {}}
                 style={{ width: '20px', height: '20px', cursor: 'pointer' }}
               />
             </div>
@@ -200,7 +197,6 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
 
       {/* Export Modal */}
       {showExportModal && (
-        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
         <div
           style={{
             position: 'fixed',
@@ -213,9 +209,7 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
             padding: '20px'
           }}
           onClick={() => setShowExportModal(false)}
-          onKeyDown={(e) => e.key === 'Escape' && setShowExportModal(false)}
         >
-          {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- nur Propagation-Stopp für den Backdrop, kein Bedienelement */}
           <div
             style={{
               background: 'var(--bg-card)',
@@ -254,8 +248,8 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
                 padding: '12px',
                 fontFamily: 'monospace',
                 fontSize: '0.82rem',
-                background: 'var(--bg-secondary)',
-                color: 'var(--accent-cyan)',
+                background: '#090d16',
+                color: '#38bdf8',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid #1e293b',
                 resize: 'none',

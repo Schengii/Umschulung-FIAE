@@ -3,7 +3,6 @@ import { ShieldCheck, Award, Lock } from 'lucide-react';
 import { WireguardZtnaSimulator } from '../../utils/wireguardZtnaEngine';
 import { useStore } from '../../store/useStore';
 import { triggerHaptic } from '../../utils/haptics';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function WireguardZtnaLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -60,9 +59,9 @@ export default function WireguardZtnaLab({ onRewardXP }) {
       </div>
 
       {/* Peer Selector Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '24px' }}>
         {sim.peers.map(peer => (
-          <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => { setSelectedPeerId(peer.id); triggerHaptic('SELECTION'); })}
+          <div
             key={peer.id}
             onClick={() => { setSelectedPeerId(peer.id); triggerHaptic('SELECTION'); }}
             style={{

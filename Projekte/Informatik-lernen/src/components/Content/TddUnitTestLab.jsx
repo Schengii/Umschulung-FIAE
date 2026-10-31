@@ -59,8 +59,8 @@ export default function TddUnitTestLab({ onRewardXP }) {
           style={{
             width: '100%',
             minHeight: '120px',
-            background: 'var(--bg-card)',
-            color: 'var(--text-main)',
+            background: '#0f172a',
+            color: '#f8fafc',
             border: 'none',
             padding: '16px',
             fontFamily: 'var(--font-code)',

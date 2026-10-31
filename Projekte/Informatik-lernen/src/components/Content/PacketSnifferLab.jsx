@@ -3,7 +3,6 @@ import React, { useState, useMemo } from 'react';
 import { Network, Filter, Layers, Terminal, Sparkles, Cpu } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { SAMPLE_PACKETS, formatHexDump, evaluatePacketFilter } from '../../utils/packetSnifferEngine';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function PacketSnifferLab() {
   const { awardXP } = useStore();
@@ -147,7 +146,7 @@ export default function PacketSnifferLab() {
       </div>
 
       {/* Pane 2 & 3: Protocol Tree Dissection + Synced Hex Dump */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(380px, 100%), 1fr))', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '20px' }}>
         {/* Layer Dissection Tree */}
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -157,7 +156,7 @@ export default function PacketSnifferLab() {
           <div className="space-y-3" style={{ fontSize: '0.88rem' }}>
             {/* Ethernet Layer */}
             {selectedPacket?.layers.ethernet && (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => handleSelectLayerField(selectedPacket.layers.ethernet.byteRange))}
+              <div
                 onClick={() => handleSelectLayerField(selectedPacket.layers.ethernet.byteRange)}
                 style={{
                   background: 'var(--bg-secondary)',
@@ -180,7 +179,7 @@ export default function PacketSnifferLab() {
 
             {/* IP Layer */}
             {selectedPacket?.layers.ip && (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => handleSelectLayerField(selectedPacket.layers.ip.byteRange))}
+              <div
                 onClick={() => handleSelectLayerField(selectedPacket.layers.ip.byteRange)}
                 style={{
                   background: 'var(--bg-secondary)',
@@ -204,7 +203,7 @@ export default function PacketSnifferLab() {
 
             {/* Transport Layer (TCP/UDP) */}
             {selectedPacket?.layers.tcp && (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => handleSelectLayerField(selectedPacket.layers.tcp.byteRange))}
+              <div
                 onClick={() => handleSelectLayerField(selectedPacket.layers.tcp.byteRange)}
                 style={{
                   background: 'var(--bg-secondary)',
@@ -228,7 +227,7 @@ export default function PacketSnifferLab() {
 
             {/* Application / Payload */}
             {selectedPacket?.layers.payload && selectedPacket.layers.payload.data && (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => handleSelectLayerField(selectedPacket.layers.payload.byteRange))}
+              <div
                 onClick={() => handleSelectLayerField(selectedPacket.layers.payload.byteRange)}
                 style={{
                   background: 'var(--bg-secondary)',
@@ -255,7 +254,7 @@ export default function PacketSnifferLab() {
             <Cpu size={18} color="var(--accent-indigo)" /> Paket Hex-Dump &amp; ASCII-Ansicht
           </h2>
 
-          <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', fontFamily: 'monospace', fontSize: '0.82rem', overflowX: 'auto', maxHeight: '380px', overflowY: 'auto', border: '1px solid #1e293b' }}>
+          <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', fontFamily: 'monospace', fontSize: '0.82rem', overflowX: 'auto', maxHeight: '380px', overflowY: 'auto', border: '1px solid #1e293b' }}>
             {hexDumpRows.map((row, rIdx) => (
               <div key={rIdx} style={{ display: 'flex', gap: '16px', marginBottom: '4px' }}>
                 <span style={{ color: '#64748b' }}>{row.offsetHex}</span>
@@ -269,7 +268,7 @@ export default function PacketSnifferLab() {
                       <span
                         key={bIdx}
                         style={{
-                          color: highlighted ? 'var(--accent-cyan)' : 'var(--text-main)',
+                          color: highlighted ? '#38bdf8' : '#e2e8f0',
                           background: highlighted ? 'rgba(56, 189, 248, 0.25)' : 'transparent',
                           fontWeight: highlighted ? 'bold' : 'normal',
                           padding: '0 2px',
@@ -283,7 +282,7 @@ export default function PacketSnifferLab() {
                 </div>
 
                 {/* ASCII */}
-                <span style={{ color: 'var(--text-dim)', borderLeft: '1px solid #334155', paddingLeft: '10px' }}>
+                <span style={{ color: '#94a3b8', borderLeft: '1px solid #334155', paddingLeft: '10px' }}>
                   {row.ascii}
                 </span>
               </div>

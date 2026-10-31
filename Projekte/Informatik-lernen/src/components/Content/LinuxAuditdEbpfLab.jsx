@@ -14,7 +14,6 @@ import {
   filterSecurityEvents
 } from '../../utils/linuxAuditdEbpfEngine';
 import { useStore } from '../../store/useStore';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function LinuxAuditdEbpfLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -96,7 +95,7 @@ export default function LinuxAuditdEbpfLab({ onRewardXP }) {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {filteredLogs.map(ev => (
-              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedEventId(ev.id))}
+              <div
                 key={ev.id}
                 onClick={() => setSelectedEventId(ev.id)}
                 style={{

@@ -21,7 +21,7 @@
  * @property {string} [badge]
  */
 
-const DIFFICULTY_ORDER = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+export const DIFFICULTY_ORDER = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
 /**
  * Registriert einen Besuch des Labs.

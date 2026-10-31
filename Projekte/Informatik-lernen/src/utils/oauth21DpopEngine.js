@@ -87,6 +87,7 @@ export function evaluateOauth21Flow(config) {
   };
 }
 
+export const validateOauth21Compliance = evaluateOauth21Flow;
 
 /**
  * Erstellt einen simulierten DPoP Proof Token

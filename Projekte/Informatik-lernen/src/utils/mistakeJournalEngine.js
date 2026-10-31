@@ -21,7 +21,7 @@
  * @property {boolean} correct
  */
 
-const REVIEW_INTERVALS = [1, 3, 7, 14, 30];
+export const REVIEW_INTERVALS = [1, 3, 7, 14, 30];
 export const MASTERY_STREAK = 3;
 
 /**

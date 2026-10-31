@@ -84,14 +84,12 @@ export default function SqlWindowFunctionsLab({ onRewardXP }) {
           <Filter size={18} color="var(--accent-primary)" /> Fenster-Partitionierung &amp; Sortierkriterien
         </h3>
 
-        <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px' }}>
+        <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           <div>
-            <label htmlFor="sql-partition-by" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
               PARTITION BY:
             </label>
             <select
-              id="sql-partition-by"
-              aria-label="PARTITION BY"
               value={partitionBy}
               onChange={(e) => setPartitionBy(e.target.value)}
               style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg-tertiary)', color: 'var(--text-main)', border: '1px solid var(--border-color)' }}
@@ -102,12 +100,10 @@ export default function SqlWindowFunctionsLab({ onRewardXP }) {
           </div>
 
           <div>
-            <label htmlFor="sql-order-by" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
               ORDER BY:
             </label>
             <select
-              id="sql-order-by"
-              aria-label="ORDER BY"
               value={orderBy}
               onChange={(e) => setOrderBy(e.target.value)}
               style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--bg-tertiary)', color: 'var(--text-main)', border: '1px solid var(--border-color)' }}
@@ -119,9 +115,9 @@ export default function SqlWindowFunctionsLab({ onRewardXP }) {
           </div>
 
           <div>
-            <span style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
               Richtung:
-            </span>
+            </label>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button
                 onClick={() => setDirection('DESC')}
@@ -141,12 +137,10 @@ export default function SqlWindowFunctionsLab({ onRewardXP }) {
           </div>
 
           <div>
-            <label htmlFor="sql-ntile-range" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
               NTILE Buckets: {ntile}
             </label>
             <input
-              id="sql-ntile-range"
-              aria-label="NTILE Buckets"
               type="range"
               min="2"
               max="5"

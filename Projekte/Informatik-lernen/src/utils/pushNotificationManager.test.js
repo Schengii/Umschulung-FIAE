@@ -112,8 +112,8 @@ describe('pushNotificationManager', () => {
     vi.advanceTimersByTime(5000);
 
     expect(showNotificationMock).toHaveBeenCalledWith('Lern-Erinnerung', expect.objectContaining({
-      icon: '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
+      icon: '/favicon.svg',
+      badge: '/favicon.svg',
       body: 'Wiederhole SRS'
     }));
 
@@ -147,7 +147,7 @@ describe('pushNotificationManager', () => {
 
     vi.advanceTimersByTime(5000);
     expect(notificationConstructorMock).toHaveBeenCalledWith('Fallback Reminder', expect.objectContaining({
-      icon: '/pwa-192x192.png',
+      icon: '/favicon.svg',
       body: 'Ohne SW'
     }));
 

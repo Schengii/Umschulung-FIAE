@@ -188,8 +188,8 @@ export default function LinuxCowSnapshotLab() {
               </button>
 
               <div className="pt-2 border-t border-slate-800">
-                <label htmlFor="linux-cow-snapshot-lab-1" className="text-xs text-slate-400 block mb-1">Neuer Inhalt für /etc/systemd.conf</label>
-                <input id="linux-cow-snapshot-lab-1"
+                <label className="text-xs text-slate-400 block mb-1">Neuer Inhalt für /etc/systemd.conf</label>
+                <input
                   type="text"
                   value={activeFileContent}
                   onChange={e => setActiveFileContent(e.target.value)}
@@ -297,7 +297,7 @@ export default function LinuxCowSnapshotLab() {
                           </div>
                         </>
                       ) : (
-                        <div className="h-full flex items-center justify-center text-xs font-mono text-slate-400">
+                        <div className="h-full flex items-center justify-center text-xs font-mono">
                           Freier Block
                         </div>
                       )}

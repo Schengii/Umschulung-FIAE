@@ -9,7 +9,6 @@ import {
 } from '../../utils/ihkDpiaEngine';
 import { useStore } from '../../store/useStore';
 import { triggerHaptic } from '../../utils/haptics';
-import { onActivationKey } from '../Shared/keyActivation';
 
 export default function IhkDpiaLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -107,10 +106,10 @@ export default function IhkDpiaLab({ onRewardXP }) {
 
       {/* Project Title Input */}
       <div style={{ marginBottom: '20px', background: 'var(--bg-card-hover)', padding: '16px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-        <label htmlFor="ihk-dpia-lab-1" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
           Titel deines IHK-Abschlussprojekts:
         </label>
-        <input id="ihk-dpia-lab-1"
+        <input
           type="text"
           value={projectTitle}
           onChange={(e) => setProjectTitle(e.target.value)}
@@ -157,7 +156,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
 
       {/* TAB 1: Schwellenwertprüfung */}
       {activeTab === 'threshold' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
           <div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '12px' }}>
               Kriterien der Datenschutzkonferenz (DSK) &amp; Art. 35 Abs. 3
@@ -170,7 +169,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
               {DPIA_CRITERIA.map(crit => {
                 const isSelected = selectedCriteria.includes(crit.id);
                 return (
-                  <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => toggleCriterion(crit.id))}
+                  <div
                     key={crit.id}
                     onClick={() => toggleCriterion(crit.id)}
                     style={{
@@ -194,7 +193,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: 'var(--text-on-accent)',
+                      color: '#fff',
                       marginTop: '2px',
                       flexShrink: 0
                     }}>
@@ -260,7 +259,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
       {/* TAB 2: Risikomatrix */}
       {activeTab === 'risks' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
             {evaluatedRisks.map(r => (
               <div
                 key={r.id}
@@ -282,14 +281,14 @@ export default function IhkDpiaLab({ onRewardXP }) {
 
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ flex: 1, padding: '8px', background: 'rgba(239, 68, 68, 0.08)', borderRadius: '6px', textAlign: 'center' }}>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--accent-rose)', display: 'block' }}>Initiales Risiko</span>
-                      <strong style={{ fontSize: '1.1rem', color: 'var(--accent-rose)' }}>{r.rawScore}</strong>
+                      <span style={{ fontSize: '0.75rem', color: '#ef4444', display: 'block' }}>Initiales Risiko</span>
+                      <strong style={{ fontSize: '1.1rem', color: '#ef4444' }}>{r.rawScore}</strong>
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>({r.impact} × {r.likelihood})</span>
                     </div>
 
                     <div style={{ flex: 1, padding: '8px', background: 'rgba(16, 185, 129, 0.08)', borderRadius: '6px', textAlign: 'center' }}>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', display: 'block' }}>Restrisiko</span>
-                      <strong style={{ fontSize: '1.1rem', color: 'var(--accent-emerald)' }}>{r.residualScore}</strong>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981', display: 'block' }}>Restrisiko</span>
+                      <strong style={{ fontSize: '1.1rem', color: '#10b981' }}>{r.residualScore}</strong>
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>(-{r.reductionPercent}%)</span>
                     </div>
                   </div>
@@ -311,7 +310,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
           </div>
 
           <div style={{ padding: '16px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <CheckCircle2 size={24} style={{ color: 'var(--accent-emerald)', flexShrink: 0 }} />
+            <CheckCircle2 size={24} style={{ color: '#10b981', flexShrink: 0 }} />
             <div style={{ fontSize: '0.88rem', color: 'var(--text-main)' }}>
               <strong>Art. 36 DSGVO Freigabe:</strong> Da alle Restrisiken nach Implementierung der technischen und organisatorischen Maßnahmen im vertretbaren Bereich liegen, ist keine vorherige Abstimmung mit der Datenschutzaufsichtsbehörde nötig.
             </div>
