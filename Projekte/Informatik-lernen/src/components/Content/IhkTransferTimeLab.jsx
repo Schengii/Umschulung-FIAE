@@ -150,7 +150,7 @@ export default function IhkTransferTimeLab() {
       </div>
 
       {activeTab === 'calculator' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '1.5rem' }}>
           {/* Eingabebereich */}
           <div className="card" style={{ padding: '1.25rem', borderRadius: '10px' }}>
             <h3 style={{ marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -159,9 +159,9 @@ export default function IhkTransferTimeLab() {
 
             {/* Datenmenge */}
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.3rem' }}>Datenmenge:</label>
+              <label htmlFor="ihk-transfer-time-lab-1" style={{ display: 'block', fontWeight: 600, marginBottom: '0.3rem' }}>Datenmenge:</label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input
+                <input id="ihk-transfer-time-lab-1"
                   type="number"
                   min="0.001"
                   step="any"
@@ -183,9 +183,9 @@ export default function IhkTransferTimeLab() {
 
             {/* Bandbreite */}
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, marginBottom: '0.3rem' }}>Übertragungsrate (Bandbreite):</label>
+              <label htmlFor="ihk-transfer-time-lab-2" style={{ display: 'block', fontWeight: 600, marginBottom: '0.3rem' }}>Übertragungsrate (Bandbreite):</label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input
+                <input id="ihk-transfer-time-lab-2"
                   type="number"
                   min="0.001"
                   step="any"
@@ -207,9 +207,9 @@ export default function IhkTransferTimeLab() {
 
             {/* Schnellauswahl Anschlüsse */}
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.3rem', opacity: 0.8 }}>
+              <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.3rem', opacity: 0.8 }}>
                 Schnellauswahl gängiger Anschlüsse:
-              </label>
+              </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
                 {PRESET_CONNECTIONS.slice(0, 5).map((p) => (
                   <button
@@ -227,7 +227,7 @@ export default function IhkTransferTimeLab() {
             {/* Overhead Slider */}
             <div style={{ marginBottom: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <label style={{ fontWeight: 600 }}>Protokoll-Overhead:</label>
+                <span style={{ fontWeight: 600 }}>Protokoll-Overhead:</span>
                 <span style={{ fontWeight: 700 }}>{overheadPercent}%</span>
               </div>
               <input
@@ -284,7 +284,7 @@ export default function IhkTransferTimeLab() {
       )}
 
       {activeTab === 'scenarios' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1rem' }}>
           {IHK_SCENARIOS.map((sc) => (
             <div key={sc.id} className="card" style={{ padding: '1.25rem', borderRadius: '10px' }}>
               <h4 style={{ margin: '0 0 0.5rem 0', color: 'var(--primary-color, #2563eb)' }}>{sc.title}</h4>
@@ -350,8 +350,8 @@ export default function IhkTransferTimeLab() {
 
           {earnedXp && (
             <div style={{ padding: '1rem', background: '#10b98122', border: '1px solid #10b981', borderRadius: '8px', textAlign: 'center', marginTop: '1rem' }}>
-              <Award size={24} style={{ color: '#10b981', display: 'inline-block', marginBottom: '0.25rem' }} />
-              <div style={{ fontWeight: 700, color: '#10b981' }}>Quiz gemeistert! +50 XP gutgeschrieben.</div>
+              <Award size={24} style={{ color: 'var(--accent-emerald)', display: 'inline-block', marginBottom: '0.25rem' }} />
+              <div style={{ fontWeight: 700, color: 'var(--accent-emerald)' }}>Quiz gemeistert! +50 XP gutgeschrieben.</div>
               <div style={{ fontSize: '0.85rem' }}>Erreichte Punktzahl: {quizScore} / {quizQuestions.length}</div>
             </div>
           )}

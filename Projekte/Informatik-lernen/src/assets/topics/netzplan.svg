@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Vorgangsknoten-Netzplan mit sechs Vorgängen. Kritischer Pfad A, B, D, F mit 15 Tagen Projektdauer; C und E haben je einen Tag Gesamtpuffer.</title>
+  <rect width="720" height="340" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f172a"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#be123c"/></marker>
+  </defs>
+  <text x="360" y="24" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">Netzplan mit Vorwärts- und Rückwärtsrechnung</text>
+  <!-- Legende -->
+  <g font-size="10" fill="#0f172a">
+    <rect x="20" y="40" width="102" height="62" fill="#f8fafc" stroke="#475569"/>
+    <line x1="20" y1="60" x2="122" y2="60" stroke="#475569"/><line x1="20" y1="82" x2="122" y2="82" stroke="#475569"/>
+    <line x1="54" y1="40" x2="54" y2="60" stroke="#475569"/><line x1="88" y1="40" x2="88" y2="60" stroke="#475569"/>
+    <line x1="54" y1="82" x2="54" y2="102" stroke="#475569"/><line x1="88" y1="82" x2="88" y2="102" stroke="#475569"/>
+    <text x="37" y="54" text-anchor="middle">FAZ</text><text x="71" y="54" text-anchor="middle">Dauer</text><text x="105" y="54" text-anchor="middle">FEZ</text>
+    <text x="71" y="75" text-anchor="middle">Nr. Vorgang</text>
+    <text x="37" y="96" text-anchor="middle">SAZ</text><text x="71" y="96" text-anchor="middle">GP | FP</text><text x="105" y="96" text-anchor="middle">SEZ</text>
+  </g>
+  <!-- Knoten: x, y, Werte -->
+  <g font-size="12" fill="#0f172a" text-anchor="middle">
+    <!-- A -->
+    <g transform="translate(20 160)"><rect width="102" height="66" fill="#fff1f2" stroke="#be123c" stroke-width="2"/><line x1="0" y1="22" x2="102" y2="22" stroke="#be123c"/><line x1="0" y1="44" x2="102" y2="44" stroke="#be123c"/><line x1="34" y1="0" x2="34" y2="22" stroke="#be123c"/><line x1="68" y1="0" x2="68" y2="22" stroke="#be123c"/><line x1="34" y1="44" x2="34" y2="66" stroke="#be123c"/><line x1="68" y1="44" x2="68" y2="66" stroke="#be123c"/>
+      <text x="17" y="16">0</text><text x="51" y="16">3</text><text x="85" y="16">3</text><text x="51" y="38" font-weight="700">A Analyse</text><text x="17" y="60">0</text><text x="51" y="60">0 | 0</text><text x="85" y="60">3</text></g>
+    <!-- B -->
+    <g transform="translate(180 80)"><rect width="102" height="66" fill="#fff1f2" stroke="#be123c" stroke-width="2"/><line x1="0" y1="22" x2="102" y2="22" stroke="#be123c"/><line x1="0" y1="44" x2="102" y2="44" stroke="#be123c"/><line x1="34" y1="0" x2="34" y2="22" stroke="#be123c"/><line x1="68" y1="0" x2="68" y2="22" stroke="#be123c"/><line x1="34" y1="44" x2="34" y2="66" stroke="#be123c"/><line x1="68" y1="44" x2="68" y2="66" stroke="#be123c"/>
+      <text x="17" y="16">3</text><text x="51" y="16">4</text><text x="85" y="16">7</text><text x="51" y="38" font-weight="700">B Entwurf</text><text x="17" y="60">3</text><text x="51" y="60">0 | 0</text><text x="85" y="60">7</text></g>
+    <!-- C -->
+    <g transform="translate(180 240)"><rect width="102" height="66" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/><line x1="0" y1="22" x2="102" y2="22" stroke="#475569"/><line x1="0" y1="44" x2="102" y2="44" stroke="#475569"/><line x1="34" y1="0" x2="34" y2="22" stroke="#475569"/><line x1="68" y1="0" x2="68" y2="22" stroke="#475569"/><line x1="34" y1="44" x2="34" y2="66" stroke="#475569"/><line x1="68" y1="44" x2="68" y2="66" stroke="#475569"/>
+      <text x="17" y="16">3</text><text x="51" y="16">6</text><text x="85" y="16">9</text><text x="51" y="38" font-weight="700">C Hardware</text><text x="17" y="60">4</text><text x="51" y="60">1 | 0</text><text x="85" y="60">10</text></g>
+    <!-- D -->
+    <g transform="translate(350 80)"><rect width="102" height="66" fill="#fff1f2" stroke="#be123c" stroke-width="2"/><line x1="0" y1="22" x2="102" y2="22" stroke="#be123c"/><line x1="0" y1="44" x2="102" y2="44" stroke="#be123c"/><line x1="34" y1="0" x2="34" y2="22" stroke="#be123c"/><line x1="68" y1="0" x2="68" y2="22" stroke="#be123c"/><line x1="34" y1="44" x2="34" y2="66" stroke="#be123c"/><line x1="68" y1="44" x2="68" y2="66" stroke="#be123c"/>
+      <text x="17" y="16">7</text><text x="51" y="16">5</text><text x="85" y="16">12</text><text x="51" y="38" font-weight="700">D Implement.</text><text x="17" y="60">7</text><text x="51" y="60">0 | 0</text><text x="85" y="60">12</text></g>
+    <!-- E -->
+    <g transform="translate(350 240)"><rect width="102" height="66" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/><line x1="0" y1="22" x2="102" y2="22" stroke="#475569"/><line x1="0" y1="44" x2="102" y2="44" stroke="#475569"/><line x1="34" y1="0" x2="34" y2="22" stroke="#475569"/><line x1="68" y1="0" x2="68" y2="22" stroke="#475569"/><line x1="34" y1="44" x2="34" y2="66" stroke="#475569"/><line x1="68" y1="44" x2="68" y2="66" stroke="#475569"/>
+      <text x="17" y="16">9</text><text x="51" y="16">2</text><text x="85" y="16">11</text><text x="51" y="38" font-weight="700">E Installation</text><text x="17" y="60">10</text><text x="51" y="60">1 | 1</text><text x="85" y="60">12</text></g>
+    <!-- F -->
+    <g transform="translate(540 160)"><rect width="102" height="66" fill="#fff1f2" stroke="#be123c" stroke-width="2"/><line x1="0" y1="22" x2="102" y2="22" stroke="#be123c"/><line x1="0" y1="44" x2="102" y2="44" stroke="#be123c"/><line x1="34" y1="0" x2="34" y2="22" stroke="#be123c"/><line x1="68" y1="0" x2="68" y2="22" stroke="#be123c"/><line x1="34" y1="44" x2="34" y2="66" stroke="#be123c"/><line x1="68" y1="44" x2="68" y2="66" stroke="#be123c"/>
+      <text x="17" y="16">12</text><text x="51" y="16">3</text><text x="85" y="16">15</text><text x="51" y="38" font-weight="700">F Test</text><text x="17" y="60">12</text><text x="51" y="60">0 | 0</text><text x="85" y="60">15</text></g>
+  </g>
+  <g stroke-width="2" fill="none">
+    <path d="M122 180 L178 120" stroke="#be123c" marker-end="url(#r)"/>
+    <path d="M122 210 L178 268" stroke="#0f172a" marker-end="url(#a)"/>
+    <path d="M282 113 H348" stroke="#be123c" marker-end="url(#r)"/>
+    <path d="M282 273 H348" stroke="#0f172a" marker-end="url(#a)"/>
+    <path d="M452 120 L538 180" stroke="#be123c" marker-end="url(#r)"/>
+    <path d="M452 268 L538 210" stroke="#0f172a" marker-end="url(#a)"/>
+  </g>
+  <g font-size="12">
+    <text x="540" y="70" fill="#be123c" font-weight="700">Kritischer Pfad</text>
+    <text x="540" y="86" fill="#be123c">A → B → D → F</text>
+    <text x="540" y="102" fill="#0f172a">Dauer: 15 Tage</text>
+  </g>
+</svg>

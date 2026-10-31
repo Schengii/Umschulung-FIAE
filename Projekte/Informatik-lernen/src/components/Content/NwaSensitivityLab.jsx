@@ -53,7 +53,7 @@ export default function NwaSensitivityLab() {
               </span>
               <span className="text-xs text-slate-400">AP2 Dokumentation & Sensitivität</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               IHK Nutzwertanalyse (NWA) Sensitivitäts- & Monte-Carlo Stresstest
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -80,7 +80,7 @@ export default function NwaSensitivityLab() {
         <div className="lg:col-span-6 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-base font-semibold text-white flex items-center gap-2">
+              <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
                 <Layers size={18} className="text-amber-400" />
                 IHK Bewertungskriterien & Gewichtung
               </h2>
@@ -123,7 +123,7 @@ export default function NwaSensitivityLab() {
                 <select
                   value={jitter}
                   onChange={(e) => setJitter(Number(e.target.value))}
-                  className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-white"
+                  className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-slate-50"
                 >
                   <option value={10}>&plusmn;10% Unsicherheit</option>
                   <option value={20}>&plusmn;20% Unsicherheit (Empfohlen)</option>
@@ -133,7 +133,7 @@ export default function NwaSensitivityLab() {
 
               <button
                 onClick={handleRunStressTest}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 transition shadow"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-black transition shadow"
               >
                 <Shuffle size={14} /> 500x Monte-Carlo Stresstest
               </button>
@@ -156,7 +156,7 @@ export default function NwaSensitivityLab() {
                   key={res.id}
                   className={`p-3 rounded-xl border flex justify-between items-center ${
                     idx === 0 && !res.koFailed
-                      ? 'bg-amber-950/20 border-amber-500/50 text-white'
+                      ? 'bg-amber-950/20 border-amber-500/50 text-slate-50'
                       : res.koFailed
                         ? 'bg-rose-950/20 border-rose-800 text-slate-400'
                         : 'bg-slate-950/70 border-slate-800 text-slate-300'

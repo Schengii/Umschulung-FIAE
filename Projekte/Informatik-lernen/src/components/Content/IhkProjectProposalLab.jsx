@@ -218,7 +218,7 @@ export default function IhkProjectProposalLab({ onRewardXP }) {
       </div>
 
       {/* Two Column Grid: Phases & Checklist */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Phase Breakdown */}
         <div
           className="glass-panel"

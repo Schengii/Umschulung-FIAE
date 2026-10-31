@@ -133,7 +133,7 @@ export default function P2pQuizDuellLab() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-950 via-red-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-amber-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-amber-950 via-red-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-amber-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -160,13 +160,13 @@ export default function P2pQuizDuellLab() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Gegner & Bot Match */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Bot className="w-5 h-5 text-amber-400" />
               Schnelles Duell starten
             </h2>
 
             <div className="space-y-3">
-              <label className="text-xs text-slate-300 block">Wähle die Duell-Schwierigkeit:</label>
+              <span className="text-xs text-slate-300 block">Wähle die Duell-Schwierigkeit:</span>
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: 'bot_easy', label: 'Junior Bot', color: 'border-emerald-500' },
@@ -199,7 +199,7 @@ export default function P2pQuizDuellLab() {
 
           {/* WebRTC LAN / Room Code */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Wifi className="w-5 h-5 text-cyan-400" />
               LAN &amp; Room-Code Duell
             </h2>
@@ -211,15 +211,15 @@ export default function P2pQuizDuellLab() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">Raum-Code von Kollegen beitreten:</label>
+                <label htmlFor="p2p-quiz-duell-lab-1" className="text-xs text-slate-300 block mb-1">Raum-Code von Kollegen beitreten:</label>
                 <div className="flex gap-2">
-                  <input
+                  <input id="p2p-quiz-duell-lab-1"
                     type="text"
                     value={joinCodeInput}
                     onChange={(e) => setJoinCodeInput(e.target.value.toUpperCase())}
                     placeholder="Z.B. X7K9AB"
                     maxLength={6}
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white font-mono text-sm text-center"
+                    className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-slate-50 font-mono text-sm text-center"
                   />
                   <button
                     onClick={handleStartMatch}
@@ -244,7 +244,7 @@ export default function P2pQuizDuellLab() {
               <div className="flex items-center justify-center gap-2 text-cyan-400 font-bold text-sm">
                 <User className="w-4 h-4" /> Du (Player 1)
               </div>
-              <div className="text-3xl font-bold font-mono text-white">{playerScore}</div>
+              <div className="text-3xl font-bold font-mono text-slate-50">{playerScore}</div>
             </div>
 
             {/* Timer & Round */}
@@ -262,7 +262,7 @@ export default function P2pQuizDuellLab() {
               <div className="flex items-center justify-center gap-2 text-rose-400 font-bold text-sm">
                 <Bot className="w-4 h-4" /> Gegner
               </div>
-              <div className="text-3xl font-bold font-mono text-white">{opponentScore}</div>
+              <div className="text-3xl font-bold font-mono text-slate-50">{opponentScore}</div>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ export default function P2pQuizDuellLab() {
               <span>100 Basispunkte + bis zu 50 Speed-Bonus</span>
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold text-white leading-relaxed">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-50 leading-relaxed">
               {currentQ.question}
             </h2>
 
@@ -334,7 +334,7 @@ export default function P2pQuizDuellLab() {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-50">
               {playerScore > opponentScore
                 ? '🏆 GLORREICHER SIEG!'
                 : playerScore === opponentScore

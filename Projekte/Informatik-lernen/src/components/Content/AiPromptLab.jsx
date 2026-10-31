@@ -56,7 +56,7 @@ export default function AiPromptLab() {
               fontSize: '0.88rem',
               fontWeight: 700,
               background: activeStep === idx ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-              color: activeStep === idx ? '#ffffff' : 'var(--text-main)',
+              color: activeStep === idx ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: activeStep === idx ? 'none' : '1px solid var(--border-color)',
               cursor: 'pointer'
             }}
@@ -77,7 +77,7 @@ export default function AiPromptLab() {
           <strong style={{ color: 'var(--accent-rose)', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.95rem', marginBottom: '8px' }}>
             <AlertTriangle size={18} /> Ungünstiger / Schlechter Prompt:
           </strong>
-          <code style={{ background: '#0f172a', color: '#f8fafc', padding: '12px', borderRadius: '6px', display: 'block', fontSize: '0.9rem' }}>
+          <code style={{ background: 'var(--bg-card)', color: 'var(--text-main)', padding: '12px', borderRadius: '6px', display: 'block', fontSize: '0.9rem' }}>
             "{current.badPrompt}"
           </code>
         </div>
@@ -87,7 +87,7 @@ export default function AiPromptLab() {
           <strong style={{ color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.95rem', marginBottom: '8px' }}>
             <CheckCircle2 size={18} /> Professioneller / Perfekter Prompt:
           </strong>
-          <code style={{ background: '#0f172a', color: '#f8fafc', padding: '12px', borderRadius: '6px', display: 'block', fontSize: '0.9rem' }}>
+          <code style={{ background: 'var(--bg-card)', color: 'var(--text-main)', padding: '12px', borderRadius: '6px', display: 'block', fontSize: '0.9rem' }}>
             "{current.goodPrompt}"
           </code>
         </div>

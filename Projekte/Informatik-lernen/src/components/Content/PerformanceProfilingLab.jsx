@@ -30,7 +30,7 @@ export default function PerformanceProfilingLab() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === t.id ? 'var(--accent-rose)' : 'var(--bg-card)',
-              color: selectedId === t.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === t.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === t.id ? '2px solid var(--accent-rose)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

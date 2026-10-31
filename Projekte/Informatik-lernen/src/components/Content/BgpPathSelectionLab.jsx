@@ -44,9 +44,9 @@ export default function BgpPathSelectionLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
+        background: 'var(--gradient-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -78,7 +78,7 @@ export default function BgpPathSelectionLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -92,7 +92,7 @@ export default function BgpPathSelectionLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(59, 130, 246, 0.15)', 
-              color: '#3b82f6', 
+              color: 'var(--accent-cyan)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -118,24 +118,24 @@ export default function BgpPathSelectionLab() {
         gap: '16px'
       }}>
         <div>
-          <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--accent-emerald)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             ★ Aktiver BGP Best-Path (Gewinner-Route)
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ffffff', marginTop: '2px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '2px' }}>
             {evaluation.bestRoute?.peerName} ({evaluation.bestRoute?.prefix})
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Entschieden durch Kriterium: <strong style={{ color: '#10b981' }}>{evaluation.winningCriteria}</strong>
+            Entschieden durch Kriterium: <strong style={{ color: 'var(--accent-emerald)' }}>{evaluation.winningCriteria}</strong>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '8px', fontSize: '0.85rem' }}>
-          <span style={{ background: 'rgba(0,0,0,0.3)', padding: '6px 12px', borderRadius: '8px' }}>
+          <span style={{ background: 'var(--bg-tertiary)', padding: '6px 12px', borderRadius: '8px' }}>
             LocalPref: <strong>{evaluation.bestRoute?.localPref}</strong>
           </span>
-          <span style={{ background: 'rgba(0,0,0,0.3)', padding: '6px 12px', borderRadius: '8px' }}>
+          <span style={{ background: 'var(--bg-tertiary)', padding: '6px 12px', borderRadius: '8px' }}>
             AS-Path: <strong>{evaluation.bestRoute?.asPath.join(' -> ')}</strong>
           </span>
-          <span style={{ background: 'rgba(0,0,0,0.3)', padding: '6px 12px', borderRadius: '8px' }}>
+          <span style={{ background: 'var(--bg-tertiary)', padding: '6px 12px', borderRadius: '8px' }}>
             MED: <strong>{evaluation.bestRoute?.med}</strong>
           </span>
         </div>
@@ -146,77 +146,77 @@ export default function BgpPathSelectionLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid var(--border-color)',
         marginBottom: '24px'
       }}>
         <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Network size={18} color="#3b82f6" /> BGP Peer Route Candidates (Attribute modifizieren)
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
           {candidates.map((c, i) => {
             const isWinner = evaluation.bestRoute?.peerName === c.peerName;
             return (
               <div 
                 key={c.peerName}
                 style={{
-                  background: isWinner ? 'rgba(16, 185, 129, 0.08)' : 'rgba(0, 0, 0, 0.25)',
+                  background: isWinner ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-tertiary)',
                   border: isWinner ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.05)',
                   borderRadius: '12px',
                   padding: '16px'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <div style={{ fontWeight: 700, fontSize: '1rem', color: isWinner ? '#10b981' : '#ffffff' }}>
+                  <div style={{ fontWeight: 700, fontSize: '1rem', color: isWinner ? 'var(--accent-emerald)' : 'var(--text-main)' }}>
                     {c.peerName} {isWinner && '★'}
                   </div>
-                  <span style={{ fontSize: '0.75rem', background: 'rgba(59, 130, 246, 0.2)', color: '#3b82f6', padding: '2px 8px', borderRadius: '12px' }}>
+                  <span style={{ fontSize: '0.75rem', background: 'rgba(59, 130, 246, 0.2)', color: 'var(--accent-cyan)', padding: '2px 8px', borderRadius: '12px' }}>
                     {c.peerType}
                   </span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.85rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ color: 'var(--text-muted)' }}>Local Preference:</label>
-                    <input 
+                    <label htmlFor={`bgp-path-selection-lab-1-${i}`} style={{ color: 'var(--text-muted)' }}>Local Preference:</label>
+                    <input id={`bgp-path-selection-lab-1-${i}`} 
                       type="number"
                       value={c.localPref}
                       onChange={(e) => updateCandidate(i, 'localPref', parseInt(e.target.value, 10) || 0)}
-                      style={{ width: '80px', padding: '4px 8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#ffffff', textAlign: 'center' }}
+                      style={{ width: '80px', padding: '4px 8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '4px', color: 'var(--text-main)', textAlign: 'center' }}
                     />
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ color: 'var(--text-muted)' }}>Weight (Cisco Local):</label>
-                    <input 
+                    <label htmlFor={`bgp-path-selection-lab-2-${i}`} style={{ color: 'var(--text-muted)' }}>Weight (Cisco Local):</label>
+                    <input id={`bgp-path-selection-lab-2-${i}`} 
                       type="number"
                       value={c.weight}
                       onChange={(e) => updateCandidate(i, 'weight', parseInt(e.target.value, 10) || 0)}
-                      style={{ width: '80px', padding: '4px 8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#ffffff', textAlign: 'center' }}
+                      style={{ width: '80px', padding: '4px 8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '4px', color: 'var(--text-main)', textAlign: 'center' }}
                     />
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ color: 'var(--text-muted)' }}>MED (Metric):</label>
-                    <input 
+                    <label htmlFor={`bgp-path-selection-lab-3-${i}`} style={{ color: 'var(--text-muted)' }}>MED (Metric):</label>
+                    <input id={`bgp-path-selection-lab-3-${i}`} 
                       type="number"
                       value={c.med}
                       onChange={(e) => updateCandidate(i, 'med', parseInt(e.target.value, 10) || 0)}
-                      style={{ width: '80px', padding: '4px 8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#ffffff', textAlign: 'center' }}
+                      style={{ width: '80px', padding: '4px 8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '4px', color: 'var(--text-main)', textAlign: 'center' }}
                     />
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ color: 'var(--text-muted)' }}>AS-Path Länge:</label>
+                    <span style={{ color: 'var(--text-muted)' }}>AS-Path Länge:</span>
                     <span style={{ fontWeight: 600 }}>{c.asPath.length} Hops ({c.asPath.join(', ')})</span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ color: 'var(--text-muted)' }}>Origin Code:</label>
-                    <select
+                    <label htmlFor={`bgp-path-selection-lab-4-${i}`} style={{ color: 'var(--text-muted)' }}>Origin Code:</label>
+                    <select id={`bgp-path-selection-lab-4-${i}`}
                       value={c.origin}
                       onChange={(e) => updateCandidate(i, 'origin', e.target.value)}
-                      style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#ffffff', padding: '4px 8px' }}
+                      style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '4px', color: 'var(--text-main)', padding: '4px 8px' }}
                     >
                       <option value="IGP">IGP (Priorität 1)</option>
                       <option value="EGP">EGP (Priorität 2)</option>
@@ -235,7 +235,7 @@ export default function BgpPathSelectionLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)'
+        border: '1px solid var(--border-color)'
       }}>
         <h3 style={{ margin: '0 0 14px 0', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Layers size={18} color="#3b82f6" /> RFC 4271 Entscheidungsprotokoll (Eliminierungs-Schritte)
@@ -251,14 +251,14 @@ export default function BgpPathSelectionLab() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'rgba(0, 0, 0, 0.25)',
+                background: 'var(--bg-tertiary)',
                 padding: '10px 14px',
                 borderRadius: '8px',
                 fontSize: '0.85rem'
               }}>
-                <span style={{ fontWeight: 600, color: '#3b82f6' }}>Stufe {step.step}: {step.name}</span>
+                <span style={{ fontWeight: 600, color: 'var(--accent-cyan)' }}>Stufe {step.step}: {step.name}</span>
                 <span style={{ color: 'var(--text-muted)' }}>{step.description}</span>
-                <span style={{ color: '#ef4444', fontWeight: 600 }}>Eliminiert: {step.eliminated.join(', ')}</span>
+                <span style={{ color: 'var(--accent-rose)', fontWeight: 600 }}>Eliminiert: {step.eliminated.join(', ')}</span>
               </div>
             ))}
           </div>

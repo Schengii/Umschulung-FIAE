@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">UML-Klassendiagramm: abstrakte Klasse Person mit Unterklassen Kunde und Mitarbeiter (Vererbung), Kunde hat 0 bis viele Bestellungen (Assoziation), Bestellung besteht aus Positionen (Komposition)</title>
+  <rect width="720" height="400" fill="#ffffff"/>
+  <defs>
+    <marker id="gen" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#ffffff" stroke="#0f172a" stroke-width="1.2"/></marker>
+    <marker id="comp" viewBox="0 0 16 10" refX="1" refY="5" markerWidth="16" markerHeight="10" orient="auto"><path d="M0 5 L8 0 L16 5 L8 10 z" fill="#0f172a"/></marker>
+  </defs>
+  <g font-size="13" fill="#0f172a">
+    <!-- Person -->
+    <rect x="250" y="16" width="220" height="104" fill="#eef2ff" stroke="#4338ca" stroke-width="1.5"/>
+    <text x="360" y="36" text-anchor="middle" font-style="italic" font-weight="700">Person</text>
+    <text x="360" y="50" text-anchor="middle" font-size="11" fill="#475569">{abstract}</text>
+    <line x1="250" y1="56" x2="470" y2="56" stroke="#4338ca"/>
+    <text x="260" y="74" font-family="Fira Code, monospace" font-size="12"># name: String</text>
+    <text x="260" y="90" font-family="Fira Code, monospace" font-size="12">- geburtsdatum: Date</text>
+    <line x1="250" y1="96" x2="470" y2="96" stroke="#4338ca"/>
+    <text x="260" y="113" font-family="Fira Code, monospace" font-size="12" font-style="italic">+ anrede(): String</text>
+    <!-- Kunde -->
+    <rect x="40" y="170" width="230" height="96" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+    <text x="155" y="190" text-anchor="middle" font-weight="700">Kunde</text>
+    <line x1="40" y1="198" x2="270" y2="198" stroke="#0f766e"/>
+    <text x="50" y="216" font-family="Fira Code, monospace" font-size="12">- kundenNr: int</text>
+    <line x1="40" y1="224" x2="270" y2="224" stroke="#0f766e"/>
+    <text x="50" y="242" font-family="Fira Code, monospace" font-size="12">+ anrede(): String</text>
+    <text x="50" y="258" font-family="Fira Code, monospace" font-size="12">+ bestellen(): Bestellung</text>
+    <!-- Mitarbeiter -->
+    <rect x="450" y="170" width="230" height="96" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+    <text x="565" y="190" text-anchor="middle" font-weight="700">Mitarbeiter</text>
+    <line x1="450" y1="198" x2="680" y2="198" stroke="#0f766e"/>
+    <text x="460" y="216" font-family="Fira Code, monospace" font-size="12">- personalNr: int</text>
+    <text x="460" y="232" font-family="Fira Code, monospace" font-size="12">- gehalt: double</text>
+    <line x1="450" y1="240" x2="680" y2="240" stroke="#0f766e"/>
+    <text x="460" y="258" font-family="Fira Code, monospace" font-size="12">+ anrede(): String</text>
+    <!-- Bestellung -->
+    <rect x="40" y="320" width="230" height="64" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+    <text x="155" y="340" text-anchor="middle" font-weight="700">Bestellung</text>
+    <line x1="40" y1="348" x2="270" y2="348" stroke="#b45309"/>
+    <text x="50" y="368" font-family="Fira Code, monospace" font-size="12">+ summe(): double</text>
+    <!-- Position -->
+    <rect x="450" y="320" width="230" height="64" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+    <text x="565" y="340" text-anchor="middle" font-weight="700">Position</text>
+    <line x1="450" y1="348" x2="680" y2="348" stroke="#b45309"/>
+    <text x="460" y="368" font-family="Fira Code, monospace" font-size="12">- menge: int</text>
+  </g>
+  <g stroke="#0f172a" stroke-width="1.5" fill="none">
+    <path d="M155 170 V145 H360 V122" marker-end="url(#gen)"/>
+    <path d="M565 170 V145 H360"/>
+    <path d="M155 266 V320"/>
+    <path d="M270 352 H450" marker-start="url(#comp)"/>
+  </g>
+  <g font-size="12" fill="#0f172a">
+    <text x="372" y="140">Vererbung</text>
+    <text x="162" y="284">1</text>
+    <text x="162" y="314">0..*</text>
+    <text x="196" y="298" fill="#475569">Assoziation</text>
+    <text x="300" y="344" fill="#475569">Komposition</text>
+    <text x="420" y="344">1..*</text>
+  </g>
+</svg>

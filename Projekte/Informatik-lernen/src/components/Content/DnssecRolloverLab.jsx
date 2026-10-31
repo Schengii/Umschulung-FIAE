@@ -85,9 +85,9 @@ export default function DnssecRolloverLab({ onRewardXP }) {
           </h2>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Rollover-Methode:
-            </label>
+            </span>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
                 onClick={() => handleMethodChange('ZSK_PRE_PUBLISH')}

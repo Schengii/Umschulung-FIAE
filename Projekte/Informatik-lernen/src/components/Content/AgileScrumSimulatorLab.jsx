@@ -51,7 +51,7 @@ export default function AgileScrumSimulatorLab() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-950 via-cyan-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-teal-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-teal-950 via-cyan-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-teal-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -94,7 +94,7 @@ export default function AgileScrumSimulatorLab() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-md">
           <span className="text-xs text-slate-400 font-semibold block mb-1">Gesamte Story Points</span>
-          <div className="text-2xl font-bold text-white">{metrics.totalPoints} SP</div>
+          <div className="text-2xl font-bold text-slate-50">{metrics.totalPoints} SP</div>
         </div>
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-md">
           <span className="text-xs text-slate-400 font-semibold block mb-1">Sprintlänge: {sprintDays} Tage</span>
@@ -123,7 +123,7 @@ export default function AgileScrumSimulatorLab() {
 
       {/* Interactive Kanban Board */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <h2 className="text-base font-bold text-white flex items-center gap-2">
+        <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
           <Layers className="w-4 h-4 text-teal-400" />
           Interaktives Sprint Kanban Board
         </h2>
@@ -195,7 +195,7 @@ export default function AgileScrumSimulatorLab() {
 
       {/* Burndown Chart */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <h2 className="text-base font-bold text-white flex items-center gap-2">
+        <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
           <TrendingDown className="w-4 h-4 text-rose-400" />
           Sprint Burndown Chart (Ideal vs. Tatsächlich)
         </h2>
@@ -206,8 +206,8 @@ export default function AgileScrumSimulatorLab() {
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="day" stroke="#94a3b8" fontSize={11} />
               <YAxis stroke="#94a3b8" fontSize={11} unit=" SP" />
-              <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }} />
-              <Legend wrapperStyle={{ fontSize: '12px' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: '#334155', fontSize: '12px' }} />
+              <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(value) => <span style={{ color: 'var(--text-muted)' }}>{value}</span>} />
               <Line type="monotone" dataKey="idealRemaining" name="Ideale Linie (SP)" stroke="#94a3b8" strokeDasharray="5 5" strokeWidth={2} />
               <Line type="monotone" dataKey="actualRemaining" name="Tatsächlicher Verlauf (SP)" stroke="#14b8a6" strokeWidth={3} dot={{ r: 4 }} />
             </LineChart>

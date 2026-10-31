@@ -31,7 +31,7 @@ export default function WebComponentsHub() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === w.id ? 'var(--accent-teal)' : 'var(--bg-card)',
-              color: selectedId === w.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === w.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === w.id ? '2px solid var(--accent-teal)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

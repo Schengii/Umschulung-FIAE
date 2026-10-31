@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">OSI-Modell mit sieben Schichten neben dem TCP/IP-Modell mit vier Schichten, dazu Dateneinheiten, Protokolle und Geräte je Schicht</title>
+  <rect width="720" height="420" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">OSI-Modell und TCP/IP-Modell</text>
+  <g font-size="12" fill="#475569" font-weight="700">
+    <text x="20" y="52">Nr.</text><text x="50" y="52">OSI-Schicht</text><text x="250" y="52">TCP/IP</text><text x="360" y="52">PDU</text><text x="440" y="52">Protokolle</text><text x="610" y="52">Geräte</text>
+  </g>
+  <g font-size="13">
+    <!-- Anwendungsschichten 7-5 -->
+    <rect x="44" y="62" width="196" height="40" rx="6" fill="#e0e7ff" stroke="#4338ca"/>
+    <rect x="44" y="106" width="196" height="40" rx="6" fill="#e0e7ff" stroke="#4338ca"/>
+    <rect x="44" y="150" width="196" height="40" rx="6" fill="#e0e7ff" stroke="#4338ca"/>
+    <rect x="246" y="62" width="104" height="128" rx="6" fill="#c7d2fe" stroke="#4338ca"/>
+    <text x="298" y="130" text-anchor="middle" font-weight="700" fill="#312e81">Anwendung</text>
+    <!-- Transport -->
+    <rect x="44" y="194" width="196" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="246" y="194" width="104" height="40" rx="6" fill="#99f6e4" stroke="#0f766e"/>
+    <text x="298" y="219" text-anchor="middle" font-weight="700" fill="#134e4a">Transport</text>
+    <!-- Vermittlung -->
+    <rect x="44" y="238" width="196" height="40" rx="6" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="246" y="238" width="104" height="40" rx="6" fill="#fde68a" stroke="#b45309"/>
+    <text x="298" y="263" text-anchor="middle" font-weight="700" fill="#78350f">Internet</text>
+    <!-- 2-1 -->
+    <rect x="44" y="282" width="196" height="40" rx="6" fill="#fce7f3" stroke="#be123c"/>
+    <rect x="44" y="326" width="196" height="40" rx="6" fill="#fce7f3" stroke="#be123c"/>
+    <rect x="246" y="282" width="104" height="84" rx="6" fill="#fbcfe8" stroke="#be123c"/>
+    <text x="298" y="321" text-anchor="middle" font-weight="700" fill="#831843">Netzzugang</text>
+    <g fill="#0f172a">
+      <text x="24" y="87">7</text><text x="56" y="87" font-weight="700">Anwendung</text>
+      <text x="24" y="131">6</text><text x="56" y="131" font-weight="700">Darstellung</text>
+      <text x="24" y="175">5</text><text x="56" y="175" font-weight="700">Sitzung</text>
+      <text x="24" y="219">4</text><text x="56" y="219" font-weight="700">Transport</text>
+      <text x="24" y="263">3</text><text x="56" y="263" font-weight="700">Vermittlung</text>
+      <text x="24" y="307">2</text><text x="56" y="307" font-weight="700">Sicherung</text>
+      <text x="24" y="351">1</text><text x="56" y="351" font-weight="700">Bitübertragung</text>
+    </g>
+    <g fill="#0f172a">
+      <text x="360" y="131">Daten</text>
+      <text x="360" y="219">Segment</text>
+      <text x="360" y="263">Paket</text>
+      <text x="360" y="307">Frame</text>
+      <text x="360" y="351">Bits</text>
+      <text x="440" y="87">HTTP(S), DNS, SMTP, SSH</text>
+      <text x="440" y="131">TLS, MIME, JPEG, UTF-8</text>
+      <text x="440" y="175">RPC, NetBIOS</text>
+      <text x="440" y="219">TCP, UDP, QUIC</text>
+      <text x="440" y="263">IPv4, IPv6, ICMP</text>
+      <text x="440" y="307">Ethernet, WLAN, ARP</text>
+      <text x="440" y="351">Kabel, Funk, Glasfaser</text>
+      <text x="610" y="87">Proxy, Gateway</text>
+      <text x="610" y="219">Firewall (L4)</text>
+      <text x="610" y="263">Router, L3-Switch</text>
+      <text x="610" y="307">Switch, Bridge, AP</text>
+      <text x="610" y="351">Hub, Repeater</text>
+    </g>
+  </g>
+  <text x="360" y="400" text-anchor="middle" font-size="12" fill="#475569">Merksatz von unten (1 → 7): „Bitte Sag Vati Tschüss, Sonst Droht Ärger“</text>
+</svg>

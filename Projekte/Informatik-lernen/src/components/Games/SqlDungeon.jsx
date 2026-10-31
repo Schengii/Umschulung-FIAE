@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SQL_DUNGEON_LEVELS, MOCK_DATABASE_TABLES } from '../../data/gamesData';
 import { Database, Play, CheckCircle2, AlertCircle, HelpCircle, Table, RefreshCw } from 'lucide-react';
-import alasql from 'alasql';
+import { runSql } from '../../utils/sqlWorkerClient';
 
 export default function SqlDungeon({ onCompleteGame }) {
   const [levelIdx, setLevelIdx] = useState(0);
@@ -14,24 +14,26 @@ export default function SqlDungeon({ onCompleteGame }) {
   const [showHint, setShowHint] = useState(false);
   const [completedLevels, setCompletedLevels] = useState([]);
 
-  // Real In-Browser AlaSQL Engine Execution
-  const executeQuery = () => {
+  // Echte AlaSQL-Engine im Web Worker (CSP-konform, siehe sqlWorkerClient.js)
+  const executeQuery = async () => {
     setErrorMessage(null);
     setIsSuccess(false);
 
     try {
-      // Setup temporary tables in memory
-      alasql('CREATE TABLE IF NOT EXISTS mitarbeiter (id INT, name STRING, rolle STRING, gehalt INT, abteilung_id INT)');
-      alasql('CREATE TABLE IF NOT EXISTS abteilungen (id INT, abteilungs_name STRING)');
-      
-      alasql('DELETE FROM mitarbeiter');
-      alasql('DELETE FROM abteilungen');
-
-      alasql.tables.mitarbeiter.data = [...MOCK_DATABASE_TABLES.mitarbeiter];
-      alasql.tables.abteilungen.data = [...MOCK_DATABASE_TABLES.abteilungen];
-
-      // Execute user query with real SQL Parser
-      const res = alasql(userQuery);
+      // Tabellen bei jedem Lauf frisch befüllen, dann die Nutzerabfrage ausführen
+      const results = await runSql([
+        { sql: 'USE alasql' },
+        { sql: 'CREATE TABLE IF NOT EXISTS mitarbeiter (id INT, name STRING, rolle STRING, gehalt INT, abteilung_id INT)' },
+        { sql: 'CREATE TABLE IF NOT EXISTS abteilungen (id INT, abteilungs_name STRING)' },
+        { sql: 'DELETE FROM mitarbeiter' },
+        { sql: 'DELETE FROM abteilungen' },
+        { sql: 'INSERT INTO mitarbeiter SELECT * FROM ?', params: [MOCK_DATABASE_TABLES.mitarbeiter] },
+        { sql: 'INSERT INTO abteilungen SELECT * FROM ?', params: [MOCK_DATABASE_TABLES.abteilungen] },
+        { sql: userQuery }
+      ]);
+      const userResult = results[results.length - 1];
+      if (!userResult.ok) throw new Error(userResult.error);
+      const res = userResult.result;
       const rows = Array.isArray(res) ? res : [res];
 
       setQueryResult(rows);
@@ -80,7 +82,7 @@ export default function SqlDungeon({ onCompleteGame }) {
                 width: '36px',
                 height: '36px',
                 borderRadius: '8px',
-                background: levelIdx === idx ? 'var(--gradient-cyber)' : 'var(--bg-tertiary)',
+                background: levelIdx === idx ? 'var(--gradient-cta)' : 'var(--bg-tertiary)',
                 color: '#fff',
                 fontWeight: '700',
                 border: 'none',
@@ -93,7 +95,7 @@ export default function SqlDungeon({ onCompleteGame }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px' }}>
         
         {/* Left Column: Challenge & Editor */}
         <div>
@@ -138,8 +140,8 @@ export default function SqlDungeon({ onCompleteGame }) {
                 rows={4}
                 style={{
                   width: '100%',
-                  background: '#090d16',
-                  color: '#38bdf8',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--accent-cyan)',
                   border: 'none',
                   outline: 'none',
                   padding: '14px',
@@ -222,7 +224,7 @@ export default function SqlDungeon({ onCompleteGame }) {
               <h5 style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '8px' }}>
                 Schema der Tabelle "mitarbeiter":
               </h5>
-              <code style={{ fontSize: '0.78rem', color: '#94a3b8', background: 'var(--bg-secondary)', padding: '8px', borderRadius: '6px', display: 'block' }}>
+              <code style={{ fontSize: '0.78rem', color: 'var(--text-dim)', background: 'var(--bg-secondary)', padding: '8px', borderRadius: '6px', display: 'block' }}>
                 id (INT), name (VARCHAR), rolle (VARCHAR), gehalt (INT), abteilung_id (INT)
               </code>
             </div>

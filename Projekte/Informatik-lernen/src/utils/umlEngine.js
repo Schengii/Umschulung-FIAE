@@ -4,11 +4,6 @@
  * IHK Standard für Anwendungsentwicklung & Systemintegration (AP1 & AP2)
  */
 
-export const UML_DIAGRAM_TYPES = {
-  SEQUENCE: 'sequence',
-  ACTIVITY: 'activity'
-};
-
 export const DEFAULT_SEQUENCE_PARTICIPANTS = [
   { id: 'user', name: 'Benutzer / Client', type: 'actor' },
   { id: 'auth_service', name: 'Auth Gateway (OAuth)', type: 'service' },

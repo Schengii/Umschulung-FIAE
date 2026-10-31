@@ -1,10 +1,12 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { FLASHCARDS_DATA } from '../../data/flashcardsData';
 import { Layers, CheckCircle2, XCircle, X, Brain, Clock, Download } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateSM2 } from '../../utils/srsAlgorithm';
 import { exportToAnkiTsv, exportToCsv } from '../../utils/flashcardIoEngine';
 import { getTodayDateKey } from '../../utils/storage';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   const { userState, updateSrsCard } = useStore();
@@ -12,16 +14,8 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
 
   // M18: Due-Date Filter & Priorisierung
   // Fällige Karten (dueDate <= today oder noch nie gelernt) zuerst sortieren
@@ -96,6 +90,7 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
   };
 
   return (
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -111,9 +106,11 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={onClose}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby="flashcards-modal-title"
@@ -132,7 +129,6 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
           flexDirection: 'column',
           alignItems: 'center'
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
@@ -172,7 +168,7 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
         </div>
 
         {/* Flip Card Area */}
-        <div
+        <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setIsFlipped(!isFlipped))}
           onClick={() => setIsFlipped(!isFlipped)}
           style={{
             width: '100%',
@@ -197,7 +193,7 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
               {currentCard.category} • {currentCard.difficulty}
             </span>
             {isDue && (
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(239, 68, 68, 0.15)', color: 'var(--accent-rose)' }}>
                 Heute fällig
               </span>
             )}

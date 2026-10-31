@@ -53,7 +53,7 @@ export default function PostgresFlamegraphLab({ onRewardXP }) {
       </div>
 
       {/* Query Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Gesamte Ausführungszeit:</span>
           <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -63,14 +63,14 @@ export default function PostgresFlamegraphLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Shared Buffer Cache Hit Ratio:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {metrics.cacheHitRatioPercent}% Hits
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Disk I/O Reads:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: metrics.hasSeqScanBottleneck ? '#ef4444' : '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: metrics.hasSeqScanBottleneck ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginTop: '4px' }}>
             {metrics.totalSharedReadBlocks} Blocks (Disk)
           </div>
         </div>
@@ -84,21 +84,21 @@ export default function PostgresFlamegraphLab({ onRewardXP }) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {/* Level 1: Root Aggregate */}
-          <div style={{ width: '100%', background: '#6366f1', color: '#fff', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+          <div style={{ width: '100%', background: 'var(--accent-primary)', color: 'var(--text-on-accent)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 'bold' }}>
             Aggregate (142.5 ms | 100% Query Time)
           </div>
 
           {/* Level 2: Hash Join */}
-          <div style={{ width: '90%', background: '#ec4899', color: '#fff', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+          <div style={{ width: '90%', background: 'var(--accent-rose)', color: 'var(--text-on-accent)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 'bold' }}>
             Hash Join (128.2 ms | 90% Query Time)
           </div>
 
           {/* Level 3: Children */}
           <div style={{ display: 'flex', gap: '8px', width: '90%' }}>
-            <div style={{ width: '35%', background: '#10b981', color: '#fff', padding: '12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+            <div style={{ width: '35%', background: 'var(--accent-emerald)', color: 'var(--text-on-accent)', padding: '12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               Index Scan on orders (45.1 ms)
             </div>
-            <div style={{ width: '65%', background: '#ef4444', color: '#fff', padding: '12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+            <div style={{ width: '65%', background: 'var(--accent-rose)', color: 'var(--text-on-accent)', padding: '12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 'bold' }}>
               Seq Scan on customers (83.1 ms - Bottleneck!)
             </div>
           </div>

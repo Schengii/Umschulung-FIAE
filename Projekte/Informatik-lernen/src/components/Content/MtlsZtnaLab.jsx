@@ -58,7 +58,7 @@ export default function MtlsZtnaLab({ onRewardXP }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Service & Request Selektor */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -66,10 +66,10 @@ export default function MtlsZtnaLab({ onRewardXP }) {
           </h3>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="mtls-ztna-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Aufrufender Client-Microservice:
             </label>
-            <select
+            <select id="mtls-ztna-lab-1"
               className="input-select"
               value={selectedServiceId}
               onChange={(e) => setSelectedServiceId(e.target.value)}
@@ -82,10 +82,10 @@ export default function MtlsZtnaLab({ onRewardXP }) {
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="mtls-ztna-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Ziel-API Endpunkt:
             </label>
-            <select
+            <select id="mtls-ztna-lab-2"
               className="input-select"
               value={requestedEndpoint}
               onChange={(e) => setRequestedEndpoint(e.target.value)}
@@ -98,7 +98,7 @@ export default function MtlsZtnaLab({ onRewardXP }) {
             </select>
           </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
             <div style={{ color: 'var(--accent-teal)' }}># Client X.509 Identity:</div>
             <div>Common Name: <strong>{clientCert.commonName}</strong></div>
             <div>Serial: <code>{clientCert.serialNumber}</code></div>
@@ -163,7 +163,7 @@ export default function MtlsZtnaLab({ onRewardXP }) {
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <ShieldCheck size={18} color="var(--accent-teal)" /> IHK AP2 Kernwissen: Normales TLS vs. Mutual TLS (mTLS)
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
           <div>
             <strong style={{ color: 'var(--text-main)' }}>Klassisches One-Way TLS:</strong>
             <p style={{ margin: '4px 0 0' }}>Nur der Server weist seine Identität per X.509 Zertifikat nach (z. B. im Webbrowser). Der Client authentifiziert sich erst später auf Applikationsebene (Passwort / Token).</p>

@@ -185,7 +185,7 @@ export default function WisoCapitalValueLab({ onRewardXP }) {
           </div>
 
           {/* Key Metric Cards */}
-          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
             <div className="glass-panel" style={{ padding: '18px' }}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block' }}>Summe Barwerte (&Sigma; BW):</span>
               <div style={{ fontSize: '1.45rem', fontWeight: '800', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -283,10 +283,10 @@ export default function WisoCapitalValueLab({ onRewardXP }) {
             </h3>
 
             <div style={{ marginBottom: '18px' }}>
-              <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label htmlFor="wiso-capital-value-lab-1" style={{ display: 'block', fontSize: '0.82rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '6px' }}>
                 Projektbezeichnung (für IHK Dokumentation):
               </label>
-              <input
+              <input id="wiso-capital-value-lab-1"
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
@@ -294,7 +294,7 @@ export default function WisoCapitalValueLab({ onRewardXP }) {
               />
             </div>
 
-            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '20px' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
                   Anschaffungsauszahlung ($I_0$): <strong>{invest.toLocaleString('de-DE')} €</strong>
@@ -384,7 +384,7 @@ export default function WisoCapitalValueLab({ onRewardXP }) {
             📚 IHK Fachwissen: Dynamische vs. Statische Investitionsrechnung
           </h2>
 
-          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px' }}>
             <div style={{ background: 'var(--bg-tertiary)', padding: '18px', borderRadius: '10px' }}>
               <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginBottom: '8px' }}>
                 1. Warum dynamische Diskontierung?

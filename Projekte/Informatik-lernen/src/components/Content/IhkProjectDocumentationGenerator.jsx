@@ -84,7 +84,7 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
     <div className="lab-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 16px' }}>
       {/* Header */}
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(34, 197, 94, 0.15)', borderRadius: '20px', color: '#4ade80', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(34, 197, 94, 0.15)', borderRadius: '20px', color: 'var(--accent-emerald)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
           <FileText size={16} /> IHK Abschlussprüfung Teil 2 (AP2) Assistent (LF 12a / LF 12b)
         </div>
         <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -105,7 +105,7 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
             borderRadius: '10px',
             border: selectedRole === 'fiae' ? '2px solid #6366f1' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
             background: selectedRole === 'fiae' ? 'rgba(99, 102, 241, 0.15)' : 'var(--card-bg, #1e293b)',
-            color: '#fff',
+            color: 'var(--text-main)',
             fontWeight: 'bold',
             fontSize: '0.95rem',
             cursor: 'pointer',
@@ -122,7 +122,7 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
             borderRadius: '10px',
             border: selectedRole === 'fisi' ? '2px solid #22c55e' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
             background: selectedRole === 'fisi' ? 'rgba(34, 197, 94, 0.15)' : 'var(--card-bg, #1e293b)',
-            color: '#fff',
+            color: 'var(--text-main)',
             fontWeight: 'bold',
             fontSize: '0.95rem',
             cursor: 'pointer',
@@ -134,11 +134,11 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
       </div>
 
       {/* Project Title Input */}
-      <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px', marginBottom: '24px' }}>
-        <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '8px' }}>
+      <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px', marginBottom: '24px' }}>
+        <label htmlFor="ihk-project-documentation-generator-1" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '8px' }}>
           Projektbezeichnung (Thema der Projektarbeit):
         </label>
-        <input
+        <input id="ihk-project-documentation-generator-1"
           type="text"
           value={projectTitle}
           onChange={(e) => setProjectTitle(e.target.value)}
@@ -146,9 +146,9 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
             width: '100%',
             padding: '10px 14px',
             borderRadius: '8px',
-            background: '#0f172a',
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: '#fff',
+            background: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-main)',
             fontSize: '0.95rem',
             outline: 'none',
             boxSizing: 'border-box'
@@ -156,12 +156,12 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '24px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(380px, 100%), 1fr))', gap: '24px', marginBottom: '24px' }}>
         
         {/* Left: Phase Planning (Gantt Budget) */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#fff', fontSize: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem' }}>
               <Clock size={18} color="#38bdf8" /> Phasen & Stundenkalkulation
             </div>
             <span style={{
@@ -170,7 +170,7 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
               padding: '4px 10px',
               borderRadius: '20px',
               background: isBudgetValid ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-              color: isBudgetValid ? '#4ade80' : '#f87171',
+              color: isBudgetValid ? 'var(--accent-emerald)' : 'var(--accent-rose)',
               border: `1px solid ${isBudgetValid ? '#22c55e' : '#ef4444'}`
             }}>
               Summe: {totalCalculatedHours}h / {template.budgetHours}h {isBudgetValid ? '✓ Exakt' : '⚠️ Abweichung'}
@@ -179,9 +179,9 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {template.phases.map(phase => (
-              <div key={phase.name} style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div key={phase.name} style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.88rem', fontWeight: '600', color: '#e2e8f0' }}>{phase.name}</span>
+                  <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)' }}>{phase.name}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <input
                       type="number"
@@ -193,17 +193,17 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
                         width: '50px',
                         padding: '4px 8px',
                         borderRadius: '4px',
-                        background: '#0f172a',
-                        border: '1px solid #475569',
-                        color: '#38bdf8',
+                        background: 'var(--bg-tertiary)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--accent-cyan)',
                         fontWeight: 'bold',
                         textAlign: 'center'
                       }}
                     />
-                    <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>Std.</span>
+                    <span style={{ color: 'var(--text-dim)', fontSize: '0.82rem' }}>Std.</span>
                   </div>
                 </div>
-                <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
                   {phase.tasks.join(' • ')}
                 </div>
               </div>
@@ -212,46 +212,46 @@ ${p.tasks.map(t => `- [x] ${t}`).join('\n')}`).join('\n\n')}
         </div>
 
         {/* Right: Wirtschaftlichkeitsrechnung (Amortisation & ROI) */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#fff', fontSize: '1rem', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem', marginBottom: '16px' }}>
               <Calculator size={18} color="#fbbf24" /> Wirtschaftlichkeits- & Amortisationsanalyse
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
               <div>
-                <label style={{ fontSize: '0.82rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Stundensatz (€/h):</label>
-                <input
+                <label htmlFor="ihk-project-documentation-generator-2" style={{ fontSize: '0.82rem', color: 'var(--text-dim)', display: 'block', marginBottom: '4px' }}>Stundensatz (€/h):</label>
+                <input id="ihk-project-documentation-generator-2"
                   type="number"
                   value={hourlyRate}
                   onChange={(e) => setHourlyRate(parseInt(e.target.value) || 0)}
-                  style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#0f172a', border: '1px solid #475569', color: '#fff' }}
+                  style={{ width: '100%', padding: '8px', borderRadius: '6px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.82rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Jährl. Einsparung (€/a):</label>
-                <input
+                <label htmlFor="ihk-project-documentation-generator-3" style={{ fontSize: '0.82rem', color: 'var(--text-dim)', display: 'block', marginBottom: '4px' }}>Jährl. Einsparung (€/a):</label>
+                <input id="ihk-project-documentation-generator-3"
                   type="number"
                   value={savedCostPerYear}
                   onChange={(e) => setSavedCostPerYear(parseInt(e.target.value) || 0)}
-                  style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#0f172a', border: '1px solid #475569', color: '#fff' }}
+                  style={{ width: '100%', padding: '8px', borderRadius: '6px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
                 />
               </div>
             </div>
 
             {/* Calculated Result Card */}
             <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '10px', padding: '16px', marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.85rem', color: '#fde68a', marginBottom: '4px' }}>Gesamte Projektkosten (Investition):</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#fbbf24', marginBottom: '10px' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-amber)', marginBottom: '4px' }}>Gesamte Projektkosten (Investition):</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--accent-amber)', marginBottom: '10px' }}>
                 {totalProjectCost.toLocaleString('de-DE')} €
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#fde68a', marginBottom: '4px' }}>Amortisationsdauer (Break-Even-Point):</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#4ade80' }}>
-                {amortizationYears} Jahre <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>({(amortizationYears * 12).toFixed(1)} Monate)</span>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-amber)', marginBottom: '4px' }}>Amortisationsdauer (Break-Even-Point):</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--accent-emerald)' }}>
+                {amortizationYears} Jahre <span style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>({(amortizationYears * 12).toFixed(1)} Monate)</span>
               </div>
             </div>
 
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: '1.4' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', lineHeight: '1.4' }}>
               💡 <strong>IHK Prüfer-Tipp:</strong> Eine Amortisationszeit unter 1,5 Jahren gilt bei IHK-Prüfungsausschüssen als hochgradig wirtschaftlich und begründet die Investition perfekt.
             </div>
           </div>

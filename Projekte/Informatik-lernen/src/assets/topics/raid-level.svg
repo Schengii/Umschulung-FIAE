@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Datenverteilung bei RAID 0 (Striping), RAID 1 (Spiegelung), RAID 5 (verteilte Parität) und RAID 10 (gespiegelte Stripes)</title>
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">RAID-Level im Vergleich</text>
+  <defs>
+    <g id="disk"><rect width="56" height="150" rx="10" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/></g>
+  </defs>
+  <g font-size="12" text-anchor="middle" font-family="Fira Code, monospace">
+    <!-- RAID 0 -->
+    <text x="90" y="56" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#4338ca">RAID 0</text>
+    <use href="#disk" x="30" y="66"/><use href="#disk" x="94" y="66"/>
+    <g fill="#e0e7ff" stroke="#4338ca"><rect x="36" y="78" width="44" height="26" rx="4"/><rect x="100" y="78" width="44" height="26" rx="4"/><rect x="36" y="110" width="44" height="26" rx="4"/><rect x="100" y="110" width="44" height="26" rx="4"/><rect x="36" y="142" width="44" height="26" rx="4"/><rect x="100" y="142" width="44" height="26" rx="4"/></g>
+    <g fill="#0f172a"><text x="58" y="95">A1</text><text x="122" y="95">A2</text><text x="58" y="127">A3</text><text x="122" y="127">A4</text><text x="58" y="159">A5</text><text x="122" y="159">A6</text></g>
+    <!-- RAID 1 -->
+    <text x="268" y="56" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#0f766e">RAID 1</text>
+    <use href="#disk" x="208" y="66"/><use href="#disk" x="272" y="66"/>
+    <g fill="#ccfbf1" stroke="#0f766e"><rect x="214" y="78" width="44" height="26" rx="4"/><rect x="278" y="78" width="44" height="26" rx="4"/><rect x="214" y="110" width="44" height="26" rx="4"/><rect x="278" y="110" width="44" height="26" rx="4"/><rect x="214" y="142" width="44" height="26" rx="4"/><rect x="278" y="142" width="44" height="26" rx="4"/></g>
+    <g fill="#0f172a"><text x="236" y="95">A1</text><text x="300" y="95">A1</text><text x="236" y="127">A2</text><text x="300" y="127">A2</text><text x="236" y="159">A3</text><text x="300" y="159">A3</text></g>
+    <!-- RAID 5 -->
+    <text x="478" y="56" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#b45309">RAID 5</text>
+    <use href="#disk" x="386" y="66"/><use href="#disk" x="450" y="66"/><use href="#disk" x="514" y="66"/>
+    <g fill="#fef3c7" stroke="#b45309"><rect x="392" y="78" width="44" height="26" rx="4"/><rect x="456" y="78" width="44" height="26" rx="4"/><rect x="392" y="110" width="44" height="26" rx="4"/><rect x="520" y="110" width="44" height="26" rx="4"/><rect x="456" y="142" width="44" height="26" rx="4"/><rect x="520" y="142" width="44" height="26" rx="4"/></g>
+    <g fill="#fecdd3" stroke="#be123c"><rect x="520" y="78" width="44" height="26" rx="4"/><rect x="456" y="110" width="44" height="26" rx="4"/><rect x="392" y="142" width="44" height="26" rx="4"/></g>
+    <g fill="#0f172a"><text x="414" y="95">A1</text><text x="478" y="95">A2</text><text x="542" y="95">Ap</text><text x="414" y="127">B1</text><text x="478" y="127">Bp</text><text x="542" y="127">B2</text><text x="414" y="159">Cp</text><text x="478" y="159">C1</text><text x="542" y="159">C2</text></g>
+    <!-- RAID 10 -->
+    <text x="650" y="56" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" fill="#6d28d9">RAID 10</text>
+    <g transform="translate(596 66) scale(0.5 1)"><use href="#disk" x="0" y="0"/><use href="#disk" x="60" y="0"/><use href="#disk" x="130" y="0"/><use href="#disk" x="190" y="0"/></g>
+    <g fill="#ede9fe" stroke="#6d28d9"><rect x="598" y="78" width="24" height="26" rx="3"/><rect x="628" y="78" width="24" height="26" rx="3"/><rect x="663" y="78" width="24" height="26" rx="3"/><rect x="693" y="78" width="24" height="26" rx="3"/><rect x="598" y="110" width="24" height="26" rx="3"/><rect x="628" y="110" width="24" height="26" rx="3"/><rect x="663" y="110" width="24" height="26" rx="3"/><rect x="693" y="110" width="24" height="26" rx="3"/></g>
+    <g fill="#0f172a" font-size="10"><text x="610" y="95">A1</text><text x="640" y="95">A1</text><text x="675" y="95">A2</text><text x="705" y="95">A2</text><text x="610" y="127">A3</text><text x="640" y="127">A3</text><text x="675" y="127">A4</text><text x="705" y="127">A4</text></g>
+  </g>
+  <g font-size="12" text-anchor="middle" fill="#0f172a">
+    <text x="90" y="240" font-weight="700">Striping</text><text x="90" y="258">n × C nutzbar</text><text x="90" y="276" fill="#be123c">kein Ausfall erlaubt</text>
+    <text x="268" y="240" font-weight="700">Spiegelung</text><text x="268" y="258">1 × C nutzbar</text><text x="268" y="276" fill="#047857">1 Platte darf ausfallen</text>
+    <text x="478" y="240" font-weight="700">verteilte Parität (rot)</text><text x="478" y="258">(n − 1) × C nutzbar</text><text x="478" y="276" fill="#047857">1 Platte darf ausfallen</text>
+    <text x="656" y="240" font-weight="700">Spiegel + Stripe</text><text x="656" y="258">n/2 × C nutzbar</text><text x="656" y="276" fill="#047857">1 je Spiegelpaar</text>
+  </g>
+  <text x="360" y="314" text-anchor="middle" font-size="13" fill="#be123c" font-weight="700">RAID schützt vor Plattenausfall – nicht vor Löschen, Ransomware oder Brand. RAID ist kein Backup!</text>
+</svg>

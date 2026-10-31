@@ -68,7 +68,7 @@ export default function LinuxBridgeVxlanLab({ onRewardXP }) {
       </div>
 
       {/* Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>VXLAN Network ID (VNI):</span>
           <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -78,14 +78,14 @@ export default function LinuxBridgeVxlanLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Header Overhead:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#ec4899', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-rose)', marginTop: '4px' }}>
             +{packetData.overheadBytes} Bytes (UDP 4789)
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Empfohlene Overlay MTU:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {packetData.mtuRecommendation} Bytes
           </div>
         </div>
@@ -94,23 +94,23 @@ export default function LinuxBridgeVxlanLab({ onRewardXP }) {
       {/* Encapsulation Packet Inspector */}
       <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
         <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '12px' }}>
-          VXLAN Paket-Struktur (Outer L3 UDP $\rightarrow$ VXLAN Header $\rightarrow$ Inner L2 Payload):
+          VXLAN Paket-Struktur (Outer L3 UDP → VXLAN Header → Inner L2 Payload):
         </span>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {/* Outer Header */}
-          <div style={{ padding: '12px', background: '#090d16', border: '1px solid #6366f1', borderRadius: '6px', fontSize: '0.8rem', color: '#818cf8', fontFamily: 'monospace' }}>
-            <strong>[Outer Header (Underlay Network)]</strong> IP {packetData.outerHeader.ip.src} $\rightarrow$ {packetData.outerHeader.ip.dst} | UDP DstPort: {packetData.outerHeader.udp.dstPort}
+          <div style={{ padding: '12px', background: 'var(--bg-secondary)', border: '1px solid #6366f1', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--accent-primary)', fontFamily: 'monospace' }}>
+            <strong>[Outer Header (Underlay Network)]</strong> IP {packetData.outerHeader.ip.src} → {packetData.outerHeader.ip.dst} | UDP DstPort: {packetData.outerHeader.udp.dstPort}
           </div>
 
           {/* VXLAN Header */}
-          <div style={{ padding: '12px', background: '#090d16', border: '1px solid #ec4899', borderRadius: '6px', fontSize: '0.8rem', color: '#f472b6', fontFamily: 'monospace' }}>
+          <div style={{ padding: '12px', background: 'var(--bg-secondary)', border: '1px solid #ec4899', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--accent-rose)', fontFamily: 'monospace' }}>
             <strong>[VXLAN Header (8 Bytes)]</strong> Flags: {packetData.vxlanHeader.flags} | VNI: {packetData.vxlanHeader.vni}
           </div>
 
           {/* Inner Payload */}
-          <div style={{ padding: '12px', background: '#090d16', border: '1px solid #10b981', borderRadius: '6px', fontSize: '0.8rem', color: '#34d399', fontFamily: 'monospace' }}>
-            <strong>[Inner Payload (Container Virtual Network)]</strong> IP {packetData.innerPayload.ip.src} $\rightarrow$ {packetData.innerPayload.ip.dst} | MAC {packetData.innerPayload.ethernet.src} $\rightarrow$ {packetData.innerPayload.ethernet.dst}
+          <div style={{ padding: '12px', background: 'var(--bg-secondary)', border: '1px solid #10b981', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--accent-emerald)', fontFamily: 'monospace' }}>
+            <strong>[Inner Payload (Container Virtual Network)]</strong> IP {packetData.innerPayload.ip.src} → {packetData.innerPayload.ip.dst} | MAC {packetData.innerPayload.ethernet.src} → {packetData.innerPayload.ethernet.dst}
           </div>
         </div>
       </div>

@@ -55,14 +55,14 @@ resource "aws_db_instance" "database" {
       </div>
 
       {/* Cloud Components Canvas */}
-      <div style={{ background: '#0f172a', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+      <div style={{ background: 'var(--bg-card)', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {components.map((comp) => (
-          <div key={comp.id} style={{ background: '#1e293b', border: '2px solid #38bdf8', padding: '20px', borderRadius: '12px', minWidth: '220px' }}>
+          <div key={comp.id} style={{ background: 'var(--bg-card-hover)', border: '2px solid #38bdf8', padding: '20px', borderRadius: '12px', minWidth: '220px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
               {comp.type === 'compute' && <Server color="#38bdf8" />}
               {comp.type === 'database' && <Database color="#10b981" />}
               {comp.type === 'network' && <Cloud color="#a855f7" />}
-              <span style={{ color: '#fff', fontWeight: '700' }}>{comp.name}</span>
+              <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>{comp.name}</span>
             </div>
             <span className="badge badge-indigo" style={{ fontSize: '0.75rem' }}>{comp.type.toUpperCase()}</span>
           </div>
@@ -77,10 +77,10 @@ resource "aws_db_instance" "database" {
 
       {generatedTerraform && (
         <div className="code-window">
-          <div className="code-header" style={{ background: '#1e293b', padding: '12px 16px', color: '#38bdf8' }}>
+          <div className="code-header" style={{ background: 'var(--bg-card-hover)', padding: '12px 16px', color: 'var(--accent-cyan)' }}>
             <span>main.tf (HCL HashiCorp Language)</span>
           </div>
-          <pre style={{ background: '#090d16', color: '#38bdf8', padding: '16px', borderRadius: '0 0 var(--radius-lg) var(--radius-lg)', margin: 0, overflowX: 'auto', fontFamily: 'monospace' }}>
+          <pre style={{ background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', padding: '16px', borderRadius: '0 0 var(--radius-lg) var(--radius-lg)', margin: 0, overflowX: 'auto', fontFamily: 'monospace' }}>
             {generatedTerraform}
           </pre>
         </div>

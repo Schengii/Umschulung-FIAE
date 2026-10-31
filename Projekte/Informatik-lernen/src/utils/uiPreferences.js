@@ -18,8 +18,8 @@
 
 const UI_PREFS_KEY = 'informatik_game_ui_prefs_v1';
 
-export const MIN_FONT_SIZE = 85;
-export const MAX_FONT_SIZE = 140;
+const MIN_FONT_SIZE = 85;
+const MAX_FONT_SIZE = 140;
 
 /** @type {(keyof UiPreferences)[]} */
 const BOOLEAN_KEYS = ['isDyslexic', 'isColorblind', 'isHighContrast', 'isReducedMotion'];

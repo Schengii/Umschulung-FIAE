@@ -130,10 +130,10 @@ export default function Ipv6RoutingLab() {
         <div className="space-y-6">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label htmlFor="ipv6-routing-lab-1" className="text-xs font-semibold text-slate-300 block mb-1">
                 IPv6-Adresse eingeben (vollständig oder komprimiert)
               </label>
-              <input
+              <input id="ipv6-routing-lab-1"
                 type="text"
                 value={ipv6Input}
                 onChange={(e) => setIpv6Input(e.target.value)}
@@ -166,7 +166,7 @@ export default function Ipv6RoutingLab() {
 
             {/* Adresstypen Referenz */}
             <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 space-y-3">
-              <h3 className="font-bold text-white text-sm">Wichtige IPv6-Präfixe & Adresstypen</h3>
+              <h3 className="font-bold text-slate-50 text-sm">Wichtige IPv6-Präfixe & Adresstypen</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                 <div className="bg-slate-900 p-3 rounded-lg border border-slate-700">
                   <span className="text-emerald-400 font-mono font-bold block">2000::/3</span>
@@ -198,30 +198,30 @@ export default function Ipv6RoutingLab() {
       {activeTab === 'eui64' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Network className="w-5 h-5 text-emerald-400" />
               SLAAC / EUI-64 Generator
             </h2>
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">MAC-Adresse (48-Bit)</label>
-                <input
+                <label htmlFor="ipv6-routing-lab-2" className="text-xs text-slate-300 block mb-1">MAC-Adresse (48-Bit)</label>
+                <input id="ipv6-routing-lab-2"
                   type="text"
                   value={macInput}
                   onChange={(e) => setMacInput(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-base"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-base"
                   placeholder="00:1A:2B:3C:4D:5E"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">IPv6 Präfix (64-Bit)</label>
-                <input
+                <label htmlFor="ipv6-routing-lab-3" className="text-xs text-slate-300 block mb-1">IPv6 Präfix (64-Bit)</label>
+                <input id="ipv6-routing-lab-3"
                   type="text"
                   value={ipv6Prefix}
                   onChange={(e) => setIpv6Prefix(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-base"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-base"
                   placeholder="fe80::"
                 />
               </div>
@@ -229,7 +229,7 @@ export default function Ipv6RoutingLab() {
           </div>
 
           <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white">Generierte IPv6 Interface-ID</h2>
+            <h2 className="text-lg font-bold text-slate-50">Generierte IPv6 Interface-ID</h2>
 
             {eui64Result.error ? (
               <div className="p-4 bg-rose-950/60 border border-rose-800 rounded-xl text-rose-300 text-sm">
@@ -248,7 +248,7 @@ export default function Ipv6RoutingLab() {
                 </div>
 
                 <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-2">
-                  <span className="font-bold text-white block">Ablauf der EUI-64 Konvertierung:</span>
+                  <span className="font-bold text-slate-50 block">Ablauf der EUI-64 Konvertierung:</span>
                   <ol className="list-decimal list-inside space-y-1">
                     <li>MAC-Adresse in zwei 24-Bit Hälften teilen (<code className="text-emerald-300">00:1A:2B</code> und <code className="text-emerald-300">3C:4D:5E</code>).</li>
                     <li><code className="text-amber-400">FF:FE</code> in die Mitte einfügen ➔ <code className="text-slate-200">00:1A:2B:FF:FE:3C:4D:5E</code>.</li>
@@ -267,7 +267,7 @@ export default function Ipv6RoutingLab() {
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
                   <Send className="w-5 h-5 text-emerald-400" />
                   Longest Prefix Match (LPM) Weiterleitungs-Entscheidung
                 </h2>
@@ -281,7 +281,7 @@ export default function Ipv6RoutingLab() {
                   type="text"
                   value={targetIp}
                   onChange={(e) => setTargetIp(e.target.value)}
-                  className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white font-mono text-sm"
+                  className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-slate-50 font-mono text-sm"
                   placeholder="10.1.5.42"
                 />
                 <button
@@ -348,7 +348,7 @@ export default function Ipv6RoutingLab() {
         <div className="space-y-6">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
             <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+              <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2 mb-2">
                 <Binary className="w-5 h-5 text-emerald-400" />
                 IPv6 Subnetz-Planung &amp; Nibble-Boundaries
               </h2>
@@ -360,10 +360,10 @@ export default function Ipv6RoutingLab() {
             {/* Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label htmlFor="ipv6-routing-lab-4" className="text-xs font-semibold text-slate-300 block mb-1">
                   Basis-Präfix
                 </label>
-                <input
+                <input id="ipv6-routing-lab-4"
                   type="text"
                   value={subnetBasePrefix}
                   onChange={(e) => setSubnetBasePrefix(e.target.value)}
@@ -373,13 +373,13 @@ export default function Ipv6RoutingLab() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label htmlFor="ipv6-routing-lab-5" className="text-xs font-semibold text-slate-300 block mb-1">
                   Zugewiesene Präfixlänge (Site Prefix)
                 </label>
-                <select
+                <select id="ipv6-routing-lab-5"
                   value={subnetPrefixLen}
                   onChange={(e) => setSubnetPrefixLen(Number(e.target.value))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-sm"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-sm"
                 >
                   <option value={48}>/48 (Enterprise Standard - 65.536 /64 Subnetze)</option>
                   <option value={52}>/52 (16 Nibble Subnetze - 4.096 /64 Subnetze)</option>
@@ -389,13 +389,13 @@ export default function Ipv6RoutingLab() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label htmlFor="ipv6-routing-lab-6" className="text-xs font-semibold text-slate-300 block mb-1">
                   Ziel-Subnetzmaske
                 </label>
-                <select
+                <select id="ipv6-routing-lab-6"
                   value={targetSubnetLen}
                   onChange={(e) => setTargetSubnetLen(Number(e.target.value))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-sm"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-sm"
                 >
                   <option value={64}>/64 (Standard für SLAAC &amp; Endgeräte-LAN)</option>
                   <option value={112}>/112 (Server-Cluster)</option>
@@ -443,7 +443,7 @@ export default function Ipv6RoutingLab() {
             {/* Subnets Table */}
             {!subnetResult.error && (
               <div>
-                <h3 className="text-sm font-bold text-white mb-2">
+                <h3 className="text-sm font-bold text-slate-50 mb-2">
                   Beispielhafte Subnetz-Zuweisungen (Auszug)
                 </h3>
                 <div className="overflow-x-auto rounded-xl border border-slate-800">

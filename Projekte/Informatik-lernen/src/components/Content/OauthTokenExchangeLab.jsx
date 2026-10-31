@@ -69,7 +69,7 @@ export default function OauthTokenExchangeLab({ onRewardXP }) {
       </div>
 
       {/* Mode Selection Tabs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
         <button
           onClick={() => { setExchangeMode('DELEGATION'); triggerHaptic('SELECTION'); }}
           className={`btn ${exchangeMode === 'DELEGATION' ? 'btn-primary' : 'btn-secondary'}`}
@@ -92,8 +92,8 @@ export default function OauthTokenExchangeLab({ onRewardXP }) {
       {/* Input Parameters */}
       <div style={{ background: 'var(--bg-secondary)', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
         <div style={{ flex: 1, minWidth: '180px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Subject User:</label>
-          <input
+          <label htmlFor="oauth-token-exchange-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Subject User:</label>
+          <input id="oauth-token-exchange-lab-1"
             type="text"
             value={subjectUser}
             onChange={(e) => setSubjectUser(e.target.value)}
@@ -102,8 +102,8 @@ export default function OauthTokenExchangeLab({ onRewardXP }) {
         </div>
 
         <div style={{ flex: 1, minWidth: '180px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Intermediary Service (Actor):</label>
-          <input
+          <label htmlFor="oauth-token-exchange-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Intermediary Service (Actor):</label>
+          <input id="oauth-token-exchange-lab-2"
             type="text"
             value={intermediaryService}
             onChange={(e) => setIntermediaryService(e.target.value)}
@@ -113,13 +113,13 @@ export default function OauthTokenExchangeLab({ onRewardXP }) {
       </div>
 
       {/* RFC 8693 POST Request & Downstream JWT Claims Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Token Request */}
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
             POST /oauth/token (RFC 8693 Request Payload):
           </span>
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#38bdf8', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
             {JSON.stringify(exchangeResult.requestPayload, null, 2)}
           </pre>
         </div>
@@ -140,7 +140,7 @@ export default function OauthTokenExchangeLab({ onRewardXP }) {
             </button>
           </div>
 
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#10b981', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-emerald)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
             {JSON.stringify(exchangeResult.issuedJwtClaims, null, 2)}
           </pre>
 

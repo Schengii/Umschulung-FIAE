@@ -193,7 +193,7 @@ export default function CustomChallengeCreatorLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-emerald-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-emerald-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -236,39 +236,39 @@ export default function CustomChallengeCreatorLab() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Challenge Config Form */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
             <Code2 className="w-4 h-4 text-emerald-400" />
             1. Aufgaben-Stammdaten &amp; Beschreibung
           </h2>
 
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Titel der Challenge:</label>
-              <input
+              <label htmlFor="custom-challenge-creator-lab-1" className="text-xs text-slate-300 font-semibold block mb-1">Titel der Challenge:</label>
+              <input id="custom-challenge-creator-lab-1"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Z.B. Array Element Filter"
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-slate-50 text-sm focus:border-emerald-500 focus:outline-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Kategorie:</label>
-                <input
+                <label htmlFor="custom-challenge-creator-lab-2" className="text-xs text-slate-300 font-semibold block mb-1">Kategorie:</label>
+                <input id="custom-challenge-creator-lab-2"
                   type="text"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-50 text-sm focus:border-emerald-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Schwierigkeit:</label>
-                <select
+                <label htmlFor="custom-challenge-creator-lab-3" className="text-xs text-slate-300 font-semibold block mb-1">Schwierigkeit:</label>
+                <select id="custom-challenge-creator-lab-3"
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:border-emerald-500 focus:outline-none"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-50 text-sm focus:border-emerald-500 focus:outline-none"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -278,19 +278,19 @@ export default function CustomChallengeCreatorLab() {
             </div>
 
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Aufgabenstellung (Markdown unterstützt):</label>
-              <textarea
+              <label htmlFor="custom-challenge-creator-lab-4" className="text-xs text-slate-300 font-semibold block mb-1">Aufgabenstellung (Markdown unterstützt):</label>
+              <textarea id="custom-challenge-creator-lab-4"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="Beschreibe präzise, was die Funktion leisten soll..."
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white text-xs leading-relaxed focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-slate-50 text-xs leading-relaxed focus:border-emerald-500 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Starter-Code (Vorgabe für Nutzer):</label>
-              <textarea
+              <label htmlFor="custom-challenge-creator-lab-5" className="text-xs text-slate-300 font-semibold block mb-1">Starter-Code (Vorgabe für Nutzer):</label>
+              <textarea id="custom-challenge-creator-lab-5"
                 value={starterCode}
                 onChange={(e) => setStarterCode(e.target.value)}
                 rows={4}
@@ -303,7 +303,7 @@ export default function CustomChallengeCreatorLab() {
         {/* Test Cases & Musterlösung */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               2. Musterlösung &amp; Testfälle
             </h2>
@@ -316,8 +316,8 @@ export default function CustomChallengeCreatorLab() {
           </div>
 
           <div>
-            <label className="text-xs text-slate-300 font-semibold block mb-1">Musterlösung (zum Validieren):</label>
-            <textarea
+            <label htmlFor="custom-challenge-creator-lab-6" className="text-xs text-slate-300 font-semibold block mb-1">Musterlösung (zum Validieren):</label>
+            <textarea id="custom-challenge-creator-lab-6"
               value={solutionCode}
               onChange={(e) => setSolutionCode(e.target.value)}
               rows={4}
@@ -414,7 +414,7 @@ export default function CustomChallengeCreatorLab() {
       {/* Saved Custom Challenges List */}
       {customList.length > 0 && (
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+          <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
             <Layers className="w-5 h-5 text-emerald-400" />
             Deine erstellten Challenges ({customList.length})
           </h2>
@@ -427,7 +427,7 @@ export default function CustomChallengeCreatorLab() {
                     <span className="text-xs font-bold text-emerald-400">{ch.category}</span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">{ch.difficulty}</span>
                   </div>
-                  <h3 className="font-bold text-white text-sm">{ch.title}</h3>
+                  <h3 className="font-bold text-slate-50 text-sm">{ch.title}</h3>
                   <p className="text-xs text-slate-400 line-clamp-2 mt-1">{ch.description}</p>
                 </div>
 
@@ -450,7 +450,7 @@ export default function CustomChallengeCreatorLab() {
       {showImportModal && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Upload className="w-5 h-5 text-emerald-400" />
               Challenges aus JSON importieren
             </h3>

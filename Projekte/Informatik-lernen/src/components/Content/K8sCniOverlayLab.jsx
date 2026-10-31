@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Cloud, ArrowRight, RotateCcw, CheckCircle2, Layers } from 'lucide-react';
 import { K8S_CNI_PACKET_STEPS } from '../../data/enterpriseLabsData';
 import { useStore } from '../../store/useStore';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function K8sCniOverlayLab() {
   const { awardXP } = useStore();
@@ -30,7 +31,7 @@ export default function K8sCniOverlayLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(56, 189, 248, 0.15)', borderRadius: '20px', color: '#38bdf8', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(56, 189, 248, 0.15)', borderRadius: '20px', color: 'var(--accent-cyan)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Cloud size={16} /> Kubernetes CNI Overlay (Calico / Flannel VXLAN)
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -42,20 +43,20 @@ export default function K8sCniOverlayLab() {
         </div>
 
         {/* Step Badge */}
-        <span style={{ fontSize: '0.85rem', padding: '6px 14px', borderRadius: '8px', background: 'var(--card-bg, #1e293b)', border: '1px solid rgba(255,255,255,0.1)', color: '#38bdf8', fontWeight: 'bold' }}>
+        <span style={{ fontSize: '0.85rem', padding: '6px 14px', borderRadius: '8px', background: 'var(--card-bg, #1e293b)', border: '1px solid var(--border-color)', color: 'var(--accent-cyan)', fontWeight: 'bold' }}>
           Schritt {currentStepIdx + 1} / {K8S_CNI_PACKET_STEPS.length}
         </span>
       </div>
 
       {/* Stepper Pipeline */}
-      <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '16px', marginBottom: '24px', overflowX: 'auto' }}>
+      <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '16px', marginBottom: '24px', overflowX: 'auto' }}>
         <div style={{ display: 'flex', gap: '8px', minWidth: '600px' }}>
           {K8S_CNI_PACKET_STEPS.map((s, idx) => {
             const isActive = idx === currentStepIdx;
             const isPassed = idx < currentStepIdx;
 
             return (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setCurrentStepIdx(idx))}
                 key={s.step}
                 onClick={() => setCurrentStepIdx(idx)}
                 style={{
@@ -64,7 +65,7 @@ export default function K8sCniOverlayLab() {
                   borderRadius: '8px',
                   background: isActive ? 'linear-gradient(135deg, #0284c7, #0369a1)' : isPassed ? 'rgba(34, 197, 94, 0.15)' : 'rgba(255,255,255,0.03)',
                   border: isActive ? '1px solid #38bdf8' : isPassed ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(255,255,255,0.06)',
-                  color: isActive ? '#fff' : isPassed ? '#86efac' : '#94a3b8',
+                  color: isActive ? 'var(--text-main)' : isPassed ? 'var(--accent-emerald)' : 'var(--text-dim)',
                   fontSize: '0.78rem',
                   fontWeight: 'bold',
                   textAlign: 'center',
@@ -85,29 +86,29 @@ export default function K8sCniOverlayLab() {
       </div>
 
       {/* Main Grid: Details & Visual Encapsulation */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: Step Details */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <span style={{ fontSize: '0.8rem', padding: '4px 10px', borderRadius: '20px', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontWeight: 'bold' }}>
+              <span style={{ fontSize: '0.8rem', padding: '4px 10px', borderRadius: '20px', background: 'rgba(56, 189, 248, 0.2)', color: 'var(--accent-cyan)', fontWeight: 'bold' }}>
                 {currentStep.layer}
               </span>
-              <span style={{ fontSize: '0.82rem', color: '#fbbf24', fontFamily: 'monospace' }}>
+              <span style={{ fontSize: '0.82rem', color: 'var(--accent-amber)', fontFamily: 'monospace' }}>
                 {currentStep.location}
               </span>
             </div>
 
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#fff', margin: '0 0 12px 0' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 12px 0' }}>
               {currentStep.desc}
             </h2>
 
-            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.78rem', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '16px' }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase', marginBottom: '4px' }}>
                 Paket-Header & Kapselung (Encapsulation):
               </div>
-              <div style={{ color: '#38bdf8', fontSize: '0.85rem', fontFamily: 'monospace' }}>
+              <div style={{ color: 'var(--accent-cyan)', fontSize: '0.85rem', fontFamily: 'monospace' }}>
                 {currentStep.packet}
               </div>
             </div>
@@ -116,7 +117,7 @@ export default function K8sCniOverlayLab() {
           <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
             <button
               onClick={handleReset}
-              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-color)', color: 'var(--text-main)', cursor: 'pointer' }}
             >
               <RotateCcw size={15} />
             </button>
@@ -128,7 +129,7 @@ export default function K8sCniOverlayLab() {
                 borderRadius: '8px',
                 background: isCompleted ? '#22c55e' : '#0284c7',
                 border: 'none',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontWeight: 'bold',
                 fontSize: '0.9rem',
                 cursor: 'pointer',
@@ -145,26 +146,26 @@ export default function K8sCniOverlayLab() {
         </div>
 
         {/* Right: Architecture Diagram */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Layers size={17} color="#818cf8" /> Cross-Node Kubernetes Topology
           </h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '4px' }}>Node 1 (192.168.1.10)</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>• Pod A: 10.244.1.42</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>• vxlan.calico tunnel device</div>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div style={{ color: 'var(--accent-cyan)', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '4px' }}>Node 1 (192.168.1.10)</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>• Pod A: 10.244.1.42</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>• vxlan.calico tunnel device</div>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ color: '#a78bfa', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '4px' }}>Node 2 (192.168.1.20)</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>• Pod B: 10.244.2.88</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>• vxlan.calico tunnel device</div>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div style={{ color: 'var(--accent-purple)', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '4px' }}>Node 2 (192.168.1.20)</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>• Pod B: 10.244.2.88</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>• vxlan.calico tunnel device</div>
             </div>
           </div>
 
-          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.82rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
             💡 <strong>IHK & CKA Prüfungswissen:</strong> VXLAN nutzt standardmäßig **UDP Port 4789** (RFC 7348). Bei Cloud-Deployments (z. B. AWS/GCP) müssen die Security Groups diesen UDP-Port zwischen den Worker-Nodes freischalten.
           </div>
         </div>

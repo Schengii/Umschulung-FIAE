@@ -56,7 +56,7 @@ export default function LiveCodingChallengeStudio() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-violet-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-violet-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-violet-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -86,7 +86,7 @@ export default function LiveCodingChallengeStudio() {
             onClick={() => handleSelectChallenge(ch.id)}
             className={`p-3.5 rounded-xl border text-left transition ${
               selectedChallengeId === ch.id
-                ? 'bg-violet-950/80 border-violet-500 text-white shadow-lg'
+                ? 'bg-violet-950/80 border-violet-500 text-slate-50 shadow-lg'
                 : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
             }`}
           >
@@ -103,7 +103,7 @@ export default function LiveCodingChallengeStudio() {
         {/* Task Description & Test Cases */}
         <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 className="text-lg font-bold text-white">{currentChallenge.title}</h2>
+            <h2 className="text-lg font-bold text-slate-50">{currentChallenge.title}</h2>
             <span className="text-xs px-2.5 py-1 rounded bg-violet-500/20 text-violet-300 font-semibold border border-violet-500/30">
               {currentChallenge.difficulty}
             </span>
@@ -165,7 +165,7 @@ export default function LiveCodingChallengeStudio() {
           {testRunResult && (
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white">Testergebnisse</h3>
+                <h3 className="text-sm font-bold text-slate-50">Testergebnisse</h3>
                 {testRunResult.success && (
                   <span className={`text-xs font-bold px-3 py-1 rounded-full ${
                     testRunResult.allPassed

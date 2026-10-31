@@ -236,7 +236,7 @@ Die Zusammenhänge zwischen Protokollheadern, kaufmännischen Formeln und Progra
       </div>
 
       {/* Lab Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: '20px' }}>
         {filteredLabs.map((lab) => {
           const Icon = lab.icon;
           const progress = labProgress?.[resolveLabKey(lab.id)];
@@ -287,7 +287,7 @@ Die Zusammenhänge zwischen Protokollheadern, kaufmännischen Formeln und Progra
 
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '20px' }}>
                   {lab.tags.map(t => (
-                    <span key={t} style={{ background: '#0f172a', color: '#94a3b8', fontSize: '0.72rem', padding: '3px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                    <span key={t} style={{ background: 'var(--bg-card)', color: 'var(--text-dim)', fontSize: '0.72rem', padding: '3px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
                       {t}
                     </span>
                   ))}
@@ -333,7 +333,7 @@ Die Zusammenhänge zwischen Protokollheadern, kaufmännischen Formeln und Progra
               readOnly
               value={generateBerichtsheftText()}
               rows={12}
-              style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#0f172a', border: '1px solid #334155', color: '#e2e8f0', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.5', resize: 'vertical', marginBottom: '16px' }}
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'var(--bg-card)', border: '1px solid #334155', color: 'var(--text-main)', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.5', resize: 'vertical', marginBottom: '16px' }}
             />
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>

@@ -8,14 +8,18 @@ import {
   Clock, GitPullRequest, Calendar, Key, HardDrive, FileCode, TrendingDown,
   Cloud, Compass, GraduationCap, Route, Scale, Building2, Users, KeyRound
 } from 'lucide-react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { TOPICS } from '../../data/topicsData';
 import { GLOSSARY_TERMS } from '../../data/glossaryData';
 import { LAB_MODULES } from '../../data/labModulesData';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpenModal }) {
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef, { closeOnEscape: false });
 
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   if (isOpen !== prevIsOpen) {
@@ -242,8 +246,8 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
     title: `${t.title} (${t.category})`,
     category: 'Lerneinheiten & Module',
     icon: BookOpen,
-    description: t.description || '',
-    action: () => onNavigate('topic-detail', t)
+    description: t.summary || '',
+    action: () => onNavigate(`wissen/${t.id}`)
   }));
 
   // Glossarbegriffe matchen
@@ -299,6 +303,7 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
 
   return (
     <AnimatePresence>
+      {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button */}
       <div 
         style={{
           position: 'fixed',
@@ -321,6 +326,11 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
           exit={{ opacity: 0, scale: 0.95, y: -20 }}
           transition={{ duration: 0.15 }}
           onClick={e => e.stopPropagation()}
+          ref={dialogRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Befehlspalette: Module suchen"
           style={{
             width: '100%',
             maxWidth: '640px',
@@ -365,6 +375,7 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
           </div>
 
           {/* Results List */}
+          {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollbarer Bereich muss per Tastatur fokussierbar sein (WCAG 2.1.1) */}
           <div tabIndex={0} aria-label="Suchergebnisse" style={{ maxHeight: '380px', overflowY: 'auto', padding: '8px' }}>
             {filteredItems.length === 0 ? (
               <div style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>
@@ -377,7 +388,10 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
                 const isSelected = index === selectedIndex;
                 const IconComponent = item.icon || Terminal;
                 return (
-                  <div
+                  <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => {
+                      item.action();
+                      onClose();
+                    })}
                     key={item.id || index}
                     onClick={() => {
                       item.action();
@@ -406,7 +420,7 @@ export default function CommandPaletteModal({ isOpen, onClose, onNavigate, onOpe
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'center',
-                        color: isSelected ? '#ffffff' : 'var(--accent-primary)',
+                        color: isSelected ? 'var(--text-on-accent)' : 'var(--accent-primary)',
                         flexShrink: 0
                       }}>
                         <IconComponent size={18} />

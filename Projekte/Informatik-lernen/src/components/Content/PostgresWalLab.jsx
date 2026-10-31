@@ -62,24 +62,24 @@ export default function PostgresWalLab({ onRewardXP }) {
       </div>
 
       {/* Replication Lag Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Replication Lag (Bytes):</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? '#10b981' : '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginTop: '4px' }}>
             {lagData.lagBytes.toLocaleString('de-DE')} Bytes
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Replication Lag (MB):</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? '#10b981' : 'var(--accent-primary)', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginTop: '4px' }}>
             {lagData.lagMb} MB
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Geschätzte Replay-Latenz:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? '#10b981' : 'var(--text-main)', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: lagData.isSynchronized ? 'var(--accent-emerald)' : 'var(--text-main)', marginTop: '4px' }}>
             ~{lagData.replayLagMs} ms
           </div>
         </div>
@@ -88,8 +88,8 @@ export default function PostgresWalLab({ onRewardXP }) {
       {/* LSN Input Bar */}
       <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
         <div>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Primary pg_current_wal_lsn():</label>
-          <input
+          <label htmlFor="postgres-wal-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Primary pg_current_wal_lsn():</label>
+          <input id="postgres-wal-lab-1"
             type="text"
             value={primaryLsn}
             onChange={(e) => setPrimaryLsn(e.target.value)}
@@ -100,8 +100,8 @@ export default function PostgresWalLab({ onRewardXP }) {
         <ArrowRight size={20} style={{ color: 'var(--text-muted)' }} />
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Standby pg_last_wal_replay_lsn():</label>
-          <input
+          <label htmlFor="postgres-wal-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Standby pg_last_wal_replay_lsn():</label>
+          <input id="postgres-wal-lab-2"
             type="text"
             value={standbyLsn}
             onChange={(e) => setStandbyLsn(e.target.value)}

@@ -36,7 +36,7 @@ export default function LinuxPermissionsLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(234, 179, 8, 0.15)', borderRadius: '20px', color: '#facc15', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(234, 179, 8, 0.15)', borderRadius: '20px', color: 'var(--accent-amber)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Terminal size={16} /> Linux Dateisystem & Zugriffsrechte Rechner
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -57,8 +57,8 @@ export default function LinuxPermissionsLab() {
                 padding: '6px 12px',
                 borderRadius: '6px',
                 background: 'var(--card-bg, #1e293b)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: '#e2e8f0',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
                 fontSize: '0.82rem',
                 fontWeight: 'bold',
                 cursor: 'pointer'
@@ -71,83 +71,83 @@ export default function LinuxPermissionsLab() {
       </div>
 
       {/* Main Grid: Interactive Checkboxes & Terminal Output */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: Permission Checkbox Matrix */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Lock size={17} color="#facc15" /> Berechtigungs-Matrix (r=4, w=2, x=1)
           </h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
             {/* Owner */}
-            <div style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '8px' }}>
-              <div style={{ fontWeight: 'bold', color: '#38bdf8', fontSize: '0.88rem', marginBottom: '8px' }}>Eigentümer (User)</div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px' }}>
+              <div style={{ fontWeight: 'bold', color: 'var(--accent-cyan)', fontSize: '0.88rem', marginBottom: '8px' }}>Eigentümer (User)</div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={owner.r} onChange={e => setOwner({ ...owner, r: e.target.checked })} /> Read (r) [4]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={owner.w} onChange={e => setOwner({ ...owner, w: e.target.checked })} /> Write (w) [2]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)' }}>
                 <input type="checkbox" checked={owner.x} onChange={e => setOwner({ ...owner, x: e.target.checked })} /> Execute (x) [1]
               </label>
             </div>
 
             {/* Group */}
-            <div style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '8px' }}>
-              <div style={{ fontWeight: 'bold', color: '#a78bfa', fontSize: '0.88rem', marginBottom: '8px' }}>Gruppe (Group)</div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px' }}>
+              <div style={{ fontWeight: 'bold', color: 'var(--accent-purple)', fontSize: '0.88rem', marginBottom: '8px' }}>Gruppe (Group)</div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={group.r} onChange={e => setGroup({ ...group, r: e.target.checked })} /> Read (r) [4]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={group.w} onChange={e => setGroup({ ...group, w: e.target.checked })} /> Write (w) [2]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)' }}>
                 <input type="checkbox" checked={group.x} onChange={e => setGroup({ ...group, x: e.target.checked })} /> Execute (x) [1]
               </label>
             </div>
 
             {/* Others */}
-            <div style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '8px' }}>
-              <div style={{ fontWeight: 'bold', color: '#f472b6', fontSize: '0.88rem', marginBottom: '8px' }}>Andere (Others)</div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px' }}>
+              <div style={{ fontWeight: 'bold', color: 'var(--accent-rose)', fontSize: '0.88rem', marginBottom: '8px' }}>Andere (Others)</div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={others.r} onChange={e => setOthers({ ...others, r: e.target.checked })} /> Read (r) [4]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0', marginBottom: '4px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)', marginBottom: '4px' }}>
                 <input type="checkbox" checked={others.w} onChange={e => setOthers({ ...others, w: e.target.checked })} /> Write (w) [2]
               </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#e2e8f0' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--text-main)' }}>
                 <input type="checkbox" checked={others.x} onChange={e => setOthers({ ...others, x: e.target.checked })} /> Execute (x) [1]
               </label>
             </div>
           </div>
 
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.1)', padding: '8px 12px', borderRadius: '6px' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--accent-amber)', background: 'rgba(251, 191, 36, 0.1)', padding: '8px 12px', borderRadius: '6px' }}>
             <input type="checkbox" checked={isSuid} onChange={e => setIsSuid(e.target.checked)} />
             <span>Special Bit aktivieren: SUID (Set User ID: 4000)</span>
           </label>
         </div>
 
         {/* Right: Terminal Command Output & Inode Stats */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(250, 204, 21, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid rgba(250, 204, 21, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <span style={{ color: '#94a3b8', fontSize: '0.85rem', fontFamily: 'monospace' }}>Linux Shell (Bash)</span>
-              <span style={{ fontSize: '0.78rem', background: '#eab308', color: '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+              <span style={{ color: 'var(--text-dim)', fontSize: '0.85rem', fontFamily: 'monospace' }}>Linux Shell (Bash)</span>
+              <span style={{ fontSize: '0.78rem', background: 'var(--accent-amber)', color: '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
                 OKTAL: {octalString}
               </span>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.4)', padding: '14px', borderRadius: '8px', fontFamily: 'Fira Code, monospace', fontSize: '0.9rem', marginBottom: '16px' }}>
-              <div style={{ color: '#94a3b8' }}>$ chmod {octalString} server_deploy.sh</div>
-              <div style={{ color: '#94a3b8' }}>$ ls -l server_deploy.sh</div>
-              <div style={{ color: '#4ade80', marginTop: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', fontFamily: 'Fira Code, monospace', fontSize: '0.9rem', marginBottom: '16px' }}>
+              <div style={{ color: 'var(--text-dim)' }}>$ chmod {octalString} server_deploy.sh</div>
+              <div style={{ color: 'var(--text-dim)' }}>$ ls -l server_deploy.sh</div>
+              <div style={{ color: 'var(--accent-emerald)', marginTop: '6px' }}>
                 -{symbolicString} 1 devops staff 4096 Aug 15 12:00 server_deploy.sh
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.82rem', color: '#cbd5e1' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               <div style={{ background: 'rgba(255,255,255,0.04)', padding: '8px 12px', borderRadius: '6px' }}>
                 📌 <strong>Inode #1489201:</strong> 12 Direct Data Blocks, 1 Hardlink, UID: 1000 (devops), GID: 1000
               </div>
@@ -163,8 +163,8 @@ export default function LinuxPermissionsLab() {
               marginTop: '20px',
               padding: '12px',
               borderRadius: '8px',
-              background: isCompleted ? '#22c55e' : '#eab308',
-              color: isCompleted ? '#fff' : '#000',
+              background: isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)',
+              color: isCompleted ? 'var(--text-main)' : '#000',
               fontWeight: 'bold',
               fontSize: '0.9rem',
               border: 'none',

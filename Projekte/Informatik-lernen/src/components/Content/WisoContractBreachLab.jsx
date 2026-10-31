@@ -67,7 +67,7 @@ export default function WisoContractBreachLab({ onRewardXP }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Fall-Konfiguration */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -75,9 +75,9 @@ export default function WisoContractBreachLab({ onRewardXP }) {
           </h3>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Vertragsparteien:
-            </label>
+            </span>
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
                 className={`btn ${partyType === 'b2b' ? 'btn-primary' : 'btn-secondary'}`}
@@ -97,10 +97,10 @@ export default function WisoContractBreachLab({ onRewardXP }) {
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="wiso-contract-breach-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Art des Mangels:
             </label>
-            <select
+            <select id="wiso-contract-breach-lab-1"
               className="input-select"
               value={defectType}
               onChange={(e) => setDefectType(e.target.value)}
@@ -162,7 +162,7 @@ export default function WisoContractBreachLab({ onRewardXP }) {
             <FileCheck size={18} color="var(--accent-teal)" /> Rügefristen & Rechtsfolgen
           </h3>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px', marginBottom: '16px', lineHeight: '1.6', fontSize: '0.9rem' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', marginBottom: '16px', lineHeight: '1.6', fontSize: '0.9rem' }}>
             <div><strong>Rechtsgrundlage:</strong> <span className="badge badge-indigo">{noticeResult.legalBasis}</span></div>
             <div style={{ marginTop: '6px' }}><strong>Gesetzliche Rügefrist:</strong></div>
             <div style={{ color: 'var(--text-main)', marginTop: '2px' }}>{noticeResult.duePeriodText}</div>
@@ -212,7 +212,7 @@ export default function WisoContractBreachLab({ onRewardXP }) {
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <HelpCircle size={18} color="var(--accent-teal)" /> IHK AP2 WISO Kernregeln
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '14px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
           <div>
             <strong style={{ color: 'var(--text-main)' }}>HGB § 377 (Handelskauf B2B):</strong>
             <p style={{ margin: '4px 0 0' }}>Kaufleute müssen gelieferte Ware unverzüglich untersuchen und offene Mängel sofort rügen. Andernfalls gilt die Ware als genehmigt!</p>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Die vier Bereiche von Git: Arbeitsverzeichnis, Staging Area, lokales Repository und entferntes Repository, verbunden durch add, commit, push, fetch, pull und restore</title>
+  <rect width="720" height="280" fill="#ffffff"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f172a"/></marker></defs>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Wo liegen meine Änderungen?</text>
+  <g font-size="13" text-anchor="middle">
+    <rect x="20" y="60" width="150" height="90" rx="10" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+    <text x="95" y="96" font-weight="700">Arbeits-</text><text x="95" y="114" font-weight="700">verzeichnis</text><text x="95" y="136" font-size="11" fill="#475569">deine Dateien</text>
+    <rect x="200" y="60" width="150" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="275" y="96" font-weight="700">Staging Area</text><text x="275" y="114" font-size="11" fill="#475569">(Index)</text><text x="275" y="136" font-size="11" fill="#475569">nächster Commit</text>
+    <rect x="380" y="60" width="150" height="90" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <text x="455" y="96" font-weight="700">lokales</text><text x="455" y="114" font-weight="700">Repository</text><text x="455" y="136" font-size="11" fill="#475569">.git, alle Commits</text>
+    <rect x="560" y="60" width="140" height="90" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="630" y="96" font-weight="700">Remote</text><text x="630" y="114" font-size="11" fill="#475569">z. B. GitHub</text><text x="630" y="136" font-size="11" fill="#475569">origin</text>
+  </g>
+  <g stroke="#0f172a" stroke-width="2" fill="none" marker-end="url(#a)">
+    <path d="M170 80 H198"/><path d="M350 80 H378"/><path d="M530 80 H558"/>
+    <path d="M600 150 V178 H470 V152"/>
+    <path d="M660 150 V215 H95 V152"/>
+    <path d="M200 130 H172"/>
+  </g>
+  <g font-family="Fira Code, monospace" font-size="12" fill="#0f172a" text-anchor="middle">
+    <text x="184" y="54">add</text><text x="364" y="54">commit</text><text x="544" y="54">push</text>
+    <text x="535" y="196">fetch (holt nur)</text>
+    <text x="362" y="232">pull = fetch + merge (oder rebase)</text>
+    <text x="186" y="166" font-size="11">restore --staged</text>
+  </g>
+  <text x="360" y="266" text-anchor="middle" font-size="12" fill="#475569">git status zeigt jederzeit, welche Dateien in welchem Bereich geändert sind.</text>
+</svg>

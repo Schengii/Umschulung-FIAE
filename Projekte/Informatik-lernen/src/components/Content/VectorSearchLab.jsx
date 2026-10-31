@@ -69,11 +69,11 @@ export default function VectorSearchLab({ onRewardXP }) {
 
       {/* Query Bar */}
       <div style={{ background: 'var(--bg-primary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
-        <label style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-main)', display: 'block', marginBottom: '8px' }}>
+        <label htmlFor="vector-search-lab-1" style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-main)', display: 'block', marginBottom: '8px' }}>
           🔍 Nutzer-Abfrage (Semantic Search Query):
         </label>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <input
+          <input id="vector-search-lab-1"
             type="text"
             value={queryText}
             onChange={(e) => setQueryText(e.target.value)}
@@ -99,7 +99,7 @@ export default function VectorSearchLab({ onRewardXP }) {
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '700' }}>Vektor Array:</span>
           <div style={{ display: 'flex', gap: '6px', fontFamily: 'monospace' }}>
             {queryVector.map((val, idx) => (
-              <span key={idx} style={{ background: '#0f172a', color: '#38bdf8', padding: '4px 8px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem' }}>
+              <span key={idx} style={{ background: 'var(--bg-card)', color: 'var(--accent-cyan)', padding: '4px 8px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem' }}>
                 v{idx + 1}: {val}
               </span>
             ))}
@@ -111,7 +111,7 @@ export default function VectorSearchLab({ onRewardXP }) {
       {results && (
         <div>
           <h4 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '16px' }}>
-            📊 Ranking nach Kosinus-Ähnlichkeit ($\cos \theta$):
+            📊 Ranking nach Kosinus-Ähnlichkeit (cos θ):
           </h4>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -134,7 +134,7 @@ export default function VectorSearchLab({ onRewardXP }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <span style={{
                         background: idx === 0 ? 'var(--accent-emerald)' : 'var(--bg-card)',
-                        color: idx === 0 ? '#ffffff' : 'var(--text-main)',
+                        color: idx === 0 ? 'var(--text-on-accent)' : 'var(--text-main)',
                         fontWeight: '800',
                         padding: '4px 10px',
                         borderRadius: 'var(--radius-md)',

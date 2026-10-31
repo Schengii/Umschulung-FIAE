@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Die fünf Säulen der Sozialversicherung mit Beitragssätzen 2026: Krankenversicherung 14,6 Prozent plus Zusatzbeitrag, Rentenversicherung 18,6 Prozent, Arbeitslosenversicherung 2,6 Prozent, Pflegeversicherung 3,6 Prozent, Unfallversicherung trägt der Arbeitgeber allein</title>
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Die fünf Säulen der Sozialversicherung (Stand 2026)</text>
+  <polygon points="40,64 360,40 680,64" fill="#0f172a"/>
+  <rect x="40" y="64" width="640" height="16" fill="#0f172a"/>
+  <g font-size="13" text-anchor="middle">
+    <g>
+      <rect x="50" y="90" width="116" height="170" fill="#e0e7ff" stroke="#4338ca"/>
+      <text x="108" y="116" font-weight="700" fill="#4338ca">Kranken-</text><text x="108" y="132" font-weight="700" fill="#4338ca">versicherung</text>
+      <text x="108" y="166" font-size="22" font-weight="800" fill="#0f172a">14,6 %</text>
+      <text x="108" y="186" font-size="11" fill="#475569">+ Zusatzbeitrag</text><text x="108" y="200" font-size="11" fill="#475569">(Ø 2,9 %)</text>
+      <text x="108" y="232" font-size="11" fill="#0f172a">je zur Hälfte</text><text x="108" y="246" font-size="11" fill="#0f172a">AN und AG</text>
+    </g>
+    <g>
+      <rect x="178" y="90" width="116" height="170" fill="#ccfbf1" stroke="#0f766e"/>
+      <text x="236" y="116" font-weight="700" fill="#0f766e">Renten-</text><text x="236" y="132" font-weight="700" fill="#0f766e">versicherung</text>
+      <text x="236" y="166" font-size="22" font-weight="800" fill="#0f172a">18,6 %</text>
+      <text x="236" y="232" font-size="11" fill="#0f172a">je zur Hälfte</text><text x="236" y="246" font-size="11" fill="#0f172a">AN und AG</text>
+    </g>
+    <g>
+      <rect x="306" y="90" width="116" height="170" fill="#fef3c7" stroke="#b45309"/>
+      <text x="364" y="116" font-weight="700" fill="#b45309">Arbeitslosen-</text><text x="364" y="132" font-weight="700" fill="#b45309">versicherung</text>
+      <text x="364" y="166" font-size="22" font-weight="800" fill="#0f172a">2,6 %</text>
+      <text x="364" y="232" font-size="11" fill="#0f172a">je zur Hälfte</text><text x="364" y="246" font-size="11" fill="#0f172a">AN und AG</text>
+    </g>
+    <g>
+      <rect x="434" y="90" width="116" height="170" fill="#ede9fe" stroke="#6d28d9"/>
+      <text x="492" y="116" font-weight="700" fill="#6d28d9">Pflege-</text><text x="492" y="132" font-weight="700" fill="#6d28d9">versicherung</text>
+      <text x="492" y="166" font-size="22" font-weight="800" fill="#0f172a">3,6 %</text>
+      <text x="492" y="186" font-size="11" fill="#475569">Kinderlose ab 23:</text><text x="492" y="200" font-size="11" fill="#475569">+0,6 % (nur AN)</text>
+      <text x="492" y="232" font-size="11" fill="#0f172a">je zur Hälfte</text><text x="492" y="246" font-size="11" fill="#0f172a">(Sachsen abweichend)</text>
+    </g>
+    <g>
+      <rect x="562" y="90" width="116" height="170" fill="#fff1f2" stroke="#be123c"/>
+      <text x="620" y="116" font-weight="700" fill="#be123c">Unfall-</text><text x="620" y="132" font-weight="700" fill="#be123c">versicherung</text>
+      <text x="620" y="166" font-size="14" font-weight="800" fill="#0f172a">je nach</text><text x="620" y="184" font-size="14" font-weight="800" fill="#0f172a">Gefahrklasse</text>
+      <text x="620" y="232" font-size="11" fill="#0f172a">nur der AG</text><text x="620" y="246" font-size="11" fill="#0f172a">(Berufsgenossenschaft)</text>
+    </g>
+  </g>
+  <rect x="40" y="260" width="640" height="14" fill="#0f172a"/>
+  <text x="360" y="300" text-anchor="middle" font-size="12" fill="#475569">Beitragsbemessungsgrenzen 2026 (monatlich): RV/AV 8.450 € · KV/PV 5.812,50 €</text>
+</svg>

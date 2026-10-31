@@ -39,7 +39,7 @@ export default function CodeExecutionDebuggerLab() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '20px', color: '#818cf8', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '20px', color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Cpu size={16} /> V8 Engine Step-by-Step Runtime Inspector
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -61,7 +61,7 @@ export default function CodeExecutionDebuggerLab() {
                 borderRadius: '8px',
                 border: selectedScenarioId === s.id ? '2px solid #6366f1' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
                 background: selectedScenarioId === s.id ? 'rgba(99, 102, 241, 0.2)' : 'var(--card-bg, #1e293b)',
-                color: selectedScenarioId === s.id ? '#a5b4fc' : 'var(--text-secondary, #94a3b8)',
+                color: selectedScenarioId === s.id ? 'var(--accent-primary)' : 'var(--text-secondary, #94a3b8)',
                 fontWeight: '600',
                 cursor: 'pointer',
                 fontSize: '0.88rem',
@@ -75,16 +75,16 @@ export default function CodeExecutionDebuggerLab() {
       </div>
 
       {/* Main Grid: Code Editor & Execution State */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: Code Viewer with Highlighted Active Line */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '12px 16px', background: '#1e293b', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#e2e8f0', fontSize: '0.9rem', fontWeight: 'bold' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', fontSize: '0.9rem', fontWeight: 'bold' }}>
               <Code2 size={18} color="#60a5fa" />
               <span>{scenario.title}</span>
             </div>
-            <span style={{ fontSize: '0.8rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.8rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', color: 'var(--text-dim)' }}>
               Zeile {step.line}
             </span>
           </div>
@@ -104,10 +104,10 @@ export default function CodeExecutionDebuggerLab() {
                     transition: 'background 0.2s ease'
                   }}
                 >
-                  <span style={{ width: '32px', color: isActive ? '#818cf8' : '#475569', userSelect: 'none', textAlign: 'right', marginRight: '16px', fontWeight: isActive ? 'bold' : 'normal' }}>
+                  <span style={{ width: '32px', color: isActive ? 'var(--accent-primary)' : 'var(--text-dim)', userSelect: 'none', textAlign: 'right', marginRight: '16px', fontWeight: isActive ? 'bold' : 'normal' }}>
                     {lineNum}
                   </span>
-                  <span style={{ color: isActive ? '#f8fafc' : '#cbd5e1', whiteSpace: 'pre' }}>
+                  <span style={{ color: isActive ? 'var(--text-main)' : 'var(--text-muted)', whiteSpace: 'pre' }}>
                     {lineText}
                   </span>
                 </div>
@@ -116,7 +116,7 @@ export default function CodeExecutionDebuggerLab() {
           </div>
 
           {/* Stepper Controls */}
-          <div style={{ padding: '14px 16px', background: '#1e293b', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+          <div style={{ padding: '14px 16px', background: 'var(--bg-tertiary)', borderTop: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
             <button
               onClick={handleReset}
               style={{
@@ -126,8 +126,8 @@ export default function CodeExecutionDebuggerLab() {
                 padding: '8px 14px',
                 borderRadius: '8px',
                 background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: '#e2e8f0',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
                 fontSize: '0.85rem',
                 cursor: 'pointer'
               }}
@@ -135,7 +135,7 @@ export default function CodeExecutionDebuggerLab() {
               <RotateCcw size={15} /> Neustart
             </button>
 
-            <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 'bold' }}>
+            <div style={{ color: 'var(--text-dim)', fontSize: '0.85rem', fontWeight: 'bold' }}>
               Schritt {currentStepIdx + 1} von {scenario.steps.length}
             </div>
 
@@ -148,8 +148,8 @@ export default function CodeExecutionDebuggerLab() {
                 gap: '8px',
                 padding: '8px 20px',
                 borderRadius: '8px',
-                background: isCompleted ? '#22c55e' : '#6366f1',
-                color: '#fff',
+                background: isCompleted ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 fontSize: '0.9rem',
                 border: 'none',
@@ -175,18 +175,18 @@ export default function CodeExecutionDebuggerLab() {
           
           {/* Explanation Alert */}
           <div style={{ padding: '16px', background: 'rgba(99, 102, 241, 0.12)', border: '1px solid rgba(99, 102, 241, 0.3)', borderRadius: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#818cf8', fontWeight: 'bold', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-primary)', fontWeight: 'bold', marginBottom: '6px' }}>
               <Info size={18} />
               <span>Was passiert in diesem Schritt?</span>
             </div>
-            <p style={{ margin: 0, color: '#e2e8f0', fontSize: '0.92rem', lineHeight: '1.5' }}>
+            <p style={{ margin: 0, color: 'var(--text-main)', fontSize: '0.92rem', lineHeight: '1.5' }}>
               {step.explanation}
             </p>
           </div>
 
           {/* Call Stack Visualizer */}
-          <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#e2e8f0', fontSize: '0.92rem', fontWeight: 'bold', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', fontSize: '0.92rem', fontWeight: 'bold', marginBottom: '12px' }}>
               <Layers size={18} color="#38bdf8" />
               <span>Call Stack (LIFO: Last In, First Out)</span>
             </div>
@@ -202,8 +202,8 @@ export default function CodeExecutionDebuggerLab() {
                       padding: '8px 12px',
                       background: index === step.stack.length - 1 ? 'linear-gradient(90deg, #6366f1, #8b5cf6)' : 'rgba(255,255,255,0.05)',
                       borderRadius: '6px',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      color: '#fff',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem',
                       fontWeight: '600',
                       display: 'flex',
@@ -213,7 +213,7 @@ export default function CodeExecutionDebuggerLab() {
                   >
                     <span>{frame}</span>
                     {index === step.stack.length - 1 && (
-                      <span style={{ fontSize: '0.75rem', background: 'rgba(0,0,0,0.3)', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '0.75rem', background: 'var(--bg-tertiary)', padding: '2px 6px', borderRadius: '4px' }}>
                         Active Top Frame
                       </span>
                     )}
@@ -226,17 +226,17 @@ export default function CodeExecutionDebuggerLab() {
           {/* Variables & Heap Inspector */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             {/* Local Variables */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '14px' }}>
-              <div style={{ fontSize: '0.88rem', fontWeight: 'bold', color: '#fbbf24', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '14px' }}>
+              <div style={{ fontSize: '0.88rem', fontWeight: 'bold', color: 'var(--accent-amber)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Database size={15} /> Local Scope
               </div>
               {Object.keys(step.vars).length === 0 ? (
-                <div style={{ color: '#64748b', fontSize: '0.82rem', fontStyle: 'italic' }}>Keine lokalen Variablen</div>
+                <div style={{ color: 'var(--text-dim)', fontSize: '0.82rem', fontStyle: 'italic' }}>Keine lokalen Variablen</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {Object.entries(step.vars).map(([k, v]) => (
-                    <div key={k} style={{ fontSize: '0.82rem', background: 'rgba(0,0,0,0.2)', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
-                      <span style={{ color: '#93c5fd' }}>{k}</span>: <span style={{ color: '#86efac' }}>{JSON.stringify(v)}</span>
+                    <div key={k} style={{ fontSize: '0.82rem', background: 'var(--bg-tertiary)', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                      <span style={{ color: 'var(--accent-cyan)' }}>{k}</span>: <span style={{ color: 'var(--accent-emerald)' }}>{JSON.stringify(v)}</span>
                     </div>
                   ))}
                 </div>
@@ -244,17 +244,17 @@ export default function CodeExecutionDebuggerLab() {
             </div>
 
             {/* Heap Objects */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '14px' }}>
-              <div style={{ fontSize: '0.88rem', fontWeight: 'bold', color: '#c084fc', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '14px' }}>
+              <div style={{ fontSize: '0.88rem', fontWeight: 'bold', color: 'var(--accent-purple)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Layers size={15} /> Heap Memory
               </div>
               {Object.keys(step.heap).length === 0 ? (
-                <div style={{ color: '#64748b', fontSize: '0.82rem', fontStyle: 'italic' }}>Keine dynamischen Heap-Objekte</div>
+                <div style={{ color: 'var(--text-dim)', fontSize: '0.82rem', fontStyle: 'italic' }}>Keine dynamischen Heap-Objekte</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {Object.entries(step.heap).map(([ptr, obj]) => (
-                    <div key={ptr} style={{ fontSize: '0.82rem', background: 'rgba(0,0,0,0.2)', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
-                      <span style={{ color: '#f472b6' }}>{ptr}</span>: <span style={{ color: '#e2e8f0' }}>{JSON.stringify(obj)}</span>
+                    <div key={ptr} style={{ fontSize: '0.82rem', background: 'var(--bg-tertiary)', padding: '4px 8px', borderRadius: '4px', fontFamily: 'monospace' }}>
+                      <span style={{ color: 'var(--accent-rose)' }}>{ptr}</span>: <span style={{ color: 'var(--text-main)' }}>{JSON.stringify(obj)}</span>
                     </div>
                   ))}
                 </div>

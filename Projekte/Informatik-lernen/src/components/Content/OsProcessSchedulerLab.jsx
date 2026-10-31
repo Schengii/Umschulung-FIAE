@@ -20,10 +20,10 @@ export default function OsProcessSchedulerLab() {
   const [algorithm, setAlgorithm] = useState('RR'); // FCFS, SJF, RR, Priority
   const [quantum, setQuantum] = useState(2);
   const [processes, setProcesses] = useState([
-    { id: 1, name: 'P1 (Init/System)', arrival: 0, burst: 5, priority: 2, color: '#6366f1' },
-    { id: 2, name: 'P2 (Web Server)', arrival: 1, burst: 4, priority: 1, color: '#10b981' },
-    { id: 3, name: 'P3 (DB Worker)', arrival: 2, burst: 2, priority: 3, color: '#f59e0b' },
-    { id: 4, name: 'P4 (Log Daemon)', arrival: 4, burst: 3, priority: 4, color: '#ec4899' }
+    { id: 1, name: 'P1 (Init/System)', arrival: 0, burst: 5, priority: 2, color: 'var(--accent-primary)' },
+    { id: 2, name: 'P2 (Web Server)', arrival: 1, burst: 4, priority: 1, color: 'var(--accent-emerald)' },
+    { id: 3, name: 'P3 (DB Worker)', arrival: 2, burst: 2, priority: 3, color: 'var(--accent-amber)' },
+    { id: 4, name: 'P4 (Log Daemon)', arrival: 4, burst: 3, priority: 4, color: 'var(--accent-rose)' }
   ]);
 
   // Banker's Algorithm State
@@ -130,9 +130,9 @@ export default function OsProcessSchedulerLab() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 <div>
-                  <label style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                     Algorithmus
-                  </label>
+                  </span>
                   <div style={{ display: 'flex', gap: '6px' }}>
                     {[
                       { id: 'FCFS', label: 'FCFS' },
@@ -208,7 +208,7 @@ export default function OsProcessSchedulerLab() {
                       minWidth: '32px',
                       height: '46px',
                       background: slot.processId === 'IDLE' ? 'var(--bg-tertiary)' : slot.color,
-                      color: '#ffffff',
+                      color: slot.processId === 'IDLE' ? 'var(--text-main)' : 'var(--text-on-accent)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -235,7 +235,7 @@ export default function OsProcessSchedulerLab() {
             </div>
 
             {/* Performance KPIs */}
-            <div className="grid-responsive" style={{ marginTop: '24px', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+            <div className="grid-responsive" style={{ marginTop: '24px', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))' }}>
               <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '700' }}>Durchschnittl. Wartezeit (T_wt)</span>
                 <div style={{ fontSize: '1.6rem', fontWeight: '800', color: 'var(--accent-teal)', marginTop: '4px' }}>
@@ -287,11 +287,12 @@ export default function OsProcessSchedulerLab() {
                         <td style={{ padding: '10px' }}>
                           <input
                             type="number"
+                            aria-label={`Ankunftszeit ${p.name}`}
                             min="0"
                             max="20"
                             value={p.arrival}
                             onChange={(e) => {
-                              const val = Math.max(0, parseInt(e.target.value) || 0);
+                              const val = Math.min(20, Math.max(0, parseInt(e.target.value) || 0));
                               setProcesses(processes.map(x => x.id === p.id ? { ...x, arrival: val } : x));
                             }}
                             style={{ width: '60px', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-main)' }}
@@ -300,11 +301,12 @@ export default function OsProcessSchedulerLab() {
                         <td style={{ padding: '10px' }}>
                           <input
                             type="number"
+                            aria-label={`Laufzeit (Burst) ${p.name}`}
                             min="1"
                             max="20"
                             value={p.burst}
                             onChange={(e) => {
-                              const val = Math.max(1, parseInt(e.target.value) || 1);
+                              const val = Math.min(20, Math.max(1, parseInt(e.target.value) || 1));
                               setProcesses(processes.map(x => x.id === p.id ? { ...x, burst: val } : x));
                             }}
                             style={{ width: '60px', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-main)' }}
@@ -313,11 +315,12 @@ export default function OsProcessSchedulerLab() {
                         <td style={{ padding: '10px' }}>
                           <input
                             type="number"
+                            aria-label={`Priorität ${p.name}`}
                             min="1"
                             max="10"
                             value={p.priority}
                             onChange={(e) => {
-                              const val = Math.max(1, parseInt(e.target.value) || 1);
+                              const val = Math.min(10, Math.max(1, parseInt(e.target.value) || 1));
                               setProcesses(processes.map(x => x.id === p.id ? { ...x, priority: val } : x));
                             }}
                             style={{ width: '60px', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-main)' }}
@@ -388,7 +391,7 @@ export default function OsProcessSchedulerLab() {
             )}
 
             {/* Matrices Grid */}
-            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px' }}>
               {/* Allocation Matrix */}
               <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
                 <h3 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '10px' }}>Allocation Matrix (Aktuell belegt)</h3>
@@ -472,8 +475,8 @@ export default function OsProcessSchedulerLab() {
               </h3>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 <div>
-                  <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Ziel-Prozess</label>
-                  <select
+                  <label htmlFor="os-process-scheduler-lab-1" style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Ziel-Prozess</label>
+                  <select id="os-process-scheduler-lab-1"
                     value={requestTargetProc}
                     onChange={(e) => setRequestTargetProc(Number(e.target.value))}
                     style={{ display: 'block', padding: '6px 12px', borderRadius: '4px', background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border-color)', marginTop: '4px' }}
@@ -485,7 +488,7 @@ export default function OsProcessSchedulerLab() {
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Ressourcen Vektor [R1, R2, R3]</label>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Ressourcen Vektor [R1, R2, R3]</span>
                   <div style={{ display: 'flex', gap: '6px', marginTop: '4px' }}>
                     {requestVector.map((val, idx) => (
                       <input

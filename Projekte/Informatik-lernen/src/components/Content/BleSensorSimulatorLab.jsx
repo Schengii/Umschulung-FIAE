@@ -64,7 +64,7 @@ export default function BleSensorSimulatorLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-cyan-950 via-sky-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-cyan-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-cyan-950 via-sky-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-cyan-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -109,7 +109,7 @@ export default function BleSensorSimulatorLab() {
           </div>
           <div>
             <span className="text-xs text-slate-400 block font-semibold">Temperatur</span>
-            <span className="text-xl font-bold text-white font-mono">
+            <span className="text-xl font-bold text-slate-50 font-mono">
               {isConnected ? `${currentPacket.temperature} °C` : '-- °C'}
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function BleSensorSimulatorLab() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* GATT Profile Structure */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
             <Layers className="w-4 h-4 text-cyan-400" />
             GATT Server Profil &amp; UUID-Struktur
           </h2>
@@ -199,7 +199,7 @@ export default function BleSensorSimulatorLab() {
         {/* Realtime Telemetry Graph */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between">
           <div className="flex justify-between items-center">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Activity className="w-4 h-4 text-emerald-400" />
               Live Sensor Telemetrie
             </h2>
@@ -220,7 +220,7 @@ export default function BleSensorSimulatorLab() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="timestamp" stroke="#94a3b8" fontSize={10} />
                 <YAxis stroke="#94a3b8" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: '#334155', fontSize: '12px' }} />
                 <Line type="monotone" dataKey="temperature" name="Temp (°C)" stroke="#f59e0b" strokeWidth={2} dot={{ r: 2 }} />
                 <Line type="monotone" dataKey="humidity" name="Feuchte (%)" stroke="#06b6d4" strokeWidth={2} dot={{ r: 2 }} />
               </LineChart>

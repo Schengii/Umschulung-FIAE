@@ -36,7 +36,7 @@ export const IHK_DISCIPLINES = [
  * Kernmodule nach Fachrichtung und Prüfungsrelevanz
  */
 /** @type {Record<string, Array<{ title: string, tags: string[], recommendedLab: string }>>} */
-export const STUDY_TRACKS = {
+const STUDY_TRACKS = {
   fiae: [
     { title: 'Software-Architektur, Clean Code & Entwurfsmuster', tags: ['#CleanCode', '#Architektur', '#Patterns'], recommendedLab: 'clean_code_lab' },
     { title: 'Relationales Datenbankdesign & SQL Optimierung', tags: ['#SQL', '#Postgres', '#ERD'], recommendedLab: 'postgres_index_types_lab' },

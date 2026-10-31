@@ -62,9 +62,9 @@ export default function Raid6GaloisLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
+        background: 'var(--gradient-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -96,7 +96,7 @@ export default function Raid6GaloisLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -110,7 +110,7 @@ export default function Raid6GaloisLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(14, 165, 233, 0.15)', 
-              color: '#0ea5e9', 
+              color: 'var(--accent-cyan)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -127,7 +127,7 @@ export default function Raid6GaloisLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid var(--border-color)',
         marginBottom: '24px'
       }}>
         <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -139,6 +139,7 @@ export default function Raid6GaloisLab() {
           {dataDisks.map((byteVal, i) => {
             const isFailed = failedDisks.includes(i);
             return (
+              // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Karte ist Mausabkürzung; Tastatur über den Button in der Karte
               <div 
                 key={i}
                 onClick={() => toggleDiskFailure(i)}
@@ -158,12 +159,13 @@ export default function Raid6GaloisLab() {
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '4px' }}>
                   Data Disk D_{i}
                 </div>
-                <div style={{ fontSize: '0.8rem', color: isFailed ? '#ef4444' : 'var(--text-muted)' }}>
+                <div style={{ fontSize: '0.8rem', color: isFailed ? 'var(--accent-rose)' : 'var(--text-muted)' }}>
                   {isFailed ? '💥 AUSGEFALLEN' : '🟢 ONLINE'}
                 </div>
+                {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- nur Propagation-Stopp um das Eingabefeld, kein Bedienelement */}
                 <div style={{ marginTop: '12px' }} onClick={(e) => e.stopPropagation()}>
-                  <label style={{ fontSize: '0.75rem', display: 'block', marginBottom: '4px', color: 'var(--text-muted)' }}>Byte Wert (0-255):</label>
-                  <input 
+                  <label htmlFor={`raid6-galois-lab-1-${i}`} style={{ fontSize: '0.75rem', display: 'block', marginBottom: '4px', color: 'var(--text-muted)' }}>Byte Wert (0-255):</label>
+                  <input id={`raid6-galois-lab-1-${i}`} 
                     type="number" 
                     min="0" 
                     max="255"
@@ -173,10 +175,10 @@ export default function Raid6GaloisLab() {
                     style={{
                       width: '60px',
                       textAlign: 'center',
-                      background: 'rgba(0, 0, 0, 0.3)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      background: 'var(--bg-tertiary)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '4px',
-                      color: '#ffffff',
+                      color: 'var(--text-main)',
                       padding: '4px',
                       fontSize: '0.85rem'
                     }}
@@ -185,6 +187,19 @@ export default function Raid6GaloisLab() {
                     0x{byteVal.toString(16).toUpperCase().padStart(2, '0')} ('{String.fromCharCode(byteVal)}')
                   </div>
                 </div>
+                {/* Tastaturweg zum Umschalten (die Karte selbst ist nur Mausabkürzung) */}
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  aria-pressed={isFailed}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDiskFailure(i);
+                  }}
+                  style={{ marginTop: '10px', padding: '4px 10px', fontSize: '0.75rem' }}
+                >
+                  {isFailed ? `D_${i} wiederherstellen` : `D_${i} ausfallen lassen`}
+                </button>
               </div>
             );
           })}
@@ -203,10 +218,10 @@ export default function Raid6GaloisLab() {
             <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '4px' }}>
               Parity Disk P
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#a855f7' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--accent-purple)' }}>
               XOR-Summe
             </div>
-            <div style={{ marginTop: '14px', fontSize: '1.2rem', fontWeight: 700, color: '#ffffff' }}>
+            <div style={{ marginTop: '14px', fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
               {parityResult.pParity}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -228,10 +243,10 @@ export default function Raid6GaloisLab() {
             <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '4px' }}>
               Parity Disk Q
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#eab308' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--accent-amber)' }}>
               Galois GF(2^8)
             </div>
-            <div style={{ marginTop: '14px', fontSize: '1.2rem', fontWeight: 700, color: '#ffffff' }}>
+            <div style={{ marginTop: '14px', fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
               {parityResult.qParity}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -246,7 +261,7 @@ export default function Raid6GaloisLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid var(--border-color)',
         marginBottom: '24px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
@@ -263,7 +278,7 @@ export default function Raid6GaloisLab() {
             Status: {recoveryResult.status} ({failedDisks.length} Ausfälle)
           </h3>
         </div>
-        <p style={{ margin: '4px 0 0 0', color: recoveryResult.canRecover ? '#10b981' : '#ef4444', fontSize: '0.92rem' }}>
+        <p style={{ margin: '4px 0 0 0', color: recoveryResult.canRecover ? 'var(--accent-emerald)' : 'var(--accent-rose)', fontSize: '0.92rem' }}>
           {recoveryResult.message}
         </p>
       </div>
@@ -273,20 +288,20 @@ export default function Raid6GaloisLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)'
+        border: '1px solid var(--border-color)'
       }}>
         <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Calculator size={18} color="#0ea5e9" /> Mathematischer Hintergrund (IHK FISI & Storage-Prüfung)
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
           <div>
-            <strong style={{ color: '#ffffff' }}>P-Parität (Standard XOR):</strong> {parityResult.formulaP}
+            <strong style={{ color: 'var(--text-main)' }}>P-Parität (Standard XOR):</strong> {parityResult.formulaP}
           </div>
           <div>
-            <strong style={{ color: '#ffffff' }}>Q-Parität (Reed-Solomon Galois-Feld):</strong> {parityResult.formulaQ} über dem Generatorpolynom $x^8 + x^4 + x^3 + x^2 + 1$ (0x11d).
+            <strong style={{ color: 'var(--text-main)' }}>Q-Parität (Reed-Solomon Galois-Feld):</strong> {parityResult.formulaQ} über dem Generatorpolynom $x^8 + x^4 + x^3 + x^2 + 1$ (0x11d).
           </div>
           <div>
-            <strong style={{ color: '#ffffff' }}>Warum 2 Ausfälle kein Problem sind:</strong> Mit 2 bekannten Gleichungen (P und Q) und 2 Unbekannten (z. B. $D_0$ und $D_1$) kann das lineare Gleichungssystem in GF(2^8) exakt und eindeutig gelöst werden, da im Galois-Feld jede Zahl $\ne 0$ ein multiplikatives Inverses besitzt.
+            <strong style={{ color: 'var(--text-main)' }}>Warum 2 Ausfälle kein Problem sind:</strong> Mit 2 bekannten Gleichungen (P und Q) und 2 Unbekannten (z. B. D₀ und D₁) kann das lineare Gleichungssystem in GF(2^8) exakt und eindeutig gelöst werden, da im Galois-Feld jede Zahl ≠ 0 ein multiplikatives Inverses besitzt.
           </div>
         </div>
       </div>

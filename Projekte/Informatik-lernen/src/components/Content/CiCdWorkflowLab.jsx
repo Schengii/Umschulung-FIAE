@@ -166,7 +166,7 @@ ${selectedPipeline.map(id => {
           </div>
 
           {/* Pipeline Track Visualizer */}
-          <div style={{ background: '#0f172a', padding: '28px', borderRadius: 'var(--radius-lg)', marginBottom: '20px', overflowX: 'auto' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '28px', borderRadius: 'var(--radius-lg)', marginBottom: '20px', overflowX: 'auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: '600px' }}>
               {selectedPipeline.map((jobId, idx) => {
                 const job = AVAILABLE_JOBS.find(j => j.id === jobId);
@@ -179,7 +179,7 @@ ${selectedPipeline.map(id => {
                     <div
                       style={{
                         flex: 1,
-                        background: status === 'success' ? '#064e3b' : isActive ? '#312e81' : '#1e293b',
+                        background: status === 'success' ? '#064e3b' : isActive ? '#312e81' : 'var(--bg-card-hover)',
                         border: status === 'success' ? '2px solid var(--accent-emerald)' : isActive ? '2px solid #818cf8' : '1px solid #334155',
                         borderRadius: 'var(--radius-md)',
                         padding: '16px',
@@ -193,16 +193,16 @@ ${selectedPipeline.map(id => {
                         {status === 'success' && <CheckCircle2 size={16} color="#34d399" />}
                         {isActive && <RefreshCw size={16} color="#818cf8" className="animate-spin" />}
                       </div>
-                      <div style={{ color: '#f8fafc', fontWeight: '700', fontSize: '0.85rem', marginBottom: '4px' }}>
+                      <div style={{ color: 'var(--text-main)', fontWeight: '700', fontSize: '0.85rem', marginBottom: '4px' }}>
                         {job?.name}
                       </div>
-                      <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>
+                      <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>
                         Dauer: {job?.time}
                       </div>
                     </div>
 
                     {idx < selectedPipeline.length - 1 && (
-                      <div style={{ color: '#475569', fontWeight: '800' }}>&rarr;</div>
+                      <div style={{ color: 'var(--text-dim)', fontWeight: '800' }}>&rarr;</div>
                     )}
                   </React.Fragment>
                 );
@@ -223,11 +223,11 @@ ${selectedPipeline.map(id => {
           </div>
 
           {/* Terminal Console Output */}
-          <div style={{ background: '#020617', padding: '16px 20px', borderRadius: 'var(--radius-md)', border: '1px solid #1e293b', fontFamily: 'monospace', fontSize: '0.85rem', color: '#38bdf8', minHeight: '130px', maxHeight: '200px', overflowY: 'auto' }}>
+          <div style={{ background: 'var(--bg-primary)', padding: '16px 20px', borderRadius: 'var(--radius-md)', border: '1px solid #1e293b', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--accent-cyan)', minHeight: '130px', maxHeight: '200px', overflowY: 'auto' }}>
             <div style={{ color: '#64748b', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Terminal size={14} /> Runner Terminal Log
             </div>
-            {logs.length === 0 && <span style={{ color: '#475569' }}>Klicke auf "Pipeline Ausführen" um Runner-Logs zu sehen...</span>}
+            {logs.length === 0 && <span style={{ color: 'var(--text-dim)' }}>Klicke auf "Pipeline Ausführen" um Runner-Logs zu sehen...</span>}
             {logs.map((l, i) => (
               <div key={i} style={{ marginBottom: '4px' }}>{l}</div>
             ))}
@@ -242,7 +242,7 @@ ${selectedPipeline.map(id => {
               <Copy size={14} /> {copied ? 'Kopiert!' : 'YAML Kopieren'}
             </button>
           </div>
-          <pre style={{ background: '#0f172a', padding: '20px', borderRadius: 'var(--radius-lg)', color: '#38bdf8', fontFamily: 'monospace', fontSize: '0.88rem', overflowX: 'auto', border: '1px solid #1e293b' }}>
+          <pre style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: 'var(--radius-lg)', color: 'var(--accent-cyan)', fontFamily: 'monospace', fontSize: '0.88rem', overflowX: 'auto', border: '1px solid #1e293b' }}>
             {generateYaml()}
           </pre>
         </div>

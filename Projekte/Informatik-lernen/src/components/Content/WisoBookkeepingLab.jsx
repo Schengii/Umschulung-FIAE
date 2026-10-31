@@ -174,8 +174,8 @@ export default function WisoBookkeepingLab({ onXPGain }) {
             <div className="buchungssatz-form">
               <div className="buchungssatz-row">
                 <div className="buchungssatz-field">
-                  <label>Soll-Konto</label>
-                  <select value={userSoll} onChange={(e) => setUserSoll(e.target.value)}>
+                  <label htmlFor="wiso-bookkeeping-lab-1">Soll-Konto</label>
+                  <select id="wiso-bookkeeping-lab-1" value={userSoll} onChange={(e) => setUserSoll(e.target.value)}>
                     <option value="">— Konto wählen —</option>
                     {KONTENRAHMEN.filter((k) => k.id !== '9000' && k.id !== '9100').map((k) => (
                       <option key={k.id} value={k.id}>{k.id} – {k.name}</option>
@@ -191,8 +191,8 @@ export default function WisoBookkeepingLab({ onXPGain }) {
                 <div className="buchungssatz-separator">an</div>
 
                 <div className="buchungssatz-field">
-                  <label>Haben-Konto</label>
-                  <select value={userHaben} onChange={(e) => setUserHaben(e.target.value)}>
+                  <label htmlFor="wiso-bookkeeping-lab-2">Haben-Konto</label>
+                  <select id="wiso-bookkeeping-lab-2" value={userHaben} onChange={(e) => setUserHaben(e.target.value)}>
                     <option value="">— Konto wählen —</option>
                     {KONTENRAHMEN.filter((k) => k.id !== '9000' && k.id !== '9100').map((k) => (
                       <option key={k.id} value={k.id}>{k.id} – {k.name}</option>
@@ -207,8 +207,8 @@ export default function WisoBookkeepingLab({ onXPGain }) {
               </div>
 
               <div className="betrag-row">
-                <label>Betrag (€)</label>
-                <input
+                <label htmlFor="wiso-bookkeeping-lab-3">Betrag (€)</label>
+                <input id="wiso-bookkeeping-lab-3"
                   type="number"
                   value={userBetrag}
                   onChange={(e) => setUserBetrag(e.target.value)}

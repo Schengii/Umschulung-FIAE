@@ -72,11 +72,11 @@ export default function PkiCertificateLab({ onAwardXP }) {
               <Lock className="w-4 h-4" />
               <span>TLS / PKI Sicherheitsarchitektur (RFC 5280)</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50">
               X.509 PKI & Certificate Chain Validator Studio
             </h1>
             <p className="text-slate-400 mt-1 max-w-2xl text-sm">
-              Visuelle Validierung kryptographischer Vertrauensketten (Root CA $\to$ Intermediate $\to$ End-Entity/Leaf),
+              Visuelle Validierung kryptographischer Vertrauensketten (Root CA → Intermediate → End-Entity/Leaf),
               Hostname-Matching (SAN), Gültigkeitszeiträume und Revocation-Status (CRL / OCSP).
             </p>
           </div>
@@ -92,16 +92,16 @@ export default function PkiCertificateLab({ onAwardXP }) {
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <label htmlFor="pki-certificate-lab-1" className="text-xs font-semibold text-slate-300 block mb-2">
               Zu prüfende Host-URL / Domain:
             </label>
             <div className="flex gap-2">
-              <input
+              <input id="pki-certificate-lab-1"
                 type="text"
                 value={domainInput}
                 onChange={e => setDomainInput(e.target.value)}
                 placeholder="z.B. shop.my-company.de"
-                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-white"
+                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-50"
               />
               <button
                 onClick={() => setDomainInput('untrusted-phishing.org')}
@@ -113,14 +113,14 @@ export default function PkiCertificateLab({ onAwardXP }) {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-2">
+            <span className="text-xs font-semibold text-slate-300 block mb-2">
               PKI-Fehlerszenarien simulieren:
-            </label>
+            </span>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setIsLeafExpired(!isLeafExpired)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
-                  isLeafExpired ? 'bg-rose-600/30 border-rose-500 text-white' : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                  isLeafExpired ? 'bg-rose-600/30 border-rose-500 text-slate-50' : 'bg-slate-800/40 border-slate-700 text-slate-400'
                 }`}
               >
                 {isLeafExpired ? '⚠️ Ablaufdatum: Abgelaufen' : 'Ablaufdatum manipulieren'}
@@ -128,7 +128,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
               <button
                 onClick={() => setIsLeafRevoked(!isLeafRevoked)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
-                  isLeafRevoked ? 'bg-rose-600/30 border-rose-500 text-white' : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                  isLeafRevoked ? 'bg-rose-600/30 border-rose-500 text-slate-50' : 'bg-slate-800/40 border-slate-700 text-slate-400'
                 }`}
               >
                 {isLeafRevoked ? '⚠️ CRL: Revoked' : 'Zertifikat widerrufen (OCSP)'}
@@ -136,7 +136,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
               <button
                 onClick={() => setBreakChain(!breakChain)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
-                  breakChain ? 'bg-rose-600/30 border-rose-500 text-white' : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                  breakChain ? 'bg-rose-600/30 border-rose-500 text-slate-50' : 'bg-slate-800/40 border-slate-700 text-slate-400'
                 }`}
               >
                 {breakChain ? '⚠️ Kettenbruch aktiv' : 'Kettenbruch (Untrusted CA)'}
@@ -148,7 +148,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
 
       {/* Chain-of-Trust Baum */}
       <div className="space-y-4">
-        <h2 className="text-sm font-bold text-white flex items-center gap-2">
+        <h2 className="text-sm font-bold text-slate-50 flex items-center gap-2">
           <Layers className="w-4 h-4 text-cyan-400" />
           Kryptographische Vertrauenskette (Top-Down):
         </h2>
@@ -160,7 +160,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-white">1. Root Certificate Authority (Trust Anchor)</span>
+              <span className="font-bold text-sm text-slate-50">1. Root Certificate Authority (Trust Anchor)</span>
               <span className="text-[11px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800 font-mono">
                 Self-Signed & CA:TRUE
               </span>
@@ -183,7 +183,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-white">2. Intermediate CA (Ausstellende Stelle)</span>
+              <span className="font-bold text-sm text-slate-50">2. Intermediate CA (Ausstellende Stelle)</span>
               <span className="text-[11px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800 font-mono">
                 Signed by Root | CA:TRUE
               </span>
@@ -210,7 +210,7 @@ export default function PkiCertificateLab({ onAwardXP }) {
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-white">3. End-Entity / Leaf-Zertifikat (Webserver)</span>
+              <span className="font-bold text-sm text-slate-50">3. End-Entity / Leaf-Zertifikat (Webserver)</span>
               <span className={`text-[11px] px-2 py-0.5 rounded font-mono ${
                 validation.isValid ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-rose-950 text-rose-300 border border-rose-800'
               }`}>

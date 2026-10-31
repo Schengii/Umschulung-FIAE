@@ -41,7 +41,7 @@ export default function GraphqlExplorerStudioLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-950 via-purple-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-violet-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-violet-950 via-purple-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-violet-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -79,7 +79,7 @@ export default function GraphqlExplorerStudioLab() {
             onClick={() => handleSelectPreset(p)}
             className={`p-3 rounded-xl border text-left text-xs transition ${
               selectedPresetId === p.id
-                ? 'bg-violet-950/80 border-violet-500 text-white font-bold shadow-lg'
+                ? 'bg-violet-950/80 border-violet-500 text-slate-50 font-bold shadow-lg'
                 : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
             }`}
           >
@@ -94,7 +94,7 @@ export default function GraphqlExplorerStudioLab() {
         {/* Query Input */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
           <div className="flex justify-between items-center">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Code2 className="w-4 h-4 text-violet-400" />
               GraphQL Query Editor
             </h2>
@@ -118,7 +118,7 @@ export default function GraphqlExplorerStudioLab() {
         {/* JSON Response & AST Inspector */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
           <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Database className="w-4 h-4 text-emerald-400" />
               JSON Response &amp; AST
             </h2>
