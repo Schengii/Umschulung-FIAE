@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-node scripts/check-secrets.mjs
-npx lint-staged
-npx tsc --noEmit

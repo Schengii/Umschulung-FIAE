@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { DEMO_ONLY } = require('./project_visibility');
 
 const projectsDataFile = path.resolve(__dirname, '..', 'assets', 'js', 'projects_data.js');
 const projectsJsonFile = path.resolve(__dirname, '..', 'assets', 'data', 'projects.json');
@@ -106,9 +107,16 @@ async function build() {
                 // github.com/Schengii/<repo> würde für Besucher in einer 404 enden. Stattdessen
                 // auf den Projektordner im Monorepo verlinken, sonst keinen Link ausgeben.
                 const folderMatch = /^Projekte\/([^/]+)\//.exec(project.link || '');
-                project.githubUrl = folderMatch
-                    ? `https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/${encodeURIComponent(decodeURIComponent(folderMatch[1]))}`
-                    : undefined;
+                const folderName = folderMatch ? decodeURIComponent(folderMatch[1]) : '';
+                if (folderName in DEMO_ONLY) {
+                    // Privates Quell-Repo: im Monorepo liegt nur der Demo-Build, also kein Code-Link.
+                    project.githubUrl = undefined;
+                    delete project.codeFiles;
+                } else {
+                    project.githubUrl = folderMatch
+                        ? `https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/${encodeURIComponent(folderName)}`
+                        : undefined;
+                }
                 project.updatedAt = new Date().toISOString();
                 project.language = project.language || '';
                 console.log(`Fallback for ${project.repoName} (No API info)`);

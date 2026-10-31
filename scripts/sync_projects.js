@@ -3,6 +3,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { DEMO_ONLY } = require('./project_visibility');
 
 /** @type {Record<string, Record<string, any>>} */
 const REPO_MAPPING = {
@@ -75,6 +76,42 @@ function copyRecursive(src, dest, ignoreList = [], preserveList = []) {
         } else {
             fs.copyFileSync(srcPath, destPath);
         }
+    }
+}
+
+/**
+ * Entfernt alles außer den Demo-Pfaden und portfolio-metadata.json (private Quell-Repos).
+ * @param {string} dir Projektordner
+ * @param {string[]} keepPaths relative Pfade (Schrägstrich), die erhalten bleiben
+ * @param {string} [rel] aktueller relativer Pfad (intern)
+ */
+function pruneToDemo(dir, keepPaths, rel = '') {
+    const keep = ['portfolio-metadata.json', ...keepPaths];
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const entryRel = rel ? `${rel}/${entry.name}` : entry.name;
+        const isKept = keep.some((k) => entryRel === k || entryRel.startsWith(`${k}/`));
+        const isAncestor = keep.some((k) => k.startsWith(`${entryRel}/`));
+        const full = path.join(dir, entry.name);
+        if (isKept) continue;
+        if (isAncestor && entry.isDirectory()) {
+            pruneToDemo(full, keepPaths, entryRel);
+        } else {
+            fs.rmSync(full, { recursive: true, force: true });
+        }
+    }
+}
+
+/**
+ * Entfernt Verweise auf Quelldateien aus den Metadaten (die Dateien sind nicht mehr öffentlich).
+ * @param {string} dir Projektordner
+ */
+function stripSourceRefs(dir) {
+    const file = path.join(dir, 'portfolio-metadata.json');
+    if (!fs.existsSync(file)) return;
+    const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    if ('codeFiles' in data) {
+        delete data.codeFiles;
+        fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
     }
 }
 
@@ -155,6 +192,13 @@ async function syncProject(projectName, config) {
                 fs.cpSync(backupPath, targetItemPath, { recursive: true });
             }
             fs.rmSync(backupPath, { recursive: true, force: true });
+        }
+
+        const demoKeep = DEMO_ONLY[path.basename(config.targetDir)];
+        if (demoKeep) {
+            pruneToDemo(targetFullPath, demoKeep);
+            stripSourceRefs(targetFullPath);
+            console.log(`🔒 ${projectName}: privates Repo, nur Demo-Build und Metadaten behalten`);
         }
 
         console.log(`✅ ${projectName} erfolgreich aktualisiert!`);
