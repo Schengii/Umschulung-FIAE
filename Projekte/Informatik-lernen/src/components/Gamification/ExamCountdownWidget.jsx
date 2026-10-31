@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Calendar, Target, Clock, ChevronRight, Zap, Activity } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateExamReadiness } from '../../utils/examReadinessEngine';
+import { onActivationKey } from '../Shared/keyActivation';
 
 const IHK_EXAM_PRESETS = [
   { id: 'ap1_spring', name: 'IHK AP1 Frühjahr (März)', month: 2, day: 15 },
@@ -153,7 +154,7 @@ export default function ExamCountdownWidget({ setActiveTab }) {
           }}>
             <Clock size={24} color={daysRemaining <= 30 ? '#ef4444' : 'var(--accent-primary, #6366f1)'} />
             <div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: daysRemaining <= 30 ? '#ef4444' : 'var(--accent-primary, #6366f1)' }}>
+              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: daysRemaining <= 30 ? 'var(--accent-rose)' : 'var(--accent-primary, #6366f1)' }}>
                 {daysRemaining > 0 ? `T-Minus ${daysRemaining} Tage` : daysRemaining === 0 ? 'Heute Prüfungstag!' : 'Prüfung abgeschlossen!'}
               </div>
               <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
@@ -166,10 +167,10 @@ export default function ExamCountdownWidget({ setActiveTab }) {
 
       {/* Datumseinstellung & Schnellwahl */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
-        <label style={{ fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <label htmlFor="exam-countdown-widget-1" style={{ fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Calendar size={16} /> Prüfungstermin:
         </label>
-        <input
+        <input id="exam-countdown-widget-1"
           type="date"
           value={targetDateStr}
           onChange={(e) => handleSaveDate(e.target.value)}
@@ -216,7 +217,7 @@ export default function ExamCountdownWidget({ setActiveTab }) {
 
         {readiness.recommendedFocus.length > 0 && (
           <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-            <strong style={{ color: '#ef4444' }}>⚠️ Priorisierter Trainingsbedarf:</strong>{' '}
+            <strong style={{ color: 'var(--accent-rose)' }}>⚠️ Priorisierter Trainingsbedarf:</strong>{' '}
             {readiness.recommendedFocus.slice(0, 2).join(' • ')}
           </div>
         )}
@@ -227,9 +228,9 @@ export default function ExamCountdownWidget({ setActiveTab }) {
         <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Zap size={16} color="var(--accent-amber)" /> Täglicher IHK-Power-Sprint (Priorisierte Module)
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px' }}>
           {sprintRecommendations.map((rec) => (
-            <div
+            <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveTab && setActiveTab(rec.tab))}
               key={rec.tab}
               className="glass-panel glass-panel-hover"
               onClick={() => setActiveTab && setActiveTab(rec.tab)}

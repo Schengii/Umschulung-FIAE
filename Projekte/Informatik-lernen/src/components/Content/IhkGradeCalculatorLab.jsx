@@ -53,11 +53,11 @@ export default function IhkGradeCalculatorLab() {
             </p>
           </div>
 
-          <div>
-            <label style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+          <div style={{ minWidth: 0, maxWidth: '100%' }}>
+            <label htmlFor="ihk-grade-calculator-lab-1" style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
               Ausbildungsberuf wählen:
             </label>
-            <select
+            <select id="ihk-grade-calculator-lab-1"
               value={selectedOccupation}
               onChange={(e) => setSelectedOccupation(e.target.value)}
               style={{
@@ -67,7 +67,8 @@ export default function IhkGradeCalculatorLab() {
                 color: 'var(--text-main)',
                 border: '1px solid var(--border-color)',
                 fontSize: '0.9rem',
-                fontWeight: '600'
+                fontWeight: '600',
+                maxWidth: '100%'
               }}
             >
               {Object.entries(IHK_OCCUPATIONS).map(([key, occ]) => (
@@ -214,8 +215,8 @@ export default function IhkGradeCalculatorLab() {
 
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
               <div>
-                <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Dokumentation</label>
-                <input
+                <label htmlFor="ihk-grade-calculator-lab-2" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Dokumentation</label>
+                <input id="ihk-grade-calculator-lab-2"
                   type="number"
                   min="0"
                   max="100"
@@ -226,8 +227,8 @@ export default function IhkGradeCalculatorLab() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Präsentation / Fachgespräch</label>
-                <input
+                <label htmlFor="ihk-grade-calculator-lab-3" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Präsentation / Fachgespräch</label>
+                <input id="ihk-grade-calculator-lab-3"
                   type="number"
                   min="0"
                   max="100"

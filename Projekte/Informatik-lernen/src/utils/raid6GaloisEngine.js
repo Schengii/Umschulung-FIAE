@@ -38,7 +38,7 @@ export function gfMultiply(a, b) {
  * @param {number} k Potenz
  * @returns {number}
  */
-export function gfPowerOfTwo(k) {
+function gfPowerOfTwo(k) {
   let val = 1;
   for (let i = 0; i < k; i++) {
     val = gfMultiply(val, 2);

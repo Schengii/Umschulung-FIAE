@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Aufbau einer HTTP-Anfrage mit Methode, Pfad, Headern und Body sowie der Antwort mit Statuscode, Headern und JSON-Body</title>
+  <rect width="720" height="320" fill="#ffffff"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f172a"/></marker></defs>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">HTTP-Anfrage und -Antwort</text>
+  <text x="180" y="54" text-anchor="middle" font-size="14" font-weight="700" fill="#4338ca">Client → Server (Request)</text>
+  <text x="540" y="54" text-anchor="middle" font-size="14" font-weight="700" fill="#0f766e">Server → Client (Response)</text>
+  <g font-family="Fira Code, monospace" font-size="12">
+    <rect x="20" y="64" width="320" height="30" fill="#e0e7ff" stroke="#4338ca"/>
+    <text x="30" y="84" fill="#0f172a"><tspan font-weight="700" fill="#4338ca">POST</tspan> /api/v1/kunden HTTP/1.1</text>
+    <rect x="20" y="94" width="320" height="96" fill="#f8fafc" stroke="#94a3b8"/>
+    <text x="30" y="114" fill="#0f172a">Host: shop.example</text>
+    <text x="30" y="132" fill="#0f172a">Content-Type: application/json</text>
+    <text x="30" y="150" fill="#0f172a">Authorization: Bearer eyJ…</text>
+    <text x="30" y="168" fill="#0f172a">Accept: application/json</text>
+    <rect x="20" y="190" width="320" height="56" fill="#fef3c7" stroke="#b45309"/>
+    <text x="30" y="212" fill="#0f172a">{ "name": "Meyer",</text>
+    <text x="30" y="230" fill="#0f172a">  "plz": "44137" }</text>
+
+    <rect x="380" y="64" width="320" height="30" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="390" y="84" fill="#0f172a">HTTP/1.1 <tspan font-weight="700" fill="#0f766e">201 Created</tspan></text>
+    <rect x="380" y="94" width="320" height="96" fill="#f8fafc" stroke="#94a3b8"/>
+    <text x="390" y="114" fill="#0f172a">Content-Type: application/json</text>
+    <text x="390" y="132" fill="#0f172a">Location: /api/v1/kunden/815</text>
+    <text x="390" y="150" fill="#0f172a">Cache-Control: no-store</text>
+    <rect x="380" y="190" width="320" height="56" fill="#fef3c7" stroke="#b45309"/>
+    <text x="390" y="212" fill="#0f172a">{ "id": 815, "name": "Meyer",</text>
+    <text x="390" y="230" fill="#0f172a">  "plz": "44137" }</text>
+  </g>
+  <g font-size="12" fill="#475569">
+    <text x="20" y="266">① Startzeile: Methode, Pfad, Version</text>
+    <text x="20" y="284">② Header: Metadaten (Schlüssel: Wert)</text>
+    <text x="20" y="302">③ Leerzeile, dann Body (optional)</text>
+    <text x="380" y="266">① Statuszeile: Version, Statuscode, Text</text>
+    <text x="380" y="284">② Header, z. B. Ort der neuen Ressource</text>
+    <text x="380" y="302">③ Body mit der angelegten Ressource</text>
+  </g>
+  <path d="M342 150 H378" stroke="#0f172a" stroke-width="2" marker-end="url(#a)"/>
+</svg>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BookOpen, Plus, Trash2, Tag, Search, Download, Sparkles, Edit3, Eye, Database } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { saveItem, deleteItem } from '../../utils/indexedDbStorage';
+import { onActivationKey } from '../Shared/keyActivation';
 
 const STORAGE_KEY = 'it_devgame_personal_notes';
 
@@ -175,7 +176,7 @@ export default function PersonalNotebookLab() {
       </div>
 
       {/* 2-Pane: Notes Sidebar + Markdown Editor/Preview */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(300px, 1fr) minmax(440px, 2fr)', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(min(300px, 100%), 1fr) minmax(440px, 2fr)', gap: '20px' }}>
         {/* Notes Sidebar */}
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)' }}>
           {/* Search & Tag Filter */}
@@ -211,7 +212,7 @@ export default function PersonalNotebookLab() {
             {filteredNotes.map(n => {
               const isSelected = selectedNoteId === n.id;
               return (
-                <div
+                <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedNoteId(n.id))}
                   key={n.id}
                   onClick={() => setSelectedNoteId(n.id)}
                   style={{

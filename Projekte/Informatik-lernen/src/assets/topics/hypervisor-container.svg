@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Schichtenvergleich: Hypervisor Typ 1 direkt auf der Hardware, Hypervisor Typ 2 auf einem Host-Betriebssystem, Container teilen sich den Kernel des Hosts</title>
+  <rect width="720" height="340" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Typ-1-Hypervisor · Typ-2-Hypervisor · Container</text>
+  <g font-size="13" text-anchor="middle">
+    <!-- Typ 1 -->
+    <text x="120" y="56" font-weight="700" fill="#4338ca" font-size="15">Typ 1 (Bare Metal)</text>
+    <rect x="20" y="70" width="95" height="40" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="67" y="95">App</text>
+    <rect x="125" y="70" width="95" height="40" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="172" y="95">App</text>
+    <rect x="20" y="114" width="95" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="67" y="139">Gast-OS</text>
+    <rect x="125" y="114" width="95" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="172" y="139">Gast-OS</text>
+    <rect x="20" y="158" width="200" height="84" rx="6" fill="#e0e7ff" stroke="#4338ca"/><text x="120" y="196" font-weight="700">Hypervisor</text><text x="120" y="216" font-size="11" fill="#475569">ist selbst das Betriebssystem</text>
+    <rect x="20" y="246" width="200" height="40" rx="6" fill="#e2e8f0" stroke="#475569"/><text x="120" y="271">Hardware</text>
+    <text x="120" y="310" fill="#475569" font-size="12">ESXi, Hyper-V, KVM, Proxmox</text>
+    <!-- Typ 2 -->
+    <text x="360" y="56" font-weight="700" fill="#6d28d9" font-size="15">Typ 2 (Hosted)</text>
+    <rect x="260" y="70" width="95" height="40" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="307" y="95">App</text>
+    <rect x="365" y="70" width="95" height="40" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="412" y="95">App</text>
+    <rect x="260" y="114" width="95" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="307" y="139">Gast-OS</text>
+    <rect x="365" y="114" width="95" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="412" y="139">Gast-OS</text>
+    <rect x="260" y="158" width="200" height="40" rx="6" fill="#ede9fe" stroke="#6d28d9"/><text x="360" y="183" font-weight="700">Hypervisor</text>
+    <rect x="260" y="202" width="200" height="40" rx="6" fill="#f1f5f9" stroke="#475569"/><text x="360" y="227">Host-Betriebssystem</text>
+    <rect x="260" y="246" width="200" height="40" rx="6" fill="#e2e8f0" stroke="#475569"/><text x="360" y="271">Hardware</text>
+    <text x="360" y="310" fill="#475569" font-size="12">VirtualBox, VMware Workstation</text>
+    <!-- Container -->
+    <text x="600" y="56" font-weight="700" fill="#0f766e" font-size="15">Container</text>
+    <rect x="500" y="70" width="62" height="84" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="531" y="108">App</text><text x="531" y="126" font-size="11">+ Libs</text>
+    <rect x="569" y="70" width="62" height="84" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="600" y="108">App</text><text x="600" y="126" font-size="11">+ Libs</text>
+    <rect x="638" y="70" width="62" height="84" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="669" y="108">App</text><text x="669" y="126" font-size="11">+ Libs</text>
+    <rect x="500" y="158" width="200" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="600" y="183" font-weight="700">Container-Runtime</text>
+    <rect x="500" y="202" width="200" height="40" rx="6" fill="#f1f5f9" stroke="#475569"/><text x="600" y="227">Host-OS (gemeinsamer Kernel)</text>
+    <rect x="500" y="246" width="200" height="40" rx="6" fill="#e2e8f0" stroke="#475569"/><text x="600" y="271">Hardware</text>
+    <text x="600" y="310" fill="#475569" font-size="12">Docker, Podman, containerd</text>
+  </g>
+  <text x="360" y="334" text-anchor="middle" font-size="12" fill="#475569">Je weniger Schichten, desto weniger Overhead – aber Container isolieren schwächer als VMs.</text>
+</svg>

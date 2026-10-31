@@ -97,7 +97,7 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(14, 165, 233, 0.15)', color: '#38bdf8' }}>
+              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(14, 165, 233, 0.15)', color: 'var(--accent-cyan)' }}>
                 <Network size={24} />
               </div>
               <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800' }}>
@@ -109,10 +109,10 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(14, 165, 233, 0.15)', color: '#38bdf8' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(14, 165, 233, 0.15)', color: 'var(--accent-cyan)' }}>
               IHK FISI & AP1
             </span>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)' }}>
               +55 XP
             </span>
           </div>
@@ -126,8 +126,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'simulation' ? '#0ea5e9' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'simulation' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'simulation' ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'simulation' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -143,8 +143,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'table' ? '#0ea5e9' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'table' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'table' ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'table' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -160,8 +160,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'rfc1918' ? '#0ea5e9' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'rfc1918' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'rfc1918' ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'rfc1918' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -177,8 +177,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'drill' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'drill' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'drill' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'drill' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -196,12 +196,12 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
         <div>
           {/* Topologie & Konfiguration */}
           <div className="glass-panel" style={{ padding: '20px', marginBottom: '20px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px' }}>
               {/* Absender (LAN) */}
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '8px', color: '#38bdf8' }}>
+                <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '8px', color: 'var(--accent-cyan)' }}>
                   1. LAN Absender-Host (Inside Local):
-                </label>
+                </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {DEFAULT_NAT_SCENARIO.lanHosts.map(h => (
                     <button
@@ -232,9 +232,9 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
 
               {/* Ziel (WAN) */}
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '8px', color: '#10b981' }}>
+                <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '8px', color: 'var(--accent-emerald)' }}>
                   2. Internet-Ziel (Outside Global):
-                </label>
+                </span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {DEFAULT_NAT_SCENARIO.wanTargets.map(t => (
                     <button
@@ -272,8 +272,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
                   padding: '12px 28px',
                   borderRadius: '30px',
                   border: 'none',
-                  background: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
-                  color: '#fff',
+                  background: 'var(--accent-cyan)',
+                  color: 'var(--text-on-accent)',
                   fontWeight: '800',
                   fontSize: '1rem',
                   cursor: 'pointer',
@@ -295,10 +295,10 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
                 Paket-Inspektor: Header-Transformation (Takt {lastPacketLog.timestamp})
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px', marginBottom: '16px' }}>
                 {/* Hinweg: LAN -> Router */}
                 <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid #38bdf8', background: 'rgba(14, 165, 233, 0.05)' }}>
-                  <div style={{ fontWeight: '700', color: '#38bdf8', marginBottom: '8px' }}>
+                  <div style={{ fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '8px' }}>
                     1. Im LAN (Vor NAT):
                   </div>
                   <div style={{ fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
@@ -310,13 +310,13 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
 
                 {/* Nach NAT: Router -> WAN */}
                 <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid #10b981', background: 'rgba(16, 185, 129, 0.05)' }}>
-                  <div style={{ fontWeight: '700', color: '#34d399', marginBottom: '8px' }}>
+                  <div style={{ fontWeight: '700', color: 'var(--accent-emerald)', marginBottom: '8px' }}>
                     2. Im Internet (Nach PAT Overload):
                   </div>
                   <div style={{ fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
                     <div><strong>Übersetzte Quelle (Inside Global):</strong> {lastPacketLog.translatedOut.srcIp}:{lastPacketLog.translatedOut.srcPort}</div>
                     <div><strong>Ziel:</strong> {lastPacketLog.translatedOut.dstIp}:{lastPacketLog.translatedOut.dstPort}</div>
-                    <div style={{ color: '#34d399', fontWeight: '700' }}>Port {lastPacketLog.translatedOut.srcPort} zugewiesen!</div>
+                    <div style={{ color: 'var(--accent-emerald)', fontWeight: '700' }}>Port {lastPacketLog.translatedOut.srcPort} zugewiesen!</div>
                   </div>
                 </div>
               </div>
@@ -360,8 +360,8 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border-color, #334155)', color: 'var(--text-muted, #94a3b8)' }}>
                   <th style={{ padding: '8px 12px' }}>Proto</th>
-                  <th style={{ padding: '8px 12px', color: '#38bdf8' }}>Inside Local (LAN Host)</th>
-                  <th style={{ padding: '8px 12px', color: '#34d399' }}>Inside Global (Public Socket)</th>
+                  <th style={{ padding: '8px 12px', color: 'var(--accent-cyan)' }}>Inside Local (LAN Host)</th>
+                  <th style={{ padding: '8px 12px', color: 'var(--accent-emerald)' }}>Inside Global (Public Socket)</th>
                   <th style={{ padding: '8px 12px' }}>Outside Global (Server)</th>
                   <th style={{ padding: '8px 12px' }}>Status</th>
                 </tr>
@@ -377,17 +377,17 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
                   natTable.map(entry => (
                     <tr key={entry.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <td style={{ padding: '8px 12px', fontWeight: '700' }}>{entry.protocol}</td>
-                      <td style={{ padding: '8px 12px', fontFamily: 'monospace', color: '#38bdf8' }}>
+                      <td style={{ padding: '8px 12px', fontFamily: 'monospace', color: 'var(--accent-cyan)' }}>
                         {entry.insideLocalIp}:{entry.insideLocalPort}
                       </td>
-                      <td style={{ padding: '8px 12px', fontFamily: 'monospace', color: '#34d399', fontWeight: '700' }}>
+                      <td style={{ padding: '8px 12px', fontFamily: 'monospace', color: 'var(--accent-emerald)', fontWeight: '700' }}>
                         {entry.insideGlobalIp}:{entry.insideGlobalPort}
                       </td>
                       <td style={{ padding: '8px 12px', fontFamily: 'monospace' }}>
                         {entry.outsideGlobalIp}:{entry.outsideGlobalPort}
                       </td>
                       <td style={{ padding: '8px 12px' }}>
-                        <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399' }}>
+                        <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.2)', color: 'var(--accent-emerald)' }}>
                           {entry.state}
                         </span>
                       </td>
@@ -407,10 +407,10 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
             RFC 1918 Private IPv4-Adressräume
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
             {RFC_1918_RANGES.map(r => (
               <div key={r.class} style={{ padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color, #334155)', background: 'rgba(255, 255, 255, 0.02)' }}>
-                <div style={{ fontWeight: '800', color: '#38bdf8', fontSize: '1rem', marginBottom: '4px' }}>
+                <div style={{ fontWeight: '800', color: 'var(--accent-cyan)', fontSize: '1rem', marginBottom: '4px' }}>
                   {r.class}: {r.cidr}
                 </div>
                 <div style={{ fontSize: '0.85rem', marginBottom: '8px' }}>
@@ -436,7 +436,7 @@ export default function NatPatSimulatorLab({ onRewardXP }) {
                 placeholder="z.B. 192.168.1.1"
                 style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-color, #334155)', background: 'var(--bg-card, #0f172a)', color: 'inherit', width: '180px', fontFamily: 'monospace' }}
               />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', fontSize: '0.9rem', color: isTestIpPrivate ? '#34d399' : '#f87171' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '700', fontSize: '0.9rem', color: isTestIpPrivate ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {isTestIpPrivate ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
                 {isTestIpPrivate ? 'Privat nach RFC 1918 (Nicht im Internet geroutet)' : 'Öffentliche / Globale Internet-IP (Oder ungültig)'}
               </div>

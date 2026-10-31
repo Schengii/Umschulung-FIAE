@@ -59,6 +59,8 @@ test('Dashboard hat keine kritischen/schwerwiegenden A11y-Verstöße (axe-core)'
 
 test('Command Palette (Ctrl+K) hat keine kritischen/schwerwiegenden A11y-Verstöße', async ({ page }) => {
   await page.goto('/');
+  // Erst nach dem Mount hängt der Ctrl+K-Listener (App.jsx) am Dokument
+  await expect(page.getByRole('heading', { name: /Willkommen zurück/i })).toBeVisible();
   await page.keyboard.press('Control+k');
   await expect(page.getByPlaceholder(/Suche Themen/i)).toBeVisible();
   await assertNoSeriousA11yViolations(page, 'in der Command Palette');

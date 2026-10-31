@@ -129,6 +129,7 @@ ${activeStepsYaml}
         <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '12px', alignItems: 'center' }}>
           {stages.map((stage, idx) => (
             <React.Fragment key={stage.id}>
+              {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Karte ist Mausabkürzung; Tastatur über die Checkbox in der Karte */}
               <div
                 onClick={() => toggleStage(stage.id)}
                 style={{
@@ -149,7 +150,14 @@ ${activeStepsYaml}
                   ) : stage.status === 'running' ? (
                     <RefreshCw size={18} style={{ color: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
                   ) : (
-                    <input type="checkbox" checked={stage.enabled} onChange={() => {}} style={{ cursor: 'pointer' }} />
+                    <input
+                      type="checkbox"
+                      checked={stage.enabled}
+                      aria-label={`Stage ${stage.name} aktivieren`}
+                      onChange={() => toggleStage(stage.id)}
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ cursor: 'pointer' }}
+                    />
                   )}
                 </div>
                 <div style={{ fontWeight: '700', fontSize: '0.92rem', color: 'var(--text-main)', marginBottom: '4px' }}>
@@ -168,17 +176,17 @@ ${activeStepsYaml}
       </div>
 
       {/* Grid: Live Log Runner & YAML Code Generator */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '20px' }}>
         {/* Live Runner Terminal */}
-        <div style={{ background: '#0f172a', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#f8fafc', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Terminal size={16} style={{ color: '#38bdf8' }} /> GitHub Actions Live Log Output
+        <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
+          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Terminal size={16} style={{ color: 'var(--accent-cyan)' }} /> GitHub Actions Live Log Output
           </h4>
           <div style={{
-            background: '#020617',
+            background: 'var(--bg-primary)',
             padding: '14px',
             borderRadius: 'var(--radius-md)',
-            color: '#38bdf8',
+            color: 'var(--accent-cyan)',
             fontFamily: 'monospace',
             fontSize: '0.85rem',
             minHeight: '260px',
@@ -190,7 +198,7 @@ ${activeStepsYaml}
               <span style={{ color: '#64748b' }}>Klicke auf "Pipeline ausführen", um den CI/CD Runner zu starten...</span>
             ) : (
               logs.map((line, idx) => (
-                <div key={idx} style={{ marginBottom: '4px', color: line.includes('SUCCESS') ? '#10b981' : line.includes('▶️') ? '#a5b4fc' : '#38bdf8' }}>
+                <div key={idx} style={{ marginBottom: '4px', color: line.includes('SUCCESS') ? 'var(--accent-emerald)' : line.includes('▶️') ? 'var(--accent-primary)' : 'var(--accent-cyan)' }}>
                   {line}
                 </div>
               ))
@@ -199,16 +207,16 @@ ${activeStepsYaml}
         </div>
 
         {/* Generated YAML Code */}
-        <div style={{ background: '#0f172a', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
-          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#f8fafc', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <FileCode size={16} style={{ color: '#10b981' }} /> Generierte Workflow YAML (`.github/workflows/deploy.yml`)
+        <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
+          <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FileCode size={16} style={{ color: 'var(--accent-emerald)' }} /> Generierte Workflow YAML (`.github/workflows/deploy.yml`)
           </h4>
           <pre style={{
             margin: 0,
             padding: '14px',
-            background: '#020617',
+            background: 'var(--bg-primary)',
             borderRadius: 'var(--radius-md)',
-            color: '#a5b4fc',
+            color: 'var(--accent-primary)',
             fontFamily: 'monospace',
             fontSize: '0.82rem',
             minHeight: '260px',

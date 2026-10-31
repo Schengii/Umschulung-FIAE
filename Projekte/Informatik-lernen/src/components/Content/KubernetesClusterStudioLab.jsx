@@ -87,7 +87,7 @@ export default function KubernetesClusterStudioLab() {
           </div>
           <span className="badge badge-green" style={{ fontSize: '0.75rem' }}>Kubernetes v1.30.2 Ready</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px' }}>
           {[
             { name: 'kube-apiserver', desc: 'REST API & Cluster Gateway', status: '200 OK' },
             { name: 'etcd Key-Value Store', desc: 'Cluster State & Raft Consensus', status: 'Leader Active' },
@@ -97,7 +97,7 @@ export default function KubernetesClusterStudioLab() {
             <div key={idx} style={{ background: 'var(--bg-secondary)', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>{cp.name}</span>
-                <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 'bold' }}>● {cp.status}</span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--accent-emerald)', fontWeight: 'bold' }}>● {cp.status}</span>
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>{cp.desc}</div>
             </div>
@@ -110,7 +110,7 @@ export default function KubernetesClusterStudioLab() {
         <h2 style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Box size={18} color="var(--accent-primary)" /> Workloads &amp; Deployments Controller
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
           {cluster.deployments.map(dep => {
             const activePods = cluster.pods.filter(p => p.deploymentId === dep.id && p.status === 'Running');
             return (
@@ -141,7 +141,7 @@ export default function KubernetesClusterStudioLab() {
         <h2 style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Server size={18} color="var(--accent-teal, #14b8a6)" /> Worker Nodes &amp; Pod Allocation
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '20px' }}>
           {cluster.nodes.map(node => {
             const podsOnNode = cluster.pods.filter(p => p.nodeId === node.id);
             const isReady = node.status === 'Ready';
@@ -162,7 +162,7 @@ export default function KubernetesClusterStudioLab() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <span style={{ fontWeight: '800', fontSize: '1.05rem', color: isReady ? 'var(--text-main)' : '#ef4444' }}>
+                    <span style={{ fontWeight: '800', fontSize: '1.05rem', color: isReady ? 'var(--text-main)' : 'var(--accent-rose)' }}>
                       {node.name}
                     </span>
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>IP: {node.ip}</div>
@@ -177,7 +177,7 @@ export default function KubernetesClusterStudioLab() {
                 </div>
 
                 {/* Pods Container */}
-                <div style={{ minHeight: '140px', background: '#0f172a', padding: '12px', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ minHeight: '140px', background: 'var(--bg-card)', padding: '12px', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 'bold' }}>
                     Allocated Pods ({podsOnNode.length}):
                   </div>
@@ -200,7 +200,7 @@ export default function KubernetesClusterStudioLab() {
                           alignItems: 'center'
                         }}
                       >
-                        <span style={{ fontWeight: '600', color: '#e2e8f0' }}>{pod.name}</span>
+                        <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{pod.name}</span>
                         <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{pod.ip}</span>
                       </div>
                     ))
@@ -244,7 +244,7 @@ export default function KubernetesClusterStudioLab() {
         </div>
 
         {lastRouteTrace && (
-          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', fontSize: '0.9rem' }}>
               <span className="badge badge-teal">Client</span>
               <ArrowRight size={14} color="#94a3b8" />

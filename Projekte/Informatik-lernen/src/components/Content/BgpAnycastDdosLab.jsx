@@ -53,7 +53,7 @@ export default function BgpAnycastDdosLab({ onRewardXP }) {
             <ShieldAlert className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-50 flex items-center gap-3">
               BGP Anycast & DDoS Flow-Scrubber Studio
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-rose-950/80 border border-rose-500/30 text-rose-400">
                 L3/L4 & BGP
@@ -92,7 +92,7 @@ export default function BgpAnycastDdosLab({ onRewardXP }) {
                   {p.isHealthy ? 'HEALTHY' : 'DOWN / WITHDRAWN'}
                 </span>
               </div>
-              <div className="text-lg font-bold text-white font-mono">
+              <div className="text-lg font-bold text-slate-50 font-mono">
                 {p.currentTrafficGbps} <span className="text-xs font-normal text-slate-400">/ {p.capacityGbps} Gbps</span>
               </div>
               <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
@@ -119,8 +119,8 @@ export default function BgpAnycastDdosLab({ onRewardXP }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Angriffsmuster:</label>
-                <select
+                <label htmlFor="bgp-anycast-ddos-lab-1" className="text-slate-400 block mb-1">Angriffsmuster:</label>
+                <select id="bgp-anycast-ddos-lab-1"
                   value={attackType}
                   onChange={(e) => setAttackType(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-200"
@@ -133,8 +133,8 @@ export default function BgpAnycastDdosLab({ onRewardXP }) {
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Angriffsvolumen (Gbps):</label>
-                <input
+                <label htmlFor="bgp-anycast-ddos-lab-2" className="text-slate-400 block mb-1">Angriffsvolumen (Gbps):</label>
+                <input id="bgp-anycast-ddos-lab-2"
                   type="number"
                   min="0"
                   max="150"

@@ -132,7 +132,7 @@
 | `event_sourcing_lab` | Event-Sourcing & CQRS Studio | Intermediate | Append-Only Event Log & Read-Model |
 | `opentelemetry_tracing_lab` | OpenTelemetry Distributed Tracing | Intermediate | W3C traceparent & Waterfall Spans |
 | `kafka_rebalance_lab` | Kafka Partition Rebalance Studio | Intermediate | Eager vs. Cooperative Sticky Rebalancing |
-| `kafka` | Apache Kafka Event-Architektur | Intermediate | Producers, Topics & Consumer Groups |
+| `kafka` | Apache Kafka Event-Architektur | Intermediate | Interaktiv: Schlüssel → Partition, Consumer Groups, Offsets & Lag, Kafka vs. Queue, IHK-Drill mit Quellen |
 | `cloud_devops` | Cloud & DevOps Praxis | Intermediate | Cloud- und DevOps-Grundlagen: Pipelines, Deployment und Betrieb. |
 | `tooling` | Entwickler-Setup-Guide | Beginner | VS Code, Git & Docker einrichten |
 

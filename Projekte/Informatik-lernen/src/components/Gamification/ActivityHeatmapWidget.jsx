@@ -51,7 +51,7 @@ export default function ActivityHeatmapWidget() {
             <Calendar className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-50 flex items-center gap-2">
               Lern-Aktivität & 365-Tage Heatmap
             </h3>
             <p className="text-xs text-slate-400">

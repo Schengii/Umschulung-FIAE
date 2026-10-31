@@ -1,14 +1,3 @@
-# Project Specific Rules for Informatik-lernen
+# Projektregeln für Informatik-lernen
 
-## README & CHANGELOG Maintenance Rule
-Whenever any file in this repository is added, deleted, modified, or improved:
-1. Automatically update `README.md` and `CHANGELOG.md` to reflect the changes.
-2. Maintain all required sections in `README.md`:
-   - Project Title & Description
-   - Folder structure
-   - File contents overview
-   - Functionality & How it works
-   - Instructions / Usage guide
-   - Change history (Änderungshistorie) logging all additions, improvements, and updates.
-3. Log version releases in `CHANGELOG.md` following the Keep a Changelog standard.
-
+Alle verbindlichen Regeln (Befehle, Architektur, Lab-Checkliste, Sicherheit, A11y, README-/CHANGELOG-Pflege) stehen in [CLAUDE.md](../CLAUDE.md) im Projektroot und werden nur dort gepflegt. Lies diese Datei vor jeder Aufgabe.

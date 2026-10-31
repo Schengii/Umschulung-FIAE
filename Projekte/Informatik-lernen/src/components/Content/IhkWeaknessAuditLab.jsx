@@ -126,8 +126,8 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
             padding: '8px 16px',
             borderRadius: '10px',
             border: 'none',
-            background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, var(--accent-purple), #5b21b6)',
-            color: '#fff',
+            background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-purple)',
+            color: 'var(--text-on-accent)',
             fontWeight: 600,
             fontSize: '0.85rem',
             cursor: xpClaimed ? 'default' : 'pointer',
@@ -142,10 +142,10 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
       </div>
 
       {/* Overview Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '14px', border: '1px solid var(--border-color)', borderTop: '4px solid var(--accent-purple)' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase' }}>Gesamt-Erfolgsquote</div>
-          <div style={{ fontSize: '2rem', fontWeight: 900, color: audit.overallScore >= 70 ? '#10b981' : 'var(--accent-amber)', marginTop: '4px' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 900, color: audit.overallScore >= 70 ? 'var(--accent-emerald)' : 'var(--accent-amber)', marginTop: '4px' }}>
             {audit.overallScore}%
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>{activeHistory.length} Prüfungsantworten ausgewertet</div>
@@ -153,7 +153,7 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
 
         <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '14px', border: '1px solid var(--border-color)', borderTop: '4px solid #ef4444' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase' }}>Kritische Wissenslücken</div>
-          <div style={{ fontSize: '2rem', fontWeight: 900, color: audit.weakFields.length === 0 ? '#10b981' : '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 900, color: audit.weakFields.length === 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginTop: '4px' }}>
             {audit.weakFields.length}
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>Lernfelder mit &gt;30% Fehlerquote</div>
@@ -185,9 +185,9 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
         </div>
 
         {recommendations.length === 0 ? (
-          <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(16,185,129,0.1)', borderRadius: '12px', border: '1px solid rgba(16,185,129,0.3)', color: '#10b981' }}>
+          <div style={{ padding: '20px', textAlign: 'center', background: 'rgba(16,185,129,0.1)', borderRadius: '12px', border: '1px solid rgba(16,185,129,0.3)', color: 'var(--accent-emerald)' }}>
             <CheckCircle2 size={32} style={{ margin: '0 auto 8px' }} />
-            <h3 style={{ margin: 0, fontWeight: 700, color: '#10b981' }}>Hervorragend! Keine kritischen Wissenslücken erkannt.</h3>
+            <h3 style={{ margin: 0, fontWeight: 700, color: 'var(--accent-emerald)' }}>Hervorragend! Keine kritischen Wissenslücken erkannt.</h3>
             <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--text-main)' }}>Du beherrschst alle IHK-Lernfelder mit hoher Trefferquote.</p>
           </div>
         ) : (
@@ -211,7 +211,7 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <AlertTriangle size={18} color="#ef4444" />
                     <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)' }}>{rec.title}</strong>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(239,68,68,0.2)', color: '#ef4444' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(239,68,68,0.2)', color: 'var(--accent-rose)' }}>
                       {rec.errorRatePercent}% Fehler
                     </span>
                   </div>
@@ -227,8 +227,8 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
                       padding: '8px 16px',
                       borderRadius: '8px',
                       border: 'none',
-                      background: '#ef4444',
-                      color: '#fff',
+                      background: 'var(--accent-rose)',
+                      color: 'var(--text-on-accent)',
                       fontSize: '0.85rem',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -256,13 +256,13 @@ export default function IhkWeaknessAuditLab({ onNavigateTab, onRewardXP, userSta
             <div key={lf.id} style={{ display: 'flex', gap: '4px' }}>
               <button
                 onClick={() => handleSimulateQuizResult(lf.id, true)}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #10b981', background: 'rgba(16,185,129,0.1)', color: '#10b981', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #10b981', background: 'rgba(16,185,129,0.1)', color: 'var(--accent-emerald)', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 + {lf.id} Richtig
               </button>
               <button
                 onClick={() => handleSimulateQuizResult(lf.id, false)}
-                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #ef4444', background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid #ef4444', background: 'rgba(239,68,68,0.1)', color: 'var(--accent-rose)', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 + {lf.id} Falsch
               </button>

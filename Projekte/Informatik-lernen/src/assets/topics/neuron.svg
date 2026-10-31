@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Ein künstliches Neuron: Eingaben werden mit Gewichten multipliziert, summiert, um den Bias ergänzt und durch eine Aktivierungsfunktion zur Ausgabe</title>
+  <rect width="720" height="300" fill="#ffffff"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f172a"/></marker></defs>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Ein künstliches Neuron</text>
+  <g font-size="14" text-anchor="middle">
+    <circle cx="80" cy="90" r="26" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="80" y="95" font-weight="700">x₁ = 1</text>
+    <circle cx="80" cy="200" r="26" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="80" y="205" font-weight="700">x₂ = 0,5</text>
+    <circle cx="330" cy="145" r="46" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="330" y="140" font-size="22" font-weight="700">Σ</text><text x="330" y="164" font-size="12">+ b = 0,1</text>
+    <rect x="440" y="115" width="110" height="60" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="495" y="140" font-weight="700">Aktivierung</text><text x="495" y="160" font-size="12">z. B. ReLU</text>
+    <circle cx="640" cy="145" r="30" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/><text x="640" y="150" font-weight="700">y</text>
+  </g>
+  <g stroke="#0f172a" stroke-width="2" fill="none" marker-end="url(#a)">
+    <path d="M106 96 L284 136"/><path d="M106 194 L284 156"/><path d="M376 145 H438"/><path d="M550 145 H608"/>
+  </g>
+  <g font-size="13" fill="#be123c" font-weight="700">
+    <text x="170" y="100">w₁ = 0,8</text><text x="170" y="200">w₂ = −0,4</text>
+  </g>
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <text x="360" y="240">z = x₁·w₁ + x₂·w₂ + b = 0,8 − 0,2 + 0,1 = 0,7</text>
+    <text x="360" y="262">y = ReLU(z) = max(0; z) = 0,7</text>
+    <text x="360" y="288" font-size="12" fill="#475569">Lernen heißt: Gewichte und Bias so anpassen, dass die Ausgaben zu den Trainingsdaten passen.</text>
+  </g>
+</svg>

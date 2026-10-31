@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Struktogramm nach Nassi-Shneiderman zur Suche des Maximums: Zuweisung, Zählschleife mit eingebetteter Verzweigung und Ausgabe</title>
+  <rect width="720" height="290" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Struktogramm: Maximum einer Liste finden</text>
+  <rect x="150" y="116" width="460" height="92" fill="#eef2ff"/>
+  <g stroke="#0f172a" stroke-width="2" fill="none">
+    <rect x="110" y="44" width="500" height="200"/>
+    <line x1="110" y1="80" x2="610" y2="80"/>
+    <line x1="110" y1="208" x2="610" y2="208"/>
+    <line x1="150" y1="116" x2="610" y2="116"/>
+    <line x1="150" y1="116" x2="150" y2="208"/>
+    <line x1="150" y1="116" x2="380" y2="164" stroke-width="1.5"/>
+    <line x1="610" y1="116" x2="380" y2="164" stroke-width="1.5"/>
+    <line x1="150" y1="164" x2="610" y2="164" stroke-width="1.5"/>
+    <line x1="380" y1="164" x2="380" y2="208" stroke-width="1.5"/>
+  </g>
+  <g font-size="14" fill="#0f172a">
+    <text x="124" y="67">max ← zahlen[0]</text>
+    <text x="124" y="103">für i ← 1 bis länge(zahlen) − 1</text>
+    <text x="380" y="138" text-anchor="middle">zahlen[i] &gt; max ?</text>
+    <text x="166" y="156" font-size="13" fill="#047857" font-weight="700">ja</text>
+    <text x="580" y="156" font-size="13" fill="#be123c" font-weight="700">nein</text>
+    <text x="265" y="192" text-anchor="middle">max ← zahlen[i]</text>
+    <text x="495" y="192" text-anchor="middle">∅</text>
+    <text x="124" y="231">Ausgabe: max</text>
+  </g>
+  <g font-size="12" fill="#475569">
+    <text x="620" y="67">Anweisung</text>
+    <text x="620" y="103">Zählschleife</text>
+    <text x="620" y="145">Verzweigung</text>
+    <text x="620" y="160">im Schleifen-</text>
+    <text x="620" y="175">rumpf (blau)</text>
+    <text x="620" y="231">Anweisung</text>
+  </g>
+  <text x="360" y="276" text-anchor="middle" font-size="12" fill="#475569">∅ = leerer Zweig. Die Symbole sind in DIN 66261 genormt.</text>
+</svg>

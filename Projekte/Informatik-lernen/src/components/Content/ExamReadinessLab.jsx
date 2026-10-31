@@ -72,7 +72,7 @@ export default function ExamReadinessLab({ onRewardXP }) {
       </div>
 
       {/* Countdown & Readiness Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         <div className="glass-panel" style={{ padding: '20px', textAlign: 'center' }}>
           <Clock size={32} color="var(--accent-teal)" style={{ margin: '0 auto 10px' }} />
           <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Nächster IHK Prüfungstermin</div>

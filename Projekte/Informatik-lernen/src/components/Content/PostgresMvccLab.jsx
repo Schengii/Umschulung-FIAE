@@ -30,7 +30,7 @@ export default function PostgresMvccLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '20px', color: '#34d399', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '20px', color: 'var(--accent-emerald)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Database size={16} /> PostgreSQL Multi-Version Concurrency Control (MVCC)
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -41,25 +41,25 @@ export default function PostgresMvccLab() {
           </p>
         </div>
 
-        <span style={{ fontSize: '0.85rem', padding: '6px 14px', borderRadius: '8px', background: 'var(--card-bg, #1e293b)', border: '1px solid rgba(255,255,255,0.1)', color: '#34d399', fontWeight: 'bold' }}>
+        <span style={{ fontSize: '0.85rem', padding: '6px 14px', borderRadius: '8px', background: 'var(--card-bg, #1e293b)', border: '1px solid var(--border-color)', color: 'var(--accent-emerald)', fontWeight: 'bold' }}>
           Schritt {currentStepIdx + 1} / {POSTGRES_MVCC_SCENARIOS.length}
         </span>
       </div>
 
       {/* Grid: SQL Action & Table Page Inspector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: Action & Explanation */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ color: '#94a3b8', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ color: 'var(--text-dim)', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '6px' }}>
               Transaktion #{currentStep.txId}
             </div>
-            <div style={{ background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', fontFamily: 'Fira Code, monospace', color: '#86efac', fontSize: '0.9rem', marginBottom: '16px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px', fontFamily: 'Fira Code, monospace', color: 'var(--accent-emerald)', fontSize: '0.9rem', marginBottom: '16px' }}>
               {currentStep.action}
             </div>
 
-            <p style={{ color: '#cbd5e1', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
               {currentStep.desc}
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function PostgresMvccLab() {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={handleReset}
-              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', color: 'var(--text-main)', cursor: 'pointer' }}
             >
               <RotateCcw size={15} />
             </button>
@@ -77,8 +77,8 @@ export default function PostgresMvccLab() {
                 flex: 1,
                 padding: '10px',
                 borderRadius: '8px',
-                background: isCompleted ? '#22c55e' : '#10b981',
-                color: '#fff',
+                background: isCompleted ? 'var(--accent-emerald)' : 'var(--accent-emerald)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 fontSize: '0.88rem',
                 border: 'none',
@@ -96,12 +96,12 @@ export default function PostgresMvccLab() {
         </div>
 
         {/* Right: Table Page 0 Memory Layout */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#fff', fontSize: '0.95rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '0.95rem' }}>
               <Layers size={17} color="#34d399" /> 8 KB Disk Page (users_table_page_0)
             </div>
-            <span style={{ fontSize: '0.75rem', background: '#34d399', color: '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '0.75rem', background: 'var(--accent-emerald)', color: '#000', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
               HEAP TUPLES
             </span>
           </div>
@@ -122,14 +122,14 @@ export default function PostgresMvccLab() {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.85rem' }}>
-                    <strong style={{ color: isReclaimed ? '#93c5fd' : isDead ? '#fca5a5' : '#86efac', fontFamily: 'monospace' }}>
+                    <strong style={{ color: isReclaimed ? 'var(--accent-cyan)' : isDead ? 'var(--accent-rose)' : 'var(--accent-emerald)', fontFamily: 'monospace' }}>
                       Tuple {tuple.tuple} [xmin={tuple.xmin}, xmax={tuple.xmax}]
                     </strong>
-                    <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: 'rgba(0,0,0,0.3)', color: '#fff' }}>
+                    <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-tertiary)', color: 'var(--text-main)' }}>
                       {tuple.state}
                     </span>
                   </div>
-                  <div style={{ color: '#cbd5e1', fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontFamily: 'monospace' }}>
                     {tuple.data}
                   </div>
                 </div>
@@ -137,7 +137,7 @@ export default function PostgresMvccLab() {
             })}
           </div>
 
-          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.4' }}>
+          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--text-dim)', lineHeight: '1.4' }}>
             💡 <strong>Tipp:</strong> `VACUUM` gibt den Speicherplatz innerhalb der Tabelle frei, damit neue INSERTs ihn nutzen können. Erst `VACUUM FULL` schreibt die Tabelle komplett neu und gibt ungenutzten Plattenplatz an das Betriebssystem zurück.
           </div>
         </div>

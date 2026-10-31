@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Vergleich der Python-Sammlungstypen list, tuple, dict und set nach Reihenfolge, Veränderbarkeit, Duplikaten und Zugriff</title>
+  <rect width="720" height="280" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Python-Sammlungen auf einen Blick</text>
+  <g font-size="13">
+    <g font-weight="700" fill="#475569">
+      <text x="20" y="62">Typ</text><text x="200" y="62">geordnet</text><text x="300" y="62">veränderbar</text><text x="420" y="62">Duplikate</text><text x="530" y="62">Zugriff</text>
+    </g>
+    <line x1="20" y1="72" x2="700" y2="72" stroke="#cbd5e1"/>
+    <g font-family="Fira Code, monospace" font-weight="700">
+      <text x="20" y="104" fill="#4338ca">list   [1, 2, 2]</text>
+      <text x="20" y="150" fill="#0f766e">tuple  (1, 2, 2)</text>
+      <text x="20" y="196" fill="#b45309">dict   {"a": 1}</text>
+      <text x="20" y="242" fill="#6d28d9">set    {1, 2}</text>
+    </g>
+    <g fill="#0f172a">
+      <text x="200" y="104">✓</text><text x="300" y="104">✓</text><text x="420" y="104">✓</text><text x="530" y="104">Index: liste[0]</text>
+      <text x="200" y="150">✓</text><text x="300" y="150" fill="#be123c">✗</text><text x="420" y="150">✓</text><text x="530" y="150">Index: tup[0]</text>
+      <text x="200" y="196">✓ (seit 3.7)</text><text x="300" y="196">✓</text><text x="420" y="196">Schlüssel ✗</text><text x="530" y="196">Schlüssel: d["a"]</text>
+      <text x="200" y="242" fill="#be123c">✗</text><text x="300" y="242">✓</text><text x="420" y="242" fill="#be123c">✗</text><text x="530" y="242">nur: x in s</text>
+    </g>
+    <g stroke="#e2e8f0"><line x1="20" y1="120" x2="700" y2="120"/><line x1="20" y1="166" x2="700" y2="166"/><line x1="20" y1="212" x2="700" y2="212"/></g>
+  </g>
+  <text x="360" y="272" text-anchor="middle" font-size="12" fill="#475569">Unveränderbare Typen (tuple, str, int) können Schlüssel eines dict oder Elemente eines set sein.</text>
+</svg>

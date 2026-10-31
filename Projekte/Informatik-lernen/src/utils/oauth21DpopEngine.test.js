@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import {
-  validateOauth21Compliance,
+  evaluateOauth21Flow,
   verifyDpopProof
 } from './oauth21DpopEngine';
 
 describe('oauth21DpopEngine', () => {
   it('identifies OAuth 2.1 violations when implicit flow or plain PKCE are used', () => {
-    const invalid = validateOauth21Compliance({
+    const invalid = evaluateOauth21Flow({
       grantType: 'implicit',
       usePkce: false,
       tokenType: 'bearer'
@@ -14,7 +14,7 @@ describe('oauth21DpopEngine', () => {
     expect(invalid.isOauth21Compliant).toBe(false);
     expect(invalid.violations.some(v => v.includes('Implicit Grant'))).toBe(true);
 
-    const valid = validateOauth21Compliance({
+    const valid = evaluateOauth21Flow({
       grantType: 'authorization_code',
       usePkce: true,
       pkceMethod: 'S256',

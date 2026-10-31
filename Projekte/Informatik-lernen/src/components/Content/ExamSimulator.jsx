@@ -233,7 +233,7 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
                 padding: '4px 12px',
                 borderRadius: '16px',
                 border: 'none',
-                background: questionFilter === 'bookmarked' ? '#f59e0b' : 'rgba(255, 255, 255, 0.05)',
+                background: questionFilter === 'bookmarked' ? 'var(--accent-amber)' : 'rgba(255, 255, 255, 0.05)',
                 color: questionFilter === 'bookmarked' ? '#000' : 'var(--text-muted)',
                 fontSize: '0.8rem',
                 fontWeight: '700',
@@ -248,8 +248,8 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
                 padding: '4px 12px',
                 borderRadius: '16px',
                 border: 'none',
-                background: questionFilter === 'unanswered' ? '#ef4444' : 'rgba(255, 255, 255, 0.05)',
-                color: questionFilter === 'unanswered' ? '#fff' : 'var(--text-muted)',
+                background: questionFilter === 'unanswered' ? 'var(--accent-rose)' : 'rgba(255, 255, 255, 0.05)',
+                color: questionFilter === 'unanswered' ? 'var(--text-on-accent)' : 'var(--text-muted)',
                 fontSize: '0.8rem',
                 fontWeight: '700',
                 cursor: 'pointer'
@@ -299,7 +299,7 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
             <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <BarChart3 size={18} /> Ergebnis nach Wissensgebieten / IHK-Themen:
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px' }}>
               {Object.entries(scoreData.categoryStats).map(([catName, stats]) => {
                 const catPercent = Math.round((stats.correct / stats.total) * 100);
                 const isCatPassed = catPercent >= 50;
@@ -307,7 +307,7 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
                   <div key={catName} style={{ padding: '12px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', fontWeight: '700', marginBottom: '6px' }}>
                       <span style={{ color: 'var(--text-main)' }}>{catName}</span>
-                      <span style={{ color: isCatPassed ? '#10b981' : '#ef4444' }}>{catPercent}%</span>
+                      <span style={{ color: isCatPassed ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>{catPercent}%</span>
                     </div>
                     <div style={{ height: '6px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '3px', overflow: 'hidden' }}>
                       <div style={{ width: `${catPercent}%`, height: '100%', background: isCatPassed ? '#10b981' : '#ef4444' }} />
@@ -341,7 +341,7 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
                       border: 'none',
                       background: 'none',
                       cursor: 'pointer',
-                      color: isBookmarked ? '#f59e0b' : 'var(--text-muted)',
+                      color: isBookmarked ? 'var(--accent-amber)' : 'var(--text-muted)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '4px',

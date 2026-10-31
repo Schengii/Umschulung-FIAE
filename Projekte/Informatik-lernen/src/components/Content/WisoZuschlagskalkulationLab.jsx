@@ -52,9 +52,9 @@ export default function WisoZuschlagskalkulationLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
+        background: 'var(--gradient-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -86,7 +86,7 @@ export default function WisoZuschlagskalkulationLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -100,7 +100,7 @@ export default function WisoZuschlagskalkulationLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(236, 72, 153, 0.15)', 
-              color: '#ec4899', 
+              color: 'var(--accent-rose)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -113,14 +113,14 @@ export default function WisoZuschlagskalkulationLab() {
       </div>
 
       {/* Grid: Inputs & Results */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '24px' }}>
         
         {/* Input Parameters */}
         <div style={{
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.08)'
+          border: '1px solid var(--border-color)'
         }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FileText size={18} color="#ec4899" /> Kostenarten & Zuschlagssätze
@@ -128,99 +128,99 @@ export default function WisoZuschlagskalkulationLab() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div>
-              <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="wiso-zuschlagskalkulation-lab-1" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                 Fertigungsmaterial (€ FM):
               </label>
-              <input 
+              <input id="wiso-zuschlagskalkulation-lab-1" 
                 type="number" 
                 value={params.fertigungsmaterial} 
                 onChange={(e) => handleChange('fertigungsmaterial', e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="wiso-zuschlagskalkulation-lab-2" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                 Materialgemeinkostensatz (MGKZ %):
               </label>
-              <input 
+              <input id="wiso-zuschlagskalkulation-lab-2" 
                 type="number" 
                 value={params.materialgemeinkostensatzProzent} 
                 onChange={(e) => handleChange('materialgemeinkostensatzProzent', e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="wiso-zuschlagskalkulation-lab-3" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                 Fertigungslohn (€ FL):
               </label>
-              <input 
+              <input id="wiso-zuschlagskalkulation-lab-3" 
                 type="number" 
                 value={params.fertigungslohn} 
                 onChange={(e) => handleChange('fertigungslohn', e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="wiso-zuschlagskalkulation-lab-4" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                 Fertigungsgemeinkostensatz (FGKZ %):
               </label>
-              <input 
+              <input id="wiso-zuschlagskalkulation-lab-4" 
                 type="number" 
                 value={params.fertigungsgemeinkostensatzProzent} 
                 onChange={(e) => handleChange('fertigungsgemeinkostensatzProzent', e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
               />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="wiso-zuschlagskalkulation-lab-5" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                   VwGKZ (% auf HK):
                 </label>
-                <input 
+                <input id="wiso-zuschlagskalkulation-lab-5" 
                   type="number" 
                   value={params.verwaltungsgemeinkostensatzProzent} 
                   onChange={(e) => handleChange('verwaltungsgemeinkostensatzProzent', e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="wiso-zuschlagskalkulation-lab-6" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                   VtGKZ (% auf HK):
                 </label>
-                <input 
+                <input id="wiso-zuschlagskalkulation-lab-6" 
                   type="number" 
                   value={params.vertriebsgemeinkostensatzProzent} 
                   onChange={(e) => handleChange('vertriebsgemeinkostensatzProzent', e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="wiso-zuschlagskalkulation-lab-7" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                   Gewinnzuschlag (%):
                 </label>
-                <input 
+                <input id="wiso-zuschlagskalkulation-lab-7" 
                   type="number" 
                   value={params.gewinnzuschlagProzent} 
                   onChange={(e) => handleChange('gewinnzuschlagProzent', e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="wiso-zuschlagskalkulation-lab-8" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                   Kundenskonto (%):
                 </label>
-                <input 
+                <input id="wiso-zuschlagskalkulation-lab-8" 
                   type="number" 
                   value={params.kundenskontoProzent} 
                   onChange={(e) => handleChange('kundenskontoProzent', e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px', color: '#ffffff' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function WisoZuschlagskalkulationLab() {
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.08)'
+          border: '1px solid var(--border-color)'
         }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <BarChart3 size={18} color="#10b981" /> IHK Kalkulationsschema (Staffelrechnung)
@@ -247,7 +247,7 @@ export default function WisoZuschlagskalkulationLab() {
               <span>+ Materialgemeinkosten ({params.materialgemeinkostensatzProzent}%):</span>
               <span>{calc.materialgemeinkosten.toFixed(2)} €</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid rgba(255, 255, 255, 0.1)', fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid var(--border-color)', fontWeight: 600 }}>
               <span>= Materialkosten (MK):</span>
               <span>{calc.materialkosten.toFixed(2)} €</span>
             </div>
@@ -264,12 +264,12 @@ export default function WisoZuschlagskalkulationLab() {
               <span>+ Sondereinzelkosten d. Fertigung (SEKF):</span>
               <span>{calc.sondereinzelkostenFertigung.toFixed(2)} €</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid rgba(255, 255, 255, 0.1)', fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderTop: '1px solid var(--border-color)', fontWeight: 600 }}>
               <span>= Fertigungskosten (FK):</span>
               <span>{calc.fertigungskosten.toFixed(2)} €</span>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(59, 130, 246, 0.15)', borderRadius: '8px', margin: '8px 0', fontWeight: 700, color: '#3b82f6' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(59, 130, 246, 0.15)', borderRadius: '8px', margin: '8px 0', fontWeight: 700, color: 'var(--accent-cyan)' }}>
               <span>= Herstellkosten (HK = MK + FK):</span>
               <span>{calc.herstellkosten.toFixed(2)} €</span>
             </div>
@@ -287,19 +287,19 @@ export default function WisoZuschlagskalkulationLab() {
               <span>{calc.sondereinzelkostenVertrieb.toFixed(2)} €</span>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderTop: '1px solid rgba(255, 255, 255, 0.1)', fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderTop: '1px solid var(--border-color)', fontWeight: 600 }}>
               <span>= Selbstkosten (SK):</span>
               <span>{calc.selbstkosten.toFixed(2)} €</span>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', color: '#10b981' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', color: 'var(--accent-emerald)' }}>
               <span>+ Gewinn ({params.gewinnzuschlagProzent}%):</span>
               <span>{calc.gewinn.toFixed(2)} €</span>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 14px', background: 'rgba(236, 72, 153, 0.2)', border: '1px solid rgba(236, 72, 153, 0.4)', borderRadius: '10px', marginTop: '10px', fontWeight: 700, fontSize: '1.05rem', color: '#ffffff' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 14px', background: 'rgba(236, 72, 153, 0.2)', border: '1px solid rgba(236, 72, 153, 0.4)', borderRadius: '10px', marginTop: '10px', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-main)' }}>
               <span>Barverkaufspreis (BVP):</span>
-              <span style={{ color: '#ec4899' }}>{calc.barverkaufspreis.toFixed(2)} €</span>
+              <span style={{ color: 'var(--accent-rose)' }}>{calc.barverkaufspreis.toFixed(2)} €</span>
             </div>
           </div>
         </div>

@@ -53,12 +53,6 @@
  * @typedef {AuthenticatePasskeyFailure | AuthenticatePasskeySuccess} AuthenticatePasskeyResult
  */
 
-export const FIDO2_ALGORITHMS = {
-  ES256: { id: -7, name: 'ECDSA mit SHA-256 (P-256 Curve)' },
-  RS256: { id: -257, name: 'RSASSA-PKCS1-v1_5 mit SHA-256' },
-  EdDSA: { id: -8, name: 'Ed25519 Curve' }
-};
-
 /**
  * Erzeugt eine kryptografische Challenge
  * @param {number} [length]

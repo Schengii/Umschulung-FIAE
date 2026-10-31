@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { Award, Download, X } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
@@ -7,6 +8,8 @@ function getFormattedToday() {
 }
 
 export default function CertificateModal({ isOpen, onClose, userState }) {
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
   if (!isOpen) return null;
 
   const today = getFormattedToday();
@@ -75,6 +78,7 @@ export default function CertificateModal({ isOpen, onClose, userState }) {
   };
 
   return (
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -90,7 +94,7 @@ export default function CertificateModal({ isOpen, onClose, userState }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={onClose}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
         className="glass-panel animate-fade-in"
@@ -108,7 +112,11 @@ export default function CertificateModal({ isOpen, onClose, userState }) {
           position: 'relative',
           textAlign: 'center'
         }}
-        onClick={(e) => e.stopPropagation()}
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="certificate-modal-title"
       >
         <button
           onClick={onClose}
@@ -126,7 +134,7 @@ export default function CertificateModal({ isOpen, onClose, userState }) {
           <span style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', color: '#4f46e5' }}>
             Zertifikat über Informatik-Qualifikation
           </span>
-          <h2 style={{ fontSize: '2.4rem', fontWeight: '900', color: '#0f172a', margin: '8px 0 0' }}>
+          <h2 id="certificate-modal-title" style={{ fontSize: '2.4rem', fontWeight: '900', color: '#0f172a', margin: '8px 0 0' }}>
             INFORMATIK-ZERTIFIKAT
           </h2>
           <div style={{ width: '120px', height: '3px', background: 'linear-gradient(135deg, #4f46e5, #0d9488)', margin: '12px auto' }}></div>

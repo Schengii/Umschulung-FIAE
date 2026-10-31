@@ -77,7 +77,7 @@ export default function WebrtcSfuLab({ onRewardXP }) {
       </div>
 
       {/* Architecture 3-Column Comparison Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '18px' }}>
         {/* Full Mesh */}
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: `2px solid ${topologyData.mesh.isViable ? 'var(--border-color)' : '#ef4444'}` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -91,7 +91,7 @@ export default function WebrtcSfuLab({ onRewardXP }) {
             <div>Client Upload: <strong>{topologyData.mesh.uploadStreams} Streams</strong></div>
             <div>Client Download: <strong>{topologyData.mesh.downloadStreams} Streams</strong></div>
             <div>Verbindungen im Mesh: <strong>{topologyData.mesh.totalConnections} Peer-to-Peer</strong></div>
-            <div>Client Bandbreite: <strong style={{ color: topologyData.mesh.isViable ? 'var(--text-main)' : '#ef4444' }}>{(topologyData.mesh.clientBandwidthKbps / 1000).toFixed(1)} Mbit/s</strong></div>
+            <div>Client Bandbreite: <strong style={{ color: topologyData.mesh.isViable ? 'var(--text-main)' : 'var(--accent-rose)' }}>{(topologyData.mesh.clientBandwidthKbps / 1000).toFixed(1)} Mbit/s</strong></div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px' }}>{topologyData.mesh.recommendation}</div>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function WebrtcSfuLab({ onRewardXP }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem' }}>
             <div>Client Upload: <strong>1 Stream</strong></div>
             <div>Client Download: <strong>1 Composite Stream</strong></div>
-            <div>Server CPU-Last: <strong style={{ color: topologyData.mcu.serverCpuPercent > 80 ? '#ef4444' : 'var(--accent-primary)' }}>{topologyData.mcu.serverCpuPercent}%</strong></div>
+            <div>Server CPU-Last: <strong style={{ color: topologyData.mcu.serverCpuPercent > 80 ? 'var(--accent-rose)' : 'var(--accent-primary)' }}>{topologyData.mcu.serverCpuPercent}%</strong></div>
             <div>Client Bandbreite: <strong>{(topologyData.mcu.clientBandwidthKbps / 1000).toFixed(1)} Mbit/s</strong></div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px' }}>{topologyData.mcu.recommendation}</div>
           </div>
@@ -115,14 +115,14 @@ export default function WebrtcSfuLab({ onRewardXP }) {
         {/* SFU Simulcast */}
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '2px solid #10b981' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 'bold', color: '#10b981' }}>3. SFU (Simulcast)</h3>
+            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--accent-emerald)' }}>3. SFU (Simulcast)</h3>
             <span className="badge badge-emerald">Best Practice</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem' }}>
             <div>Client Upload: <strong>3 Simulcast Layers (720p/360p/180p)</strong></div>
             <div>Client Download: <strong>{topologyData.sfu.downloadStreams} Adaptive Streams</strong></div>
-            <div>Server CPU-Last: <strong style={{ color: '#10b981' }}>{topologyData.sfu.serverCpuPercent}% (RTP Forwarding)</strong></div>
+            <div>Server CPU-Last: <strong style={{ color: 'var(--accent-emerald)' }}>{topologyData.sfu.serverCpuPercent}% (RTP Forwarding)</strong></div>
             <div>Client Bandbreite: <strong>{(topologyData.sfu.clientBandwidthKbps / 1000).toFixed(1)} Mbit/s</strong></div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px' }}>{topologyData.sfu.recommendation}</div>
           </div>

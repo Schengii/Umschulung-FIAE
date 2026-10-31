@@ -163,7 +163,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-10-27T09:25:30.710Z",
+    "updatedAt": "2026-10-31T10:00:40.487Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -299,7 +299,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-22T09:57:38Z"
+    "updatedAt": "2026-10-30T18:39:58Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -320,7 +320,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-22T09:57:43Z",
+    "updatedAt": "2026-10-30T18:40:04Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"

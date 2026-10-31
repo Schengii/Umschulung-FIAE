@@ -103,7 +103,7 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
       {tab === 'bep' ? (
         <>
           {/* Key Stat Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
             <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Stückdeckungsbeitrag (db):</span>
               <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -113,14 +113,14 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
 
             <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Gewinnschwelle (Break-Even-Point):</span>
-              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
                 {cmData.bepMenge.toLocaleString('de-DE')} Stück
               </div>
             </div>
 
             <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Betriebsergebnis (Gewinn/Verlust):</span>
-              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: cmData.isProfit ? '#10b981' : '#ef4444', marginTop: '4px' }}>
+              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: cmData.isProfit ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginTop: '4px' }}>
                 {cmData.betriebsergebnis >= 0 ? '+' : ''}{cmData.betriebsergebnis.toLocaleString('de-DE')} €
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
 
           {/* Interactive Sliders */}
           <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Verkaufspreis (p): {preis} €
@@ -202,7 +202,7 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'var(--bg-primary)', borderRadius: '6px' }}>
               <span>- Variable Gesamtkosten ({menge} Stk. × {varKosten} €)</span>
-              <strong style={{ color: '#ef4444' }}>-{multiData.varKosten.toLocaleString('de-DE')} €</strong>
+              <strong style={{ color: 'var(--accent-rose)' }}>-{multiData.varKosten.toLocaleString('de-DE')} €</strong>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '6px', fontWeight: 'bold' }}>
@@ -212,17 +212,17 @@ export default function WisoContributionMarginLab({ onRewardXP }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '6px', fontWeight: 'bold' }}>
               <span>= Deckungsbeitrag II (nach Erzeugnisfixkosten 15.000 €)</span>
-              <strong style={{ color: '#10b981' }}>{multiData.db2.toLocaleString('de-DE')} €</strong>
+              <strong style={{ color: 'var(--accent-emerald)' }}>{multiData.db2.toLocaleString('de-DE')} €</strong>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '6px', fontWeight: 'bold' }}>
               <span>= Deckungsbeitrag III (nach Gruppenfixkosten 10.000 €)</span>
-              <strong style={{ color: '#10b981' }}>{multiData.db3.toLocaleString('de-DE')} €</strong>
+              <strong style={{ color: 'var(--accent-emerald)' }}>{multiData.db3.toLocaleString('de-DE')} €</strong>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 14px', background: multiData.isProfit ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)', borderRadius: '6px', fontWeight: 'bold', fontSize: '1rem' }}>
               <span>= Betriebsergebnis (nach allen Fixkosten)</span>
-              <strong style={{ color: multiData.isProfit ? '#10b981' : '#ef4444' }}>
+              <strong style={{ color: multiData.isProfit ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {multiData.betriebsergebnis >= 0 ? '+' : ''}{multiData.betriebsergebnis.toLocaleString('de-DE')} €
               </strong>
             </div>

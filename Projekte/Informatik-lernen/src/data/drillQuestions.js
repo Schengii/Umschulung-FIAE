@@ -13,6 +13,8 @@ import { RAID_DRILL_QUESTIONS } from '../utils/raidEngine';
 import { LIQUIDITAET_DRILL_QUESTIONS } from '../utils/wisoLiquiditaetEngine';
 import { ANDLER_DRILL_QUESTIONS } from '../utils/wisoAndlerEngine';
 import { CONTRIBUTION_MARGIN_DRILL_QUESTIONS } from '../utils/wisoContributionMarginEngine';
+import { KAFKA_DRILL_QUESTIONS } from '../utils/kafkaEventEngine';
+import { WASM_DRILL_QUESTIONS } from '../utils/wasmBinaryEngine';
 
 const SOURCES = [
   NORMALIZATION_DRILL_QUESTIONS,
@@ -26,7 +28,9 @@ const SOURCES = [
   RAID_DRILL_QUESTIONS,
   LIQUIDITAET_DRILL_QUESTIONS,
   ANDLER_DRILL_QUESTIONS,
-  CONTRIBUTION_MARGIN_DRILL_QUESTIONS
+  CONTRIBUTION_MARGIN_DRILL_QUESTIONS,
+  KAFKA_DRILL_QUESTIONS,
+  WASM_DRILL_QUESTIONS
 ];
 
 /** @type {Array<{ id: string, question: string, options: string[], correct: number, explanation: string }>} */

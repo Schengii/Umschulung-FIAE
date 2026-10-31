@@ -64,8 +64,8 @@ export default function LinuxNetNsLab() {
             padding: '8px 16px',
             borderRadius: '10px',
             border: 'none',
-            background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-            color: '#fff',
+            background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+            color: 'var(--text-on-accent)',
             fontWeight: 600,
             fontSize: '0.85rem',
             cursor: xpClaimed ? 'default' : 'pointer',
@@ -85,9 +85,9 @@ export default function LinuxNetNsLab() {
           Interaktive Linux Container-Netzwerktopologie
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
           {/* Namespace 1 */}
-          <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '2px solid #cbd5e1' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '12px', border: '2px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <Server size={18} color="#0284c7" />
               <strong style={{ fontSize: '0.95rem' }}>ns-web (Container 1)</strong>
@@ -97,14 +97,14 @@ export default function LinuxNetNsLab() {
           </div>
 
           {/* Linux Bridge br0 */}
-          <div style={{ background: bridgeUp ? '#eff6ff' : '#fee2e2', padding: '16px', borderRadius: '12px', border: bridgeUp ? '2px solid #3b82f6' : '2px solid #ef4444', textAlign: 'center' }}>
-            <div style={{ fontWeight: 800, color: bridgeUp ? '#1d4ed8' : '#b91c1c' }}>Linux Bridge br0</div>
+          <div style={{ background: bridgeUp ? 'rgba(59, 130, 246, 0.12)' : 'rgba(239, 68, 68, 0.12)', padding: '16px', borderRadius: '12px', border: bridgeUp ? '2px solid #3b82f6' : '2px solid #ef4444', textAlign: 'center' }}>
+            <div style={{ fontWeight: 800, color: bridgeUp ? 'var(--accent-cyan)' : 'var(--accent-rose)' }}>Linux Bridge br0</div>
             <div style={{ fontSize: '0.85rem', fontFamily: 'monospace', marginTop: '4px' }}>IP: 10.0.0.1 (Default Gateway)</div>
             <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '6px' }}>Status: {bridgeUp ? 'UP (L2 Forwarding)' : 'DOWN (Ausfall)'}</div>
           </div>
 
           {/* Namespace 2 */}
-          <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '2px solid #cbd5e1' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '12px', border: '2px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <Server size={18} color="#0284c7" />
               <strong style={{ fontSize: '0.95rem' }}>ns-db (Container 2)</strong>
@@ -116,17 +116,17 @@ export default function LinuxNetNsLab() {
       </div>
 
       {/* Control Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>
             Ping-Szenario konfigurieren
           </h2>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
+            <label htmlFor="linux-net-ns-lab-1" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
               Quell-Namespace:
             </label>
-            <select
+            <select id="linux-net-ns-lab-1"
               value={selectedSource}
               onChange={(e) => setSelectedSource(e.target.value)}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', background: 'var(--input-bg, #fff)' }}
@@ -137,11 +137,11 @@ export default function LinuxNetNsLab() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
+            <label htmlFor="linux-net-ns-lab-2" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
               Ziel-IP (lokal oder Internet):
             </label>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <input
+              <input id="linux-net-ns-lab-2"
                 type="text"
                 value={targetIp}
                 onChange={(e) => setTargetIp(e.target.value)}
@@ -149,7 +149,7 @@ export default function LinuxNetNsLab() {
               />
               <button
                 onClick={() => setTargetIp(targetIp === '8.8.8.8' ? '10.0.0.3' : '8.8.8.8')}
-                style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#f1f5f9', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+                style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-tertiary)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
               >
                 {targetIp === '8.8.8.8' ? 'Lokal (10.0.0.3)' : 'WAN (8.8.8.8)'}
               </button>
@@ -202,7 +202,7 @@ export default function LinuxNetNsLab() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
               <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>{st.stage}</span>
-              <span style={{ fontFamily: 'monospace', fontSize: '0.75rem', background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px' }}>{st.cmd}</span>
+              <span style={{ fontFamily: 'monospace', fontSize: '0.75rem', background: 'var(--bg-tertiary)', padding: '2px 8px', borderRadius: '4px' }}>{st.cmd}</span>
             </div>
             <p style={{ margin: 0, fontSize: '0.85rem', color: st.success === false ? '#dc2626' : 'var(--text-secondary, #64748b)' }}>
               {st.detail}
@@ -226,8 +226,8 @@ export default function LinuxNetNsLab() {
               padding: '6px 14px',
               borderRadius: '8px',
               border: 'none',
-              background: '#3b82f6',
-              color: '#fff',
+              background: 'var(--accent-cyan)',
+              color: 'var(--text-on-accent)',
               fontSize: '0.85rem',
               fontWeight: 600,
               cursor: 'pointer'
@@ -239,8 +239,8 @@ export default function LinuxNetNsLab() {
         </div>
 
         <pre style={{
-          background: '#0f172a',
-          color: '#f8fafc',
+          background: 'var(--bg-card)',
+          color: 'var(--text-main)',
           padding: '16px',
           borderRadius: '10px',
           fontFamily: 'monospace',

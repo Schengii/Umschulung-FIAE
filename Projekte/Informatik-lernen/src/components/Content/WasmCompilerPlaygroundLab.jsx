@@ -83,7 +83,7 @@ export default function WasmCompilerPlaygroundLab() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
         {/* Left Column: Editor */}
         <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-          <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
+          <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-tertiary)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
               <FileCode size={18} color="var(--accent-blue)" /> main.c
             </div>
@@ -97,14 +97,14 @@ export default function WasmCompilerPlaygroundLab() {
               {isCompiling ? 'Kompiliert (Clang/LLVM)...' : 'Zu WASM kompilieren'}
             </button>
           </div>
-          <pre style={{ margin: 0, padding: '24px', background: 'var(--bg-tertiary)', flex: 1, fontFamily: 'monospace', fontSize: '1.1rem', color: '#e2e8f0' }}>
+          <pre style={{ margin: 0, padding: '24px', background: 'var(--bg-tertiary)', flex: 1, fontFamily: 'monospace', fontSize: '1.1rem', color: 'var(--text-main)' }}>
             {code}
           </pre>
         </div>
 
         {/* Right Column: Hex Inspector */}
         <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-          <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)' }}>
+          <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-tertiary)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}>
               <Layers size={18} color="var(--accent-purple)" /> Binary WASM Bytecode (.wasm)
             </div>
@@ -141,7 +141,7 @@ export default function WasmCompilerPlaygroundLab() {
                 </div>
 
                 {/* Hex Dump */}
-                <div style={{ fontFamily: 'monospace', fontSize: '1rem', background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', overflowX: 'auto' }}>
+                <div style={{ fontFamily: 'monospace', fontSize: '1rem', background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', overflowX: 'auto' }}>
                   {hexLines.map((line, lIdx) => (
                     <div key={lIdx} style={{ display: 'flex', gap: '16px', lineHeight: '1.6' }}>
                       <span style={{ color: 'var(--text-muted)' }}>{line.address}</span>

@@ -82,7 +82,7 @@ CMD ["npm", "start"]`
               fontWeight: '700',
               fontSize: '0.95rem',
               background: activeToolId === t.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-              color: activeToolId === t.id ? '#ffffff' : 'var(--text-main)',
+              color: activeToolId === t.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: activeToolId === t.id ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

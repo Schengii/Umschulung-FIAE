@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Von-Neumann-Architektur: CPU mit Steuerwerk und Rechenwerk, Speicher und Ein-/Ausgabe, verbunden über den gemeinsamen Bus</title>
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Von-Neumann-Architektur</text>
+  <rect x="40" y="50" width="300" height="160" rx="12" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+  <text x="190" y="76" text-anchor="middle" font-size="16" font-weight="700" fill="#4338ca">CPU (Prozessor)</text>
+  <rect x="60" y="92" width="125" height="96" rx="8" fill="#ffffff" stroke="#4338ca"/>
+  <text x="122" y="128" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Steuerwerk</text>
+  <text x="122" y="150" text-anchor="middle" font-size="12" fill="#475569">holt und deko-</text>
+  <text x="122" y="166" text-anchor="middle" font-size="12" fill="#475569">diert Befehle</text>
+  <rect x="198" y="92" width="125" height="96" rx="8" fill="#ffffff" stroke="#4338ca"/>
+  <text x="260" y="128" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Rechenwerk</text>
+  <text x="260" y="150" text-anchor="middle" font-size="12" fill="#475569">ALU: rechnet</text>
+  <text x="260" y="166" text-anchor="middle" font-size="12" fill="#475569">und vergleicht</text>
+  <rect x="390" y="50" width="140" height="160" rx="12" fill="#f0fdfa" stroke="#0f766e" stroke-width="2"/>
+  <text x="460" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#0f766e">Speicher</text>
+  <text x="460" y="142" text-anchor="middle" font-size="12" fill="#475569">Programme und</text>
+  <text x="460" y="158" text-anchor="middle" font-size="12" fill="#475569">Daten gemeinsam</text>
+  <rect x="560" y="50" width="130" height="160" rx="12" fill="#fffbeb" stroke="#b45309" stroke-width="2"/>
+  <text x="625" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#b45309">Ein-/Ausgabe</text>
+  <text x="625" y="142" text-anchor="middle" font-size="12" fill="#475569">Tastatur, Monitor,</text>
+  <text x="625" y="158" text-anchor="middle" font-size="12" fill="#475569">Netzwerk, SSD</text>
+  <rect x="40" y="250" width="650" height="44" rx="10" fill="#0f172a"/>
+  <text x="365" y="278" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Bussystem: Datenbus · Adressbus · Steuerbus</text>
+  <g stroke="#0f172a" stroke-width="3">
+    <path d="M190 210 V250"/><path d="M460 210 V250"/><path d="M625 210 V250"/>
+  </g>
+  <text x="365" y="318" text-anchor="middle" font-size="12" fill="#be123c">Engpass: Befehle und Daten teilen sich einen Bus („Von-Neumann-Flaschenhals“)</text>
+</svg>

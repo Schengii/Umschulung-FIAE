@@ -12,20 +12,20 @@ describe('sqlSandboxEngine', () => {
     sandbox.destroy();
   });
 
-  it('erstellt Tabellen und führt SELECT Queries aus', () => {
-    sandbox.loadSeed('ecommerce');
+  it('erstellt Tabellen und führt SELECT Queries aus', async () => {
+    await sandbox.loadSeed('ecommerce');
 
-    const res = sandbox.execute('SELECT * FROM customers WHERE city = "Berlin"');
+    const res = await sandbox.execute('SELECT * FROM customers WHERE city = "Berlin"');
     expect(res.success).toBe(true);
     expect(res.isSelect).toBe(true);
     expect(res.rowCount).toBe(1);
     expect(res.rows[0].name).toBe('Max Mustermann');
   });
 
-  it('führt JOIN Queries über mehrere Tabellen aus', () => {
-    sandbox.loadSeed('ecommerce');
+  it('führt JOIN Queries über mehrere Tabellen aus', async () => {
+    await sandbox.loadSeed('ecommerce');
 
-    const joinRes = sandbox.execute(`
+    const joinRes = await sandbox.execute(`
       SELECT c.name, o.id AS order_id, o.total_amount
       FROM customers c
       INNER JOIN orders o ON c.id = o.customer_id
@@ -37,15 +37,15 @@ describe('sqlSandboxEngine', () => {
     expect(joinRes.rows[0].total_amount).toBe(599.00);
   });
 
-  it('erkennt fehlerhafte SQL Syntax und liefert Fehlermeldungen', () => {
-    const errorRes = sandbox.execute('SELECT FROM WHERE INVALID SQL');
+  it('erkennt fehlerhafte SQL Syntax und liefert Fehlermeldungen', async () => {
+    const errorRes = await sandbox.execute('SELECT FROM WHERE INVALID SQL');
     expect(errorRes.success).toBe(false);
     expect(errorRes.error).toBeDefined();
   });
 
-  it('ermittelt das Datenbankschema (Tabellen und Spalten)', () => {
-    sandbox.loadSeed('ecommerce');
-    const schema = sandbox.getSchema();
+  it('ermittelt das Datenbankschema (Tabellen und Spalten)', async () => {
+    await sandbox.loadSeed('ecommerce');
+    const schema = await sandbox.getSchema();
 
     expect(schema.customers).toBeDefined();
     expect(schema.customers.columns).toContain('email');

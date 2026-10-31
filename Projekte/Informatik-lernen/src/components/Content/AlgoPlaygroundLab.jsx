@@ -94,7 +94,7 @@ export default function AlgoPlaygroundLab({ onRewardXP }) {
       </div>
 
       {/* Array Bars Visualization */}
-      <div style={{ background: '#0f172a', padding: '32px 24px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', minHeight: '260px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '12px' }}>
+      <div style={{ background: 'var(--bg-card)', padding: '32px 24px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', minHeight: '260px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '12px' }}>
         {array.map((val, idx) => {
           let barBg = '#38bdf8'; // Default sky blue
           if (activeIndices.includes(idx)) barBg = '#f59e0b'; // Comparing (Amber)
@@ -102,7 +102,7 @@ export default function AlgoPlaygroundLab({ onRewardXP }) {
 
           return (
             <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: '48px' }}>
-              <span style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '700', marginBottom: '6px' }}>{val}</span>
+              <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem', fontWeight: '700', marginBottom: '6px' }}>{val}</span>
               <div
                 style={{
                   width: '100%',

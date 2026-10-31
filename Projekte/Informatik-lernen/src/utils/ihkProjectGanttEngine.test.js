@@ -76,3 +76,19 @@ describe('ihkProjectGanttEngine', () => {
     expect(md).toContain('Projektziel erreicht');
   });
 });
+
+describe('calculateGanttTimeline Robustheit', () => {
+  const phases = [{ id: 'a', name: 'A', hours: 16 }];
+
+  it('fällt bei leerem oder ungültigem Startdatum auf das Standarddatum zurück (kein Invalid time value)', () => {
+    expect(() => calculateGanttTimeline(phases, '')).not.toThrow();
+    const t = calculateGanttTimeline(phases, 'kein-datum');
+    expect(t[0].startDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  it('begrenzt riesige und nicht endliche Stundenwerte, statt einzufrieren', () => {
+    const t = calculateGanttTimeline([{ id: 'x', name: 'X', hours: 1e20 }, { id: 'y', name: 'Y', hours: NaN }]);
+    expect(t[0].durationDays).toBeLessThanOrEqual(3650);
+    expect(t[1].durationDays).toBe(1);
+  });
+});

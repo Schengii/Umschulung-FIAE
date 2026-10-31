@@ -9,9 +9,134 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 
 ## [Unveröffentlicht]
 
+### Wissensbereich & Lernartikel (Wissen-Ausbau)
+- **Sichere Markdown-Engine (`src/utils/markdownEngine.js`)**:
+  - Parser mit AST-Generierung ohne `dangerouslySetInnerHTML` für sicheres Rendern von Fachartikeln (`src/components/Shared/MarkdownContent.jsx`).
+  - Unterstützung für Überschriften mit Slug-Ankern, Tabellen mit Ausrichtung, Callouts (`info`, `tip`, `warning`, `exam`, `example`), Code-Blöcke, Listen, Trennlinien, Abbildungs-Einbettung und sichere Links.
+  - Vollständige Test-Suite `src/utils/markdownEngine.test.js` (18 Tests).
+- **25 Thematische SVG-Diagramme (`src/assets/topics/`)**:
+  - Maßgeschneiderte Vektordiagramme für Kernkonzepte (OSI-Modell, Subnetting, Normalisierung, Event-Loop, Box-Modell, Von-Neumann-Architektur, Testpyramide u. v. m.).
+  - Dynamischer Image-Resolver `src/data/topicImages.js` mit Vite-Asset-Hashing.
+- **Code-Splitting & Modularisierung (`src/data/topics/`)**:
+  - 24 Fachartikel aus dem monolithischen `topicsData.js` in eigenständige Module unter `src/data/topics/<id>.js` aufgeteilt und per dynamischem `import()` nachgeladen.
+  - Artikel erweitert um Lernziele, formatierte Fachinhalte, mindestens 3 interaktive Übungsaufgaben mit Tipps/Musterlösungen, Prüfungsquizzes und validierte Quellenangaben.
+  - Integritätstest-Suite `src/data/topics.test.js` (195 Tests) sichert Struktur, Eindeutigkeit, Quizfragen und Abbildungen projektweit ab.
+- **Interaktiver TopicReader & Deep-Linking**:
+  - `TopicReader.jsx`: Aufgabentipps schrittweise einblendbar, Musterlösungen ein-/ausklappbar, Quizzes mit Erklärungen und Reset, Artikelnavigation (Vor/Zurück) und Text-to-Speech Vorlesefunktion.
+  - URL-Routing: Wissensartikel über `/wissen/<topicId>` direkt verlinkbar und über die Command Palette erreichbar.
+
+### Lerninhalte (PLAN.md P17)
+- **Kafka-Lab neu (`/kafka`)**: Statt zweier statischer Code-Blöcke ein interaktives Modell (`kafkaEventEngine.js`): Schlüssel bestimmen die Partition, Consumer Groups teilen Partitionen (überzählige Consumer idle), Offsets und Lag je Gruppe, Repartitionierung, Vergleich mit Message Queues, 4 Aufgaben mit 50 XP (Abzeichen `kafka_event_master`), 6 Drillfragen im Fehlerjournal, Quellenliste.
+- **WebAssembly-Lab neu (`/wasm_rust_studio`)**: Echtes Wasm-Modul aus `wasmBinaryEngine.js` mit Binär-Inspektor (Präambel, Sektionen, LEB128, Exporte), Ausführung von `add`/`mul` im Browser samt i32-Überlauf, `memory.grow()`, 5 Aufgaben mit 50 XP, 6 Drillfragen, Quellenliste. Der Rust-Beispielcode war fehlerhaft (`export fn`) und nutzt jetzt `#[no_mangle] pub extern "C" fn`.
+- **`Shared/SourceList.jsx`**: Quellenangaben für Labs.
+
+### Darstellung (PLAN.md Phase 6)
+- **Lesbarer Light und Dark Mode (P15)**: `npm run audit:ui` meldet in beiden Themes keine Route mehr mit Text unter 3:1 (vorher hell 125, dunkel 157 Routen). Neue Variable `--text-on-accent` für Schrift auf Akzentflächen; `src/styles/tailwind-light.css` (`npm run gen:tailwind-light`) spiegelt im Light Mode die Tailwind-Palette der dunkel gestalteten Labs; fest codierte Inline-Farben in rund 150 Komponenten auf Theme-Variablen umgestellt (im Dark Mode farbgleich); Buttons ohne Hintergrundklasse erben nicht mehr das Browser-Grau.
+- **Handy-Breite (P16)**: Bei 375 px ragt in keinem Lab mehr Inhalt unerreichbar aus dem Bild (vorher 78 Routen, z. B. WebRTC-Studio +533 px, Backup-Lab +430 px). Raster mit Mindestspaltenbreite schrumpfen auf die verfügbare Breite, `.grid-responsive` ist auf dem Handy einspaltig, Tab- und Button-Leisten brechen um; neuer E2E-Test `e2e/mobile-layout.spec.js`.
+- **Abhängigkeiten**: undici 8.12.3, fast-uri 3.1.9, serialize-javascript 7.1.4 (10 Dependabot-Warnungen in Entwicklungsabhängigkeiten); `deepmerge` (niedrig, über workbox-build) hat noch keine korrigierte Version.
+- **Sicherheit**: Die Prepared-Statement-Anzeige im SQL-Injection-Lab maskiert Eingaben per `JSON.stringify` (CodeQL `js/incomplete-sanitization`).
+- **UI-Audit (P14)**: `audit:ui` nennt je Fundstelle Element und Hintergrundquelle bzw. die Ursache eines Überlaufs und überspringt Verlaufsschrift.
+
+## [3.79.0] - 2026-10-29
+
+Umsetzung von `PLAN.md` (Analyse vom 2026-10-29: P01–P13, neu gefunden N01–N04; Details, Messwerte und Status dort). Enthält außerdem die bisher unveröffentlichten QA-Fehlerbehebungen und die Branch-Arbeit M01–M14 (Abschnitte darunter).
+
+### Umsetzung PLAN.md (2026-10-29)
+- **SQL-Labs unter der Produktions-CSP (P01)**: alasql läuft im neuen Web Worker `sql.worker.js` mit eigener CSP (`sqlWorkerCore.js`, `sqlWorkerClient.js`; ohne Worker in Node/jsdom direkt im Prozess). Vorher warfen `/sql_joins` (`EvalError`), `/sqlite_studio`, `/sqlite_worker_lab` und das SQL-Dungeon unter der CSP. `SqlSandboxInstance` und `SqliteWorkerBridge` sind asynchron; 5 neue Fälle in `e2e/csp.spec.js`.
+- **CI (P02, N02)**: Alle Actions auf aktuelle Major-Versionen per SHA gepinnt (checkout v7, setup-node v7, upload-artifact v7, download-artifact v8, cache v6, gitleaks-action v3) – v4 und gitleaks v2 liefen auf Node 20, das seit 16.09.2026 nicht mehr auf GitHub-Runnern existiert. Der PR-Bundle-Trend nutzt statt der Node-20-Action `andresz1/size-limit-action` eigene Schritte mit `scripts/size-report.js`.
+- **PWA (P03, P04)**: Precache 6,1 → 4,1 MB (Monaco-Kern `jsonMode`, Sentry `vendor-sentry`, jsPDF-Zusatz `vendor-canvg` und `sql.worker` über den Runtime-Cache). PWA-E2E hat ein eigenes Zeitlimit (90 s), der Command-Palette-Test wartet auf den Mount.
+- **Tests (P05–P07)**: Vitest wieder mit `isolate: true` (gemessen: `false` brachte keinen Zeitgewinn, aber sporadisch rote Tests); Lighthouse-A11y lokal 0,98 (Schwelle 0,95 bleibt); Coverage-Schwellen 63/54,5/47,5/64,5 %.
+- **Sicherheits-Header (P08)**: `X-XSS-Protection` entfernt (von Browsern ignoriert, CSP schützt); ein E2E-Fall prüft die übrigen Header für Seite und Sandbox-Worker.
+- **Barrierefreiheit (P09–P11)**: `label-has-associated-control`, `click-events-have-key-events` und `no-static-element-interactions` sind aktiv. 246 Labels per `htmlFor`/`id` verknüpft, 36 feldlose Labels zu `<span>`; 45 klickbare Karten mit `role="button"`, `tabIndex` und Enter/Leertaste (`Shared/keyActivation.js`); funktionslose Checkboxen im CI/CD- und TOM-Lab schalten jetzt, RAID-6 und ERD haben Tastatur-Buttons, das Navbar-Logo reagiert auf Enter, das TOM-Export-Modal schließt per Escape. `prefer-tag-over-role` bleibt begründet aus (CLAUDE.md).
+- **Developer Experience (P12)**: `npm run new-lab` schreibt in die passende Themendatei unter `src/data/labModules/`.
+- **Inhalt (N04)**: Rohes LaTeX (`$\to$`, `$\times$` u. a.) in 8 Labs durch Unicode ersetzt.
+- **Doku (P13)**: Nicht belegte Testlaufzeit („~64 s“) korrigiert, Versionsüberschriften, `GEMINI.md`/`AGENTS.md` als reine Verweise beschrieben; CLAUDE.md um SQL-Worker, A11y-Muster und Precache-Regeln ergänzt.
+
+### Fehlerbehebungen aus dem Qualitäts- und Sicherheitstest (2026-10-22)
+- **Abstürze behoben**: `SqliteWasmStudioLab` (`setSandbox` fehlte nach dem Lint-Fix M03, Wechsel der Beispiel-Datenbank warf), `IhkOralExamSimulator` (Präsentations-Checkliste war nicht definiert), `JwtConfusionLab` (ungültiges Base64URL im Token-Feld warf `atob`). Regressionstests liegen neben den Komponenten.
+- **Robustheit**: `calculateGanttTimeline` fällt bei leerem/ungültigem Startdatum auf das Standarddatum zurück und begrenzt riesige oder nicht endliche Stunden; `WisoFinancingLab` und `OsProcessSchedulerLab` begrenzen Eingaben auf die deklarierten Maxima (verhindert Einfrieren bei z. B. 99999999999999999999).
+- **Layout**: Kopfzeile läuft bei 320 px nicht mehr über (Wortmarke unter 400 px ausgeblendet, Header-Schaltflächen behalten ihre Breite, kein „Ctrl+K“-Hinweis auf Touch-Breiten); Rasterspalten dürfen schrumpfen, Code-Blöcke im JWT-Lab scrollen in sich.
+- **Datenschutz**: YouTube-Videos laden erst nach Klick auf „Video von YouTube laden“ (`VideoHub`, `e2e/csp.spec.js` prüft, dass vorher kein iframe existiert); Datenschutz- und Barrierefreiheitstext an das tatsächliche Verhalten angepasst (YouTube, Server-Logdaten, keine unbelegten AAA-/Zertifizierungsaussagen).
+- **Barrierefreiheit**: Eingabefelder behalten trotz inline `outline: none` eine sichtbare Fokusmarkierung; überlaufende Scroll-Bereiche werden per Tastatur fokussierbar (`applyScrollableFocus` in `a11yAutoLabel.js`); der mobile Menü-Button schrumpft nicht mehr auf 14 px.
+
+### Architektur & Modularisierung
+- **Navbar Modularisierung (M08)**:
+  - Aufteilung der 901-Zeilen-Komponente `src/components/Navigation/Navbar.jsx` in modulare Unterkomponenten: `NavDesktopMenu.jsx`, `NavDropdownMenu.jsx`, `NavToolsMenu.jsx`, `NavProfileMenu.jsx`, `NavMobileDrawer.jsx` und die Datenstruktur `navbarMenuItems.js`.
+  - Haupt-Navbar auf 263 Zeilen verschlankt bei 100 % Erhalt aller Routing-, Barrierefreiheits- und Tastaturnavigationsfunktionen.
+- **Lab-Moduldaten Partitionierung (M10)**:
+  - Aufteilung der monolithischen `src/data/labModulesData.js` (2.432 Zeilen) in 5 thematische Moduldateien unter `src/data/labModules/`: `ihkModules.js`, `networkModules.js`, `securityModules.js`, `cloudDevopsModules.js` und `softwareDataModules.js`.
+  - Anpassung des Scaffolding-Tools `scripts/new-lab.js` und des Doku-Generators `scripts/gen-lab-list.js`.
+
+### Tests, Qualität & CI
+- **5 Pilot-Lab Interaktions-Test-Suiten (M13)**:
+  - `src/components/Content/SubnettingLab.test.jsx`: CIDR-Berechnung, Adressänderung, Quiz-Interaktion und XP-Belohnung (+25 XP).
+  - `src/components/Content/VlsmSubnetLab.test.jsx`: Hierarchische Subnetz-Planung, dynamisches Hinzufügen von Subnetzen, Zwischenablage-Export und XP-Belohnung (+50 XP).
+  - `src/components/Content/SqlWindowFunctionsLab.test.jsx`: Partitionierung (`PARTITION BY`), Sortierung (`ORDER BY`), SQL-Export und Lab-Validierung (+65 XP).
+  - `src/components/Content/AlgoPlaygroundLab.test.jsx`: Algorithmen-Auswahl, schrittweise Animation und Fertigstellungs-Belohnung (+35 XP).
+  - `src/components/Content/VectorMathEmbeddingLab.test.jsx`: Orthogonale/ähnliche Vektor-Presets, Winkelberechnung und Lab-Validierung (+65 XP).
+  - `allLabsA11y.test.jsx`: Alle 234 Lab-Komponenten bestehen automatische axe-core Barrierefreiheitsprüfungen ohne Regelverletzungen.
+- **Lighthouse CI Barrierefreiheits-Schwellwert (M14)**:
+  - Anhebung der Mindestbewertung (`minScore`) für `categories:accessibility` in `lighthouserc.json` von 0.90 auf 0.95.
+- **Coverage-Schwellwerte angehoben (M07)**:
+  - Anhebung der Vitest-Mindestschwellwerte in `vite.config.js` auf Statements: 62 %, Branches: 53.5 %, Functions: 47 %, Lines: 63.5 %.
+- **GitHub Actions SHA-Pinning (M09)**:
+  - Umstellung aller Actions in `.github/workflows/ci.yml` auf unveränderliche 40-Zeichen-Commit-SHAs (`checkout@11bd719`, `setup-node@49933ea`, `cache@0057852`, `upload-artifact@ea165f8`, `size-limit-action@94bc357`) zur Abwehr von Supply-Chain-Angriffen.
+- **Sandbox Test-Utilities (M11)**:
+  - Vollständige JSDoc-Typisierung und dedizierte Test-Suite `src/utils/sandboxTestUtils.test.js` für `createInlineSandboxWorker`.
+- **Vitest Performance & Zuverlässigkeit (M03–M06)**:
+  - Erhöhung von `testTimeout: 15000` in `vite.config.js` gegen Zeitüberschreitungen bei komplexen UI-Komponenten (`LabsDashboard.test.jsx`). Das zugleich aktivierte `isolate: false` wurde nachgemessen und wieder verworfen (P05: kein Zeitgewinn, sporadisch rote Tests; die genannten „64 s“ ließen sich nicht reproduzieren, gemessen 113–121 s).
+  - Neue Unit-Test-Suite `src/utils/audioSystem.test.js` (6 Tests, 100 % Zeilenabdeckung) für Lautstärke-Clamping, Stummschaltung, Synthesizer-SFX und AudioContext-Lifecycle.
+  - Neue Unit-Test-Suite `src/utils/sandboxEvaluator.test.js` (9 Tests) für Skript-Modus, Funktions-Kandidaten, Laufzeit- und Syntaxfehler, Log-Kappung und Worker-Scope-Lockdown (`BLOCKED_WORKER_GLOBALS`).
+  - Neue Unit-Test-Suite `src/utils/errorMonitoring.test.js` (3 Tests) für fehlerresistente Exception-Weiterleitung und DSN-Prüfung.
+
+### Sicherheit & Härtung (Security)
+- **Pre-Commit-Kompatibilität & Key-Kapselung (M02)**:
+  - `src/utils/jwtConfusionEngine.js`: Reformatierung des Mock-RSA-Schlüssels `SAMPLE_RSA_PRIVATE_KEY` und Entfernung des unnötigen `export`-Keywords (Modul-Internum). Dadurch werden Fehlalarme im POSIX-Pre-Commit-Fallback vermieden, während die Bildungs-Lab-Funktionalität vollständig erhalten bleibt.
+- **Gehärteter Git Pre-Commit Hook (`.githooks/pre-commit`)**:
+  - Bevorzugt `gitleaks protect --staged`, falls im System installiert, mit nahtlosem portablem Shell-Fallback für Git Bash und POSIX-Shells.
+  - Blockiert gestagte Umgebungs- und Schlüsseldateien: `.env`, `.env.*` (mit expliziter Ausnahme für `.env.example`), `*.pem`, `*.key`.
+  - Blockiert gestagten Code mit sensiblen Key-Mustern: `sk-...`, `AIza...`, `ghp_...`, `AKIA...`, `-----BEGIN … PRIVATE KEY-----` sowie Zuweisungen wie `API_KEY=`, `SECRET=`, `TOKEN=` mit nichtleerem Wert.
+  - Gibt bei Funden ausschließlich den Dateinamen und das zutreffende Muster aus, niemals den eigentlichen Geheimwert.
+  - Aktivierungsbefehl `git config core.hooksPath .githooks` und npm-Script `prepare` in `CLAUDE.md`, `GEMINI.md` und `README.md` dokumentiert.
+
+### Dokumentation
+- **`PLAN.md` (Umsetzungsplan)**: Vollständige Realisierung aller 14 priorisierten Maßnahmen (M01–M14) in 4 Phasen.
+- **`README.md` (M12)**: Dokumentation des Open-Graph-Banner-Generators `npm run og:image` (`scripts/generate-og-image.js`).
+
+## [3.78.0] - 2026-10-22
+
+Umsetzung von `PLAN.md` (M01–M20, Details und Status dort).
+
+### Sicherheit (Security)
+- **Produktions-CSP wird jetzt getestet**: `vite preview` und damit die E2E-Tests liefern die Header aus `vercel.json` aus (`vite.config.js`, Plugin `vercelHeadersForPreview`); neue `e2e/csp.spec.js` wertet `securitypolicyviolation`-Ereignisse als Fehler.
+- **Im Browser bestätigte CSP-Fehler behoben**: Der Sandbox-Worker (`new Function`) bekommt eine eigene, strengere CSP (`'unsafe-eval'` nur dort, `connect-src 'none'`), die Hauptseite bleibt ohne `'unsafe-eval'`; `frame-src` erlaubt den YouTube-Player (`youtube-nocookie.com`); Monaco wird lokal gebündelt (`src/utils/monacoLoader.js`) statt vom CDN geladen.
+- **`script-src` ohne `'unsafe-inline'`**: Das Skeleton-Skript liegt jetzt in `public/skeleton-hide.js`.
+- **Lieferkette**: CI führt `npm audit --omit=dev --omit=optional --audit-level=high` aus (die 20 Funde der Rohausgabe stammen nur aus `react-native-fs`, einer optionalen Abhängigkeit von `alasql`, die nicht im Browser-Build landet).
+
+### Barrierefreiheit (A11y)
+- Neuer Baustein `src/components/Shared/useDialogA11y.js` (Focus-Trap, Escape, Fokus-Rückgabe) mit Unit-Tests; alle 11 Modals sind jetzt modale Dialoge (`role="dialog"`, `aria-modal`, Beschriftung); Sammeltest `src/components/modalsA11y.test.jsx`.
+- Oxlint-Plugin `jsx-a11y` aktiviert; 18 Befunde behoben (fehlende `aria-label`s in Wiso-/VLSM-/Scheduler-Labs und Audio-Schalter, `autoFocus` im CLI-Terminal). Drei Massenregeln sind vorerst aus (siehe `PLAN.md` N01–N03).
+
+### PWA
+- PNG-Icons (192, 512, maskable) im Manifest (`scripts/generate-pwa-icons.js`) und als Benachrichtigungs-Icon; Monaco-Chunks sind vom Precache ausgenommen und werden per Runtime-Cache geladen.
+
+### CI & Tooling
+- Tests laufen einmal (`test:coverage`) statt zweimal; der Lighthouse-Job nutzt den `dist`-Artefakt des test-Jobs statt eines zweiten Builds; Coverage-Schwellen auf 61/53/46/63 % angehoben.
+- `monaco-editor` ist jetzt direkte Abhängigkeit.
+
+### Dokumentation
+- `GEMINI.md` und `.agents/AGENTS.md` verweisen auf `CLAUDE.md` (eine Quelle); `CLAUDE.md` um Badges, Multi-Tab-Sync, CSP und Dialog-Regeln ergänzt; Testzahl-Verweise korrigiert.
+
 ### Bereinigung & Code-Qualität (Chore)
+- **Umfassende Dead-Code- & Export-Bereinigung (chore/cleanup)**:
+  - Phase 2: Entfernung toter, ungenutzter Datenstrukturen und Tabellen: `LOGIC_GATES_LEVELS` (gamesData), `DEFAULT_NET_NAMESPACES` (linuxNetNsEngine), `RESTART_POLICIES` (systemdServiceEngine), `UML_DIAGRAM_TYPES` (umlEngine), `FIDO2_ALGORITHMS` (webAuthnEngine), `NDP_MESSAGE_TYPES` (ipv6NdpEngine).
+  - Phase 2: Konsolidierung doppelter Exporte & Aliase: `LANGUAGE_MODULES` direkt als `PROGRAMMING_LANGUAGES`, `VIDEO_TUTORIALS` direkt als `TUTORIAL_VIDEOS`, Vereinheitlichung auf `evaluateOauth21Flow` in `oauth21DpopEngine`.
+  - Phase 2: Kapselung privater Modul-Interna: Entfernen redundanter `export`-Keywords über 22 Utility- und Gamification-Module (`SkillTreeWidget`, `customChallengesManager`, `dnssecValidationEngine`, `examReadinessEngine`, `graphqlSandboxEngine`, `ihkRiskAnalysisEngine`, `ihkStudyPlanEngine`, `indexedDbStorage`, `indexedDbStoreMiddleware`, `ipv6Routing`, `jwtConfusionEngine`, `labProgressEngine`, `mistakeJournalEngine`, `oauthPkceEngine`, `raid6GaloisEngine`, `sandboxRunner`, `sqlSandboxEngine`, `srpAuthEngine`, `stpProtocolEngine`, `uiPreferences`, `vectorMathEngine`, `wisoPayrollEngine`).
+  - Phase 2: Bereinigung von Re-Exporten in `src/utils/srsAlgorithm.js`.
+  - Phase 2: Ergänzung des npm-Scripts `"og:image": "node scripts/generate-og-image.js"` in `package.json`.
+  - Phase 3: Validierung der Zielstruktur nach Stack-Konventionen (`src/`, `docs/`, `e2e/`, `public/`, `scripts/`, `.githooks/`), Importpfade und Konsistenzprüfungen.
 - **Projekt-Bereinigung & Analyse (chore/cleanup)**:
-  - Phase 0: Baseline-Sicherung für Build (1.27s), Oxlint (704 Dateien, 0 Warnungen) und Vitest (1.223 Tests bestanden).
+  - Phase 0: Baseline-Sicherung für Build (1.27s), Oxlint (704 Dateien, 0 Warnungen) und Vitest (1.223 Tests bestanden, Stand der Bereinigung; die aktuelle Zahl nennt `npm test`).
   - Phase 1: Projektweite Tiefenanalyse auf Duplikate, ungenutzte Exporte, leere Ordner und Code Smells ohne Beanstandung von Fehlern.
   - Phase 2: Gezielte Härtung und Bereinigung mit hoher Sicherheit:
     - `src/utils/pushNotificationManager.js`: Vermeidung ungenutzter Instanziierung (`new Notification`).

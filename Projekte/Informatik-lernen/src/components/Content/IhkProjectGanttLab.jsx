@@ -87,7 +87,7 @@ export default function IhkProjectGanttLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(59, 130, 246, 0.15)', borderRadius: '20px', color: '#60a5fa', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(59, 130, 246, 0.15)', borderRadius: '20px', color: 'var(--accent-cyan)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Calendar size={16} /> IHK Abschlussprüfung Teil 2 (AP2) Projektantrag
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -106,7 +106,7 @@ export default function IhkProjectGanttLab() {
               borderRadius: '8px',
               border: selectedProfile === 'FIAE' ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)',
               background: selectedProfile === 'FIAE' ? 'rgba(59, 130, 246, 0.2)' : 'var(--card-bg, #1e293b)',
-              color: selectedProfile === 'FIAE' ? '#60a5fa' : '#94a3b8',
+              color: selectedProfile === 'FIAE' ? 'var(--accent-cyan)' : 'var(--text-dim)',
               fontWeight: 'bold',
               cursor: 'pointer'
             }}
@@ -120,7 +120,7 @@ export default function IhkProjectGanttLab() {
               borderRadius: '8px',
               border: selectedProfile === 'FISI' ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.1)',
               background: selectedProfile === 'FISI' ? 'rgba(16, 185, 129, 0.2)' : 'var(--card-bg, #1e293b)',
-              color: selectedProfile === 'FISI' ? '#34d399' : '#94a3b8',
+              color: selectedProfile === 'FISI' ? 'var(--accent-emerald)' : 'var(--text-dim)',
               fontWeight: 'bold',
               cursor: 'pointer'
             }}
@@ -132,8 +132,8 @@ export default function IhkProjectGanttLab() {
             style={{
               padding: '8px 18px',
               borderRadius: '8px',
-              background: copied ? '#10b981' : '#3b82f6',
-              color: '#fff',
+              background: copied ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+              color: 'var(--text-on-accent)',
               fontWeight: 'bold',
               border: 'none',
               cursor: 'pointer',
@@ -149,54 +149,54 @@ export default function IhkProjectGanttLab() {
       </div>
 
       {/* Meta Input Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <label style={{ display: 'block', fontSize: '0.85rem', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <label htmlFor="ihk-project-gantt-lab-1" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '6px', fontWeight: 'bold' }}>
             Projektbezeichnung (Antrag):
           </label>
-          <input
+          <input id="ihk-project-gantt-lab-1"
             type="text"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             style={{
               width: '100%',
               padding: '8px 12px',
-              background: 'rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--bg-tertiary)',
+              border: '1px solid var(--border-color)',
               borderRadius: '6px',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.9rem'
             }}
           />
         </div>
 
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <label style={{ display: 'block', fontSize: '0.85rem', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <label htmlFor="ihk-project-gantt-lab-2" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '6px', fontWeight: 'bold' }}>
             Projekt-Startdatum (Werktag):
           </label>
-          <input
+          <input id="ihk-project-gantt-lab-2"
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             style={{
               width: '100%',
               padding: '8px 12px',
-              background: 'rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--bg-tertiary)',
+              border: '1px solid var(--border-color)',
               borderRadius: '6px',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.9rem'
             }}
           />
         </div>
 
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-            <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 'bold' }}>Stunden-Sollprüfung:</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 'bold' }}>Stunden-Sollprüfung:</span>
             <span style={{ 
               fontWeight: '800', 
               fontSize: '1.1rem',
-              color: validation.isValid ? '#10b981' : '#ef4444' 
+              color: validation.isValid ? 'var(--accent-emerald)' : 'var(--accent-rose)' 
             }}>
               {validation.totalHours} / {validation.targetHours} Std.
             </span>
@@ -211,7 +211,7 @@ export default function IhkProjectGanttLab() {
               }} 
             />
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '6px' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '6px' }}>
             {validation.isValid ? '✓ Punktgenaue 100% Stundenvorgabe erreicht' : `Differenz: ${validation.diffHours > 0 ? '+' : ''}${validation.diffHours}h`}
           </div>
         </div>
@@ -226,28 +226,28 @@ export default function IhkProjectGanttLab() {
           padding: '16px',
           marginBottom: '24px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: validation.errors.length > 0 ? '#f87171' : '#fbbf24', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: validation.errors.length > 0 ? 'var(--accent-rose)' : 'var(--accent-amber)', marginBottom: '8px' }}>
             <AlertTriangle size={18} />
             <span>IHK-Prüfungsordnung Feedback:</span>
           </div>
-          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.88rem', color: '#e2e8f0', lineHeight: '1.6' }}>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: '1.6' }}>
             {validation.errors.map((err, i) => (
-              <li key={`err-${i}`} style={{ color: '#fca5a5' }}><strong>Fehler:</strong> {err}</li>
+              <li key={`err-${i}`} style={{ color: 'var(--accent-rose)' }}><strong>Fehler:</strong> {err}</li>
             ))}
             {validation.warnings.map((warn, i) => (
-              <li key={`warn-${i}`} style={{ color: '#fde68a' }}><strong>Hinweis:</strong> {warn}</li>
+              <li key={`warn-${i}`} style={{ color: 'var(--accent-amber)' }}><strong>Hinweis:</strong> {warn}</li>
             ))}
           </ul>
         </div>
       )}
 
       {/* Interactive Gantt Timeline Visualization */}
-      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '24px' }}>
+      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Clock size={18} color="#60a5fa" /> Gantt-Diagramm Zeitstrahl (Arbeitstage ohne Sa/So)
           </h3>
-          <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+          <span style={{ fontSize: '0.82rem', color: 'var(--text-dim)' }}>
             Gesamtdauer: ~{timeline.reduce((acc, t) => acc + t.durationDays, 0)} Arbeitstage
           </span>
         </div>
@@ -259,15 +259,15 @@ export default function IhkProjectGanttLab() {
             const phaseColor = colors[idx % colors.length];
 
             return (
-              <div key={item.id} style={{ background: 'rgba(0,0,0,0.25)', padding: '12px 16px', borderRadius: '8px' }}>
+              <div key={item.id} style={{ background: 'var(--bg-tertiary)', padding: '12px 16px', borderRadius: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontSize: '0.88rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: phaseColor }} />
-                    <strong style={{ color: '#e2e8f0' }}>{item.name}</strong>
+                    <strong style={{ color: 'var(--text-main)' }}>{item.name}</strong>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: '#94a3b8', fontSize: '0.82rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'var(--text-dim)', fontSize: '0.82rem' }}>
                     <span>{item.startDate} → {item.endDate}</span>
-                    <strong style={{ color: '#fff', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px' }}>
+                    <strong style={{ color: 'var(--text-main)', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px' }}>
                       {item.hours}h ({item.durationDays} AT)
                     </strong>
                   </div>
@@ -291,7 +291,7 @@ export default function IhkProjectGanttLab() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
                     <Milestone size={14} color="#f59e0b" />
                     {item.milestones.map((ms, mi) => (
-                      <span key={mi} style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', padding: '2px 8px', borderRadius: '4px' }}>
+                      <span key={mi} style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.15)', color: 'var(--accent-amber)', padding: '2px 8px', borderRadius: '4px' }}>
                         🚩 {ms}
                       </span>
                     ))}
@@ -304,9 +304,9 @@ export default function IhkProjectGanttLab() {
       </div>
 
       {/* Phase Editor Table */}
-      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: 0 }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: 0 }}>
             Phasen & Arbeitspakete anpassen
           </h3>
           <button
@@ -316,7 +316,7 @@ export default function IhkProjectGanttLab() {
               borderRadius: '6px',
               background: 'rgba(59, 130, 246, 0.2)',
               border: '1px solid #3b82f6',
-              color: '#60a5fa',
+              color: 'var(--accent-cyan)',
               fontSize: '0.85rem',
               fontWeight: 'bold',
               cursor: 'pointer',
@@ -335,10 +335,10 @@ export default function IhkProjectGanttLab() {
               key={phase.id || idx}
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 100px 40px',
+                gridTemplateColumns: 'minmax(0, 1fr) 100px 40px',
                 gap: '12px',
                 alignItems: 'center',
-                background: 'rgba(0,0,0,0.2)',
+                background: 'var(--bg-tertiary)',
                 padding: '10px 14px',
                 borderRadius: '8px'
               }}
@@ -349,9 +349,9 @@ export default function IhkProjectGanttLab() {
                 onChange={(e) => handleNameChange(idx, e.target.value)}
                 style={{
                   background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  border: '1px solid var(--border-color)',
                   borderRadius: '6px',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   padding: '6px 10px',
                   fontSize: '0.9rem'
                 }}
@@ -365,16 +365,16 @@ export default function IhkProjectGanttLab() {
                   onChange={(e) => handleHourChange(idx, e.target.value)}
                   style={{
                     width: '65px',
-                    background: 'rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '6px',
-                    color: '#60a5fa',
+                    color: 'var(--accent-cyan)',
                     fontWeight: 'bold',
                     padding: '6px',
                     textAlign: 'center'
                   }}
                 />
-                <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>h</span>
+                <span style={{ color: 'var(--text-dim)', fontSize: '0.82rem' }}>h</span>
               </div>
               <button
                 onClick={() => handleDeletePhase(idx)}
@@ -383,7 +383,7 @@ export default function IhkProjectGanttLab() {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: phases.length <= 2 ? '#475569' : '#ef4444',
+                  color: phases.length <= 2 ? '#475569' : 'var(--accent-rose)',
                   cursor: phases.length <= 2 ? 'not-allowed' : 'pointer',
                   padding: '4px'
                 }}
@@ -398,7 +398,7 @@ export default function IhkProjectGanttLab() {
       {/* Practical IHK Tips Footer */}
       <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(59, 130, 246, 0.08)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.2)', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
         <Info size={20} color="#60a5fa" style={{ flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.5' }}>
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
           <strong>Prüfungs-Tipp für den Projektantrag:</strong> Die IHK fordert eine plausible und detaillierte Phasengliederung. Die Realisierungsphase sollte nicht mehr als 50% der Gesamtdauer einnehmen, um zu beweisen, dass die Arbeit eine vollwertige ingenieurmäßige/ganzheitliche Projektleistung darstellt und nicht nur reines Coden oder Zusammenschrauben ist.
         </div>
       </div>

@@ -993,7 +993,8 @@ export const LAB_REGISTRY = [
   },
   {
     tabs: ['kafka'],
-    load: () => import('../components/Content/KafkaEventLab')
+    load: () => import('../components/Content/KafkaEventLab'),
+    xp: { prop: 'onRewardXP', badge: 'kafka_event_master' }
   },
   {
     tabs: ['docker'],

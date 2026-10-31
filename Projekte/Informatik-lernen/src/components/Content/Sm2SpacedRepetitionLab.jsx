@@ -5,6 +5,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianG
 import { useStore } from '../../store/useStore';
 import { calculateSm2NextReview, calculateEbbinghausCurve } from '../../utils/sm2Algorithm';
 import { scheduleDailyReminder } from '../../utils/pushNotificationManager';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export const SM2_SAMPLE_CARDS = [
   {
@@ -127,7 +128,7 @@ export default function Sm2SpacedRepetitionLab() {
       </div>
 
       {/* 2-Pane: Flashcard Viewer + Ebbinghaus Memory Curve */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(340px, 1.2fr) minmax(320px, 1fr)', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(340px, 1.2fr) minmax(min(320px, 100%), 1fr)', gap: '20px' }}>
         {/* Flashcard Component */}
         <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-lg)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -138,7 +139,7 @@ export default function Sm2SpacedRepetitionLab() {
           </div>
 
           {/* Interactive Card */}
-          <div
+          <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setIsFlipped(!isFlipped))}
             onClick={() => setIsFlipped(!isFlipped)}
             style={{
               minHeight: '220px',
@@ -204,7 +205,7 @@ export default function Sm2SpacedRepetitionLab() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
                 <XAxis dataKey="day" stroke="var(--text-muted)" fontSize={11} />
                 <YAxis stroke="var(--text-muted)" fontSize={11} unit="%" domain={[0, 100]} />
-                <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }} />
+                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }} />
                 <Line type="monotone" dataKey="retentionPercent" stroke="var(--accent-teal)" strokeWidth={3} dot={{ r: 3 }} name="Behaltenskraft" />
               </LineChart>
             </ResponsiveContainer>

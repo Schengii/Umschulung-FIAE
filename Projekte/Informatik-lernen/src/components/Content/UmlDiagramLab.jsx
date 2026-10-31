@@ -142,7 +142,7 @@ export default function UmlDiagramLab({ onRewardXP }) {
       </div>
 
       {activeTab === 'sequence' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {/* Messages Flow List */}
           <div 
             className="glass-panel"
@@ -253,7 +253,7 @@ export default function UmlDiagramLab({ onRewardXP }) {
         </div>
       ) : activeTab === 'activity' ? (
         /* Activity Diagram View */
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           <div 
             className="glass-panel"
             style={{
@@ -326,7 +326,7 @@ export default function UmlDiagramLab({ onRewardXP }) {
         </div>
       ) : (
         /* Class Diagram & IHK Drill View */
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {/* IHK Drill Questions */}
           <div 
             className="glass-panel"

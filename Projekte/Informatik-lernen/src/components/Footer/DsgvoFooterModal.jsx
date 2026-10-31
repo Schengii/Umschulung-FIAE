@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { Shield, FileText, ExternalLink, X, Heart, Code2, HelpCircle, GitBranch } from 'lucide-react';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -6,16 +7,8 @@ const CURRENT_YEAR = new Date().getFullYear();
 export default function DsgvoFooterModal() {
   const [activeModal, setActiveModal] = useState(null); // 'datenschutz' | 'impressum' | 'dsgvo' | 'faq' | null
 
-  useEffect(() => {
-    if (!activeModal) return;
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setActiveModal(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeModal]);
+  const dialogRef = useRef(null);
+  useDialogA11y(Boolean(activeModal), () => setActiveModal(null), dialogRef);
 
   return (
     <footer
@@ -33,7 +26,7 @@ export default function DsgvoFooterModal() {
         <div 
           style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', 
             gap: '36px',
             marginBottom: '40px'
           }}
@@ -46,7 +39,7 @@ export default function DsgvoFooterModal() {
                   width: '34px',
                   height: '34px',
                   borderRadius: '8px',
-                  background: 'var(--gradient-cyber)',
+                  background: 'var(--gradient-cta)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -215,6 +208,7 @@ export default function DsgvoFooterModal() {
 
       {/* Modal Dialogs */}
       {activeModal && (
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
         <div
           style={{
             position: 'fixed',
@@ -230,9 +224,11 @@ export default function DsgvoFooterModal() {
             justifyContent: 'center',
             padding: '20px'
           }}
-          onClick={() => setActiveModal(null)}
+          onClick={(e) => e.target === e.currentTarget && setActiveModal(null)}
         >
           <div
+            ref={dialogRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-labelledby="dsgvo-footer-modal-title"
@@ -250,7 +246,6 @@ export default function DsgvoFooterModal() {
               border: '2px solid var(--accent-primary)',
               borderRadius: 'var(--radius-xl)'
             }}
-            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setActiveModal(null)}
@@ -273,13 +268,13 @@ export default function DsgvoFooterModal() {
                     <strong>2. Rot-Grün-Sehhilfe &amp; Farbenblindheit:</strong> Keine Information stützt sich ausschließlich auf Farben. Rote und grüne Indikatoren werden durch eindeutige Icons (✓ und ✗) sowie kontraststarke Blau- und Amber-Töne ersetzt.
                   </p>
                   <p style={{ marginBottom: '12px' }}>
-                    <strong>3. Sinnvolle Kontraste (WCAG 7:1+ AAA):</strong> Alle Standard-Schriftfarben und Akzente besitzen optimierte Luminanzwerte für ermüdungsfreies Lesen bei Tag und Nacht.
+                    <strong>3. Kontraste:</strong> Für Tag- und Nachtdarstellung gibt es einen Hoch-Kontrast-Modus. Die Standardfarben erreichen WCAG 2.2 AA noch nicht auf allen Seiten; die Verbesserung läuft.
                   </p>
                   <p style={{ marginBottom: '12px' }}>
                     <strong>4. Reduzierte Bewegung:</strong> Nutzer mit vestibulären Störungen können Animationen vollständig deaktivieren (unterstützt auch systemweites <code>prefers-reduced-motion</code>).
                   </p>
                   <p style={{ marginBottom: '12px' }}>
-                    <strong>5. Mobile Touch-Targets:</strong> Alle interaktiven Elemente besitzen eine Mindesthöhe von 44x44 Pixeln nach WCAG-Kriterium 2.5.5 für fehlerfreie Bedienung auf kleineren Touchscreens.
+                    <strong>5. Mobile Touch-Targets:</strong> Wichtige Bedienelemente haben eine Mindesthöhe von 44 Pixeln; kleinere Elemente sind einzelne Ausnahmen, die schrittweise angepasst werden.
                   </p>
                 </div>
               </div>
@@ -292,16 +287,19 @@ export default function DsgvoFooterModal() {
                 </h2>
                 <div style={{ lineHeight: '1.7', fontSize: '0.9rem' }}>
                   <p style={{ marginBottom: '12px' }}>
-                    <strong>1. 100% Lokale Datenspeicherung:</strong> Diese Anwendung speichert und verarbeitet keinerlei personenbezogene Daten auf Remote-Servern. Alle Lernfortschritte, Karteikarten-Wiederholungsintervalle (SM-2 Algorithmus), Erfahrungspunkte (XP) und Badges verbleiben ausschließlich im <code>localStorage</code> deines Endgeräts.
+                    <strong>1. Lokale Datenspeicherung:</strong> Diese Anwendung legt keine Nutzerkonten oder Spielstände auf eigenen Servern ab. Beim Aufruf der Seite fallen beim Hosting-Anbieter (Vercel) technisch übliche Server-Logdaten an (z.&nbsp;B. IP-Adresse, Zeitpunkt, aufgerufene Adresse). Alle Lernfortschritte, Karteikarten-Wiederholungsintervalle (SM-2 Algorithmus), Erfahrungspunkte (XP) und Badges verbleiben ausschließlich im <code>localStorage</code> deines Endgeräts.
                   </p>
                   <p style={{ marginBottom: '12px' }}>
                     <strong>2. Datenschutzfreundliche Web-Analytics (Cookie-less):</strong> Zur technischen Fehleranalyse und Lastüberwachung setzen wir <em>Vercel Web Analytics</em> ein. Es werden <strong>keine Cookies</strong> gesetzt, keine IP-Adressen gespeichert und keine geräteübergreifenden Profile erstellt. Die Erfassung erfolgt vollständig anonymisiert und DSGVO-konform ohne Einwilligungspflicht.
                   </p>
                   <p style={{ marginBottom: '12px' }}>
-                    <strong>3. Datensouveränität &amp; Backup:</strong> Über das Menü <em>Tools ➔ Backup &amp; Wiederherstellen</em> kannst du jederzeit deinen gesamten Spielstand als JSON-Datei exportieren oder löschen.
+                    <strong>3. Eingebettete YouTube-Videos:</strong> Im Video-Bereich werden Videos von YouTube (Google) über <code>youtube-nocookie.com</code> eingebettet. Die Verbindung zu YouTube wird erst nach deinem Klick auf „Video von YouTube laden“ aufgebaut; dabei werden z.&nbsp;B. deine IP-Adresse und Geräteinformationen an YouTube übertragen. Ohne Klick findet keine Übertragung statt.
                   </p>
                   <p style={{ marginBottom: '12px' }}>
-                    <strong>4. Barrierefreiheit (WCAG 2.1 AAA):</strong> Wir unterstützen uneingeschränkt Inklusion mit zertifizierten Modi für Legasthenie/Dyslexie (*Atkinson Hyperlegible*), Deuteranopie/Rot-Grün-Schwäche sowie High-Contrast.
+                    <strong>4. Datensouveränität &amp; Backup:</strong> Über das Menü <em>Tools ➔ Backup &amp; Wiederherstellen</em> kannst du jederzeit deinen gesamten Spielstand als JSON-Datei exportieren oder löschen.
+                  </p>
+                  <p style={{ marginBottom: '12px' }}>
+                    <strong>5. Barrierefreiheit:</strong> Ziel ist WCAG 2.2 AA; dieser Stand ist noch nicht überall erreicht. Es gibt Anzeigemodi für Legasthenie/Dyslexie (<em>Atkinson Hyperlegible</em>), Rot-Grün-Schwäche sowie Hohen Kontrast. Eine Zertifizierung liegt nicht vor.
                   </p>
                 </div>
               </div>

@@ -264,7 +264,7 @@ export default function DataStructuresLab({ onRewardXP }) {
           </div>
 
           {/* Visual Tree Display */}
-          <div style={{ background: '#0f172a', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '20px', minHeight: '260px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '20px', minHeight: '260px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center', alignItems: 'center', maxWidth: '650px' }}>
               {treeValues.map((val) => {
                 const isVisiting = activeVisitingNode === val;
@@ -281,8 +281,8 @@ export default function DataStructuresLab({ onRewardXP }) {
                       justifyContent: 'center',
                       fontWeight: '800',
                       fontSize: '1.1rem',
-                      background: isVisiting ? '#e11d48' : isTraversed ? 'var(--accent-emerald)' : '#1e293b',
-                      color: '#ffffff',
+                      background: isVisiting ? 'var(--accent-rose)' : isTraversed ? 'var(--accent-emerald)' : 'var(--bg-tertiary)',
+                      color: isVisiting || isTraversed ? 'var(--text-on-accent)' : 'var(--text-main)',
                       border: isVisiting ? '3px solid #fda4af' : '2px solid #334155',
                       boxShadow: isVisiting ? '0 0 20px #e11d48' : 'none',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -307,8 +307,8 @@ export default function DataStructuresLab({ onRewardXP }) {
                   <span
                     key={idx}
                     style={{
-                      background: '#0f172a',
-                      color: '#38bdf8',
+                      background: 'var(--bg-card)',
+                      color: 'var(--accent-cyan)',
                       padding: '6px 14px',
                       borderRadius: 'var(--radius-md)',
                       fontFamily: 'monospace',
@@ -359,8 +359,8 @@ export default function DataStructuresLab({ onRewardXP }) {
           </div>
 
           {/* Graph Adjacency / Nodes Visualization */}
-          <div style={{ background: '#0f172a', padding: '24px', borderRadius: 'var(--radius-lg)', marginBottom: '20px' }}>
-            <h4 style={{ color: '#94a3b8', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '24px', borderRadius: 'var(--radius-lg)', marginBottom: '20px' }}>
+            <h4 style={{ color: 'var(--text-dim)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
               Graph Knotennetzwerk & Kantengewichte
             </h4>
 
@@ -372,19 +372,19 @@ export default function DataStructuresLab({ onRewardXP }) {
                   <div
                     key={node}
                     style={{
-                      background: isInPath ? 'rgba(16,185,129,0.2)' : isVisited ? 'rgba(56,189,248,0.1)' : '#1e293b',
+                      background: isInPath ? 'rgba(16,185,129,0.2)' : isVisited ? 'rgba(56,189,248,0.1)' : 'var(--bg-card-hover)',
                       border: isInPath ? '2px solid var(--accent-emerald)' : isVisited ? '1px solid #38bdf8' : '1px solid #334155',
                       padding: '12px',
                       borderRadius: 'var(--radius-md)'
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <span style={{ fontWeight: '800', color: isInPath ? 'var(--accent-emerald)' : '#f8fafc', fontSize: '1.1rem' }}>
+                      <span style={{ fontWeight: '800', color: isInPath ? 'var(--accent-emerald)' : 'var(--text-main)', fontSize: '1.1rem' }}>
                         Node {node}
                       </span>
                       {isInPath && <span className="badge badge-emerald" style={{ fontSize: '0.65rem' }}>IM WEG</span>}
                     </div>
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
                       {edges.map(e => `${e.node} (w: ${e.weight})`).join(', ')}
                     </div>
                   </div>
@@ -395,7 +395,7 @@ export default function DataStructuresLab({ onRewardXP }) {
 
           {/* Path Result & Log */}
           {graphPath.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px' }}>
               <div style={{ background: 'var(--bg-primary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
                 <h4 style={{ margin: '0 0 12px 0', color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Award size={18} /> Optimaler Pfad ({startNode} &rarr; {targetNode})
@@ -403,7 +403,7 @@ export default function DataStructuresLab({ onRewardXP }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   {graphPath.map((node, i) => (
                     <React.Fragment key={node}>
-                      <span style={{ background: 'var(--accent-emerald)', color: '#ffffff', padding: '6px 14px', borderRadius: 'var(--radius-md)', fontWeight: '800' }}>
+                      <span style={{ background: 'var(--accent-emerald)', color: 'var(--text-on-accent)', padding: '6px 14px', borderRadius: 'var(--radius-md)', fontWeight: '800' }}>
                         {node}
                       </span>
                       {i < graphPath.length - 1 && <ArrowRight size={18} style={{ color: 'var(--text-muted)' }} />}
@@ -412,8 +412,8 @@ export default function DataStructuresLab({ onRewardXP }) {
                 </div>
               </div>
 
-              <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-lg)', maxHeight: '180px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '0.8rem', color: '#cbd5e1' }}>
-                <div style={{ color: '#94a3b8', fontWeight: '700', marginBottom: '6px' }}>Algorithmus Trace:</div>
+              <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-lg)', maxHeight: '180px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                <div style={{ color: 'var(--text-dim)', fontWeight: '700', marginBottom: '6px' }}>Algorithmus Trace:</div>
                 {graphLog.map((log, idx) => (
                   <div key={idx} style={{ marginBottom: '4px' }}>{log}</div>
                 ))}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Die drei Schutzziele der Informationssicherheit als Dreieck: Vertraulichkeit, Integrität und Verfügbarkeit, jeweils mit Bedrohung und Maßnahme</title>
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Schutzziele der Informationssicherheit (CIA-Triade)</text>
+  <polygon points="360,60 210,290 510,290" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <text x="360" y="215" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Information</text>
+  <text x="360" y="234" text-anchor="middle" font-size="12" fill="#475569">ergänzend: Authentizität,</text>
+  <text x="360" y="250" text-anchor="middle" font-size="12" fill="#475569">Verbindlichkeit</text>
+  <circle cx="360" cy="70" r="12" fill="#4338ca"/>
+  <circle cx="215" cy="285" r="12" fill="#0f766e"/>
+  <circle cx="505" cy="285" r="12" fill="#b45309"/>
+  <g font-size="13">
+    <text x="420" y="62" font-weight="700" fill="#4338ca" font-size="15">Vertraulichkeit</text>
+    <text x="420" y="80" fill="#0f172a">nur Befugte sehen die Daten</text>
+    <text x="420" y="98" fill="#475569">Bedrohung: Abhören, Datenleck</text>
+    <text x="420" y="116" fill="#475569">Maßnahme: Verschlüsselung, Rechte</text>
+    <text x="20" y="200" font-weight="700" fill="#0f766e" font-size="15">Integrität</text>
+    <text x="20" y="218" fill="#0f172a">Daten sind korrekt</text>
+    <text x="20" y="236" fill="#0f172a">und unverändert</text>
+    <text x="20" y="254" fill="#475569">Bedrohung: Manipulation</text>
+    <text x="20" y="272" fill="#475569">Maßnahme: Hash, Signatur</text>
+    <text x="522" y="200" font-weight="700" fill="#b45309" font-size="15">Verfügbarkeit</text>
+    <text x="522" y="218" fill="#0f172a">Daten und Systeme sind</text>
+    <text x="522" y="236" fill="#0f172a">nutzbar, wenn gebraucht</text>
+    <text x="522" y="254" fill="#475569">Bedrohung: Ausfall, DDoS</text>
+    <text x="522" y="272" fill="#475569">Maßnahme: RAID, USV, Backup</text>
+  </g>
+  <text x="360" y="320" text-anchor="middle" font-size="12" fill="#475569">Englisch: Confidentiality · Integrity · Availability</text>
+</svg>

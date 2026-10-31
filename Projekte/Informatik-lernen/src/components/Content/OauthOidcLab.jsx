@@ -37,7 +37,7 @@ export default function OauthOidcLab() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === s.id ? 'var(--accent-indigo)' : 'var(--bg-card)',
-              color: selectedId === s.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === s.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === s.id ? '2px solid var(--accent-indigo)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'
@@ -59,7 +59,7 @@ export default function OauthOidcLab() {
         <div className="code-window">
           <div className="code-header">
             <span>OAuth2 Code Snippet</span>
-            <button onClick={handleCopy} style={{ background: 'transparent', border: 'none', color: '#f8fafc', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}>
+            <button onClick={handleCopy} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}>
               <Copy size={14} /> {copied ? 'Kopiert ✓' : 'Kopieren'}
             </button>
           </div>

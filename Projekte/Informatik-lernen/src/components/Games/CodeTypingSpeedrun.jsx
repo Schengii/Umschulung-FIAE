@@ -58,7 +58,7 @@ export default function CodeTypingSpeedrun({ onCompleteGame }) {
       </p>
 
       {/* Target Code Snippet Window */}
-      <div style={{ background: '#0f172a', color: '#f8fafc', padding: '20px', borderRadius: 'var(--radius-lg)', fontFamily: 'var(--font-code)', fontSize: '1.05rem', marginBottom: '20px', border: '1px solid #334155', userSelect: 'none' }}>
+      <div style={{ background: 'var(--bg-card)', color: 'var(--text-main)', padding: '20px', borderRadius: 'var(--radius-lg)', fontFamily: 'var(--font-code)', fontSize: '1.05rem', marginBottom: '20px', border: '1px solid #334155', userSelect: 'none' }}>
         {currentSnippet.code}
       </div>
 

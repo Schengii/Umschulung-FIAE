@@ -78,8 +78,8 @@ export default function CleanArchLab() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'var(--card-bg, #ffffff)', padding: '10px 18px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)' }}>
           <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Architektur-Score</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: audit.isClean ? '#10b981' : '#ef4444' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dim)' }}>Architektur-Score</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: audit.isClean ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
               {audit.complianceScore}%
             </div>
           </div>
@@ -90,8 +90,8 @@ export default function CleanArchLab() {
               padding: '8px 16px',
               borderRadius: '10px',
               border: 'none',
-              background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, #06b6d4, #0284c7)',
-              color: '#fff',
+              background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-cyan)',
+              color: 'var(--text-on-accent)',
               fontWeight: 600,
               fontSize: '0.85rem',
               cursor: xpClaimed ? 'default' : 'pointer',
@@ -111,10 +111,10 @@ export default function CleanArchLab() {
         <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 12px' }}>
           Konzentrische Schichten & Flussrichtung (Dependency Rule)
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px' }}>
           {Object.values(ARCH_LAYERS).map(layer => (
             <div key={layer.id} style={{ padding: '14px', borderRadius: '12px', borderLeft: `4px solid ${layer.color}`, background: layer.bg }}>
-              <div style={{ fontWeight: 800, color: layer.color, fontSize: '0.9rem' }}>{layer.name}</div>
+              <div style={{ fontWeight: 800, color: `color-mix(in srgb, ${layer.color} 55%, var(--text-main))`, fontSize: '0.9rem' }}>{layer.name}</div>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary, #475569)', margin: '6px 0 0' }}>{layer.description}</p>
             </div>
           ))}
@@ -134,7 +134,7 @@ export default function CleanArchLab() {
               borderRadius: '8px',
               border: '1px solid #10b981',
               background: 'rgba(16, 185, 129, 0.1)',
-              color: '#059669',
+              color: 'var(--accent-emerald)',
               fontSize: '0.85rem',
               fontWeight: 700,
               cursor: 'pointer',
@@ -149,8 +149,8 @@ export default function CleanArchLab() {
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ flex: 1, minWidth: '220px' }}>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '4px' }}>Quelle (Importeur):</label>
-            <select
+            <label htmlFor="clean-arch-lab-1" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dim)', marginBottom: '4px' }}>Quelle (Importeur):</label>
+            <select id="clean-arch-lab-1"
               value={fromSelect}
               onChange={(e) => setFromSelect(e.target.value)}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', background: 'var(--input-bg, #fff)' }}
@@ -164,8 +164,8 @@ export default function CleanArchLab() {
           <div style={{ paddingTop: '20px' }}><ArrowRight size={20} color="#64748b" /></div>
 
           <div style={{ flex: 1, minWidth: '220px' }}>
-            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '4px' }}>Ziel (Importierte Komponente):</label>
-            <select
+            <label htmlFor="clean-arch-lab-2" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dim)', marginBottom: '4px' }}>Ziel (Importierte Komponente):</label>
+            <select id="clean-arch-lab-2"
               value={toSelect}
               onChange={(e) => setToSelect(e.target.value)}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', background: 'var(--input-bg, #fff)' }}
@@ -183,8 +183,8 @@ export default function CleanArchLab() {
               padding: '9px 18px',
               borderRadius: '8px',
               border: 'none',
-              background: '#06b6d4',
-              color: '#fff',
+              background: 'var(--accent-cyan)',
+              color: 'var(--text-on-accent)',
               fontWeight: 700,
               fontSize: '0.9rem',
               cursor: 'pointer',
@@ -229,17 +229,17 @@ export default function CleanArchLab() {
             >
               <div style={{ flex: 1, minWidth: '260px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                  <span style={{ fontWeight: 800, color: ARCH_LAYERS[fromComp.layer].color }}>{fromComp.name}</span>
+                  <span style={{ fontWeight: 800, color: `color-mix(in srgb, ${ARCH_LAYERS[fromComp.layer].color} 55%, var(--text-main))` }}>{fromComp.name}</span>
                   <ArrowRight size={14} color="#64748b" />
-                  <span style={{ fontWeight: 800, color: ARCH_LAYERS[toComp.layer].color }}>{toComp.name}</span>
+                  <span style={{ fontWeight: 800, color: `color-mix(in srgb, ${ARCH_LAYERS[toComp.layer].color} 55%, var(--text-main))` }}>{toComp.name}</span>
 
                   <span style={{
                     fontSize: '0.75rem',
                     fontWeight: 700,
                     padding: '2px 8px',
                     borderRadius: '6px',
-                    background: validation.isValid ? '#dcfce7' : '#fee2e2',
-                    color: validation.isValid ? '#15803d' : '#b91c1c',
+                    background: validation.isValid ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                    color: validation.isValid ? 'var(--accent-emerald)' : 'var(--accent-rose)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px'
@@ -248,7 +248,7 @@ export default function CleanArchLab() {
                     {validation.isValid ? 'Konform' : 'Architektur-Verstoß'}
                   </span>
                 </div>
-                <div style={{ fontSize: '0.82rem', color: validation.isValid ? '#64748b' : '#dc2626', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.82rem', color: validation.isValid ? 'var(--text-dim)' : 'var(--accent-rose)', marginTop: '6px' }}>
                   {validation.reason}
                 </div>
               </div>
@@ -258,7 +258,7 @@ export default function CleanArchLab() {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#94a3b8',
+                  color: 'var(--text-dim)',
                   cursor: 'pointer',
                   padding: '6px',
                   borderRadius: '6px'
