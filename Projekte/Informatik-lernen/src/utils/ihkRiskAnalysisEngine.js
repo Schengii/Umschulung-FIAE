@@ -4,7 +4,7 @@
  * Berechnet Risikoprioritätszahlen (RPZ), 5x5 Ampel-Klassifizierung und generiert IHK-Projektdokumentationen.
  */
 
-export const RISK_LEVELS = {
+const RISK_LEVELS = {
   LOW: { label: 'Gering (Akzeptabel)', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.15)', maxRpz: 6 },
   MEDIUM: { label: 'Mittel (Überwachung & Minderung)', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', maxRpz: 14 },
   HIGH: { label: 'Kritisch (Sofortmaßnahmen erforderlich)', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)', maxRpz: 25 }

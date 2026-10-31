@@ -44,3 +44,7 @@ Die Synchronisation erfolgt über ein 3-stufiges, ausfallsicheres Multi-Tier-Sys
 - **Maximale Ausfallsicherheit:** Versagt eine Methode (z. B. Webhook/PAT), greift binnen 24 Stunden der Cron-Job, oder lokal der 1-Klick-Befehl.
 - **Stabilität & QA-Schutz:** Automatische Syncs in GitHub Actions erstellen einen PR mit vollständigen CI-Checks (Playwright E2E, Vitest, Lighthouse), sodass fehlerhafter Subprojekt-Code niemals unbemerkt die Portfolio-Hauptseite bricht.
 - **Demos bleiben dauerhaft lauffähig:** Vorkompilierte `dist/`-Ordner werden durch `preserve` niemals überschrieben.
+
+## Nachtrag 2026-10-31 — Private Quell-Repos
+
+Für Projekte mit **privatem** Quell-Repo (Amazon 2.0, ElektroCheck AI, Wohnungssuche KI, Minecraft) übernimmt der Sync nur den Demo-Build und `portfolio-metadata.json` (`DEMO_ONLY` in `scripts/project_visibility.js`). Der Quellcode bleibt im privaten Repo; auf der Website entfallen Code-Link und `codeFiles` für diese Projekte. Alte Commits in der Git-History enthalten die früheren Quellstände weiterhin.

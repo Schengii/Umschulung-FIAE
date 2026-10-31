@@ -81,12 +81,12 @@ export default function TlsHandshakeLab({ onRewardXP }) {
 
       {/* Parameters */}
       <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+            <label htmlFor="tls-handshake-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
               Server Name Indication (SNI):
             </label>
-            <input
+            <input id="tls-handshake-lab-1"
               type="text"
               value={sni}
               onChange={(e) => setSni(e.target.value)}
@@ -97,10 +97,10 @@ export default function TlsHandshakeLab({ onRewardXP }) {
           {mode === 'full' && (
             <>
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="tls-handshake-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Cipher Suite:
                 </label>
-                <select
+                <select id="tls-handshake-lab-2"
                   value={cipherSuiteId}
                   onChange={(e) => setCipherSuiteId(e.target.value)}
                   style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '0.85rem' }}
@@ -110,10 +110,10 @@ export default function TlsHandshakeLab({ onRewardXP }) {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="tls-handshake-lab-3" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Key-Exchange-Gruppe (ECDHE):
                 </label>
-                <select
+                <select id="tls-handshake-lab-3"
                   value={keyGroupId}
                   onChange={(e) => setKeyGroupId(e.target.value)}
                   style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '0.85rem' }}

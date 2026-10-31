@@ -218,6 +218,8 @@ export function validateIhkProjectPlan(phases, profileId = 'FIAE', customTarget 
  */
 export function calculateGanttTimeline(phases, startDateStr = '2026-04-01', workHoursPerDay = 8) {
   let currentDate = new Date(startDateStr);
+  // Leeres/ungültiges Datum (z. B. gelöschtes Datumsfeld) → Standard-Startdatum statt 'Invalid time value'
+  if (Number.isNaN(currentDate.getTime())) currentDate = new Date('2026-04-01');
 
   // Wenn Startdatum auf Wochenende fällt, auf Montag vorrücken
   while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
@@ -229,7 +231,9 @@ export function calculateGanttTimeline(phases, startDateStr = '2026-04-01', work
 
   phases.forEach((phase) => {
     const phaseStart = new Date(currentDate);
-    const durationDays = Math.max(1, Math.ceil(phase.hours / workHoursPerDay));
+    // Nicht endliche oder riesige Eingaben begrenzen (sonst friert die Schleife unten ein)
+    const rawDays = Math.ceil(phase.hours / workHoursPerDay);
+    const durationDays = Number.isFinite(rawDays) ? Math.min(Math.max(1, rawDays), 3650) : 1;
 
     let daysAdded = 0;
     while (daysAdded < durationDays) {

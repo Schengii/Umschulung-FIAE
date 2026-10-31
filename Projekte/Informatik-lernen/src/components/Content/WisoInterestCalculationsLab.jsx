@@ -95,7 +95,7 @@ export default function WisoInterestCalculationsLab({ onRewardXP }) {
       {tab === 'simple' ? (
         <>
           {/* Key Metrics */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
             <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Angelegtes Kapital (K):</span>
               <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -105,7 +105,7 @@ export default function WisoInterestCalculationsLab({ onRewardXP }) {
 
             <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Zinsertrag ({tage} Tage à {zinssatz}%):</span>
-              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+              <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
                 +{simpleData.zinsen.toLocaleString('de-DE')} €
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function WisoInterestCalculationsLab({ onRewardXP }) {
 
           {/* Sliders */}
           <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Kapital (K): {kapital.toLocaleString('de-DE')} €</label>
                 <input type="range" min="5000" max="250000" step="5000" value={kapital} onChange={(e) => setKapital(parseInt(e.target.value, 10))} style={{ width: '100%' }} />
@@ -143,7 +143,7 @@ export default function WisoInterestCalculationsLab({ onRewardXP }) {
             <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>
               Zinseszinsentwicklung über {jahre} Jahre (Aufzinsungsfaktor: {compoundData.aufzinsungsfaktor}):
             </span>
-            <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#10b981' }}>
+            <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--accent-emerald)' }}>
               Gesamtzinsen: +{compoundData.gesamtzinsen.toLocaleString('de-DE')} €
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function WisoInterestCalculationsLab({ onRewardXP }) {
               {compoundData.yearlyProgression.map(row => (
                 <tr key={row.jahr} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '10px', fontWeight: 'bold' }}>Jahr {row.jahr}</td>
-                  <td style={{ padding: '10px', color: '#10b981' }}>+{row.zinsenImJahr.toLocaleString('de-DE')} €</td>
+                  <td style={{ padding: '10px', color: 'var(--accent-emerald)' }}>+{row.zinsenImJahr.toLocaleString('de-DE')} €</td>
                   <td style={{ padding: '10px', fontWeight: 'bold' }}>{row.kapitalEndeJahr.toLocaleString('de-DE')} €</td>
                 </tr>
               ))}

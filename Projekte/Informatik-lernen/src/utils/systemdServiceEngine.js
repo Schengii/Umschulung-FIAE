@@ -6,8 +6,6 @@
  * und OOM-Kill-Ereignisse.
  */
 
-export const RESTART_POLICIES = ['no', 'always', 'on-failure', 'on-abort'];
-
 export const DEFAULT_SERVICE_CONFIG = {
   unitName: 'api-backend.service',
   description: 'IT-DevGame REST API Backend Service',

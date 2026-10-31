@@ -67,7 +67,7 @@ export default function LogicGatesGame({ onCompleteGame }) {
 
         {/* Visual Circuit Diagram */}
         <div style={{
-          background: '#090d16',
+          background: 'var(--bg-secondary)',
           border: '1px solid var(--border-color)',
           borderRadius: 'var(--radius-md)',
           padding: '32px',
@@ -89,7 +89,7 @@ export default function LogicGatesGame({ onCompleteGame }) {
                   padding: '10px 20px',
                   borderRadius: '8px',
                   background: inputA ? 'var(--accent-green)' : 'var(--bg-tertiary)',
-                  color: '#fff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: '800',
                   border: 'none',
                   cursor: 'pointer',
@@ -110,7 +110,7 @@ export default function LogicGatesGame({ onCompleteGame }) {
                   padding: '10px 20px',
                   borderRadius: '8px',
                   background: inputB ? 'var(--accent-green)' : 'var(--bg-tertiary)',
-                  color: '#fff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: '800',
                   border: 'none',
                   cursor: 'pointer',
@@ -152,7 +152,7 @@ export default function LogicGatesGame({ onCompleteGame }) {
               boxShadow: outputSignal ? '0 0 30px rgba(16, 185, 129, 0.8)' : 'none',
               fontSize: '1.4rem',
               fontWeight: '800',
-              color: '#fff'
+              color: 'var(--text-on-accent)'
             }}>
               {outputSignal}
             </div>

@@ -9,6 +9,7 @@ import {
   executeSyscallSandbox 
 } from '../../utils/linuxCapSeccompEngine';
 import { useStore } from '../../store/useStore';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function LinuxCapSeccompLab() {
   const { awardXP } = useStore();
@@ -59,9 +60,9 @@ export default function LinuxCapSeccompLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
+        background: 'var(--gradient-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -93,7 +94,7 @@ export default function LinuxCapSeccompLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -107,7 +108,7 @@ export default function LinuxCapSeccompLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.15)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -120,28 +121,28 @@ export default function LinuxCapSeccompLab() {
       </div>
 
       {/* Grid: Capabilities & Seccomp Config */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Capabilities Panel */}
         <div style={{
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid rgba(255, 255, 255, 0.08)'
+          border: '1px solid var(--border-color)'
         }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Lock size={18} color="#10b981" /> Aktive Linux Capabilities (Rechte-Tokens)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {Object.values(caps).map((c) => (
-              <div 
+              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => toggleCap(c.name))} 
                 key={c.name}
                 onClick={() => toggleCap(c.name)}
                 style={{
                   padding: '12px 14px',
                   borderRadius: '10px',
                   cursor: 'pointer',
-                  background: c.active ? 'rgba(16, 185, 129, 0.15)' : 'rgba(0, 0, 0, 0.25)',
+                  background: c.active ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-tertiary)',
                   border: c.active ? '1px solid #10b981' : '1px solid rgba(255, 255, 255, 0.05)',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -150,7 +151,7 @@ export default function LinuxCapSeccompLab() {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: c.active ? '#10b981' : '#ffffff' }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: c.active ? 'var(--accent-emerald)' : 'var(--text-main)' }}>
                     {c.name}
                   </div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
@@ -163,7 +164,7 @@ export default function LinuxCapSeccompLab() {
                   borderRadius: '12px',
                   fontWeight: 600,
                   background: c.active ? 'rgba(16, 185, 129, 0.25)' : 'rgba(148, 163, 184, 0.2)',
-                  color: c.active ? '#10b981' : '#94a3b8'
+                  color: c.active ? 'var(--accent-emerald)' : 'var(--text-dim)'
                 }}>
                   {c.active ? 'Aktiv' : 'Inaktiv'}
                 </span>
@@ -177,7 +178,7 @@ export default function LinuxCapSeccompLab() {
           background: 'var(--surface-card, #1e293b)',
           borderRadius: '16px',
           padding: '20px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
+          border: '1px solid var(--border-color)',
           display: 'flex',
           flexDirection: 'column'
         }}>
@@ -187,19 +188,19 @@ export default function LinuxCapSeccompLab() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '16px' }}>
             <div>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+              <label htmlFor="linux-cap-seccomp-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
                 Systemaufruf (Syscall):
               </label>
-              <select
+              <select id="linux-cap-seccomp-lab-1"
                 value={selectedSyscall}
                 onChange={(e) => setSelectedSyscall(e.target.value)}
                 style={{
                   width: '100%',
-                  background: 'rgba(0, 0, 0, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  background: 'var(--bg-tertiary)',
+                  border: '1px solid var(--border-color)',
                   borderRadius: '8px',
                   padding: '8px 12px',
-                  color: '#ffffff',
+                  color: 'var(--text-main)',
                   fontSize: '0.9rem'
                 }}
               >
@@ -215,20 +216,20 @@ export default function LinuxCapSeccompLab() {
 
             {selectedSyscall === 'bind' && (
               <div>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+                <label htmlFor="linux-cap-seccomp-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
                   Ziel-Port (Privilegiert falls &lt; 1024):
                 </label>
-                <input 
+                <input id="linux-cap-seccomp-lab-2" 
                   type="number"
                   value={bindPort}
                   onChange={(e) => setBindPort(parseInt(e.target.value, 10) || 80)}
                   style={{
                     width: '100%',
-                    background: 'rgba(0, 0, 0, 0.3)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '8px',
                     padding: '8px 12px',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: '0.9rem'
                   }}
                 />
@@ -242,7 +243,7 @@ export default function LinuxCapSeccompLab() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                background: '#10b981',
+                background: 'var(--accent-emerald)',
                 color: '#000000',
                 border: 'none',
                 borderRadius: '8px',
@@ -259,9 +260,9 @@ export default function LinuxCapSeccompLab() {
           <h3 style={{ fontSize: '0.9rem', margin: '0 0 8px 0', color: 'var(--text-muted)' }}>Aktive Seccomp BPF Filterregeln:</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.78rem' }}>
             {seccompRules.map((r) => (
-              <div key={r.syscall} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px', background: 'rgba(0,0,0,0.2)', borderRadius: '4px' }}>
+              <div key={r.syscall} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px', background: 'var(--bg-tertiary)', borderRadius: '4px' }}>
                 <code>{r.syscall}()</code>
-                <span style={{ color: r.action === 'SECCOMP_RET_KILL_PROCESS' ? '#ef4444' : r.action === 'SECCOMP_RET_ERRNO' ? '#f59e0b' : '#10b981', fontWeight: 600 }}>
+                <span style={{ color: r.action === 'SECCOMP_RET_KILL_PROCESS' ? 'var(--accent-rose)' : r.action === 'SECCOMP_RET_ERRNO' ? 'var(--accent-amber)' : 'var(--accent-emerald)', fontWeight: 600 }}>
                   {r.action}
                 </span>
               </div>
@@ -276,7 +277,7 @@ export default function LinuxCapSeccompLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)'
+        border: '1px solid var(--border-color)'
       }}>
         <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Terminal size={18} color="#10b981" /> Kernel Syscall-Audit & Dmesg Log
@@ -292,16 +293,16 @@ export default function LinuxCapSeccompLab() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'rgba(0, 0, 0, 0.3)',
+                background: 'var(--bg-tertiary)',
                 padding: '8px 12px',
                 borderRadius: '6px',
                 fontSize: '0.82rem'
               }}>
                 <span style={{ color: 'var(--text-muted)' }}>[{log.timestamp}]</span>
-                <span style={{ fontWeight: 600, color: '#3b82f6' }}>{log.syscall}(){log.targetPort ? ` -> Port ${log.targetPort}` : ''}</span>
+                <span style={{ fontWeight: 600, color: 'var(--accent-cyan)' }}>{log.syscall}(){log.targetPort ? ` -> Port ${log.targetPort}` : ''}</span>
                 <span style={{
                   fontWeight: 600,
-                  color: log.status === 'SUCCESS' ? '#10b981' : log.status === 'KILLED' ? '#ef4444' : '#f59e0b'
+                  color: log.status === 'SUCCESS' ? 'var(--accent-emerald)' : log.status === 'KILLED' ? 'var(--accent-rose)' : 'var(--accent-amber)'
                 }}>
                   {log.status}
                 </span>

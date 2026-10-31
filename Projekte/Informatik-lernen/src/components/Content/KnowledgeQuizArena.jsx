@@ -63,7 +63,7 @@ export default function KnowledgeQuizArena({ onRewardXP }) {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedCatId === cat.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-              color: selectedCatId === cat.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedCatId === cat.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedCatId === cat.id ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

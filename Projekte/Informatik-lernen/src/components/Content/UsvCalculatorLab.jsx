@@ -61,7 +61,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(234, 179, 8, 0.15)', color: '#facc15' }}>
+              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(234, 179, 8, 0.15)', color: 'var(--accent-amber)' }}>
                 <Zap size={24} />
               </div>
               <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800' }}>
@@ -73,10 +73,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(234, 179, 8, 0.15)', color: '#facc15' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(234, 179, 8, 0.15)', color: 'var(--accent-amber)' }}>
               IT-SE & FISI
             </span>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)' }}>
               +55 XP
             </span>
           </div>
@@ -90,7 +90,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'dimensioning' ? '#eab308' : 'rgba(255, 255, 255, 0.05)',
+              background: activeTab === 'dimensioning' ? 'var(--accent-amber)' : 'rgba(255, 255, 255, 0.05)',
               color: activeTab === 'dimensioning' ? '#000' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
@@ -107,7 +107,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'autonomie' ? '#eab308' : 'rgba(255, 255, 255, 0.05)',
+              background: activeTab === 'autonomie' ? 'var(--accent-amber)' : 'rgba(255, 255, 255, 0.05)',
               color: activeTab === 'autonomie' ? '#000' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
@@ -124,7 +124,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'topologien' ? '#eab308' : 'rgba(255, 255, 255, 0.05)',
+              background: activeTab === 'topologien' ? 'var(--accent-amber)' : 'rgba(255, 255, 255, 0.05)',
               color: activeTab === 'topologien' ? '#000' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
@@ -141,8 +141,8 @@ export default function UsvCalculatorLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'drill' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'drill' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'drill' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'drill' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -157,7 +157,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
 
       {/* TAB 1: USV LEISTUNGSDIMENSIONIERUNG */}
       {activeTab === 'dimensioning' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {/* Verbraucher-Tabelle */}
           <div className="glass-panel" style={{ padding: '20px' }}>
             <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: 0, marginBottom: '14px' }}>
@@ -190,10 +190,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             {/* Parameter */}
             <div style={{ borderTop: '1px solid #334155', paddingTop: '14px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               <div style={{ flex: 1, minWidth: '130px' }}>
-                <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="usv-calculator-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Leistungsfaktor (cos φ):
                 </label>
-                <input
+                <input id="usv-calculator-lab-1"
                   type="number"
                   step="0.05"
                   min="0.5"
@@ -204,10 +204,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
                 />
               </div>
               <div style={{ flex: 1, minWidth: '130px' }}>
-                <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="usv-calculator-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   IHK-Reserve (+%):
                 </label>
-                <input
+                <input id="usv-calculator-lab-2"
                   type="number"
                   min="0"
                   max="50"
@@ -221,14 +221,14 @@ export default function UsvCalculatorLab({ onRewardXP }) {
 
           {/* Berechnungsergebnisse */}
           <div className="glass-panel" style={{ padding: '20px' }}>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: 0, marginBottom: '14px', color: '#facc15' }}>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: 0, marginBottom: '14px', color: 'var(--accent-amber)' }}>
               IHK Dimensionierungs-Ergebnis:
             </h2>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
               <div style={{ padding: '14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid #334155' }}>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Reine Wirkleistung P (Last):</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#38bdf8', marginTop: '4px' }}>
+                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--accent-cyan)', marginTop: '4px' }}>
                   {powerMetrics.activePowerW} W
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>({powerMetrics.activePowerKw} kW)</div>
@@ -236,7 +236,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
 
               <div style={{ padding: '14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid #334155' }}>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Scheinleistung S = P / cos φ:</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#c084fc', marginTop: '4px' }}>
+                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--accent-purple)', marginTop: '4px' }}>
                   {powerMetrics.apparentPowerVa} VA
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>({powerMetrics.apparentPowerKva} kVA)</div>
@@ -245,10 +245,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
 
             {/* Empfohlene USV-Klasse */}
             <div style={{ padding: '16px', borderRadius: '8px', background: 'rgba(234, 179, 8, 0.1)', border: '1px solid #eab308', marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#facc15', marginBottom: '4px' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-amber)', marginBottom: '4px' }}>
                 Mindestgröße der USV (inkl. {safetyMargin}% Sicherheitsreserve):
               </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#facc15' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--accent-amber)' }}>
                 ≥ {powerMetrics.requiredUsvVa} VA ({powerMetrics.requiredUsvWatt} W)
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -270,12 +270,12 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             Autonomiezeit-Kalkulation (Überbrückungsdauer im Akkubetrieb)
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
+              <label htmlFor="usv-calculator-lab-3" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
                 Batterie-Nennspannung (V):
               </label>
-              <select
+              <select id="usv-calculator-lab-3"
                 value={batteryVoltage}
                 onChange={(e) => setBatteryVoltage(Number(e.target.value))}
                 style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #334155', background: 'var(--bg-card, #0f172a)', color: 'inherit' }}
@@ -287,10 +287,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
+              <label htmlFor="usv-calculator-lab-4" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
                 Batterie-Kapazität (Ah):
               </label>
-              <input
+              <input id="usv-calculator-lab-4"
                 type="number"
                 min="10"
                 max="500"
@@ -301,10 +301,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
+              <label htmlFor="usv-calculator-lab-5" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
                 Aktuelle IT-Last (W):
               </label>
-              <input
+              <input id="usv-calculator-lab-5"
                 type="number"
                 value={totalRackWatt}
                 disabled
@@ -316,10 +316,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
           {/* Ergebnis-Box */}
           <div style={{ padding: '20px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <div style={{ fontSize: '0.85rem', color: '#34d399', fontWeight: '700' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-emerald)', fontWeight: '700' }}>
                 Errechnete Autonomiezeit bei {totalRackWatt} W Last:
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: '#34d399', marginTop: '4px' }}>
+              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--accent-emerald)', marginTop: '4px' }}>
                 {autonomyRes.runtimeMinutes} Minuten
               </div>
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -340,11 +340,11 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             USV-Topologien nach DIN EN 62040-3
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px', marginBottom: '28px' }}>
             {USV_TOPOLOGIES.map(t => (
               <div key={t.code} style={{ padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color, #334155)', background: 'rgba(255, 255, 255, 0.02)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ fontWeight: '800', fontSize: '1.1rem', color: '#facc15' }}>{t.code}</span>
+                  <span style={{ fontWeight: '800', fontSize: '1.1rem', color: 'var(--accent-amber)' }}>{t.code}</span>
                   <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)' }}>
                     Umschaltzeit: {t.switchTime}
                   </span>
@@ -353,7 +353,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
                 <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0 0 10px 0', lineHeight: '1.45' }}>
                   {t.explanation}
                 </p>
-                <div style={{ fontSize: '0.78rem', color: '#38bdf8' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--accent-cyan)' }}>
                   <strong>Einsatz:</strong> {t.recommendedFor}
                 </div>
               </div>
@@ -365,12 +365,12 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             <h3 style={{ fontSize: '1.05rem', fontWeight: '700', margin: '0 0 12px 0' }}>
               RZ-Energieeffizienz: PUE-Rechner (Power Usage Effectiveness)
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="usv-calculator-lab-6" style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Gesamtenergie des Rechenzentrums (kWh):
                 </label>
-                <input
+                <input id="usv-calculator-lab-6"
                   type="number"
                   value={facilityEnergy}
                   onChange={(e) => setFacilityEnergy(Number(e.target.value))}
@@ -378,10 +378,10 @@ export default function UsvCalculatorLab({ onRewardXP }) {
                 />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                <label htmlFor="usv-calculator-lab-7" style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
                   Reine IT-Energie (Server & Storage) (kWh):
                 </label>
-                <input
+                <input id="usv-calculator-lab-7"
                   type="number"
                   value={itEnergy}
                   onChange={(e) => setItEnergy(Number(e.target.value))}
@@ -393,7 +393,7 @@ export default function UsvCalculatorLab({ onRewardXP }) {
             <div style={{ padding: '14px 18px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>PUE = Gesamtenergie / IT-Energie:</div>
-                <div style={{ fontSize: '1.6rem', fontWeight: '800', color: pueRes.pue <= 1.4 ? '#34d399' : '#f59e0b', marginTop: '2px' }}>
+                <div style={{ fontSize: '1.6rem', fontWeight: '800', color: pueRes.pue <= 1.4 ? 'var(--accent-emerald)' : 'var(--accent-amber)', marginTop: '2px' }}>
                   {pueRes.pue} ({pueRes.rating})
                 </div>
               </div>

@@ -143,10 +143,10 @@ export default function CloudIamPolicyLab({ onRewardXP }) {
           </h2>
 
           <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="cloud-iam-policy-lab-1" style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Angefragte IAM Action:
             </label>
-            <select
+            <select id="cloud-iam-policy-lab-1"
               value={selectedAction}
               onChange={(e) => setSelectedAction(e.target.value)}
               className="input-select"
@@ -162,10 +162,10 @@ export default function CloudIamPolicyLab({ onRewardXP }) {
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="cloud-iam-policy-lab-2" style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Ziel-Ressourcen ARN (Resource ARN):
             </label>
-            <select
+            <select id="cloud-iam-policy-lab-2"
               value={selectedResource}
               onChange={(e) => setSelectedResource(e.target.value)}
               className="input-select"

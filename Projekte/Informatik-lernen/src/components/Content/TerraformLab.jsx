@@ -118,7 +118,7 @@ export default function TerraformLab({ onRewardXP }) {
       </div>
 
       {/* Plan Summary KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '18px', borderRadius: 'var(--radius-lg)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 700 }}>Zu erstellen (+)</div>
           <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--accent-emerald)', margin: '4px 0' }}>
@@ -158,22 +158,22 @@ export default function TerraformLab({ onRewardXP }) {
         style={{
           padding: '24px',
           borderRadius: 'var(--radius-xl)',
-          background: '#090d16',
+          background: 'var(--bg-secondary)',
           border: '1px solid rgba(255,255,255,0.1)',
-          color: '#e2e8f0',
+          color: 'var(--text-main)',
           fontFamily: 'monospace'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '16px' }}>
           <Terminal size={18} color="#38bdf8" />
-          <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#38bdf8' }}>
+          <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--accent-cyan)' }}>
             terminal ~ terraform plan -out=tfplan
           </span>
         </div>
 
         <div style={{ fontSize: '0.85rem', lineHeight: '1.7' }}>
-          <div style={{ color: '#94a3b8' }}>Terraform used the selected providers to generate the following execution plan:</div>
-          <div style={{ margin: '8px 0', color: '#cbd5e1' }}>
+          <div style={{ color: 'var(--text-dim)' }}>Terraform used the selected providers to generate the following execution plan:</div>
+          <div style={{ margin: '8px 0', color: 'var(--text-muted)' }}>
             Terraform will perform the following actions:
           </div>
 
@@ -184,7 +184,7 @@ export default function TerraformLab({ onRewardXP }) {
                   {act.symbol} {act.id}
                 </span>
                 {act.action === 'update' && act.diffs && (
-                  <div style={{ marginLeft: '24px', color: '#94a3b8', fontSize: '0.8rem' }}>
+                  <div style={{ marginLeft: '24px', color: 'var(--text-dim)', fontSize: '0.8rem' }}>
                     {act.diffs.map((d, di) => (
                       <div key={di}>
                         ~ {d.key}: {JSON.stringify(d.oldVal)} ➔ <span style={{ color: 'var(--accent-amber)' }}>{JSON.stringify(d.newVal)}</span>

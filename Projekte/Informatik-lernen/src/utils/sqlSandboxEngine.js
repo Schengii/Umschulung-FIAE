@@ -1,5 +1,5 @@
 // @ts-check
-import alasql from 'alasql';
+import { runSql } from './sqlWorkerClient';
 
 /**
  * SQL Sandbox Engine powered by AlaSQL
@@ -7,7 +7,7 @@ import alasql from 'alasql';
  */
 
 /** @type {Record<string, string>} */
-export const INITIAL_SQL_SEEDS = {
+const INITIAL_SQL_SEEDS = {
   ecommerce: `
 CREATE TABLE customers (
   id INT PRIMARY KEY,
@@ -55,85 +55,108 @@ INSERT INTO servers VALUES
 `
 };
 
+/**
+ * @typedef {object} SqlExecuteResult
+ * @property {boolean} success
+ * @property {any[]} rows
+ * @property {number} rowCount
+ * @property {number} [executionTimeMs]
+ * @property {boolean} [isSelect]
+ * @property {any} [raw]
+ * @property {string} [error]
+ */
+
+/**
+ * @param {import('./sqlWorkerCore').SqlStatementResult} res
+ * @returns {SqlExecuteResult}
+ */
+const toExecuteResult = (res) => {
+  if (!res.ok) {
+    return { success: false, error: res.error, rows: [], rowCount: 0 };
+  }
+  const rows = Array.isArray(res.result) ? res.result : [];
+  return {
+    success: true,
+    rows,
+    rowCount: rows.length,
+    executionTimeMs: Number(res.elapsedMs.toFixed(2)),
+    isSelect: Array.isArray(res.result),
+    raw: res.result
+  };
+};
+
+/**
+ * Eigene Datenbank je Instanz im gemeinsamen alasql-Worker. Alle Methoden mit
+ * SQL-Zugriff sind asynchron, weil alasql im Worker läuft (sqlWorkerClient.js).
+ */
 export class SqlSandboxInstance {
   constructor() {
     this.dbName = 'sandbox_' + Math.random().toString(36).substring(2, 9);
-    alasql(`CREATE DATABASE ${this.dbName}; USE ${this.dbName};`);
   }
 
-  loadSeed(seedName = 'ecommerce') {
+  /**
+   * Stellt jedem Auftrag das Anlegen/Auswählen der eigenen Datenbank voran,
+   * weil sich andere Labs denselben Worker teilen.
+   * @param {string[]} queries
+   */
+  async run(queries) {
+    const results = await runSql([
+      { sql: `CREATE DATABASE IF NOT EXISTS ${this.dbName}` },
+      { sql: `USE ${this.dbName}` },
+      ...queries.map((sql) => ({ sql }))
+    ]);
+    return results.slice(2);
+  }
+
+  /** @param {string} [seedName] */
+  async loadSeed(seedName = 'ecommerce') {
     const sql = INITIAL_SQL_SEEDS[seedName] || INITIAL_SQL_SEEDS.ecommerce;
-    this.executeMultiple(sql);
+    return this.executeMultiple(sql);
   }
 
-  /** @param {string} query */
-  execute(query) {
-    try {
-      alasql(`USE ${this.dbName};`);
-      const startTime = performance.now();
-      const result = alasql(query);
-      const executionTimeMs = Number((performance.now() - startTime).toFixed(2));
-
-      let rows = [];
-      let isSelect = false;
-
-      if (Array.isArray(result)) {
-        rows = result;
-        isSelect = true;
-      }
-
-      return {
-        success: true,
-        rows,
-        rowCount: rows.length,
-        executionTimeMs,
-        isSelect,
-        raw: result
-      };
-    } catch (error) {
-      const e = /** @type {Error} */ (error);
-      return {
-        success: false,
-        error: e.message || String(e),
-        rows: [],
-        rowCount: 0
-      };
-    }
+  /**
+   * @param {string} query
+   * @returns {Promise<SqlExecuteResult>}
+   */
+  async execute(query) {
+    const [res] = await this.run([query]);
+    return toExecuteResult(res);
   }
 
-  /** @param {string} sqlScript */
-  executeMultiple(sqlScript) {
+  /**
+   * @param {string} sqlScript
+   * @returns {Promise<SqlExecuteResult[]>}
+   */
+  async executeMultiple(sqlScript) {
     const statements = sqlScript
       .split(';')
       .map(/** @param {string} s */ s => s.trim())
       .filter(/** @param {string} s */ s => s.length > 0);
-
-    const results = [];
-    for (const stmt of statements) {
-      results.push(this.execute(stmt));
-    }
-    return results;
+    const results = await this.run(statements);
+    return results.map(toExecuteResult);
   }
 
-  getSchema() {
+  /** @returns {Promise<Record<string, { columns: string[], totalRows: number }>>} */
+  async getSchema() {
     try {
-      alasql(`USE ${this.dbName};`);
-      const tables = alasql('SHOW TABLES');
+      const [tablesRes] = await this.run(['SHOW TABLES']);
+      if (!tablesRes.ok || !Array.isArray(tablesRes.result)) return {};
+      /** @type {string[]} */
+      const tableNames = tablesRes.result.map(/** @param {any} t */ t => t.tableid);
+      const details = await this.run(tableNames.flatMap(name => [
+        `SELECT * FROM ${name} LIMIT 1`,
+        `SELECT COUNT(*) AS c FROM ${name}`
+      ]));
+      /** @type {Record<string, { columns: string[], totalRows: number }>} */
       const schema = {};
-
-      if (Array.isArray(tables)) {
-        tables.forEach(/** @param {any} t */ t => {
-          const tableName = t.tableid;
-          const sample = alasql(`SELECT * FROM ${tableName} LIMIT 1`);
-          const countRes = alasql(`SELECT COUNT(*) AS c FROM ${tableName}`);
-          const columns = sample && (/** @type {any} */ (sample)).length > 0 ? Object.keys((/** @type {any} */ (sample))[0]) : [];
-          const totalRows = countRes && (/** @type {any} */ (countRes))[0] ? (/** @type {any} */ (countRes))[0].c : 0;
-          /** @type {Record<string, any>} */ (schema)[tableName] = {
-            columns,
-            totalRows
-          };
-        });
-      }
+      tableNames.forEach((name, i) => {
+        const sample = details[i * 2].result;
+        const countRes = details[i * 2 + 1].result;
+        schema[name] = {
+          columns: Array.isArray(sample) && sample.length > 0 ? Object.keys(sample[0]) : [],
+          totalRows: Array.isArray(countRes) && countRes[0] ? countRes[0].c : 0
+        };
+      });
       return schema;
     } catch {
       return {};
@@ -156,11 +179,9 @@ export class SqlSandboxInstance {
   }
 
   destroy() {
-    try {
-      alasql(`DROP DATABASE IF EXISTS ${this.dbName};`);
-    } catch {
-      // Ignore
-    }
+    runSql([{ sql: `DROP DATABASE IF EXISTS ${this.dbName}` }]).catch(() => {
+      // Worker beendet oder Datenbank schon weg - nichts zu tun
+    });
   }
 }
 
@@ -210,7 +231,7 @@ export function analyzeSqlInjection(userInput = '', baseQueryTemplate = "SELECT 
 
   const preparedTokens = [
     { type: 'PREPARED_STMT', value: 'SELECT * FROM users WHERE username = ? AND status = ?' },
-    { type: 'SAFE_PARAMETER', value: `Param 1 (String): "${userInput.replace(/"/g, '\\"')}"` },
+    { type: 'SAFE_PARAMETER', value: `Param 1 (String): ${JSON.stringify(userInput)}` },
     { type: 'SAFE_PARAMETER', value: 'Param 2 (String): "active"' }
   ];
 

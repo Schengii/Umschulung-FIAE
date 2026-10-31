@@ -74,7 +74,7 @@ export default function SystemdServiceLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(234, 179, 8, 0.15)', borderRadius: '20px', color: '#facc15', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(234, 179, 8, 0.15)', borderRadius: '20px', color: 'var(--accent-amber)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Server size={16} /> Linux Init-System & Cgroups v2 Resource Management
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -87,7 +87,7 @@ export default function SystemdServiceLab() {
 
         {/* State Badge */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Status:</span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>Status:</span>
           <span style={{
             padding: '6px 16px',
             borderRadius: '20px',
@@ -98,13 +98,13 @@ export default function SystemdServiceLab() {
               serviceState === 'restarting' ? 'rgba(234, 179, 8, 0.2)' :
               serviceState === 'failed' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(148, 163, 184, 0.2)',
             color:
-              serviceState === 'active' ? '#34d399' :
-              serviceState === 'restarting' ? '#facc15' :
-              serviceState === 'failed' ? '#f87171' : '#94a3b8',
+              serviceState === 'active' ? 'var(--accent-emerald)' :
+              serviceState === 'restarting' ? 'var(--accent-amber)' :
+              serviceState === 'failed' ? 'var(--accent-rose)' : 'var(--text-dim)',
             border: `1px solid ${
-              serviceState === 'active' ? '#10b981' :
-              serviceState === 'restarting' ? '#eab308' :
-              serviceState === 'failed' ? '#ef4444' : '#64748b'
+              serviceState === 'active' ? 'var(--accent-emerald)' :
+              serviceState === 'restarting' ? 'var(--accent-amber)' :
+              serviceState === 'failed' ? 'var(--accent-rose)' : '#64748b'
             }`
           }}>
             {serviceState === 'active' ? '● active (running)' :
@@ -114,10 +114,10 @@ export default function SystemdServiceLab() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Controls & Configuration */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 16px 0' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 16px 0' }}>
             Systemctl Service Steuerung
           </h3>
 
@@ -128,8 +128,8 @@ export default function SystemdServiceLab() {
               style={{
                 padding: '10px',
                 borderRadius: '8px',
-                background: serviceState === 'active' ? '#334155' : '#10b981',
-                color: '#fff',
+                background: serviceState === 'active' ? 'var(--bg-card-hover)' : 'var(--accent-emerald)',
+                color: 'var(--text-main)',
                 fontWeight: 'bold',
                 fontSize: '0.85rem',
                 border: 'none',
@@ -149,8 +149,8 @@ export default function SystemdServiceLab() {
               style={{
                 padding: '10px',
                 borderRadius: '8px',
-                background: serviceState === 'inactive' ? '#334155' : '#64748b',
-                color: '#fff',
+                background: serviceState === 'inactive' ? 'var(--bg-card-hover)' : '#64748b',
+                color: 'var(--text-main)',
                 fontWeight: 'bold',
                 fontSize: '0.85rem',
                 border: 'none',
@@ -169,8 +169,8 @@ export default function SystemdServiceLab() {
               style={{
                 padding: '10px',
                 borderRadius: '8px',
-                background: '#0284c7',
-                color: '#fff',
+                background: 'var(--accent-cyan)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 fontSize: '0.85rem',
                 border: 'none',
@@ -185,8 +185,8 @@ export default function SystemdServiceLab() {
             </button>
           </div>
 
-          <div style={{ padding: '14px', background: 'rgba(0,0,0,0.25)', borderRadius: '8px', marginBottom: '16px' }}>
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '8px', fontWeight: 'bold' }}>
+          <div style={{ padding: '14px', background: 'var(--bg-tertiary)', borderRadius: '8px', marginBottom: '16px' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '8px', fontWeight: 'bold' }}>
               Fehlersimulation & Stresstests:
             </div>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -197,7 +197,7 @@ export default function SystemdServiceLab() {
                   borderRadius: '6px',
                   background: 'rgba(239, 68, 68, 0.2)',
                   border: '1px solid #ef4444',
-                  color: '#fca5a5',
+                  color: 'var(--accent-rose)',
                   fontSize: '0.82rem',
                   fontWeight: 'bold',
                   cursor: 'pointer',
@@ -216,7 +216,7 @@ export default function SystemdServiceLab() {
                   borderRadius: '6px',
                   background: 'rgba(234, 179, 8, 0.2)',
                   border: '1px solid #eab308',
-                  color: '#fde047',
+                  color: 'var(--accent-amber)',
                   fontSize: '0.82rem',
                   fontWeight: 'bold',
                   cursor: 'pointer',
@@ -233,11 +233,11 @@ export default function SystemdServiceLab() {
           {/* Configuration Inputs */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.85rem' }}>
             <div>
-              <label style={{ color: '#94a3b8' }}>Restart-Policy:</label>
-              <select
+              <label htmlFor="systemd-service-lab-1" style={{ color: 'var(--text-dim)' }}>Restart-Policy:</label>
+              <select id="systemd-service-lab-1"
                 value={config.restart}
                 onChange={(e) => setConfig(prev => ({ ...prev, restart: e.target.value }))}
-                style={{ width: '100%', padding: '6px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', color: '#fff' }}
+                style={{ width: '100%', padding: '6px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
               >
                 <option value="on-failure">on-failure (Standard bei Server-Diensten)</option>
                 <option value="always">always (Automatischer Restart bei jedem Exit)</option>
@@ -247,22 +247,22 @@ export default function SystemdServiceLab() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ color: '#94a3b8' }}>Cgroups MemoryMax:</label>
-                <input
+                <label htmlFor="systemd-service-lab-2" style={{ color: 'var(--text-dim)' }}>Cgroups MemoryMax:</label>
+                <input id="systemd-service-lab-2"
                   type="number"
                   value={config.memoryMaxMb}
                   onChange={(e) => setConfig(prev => ({ ...prev, memoryMaxMb: Number(e.target.value) }))}
-                  style={{ width: '100%', padding: '6px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', color: '#fff' }}
+                  style={{ width: '100%', padding: '6px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
 
               <div>
-                <label style={{ color: '#94a3b8' }}>RestartSec (Sekunden):</label>
-                <input
+                <label htmlFor="systemd-service-lab-3" style={{ color: 'var(--text-dim)' }}>RestartSec (Sekunden):</label>
+                <input id="systemd-service-lab-3"
                   type="number"
                   value={config.restartSec}
                   onChange={(e) => setConfig(prev => ({ ...prev, restartSec: Number(e.target.value) }))}
-                  style={{ width: '100%', padding: '6px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', color: '#fff' }}
+                  style={{ width: '100%', padding: '6px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-main)' }}
                 />
               </div>
             </div>
@@ -270,20 +270,20 @@ export default function SystemdServiceLab() {
         </div>
 
         {/* Live Journalctl Terminal */}
-        <div style={{ background: '#090d16', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'monospace' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'monospace' }}>
               <Terminal size={14} /> journalctl -u {config.unitName} -f
             </span>
-            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Live Systemd Journal</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Live Systemd Journal</span>
           </div>
 
-          <div style={{ flex: 1, background: '#000', padding: '14px', borderRadius: '8px', fontFamily: 'Consolas, monospace', fontSize: '0.82rem', lineHeight: '1.5', overflowY: 'auto', maxHeight: '300px' }}>
+          <div style={{ flex: 1, background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', fontFamily: 'Consolas, monospace', fontSize: '0.82rem', lineHeight: '1.5', overflowY: 'auto', maxHeight: '300px' }}>
             {logs.map((log, idx) => (
               <div key={idx} style={{ 
-                color: log.includes('FAILURE') || log.includes('Killed') ? '#f87171' : 
-                       log.includes('Restarting') || log.includes('leak') ? '#fde047' : 
-                       log.includes('Started') ? '#34d399' : '#93c5fd',
+                color: log.includes('FAILURE') || log.includes('Killed') ? 'var(--accent-rose)' : 
+                       log.includes('Restarting') || log.includes('leak') ? 'var(--accent-amber)' : 
+                       log.includes('Started') ? 'var(--accent-emerald)' : 'var(--accent-cyan)',
                 marginBottom: '4px' 
               }}>
                 {log}
@@ -291,18 +291,18 @@ export default function SystemdServiceLab() {
             ))}
           </div>
 
-          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: '#94a3b8' }}>
-            Aktueller RAM-Bedarf: <strong style={{ color: currentMemoryMb > config.memoryMaxMb ? '#ef4444' : '#34d399' }}>{currentMemoryMb} MB</strong> / Limit: {config.memoryMaxMb} MB
+          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-dim)' }}>
+            Aktueller RAM-Bedarf: <strong style={{ color: currentMemoryMb > config.memoryMaxMb ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>{currentMemoryMb} MB</strong> / Limit: {config.memoryMaxMb} MB
           </div>
         </div>
       </div>
 
       {/* Generated Unit File Preview */}
-      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FileText size={16} color="#60a5fa" /> /etc/systemd/system/{config.unitName}
+      <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <FileText size={16} color="var(--accent-cyan)" /> /etc/systemd/system/{config.unitName}
         </h3>
-        <pre style={{ margin: 0, padding: '14px', background: '#0f172a', borderRadius: '8px', color: '#38bdf8', fontSize: '0.85rem', lineHeight: '1.5', overflowX: 'auto' }}>
+        <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-tertiary)', borderRadius: '8px', color: 'var(--accent-cyan)', fontSize: '0.85rem', lineHeight: '1.5', overflowX: 'auto' }}>
           <code>{unitFileText}</code>
         </pre>
       </div>

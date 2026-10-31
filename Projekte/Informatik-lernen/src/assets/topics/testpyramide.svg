@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Testpyramide: viele schnelle Unit-Tests an der Basis, weniger Integrationstests in der Mitte, wenige langsame End-to-End-Tests an der Spitze</title>
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Die Testpyramide</text>
+  <polygon points="260,50 330,50 380,120 210,120" fill="#fecdd3" stroke="#be123c" stroke-width="1.5"/>
+  <polygon points="210,124 380,124 440,194 150,194" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+  <polygon points="150,198 440,198 500,268 90,268" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5"/>
+  <g text-anchor="middle" font-weight="700" fill="#0f172a">
+    <text x="295" y="92" font-size="14">E2E / UI</text>
+    <text x="295" y="166" font-size="14">Integrationstests</text>
+    <text x="295" y="240" font-size="14">Unit-Tests (Komponententests)</text>
+  </g>
+  <g font-size="12" fill="#0f172a">
+    <text x="520" y="80">wenige · langsam · teuer</text>
+    <text x="520" y="96" fill="#475569">ganzer Ablauf im Browser</text>
+    <text x="520" y="154">mittlere Anzahl</text>
+    <text x="520" y="170" fill="#475569">Zusammenspiel, z. B. mit DB/API</text>
+    <text x="520" y="228">sehr viele · Millisekunden</text>
+    <text x="520" y="244" fill="#475569">einzelne Funktion/Klasse isoliert</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M60 268 V60"/><path d="M54 70 L60 56 L66 70"/>
+  </g>
+  <text x="44" y="170" font-size="12" fill="#475569" transform="rotate(-90 44 170)" text-anchor="middle">Aufwand und Laufzeit je Test</text>
+  <text x="360" y="292" text-anchor="middle" font-size="12" fill="#475569">Viele Fehler früh und billig unten finden – oben nur die wichtigsten Abläufe absichern.</text>
+</svg>

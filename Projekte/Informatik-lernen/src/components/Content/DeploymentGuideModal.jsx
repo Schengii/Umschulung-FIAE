@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { Rocket, X } from 'lucide-react';
 
 export default function DeploymentGuideModal({ isOpen, onClose }) {
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
   if (!isOpen) return null;
 
   return (
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div
       style={{
         position: 'fixed',
@@ -20,7 +24,7 @@ export default function DeploymentGuideModal({ isOpen, onClose }) {
         zIndex: 2000,
         padding: '20px'
       }}
-      onClick={onClose}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
         className="glass-panel animate-fade-in"
@@ -34,7 +38,11 @@ export default function DeploymentGuideModal({ isOpen, onClose }) {
           boxShadow: 'var(--shadow-card)',
           position: 'relative'
         }}
-        onClick={(e) => e.stopPropagation()}
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deployment-modal-title"
       >
         <button
           onClick={onClose}
@@ -46,7 +54,7 @@ export default function DeploymentGuideModal({ isOpen, onClose }) {
 
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <Rocket size={36} style={{ color: 'var(--accent-primary)', marginBottom: '8px' }} />
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
+          <h2 id="deployment-modal-title" style={{ fontSize: '1.8rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
             Live Deployment Leitfaden
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem' }}>

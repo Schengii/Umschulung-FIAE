@@ -134,9 +134,9 @@ export default function GitLab({ onRewardXP }) {
       </div>
 
       {/* Visual Commit Tree View */}
-      <div style={{ background: '#0f172a', padding: '24px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', minHeight: '220px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h4 style={{ color: '#94a3b8', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
-          Git Tree Visualizer (HEAD &rarr; <span style={{ color: '#38bdf8' }}>{activeBranch}</span>)
+      <div style={{ background: 'var(--bg-card)', padding: '24px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', minHeight: '220px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <h4 style={{ color: 'var(--text-dim)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
+          Git Tree Visualizer (HEAD &rarr; <span style={{ color: 'var(--accent-cyan)' }}>{activeBranch}</span>)
         </h4>
 
         <div style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '12px', alignItems: 'center' }}>
@@ -144,7 +144,7 @@ export default function GitLab({ onRewardXP }) {
             <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div
                 style={{
-                  background: c.branch === 'main' ? '#1e293b' : '#312e81',
+                  background: c.branch === 'main' ? 'var(--bg-card-hover)' : '#312e81',
                   border: c.branch === activeBranch ? '2px solid #38bdf8' : '1px solid #475569',
                   padding: '12px 16px',
                   borderRadius: '12px',
@@ -153,12 +153,12 @@ export default function GitLab({ onRewardXP }) {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '700' }}>{c.id}</span>
-                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: c.branch === 'main' ? '#334155' : '#4338ca', color: '#f8fafc' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: '700' }}>{c.id}</span>
+                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: c.branch === 'main' ? 'var(--bg-card-hover)' : '#4338ca', color: 'var(--text-main)' }}>
                     {c.branch}
                   </span>
                 </div>
-                <div style={{ fontSize: '0.88rem', color: '#f8fafc', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {c.message}
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function GitLab({ onRewardXP }) {
       </div>
 
       {/* Controls & Quick Actions */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px' }}>
         {/* Terminal Input */}
         <div>
           <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '12px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -219,7 +219,7 @@ export default function GitLab({ onRewardXP }) {
           <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '12px', color: 'var(--text-main)' }}>
             Ausgabe-Protokoll (Log)
           </h4>
-          <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', height: '160px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '0.85rem', color: '#cbd5e1' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', height: '160px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {logs.map((l, idx) => (
               <div key={idx} style={{ marginBottom: '6px', borderBottom: '1px solid #1e293b', paddingBottom: '4px' }}>
                 {l}

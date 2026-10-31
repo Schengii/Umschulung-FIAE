@@ -79,7 +79,7 @@ button {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '24px' }}>
         
         {/* Left Column: Code Editor */}
         <div className="glass-panel" style={{ padding: '20px' }}>
@@ -91,7 +91,7 @@ button {
                 padding: '6px 14px',
                 borderRadius: '6px',
                 background: activeTab === 'html' ? 'var(--accent-cyan)' : 'var(--bg-tertiary)',
-                color: '#fff',
+                color: 'var(--text-on-accent)',
                 fontWeight: '700',
                 border: 'none',
                 cursor: 'pointer'
@@ -105,7 +105,7 @@ button {
                 padding: '6px 14px',
                 borderRadius: '6px',
                 background: activeTab === 'css' ? 'var(--accent-purple)' : 'var(--bg-tertiary)',
-                color: '#fff',
+                color: 'var(--text-on-accent)',
                 fontWeight: '700',
                 border: 'none',
                 cursor: 'pointer'
@@ -126,8 +126,8 @@ button {
               rows={16}
               style={{
                 width: '100%',
-                background: '#090d16',
-                color: '#e2e8f0',
+                background: 'var(--bg-secondary)',
+                color: 'var(--text-main)',
                 border: 'none',
                 outline: 'none',
                 padding: '14px',

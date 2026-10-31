@@ -17,7 +17,7 @@
 /**
  * IHK-Regelbereiche und Gewichtungen nach Ausbildungsordnung 2020
  */
-export const IHK_EXAM_DOMAINS = [
+const IHK_EXAM_DOMAINS = [
   { key: 'ap1', title: 'AP1: Einrichtung IT-gestützter Arbeitsplatz', weight: 0.20, requiredTasks: 15 },
   { key: 'ap2_1', title: 'AP2 Bereich 1: Planen & Konzipieren', weight: 0.10, requiredTasks: 15 },
   { key: 'ap2_2', title: 'AP2 Bereich 2: Fachaufgaben & Entwicklung/Netzwerk', weight: 0.10, requiredTasks: 15 },

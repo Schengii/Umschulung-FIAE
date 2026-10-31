@@ -92,7 +92,7 @@ export default function TlsReplayLab() {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', color: '#f8fafc' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', color: 'var(--text-main)' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
@@ -104,7 +104,7 @@ export default function TlsReplayLab() {
               <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 'bold' }}>
                 TLS 1.3 0-RTT Replay Attack & Defense Studio
               </h1>
-              <p style={{ margin: '4px 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
+              <p style={{ margin: '4px 0 0', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
                 RFC 8446 Early Data Sicherheit: Idempotenz, Single-Use Tickets & Strike-Register Abwehr
               </p>
             </div>
@@ -112,15 +112,15 @@ export default function TlsReplayLab() {
         </div>
 
         {/* Tab Navigation */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-tertiary)', padding: '4px', borderRadius: '8px' }}>
           <button
             onClick={() => setActiveTab('interactive')}
             style={{
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'interactive' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'interactive' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'interactive' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -136,8 +136,8 @@ export default function TlsReplayLab() {
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'audit' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'audit' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'audit' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -153,8 +153,8 @@ export default function TlsReplayLab() {
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'deepdive' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'deepdive' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'deepdive' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -171,35 +171,35 @@ export default function TlsReplayLab() {
       {activeTab === 'interactive' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Controls Bar */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px' }}>
             {/* Request Type */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+              <label htmlFor="tls-replay-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
                 1. HTTP Request Methode & Payload:
               </label>
-              <select
+              <select id="tls-replay-lab-1"
                 value={selectedMethodKey}
                 onChange={(e) => setSelectedMethodKey(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', borderRadius: '6px' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
               >
                 <option value="POST_PAYMENT">POST /transfers (Geldüberweisung - NICHT IDEMPOTENT!)</option>
                 <option value="GET">GET /user/profile (Profilabruf - IDEMPOTENT & SICHER)</option>
                 <option value="PUT_CONFIG">PUT /settings (Dark Mode Konfiguration - IDEMPOTENT)</option>
               </select>
-              <div style={{ marginTop: '8px', fontSize: '0.75rem', color: selectedRequest.idempotent ? '#4ade80' : '#f87171' }}>
+              <div style={{ marginTop: '8px', fontSize: '0.75rem', color: selectedRequest.idempotent ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {selectedRequest.idempotent ? '✓ Idempotent: Mehrfaches Senden verändert den Systemzustand nicht' : '⚠️ Nicht idempotent: Mehrfaches Senden löst Mehrfachbuchungen aus!'}
               </div>
             </div>
 
             {/* Anti-Replay Mechanism */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+              <label htmlFor="tls-replay-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
                 2. Serverseitiger Schutzmechanismus:
               </label>
-              <select
+              <select id="tls-replay-lab-2"
                 value={antiReplay}
                 onChange={(e) => setAntiReplay(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', borderRadius: '6px' }}
+                style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
               >
                 <option value={ANTI_REPLAY_MECHANISMS.NONE}>Keiner (Standard RFC 8446 ohne Schutz) ❌</option>
                 <option value={ANTI_REPLAY_MECHANISMS.SINGLE_USE_TICKETS}>Single-Use Session Tickets (Invalidierung nach 1x) 🛡️</option>
@@ -216,8 +216,8 @@ export default function TlsReplayLab() {
               style={{
                 flex: '1 1 240px',
                 padding: '12px 20px',
-                background: '#10b981',
-                color: '#fff',
+                background: 'var(--accent-emerald)',
+                color: 'var(--text-on-accent)',
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: 'bold',
@@ -237,8 +237,8 @@ export default function TlsReplayLab() {
               style={{
                 flex: '1 1 240px',
                 padding: '12px 20px',
-                background: capturedPacket ? '#ef4444' : '#475569',
-                color: '#fff',
+                background: capturedPacket ? 'var(--accent-rose)' : 'var(--bg-card-hover)',
+                color: capturedPacket ? 'var(--text-on-accent)' : 'var(--text-main)',
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: 'bold',
@@ -257,7 +257,7 @@ export default function TlsReplayLab() {
               style={{
                 padding: '12px 16px',
                 background: 'rgba(255,255,255,0.1)',
-                color: '#cbd5e1',
+                color: 'var(--text-muted)',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -271,25 +271,25 @@ export default function TlsReplayLab() {
           </div>
 
           {/* Inspection Screen */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
             {/* Session State */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <h3 style={{ margin: '0 0 14px 0', fontSize: '1.1rem', fontWeight: 'bold', color: '#38bdf8' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+              <h3 style={{ margin: '0 0 14px 0', fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
                 TLS 1.3 Session & Ticket Status
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.85rem' }}>
-                <div><strong>Session-ID:</strong> <code style={{ color: '#a78bfa' }}>{session.sessionId}</code></div>
-                <div><strong>Pre-Shared Key (PSK):</strong> <code style={{ color: '#cbd5e1' }}>{session.psk}</code></div>
-                <div><strong>Ticket Status:</strong> {session.isUsed ? <span style={{ color: '#f87171' }}>Verbraucht (Consumed)</span> : <span style={{ color: '#4ade80' }}>Gültig & Unbenutzt</span>}</div>
-                <div><strong>Strike-Register Einträge:</strong> <span style={{ color: '#38bdf8' }}>{serverStrikeRegister.size} erfasste Ticket-Hashes</span></div>
+                <div><strong>Session-ID:</strong> <code style={{ color: 'var(--accent-purple)' }}>{session.sessionId}</code></div>
+                <div><strong>Pre-Shared Key (PSK):</strong> <code style={{ color: 'var(--text-muted)' }}>{session.psk}</code></div>
+                <div><strong>Ticket Status:</strong> {session.isUsed ? <span style={{ color: 'var(--accent-rose)' }}>Verbraucht (Consumed)</span> : <span style={{ color: 'var(--accent-emerald)' }}>Gültig & Unbenutzt</span>}</div>
+                <div><strong>Strike-Register Einträge:</strong> <span style={{ color: 'var(--accent-cyan)' }}>{serverStrikeRegister.size} erfasste Ticket-Hashes</span></div>
               </div>
 
               {capturedPacket && (
                 <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#fca5a5', fontWeight: 'bold' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--accent-rose)', fontWeight: 'bold' }}>
                     😈 Im Äther abgefangenes 0-RTT Datenpaket:
                   </div>
-                  <div style={{ fontSize: '0.75rem', fontFamily: 'monospace', marginTop: '4px', color: '#cbd5e1' }}>
+                  <div style={{ fontSize: '0.75rem', fontFamily: 'monospace', marginTop: '4px', color: 'var(--text-muted)' }}>
                     Method: {capturedPacket.request.method} {capturedPacket.request.path}<br />
                     Payload: {capturedPacket.request.body || 'None'}<br />
                     PSK Bind: {capturedPacket.sessionPsk.substring(0, 10)}...
@@ -299,8 +299,8 @@ export default function TlsReplayLab() {
             </div>
 
             {/* Server Feedback & Result */}
-            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <h3 style={{ margin: '0 0 14px 0', fontSize: '1.1rem', fontWeight: 'bold', color: '#f8fafc' }}>
+            <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+              <h3 style={{ margin: '0 0 14px 0', fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
                 Server Response & Sicherheitsanalyse
               </h3>
               {lastResult ? (
@@ -312,32 +312,32 @@ export default function TlsReplayLab() {
                     border: `1px solid ${lastResult.riskLevel === 'critical' ? '#ef4444' : lastResult.riskLevel === 'safe' ? '#22c55e' : '#f59e0b'}`,
                     marginBottom: '14px'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: lastResult.riskLevel === 'critical' ? '#fca5a5' : lastResult.riskLevel === 'safe' ? '#86efac' : '#fcd34d' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: lastResult.riskLevel === 'critical' ? 'var(--accent-rose)' : lastResult.riskLevel === 'safe' ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
                       {lastResult.riskLevel === 'safe' ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
                       {lastResult.riskLevel === 'critical' ? 'KRITISCHER SICHERHEITSVORFALL' : lastResult.riskLevel === 'safe' ? 'ANFRAGE SICHER ABGEWICKELT' : 'WARNUNG: IDEMPOTENZ BEACHTEN'}
                     </div>
-                    <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#f8fafc' }}>
+                    <div style={{ fontSize: '0.85rem', marginTop: '6px', color: 'var(--text-main)' }}>
                       {lastResult.message}
                     </div>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', fontSize: '0.8rem' }}>
-                    <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px', borderRadius: '6px' }}>
-                      <span style={{ color: '#94a3b8' }}>0-RTT Akzeptiert:</span> <strong>{lastResult.accepted0Rtt ? 'JA (0ms Latenz)' : 'NEIN (Fallback)'}</strong>
+                    <div style={{ background: 'var(--bg-tertiary)', padding: '8px', borderRadius: '6px' }}>
+                      <span style={{ color: 'var(--text-dim)' }}>0-RTT Akzeptiert:</span> <strong>{lastResult.accepted0Rtt ? 'JA (0ms Latenz)' : 'NEIN (Fallback)'}</strong>
                     </div>
-                    <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px', borderRadius: '6px' }}>
-                      <span style={{ color: '#94a3b8' }}>Benötigte RTTs:</span> <strong>{lastResult.rttCount} RTT</strong>
+                    <div style={{ background: 'var(--bg-tertiary)', padding: '8px', borderRadius: '6px' }}>
+                      <span style={{ color: 'var(--text-dim)' }}>Benötigte RTTs:</span> <strong>{lastResult.rttCount} RTT</strong>
                     </div>
-                    <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px', borderRadius: '6px' }}>
-                      <span style={{ color: '#94a3b8' }}>Ausgeführt:</span> <strong>{lastResult.executedRequest ? 'Ja' : 'Abgelehnt'}</strong>
+                    <div style={{ background: 'var(--bg-tertiary)', padding: '8px', borderRadius: '6px' }}>
+                      <span style={{ color: 'var(--text-dim)' }}>Ausgeführt:</span> <strong>{lastResult.executedRequest ? 'Ja' : 'Abgelehnt'}</strong>
                     </div>
-                    <div style={{ background: 'rgba(0,0,0,0.3)', padding: '8px', borderRadius: '6px' }}>
-                      <span style={{ color: '#94a3b8' }}>Rejection Reason:</span> <code>{lastResult.rejectionReason || 'None'}</code>
+                    <div style={{ background: 'var(--bg-tertiary)', padding: '8px', borderRadius: '6px' }}>
+                      <span style={{ color: 'var(--text-dim)' }}>Rejection Reason:</span> <code>{lastResult.rejectionReason || 'None'}</code>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.9rem' }}>
+                <div style={{ color: 'var(--text-dim)', fontStyle: 'italic', fontSize: '0.9rem' }}>
                   Klicke auf Button 1, um die erste 0-RTT Early-Data Anfrage abzusenden.
                 </div>
               )}
@@ -348,19 +348,19 @@ export default function TlsReplayLab() {
 
       {/* TAB 2: Server Security Audit */}
       {activeTab === 'audit' && (
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 16px 0', color: '#38bdf8' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 16px 0', color: 'var(--accent-cyan)' }}>
             TLS 1.3 Server 0-RTT Konfigurations-Audit
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
             <div>
-              <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+              <label htmlFor="tls-replay-lab-3" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                 Nicht-idempotente Anfragen in Early Data:
               </label>
-              <select
+              <select id="tls-replay-lab-3"
                 value={allowNonIdempotent ? 'yes' : 'no'}
                 onChange={(e) => setAllowNonIdempotent(e.target.value === 'yes')}
-                style={{ width: '100%', padding: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '6px' }}
+                style={{ width: '100%', padding: '8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
               >
                 <option value="yes">Erlaubt (Extrem gefährlich! POST in 0-RTT)</option>
                 <option value="no">Verboten (Nur GET / HEAD / PUT idempotent)</option>
@@ -368,13 +368,13 @@ export default function TlsReplayLab() {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+              <label htmlFor="tls-replay-lab-4" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                 Anti-Replay Abwehrmechanismus:
               </label>
-              <select
+              <select id="tls-replay-lab-4"
                 value={auditAntiReplay}
                 onChange={(e) => setAuditAntiReplay(e.target.value)}
-                style={{ width: '100%', padding: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '6px' }}
+                style={{ width: '100%', padding: '8px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
               >
                 <option value={ANTI_REPLAY_MECHANISMS.NONE}>Keiner</option>
                 <option value={ANTI_REPLAY_MECHANISMS.SINGLE_USE_TICKETS}>Single-Use Session Tickets</option>
@@ -384,7 +384,7 @@ export default function TlsReplayLab() {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+              <label style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                 Max Early Data Puffer: {maxEarlyData} Bytes
               </label>
               <input
@@ -407,22 +407,22 @@ export default function TlsReplayLab() {
             border: `1px solid ${auditResult.isCompliant ? '#22c55e' : '#ef4444'}`
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: auditResult.isCompliant ? '#86efac' : '#fca5a5' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: auditResult.isCompliant ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 Sicherheits-Bewertung: Note {auditResult.grade} ({auditResult.score} / 100 Punkte)
               </span>
-              <span style={{ fontSize: '0.85rem', padding: '4px 10px', borderRadius: '20px', background: auditResult.isCompliant ? '#15803d' : '#991b1b', color: '#fff' }}>
+              <span style={{ fontSize: '0.85rem', padding: '4px 10px', borderRadius: '20px', background: auditResult.isCompliant ? '#15803d' : '#991b1b', color: 'var(--text-main)' }}>
                 {auditResult.isCompliant ? 'RFC 8446 Konform' : 'Unsicher'}
               </span>
             </div>
 
             {auditResult.issues.length > 0 ? (
-              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem', color: '#cbd5e1' }}>
+              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 {auditResult.issues.map((issue, idx) => (
                   <li key={idx} style={{ marginBottom: '4px' }}>{issue}</li>
                 ))}
               </ul>
             ) : (
-              <div style={{ fontSize: '0.85rem', color: '#86efac' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-emerald)' }}>
                 Exzellente Konfiguration! Keine Replay-Schwachstellen vorhanden.
               </div>
             )}
@@ -432,20 +432,20 @@ export default function TlsReplayLab() {
 
       {/* TAB 3: RFC 8446 Deep Dive */}
       {activeTab === 'deepdive' && (
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 14px 0', color: '#f59e0b' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 14px 0', color: 'var(--accent-amber)' }}>
             RFC 8446 Kapitel 8: Warum 0-RTT Replay-Angriffen ausgesetzt ist
           </h2>
-          <div style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: '1.6' }}>
+          <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
             <p>
               In TLS 1.2 benötigte ein Handshake typischerweise <strong>2 RTTs</strong> (Round-Trip Times). TLS 1.3 reduzierte den Standard-Handshake auf <strong>1 RTT</strong>.
               Mit <strong>0-RTT Session Resumption (Early Data)</strong> kann ein Client, der bereits zuvor mit dem Server kommuniziert hat, direkt im ersten Paket (ClientHello) verschlüsselte Anwendungsdaten mitsenden.
             </p>
-            <h4 style={{ color: '#38bdf8', margin: '14px 0 6px 0' }}>Das Problem der fehlenden Forward Secrecy in 0-RTT:</h4>
+            <h4 style={{ color: 'var(--accent-cyan)', margin: '14px 0 6px 0' }}>Das Problem der fehlenden Forward Secrecy in 0-RTT:</h4>
             <p>
               Da der Server noch kein neues Schlüsselpaar ausgetauscht hat, basiert die Verschlüsselung von 0-RTT rein auf dem vorherigen Session-Ticket (PSK). Ein Angreifer im Netzwerk (z. B. WLAN-Sniffer) kann dieses Datenpaket unverändert kopieren und erneut an den Server senden. Der Server hält das Paket für legitim und entschlüsselt es!
             </p>
-            <h4 style={{ color: '#4ade80', margin: '14px 0 6px 0' }}>Die 3 anerkannten Gegenmaßnahmen:</h4>
+            <h4 style={{ color: 'var(--accent-emerald)', margin: '14px 0 6px 0' }}>Die 3 anerkannten Gegenmaßnahmen:</h4>
             <ol style={{ paddingLeft: '20px' }}>
               <li><strong>Single-Use Tickets:</strong> Der Server invalidiert das Session-Ticket sofort nach dem ersten Eintreffen. Nachteil: Erfordert verteilten Cache über alle Server-Cluster hinweg.</li>
               <li><strong>Client Hello Timestamp Window:</strong> Der Client kodiert einen Zeitstempel. Pakete außerhalb von ±5 Sekunden werden abgewiesen.</li>

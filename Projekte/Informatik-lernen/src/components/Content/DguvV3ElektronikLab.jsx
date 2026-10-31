@@ -55,7 +55,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
               <Zap className="w-4 h-4" />
               <span>ITSE / FISI Elektrotechnik & Rechenzentren</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50">
               DGUV Vorschrift 3 & VDE Elektro-Prüfstudio
             </h1>
             <p className="text-slate-400 mt-1 max-w-2xl text-sm">
@@ -73,10 +73,10 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
 
       {/* Schutzklassen Auswahl */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-        <label className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
+        <span className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
           <Layers className="w-4 h-4 text-amber-400" />
           1. Elektrische Schutzklasse des Prüflings wählen:
-        </label>
+        </span>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {Object.values(ELECTRICAL_PROTECTION_CLASSES).map(cls => {
             const isSelected = selectedClass === cls.id;
@@ -86,7 +86,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
                 onClick={() => setSelectedClass(cls.id)}
                 className={`p-4 rounded-xl text-left border transition-all ${
                   isSelected
-                    ? 'bg-amber-600/20 border-amber-500 text-white shadow-lg shadow-amber-900/20'
+                    ? 'bg-amber-600/20 border-amber-500 text-slate-50 shadow-lg shadow-amber-900/20'
                     : 'bg-slate-800/40 border-slate-700/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                 }`}
               >
@@ -110,7 +110,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Box 1: DGUV V3 Prüfprotokoll für Geräte */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
             <Activity className="w-5 h-5 text-amber-400" />
             2. Geräteprüfung (DIN VDE 0701-0702)
           </h2>
@@ -176,7 +176,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
 
         {/* Box 2: RCD / FI-Schutzschalter Prüfung */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
             3. RCD / FI Personenschutz (DIN VDE 0100-410)
           </h2>
@@ -247,45 +247,45 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
 
       {/* Box 3: RZ-USV Batteriedimensionierung */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-        <h2 className="text-base font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-base font-bold text-slate-50 flex items-center gap-2 mb-4">
           <BatteryCharging className="w-5 h-5 text-indigo-400" />
           4. USV-Batteriedimensionierung & Autonomiezeit (Server-Notstrom)
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div className="p-3 bg-slate-800/40 rounded-lg border border-slate-700/60">
-            <label className="text-xs text-slate-400 block mb-1">Batteriebank-Kapazität (Ah):</label>
-            <input
+            <label htmlFor="dguv-v3-elektronik-lab-1" className="text-xs text-slate-400 block mb-1">Batteriebank-Kapazität (Ah):</label>
+            <input id="dguv-v3-elektronik-lab-1"
               type="number"
               min="10"
               max="500"
               step="5"
               value={batteryAh}
               onChange={e => setBatteryAh(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-white"
+              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-slate-50"
             />
           </div>
           <div className="p-3 bg-slate-800/40 rounded-lg border border-slate-700/60">
-            <label className="text-xs text-slate-400 block mb-1">Batteriespannung (V DC):</label>
-            <input
+            <label htmlFor="dguv-v3-elektronik-lab-2" className="text-xs text-slate-400 block mb-1">Batteriespannung (V DC):</label>
+            <input id="dguv-v3-elektronik-lab-2"
               type="number"
               min="12"
               max="96"
               step="12"
               value={batteryVolt}
               onChange={e => setBatteryVolt(Math.max(12, parseInt(e.target.value) || 12))}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-white"
+              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-slate-50"
             />
           </div>
           <div className="p-3 bg-slate-800/40 rounded-lg border border-slate-700/60">
-            <label className="text-xs text-slate-400 block mb-1">Serverrack-Verbrauch (Watt):</label>
-            <input
+            <label htmlFor="dguv-v3-elektronik-lab-3" className="text-xs text-slate-400 block mb-1">Serverrack-Verbrauch (Watt):</label>
+            <input id="dguv-v3-elektronik-lab-3"
               type="number"
               min="100"
               max="10000"
               step="50"
               value={serverWatt}
               onChange={e => setServerWatt(Math.max(50, parseInt(e.target.value) || 50))}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-white"
+              className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-sm font-mono text-slate-50"
             />
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
         <div className="p-4 rounded-xl bg-indigo-950/30 border border-indigo-500/40 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <div className="text-xs text-indigo-300 font-semibold mb-1">Errechnete Notstrom-Autonomie:</div>
-            <div className="text-2xl font-bold font-mono text-white">
+            <div className="text-2xl font-bold font-mono text-slate-50">
               {upsResult.runtimeMinutes} Minuten
               <span className="text-xs text-slate-400 font-normal ml-2">
                 (Gespeicherte Energie: {upsResult.storedEnergyWh} Wh)

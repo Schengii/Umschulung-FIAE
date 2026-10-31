@@ -64,7 +64,7 @@ export default function CloudArchitectureCanvasLab() {
       </div>
 
       {/* KPI Metrics Dashboard */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '700' }}>System SLA Verfügbarkeit</span>
           <div style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--accent-emerald)', marginTop: '6px' }}>

@@ -80,7 +80,7 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
       </div>
 
       {/* Protocol Visualizer */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Client Side */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -88,10 +88,10 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
           </h3>
 
           <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="srp-zero-knowledge-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
               Gespeichertes Passwort:
             </label>
-            <input
+            <input id="srp-zero-knowledge-lab-1"
               type="text"
               className="input-select"
               value={password}
@@ -101,10 +101,10 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
           </div>
 
           <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="srp-zero-knowledge-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
               Eingegebenes Login-Passwort (Angriffs-Simulation):
             </label>
-            <input
+            <input id="srp-zero-knowledge-lab-2"
               type="text"
               className="input-select"
               value={inputPassword}
@@ -120,7 +120,7 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
             />
           </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
             <div>Ephemeres Client-Geheimnis <code>a</code> = {clientHello.a.toString()}</div>
             <div style={{ color: 'var(--accent-teal)' }}>Public Key <code>A = g^a % N</code> = {clientHello.A.toString()}</div>
             <div>Berechneter Shared Key <code>S_client</code> = {authResult.clientS.toString()}</div>
@@ -134,14 +134,14 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
             <Terminal size={18} color="var(--accent-indigo)" /> Server-Datenbank & Challenge
           </h3>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6', marginBottom: '14px' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6', marginBottom: '14px' }}>
             <div style={{ color: 'var(--text-muted)' }}># Was der Server speichert (KEIN Passwort!):</div>
             <div>Benutzer: <code>{registration.username}</code></div>
             <div>Salt <code>s</code>: {registration.salt.toString()}</div>
             <div>Password Verifier <code>v = g^x % N</code>: <strong>{registration.verifier.toString()}</strong></div>
           </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '6px', fontSize: '0.85rem', fontFamily: 'monospace', lineHeight: '1.6' }}>
             <div style={{ color: 'var(--text-muted)' }}># Live Challenge Erzeugung:</div>
             <div>Ephemeres Server-Geheimnis <code>b</code> = {serverChallenge.b.toString()}</div>
             <div style={{ color: 'var(--accent-indigo)' }}>Public Challenge <code>B = (k*v + g^b) % N</code> = {serverChallenge.B.toString()}</div>
@@ -177,15 +177,15 @@ export default function SrpZeroKnowledgeLab({ onRewardXP }) {
           </button>
         </div>
 
-        <div style={{ background: 'rgba(15, 23, 42, 0.7)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
           <div style={{ fontSize: '0.85rem', color: 'var(--accent-amber)', marginBottom: '8px', fontWeight: 600 }}>
             Über das Netzwerk übertragene Datenpakete:
           </div>
           <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-            <li>Client $\to$ Server: <code>{`{ username: "${username}", A: "${clientHello.A.toString()}" }`}</code></li>
-            <li>Server $\to$ Client: <code>{`{ salt: "${registration.salt.toString()}", B: "${serverChallenge.B.toString()}" }`}</code></li>
-            <li>Client $\to$ Server: <code>{`{ proofM1: "${authResult.clientProofM1.toString()}" }`}</code> (Beweis ohne Preisgabe)</li>
-            <li>Server $\to$ Client: <code>{`{ proofM2: "${authResult.serverProofM2.toString()}" }`}</code> (Gegenseitige Authentifizierung)</li>
+            <li>Client → Server: <code>{`{ username: "${username}", A: "${clientHello.A.toString()}" }`}</code></li>
+            <li>Server → Client: <code>{`{ salt: "${registration.salt.toString()}", B: "${serverChallenge.B.toString()}" }`}</code></li>
+            <li>Client → Server: <code>{`{ proofM1: "${authResult.clientProofM1.toString()}" }`}</code> (Beweis ohne Preisgabe)</li>
+            <li>Server → Client: <code>{`{ proofM2: "${authResult.serverProofM2.toString()}" }`}</code> (Gegenseitige Authentifizierung)</li>
             <li style={{ color: 'var(--accent-teal)', marginTop: '4px' }}>
               <strong>Zero-Knowledge-Garantie:</strong> Weder das Klartext-Passwort noch ein Hash werden übertragen! Selbst ein Angreifer mit vollständigem Packet-Sniffing kann daraus das Passwort nicht ableiten.
             </li>

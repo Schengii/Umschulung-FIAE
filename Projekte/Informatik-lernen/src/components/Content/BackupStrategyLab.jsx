@@ -182,7 +182,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
               borderRadius: 'var(--radius-md)',
               padding: '1.25rem',
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
               gap: '1.25rem',
               boxShadow: 'var(--shadow-sm)'
             }}
@@ -236,7 +236,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
           </div>
 
           {/* Cards for Full vs Diff vs Incremental */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '1.5rem' }}>
             {/* Full Backup */}
             <div
               style={{
@@ -369,7 +369,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
             Das vom BSI empfohlene Standard-Rotationsverfahren schützt vor schleichendem Datenverlust bei minimalem Medienaufwand (genau 20 Medien für 1 volles Jahr Historie).
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
             <div style={{ background: 'var(--bg-primary)', padding: '1.25rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-teal)' }}>SOHN (TAGESSICHERUNG)</div>
               <div style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0.25rem 0' }}>4 Medien</div>
@@ -431,7 +431,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
             Quantifiziere die betriebswirtschaftlichen Schäden eines Rechenzentrumsausfalls nach BSI 200-4 Business Continuity Management (BCM).
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
             <div>
               <label htmlFor={rtoInputId} style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>
                 RTO (Recovery Time): <strong>{rtoHours} Stunden</strong>
@@ -484,7 +484,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '1rem' }}>
             <div style={{ background: 'var(--bg-primary)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Stillstandskosten (Downtime)</div>
               <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-rose)', margin: '0.2rem 0' }}>
@@ -723,7 +723,7 @@ export default function BackupStrategyLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-sm)',
                   border: 'none',
                   background: 'var(--accent-primary)',
-                  color: '#ffffff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}

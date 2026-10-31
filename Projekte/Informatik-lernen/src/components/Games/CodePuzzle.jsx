@@ -68,7 +68,7 @@ export default function CodePuzzle({ onCompleteGame }) {
         </p>
 
         {/* Lines Re-order Editor */}
-        <div style={{ background: '#090d16', borderRadius: 'var(--radius-md)', padding: '16px', border: '1px solid var(--border-color)', marginBottom: '20px' }}>
+        <div style={{ background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', padding: '16px', border: '1px solid var(--border-color)', marginBottom: '20px' }}>
           {userLines.map((line, idx) => (
             <div
               key={line.id}

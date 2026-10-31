@@ -54,6 +54,10 @@ const IHK_DRILL_QUESTIONS = [
   }
 ];
 
+// Die Engine liefert die Light-Mode-Akzentwerte; im Dark Mode wären sie auf dunklem Grund zu dunkel.
+const LANE_THEME_COLOR = { '#4338ca': 'var(--accent-primary)', '#6d28d9': 'var(--accent-purple)', '#0f766e': 'var(--accent-teal)', '#b45309': 'var(--accent-amber)' };
+const laneColor = (hex) => LANE_THEME_COLOR[hex.toLowerCase()] || hex;
+
 export default function BpmnProcessLab({ onRewardXP = () => {} }) {
   const [selectedTemplateKey, setSelectedTemplateKey] = useState('order_fulfillment');
   const [processData, setProcessData] = useState(IHK_BPMN_TEMPLATES.order_fulfillment);
@@ -135,7 +139,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border-color)',
                 background: selectedTemplateKey === 'order_fulfillment' ? 'var(--accent-teal)' : 'var(--bg-card)',
-                color: selectedTemplateKey === 'order_fulfillment' ? '#ffffff' : 'var(--text-main)',
+                color: selectedTemplateKey === 'order_fulfillment' ? 'var(--text-on-accent)' : 'var(--text-main)',
                 fontWeight: 600,
                 cursor: 'pointer'
               }}
@@ -151,7 +155,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border-color)',
                 background: selectedTemplateKey === 'incident_management' ? 'var(--accent-purple)' : 'var(--bg-card)',
-                color: selectedTemplateKey === 'incident_management' ? '#ffffff' : 'var(--text-main)',
+                color: selectedTemplateKey === 'incident_management' ? 'var(--text-on-accent)' : 'var(--text-main)',
                 fontWeight: 600,
                 cursor: 'pointer'
               }}
@@ -227,7 +231,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-xs)',
                   border: 'none',
                   background: 'var(--accent-teal)',
-                  color: '#ffffff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: 600,
                   cursor: 'pointer',
                   display: 'flex',
@@ -266,7 +270,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-xs)',
                   border: '1px solid var(--border-color)',
                   background: xorChoice === 'Ja' ? 'var(--accent-teal)' : 'var(--bg-primary)',
-                  color: xorChoice === 'Ja' ? '#ffffff' : 'var(--text-main)',
+                  color: xorChoice === 'Ja' ? 'var(--text-on-accent)' : 'var(--text-main)',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -282,7 +286,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-xs)',
                   border: '1px solid var(--border-color)',
                   background: xorChoice === 'Nein' ? 'var(--accent-rose)' : 'var(--bg-primary)',
-                  color: xorChoice === 'Nein' ? '#ffffff' : 'var(--text-main)',
+                  color: xorChoice === 'Nein' ? 'var(--text-on-accent)' : 'var(--text-main)',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -319,14 +323,14 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                     {/* Swimlane Label */}
                     <div
                       style={{
-                        background: lane.color ? `${lane.color}15` : 'var(--bg-primary)',
+                        background: lane.color ? `color-mix(in srgb, ${laneColor(lane.color)} 8%, transparent)` : 'var(--bg-primary)',
                         borderRight: '2px solid var(--border-color)',
                         padding: '1rem',
                         fontWeight: 700,
                         fontSize: '0.9rem',
                         display: 'flex',
                         alignItems: 'center',
-                        color: lane.color || 'var(--text-main)'
+                        color: lane.color ? laneColor(lane.color) : 'var(--text-main)'
                       }}
                     >
                       {lane.name}
@@ -635,7 +639,7 @@ export default function BpmnProcessLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-sm)',
                   border: 'none',
                   background: 'var(--accent-teal)',
-                  color: '#ffffff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}

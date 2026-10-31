@@ -1,7 +1,7 @@
 import React from 'react';
 import { Award, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 
-export const SKILL_TREE_DATA = [
+const SKILL_TREE_DATA = [
   {
     category: 'Tier 1: IT-Grundlagen',
     nodes: [
@@ -61,7 +61,7 @@ export default function SkillTreeWidget({ userState }) {
               {tier.category}
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '16px' }}>
               {tier.nodes.map((node) => {
                 const isUnlocked = unlockedTopics.includes(node.id) || !node.req;
                 const isCompleted = unlockedTopics.includes(node.id);
@@ -70,7 +70,7 @@ export default function SkillTreeWidget({ userState }) {
                   <div
                     key={node.id}
                     style={{
-                      background: isCompleted ? 'rgba(16, 185, 129, 0.08)' : isUnlocked ? 'var(--bg-primary)' : 'rgba(15, 23, 42, 0.4)',
+                      background: isCompleted ? 'rgba(16, 185, 129, 0.08)' : isUnlocked ? 'var(--bg-primary)' : 'var(--bg-tertiary)',
                       border: isCompleted ? '2px solid var(--accent-emerald)' : isUnlocked ? '1px solid var(--border-color)' : '1px dashed var(--border-color)',
                       padding: '20px',
                       borderRadius: 'var(--radius-lg)',

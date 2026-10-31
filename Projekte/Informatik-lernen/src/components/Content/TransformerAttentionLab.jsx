@@ -88,9 +88,9 @@ export default function TransformerAttentionLab() {
         <div className="space-y-6">
           {/* Sentence Selector Bar */}
           <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>
               Beispielsatz auswählen:
-            </label>
+            </span>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {SAMPLE_SENTENCES.map(s => (
                 <button
@@ -139,7 +139,7 @@ export default function TransformerAttentionLab() {
                             style={{
                               padding: '10px 14px',
                               background: `rgba(99, 102, 241, ${intensity})`,
-                              color: intensity > 0.4 ? '#ffffff' : 'var(--text-muted)',
+                              color: intensity > 0.8 ? '#ffffff' : 'var(--text-main)',
                               fontWeight: intensity > 0.4 ? '800' : 'normal',
                               border: '1px solid rgba(255,255,255,0.08)',
                               borderRadius: '4px',
@@ -173,7 +173,7 @@ export default function TransformerAttentionLab() {
               <Sliders size={18} color="var(--accent-indigo)" /> Sampling Hyperparameter Steuerung
             </h2>
 
-            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '20px' }}>
               {/* Temperature */}
               <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -254,7 +254,7 @@ export default function TransformerAttentionLab() {
                       style={{
                         height: '100%',
                         width: `${item.percentage}%`,
-                        background: 'var(--gradient-cyber)',
+                        background: 'var(--gradient-cta)',
                         borderRadius: '4px',
                         transition: 'width 0.3s ease'
                       }}

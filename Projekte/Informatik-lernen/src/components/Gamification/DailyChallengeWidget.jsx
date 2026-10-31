@@ -66,7 +66,7 @@ export default function DailyChallengeWidget({ onCompleteChallenge }) {
         {quest.question}
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '10px' }}>
         {quest.options.map((opt, idx) => {
           const isSelected = selectedOpt === idx;
           const isCorrect = idx === quest.correct;

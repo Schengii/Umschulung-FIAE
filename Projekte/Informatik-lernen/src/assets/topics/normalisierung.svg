@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">Ergebnis der Normalisierung bis zur 3. Normalform: Tabellen Ort, Kunde, Rechnung, Position und Artikel mit Primär- und Fremdschlüsseln</title>
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Rechnungsdaten in 3NF</text>
+  <g font-size="12">
+    <!-- Ort -->
+    <rect x="20" y="60" width="130" height="78" rx="6" fill="#f8fafc" stroke="#475569"/>
+    <rect x="20" y="60" width="130" height="24" rx="6" fill="#e2e8f0"/><text x="85" y="77" text-anchor="middle" font-weight="700">Ort</text>
+    <text x="30" y="102" font-weight="700" text-decoration="underline">PLZ</text><text x="30" y="122">Ort</text>
+    <!-- Kunde -->
+    <rect x="190" y="60" width="150" height="98" rx="6" fill="#f8fafc" stroke="#4338ca"/>
+    <rect x="190" y="60" width="150" height="24" rx="6" fill="#e0e7ff"/><text x="265" y="77" text-anchor="middle" font-weight="700">Kunde</text>
+    <text x="200" y="102" font-weight="700" text-decoration="underline">KundenNr</text><text x="200" y="122">Name</text><text x="200" y="142" fill="#be123c">PLZ (FK)</text>
+    <!-- Rechnung -->
+    <rect x="380" y="60" width="150" height="98" rx="6" fill="#f8fafc" stroke="#0f766e"/>
+    <rect x="380" y="60" width="150" height="24" rx="6" fill="#ccfbf1"/><text x="455" y="77" text-anchor="middle" font-weight="700">Rechnung</text>
+    <text x="390" y="102" font-weight="700" text-decoration="underline">RechnungsNr</text><text x="390" y="122">Datum</text><text x="390" y="142" fill="#be123c">KundenNr (FK)</text>
+    <!-- Position -->
+    <rect x="380" y="200" width="150" height="98" rx="6" fill="#f8fafc" stroke="#b45309"/>
+    <rect x="380" y="200" width="150" height="24" rx="6" fill="#fef3c7"/><text x="455" y="217" text-anchor="middle" font-weight="700">Position</text>
+    <text x="390" y="242" font-weight="700" text-decoration="underline" fill="#be123c">RechnungsNr (FK)</text><text x="390" y="262" font-weight="700" text-decoration="underline" fill="#be123c">ArtikelNr (FK)</text><text x="390" y="282">Menge, Preis</text>
+    <!-- Artikel -->
+    <rect x="570" y="200" width="130" height="98" rx="6" fill="#f8fafc" stroke="#6d28d9"/>
+    <rect x="570" y="200" width="130" height="24" rx="6" fill="#ede9fe"/><text x="635" y="217" text-anchor="middle" font-weight="700">Artikel</text>
+    <text x="580" y="242" font-weight="700" text-decoration="underline">ArtikelNr</text><text x="580" y="262">Bezeichnung</text><text x="580" y="282">Listenpreis</text>
+  </g>
+  <g stroke="#0f172a" stroke-width="1.5" fill="none">
+    <path d="M150 98 H190"/><path d="M340 98 H380"/><path d="M455 158 V200"/><path d="M530 250 H570"/>
+  </g>
+  <g font-size="12" font-weight="700" fill="#0f172a">
+    <text x="154" y="92">1</text><text x="178" y="92">n</text>
+    <text x="344" y="92">1</text><text x="368" y="92">n</text>
+    <text x="460" y="174">1</text><text x="460" y="196">n</text>
+    <text x="534" y="244">n</text><text x="558" y="244">1</text>
+  </g>
+  <text x="20" y="200" font-size="12" fill="#475569">Unterstrichen = Primärschlüssel</text>
+  <text x="20" y="218" font-size="12" fill="#be123c">Rot = Fremdschlüssel</text>
+  <text x="20" y="250" font-size="12" fill="#475569">Position hat einen zusammen-</text>
+  <text x="20" y="266" font-size="12" fill="#475569">gesetzten Schlüssel und löst die</text>
+  <text x="20" y="282" font-size="12" fill="#475569">n:m-Beziehung Rechnung–Artikel auf.</text>
+</svg>

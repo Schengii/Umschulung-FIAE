@@ -116,7 +116,7 @@ export default function AnsiblePlaybookLab({ onRewardXP }) {
       </div>
 
       {/* Playbook Details & Terminal View */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Playbook Definition */}
         <div 
           className="glass-panel"
@@ -172,15 +172,15 @@ export default function AnsiblePlaybookLab({ onRewardXP }) {
           style={{
             padding: '24px',
             borderRadius: 'var(--radius-xl)',
-            background: '#090d16',
+            background: 'var(--bg-secondary)',
             border: '1px solid rgba(255,255,255,0.1)',
-            color: '#e2e8f0',
+            color: 'var(--text-main)',
             fontFamily: 'monospace'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '16px' }}>
             <Terminal size={18} color="#38bdf8" />
-            <span style={{ fontWeight: 800, fontSize: '0.9rem', color: '#38bdf8' }}>
+            <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--accent-cyan)' }}>
               ansible-playbook -i inventory.ini site.yml (Run #{runCount || 0})
             </span>
           </div>
@@ -191,16 +191,16 @@ export default function AnsiblePlaybookLab({ onRewardXP }) {
             </div>
           ) : (
             <div style={{ fontSize: '0.82rem', lineHeight: '1.7' }}>
-              <div style={{ color: '#38bdf8', fontWeight: 800 }}>PLAY [{playbook.name}] *************************************</div>
+              <div style={{ color: 'var(--accent-cyan)', fontWeight: 800 }}>PLAY [{playbook.name}] *************************************</div>
               
               {Object.values(lastRunResult.hostResults).map((res) => (
                 <div key={res.host} style={{ margin: '12px 0' }}>
-                  <div style={{ color: '#94a3b8' }}>TASK [Gathering Facts] *************************************</div>
+                  <div style={{ color: 'var(--text-dim)' }}>TASK [Gathering Facts] *************************************</div>
                   <div style={{ color: 'var(--accent-emerald)' }}>ok: [{res.host}]</div>
 
                   {res.taskLogs.map((log, li) => (
                     <div key={li}>
-                      <div style={{ color: '#94a3b8' }}>TASK [{log.name}] *************************************</div>
+                      <div style={{ color: 'var(--text-dim)' }}>TASK [{log.name}] *************************************</div>
                       <div style={{ color: log.status === 'changed' ? 'var(--accent-amber)' : 'var(--accent-emerald)', fontWeight: 700 }}>
                         {log.status}: [{res.host}]
                       </div>
@@ -209,7 +209,7 @@ export default function AnsiblePlaybookLab({ onRewardXP }) {
 
                   {res.handlerLogs.map((hlog, hi) => (
                     <div key={hi}>
-                      <div style={{ color: '#94a3b8' }}>RUNNING HANDLER [{hlog.name}] *************************************</div>
+                      <div style={{ color: 'var(--text-dim)' }}>RUNNING HANDLER [{hlog.name}] *************************************</div>
                       <div style={{ color: 'var(--accent-amber)', fontWeight: 700 }}>
                         {hlog.status}: [{res.host}]
                       </div>
@@ -218,7 +218,7 @@ export default function AnsiblePlaybookLab({ onRewardXP }) {
 
                   <div style={{ borderTop: '1px dashed rgba(255,255,255,0.15)', marginTop: '12px', paddingTop: '8px', fontWeight: 800 }}>
                     PLAY RECAP ***************************************************<br />
-                    <span style={{ color: '#cbd5e1' }}>{res.host}</span> : 
+                    <span style={{ color: 'var(--text-muted)' }}>{res.host}</span> : 
                     <span style={{ color: 'var(--accent-emerald)' }}> ok={res.summary.ok} </span>
                     <span style={{ color: 'var(--accent-amber)' }}> changed={res.summary.changed} </span>
                     <span style={{ color: 'var(--accent-rose)' }}> failed={res.summary.failed} </span>

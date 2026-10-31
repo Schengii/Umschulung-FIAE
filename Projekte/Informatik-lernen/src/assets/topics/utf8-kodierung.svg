@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t">
+  <title id="t">UTF-8 kodiert Zeichen mit 1 bis 4 Byte: A als 41, ä als C3 A4, Euro als E2 82 AC, Emoji als F0 9F 98 80</title>
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">UTF-8: 1 bis 4 Byte je Zeichen</text>
+  <g font-size="14" fill="#475569" font-weight="600">
+    <text x="20" y="62">Zeichen</text><text x="110" y="62">Codepoint</text><text x="230" y="62">Bitmuster (x = Nutzbits)</text><text x="560" y="62">Bytes (hex)</text>
+  </g>
+  <line x1="20" y1="72" x2="700" y2="72" stroke="#cbd5e1"/>
+  <g font-size="15" fill="#0f172a">
+    <text x="40" y="106" font-size="22" font-weight="700">A</text><text x="110" y="104">U+0041</text>
+    <text x="230" y="104" font-family="Fira Code, monospace" font-size="13"><tspan fill="#be123c">0</tspan>1000001</text>
+    <rect x="560" y="86" width="40" height="26" rx="5" fill="#e0e7ff" stroke="#4338ca"/><text x="580" y="104" text-anchor="middle" font-family="Fira Code, monospace">41</text>
+
+    <text x="40" y="156" font-size="22" font-weight="700">ä</text><text x="110" y="154">U+00E4</text>
+    <text x="230" y="154" font-family="Fira Code, monospace" font-size="13"><tspan fill="#be123c">110</tspan>00011 <tspan fill="#be123c">10</tspan>100100</text>
+    <rect x="560" y="136" width="40" height="26" rx="5" fill="#ccfbf1" stroke="#0f766e"/><text x="580" y="154" text-anchor="middle" font-family="Fira Code, monospace">C3</text>
+    <rect x="606" y="136" width="40" height="26" rx="5" fill="#ccfbf1" stroke="#0f766e"/><text x="626" y="154" text-anchor="middle" font-family="Fira Code, monospace">A4</text>
+
+    <text x="40" y="206" font-size="22" font-weight="700">€</text><text x="110" y="204">U+20AC</text>
+    <text x="230" y="204" font-family="Fira Code, monospace" font-size="13"><tspan fill="#be123c">1110</tspan>0010 <tspan fill="#be123c">10</tspan>000010 <tspan fill="#be123c">10</tspan>101100</text>
+    <rect x="560" y="186" width="40" height="26" rx="5" fill="#fef3c7" stroke="#b45309"/><text x="580" y="204" text-anchor="middle" font-family="Fira Code, monospace">E2</text>
+    <rect x="606" y="186" width="40" height="26" rx="5" fill="#fef3c7" stroke="#b45309"/><text x="626" y="204" text-anchor="middle" font-family="Fira Code, monospace">82</text>
+    <rect x="652" y="186" width="40" height="26" rx="5" fill="#fef3c7" stroke="#b45309"/><text x="672" y="204" text-anchor="middle" font-family="Fira Code, monospace">AC</text>
+
+    <text x="36" y="256" font-size="20">😀</text><text x="110" y="254">U+1F600</text>
+    <text x="230" y="254" font-family="Fira Code, monospace" font-size="13"><tspan fill="#be123c">11110</tspan>000 <tspan fill="#be123c">10</tspan>011111 <tspan fill="#be123c">10</tspan>011000 <tspan fill="#be123c">10</tspan>000000</text>
+    <text x="560" y="254" font-family="Fira Code, monospace" font-size="13">F0 9F 98 80</text>
+  </g>
+  <text x="360" y="288" text-anchor="middle" font-size="12" fill="#475569">Rot: Steuerbits. Ein Startbyte zeigt die Länge an, Folgebytes beginnen immer mit 10. ASCII bleibt unverändert.</text>
+</svg>

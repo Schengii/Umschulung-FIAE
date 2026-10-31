@@ -7,6 +7,11 @@ import { test, expect } from '@playwright/test';
 // simulierten Offline-Modus und prüft, dass die App weiterhin aus dem Cache
 // bedient wird statt eine Browser-Offline-Fehlerseite zu zeigen.
 test.describe.serial('PWA Offline & Service Worker Suite', () => {
+  // Die Installation lädt den gesamten Precache (~380 Dateien, ~4 MB) vom
+  // Preview-Server, den sich alle parallel laufenden Specs teilen – im
+  // Gesamtlauf dauert das deutlich länger als das Standard-Zeitlimit (30 s).
+  test.describe.configure({ timeout: 90_000 });
+
   test('Service Worker registriert sich und cached die App-Shell', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { name: /Willkommen zurück/i })).toBeVisible();

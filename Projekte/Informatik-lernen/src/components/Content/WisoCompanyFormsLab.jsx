@@ -64,7 +64,7 @@ export default function WisoCompanyFormsLab({ onRewardXP }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Entscheidungs-Filter */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -144,27 +144,27 @@ export default function WisoCompanyFormsLab({ onRewardXP }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', lineHeight: '1.5' }}>
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px' }}>
               <div style={{ color: 'var(--accent-amber)', fontSize: '0.8rem', fontWeight: 600 }}>HAFTUNG:</div>
               <div style={{ color: 'var(--text-main)' }}>{selectedForm.liability}</div>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px' }}>
               <div style={{ color: 'var(--accent-teal)', fontSize: '0.8rem', fontWeight: 600 }}>MINDESTKAPITAL:</div>
               <div style={{ color: 'var(--text-main)' }}>{selectedForm.minCapital}</div>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px' }}>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>HANDELSREGISTER (HRA / HRB):</div>
               <div style={{ color: 'var(--text-main)' }}>{selectedForm.commercialRegister}</div>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px' }}>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>GESCHÄFTSFÜHRUNG & ORGANE:</div>
               <div style={{ color: 'var(--text-main)' }}>{selectedForm.management} • <em>Organe: {selectedForm.organs}</em></div>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '6px' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px' }}>
               <div style={{ color: 'var(--accent-teal)', fontSize: '0.8rem', fontWeight: 600 }}>TYPISCHER EINSATZZWECK:</div>
               <div style={{ color: 'var(--text-main)' }}>{selectedForm.bestFor}</div>
             </div>
@@ -177,7 +177,7 @@ export default function WisoCompanyFormsLab({ onRewardXP }) {
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Scale size={18} color="var(--accent-teal)" /> IHK AP2 WISO Prüfungsklassiker: Handelsregister-Unterscheidung
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
           <div>
             <strong style={{ color: 'var(--text-main)' }}>Abteilung A (HRA):</strong>
             <p style={{ margin: '4px 0 0' }}>Für <strong>Einzelkaufleute (e.K.)</strong> und <strong>Personengesellschaften (OHG, KG)</strong>. Kennzeichen: Mindestens ein Vollhafter haftet unbeschränkt mit dem Privatvermögen.</p>

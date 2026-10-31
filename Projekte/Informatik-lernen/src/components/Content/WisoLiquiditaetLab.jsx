@@ -52,7 +52,7 @@ export default function WisoLiquiditaetLab() {
               </span>
               <span className="text-xs text-slate-400">AP2 WISO Standard</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               IHK Liquiditätsgrade & Working Capital Studio
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -67,7 +67,7 @@ export default function WisoLiquiditaetLab() {
             ) : (
               <button
                 onClick={handleTestTrigger}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition shadow"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-black text-xs font-bold transition shadow"
               >
                 <Award size={14} /> 60 XP sichern
               </button>
@@ -81,57 +81,57 @@ export default function WisoLiquiditaetLab() {
         {/* Input Parameters (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <Calculator size={18} className="text-teal-400" />
               Bilanzdaten (Aktiva & Passiva)
             </h2>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-400 font-medium mb-1">
+                <label htmlFor="wiso-liquiditaet-lab-1" className="block text-slate-400 font-medium mb-1">
                   1. Flüssige Mittel (Kasse, Bankguthaben) (€):
                 </label>
-                <input
+                <input id="wiso-liquiditaet-lab-1"
                   type="number"
                   value={params.fluessigeMittel}
                   onChange={(e) => handleChange('fluessigeMittel', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 font-medium mb-1">
+                <label htmlFor="wiso-liquiditaet-lab-2" className="block text-slate-400 font-medium mb-1">
                   2. Kurzfristige Forderungen & Wertpapiere (€):
                 </label>
-                <input
+                <input id="wiso-liquiditaet-lab-2"
                   type="number"
                   value={params.kurzfristigeForderungen}
                   onChange={(e) => handleChange('kurzfristigeForderungen', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 font-medium mb-1">
+                <label htmlFor="wiso-liquiditaet-lab-3" className="block text-slate-400 font-medium mb-1">
                   3. Vorräte (Waren, Rohstoffe, Erzeugnisse) (€):
                 </label>
-                <input
+                <input id="wiso-liquiditaet-lab-3"
                   type="number"
                   value={params.vorraete}
                   onChange={(e) => handleChange('vorraete', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 font-mono"
                 />
               </div>
 
               <div className="pt-2 border-t border-slate-800">
-                <label className="block text-slate-300 font-semibold mb-1">
+                <label htmlFor="wiso-liquiditaet-lab-4" className="block text-slate-300 font-semibold mb-1">
                   Kurzfristige Verbindlichkeiten (LuL, Kontokorrent) (€):
                 </label>
-                <input
+                <input id="wiso-liquiditaet-lab-4"
                   type="number"
                   value={params.kurzfristigeVerbindlichkeiten}
                   onChange={(e) => handleChange('kurzfristigeVerbindlichkeiten', e.target.value)}
-                  className="w-full bg-slate-950 border border-teal-500/50 rounded-lg px-3 py-2 text-white font-mono font-bold"
+                  className="w-full bg-slate-950 border border-teal-500/50 rounded-lg px-3 py-2 text-slate-50 font-mono font-bold"
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function WisoLiquiditaetLab() {
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex justify-between items-center">
             <div>
               <span className="text-xs text-slate-400 block">Net Working Capital (Umlaufvermögen - Verbindlichkeiten)</span>
-              <span className="text-3xl font-black font-mono text-white">
+              <span className="text-3xl font-black font-mono text-slate-50">
                 {calculation.netWorkingCapital.toLocaleString('de-DE')} €
               </span>
             </div>

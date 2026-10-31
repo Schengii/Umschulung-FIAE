@@ -24,6 +24,10 @@
 
   /* Gradients */
   --gradient-cyber: linear-gradient(135deg, #4338ca 0%, #0f766e 50%, #6d28d9 100%);
+  /* Flächen mit weißer Schrift (Primär-Buttons, Icon-Kacheln): in beiden Themes ≥ 4,5:1 zu Weiß */
+  --gradient-cta: linear-gradient(135deg, #4338ca 0%, #0f766e 50%, #6d28d9 100%);
+  /* Schrift auf Akzentflächen (background: var(--accent-*)) */
+  --text-on-accent: #ffffff;
   --gradient-emerald: linear-gradient(135deg, #047857 0%, #065f46 100%);
   --gradient-gold: linear-gradient(135deg, #b45309 0%, #92400e 100%);
   --gradient-rose: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
@@ -80,6 +84,8 @@
   --text-dim: #94a3b8;
 
   --gradient-cyber: linear-gradient(135deg, #818cf8 0%, #2dd4bf 50%, #c084fc 100%);
+  --gradient-cta: linear-gradient(135deg, #4f46e5 0%, #0f766e 50%, #7c3aed 100%);
+  --text-on-accent: #0b1020;
   --gradient-card: linear-gradient(145deg, #0f172a 0%, #07090e 100%);
   --gradient-glass: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(7, 9, 14, 0.75) 100%);
 
@@ -94,6 +100,30 @@
   --shadow-glow: 0 0 35px rgba(129, 140, 248, 0.35);
 }
 
+/* Alias-Variablen, die Labs verwenden, die aber nie definiert waren. Ohne sie griffen die
+   festen Fallbacks (z. B. var(--card-bg, #1e293b)) und erzeugten dunkle Flächen im Light Mode
+   bzw. weiße im Dark Mode. Auf body definiert, damit sie Theme (html) und
+   Hochkontrast-Modus (body) folgen. Neue Labs nutzen direkt die Variablen oben. */
+body {
+  --card-bg: var(--bg-card);
+  --surface-card: var(--bg-card);
+  --bg-surface: var(--bg-secondary);
+  --input-bg: var(--bg-secondary);
+  --bg-subtle: var(--bg-tertiary);
+  --badge-bg: var(--bg-tertiary);
+  --code-bg: var(--bg-tertiary);
+  --text-primary: var(--text-main);
+  --text-color: var(--text-main);
+  --text-secondary: var(--text-muted);
+  --accent-indigo: var(--accent-primary);
+  --primary-color: var(--accent-primary);
+  --accent-blue: var(--accent-cyan);
+  --accent-green: var(--accent-emerald);
+  --accent-red: var(--accent-rose);
+  --accent-danger: var(--accent-rose);
+  --font-mono: var(--font-code);
+}
+
 /* High Contrast Mode (WCAG AAA) */
 body.high-contrast-mode {
   --bg-primary: #000000 !important;
@@ -104,6 +134,7 @@ body.high-contrast-mode {
   --text-main: #ffffff !important;
   --text-muted: #ffff00 !important; /* High Visibility Yellow */
   --text-dim: #ffffff !important;
+  --text-on-accent: #000000 !important;
   --border-color: #ffffff !important;
   --border-highlight: #00ffff !important; /* Cyan highlight */
   --accent-primary: #00ffff !important;
@@ -197,6 +228,13 @@ body.colorblind-mode .badge-amber::before {
 img, video, canvas, svg {
   max-width: 100%;
   height: auto;
+}
+
+/* Ohne Tailwind-Preflight bekamen Buttons ohne eigene Hintergrund-/Textfarbe das Browser-Grau
+   (#f0f0f0) und schwarze Schrift – im Dark Mode helle Tabs mit heller Tailwind-Schrift. */
+button {
+  background-color: transparent;
+  color: inherit;
 }
 
 /* Allow absolute dropdown popovers to expand beyond parent wrapper button width */
@@ -313,7 +351,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Code Window */
 .code-window {
-  background: #0f172a;
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -321,20 +359,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .code-header {
-  background: #1e293b;
+  background: var(--bg-tertiary);
   padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border-color);
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--text-dim);
 }
 
 .code-body {
   padding: 16px;
   font-size: 0.92rem;
-  color: #f8fafc;
+  color: var(--text-main);
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-word;
@@ -358,7 +396,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background: var(--gradient-cyber);
+  background: var(--gradient-cta);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
 }
@@ -438,7 +476,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Responsive Grid & Layout Helper */
 .grid-responsive {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 1.5rem;
 }
 
@@ -454,7 +492,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Tablet & Mobile Responsiveness */
 @media (max-width: 1024px) {
   .grid-responsive {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
     gap: 1.25rem;
   }
 }
@@ -466,8 +504,9 @@ h1, h2, h3, h4, h5, h6 {
   body {
     padding-bottom: 74px; /* Prevent fixed MobileNav from overlapping footer */
   }
+  /* !important: viele Labs setzen gridTemplateColumns inline (z. B. 'minmax(340px, 1.2fr) minmax(320px, 1fr)') */
   .grid-responsive {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 1rem;
   }
   .glass-panel {
@@ -493,6 +532,10 @@ h1, h2, h3, h4, h5, h6 {
   .btn {
     width: 100%;
     justify-content: center;
+  }
+  /* Header-Schaltflächen bleiben kompakt, sonst läuft die Kopfzeile über (320 px) */
+  .btn.header-btn {
+    width: auto;
   }
   .code-body {
     font-size: 0.82rem;
@@ -718,7 +761,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Booking Rules Grid */
 .booking-rules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 16px;
   margin-bottom: 28px;
 }
@@ -799,7 +842,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Kontenrahmen Grid */
 .kontenrahmen-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -1293,7 +1336,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .zuschlagsatz-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 14px;
   margin-bottom: 24px;
 }
@@ -1486,7 +1529,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .payment-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -1645,7 +1688,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Preisnachlässe */
 .nachlass-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 14px;
 }
 
@@ -1954,3 +1997,186 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.55;
 }
 
+
+/* Sehr schmale Displays (320 px): nur das Logo-Symbol, damit Kopfzeile und Aktionen nebeneinander passen */
+@media (max-width: 400px) {
+  .brand-text {
+    display: none;
+  }
+}
+
+/* Eingabefelder mit inline `outline: none` behalten eine sichtbare Fokusmarkierung (WCAG 2.4.7) */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[contenteditable]:focus-visible {
+  outline: 2px solid var(--accent-primary) !important;
+  outline-offset: 2px;
+}
+
+/* Spalten im Raster dürfen schrumpfen; breiter Inhalt (z. B. <pre>) scrollt dann in sich statt die Seite zu verbreitern */
+.grid-responsive > * {
+  min-width: 0;
+}
+
+/* Handy: Flex-Zeilen der Labs (Tabs, Button- und Badge-Leisten) brechen um, statt rechts unerreichbar
+   aus dem Bild zu ragen. Zeilen mit eigenem flex-wrap oder Scroll-Verhalten bleiben, wie sie sind. */
+@media (max-width: 768px) {
+  main [style*="display: flex"]:not([style*="flex-direction: column"]):not([style*="flex-wrap"]):not([style*="overflow"]),
+  main .flex:not(.flex-col):not(.flex-nowrap):not([class*="overflow-"]) {
+    flex-wrap: wrap;
+  }
+  /* Lange Komposita in Überschriften (z. B. „Geschäftsprozessmodellierung“) dürfen umbrechen */
+  main h1, main h2 {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Wissensartikel (Shared/MarkdownContent.jsx): Typografie, Tabellen, Callouts und Abbildungen */
+.md-content {
+  color: var(--text-main);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+.md-content > :first-child {
+  margin-top: 0;
+}
+.md-content p,
+.md-content ul,
+.md-content ol {
+  margin: 0 0 14px;
+}
+.md-content ul,
+.md-content ol {
+  padding-left: 24px;
+}
+.md-content li {
+  margin-bottom: 6px;
+}
+.md-content li > ul,
+.md-content li > ol {
+  margin: 6px 0 0;
+}
+.md-content .md-heading {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  line-height: 1.3;
+  scroll-margin-top: 90px;
+}
+.md-content h2.md-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-subtle);
+}
+.md-content h3.md-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 26px 0 10px;
+}
+.md-content h4.md-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 20px 0 8px;
+  color: var(--text-muted);
+}
+.md-content a {
+  color: var(--accent-primary);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.md-inline-code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 1px 6px;
+  overflow-wrap: anywhere;
+}
+.md-hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 28px 0;
+}
+.md-code {
+  margin: 0 0 18px;
+}
+.md-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 18px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+.md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+.md-table th,
+.md-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+.md-table th {
+  background: var(--bg-tertiary);
+  font-weight: 700;
+  color: var(--text-main);
+}
+.md-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.md-quote {
+  margin: 0 0 18px;
+  padding: 10px 16px;
+  border-left: 4px solid var(--border-color);
+  color: var(--text-muted);
+  font-style: italic;
+}
+.md-callout {
+  --callout-accent: var(--accent-cyan);
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color);
+  border-left: 5px solid var(--callout-accent);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+}
+.md-callout > :last-child,
+.md-callout > :last-child > :last-child {
+  margin-bottom: 0;
+}
+.md-callout-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--callout-accent);
+}
+.md-callout-tip { --callout-accent: var(--accent-emerald); }
+.md-callout-warning { --callout-accent: var(--accent-rose); }
+.md-callout-exam { --callout-accent: var(--accent-purple); }
+.md-callout-example { --callout-accent: var(--accent-amber); }
+.md-figure {
+  margin: 8px 0 22px;
+  text-align: center;
+}
+/* Die SVG-Grafiken haben eine feste helle Palette; die weiße Fläche hält sie in beiden Themes lesbar */
+.md-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+}
+.md-figure figcaption {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}

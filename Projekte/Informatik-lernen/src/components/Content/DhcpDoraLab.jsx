@@ -114,7 +114,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <span style={{
               background: 'rgba(14, 165, 233, 0.15)',
-              color: '#0ea5e9',
+              color: 'var(--accent-cyan)',
               padding: '0.35rem 0.75rem',
               borderRadius: '2rem',
               fontWeight: 600,
@@ -124,7 +124,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
             </span>
             <span style={{
               background: 'rgba(16, 185, 129, 0.15)',
-              color: '#10b981',
+              color: 'var(--accent-emerald)',
               padding: '0.35rem 0.75rem',
               borderRadius: '2rem',
               fontWeight: 600,
@@ -161,8 +161,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                   cursor: 'pointer',
                   fontWeight: 600,
                   fontSize: '0.9rem',
-                  background: isActive ? '#0ea5e9' : 'rgba(255, 255, 255, 0.05)',
-                  color: isActive ? '#fff' : 'var(--text-muted, #94a3b8)',
+                  background: isActive ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.05)',
+                  color: isActive ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -204,7 +204,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
 
                 <div>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-muted, #94a3b8)', textTransform: 'uppercase' }}>Zugewiesene IP:</span>
-                  <strong style={{ marginLeft: '0.5rem', color: session.assignedIp ? '#10b981' : '#94a3b8' }}>
+                  <strong style={{ marginLeft: '0.5rem', color: session.assignedIp ? 'var(--accent-emerald)' : 'var(--text-dim)' }}>
                     {session.assignedIp || 'Keine (Unkonfiguriert)'}
                   </strong>
                 </div>
@@ -222,7 +222,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     borderRadius: '0.4rem',
                     border: `1px solid ${isRelayActive ? '#0ea5e9' : 'var(--border-color, #334155)'}`,
                     background: isRelayActive ? 'rgba(14, 165, 233, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                    color: isRelayActive ? '#0ea5e9' : 'inherit',
+                    color: isRelayActive ? 'var(--accent-cyan)' : 'inherit',
                     fontSize: '0.85rem',
                     fontWeight: 600,
                     cursor: 'pointer'
@@ -241,8 +241,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     padding: '0.4rem 0.9rem',
                     borderRadius: '0.4rem',
                     border: 'none',
-                    background: '#10b981',
-                    color: '#fff',
+                    background: 'var(--accent-emerald)',
+                    color: 'var(--text-on-accent)',
                     fontSize: '0.85rem',
                     fontWeight: 600,
                     cursor: 'pointer'
@@ -284,7 +284,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
                   borderRadius: '0.5rem',
                   border: '1px solid #0ea5e9',
                   background: session.clientState === 'INIT' ? 'rgba(14, 165, 233, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: session.clientState === 'INIT' ? '#0ea5e9' : '#64748b',
+                  color: session.clientState === 'INIT' ? 'var(--accent-cyan)' : '#64748b',
                   fontWeight: 600,
                   cursor: session.clientState === 'INIT' ? 'pointer' : 'not-allowed',
                   fontSize: '0.85rem'
@@ -301,7 +301,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
                   borderRadius: '0.5rem',
                   border: '1px solid #0ea5e9',
                   background: session.clientState === 'SELECTING' ? 'rgba(14, 165, 233, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: session.clientState === 'SELECTING' ? '#0ea5e9' : '#64748b',
+                  color: session.clientState === 'SELECTING' ? 'var(--accent-cyan)' : '#64748b',
                   fontWeight: 600,
                   cursor: session.clientState === 'SELECTING' ? 'pointer' : 'not-allowed',
                   fontSize: '0.85rem'
@@ -318,7 +318,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
                   borderRadius: '0.5rem',
                   border: '1px solid #0ea5e9',
                   background: session.history.length > 0 && session.history[session.history.length - 1].phase === 'OFFER' ? 'rgba(14, 165, 233, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: session.history.length > 0 && session.history[session.history.length - 1].phase === 'OFFER' ? '#0ea5e9' : '#64748b',
+                  color: session.history.length > 0 && session.history[session.history.length - 1].phase === 'OFFER' ? 'var(--accent-cyan)' : '#64748b',
                   fontWeight: 600,
                   cursor: session.history.length > 0 && session.history[session.history.length - 1].phase === 'OFFER' ? 'pointer' : 'not-allowed',
                   fontSize: '0.85rem'
@@ -335,7 +335,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
                   borderRadius: '0.5rem',
                   border: '1px solid #10b981',
                   background: session.clientState === 'REQUESTING' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: session.clientState === 'REQUESTING' ? '#10b981' : '#64748b',
+                  color: session.clientState === 'REQUESTING' ? 'var(--accent-emerald)' : '#64748b',
                   fontWeight: 600,
                   cursor: session.clientState === 'REQUESTING' ? 'pointer' : 'not-allowed',
                   fontSize: '0.85rem'
@@ -377,8 +377,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span style={{
-                          background: pkt.phase === 'DISCOVER' || pkt.phase === 'REQUEST' ? '#0ea5e9' : '#10b981',
-                          color: '#fff',
+                          background: pkt.phase === 'DISCOVER' || pkt.phase === 'REQUEST' ? 'var(--accent-cyan)' : 'var(--accent-emerald)',
+                          color: 'var(--text-on-accent)',
                           fontWeight: 700,
                           fontSize: '0.75rem',
                           padding: '0.2rem 0.5rem',
@@ -395,11 +395,11 @@ export default function DhcpDoraLab({ onRewardXP }) {
                       </span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem', fontSize: '0.85rem', fontFamily: 'monospace', background: 'rgba(0,0,0,0.2)', padding: '0.5rem 0.75rem', borderRadius: '0.4rem', marginBottom: '0.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '0.5rem', fontSize: '0.85rem', fontFamily: 'monospace', background: 'var(--bg-tertiary)', padding: '0.5rem 0.75rem', borderRadius: '0.4rem', marginBottom: '0.5rem' }}>
                       <div>Src IP: {pkt.srcIp}</div>
                       <div>Dst IP: {pkt.dstIp}</div>
-                      <div>Your IP (yiaddr): <span style={{ color: pkt.yiaddr !== '0.0.0.0' ? '#10b981' : 'inherit' }}>{pkt.yiaddr}</span></div>
-                      <div>Relay IP (giaddr): <span style={{ color: pkt.giaddr !== '0.0.0.0' ? '#0ea5e9' : 'inherit' }}>{pkt.giaddr}</span></div>
+                      <div>Your IP (yiaddr): <span style={{ color: pkt.yiaddr !== '0.0.0.0' ? 'var(--accent-emerald)' : 'inherit' }}>{pkt.yiaddr}</span></div>
+                      <div>Relay IP (giaddr): <span style={{ color: pkt.giaddr !== '0.0.0.0' ? 'var(--accent-cyan)' : 'inherit' }}>{pkt.giaddr}</span></div>
                     </div>
 
                     <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)', lineHeight: '1.4' }}>
@@ -431,9 +431,9 @@ export default function DhcpDoraLab({ onRewardXP }) {
             <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.5rem', fontWeight: 600 }}>
                 <span>0h (Lease Start / ACK)</span>
-                <span style={{ color: '#0ea5e9' }}>T1: 12h (50% Renewal - Unicast)</span>
-                <span style={{ color: '#f59e0b' }}>T2: 21h (87.5% Rebind - Broadcast)</span>
-                <span style={{ color: '#ef4444' }}>24h (Expiry)</span>
+                <span style={{ color: 'var(--accent-cyan)' }}>T1: 12h (50% Renewal - Unicast)</span>
+                <span style={{ color: 'var(--accent-amber)' }}>T2: 21h (87.5% Rebind - Broadcast)</span>
+                <span style={{ color: 'var(--accent-rose)' }}>24h (Expiry)</span>
               </div>
               <div style={{ height: '14px', background: 'rgba(255,255,255,0.08)', borderRadius: '7px', display: 'flex', overflow: 'hidden' }}>
                 <div style={{ width: '50%', background: '#10b981' }} title="T1 Erneuerungsfenster" />
@@ -443,9 +443,9 @@ export default function DhcpDoraLab({ onRewardXP }) {
             </div>
 
             {/* Timer Aktionen */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '1rem' }}>
               <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-color, #334155)' }}>
-                <strong style={{ display: 'block', fontSize: '0.95rem', color: '#0ea5e9', marginBottom: '0.25rem' }}>
+                <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--accent-cyan)', marginBottom: '0.25rem' }}>
                   Timer T1 (50% Lease)
                 </strong>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)', margin: '0 0 0.75rem 0' }}>
@@ -459,8 +459,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     padding: '0.5rem',
                     borderRadius: '0.4rem',
                     border: 'none',
-                    background: session.clientState === 'BOUND' ? '#0ea5e9' : 'rgba(255,255,255,0.05)',
-                    color: '#fff',
+                    background: session.clientState === 'BOUND' ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.05)',
+                    color: 'var(--text-on-accent)',
                     fontWeight: 600,
                     cursor: session.clientState === 'BOUND' ? 'pointer' : 'not-allowed',
                     fontSize: '0.85rem'
@@ -471,7 +471,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
               </div>
 
               <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-color, #334155)' }}>
-                <strong style={{ display: 'block', fontSize: '0.95rem', color: '#f59e0b', marginBottom: '0.25rem' }}>
+                <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--accent-amber)', marginBottom: '0.25rem' }}>
                   Timer T2 (87.5% Lease)
                 </strong>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)', margin: '0 0 0.75rem 0' }}>
@@ -485,8 +485,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     padding: '0.5rem',
                     borderRadius: '0.4rem',
                     border: 'none',
-                    background: session.clientState === 'BOUND' || session.clientState === 'RENEWING' ? '#f59e0b' : 'rgba(255,255,255,0.05)',
-                    color: '#fff',
+                    background: session.clientState === 'BOUND' || session.clientState === 'RENEWING' ? 'var(--accent-amber)' : 'rgba(255,255,255,0.05)',
+                    color: 'var(--text-on-accent)',
                     fontWeight: 600,
                     cursor: session.clientState === 'BOUND' || session.clientState === 'RENEWING' ? 'pointer' : 'not-allowed',
                     fontSize: '0.85rem'
@@ -497,7 +497,7 @@ export default function DhcpDoraLab({ onRewardXP }) {
               </div>
 
               <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-color, #334155)' }}>
-                <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ef4444', marginBottom: '0.25rem' }}>
+                <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--accent-rose)', marginBottom: '0.25rem' }}>
                   DHCP Release
                 </strong>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)', margin: '0 0 0.75rem 0' }}>
@@ -511,8 +511,8 @@ export default function DhcpDoraLab({ onRewardXP }) {
                     padding: '0.5rem',
                     borderRadius: '0.4rem',
                     border: 'none',
-                    background: session.clientState === 'BOUND' ? '#ef4444' : 'rgba(255,255,255,0.05)',
-                    color: '#fff',
+                    background: session.clientState === 'BOUND' ? 'var(--accent-rose)' : 'rgba(255,255,255,0.05)',
+                    color: 'var(--text-on-accent)',
                     fontWeight: 600,
                     cursor: session.clientState === 'BOUND' ? 'pointer' : 'not-allowed',
                     fontSize: '0.85rem'

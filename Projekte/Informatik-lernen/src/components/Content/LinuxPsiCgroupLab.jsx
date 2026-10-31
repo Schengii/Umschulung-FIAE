@@ -78,7 +78,7 @@ export default function LinuxPsiCgroupLab() {
               </span>
               <span className="text-xs text-slate-400">Kubernetes Node Pressure & PSI</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               Linux Cgroups v2 & PSI (Pressure Stall Information) Studio
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -132,7 +132,7 @@ export default function LinuxPsiCgroupLab() {
         {/* Controls (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <Layers size={18} className="text-cyan-400" />
               Cgroup v2 Limits
             </h2>
@@ -186,7 +186,7 @@ export default function LinuxPsiCgroupLab() {
           </div>
 
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <Activity size={18} className="text-emerald-400" />
               Aktuelle Workload-Auslastung
             </h2>
