@@ -384,7 +384,6 @@ function renderFooter() {
                         <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
                         <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
                         <a href="https://instagram.com/schengii" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/4917624921897" target="_blank" rel="noopener" aria-label="WhatsApp" class="social-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
                         <a href="mailto:sche-max@web.de" aria-label="E-Mail" data-en-aria-label="Email" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
                     </div>
                 </div>
@@ -419,7 +418,7 @@ function renderFooter() {
             </div>
             
             <div class="footer-bottom">
-                <p class="copyright">&copy; ${year} Maximilian Schenk &middot; 53175 Bonn &middot; Germany</p>
+                <p class="copyright">&copy; ${year} Maximilian Schenk &middot; Bonn &middot; Germany</p>
                 <p class="footer-meta-row">
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
