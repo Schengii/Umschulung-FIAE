@@ -67,9 +67,9 @@ export default function SqliteWorkerStudioLab() {
         gap: '16px',
         marginBottom: '24px',
         padding: '20px',
-        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9))',
+        background: 'var(--gradient-card)',
         borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{
@@ -101,7 +101,7 @@ export default function SqliteWorkerStudioLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.2)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -115,7 +115,7 @@ export default function SqliteWorkerStudioLab() {
               alignItems: 'center', 
               gap: '6px', 
               background: 'rgba(16, 185, 129, 0.15)', 
-              color: '#10b981', 
+              color: 'var(--accent-emerald)', 
               padding: '6px 14px', 
               borderRadius: '20px',
               fontWeight: 600,
@@ -132,20 +132,20 @@ export default function SqliteWorkerStudioLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        border: '1px solid var(--border-color)',
         marginBottom: '24px'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <label style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Cpu size={18} color="#10b981" /> SQL Abfrage (Im Worker-Thread ausgeführt)
-          </label>
+          </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Worker Offloading:</span>
             <button
               onClick={() => setUseWorker(!useWorker)}
               style={{
-                background: useWorker ? '#10b981' : '#64748b',
-                color: '#ffffff',
+                background: useWorker ? 'var(--accent-emerald)' : 'var(--text-dim)',
+                color: 'var(--bg-card)',
                 border: 'none',
                 borderRadius: '20px',
                 padding: '4px 12px',
@@ -165,10 +165,10 @@ export default function SqliteWorkerStudioLab() {
           onChange={(e) => setQuery(e.target.value)}
           style={{
             width: '100%',
-            background: 'rgba(0, 0, 0, 0.3)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)',
             borderRadius: '8px',
-            color: '#ffffff',
+            color: 'var(--text-main)',
             padding: '12px',
             fontFamily: 'monospace',
             fontSize: '0.9rem',
@@ -185,7 +185,7 @@ export default function SqliteWorkerStudioLab() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: '#10b981',
+              background: 'var(--accent-emerald)',
               color: '#000000',
               border: 'none',
               borderRadius: '8px',
@@ -206,7 +206,7 @@ export default function SqliteWorkerStudioLab() {
               alignItems: 'center',
               gap: '8px',
               background: 'rgba(59, 130, 246, 0.2)',
-              color: '#3b82f6',
+              color: 'var(--accent-cyan)',
               border: '1px solid rgba(59, 130, 246, 0.4)',
               borderRadius: '8px',
               padding: '10px 18px',
@@ -234,7 +234,7 @@ export default function SqliteWorkerStudioLab() {
           fontSize: '0.9rem'
         }}>
           <span>🚀 <strong>Benchmark beendet:</strong> {benchmarkResult.rowCount} Datensätze generiert & aggregiert</span>
-          <span style={{ color: '#3b82f6', fontWeight: 700 }}>{benchmarkResult.durationMs} ms (Zero Frame Jank)</span>
+          <span style={{ color: 'var(--accent-cyan)', fontWeight: 700 }}>{benchmarkResult.durationMs} ms (Zero Frame Jank)</span>
         </div>
       )}
 
@@ -243,14 +243,14 @@ export default function SqliteWorkerStudioLab() {
         background: 'var(--surface-card, #1e293b)',
         borderRadius: '16px',
         padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.08)'
+        border: '1px solid var(--border-color)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
             Ergebnis {result ? `(${result.rows?.length || 0} Zeilen in ${result.executionTimeMs} ms)` : ''}
           </h2>
           {result?.workerThread && (
-            <span style={{ fontSize: '0.78rem', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '3px 8px', borderRadius: '12px', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.78rem', background: 'rgba(16, 185, 129, 0.2)', color: 'var(--accent-emerald)', padding: '3px 8px', borderRadius: '12px', fontWeight: 600 }}>
               Thread: Dedicated Worker
             </span>
           )}
@@ -260,9 +260,9 @@ export default function SqliteWorkerStudioLab() {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
               <thead>
-                <tr style={{ background: 'rgba(0, 0, 0, 0.3)', textAlign: 'left' }}>
+                <tr style={{ background: 'var(--bg-tertiary)', textAlign: 'left' }}>
                   {(result.columns || []).map((c) => (
-                    <th key={c} style={{ padding: '10px 12px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: '#10b981' }}>
+                    <th key={c} style={{ padding: '10px 12px', borderBottom: '1px solid var(--border-color)', color: 'var(--accent-emerald)' }}>
                       {c}
                     </th>
                   ))}
@@ -270,7 +270,7 @@ export default function SqliteWorkerStudioLab() {
               </thead>
               <tbody>
                 {(result.rows || []).map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
                     {(result.columns || []).map((c) => (
                       <td key={c} style={{ padding: '8px 12px' }}>
                         {String(r[c] ?? '')}
@@ -282,7 +282,7 @@ export default function SqliteWorkerStudioLab() {
             </table>
           </div>
         ) : result?.error ? (
-          <div style={{ color: '#ef4444', padding: '12px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
+          <div style={{ color: 'var(--accent-rose)', padding: '12px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
             {result.error}
           </div>
         ) : (

@@ -48,7 +48,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
               <Database className="w-4 h-4" />
               <span>Datenbank-Sicherheit & ACID Architekturen</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50">
               SQL Transaction Isolation & ACID Studio
             </h1>
             <p className="text-slate-400 mt-1 max-w-2xl text-sm">
@@ -68,10 +68,10 @@ export default function SqlIsolationLab({ onAwardXP }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Isolationsstufe wählen */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <label className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
+          <span className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
             <Layers className="w-4 h-4 text-indigo-400" />
             1. Isolationslevel wählen:
-          </label>
+          </span>
           <div className="grid grid-cols-2 gap-2">
             {Object.values(ISOLATION_LEVELS).map((lvl) => {
               const isSelected = selectedLevel === lvl.id;
@@ -81,7 +81,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
                   onClick={() => { setSelectedLevel(lvl.id); handleReset(); }}
                   className={`p-3 rounded-lg text-left border transition-all text-xs ${
                     isSelected
-                      ? 'bg-indigo-600/30 border-indigo-500 text-white font-medium shadow-md shadow-indigo-900/20'
+                      ? 'bg-indigo-600/30 border-indigo-500 text-slate-50 font-medium shadow-md shadow-indigo-900/20'
                       : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                   }`}
                 >
@@ -95,10 +95,10 @@ export default function SqlIsolationLab({ onAwardXP }) {
 
         {/* Anomalie wählen */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <label className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
+          <span className="text-sm font-semibold text-slate-300 flex items-center gap-2 mb-3">
             <ShieldAlert className="w-4 h-4 text-amber-400" />
             2. Transaktions-Anomalie testen:
-          </label>
+          </span>
           <div className="grid grid-cols-2 gap-2">
             {Object.values(ANOMALIES).map((anom) => {
               const isSelected = selectedAnomaly === anom.id;
@@ -109,7 +109,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
                   onClick={() => { setSelectedAnomaly(anom.id); handleReset(); }}
                   className={`p-3 rounded-lg text-left border transition-all text-xs ${
                     isSelected
-                      ? 'bg-amber-600/30 border-amber-500 text-white font-medium shadow-md shadow-amber-900/20'
+                      ? 'bg-amber-600/30 border-amber-500 text-slate-50 font-medium shadow-md shadow-amber-900/20'
                       : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                   }`}
                 >
@@ -133,7 +133,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
               <Play className="w-5 h-5" />
             </span>
             <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
                 <span>{currentAnomaly.title}</span>
                 <span className="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono font-normal">
                   Schritt {activeStep + 1} von {currentAnomaly.scenario.length}
@@ -144,7 +144,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
           </div>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-400 hover:text-slate-50 bg-slate-800 hover:bg-slate-700 rounded-lg transition"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Neustart</span>
@@ -170,7 +170,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
                     <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                      isPast ? 'bg-emerald-500 text-slate-950' : isCurrent ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-500'
+                      isPast ? 'bg-emerald-500 text-black' : isCurrent ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-500'
                     }`}>
                       {isPast ? '✓' : idx + 1}
                     </span>
@@ -251,7 +251,7 @@ export default function SqlIsolationLab({ onAwardXP }) {
 
       {/* IHK Prüfungsmatrix (Tabelle) */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-3">
+        <h3 className="text-sm font-bold text-slate-50 flex items-center gap-2 mb-3">
           <Info className="w-4 h-4 text-indigo-400" />
           IHK Prüfungs-Matrix: ANSI SQL Isolation Levels vs. Anomalien
         </h3>
@@ -268,28 +268,28 @@ export default function SqlIsolationLab({ onAwardXP }) {
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
               <tr>
-                <td className="py-2.5 px-3 font-mono font-medium text-white">Read Uncommitted</td>
+                <td className="py-2.5 px-3 font-mono font-medium text-slate-50">Read Uncommitted</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
               </tr>
               <tr>
-                <td className="py-2.5 px-3 font-mono font-medium text-white">Read Committed (Default)</td>
+                <td className="py-2.5 px-3 font-mono font-medium text-slate-50">Read Committed (Default)</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
               </tr>
               <tr>
-                <td className="py-2.5 px-3 font-mono font-medium text-white">Repeatable Read</td>
+                <td className="py-2.5 px-3 font-mono font-medium text-slate-50">Repeatable Read</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓ (MVCC)</td>
                 <td className="py-2.5 px-3 text-rose-400 font-medium">Möglich ⚠️</td>
               </tr>
               <tr>
-                <td className="py-2.5 px-3 font-mono font-medium text-white">Serializable (SSI)</td>
+                <td className="py-2.5 px-3 font-mono font-medium text-slate-50">Serializable (SSI)</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>
                 <td className="py-2.5 px-3 text-emerald-400 font-medium">Verhindert ✓</td>

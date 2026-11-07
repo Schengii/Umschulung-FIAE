@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal, CheckCircle2 } from 'lucide-react';
 
 export default function CliTerminalLab({ onCompleteGame }) {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   const [history, setHistory] = useState([
     { type: 'output', text: 'Willkommen im IT-DevGame Terminal Simulator v1.0' },
     { type: 'output', text: 'Tippe "help" für eine Übersicht verfügbarer Befehle.' }
@@ -83,7 +87,7 @@ export default function CliTerminalLab({ onCompleteGame }) {
         <strong style={{ fontSize: '0.9rem', color: 'var(--text-main)', display: 'block', marginBottom: '8px' }}>
           🎯 Terminal-Übungsaufgaben:
         </strong>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '8px' }}>
           {tasks.map(t => {
             const isDone = completedTasks.includes(t.id);
             return (
@@ -97,17 +101,17 @@ export default function CliTerminalLab({ onCompleteGame }) {
       </div>
 
       {/* Interactive Terminal Window */}
-      <div style={{ background: '#0f172a', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid #334155' }}>
-        <div style={{ background: '#1e293b', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid #334155' }}>
+        <div style={{ background: 'var(--bg-card-hover)', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444' }}></div>
           <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b' }}></div>
           <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981' }}></div>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8', marginLeft: '8px', fontFamily: 'var(--font-code)' }}>bash - dev@it-system:~</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginLeft: '8px', fontFamily: 'var(--font-code)' }}>bash - dev@it-system:~</span>
         </div>
 
-        <div style={{ padding: '20px', minHeight: '260px', maxHeight: '350px', overflowY: 'auto', fontFamily: 'var(--font-code)', fontSize: '0.92rem', color: '#f8fafc', lineHeight: '1.6' }}>
+        <div style={{ padding: '20px', minHeight: '260px', maxHeight: '350px', overflowY: 'auto', fontFamily: 'var(--font-code)', fontSize: '0.92rem', color: 'var(--text-main)', lineHeight: '1.6' }}>
           {history.map((item, idx) => (
-            <div key={idx} style={{ color: item.type === 'input' ? '#818cf8' : '#cbd5e1', whiteSpace: 'pre-wrap' }}>
+            <div key={idx} style={{ color: item.type === 'input' ? 'var(--accent-primary)' : 'var(--text-muted)', whiteSpace: 'pre-wrap' }}>
               {item.text}
             </div>
           ))}
@@ -127,7 +131,7 @@ export default function CliTerminalLab({ onCompleteGame }) {
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
-              autoFocus
+              ref={inputRef}
             />
           </form>
         </div>

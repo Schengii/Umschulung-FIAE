@@ -134,7 +134,7 @@ export default function DockerComposeLab({ onRewardXP }) {
 
       {/* Main Content Area based on Tab */}
       {activeTab === 'orchestrator' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {/* Services List & DAG */}
           <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
             <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -194,7 +194,7 @@ export default function DockerComposeLab({ onRewardXP }) {
             </h2>
 
             <div style={{
-              background: '#0d1117',
+              background: 'var(--bg-secondary)',
               color: '#38ef7d',
               padding: '16px',
               borderRadius: 'var(--radius-md)',
@@ -240,12 +240,12 @@ export default function DockerComposeLab({ onRewardXP }) {
             Prüfe, ob zwei Container über gemeinsame Docker-Netzwerke kommunizieren können. Aus Sicherheitsgründen sollte der Web-Frontend-Container keinen direkten Netzwerkzugriff auf die interne Datenbank haben!
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
+              <label htmlFor="docker-compose-lab-1" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
                 Quell-Container (From)
               </label>
-              <select
+              <select id="docker-compose-lab-1"
                 value={selectedPingFrom}
                 onChange={(e) => setSelectedPingFrom(e.target.value)}
                 style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
@@ -257,10 +257,10 @@ export default function DockerComposeLab({ onRewardXP }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
+              <label htmlFor="docker-compose-lab-2" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '6px' }}>
                 Ziel-Container (To)
               </label>
-              <select
+              <select id="docker-compose-lab-2"
                 value={selectedPingTo}
                 onChange={(e) => setSelectedPingTo(e.target.value)}
                 style={{ width: '100%', padding: '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-main)' }}
@@ -318,7 +318,7 @@ export default function DockerComposeLab({ onRewardXP }) {
             Generierte docker-compose.yml
           </h2>
           <pre style={{
-            background: '#0d1117',
+            background: 'var(--bg-secondary)',
             color: '#e6edf3',
             padding: '20px',
             borderRadius: 'var(--radius-md)',

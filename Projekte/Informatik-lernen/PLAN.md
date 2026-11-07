@@ -1,110 +1,115 @@
-# Umsetzungsplan (PLAN.md) – Informatik-lernen (IT-DevGame)
+# Umsetzungsplan (PLAN.md) – Informatik-lernen
 
-## 1. Ist-Zustand (max. 10 Zeilen)
-1. Tech-Stack: React 19.3, Vite 8.3 (Rolldown), Zustand 5.0, TailwindCSS 4, Oxlint 1.87, Vitest 5.0, Playwright 1.64.
-2. Umfang & Chunks: 235 Lab-Komponenten, PWA-Service-Worker, Vendor-Chunk-Splitting (React, UI, Charts, PDF, SQL) unterhalb aller Size-Limits (Shell 78.6 KB / 105 KB Budget).
-3. Test-Suite: `npm test` (1.895 Tests, 211 Testdateien), `npm run typecheck` und `npm run build` laufen fehlerfrei durch.
-4. CI-Bruch: `npm run lint:ci` scheitert hart (Exit-Code 1) an 28 Oxlint-Warnungen (`set-state-in-effect`, `react(purity)`, `react(immutability)`, `react(refs)`).
-5. Coverage-Grenzlage: Statements 62,05% (Limit 60%), Branches 53,49% (Limit 52%), Functions 47,4% (Limit 45%), Lines 63,62% (Limit 62%).
-6. Kritischer UI-Bug: `BadgesModal` stürzt beim Öffnen wegen fehlender `userState`-Prop-Übergabe in `ModalContainer.jsx` mit uncaught TypeError ab.
-7. Gamification-Lücken: `FlashcardsModal` vergibt keine XP (fehlende Prop), 40+ Lab-Mastery-Badges fehlen im `BADGES`-Katalog, `Sm2SpacedRepetitionLab` hat abgetrennten State & Endlos-XP.
-8. Broken Assets: `pushNotificationManager.js` referenziert nicht existierende `/pwa-192x192.png` Icons (404-Netzwerkfehler).
-9. Architektur & Kopplung: Mehrere Labs (`IhkCheatSheetPdfGenerator`, `LinuxMemoryLab`, `ZkpCryptoVisualizerLab`) brechen die Entkopplung durch direkten Store-Import.
-10. Sicherheit & A11y: Gute Basis (0 `dangerouslySetInnerHTML`), jedoch fehlende Worker-Scope-Sperren (Wasm/SAB) und fehlende Modal-Focus-Traps.
+Stand der Analyse: 2026-11-01, Version 3.79.0, Branch `main` (Commit `91d6523`).
+PLAN.md ist ab jetzt die einzige Arbeitsgrundlage für Umsetzung und Tests.
+
+---
+
+## 1. Ist-Zustand (gemessen am 2026-11-01)
+
+1. Stack & Umfang: React 19, Vite 8 (Rolldown), Zustand 5, Vitest 5, Playwright 1.64, Oxlint 1.88, Tailwind CSS v4, PWA; 252 Labs in `src/components/Content/`, 178 `*Engine.js`-Module in `src/utils/`, 24 Fachartikel in `src/data/topics/`.
+2. Lint & Typen: `npm run lint:ci` (Oxlint) 0 Fehler, 0 Warnungen auf 775 Dateien (182 ms); `npm run typecheck` (`tsc --noEmit`) 0 Fehler.
+3. Unit-Tests & Engines: `npm run test:fast` 232 Dateien / 1508 Tests grün (24 s); `npm run test:coverage` 236 Dateien / 2228 Tests grün (118 s); alle Engines isoliert getestet.
+4. Coverage: Statements 64.23% (Schwelle 63%), Branches 55.67% (54.5%), Functions 48.86% (47.5%), Lines 65.75% (64.5%); Engine-Schwellen (85% Lines / 70% Branches / 90% Functions) übererfüllt.
+5. Bundle-Limits: `npm run size` erfüllt alle 6 Budgets (App-Shell 81.4 KB / 105 KB, React/Router/Zustand 64.4 KB / 70 KB, UI 64.8 KB / 70 KB, PDF 175.0 KB / 190 KB).
+6. E2E-Tests: `npx playwright test --workers=2` 55/55 Tests grün in 1.2 m; bei unbegrenzter Parallelität lokal OOM-/Timeout-Gefahr sowie Port-Kollision bei bereits belegtem Port 4173 (`reuseExistingServer: !process.env.CI`).
+7. PWA & Caching: `npm run build` in 2.4 s; Service-Worker-Precache umfasst 410 Chunks mit 4606 KiB (große Vendor-Chunks sind per globIgnores im Runtime-Cache, 229 Lab-Chunks liegen im Precache).
+8. Sicherheit & CSP: `npm audit --omit=dev --omit=optional --audit-level=high` 0 Funde in Produktion; 19 Funde in Dev-Dependencies (`deepmerge`/`workbox-build`, `minimatch`); alasql läuft in isoliertem Web Worker mit eigener CSP.
+9. Barrierefreiheit (A11y): `allLabsA11y.test.jsx` 234 Tests grün; E2E-A11y klammert `color-contrast` aus (`KNOWN_DESIGN_DEBT_RULES`); `scripts/ui-audit.js` misst Handy-Überlauf und Kontrast.
+10. Dokumentation & DX: `CLAUDE.md` und `README.md` enthalten veraltete Test-Zahlen (1998 Tests, 43 E2E); `scripts/new-lab.js` und modularisierte Datenstrukturen funktionieren konsistent.
 
 ---
 
 ## 2. Maßnahmen
 
-### Phase 1: CI-Pipeline & Oxlint-Bereinigung (Abhängigkeiten zuerst)
-- [x] M01 | Oxlint-Warnung react(immutability) in ServiceMeshLab beheben | P1 | S | `src/components/Content/ServiceMeshLab.jsx` | src/components/Content/ServiceMeshLab.jsx:34 | Fertig wenn: `mesh` per `useRef` verwaltet wird, keine direkte Mutation auf `useState`-Werten erfolgt und `npm run lint:ci` fehlerfrei durchläuft.
-- [x] M02 | Oxlint-Warnungen react(refs) und set-state-in-effect in LinuxMemoryLab beheben | P1 | S | `src/components/Content/LinuxMemoryLab.jsx` | src/components/Content/LinuxMemoryLab.jsx:20, src/components/Content/LinuxMemoryLab.jsx:34, src/components/Content/LinuxMemoryLab.jsx:48 | Fertig wenn: Simulator per Lazy-State `useState(() => new LinuxMemorySimulator(4096, 2048))` initialisiert wird, kein Ref-Lesezugriff im Render erfolgt und `npm run lint:ci` fehlerfrei durchläuft.
-- [x] M03 | Oxlint-Warnung react(set-state-in-effect) in SqliteWasmStudioLab beheben | P1 | S | `src/components/Content/SqliteWasmStudioLab.jsx` | src/components/Content/SqliteWasmStudioLab.jsx:24 | Fertig wenn: Initialisierung von `SqlSandboxInstance` ohne synchronen `setState`-Aufruf im `useEffect` erfolgt und `npm run lint:ci` keine Warnung ausgibt.
-- [x] M04 | Oxlint-Warnung react(set-state-in-effect) in CustomChallengeCreatorLab beheben | P1 | S | `src/components/Content/CustomChallengeCreatorLab.jsx` | src/components/Content/CustomChallengeCreatorLab.jsx:42 | Fertig wenn: `customList` über Lazy-Initializer `useState(() => getStoredCustomChallenges())` initialisiert wird, der leere `useEffect` entfällt und `npm run lint:ci` fehlerfrei ist.
-- [x] M05 | Oxlint-Warnung react(set-state-in-effect) in ExamCountdownWidget beheben | P1 | S | `src/components/Gamification/ExamCountdownWidget.jsx` | src/components/Gamification/ExamCountdownWidget.jsx:36 | Fertig wenn: `daysRemaining` als abgeleiteter Wert über `useMemo` berechnet wird, der synchrone `useEffect` entfällt und `npm run lint:ci` sauber durchläuft.
-- [x] M06 | Oxlint-Warnungen react(set-state-in-effect) in IhkOralExamSimulator und ExamSimulator beheben | P1 | S | `src/components/Content/IhkOralExamSimulator.jsx`, `src/components/Content/ExamSimulator.jsx` | src/components/Content/IhkOralExamSimulator.jsx:88, src/components/Content/ExamSimulator.jsx:87 | Fertig wenn: Timer-Ablauf im Interval-Callback (`prev <= 1`) behandelt wird statt synchronem `setState` im Effect und `npm run lint:ci` fehlerfrei ist.
-- [x] M07 | Oxlint-Warnungen react(set-state-in-effect) in CommandPaletteModal und PomodoroTimerWidget beheben | P1 | S | `src/components/Navigation/CommandPaletteModal.jsx`, `src/components/Navigation/PomodoroTimerWidget.jsx` | src/components/Navigation/CommandPaletteModal.jsx:22, src/components/Navigation/PomodoroTimerWidget.jsx:25 | Fertig wenn: Reset-Operationen beim Öffnen über Key-Wechsel oder Event-Handler gesteuert werden und `npm run lint:ci` grün ist.
-- [x] M08 | Oxlint-Warnungen react(set-state-in-effect) in ZkpCryptoVisualizerLab und P2pQuizDuellLab beheben | P1 | S | `src/components/Content/ZkpCryptoVisualizerLab.jsx`, `src/components/Content/P2pQuizDuellLab.jsx` | src/components/Content/ZkpCryptoVisualizerLab.jsx:24, src/components/Content/P2pQuizDuellLab.jsx:90 | Fertig wenn: Zustandsübergänge bei Schrittwechseln in Event-Handlern erfolgen und `npm run lint:ci` fehlerfrei durchläuft.
-- [x] M09 | Oxlint-Warnungen react(purity) bei Datumsaufrufen im Render beheben | P1 | S | `src/components/Footer/DsgvoFooterModal.jsx`, `src/components/Gamification/CertificateModal.jsx`, `src/components/Gamification/ActivityHeatmapWidget.jsx`, `src/components/Content/ExamReadinessLab.jsx`, `src/components/Content/OauthRevocationIntrospectionLab.jsx` | src/components/Footer/DsgvoFooterModal.jsx:168, src/components/Gamification/CertificateModal.jsx:8, src/components/Gamification/ActivityHeatmapWidget.jsx:12, src/components/Content/ExamReadinessLab.jsx:17, src/components/Content/OauthRevocationIntrospectionLab.jsx:148 | Fertig wenn: `new Date()` und `Date.now()` außerhalb der Render-Funktion, per Lazy-Initializer oder per `useMemo` gecacht werden und `npm run lint:ci` 0 Warnungen meldet.
+### Phase 1: CI, E2E & Developer Experience (Grundlage für Tests & Stabilität)
 
-### Phase 2: Kritische Bugfixes, Modals & Gamification-Korrekturen
-- [x] M10 | BadgesModal Absturz durch fehlendes userState-Prop in ModalContainer beheben | P1 | S | `src/components/Navigation/ModalContainer.jsx` | src/components/Navigation/ModalContainer.jsx:96 | Fertig wenn: `userState={userState}` an `BadgesModal` übergeben wird und das Modal beim Öffnen ohne TypeError rendert.
-- [x] M11 | FlashcardsModal XP-Vergabe durch Weiterleitung von onRewardXP aktivieren | P1 | S | `src/components/Navigation/ModalContainer.jsx` | src/components/Navigation/ModalContainer.jsx:132-135 | Fertig wenn: `onRewardXP={awardXP}` an `FlashcardsModal` übergeben wird und Nutzer beim Lernen von Flashcards verifizierbar XP erhalten.
-- [x] M12 | 404-Asset-Fehler in PushNotificationManager bereinigen | P1 | S | `src/utils/pushNotificationManager.js` | src/utils/pushNotificationManager.js:38, src/utils/pushNotificationManager.js:39, src/utils/pushNotificationManager.js:57 | Fertig wenn: Nicht existente `/pwa-192x192.png` Pfade durch `/favicon.svg` oder vorhandene statische Icons ersetzt sind und keine 404-Fehler in der Konsole auftreten.
-- [x] M13 | Toten Code addXP in WISO-Labs entfernen | P2 | S | `src/components/Content/WisoPaymentMethodsLab.jsx`, `src/components/Content/WisoBookkeepingLab.jsx`, `src/components/Content/WisoBabLab.jsx` | src/components/Content/WisoPaymentMethodsLab.jsx:16, src/components/Content/WisoBookkeepingLab.jsx:17, src/components/Content/WisoBabLab.jsx:18 | Fertig wenn: Der Aufruf `const addXP = useStore((s) => s.addXP);` rückstandslos entfernt ist und keine nicht existenten Store-Methoden referenziert werden.
-- [x] M14 | Lab-Mastery-Badges in globaler BADGES-Tabelle registrieren | P2 | M | `src/utils/storage.js` | src/utils/storage.js:360-374, src/data/labRegistry.js:17-68 | Fertig wenn: Alle in `labRegistry.js` vergebenen Badges (`stp_rstp_master`, `bpmn_process_master`, `struktogramm_master`, etc.) in `BADGES` definiert sind und im `BadgesModal` angezeigt werden.
-- [x] M15 | Sm2SpacedRepetitionLab an zentralen Store anbinden und Endlos-XP deckeln | P2 | M | `src/components/Content/Sm2SpacedRepetitionLab.jsx` | src/components/Content/Sm2SpacedRepetitionLab.jsx:41, src/components/Content/Sm2SpacedRepetitionLab.jsx:64 | Fertig wenn: Karten-Updates mit `userState.srsFlashcards` synchronisiert werden und XP nur einmalig bzw. nach Fälligkeit vergeben werden.
+- [x] M01 | Playwright reuseExistingServer absichern oder Port-Kollision abfangen | P1 | S | playwright.config.js | playwright.config.js:29 | Fertig wenn: E2E-Suite startet immer den verifizierten lokalen Build und greift nicht unbemerkt auf fremde Prozesse auf Port 4173 zu; e2e läuft isoliert grün.
+- [x] M02 | Playwright Worker-Standardbegrenzung konfigurieren gegen OOM und Timeouts | P1 | S | playwright.config.js | playwright.config.js:9 | Fertig wenn: playwright.config.js begrenzt workers (z. B. auf 2 oder CI-gerecht), sodass npx playwright test ohne CLI-Flags lokal und im CI ohne Speicherabbruch (OOM) durchläuft.
+- [x] M03 | UI-Audit Lifecycle automatisieren (Startet lokalen Preview-Server falls inaktiv) | P2 | S | scripts/ui-audit.js, package.json | scripts/ui-audit.js:17, package.json:24 | Fertig wenn: npm run audit:ui ohne vorheriges manuelles Starten eines zweiten Terminals auf localhost:4173 durchläuft oder saubere Fehlermeldung ausgibt.
+- [x] M04 | Vitest Coverage-Schwellen auf aktuellen Ist-Stand anheben | P2 | S | vite.config.js | vite.config.js:165-168 | Fertig wenn: statements auf 64%, branches auf 55%, functions auf 48.5%, lines auf 65.5% angehoben sind und npm run test:coverage grün durchläuft.
 
-### Phase 3: Komponenten-Entkopplung & Architektur-Standards
-- [x] M16 | IhkCheatSheetPdfGenerator entkoppeln und in labRegistry.js registrieren | P2 | S | `src/components/Content/IhkCheatSheetPdfGenerator.jsx`, `src/data/labRegistry.js` | src/components/Content/IhkCheatSheetPdfGenerator.jsx:8, src/components/Content/IhkCheatSheetPdfGenerator.jsx:122, src/data/labRegistry.js:109-111 | Fertig wenn: Die Komponente `onRewardXP` als Prop entgegennimmt, direkter `useStore`-Import entfällt und in `labRegistry.js` `xp: { prop: 'onRewardXP', badge: 'exam_passed' }` hinterlegt ist.
-- [x] M17 | LinuxMemoryLab und ZkpCryptoVisualizerLab vollständig über Props entkoppeln | P2 | S | `src/components/Content/LinuxMemoryLab.jsx`, `src/components/Content/ZkpCryptoVisualizerLab.jsx` | src/components/Content/LinuxMemoryLab.jsx:8, src/components/Content/LinuxMemoryLab.jsx:43, src/components/Content/ZkpCryptoVisualizerLab.jsx:11, src/components/Content/ZkpCryptoVisualizerLab.jsx:28 | Fertig wenn: Direkte `useStore`- und `awardXP`-Importe entfallen und XP-Vergaben ausschließlich über die Props `onRewardXP` laufen.
-- [x] M18 | Lernfeld-Mapping-Heuristik aus UI in ihkWeaknessAuditEngine auslagern | P2 | M | `src/components/Content/IhkWeaknessAuditLab.jsx`, `src/utils/ihkWeaknessAuditEngine.js` | src/components/Content/IhkWeaknessAuditLab.jsx:23-45, src/utils/ihkWeaknessAuditEngine.js:34 | Fertig wenn: `mapQuestionToLernfeld` als reine Engine-Funktion nach `ihkWeaknessAuditEngine.js` migriert ist und sowohl `question` als auch `frage` unterstützt.
+### Phase 2: Sicherheit & Abhängigkeiten
 
-### Phase 4: Sicherheit, Performance & Barrierefreiheit (WCAG 2.1 AA)
-- [x] M19 | Worker Sandbox Scope Lockdown um WebAssembly und SharedArrayBuffer härten | P2 | S | `src/utils/sandboxEvaluator.js` | src/utils/sandboxEvaluator.js:121-125 | Fertig wenn: `WebAssembly` und `SharedArrayBuffer` in `BLOCKED_WORKER_GLOBALS` eingetragen sind und fremder Code in der Sandbox keinen Zugriff darauf hat.
-- [x] M20 | Date.now() Performance-Hotspot in Token-Rendering Schleife eliminieren | P2 | S | `src/components/Content/OauthRevocationIntrospectionLab.jsx` | src/components/Content/OauthRevocationIntrospectionLab.jsx:148 | Fertig wenn: Der aktuelle Zeitstempel vor der Schleife einmalig bestimmt wird und nicht pro Token neu aufgerufen wird.
-- [x] M21 | Semantische ARIA-Attribute und Modal-Rollen für BadgesModal und FlashcardsModal ergänzen | P2 | S | `src/components/Gamification/BadgesModal.jsx`, `src/components/Gamification/FlashcardsModal.jsx` | src/components/Gamification/BadgesModal.jsx:23, src/components/Gamification/FlashcardsModal.jsx:106 | Fertig wenn: Beide Modale `role="dialog"`, `aria-modal="true"`, `aria-labelledby` besitzen und per Tastatur (Escape) schließbar sind.
+- [x] M05 | npm audit Warnungen in Dev-Dependencies (deepmerge / minimatch) beheben | P2 | M | package.json, package-lock.json | package.json:90, npm audit: 19 Funde (deepmerge in vite-plugin-pwa, minimatch in vitest-Tools) | Fertig wenn: npm audit --audit-level=moderate 0 Schwachstellen meldet oder Overrides sauber in package.json dokumentiert sind ohne Breaking Changes.
+- [x] M06 | E2E-CSP-Abdeckung auf Wissensartikel (/topic/:id) ausweiten | P2 | S | e2e/csp.spec.js | e2e/csp.spec.js:20, src/components/Topics/TopicReader.jsx:1 | Fertig wenn: Neuer Test in e2e/csp.spec.js verifiziert, dass Wissensartikel unter CSP fehlerfrei laden und 0 CSP-Verstöße in der Browser-Konsole werfen.
 
-### Phase 5: Testabdeckung, CI & Dokumentation
-- [x] M22 | Isolierte Unit-Tests für pushNotificationManager.js ergänzen | P2 | S | `src/utils/pushNotificationManager.test.js` | src/utils/pushNotificationManager.test.js:1-20 | Fertig wenn: Test-Suite `scheduleDailyReminder`, Notification-Fallback und Service-Worker-Zweig mockt und abdeckt.
-- [x] M23 | Isolierte Test-Suite für FlashcardsModal SM-2 Sortierung erstellen | P2 | S | `src/components/Gamification/FlashcardsModal.test.jsx` | src/components/Gamification/FlashcardsModal.jsx:18-35 | Fertig wenn: Fälligkeits-Priorisierung, Sortierung nach `dueDate` und TSV-Download isoliert getestet sind.
-- [x] M24 | Unit-Tests für mapQuestionToLernfeld in ihkWeaknessAuditEngine.test.js anlegen | P2 | S | `src/utils/ihkWeaknessAuditEngine.test.js` | src/utils/ihkWeaknessAuditEngine.test.js:1-35 | Fertig wenn: Alle 12 Lernfelder sowie Randfälle (fehlende Kategorie, Drill-Format mit `frage`) isoliert getestet sind.
-- [x] M25 | Dokumentation von Badges und PWA-Assets in README.md & CHANGELOG.md angleichen | P3 | S | `README.md`, `CHANGELOG.md` | README.md:33, CHANGELOG.md:1-25 | Fertig wenn: Badge-Übersicht, Lab-Gesamtzahl (235) und behobene Modals im Keep-a-Changelog Format dokumentiert sind.
+### Phase 3: Codequalität & Architektur (Dünne Labs nach CLAUDE.md-Standard ausbauen)
 
-### Optional (Ideen ohne Beleg im Projektcode)
-- [ ] M26 | (Optional) Offline-Background-Sync via Service Worker Push API | P3 | L | `src/main.jsx` | - | Fertig wenn: Ein echter Web-Push-Service mit Backend-Subscription angebunden ist.
-- [ ] M27 | (Optional) Multi-User WebRTC P2P-Turniere mit externem STUN/TURN Signaling | P3 | L | `src/components/Content/P2pQuizDuellLab.jsx` | - | Fertig wenn: Echte Multi-Client-Turniere über Internet-Grenzen hinweg spielbar sind.
+- [ ] M07 | DockerLab ausbauen (Engine, interaktive Validierung und Drill-Sektion) | P2 | M | src/components/Content/DockerLab.jsx, src/utils/dockerEngine.js, src/utils/dockerEngine.test.js | src/components/Content/DockerLab.jsx:1 | Fertig wenn: Dockerfile/Compose-Syntax per neuer dockerEngine validiert wird, XP-Vergabe integriert ist, dockerEngine.test.js > 85% Line-Coverage hat und DockerLab interaktiv ist.
+- [ ] M08 | KubernetesLab ausbauen (Engine, Manifest-Simulator und Drill-Sektion) | P2 | M | src/components/Content/KubernetesLab.jsx, src/utils/kubernetesEngine.js, src/utils/kubernetesEngine.test.js | src/components/Content/KubernetesLab.jsx:1 | Fertig wenn: K8s YAML-Ressourcen (Deployment/Service) per kubernetesEngine geprüft werden, Aufgaben/XP vorhanden sind und Engine > 85% Line-Coverage erreicht.
+- [ ] M09 | WebSocketsLab ausbauen (Engine für Frame-Parsing und Verbindungs-State-Machine) | P2 | M | src/components/Content/WebSocketsLab.jsx, src/utils/webSocketsEngine.js, src/utils/webSocketsEngine.test.js | src/components/Content/WebSocketsLab.jsx:1 | Fertig wenn: WebSocket-Handshake und Frame-Aufbau (Opcode, Masking, Payload) interaktiv simuliert werden und Unit-Tests für die Engine grün sind.
+- [ ] M10 | OAuthOidcLab vertiefen (PKCE-, Code-Exchange- und Token-State-Engine) | P2 | M | src/components/Content/OAuthOidcLab.jsx, src/utils/oauthOidcEngine.js, src/utils/oauthOidcEngine.test.js | src/components/Content/OAuthOidcLab.jsx:1 | Fertig wenn: Autorisierungs-Flows (Auth Code + PKCE, Refresh Flow) mit simulierten Token-Payloads validiert werden und Engine-Coverage > 85% beträgt.
+- [ ] M11 | CloudDevOpsLab um Architektur-Simulator und Pipeline-Engine erweitern | P2 | M | src/components/Content/CloudDevOpsLab.jsx, src/utils/cloudDevOpsEngine.js, src/utils/cloudDevOpsEngine.test.js | src/components/Content/CloudDevOpsLab.jsx:1 | Fertig wenn: CI/CD- und Multi-Cloud-Topologien interaktiv konfiguriert und validiert werden inkl. vollständiger Engine-Unit-Tests.
+- [ ] M12 | Lab-Katalog-Daten synchronisieren und Metadaten-Integrität testen | P3 | S | src/data/labRegistry.js, src/data/labModulesData.js, src/data/labModules/\*.js | src/data/labRegistry.js:1, src/data/labModulesData.js:1 | Fertig wenn: Ein automatisierter Test sicherstellt, dass alle 252 Labs in Moduldaten und Registry konsistente IDs, Kategorien und Routen besitzen.
+
+### Phase 4: Barrierefreiheit & Design-System
+
+- [x] M13 | Farbkontraste für Kern-Routen auditieren und WCAG AA (4.5:1 / 3:1) herstellen | P2 | L | src/styles/global.css, e2e/accessibility.spec.js | e2e/accessibility.spec.js:34, src/styles/global.css:25 | Fertig wenn: KNOWN_DESIGN_DEBT_RULES auf mindestens den 5 Haupt-Dashboards (Home, Labs, Wissensbereich, Leaderboard, Einstellungen) ohne color-contrast-Ausnahme grün durchläuft.
+- [x] M14 | E2E-Mobile-Layout-Regressionstest auf alle neuen Labs erweitern | P2 | S | e2e/mobile-layout.spec.js | e2e/mobile-layout.spec.js:20, scripts/ui-audit.js:18 | Fertig wenn: e2e/mobile-layout.spec.js stichprobenartig alle Lab-Kategorien bei 375 px Viewport prüft und 0 horizontale Überläufe feststellt.
+- [x] M15 | TopicReader Tastatur-Fokus, Scroll-Spys und Skip-Links barrierefrei absichern | P3 | S | src/components/Topics/TopicReader.jsx | src/components/Topics/TopicReader.jsx:1 | Fertig wenn: Inhaltsverzeichnis und Markdown-Überschriften per Tab erreichbar sind, aktive Abschnitte per aria-current signalisiert werden und axe-core 0 Fehler meldet.
+
+### Phase 5: Performance & PWA
+
+- [x] M16 | PWA-Precache optimieren: Kern-Labs im Precache vs. On-Demand-Labs im Runtime-Cache | P2 | M | vite.config.js | vite.config.js:50-52, dist Build: 4606 KiB Precache (410 entries) | Fertig wenn: Precache auf < 2.5 MB gesenkt ist, während Offline-Kern-Funktionalität und e2e/pwa-offline.spec.js fehlerfrei bleiben.
+- [x] M17 | SVGs im Wissensbereich auf Dateigröße und Barrierefreiheit (title/desc) prüfen | P3 | S | src/assets/topics/\*.svg | src/assets/topics/ (25 SVG-Dateien) | Fertig wenn: Alle Topic-SVGs über svgo komprimiert sind, integrierte <title>-Tags für Screenreader besitzen und keine ungenutzten Metadaten enthalten.
+
+### Phase 6: Dokumentation & CI
+
+- [x] M18 | Dokumentation der Testanzahl, E2E-Fälle und Coverage in README und CLAUDE.md aktualisieren | P3 | S | README.md, CLAUDE.md | CLAUDE.md:32, README.md:161 | Fertig wenn: Alle Doku-Angaben exakt mit den gemessenen Zahlen (2228 Unit-Tests, 55 E2E-Tests, 252 Labs, 178 Engines) übereinstimmen.
+- [x] M19 | GitHub Actions Workflow SHA-Pinning und Dependency-Cache auditieren | P3 | S | .github/workflows/ci.yml | .github/workflows/ci.yml:13 | Fertig wenn: Alle Actions auf gültigen 40-Zeichen Full-SHAs fixiert sind und der CI-Run im PR ohne veraltete Node-Warnungen durchläuft.
+
+### Optional (Ideen ohne harten Beleg im Code)
+
+- [ ] M20 | Internationalisierung (i18n): Englisch-Sprachunterstützung für Kern-Labs vorbereiten | P3 | L | src/locales/ | Keine Mehrsprachigkeit angelegt | Fertig wenn: Sprachumschalter existiert und Kern-Labs mit Übersetzungsdateien geladen werden können.
+- [ ] M21 | Native Dialog-Elemente (<dialog>) anstelle von ARIA role="dialog" evaluieren | P3 | M | src/components/Modals/ | CLAUDE.md:105 (bewusster Ausschluss von prefer-tag-over-role) | Fertig wenn: Native Modale mit showModal() und polyfill ohne Regressionsrisiko für Tastaturfokus eingeführt sind.
+- [ ] M22 | WebAssembly-basierte SQLite-Engine für vollständige Offline-SQL-Ausführung evaluieren | P3 | M | src/utils/sqlSandboxEngine.js | src/utils/sqlSandboxEngine.js:1 | Fertig wenn: sqlite3-wasm als Fallback für alasql ohne eval-Worker evaluiert und getestet ist.
 
 ---
 
 ## 3. Vorgehen je Phase: Reihenfolge, Test nach jeder Phase, Rollback
 
-### Phase 1: CI-Pipeline & Oxlint-Bereinigung
-- **Reihenfolge**: M01 → M02 → M03 → M04 → M05 → M06 → M07 → M08 → M09
-- **Test nach Phase**:
-  - `npm run lint:ci` (Muss mit Exit-Code 0 und 0 Warnungen abschließen)
-  - `npm run typecheck`
-  - `npm run test:fast`
-- **Rollback**: `git checkout -- src/components/Content/ServiceMeshLab.jsx src/components/Content/LinuxMemoryLab.jsx src/components/Content/SqliteWasmStudioLab.jsx src/components/Content/CustomChallengeCreatorLab.jsx src/components/Gamification/ExamCountdownWidget.jsx src/components/Content/IhkOralExamSimulator.jsx src/components/Content/ExamSimulator.jsx src/components/Navigation/CommandPaletteModal.jsx src/components/Navigation/PomodoroTimerWidget.jsx src/components/Content/ZkpCryptoVisualizerLab.jsx src/components/Content/P2pQuizDuellLab.jsx src/components/Footer/DsgvoFooterModal.jsx src/components/Gamification/CertificateModal.jsx src/components/Gamification/ActivityHeatmapWidget.jsx src/components/Content/ExamReadinessLab.jsx src/components/Content/OauthRevocationIntrospectionLab.jsx`
+### Reihenfolge der Umsetzung
 
-### Phase 2: Kritische Bugfixes, Modals & Gamification-Korrekturen
-- **Reihenfolge**: M10 → M11 → M12 → M13 → M14 → M15
-- **Test nach Phase**:
-  - `npm test -- src/utils/storage.test.js src/utils/pushNotificationManager.test.js src/components/Content/LabsDashboard.test.jsx`
-  - Manuelle Prüfung im Browser: Öffnen von BadgesModal und FlashcardsModal (kein Absturz, XP werden gutgeschrieben)
-  - `npm run build`
-- **Rollback**: `git checkout -- src/components/Navigation/ModalContainer.jsx src/utils/pushNotificationManager.js src/components/Content/WisoPaymentMethodsLab.jsx src/components/Content/WisoBookkeepingLab.jsx src/components/Content/WisoBabLab.jsx src/utils/storage.js src/components/Content/Sm2SpacedRepetitionLab.jsx`
+1. **Phase 1 (CI, E2E & DX):** Beseitigt Flakiness in der Testausführung (Portkollisionen, Worker-Überlastung) und zieht die Coverage-Schwellen auf den Ist-Stand nach.
+2. **Phase 2 (Sicherheit & Abhängigkeiten):** Behebt Audit-Meldungen in Dev-Dependencies und erweitert den E2E-Schutz unter CSP auf den Wissensbereich.
+3. **Phase 3 (Codequalität & Architektur):** Rüstet dünne Labs mit echten Engines und Drills aus, damit alle Labs dem CLAUDE.md-Standard entsprechen.
+4. **Phase 4 (Barrierefreiheit & Design-System):** Schließt schrittweise Kontrastlücken und sichert die mobile Darstellung bei 375 px ab.
+5. **Phase 5 (Performance & PWA):** Optimiert den Precache-Umfang für schnellere PWA-Installationen und bereinigt Vektor-Assets.
+6. **Phase 6 (Dokumentation & CI):** Synchronisiert Kennzahlen in README und CLAUDE.md und prüft CI-Pipelines.
 
-### Phase 3: Komponenten-Entkopplung & Architektur-Standards
-- **Reihenfolge**: M16 → M17 → M18
-- **Test nach Phase**:
-  - `npm test -- src/utils/ihkWeaknessAuditEngine.test.js src/data/labModulesData.test.js src/components/allLabsSmoke.test.jsx`
-  - `npm run typecheck`
-- **Rollback**: `git checkout -- src/components/Content/IhkCheatSheetPdfGenerator.jsx src/data/labRegistry.js src/components/Content/LinuxMemoryLab.jsx src/components/Content/ZkpCryptoVisualizerLab.jsx src/components/Content/IhkWeaknessAuditLab.jsx src/utils/ihkWeaknessAuditEngine.js`
+### Test nach jeder Phase
 
-### Phase 4: Sicherheit, Performance & Barrierefreiheit (WCAG 2.1 AA)
-- **Reihenfolge**: M19 → M20 → M21
-- **Test nach Phase**:
-  - `npm test -- src/utils/sandboxRunner.test.js src/components/allLabsA11y.test.jsx`
-  - `npm run build && npm run size`
-- **Rollback**: `git checkout -- src/utils/sandboxEvaluator.js src/components/Content/OauthRevocationIntrospectionLab.jsx src/components/Gamification/BadgesModal.jsx src/components/Gamification/FlashcardsModal.jsx`
+Nach jeder Phase müssen alle folgenden Qualitäts-Gates lokal und im CI fehlerfrei bestanden sein:
 
-### Phase 5: Testabdeckung, CI & Dokumentation
-- **Reihenfolge**: M22 → M23 → M24 → M25
-- **Test nach Phase**:
-  - Vollständige CI-Qualitätskette: `npm run lint:ci && npm run typecheck && npm test && npm run test:coverage && npm run build && npm run size`
-  - Regression-Check: Coverage-Schwellenwerte (`statements: 60`, `branches: 52`, `functions: 45`, `lines: 62`) einhalten
-- **Rollback**: `git checkout -- src/utils/pushNotificationManager.test.js src/components/Gamification/FlashcardsModal.test.jsx src/utils/ihkWeaknessAuditEngine.test.js README.md CHANGELOG.md`
+1. `npm run lint:ci` (0 Fehler, 0 Warnungen)
+2. `npm run typecheck` (0 Fehler)
+3. `npm run test:fast` (alle schnellen Unit-Tests grün)
+4. `npm run test:coverage` (2228+ Tests grün, Schwellen eingehalten)
+5. `npm run build` (erfolgreicher Build ohne Bundle-Warnungen)
+6. `npm run size` (alle 6 Bundle-Budgets grün)
+7. `npx playwright test --workers=2` (alle E2E-Tests grün)
+
+### Rollback-Strategie
+
+- Jede Maßnahme wird in einem dedizierten Git-Branch umgesetzt.
+- Vor jedem Merge in `main` wird die vollständige Test-Kette lokal verifiziert.
+- Tritt bei der Umsetzung oder nach dem Merge eine Regression auf, die nicht innerhalb von 15 Minuten behoben werden kann, wird die Änderung via `git revert <commit-sha>` sofort zurückgerollt.
+- Für PWA-Änderungen: Bei Cache-Inkonsistenzen wird die Cache-Versionsnummer in `vite.config.js` inkrementiert, um Client-Caches zu invalidieren.
 
 ---
 
 ## 4. Risiken und offene Fragen
 
 ### Risiken
-1. **Oxlint Strict Mode vs. React 19 Hydration**: Das Beheben von `react(set-state-in-effect)` durch `useMemo` oder State-Initialisierungs-Funktionen darf keine unkontrollierten Re-Renders oder Hydration-Mismatches erzeugen.
-2. **Badges-Schema-Erweiterung in UserState**: Werden 40+ neue Badges in `BADGES` (`storage.js`) aufgenommen, muss sichergestellt sein, dass bestehende `userState.unlockedBadges`-Arrays im LocalStorage und IndexedDB kompatibel bleiben und nicht durch Validatoren verworfen werden.
-3. **Coverage-Grenzwerte in vite.config.js**: Da Functions (47,4% vs. 45% Schwelle) und Branches (53,49% vs. 52% Schwelle) sehr nah an der Abbruchgrenze liegen, muss jede neue Engine-Funktion mit isolierten Tests abgesichert werden, um den CI-Build nicht zu gefährden.
+
+1. **PWA-Precache vs. Offline-Garantie (M16):** Ein Verkleinern des Precache durch Verlagerung von Lab-Chunks in den Runtime-Cache spart initiale Download-Größe (~4.6 MB → < 2.5 MB), führt jedoch dazu, dass Labs erst nach dem ersten Online-Aufruf offline verfügbar sind.
+2. **Kontrastanpassungen vs. Dark-Mode-Design (M13):** Das Erhöhen des Kontrasts für gedämpfte Texte (`--text-muted`) von ~2.8:1 auf WCAG AA (4.5:1) verändert die visuelle Hierarchie. Muss behutsam und systemweit über CSS-Variablen erfolgen.
+3. **Parallelitäts-Timeouts bei E2E (M01, M02):** Auf unterschiedlichen Entwicklungsrechnern können zu viele parallele Playwright-Worker zu Heap-Out-of-Memory führen. Eine feste Begrenzung auf maximal 2 Worker ist Pflicht.
+4. **Dev-Dependency Overrides (M05):** Erzwungene Upgrades von Sub-Abhängigkeiten wie `deepmerge` in `workbox-build` können transitive Inkompatibilitäten im Service-Worker-Build verursachen.
 
 ### Offene Fragen
-1. **Badges-Kategorisierung**: Sollen die über 40 Lab-Badges im `BadgesModal` in Kategorien (z. B. "IHK Kernqualifikationen", "Netzwerktechnik", "Softwareentwicklung", "WISO") unterteilt werden, um die Übersichtlichkeit im Grid zu wahren?
-2. **Push-Notification PWA Service Worker**: Soll `pushNotificationManager.js` persistente Push-Subscriptions über den bereits aktiven Service Worker (`vite-plugin-pwa`) mit echten Trigger-Events nutzen, oder reicht die tab-gebundene lokale Benachrichtigung?
+
+1. **Offline-Priorität der Labs:** Sollen alle 252 Labs offline garantiert vorgehalten werden (Precache ~4.6 MB), oder nur eine definierte Auswahl der 50 beliebtesten Kern-Labs, während der Rest lazy über den StaleWhileRevalidate-Cache lädt?
+2. **Tiefe der Simulatoren in Docker/K8s (M07, M08):** Sollen die Engines echte AST/Syntax-Validierungen durchführen oder reglementierte interaktive Schritt-für-Schritt-Zustandsautomaten bieten?
+3. **Automatisierung von `audit:ui`:** Soll `scripts/ui-audit.js` als festes Quality-Gate in den CI-Workflow eingebunden werden, oder bleibt es vorerst ein lokales Entwickler-Werkzeug?

@@ -99,7 +99,7 @@ export default function WisoAbcXyzLab({ onRewardXP }) {
                     {item.xyzClass} ({item.schwankungPercent}%)
                   </span>
                 </td>
-                <td style={{ padding: '10px', color: item.matrixCode === 'AX' ? '#10b981' : 'var(--text-main)', fontWeight: item.matrixCode === 'AX' ? 'bold' : 'normal' }}>
+                <td style={{ padding: '10px', color: item.matrixCode === 'AX' ? 'var(--accent-emerald)' : 'var(--text-main)', fontWeight: item.matrixCode === 'AX' ? 'bold' : 'normal' }}>
                   {item.strategie}
                 </td>
               </tr>

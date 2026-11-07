@@ -236,7 +236,7 @@ export default function RoutingDijkstraLab({ onRewardXP }) {
 
       {/* Control Panel & Details */}
       {activeTab === 'dijkstra' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           <div className="glass-panel" style={{ padding: '20px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Play size={18} color="var(--accent-amber)" /> Dijkstra Schritt-Steuerung
@@ -244,8 +244,8 @@ export default function RoutingDijkstraLab({ onRewardXP }) {
 
             <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
               <div style={{ flex: 1 }}>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Startknoten:</label>
-                <select
+                <label htmlFor="routing-dijkstra-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Startknoten:</label>
+                <select id="routing-dijkstra-lab-1"
                   className="input-select"
                   value={startNode}
                   onChange={(e) => { setStartNode(e.target.value); setActiveStepIdx(0); }}
@@ -256,8 +256,8 @@ export default function RoutingDijkstraLab({ onRewardXP }) {
               </div>
 
               <div style={{ flex: 1 }}>
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Zielknoten:</label>
-                <select
+                <label htmlFor="routing-dijkstra-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Zielknoten:</label>
+                <select id="routing-dijkstra-lab-2"
                   className="input-select"
                   value={targetNode}
                   onChange={(e) => { setTargetNode(e.target.value); setActiveStepIdx(0); }}
@@ -322,7 +322,7 @@ export default function RoutingDijkstraLab({ onRewardXP }) {
         </div>
       ) : (
         /* STP View */
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           <div className="glass-panel" style={{ padding: '20px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <ShieldAlert size={18} color="var(--accent-rose)" /> Spanning Tree Status (IEEE 802.1D)

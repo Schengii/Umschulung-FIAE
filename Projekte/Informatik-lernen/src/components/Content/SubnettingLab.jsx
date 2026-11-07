@@ -123,12 +123,12 @@ export default function SubnettingLab({ onRewardXP }) {
       {/* CALCULATOR TAB */}
       {activeTab === 'calc' && (
         <div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
             <div>
-              <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', color: 'var(--text-main)' }}>
+              <label htmlFor="subnetting-lab-1" style={{ display: 'block', fontWeight: '700', marginBottom: '8px', color: 'var(--text-main)' }}>
                 IP-Adresse (IPv4)
               </label>
-              <input
+              <input id="subnetting-lab-1"
                 type="text"
                 value={ipAddress}
                 onChange={(e) => setIpAddress(e.target.value)}
@@ -166,7 +166,7 @@ export default function SubnettingLab({ onRewardXP }) {
                 📊 Analyse-Ergebnisse für {ipAddress}/{cidr}
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', marginBottom: '20px' }}>
                 <div style={{ padding: '12px', background: 'var(--bg-card)', borderRadius: 'var(--radius-md)' }}>
                   <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Netz-ID (Network ID)</span>
                   <div style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--accent-emerald)' }}>{result.networkId}</div>
@@ -195,7 +195,7 @@ export default function SubnettingLab({ onRewardXP }) {
 
               <div>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Binärmaske</span>
-                <code style={{ background: '#0f172a', color: '#38bdf8', padding: '8px 12px', borderRadius: 'var(--radius-md)', display: 'block', fontSize: '0.9rem' }}>
+                <code style={{ background: 'var(--bg-card)', color: 'var(--accent-cyan)', padding: '8px 12px', borderRadius: 'var(--radius-md)', display: 'block', fontSize: '0.9rem' }}>
                   {result.binaryMask}
                 </code>
               </div>

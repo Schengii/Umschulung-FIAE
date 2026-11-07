@@ -5,37 +5,48 @@ import { SqlSandboxInstance } from '../../utils/sqlSandboxEngine';
 import { soundManager } from '../../utils/audioSystem';
 import { useStore } from '../../store/useStore';
 
+const INITIAL_QUERY = `SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+ORDER BY o.total_amount DESC;`;
+
+/** Eine Sandbox-Instanz je geladener Beispiel-Datenbank, samt Startabfrage. */
+const createSession = (preset, query) => ({ sandbox: new SqlSandboxInstance(), preset, query });
+
 export default function SqliteWasmStudioLab() {
   const { awardXP } = useStore();
-  const [sandbox] = useState(() => {
-    const inst = new SqlSandboxInstance();
-    inst.loadSeed('ecommerce');
-    return inst;
-  });
-  const [schema, setSchema] = useState(() => sandbox.getSchema());
-  const [queryInput, setQueryInput] = useState(`SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
-FROM customers c
-INNER JOIN orders o ON c.id = o.customer_id
-ORDER BY o.total_amount DESC;`);
-  
-  const [queryResult, setQueryResult] = useState(() => sandbox.execute(`SELECT c.name, c.city, o.id AS order_id, o.total_amount, o.status
-FROM customers c
-INNER JOIN orders o ON c.id = o.customer_id
-ORDER BY o.total_amount DESC;`));
+  const [session, setSession] = useState(() => createSession('ecommerce', INITIAL_QUERY));
+  const { sandbox } = session;
+  const [schema, setSchema] = useState({});
+  const [queryInput, setQueryInput] = useState(INITIAL_QUERY);
+
+  const [queryResult, setQueryResult] = useState(null);
   const [activePreset, setActivePreset] = useState('ecommerce');
   const [xpClaimed, setXpClaimed] = useState(false);
 
+  // alasql läuft im Worker (asynchron): Seed laden und Startabfrage ausführen,
+  // sobald eine neue Sitzung aktiv ist. Der Cleanup räumt die alte Datenbank ab.
   useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await session.sandbox.loadSeed(session.preset);
+      const nextSchema = await session.sandbox.getSchema();
+      const res = await session.sandbox.execute(session.query);
+      if (cancelled) return;
+      setSchema(nextSchema);
+      setQueryResult(res);
+    })();
     return () => {
-      sandbox.destroy();
+      cancelled = true;
+      session.sandbox.destroy();
     };
-  }, [sandbox]);
+  }, [session]);
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     if (!sandbox) return;
-    const res = sandbox.execute(queryInput);
+    const res = await sandbox.execute(queryInput);
     setQueryResult(res);
-    setSchema(sandbox.getSchema());
+    setSchema(await sandbox.getSchema());
     if (res.success) {
       soundManager.playSFX('success');
       if (!xpClaimed) {
@@ -48,23 +59,12 @@ ORDER BY o.total_amount DESC;`));
   };
 
   const handleLoadPreset = (presetName) => {
-    if (!sandbox) return;
-    sandbox.destroy();
-    const inst = new SqlSandboxInstance();
-    inst.loadSeed(presetName);
-    setSandbox(inst);
+    const q = presetName === 'ecommerce'
+      ? `SELECT * FROM customers;`
+      : `SELECT * FROM servers WHERE status = 'ONLINE';`;
+    setSession(createSession(presetName, q));
     setActivePreset(presetName);
-    setSchema(inst.getSchema());
-
-    if (presetName === 'ecommerce') {
-      const q = `SELECT * FROM customers;`;
-      setQueryInput(q);
-      setQueryResult(inst.execute(q));
-    } else {
-      const q = `SELECT * FROM servers WHERE status = 'ONLINE';`;
-      setQueryInput(q);
-      setQueryResult(inst.execute(q));
-    }
+    setQueryInput(q);
     soundManager.playSFX('click');
   };
 
@@ -84,7 +84,7 @@ ORDER BY o.total_amount DESC;`));
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-950 via-cyan-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-blue-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-950 via-cyan-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-blue-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -118,7 +118,7 @@ ORDER BY o.total_amount DESC;`));
         {/* Schema Explorer */}
         <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <HardDrive className="w-4 h-4 text-cyan-400" />
               Tabellen-Schema
             </h2>
@@ -211,7 +211,7 @@ ORDER BY o.total_amount DESC;`));
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h3 className="text-base font-bold text-white">Ergebnis-Tabelle</h3>
+                <h3 className="text-base font-bold text-slate-50">Ergebnis-Tabelle</h3>
                 {queryResult && queryResult.success && (
                   <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-800/60">
                     {queryResult.rowCount} Zeilen ({queryResult.executionTimeMs} ms)

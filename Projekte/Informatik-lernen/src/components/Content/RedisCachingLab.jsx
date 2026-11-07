@@ -36,7 +36,7 @@ export default function RedisCachingLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(239, 68, 68, 0.15)', borderRadius: '20px', color: '#f87171', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(239, 68, 68, 0.15)', borderRadius: '20px', color: 'var(--accent-rose)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Database size={16} /> Redis In-Memory Key-Value Store & Caching Strategies
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -58,7 +58,7 @@ export default function RedisCachingLab() {
                 borderRadius: '8px',
                 border: selectedStrategyId === s.id ? '2px solid #ef4444' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
                 background: selectedStrategyId === s.id ? 'rgba(239, 68, 68, 0.2)' : 'var(--card-bg, #1e293b)',
-                color: selectedStrategyId === s.id ? '#fca5a5' : '#94a3b8',
+                color: selectedStrategyId === s.id ? 'var(--accent-rose)' : 'var(--text-dim)',
                 fontWeight: 'bold',
                 cursor: 'pointer',
                 fontSize: '0.85rem'
@@ -71,27 +71,27 @@ export default function RedisCachingLab() {
       </div>
 
       {/* Stats Bar */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))' }}>
-          <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Erwartete Cache Hit-Ratio:</div>
-          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#4ade80' }}>{strategy.hitRatio}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--border-color, var(--border-color))' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Erwartete Cache Hit-Ratio:</div>
+          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-emerald)' }}>{strategy.hitRatio}</div>
         </div>
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))' }}>
-          <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Eingesparte DB-Latenz:</div>
-          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#38bdf8' }}>{strategy.latencySaved}</div>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--border-color, var(--border-color))' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Eingesparte DB-Latenz:</div>
+          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>{strategy.latencySaved}</div>
         </div>
       </div>
 
       {/* Grid: Strategy Flow & Live Redis Memory Inspector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: Execution Flow */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fff', margin: '0 0 8px 0' }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 8px 0' }}>
               {strategy.name}
             </h2>
-            <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '16px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '16px' }}>
               {strategy.desc}
             </p>
 
@@ -108,7 +108,7 @@ export default function RedisCachingLab() {
                       borderRadius: '8px',
                       background: isCurrent ? 'rgba(239, 68, 68, 0.25)' : isPassed ? 'rgba(34, 197, 94, 0.12)' : 'rgba(255,255,255,0.03)',
                       borderLeft: isCurrent ? '4px solid #ef4444' : isPassed ? '4px solid #22c55e' : '4px solid transparent',
-                      color: isCurrent ? '#fca5a5' : isPassed ? '#86efac' : '#94a3b8',
+                      color: isCurrent ? 'var(--accent-rose)' : isPassed ? 'var(--accent-emerald)' : 'var(--text-dim)',
                       fontSize: '0.85rem',
                       fontFamily: 'monospace'
                     }}
@@ -123,7 +123,7 @@ export default function RedisCachingLab() {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={handleReset}
-              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+              style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', color: 'var(--text-main)', cursor: 'pointer' }}
             >
               <RotateCcw size={15} />
             </button>
@@ -133,8 +133,8 @@ export default function RedisCachingLab() {
                 flex: 1,
                 padding: '10px',
                 borderRadius: '8px',
-                background: isCompleted ? '#22c55e' : '#ef4444',
-                color: '#fff',
+                background: isCompleted ? 'var(--accent-emerald)' : 'var(--accent-rose)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 fontSize: '0.88rem',
                 border: 'none',
@@ -152,31 +152,31 @@ export default function RedisCachingLab() {
         </div>
 
         {/* Right: Live Redis In-Memory Table */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#fff', fontSize: '0.95rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '0.95rem' }}>
               <Server size={17} color="#ef4444" /> Redis In-Memory Keyspace (Port 6379)
             </div>
-            <span style={{ fontSize: '0.75rem', background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '0.75rem', background: 'var(--accent-rose)', color: 'var(--text-on-accent)', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
               RAM 0.8ms
             </span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {cacheMemory.map(item => (
-              <div key={item.key} style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div key={item.key} style={{ background: 'var(--bg-tertiary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <strong style={{ color: '#fca5a5', fontFamily: 'monospace', fontSize: '0.88rem' }}>{item.key}</strong>
-                  <span style={{ color: '#fbbf24', fontSize: '0.78rem', fontFamily: 'monospace' }}>TTL: {item.ttl}s</span>
+                  <strong style={{ color: 'var(--accent-rose)', fontFamily: 'monospace', fontSize: '0.88rem' }}>{item.key}</strong>
+                  <span style={{ color: 'var(--accent-amber)', fontSize: '0.78rem', fontFamily: 'monospace' }}>TTL: {item.ttl}s</span>
                 </div>
-                <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ color: 'var(--text-dim)', fontSize: '0.8rem', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {item.val}
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ marginTop: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem', color: '#94a3b8', lineHeight: '1.4' }}>
+          <div style={{ marginTop: '20px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', fontSize: '0.8rem', color: 'var(--text-dim)', lineHeight: '1.4' }}>
             💡 <strong>Eviction Policy:</strong> Wenn Redis die Speicherobergrenze (z. B. `maxmemory 4gb`) erreicht, entfernt die `allkeys-lru` Policy automatisch die am längsten ungenutzten Keys aus dem Speicher.
           </div>
         </div>

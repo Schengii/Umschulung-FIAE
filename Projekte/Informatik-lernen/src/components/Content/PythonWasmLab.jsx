@@ -50,11 +50,11 @@ export default function PythonWasmLab({ onRewardXP }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Editor */}
         <div>
           <div className="code-window" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-            <div className="code-header" style={{ background: '#1e293b', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '0.85rem' }}>
+            <div className="code-header" style={{ background: 'var(--bg-card-hover)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', color: 'var(--text-dim)', fontSize: '0.85rem' }}>
               <span>main.py</span>
               <span>Python 3.11 WASM</span>
             </div>
@@ -64,8 +64,8 @@ export default function PythonWasmLab({ onRewardXP }) {
               rows={12}
               style={{
                 width: '100%',
-                background: '#090d16',
-                color: '#38bdf8',
+                background: 'var(--bg-secondary)',
+                color: 'var(--accent-cyan)',
                 border: 'none',
                 outline: 'none',
                 padding: '16px',
@@ -93,8 +93,8 @@ export default function PythonWasmLab({ onRewardXP }) {
           </h4>
           <div
             style={{
-              background: '#0f172a',
-              color: '#38bdf8',
+              background: 'var(--bg-card)',
+              color: 'var(--accent-cyan)',
               padding: '20px',
               borderRadius: 'var(--radius-lg)',
               fontFamily: 'monospace',

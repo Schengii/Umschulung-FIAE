@@ -37,7 +37,7 @@ export default function DnsPrivacyLab() {
               </span>
               <span className="text-xs text-slate-400">DoH (RFC 8484) vs. DoT (RFC 7858)</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               DNS-over-HTTPS (DoH) & DNS-over-TLS (DoT) Privacy Inspector
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -52,7 +52,7 @@ export default function DnsPrivacyLab() {
             ) : (
               <button
                 onClick={handleTestTrigger}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition shadow"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold transition shadow"
               >
                 <Award size={14} /> 65 XP sichern
               </button>
@@ -66,25 +66,25 @@ export default function DnsPrivacyLab() {
         {/* Controls (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <Globe size={18} className="text-cyan-400" />
               DNS-Anfrage konfigurieren
             </h2>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Aufzurufende Domain (FQDN):</label>
-                <input
+                <label htmlFor="dns-privacy-lab-1" className="block text-slate-300 font-medium mb-1">Aufzurufende Domain (FQDN):</label>
+                <input id="dns-privacy-lab-1"
                   type="text"
                   value={domain}
                   onChange={(e) => setDomain(e.target.value)}
                   placeholder="z. B. www.reddit.com"
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Protokoll:</label>
+                <span className="block text-slate-300 font-medium mb-1">Protokoll:</span>
                 <div className="space-y-2">
                   {[
                     { id: 'PlainDNS', title: 'Klartext-DNS (Standard)', port: 'Port 53 / UDP' },
@@ -96,7 +96,7 @@ export default function DnsPrivacyLab() {
                       onClick={() => setProtocol(/** @type {any} */ (proto.id))}
                       className={`w-full p-3 rounded-xl border text-left flex justify-between items-center transition ${
                         protocol === proto.id
-                          ? 'bg-cyan-950/40 border-cyan-500 text-white'
+                          ? 'bg-cyan-950/40 border-cyan-500 text-slate-50'
                           : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                       }`}
                     >
@@ -157,7 +157,7 @@ export default function DnsPrivacyLab() {
                 <Terminal size={14} className="text-cyan-400" />
                 Wireshark / Sniffer Paket-Inhalt Preview:
               </span>
-              <div className="p-3 rounded-xl bg-black/90 font-mono text-[11px] text-cyan-300 border border-slate-800 overflow-x-auto">
+              <div className="p-3 rounded-xl bg-slate-950 font-mono text-[11px] text-cyan-300 border border-slate-800 overflow-x-auto">
                 {inspection.hexDumpPreview}
               </div>
             </div>

@@ -69,7 +69,7 @@ export default function VlanTrunkingLab({ onRewardXP }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.15)', color: '#c084fc' }}>
+              <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)' }}>
                 <Route size={24} />
               </div>
               <h1 style={{ margin: 0, fontSize: '1.45rem', fontWeight: '800' }}>
@@ -81,10 +81,10 @@ export default function VlanTrunkingLab({ onRewardXP }) {
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(139, 92, 246, 0.15)', color: '#c084fc' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)' }}>
               IEEE 802.1Q
             </span>
-            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
+            <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)' }}>
               +55 XP
             </span>
           </div>
@@ -98,8 +98,8 @@ export default function VlanTrunkingLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'frame' ? '#8b5cf6' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'frame' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'frame' ? 'var(--accent-purple)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'frame' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -115,8 +115,8 @@ export default function VlanTrunkingLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'switch' ? '#8b5cf6' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'switch' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'switch' ? 'var(--accent-purple)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'switch' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -132,8 +132,8 @@ export default function VlanTrunkingLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'roas' ? '#8b5cf6' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'roas' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'roas' ? 'var(--accent-purple)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'roas' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -149,8 +149,8 @@ export default function VlanTrunkingLab({ onRewardXP }) {
               padding: '8px 16px',
               borderRadius: '8px',
               border: 'none',
-              background: activeTab === 'drill' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'drill' ? '#fff' : 'var(--text-muted, #94a3b8)',
+              background: activeTab === 'drill' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+              color: activeTab === 'drill' ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
               fontWeight: '700',
               cursor: 'pointer',
               display: 'flex',
@@ -173,34 +173,34 @@ export default function VlanTrunkingLab({ onRewardXP }) {
           {/* Visuelle Bit-Aufteilung */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px', marginBottom: '24px', textAlign: 'center' }}>
             <div style={{ padding: '14px', borderRadius: '6px', background: 'rgba(99, 102, 241, 0.15)', border: '1px solid #6366f1' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#818cf8' }}>16 Bit (2 Byte)</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-primary)' }}>16 Bit (2 Byte)</div>
               <div style={{ fontWeight: '800', fontSize: '1rem', marginTop: '4px' }}>TPID</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>0x8100</div>
             </div>
             <div style={{ padding: '14px', borderRadius: '6px', background: 'rgba(245, 158, 11, 0.15)', border: '1px solid #f59e0b' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#fbbf24' }}>3 Bit</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-amber)' }}>3 Bit</div>
               <div style={{ fontWeight: '800', fontSize: '1rem', marginTop: '4px' }}>PCP (QoS)</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Priorität 0–7</div>
             </div>
             <div style={{ padding: '14px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#f87171' }}>1 Bit</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-rose)' }}>1 Bit</div>
               <div style={{ fontWeight: '800', fontSize: '1rem', marginTop: '4px' }}>DEI</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Drop Eligible</div>
             </div>
             <div style={{ padding: '14px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#34d399' }}>12 Bit</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-emerald)' }}>12 Bit</div>
               <div style={{ fontWeight: '800', fontSize: '1rem', marginTop: '4px' }}>VID</div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>1 bis 4.094</div>
             </div>
           </div>
 
           {/* Regler zur Interaktiven Berechnung */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px', marginBottom: '20px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
+              <label htmlFor="vlan-trunking-lab-1" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
                 VLAN-ID (VID: 1 - 4094):
               </label>
-              <input
+              <input id="vlan-trunking-lab-1"
                 type="number"
                 min="1"
                 max="4094"
@@ -210,10 +210,10 @@ export default function VlanTrunkingLab({ onRewardXP }) {
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
+              <label htmlFor="vlan-trunking-lab-2" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '700', marginBottom: '6px' }}>
                 PCP Priorität (0 = Standard, 5 = Voice, 7 = Network Control):
               </label>
-              <select
+              <select id="vlan-trunking-lab-2"
                 value={tagPcp}
                 onChange={(e) => setTagPcp(Number(e.target.value))}
                 style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #334155', background: 'var(--bg-card, #0f172a)', color: 'inherit' }}
@@ -231,7 +231,7 @@ export default function VlanTrunkingLab({ onRewardXP }) {
           <div style={{ padding: '16px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Berechneter 4-Byte Ethernet-Tag (Hex):</div>
-              <div style={{ fontSize: '1.25rem', fontFamily: 'monospace', fontWeight: '800', color: '#c084fc', marginTop: '4px' }}>
+              <div style={{ fontSize: '1.25rem', fontFamily: 'monospace', fontWeight: '800', color: 'var(--accent-purple)', marginTop: '4px' }}>
                 0x{tagCalc.tagHex}
               </div>
             </div>
@@ -249,16 +249,16 @@ export default function VlanTrunkingLab({ onRewardXP }) {
             Switch Weiterleitung: Access- vs. Trunk-Port Verhalten
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px', marginBottom: '20px' }}>
             {/* Eingang */}
             <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid #334155', background: 'rgba(255, 255, 255, 0.02)' }}>
-              <div style={{ fontWeight: '700', color: '#38bdf8', marginBottom: '10px' }}>
+              <div style={{ fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '10px' }}>
                 1. Eingang (Ingress Port Fa0/1):
               </div>
-              <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '6px' }}>
+              <label htmlFor="vlan-trunking-lab-3" style={{ display: 'block', fontSize: '0.85rem', marginBottom: '6px' }}>
                 Access VLAN des sendenden PCs:
               </label>
-              <select
+              <select id="vlan-trunking-lab-3"
                 value={ingressVlan}
                 onChange={(e) => setIngressVlan(Number(e.target.value))}
                 style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #334155', background: 'var(--bg-card, #0f172a)', color: 'inherit' }}
@@ -271,7 +271,7 @@ export default function VlanTrunkingLab({ onRewardXP }) {
 
             {/* Ausgang */}
             <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid #334155', background: 'rgba(255, 255, 255, 0.02)' }}>
-              <div style={{ fontWeight: '700', color: '#c084fc', marginBottom: '10px' }}>
+              <div style={{ fontWeight: '700', color: 'var(--accent-purple)', marginBottom: '10px' }}>
                 2. Ziel-Port (Egress Port):
               </div>
               <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
@@ -309,10 +309,10 @@ export default function VlanTrunkingLab({ onRewardXP }) {
 
               {egressMode === 'access' && (
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '6px' }}>
+                  <label htmlFor="vlan-trunking-lab-4" style={{ display: 'block', fontSize: '0.85rem', marginBottom: '6px' }}>
                     Access-VLAN des Ziel-Ports (Fa0/2):
                   </label>
-                  <select
+                  <select id="vlan-trunking-lab-4"
                     value={egressAccessVlan}
                     onChange={(e) => setEgressAccessVlan(Number(e.target.value))}
                     style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #334155', background: 'var(--bg-card, #0f172a)', color: 'inherit' }}
@@ -333,8 +333,8 @@ export default function VlanTrunkingLab({ onRewardXP }) {
                 padding: '10px 24px',
                 borderRadius: '20px',
                 border: 'none',
-                background: '#8b5cf6',
-                color: '#fff',
+                background: 'var(--accent-purple)',
+                color: 'var(--text-on-accent)',
                 fontWeight: '700',
                 cursor: 'pointer'
               }}
@@ -345,7 +345,7 @@ export default function VlanTrunkingLab({ onRewardXP }) {
 
           {forwardResult && (
             <div style={{ padding: '16px', borderRadius: '8px', border: forwardResult.forwarded ? '1px solid #10b981' : '1px solid #ef4444', background: forwardResult.forwarded ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)' }}>
-              <div style={{ fontWeight: '700', fontSize: '0.95rem', color: forwardResult.forwarded ? '#34d399' : '#f87171', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ fontWeight: '700', fontSize: '0.95rem', color: forwardResult.forwarded ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {forwardResult.forwarded ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
                 Ergebnis: {forwardResult.forwarded ? 'Erfolgreich weitergeleitet' : 'Frame verworfen'}
               </div>
@@ -365,21 +365,21 @@ export default function VlanTrunkingLab({ onRewardXP }) {
             Verbindet einen Layer-2 Switch mit einem Router über einen einzigen 802.1Q Trunk-Link. Der Router nutzt Subinterfaces als Standard-Gateways für die jeweiligen VLANs.
           </p>
 
-          <div style={{ padding: '16px', borderRadius: '8px', background: '#0f172a', border: '1px solid #334155', fontFamily: 'monospace', fontSize: '0.85rem', color: '#e2e8f0', lineHeight: '1.6' }}>
-            <div style={{ color: '#94a3b8' }}># 1. Switch Trunk-Port einrichten:</div>
+          <div style={{ padding: '16px', borderRadius: '8px', background: 'var(--bg-card)', border: '1px solid #334155', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: '1.6' }}>
+            <div style={{ color: 'var(--text-dim)' }}># 1. Switch Trunk-Port einrichten:</div>
             <div>Switch(config)# interface GigabitEthernet0/1</div>
             <div>Switch(config-if)# switchport mode trunk</div>
             <div>Switch(config-if)# switchport trunk allowed vlan 10,20,30</div>
             <div>Switch(config-if)# no shutdown</div>
-            <div style={{ marginTop: '14px', color: '#94a3b8' }}># 2. Router-on-a-Stick Subinterfaces konfigurieren:</div>
+            <div style={{ marginTop: '14px', color: 'var(--text-dim)' }}># 2. Router-on-a-Stick Subinterfaces konfigurieren:</div>
             <div>Router(config)# interface GigabitEthernet0/0</div>
             <div>Router(config-if)# no shutdown</div>
-            <div style={{ color: '#38bdf8' }}>Router(config)# interface GigabitEthernet0/0.10</div>
-            <div style={{ color: '#38bdf8' }}>Router(config-subif)# encapsulation dot1Q 10</div>
-            <div style={{ color: '#38bdf8' }}>Router(config-subif)# ip address 192.168.10.1 255.255.255.0</div>
-            <div style={{ marginTop: '8px', color: '#34d399' }}>Router(config)# interface GigabitEthernet0/0.20</div>
-            <div style={{ color: '#34d399' }}>Router(config-subif)# encapsulation dot1Q 20</div>
-            <div style={{ color: '#34d399' }}>Router(config-subif)# ip address 192.168.20.1 255.255.255.0</div>
+            <div style={{ color: 'var(--accent-cyan)' }}>Router(config)# interface GigabitEthernet0/0.10</div>
+            <div style={{ color: 'var(--accent-cyan)' }}>Router(config-subif)# encapsulation dot1Q 10</div>
+            <div style={{ color: 'var(--accent-cyan)' }}>Router(config-subif)# ip address 192.168.10.1 255.255.255.0</div>
+            <div style={{ marginTop: '8px', color: 'var(--accent-emerald)' }}>Router(config)# interface GigabitEthernet0/0.20</div>
+            <div style={{ color: 'var(--accent-emerald)' }}>Router(config-subif)# encapsulation dot1Q 20</div>
+            <div style={{ color: 'var(--accent-emerald)' }}>Router(config-subif)# ip address 192.168.20.1 255.255.255.0</div>
           </div>
         </div>
       )}

@@ -9,7 +9,7 @@
 /**
  * 256-Bit Standard Safe Prime N und Generator g (RFC 5054 modp-Gruppe 1/Test-Parameter)
  */
-export const SRP_PARAMS = {
+const SRP_PARAMS = {
   N: 0xEEAF0AB9n, // Didaktische 32-Bit/64-Bit Demonstration für performante BigInt-Operationen
   g: 2n,
   k: 3n // k = H(N, g)
@@ -22,7 +22,7 @@ export const SRP_PARAMS = {
  * @param {bigint} mod
  * @returns {bigint}
  */
-export function modPow(base, exp, mod) {
+function modPow(base, exp, mod) {
   let res = 1n;
   base = base % mod;
   let e = exp;
@@ -41,7 +41,7 @@ export function modPow(base, exp, mod) {
  * @param {string | bigint} input
  * @returns {bigint}
  */
-export function hashToBigInt(input) {
+function hashToBigInt(input) {
   const str = String(input);
   let hash = 5381n;
   for (let i = 0; i < str.length; i++) {

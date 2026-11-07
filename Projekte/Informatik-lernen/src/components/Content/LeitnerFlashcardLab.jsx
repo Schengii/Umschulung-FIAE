@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen } from 'lucide-react';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export const LEITNER_FLASHCARDS = [
   { id: 'l1', q: 'Was bedeutet die Abkürzung EVA im Grundprinzip der DV?', a: 'Eingabe, Verarbeitung, Ausgabe', box: 1 },
@@ -63,7 +64,7 @@ export default function LeitnerFlashcardLab({ onRewardXP }) {
       </div>
 
       {/* Flashcard Main View */}
-      <div
+      <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setShowAnswer(!showAnswer))}
         onClick={() => setShowAnswer(!showAnswer)}
         style={{
           background: 'var(--bg-primary)',

@@ -159,7 +159,7 @@ export default function ArgoCdGitOpsLab({ onRewardXP }) {
       </div>
 
       {/* Grid: Git Repo (Desired) vs Cluster (Live) */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Desired State */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>

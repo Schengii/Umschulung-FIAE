@@ -107,7 +107,7 @@ function simpleHash(str, salt = '', iterations = 1) {
  * Standard-Konfiguration der DNSSEC-Vertrauenskette
  * @type {DnssecConfig}
  */
-export const DEFAULT_DNSSEC_CONFIG = {
+const DEFAULT_DNSSEC_CONFIG = {
   root: {
     name: '.',
     kskId: 20326,
@@ -287,7 +287,7 @@ export function validateDnssecChain(customConfig = {}) {
  * ohne dass Angreifer durch NSEC-Zone-Walking alle Hostnamen auslesen können.
  */
 /** @type {Nsec3Record[]} */
-export const NSEC3_SAMPLE_ZONE = [
+const NSEC3_SAMPLE_ZONE = [
   { hashedName: '2T9GK98', originalHint: 'api.example.de', nextHashedName: '7K1QP23', types: ['A', 'RRSIG'] },
   { hashedName: '7K1QP23', originalHint: 'mail.example.de', nextHashedName: 'B8X4M91', types: ['MX', 'RRSIG'] },
   { hashedName: 'B8X4M91', originalHint: 'vpn.example.de', nextHashedName: 'F9Z2L04', types: ['A', 'TXT', 'RRSIG'] },

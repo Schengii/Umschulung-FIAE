@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest';
-import { applyAutoLabels, hasAccessibleName, inferAccessibleName, observeAutoLabels } from './a11yAutoLabel';
+import { applyAutoLabels, applyScrollableFocus, hasAccessibleName, inferAccessibleName, observeAutoLabels } from './a11yAutoLabel';
 
 let root;
 beforeEach(() => {
@@ -53,5 +53,31 @@ describe('a11yAutoLabel', () => {
     await new Promise((r) => setTimeout(r, 50));
     expect(root.querySelector('input').getAttribute('aria-label')).toBe('Lautstärke');
     stop();
+  });
+});
+
+describe('applyScrollableFocus', () => {
+  const makeScrollable = (el, overflowing) => {
+    Object.defineProperty(el, 'scrollWidth', { value: overflowing ? 500 : 100, configurable: true });
+    Object.defineProperty(el, 'clientWidth', { value: 100, configurable: true });
+  };
+
+  it('macht überlaufende Bereiche ohne fokussierbares Kind per Tastatur erreichbar', () => {
+    root.innerHTML = '<div class="overflow-x-auto"><table><tr><td>x</td></tr></table></div>';
+    const box = root.firstElementChild;
+    makeScrollable(box, true);
+    expect(applyScrollableFocus(root)).toBe(1);
+    expect(box.getAttribute('tabindex')).toBe('0');
+    expect(box.getAttribute('role')).toBe('region');
+    expect(box.getAttribute('aria-label')).toBe('Scrollbarer Bereich');
+  });
+
+  it('lässt nicht überlaufende Bereiche und Bereiche mit fokussierbarem Kind unverändert', () => {
+    root.innerHTML = '<div class="overflow-x-auto" id="a"><p>kurz</p></div><div class="overflow-auto" id="b"><button>ok</button></div>';
+    makeScrollable(document.getElementById('a'), false);
+    makeScrollable(document.getElementById('b'), true);
+    expect(applyScrollableFocus(root)).toBe(0);
+    expect(document.getElementById('a').hasAttribute('tabindex')).toBe(false);
+    expect(document.getElementById('b').hasAttribute('tabindex')).toBe(false);
   });
 });

@@ -64,8 +64,8 @@ export default function WisoMultiContributionLab() {
             padding: '8px 16px',
             borderRadius: '10px',
             border: 'none',
-            background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, #10b981, #047857)',
-            color: '#fff',
+            background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-teal)',
+            color: 'var(--text-on-accent)',
             fontWeight: 600,
             fontSize: '0.85rem',
             cursor: xpClaimed ? 'default' : 'pointer',
@@ -80,10 +80,10 @@ export default function WisoMultiContributionLab() {
       </div>
 
       {/* KPI Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '14px', border: '1px solid var(--border-color, #e2e8f0)', borderTop: '4px solid #10b981' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Betriebsergebnis (Gewinn/Verlust)</div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: result.isProfitable ? '#10b981' : '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: result.isProfitable ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginTop: '4px' }}>
             {result.operatingProfit.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>Nach Abzug aller 4 Fixkostenstufen</div>
@@ -99,7 +99,7 @@ export default function WisoMultiContributionLab() {
 
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '14px', border: '1px solid var(--border-color, #e2e8f0)', borderTop: '4px solid #f59e0b' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Sicherheitskoeffizient</div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#f59e0b', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--accent-amber)', marginTop: '4px' }}>
             {result.safetyMarginPercent}%
           </div>
           <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>Umsatz-Puffer vor Verlustzone</div>
@@ -114,13 +114,13 @@ export default function WisoMultiContributionLab() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
           {/* Step 1: Umsatzerlöse */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: '#f8fafc', borderRadius: '8px', fontWeight: 700 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: 'var(--bg-tertiary)', borderRadius: '8px', fontWeight: 700 }}>
             <span>Umsatzerlöse (Gesamt):</span>
             <span>+{result.totalRevenue.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
           </div>
 
           {/* Variable Kosten */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', color: '#ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', color: 'var(--accent-rose)' }}>
             <span>- Variable Kosten (Gesamt):</span>
             <span>-{result.totalVariableCosts.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
           </div>
@@ -132,7 +132,7 @@ export default function WisoMultiContributionLab() {
           </div>
 
           {/* Stufe 2: Erzeugnisfixkosten */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', color: '#ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', color: 'var(--accent-rose)' }}>
             <span>- Erzeugnisfixkosten (Produktfixkosten):</span>
             <span>-{result.totalProductFixCosts.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
           </div>
@@ -144,7 +144,7 @@ export default function WisoMultiContributionLab() {
           </div>
 
           {/* Stufe 3: Erzeugnisgruppenfixkosten */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: '#ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: 'var(--accent-rose)' }}>
             <span>- Erzeugnisgruppenfixkosten:</span>
             <input
               type="number"
@@ -161,7 +161,7 @@ export default function WisoMultiContributionLab() {
           </div>
 
           {/* Stufe 4: Bereichsfixkosten */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: '#ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: 'var(--accent-rose)' }}>
             <span>- Bereichsfixkosten (Abteilungsfixkosten):</span>
             <input
               type="number"
@@ -178,7 +178,7 @@ export default function WisoMultiContributionLab() {
           </div>
 
           {/* Stufe 5: Unternehmensfixkosten */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: '#ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', color: 'var(--accent-rose)' }}>
             <span>- Unternehmensfixkosten (Zentrale Verwaltung):</span>
             <input
               type="number"
@@ -202,15 +202,15 @@ export default function WisoMultiContributionLab() {
           Produkte & Erzeugniskosten anpassen
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
           {products.map(p => (
-            <div key={p.id} style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
+            <div key={p.id} style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <strong style={{ fontSize: '1rem' }}>{p.name}</strong>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '12px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Preis pro Stück (€):</label>
-                  <input
+                  <label htmlFor={`wiso-multi-contribution-lab-1-${p.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Preis pro Stück (€):</label>
+                  <input id={`wiso-multi-contribution-lab-1-${p.id}`}
                     type="number"
                     value={p.pricePerUnit}
                     onChange={(e) => handleUpdateProduct(p.id, 'pricePerUnit', e.target.value)}
@@ -219,8 +219,8 @@ export default function WisoMultiContributionLab() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Var. Kosten/Stück (€):</label>
-                  <input
+                  <label htmlFor={`wiso-multi-contribution-lab-2-${p.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Var. Kosten/Stück (€):</label>
+                  <input id={`wiso-multi-contribution-lab-2-${p.id}`}
                     type="number"
                     value={p.variableCostPerUnit}
                     onChange={(e) => handleUpdateProduct(p.id, 'variableCostPerUnit', e.target.value)}
@@ -229,8 +229,8 @@ export default function WisoMultiContributionLab() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Absatzmenge (Stück):</label>
-                  <input
+                  <label htmlFor={`wiso-multi-contribution-lab-3-${p.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Absatzmenge (Stück):</label>
+                  <input id={`wiso-multi-contribution-lab-3-${p.id}`}
                     type="number"
                     value={p.unitsSold}
                     onChange={(e) => handleUpdateProduct(p.id, 'unitsSold', e.target.value)}
@@ -239,8 +239,8 @@ export default function WisoMultiContributionLab() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Erzeugnisfix (€):</label>
-                  <input
+                  <label htmlFor={`wiso-multi-contribution-lab-4-${p.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>Erzeugnisfix (€):</label>
+                  <input id={`wiso-multi-contribution-lab-4-${p.id}`}
                     type="number"
                     value={p.productFixCosts}
                     onChange={(e) => handleUpdateProduct(p.id, 'productFixCosts', e.target.value)}

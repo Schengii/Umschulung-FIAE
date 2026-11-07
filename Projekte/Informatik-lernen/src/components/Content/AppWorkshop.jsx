@@ -64,7 +64,7 @@ npm run build
               fontSize: '0.88rem',
               fontWeight: 700,
               background: currentStep === idx ? 'var(--accent-primary)' : 'var(--bg-card)',
-              color: currentStep === idx ? '#ffffff' : 'var(--text-main)',
+              color: currentStep === idx ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: currentStep === idx ? 'none' : '1px solid var(--border-color)',
               cursor: 'pointer'
             }}

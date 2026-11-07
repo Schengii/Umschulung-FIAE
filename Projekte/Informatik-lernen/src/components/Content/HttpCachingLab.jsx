@@ -74,7 +74,7 @@ export default function HttpCachingLab({ onRewardXP }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Controls */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -173,7 +173,7 @@ export default function HttpCachingLab({ onRewardXP }) {
             <span className="badge badge-teal">Quelle: {result.source}</span>
           </div>
 
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.85rem', marginBottom: '16px', lineHeight: '1.6' }}>
+          <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.85rem', marginBottom: '16px', lineHeight: '1.6' }}>
             <div style={{ color: 'var(--accent-teal)' }}># Response Headers:</div>
             {Object.entries(result.headers).map(([k, v]) => (
               <div key={k}>
@@ -189,7 +189,7 @@ export default function HttpCachingLab({ onRewardXP }) {
             <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
               Empfangener Response Body ({result.body.length} Bytes übertragen):
             </label>
-            <pre style={{ margin: 0, padding: '10px', background: 'rgba(0,0,0,0.4)', borderRadius: '6px', fontSize: '0.8rem', color: result.body ? '#f8fafc' : 'var(--text-muted)' }}>
+            <pre style={{ margin: 0, padding: '10px', background: 'var(--bg-tertiary)', borderRadius: '6px', fontSize: '0.8rem', color: result.body ? 'var(--text-main)' : 'var(--text-muted)' }}>
               {result.body || '(Leer bei 304 Not Modified – 0 Bytes Payload-Transfer!)'}
             </pre>
           </div>
@@ -201,7 +201,7 @@ export default function HttpCachingLab({ onRewardXP }) {
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Database size={18} color="var(--accent-teal)" /> IHK AP2 Kernwissen: HTTP Caching
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '16px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
           <div>
             <strong style={{ color: 'var(--text-main)' }}>`no-cache` vs. `no-store`:</strong>
             <p style={{ margin: '4px 0 0' }}>`no-cache` erlaubt Caching, verlangt aber vor jedem Zugriff eine Revalidierung (ETag) beim Server. `no-store` verbietet jegliches Speichern (z.B. für Bankdaten/DSGVO).</p>
@@ -212,7 +212,7 @@ export default function HttpCachingLab({ onRewardXP }) {
           </div>
           <div>
             <strong style={{ color: 'var(--text-main)' }}>Cache-Hierarchie:</strong>
-            <p style={{ margin: '4px 0 0' }}>Browser Memory Cache (0ms) $\to$ Service Worker Cache $\to$ Disk Cache $\to$ CDN / Reverse Proxy $\to$ Origin Server.</p>
+            <p style={{ margin: '4px 0 0' }}>Browser Memory Cache (0ms) → Service Worker Cache → Disk Cache → CDN / Reverse Proxy → Origin Server.</p>
           </div>
         </div>
       </div>

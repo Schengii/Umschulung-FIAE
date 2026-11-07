@@ -166,20 +166,3 @@ export const CODE_PUZZLE_LEVELS = [
     xpReward: 80
   }
 ];
-
-export const LOGIC_GATES_LEVELS = [
-  {
-    id: 1,
-    gateType: 'AND',
-    description: 'Das AND-Gatter gibt nur 1 aus, wenn BEIDE Eingänge (A und B) den Wert 1 haben.',
-    targetOutput: 1,
-    xpReward: 40
-  },
-  {
-    id: 2,
-    gateType: 'XOR',
-    description: 'Das XOR-Gatter (Exclusive OR) gibt 1 aus, wenn GENAU EINER der beiden Eingänge 1 ist.',
-    targetOutput: 1,
-    xpReward: 50
-  }
-];

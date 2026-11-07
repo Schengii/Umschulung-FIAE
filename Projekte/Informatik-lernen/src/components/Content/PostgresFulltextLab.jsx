@@ -56,12 +56,12 @@ export default function PostgresFulltextLab({ onRewardXP }) {
       </div>
 
       {/* Input Text & Query Bar */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+          <label htmlFor="postgres-fulltext-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
             Dokumententext (Eingabe):
           </label>
-          <textarea
+          <textarea id="postgres-fulltext-lab-1"
             value={docText}
             onChange={(e) => setDocText(e.target.value)}
             rows={3}
@@ -70,10 +70,10 @@ export default function PostgresFulltextLab({ onRewardXP }) {
         </div>
 
         <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+          <label htmlFor="postgres-fulltext-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
             Suchabfrage (tsquery boolesch mit &amp;, |, !):
           </label>
-          <input
+          <input id="postgres-fulltext-lab-2"
             type="text"
             value={queryStr}
             onChange={(e) => setQueryStr(e.target.value)}
@@ -94,7 +94,7 @@ export default function PostgresFulltextLab({ onRewardXP }) {
         <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
           Extrahierter PostgreSQL `tsvector` (Gestemmte Lexeme mit Wortpositionen):
         </span>
-        <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#10b981', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+        <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-emerald)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
           {vectorData.formattedVector}
         </pre>
       </div>

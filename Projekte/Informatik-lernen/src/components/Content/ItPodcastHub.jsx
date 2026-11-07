@@ -31,7 +31,7 @@ export default function ItPodcastHub() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedEpId === ep.id ? 'var(--accent-amber)' : 'var(--bg-card)',
-              color: selectedEpId === ep.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedEpId === ep.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedEpId === ep.id ? '2px solid var(--accent-amber)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

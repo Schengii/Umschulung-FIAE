@@ -13,6 +13,7 @@ import {
   exportBsiReportMarkdown 
 } from '../../utils/bsiGrundschutzEngine';
 import { useStore } from '../../store/useStore';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function BsiGrundschutzLab() {
   const { awardXP } = useStore();
@@ -83,7 +84,7 @@ export default function BsiGrundschutzLab() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'var(--card-bg, #ffffff)', padding: '12px 20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
           <div>
             <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 700, color: '#64748b' }}>BSI Erfüllungsgrad</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: evaluation.complianceScore >= 80 ? '#10b981' : evaluation.complianceScore >= 50 ? '#f59e0b' : '#ef4444' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: evaluation.complianceScore >= 80 ? 'var(--accent-emerald)' : evaluation.complianceScore >= 50 ? 'var(--accent-amber)' : 'var(--accent-rose)' }}>
               {evaluation.complianceScore}%
             </div>
           </div>
@@ -94,8 +95,8 @@ export default function BsiGrundschutzLab() {
               padding: '8px 16px',
               borderRadius: '10px',
               border: 'none',
-              background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-              color: '#fff',
+              background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+              color: 'var(--text-on-accent)',
               fontWeight: 600,
               fontSize: '0.85rem',
               cursor: xpClaimed ? 'default' : 'pointer',
@@ -158,10 +159,10 @@ export default function BsiGrundschutzLab() {
               Nach dem <strong>Maximum-Prinzip</strong> (BSI 200-2) bestimmt die höchste Einzeleinstufung den kumulierten Gesamtschutzbedarf des Zielobjekts.
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '12px' }}>
               {Object.values(PROTECTION_LEVELS).map(lvl => (
                 <div key={lvl.id} style={{ padding: '12px 16px', borderRadius: '12px', borderLeft: `4px solid ${lvl.color}`, background: 'var(--bg-subtle, rgba(0,0,0,0.02))' }}>
-                  <div style={{ fontWeight: 700, color: lvl.color, fontSize: '0.95rem' }}>{lvl.label}</div>
+                  <div style={{ fontWeight: 700, color: `color-mix(in srgb, ${lvl.color} 55%, var(--text-main))`, fontSize: '0.95rem' }}>{lvl.label}</div>
                   <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary, #64748b)', marginTop: '4px' }}>{lvl.desc}</div>
                 </div>
               ))}
@@ -178,7 +179,7 @@ export default function BsiGrundschutzLab() {
                 <div key={asset.id} style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
                     <div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', padding: '3px 8px', borderRadius: '6px', background: 'var(--badge-bg, #e0f2fe)', color: '#0369a1' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', padding: '3px 8px', borderRadius: '6px', background: 'var(--badge-bg, #e0f2fe)', color: 'var(--accent-cyan)' }}>
                         {asset.type}
                       </span>
                       <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '8px 0 4px' }}>{asset.name}</h3>
@@ -187,14 +188,14 @@ export default function BsiGrundschutzLab() {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: `${overallInfo.color}15`, padding: '8px 16px', borderRadius: '12px', border: `1px solid ${overallInfo.color}40` }}>
                       <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Gesamtschutz:</span>
-                      <span style={{ fontWeight: 800, color: overallInfo.color, fontSize: '0.95rem' }}>
+                      <span style={{ fontWeight: 800, color: `color-mix(in srgb, ${overallInfo.color} 55%, var(--text-main))`, fontSize: '0.95rem' }}>
                         {overallInfo.label.toUpperCase()}
                       </span>
                     </div>
                   </div>
 
                   {/* Selectors */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
                     {[
                       { key: 'confidentiality', label: 'Vertraulichkeit (Confidentiality)' },
                       { key: 'integrity', label: 'Integrität (Integrity)' },
@@ -235,19 +236,19 @@ export default function BsiGrundschutzLab() {
       {/* Tab 2: BSI IT-Grundschutz Bausteine */}
       {activeSubTab === 'modules' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
             <div style={{ background: 'var(--card-bg, #ffffff)', padding: '16px', borderRadius: '14px', border: '1px solid var(--border-color, #e2e8f0)' }}>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>BASIS-ANFORDERUNGEN</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, marginTop: '4px', color: evaluation.basisFulfilled ? '#10b981' : '#ef4444' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, marginTop: '4px', color: evaluation.basisFulfilled ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {evaluation.basisFulfilled ? 'Vollständig erfüllt' : `${evaluation.basisImplemented} / ${evaluation.basisTotal} erfüllt`}
               </div>
             </div>
             <div style={{ background: 'var(--card-bg, #ffffff)', padding: '16px', borderRadius: '14px', border: '1px solid var(--border-color, #e2e8f0)' }}>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>MASSNAHMEN STATUS</div>
               <div style={{ fontSize: '0.9rem', fontWeight: 600, marginTop: '6px', display: 'flex', gap: '12px' }}>
-                <span style={{ color: '#10b981' }}>✔ {evaluation.implemented} Erfüllt</span>
-                <span style={{ color: '#f59e0b' }}>◐ {evaluation.partial} Teilweise</span>
-                <span style={{ color: '#ef4444' }}>✖ {evaluation.missing} Offen</span>
+                <span style={{ color: 'var(--accent-emerald)' }}>✔ {evaluation.implemented} Erfüllt</span>
+                <span style={{ color: 'var(--accent-amber)' }}>◐ {evaluation.partial} Teilweise</span>
+                <span style={{ color: 'var(--accent-rose)' }}>✖ {evaluation.missing} Offen</span>
               </div>
             </div>
           </div>
@@ -268,11 +269,11 @@ export default function BsiGrundschutzLab() {
               {/* Measures */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {mod.measures.map(m => {
-                  const statusColor = m.status === 'yes' ? '#10b981' : m.status === 'partially' ? '#f59e0b' : '#ef4444';
+                  const statusColor = m.status === 'yes' ? 'var(--accent-emerald)' : m.status === 'partially' ? 'var(--accent-amber)' : 'var(--accent-rose)';
                   const statusBg = m.status === 'yes' ? 'rgba(16, 185, 129, 0.1)' : m.status === 'partially' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(239, 68, 68, 0.1)';
 
                   return (
-                    <div
+                    <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => handleToggleMeasureStatus(mod.id, m.id))}
                       key={m.id}
                       onClick={() => handleToggleMeasureStatus(mod.id, m.id)}
                       style={{
@@ -295,7 +296,7 @@ export default function BsiGrundschutzLab() {
                           borderRadius: '4px',
                           textTransform: 'uppercase',
                           background: m.type === 'basis' ? '#fee2e2' : m.type === 'standard' ? '#e0f2fe' : '#fef3c7',
-                          color: m.type === 'basis' ? '#b91c1c' : m.type === 'standard' ? '#0369a1' : '#b45309'
+                          color: m.type === 'basis' ? '#b91c1c' : m.type === 'standard' ? 'var(--accent-cyan)' : '#b45309'
                         }}>
                           {m.type === 'basis' ? 'Basis' : m.type === 'standard' ? 'Standard' : 'Hoch'}
                         </span>
@@ -337,7 +338,7 @@ export default function BsiGrundschutzLab() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
             {NIS2_OBLIGATIONS.map(req => (
               <div key={req.id} style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -358,10 +359,10 @@ export default function BsiGrundschutzLab() {
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
             <div style={{ flex: 1, minWidth: '240px' }}>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
+              <label htmlFor="bsi-grundschutz-lab-1" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
                 Projektbezeichnung für IHK-Dokumentation:
               </label>
-              <input
+              <input id="bsi-grundschutz-lab-1"
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
@@ -387,8 +388,8 @@ export default function BsiGrundschutzLab() {
                 padding: '10px 18px',
                 borderRadius: '10px',
                 border: 'none',
-                background: '#0284c7',
-                color: '#fff',
+                background: 'var(--accent-cyan)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 600,
                 fontSize: '0.9rem',
                 cursor: 'pointer'
@@ -401,7 +402,7 @@ export default function BsiGrundschutzLab() {
 
           <pre style={{
             background: 'var(--code-bg, #0f172a)',
-            color: '#f8fafc',
+            color: 'var(--text-main)',
             padding: '20px',
             borderRadius: '12px',
             fontSize: '0.85rem',

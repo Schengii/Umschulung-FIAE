@@ -74,7 +74,7 @@ export default function PromqlAlertLab({ onRewardXP }) {
       </div>
 
       {/* Metric Selector Tabs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
         <button
           onClick={() => { setMetricType('LATENCY'); setThreshold(200); triggerHaptic('SELECTION'); }}
           className={`btn ${metricType === 'LATENCY' ? 'btn-primary' : 'btn-secondary'}`}
@@ -107,7 +107,7 @@ export default function PromqlAlertLab({ onRewardXP }) {
       <div style={{ background: alertData.isFiring ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)', border: `1px solid ${alertData.isFiring ? '#ef4444' : '#10b981'}`, borderRadius: '12px', padding: '18px 22px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
         <div>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Prometheus Alert State:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: alertData.isFiring ? '#ef4444' : '#10b981', marginTop: '2px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: alertData.isFiring ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginTop: '2px' }}>
             {alertData.isFiring ? '🚨 ALERT FIRING' : '✅ STATUS: OK (INACTIVE)'}
           </div>
           <div style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -127,7 +127,7 @@ export default function PromqlAlertLab({ onRewardXP }) {
             style={{ width: '180px' }}
           />
 
-          <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '10px', marginBottom: '4px' }}>Severity Label:</label>
+          <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '10px', marginBottom: '4px' }}>Severity Label:</span>
           <div style={{ display: 'flex', gap: '6px' }}>
             {['critical', 'warning', 'info'].map(sev => (
               <button
@@ -144,12 +144,12 @@ export default function PromqlAlertLab({ onRewardXP }) {
       </div>
 
       {/* PromQL Expression & YAML Rule Output */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
             PromQL Auswertungs-Ausdruck:
           </span>
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#38bdf8', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
             {alertData.promqlExpr}
           </pre>
         </div>
@@ -169,7 +169,7 @@ export default function PromqlAlertLab({ onRewardXP }) {
             </button>
           </div>
 
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#10b981', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-emerald)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', lineHeight: '1.4', overflowX: 'auto' }}>
             {alertData.yamlManifest}
           </pre>
         </div>
