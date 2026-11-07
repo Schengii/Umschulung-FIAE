@@ -159,7 +159,7 @@ export default function IhkPresentationTimerLab({ onRewardXP }) {
         <div style={{
           marginTop: '24px',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
           gap: '16px',
           background: 'var(--bg-tertiary)',
           padding: '20px',
@@ -234,7 +234,7 @@ export default function IhkPresentationTimerLab({ onRewardXP }) {
       </div>
 
       {/* Main Grid: Slide Guide & Rubric Evaluation */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Slide Navigation & Talking Points */}
         <div 
           className="glass-panel"

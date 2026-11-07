@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { TUTORIAL_VIDEOS } from '../../data/videosData';
 import { Video, Play, Clock, CheckCircle2, ListFilter, GraduationCap } from 'lucide-react';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function VideoHub({ onCompleteVideo }) {
   const [activeVideoId, setActiveVideoId] = useState(TUTORIAL_VIDEOS[0].id);
   const activeVideo = TUTORIAL_VIDEOS.find(v => v.id === activeVideoId) || TUTORIAL_VIDEOS[0];
   const [completedVideos, setCompletedVideos] = useState([]);
+  // YouTube wird erst nach Klick geladen (Datenübertragung an Google erst mit Einwilligung); nur im Speicher, nichts wird persistiert
+  const [playerEnabled, setPlayerEnabled] = useState(false);
 
   const handleMarkWatched = (id) => {
     if (!completedVideos.includes(id)) {
@@ -26,7 +29,7 @@ export default function VideoHub({ onCompleteVideo }) {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '24px' }}>
         
         {/* Main Video Player Card */}
         <div style={{ gridColumn: 'span 2' }}>
@@ -34,6 +37,30 @@ export default function VideoHub({ onCompleteVideo }) {
             
             {/* Embed Iframe Container */}
             <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', borderRadius: 'var(--radius-md)', overflow: 'hidden', background: '#000' }}>
+              {!playerEnabled ? (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '12px',
+                    padding: '16px',
+                    textAlign: 'center',
+                    background: 'var(--bg-tertiary)',
+                    color: 'var(--text-main)'
+                  }}
+                >
+                  <p style={{ margin: 0, fontSize: '0.9rem', maxWidth: '460px' }}>
+                    Dieses Video wird von YouTube (Google) eingebettet. Erst nach dem Klick wird eine Verbindung zu YouTube aufgebaut und dabei z.&nbsp;B. deine IP-Adresse übertragen.
+                  </p>
+                  <button className="btn btn-primary" onClick={() => setPlayerEnabled(true)}>
+                    <Play size={16} /> Video von YouTube laden
+                  </button>
+                </div>
+              ) : (
               <iframe
                 src={activeVideo.embedUrl}
                 title={activeVideo.title}
@@ -49,6 +76,7 @@ export default function VideoHub({ onCompleteVideo }) {
                   border: 'none'
                 }}
               />
+              )}
             </div>
 
             <div style={{ marginTop: '16px' }}>
@@ -104,7 +132,7 @@ export default function VideoHub({ onCompleteVideo }) {
             const isWatched = completedVideos.includes(video.id);
 
             return (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveVideoId(video.id))}
                 key={video.id}
                 onClick={() => setActiveVideoId(video.id)}
                 className="glass-panel-hover"
@@ -123,7 +151,7 @@ export default function VideoHub({ onCompleteVideo }) {
                   width: '36px',
                   height: '36px',
                   borderRadius: '8px',
-                  background: isSelected ? 'var(--gradient-cyber)' : 'var(--bg-secondary)',
+                  background: isSelected ? 'var(--gradient-cta)' : 'var(--bg-secondary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

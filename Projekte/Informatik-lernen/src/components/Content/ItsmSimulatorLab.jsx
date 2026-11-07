@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Headphones, AlertCircle, ShieldCheck, Sparkles, Check } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { ITSM_INITIAL_TICKETS, evaluateCabRiskScore } from '../../utils/itsmEngine';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function ItsmSimulatorLab() {
   const { awardXP } = useStore();
@@ -50,14 +51,14 @@ export default function ItsmSimulatorLab() {
               ITIL 4 ITSM &amp; Service Desk Management Simulator
             </h1>
             <p style={{ color: 'var(--text-muted)', marginTop: '6px', maxWidth: '750px', fontSize: '0.95rem' }}>
-              Bearbeite Incidents, Service Requests und Changes mit SLA-Priorisierungsmatrix (Impact $\times$ Urgency) und bewerte Change Requests im Change Advisory Board (CAB).
+              Bearbeite Incidents, Service Requests und Changes mit SLA-Priorisierungsmatrix (Impact × Urgency) und bewerte Change Requests im Change Advisory Board (CAB).
             </p>
           </div>
         </div>
       </div>
 
       {/* 2-Pane: Ticket Queue + Ticket Detail / CAB */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(340px, 1fr) minmax(380px, 1.2fr)', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(min(340px, 100%), 1fr) minmax(380px, 1.2fr)', gap: '20px' }}>
         {/* Ticket Queue */}
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)' }}>
           <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -70,7 +71,7 @@ export default function ItsmSimulatorLab() {
               const isResolved = ticket.status === 'Resolved / Closed';
 
               return (
-                <div
+                <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedTicketId(ticket.id))}
                   key={ticket.id}
                   onClick={() => setSelectedTicketId(ticket.id)}
                   style={{

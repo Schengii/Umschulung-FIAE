@@ -68,7 +68,7 @@ export default function ArchitectureVisualizer() {
           Klicke auf eine Komponente der Architektur:
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
           {nodes.map((node) => (
             <button
               key={node.id}
@@ -77,7 +77,7 @@ export default function ArchitectureVisualizer() {
                 padding: '16px',
                 borderRadius: 'var(--radius-md)',
                 background: selectedNode === node.id ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                color: selectedNode === node.id ? '#ffffff' : 'var(--text-main)',
+                color: selectedNode === node.id ? 'var(--text-on-accent)' : 'var(--text-main)',
                 border: selectedNode === node.id ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
                 textAlign: 'left',
                 cursor: 'pointer',

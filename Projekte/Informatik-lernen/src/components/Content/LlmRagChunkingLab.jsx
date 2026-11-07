@@ -43,7 +43,7 @@ export default function LlmRagChunkingLab() {
               </span>
               <span className="text-xs text-slate-400">Two-Stage RAG Pipeline</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               LLM RAG Chunking & Cross-Encoder Re-Ranking Studio
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -82,11 +82,11 @@ export default function LlmRagChunkingLab() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-800/80">
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">Strategie</label>
-                <select
+                <label htmlFor="llm-rag-chunking-lab-1" className="block text-slate-400 text-xs font-medium mb-1">Strategie</label>
+                <select id="llm-rag-chunking-lab-1"
                   value={strategy}
                   onChange={(e) => setStrategy(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-50 focus:outline-none focus:border-purple-500"
                 >
                   <option value="paragraph">Absatzbasiert (Paragraphs)</option>
                   <option value="sliding">Sliding Window mit Overlap</option>
@@ -97,22 +97,22 @@ export default function LlmRagChunkingLab() {
               {strategy !== 'paragraph' && (
                 <>
                   <div>
-                    <label className="block text-slate-400 text-xs font-medium mb-1">Chunk-Größe (Char)</label>
-                    <input
+                    <label htmlFor="llm-rag-chunking-lab-2" className="block text-slate-400 text-xs font-medium mb-1">Chunk-Größe (Char)</label>
+                    <input id="llm-rag-chunking-lab-2"
                       type="number"
                       value={chunkSize}
                       onChange={(e) => setChunkSize(Number(e.target.value) || 100)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-50 focus:outline-none focus:border-purple-500 font-mono"
                     />
                   </div>
                   {strategy === 'sliding' && (
                     <div>
-                      <label className="block text-slate-400 text-xs font-medium mb-1">Overlap (Char)</label>
-                      <input
+                      <label htmlFor="llm-rag-chunking-lab-3" className="block text-slate-400 text-xs font-medium mb-1">Overlap (Char)</label>
+                      <input id="llm-rag-chunking-lab-3"
                         type="number"
                         value={chunkOverlap}
                         onChange={(e) => setChunkOverlap(Number(e.target.value) || 0)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono"
+                        className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-50 focus:outline-none focus:border-purple-500 font-mono"
                       />
                     </div>
                   )}
@@ -130,7 +130,7 @@ export default function LlmRagChunkingLab() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Gib eine Frage an den RAG-Index ein..."
-                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500"
+                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-50 focus:outline-none focus:border-purple-500"
               />
             </div>
             <div className="flex flex-wrap gap-2 text-xs">
@@ -154,7 +154,7 @@ export default function LlmRagChunkingLab() {
         {/* Results & Ranked Chunks (6 Cols) */}
         <div className="lg:col-span-6 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <span>Ergebnisse: Two-Stage Re-Ranking</span>
               <span className="px-2 py-0.5 rounded-full text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30">
                 {rankedChunks.length} Chunks generiert

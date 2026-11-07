@@ -6,8 +6,8 @@
 
 import { saveItem, getItem, getAllItems, deleteItem } from './indexedDbStorage';
 
-export const IDB_STORE_BACKUP_KEY = 'user_state_backup';
-export const IDB_SNAPSHOT_PREFIX = 'snapshot_';
+const IDB_STORE_BACKUP_KEY = 'user_state_backup';
+const IDB_SNAPSHOT_PREFIX = 'snapshot_';
 
 /**
  * Asynchrone redundante Speicherung des Nutzerzustands in IndexedDB

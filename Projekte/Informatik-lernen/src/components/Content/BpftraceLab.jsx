@@ -55,7 +55,7 @@ export default function BpftraceLab({ onRewardXP }) {
       </div>
 
       {/* Script Selector Tabs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
         <button
           onClick={() => { setSelectedScript('vfs_read_hist'); triggerHaptic('SELECTION'); }}
           className={`btn ${selectedScript === 'vfs_read_hist' ? 'btn-primary' : 'btn-secondary'}`}
@@ -85,12 +85,12 @@ export default function BpftraceLab({ onRewardXP }) {
       </div>
 
       {/* Editor & Trace Terminal Output Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
             BPFtrace Programm-Code:
           </span>
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#38bdf8', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
             {traceData.code}
           </pre>
           <div style={{ marginTop: '10px', fontSize: '0.75rem', color: 'var(--accent-primary)' }}>
@@ -102,7 +102,7 @@ export default function BpftraceLab({ onRewardXP }) {
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
             Live BPFtrace Terminal Trace Output:
           </span>
-          <pre style={{ margin: 0, padding: '14px', background: '#090d16', color: '#10b981', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+          <pre style={{ margin: 0, padding: '14px', background: 'var(--bg-secondary)', color: 'var(--accent-emerald)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
             {traceData.output}
           </pre>
         </div>

@@ -90,7 +90,7 @@ describe('ErrorBoundary', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
-      <ErrorBoundary resetKey="a" fallback={({ retry }) => <div data-testid="custom-fallback" onClick={retry}>Custom</div>}>
+      <ErrorBoundary resetKey="a" fallback={({ retry }) => <button type="button" data-testid="custom-fallback" onClick={retry}>Custom</button>}>
         <Bomb shouldThrow={true} />
       </ErrorBoundary>
     );

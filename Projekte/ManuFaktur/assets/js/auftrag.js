@@ -94,7 +94,7 @@ function findCardByValue(selector, value) {
 
 // ── Karten-Auswahl ────────────────────────────────────────────────────────
 
-function selectOption(card, group) {
+function selectOption(card) {
   document.querySelectorAll('#panel-1 .option-card').forEach(c => {
     c.classList.remove('selected');
     c.setAttribute('aria-pressed', 'false');
@@ -143,7 +143,7 @@ function nextStep(current) {
   if (current === 3 && !state.technik) { hintEl.classList.add('visible'); return; }
 
   if (current === 3) buildSummary();
-  goToStep(current + 1);
+  goToStep(current + 1, true);
 }
 
 // Kinder einer progressbar sind für Screenreader unsichtbar – der Schritt steht deshalb in aria-valuetext.
@@ -153,17 +153,18 @@ function updateProgressAria() {
   const step = state.step || 1;
   const labels = document.querySelectorAll('.progress-step .step-label');
   const label = labels[step - 1] ? labels[step - 1].textContent.trim() : '';
-  const isEn = typeof currentLang !== 'undefined' && currentLang === 'en';
+  const isEn = isEnglish();
   bar.setAttribute('aria-valuenow', String(step));
   bar.setAttribute('aria-valuetext', isEn ? `Step ${step} of 4: ${label}` : `Schritt ${step} von 4: ${label}`);
   bar.setAttribute('aria-label', isEn ? 'Configuration progress' : 'Konfigurationsfortschritt');
 }
 
 function prevStep(current) {
-  goToStep(current - 1);
+  goToStep(current - 1, true);
 }
 
-function goToStep(step) {
+// moveFocus: nur bei Benutzeraktion (Weiter/Zurück), nicht beim Wiederherstellen beim Laden.
+function goToStep(step, moveFocus = false) {
   document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.progress-step').forEach((s, i) => {
     s.classList.remove('active', 'completed');
@@ -175,6 +176,14 @@ function goToStep(step) {
   updateProgressAria();
   saveConfig();
   document.querySelector('.progress-bar-container').scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  if (moveFocus) {
+    // Das vorige Panel ist jetzt display:none; Fokus auf die Überschrift des neuen Schritts setzen
+    const heading = document.getElementById('step' + step + '-title');
+    if (heading) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }
+  }
 }
 
 // ── Zusammenfassung ───────────────────────────────────────────────────────
@@ -229,7 +238,6 @@ function buildSummary() {
   if (state.referenz) params.set('ref', state.referenz);
   document.getElementById('anfrage-link').href = `Kontakt.html?${params.toString()}`;
 }
-window.buildSummary = buildSummary;
 
 // ── Tastaturunterstützung für Karten ─────────────────────────────────────
 document.addEventListener('keydown', function (e) {
@@ -244,7 +252,7 @@ document.addEventListener('keydown', function (e) {
 // ── Klick-Delegation (ersetzt vormalige inline onclick-Attribute für CSP) ──
 document.addEventListener('click', function (e) {
   const optionCard = e.target.closest('#panel-1 .option-card');
-  if (optionCard) { selectOption(optionCard, 'motiv'); return; }
+  if (optionCard) { selectOption(optionCard); return; }
 
   const formatCard = e.target.closest('#panel-2 .format-card');
   if (formatCard) { selectFormat(formatCard); return; }

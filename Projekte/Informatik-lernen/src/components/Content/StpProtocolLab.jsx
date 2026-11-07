@@ -167,7 +167,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border-color)',
                 background: mode === 'rstp' ? 'var(--accent-primary)' : 'var(--bg-card)',
-                color: mode === 'rstp' ? '#ffffff' : 'var(--text-main)',
+                color: mode === 'rstp' ? 'var(--text-on-accent)' : 'var(--text-main)',
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
@@ -186,7 +186,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
                 borderRadius: 'var(--radius-sm)',
                 border: '1px solid var(--border-color)',
                 background: mode === 'stp' ? 'var(--accent-amber)' : 'var(--bg-card)',
-                color: mode === 'stp' ? '#ffffff' : 'var(--text-main)',
+                color: mode === 'stp' ? 'var(--text-on-accent)' : 'var(--text-main)',
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
@@ -254,7 +254,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
 
       {/* Main Tab Content */}
       {activeTab === 'topology' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '1.5rem' }}>
           {/* Switch Grid */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <h2 style={{ fontSize: '1.15rem', margin: 0, fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -470,7 +470,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
                             borderRadius: 'var(--radius-xs)',
                             border: '1px solid var(--border-color)',
                             background: isDown ? 'var(--accent-emerald)' : 'var(--bg-primary)',
-                            color: isDown ? '#ffffff' : 'var(--accent-rose)',
+                            color: isDown ? 'var(--text-on-accent)' : 'var(--accent-rose)',
                             cursor: 'pointer',
                             fontWeight: 600
                           }}
@@ -496,7 +496,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
           </h2>
           <p style={{ color: 'var(--text-dim)', marginBottom: '1.5rem' }}>{convergence.description}</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
             {convergence.phases.map((phase, idx) => (
               <div
                 key={phase.name}
@@ -583,7 +583,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-xs)',
                   border: selectedSwitchId === sw.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
                   background: selectedSwitchId === sw.id ? 'var(--accent-primary)' : 'var(--bg-primary)',
-                  color: selectedSwitchId === sw.id ? '#ffffff' : 'var(--text-main)',
+                  color: selectedSwitchId === sw.id ? 'var(--text-on-accent)' : 'var(--text-main)',
                   fontWeight: 600,
                   cursor: 'pointer',
                   fontSize: '0.85rem'
@@ -597,8 +597,8 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
           <div style={{ position: 'relative' }}>
             <pre
               style={{
-                background: '#0f172a',
-                color: '#38bdf8',
+                background: 'var(--bg-card)',
+                color: 'var(--accent-cyan)',
                 padding: '1.25rem',
                 borderRadius: 'var(--radius-sm)',
                 overflowX: 'auto',
@@ -763,7 +763,7 @@ export default function StpProtocolLab({ onRewardXP = () => {} }) {
                   borderRadius: 'var(--radius-sm)',
                   border: 'none',
                   background: 'var(--accent-primary)',
-                  color: '#ffffff',
+                  color: 'var(--text-on-accent)',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}

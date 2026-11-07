@@ -3,8 +3,8 @@ import { GitBranch, GitCommit, GitMerge, GitPullRequest, RotateCcw, Sparkles, Te
 
 export default function GitBranchGraphLab({ onRewardXP }) {
   const initialBranches = {
-    main: { name: 'main', color: '#6366f1', commits: ['c1', 'c2'] },
-    feature: { name: 'feature', color: '#10b981', commits: ['c1', 'c2', 'c3'] }
+    main: { name: 'main', color: 'var(--accent-primary)', commits: ['c1', 'c2'] },
+    feature: { name: 'feature', color: 'var(--accent-emerald)', commits: ['c1', 'c2', 'c3'] }
   };
 
   const initialCommits = {
@@ -253,7 +253,7 @@ export default function GitBranchGraphLab({ onRewardXP }) {
 
       {/* Interactive Commit Graph Visualizer Canvas (SVG) */}
       <div style={{ 
-        background: '#090d16', 
+        background: 'var(--bg-secondary)', 
         borderRadius: '16px', 
         border: '1px solid #1e293b', 
         padding: '24px', 
@@ -262,10 +262,10 @@ export default function GitBranchGraphLab({ onRewardXP }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>AKTIVER BRANCH (HEAD):</span>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontWeight: 600 }}>AKTIVER BRANCH (HEAD):</span>
             <span style={{ 
-              background: branches[headBranch]?.color || '#6366f1', 
-              color: '#fff', 
+              background: branches[headBranch]?.color || 'var(--accent-primary)', 
+              color: 'var(--text-on-accent)', 
               padding: '2px 10px', 
               borderRadius: '9999px', 
               fontSize: '0.75rem', 
@@ -275,7 +275,7 @@ export default function GitBranchGraphLab({ onRewardXP }) {
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', fontSize: '0.78rem', color: '#94a3b8' }}>
+          <div style={{ display: 'flex', gap: '12px', fontSize: '0.78rem', color: 'var(--text-dim)' }}>
             {Object.values(branches).map(b => (
               <span key={b.name} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: b.color }} />
@@ -411,7 +411,7 @@ export default function GitBranchGraphLab({ onRewardXP }) {
         <button 
           onClick={() => mergeBranch(headBranch === 'main' ? 'feature' : 'main')} 
           className="btn btn-secondary btn-sm"
-          style={{ gap: '6px', borderColor: '#10b981', color: '#10b981' }}
+          style={{ gap: '6px', borderColor: '#10b981', color: 'var(--accent-emerald)' }}
         >
           <GitMerge size={15} /> Git Merge ({headBranch === 'main' ? 'feature' : 'main'})
         </button>
@@ -426,15 +426,15 @@ export default function GitBranchGraphLab({ onRewardXP }) {
       </div>
 
       {/* Interactive Git Terminal Console */}
-      <div style={{ background: '#0b0f19', borderRadius: '12px', border: '1px solid #1e293b', padding: '16px', fontFamily: 'monospace' }}>
+      <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid #1e293b', padding: '16px', fontFamily: 'monospace' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.8rem', marginBottom: '12px' }}>
           <Terminal size={14} /> Git Interactive CLI Terminal
         </div>
 
         {/* Logs Output */}
-        <div style={{ maxHeight: '120px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.85rem', color: '#e2e8f0', marginBottom: '12px' }}>
+        <div style={{ maxHeight: '120px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.85rem', color: 'var(--text-main)', marginBottom: '12px' }}>
           {cliLogs.map((log, index) => (
-            <div key={index} style={{ color: log.startsWith('error') || log.startsWith('fatal') ? '#f87171' : '#38bdf8' }}>
+            <div key={index} style={{ color: log.startsWith('error') || log.startsWith('fatal') ? 'var(--accent-rose)' : 'var(--accent-cyan)' }}>
               &gt; {log}
             </div>
           ))}
@@ -442,7 +442,7 @@ export default function GitBranchGraphLab({ onRewardXP }) {
 
         {/* CLI Input */}
         <form onSubmit={handleCliSubmit} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#10b981', fontWeight: 'bold' }}>dev@repo:~$</span>
+          <span style={{ color: 'var(--accent-emerald)', fontWeight: 'bold' }}>dev@repo:~$</span>
           <input
             type="text"
             value={cliInput}
@@ -450,11 +450,11 @@ export default function GitBranchGraphLab({ onRewardXP }) {
             placeholder="git commit -m 'feat: my change' / git checkout main / git merge feature"
             style={{
               flex: 1,
-              background: '#1e293b',
+              background: 'var(--bg-card-hover)',
               border: '1px solid #334155',
               borderRadius: '6px',
               padding: '8px 12px',
-              color: '#f8fafc',
+              color: 'var(--text-main)',
               fontFamily: 'monospace',
               fontSize: '0.9rem',
               outline: 'none'

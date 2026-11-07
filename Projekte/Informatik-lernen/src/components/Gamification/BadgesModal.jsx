@@ -1,24 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { BADGES } from '../../utils/storage';
 import { Trophy, X } from 'lucide-react';
 
 export default function BadgesModal({ isOpen, onClose, userState = {} }) {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
 
   if (!isOpen) return null;
 
   return (
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Backdrop schließt nur per Maus; Tastatur: Escape und Schließen-Button
     <div 
-      onClick={onClose}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
       style={{
         position: 'fixed',
         top: 0,
@@ -35,10 +29,11 @@ export default function BadgesModal({ isOpen, onClose, userState = {} }) {
       }}
     >
       <div 
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby="badges-modal-title"
-        onClick={(e) => e.stopPropagation()}
         style={{
           maxWidth: '700px',
           width: '100%',
@@ -83,7 +78,7 @@ export default function BadgesModal({ isOpen, onClose, userState = {} }) {
         </div>
 
         {/* Badges Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
           {BADGES.map(badge => {
             const isUnlocked = Array.isArray(userState?.unlockedBadges) && userState.unlockedBadges.includes(badge.id);
 

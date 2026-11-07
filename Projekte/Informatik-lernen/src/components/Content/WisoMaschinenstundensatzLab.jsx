@@ -87,7 +87,7 @@ export default function WisoMaschinenstundensatzLab() {
               </span>
               <span className="text-xs text-slate-400">AP2 WISO Standard</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               Maschinenstundensatz-Rechner (MSS)
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -122,142 +122,142 @@ export default function WisoMaschinenstundensatzLab() {
         {/* Form Inputs (7 Cols) */}
         <div className="lg:col-span-7 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-slate-50 mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400" />
               1. Stammdaten & Laufzeit
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-1" className="block text-slate-400 text-xs font-medium mb-1">
                   Wiederbeschaffungswert (€)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-1"
                   type="number"
                   value={params.wiederbeschaffungswert}
                   onChange={(e) => handleChange('wiederbeschaffungswert', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-amber-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-2" className="block text-slate-400 text-xs font-medium mb-1">
                   Geschätzter Restwert (€)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-2"
                   type="number"
                   value={params.restwert}
                   onChange={(e) => handleChange('restwert', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-amber-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-3" className="block text-slate-400 text-xs font-medium mb-1">
                   Nutzungsdauer (Jahre)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-3"
                   type="number"
                   value={params.nutzungsdauerJahre}
                   onChange={(e) => handleChange('nutzungsdauerJahre', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-amber-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-4" className="block text-slate-400 text-xs font-medium mb-1">
                   Kalkulatorischer Zinssatz (% p.a.)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-4"
                   type="number"
                   step="0.5"
                   value={params.kalkZinssatzProzent}
                   onChange={(e) => handleChange('kalkZinssatzProzent', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-amber-500 font-mono"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-5" className="block text-slate-400 text-xs font-medium mb-1">
                   Geplante jährliche Maschinenlaufzeit (Stunden / Jahr)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-5"
                   type="number"
                   value={params.jaehrlicheLaufstunden}
                   onChange={(e) => handleChange('jaehrlicheLaufstunden', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-amber-500 font-mono"
                 />
               </div>
             </div>
           </div>
 
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-slate-50 mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-cyan-400" />
               2. Raum-, Energie- & Betriebskosten
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-6" className="block text-slate-400 text-xs font-medium mb-1">
                   Raumfläche (m²)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-6"
                   type="number"
                   value={params.raumflaecheQm}
                   onChange={(e) => handleChange('raumflaecheQm', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-7" className="block text-slate-400 text-xs font-medium mb-1">
                   Raumkostensatz (€ / m² / Jahr)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-7"
                   type="number"
                   value={params.raumkostensatzProQm}
                   onChange={(e) => handleChange('raumkostensatzProQm', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-8" className="block text-slate-400 text-xs font-medium mb-1">
                   Leistungsaufnahme (kW)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-8"
                   type="number"
                   step="0.5"
                   value={params.leistungKw}
                   onChange={(e) => handleChange('leistungKw', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-9" className="block text-slate-400 text-xs font-medium mb-1">
                   Strompreis (€ / kWh)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-9"
                   type="number"
                   step="0.01"
                   value={params.strompreisKwh}
                   onChange={(e) => handleChange('strompreisKwh', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-10" className="block text-slate-400 text-xs font-medium mb-1">
                   Instandhaltungskosten (€ / Jahr)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-10"
                   type="number"
                   value={params.instandhaltungProJahr}
                   onChange={(e) => handleChange('instandhaltungProJahr', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-xs font-medium mb-1">
+                <label htmlFor="wiso-maschinenstundensatz-lab-11" className="block text-slate-400 text-xs font-medium mb-1">
                   Werkzeugkosten (€ / Jahr)
                 </label>
-                <input
+                <input id="wiso-maschinenstundensatz-lab-11"
                   type="number"
                   value={params.werkzeugkostenProJahr}
                   onChange={(e) => handleChange('werkzeugkostenProJahr', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50 focus:outline-none focus:border-cyan-500 font-mono"
                 />
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function WisoMaschinenstundensatzLab() {
               Ergebnis Maschinenstundensatz
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl md:text-5xl font-black text-white font-mono">
+              <span className="text-4xl md:text-5xl font-black text-slate-50 font-mono">
                 {calculation.maschinenstundensatzGesamt.toFixed(2)}
               </span>
               <span className="text-xl font-medium text-amber-300">€ / Stunde</span>

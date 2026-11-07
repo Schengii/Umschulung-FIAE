@@ -60,7 +60,7 @@ export default function KafkaRebalanceLab({ onRewardXP }) {
       </div>
 
       {/* Protocol Tabs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', marginBottom: '24px' }}>
         <button
           onClick={() => { setProtocol('COOPERATIVE_STICKY'); triggerHaptic('SELECTION'); }}
           className={`btn ${protocol === 'COOPERATIVE_STICKY' ? 'btn-primary' : 'btn-secondary'}`}
@@ -81,10 +81,10 @@ export default function KafkaRebalanceLab({ onRewardXP }) {
       </div>
 
       {/* Rebalance Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Consumer Group Downtime:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: rebalanceData.isZeroDowntime ? '#10b981' : '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: rebalanceData.isZeroDowntime ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginTop: '4px' }}>
             {rebalanceData.downtimeMs} ms
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function KafkaRebalanceLab({ onRewardXP }) {
           Aktuelle Partitions-Zuweisung ({rebalanceData.topic}):
         </span>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '12px' }}>
           {Object.entries(rebalanceData.assignments).map(([consumer, partitions]) => (
             <div key={consumer} style={{ padding: '14px', background: 'var(--bg-primary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
               <strong style={{ fontSize: '0.9rem', color: 'var(--accent-primary)', display: 'block', marginBottom: '8px' }}>

@@ -111,7 +111,7 @@ export default function GithubActionsWorkflowLab({ onRewardXP }) {
       </div>
 
       {/* DAG Workflow Visualizer & Logs Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Stages DAG */}
         <div className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-xl)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -181,7 +181,7 @@ export default function GithubActionsWorkflowLab({ onRewardXP }) {
           </div>
 
           <div style={{
-            background: '#0d1117',
+            background: 'var(--bg-secondary)',
             color: '#58a6ff',
             padding: '16px',
             borderRadius: 'var(--radius-md)',

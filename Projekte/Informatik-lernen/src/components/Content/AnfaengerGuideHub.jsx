@@ -88,7 +88,7 @@ export default function AnfaengerGuideHub() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === g.id ? 'var(--accent-emerald)' : 'var(--bg-card)',
-              color: selectedId === g.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === g.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === g.id ? '2px solid var(--accent-emerald)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

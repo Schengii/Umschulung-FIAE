@@ -17,7 +17,7 @@ window.projectsData = [
     "category": "web",
     "language": "TypeScript",
     "stars": 0,
-    "updatedAt": "2026-10-27T09:25:30.552Z",
+    "updatedAt": "2026-11-07T10:46:36.456Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -163,7 +163,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-10-27T09:25:30.710Z",
+    "updatedAt": "2026-11-07T10:46:36.567Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -187,7 +187,7 @@ window.projectsData = [
     "category": "ai",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-10-27T09:25:30.825Z",
+    "updatedAt": "2026-11-07T10:46:36.679Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -299,7 +299,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Informatik-lernen",
-    "updatedAt": "2026-10-22T09:57:38Z"
+    "updatedAt": "2026-11-02T12:48:23Z"
   },
   {
     "repoName": "ManuFaktur",
@@ -320,7 +320,7 @@ window.projectsData = [
     "language": "JavaScript",
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/ManuFaktur",
-    "updatedAt": "2026-10-22T09:57:43Z",
+    "updatedAt": "2026-11-06T10:56:46Z",
     "images": [
       "assets/images/manufaktur_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -349,7 +349,7 @@ window.projectsData = [
     "category": "games",
     "language": "C++",
     "stars": 0,
-    "updatedAt": "2026-10-27T09:25:31.452Z"
+    "updatedAt": "2026-11-07T10:46:37.256Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -369,7 +369,7 @@ window.projectsData = [
     "category": "ai web",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-10-27T09:25:31.569Z",
+    "updatedAt": "2026-11-07T10:46:37.364Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"

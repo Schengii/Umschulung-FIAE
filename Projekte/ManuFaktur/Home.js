@@ -10,8 +10,10 @@ let currentLang = 'de';
 let currentTheme = 'light';
 
 try {
-    currentLang = localStorage.getItem('manufaktur_lang') || 'de';
-    currentTheme = localStorage.getItem('manufaktur_theme') || 
+    const storedLang = localStorage.getItem('manufaktur_lang');
+    const storedTheme = localStorage.getItem('manufaktur_theme');
+    currentLang = storedLang === 'en' ? 'en' : 'de';
+    currentTheme = (storedTheme === 'dark' || storedTheme === 'light') ? storedTheme :
         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 } catch (e) {
     currentLang = 'de';
@@ -60,7 +62,7 @@ function getI18nDict() {
 }
 
 // Englisch-Besucher: Laden sofort anstoßen, nicht erst nach DOMContentLoaded.
-if (currentLang === 'en') ensureI18n().catch(() => {});
+if (isEnglish()) ensureI18n().catch(() => {});
 
 /**
  * Zentrale Texte für Theme-/Sprach-Umschalter-Buttons (Footer).
@@ -99,7 +101,7 @@ function setTheme(theme) {
 function toggleTheme() {
     const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
     setTheme(newTheme);
-    showToast(currentLang === 'en' 
+    showToast(isEnglish() 
         ? (newTheme === 'dark' ? '🌙 Dark mode activated' : '☀️ Light mode activated')
         : (newTheme === 'dark' ? '🌙 Dunkelmodus aktiviert' : '☀️ Hellmodus aktiviert'));
 }
@@ -122,6 +124,10 @@ function updateThemeButtonUI() {
 
 function getLanguage() {
     return currentLang;
+}
+
+function isEnglish() {
+    return currentLang === 'en';
 }
 
 function setLanguage(lang) {
@@ -150,6 +156,7 @@ function setLanguage(lang) {
     // Alles Weitere braucht die Texte der Zielsprache (beim ersten Wechsel auf Englisch erst nach dem Nachladen).
     whenI18nReady(currentLang, () => {
         applyTranslations(currentLang);
+        refreshAccordionHeights();
 
         // Galerie Filter & Suche aktualisieren falls vorhanden
         if (typeof filterGallery === 'function') {
@@ -170,6 +177,9 @@ function setLanguage(lang) {
 function toggleLanguage() {
     const newLang = (currentLang === 'de') ? 'en' : 'de';
     setLanguage(newLang);
+    // Footer wurde neu aufgebaut: Fokus auf den neuen Sprach-Button zurücksetzen
+    const newLangBtn = document.getElementById('lang-toggle-btn');
+    if (newLangBtn) newLangBtn.focus();
     showToast(newLang === 'en' ? '🇬🇧 Switched to English' : '🇩🇪 Auf Deutsch gewechselt');
 }
 
@@ -225,20 +235,45 @@ function initHamburgerMenu() {
         });
     });
 
+    // Document-Listener nur einmal registrieren (initHamburgerMenu läuft bei jedem Sprachwechsel erneut)
+    if (navDocListenersBound) return;
+    navDocListenersBound = true;
+
     // Click-Outside schließt offene Dropdowns
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.dropdown')) {
             document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
         }
     });
+
+    // Escape schließt Dropdowns und das mobile Menü; Fokus geht zurück auf den Hamburger
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        const menu = document.querySelector('.nav-links.active');
+        const openDropdowns = document.querySelectorAll('.dropdown.open');
+        if (!menu && openDropdowns.length === 0) return;
+        openDropdowns.forEach(d => d.classList.remove('open'));
+        if (menu) {
+            const burger = document.querySelector('.hamburger');
+            menu.classList.remove('active');
+            if (burger) {
+                burger.setAttribute('aria-expanded', 'false');
+                const icon = burger.querySelector('i');
+                if (icon) icon.className = 'fa fa-bars';
+                burger.focus();
+            }
+        }
+    });
 }
+
+let navDocListenersBound = false;
 
 /**
  * Gibt den HTML-String der gemeinsamen Navigation zurück.
  * Der aktive Link wird anhand der aktuellen URL gesetzt.
  */
 function getNavHTML(activePage) {
-    const isEn = currentLang === 'en';
+    const isEn = isEnglish();
     const links = [
         { href: 'Home.html', icon: 'fa fa-home', label: 'Home' },
         { href: 'UeberMich.html', icon: 'fa-solid fa-address-card', label: isEn ? 'About Me' : 'Über mich' },
@@ -287,7 +322,7 @@ function getNavHTML(activePage) {
  * Gibt den HTML-String des gemeinsamen Footers zurück.
  */
 function getFooterHTML() {
-    const isEn = currentLang === 'en';
+    const isEn = isEnglish();
     const isDark = currentTheme === 'dark';
     return `
   <footer>
@@ -341,7 +376,7 @@ function getFooterHTML() {
     document.documentElement.setAttribute('data-theme', currentTheme);
     document.documentElement.setAttribute('lang', currentLang);
 
-    // Header nur auf Nicht-Hero-Seiten injizieren
+    // Header-Platzhalter durch die gemeinsame Navigation ersetzen
     const headerEl = document.querySelector('header');
     if (headerEl) {
         headerEl.outerHTML = getNavHTML(filename);
@@ -420,6 +455,7 @@ function applyTranslations(lang) {
 
     // Galerie-Karten (Titel, Technik, Maße aus artworks-data.js)
     translateGalleryCards(lang);
+    if (typeof initFavButtonsUI === 'function') initFavButtonsUI();
 
     // Konfigurator: Fortschrittsanzeige (aria-valuetext) folgt den Schrittnamen
     if (typeof updateProgressAria === 'function') updateProgressAria();
@@ -439,7 +475,7 @@ function applyTranslations(lang) {
 function getArtMeta(itemId) {
     if (!itemId || typeof ARTWORKS_METADATA === 'undefined' || !ARTWORKS_METADATA[itemId]) return null;
     const base = ARTWORKS_METADATA[itemId];
-    if (currentLang === 'en' && typeof ARTWORKS_METADATA_EN !== 'undefined' && ARTWORKS_METADATA_EN[itemId]) {
+    if (isEnglish() && typeof ARTWORKS_METADATA_EN !== 'undefined' && ARTWORKS_METADATA_EN[itemId]) {
         return Object.assign({}, base, ARTWORKS_METADATA_EN[itemId]);
     }
     return base;
@@ -490,7 +526,8 @@ let activeCategory = 'alle';
 function getFavorites() {
     try {
         const favs = localStorage.getItem('manufaktur_favorites');
-        return favs ? JSON.parse(favs) : [];
+        const parsed = favs ? JSON.parse(favs) : [];
+        return Array.isArray(parsed) ? parsed.filter(id => typeof id === 'string') : [];
     } catch {
         return [];
     }
@@ -518,11 +555,11 @@ function toggleFavorite(itemId, event) {
     if (index > -1) {
         favs.splice(index, 1);
         isAdded = false;
-        showToast(currentLang === 'en' ? 'Artwork removed from favorites.' : 'Kunstwerk aus Favoriten entfernt.');
+        showToast(isEnglish() ? 'Artwork removed from favorites.' : 'Kunstwerk aus Favoriten entfernt.');
     } else {
         favs.push(itemId);
         isAdded = true;
-        showToast(currentLang === 'en' ? '❤️ Artwork added to favorites!' : '❤️ Kunstwerk zu Favoriten hinzugefügt!');
+        showToast(isEnglish() ? '❤️ Artwork added to favorites!' : '❤️ Kunstwerk zu Favoriten hinzugefügt!');
     }
 
     saveFavorites(favs);
@@ -556,6 +593,7 @@ function updateFavButtonsUI(itemId, isAdded) {
         if (btn) {
             btn.classList.toggle('active', isAdded);
             btn.setAttribute('aria-label', favButtonLabel(isAdded));
+            btn.setAttribute('title', favButtonLabel(isAdded));
             const icon = btn.querySelector('i');
             if (icon) {
                 icon.className = isAdded ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
@@ -613,10 +651,14 @@ function initFavButtonsUI() {
         const isAdded = favs.includes(itemId);
         btn.classList.toggle('active', isAdded);
         btn.setAttribute('aria-label', favButtonLabel(isAdded));
+        btn.setAttribute('title', favButtonLabel(isAdded));
         btn.innerHTML = isAdded ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>';
     });
     updateFavBadgeCount();
 }
+
+const GALLERY_SEARCH_DEBOUNCE_MS = 150;
+let gallerySearchTimer = null;
 
 function clearGallerySearch() {
     const searchInput = document.getElementById('gallery-search');
@@ -657,7 +699,7 @@ function sortGallery(sortOption) {
 
     items.forEach(item => grid.appendChild(item));
     updateGalleryLinks();
-    showToast(currentLang === 'en' ? 'Gallery re-sorted' : 'Galerie neu sortiert');
+    showToast(isEnglish() ? 'Gallery re-sorted' : 'Galerie neu sortiert');
 }
 
 let currentLbScene = 'detail';
@@ -680,7 +722,7 @@ function resetWallFramePosition() {
     wallFramePosX = 0;
     wallFramePosY = 0;
     updateWallFrameTransform();
-    showToast(currentLang === 'en' ? '🎯 Position centered' : '🎯 Position zentriert');
+    showToast(isEnglish() ? '🎯 Position centered' : '🎯 Position zentriert');
 }
 
 function updateWallFrameTransform() {
@@ -794,7 +836,7 @@ function setLightboxScene(scene, btn) {
             stage.style.backgroundColor = 'transparent';
             if (badge) {
                 badge.classList.remove('hidden');
-                const isEn = currentLang === 'en';
+                const isEn = isEnglish();
                 const labelMap = isEn ? {
                     'livingroom': 'Living Room',
                     'bedroom': 'Bedroom',
@@ -891,7 +933,7 @@ function setLightboxViewAngle(angle, btn) {
         img.src = 'assets/images/rooms/canvas_back.webp';
         if (badge) {
             badge.classList.remove('hidden');
-            badge.innerHTML = `<i class="fa-solid fa-square-check" aria-hidden="true"></i> ${currentLang === 'en' ? 'Stretcher frame & back (solid spruce)' : 'Keilrahmen & Rückseite (massives Fichtenholz)'}`;
+            badge.innerHTML = `<i class="fa-solid fa-square-check" aria-hidden="true"></i> ${isEnglish() ? 'Stretcher frame & back (solid spruce)' : 'Keilrahmen & Rückseite (massives Fichtenholz)'}`;
         }
         container.style.maxWidth = '75%';
         container.style.maxHeight = '52vh';
@@ -904,7 +946,7 @@ function setLightboxViewAngle(angle, btn) {
         container.style.boxShadow = '-20px 25px 50px rgba(0, 0, 0, 0.65), -5px 8px 15px rgba(0, 0, 0, 0.4)';
         if (badge) {
             badge.classList.remove('hidden');
-            badge.innerHTML = `<i class="fa-solid fa-cube" aria-hidden="true"></i> ${currentLang === 'en' ? '3D side view (painted edge)' : '3D-Seitenansicht (gemalter Rand)'}`;
+            badge.innerHTML = `<i class="fa-solid fa-cube" aria-hidden="true"></i> ${isEnglish() ? '3D side view (painted edge)' : '3D-Seitenansicht (gemalter Rand)'}`;
         }
     } else if (currentViewAngle === 'artist') {
         if (stage) {
@@ -916,7 +958,7 @@ function setLightboxViewAngle(angle, btn) {
         }
         if (badge) {
             badge.classList.remove('hidden');
-            badge.innerHTML = `<i class="fa-solid fa-palette" aria-hidden="true"></i> ${currentLang === 'en' ? 'Handmade in the Bonn studio' : 'Handgemacht im Atelier Bonn'}`;
+            badge.innerHTML = `<i class="fa-solid fa-palette" aria-hidden="true"></i> ${isEnglish() ? 'Handmade in the Bonn studio' : 'Handgemacht im Atelier Bonn'}`;
         }
     }
 }
@@ -930,7 +972,7 @@ function rotateLightboxImage(deg) {
     if (!img) return;
     currentRotationAngle = (currentRotationAngle + (deg || 90)) % 360;
     img.style.transform = `rotate(${currentRotationAngle}deg)`;
-    showToast(currentLang === 'en' ? `Image rotated ${currentRotationAngle}°` : `Bild um ${currentRotationAngle}° gedreht`);
+    showToast(isEnglish() ? `Image rotated ${currentRotationAngle}°` : `Bild um ${currentRotationAngle}° gedreht`);
 }
 
 function toggleLightboxZoom() {
@@ -939,7 +981,7 @@ function toggleLightboxZoom() {
     const lens = document.getElementById('lightbox-magnifier');
     if (btn) btn.classList.toggle('active', isZoomActive);
     if (!isZoomActive && lens) lens.style.display = 'none';
-    showToast(currentLang === 'en'
+    showToast(isEnglish()
         ? (isZoomActive ? '🔍 Magnifier activated (hover over the image)' : 'Magnifier deactivated')
         : (isZoomActive ? '🔍 Lupe aktiviert (Fahre über das Bild)' : 'Lupe deaktiviert'));
 }
@@ -1020,6 +1062,7 @@ let isClosingLightboxFromPopstate = false;
 let isFlyerModalOpen = false;
 let closeLightboxUI = null;
 let closeFlyerModalUI = null;
+let lastFlyerTrigger = null;
 
 function applyFilterUI(category) {
     activeCategory = category || 'alle';
@@ -1104,7 +1147,8 @@ function filterGallery() {
         const itemId = item.getAttribute('id') || '';
         const imgEl = item.querySelector('img');
         const captionEl = item.querySelector('.gallery-caption');
-        const itemText = (captionEl ? captionEl.innerText : '') + ' ' + (imgEl ? imgEl.alt : '');
+        // textContent statt innerText: innerText erzwingt pro Item ein Layout (Reflow)
+        const itemText = (captionEl ? captionEl.textContent : '') + ' ' + (imgEl ? imgEl.alt : '');
 
         let matchesCategory = false;
         if (activeCategory === 'alle') {
@@ -1149,33 +1193,9 @@ function filterGallery() {
         clearBtn.style.display = searchTerm ? 'block' : 'none';
     }
 
-    const countBadge = document.getElementById('search-count-badge');
-    if (countBadge) {
-        const isEnCount = currentLang === 'en';
-        const catMap = isEnCount ? {
-            'alle': 'all categories',
-            'tiere': 'Animals',
-            'landschaften': 'Landscapes',
-            'pflanzen': 'Botanicals',
-            'sonstiges': 'Still Life & More',
-            'favoriten': '❤️ Saved Favorites'
-        } : {
-            'alle': 'alle Kategorien',
-            'tiere': 'Tiere',
-            'landschaften': 'Landschaften',
-            'pflanzen': 'Pflanzen',
-            'sonstiges': 'Sonstiges',
-            'favoriten': '❤️ Gemerkte Kunstwerke'
-        };
-        const catLabel = catMap[activeCategory] || activeCategory;
-        countBadge.innerHTML = isEnCount
-            ? `<i class="fa-solid fa-images" aria-hidden="true"></i> Showing ${visibleCount} of ${items.length} artworks (${catLabel})`
-            : `<i class="fa-solid fa-images" aria-hidden="true"></i> Zeige ${visibleCount} von ${items.length} Kunstwerken (${catLabel})`;
-    }
-
     const liveCounterEl = document.getElementById('gallery-counter');
     if (liveCounterEl) {
-        const isEnCounter = currentLang === 'en';
+        const isEnCounter = isEnglish();
         if (visibleCount === items.length) {
             liveCounterEl.textContent = isEnCounter
                 ? `${items.length} paintings`
@@ -1190,6 +1210,19 @@ function filterGallery() {
     updateFavBadgeCount();
     updateGalleryLinks();
 }
+
+// Höhe geöffneter FAQ-Einträge neu messen (nach Sprachwechsel oder Resize ändert sich die Textlänge)
+function refreshAccordionHeights() {
+    document.querySelectorAll('.accordion-header.active').forEach(header => {
+        const content = header.nextElementSibling;
+        if (content) content.style.maxHeight = content.scrollHeight + 'px';
+    });
+}
+let accordionResizeTimer = null;
+window.addEventListener('resize', function () {
+    clearTimeout(accordionResizeTimer);
+    accordionResizeTimer = setTimeout(refreshAccordionHeights, 150);
+});
 
 function updateGalleryLinks() {
     visibleGalleryLinks = Array.from(document.querySelectorAll('.gallery-item'))
@@ -1209,15 +1242,10 @@ document.addEventListener('DOMContentLoaded', function () {
     initFavButtonsUI();
     updateGalleryLinks();
 
-    // --- B. Hamburger Menü (Mobil) ---
-    // Wird bereits vollständig von initHamburgerMenu() (oben) behandelt.
-
     // --- C. Lightbox & Slideshow & Gesten ---
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-    const captionText = document.getElementById('caption');
     const lbCounter = document.getElementById('lightbox-counter');
-    const lbWhatsappBtn = document.getElementById('lightbox-whatsapp-btn');
     const lbShareBtn = document.getElementById('lightbox-share-btn');
     const lbFavBtn = document.getElementById('lightbox-fav-btn');
     let lastFocusedElement = null;
@@ -1241,9 +1269,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isLightboxOpen) {
             savedGalleryScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
             isLightboxOpen = true;
+            // Nur beim ersten Öffnen merken, sonst wird beim Blättern der Schließen-Button gespeichert
+            lastFocusedElement = document.activeElement;
         }
 
-        lastFocusedElement = document.activeElement;
         document.body.style.overflow = 'hidden';
         currentIndex = index;
 
@@ -1308,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const realMasse = artMeta ? artMeta.masse : 'Unikatmaß';
         const realKat = artMeta ? artMeta.kategorie : (item ? (item.getAttribute('data-kategorie') || 'Kunstwerk') : 'Kunstwerk');
 
-        const isEn = currentLang === 'en';
+        const isEn = isEnglish();
         const techniqueTranslations = {
             'Acryl auf Leinwand': 'Acrylic on Canvas',
             'Öl auf Leinwand': 'Oil on Canvas',
@@ -1340,21 +1369,9 @@ document.addEventListener('DOMContentLoaded', function () {
             statusRow.classList.toggle('hidden', !statusText);
         }
 
-        if (captionText) {
-            captionText.innerHTML = `${realTitle} <span class="caption-meta font-size-085rem color-text-muted">(${displayTechnik}, ${realMasse})</span>`;
-        }
-
         // Bildzähler
         if (lbCounter) {
             lbCounter.innerText = isEn ? `Image ${currentIndex + 1} of ${visibleGalleryLinks.length}` : `Bild ${currentIndex + 1} von ${visibleGalleryLinks.length}`;
-        }
-
-        // WhatsApp Link
-        if (lbWhatsappBtn) {
-            const waMsg = isEn 
-                ? `Hello Manuela, I am interested in your artwork "${realTitle}" (${displayTechnik}, ${realMasse}) [#${itemId || 'Gallery'}] from your gallery.`
-                : `Hallo Manuela, ich habe Interesse am Kunstwerk "${realTitle}" (${realTechnik}, ${realMasse}) [#${itemId || 'Galerie'}] aus deiner Bildergalerie.`;
-            lbWhatsappBtn.href = `https://wa.me/491632662435?text=${encodeURIComponent(waMsg)}`;
         }
 
         // Share Link Button & Web Share API
@@ -1429,7 +1446,7 @@ document.addEventListener('DOMContentLoaded', function () {
             lbRoomBtn.onclick = function() {
                 setLightboxViewAngle('room', document.querySelector('.view-thumb-btn[data-view="room"]'));
                 setLightboxScene('livingroom', document.querySelector('.scene-btn[data-scene="livingroom"]'));
-                showToast(currentLang === 'en' ? '✨ AI wall preview activated!' : '✨ KI-Wandvorlage im Raum aktiviert!');
+                showToast(isEnglish() ? '✨ AI wall preview activated!' : '✨ KI-Wandvorlage im Raum aktiviert!');
             };
         }
 
@@ -1608,11 +1625,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 trapFocus(lightbox, e);
                 return;
             }
-            const activeTag = document.activeElement ? document.activeElement.tagName : '';
-            if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
             if (e.key === 'Escape') {
                 closeLightboxFn();
-            } else if (e.key === 'ArrowRight') {
+                return;
+            }
+            const activeTag = document.activeElement ? document.activeElement.tagName : '';
+            if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+            if (e.key === 'ArrowRight') {
                 changeSlide(1);
             } else if (e.key === 'ArrowLeft') {
                 changeSlide(-1);
@@ -1681,10 +1700,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- G. Rechtsklick-Schutz (Toast) ---
-    document.addEventListener('contextmenu', function (e) {
+    // Skip-Link per Skript: funktioniert auch mit <base href> (404.html), wo '#main-content' sonst auf '/' zeigt
+document.addEventListener('click', function (e) {
+    const skip = e.target.closest && e.target.closest('.skip-link');
+    if (!skip) return;
+    const target = document.getElementById((skip.getAttribute('href') || '').replace('#', ''));
+    if (!target) return;
+    e.preventDefault();
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus();
+    target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+});
+
+document.addEventListener('contextmenu', function (e) {
         if (e.target.tagName === 'IMG') {
             e.preventDefault();
-            showToast(currentLang === 'en' ? 'Copyright protected © Manuela Schenk' : 'Urheberrechtlich geschützt © Manuela Schenk');
+            showToast(isEnglish() ? 'Copyright protected © Manuela Schenk' : 'Urheberrechtlich geschützt © Manuela Schenk');
         }
     });
 
@@ -1737,6 +1768,10 @@ closeFlyerModalUI = function (triggerHistoryBack = true) {
         isFlyerModalOpen = false;
         document.body.style.overflow = '';
 
+        // Fokus zurück an das auslösende Bild (WCAG 2.4.3)
+        if (lastFlyerTrigger && document.contains(lastFlyerTrigger)) lastFlyerTrigger.focus();
+        lastFlyerTrigger = null;
+
         if (triggerHistoryBack && window.history && window.history.state && window.history.state.modal === 'flyer') {
             isClosingLightboxFromPopstate = true;
             window.history.back();
@@ -1745,6 +1780,7 @@ closeFlyerModalUI = function (triggerHistoryBack = true) {
 };
 
 function openFlyerModal(element) {
+    lastFlyerTrigger = element;
     const modal = document.getElementById('flyerModal');
     const modalImg = document.getElementById('modalImg');
     if (modal && modalImg) {
@@ -1772,6 +1808,13 @@ document.addEventListener('keydown', function (e) {
     if (modal && isFlyerModalOpen) {
         if (e.key === 'Escape') closeFlyerModal();
         else if (e.key === 'Tab') trapFocus(modal, e);
+        return;
+    }
+    // Flyer-Bilder sind per Tastatur bedienbar (role="button")
+    const flyer = e.target.closest && e.target.closest('.flyer-image');
+    if (flyer && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        openFlyerModal(flyer);
     }
 });
 
@@ -1867,7 +1910,11 @@ document.addEventListener('click', function (e) {
 
 document.addEventListener('input', function (e) {
     if (e.target.id === 'lb-scale-slider') updateLbWallScale(e.target.value);
-    if (e.target.id === 'gallery-search') filterGallery();
+    if (e.target.id === 'gallery-search') {
+        // Entprellen: nicht bei jedem Tastendruck neu filtern (und den Live-Zähler ansagen)
+        clearTimeout(gallerySearchTimer);
+        gallerySearchTimer = setTimeout(filterGallery, GALLERY_SEARCH_DEBOUNCE_MS);
+    }
 });
 
 document.addEventListener('change', function (e) {
@@ -1950,7 +1997,7 @@ function initContactForm() {
 
     form.addEventListener('submit', async function (e) {
         const action = form.getAttribute('action');
-        const isEn = currentLang === 'en';
+        const isEn = isEnglish();
 
         const accessKey = form.querySelector('input[name="access_key"]');
         if (!action || !accessKey || !accessKey.value || accessKey.value === 'DEIN_WEB3FORMS_KEY') {
@@ -1964,7 +2011,7 @@ function initContactForm() {
 
         e.preventDefault();
 
-        // Honeypot: ein Mensch sieht das Feld nicht. Bots bekommen scheinbar Erfolg, es wird aber nichts gesendet.
+        // Honeypot: ein Mensch sieht das Feld nicht. Ist es angekreuzt, wird stillschweigend nichts gesendet.
         const honeypot = form.querySelector('input[name="botcheck"]');
         if (honeypot && honeypot.checked) return;
 
@@ -1984,11 +2031,20 @@ function initContactForm() {
 
         try {
             const data = new FormData(form);
-            const response = await fetch(action, {
-                method: 'POST',
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            });
+            // Timeout, damit der Button bei hängender Verbindung nicht ewig auf „Sende...“ bleibt
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), FORM_SUBMIT_TIMEOUT_MS);
+            let response;
+            try {
+                response = await fetch(action, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' },
+                    signal: controller.signal
+                });
+            } finally {
+                clearTimeout(timeoutId);
+            }
 
             const result = await response.json().catch(() => null);
 
@@ -1999,7 +2055,8 @@ function initContactForm() {
                     : '<i class="fa fa-check-circle" aria-hidden="true"></i> Vielen Dank! Deine Nachricht wurde gesendet. Ich melde mich bald bei dir.';
                 showFormFeedback('success', successMsg);
             } else {
-                const errorDetail = result && result.message ? ` (${result.message})` : '';
+                // Antworttext der API ist fremder Inhalt: nur escaped einfügen
+                const errorDetail = result && result.message ? ` (${escapeHtml(result.message)})` : '';
                 const errorMsg = isEn
                     ? `<i class="fa fa-exclamation-circle" aria-hidden="true"></i> An error occurred while sending${errorDetail}. Please try again or contact me directly at <a href="${buildContactMailtoHref(form)}">manufaktur-malerei@web.de</a>`
                     : `<i class="fa fa-exclamation-circle" aria-hidden="true"></i> Es ist ein Fehler aufgetreten${errorDetail}. Bitte versuche es erneut oder schreibe direkt an <a href="${buildContactMailtoHref(form)}">manufaktur-malerei@web.de</a>`;
@@ -2019,13 +2076,23 @@ function initContactForm() {
     });
 }
 
+const FORM_SUBMIT_TIMEOUT_MS = 15000;
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function showFormFeedback(type, message) {
     let feedback = document.getElementById('form-feedback');
     if (!feedback) {
         feedback = document.createElement('div');
         feedback.id = 'form-feedback';
-        feedback.setAttribute('role', 'alert');
-        feedback.setAttribute('aria-live', 'polite');
+        feedback.setAttribute('role', 'alert'); // role=alert ist bereits assertive Live-Region
         const form = document.querySelector('.contact-form');
         if (form) form.insertAdjacentElement('afterend', feedback);
     }
@@ -2107,17 +2174,23 @@ function showConfigReference(refTitle, displayTitle) {
         state.referenz = refTitle;
         if (typeof saveConfig === 'function') saveConfig();
     }
-    const hintEl = document.getElementById('hint-1');
-    if (!hintEl) return;
+    const validationHint = document.getElementById('hint-1');
+    if (!validationHint) return;
+    // Eigenes Element: das Validierungs-Hint (#hint-1) bleibt für „Bitte wähle ein Motiv“ erhalten
+    let hintEl = document.getElementById('config-reference');
+    if (!hintEl) {
+        hintEl = document.createElement('p');
+        hintEl.id = 'config-reference';
+        hintEl.className = 'config-reference';
+        validationHint.insertAdjacentElement('beforebegin', hintEl);
+    }
     const icon = document.createElement('i');
     icon.className = 'fa fa-circle-info';
     icon.setAttribute('aria-hidden', 'true');
     const strong = document.createElement('strong');
     strong.textContent = displayTitle || refTitle;
-    const label = currentLang === 'en' ? 'Selected reference painting' : 'Ausgewählte Motiv-Referenz';
+    const label = isEnglish() ? 'Selected reference painting' : 'Ausgewählte Motiv-Referenz';
     hintEl.replaceChildren(icon, ` ${label}: `, strong);
-    hintEl.style.display = 'block';
-    hintEl.style.color = 'var(--primary-color)';
 }
 
 // Client Foto Upload Vorschau in Step 4 des Konfigurators
@@ -2132,7 +2205,7 @@ function initPhotoUploadPreview() {
             const file = this.files[0];
             if (file) {
                 if (file.size > 10 * 1024 * 1024) {
-                    showToast(currentLang === 'en' ? 'Note: File is larger than 10 MB.' : 'Hinweis: Datei ist größer als 10 MB.');
+                    showToast(isEnglish() ? 'Note: File is larger than 10 MB.' : 'Hinweis: Datei ist größer als 10 MB.');
                 }
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -2169,19 +2242,19 @@ function initUrlParamPrefill() {
         const optionCards = document.querySelectorAll('.option-card');
         if (optionCards.length > 0 && kat) {
             const katLower = kat.toLowerCase();
-            optionCards.forEach(card => {
-                const val = (card.getAttribute('data-value') || '').toLowerCase();
-                const isMatch = (
-                    (katLower.includes('land') && val.includes('land')) ||
-                    (katLower.includes('tier') && val.includes('tier')) ||
-                    (katLower.includes('pflanz') && (val.includes('still') || val.includes('pflanz'))) ||
-                    (katLower.includes('sonstig') && val.includes('sonstig')) ||
-                    val.includes(katLower) || katLower.includes(val)
-                );
-                if (isMatch) {
-                    card.click();
-                }
-            });
+            // Galerie-Kategorie (URL) -> data-value der Motiv-Karte; exakte Zuordnung statt Teilstring
+            const KAT_TO_MOTIV = {
+                landschaften: 'landschaft', landschaft: 'landschaft',
+                tiere: 'tierportrait', tierportrait: 'tierportrait',
+                pflanzen: 'stillleben', stillleben: 'stillleben',
+                sonstiges: 'sonstiges', sonstige: 'sonstiges'
+            };
+            const motiv = KAT_TO_MOTIV[katLower];
+            if (motiv) {
+                optionCards.forEach(card => {
+                    if ((card.getAttribute('data-value') || '').toLowerCase() === motiv) card.click();
+                });
+            }
         }
         
         if (ref && document.getElementById('hint-1')) {

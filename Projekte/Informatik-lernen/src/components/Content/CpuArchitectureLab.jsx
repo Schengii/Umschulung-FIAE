@@ -157,16 +157,16 @@ export default function CpuArchitectureLab({ onRewardXP }) {
       </div>
 
       {/* Main Visual Dashboard */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* CPU DIE & REGISTERS */}
-        <div style={{ background: '#090d16', padding: '20px', borderRadius: '16px', border: '2px solid #3b82f6', position: 'relative' }}>
+        <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: '16px', border: '2px solid #3b82f6', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <span style={{ color: '#38bdf8', fontWeight: 800, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ color: 'var(--accent-cyan)', fontWeight: 800, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Cpu size={16} /> CENTRAL PROCESSING UNIT (CPU)
             </span>
             <span style={{ 
-              background: phase === 'FETCH' ? '#6366f1' : phase === 'DECODE' ? '#f59e0b' : phase === 'EXECUTE' ? '#10b981' : '#ef4444',
-              color: '#fff',
+              background: phase === 'FETCH' ? 'var(--accent-primary)' : phase === 'DECODE' ? 'var(--accent-amber)' : phase === 'EXECUTE' ? 'var(--accent-emerald)' : 'var(--accent-rose)',
+              color: 'var(--text-on-accent)',
               fontSize: '0.72rem',
               fontWeight: 800,
               padding: '2px 8px',
@@ -178,30 +178,30 @@ export default function CpuArchitectureLab({ onRewardXP }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
             {/* Program Counter PC */}
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '10px', border: activeBus === 'address' ? '2px solid #38bdf8' : '1px solid #334155' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>PROGRAM COUNTER (PC)</div>
-              <div style={{ fontSize: '1.25rem', color: '#38bdf8', fontWeight: 900, fontFamily: 'monospace' }}>0x0{pc}</div>
+            <div style={{ background: 'var(--bg-card-hover)', padding: '12px', borderRadius: '10px', border: activeBus === 'address' ? '2px solid #38bdf8' : '1px solid #334155' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 700 }}>PROGRAM COUNTER (PC)</div>
+              <div style={{ fontSize: '1.25rem', color: 'var(--accent-cyan)', fontWeight: 900, fontFamily: 'monospace' }}>0x0{pc}</div>
               <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Zeigt auf nächsten Befehl</div>
             </div>
 
             {/* Instruction Register IR */}
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '10px', border: activeBus === 'control' ? '2px solid #f59e0b' : '1px solid #334155' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>INSTRUCTION REG (IR)</div>
-              <div style={{ fontSize: '1.1rem', color: '#f59e0b', fontWeight: 900, fontFamily: 'monospace' }}>{ir}</div>
+            <div style={{ background: 'var(--bg-card-hover)', padding: '12px', borderRadius: '10px', border: activeBus === 'control' ? '2px solid #f59e0b' : '1px solid #334155' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 700 }}>INSTRUCTION REG (IR)</div>
+              <div style={{ fontSize: '1.1rem', color: 'var(--accent-amber)', fontWeight: 900, fontFamily: 'monospace' }}>{ir}</div>
               <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Aktueller OP-Code</div>
             </div>
 
             {/* Accumulator AC */}
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '10px', border: activeBus === 'data' ? '2px solid #10b981' : '1px solid #334155' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>ACCUMULATOR (AC)</div>
-              <div style={{ fontSize: '1.25rem', color: '#10b981', fontWeight: 900, fontFamily: 'monospace' }}>{ac} (Dec)</div>
+            <div style={{ background: 'var(--bg-card-hover)', padding: '12px', borderRadius: '10px', border: activeBus === 'data' ? '2px solid #10b981' : '1px solid #334155' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 700 }}>ACCUMULATOR (AC)</div>
+              <div style={{ fontSize: '1.25rem', color: 'var(--accent-emerald)', fontWeight: 900, fontFamily: 'monospace' }}>{ac} (Dec)</div>
               <div style={{ fontSize: '0.68rem', color: '#64748b' }}>ALU Rechenergebnis</div>
             </div>
 
             {/* Memory Address Register MAR */}
-            <div style={{ background: '#1e293b', padding: '12px', borderRadius: '10px', border: '1px solid #334155' }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>MEM ADDR REG (MAR)</div>
-              <div style={{ fontSize: '1.25rem', color: '#a78bfa', fontWeight: 900, fontFamily: 'monospace' }}>{mar}</div>
+            <div style={{ background: 'var(--bg-card-hover)', padding: '12px', borderRadius: '10px', border: '1px solid #334155' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 700 }}>MEM ADDR REG (MAR)</div>
+              <div style={{ fontSize: '1.25rem', color: 'var(--accent-purple)', fontWeight: 900, fontFamily: 'monospace' }}>{mar}</div>
               <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Bus-Zieladresse</div>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default function CpuArchitectureLab({ onRewardXP }) {
             padding: '12px', 
             textAlign: 'center' 
           }}>
-            <span style={{ fontSize: '0.78rem', color: '#c7d2fe', fontWeight: 800 }}>⚡ ARITHMETIC LOGIC UNIT (ALU)</span>
+            <span style={{ fontSize: '0.78rem', color: '#a5b4fc', fontWeight: 800 }}>⚡ ARITHMETIC LOGIC UNIT (ALU)</span>
             <div style={{ fontSize: '0.85rem', color: '#e0e7ff', marginTop: '4px' }}>
               Operation: {ir.startsWith('ADD') ? '➕ ADDITION' : ir.startsWith('SUB') ? '➖ SUBTRAKTION' : '💤 IDLE / PASS-THROUGH'}
             </div>
@@ -222,9 +222,9 @@ export default function CpuArchitectureLab({ onRewardXP }) {
         </div>
 
         {/* RAM MATRIX */}
-        <div style={{ background: '#090d16', padding: '20px', borderRadius: '16px', border: '2px solid #10b981' }}>
+        <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: '16px', border: '2px solid #10b981' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <span style={{ color: '#10b981', fontWeight: 800, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ color: 'var(--accent-emerald)', fontWeight: 800, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Database size={16} /> PRIMARY STORAGE (RAM 8-BYTE)
             </span>
             <span style={{ color: '#64748b', fontSize: '0.75rem', fontFamily: 'monospace' }}>Matrix: 0x00 - 0x07</span>
@@ -243,17 +243,17 @@ export default function CpuArchitectureLab({ onRewardXP }) {
                     justifyContent: 'space-between',
                     padding: '6px 12px',
                     borderRadius: '6px',
-                    background: isCurrentPc ? 'rgba(99, 102, 241, 0.25)' : isTargetMar ? 'rgba(56, 189, 248, 0.15)' : '#1e293b',
+                    background: isCurrentPc ? 'rgba(99, 102, 241, 0.25)' : isTargetMar ? 'rgba(56, 189, 248, 0.15)' : 'var(--bg-card-hover)',
                     border: isCurrentPc ? '1px solid #6366f1' : isTargetMar ? '1px solid #38bdf8' : '1px solid #334155',
                     fontSize: '0.82rem',
                     fontFamily: 'monospace'
                   }}
                 >
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <span style={{ color: '#a78bfa', fontWeight: 700 }}>{cell.address}</span>
-                    <span style={{ color: '#f8fafc', fontWeight: 600 }}>{cell.code}</span>
+                    <span style={{ color: 'var(--accent-purple)', fontWeight: 700 }}>{cell.address}</span>
+                    <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{cell.code}</span>
                   </div>
-                  <span style={{ color: '#34d399', fontWeight: 800 }}>Val: {cell.value}</span>
+                  <span style={{ color: 'var(--accent-emerald)', fontWeight: 800 }}>Val: {cell.value}</span>
                 </div>
               );
             })}
@@ -262,14 +262,14 @@ export default function CpuArchitectureLab({ onRewardXP }) {
       </div>
 
       {/* Bus Activity & Terminal Log Output */}
-      <div style={{ background: '#0b0f19', borderRadius: '12px', border: '1px solid #1e293b', padding: '16px', fontFamily: 'monospace' }}>
+      <div style={{ background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid #1e293b', padding: '16px', fontFamily: 'monospace' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '0.8rem', marginBottom: '10px' }}>
           <Terminal size={14} /> CPU Instruction Execution Log Stream
         </div>
 
         <div style={{ maxHeight: '100px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.84rem' }}>
           {logs.map((log, index) => (
-            <div key={index} style={{ color: log.includes('HLT') ? '#10b981' : log.includes('EXECUTE') ? '#f59e0b' : '#38bdf8' }}>
+            <div key={index} style={{ color: log.includes('HLT') ? 'var(--accent-emerald)' : log.includes('EXECUTE') ? 'var(--accent-amber)' : 'var(--accent-cyan)' }}>
               &gt; {log}
             </div>
           ))}

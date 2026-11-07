@@ -30,7 +30,7 @@ export default function ApiBenchStudio() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === a.id ? 'var(--accent-purple)' : 'var(--bg-card)',
-              color: selectedId === a.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === a.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === a.id ? '2px solid var(--accent-purple)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

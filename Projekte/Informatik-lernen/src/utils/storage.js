@@ -431,6 +431,7 @@ export const BADGES = [
   { id: "linux_bridge_vxlan_master", title: "Linux Bridge & VXLAN Overlay Meister", desc: "veth-Paare, br0 FDB & UDP 4789 Tunnel...", icon: "🏆" },
   { id: "postgres_partitioning_master", title: "PostgreSQL Partitioning & Pruning Meister", desc: "Range, List & Hash Partitioning DDL...", icon: "🗄️" },
   { id: "wiso_interest_master", title: "IHK Zinsrechnung & Zinseszins Meister", desc: "Deutsche Methode 30/360 & Aufzinsung...", icon: "📊" },
+  { id: "kafka_event_master", title: "Kafka Event-Streaming Meister", desc: "Partitionen, Schlüssel, Consumer Groups & Offsets...", icon: "📨" },
   { id: "kafka_rebalance_master", title: "Kafka Partition Rebalance Meister", desc: "Eager vs. Cooperative Sticky Rebalancing...", icon: "🏆" },
   { id: "bgp_anycast_master", title: "Linux BGP Routing & Anycast Meister", desc: "eBGP/iBGP Peering, AS-Path & Anycast IP...", icon: "🌐" },
   { id: "tls_handshake_master", title: "TLS 1.3 Handshake Meister", desc: "1-RTT Full Handshake & 0-RTT Session Resumption...", icon: "🛡️" },

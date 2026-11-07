@@ -141,7 +141,7 @@ export default function TcpStateMachineLab({ onRewardXP }) {
               className="badge"
               style={{
                 background: getStateBadgeColor(session.clientState),
-                color: '#fff',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 padding: '4px 10px',
                 borderRadius: '6px',
@@ -202,7 +202,7 @@ export default function TcpStateMachineLab({ onRewardXP }) {
               className="badge"
               style={{
                 background: getStateBadgeColor(session.serverState),
-                color: '#fff',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 padding: '4px 10px',
                 borderRadius: '6px',

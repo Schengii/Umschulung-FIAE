@@ -64,8 +64,8 @@ export default function RegexLab({ onCompleteGame }) {
       </p>
 
       {/* Test Sample Text Box */}
-      <div style={{ background: '#0f172a', color: '#f8fafc', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', fontFamily: 'var(--font-code)', fontSize: '0.92rem' }}>
-        <strong style={{ color: '#94a3b8', display: 'block', marginBottom: '6px' }}>Test-Text:</strong>
+      <div style={{ background: 'var(--bg-card)', color: 'var(--text-main)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', fontFamily: 'var(--font-code)', fontSize: '0.92rem' }}>
+        <strong style={{ color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>Test-Text:</strong>
         {level.sampleText}
       </div>
 
