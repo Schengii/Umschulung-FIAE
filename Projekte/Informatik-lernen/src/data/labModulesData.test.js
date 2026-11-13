@@ -10,6 +10,10 @@ const ROUTED_TABS = new Set([...SWITCH_TABS, ...REGISTRY_TABS]);
 // Dashboard-Einträge, die bewusst keinen eigenen Tab haben (siehe onSelectLab in App.jsx)
 const SPECIAL_ROUTES = new Set(['sqldungeon']);
 const DIFFICULTIES = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+const KNOWN_CATEGORIES = new Set([
+  'wiso', 'ihk', 'network', 'security', 'hardware', 'cloud', 'linux',
+  'devops', 'fiae', 'database', 'ai', 'architecture', 'tools', 'algorithms', 'code', 'databases'
+]);
 
 describe('LAB_MODULES Datenintegrität', () => {
   it('hat eindeutige IDs', () => {
@@ -23,6 +27,7 @@ describe('LAB_MODULES Datenintegrität', () => {
       expect(typeof lab.id, lab.id).toBe('string');
       expect(lab.title?.length, `${lab.id}: title`).toBeGreaterThan(0);
       expect(lab.category?.length, `${lab.id}: category`).toBeGreaterThan(0);
+      expect(KNOWN_CATEGORIES.has(lab.category), `${lab.id}: ungültige Kategorie '${lab.category}'`).toBe(true);
       expect(lab.desc?.length, `${lab.id}: desc`).toBeGreaterThan(0);
       expect(lab.icon, `${lab.id}: icon`).toBeTruthy();
       expect(lab.color, `${lab.id}: color`).toMatch(/^#[0-9a-f]{6}$/i);
@@ -62,5 +67,12 @@ describe('LAB_REGISTRY', () => {
   it('lehnt doppelte Tabs ab', () => {
     const e = { tabs: ['a'], load: () => null };
     expect(() => buildRegistryIndex([e, { ...e }])).toThrow(/Doppelte/);
+  });
+
+  it('stellt sicher, dass jedes Registry-Lab mit mindestens einer gültigen Route auflöst (M12)', () => {
+    for (const entry of LAB_REGISTRY) {
+      expect(Array.isArray(entry.tabs) && entry.tabs.length > 0).toBe(true);
+      expect(typeof entry.load).toBe('function');
+    }
   });
 });

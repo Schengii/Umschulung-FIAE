@@ -66,8 +66,8 @@ export default function Ipv6NdpLab() {
             padding: '8px 16px',
             borderRadius: '10px',
             border: 'none',
-            background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, #6366f1, #4338ca)',
-            color: '#fff',
+            background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+            color: 'var(--text-on-accent)',
             fontWeight: 600,
             fontSize: '0.85rem',
             cursor: xpClaimed ? 'default' : 'pointer',
@@ -82,18 +82,18 @@ export default function Ipv6NdpLab() {
       </div>
 
       {/* Control Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Client & Prefix Config */}
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Server size={18} color="#6366f1" /> Client- & Router-Parameter
+            <Server size={18} color="var(--accent-primary)" /> Client- & Router-Parameter
           </h2>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
+            <label htmlFor="ipv6-ndp-lab-1" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
               Client MAC-Adresse:
             </label>
-            <input
+            <input id="ipv6-ndp-lab-1"
               type="text"
               value={macAddress}
               onChange={(e) => setMacAddress(e.target.value)}
@@ -112,10 +112,10 @@ export default function Ipv6NdpLab() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
+            <label htmlFor="ipv6-ndp-lab-2" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary, #64748b)', marginBottom: '4px' }}>
               Router Advertisement (RA) /64 Prefix:
             </label>
-            <input
+            <input id="ipv6-ndp-lab-2"
               type="text"
               value={prefix}
               onChange={(e) => setPrefix(e.target.value)}
@@ -137,7 +137,7 @@ export default function Ipv6NdpLab() {
         {/* Router RA Flags & Modes */}
         <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Globe size={18} color="#6366f1" /> Router Flags & Sicherheits-Optionen
+            <Globe size={18} color="var(--accent-primary)" /> Router Flags & Sicherheits-Optionen
           </h2>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', cursor: 'pointer' }}>
@@ -168,7 +168,7 @@ export default function Ipv6NdpLab() {
             <span><strong>Other Config Flag (O-Flag = 1)</strong>: Stateless DHCPv6 für DNS/NTP</span>
           </label>
 
-          <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', cursor: 'pointer', color: dadConflict ? '#ef4444' : 'inherit' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', cursor: 'pointer', color: dadConflict ? 'var(--accent-rose)' : 'inherit' }}>
             <input
               type="checkbox"
               checked={dadConflict}
@@ -215,7 +215,7 @@ export default function Ipv6NdpLab() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {step.addresses.map((a, aIdx) => (
                     <div key={aIdx} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--bg-subtle, #f8fafc)', padding: '8px 12px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                      <span style={{ fontWeight: 700, color: '#4338ca' }}>{a.address}</span>
+                      <span style={{ fontWeight: 700, color: 'var(--accent-primary)' }}>{a.address}</span>
                       <span style={{ color: '#64748b' }}>({a.type})</span>
                     </div>
                   ))}
@@ -228,7 +228,7 @@ export default function Ipv6NdpLab() {
 
       {/* IHK Wissens-Box */}
       <div style={{ background: 'var(--card-bg, #ffffff)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color, #e2e8f0)' }}>
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 10px', color: '#4338ca' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 10px', color: 'var(--accent-primary)' }}>
           💡 IHK Prüfungs-Wissen (AP1 & AP2): EUI-64 & Flags
         </h3>
         <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary, #475569)' }}>

@@ -56,7 +56,7 @@ export default function Http3QuicLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(56, 189, 248, 0.15)', borderRadius: '20px', color: '#38bdf8', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(56, 189, 248, 0.15)', borderRadius: '20px', color: 'var(--accent-cyan)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Globe size={16} /> Next-Gen Transport: UDP-basiertes QUIC & 0-RTT Multiplexing
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -68,7 +68,7 @@ export default function Http3QuicLab() {
         </div>
 
         {/* Action Tabs */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '10px' }}>
+        <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-tertiary)', padding: '4px', borderRadius: '10px' }}>
           <button
             onClick={() => setActiveTab('simulation')}
             style={{
@@ -76,7 +76,7 @@ export default function Http3QuicLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'simulation' ? '#0284c7' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -94,7 +94,7 @@ export default function Http3QuicLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'handshake' ? '#0284c7' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -112,7 +112,7 @@ export default function Http3QuicLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'migration' ? '#0284c7' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -129,10 +129,10 @@ export default function Http3QuicLab() {
       {activeTab === 'simulation' && (
         <>
           {/* Controls Bar */}
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '16px 20px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.82rem', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>
+                <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '4px', fontWeight: 'bold' }}>
                   Simulierter Paketverlust: {packetLossPct}%
                 </label>
                 <input
@@ -147,17 +147,17 @@ export default function Http3QuicLab() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.82rem', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>
+                <label htmlFor="http3-quic-lab-1" style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '4px', fontWeight: 'bold' }}>
                   Parallele Ressourcen-Streams:
                 </label>
-                <select
+                <select id="http3-quic-lab-1"
                   value={streamCount}
                   onChange={(e) => setStreamCount(Number(e.target.value))}
                   style={{
-                    background: 'rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '6px',
-                    color: '#fff',
+                    color: 'var(--text-main)',
                     padding: '6px 12px',
                     fontSize: '0.85rem'
                   }}
@@ -174,8 +174,8 @@ export default function Http3QuicLab() {
               style={{
                 padding: '8px 18px',
                 borderRadius: '8px',
-                background: '#0284c7',
-                color: '#fff',
+                background: 'var(--accent-cyan)',
+                color: 'var(--text-on-accent)',
                 fontWeight: 'bold',
                 fontSize: '0.88rem',
                 border: 'none',
@@ -190,22 +190,22 @@ export default function Http3QuicLab() {
           </div>
 
           {/* Protocol Comparison Side-by-Side */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
             {/* HTTP/2 Card */}
             <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', padding: '20px', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#fbbf24', margin: 0 }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-amber)', margin: 0 }}>
                   HTTP/2 (TCP)
                 </h3>
-                <span style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.2)', color: '#fbbf24', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '0.75rem', background: 'rgba(245, 158, 11, 0.2)', color: 'var(--accent-amber)', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
                   Single TCP Socket
                 </span>
               </div>
 
-              <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '14px' }}>
-                Gesamte Ladezeit: <strong style={{ color: h2Simulation.totalHolPenaltyMs > 0 ? '#ef4444' : '#fff', fontSize: '1.1rem' }}>{h2Simulation.totalDurationMs} ms</strong>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '14px' }}>
+                Gesamte Ladezeit: <strong style={{ color: h2Simulation.totalHolPenaltyMs > 0 ? 'var(--accent-rose)' : 'var(--text-main)', fontSize: '1.1rem' }}>{h2Simulation.totalDurationMs} ms</strong>
                 {h2Simulation.totalHolPenaltyMs > 0 && (
-                  <span style={{ color: '#ef4444', marginLeft: '8px', fontSize: '0.8rem' }}>
+                  <span style={{ color: 'var(--accent-rose)', marginLeft: '8px', fontSize: '0.8rem' }}>
                     (inkl. +{h2Simulation.totalHolPenaltyMs}ms TCP HoL-Blocking!)
                   </span>
                 )}
@@ -213,10 +213,10 @@ export default function Http3QuicLab() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {h2Simulation.streams.map(stream => (
-                  <div key={stream.streamId} style={{ background: 'rgba(0,0,0,0.25)', padding: '10px', borderRadius: '6px', fontSize: '0.82rem' }}>
+                  <div key={stream.streamId} style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px', fontSize: '0.82rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ color: '#e2e8f0', fontWeight: 'bold' }}>{stream.name}</span>
-                      <span style={{ color: stream.isStalledByHoL ? '#f87171' : '#94a3b8' }}>
+                      <span style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>{stream.name}</span>
+                      <span style={{ color: stream.isStalledByHoL ? 'var(--accent-rose)' : 'var(--text-dim)' }}>
                         {stream.durationMs} ms {stream.isStalledByHoL && '⚠️ HoL Stalled'}
                       </span>
                     </div>
@@ -237,27 +237,27 @@ export default function Http3QuicLab() {
             {/* HTTP/3 QUIC Card */}
             <div style={{ background: 'rgba(2, 132, 199, 0.08)', borderRadius: '12px', padding: '20px', border: '2px solid #38bdf8' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#38bdf8', margin: 0 }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-cyan)', margin: 0 }}>
                   HTTP/3 (QUIC / UDP)
                 </h3>
-                <span style={{ fontSize: '0.75rem', background: '#0284c7', color: '#fff', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '0.75rem', background: 'var(--accent-cyan)', color: 'var(--text-on-accent)', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
                   Unabhängige UDP Streams
                 </span>
               </div>
 
-              <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '14px' }}>
-                Gesamte Ladezeit: <strong style={{ color: '#38bdf8', fontSize: '1.1rem' }}>{h3Simulation.totalDurationMs} ms</strong>
-                <span style={{ color: '#34d399', marginLeft: '8px', fontSize: '0.8rem' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '14px' }}>
+                Gesamte Ladezeit: <strong style={{ color: 'var(--accent-cyan)', fontSize: '1.1rem' }}>{h3Simulation.totalDurationMs} ms</strong>
+                <span style={{ color: 'var(--accent-emerald)', marginLeft: '8px', fontSize: '0.8rem' }}>
                   ✓ Kein Head-of-Line Blocking
                 </span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {h3Simulation.streams.map(stream => (
-                  <div key={stream.streamId} style={{ background: 'rgba(0,0,0,0.25)', padding: '10px', borderRadius: '6px', fontSize: '0.82rem' }}>
+                  <div key={stream.streamId} style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '6px', fontSize: '0.82rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ color: '#e2e8f0', fontWeight: 'bold' }}>{stream.name}</span>
-                      <span style={{ color: stream.packetsLost > 0 ? '#f59e0b' : '#34d399' }}>
+                      <span style={{ color: 'var(--text-main)', fontWeight: 'bold' }}>{stream.name}</span>
+                      <span style={{ color: stream.packetsLost > 0 ? 'var(--accent-amber)' : 'var(--accent-emerald)' }}>
                         {stream.durationMs} ms {stream.packetsLost > 0 ? `(${stream.packetsLost} Pkt. Drop)` : '✓ Schneller Stream'}
                       </span>
                     </div>
@@ -277,7 +277,7 @@ export default function Http3QuicLab() {
           </div>
 
           {/* Info Banner */}
-          <div style={{ padding: '16px', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', borderRadius: '10px', fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.5' }}>
+          <div style={{ padding: '16px', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', borderRadius: '10px', fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
             💡 <strong>Wichtigste Erkenntnis:</strong> Da HTTP/2 alle virtuellen Streams über **eine einzige TCP-Verbindung** tunnelt, stoppt ein verlorenes TCP-Paket den gesamten Strom (TCP Head-of-Line-Blocking). **HTTP/3 über QUIC (UDP)** wickelt jeden Stream transporttechnisch unabhängig ab, sodass Paketverluste nur den betroffenen Stream verzögern und alle anderen ungestört durchgehen!
           </div>
         </>
@@ -285,9 +285,9 @@ export default function Http3QuicLab() {
 
       {activeTab === 'handshake' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: 0 }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: 0 }}>
                 Handshake Latenz & Session Resumption (0-RTT)
               </h3>
               <button
@@ -297,7 +297,7 @@ export default function Http3QuicLab() {
                   borderRadius: '6px',
                   background: isResumedHandshake ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255,255,255,0.1)',
                   border: isResumedHandshake ? '1px solid #38bdf8' : '1px solid rgba(255,255,255,0.2)',
-                  color: isResumedHandshake ? '#38bdf8' : '#94a3b8',
+                  color: isResumedHandshake ? 'var(--accent-cyan)' : 'var(--text-dim)',
                   fontSize: '0.82rem',
                   fontWeight: 'bold',
                   cursor: 'pointer'
@@ -307,24 +307,24 @@ export default function Http3QuicLab() {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px' }}>
               {['HTTP/1.1', 'HTTP/2', 'HTTP/3'].map(proto => {
                 const hs = calculateHandshakeLatency(proto, 50, isResumedHandshake);
                 const isH3 = proto === 'HTTP/3';
 
                 return (
-                  <div key={proto} style={{ background: isH3 ? 'rgba(56, 189, 248, 0.1)' : 'rgba(0,0,0,0.25)', border: isH3 ? '2px solid #38bdf8' : '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '16px' }}>
-                    <div style={{ fontWeight: 'bold', color: isH3 ? '#38bdf8' : '#e2e8f0', marginBottom: '8px' }}>
+                  <div key={proto} style={{ background: isH3 ? 'rgba(56, 189, 248, 0.1)' : 'var(--bg-tertiary)', border: isH3 ? '2px solid #38bdf8' : '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '16px' }}>
+                    <div style={{ fontWeight: 'bold', color: isH3 ? 'var(--accent-cyan)' : 'var(--text-main)', marginBottom: '8px' }}>
                       {proto}
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: isH3 ? '#38bdf8' : '#fff', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: isH3 ? 'var(--accent-cyan)' : 'var(--text-main)', marginBottom: '6px' }}>
                       {hs.latencyMs} ms
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)' }}>
                       {hs.rttCount} RTT (Round Trip Times)
                     </div>
                     {hs.is0RttPossible && (
-                      <div style={{ marginTop: '8px', fontSize: '0.78rem', color: '#34d399', fontWeight: 'bold' }}>
+                      <div style={{ marginTop: '8px', fontSize: '0.78rem', color: 'var(--accent-emerald)', fontWeight: 'bold' }}>
                         ⚡ 0-RTT: Daten werden direkt mit dem ersten Paket verschickt (Early Data)
                       </div>
                     )}
@@ -338,11 +338,11 @@ export default function Http3QuicLab() {
 
       {activeTab === 'migration' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 16px 0' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 16px 0' }}>
               Connection ID Migration (Netzwerkwechsel WLAN → 5G Mobilfunk)
             </h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: '0 0 16px 0' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)', margin: '0 0 16px 0' }}>
               Beim Verlassen des Büros wechselt das Endgerät von der WLAN-IP (z. B. 192.168.1.50) zur Mobilfunk-IP (z. B. 10.120.45.89). Teste, wie die Protokolle reagieren:
             </p>
 
@@ -354,7 +354,7 @@ export default function Http3QuicLab() {
                   borderRadius: '8px',
                   background: 'rgba(245, 158, 11, 0.2)',
                   border: '1px solid #f59e0b',
-                  color: '#fbbf24',
+                  color: 'var(--accent-amber)',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
@@ -368,7 +368,7 @@ export default function Http3QuicLab() {
                   borderRadius: '8px',
                   background: 'rgba(56, 189, 248, 0.2)',
                   border: '1px solid #38bdf8',
-                  color: '#38bdf8',
+                  color: 'var(--accent-cyan)',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
@@ -384,13 +384,13 @@ export default function Http3QuicLab() {
                 borderRadius: '10px',
                 padding: '16px'
               }}>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem', color: migrationState.success ? '#34d399' : '#f87171', marginBottom: '6px' }}>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem', color: migrationState.success ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginBottom: '6px' }}>
                   {migrationState.success ? '✓ Nahtlose Verbindungsmigration erfolgreich!' : '❌ Verbindungsunterbrechung (Socket Teardown)'}
                 </div>
-                <div style={{ fontSize: '0.88rem', color: '#e2e8f0', lineHeight: '1.5' }}>
+                <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
                   {migrationState.description}
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '8px' }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', marginTop: '8px' }}>
                   Zusätzlicher Neuaufbau-Verzug: <strong>{migrationState.handshakeDelayMs} ms</strong>
                 </div>
               </div>

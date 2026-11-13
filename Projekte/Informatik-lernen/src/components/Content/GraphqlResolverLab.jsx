@@ -25,7 +25,7 @@ export default function GraphqlResolverLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(236, 72, 153, 0.15)', borderRadius: '20px', color: '#f472b6', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(236, 72, 153, 0.15)', borderRadius: '20px', color: 'var(--accent-rose)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Network size={16} /> GraphQL AST Parser & Resolver Engine
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -45,7 +45,7 @@ export default function GraphqlResolverLab() {
               borderRadius: '8px',
               border: mode === 'naive' ? '2px solid #ef4444' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
               background: mode === 'naive' ? 'rgba(239, 68, 68, 0.15)' : 'var(--card-bg, #1e293b)',
-              color: mode === 'naive' ? '#fca5a5' : '#94a3b8',
+              color: mode === 'naive' ? 'var(--accent-rose)' : 'var(--text-dim)',
               fontWeight: 'bold',
               cursor: 'pointer',
               fontSize: '0.85rem'
@@ -60,7 +60,7 @@ export default function GraphqlResolverLab() {
               borderRadius: '8px',
               border: mode === 'dataloader' ? '2px solid #10b981' : '1px solid var(--border-color, rgba(255,255,255,0.1))',
               background: mode === 'dataloader' ? 'rgba(16, 185, 129, 0.15)' : 'var(--card-bg, #1e293b)',
-              color: mode === 'dataloader' ? '#86efac' : '#94a3b8',
+              color: mode === 'dataloader' ? 'var(--accent-emerald)' : 'var(--text-dim)',
               fontWeight: 'bold',
               cursor: 'pointer',
               fontSize: '0.85rem'
@@ -72,40 +72,40 @@ export default function GraphqlResolverLab() {
       </div>
 
       {/* Grid: Query AST & Resolver Calls */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(420px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         
         {/* Left: GraphQL Query */}
-        <div style={{ background: '#0f172a', borderRadius: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', overflow: 'hidden' }}>
+        <div style={{ background: 'var(--bg-tertiary)', borderRadius: '12px', border: '1px solid rgba(236, 72, 153, 0.3)', overflow: 'hidden' }}>
           <div style={{ padding: '12px 16px', background: 'rgba(236, 72, 153, 0.15)', borderBottom: '1px solid rgba(236, 72, 153, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ color: '#f472b6', fontWeight: 'bold', fontSize: '0.9rem' }}>Incoming GraphQL Query</span>
-            <span style={{ fontSize: '0.75rem', background: '#db2777', color: '#fff', padding: '2px 8px', borderRadius: '4px' }}>AST PARSED</span>
+            <span style={{ color: 'var(--accent-rose)', fontWeight: 'bold', fontSize: '0.9rem' }}>Incoming GraphQL Query</span>
+            <span style={{ fontSize: '0.75rem', background: 'var(--accent-rose)', color: 'var(--text-on-accent)', padding: '2px 8px', borderRadius: '4px' }}>AST PARSED</span>
           </div>
-          <pre style={{ margin: 0, padding: '16px', color: '#fbcfe8', fontFamily: 'Fira Code, monospace', fontSize: '0.88rem', lineHeight: '1.6', overflowX: 'auto' }}>
+          <pre style={{ margin: 0, padding: '16px', color: 'var(--accent-rose)', fontFamily: 'Fira Code, monospace', fontSize: '0.88rem', lineHeight: '1.6', overflowX: 'auto' }}>
             {scenario.query}
           </pre>
-          <div style={{ padding: '12px 16px', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.06)', color: '#94a3b8', fontSize: '0.82rem' }}>
+          <div style={{ padding: '12px 16px', background: 'var(--bg-tertiary)', borderTop: '1px solid var(--border-color)', color: 'var(--text-dim)', fontSize: '0.82rem' }}>
             🔍 <strong>AST Tokenizer:</strong> Document &gt; OperationDefinition (query) &gt; Field (user) &gt; SelectionSet (posts)
           </div>
         </div>
 
         {/* Right: Database Execution Trace */}
-        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, rgba(255,255,255,0.1))', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', borderRadius: '12px', border: '1px solid var(--border-color, var(--border-color))', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#fff', fontSize: '0.95rem' }}>
-                <Database size={17} color={mode === 'naive' ? '#ef4444' : '#10b981'} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '0.95rem' }}>
+                <Database size={17} color={mode === 'naive' ? 'var(--accent-rose)' : 'var(--accent-emerald)'} />
                 <span>Datenbank Queries ({mode === 'naive' ? '5 Roundtrips' : '3 Batch Roundtrips'})</span>
               </div>
-              <span style={{ fontSize: '0.78rem', padding: '2px 8px', borderRadius: '4px', background: mode === 'naive' ? '#ef4444' : '#10b981', color: '#fff', fontWeight: 'bold' }}>
+              <span style={{ fontSize: '0.78rem', padding: '2px 8px', borderRadius: '4px', background: mode === 'naive' ? 'var(--accent-rose)' : 'var(--accent-emerald)', color: 'var(--text-on-accent)', fontWeight: 'bold' }}>
                 {mode === 'naive' ? 'N+1 INEFFIZIENT' : 'BATCH LOADED'}
               </span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {(mode === 'naive' ? scenario.naiveCalls : scenario.dataloaderCalls).map((call) => (
-                <div key={call.step} style={{ background: 'rgba(0,0,0,0.25)', padding: '10px 12px', borderRadius: '8px', borderLeft: `4px solid ${mode === 'naive' ? '#ef4444' : '#10b981'}` }}>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold' }}>{call.resolver}</div>
-                  <div style={{ color: mode === 'naive' ? '#fca5a5' : '#86efac', fontSize: '0.85rem', fontFamily: 'monospace', marginTop: '2px' }}>{call.sql}</div>
+                <div key={call.step} style={{ background: 'var(--bg-tertiary)', padding: '10px 12px', borderRadius: '8px', borderLeft: `4px solid ${mode === 'naive' ? '#ef4444' : '#10b981'}` }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontWeight: 'bold' }}>{call.resolver}</div>
+                  <div style={{ color: mode === 'naive' ? 'var(--accent-rose)' : 'var(--accent-emerald)', fontSize: '0.85rem', fontFamily: 'monospace', marginTop: '2px' }}>{call.sql}</div>
                 </div>
               ))}
             </div>
@@ -118,7 +118,7 @@ export default function GraphqlResolverLab() {
               padding: '12px',
               borderRadius: '8px',
               background: isExecuted ? '#22c55e' : 'linear-gradient(90deg, #ec4899, #8b5cf6)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.9rem',
               border: 'none',

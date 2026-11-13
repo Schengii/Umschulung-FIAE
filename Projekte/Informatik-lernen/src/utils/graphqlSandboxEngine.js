@@ -4,7 +4,7 @@
  * Parses, resolves, and simulates in-browser GraphQL Queries & Mutations against mock dataset.
  */
 
-export const MOCK_GRAPHQL_DATABASE = {
+const MOCK_GRAPHQL_DATABASE = {
   products: [
     { id: 'prod_1', title: 'Entwickler-Tastatur RGB', price: 129.99, stock: 45, category: 'Hardware' },
     { id: 'prod_2', title: '4K Ultra-Wide Monitor 34"', price: 499.00, stock: 12, category: 'Hardware' },

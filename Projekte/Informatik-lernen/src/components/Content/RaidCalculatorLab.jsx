@@ -90,7 +90,7 @@ export default function RaidCalculatorLab({ onRewardXP }) {
       </div>
 
       {/* Config & Metrics Dashboard */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '20px' }}>
         {/* Controls */}
         <div
           className="glass-panel"

@@ -130,7 +130,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <span style={{
               background: 'rgba(99, 102, 241, 0.15)',
-              color: '#818cf8',
+              color: 'var(--accent-primary)',
               padding: '0.35rem 0.75rem',
               borderRadius: '2rem',
               fontWeight: 600,
@@ -140,7 +140,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
             </span>
             <span style={{
               background: 'rgba(16, 185, 129, 0.15)',
-              color: '#10b981',
+              color: 'var(--accent-emerald)',
               padding: '0.35rem 0.75rem',
               borderRadius: '2rem',
               fontWeight: 600,
@@ -177,8 +177,8 @@ export default function TestverfahrenLab({ onRewardXP }) {
                   cursor: 'pointer',
                   fontWeight: 600,
                   fontSize: '0.9rem',
-                  background: isActive ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-                  color: isActive ? '#fff' : 'var(--text-muted, #94a3b8)',
+                  background: isActive ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+                  color: isActive ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -211,8 +211,8 @@ export default function TestverfahrenLab({ onRewardXP }) {
                       padding: '0.4rem 0.8rem',
                       borderRadius: '0.4rem',
                       border: '1px solid var(--border-color, #334155)',
-                      background: selectedPreset === key ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-                      color: selectedPreset === key ? '#fff' : 'inherit',
+                      background: selectedPreset === key ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+                      color: selectedPreset === key ? 'var(--text-on-accent)' : 'inherit',
                       cursor: 'pointer',
                       fontSize: '0.85rem',
                       fontWeight: 500
@@ -225,8 +225,8 @@ export default function TestverfahrenLab({ onRewardXP }) {
 
               {/* Live Eingabetester */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Testwert eingeben:</label>
-                <input
+                <label htmlFor="testverfahren-lab-1" style={{ fontSize: '0.85rem', fontWeight: 600 }}>Testwert eingeben:</label>
+                <input id="testverfahren-lab-1"
                   type="text"
                   value={testInput}
                   onChange={(e) => setTestInput(e.target.value)}
@@ -257,7 +257,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
               <div>
                 <strong>Zugeordnete Äquivalenzklasse:</strong> <span style={{ fontWeight: 600 }}>{inputAekResult}</span>
               </div>
-              <div style={{ fontWeight: 700, color: isInputValid ? '#10b981' : '#ef4444' }}>
+              <div style={{ fontWeight: 700, color: isInputValid ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 Status: {isInputValid ? '✓ Gültig (Akzeptiert)' : '✗ Ungültig (Abgewiesen / Validierungsfehler)'}
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
                       <td style={{ padding: '0.6rem' }}>
                         <span style={{
                           background: aek.typ === 'GÄK' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                          color: aek.typ === 'GÄK' ? '#10b981' : '#ef4444',
+                          color: aek.typ === 'GÄK' ? 'var(--accent-emerald)' : 'var(--accent-rose)',
                           padding: '0.2rem 0.5rem',
                           borderRadius: '0.3rem',
                           fontWeight: 700,
@@ -306,7 +306,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
                       <td style={{ padding: '0.6rem', fontFamily: 'monospace' }}>{aek.bedingung}</td>
                       <td style={{ padding: '0.6rem' }}>{aek.bezeichnung}</td>
                       <td style={{ padding: '0.6rem', textAlign: 'center', fontWeight: 600 }}>{aek.repraesentant}</td>
-                      <td style={{ padding: '0.6rem', textAlign: 'center', fontWeight: 700, color: aek.erwartetesErgebnis === 'GÜLTIG' ? '#10b981' : '#ef4444' }}>
+                      <td style={{ padding: '0.6rem', textAlign: 'center', fontWeight: 700, color: aek.erwartetesErgebnis === 'GÜLTIG' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                         {aek.erwartetesErgebnis}
                       </td>
                     </tr>
@@ -354,13 +354,13 @@ export default function TestverfahrenLab({ onRewardXP }) {
                         fontWeight: 700,
                         padding: '0.15rem 0.4rem',
                         borderRadius: '0.3rem',
-                        background: gw.status === 'GÜLTIG' ? '#10b981' : '#ef4444',
-                        color: '#fff'
+                        background: gw.status === 'GÜLTIG' ? 'var(--accent-emerald)' : 'var(--accent-rose)',
+                        color: 'var(--text-on-accent)'
                       }}>
                         {gw.status}
                       </span>
                     </div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: gw.status === 'GÜLTIG' ? '#10b981' : '#ef4444', marginBottom: '0.35rem' }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: gw.status === 'GÜLTIG' ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginBottom: '0.35rem' }}>
                       {gw.wert}
                     </div>
                   </div>
@@ -376,7 +376,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
 
       {/* TAB 2: WHITE-BOX TESTING */}
       {activeTab === 'whitebox' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '1.5rem' }}>
           {/* McCabe Rechner */}
           <div style={{
             background: 'var(--bg-card, #1e293b)',
@@ -440,7 +440,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
               border: '1px solid #6366f1',
               marginBottom: '1rem'
             }}>
-              <div style={{ fontSize: '0.8rem', color: '#818cf8', fontWeight: 600, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--accent-primary)', fontWeight: 600, textTransform: 'uppercase' }}>
                 Formel: M = E - N + 2P = {graphParams.kanten} - {graphParams.knoten} + 2({graphParams.komponenten})
               </div>
               <div style={{ fontSize: '2rem', fontWeight: 800, marginTop: '0.25rem' }}>
@@ -453,8 +453,8 @@ export default function TestverfahrenLab({ onRewardXP }) {
                 fontWeight: 700,
                 padding: '0.2rem 0.6rem',
                 borderRadius: '0.3rem',
-                background: mccabeRes.risikoKlasse === 'NIEDRIG' ? '#10b981' : mccabeRes.risikoKlasse === 'MITTEL' ? '#f59e0b' : '#ef4444',
-                color: '#fff'
+                background: mccabeRes.risikoKlasse === 'NIEDRIG' ? 'var(--accent-emerald)' : mccabeRes.risikoKlasse === 'MITTEL' ? 'var(--accent-amber)' : 'var(--accent-rose)',
+                color: 'var(--text-on-accent)'
               }}>
                 Risiko: {mccabeRes.risikoKlasse}
               </div>
@@ -482,7 +482,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
                   <span><strong>C0: Anweisungsüberdeckung</strong> (Statement Coverage)</span>
-                  <strong style={{ color: covRes.istC0Vollstaendig ? '#10b981' : '#f59e0b' }}>{covRes.c0AnweisungsUeberdeckung}%</strong>
+                  <strong style={{ color: covRes.istC0Vollstaendig ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>{covRes.c0AnweisungsUeberdeckung}%</strong>
                 </div>
                 <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ width: `${covRes.c0AnweisungsUeberdeckung}%`, background: covRes.istC0Vollstaendig ? '#10b981' : '#f59e0b', height: '100%' }} />
@@ -496,7 +496,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
                   <span><strong>C1: Zweigüberdeckung</strong> (Branch Coverage)</span>
-                  <strong style={{ color: covRes.istC1Vollstaendig ? '#10b981' : '#f59e0b' }}>{covRes.c1ZweigUeberdeckung}%</strong>
+                  <strong style={{ color: covRes.istC1Vollstaendig ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>{covRes.c1ZweigUeberdeckung}%</strong>
                 </div>
                 <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ width: `${covRes.c1ZweigUeberdeckung}%`, background: covRes.istC1Vollstaendig ? '#10b981' : '#f59e0b', height: '100%' }} />
@@ -510,7 +510,7 @@ export default function TestverfahrenLab({ onRewardXP }) {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
                   <span><strong>C2: Pfadüberdeckung</strong> (Path Coverage)</span>
-                  <strong style={{ color: '#6366f1' }}>{covRes.c2PfadUeberdeckung}%</strong>
+                  <strong style={{ color: 'var(--accent-primary)' }}>{covRes.c2PfadUeberdeckung}%</strong>
                 </div>
                 <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ width: `${covRes.c2PfadUeberdeckung}%`, background: '#6366f1', height: '100%' }} />

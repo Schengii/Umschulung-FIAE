@@ -59,7 +59,7 @@ export default function RackConfiguratorLab() {
       </div>
 
       {/* KPI Metrics Dashboard */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '700' }}>Höheneinheiten Belegung</span>
           <div style={{ fontSize: '1.7rem', fontWeight: '800', color: 'var(--accent-indigo)', marginTop: '4px' }}>
@@ -94,14 +94,14 @@ export default function RackConfiguratorLab() {
       </div>
 
       {/* Main Rack Visualizer & Device Catalog */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(320px, 1fr) minmax(360px, 1.2fr)', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(min(320px, 100%), 1fr) minmax(360px, 1.2fr)', gap: '20px' }}>
         {/* Visual 42U Rack */}
         <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-lg)' }}>
           <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Server size={18} color="var(--accent-indigo)" /> 42HE Serverschrank (Frontansicht)
           </h2>
 
-          <div style={{ background: '#090d16', border: '3px solid #334155', borderRadius: 'var(--radius-md)', padding: '8px', minHeight: '440px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ background: 'var(--bg-secondary)', border: '3px solid #334155', borderRadius: 'var(--radius-md)', padding: '8px', minHeight: '440px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {installedDevices.map((dev) => (
               <div
                 key={dev.instanceId}
@@ -120,16 +120,16 @@ export default function RackConfiguratorLab() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span className="badge badge-indigo" style={{ padding: '1px 6px', fontSize: '0.72rem' }}>{dev.heightU} HE</span>
+                  <span className="badge badge-indigo" style={{ padding: '1px 6px', fontSize: '0.72rem', color: '#e0e7ff', background: 'rgba(255, 255, 255, 0.12)', borderColor: 'rgba(255, 255, 255, 0.25)' }}>{dev.heightU} HE</span>
                   <span>{dev.name}</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>{dev.powerWatts}W</span>
+                  <span style={{ color: '#cbd5e1', fontSize: '0.75rem' }}>{dev.powerWatts}W</span>
                   <button
                     onClick={() => handleRemoveDevice(dev.instanceId)}
                     className="btn btn-ghost"
-                    style={{ padding: '2px', color: 'var(--accent-rose)' }}
+                    style={{ padding: '2px', color: '#fda4af' }}
                   >
                     <Trash2 size={13} />
                   </button>

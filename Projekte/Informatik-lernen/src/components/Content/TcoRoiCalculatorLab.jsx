@@ -84,7 +84,7 @@ export default function TcoRoiCalculatorLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-950 via-emerald-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-teal-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-teal-950 via-emerald-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-teal-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -170,7 +170,7 @@ export default function TcoRoiCalculatorLab() {
         {/* Cost Parameter Form */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Server className="w-4 h-4 text-rose-400" />
               1. On-Premises Kostenparameter
             </h2>
@@ -208,42 +208,42 @@ export default function TcoRoiCalculatorLab() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1">Strom/Kühlung (€/Jahr):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-1" className="text-slate-400 block mb-1">Strom/Kühlung (€/Jahr):</label>
+                <input id="tco-roi-calculator-lab-1"
                   type="number"
                   value={onPremAnnualPowerCooling}
                   onChange={(e) => setOnPremAnnualPowerCooling(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Wartung/Lizenzen (€/Jahr):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-2" className="text-slate-400 block mb-1">Wartung/Lizenzen (€/Jahr):</label>
+                <input id="tco-roi-calculator-lab-2"
                   type="number"
                   value={onPremAnnualLicensesMaintenance}
                   onChange={(e) => setOnPremAnnualLicensesMaintenance(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1">Admin Stunden/Jahr:</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-3" className="text-slate-400 block mb-1">Admin Stunden/Jahr:</label>
+                <input id="tco-roi-calculator-lab-3"
                   type="number"
                   value={onPremAdminHoursPerYear}
                   onChange={(e) => setOnPremAdminHoursPerYear(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Stundensatz (€/h):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-4" className="text-slate-400 block mb-1">Stundensatz (€/h):</label>
+                <input id="tco-roi-calculator-lab-4"
                   type="number"
                   value={onPremAdminHourlyRate}
                   onChange={(e) => setOnPremAdminHourlyRate(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
             </div>
@@ -251,49 +251,49 @@ export default function TcoRoiCalculatorLab() {
 
           {/* Cloud Parameters */}
           <div className="border-t border-slate-800 pt-4 space-y-3 text-xs">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Cloud className="w-4 h-4 text-cyan-400" />
               2. Cloud Kostenparameter (AWS / Azure)
             </h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1">Einmaliges Setup/Migration (€):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-5" className="text-slate-400 block mb-1">Einmaliges Setup/Migration (€):</label>
+                <input id="tco-roi-calculator-lab-5"
                   type="number"
                   value={cloudOneTimeMigrationCost}
                   onChange={(e) => setCloudOneTimeMigrationCost(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Monatliches Hosting (€/M.):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-6" className="text-slate-400 block mb-1">Monatliches Hosting (€/M.):</label>
+                <input id="tco-roi-calculator-lab-6"
                   type="number"
                   value={cloudMonthlyHosting}
                   onChange={(e) => setCloudMonthlyHosting(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-slate-400 block mb-1">Cloud-Admin Std./Jahr:</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-7" className="text-slate-400 block mb-1">Cloud-Admin Std./Jahr:</label>
+                <input id="tco-roi-calculator-lab-7"
                   type="number"
                   value={cloudAdminHoursPerYear}
                   onChange={(e) => setCloudAdminHoursPerYear(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
               <div>
-                <label className="text-slate-400 block mb-1">Stundensatz (€/h):</label>
-                <input
+                <label htmlFor="tco-roi-calculator-lab-8" className="text-slate-400 block mb-1">Stundensatz (€/h):</label>
+                <input id="tco-roi-calculator-lab-8"
                   type="number"
                   value={cloudAdminHourlyRate}
                   onChange={(e) => setCloudAdminHourlyRate(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-white font-mono"
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-50 font-mono"
                 />
               </div>
             </div>
@@ -303,7 +303,7 @@ export default function TcoRoiCalculatorLab() {
         {/* Interactive Chart */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-teal-400" />
               Kumulierter Kostenverlauf über {years} Jahre
             </h2>
@@ -317,10 +317,10 @@ export default function TcoRoiCalculatorLab() {
                 <XAxis dataKey="year" stroke="#64748b" textAnchor="middle" />
                 <YAxis stroke="#64748b" tickFormatter={(v) => `${v / 1000}k`} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: 'var(--bg-card)', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
                   formatter={(value) => `${Number(value).toLocaleString('de-DE')} €`}
                 />
-                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                <Legend wrapperStyle={{ fontSize: '12px' }} formatter={(value) => <span style={{ color: 'var(--text-muted)' }}>{value}</span>} />
                 <Line type="monotone" dataKey="onPremCost" name="On-Premises TCO" stroke="#f43f5e" strokeWidth={3} dot={{ r: 5 }} />
                 <Line type="monotone" dataKey="cloudCost" name="Cloud TCO" stroke="#06b6d4" strokeWidth={3} dot={{ r: 5 }} />
               </LineChart>
@@ -333,7 +333,7 @@ export default function TcoRoiCalculatorLab() {
               <CheckCircle2 className="w-4 h-4" /> Fazit für IHK-Projektdokumentation:
             </span>
             <p>
-              Die Cloud-Migration führt nach {years} Jahren zu einer Gesamtersparnis von <strong className="text-white">{tcoResult.totalSavings.toLocaleString('de-DE')} €</strong> und amortisiert sich im <strong className="text-teal-300">Monat {tcoResult.breakEvenMonth || '1'}</strong> mit einem Return on Investment von <strong className="text-teal-300">{tcoResult.roiPercentage}%</strong>.
+              Die Cloud-Migration führt nach {years} Jahren zu einer Gesamtersparnis von <strong className="text-slate-50">{tcoResult.totalSavings.toLocaleString('de-DE')} €</strong> und amortisiert sich im <strong className="text-teal-300">Monat {tcoResult.breakEvenMonth || '1'}</strong> mit einem Return on Investment von <strong className="text-teal-300">{tcoResult.roiPercentage}%</strong>.
             </p>
           </div>
         </div>

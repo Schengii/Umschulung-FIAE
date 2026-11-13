@@ -5,8 +5,8 @@ tags:
   - tech/react
   - domain/ihk-ausbildung
   - status/active
-version: v3.77.0
-date: 2026-10-16
+version: v3.79.0
+date: 2026-10-29
 ---
 
 # 💻 Informatik-lernen (IT-DevGame) - Projektübersicht
@@ -23,6 +23,11 @@ date: 2026-10-16
 - `.gitignore`, `.gitattributes`, `.claudeignore` & `.githooks/pre-commit`
 
 ---
+
+## 🎯 Ausbau dünner Labs (unveröffentlicht, PLAN P17)
+1. **Apache Kafka (`KafkaEventLab.jsx` & `src/utils/kafkaEventEngine.js`)**: Producer mit Schlüssel → Partition, Partitions-Logs mit Offsets, zwei Consumer Groups mit eigener Zuweisung, Lag und Fan-out, Repartitionierung, Vergleich Kafka/Queue, 6 Drillfragen, Quellen (kafka.apache.org, KIP-480, Vault-ADR).
+2. **WebAssembly & Rust (`WasmRustLab.jsx` & `src/utils/wasmBinaryEngine.js`)**: echtes, Byte für Byte erzeugtes Wasm-Modul (add, mul, memory), Binär-Inspektor mit Sektionen und LEB128, Ausführung im Browser mit i32-Überlauf, `memory.grow()`, 6 Drillfragen, Quellen (WebAssembly-Spezifikation, MDN, rustc book).
+3. **`Shared/SourceList.jsx`**: einheitliche Quellenangaben am Ende eines Labs.
 
 ## 🎯 Wichtige Meilensteine (Version 3.73.0)
 1. **DIN 66261 Nassi-Shneiderman Struktogramm Studio (`StruktogrammLab.jsx` & `src/utils/struktogrammEngine.js`)**:
@@ -80,10 +85,11 @@ date: 2026-10-16
 
 ---
 
-## 📊 Aktuelle Test- & Qualitätsmetriken (v3.72.0)
-- **Unit- & Integrationstests**: 1699 bestandene Tests in 183 Test-Dateien (100% Erfolgsquote), 33 E2E-Tests; Lab-Routing vollständig über `src/data/labRegistry.js`
-- **Code-Qualität**: 0 Oxlint Fehler / 0 Warnungen über 644 Quelldateien, `tsc --noEmit` fehlerfrei
-- **Build**: Vite 8 & PWA Offline Service Worker (271 Precache-Einträge)
-- **Performance & Limits**: Alle Chunks innerhalb der Size-Limits (App-Shell 76.55 KB gzipped < 105 KB Limit); Lighthouse: Perf 98 / A11y 98 / BP 100 / SEO 100
+## 📊 Aktuelle Test- & Qualitätsmetriken (v3.79.0, gemessen 2026-10-29)
+- **Unit- & Integrationstests**: 1.998 bestandene Tests in 230 Test-Dateien, alle Labs bestehen axe-core Barrierefreiheitsprüfungen; Coverage 63,6 / 55,4 / 48,2 / 65,2 % (Statements/Branches/Functions/Lines); Lab-Routing vollständig über `src/data/labRegistry.js`
+- **E2E**: 43 Playwright-Tests unter der Produktions-CSP (inkl. SQL-Worker, Sandbox, Monaco, PWA-Offline)
+- **Code-Qualität**: 0 Oxlint Fehler / 0 Warnungen (inkl. `jsx-a11y`-Regeln für Labels und Tastaturbedienung), `tsc --noEmit` fehlerfrei, `npm audit` (prod) 0 Funde
+- **Build**: Vite 8 & PWA Offline Service Worker (383 Precache-Einträge, ca. 4,1 MB)
+- **Performance & Limits**: Alle Chunks innerhalb der Size-Limits (App-Shell 89,06 KB gzipped < 105 KB Limit); Lighthouse lokal: A11y 0,98 (minScore 0,95), Performance 0,97
 - **Vercel-Deployment**: Produktionsreife `vercel.json` mit SPA-Rewrites, Asset-Caching & Security-Headern
 - **A11y**: WCAG 2.1 Konformität (Reduced Motion Support, automatische Labels + axe-core-Test über alle Labs)

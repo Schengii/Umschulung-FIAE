@@ -67,10 +67,10 @@ export default function LinuxMemoryLab({ onRewardXP }) {
       </div>
 
       {/* Memory Stats Banner */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>TLB Cache Hits:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {stats.tlbHits} Hits
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function LinuxMemoryLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Major Page Faults (Disk Swap):</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-rose)', marginTop: '4px' }}>
             {stats.majorFaults} Faults
           </div>
         </div>
@@ -93,8 +93,8 @@ export default function LinuxMemoryLab({ onRewardXP }) {
       {/* Interactive Virtual Address Bar */}
       <div style={{ background: 'var(--bg-secondary)', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-          <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Virtuelle Hex-Adresse:</label>
-          <input
+          <label htmlFor="linux-memory-lab-1" style={{ fontSize: '0.78rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Virtuelle Hex-Adresse:</label>
+          <input id="linux-memory-lab-1"
             type="text"
             value={addrInput}
             onChange={(e) => setAddrInput(e.target.value)}
@@ -132,7 +132,7 @@ export default function LinuxMemoryLab({ onRewardXP }) {
           Linux OOM (Out-of-Memory) Killer Score Rechner (`/proc/[pid]/oom_score`):
         </span>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '20px', alignItems: 'center' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
               Prozess RSS Speicher: {procRss} MB (von 4096 MB RAM)
@@ -163,10 +163,10 @@ export default function LinuxMemoryLab({ onRewardXP }) {
 
           <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Berechneter `oom_score`:</span>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: oomInfo.oomScore >= 600 ? '#ef4444' : '#10b981', marginTop: '4px' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: oomInfo.oomScore >= 600 ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginTop: '4px' }}>
               {oomInfo.oomScore} / 1000
             </div>
-            <div style={{ fontSize: '0.78rem', fontWeight: 'bold', marginTop: '4px', color: oomInfo.oomScore >= 600 ? '#ef4444' : 'var(--text-muted)' }}>
+            <div style={{ fontSize: '0.78rem', fontWeight: 'bold', marginTop: '4px', color: oomInfo.oomScore >= 600 ? 'var(--accent-rose)' : 'var(--text-muted)' }}>
               Risiko: {oomInfo.riskLevel}
             </div>
           </div>

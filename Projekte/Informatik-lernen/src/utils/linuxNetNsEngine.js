@@ -14,14 +14,6 @@
  */
 
 /**
- * Initialer Netzwerkaufbau mit Host, Default-Bridge und 2 isolierten Namespaces
- */
-export const DEFAULT_NET_NAMESPACES = [
-  { name: 'ns-web (Container 1)', ip: '10.0.0.2/24', gateway: '10.0.0.1', isBridge: false },
-  { name: 'ns-db (Container 2)', ip: '10.0.0.3/24', gateway: '10.0.0.1', isBridge: false }
-];
-
-/**
  * Simuliert einen Ping zwischen zwei Namespaces oder ins Internet
  * @param {string} fromNs - z. B. 'ns-web'
  * @param {string} targetIp - z. B. '10.0.0.3' oder '8.8.8.8'

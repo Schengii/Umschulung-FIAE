@@ -67,7 +67,7 @@ export default function RagSemanticCacheLab() {
               <Sparkles className="w-3.5 h-3.5" />
               <span>RAG & LLM Optimization · Semantic Caching</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-50 tracking-tight">
               RAG Semantic Cache & Vector Similarity Studio
             </h1>
             <p className="text-slate-400 text-sm sm:text-base max-w-3xl">
@@ -82,18 +82,18 @@ export default function RagSemanticCacheLab() {
         {/* Left Column: Query Console & Parameters */}
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-6 border border-slate-700/60 shadow-lg space-y-5">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Search className="w-5 h-5 text-cyan-400" />
               Nutzer-Prompt (Eingehende Anfrage)
             </h2>
 
             <div className="space-y-3">
-              <label className="text-xs font-medium text-slate-300">Prompt eingeben:</label>
-              <textarea
+              <label htmlFor="rag-semantic-cache-lab-1" className="text-xs font-medium text-slate-300">Prompt eingeben:</label>
+              <textarea id="rag-semantic-cache-lab-1"
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
                 rows={3}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 placeholder="Beispiel: Wie richte ich ein VLAN auf einem Switch ein?"
               />
               <div className="flex flex-wrap gap-1.5">
@@ -157,7 +157,7 @@ export default function RagSemanticCacheLab() {
 
           {/* Add custom entry */}
           <form onSubmit={handleAddCacheEntry} className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-6 border border-slate-700/60 shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-50 flex items-center gap-2">
               <PlusCircle className="w-4 h-4 text-emerald-400" />
               Neuen Cache-Eintrag einlernen
             </h3>
@@ -166,14 +166,14 @@ export default function RagSemanticCacheLab() {
               value={newPrompt}
               onChange={(e) => setNewPrompt(e.target.value)}
               placeholder="Referenz-Prompt..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
             <textarea
               value={newResponse}
               onChange={(e) => setNewResponse(e.target.value)}
               rows={2}
               placeholder="Antworttext / Tool-Ergebnis..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
             <button
               type="submit"
@@ -207,7 +207,7 @@ export default function RagSemanticCacheLab() {
                   <div className="text-xs uppercase tracking-wider font-semibold text-slate-400">
                     Routing Ergebnis
                   </div>
-                  <div className="text-xl font-black text-white">
+                  <div className="text-xl font-black text-slate-50">
                     {evaluation.isHit ? 'CACHE HIT (Zero Token Cost)' : 'CACHE MISS (LLM Inference)'}
                   </div>
                 </div>
@@ -235,13 +235,13 @@ export default function RagSemanticCacheLab() {
 
             <div className="mt-4 pt-4 border-t border-slate-700/40 font-mono text-xs text-slate-300 flex items-center gap-2">
               <span className="text-slate-400">Execution Pipeline:</span>
-              <span className="font-semibold text-white">{evaluation.executionPath}</span>
+              <span className="font-semibold text-slate-50">{evaluation.executionPath}</span>
             </div>
           </div>
 
           {/* Response Payload */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-6 border border-slate-700/60 shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-50 flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
                 Ausgelieferte Antwort (Payload)
@@ -273,7 +273,7 @@ export default function RagSemanticCacheLab() {
 
           {/* Vector Store Comparison Table */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-6 border border-slate-700/60 shadow-lg space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-50 flex items-center gap-2">
               <Database className="w-4 h-4 text-cyan-400" />
               Vector Index Einträge & Cosine Scores
             </h3>
@@ -293,9 +293,9 @@ export default function RagSemanticCacheLab() {
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                      <div className="font-medium text-white flex items-center gap-2">
+                      <div className="font-medium text-slate-50 flex items-center gap-2">
                         {isWinner && (
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-500 text-black font-black text-[10px]">
                             ACTIVE HIT
                           </span>
                         )}

@@ -30,7 +30,7 @@ export default function RagAiSimulator() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === s.id ? 'var(--accent-purple)' : 'var(--bg-card)',
-              color: selectedId === s.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === s.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === s.id ? '2px solid var(--accent-purple)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'

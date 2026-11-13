@@ -42,17 +42,6 @@ export function generatePrivacyAddress(prefix) {
 }
 
 /**
- * Neighbor Discovery Protocol (NDP) Nachrichtentypen nach RFC 4861
- */
-export const NDP_MESSAGE_TYPES = {
-  RS: { type: 133, name: 'Router Solicitation (RS)', desc: 'Host bittet alle Router um ein Router Advertisement (Multicast an ff02::2)' },
-  RA: { type: 134, name: 'Router Advertisement (RA)', desc: 'Router sendet Prefix-Informationen, Default-Gateway und Flags (ff02::1)' },
-  NS: { type: 135, name: 'Neighbor Solicitation (NS)', desc: 'Ermittelt Link-Layer-Adresse eines Nachbarn oder DAD (Duplicate Address Detection)' },
-  NA: { type: 136, name: 'Neighbor Advertisement (NA)', desc: 'Antwort auf NS mit der eigenen MAC-Adresse oder Flag-Update' },
-  REDIRECT: { type: 137, name: 'Redirect', desc: 'Informiert Host über einen besseren First-Hop-Router' }
-};
-
-/**
  * Simuliert den Lebenszyklus des IPv6 Autoconfig-Ablaufs
  * @param {Object} options
  * @param {string} options.mac - MAC des Clients

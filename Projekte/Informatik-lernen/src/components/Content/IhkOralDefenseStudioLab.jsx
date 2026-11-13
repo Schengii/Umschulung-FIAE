@@ -176,7 +176,7 @@ export default function IhkOralDefenseStudioLab({ onRewardXP }) {
 
       {/* Main Examination Room */}
       {!finalResult ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           {/* Examiner Panel */}
           <div 
             className="glass-panel"
