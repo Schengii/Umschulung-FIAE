@@ -1,0 +1,61 @@
+/* Rules that only apply on index.html (landing page). The hero and the point cards come from
+   modules/hero_showcase.css and home.css, which index.html shares with pages/home.html
+   (ADR 0014, addendum 2026-11-14). */
+
+.landing-project {
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-project-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.landing-project-label {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.landing-project-link {
+    margin-top: auto;
+    padding-top: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.landing-project-link:hover,
+.landing-project-link:focus-visible {
+    text-decoration: underline;
+}
+
+.landing-more {
+    margin: 0;
+    text-align: center;
+}
+
+.landing-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.5rem 1.5rem;
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.25rem;
+}
+
+.landing-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin: 0;
+}
+
+.landing-contact a {
+    font-weight: 600;
+}
