@@ -17,7 +17,7 @@
     "category": "web",
     "language": "TypeScript",
     "stars": 0,
-    "updatedAt": "2026-11-13T11:41:51.041Z",
+    "updatedAt": "2026-10-31T15:05:40.000Z",
     "images": [
       "assets/images/analytics_showcase.webp",
       "assets/images/analytics_showcase.webp"
@@ -163,7 +163,7 @@
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-11-13T11:41:51.153Z",
+    "updatedAt": "2026-11-13T11:41:53.000Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -187,7 +187,7 @@
     "category": "ai",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-11-13T11:41:51.256Z",
+    "updatedAt": "2026-10-31T15:05:40.000Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -349,7 +349,7 @@
     "category": "games",
     "language": "C++",
     "stars": 0,
-    "updatedAt": "2026-11-13T11:41:51.868Z"
+    "updatedAt": "2026-10-31T15:05:40.000Z"
   },
   {
     "repoName": "Wohnungssuche-KI",
@@ -369,7 +369,7 @@
     "category": "ai web",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-11-13T11:41:51.956Z",
+    "updatedAt": "2026-10-31T15:05:40.000Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
