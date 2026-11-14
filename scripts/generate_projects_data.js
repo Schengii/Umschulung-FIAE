@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { execFileSync } = require('child_process');
 const { DEMO_ONLY } = require('./project_visibility');
 
 const projectsDataFile = path.resolve(__dirname, '..', 'assets', 'js', 'projects_data.js');
@@ -41,6 +42,51 @@ function scanLocalProjects() {
     });
 
     return scanned;
+}
+
+/**
+ * Runs git in the repository root and returns its trimmed output.
+ * @param {string[]} args
+ */
+function runGit(args) {
+    return execFileSync('git', args, { cwd: path.resolve(__dirname, '..'), encoding: 'utf-8' }).trim();
+}
+
+/**
+ * `updatedAt` of a project without public repository data (private or renamed repo).
+ * The date has to be stable: "now" would change projects.json, and with it the service worker
+ * cache name, on every sync run and would show every demo as updated today.
+ * Order: uncommitted changes in the folder mean it is being updated right now; otherwise the
+ * date of the last commit that touched the folder; without git the previous value.
+ * @param {{ folderName: string, previous?: string, git?: (args: string[]) => string, now?: () => Date }} options
+ * @returns {string} ISO date
+ */
+function resolveFallbackUpdatedAt({ folderName, previous, git = runGit, now = () => new Date() }) {
+    if (folderName) {
+        const folder = `Projekte/${folderName}`;
+        try {
+            if (git(['status', '--porcelain', '--', folder]) !== '') return now().toISOString();
+            const committed = git(['log', '-1', '--format=%cI', '--', folder]);
+            if (committed) return new Date(committed).toISOString();
+        } catch {
+            // No git or no repository (for example an unpacked archive): fall through.
+        }
+    }
+    return previous || now().toISOString();
+}
+
+/** `updatedAt` per repoName from the last generated projects.json. */
+function readPreviousUpdatedAt() {
+    /** @type {Record<string, string>} */
+    const byRepo = {};
+    try {
+        for (const project of JSON.parse(fs.readFileSync(projectsJsonFile, 'utf-8'))) {
+            if (project.repoName && project.updatedAt) byRepo[project.repoName] = project.updatedAt;
+        }
+    } catch {
+        // First run or unreadable file: no previous values.
+    }
+    return byRepo;
 }
 
 /** @param {string} repoName */
@@ -88,6 +134,7 @@ async function build() {
     console.log(`Total projects to process: ${combinedProjects.length}`);
     console.log('Fetching GitHub repository data...');
     const enriched = [];
+    const previousUpdatedAt = readPreviousUpdatedAt();
 
     for (const project of combinedProjects) {
         if (project.repoName) {
@@ -117,7 +164,10 @@ async function build() {
                         ? `https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/${encodeURIComponent(folderName)}`
                         : undefined;
                 }
-                project.updatedAt = new Date().toISOString();
+                project.updatedAt = resolveFallbackUpdatedAt({
+                    folderName,
+                    previous: previousUpdatedAt[project.repoName],
+                });
                 project.language = project.language || '';
                 console.log(`Fallback for ${project.repoName} (No API info)`);
             }
@@ -168,4 +218,6 @@ async function build() {
     console.log(`Successfully generated projects.json -> ${projectsJsonFile}`);
 }
 
-build();
+if (require.main === module) build();
+
+module.exports = { resolveFallbackUpdatedAt };
