@@ -1,6 +1,7 @@
 /**
  * @file portfolio-copilot.js
- * @description Lokaler, 100% offline-fähiger KI-Portfolio-Copilot für Recruiter und Prüfer
+ * @description Portfolio-Assistent für Recruiter und Prüfer: gleicht die Frage mit Stichwörtern einer
+ * festen Wissensbasis ab (kein Sprachmodell), läuft vollständig im Browser.
  */
 
 /**
@@ -129,13 +130,14 @@ function injectCopilotWidget() {
     const container = document.createElement('div');
     container.id = 'portfolio-copilot-container';
     container.setAttribute('role', 'complementary');
-    container.setAttribute('aria-label', 'FIAE AI Copilot');
+    container.setAttribute('aria-label', 'Portfolio-Assistent');
+    container.setAttribute('data-en-aria-label', 'Portfolio assistant');
 
     container.innerHTML = `
         <!-- Floating Toggle Button -->
-        <button id="copilot-toggle-btn" class="btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="copilot-chat-box" aria-label="FIAE AI Copilot öffnen" data-en-aria-label="Open FIAE AI Copilot" title="FIAE AI Copilot Chat">
+        <button id="copilot-toggle-btn" class="btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="copilot-chat-box" aria-label="Portfolio-Assistent öffnen" data-en-aria-label="Open portfolio assistant" title="Portfolio-Assistent" data-en-title="Portfolio assistant">
             <span class="copilot-btn-icon">🤖</span>
-            <span class="copilot-btn-text">FIAE AI Copilot</span>
+            <span class="copilot-btn-text"><span lang="de">Portfolio-Assistent</span><span lang="en">Portfolio Assistant</span></span>
             <span class="copilot-pulse-dot" aria-hidden="true"></span>
         </button>
 
@@ -146,10 +148,10 @@ function injectCopilotWidget() {
                 <div class="copilot-header-left">
                     <div class="copilot-avatar-badge" aria-hidden="true">🤖</div>
                     <div>
-                        <div id="copilot-dialog-title" class="copilot-header-title">FIAE Portfolio Copilot</div>
+                        <div id="copilot-dialog-title" class="copilot-header-title"><span lang="de">Portfolio-Assistent</span><span lang="en">Portfolio Assistant</span></div>
                         <div class="copilot-header-status">
                             <span class="copilot-pulse-dot" style="width:6px;height:6px;" aria-hidden="true"></span>
-                            <span>100% Offline / Client-Side</span>
+                            <span lang="de">Stichwortsuche, läuft lokal</span><span lang="en">Keyword search, runs locally</span>
                         </div>
                     </div>
                 </div>
@@ -157,7 +159,7 @@ function injectCopilotWidget() {
                     <button type="button" id="copilot-clear-btn" class="copilot-icon-btn" title="Chat zurücksetzen" data-en-title="Reset chat" aria-label="Chat zurücksetzen" data-en-aria-label="Reset chat">
                         <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                     </button>
-                    <button type="button" id="copilot-close-btn" class="copilot-icon-btn" title="Schließen" data-en-title="Close" aria-label="Copilot Chat schließen" data-en-aria-label="Close Copilot chat">
+                    <button type="button" id="copilot-close-btn" class="copilot-icon-btn" title="Schließen" data-en-title="Close" aria-label="Assistent schließen" data-en-aria-label="Close assistant">
                         <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -168,8 +170,8 @@ function injectCopilotWidget() {
                 <div class="copilot-msg bot">
                     ${
                         currentLang === 'en'
-                            ? 'Hello! I am Maximilian’s Portfolio Copilot. Feel free to ask anything about his skills, projects (C++, React, Godot, AI, SQL), or his IHK graduation project!'
-                            : 'Hallo! Ich bin der Portfolio-Copilot. Frag mich gerne alles zu Maximilians Fähigkeiten, Projekten (C++, React, Godot, KI, SQL) oder dem IHK-Abschlussprojekt!'
+                            ? 'Hello! I am the portfolio assistant. I match your question against a fixed set of answers, so ask about his skills, projects (C++, React, Godot, AI, SQL), or his IHK graduation project!'
+                            : 'Hallo! Ich bin der Portfolio-Assistent. Ich gleiche deine Frage mit festen Antworten ab, frag also nach Maximilians Fähigkeiten, Projekten (C++, React, Godot, KI, SQL) oder dem IHK-Abschlussprojekt!'
                     }
                 </div>
 
@@ -185,7 +187,7 @@ function injectCopilotWidget() {
 
             <!-- Input Bar -->
             <form id="copilot-form">
-                <input type="text" id="copilot-input" placeholder="Frage eingeben..." data-en-placeholder="Ask a question..." aria-label="Nachricht an Copilot" data-en-aria-label="Message to Copilot" autocomplete="off">
+                <input type="text" id="copilot-input" placeholder="Frage eingeben..." data-en-placeholder="Ask a question..." aria-label="Frage an den Assistenten" data-en-aria-label="Question for the assistant" autocomplete="off">
                 <button type="submit" class="copilot-send-btn" aria-label="Senden" data-en-aria-label="Send" title="Senden" data-en-title="Send">
                     <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
                 </button>
