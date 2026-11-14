@@ -153,8 +153,8 @@ function renderHeader(currentPage) {
     <header class="app-header">
         <div class="header-banner">
             <h1 class="header-title">
-                <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
-                <span lang="en">My Retraining as an IT Specialist in Application Development</span>
+                <span lang="de">Maximilian Schenk · Fachinformatiker für Anwendungsentwicklung</span>
+                <span lang="en">Maximilian Schenk · IT Specialist in Application Development</span>
             </h1>
         </div>
         ${renderNav(currentPage)}

@@ -41,7 +41,7 @@ Aufwand: **S** bis 2 Stunden, **M** bis 1 Tag, **L** mehrere Tage.
 
 Vier PRs sind offen und blockieren zum Teil die Punkte weiter unten.
 
-- [ ] **0.1 PR #67 (Personendaten reduzieren) grün bekommen und mergen.** (S)
+- [x] **0.1 PR #67 (Personendaten reduzieren) grün bekommen und mergen.** (S) Erledigt 2026-11-14: Ursache war das veraltete Icon-Subset nach dem entfernten WhatsApp-Link; gemergt.
   Der Job `quality` schlägt fehl, alle E2E- und Lighthouse-Jobs sind grün. Die Ursache ist nicht untersucht; naheliegend ist ein fehlendes `npm run regen` oder `npm run check-csp:fix` nach der HTML-Änderung. Der PR betrifft auch die Telefonnummer in `components.js` (WhatsApp-Link) und in `datenschutz.html`.
 - [x] **0.2 PR #61 (Sync der Unterprojekte) entscheiden.** (S) Erledigt 2026-11-14: Diff geprüft (nur Informatik-lernen, ManuFaktur, EcoChef; keine Secrets, kein Quellcode privater Projekte), gemergt. Die zwei CodeQL-Meldungen liegen in den Unterprojekten (Testdatei und CORS-Lernsimulation) und gehören in deren Repos.
   Offen seit 2026-10-28, 100 geänderte Dateien, mergebar. Die von `pull_request` ausgelösten Läufe stehen auf `action_required`, der per `workflow_dispatch` gestartete CI-Lauf ist grün, der CodeQL-Check rot. Diff durchsehen, dann mergen oder schließen.
@@ -65,15 +65,15 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 - [ ] **1.2 Simulierte Dashboard-Daten durch echte ersetzen.** (M)
   `dashboard.html` zeigt „Umschulungs-Beiträge (Simuliert)“ (Zufallszahlen mit festem Seed aus `buildContributionData`) und „Code-Qualität & QA-Metriken (Simuliert)“ mit Vorgabewerten 85 / 92 / 80. Erfundene Zahlen schaden in einem Bewerbungsportfolio mehr, als sie nützen, auch wenn sie als simuliert gekennzeichnet sind.
   Vorschlag: Ein neues Skript `scripts/generate_site_stats.js` erzeugt `assets/data/site-stats.json` aus `git log` (Commits je Tag), der Vitest-Coverage, der Testanzahl und den Lighthouse-Werten. Das Raster zeigt die echte Commit-Historie (434 Commits), die Metrik-Karte die echten Messwerte. Der Rechner mit Schiebereglern kann als klar benanntes Rechenbeispiel bleiben. Check-Gate nach dem Muster von `check-search-index`.
-- [ ] **1.3 Aussagen an die Messwerte anpassen.** (S)
+- [x] **1.3 Aussagen an die Messwerte anpassen.** (S) Erledigt 2026-11-14 (Branch `content/aktualitaet-phase-1`).
   - `home.html` nennt „100% WCAG AAA & PWA“, das README „WCAG 2.1 AA“, die CI prüft Lighthouse-A11y ab 0,9. Auf die belegbare Aussage (WCAG 2.1 AA, axe-geprüft) vereinheitlichen.
   - Der „KI-Portfolio-Copilot“ ist ein Schlagwort-Abgleich gegen `KNOWLEDGE_BASE`. Umbenennen in „Portfolio-Assistent“ oder die Arbeitsweise im Widget offen benennen.
   - „100% datenschutzkonform“ am Kontaktformular durch eine konkrete Aussage ersetzen (keine Cookies, Versand über Web3Forms).
-- [ ] **1.4 Veraltete Texte aus der Lernphase.** (S)
+- [x] **1.4 Veraltete Texte aus der Lernphase.** (S) Erledigt 2026-11-14 für `home.html` (Meta-Texte, JSON-LD) und den Banner-Titel. Die Fließtexte der übrigen Seiten sind noch nicht Satz für Satz durchgesehen.
   Meta-Description, `og:description` und `twitter:description` von `home.html` werben mit einem „IHK-Prüfungs-Countdown“, den es nicht mehr gibt. Der Banner-Titel in `components.js` lautet „Meine Umschulung zum Fachinformatiker“. Alle Seiten auf Formulierungen aus der Lernphase prüfen und auf den Stand „abgeschlossen, auf Jobsuche“ bringen, ebenso `jobTitle` und `description` im JSON-LD.
-- [ ] **1.5 News fortführen.** (S)
+- [x] **1.5 News fortführen.** (S) Erledigt 2026-11-14: ISO-Datum, Sortierung, zwei neue Einträge (v1.5.0, IHK-Kartei). Die Texte der neuen Einträge bitte gegenlesen.
   Der neueste Eintrag in `news_data.js` ist vom 2026-07-06. Einträge zu v1.5.0, IHK-Kartei und neuen Projekten ergänzen. Zusätzlich das Datum als ISO-Feld speichern (`date: '2026-07-06'`) und die Anzeige daraus formatieren, statt `date_de` und `date_en` von Hand zu pflegen.
-- [ ] **1.6 Datenschutzerklärung mit dem Code abgleichen.** (M)
+- [x] **1.6 Datenschutzerklärung mit dem Code abgleichen.** (M) Erledigt 2026-11-14, mit Test `scripts/privacy_storage_keys.test.js`. Die neuen Abschnitte 8 bis 10 und die genannten Rechtsgrundlagen bitte selbst prüfen.
   Es fehlen:
   - Abrufe der GitHub-API (`recruiter-filter.js`, `projekt-detail.js`), dabei geht die IP-Adresse an GitHub.
   - Die Spracheingabe im Interview-Trainer (`SpeechRecognition`); je nach Browser verarbeitet ein externer Dienst die Aufnahme.

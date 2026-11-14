@@ -61,20 +61,27 @@
 
             <h2 lang="de">3. Lokale Speicherung (Local Storage)</h2>
             <h2 lang="en">3. Local Storage</h2>
-            <p lang="de">Diese Website verwendet den <code>localStorage</code> Ihres Browsers, um Ihre Benutzereinstellungen ausschließlich lokal auf Ihrem Endgerät zu speichern. Es findet <strong>keine Übertragung</strong> an externe Server oder Tracking-Dienste statt:</p>
-            <p lang="en">This website uses your browser's <code>localStorage</code> to keep your personal UI preferences stored exclusively on your device. <strong>No data is transmitted</strong> to external analytics or tracking services:</p>
-            <ul>
-                <li><code>fiae_theme</code>: <span lang="de">Gewähltes Farbschema (Hell / Dunkel)</span><span lang="en">Selected theme (Light / Dark)</span></li>
-                <li><code>fiae_accent_color</code>: <span lang="de">Gewählte Akzentfarbe (Blau, Grün, Lila, etc.)</span><span lang="en">Selected accent color (Blue, Green, Purple, etc.)</span></li>
-                <li><code>fiae_lang</code>: <span lang="de">Sprachpräferenz (Deutsch / Englisch)</span><span lang="en">Language preference (German / English)</span></li>
-                <li><code>fiae_username</code>: <span lang="de">Optional eingegebener Name für die Dashboard-Begrüßung</span><span lang="en">Optionally entered name for personalized greetings</span></li>
-                <li><code>fiae_a11y_*</code>: <span lang="de">Barrierefreiheits-Einstellungen (Schriftgröße, Legasthenie-Hilfe, Farbkontrast)</span><span lang="en">Accessibility options (Font scale, Dyslexia font, High contrast)</span></li>
-                <li><code>fiae_achievements</code>: <span lang="de">Lokale Gamification-Errungenschaften &amp; Fortschritte</span><span lang="en">Local achievements &amp; gamification progress</span></li>
-                <li><code>snake_highscore</code>, <code>memory_best_time</code>: <span lang="de">Lokale Spielstände der Mini-Games</span><span lang="en">Local game high scores</span></li>
-                <li><code>fiae_cookie_consent</code>: <span lang="de">Status der Cookie-/Datenschutz-Bestätigung</span><span lang="en">Consent acknowledgement state</span></li>
+            <p lang="de">Diese Website speichert Einstellungen, Lernstände und Spielstände im <code>localStorage</code> Ihres Browsers, also ausschließlich auf Ihrem Endgerät. Diese Daten werden <strong>nicht</strong> an mich oder an Dritte übertragen. Gespeichert wird unter folgenden Schlüsseln:</p>
+            <p lang="en">This website stores settings, learning progress and game scores in your browser's <code>localStorage</code>, that is, exclusively on your device. This data is <strong>not</strong> transmitted to me or to third parties. The following keys are used:</p>
+            <ul id="storage-key-list">
+                <li><code>theme</code>, <code>portfolio_accent</code>, <code>lang</code>: <span lang="de">Farbschema, Akzentfarbe und Sprache</span><span lang="en">Theme, accent colour and language</span></li>
+                <li><code>portfolio_dyslexia</code>, <code>portfolio_colorblind</code>, <code>portfolio_font_scale</code>, <code>portfolio_contrast</code>: <span lang="de">Einstellungen zur Barrierefreiheit</span><span lang="en">Accessibility settings</span></li>
+                <li><code>sound_enabled</code>, <code>interview_tts_enabled</code>: <span lang="de">Ton und Sprachausgabe an oder aus</span><span lang="en">Sound and speech output on or off</span></li>
+                <li><code>username</code>: <span lang="de">optional eingegebener Name für die Begrüßung</span><span lang="en">optionally entered name for the greeting</span></li>
+                <li><code>cookieConsent</code>: <span lang="de">Bestätigung des Datenschutzhinweises</span><span lang="en">acknowledgement of the privacy notice</span></li>
+                <li><code>flashcards_box_levels</code>, <code>flashcards_due_dates</code>, <code>flashcards_starred</code>, <code>flashcards_custom</code>, <code>flashcards_extended_enabled</code>, <code>known_flashcards</code>, <code>flashcard_total_count</code>, <code>flashcard_correct_count</code>: <span lang="de">Lernkarten: Stufen der Leitner-Box, Fälligkeiten, Markierungen, selbst angelegte Karten und Zähler</span><span lang="en">Flashcards: Leitner box levels, due dates, stars, your own cards and counters</span></li>
+                <li><code>exam_results</code>, <code>exam_topic_stats</code>, <code>exam_wrong_questions</code>, <code>quiz_best_score</code>, <code>fiae_daily_question_state</code>: <span lang="de">Ergebnisse des Prüfungssimulators, des Quiz und der Frage des Tages</span><span lang="en">Results of the exam simulator, the quiz and the question of the day</span></li>
+                <li><code>interview_best_score</code>: <span lang="de">bestes Ergebnis im Interview-Trainer</span><span lang="en">best score in the interview trainer</span></li>
+                <li><code>learning_recommendations_quiz_weak_categories</code>, <code>learning_recommendations_flashcards_wrong_counts</code>: <span lang="de">Grundlage der Lernempfehlungen im Dashboard</span><span lang="en">basis of the learning recommendations on the dashboard</span></li>
+                <li><code>fiae_progress_phase_*</code>: <span lang="de">abgehakte Schritte im Umschulungsablauf</span><span lang="en">ticked steps of the retraining timeline</span></li>
+                <li><code>snake_highscore</code>, <code>snake_highscore_list</code>, <code>memoryBestMoves</code>, <code>memoryBestTime</code>, <code>memory_highscore_list</code>: <span lang="de">Spielstände der Mini-Games</span><span lang="en">Scores of the mini games</span></li>
+                <li><code>achievements</code>, <code>visited_pages</code>: <span lang="de">Erfolge und besuchte Seiten</span><span lang="en">Achievements and visited pages</span></li>
+                <li><code>news_likes_*</code>: <span lang="de">Ihre „Gefällt mir“-Markierungen bei den News</span><span lang="en">your likes on news entries</span></li>
+                <li><code>github_projects_cache</code>, <code>github_projects_cache_time</code>, <code>github_live_commits_today</code>: <span lang="de">Zwischenspeicher der öffentlichen Projektdaten von GitHub (siehe Abschnitt 8) und Zähler für das Aktivitätsraster</span><span lang="en">cache of the public project data from GitHub (see section 8) and counter for the activity grid</span></li>
+                <li><code>last_backup_at</code>: <span lang="de">Zeitpunkt des letzten Exports</span><span lang="en">time of the last export</span></li>
             </ul>
-            <p lang="de">Sie können die gespeicherten Daten jederzeit selbst über Ihre Browser-Einstellungen oder den Button „Alle lokalen Daten löschen“ im Dashboard zurücksetzen.</p>
-            <p lang="en">You can clear this stored data anytime in your browser settings or via the reset button on the dashboard.</p>
+            <p lang="de">Die Demos unter „Projekte“ laufen unter derselben Adresse und können eigene Einträge anlegen. Sie können alle gespeicherten Daten jederzeit über die Einstellungen Ihres Browsers löschen (Websitedaten löschen).</p>
+            <p lang="en">The demos under "Projects" run on the same address and may create entries of their own. You can delete all stored data at any time in your browser settings (clear site data).</p>
             <hr>
 
             <h2 lang="de">4. Lokales Schriftarten- &amp; Icon-Hosting</h2>
@@ -101,8 +108,26 @@
             <p lang="en">This website uses <strong>Vercel Analytics</strong> (Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA) for anonymized, cookieless page-view analytics (e.g. visited pages, referrer, device type). No individual profiles are created and no IP addresses are permanently stored. The script only loads on the production domain, never during local development. Legal basis: Art. 6 (1) lit. f GDPR (legitimate interest in understanding portfolio usage).</p>
             <hr>
 
-            <h2 lang="de">8. Ihre Rechte als betroffene Person</h2>
-            <h2 lang="en">8. Your Rights under GDPR</h2>
+            <h2 lang="de">8. Projektdaten von GitHub</h2>
+            <h2 lang="en">8. Project Data from GitHub</h2>
+            <p lang="de">Die Startseite und die Projekt-Detailseiten rufen die Liste meiner öffentlichen Repositories direkt bei der Programmierschnittstelle von GitHub ab (<code>api.github.com</code>, GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA, ein Unternehmen von Microsoft). Dabei wird technisch bedingt Ihre IP-Adresse an GitHub übertragen. Es werden keine Angaben über Sie mitgeschickt, und die Antwort wird für eine Stunde in Ihrem Browser zwischengespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an aktuellen Projektdaten).</p>
+            <p lang="en">The home page and the project detail pages request the list of my public repositories directly from the GitHub API (<code>api.github.com</code>, GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA, a Microsoft company). For technical reasons your IP address is transmitted to GitHub. No information about you is sent along, and the answer is cached in your browser for one hour. Legal basis: Art. 6 (1) lit. f GDPR (legitimate interest in up-to-date project data).</p>
+            <hr>
+
+            <h2 lang="de">9. Spracheingabe und Sprachausgabe im Interview-Trainer</h2>
+            <h2 lang="en">9. Speech Input and Speech Output in the Interview Trainer</h2>
+            <p lang="de">Der Interview-Trainer bietet eine Spracheingabe über die Spracherkennung Ihres Browsers an. Das Mikrofon wird erst aktiv, wenn Sie auf die Mikrofon-Schaltfläche klicken und der Browser Ihre Erlaubnis erhalten hat. Ich erhalte und speichere keine Aufnahmen. Je nach Browser verarbeitet jedoch ein Dienst des Browser-Herstellers die Aufnahme auf dessen Servern (in Google Chrome zum Beispiel Google); maßgeblich sind die Datenschutzhinweise Ihres Browsers. Sie können den Trainer vollständig ohne Mikrofon per Tastatur nutzen. Die Sprachausgabe der Fragen nutzt die Stimmen Ihres Browsers oder Betriebssystems. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO (Einwilligung durch die Freigabe des Mikrofons).</p>
+            <p lang="en">The interview trainer offers speech input through the speech recognition of your browser. The microphone only becomes active once you click the microphone button and the browser has received your permission. I neither receive nor store recordings. Depending on the browser, however, a service of the browser vendor processes the recording on its servers (in Google Chrome, for example, Google); the privacy notice of your browser applies. You can use the trainer entirely without a microphone by keyboard. The speech output of the questions uses the voices of your browser or operating system. Legal basis: Art. 6 (1) lit. a GDPR (consent by granting microphone access).</p>
+            <hr>
+
+            <h2 lang="de">10. Sicherung und Übertragung des Lernstands</h2>
+            <h2 lang="en">10. Backup and Transfer of Learning Progress</h2>
+            <p lang="de">Im Dashboard können Sie die in Abschnitt 3 genannten Daten als Datei exportieren, wieder importieren oder über einen QR-Code beziehungsweise einen Link auf ein anderes Gerät übertragen. Datei, QR-Code und Link entstehen in Ihrem Browser. Beim Link stehen die Daten hinter dem Zeichen <code>#</code> in der Adresse; dieser Teil wird vom Browser nicht an den Server gesendet. Wer den Link oder den QR-Code erhält, kann die enthaltenen Daten lesen. Geben Sie ihn deshalb nur an eigene Geräte weiter.</p>
+            <p lang="en">On the dashboard you can export the data listed in section 3 as a file, import it again, or transfer it to another device by QR code or link. File, QR code and link are created in your browser. In the link the data follows the <code>#</code> character of the address; the browser does not send this part to the server. Whoever receives the link or the QR code can read the data it contains, so pass it on to your own devices only.</p>
+            <hr>
+
+            <h2 lang="de">11. Ihre Rechte als betroffene Person</h2>
+            <h2 lang="en">11. Your Rights under GDPR</h2>
             <p lang="de">Sie haben gemäß Art. 15–21 DSGVO jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger sowie das Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Wenden Sie sich hierzu bitte an: <a href="mailto:sche-max@web.de">sche-max@web.de</a>.</p>
             <p lang="en">Under Art. 15–21 GDPR, you have the right to information, rectification, erasure, and restriction of processing of your personal data at any time. For inquiries, contact: <a href="mailto:sche-max@web.de">sche-max@web.de</a>.</p>
         </article>
