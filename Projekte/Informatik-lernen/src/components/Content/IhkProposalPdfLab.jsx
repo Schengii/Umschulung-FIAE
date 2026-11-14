@@ -90,7 +90,7 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
               <FileText className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-50 flex items-center gap-3">
                 IHK Projektantrag PDF- & Dokumentations-Generator
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/30 text-amber-400">
                   AP2 Teil A
@@ -115,7 +115,7 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
               type="button"
               onClick={handleDownloadPdf}
               disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold shadow-lg hover:from-amber-400 hover:to-amber-500 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black text-xs font-bold shadow-lg hover:from-amber-400 hover:to-amber-500 transition"
             >
               <Download className="w-4 h-4" />
               {isExporting ? 'Generiere...' : 'Druckfertiges PDF'}
@@ -134,8 +134,8 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
             </h2>
 
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Ausbildungsberuf (AO 2020):</label>
-              <select
+              <label htmlFor="ihk-proposal-pdf-lab-1" className="text-xs text-slate-400 block mb-1">Ausbildungsberuf (AO 2020):</label>
+              <select id="ihk-proposal-pdf-lab-1"
                 value={selectedOccupation}
                 onChange={(e) => setSelectedOccupation(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200"
@@ -150,8 +150,8 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Prüfling Name:</label>
-                <input
+                <label htmlFor="ihk-proposal-pdf-lab-2" className="text-xs text-slate-400 block mb-1">Prüfling Name:</label>
+                <input id="ihk-proposal-pdf-lab-2"
                   type="text"
                   value={candidateName}
                   onChange={(e) => setCandidateName(e.target.value)}
@@ -159,8 +159,8 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Ausbildungsbetrieb:</label>
-                <input
+                <label htmlFor="ihk-proposal-pdf-lab-3" className="text-xs text-slate-400 block mb-1">Ausbildungsbetrieb:</label>
+                <input id="ihk-proposal-pdf-lab-3"
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
@@ -170,8 +170,8 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
             </div>
 
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Projektbezeichnung (Thema):</label>
-              <input
+              <label htmlFor="ihk-proposal-pdf-lab-4" className="text-xs text-slate-400 block mb-1">Projektbezeichnung (Thema):</label>
+              <input id="ihk-proposal-pdf-lab-4"
                 type="text"
                 value={projectTitle}
                 onChange={(e) => setProjectTitle(e.target.value)}
@@ -180,8 +180,8 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
             </div>
 
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Kurzbeschreibung & Problemstellung:</label>
-              <textarea
+              <label htmlFor="ihk-proposal-pdf-lab-5" className="text-xs text-slate-400 block mb-1">Kurzbeschreibung & Problemstellung:</label>
+              <textarea id="ihk-proposal-pdf-lab-5"
                 rows={3}
                 value={projectGoal}
                 onChange={(e) => setProjectGoal(e.target.value)}
@@ -227,7 +227,7 @@ export default function IhkProposalPdfLab({ onRewardXP }) {
                     </tr>
                   ))}
                   <tr className="bg-slate-950/90 font-bold border-t border-slate-700">
-                    <td className="py-2 px-3 text-white">Gesamtbudget</td>
+                    <td className="py-2 px-3 text-slate-50">Gesamtbudget</td>
                     <td className="py-2 px-3 text-slate-400">100% Soll</td>
                     <td className="py-2 px-3 text-right text-amber-300 font-mono">{occ.maxHours} h</td>
                   </tr>

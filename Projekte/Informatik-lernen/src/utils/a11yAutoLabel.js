@@ -107,6 +107,29 @@ export function applyAutoLabels(root) {
   return count;
 }
 
+const SCROLL_SELECTOR = '.overflow-x-auto, .overflow-y-auto, .overflow-auto';
+const FOCUSABLE_INSIDE = 'a[href], button, input, select, textarea, summary, [tabindex]';
+
+/**
+ * Macht scrollbare Bereiche per Tastatur erreichbar (WCAG 2.1.1): Wer nur die Tastatur nutzt,
+ * kann sonst überlaufende Tabellen/Code-Blöcke nicht scrollen. Betroffen sind nur Bereiche, die
+ * tatsächlich überlaufen und kein fokussierbares Kind haben; liefert die Anzahl der Änderungen.
+ */
+export function applyScrollableFocus(root) {
+  if (!root || !root.querySelectorAll) return 0;
+  let count = 0;
+  root.querySelectorAll(SCROLL_SELECTOR).forEach((el) => {
+    if (el.hasAttribute('tabindex') || el.querySelector(FOCUSABLE_INSIDE)) return;
+    if (el.scrollWidth <= el.clientWidth && el.scrollHeight <= el.clientHeight) return;
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'region');
+    if (!hasAccessibleName(el)) el.setAttribute('aria-label', 'Scrollbarer Bereich');
+    el.setAttribute('data-auto-scroll-focus', '');
+    count += 1;
+  });
+  return count;
+}
+
 /**
  * Beobachtet `root` und beschriftet nachträglich hinzugekommene Elemente.
  * Gibt eine Cleanup-Funktion zurück.
@@ -117,6 +140,7 @@ export function observeAutoLabels(root) {
   const run = () => {
     scheduled = false;
     applyAutoLabels(root);
+    applyScrollableFocus(root);
   };
   const schedule = () => {
     if (scheduled) return;
@@ -125,6 +149,11 @@ export function observeAutoLabels(root) {
   };
   const observer = new MutationObserver(schedule);
   observer.observe(root, { childList: true, subtree: true });
+  window.addEventListener('resize', schedule);
   applyAutoLabels(root);
-  return () => observer.disconnect();
+  applyScrollableFocus(root);
+  return () => {
+    observer.disconnect();
+    window.removeEventListener('resize', schedule);
+  };
 }

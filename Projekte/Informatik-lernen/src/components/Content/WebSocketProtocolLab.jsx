@@ -97,8 +97,8 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
         <h4 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--text-main)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
           🤝 HTTP 101 Switching Protocols Handshake:
         </h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', fontSize: '0.85rem', fontFamily: 'monospace' }}>
-          <div style={{ background: '#0f172a', padding: '12px', borderRadius: 'var(--radius-md)', color: '#38bdf8' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px', fontSize: '0.85rem', fontFamily: 'monospace' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: 'var(--radius-md)', color: 'var(--accent-cyan)' }}>
             <div style={{ color: '#64748b', fontSize: '0.75rem' }}>CLIENT REQUEST:</div>
             GET /chat HTTP/1.1<br />
             Host: realtime.devgame.it<br />
@@ -106,7 +106,7 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
             Connection: Upgrade<br />
             Sec-WebSocket-Key: {handshakeHeaders.secKey}
           </div>
-          <div style={{ background: '#0f172a', padding: '12px', borderRadius: 'var(--radius-md)', color: '#10b981' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '12px', borderRadius: 'var(--radius-md)', color: 'var(--accent-emerald)' }}>
             <div style={{ color: '#64748b', fontSize: '0.75rem' }}>SERVER RESPONSE:</div>
             HTTP/1.1 101 Switching Protocols<br />
             Upgrade: websocket<br />
@@ -117,7 +117,7 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
       </div>
 
       {/* WebSocket Frame Terminal Log & Chat Controls */}
-      <div style={{ background: '#0f172a', borderRadius: 'var(--radius-lg)', padding: '20px', border: '1px solid #1e293b' }}>
+      <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '20px', border: '1px solid #1e293b' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{
@@ -127,7 +127,7 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
               background: connectionStatus === 'CONNECTED' ? '#10b981' : connectionStatus === 'CONNECTING' ? '#f59e0b' : '#ef4444',
               boxShadow: connectionStatus === 'CONNECTED' ? '0 0 10px #10b981' : 'none'
             }} />
-            <span style={{ color: '#f8fafc', fontWeight: '700', fontSize: '0.9rem' }}>
+            <span style={{ color: 'var(--text-main)', fontWeight: '700', fontSize: '0.9rem' }}>
               Status: {connectionStatus} {pingLatency ? `(${pingLatency}ms)` : ''}
             </span>
           </div>
@@ -138,13 +138,13 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
             disabled={connectionStatus !== 'CONNECTED'}
             style={{ fontSize: '0.82rem', padding: '6px 12px', gap: '6px' }}
           >
-            <Zap size={14} style={{ color: '#f59e0b' }} /> Ping / Pong Test
+            <Zap size={14} style={{ color: 'var(--accent-amber)' }} /> Ping / Pong Test
           </button>
         </div>
 
         {/* Message Stream */}
         <div style={{
-          background: '#020617',
+          background: 'var(--bg-primary)',
           padding: '16px',
           borderRadius: 'var(--radius-md)',
           minHeight: '260px',
@@ -170,25 +170,25 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
               >
                 <span style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '2px' }}>[{m.time}]</span>
                 {m.type === 'client' && (
-                  <span style={{ color: '#6366f1', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: 'var(--accent-primary)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <ArrowUpRight size={14} /> CLIENT FRAME:
                   </span>
                 )}
                 {m.type === 'server' && (
-                  <span style={{ color: '#10b981', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: 'var(--accent-emerald)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <ArrowDownLeft size={14} /> SERVER FRAME:
                   </span>
                 )}
                 {m.type === 'system' && (
-                  <span style={{ color: '#f59e0b', fontWeight: '700' }}>[SYSTEM]:</span>
+                  <span style={{ color: 'var(--accent-amber)', fontWeight: '700' }}>[SYSTEM]:</span>
                 )}
                 {m.type === 'ping' && (
-                  <span style={{ color: '#ec4899', fontWeight: '700' }}>[PING]:</span>
+                  <span style={{ color: 'var(--accent-rose)', fontWeight: '700' }}>[PING]:</span>
                 )}
                 {m.type === 'pong' && (
-                  <span style={{ color: '#38bdf8', fontWeight: '700' }}>[PONG]:</span>
+                  <span style={{ color: 'var(--accent-cyan)', fontWeight: '700' }}>[PONG]:</span>
                 )}
-                <span style={{ color: '#f8fafc' }}>{m.text}</span>
+                <span style={{ color: 'var(--text-main)' }}>{m.text}</span>
               </div>
             ))
           )}
@@ -206,8 +206,8 @@ export default function WebSocketProtocolLab({ onRewardXP }) {
               flex: 1,
               padding: '12px 16px',
               borderRadius: 'var(--radius-md)',
-              background: '#0f172a',
-              color: '#f8fafc',
+              background: 'var(--bg-card)',
+              color: 'var(--text-main)',
               border: '1px solid #334155',
               fontFamily: 'monospace',
               fontSize: '0.92rem'

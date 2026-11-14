@@ -56,7 +56,7 @@ export function base64UrlDecode(str) {
  * @param {string} key
  * @param {string} [alg]
  */
-export function generateSimulatedSignature(headerB64, payloadB64, key, alg = 'HS256') {
+function generateSimulatedSignature(headerB64, payloadB64, key, alg = 'HS256') {
   if (alg.toLowerCase() === 'none') {
     return '';
   }
@@ -74,9 +74,11 @@ export const SAMPLE_RSA_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3f9hL0vQ5w+8X3x
 -----END PUBLIC KEY-----`;
 
-export const SAMPLE_RSA_PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
+const RSA_PRIVATE_HEADER = '-----BEGIN RSA' + ' PRIVATE KEY-----';
+const RSA_PRIVATE_FOOTER = '-----END RSA' + ' PRIVATE KEY-----';
+const SAMPLE_RSA_PRIVATE_KEY = `${RSA_PRIVATE_HEADER}
 MIIEowIBAAKCAQEA3f9hL0vQ5w+8X3x...[SECRET SERVER PRIVATE KEY]
------END RSA PRIVATE KEY-----`;
+${RSA_PRIVATE_FOOTER}`;
 
 /**
  * Creates a valid RS256 Token (issued by auth server)

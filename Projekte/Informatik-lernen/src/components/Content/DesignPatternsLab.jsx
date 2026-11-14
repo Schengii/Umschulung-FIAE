@@ -69,7 +69,7 @@ class Subject {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: activePatternId === p.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-              color: activePatternId === p.id ? '#ffffff' : 'var(--text-main)',
+              color: activePatternId === p.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: activePatternId === p.id ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)',
               cursor: 'pointer'
             }}

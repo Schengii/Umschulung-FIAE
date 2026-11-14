@@ -183,7 +183,7 @@ export default function ApiMockStudioLab({ onRewardXP }) {
             }}
           >
             <span style={{
-              color: preset.method === 'GET' ? '#10b981' : preset.method === 'POST' ? '#6366f1' : '#f59e0b',
+              color: preset.method === 'GET' ? 'var(--accent-emerald)' : preset.method === 'POST' ? 'var(--accent-primary)' : 'var(--accent-amber)',
               fontWeight: '800',
               marginRight: '6px'
             }}>
@@ -203,7 +203,7 @@ export default function ApiMockStudioLab({ onRewardXP }) {
             padding: '12px 16px',
             borderRadius: 'var(--radius-md)',
             background: 'var(--bg-primary)',
-            color: method === 'GET' ? '#10b981' : method === 'POST' ? '#6366f1' : method === 'PUT' ? '#f59e0b' : '#ef4444',
+            color: method === 'GET' ? 'var(--accent-emerald)' : method === 'POST' ? 'var(--accent-primary)' : method === 'PUT' ? 'var(--accent-amber)' : 'var(--accent-rose)',
             fontWeight: '800',
             border: '1px solid var(--border-color)',
             fontSize: '1rem',
@@ -284,8 +284,8 @@ export default function ApiMockStudioLab({ onRewardXP }) {
                 width: '100%',
                 padding: '12px',
                 borderRadius: 'var(--radius-md)',
-                background: '#0f172a',
-                color: '#38bdf8',
+                background: 'var(--bg-card)',
+                color: 'var(--accent-cyan)',
                 fontFamily: 'monospace',
                 fontSize: '0.9rem',
                 border: '1px solid var(--border-color)',
@@ -306,8 +306,8 @@ export default function ApiMockStudioLab({ onRewardXP }) {
                 width: '100%',
                 padding: '12px',
                 borderRadius: 'var(--radius-md)',
-                background: '#0f172a',
-                color: '#38bdf8',
+                background: 'var(--bg-card)',
+                color: 'var(--accent-cyan)',
                 fontFamily: 'monospace',
                 fontSize: '0.9rem',
                 border: '1px solid var(--border-color)',
@@ -320,12 +320,12 @@ export default function ApiMockStudioLab({ onRewardXP }) {
 
       {/* Response Panel */}
       {response && (
-        <div style={{ background: '#0f172a', borderRadius: 'var(--radius-lg)', padding: '20px', border: '1px solid #1e293b' }}>
+        <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', padding: '20px', border: '1px solid #1e293b' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{
                 background: response.status < 300 ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)',
-                color: response.status < 300 ? '#10b981' : '#ef4444',
+                color: response.status < 300 ? 'var(--accent-emerald)' : 'var(--accent-rose)',
                 padding: '4px 10px',
                 borderRadius: 'var(--radius-md)',
                 fontWeight: '800',
@@ -333,15 +333,15 @@ export default function ApiMockStudioLab({ onRewardXP }) {
               }}>
                 {response.statusText}
               </span>
-              <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Dauer: {response.timeMs}ms</span>
-              <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Größe: {response.size}</span>
+              <span style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>Dauer: {response.timeMs}ms</span>
+              <span style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>Größe: {response.size}</span>
             </div>
 
             <button
               onClick={handleCopyResponse}
               style={{
-                background: '#1e293b',
-                color: '#e2e8f0',
+                background: 'var(--bg-card-hover)',
+                color: 'var(--text-main)',
                 border: '1px solid #334155',
                 padding: '6px 12px',
                 borderRadius: 'var(--radius-md)',
@@ -352,7 +352,7 @@ export default function ApiMockStudioLab({ onRewardXP }) {
                 gap: '6px'
               }}
             >
-              {copied ? <CheckCircle2 size={14} style={{ color: '#10b981' }} /> : <Copy size={14} />}
+              {copied ? <CheckCircle2 size={14} style={{ color: 'var(--accent-emerald)' }} /> : <Copy size={14} />}
               {copied ? 'Kopiert!' : 'Response kopieren'}
             </button>
           </div>
@@ -360,9 +360,9 @@ export default function ApiMockStudioLab({ onRewardXP }) {
           <pre style={{
             margin: 0,
             padding: '16px',
-            background: '#020617',
+            background: 'var(--bg-primary)',
             borderRadius: 'var(--radius-md)',
-            color: '#38bdf8',
+            color: 'var(--accent-cyan)',
             fontFamily: 'monospace',
             fontSize: '0.9rem',
             maxHeight: '360px',
@@ -398,7 +398,7 @@ export default function ApiMockStudioLab({ onRewardXP }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{
                     fontWeight: '800',
-                    color: item.method === 'GET' ? '#10b981' : item.method === 'POST' ? '#6366f1' : '#f59e0b'
+                    color: item.method === 'GET' ? 'var(--accent-emerald)' : item.method === 'POST' ? 'var(--accent-primary)' : 'var(--accent-amber)'
                   }}>
                     {item.method}
                   </span>

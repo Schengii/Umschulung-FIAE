@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, VolumeX, X, Play } from 'lucide-react';
 import { soundManager } from '../../utils/audioSystem';
@@ -6,6 +7,8 @@ import { useStore } from '../../store/useStore';
 
 export default function AudioSettingsModal({ isOpen, onClose }) {
   const { soundVolume, isSoundMuted, setSoundVolume, setIsSoundMuted } = useStore();
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
 
   if (!isOpen) return null;
 
@@ -20,18 +23,23 @@ export default function AudioSettingsModal({ isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 text-white shadow-2xl space-y-5"
+          ref={dialogRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="audio-settings-modal-title"
+          className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 text-slate-50 shadow-2xl space-y-5"
         >
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
                 <Volume2 className="w-5 h-5" />
               </div>
-              <h2 className="text-lg font-bold">Audio- & SFX-Einstellungen</h2>
+              <h2 id="audio-settings-modal-title" className="text-lg font-bold">Audio- & SFX-Einstellungen</h2>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-white transition"
+              className="p-1.5 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-slate-50 transition"
             >
               <X className="w-5 h-5" />
             </button>
@@ -53,6 +61,9 @@ export default function AudioSettingsModal({ isOpen, onClose }) {
               </div>
               <button
                 onClick={() => setIsSoundMuted(!isSoundMuted)}
+                role="switch"
+                aria-checked={!isSoundMuted}
+                aria-label="Sound aktivieren"
                 className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 ${
                   !isSoundMuted ? 'bg-emerald-600 justify-end' : 'bg-slate-700 justify-start'
                 }`}

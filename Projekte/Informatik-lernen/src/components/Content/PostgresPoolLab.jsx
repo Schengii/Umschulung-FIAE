@@ -92,7 +92,7 @@ export default function PostgresPoolLab({ onRewardXP }) {
       </div>
 
       {/* Pool Stat Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Aktive Clients:</span>
           <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -102,14 +102,14 @@ export default function PostgresPoolLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>DB Backend Server Prozesse:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {poolMetrics.activeServerBackends} / 20 Max
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>RAM Einsparung via PgBouncer:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {poolMetrics.ramSavedPercent}% ({poolMetrics.ramUsagePgBouncerMb} MB statt {poolMetrics.ramUsageDirectMb} MB)
           </div>
         </div>
@@ -151,10 +151,10 @@ export default function PostgresPoolLab({ onRewardXP }) {
             {SQL_ISOLATION_LEVELS.map((iso, idx) => (
               <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)' }}>
                 <td style={{ padding: '10px', fontWeight: 'bold' }}>{iso.level}</td>
-                <td style={{ padding: '10px', color: iso.dirtyRead ? '#ef4444' : '#10b981' }}>{iso.dirtyRead ? '❌ Möglich' : '✅ Verhindert'}</td>
-                <td style={{ padding: '10px', color: iso.nonRepeatableRead ? '#ef4444' : '#10b981' }}>{iso.nonRepeatableRead ? '❌ Möglich' : '✅ Verhindert'}</td>
-                <td style={{ padding: '10px', color: iso.phantomRead ? '#ef4444' : '#10b981' }}>{iso.phantomRead ? '❌ Möglich' : '✅ Verhindert'}</td>
-                <td style={{ padding: '10px', color: iso.serializationAnomaly ? '#ef4444' : '#10b981' }}>{iso.serializationAnomaly ? '❌ Möglich' : '✅ Verhindert'}</td>
+                <td style={{ padding: '10px', color: iso.dirtyRead ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>{iso.dirtyRead ? '❌ Möglich' : '✅ Verhindert'}</td>
+                <td style={{ padding: '10px', color: iso.nonRepeatableRead ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>{iso.nonRepeatableRead ? '❌ Möglich' : '✅ Verhindert'}</td>
+                <td style={{ padding: '10px', color: iso.phantomRead ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>{iso.phantomRead ? '❌ Möglich' : '✅ Verhindert'}</td>
+                <td style={{ padding: '10px', color: iso.serializationAnomaly ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>{iso.serializationAnomaly ? '❌ Möglich' : '✅ Verhindert'}</td>
               </tr>
             ))}
           </tbody>

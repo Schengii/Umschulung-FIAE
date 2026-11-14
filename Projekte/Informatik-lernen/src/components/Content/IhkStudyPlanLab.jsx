@@ -91,8 +91,8 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
             padding: '8px 16px',
             borderRadius: '10px',
             border: 'none',
-            background: xpClaimed ? '#10b981' : 'linear-gradient(135deg, var(--accent-amber), #b45309)',
-            color: '#fff',
+            background: xpClaimed ? 'var(--accent-emerald)' : 'var(--accent-amber)',
+            color: 'var(--text-on-accent)',
             fontWeight: 600,
             fontSize: '0.85rem',
             cursor: xpClaimed ? 'default' : 'pointer',
@@ -130,7 +130,7 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
         {/* Progress Box */}
         <div style={{ background: 'var(--bg-tertiary)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Lernplan Fortschritt</div>
-          <div style={{ fontSize: '2rem', fontWeight: 900, color: progressPercent >= 70 ? '#10b981' : 'var(--accent-amber)', marginTop: '4px' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 900, color: progressPercent >= 70 ? 'var(--accent-emerald)' : 'var(--accent-amber)', marginTop: '4px' }}>
             {progressPercent}%
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
@@ -140,12 +140,12 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
       </div>
 
       {/* Selectors */}
-      <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+      <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
+          <label htmlFor="ihk-study-plan-lab-1" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
             IHK Prüfungstermin:
           </label>
-          <select
+          <select id="ihk-study-plan-lab-1"
             value={selectedExamId}
             onChange={(e) => setSelectedExamId(e.target.value)}
             style={{
@@ -166,10 +166,10 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
+          <label htmlFor="ihk-study-plan-lab-2" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
             Deine Fachrichtung:
           </label>
-          <select
+          <select id="ihk-study-plan-lab-2"
             value={selectedDiscipline}
             onChange={(e) => setSelectedDiscipline(e.target.value)}
             style={{
@@ -221,7 +221,7 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
               >
                 <div style={{ flex: 1, minWidth: '260px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: isDone ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)', color: isDone ? '#10b981' : 'var(--accent-amber)' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: isDone ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)', color: isDone ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
                       Woche {week.weekNumber}
                     </span>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>~{week.targetHours}h Lernaufwand</span>
@@ -272,8 +272,8 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
                       padding: '8px 16px',
                       borderRadius: '8px',
                       border: 'none',
-                      background: isDone ? '#10b981' : 'var(--bg-tertiary)',
-                      color: isDone ? '#fff' : 'var(--text-main)',
+                      background: isDone ? 'var(--accent-emerald)' : 'var(--bg-tertiary)',
+                      color: isDone ? 'var(--text-on-accent)' : 'var(--text-main)',
                       fontSize: '0.85rem',
                       fontWeight: 700,
                       cursor: 'pointer',

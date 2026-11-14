@@ -67,15 +67,24 @@ export default function JwtConfusionLab({ onRewardXP }) {
 
   // Decode parts for visual inspection
   const parts = currentToken.split('.');
-  const headerPreview = parts[0] ? atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')) : '';
-  const payloadPreview = parts[1] ? atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')) : '';
+  // Manuell eingegebene Tokens können kein gültiges Base64URL sein → nicht abstürzen, Hinweis anzeigen
+  const decodePart = (part) => {
+    if (!part) return '';
+    try {
+      return atob(part.replace(/-/g, '+').replace(/_/g, '/'));
+    } catch {
+      return '(kein gültiges Base64URL)';
+    }
+  };
+  const headerPreview = decodePart(parts[0]);
+  const payloadPreview = decodePart(parts[1]);
 
   return (
     <div className="container-responsive" style={{ padding: '30px 16px', color: 'var(--text-main)' }}>
       {/* Header Banner */}
       <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--gradient-cyber)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(79, 70, 229, 0.3)' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--gradient-cta)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(79, 70, 229, 0.3)' }}>
             <Key size={26} />
           </div>
           <div>
@@ -102,7 +111,7 @@ export default function JwtConfusionLab({ onRewardXP }) {
       </div>
 
       {/* Grid Layout: Config, Attack Workbench & Server Verification */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Left: Server Configuration (Vulnerable vs Hardened) */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -187,7 +196,7 @@ export default function JwtConfusionLab({ onRewardXP }) {
           {/* Current Raw Token Input/View */}
           <div style={{ marginTop: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 700 }}>Aktueller JWT String:</label>
+              <span style={{ fontSize: '0.82rem', fontWeight: 700 }}>Aktueller JWT String:</span>
               <button 
                 onClick={() => handleCopy(currentToken)}
                 style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -225,14 +234,14 @@ export default function JwtConfusionLab({ onRewardXP }) {
 
           <div style={{ marginBottom: '12px' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-rose)', textTransform: 'uppercase' }}>Header (Algorithmus):</span>
-            <pre style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-main)', fontFamily: 'var(--font-code)', marginTop: '4px' }}>
+            <pre style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-main)', fontFamily: 'var(--font-code)', marginTop: '4px', overflowX: 'auto' }}>
               {headerPreview || '{}'}
             </pre>
           </div>
 
           <div style={{ marginBottom: '12px' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-purple)', textTransform: 'uppercase' }}>Payload (Rechte &amp; Claims):</span>
-            <pre style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-main)', fontFamily: 'var(--font-code)', marginTop: '4px' }}>
+            <pre style={{ background: 'var(--bg-tertiary)', padding: '10px', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-main)', fontFamily: 'var(--font-code)', marginTop: '4px', overflowX: 'auto' }}>
               {payloadPreview || '{}'}
             </pre>
           </div>
@@ -259,13 +268,13 @@ export default function JwtConfusionLab({ onRewardXP }) {
         </div>
 
         {verificationResult.warning && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', padding: '12px', borderRadius: '8px', fontWeight: 700, fontSize: '0.9rem', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(239, 68, 68, 0.15)', color: 'var(--accent-rose)', padding: '12px', borderRadius: '8px', fontWeight: 700, fontSize: '0.9rem', marginBottom: '12px' }}>
             {verificationResult.warning}
           </div>
         )}
 
         {verificationResult.error && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '12px' }}>
+          <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--accent-rose)', padding: '12px', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '12px' }}>
             {verificationResult.error}
           </div>
         )}

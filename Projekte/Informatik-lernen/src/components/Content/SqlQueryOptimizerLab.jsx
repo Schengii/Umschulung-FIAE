@@ -134,7 +134,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             fontWeight: 700,
             fontSize: '0.88rem',
             background: selectedQuery === 'user_lookup' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-            color: selectedQuery === 'user_lookup' ? '#fff' : 'var(--text-muted)',
+            color: selectedQuery === 'user_lookup' ? 'var(--text-on-accent)' : 'var(--text-muted)',
             border: '1px solid var(--border-color)',
             cursor: 'pointer'
           }}
@@ -150,7 +150,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             fontWeight: 700,
             fontSize: '0.88rem',
             background: selectedQuery === 'status_filter' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-            color: selectedQuery === 'status_filter' ? '#fff' : 'var(--text-muted)',
+            color: selectedQuery === 'status_filter' ? 'var(--text-on-accent)' : 'var(--text-muted)',
             border: '1px solid var(--border-color)',
             cursor: 'pointer'
           }}
@@ -166,7 +166,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             fontWeight: 700,
             fontSize: '0.88rem',
             background: selectedQuery === 'composite_range' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-            color: selectedQuery === 'composite_range' ? '#fff' : 'var(--text-muted)',
+            color: selectedQuery === 'composite_range' ? 'var(--text-on-accent)' : 'var(--text-muted)',
             border: '1px solid var(--border-color)',
             cursor: 'pointer'
           }}
@@ -176,12 +176,12 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
       </div>
 
       {/* SQL Statement Preview */}
-      <div style={{ background: '#0b0f19', padding: '16px 20px', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '24px' }}>
+      <div style={{ background: 'var(--bg-secondary)', padding: '16px 20px', borderRadius: '12px', border: '1px solid #1e293b', marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700 }}>SQL STATEMENT &amp; TABELLENGRÖSSE:</span>
-          <span style={{ fontSize: '0.75rem', color: '#a78bfa', fontWeight: 700 }}>{currentQueryData.tableSize}</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: 700 }}>SQL STATEMENT &amp; TABELLENGRÖSSE:</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--accent-purple)', fontWeight: 700 }}>{currentQueryData.tableSize}</span>
         </div>
-        <code style={{ color: '#38bdf8', fontSize: '0.98rem', fontFamily: 'monospace', fontWeight: 600 }}>
+        <code style={{ color: 'var(--accent-cyan)', fontSize: '0.98rem', fontFamily: 'monospace', fontWeight: 600 }}>
           {currentQueryData.sql}
         </code>
       </div>
@@ -198,8 +198,8 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             onClick={() => handleToggleIndex('email')}
             className="btn btn-sm"
             style={{
-              background: hasIndexOnEmail ? '#10b981' : 'var(--bg-card)',
-              color: hasIndexOnEmail ? '#fff' : 'var(--text-main)',
+              background: hasIndexOnEmail ? 'var(--accent-emerald)' : 'var(--bg-card)',
+              color: hasIndexOnEmail ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: hasIndexOnEmail ? '1px solid #10b981' : '1px solid var(--border-color)',
               fontWeight: 700
             }}
@@ -211,8 +211,8 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             onClick={() => handleToggleIndex('status')}
             className="btn btn-sm"
             style={{
-              background: hasIndexOnStatus ? '#10b981' : 'var(--bg-card)',
-              color: hasIndexOnStatus ? '#fff' : 'var(--text-main)',
+              background: hasIndexOnStatus ? 'var(--accent-emerald)' : 'var(--bg-card)',
+              color: hasIndexOnStatus ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: hasIndexOnStatus ? '1px solid #10b981' : '1px solid var(--border-color)',
               fontWeight: 700
             }}
@@ -224,8 +224,8 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             onClick={() => handleToggleIndex('composite')}
             className="btn btn-sm"
             style={{
-              background: hasCompositeIndex ? '#10b981' : 'var(--bg-card)',
-              color: hasCompositeIndex ? '#fff' : 'var(--text-main)',
+              background: hasCompositeIndex ? 'var(--accent-emerald)' : 'var(--bg-card)',
+              color: hasCompositeIndex ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: hasCompositeIndex ? '1px solid #10b981' : '1px solid var(--border-color)',
               fontWeight: 700
             }}
@@ -245,7 +245,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <span style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', color: isOptimal ? '#10b981' : '#ef4444' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', color: isOptimal ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
               {isOptimal ? '🚀 HOCHGRADIG OPTIMIERT (INDEX SEEK)' : '⚠️ UNOPTIMIERT (FULL TABLE SCAN)'}
             </span>
             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', margin: '2px 0' }}>
@@ -256,13 +256,13 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>GESCHÄTZTE KOSTEN</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: isOptimal ? '#10b981' : '#ef4444' }}>
+              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: isOptimal ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {activeStats.costPoints} Cost-Units
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>AUSFÜHRUNGSZEIT</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: isOptimal ? '#10b981' : '#ef4444' }}>
+              <div style={{ fontSize: '1.3rem', fontWeight: 900, color: isOptimal ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                 {activeStats.execTimeMs} ms
               </div>
             </div>
@@ -274,15 +274,15 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
         </p>
 
         {/* Tree Flow Representation */}
-        <div style={{ marginTop: '20px', background: '#090d16', padding: '16px', borderRadius: '10px', border: '1px solid #1e293b', fontFamily: 'monospace', fontSize: '0.85rem' }}>
-          <div style={{ color: '#94a3b8', marginBottom: '6px' }}>EXPLAIN (ANALYZE, BUFFERS, COSTS) OUTPUT:</div>
-          <div style={{ color: isOptimal ? '#34d399' : '#f87171' }}>
+        <div style={{ marginTop: '20px', background: 'var(--bg-secondary)', padding: '16px', borderRadius: '10px', border: '1px solid #1e293b', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+          <div style={{ color: 'var(--text-dim)', marginBottom: '6px' }}>EXPLAIN (ANALYZE, BUFFERS, COSTS) OUTPUT:</div>
+          <div style={{ color: isOptimal ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
             -&gt; {activeStats.planType} (cost=0.00..{activeStats.costPoints} rows={activeStats.scannedRows} width=48) (actual time={activeStats.execTimeMs}ms)
           </div>
           <div style={{ color: '#64748b', paddingLeft: '16px' }}>
             Buffers: shared hit={isOptimal ? 4 : 8420} read={isOptimal ? 0 : 2100}
           </div>
-          <div style={{ color: '#38bdf8', paddingLeft: '16px' }}>
+          <div style={{ color: 'var(--accent-cyan)', paddingLeft: '16px' }}>
             Planning Time: 0.12 ms | Execution Time: {activeStats.execTimeMs} ms
           </div>
         </div>
@@ -301,7 +301,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
           <code>SELECT customer_id, total_amount, created_at FROM orders WHERE customer_id = 48291 AND created_at &gt;= &apos;2026-01-01&apos; ORDER BY created_at DESC;</code>?
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '10px', marginBottom: '14px' }}>
           <button
             onClick={() => handleDrillCheck('single_customer')}
             className="btn btn-secondary"
@@ -352,7 +352,7 @@ export default function SqlQueryOptimizerLab({ onRewardXP }) {
             color: 'var(--text-main)',
             lineHeight: 1.5
           }}>
-            <div style={{ fontWeight: 800, marginBottom: '4px', color: drillFeedback.correct ? '#10b981' : '#ef4444' }}>
+            <div style={{ fontWeight: 800, marginBottom: '4px', color: drillFeedback.correct ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
               {drillFeedback.correct ? '✓ Vollständig Korrekt (+50 XP erhalten)' : '✗ Fehlerhafte Antwort'}
             </div>
             {drillFeedback.text}

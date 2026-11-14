@@ -38,7 +38,7 @@ export default function AiBusinessMasterclass() {
               fontWeight: '700',
               fontSize: '0.95rem',
               background: selectedId === m.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-              color: selectedId === m.id ? '#ffffff' : 'var(--text-main)',
+              color: selectedId === m.id ? 'var(--text-on-accent)' : 'var(--text-main)',
               border: selectedId === m.id ? '2px solid var(--accent-primary)' : '2px solid var(--border-color)',
               cursor: 'pointer',
               whiteSpace: 'nowrap'
@@ -63,7 +63,7 @@ export default function AiBusinessMasterclass() {
         <div className="code-window" style={{ marginBottom: '20px' }}>
           <div className="code-header">
             <span>Prompt Vorlage / Code Snippet</span>
-            <button onClick={handleCopy} style={{ background: 'transparent', border: 'none', color: '#f8fafc', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}>
+            <button onClick={handleCopy} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}>
               <Copy size={14} /> {copied ? 'Kopiert ✓' : 'Kopieren'}
             </button>
           </div>

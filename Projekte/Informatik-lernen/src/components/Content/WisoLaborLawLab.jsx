@@ -117,7 +117,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
 
       {/* TAB 1: Kündigungsfristen Rechner */}
       {activeSubTab === 'notice' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px' }}>
           {/* Controls */}
           <div style={{ background: 'var(--bg-card-hover)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -175,10 +175,10 @@ export default function WisoLaborLawLab({ onRewardXP }) {
             )}
 
             <div style={{ marginTop: '20px' }}>
-              <label style={{ fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: 'var(--text-main)' }}>
+              <label htmlFor="wiso-labor-law-lab-1" style={{ fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: 'var(--text-main)' }}>
                 <Calendar size={16} /> Datum des Kündigungszugangs (§ 130 BGB):
               </label>
-              <input
+              <input id="wiso-labor-law-lab-1"
                 type="date"
                 value={receiptDateStr}
                 onChange={(e) => setReceiptDateStr(e.target.value)}
@@ -227,8 +227,8 @@ export default function WisoLaborLawLab({ onRewardXP }) {
                       <strong style={{ color: 'var(--accent-primary)', fontSize: '1.05rem' }}>{calendarResult.terminationDateFormatted}</strong>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid #ef4444', borderRadius: '8px' }}>
-                      <span style={{ color: '#ef4444', fontWeight: 700, fontSize: '0.88rem' }}>⚖️ 3-Wochen-Klagefrist (§ 4 KSchG):</span>
-                      <strong style={{ color: '#ef4444', fontSize: '0.95rem' }}>bis {calendarResult.lawsuitDeadlineFormatted}</strong>
+                      <span style={{ color: 'var(--accent-rose)', fontWeight: 700, fontSize: '0.88rem' }}>⚖️ 3-Wochen-Klagefrist (§ 4 KSchG):</span>
+                      <strong style={{ color: 'var(--accent-rose)', fontSize: '0.95rem' }}>bis {calendarResult.lawsuitDeadlineFormatted}</strong>
                     </div>
                   </>
                 )}
@@ -236,7 +236,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
             </div>
 
             <div style={{ marginTop: '20px', padding: '12px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle size={18} style={{ color: '#10b981', flexShrink: 0 }} />
+              <CheckCircle size={18} style={{ color: 'var(--accent-emerald)', flexShrink: 0 }} />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-main)' }}>
                 Schriftformerfordernis nach § 623 BGB: Eine Kündigung per E-Mail, WhatsApp oder Fax ist <strong>nichtig</strong>!
               </span>
@@ -247,7 +247,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
 
       {/* TAB 2: KSchG & Schutzprüfung */}
       {activeSubTab === 'protection' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px' }}>
           {/* Controls */}
           <div style={{ background: 'var(--bg-card-hover)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '16px' }}>Betriebs- &amp; Personaldaten</h3>
@@ -255,7 +255,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
             <div style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                 <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Mitarbeiteranzahl im Betrieb:</span>
-                <strong style={{ color: employeeCount > 10 ? '#10b981' : '#f59e0b' }}>{employeeCount} MA</strong>
+                <strong style={{ color: employeeCount > 10 ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>{employeeCount} MA</strong>
               </div>
               <input
                 type="range"
@@ -273,7 +273,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
             <div style={{ marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                 <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Dauer des Arbeitsverhältnisses:</span>
-                <strong style={{ color: employmentMonths > 6 ? '#10b981' : '#f59e0b' }}>{employmentMonths} Monate</strong>
+                <strong style={{ color: employmentMonths > 6 ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>{employmentMonths} Monate</strong>
               </div>
               <input
                 type="range"
@@ -336,7 +336,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
 
               {protectionResult.hasSpecialProtection && (
                 <div style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '12px', borderRadius: '8px', marginBottom: '16px' }}>
-                  <strong style={{ fontSize: '0.85rem', color: '#ef4444', display: 'block', marginBottom: '6px' }}>
+                  <strong style={{ fontSize: '0.85rem', color: 'var(--accent-rose)', display: 'block', marginBottom: '6px' }}>
                     Gefundene Ausschlussgründe / Zustimmungsbedarfe:
                   </strong>
                   <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: 1.5 }}>
@@ -350,10 +350,10 @@ export default function WisoLaborLawLab({ onRewardXP }) {
               <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
                 <strong>Voraussetzungen KSchG:</strong>
                 <ul style={{ margin: '6px 0 0 0', paddingLeft: '20px' }}>
-                  <li style={{ color: employeeCount > 10 ? '#10b981' : '#f59e0b' }}>
+                  <li style={{ color: employeeCount > 10 ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
                     Betriebsgröße &gt; 10 Mitarbeiter: {employeeCount > 10 ? 'Erfüllt' : 'Nicht erfüllt (Kleinbetrieb)'}
                   </li>
-                  <li style={{ color: employmentMonths > 6 ? '#10b981' : '#f59e0b' }}>
+                  <li style={{ color: employmentMonths > 6 ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
                     Wartezeit &gt; 6 Monate: {employmentMonths > 6 ? 'Erfüllt' : 'Nicht erfüllt'}
                   </li>
                 </ul>
@@ -369,7 +369,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
 
       {/* TAB 3: Wissens-Box & IHK Prüfungstipps */}
       {activeSubTab === 'cases' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
           <div style={{ background: 'var(--bg-card-hover)', padding: '18px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
             <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--accent-primary)', marginBottom: '8px' }}>
               Personenbedingte Kündigung
@@ -398,7 +398,7 @@ export default function WisoLaborLawLab({ onRewardXP }) {
           </div>
 
           <div style={{ background: 'var(--bg-card-hover)', padding: '18px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-            <h4 style={{ fontWeight: 700, fontSize: '1rem', color: '#10b981', marginBottom: '8px' }}>
+            <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--accent-emerald)', marginBottom: '8px' }}>
               Fristlose Kündigung (§ 626 BGB)
             </h4>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>

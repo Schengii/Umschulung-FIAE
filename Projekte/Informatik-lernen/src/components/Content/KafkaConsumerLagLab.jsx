@@ -145,10 +145,10 @@ export default function KafkaConsumerLagLab({ onRewardXP }) {
           </h2>
 
           <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+            <label htmlFor="kafka-consumer-lag-lab-1" style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
               Rebalance-Strategie:
             </label>
-            <select
+            <select id="kafka-consumer-lag-lab-1"
               value={rebalanceProtocol}
               onChange={(e) => setRebalanceProtocol(e.target.value)}
               className="input-select"

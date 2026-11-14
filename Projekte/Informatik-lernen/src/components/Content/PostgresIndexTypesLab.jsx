@@ -66,7 +66,7 @@ export default function PostgresIndexTypesLab() {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', color: '#f8fafc' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', color: 'var(--text-main)' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
@@ -78,7 +78,7 @@ export default function PostgresIndexTypesLab() {
               <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 'bold' }}>
                 PostgreSQL Index Types Deep Dive
               </h1>
-              <p style={{ margin: '4px 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
+              <p style={{ margin: '4px 0 0', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
                 B-Tree, GIN, GiST & BRIN: Index-Auswahl, Speicher-Overhead und Query Execution Tuning
               </p>
             </div>
@@ -86,15 +86,15 @@ export default function PostgresIndexTypesLab() {
         </div>
 
         {/* Tab Buttons */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-tertiary)', padding: '4px', borderRadius: '8px' }}>
           <button
             onClick={() => setActiveTab('advisor')}
             style={{
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'advisor' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'advisor' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'advisor' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -110,8 +110,8 @@ export default function PostgresIndexTypesLab() {
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'compare' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'compare' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'compare' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -127,8 +127,8 @@ export default function PostgresIndexTypesLab() {
               padding: '8px 16px',
               borderRadius: '6px',
               border: 'none',
-              background: activeTab === 'cheatsheet' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              background: activeTab === 'cheatsheet' ? 'var(--accent-primary)' : 'transparent',
+              color: activeTab === 'cheatsheet' ? 'var(--text-on-accent)' : 'var(--text-main)',
               fontWeight: 'bold',
               cursor: 'pointer',
               display: 'flex',
@@ -145,19 +145,19 @@ export default function PostgresIndexTypesLab() {
       {activeTab === 'advisor' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Controls */}
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ margin: '0 0 16px 0', fontSize: '1.2rem', color: '#38bdf8', fontWeight: 'bold' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <h2 style={{ margin: '0 0 16px 0', fontSize: '1.2rem', color: 'var(--accent-cyan)', fontWeight: 'bold' }}>
               Szenario-Parameter für automatische Index-Empfehlung
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px' }}>
               <div>
-                <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                <label htmlFor="postgres-index-types-lab-1" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                   Spalten-Datentyp:
                 </label>
-                <select
+                <select id="postgres-index-types-lab-1"
                   value={dataType}
                   onChange={(e) => setDataType(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', borderRadius: '6px' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
                 >
                   <option value="timestamp">timestamp (z. B. created_at, Event-Logs)</option>
                   <option value="integer">integer / bigint (z. B. user_id, Bestellnummer)</option>
@@ -169,13 +169,13 @@ export default function PostgresIndexTypesLab() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                <label htmlFor="postgres-index-types-lab-2" style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                   Abfrage-Muster (SQL Query Pattern):
                 </label>
-                <select
+                <select id="postgres-index-types-lab-2"
                   value={queryPattern}
                   onChange={(e) => setQueryPattern(e.target.value)}
-                  style={{ width: '100%', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', borderRadius: '6px' }}
+                  style={{ width: '100%', padding: '8px 12px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
                 >
                   <option value="equality">Exakte Gleichheit (=, IN)</option>
                   <option value="range">Bereichsabfrage (&lt;, &gt;, BETWEEN)</option>
@@ -186,7 +186,7 @@ export default function PostgresIndexTypesLab() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                <label style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                   Tabellengröße: <strong>{(rowCount / 1000000).toFixed(1)} Mio. Zeilen</strong>
                 </label>
                 <input
@@ -201,9 +201,9 @@ export default function PostgresIndexTypesLab() {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.85rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
                   Physikalische Sortierung auf Disk:
-                </label>
+                </span>
                 <button
                   onClick={() => setIsSorted(!isSorted)}
                   style={{
@@ -211,8 +211,8 @@ export default function PostgresIndexTypesLab() {
                     padding: '8px 12px',
                     borderRadius: '6px',
                     border: 'none',
-                    background: isSorted ? '#10b981' : '#475569',
-                    color: '#fff',
+                    background: isSorted ? 'var(--accent-emerald)' : 'var(--bg-card-hover)',
+                    color: isSorted ? 'var(--text-on-accent)' : 'var(--text-main)',
                     fontWeight: 'bold',
                     cursor: 'pointer'
                   }}
@@ -227,10 +227,10 @@ export default function PostgresIndexTypesLab() {
           <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.4)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <span style={{ fontSize: '0.8rem', color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>
                   Empfohlener PostgreSQL Indextyp
                 </span>
-                <h3 style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>
+                <h3 style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
                   {INDEX_TYPES[recommendation.recommendedType.toUpperCase()].name}
                 </h3>
               </div>
@@ -239,8 +239,8 @@ export default function PostgresIndexTypesLab() {
                 onClick={handleCopySql}
                 style={{
                   padding: '8px 16px',
-                  background: copied ? '#10b981' : '#3b82f6',
-                  color: '#fff',
+                  background: copied ? 'var(--accent-emerald)' : 'var(--accent-primary)',
+                  color: 'var(--text-on-accent)',
                   border: 'none',
                   borderRadius: '6px',
                   fontWeight: 'bold',
@@ -255,40 +255,40 @@ export default function PostgresIndexTypesLab() {
               </button>
             </div>
 
-            <div style={{ background: 'rgba(0,0,0,0.4)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '16px' }}>
-              <code style={{ color: '#4ade80', fontSize: '0.95rem', fontFamily: 'monospace' }}>
+            <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '16px' }}>
+              <code style={{ color: 'var(--accent-emerald)', fontSize: '0.95rem', fontFamily: 'monospace' }}>
                 {recommendation.sqlSnippet}
               </code>
             </div>
 
-            <div style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: '1.5', marginBottom: '20px' }}>
+            <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '20px' }}>
               <strong>Begründung:</strong> {recommendation.reason}
             </div>
 
             {/* Performance Metrics Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Tabellengröße Netto</div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#fff' }}>{recommendedMetrics.tableSizeMb} MB</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Tabellengröße Netto</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{recommendedMetrics.tableSizeMb} MB</div>
               </div>
 
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Geschätzte Indexgröße</div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#38bdf8' }}>{recommendedMetrics.indexSizeMb} MB</div>
-                <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Geschätzte Indexgröße</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>{recommendedMetrics.indexSizeMb} MB</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
                   ({((recommendedMetrics.indexSizeMb / recommendedMetrics.tableSizeMb) * 100).toFixed(1)}% der Tabelle)
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Abfragezeit (Index Scan)</div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#4ade80' }}>{recommendedMetrics.indexScanMs} ms</div>
-                <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>vs. {recommendedMetrics.seqScanMs} ms Seq Scan</div>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Abfragezeit (Index Scan)</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--accent-emerald)' }}>{recommendedMetrics.indexScanMs} ms</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>vs. {recommendedMetrics.seqScanMs} ms Seq Scan</div>
               </div>
 
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '14px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Abfrage-Speedup</div>
-                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#f59e0b' }}>~{recommendedMetrics.speedup}x</div>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '14px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Abfrage-Speedup</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'var(--accent-amber)' }}>~{recommendedMetrics.speedup}x</div>
               </div>
             </div>
           </div>
@@ -297,9 +297,9 @@ export default function PostgresIndexTypesLab() {
 
       {/* TAB 2: Compare Tab */}
       {activeTab === 'compare' && (
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold', color: '#38bdf8' }}>
+            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
               Speicherbedarf & Abfragedauer im direkten Vergleich
             </h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
@@ -307,7 +307,7 @@ export default function PostgresIndexTypesLab() {
               <select
                 value={compareRowCount}
                 onChange={(e) => setCompareRowCount(Number(e.target.value))}
-                style={{ padding: '6px 10px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', borderRadius: '6px' }}
+                style={{ padding: '6px 10px', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', color: 'var(--text-main)', borderRadius: '6px' }}
               >
                 <option value={500000}>500.000 Zeilen (~60 MB)</option>
                 <option value={2000000}>2.000.000 Zeilen (~240 MB)</option>
@@ -316,19 +316,19 @@ export default function PostgresIndexTypesLab() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
             {comparisonData.map(item => (
               <div
                 key={item.id}
                 style={{
-                  background: 'rgba(0,0,0,0.3)',
+                  background: 'var(--bg-tertiary)',
                   padding: '16px',
                   borderRadius: '10px',
                   border: item.id === 'brin' ? '1px solid rgba(34, 197, 94, 0.4)' : '1px solid rgba(255,255,255,0.08)'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <h4 style={{ margin: 0, fontSize: '1.05rem', color: '#fff' }}>{item.name}</h4>
+                  <h4 style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-main)' }}>{item.name}</h4>
                   {item.id === 'brin' && (
                     <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: '#15803d', color: '#fff' }}>
                       Kompaktester Index
@@ -336,14 +336,14 @@ export default function PostgresIndexTypesLab() {
                   )}
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '12px', minHeight: '38px' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '12px', minHeight: '38px' }}>
                   {item.bestFor}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
-                  <div>Indexgröße: <strong style={{ color: item.id === 'brin' ? '#4ade80' : '#38bdf8' }}>{item.indexSizeMb} MB</strong></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                  <div>Indexgröße: <strong style={{ color: item.id === 'brin' ? 'var(--accent-emerald)' : 'var(--accent-cyan)' }}>{item.indexSizeMb} MB</strong></div>
                   <div>Query Time: <strong>{item.indexScanMs} ms</strong></div>
-                  <div>Write Overhead: <span style={{ color: item.id === 'gin' ? '#f87171' : '#cbd5e1' }}>{item.writeOverhead}</span></div>
+                  <div>Write Overhead: <span style={{ color: item.id === 'gin' ? 'var(--accent-rose)' : 'var(--text-muted)' }}>{item.writeOverhead}</span></div>
                 </div>
               </div>
             ))}
@@ -353,13 +353,13 @@ export default function PostgresIndexTypesLab() {
 
       {/* TAB 3: Index Cheatsheet */}
       {activeTab === 'cheatsheet' && (
-        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 16px 0', color: '#fbbf24' }}>
+        <div style={{ background: 'var(--card-bg, #1e293b)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '0 0 16px 0', color: 'var(--accent-amber)' }}>
             PostgreSQL Index-Typen Referenzmatrix
           </h2>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', textAlign: 'left' }}>
+              <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-dim)', textAlign: 'left' }}>
                 <th style={{ padding: '10px' }}>Index</th>
                 <th style={{ padding: '10px' }}>Unterstützte Operatoren</th>
                 <th style={{ padding: '10px' }}>Haupt-Einsatzzweck</th>
@@ -368,11 +368,11 @@ export default function PostgresIndexTypesLab() {
             </thead>
             <tbody>
               {Object.values(INDEX_TYPES).map(type => (
-                <tr key={type.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <td style={{ padding: '12px 10px', fontWeight: 'bold', color: '#38bdf8' }}>{type.name}</td>
-                  <td style={{ padding: '12px 10px', fontFamily: 'monospace', color: '#a78bfa' }}>{type.operators.join('  ')}</td>
-                  <td style={{ padding: '12px 10px', color: '#cbd5e1' }}>{type.bestFor}</td>
-                  <td style={{ padding: '12px 10px', color: '#94a3b8' }}>{type.writeOverhead}</td>
+                <tr key={type.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '12px 10px', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>{type.name}</td>
+                  <td style={{ padding: '12px 10px', fontFamily: 'monospace', color: 'var(--accent-purple)' }}>{type.operators.join('  ')}</td>
+                  <td style={{ padding: '12px 10px', color: 'var(--text-muted)' }}>{type.bestFor}</td>
+                  <td style={{ padding: '12px 10px', color: 'var(--text-dim)' }}>{type.writeOverhead}</td>
                 </tr>
               ))}
             </tbody>

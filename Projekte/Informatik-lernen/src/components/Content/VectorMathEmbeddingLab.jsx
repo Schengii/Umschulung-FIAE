@@ -103,7 +103,7 @@ export default function VectorMathEmbeddingLab({ onRewardXP }) {
       </div>
 
       {/* Metric Cards */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))', gap: '16px', marginBottom: '24px' }}>
         <div className="glass-panel" style={{ padding: '18px' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block' }}>Cosine Similarity:</span>
           <div style={{ fontSize: '1.45rem', fontWeight: '800', color: 'var(--accent-emerald)', marginTop: '4px' }}>
@@ -138,7 +138,7 @@ export default function VectorMathEmbeddingLab({ onRewardXP }) {
       </div>
 
       {/* Vector Sliders */}
-      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Vektor A */}
         <div className="glass-panel" style={{ padding: '20px' }}>
           <h3 style={{ margin: '0 0 14px', fontSize: '1.05rem', fontWeight: '800', display: 'flex', justifyContent: 'space-between' }}>

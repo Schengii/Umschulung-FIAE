@@ -8,7 +8,7 @@
 /**
  * Beitragssätze der Sozialversicherung (Standard-Werte nach IHK-Rahmenlehrplan)
  */
-export const SOCIAL_RATES = {
+const SOCIAL_RATES = {
   HEALTH: { employee: 0.073, employer: 0.073, additionalAvg: 0.017 }, // 14,6% + 1,7% Zusatzbeitrag (je 50%)
   PENSION: { employee: 0.093, employer: 0.093 }, // 18,6% geteilt durch 2
   UNEMPLOYMENT: { employee: 0.013, employer: 0.013 }, // 2,6% geteilt durch 2
@@ -19,7 +19,7 @@ export const SOCIAL_RATES = {
 /**
  * Beitragsbemessungsgrenzen (BBG) Monatsbasis
  */
-export const CONTRIBUTION_CEILINGS = {
+const CONTRIBUTION_CEILINGS = {
   HEALTH_CARE_MONTHLY: 5175.0,  // KV / PV BBG
   PENSION_UNEMP_MONTHLY: 7550.0 // RV / AV BBG (West)
 };

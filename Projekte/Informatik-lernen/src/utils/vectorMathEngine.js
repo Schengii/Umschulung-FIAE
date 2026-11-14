@@ -75,7 +75,7 @@ export function calculateManhattanDistance(vecA, vecB) {
  * @param {number[]} vecB
  * @returns {number}
  */
-export function calculateCosineSimilarity(vecA, vecB) {
+function calculateCosineSimilarity(vecA, vecB) {
   const magA = calculateVectorMagnitude(vecA);
   const magB = calculateVectorMagnitude(vecB);
   if (magA === 0 || magB === 0) return 0;

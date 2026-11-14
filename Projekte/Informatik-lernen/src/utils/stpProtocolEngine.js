@@ -59,7 +59,7 @@ export const STP_PATH_COSTS = {
  * @param {StpSwitch} b
  * @returns {number}
  */
-export function compareBridgeId(a, b) {
+function compareBridgeId(a, b) {
   if (a.priority !== b.priority) {
     return a.priority - b.priority;
   }

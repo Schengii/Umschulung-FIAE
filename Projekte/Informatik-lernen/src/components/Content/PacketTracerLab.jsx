@@ -44,42 +44,42 @@ export default function PacketTracerLab({ onRewardXP }) {
       </div>
 
       {/* Network Topology Visualizer */}
-      <div style={{ background: '#0f172a', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
+      <div style={{ background: 'var(--bg-card)', padding: '32px', borderRadius: 'var(--radius-lg)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
         {/* PC 1 */}
-        <div style={{ textAlign: 'center', padding: '16px', background: activeHop === 'pc1-router' ? 'rgba(56,189,248,0.2)' : '#1e293b', borderRadius: '12px', border: '2px solid #38bdf8' }}>
+        <div style={{ textAlign: 'center', padding: '16px', background: activeHop === 'pc1-router' ? 'rgba(56,189,248,0.2)' : 'var(--bg-card-hover)', borderRadius: '12px', border: '2px solid #38bdf8' }}>
           <HardDrive size={40} color="#38bdf8" />
-          <div style={{ color: '#fff', fontWeight: '700', marginTop: '8px' }}>PC 1</div>
-          <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>192.168.1.10</span>
+          <div style={{ color: 'var(--text-main)', fontWeight: '700', marginTop: '8px' }}>PC 1</div>
+          <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>192.168.1.10</span>
         </div>
 
         <ArrowRight size={28} color={activeHop === 'pc1-router' ? '#10b981' : '#64748b'} />
 
         {/* Router */}
-        <div style={{ textAlign: 'center', padding: '16px', background: activeHop === 'router-server' ? 'rgba(56,189,248,0.2)' : '#1e293b', borderRadius: '12px', border: '2px solid #a855f7' }}>
+        <div style={{ textAlign: 'center', padding: '16px', background: activeHop === 'router-server' ? 'rgba(56,189,248,0.2)' : 'var(--bg-card-hover)', borderRadius: '12px', border: '2px solid #a855f7' }}>
           <Router size={40} color="#a855f7" />
-          <div style={{ color: '#fff', fontWeight: '700', marginTop: '8px' }}>Core Router</div>
-          <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>192.168.1.1 / 192.168.2.1</span>
+          <div style={{ color: 'var(--text-main)', fontWeight: '700', marginTop: '8px' }}>Core Router</div>
+          <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>192.168.1.1 / 192.168.2.1</span>
         </div>
 
         <ArrowRight size={28} color={activeHop === 'router-server' ? '#10b981' : '#64748b'} />
 
         {/* Server */}
-        <div style={{ textAlign: 'center', padding: '16px', background: simulationState === 'success' ? 'rgba(16,185,129,0.2)' : '#1e293b', borderRadius: '12px', border: '2px solid #10b981' }}>
+        <div style={{ textAlign: 'center', padding: '16px', background: simulationState === 'success' ? 'rgba(16,185,129,0.2)' : 'var(--bg-card-hover)', borderRadius: '12px', border: '2px solid #10b981' }}>
           <HardDrive size={40} color="#10b981" />
-          <div style={{ color: '#fff', fontWeight: '700', marginTop: '8px' }}>Web Server</div>
-          <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>192.168.2.50</span>
+          <div style={{ color: 'var(--text-main)', fontWeight: '700', marginTop: '8px' }}>Web Server</div>
+          <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>192.168.2.50</span>
         </div>
       </div>
 
       {/* Control & Terminal Log */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '20px' }}>
         <div>
           <button className="btn btn-primary" onClick={runPingSimulation} disabled={simulationState === 'pinging'}>
             <Play size={16} /> {simulationState === 'pinging' ? 'Sende Pakete...' : 'ICMP Ping Starten'}
           </button>
         </div>
 
-        <div style={{ background: '#0f172a', color: '#38bdf8', padding: '16px', borderRadius: 'var(--radius-md)', fontFamily: 'monospace', fontSize: '0.85rem', minHeight: '140px' }}>
+        <div style={{ background: 'var(--bg-card)', color: 'var(--accent-cyan)', padding: '16px', borderRadius: 'var(--radius-md)', fontFamily: 'monospace', fontSize: '0.85rem', minHeight: '140px' }}>
           {pingLogs.map((l, i) => (
             <div key={i}>{l}</div>
           ))}

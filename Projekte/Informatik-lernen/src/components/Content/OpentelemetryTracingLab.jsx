@@ -67,7 +67,7 @@ export default function OpentelemetryTracingLab({ onRewardXP }) {
       <div style={{ background: 'var(--bg-secondary)', padding: '18px 22px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
         <div>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>W3C Distributed Trace Context Header:</span>
-          <div style={{ fontSize: '1.05rem', fontWeight: 'bold', color: 'var(--accent-primary)', fontFamily: 'monospace', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.05rem', fontWeight: 'bold', color: 'var(--accent-primary)', fontFamily: 'monospace', marginTop: '4px', wordBreak: 'break-all' }}>
             traceparent: {traceparent}
           </div>
         </div>
@@ -107,12 +107,12 @@ export default function OpentelemetryTracingLab({ onRewardXP }) {
                       left: `${leftPercent}%`,
                       width: `${widthPercent}%`,
                       height: '100%',
-                      background: span.service.includes('db') ? '#10b981' : span.service.includes('auth') ? '#ec4899' : 'var(--accent-primary)',
+                      background: span.service.includes('db') ? 'var(--accent-emerald)' : span.service.includes('auth') ? 'var(--accent-rose)' : 'var(--accent-primary)',
                       borderRadius: '4px',
                       display: 'flex',
                       alignItems: 'center',
                       padding: '0 8px',
-                      color: '#fff',
+                      color: 'var(--text-on-accent)',
                       fontWeight: 'bold',
                       fontSize: '0.75rem',
                       whiteSpace: 'nowrap'

@@ -86,7 +86,7 @@ export default function WisoDunningLab({ onRewardXP }) {
           1. Skonto-Effektivverzinsung (p_eff = (Skonto% * 360) / (Zahlungsziel - Skontofrist)):
         </span>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', alignItems: 'center' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
               Skontosatz: {skontoPercent}%
@@ -128,7 +128,7 @@ export default function WisoDunningLab({ onRewardXP }) {
 
           <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Effektiver Jahreszins:</span>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
               {skontoData.effektivzinsPercent}% p.a.
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
@@ -163,7 +163,7 @@ export default function WisoDunningLab({ onRewardXP }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', alignItems: 'center', marginBottom: '14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', alignItems: 'center', marginBottom: '14px' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
               Rechnungsbetrag: {rechnungsbetrag.toLocaleString('de-DE')} €
@@ -192,7 +192,7 @@ export default function WisoDunningLab({ onRewardXP }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px' }}>
           <div style={{ background: 'var(--bg-primary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Hauptforderung:</span>
             <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', marginTop: '2px' }}>
@@ -202,21 +202,21 @@ export default function WisoDunningLab({ onRewardXP }) {
 
           <div style={{ background: 'var(--bg-primary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Verzugszins ({verzugData.verzugszinsSatzPercent}% für {verzugData.verzugstage} Tage):</span>
-            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#ef4444', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-rose)', marginTop: '2px' }}>
               +{verzugData.zinsenBetrag.toLocaleString('de-DE')} €
             </div>
           </div>
 
           <div style={{ background: 'var(--bg-primary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Mahnpauschale (§ 288 Abs. 5 BGB):</span>
-            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f59e0b', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-amber)', marginTop: '2px' }}>
               +{verzugData.mahnpauschaleBetrag.toLocaleString('de-DE')} €
             </div>
           </div>
 
           <div style={{ background: 'var(--bg-primary)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Gesamte Forderung:</span>
-            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#10b981', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '2px' }}>
               {verzugData.gesamtForderung.toLocaleString('de-DE')} €
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function WisoDunningLab({ onRewardXP }) {
           3. IHK Ablauf: Kaufmännisches vs. Gerichtliches Mahnverfahren:
         </span>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '10px' }}>
           {IHK_DUNNING_STAGES.map((st, idx) => (
             <div key={idx} style={{ background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
               <div style={{ fontWeight: 'bold', fontSize: '0.84rem', color: 'var(--text-main)' }}>{st.stage}</div>

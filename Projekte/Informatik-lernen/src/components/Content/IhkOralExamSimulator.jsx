@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ORAL_EXAM_DATA } from '../../data/oralExamData';
 import { GraduationCap, Timer, CheckCircle2, ChevronRight, RotateCcw, Sparkles, Mic, MicOff } from 'lucide-react';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function IhkOralExamSimulator({ onRewardXP }) {
   const [selectedRole, setSelectedRole] = useState('ae'); // 'ae' | 'fisi'
@@ -21,6 +22,15 @@ export default function IhkOralExamSimulator({ onRewardXP }) {
   const [answers, setAnswers] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  // Presentation Checklist items
+  const [checklist, setChecklist] = useState([
+    { id: 'c1', text: 'Einleitung & Motivation (Problemstellung im Betrieb)', checked: false },
+    { id: 'c2', text: 'Projektziel & Soll-Konzept (inkl. Nutzwertanalyse)', checked: false },
+    { id: 'c3', text: 'Hauptteil: Technische Umsetzung & Live-Demonstration/Architektur', checked: false },
+    { id: 'c4', text: 'Wirtschaftlichkeitsbetrachtung & Amortisationsdauer (ROI)', checked: false },
+    { id: 'c5', text: 'Fazit, Lessons Learned & Ausblick', checked: false }
+  ]);
 
   const roleData = ORAL_EXAM_DATA[selectedRole];
   const questions = roleData.questions;
@@ -227,9 +237,9 @@ export default function IhkOralExamSimulator({ onRewardXP }) {
             <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
               2. Wähle dein betriebliches Abschlussprojekt:
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px' }}>
               {roleData.projects.map(p => (
-                <div
+                <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedProject(p))}
                   key={p.id}
                   onClick={() => setSelectedProject(p)}
                   style={{
@@ -271,7 +281,7 @@ export default function IhkOralExamSimulator({ onRewardXP }) {
 
           <div style={{ display: 'grid', gap: '12px', marginBottom: '24px' }}>
             {checklist.map(item => (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => toggleChecklist(item.id))}
                 key={item.id}
                 onClick={() => toggleChecklist(item.id)}
                 style={{

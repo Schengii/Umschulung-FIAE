@@ -70,7 +70,7 @@ export default function WasmSimdStudioLab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(168, 85, 247, 0.15)', borderRadius: '20px', color: '#c084fc', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '4px 12px', background: 'rgba(168, 85, 247, 0.15)', borderRadius: '20px', color: 'var(--accent-purple)', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '8px' }}>
             <Cpu size={16} /> WebAssembly 128-Bit SIMD (v128) Architecture
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
@@ -82,7 +82,7 @@ export default function WasmSimdStudioLab() {
         </div>
 
         {/* Tab Navigation */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '10px' }}>
+        <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-tertiary)', padding: '4px', borderRadius: '10px' }}>
           <button
             onClick={() => setActiveTab('lanes')}
             style={{
@@ -90,7 +90,7 @@ export default function WasmSimdStudioLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'lanes' ? '#9333ea' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -108,7 +108,7 @@ export default function WasmSimdStudioLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'benchmark' ? '#9333ea' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -126,7 +126,7 @@ export default function WasmSimdStudioLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'wat' ? '#9333ea' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -144,7 +144,7 @@ export default function WasmSimdStudioLab() {
               borderRadius: '8px',
               border: 'none',
               background: activeTab === 'convolution' ? '#9333ea' : 'transparent',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: 'bold',
               fontSize: '0.85rem',
               cursor: 'pointer',
@@ -167,7 +167,7 @@ export default function WasmSimdStudioLab() {
             borderRadius: '8px',
             border: selectedOp === 'add' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
             background: selectedOp === 'add' ? 'rgba(168, 85, 247, 0.2)' : 'var(--card-bg, #1e293b)',
-            color: selectedOp === 'add' ? '#c084fc' : '#94a3b8',
+            color: selectedOp === 'add' ? 'var(--accent-purple)' : 'var(--text-dim)',
             fontWeight: 'bold',
             cursor: 'pointer'
           }}
@@ -181,7 +181,7 @@ export default function WasmSimdStudioLab() {
             borderRadius: '8px',
             border: selectedOp === 'mul' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
             background: selectedOp === 'mul' ? 'rgba(168, 85, 247, 0.2)' : 'var(--card-bg, #1e293b)',
-            color: selectedOp === 'mul' ? '#c084fc' : '#94a3b8',
+            color: selectedOp === 'mul' ? 'var(--accent-purple)' : 'var(--text-dim)',
             fontWeight: 'bold',
             cursor: 'pointer'
           }}
@@ -195,7 +195,7 @@ export default function WasmSimdStudioLab() {
             borderRadius: '8px',
             border: selectedOp === 'dot' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
             background: selectedOp === 'dot' ? 'rgba(168, 85, 247, 0.2)' : 'var(--card-bg, #1e293b)',
-            color: selectedOp === 'dot' ? '#c084fc' : '#94a3b8',
+            color: selectedOp === 'dot' ? 'var(--accent-purple)' : 'var(--text-dim)',
             fontWeight: 'bold',
             cursor: 'pointer'
           }}
@@ -207,18 +207,18 @@ export default function WasmSimdStudioLab() {
       {activeTab === 'lanes' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Register A */}
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <span style={{ fontWeight: 'bold', color: '#60a5fa', fontSize: '0.95rem' }}>
+              <span style={{ fontWeight: 'bold', color: 'var(--accent-cyan)', fontSize: '0.95rem' }}>
                 SIMD Register %v0 (128-Bit Float32x4 Vektor A)
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>4x 32-Bit IEEE 754 Floating Point</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>4x 32-Bit IEEE 754 Floating Point</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '8px' }}>
               {vecA.map((val, idx) => (
                 <div key={`a-${idx}`} style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#93c5fd', marginBottom: '6px' }}>Lane {idx} (Bits {idx*32}..{idx*32+31})</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginBottom: '6px' }}>Lane {idx} (Bits {idx*32}..{idx*32+31})</div>
                   <input
                     type="number"
                     step="0.25"
@@ -226,10 +226,10 @@ export default function WasmSimdStudioLab() {
                     onChange={(e) => handleVecAChange(idx, e.target.value)}
                     style={{
                       width: '100%',
-                      background: 'rgba(0,0,0,0.4)',
-                      border: '1px solid rgba(255,255,255,0.1)',
+                      background: 'var(--bg-tertiary)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '6px',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontWeight: 'bold',
                       fontSize: '1.1rem',
                       textAlign: 'center',
@@ -242,7 +242,7 @@ export default function WasmSimdStudioLab() {
           </div>
 
           {/* Operation Indicator */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', color: '#a855f7', fontWeight: 'bold' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', color: 'var(--accent-purple)', fontWeight: 'bold' }}>
             <div style={{ height: '1px', flex: 1, background: 'rgba(168, 85, 247, 0.3)' }} />
             <span style={{ padding: '6px 16px', background: 'rgba(168, 85, 247, 0.15)', borderRadius: '20px', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
               1 CPU Taktzyklus: {selectedOp === 'mul' ? '⊗ (f32x4.mul)' : selectedOp === 'dot' ? '• (Dot Product)' : '⊕ (f32x4.add)'}
@@ -251,18 +251,18 @@ export default function WasmSimdStudioLab() {
           </div>
 
           {/* Register B */}
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <span style={{ fontWeight: 'bold', color: '#34d399', fontSize: '0.95rem' }}>
+              <span style={{ fontWeight: 'bold', color: 'var(--accent-emerald)', fontSize: '0.95rem' }}>
                 SIMD Register %v1 (128-Bit Float32x4 Vektor B)
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>4x 32-Bit IEEE 754 Floating Point</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>4x 32-Bit IEEE 754 Floating Point</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '8px' }}>
               {vecB.map((val, idx) => (
                 <div key={`b-${idx}`} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#6ee7b7', marginBottom: '6px' }}>Lane {idx} (Bits {idx*32}..{idx*32+31})</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', marginBottom: '6px' }}>Lane {idx} (Bits {idx*32}..{idx*32+31})</div>
                   <input
                     type="number"
                     step="0.25"
@@ -270,10 +270,10 @@ export default function WasmSimdStudioLab() {
                     onChange={(e) => handleVecBChange(idx, e.target.value)}
                     style={{
                       width: '100%',
-                      background: 'rgba(0,0,0,0.4)',
-                      border: '1px solid rgba(255,255,255,0.1)',
+                      background: 'var(--bg-tertiary)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '6px',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontWeight: 'bold',
                       fontSize: '1.1rem',
                       textAlign: 'center',
@@ -288,23 +288,23 @@ export default function WasmSimdStudioLab() {
           {/* Result Register */}
           <div style={{ background: 'rgba(168, 85, 247, 0.12)', padding: '20px', borderRadius: '12px', border: '2px solid #a855f7' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <span style={{ fontWeight: 'bold', color: '#e9d5ff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontWeight: 'bold', color: 'var(--accent-purple)', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Sparkles size={18} color="#c084fc" /> Ergebnis SIMD Register %v_out
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#d8b4fe' }}>Parallele Ausführung auf SIMD Hardware-ALU</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--accent-purple)' }}>Parallele Ausführung auf SIMD Hardware-ALU</span>
             </div>
 
             {selectedOp === 'dot' ? (
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.85rem', color: '#d8b4fe', marginBottom: '6px' }}>Skalarprodukt Σ(Lane[i] * Lane[i]):</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#fff' }}>{currentResult[0].toFixed(2)}</div>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--accent-purple)', marginBottom: '6px' }}>Skalarprodukt Σ(Lane[i] * Lane[i]):</div>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--text-main)' }}>{currentResult[0].toFixed(2)}</div>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '8px' }}>
                 {currentResult.map((val, idx) => (
-                  <div key={`out-${idx}`} style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#d8b4fe', marginBottom: '4px' }}>Result Lane {idx}</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#38bdf8' }}>{val.toFixed(2)}</div>
+                  <div key={`out-${idx}`} style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--accent-purple)', marginBottom: '4px' }}>Result Lane {idx}</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--accent-cyan)' }}>{val.toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -315,22 +315,22 @@ export default function WasmSimdStudioLab() {
 
       {activeTab === 'benchmark' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 16px 0' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 16px 0' }}>
               Benchmark-Konfiguration
             </h3>
 
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', color: '#94a3b8', marginBottom: '6px' }}>Datengröße (Float32 Elemente):</label>
-                <select
+                <label htmlFor="wasm-simd-studio-lab-1" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: '6px' }}>Datengröße (Float32 Elemente):</label>
+                <select id="wasm-simd-studio-lab-1"
                   value={itemCount}
                   onChange={(e) => setItemCount(Number(e.target.value))}
                   style={{
-                    background: 'rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(255,255,255,0.15)',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '6px',
-                    color: '#fff',
+                    color: 'var(--text-main)',
                     padding: '8px 12px',
                     fontSize: '0.9rem'
                   }}
@@ -349,7 +349,7 @@ export default function WasmSimdStudioLab() {
                   padding: '10px 24px',
                   borderRadius: '8px',
                   background: isBenchmarking ? '#6b21a8' : '#9333ea',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontWeight: 'bold',
                   fontSize: '0.95rem',
                   border: 'none',
@@ -365,33 +365,33 @@ export default function WasmSimdStudioLab() {
           </div>
 
           {benchmarkResult && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
               <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '12px', padding: '20px' }}>
-                <div style={{ fontSize: '0.85rem', color: '#fca5a5', marginBottom: '6px' }}>Skalarer JavaScript Loop:</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#f87171' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--accent-rose)', marginBottom: '6px' }}>Skalarer JavaScript Loop:</div>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--accent-rose)' }}>
                   {benchmarkResult.scalarDurationMs} ms
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '6px' }}>
                   Verarbeitet 1 Float pro Schleifendurchlauf (SISD)
                 </div>
               </div>
 
               <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '20px' }}>
-                <div style={{ fontSize: '0.85rem', color: '#6ee7b7', marginBottom: '6px' }}>WebAssembly SIMD (v128):</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#34d399' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--accent-emerald)', marginBottom: '6px' }}>WebAssembly SIMD (v128):</div>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--accent-emerald)' }}>
                   {benchmarkResult.simdDurationMs} ms
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '6px' }}>
                   Parallele 4-Lane Vektor-Register (SIMD)
                 </div>
               </div>
 
               <div style={{ background: 'rgba(168, 85, 247, 0.15)', border: '2px solid #a855f7', borderRadius: '12px', padding: '20px' }}>
-                <div style={{ fontSize: '0.85rem', color: '#d8b4fe', marginBottom: '6px' }}>Hardware-Beschleunigung / Speedup:</div>
-                <div style={{ fontSize: '2rem', fontWeight: '800', color: '#c084fc' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--accent-purple)', marginBottom: '6px' }}>Hardware-Beschleunigung / Speedup:</div>
+                <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--accent-purple)' }}>
                   ~{benchmarkResult.speedup}x Schneller
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#e9d5ff', marginTop: '6px' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent-purple)', marginTop: '6px' }}>
                   Durchsatz: <strong>{benchmarkResult.throughputMflops} MFLOPS</strong>
                 </div>
               </div>
@@ -401,13 +401,13 @@ export default function WasmSimdStudioLab() {
       )}
 
       {activeTab === 'wat' && (
-        <div style={{ background: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div style={{ background: 'var(--bg-tertiary)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontFamily: 'monospace' }}>
+            <span style={{ fontSize: '0.9rem', color: 'var(--text-dim)', fontFamily: 'monospace' }}>
               WebAssembly Text Format (WAT) - SIMD Module
             </span>
           </div>
-          <pre style={{ margin: 0, padding: '16px', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', color: '#38bdf8', fontSize: '0.9rem', lineHeight: '1.6', overflowX: 'auto' }}>
+          <pre style={{ margin: 0, padding: '16px', background: 'var(--bg-tertiary)', borderRadius: '8px', color: 'var(--accent-cyan)', fontSize: '0.9rem', lineHeight: '1.6', overflowX: 'auto' }}>
             <code>{watCode}</code>
           </pre>
         </div>
@@ -415,11 +415,11 @@ export default function WasmSimdStudioLab() {
 
       {activeTab === 'convolution' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', margin: '0 0 14px 0' }}>
+          <div style={{ background: 'var(--card-bg, #1e293b)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-main)', margin: '0 0 14px 0' }}>
               3x3 Bildfaltungs-Matrix (Convolution Kernel)
             </h3>
-            <p style={{ fontSize: '0.88rem', color: '#94a3b8', margin: '0 0 16px 0' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-dim)', margin: '0 0 16px 0' }}>
               In der Computergrafik und Bildverarbeitung werden 3x3 Faltungskerne (Sobel, Gauß) über Bildpixel geschoben. Mit 128-Bit SIMD werden 4 oder 16 Farbkanäle parallel berechnet.
             </p>
 
@@ -430,8 +430,8 @@ export default function WasmSimdStudioLab() {
                   padding: '8px 16px',
                   borderRadius: '8px',
                   border: filterType === 'sobel' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
-                  background: filterType === 'sobel' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(0,0,0,0.3)',
-                  color: filterType === 'sobel' ? '#c084fc' : '#94a3b8',
+                  background: filterType === 'sobel' ? 'rgba(168, 85, 247, 0.2)' : 'var(--bg-tertiary)',
+                  color: filterType === 'sobel' ? 'var(--accent-purple)' : 'var(--text-dim)',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
@@ -444,8 +444,8 @@ export default function WasmSimdStudioLab() {
                   padding: '8px 16px',
                   borderRadius: '8px',
                   border: filterType === 'gaussianBlur' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
-                  background: filterType === 'gaussianBlur' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(0,0,0,0.3)',
-                  color: filterType === 'gaussianBlur' ? '#c084fc' : '#94a3b8',
+                  background: filterType === 'gaussianBlur' ? 'rgba(168, 85, 247, 0.2)' : 'var(--bg-tertiary)',
+                  color: filterType === 'gaussianBlur' ? 'var(--accent-purple)' : 'var(--text-dim)',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
@@ -458,8 +458,8 @@ export default function WasmSimdStudioLab() {
                   padding: '8px 16px',
                   borderRadius: '8px',
                   border: filterType === 'sharpen' ? '2px solid #a855f7' : '1px solid rgba(255,255,255,0.1)',
-                  background: filterType === 'sharpen' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(0,0,0,0.3)',
-                  color: filterType === 'sharpen' ? '#c084fc' : '#94a3b8',
+                  background: filterType === 'sharpen' ? 'rgba(168, 85, 247, 0.2)' : 'var(--bg-tertiary)',
+                  color: filterType === 'sharpen' ? 'var(--accent-purple)' : 'var(--text-dim)',
                   fontWeight: 'bold',
                   cursor: 'pointer'
                 }}
@@ -469,12 +469,12 @@ export default function WasmSimdStudioLab() {
             </div>
 
             {/* Matrix & Performance Metrics */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-              <div style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '8px', fontWeight: 'bold' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
+              <div style={{ background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', marginBottom: '8px', fontWeight: 'bold' }}>
                   Aktueller 3x3 Faltungskern ({filterType}):
                 </div>
-                <div style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: '#38bdf8', lineHeight: '1.6' }}>
+                <div style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: 'var(--accent-cyan)', lineHeight: '1.6' }}>
                   {filterType === 'sobel' && (
                     <>
                       <div>Sobel X: [-1, 0, 1; -2, 0, 2; -1, 0, 1]</div>
@@ -499,21 +499,21 @@ export default function WasmSimdStudioLab() {
               </div>
 
               <div style={{ background: 'rgba(168, 85, 247, 0.12)', border: '1px solid rgba(168, 85, 247, 0.3)', padding: '16px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '0.82rem', color: '#d8b4fe', marginBottom: '6px', fontWeight: 'bold' }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--accent-purple)', marginBottom: '6px', fontWeight: 'bold' }}>
                   SIMD Vektorisierungs-Gewinn (3x3 Faltung):
                 </div>
-                <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#c084fc', marginBottom: '4px' }}>
+                <div style={{ fontSize: '1.6rem', fontWeight: '800', color: 'var(--accent-purple)', marginBottom: '4px' }}>
                   ~3.9x Hardware Speedup
                 </div>
-                <div style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   Berechnet 4 Float-Nachbarpixel oder 16 Farb-Bytes parallel in einem CPU-Zyklus via <code>v128</code> Vektor-Multiplikation und Fused Multiply-Add (FMA).
                 </div>
               </div>
             </div>
 
             {/* Live-Faltungsfilter-Berechnung (SIMD Kern) */}
-            <div style={{ marginTop: '16px', background: 'rgba(0,0,0,0.4)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: 'bold', marginBottom: '8px' }}>
+            <div style={{ marginTop: '16px', background: 'var(--bg-tertiary)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontWeight: 'bold', marginBottom: '8px' }}>
                 Live Test-Matrix (4x4 Pixel Sample) gefiltert mit <code>applySimdConvolutionFilter</code>:
               </div>
               {(() => {
@@ -522,14 +522,14 @@ export default function WasmSimdStudioLab() {
                 const result = applySimdConvolutionFilter(samplePixels, 4, 4, kernelKey);
                 return (
                   <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                      Ausgewählter Filter-Kernel: <span style={{ color: '#c084fc', fontWeight: 'bold' }}>{kernelKey}</span>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                      Ausgewählter Filter-Kernel: <span style={{ color: 'var(--accent-purple)', fontWeight: 'bold' }}>{kernelKey}</span>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                      Zentrum-Pixel [1,1] (Vorher: 200) &rarr; Gefiltert: <span style={{ color: '#4ade80', fontWeight: 'bold' }}>{result[5]}</span>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                      Zentrum-Pixel [1,1] (Vorher: 200) &rarr; Gefiltert: <span style={{ color: 'var(--accent-emerald)', fontWeight: 'bold' }}>{result[5]}</span>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                      Zentrum-Pixel [2,2] (Vorher: 230) &rarr; Gefiltert: <span style={{ color: '#4ade80', fontWeight: 'bold' }}>{result[10]}</span>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                      Zentrum-Pixel [2,2] (Vorher: 230) &rarr; Gefiltert: <span style={{ color: 'var(--accent-emerald)', fontWeight: 'bold' }}>{result[10]}</span>
                     </div>
                   </div>
                 );
