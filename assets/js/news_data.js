@@ -1,9 +1,38 @@
 const newsData = [
     {
+        id: 'ihk-kartei-2000-karten',
+        category: 'milestone',
+        date: '2026-10-28',
+        title_de: '🗂️ IHK-Kartei: rund 2 000 Lernkarten für AP1, AP2 und WiSo',
+        title_en: '🗂️ IHK Card Index: Around 2,000 Flashcards for AP1, AP2 and WiSo',
+        content_de: [
+            'Die Lernkarten-Seite hat eine zuschaltbare IHK-Kartei bekommen: rund 2 000 Karten aus meinen eigenen Prüfungsnotizen zu AP1, AP2 und Wirtschafts- und Sozialkunde. Die Karten laufen durch dieselbe Leitner-Box wie die Kernkarten, mit Fälligkeitsterminen und Export des Lernplans als Kalenderdatei.',
+            'Die Kartei ist nur auf Deutsch verfügbar und wird erst geladen, wenn der Schalter „Erweiterte IHK-Kartei einbeziehen“ aktiv ist. Wer sich gerade auf die Abschlussprüfung vorbereitet, kann sie frei nutzen.',
+        ],
+        content_en: [
+            'The flashcards page now has an optional IHK card index: around 2,000 cards from my own exam notes on AP1, AP2 and economics and social studies. The cards run through the same Leitner box as the core cards, with due dates and an export of the study plan as a calendar file.',
+            'The card index is available in German only and is loaded only once the switch "Erweiterte IHK-Kartei einbeziehen" is on. Anyone preparing for the final exam is welcome to use it.',
+        ],
+    },
+    {
+        id: 'portfolio-release-1-5-0',
+        category: 'milestone',
+        date: '2026-10-24',
+        title_de: '🔒 Version 1.5.0: strengere Content Security Policy und mehr Tests',
+        title_en: '🔒 Version 1.5.0: Stricter Content Security Policy and More Tests',
+        content_de: [
+            'Mit Version 1.5.0 erlaubt die Content Security Policy der Seiten nur noch Stylesheets aus Dateien. Alle Inline-Styles sind in CSS-Dateien umgezogen, und ein End-to-End-Test schlägt bei jeder CSP-Verletzung fehl.',
+            'Dazu kommen Unit-Tests für die DOM-Module, eine Mindestgrenze für die Testabdeckung, die nur noch steigen darf, und neue Prüfungen für Barrierefreiheit: Kontrast je Akzentfarbe, reduzierte Bewegung und Fokus-Rückgabe bei Dialogen. Die Einzelheiten stehen im Changelog des Repositorys.',
+        ],
+        content_en: [
+            'With version 1.5.0 the Content Security Policy of the pages only allows stylesheets from files. All inline styles have moved into CSS files, and an end-to-end test fails on every CSP violation.',
+            'On top of that come unit tests for the DOM modules, a minimum for test coverage that may only go up, and new accessibility checks: contrast per accent colour, reduced motion and focus return for dialogs. The details are in the changelog of the repository.',
+        ],
+    },
+    {
         id: 'job-search-start',
         category: 'milestone',
-        date_de: '06. Juli 2026',
-        date_en: 'July 06, 2026',
+        date: '2026-07-06',
         title_de: '🚀 Auf Jobsuche — jetzt bereit für den ersten Job als Entwickler!',
         title_en: '🚀 Job Search Begins — Ready for My First Developer Role!',
         content_de: [
@@ -18,8 +47,7 @@ const newsData = [
     {
         id: 'portfolio-relaunch-2026',
         category: 'milestone',
-        date_de: '25. Juni 2026',
-        date_en: 'June 25, 2026',
+        date: '2026-06-25',
         title_de: '🌐 Portfolio-Relaunch: Recruiter-Features, Achievements & Keyboard-Shortcuts',
         title_en: '🌐 Portfolio Relaunch: Recruiter Features, Achievements & Keyboard Shortcuts',
         content_de: [
@@ -34,8 +62,7 @@ const newsData = [
     {
         id: 'ihk-exam-recap',
         category: 'milestone',
-        date_de: '10. Juni 2026',
-        date_en: 'June 10, 2026',
+        date: '2026-06-10',
         title_de: '🎓 Rückblick: Mündliche IHK-AP2 und das Fachgespräch',
         title_en: '🎓 Recap: Oral IHK AP2 Final Exam and Expert Interview',
         content_de: [
@@ -50,8 +77,7 @@ const newsData = [
     {
         id: 'ecochef-media-release',
         category: 'milestone',
-        date_de: '15. Juni 2026',
-        date_en: 'June 15, 2026',
+        date: '2026-06-15',
         title_de: '🎬 EcoChef: Live-Demos & IHK-Vortragsfolien veröffentlicht!',
         title_en: '🎬 EcoChef: Live Demos & IHK Slides Published!',
         content_de: [
@@ -66,8 +92,7 @@ const newsData = [
     {
         id: 'dfg-media-release',
         category: 'dfg',
-        date_de: '15. März 2026',
-        date_en: 'March 15, 2026',
+        date: '2026-03-15',
         title_de: '📊 DFG-Betriebsstruktur & Präsentation online',
         title_en: '📊 DFG Structural Insights & Slides Online',
         content_de: [
@@ -82,8 +107,7 @@ const newsData = [
     {
         id: 'dfg-ihk-graduation',
         category: 'milestone',
-        date_de: '07. Juni 2026',
-        date_en: 'June 07, 2026',
+        date: '2026-06-07',
         title_de: '🏆 IHK-Abschlussprüfung erfolgreich bestanden!',
         title_en: '🏆 Successfully Passed IHK Final Exams!',
         content_de: [
@@ -98,8 +122,7 @@ const newsData = [
     {
         id: 'bfw-ihk-written',
         category: 'bfw',
-        date_de: '06. Mai 2026',
-        date_en: 'May 06, 2026',
+        date: '2026-05-06',
         title_de: '📝 Schriftliche IHK-Abschlussprüfung (Teil 2) absolviert',
         title_en: '📝 Completed Written IHK Final Exams (Part 2)',
         content_de: [
@@ -114,8 +137,7 @@ const newsData = [
     {
         id: 'dfg-project-approval',
         category: 'dfg',
-        date_de: '10. Januar 2026',
-        date_en: 'January 10, 2026',
+        date: '2026-01-10',
         title_de: '⚙️ Genehmigung des IHK-Projektantrags (EcoChef)',
         title_en: '⚙️ Approval of IHK Capstone Project Proposal (EcoChef)',
         content_de: [
@@ -130,8 +152,7 @@ const newsData = [
     {
         id: 'bfw-intermediate-exam',
         category: 'bfw',
-        date_de: '15. März 2025',
-        date_en: 'March 15, 2025',
+        date: '2025-03-15',
         title_de: '📊 Ergebnis der IHK-Zwischenprüfung (Teil 1)',
         title_en: '📊 Results of IHK Intermediate Exam (Part 1)',
         content_de: [
@@ -146,8 +167,7 @@ const newsData = [
     {
         id: 'dfg-internship-start',
         category: 'dfg',
-        date_de: '20. März 2024',
-        date_en: 'March 20, 2024',
+        date: '2024-03-20',
         title_de: '🚀 Start des Fachpraktikums bei der DFG',
         title_en: '🚀 Start of Internship at the DFG',
         content_de: [
@@ -162,8 +182,7 @@ const newsData = [
     {
         id: 'bfw-semester-end',
         category: 'bfw',
-        date_de: '15. Februar 2024',
-        date_en: 'February 15, 2024',
+        date: '2024-02-15',
         title_de: '🏫 Erstes Semester am BFW Dortmund abgeschlossen',
         title_en: '🏫 First Semester at BFW Dortmund Completed',
         content_de: [
@@ -178,8 +197,7 @@ const newsData = [
     {
         id: 'retraining-start',
         category: 'milestone',
-        date_de: '08. Januar 2024',
-        date_en: 'January 08, 2024',
+        date: '2024-01-08',
         title_de: '🌱 Beginn der Umschulung in Dortmund',
         title_en: '🌱 Start of Retraining in Dortmund',
         content_de: [
