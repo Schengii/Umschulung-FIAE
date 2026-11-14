@@ -406,8 +406,8 @@ export default function IhkAgileBurndownLab() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs text-slate-400">Vorgehensmodell</label>
-                <select
+                <label htmlFor="ihk-agile-burndown-lab-1" className="text-xs text-slate-400">Vorgehensmodell</label>
+                <select id="ihk-agile-burndown-lab-1"
                   value={selectedMethod}
                   onChange={e => setSelectedMethod(e.target.value)}
                   className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-100"
@@ -419,8 +419,8 @@ export default function IhkAgileBurndownLab() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-400">Ausbildungsberuf</label>
-                <select
+                <label htmlFor="ihk-agile-burndown-lab-2" className="text-xs text-slate-400">Ausbildungsberuf</label>
+                <select id="ihk-agile-burndown-lab-2"
                   value={candidateRole}
                   onChange={e => {
                     const role = e.target.value;
@@ -436,8 +436,8 @@ export default function IhkAgileBurndownLab() {
               </div>
 
               <div>
-                <label className="text-xs text-slate-400">Projektname</label>
-                <input
+                <label htmlFor="ihk-agile-burndown-lab-3" className="text-xs text-slate-400">Projektname</label>
+                <input id="ihk-agile-burndown-lab-3"
                   type="text"
                   value={projectName}
                   onChange={e => setProjectName(e.target.value)}

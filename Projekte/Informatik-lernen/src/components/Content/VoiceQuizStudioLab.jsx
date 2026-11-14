@@ -113,7 +113,7 @@ export default function VoiceQuizStudioLab() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-purple-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-purple-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -145,7 +145,7 @@ export default function VoiceQuizStudioLab() {
         </div>
 
         <div className="flex items-start justify-between gap-4">
-          <h2 className="text-xl md:text-2xl font-bold text-white leading-relaxed">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-50 leading-relaxed">
             {currentQ.question}
           </h2>
           <button

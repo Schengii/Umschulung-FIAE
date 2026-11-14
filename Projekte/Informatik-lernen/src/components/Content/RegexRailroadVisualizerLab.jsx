@@ -57,7 +57,7 @@ export default function RegexRailroadVisualizerLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-pink-950 via-rose-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-pink-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-pink-950 via-rose-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-pink-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -95,7 +95,7 @@ export default function RegexRailroadVisualizerLab() {
             onClick={() => handleSelectPreset(p)}
             className={`p-3 rounded-xl border text-left text-xs transition ${
               pattern === p.pattern
-                ? 'bg-pink-950/80 border-pink-500 text-white font-bold shadow-lg'
+                ? 'bg-pink-950/80 border-pink-500 text-slate-50 font-bold shadow-lg'
                 : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
             }`}
           >
@@ -134,7 +134,7 @@ export default function RegexRailroadVisualizerLab() {
 
       {/* Visual Railroad Diagram */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
-        <h2 className="text-base font-bold text-white flex items-center gap-2">
+        <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
           <Layers className="w-5 h-5 text-pink-400" />
           Visuelles Eisenbahn-Diagramm &amp; Token-Kette
         </h2>
@@ -171,7 +171,7 @@ export default function RegexRailroadVisualizerLab() {
       {/* Live Match Tester */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
             <Eye className="w-5 h-5 text-pink-400" />
             Live Test-String &amp; Match-Erkennung
           </h2>
@@ -200,7 +200,7 @@ export default function RegexRailroadVisualizerLab() {
             <div className="flex flex-wrap gap-2">
               {testResult.matches.map((m, idx) => (
                 <div key={idx} className="p-2 bg-emerald-950/40 border border-emerald-800/80 rounded-xl text-xs font-mono text-emerald-300">
-                  <span className="text-slate-500">#{idx + 1} (Index {m.index}):</span> <strong className="text-white">"{m.value}"</strong>
+                  <span className="text-slate-500">#{idx + 1} (Index {m.index}):</span> <strong className="text-slate-50">"{m.value}"</strong>
                 </div>
               ))}
             </div>

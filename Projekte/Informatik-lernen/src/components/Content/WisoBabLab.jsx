@@ -411,7 +411,7 @@ export default function WisoBabLab({ onXPGain }) {
                   </div>
 
                   {drillSubmitted && (
-                    <div style={{ marginTop: '12px', fontSize: '0.85rem', color: isCorrect ? '#10b981' : '#f87171' }}>
+                    <div style={{ marginTop: '12px', fontSize: '0.85rem', color: isCorrect ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
                       <p style={{ margin: '4px 0', fontWeight: 'bold' }}>
                         {isCorrect ? '✓ Richtig!' : '✗ Falsch!'}
                       </p>

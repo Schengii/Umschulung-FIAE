@@ -45,7 +45,7 @@ export default function DifficultyFilterBar({ activeFilter, onSelectFilter }) {
                 fontSize: '0.85rem',
                 fontWeight: '700',
                 background: isActive ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-                color: isActive ? '#ffffff' : 'var(--text-main)',
+                color: isActive ? 'var(--text-on-accent)' : 'var(--text-main)',
                 border: isActive ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
                 cursor: 'pointer',
                 display: 'inline-flex',

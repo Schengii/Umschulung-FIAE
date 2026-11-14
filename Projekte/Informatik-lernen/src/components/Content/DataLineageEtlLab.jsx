@@ -63,7 +63,7 @@ export default function DataLineageEtlLab({ onRewardXP }) {
       </div>
 
       {/* Visual Data Lineage Stages */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '14px', marginBottom: '28px' }}>
         {etlResult.lineageGraph.map((stage, idx) => (
           <div
             key={stage.stage}
@@ -92,7 +92,7 @@ export default function DataLineageEtlLab({ onRewardXP }) {
       </div>
 
       {/* Main Studio Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '20px' }}>
         {/* Left: Raw Data JSON Input */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -116,8 +116,8 @@ export default function DataLineageEtlLab({ onRewardXP }) {
               padding: '12px',
               fontFamily: 'var(--font-code, monospace)',
               fontSize: '0.82rem',
-              background: '#090d16',
-              color: '#38bdf8',
+              background: 'var(--bg-secondary)',
+              color: 'var(--accent-cyan)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid #1e293b',
               resize: 'vertical'

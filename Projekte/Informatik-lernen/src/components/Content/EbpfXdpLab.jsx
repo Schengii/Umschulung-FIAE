@@ -79,10 +79,10 @@ export default function EbpfXdpLab({ onRewardXP }) {
       </div>
 
       {/* Performance Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Durchsatz (Driver Level):</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             ~14.8 Mpps (100 Gbit/s)
           </div>
         </div>
@@ -96,14 +96,14 @@ export default function EbpfXdpLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Gedroppte Pakete:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#ef4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-rose)', marginTop: '4px' }}>
             {sim.stats.droppedPackets.toLocaleString('de-DE')} Dropped
           </div>
         </div>
       </div>
 
       {/* C-Code Editor & Verifier Result */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
             eBPF C-Quellcode (`filter_ddos.bpf.c`):
@@ -112,7 +112,7 @@ export default function EbpfXdpLab({ onRewardXP }) {
             value={cCode}
             onChange={(e) => setCCode(e.target.value)}
             rows={10}
-            style={{ width: '100%', padding: '12px', background: '#090d16', color: '#38bdf8', border: '1px solid var(--border-color)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', resize: 'vertical' }}
+            style={{ width: '100%', padding: '12px', background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', border: '1px solid var(--border-color)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: '1.4', resize: 'vertical' }}
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function EbpfXdpLab({ onRewardXP }) {
           </span>
 
           <div style={{ background: verifierResult.verified ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)', border: `1px solid ${verifierResult.verified ? '#10b981' : '#ef4444'}`, borderRadius: '8px', padding: '14px', fontSize: '0.85rem' }}>
-            <div style={{ fontWeight: 'bold', color: verifierResult.verified ? '#10b981' : '#ef4444' }}>
+            <div style={{ fontWeight: 'bold', color: verifierResult.verified ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>
               {verifierResult.verified ? '✅ Verifier Status: PASSED' : '❌ Verifier Status: REJECTED'}
             </div>
             <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -139,8 +139,8 @@ export default function EbpfXdpLab({ onRewardXP }) {
 
       {/* Interactive Packet Test Bar */}
       <div style={{ background: 'var(--bg-secondary)', padding: '18px', borderRadius: '12px', border: '1px solid var(--border-color)', display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
-        <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Test-Paket Quell-IP:</label>
-        <input
+        <label htmlFor="ebpf-xdp-lab-1" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Test-Paket Quell-IP:</label>
+        <input id="ebpf-xdp-lab-1"
           type="text"
           value={ipInput}
           onChange={(e) => setIpInput(e.target.value)}
@@ -155,7 +155,7 @@ export default function EbpfXdpLab({ onRewardXP }) {
         </button>
 
         {packetResult && (
-          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: packetResult.action === 'XDP_DROP' ? '#ef4444' : '#10b981', marginLeft: 'auto' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: packetResult.action === 'XDP_DROP' ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginLeft: 'auto' }}>
             Ergebnis: {packetResult.action} ({packetResult.latencyNs} ns) - {packetResult.reason}
           </span>
         )}

@@ -4,6 +4,7 @@ import { Radio, Send, Activity, Award, Globe } from 'lucide-react';
 import { WEBHOOK_PRESETS, simulateWebhookDispatch } from '../../utils/webhookSimulator';
 import { soundManager } from '../../utils/audioSystem';
 import { useStore } from '../../store/useStore';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function WebhookInspectorLab() {
   const { awardXP } = useStore();
@@ -68,7 +69,7 @@ export default function WebhookInspectorLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-blue-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-blue-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -106,7 +107,7 @@ export default function WebhookInspectorLab() {
             onClick={() => handleSelectPreset(p.id)}
             className={`p-4 rounded-xl border text-left transition ${
               selectedPresetId === p.id
-                ? 'bg-blue-950/80 border-blue-500 text-white shadow-lg'
+                ? 'bg-blue-950/80 border-blue-500 text-slate-50 shadow-lg'
                 : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
             }`}
           >
@@ -124,7 +125,7 @@ export default function WebhookInspectorLab() {
         {/* Webhook Payload Config */}
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
           <div className="flex justify-between items-center">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
               <Globe className="w-4 h-4 text-blue-400" />
               Webhook Konfiguration
             </h2>
@@ -139,8 +140,8 @@ export default function WebhookInspectorLab() {
 
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Ziel-Endpoint:</label>
-              <input
+              <label htmlFor="webhook-inspector-lab-1" className="text-xs text-slate-300 font-semibold block mb-1">Ziel-Endpoint:</label>
+              <input id="webhook-inspector-lab-1"
                 type="text"
                 value={endpoint}
                 onChange={(e) => setEndpoint(e.target.value)}
@@ -149,8 +150,8 @@ export default function WebhookInspectorLab() {
             </div>
 
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">HTTP Request Headers (JSON):</label>
-              <textarea
+              <label htmlFor="webhook-inspector-lab-2" className="text-xs text-slate-300 font-semibold block mb-1">HTTP Request Headers (JSON):</label>
+              <textarea id="webhook-inspector-lab-2"
                 value={headersJson}
                 onChange={(e) => setHeadersJson(e.target.value)}
                 rows={4}
@@ -159,8 +160,8 @@ export default function WebhookInspectorLab() {
             </div>
 
             <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Payload Body (JSON):</label>
-              <textarea
+              <label htmlFor="webhook-inspector-lab-3" className="text-xs text-slate-300 font-semibold block mb-1">Payload Body (JSON):</label>
+              <textarea id="webhook-inspector-lab-3"
                 value={bodyJson}
                 onChange={(e) => setBodyJson(e.target.value)}
                 rows={6}
@@ -174,7 +175,7 @@ export default function WebhookInspectorLab() {
         <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center border-b border-slate-800 pb-3 mb-3">
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <h2 className="text-base font-bold text-slate-50 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-emerald-400" />
                 Empfangene Webhook Requests ({logs.length})
               </h2>
@@ -192,12 +193,12 @@ export default function WebhookInspectorLab() {
             ) : (
               <div className="space-y-2 max-h-44 overflow-y-auto mb-4 pr-1">
                 {logs.map((req) => (
-                  <div
+                  <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setSelectedLog(req))}
                     key={req.id}
                     onClick={() => setSelectedLog(req)}
                     className={`p-3 rounded-xl border text-xs font-mono cursor-pointer transition flex items-center justify-between ${
                       selectedLog?.id === req.id
-                        ? 'bg-blue-950/80 border-blue-500 text-white'
+                        ? 'bg-blue-950/80 border-blue-500 text-slate-50'
                         : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800'
                     }`}
                   >

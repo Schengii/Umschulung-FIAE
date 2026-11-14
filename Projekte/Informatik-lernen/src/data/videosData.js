@@ -1,4 +1,4 @@
-export const VIDEO_TUTORIALS = [
+export const TUTORIAL_VIDEOS = [
   {
     id: 'vid_py_basics',
     title: 'Python für Anfänger: Der komplette 30-Minuten Kurs',
@@ -59,4 +59,3 @@ export const VIDEO_TUTORIALS = [
   }
 ];
 
-export const TUTORIAL_VIDEOS = VIDEO_TUTORIALS;

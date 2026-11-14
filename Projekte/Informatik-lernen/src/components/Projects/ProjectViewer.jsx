@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MICRO_PROJECTS } from '../../data/projectsData';
 import { FolderGit2, CheckCircle2, Code } from 'lucide-react';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function ProjectViewer({ onCompleteProject }) {
   const [activeProjId, setActiveProjId] = useState(MICRO_PROJECTS[0].id);
@@ -26,7 +27,7 @@ export default function ProjectViewer({ onCompleteProject }) {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '24px' }}>
         
         {/* Project Selector Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -35,7 +36,7 @@ export default function ProjectViewer({ onCompleteProject }) {
             const isDone = completedProjects.includes(proj.id);
 
             return (
-              <div
+              <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => setActiveProjId(proj.id))}
                 key={proj.id}
                 onClick={() => setActiveProjId(proj.id)}
                 className="glass-panel-hover"

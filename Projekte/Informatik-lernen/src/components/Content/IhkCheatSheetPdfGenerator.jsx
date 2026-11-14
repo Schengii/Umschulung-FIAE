@@ -171,7 +171,7 @@ export default function IhkCheatSheetPdfGenerator({ onRewardXP }) {
           onClick={() => setSelectedTopic('ihk_wiso')}
           className={`p-4 rounded-xl border text-left transition flex items-start gap-3 ${
             selectedTopic === 'ihk_wiso'
-              ? 'bg-blue-950/70 border-blue-500 text-white shadow-lg'
+              ? 'bg-blue-950/70 border-blue-500 text-slate-50 shadow-lg'
               : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
           }`}
         >
@@ -186,7 +186,7 @@ export default function IhkCheatSheetPdfGenerator({ onRewardXP }) {
           onClick={() => setSelectedTopic('sql_db')}
           className={`p-4 rounded-xl border text-left transition flex items-start gap-3 ${
             selectedTopic === 'sql_db'
-              ? 'bg-blue-950/70 border-blue-500 text-white shadow-lg'
+              ? 'bg-blue-950/70 border-blue-500 text-slate-50 shadow-lg'
               : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
           }`}
         >
@@ -201,7 +201,7 @@ export default function IhkCheatSheetPdfGenerator({ onRewardXP }) {
           onClick={() => setSelectedTopic('networking')}
           className={`p-4 rounded-xl border text-left transition flex items-start gap-3 ${
             selectedTopic === 'networking'
-              ? 'bg-blue-950/70 border-blue-500 text-white shadow-lg'
+              ? 'bg-blue-950/70 border-blue-500 text-slate-50 shadow-lg'
               : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
           }`}
         >
@@ -218,7 +218,7 @@ export default function IhkCheatSheetPdfGenerator({ onRewardXP }) {
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div>
             <span className="text-xs text-blue-400 font-semibold uppercase tracking-wider block">Live-Vorschau</span>
-            <h2 className="text-xl font-bold text-white mt-1">{currentSheet.title}</h2>
+            <h2 className="text-xl font-bold text-slate-50 mt-1">{currentSheet.title}</h2>
           </div>
           <span className="px-3 py-1 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700">
             DIN A4 Format

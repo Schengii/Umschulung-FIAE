@@ -8,6 +8,7 @@ import {
   buildAuthorizationUrl,
   exchangeCodeForTokens
 } from '../../utils/oauthPkceEngine';
+import { onActivationKey } from '../Shared/keyActivation';
 
 export default function OauthPkceStudioLab() {
   const { awardXP } = useStore();
@@ -151,7 +152,7 @@ export default function OauthPkceStudioLab() {
             { num: 3, title: '3. Token Exchange', desc: 'Code + Verifier -> JWT' },
             { num: 4, title: '4. Resource API', desc: 'Bearer Token Zugriff' }
           ].map((st) => (
-            <div 
+            <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => st.num <= step && setStep(st.num))} 
               key={st.num}
               onClick={() => st.num <= step && setStep(st.num)}
               style={{
@@ -167,7 +168,7 @@ export default function OauthPkceStudioLab() {
                 height: '36px',
                 borderRadius: '50%',
                 background: step === st.num ? 'var(--accent-primary)' : step > st.num ? 'var(--accent-green, #10b981)' : 'var(--bg-tertiary)',
-                color: '#fff',
+                color: step >= st.num ? 'var(--text-on-accent)' : 'var(--text-muted)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -195,7 +196,7 @@ export default function OauthPkceStudioLab() {
             Da SPAs und Mobile Apps keinen sicheren Speicher für ein <code>client_secret</code> haben, schützt PKCE (RFC 7636) vor Authorization Code Injection &amp; Interception Attacken.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(350px, 100%), 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontWeight: '700', fontSize: '0.88rem', color: 'var(--accent-purple)' }}>
@@ -203,7 +204,7 @@ export default function OauthPkceStudioLab() {
                 </span>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Client-Side Only</span>
               </div>
-              <pre style={{ margin: 0, padding: '12px', background: '#0f172a', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', color: '#38bdf8', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
+              <pre style={{ margin: 0, padding: '12px', background: 'var(--bg-card)', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', color: 'var(--accent-cyan)', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
                 {codeVerifier}
               </pre>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px' }}>
@@ -218,7 +219,7 @@ export default function OauthPkceStudioLab() {
                 </span>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Public</span>
               </div>
-              <pre style={{ margin: 0, padding: '12px', background: '#0f172a', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', color: '#4ade80', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
+              <pre style={{ margin: 0, padding: '12px', background: 'var(--bg-card)', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', color: 'var(--accent-emerald)', wordBreak: 'break-all', whiteSpace: 'pre-wrap' }}>
                 {codeChallenge}
               </pre>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '6px' }}>
@@ -248,9 +249,9 @@ export default function OauthPkceStudioLab() {
             Die Client-App leitet den Benutzer mit der <code>code_challenge</code> und Scopes zur Login-Maske weiter.
           </p>
 
-          <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', overflowX: 'auto' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', overflowX: 'auto' }}>
             <div style={{ fontSize: '0.82rem', color: 'var(--accent-primary)', marginBottom: '6px', fontWeight: 'bold' }}>HTTP GET Authorization Request URL:</div>
-            <code style={{ fontSize: '0.88rem', color: '#e2e8f0', wordBreak: 'break-all' }}>
+            <code style={{ fontSize: '0.88rem', color: 'var(--text-main)', wordBreak: 'break-all' }}>
               {authUrl}
             </code>
           </div>
@@ -259,7 +260,7 @@ export default function OauthPkceStudioLab() {
             <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <UserCheck size={18} color="var(--accent-green, #10b981)" /> Simulierter IdP Consent &amp; Login Screen
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', fontSize: '0.9rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', fontSize: '0.9rem' }}>
               <div><strong>Client:</strong> {clientId}</div>
               <div><strong>Redirect URI:</strong> {redirectUri}</div>
               <div><strong>Scope:</strong> {scope}</div>
@@ -288,11 +289,11 @@ export default function OauthPkceStudioLab() {
             Die SPA sendet den <code>code</code> zusammen mit dem geheimen <code>code_verifier</code> per POST-Request an den Authorization Server. Der Server verifiziert <code>SHA256(verifier) == challenge</code>.
           </p>
 
-          <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '0.85rem' }}>
-            <div style={{ color: '#ec4899', fontWeight: 'bold', marginBottom: '4px' }}>POST /oauth/v2/token HTTP/1.1</div>
-            <div style={{ color: '#94a3b8' }}>Host: auth.devgame.it</div>
-            <div style={{ color: '#94a3b8' }}>Content-Type: application/x-www-form-urlencoded</div>
-            <div style={{ marginTop: '8px', color: '#38bdf8' }}>
+          <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '20px', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+            <div style={{ color: 'var(--accent-rose)', fontWeight: 'bold', marginBottom: '4px' }}>POST /oauth/v2/token HTTP/1.1</div>
+            <div style={{ color: 'var(--text-dim)' }}>Host: auth.devgame.it</div>
+            <div style={{ color: 'var(--text-dim)' }}>Content-Type: application/x-www-form-urlencoded</div>
+            <div style={{ marginTop: '8px', color: 'var(--accent-cyan)' }}>
               grant_type=authorization_code&amp;<br/>
               client_id={clientId}&amp;<br/>
               redirect_uri={redirectUri}&amp;<br/>
@@ -309,7 +310,7 @@ export default function OauthPkceStudioLab() {
               onChange={(e) => setIsTampered(e.target.checked)}
               style={{ width: '18px', height: '18px', cursor: 'pointer' }}
             />
-            <label htmlFor="tamper-checkbox" style={{ fontSize: '0.9rem', color: '#fca5a5', cursor: 'pointer' }}>
+            <label htmlFor="tamper-checkbox" style={{ fontSize: '0.9rem', color: 'var(--accent-rose)', cursor: 'pointer' }}>
               <strong>Angriff simulieren:</strong> Manipulierten Code-Verifier senden (Testet PKCE Ablehnung / Invalid Grant)
             </label>
           </div>
@@ -352,19 +353,19 @@ export default function OauthPkceStudioLab() {
             </div>
 
             {/* JWT Breakdown */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
-              <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '16px' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
                 <div style={{ fontSize: '0.82rem', color: '#f43f5e', fontWeight: 'bold', marginBottom: '6px' }}>HEADER (Algorithm &amp; Key ID):</div>
-                <pre style={{ margin: 0, color: '#fda4af', fontSize: '0.85rem' }}>
+                <pre style={{ margin: 0, color: 'var(--accent-rose)', fontSize: '0.85rem' }}>
                   {JSON.stringify(tokenResponse.decoded.header, null, 2)}
                 </pre>
               </div>
 
-              <div style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)' }}>
-                <div style={{ fontSize: '0.82rem', color: '#a855f7', fontWeight: 'bold', marginBottom: '6px' }}>
+              <div style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--accent-purple)', fontWeight: 'bold', marginBottom: '6px' }}>
                   PAYLOAD CLAIMS ({activeJwtTab === 'id_token' ? 'OpenID User Identity' : 'API Scopes & Permissions'}):
                 </div>
-                <pre style={{ margin: 0, color: '#d8b4fe', fontSize: '0.85rem' }}>
+                <pre style={{ margin: 0, color: 'var(--accent-purple)', fontSize: '0.85rem' }}>
                   {JSON.stringify(activeJwtTab === 'id_token' ? tokenResponse.decoded.idToken : tokenResponse.decoded.accessToken, null, 2)}
                 </pre>
               </div>
@@ -388,12 +389,12 @@ export default function OauthPkceStudioLab() {
             </div>
 
             {apiResponse && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: '#0f172a', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent-green, #10b981)' }}>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent-green, #10b981)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.82rem' }}>
-                  <span style={{ color: '#4ade80', fontWeight: 'bold' }}>HTTP 200 OK</span>
+                  <span style={{ color: 'var(--accent-emerald)', fontWeight: 'bold' }}>HTTP 200 OK</span>
                   <span style={{ color: 'var(--text-muted)' }}>Response Body:</span>
                 </div>
-                <pre style={{ margin: 0, color: '#38bdf8', fontSize: '0.85rem' }}>
+                <pre style={{ margin: 0, color: 'var(--accent-cyan)', fontSize: '0.85rem' }}>
                   {JSON.stringify(apiResponse.data, null, 2)}
                 </pre>
               </motion.div>

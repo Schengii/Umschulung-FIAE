@@ -10,5 +10,4 @@ paths = [
   '''^src/utils/jwtConfusionEngine\.js$''',
   '''^src/components/Content/ApiMockStudioLab\.jsx$''',
   '''^src/components/Content/WebSocketProtocolLab\.jsx$''',
-  '''^src/data/websocketData\.js$''',
 ]

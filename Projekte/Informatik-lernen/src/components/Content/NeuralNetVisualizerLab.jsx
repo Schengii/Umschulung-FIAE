@@ -87,7 +87,7 @@ export default function NeuralNetVisualizerLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-purple-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-purple-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -147,14 +147,14 @@ export default function NeuralNetVisualizerLab() {
       {activeTab === 'neural_net' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Sliders className="w-5 h-5 text-purple-400" />
               Inputs & Hyperparameter
             </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">Aktivierungsfunktion Hidden Layer:</label>
+                <span className="text-xs text-slate-300 block mb-1">Aktivierungsfunktion Hidden Layer:</span>
                 <div className="flex gap-2">
                   {['relu', 'sigmoid', 'tanh'].map((fn) => (
                     <button
@@ -244,7 +244,7 @@ export default function NeuralNetVisualizerLab() {
           </div>
 
           <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-            <h2 className="text-lg font-bold text-white">Netzwerk-Architektur & Aktivierung</h2>
+            <h2 className="text-lg font-bold text-slate-50">Netzwerk-Architektur & Aktivierung</h2>
 
             {/* Visualisierung der Schichten */}
             <div className="grid grid-cols-3 gap-4 text-center items-center py-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
@@ -253,11 +253,11 @@ export default function NeuralNetVisualizerLab() {
                 <span className="text-xs text-slate-400 font-bold block">Input Layer</span>
                 <div className="w-16 h-16 mx-auto rounded-full bg-blue-900/60 border-2 border-blue-500 flex flex-col items-center justify-center font-mono">
                   <span className="text-[10px] text-blue-300">x₁</span>
-                  <span className="font-bold text-white text-xs">{inputX1}</span>
+                  <span className="font-bold text-slate-50 text-xs">{inputX1}</span>
                 </div>
                 <div className="w-16 h-16 mx-auto rounded-full bg-blue-900/60 border-2 border-blue-500 flex flex-col items-center justify-center font-mono">
                   <span className="text-[10px] text-blue-300">x₂</span>
-                  <span className="font-bold text-white text-xs">{inputX2}</span>
+                  <span className="font-bold text-slate-50 text-xs">{inputX2}</span>
                 </div>
               </div>
 
@@ -266,11 +266,11 @@ export default function NeuralNetVisualizerLab() {
                 <span className="text-xs text-purple-300 font-bold block">Hidden ({activationFn})</span>
                 <div className="w-16 h-16 mx-auto rounded-full bg-purple-900/60 border-2 border-purple-500 flex flex-col items-center justify-center font-mono">
                   <span className="text-[10px] text-purple-300">h₁ (a₁)</span>
-                  <span className="font-bold text-white text-xs">{a1.toFixed(2)}</span>
+                  <span className="font-bold text-slate-50 text-xs">{a1.toFixed(2)}</span>
                 </div>
                 <div className="w-16 h-16 mx-auto rounded-full bg-purple-900/60 border-2 border-purple-500 flex flex-col items-center justify-center font-mono">
                   <span className="text-[10px] text-purple-300">h₂ (a₂)</span>
-                  <span className="font-bold text-white text-xs">{a2.toFixed(2)}</span>
+                  <span className="font-bold text-slate-50 text-xs">{a2.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -285,7 +285,7 @@ export default function NeuralNetVisualizerLab() {
             </div>
 
             <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-1">
-              <span className="font-bold text-white block">Mathematische Formel (Forward Pass):</span>
+              <span className="font-bold text-slate-50 block">Mathematische Formel (Forward Pass):</span>
               <div className="font-mono text-purple-300">
                 z₁ = ({inputX1} × {weights.w11}) + ({inputX2} × {weights.w12}) + {weights.b1} = {z1.toFixed(2)}
               </div>
@@ -301,18 +301,18 @@ export default function NeuralNetVisualizerLab() {
       {activeTab === 'bpe_tokenizer' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Hash className="w-5 h-5 text-purple-400" />
               BPE Korpus eingeben
             </h2>
 
             <div className="space-y-3">
-              <label className="text-xs text-slate-300 block">Trainings-Text:</label>
-              <input
+              <label htmlFor="neural-net-visualizer-lab-1" className="text-xs text-slate-300 block">Trainings-Text:</label>
+              <input id="neural-net-visualizer-lab-1"
                 type="text"
                 value={bpeText}
                 onChange={(e) => setBpeText(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-sm"
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-sm"
               />
 
               <div>
@@ -346,7 +346,7 @@ export default function NeuralNetVisualizerLab() {
           </div>
 
           <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white">Vokabular & Merges</h2>
+            <h2 className="text-lg font-bold text-slate-50">Vokabular & Merges</h2>
 
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
               <span className="text-xs text-slate-400 block font-semibold">Aktuelle Token-Segmentierung im Korpus:</span>
@@ -365,7 +365,7 @@ export default function NeuralNetVisualizerLab() {
             </div>
 
             <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-2">
-              <span className="font-bold text-white block">Ausgeführte BPE Merges:</span>
+              <span className="font-bold text-slate-50 block">Ausgeführte BPE Merges:</span>
               {bpeResult.mergeHistory.length === 0 ? (
                 <span className="text-slate-500">Noch keine Merges ausgeführt (Initialzustand: Einzelbuchstaben).</span>
               ) : (

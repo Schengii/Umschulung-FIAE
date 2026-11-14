@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDialogA11y } from '../Shared/useDialogA11y';
 import { USER_ROLES } from '../../data/userProfiles';
 import { Check, X, HeartHandshake } from 'lucide-react';
 
 export default function RoleSelectionModal({ isOpen, onClose, currentRole, onSelectRole }) {
+  const dialogRef = useRef(null);
+  useDialogA11y(isOpen, onClose, dialogRef);
   if (!isOpen) return null;
 
   return (
@@ -23,6 +26,11 @@ export default function RoleSelectionModal({ isOpen, onClose, currentRole, onSel
       }}
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="role-selection-modal-title"
         className="glass-panel animate-fade-in"
         style={{
           maxWidth: '920px',
@@ -79,7 +87,7 @@ export default function RoleSelectionModal({ isOpen, onClose, currentRole, onSel
           >
             <HeartHandshake size={18} /> Für jedes Alter & jedes Vorwissen geeignet
           </div>
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
+          <h2 id="role-selection-modal-title" style={{ fontSize: '2rem', fontWeight: '800', margin: '4px 0', color: 'var(--text-main)' }}>
             Wähle dein Lern-Level & Profil
           </h2>
           <p style={{ color: 'var(--text-muted)', marginTop: '6px', fontSize: '1rem', maxWidth: '650px', margin: '0 auto' }}>
@@ -88,10 +96,11 @@ export default function RoleSelectionModal({ isOpen, onClose, currentRole, onSel
         </div>
 
         {/* Roles Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '18px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: '18px' }}>
           {Object.values(USER_ROLES).map((role) => {
             const isSelected = currentRole === role.id;
             return (
+              // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- Karte ist Mausabkürzung; Tastatur über den Auswahl-Button in der Karte
               <div
                 key={role.id}
                 onClick={() => {

@@ -67,7 +67,7 @@ export default function WisoAndlerLab({ onRewardXP }) {
       </div>
 
       {/* Optimum Key Metrics Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Optimale Bestellmenge (x_opt):</span>
           <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-primary)', marginTop: '4px' }}>
@@ -77,21 +77,21 @@ export default function WisoAndlerLab({ onRewardXP }) {
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Bestellhäufigkeit &amp; Intervall:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {andlerData.nOpt} × (alle {andlerData.tOptDays} Tage)
           </div>
         </div>
 
         <div style={{ background: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Minimale Gesamtkosten:</span>
-          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#10b981', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: 'var(--accent-emerald)', marginTop: '4px' }}>
             {andlerData.gesamtkosten.toLocaleString('de-DE')} €
           </div>
         </div>
       </div>
 
       {/* Cost Breakdown & Sliders */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Cost Breakdown */}
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '14px' }}>
@@ -106,12 +106,12 @@ export default function WisoAndlerLab({ onRewardXP }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'var(--bg-primary)', borderRadius: '6px' }}>
               <span>Lagerhaltungskosten ({lagerkostensatz}% von durchschn. Lagerbestand):</span>
-              <strong style={{ color: '#ec4899' }}>{andlerData.lagerkosten.toLocaleString('de-DE')} €</strong>
+              <strong style={{ color: 'var(--accent-rose)' }}>{andlerData.lagerkosten.toLocaleString('de-DE')} €</strong>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 14px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.95rem' }}>
               <span>= Minimale Gesamtkosten (Schnittpunkt):</span>
-              <strong style={{ color: '#10b981' }}>{andlerData.gesamtkosten.toLocaleString('de-DE')} €</strong>
+              <strong style={{ color: 'var(--accent-emerald)' }}>{andlerData.gesamtkosten.toLocaleString('de-DE')} €</strong>
             </div>
           </div>
         </div>

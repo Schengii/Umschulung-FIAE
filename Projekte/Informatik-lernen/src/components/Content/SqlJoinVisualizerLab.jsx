@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import alasql from 'alasql';
+import { runSql } from '../../utils/sqlWorkerClient';
+
+const JOIN_SELECT = 'SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u';
+const JOIN_QUERIES = {
+  INNER: `${JOIN_SELECT} INNER JOIN Orders o ON u.id = o.user_id`,
+  LEFT: `${JOIN_SELECT} LEFT JOIN Orders o ON u.id = o.user_id`,
+  RIGHT: `${JOIN_SELECT} RIGHT JOIN Orders o ON u.id = o.user_id`,
+  FULL: `${JOIN_SELECT} OUTER JOIN Orders o ON u.id = o.user_id`,
+  LEFT_ONLY: `${JOIN_SELECT} LEFT JOIN Orders o ON u.id = o.user_id WHERE o.order_id IS NULL`
+};
 import { Database } from 'lucide-react';
 
 const INITIAL_USERS = [
@@ -68,29 +77,24 @@ WHERE o.order_id IS NULL;`;
     }
   };
 
-  const executeJoin = (type) => {
+  const executeJoin = async (type) => {
     setJoinType(type);
+    const joinQuery = JOIN_QUERIES[type];
     try {
-      // Execute in AlaSQL
-      alasql('CREATE TABLE IF NOT EXISTS Users (id INT, name STRING, role STRING)');
-      alasql('CREATE TABLE IF NOT EXISTS Orders (order_id INT, user_id INT, product STRING, amount INT)');
-      alasql('DELETE FROM Users');
-      alasql('DELETE FROM Orders');
-      INITIAL_USERS.forEach(u => alasql('INSERT INTO Users VALUES (?, ?, ?)', [u.id, u.name, u.role]));
-      INITIAL_ORDERS.forEach(o => alasql('INSERT INTO Orders VALUES (?, ?, ?, ?)', [o.order_id, o.user_id, o.product, o.amount]));
-
-      let res = [];
-      if (type === 'INNER') {
-        res = alasql('SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u INNER JOIN Orders o ON u.id = o.user_id');
-      } else if (type === 'LEFT') {
-        res = alasql('SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u LEFT JOIN Orders o ON u.id = o.user_id');
-      } else if (type === 'RIGHT') {
-        res = alasql('SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u RIGHT JOIN Orders o ON u.id = o.user_id');
-      } else if (type === 'FULL') {
-        res = alasql('SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u OUTER JOIN Orders o ON u.id = o.user_id');
-      } else if (type === 'LEFT_ONLY') {
-        res = alasql('SELECT u.id, u.name, o.order_id, o.product, o.amount FROM Users u LEFT JOIN Orders o ON u.id = o.user_id WHERE o.order_id IS NULL');
-      }
+      // Execute in AlaSQL (Web Worker, CSP-konform – siehe sqlWorkerClient.js)
+      const results = await runSql([
+        { sql: 'USE alasql' },
+        { sql: 'CREATE TABLE IF NOT EXISTS Users (id INT, name STRING, role STRING)' },
+        { sql: 'CREATE TABLE IF NOT EXISTS Orders (order_id INT, user_id INT, product STRING, amount INT)' },
+        { sql: 'DELETE FROM Users' },
+        { sql: 'DELETE FROM Orders' },
+        ...INITIAL_USERS.map(u => ({ sql: 'INSERT INTO Users VALUES (?, ?, ?)', params: [u.id, u.name, u.role] })),
+        ...INITIAL_ORDERS.map(o => ({ sql: 'INSERT INTO Orders VALUES (?, ?, ?, ?)', params: [o.order_id, o.user_id, o.product, o.amount] })),
+        ...(joinQuery ? [{ sql: joinQuery }] : [])
+      ]);
+      const failed = results.find(r => !r.ok);
+      if (failed) throw new Error(failed.error);
+      const res = joinQuery ? results[results.length - 1].result : [];
       setQueryResult(res);
 
       if (type === quests[activeQuestIdx].targetJoin) {
@@ -150,11 +154,11 @@ WHERE o.order_id IS NULL;`;
       </div>
 
       {/* Interactive Venn Diagram Visualizer & Controls */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Venn Diagram Visualizer */}
-        <div style={{ background: '#0f172a', padding: '24px', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h4 style={{ color: '#94a3b8', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-            Venn-Diagramm Visualisierung: <span style={{ color: '#38bdf8' }}>{joinType} JOIN</span>
+        <div style={{ background: 'var(--bg-card)', padding: '24px', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <h4 style={{ color: 'var(--text-dim)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
+            Venn-Diagramm Visualisierung: <span style={{ color: 'var(--accent-cyan)' }}>{joinType} JOIN</span>
           </h4>
 
           {/* SVG Venn Circles */}
@@ -214,7 +218,7 @@ WHERE o.order_id IS NULL;`;
                 padding: '10px 14px',
                 borderRadius: 'var(--radius-md)',
                 background: joinType === btn.id ? 'var(--accent-primary)' : 'var(--bg-card)',
-                color: joinType === btn.id ? '#ffffff' : 'var(--text-main)',
+                color: joinType === btn.id ? 'var(--text-on-accent)' : 'var(--text-main)',
                 border: joinType === btn.id ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
                 fontWeight: '700',
                 fontSize: '0.88rem',
@@ -229,13 +233,13 @@ WHERE o.order_id IS NULL;`;
       </div>
 
       {/* SQL Output & Live Result Table */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
         {/* Generated SQL Statement */}
-        <div style={{ background: '#0f172a', padding: '18px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
-          <h4 style={{ color: '#94a3b8', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+        <div style={{ background: 'var(--bg-card)', padding: '18px', borderRadius: 'var(--radius-lg)', border: '1px solid #1e293b' }}>
+          <h4 style={{ color: 'var(--text-dim)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
             Generiertes SQL Statement:
           </h4>
-          <pre style={{ margin: 0, color: '#38bdf8', fontFamily: 'monospace', fontSize: '0.88rem', lineHeight: 1.5 }}>
+          <pre style={{ margin: 0, color: 'var(--accent-cyan)', fontFamily: 'monospace', fontSize: '0.88rem', lineHeight: 1.5 }}>
             {getSqlQuery(joinType)}
           </pre>
         </div>
@@ -263,11 +267,11 @@ WHERE o.order_id IS NULL;`;
               <tbody>
                 {queryResult.map((row, idx) => (
                   <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                    <td style={{ padding: '6px 10px', color: row.id ? '#38bdf8' : '#64748b' }}>{row.id || 'NULL'}</td>
-                    <td style={{ padding: '6px 10px', color: row.name ? '#f8fafc' : '#64748b' }}>{row.name || 'NULL'}</td>
-                    <td style={{ padding: '6px 10px', color: row.order_id ? '#ec4899' : '#64748b' }}>{row.order_id || 'NULL'}</td>
-                    <td style={{ padding: '6px 10px', color: row.product ? '#f8fafc' : '#64748b' }}>{row.product || 'NULL'}</td>
-                    <td style={{ padding: '6px 10px', color: row.amount ? '#34d399' : '#64748b' }}>{row.amount ? `${row.amount} €` : 'NULL'}</td>
+                    <td style={{ padding: '6px 10px', color: row.id ? 'var(--accent-cyan)' : '#64748b' }}>{row.id || 'NULL'}</td>
+                    <td style={{ padding: '6px 10px', color: row.name ? 'var(--text-main)' : '#64748b' }}>{row.name || 'NULL'}</td>
+                    <td style={{ padding: '6px 10px', color: row.order_id ? 'var(--accent-rose)' : '#64748b' }}>{row.order_id || 'NULL'}</td>
+                    <td style={{ padding: '6px 10px', color: row.product ? 'var(--text-main)' : '#64748b' }}>{row.product || 'NULL'}</td>
+                    <td style={{ padding: '6px 10px', color: row.amount ? 'var(--accent-emerald)' : '#64748b' }}>{row.amount ? `${row.amount} €` : 'NULL'}</td>
                   </tr>
                 ))}
               </tbody>

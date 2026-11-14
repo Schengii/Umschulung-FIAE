@@ -148,7 +148,7 @@ export default function CtfChallengeLab({ onRewardXP }) {
                 padding: '10px 16px',
                 borderRadius: 'var(--radius-md)',
                 background: isActive ? 'var(--accent-primary)' : 'var(--bg-primary)',
-                color: isActive ? '#ffffff' : 'var(--text-main)',
+                color: isActive ? 'var(--text-on-accent)' : 'var(--text-main)',
                 border: isActive ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
                 fontWeight: '700',
                 fontSize: '0.88rem',
@@ -173,7 +173,7 @@ export default function CtfChallengeLab({ onRewardXP }) {
           </h3>
           <span style={{
             background: currentQuest.difficulty === 'Easy' ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)',
-            color: currentQuest.difficulty === 'Easy' ? '#10b981' : '#f59e0b',
+            color: currentQuest.difficulty === 'Easy' ? 'var(--accent-emerald)' : 'var(--accent-amber)',
             padding: '4px 10px',
             borderRadius: 'var(--radius-md)',
             fontWeight: '700',
@@ -188,18 +188,18 @@ export default function CtfChallengeLab({ onRewardXP }) {
         </p>
 
         {/* Code Snippet Box */}
-        <div style={{ background: '#0f172a', padding: '14px', borderRadius: 'var(--radius-md)', color: '#38bdf8', fontFamily: 'monospace', fontSize: '0.9rem', marginBottom: '16px', border: '1px solid #1e293b' }}>
+        <div style={{ background: 'var(--bg-card)', padding: '14px', borderRadius: 'var(--radius-md)', color: 'var(--accent-cyan)', fontFamily: 'monospace', fontSize: '0.9rem', marginBottom: '16px', border: '1px solid #1e293b' }}>
           <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '4px', textTransform: 'uppercase' }}>Vulnerable Code Snippet:</div>
           {currentQuest.sampleCode}
         </div>
 
         {/* Interactive Testing Sandbox */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
+          <label htmlFor="ctf-challenge-lab-1" style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
             🧪 Interactive Payload Simulator:
           </label>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <input
+            <input id="ctf-challenge-lab-1"
               type="text"
               value={testPayload}
               onChange={(e) => setTestPayload(e.target.value)}
@@ -208,8 +208,8 @@ export default function CtfChallengeLab({ onRewardXP }) {
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: 'var(--radius-md)',
-                background: '#0f172a',
-                color: '#f8fafc',
+                background: 'var(--bg-card)',
+                color: 'var(--text-main)',
                 border: '1px solid #334155',
                 fontFamily: 'monospace',
                 fontSize: '0.9rem',
@@ -226,8 +226,8 @@ export default function CtfChallengeLab({ onRewardXP }) {
               marginTop: '10px',
               padding: '12px',
               borderRadius: 'var(--radius-md)',
-              background: '#020617',
-              color: '#38bdf8',
+              background: 'var(--bg-primary)',
+              color: 'var(--accent-cyan)',
               fontFamily: 'monospace',
               fontSize: '0.88rem',
               whiteSpace: 'pre-wrap',

@@ -485,6 +485,30 @@ nav {
     z-index: 1;
 }
 
+/* Rechtliche Links auf der Einstiegsseite (kein Home.js-Footer) */
+.hero-legal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-legal a {
+    color: #fff;
+    text-decoration: underline;
+    padding: 6px 4px;
+}
+
+.hero-legal a:focus-visible {
+    outline: 3px solid #9ac2f8;
+    outline-offset: 2px;
+}
+
 .hero-section::before {
     content: "";
     position: absolute;
@@ -764,26 +788,6 @@ p.intro-text {
     color: var(--primary-color);
 }
 
-/* Search Counter Badge */
-.search-count-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background-color: var(--card-bg);
-    color: var(--secondary-color);
-    border: 1px solid var(--border-color);
-    padding: 8px 18px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    margin-top: 12px;
-}
-
-.search-count-badge i {
-    color: var(--primary-color);
-}
-
 /* Utility Classes */
 .intro-text--subtle {
     font-size: 0.95rem;
@@ -944,8 +948,15 @@ cite {
 .accordion-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    /* Geschlossen: für Screenreader und Tab-Reihenfolge ausgeblendet (erst nach der Animation) */
+    visibility: hidden;
+    transition: max-height 0.3s ease-out, visibility 0s linear 0.3s;
     background: #fdfdfc;
+}
+
+.accordion-header.active + .accordion-content {
+    visibility: visible;
+    transition: max-height 0.3s ease-out, visibility 0s;
 }
 
 .accordion-content p {
@@ -1413,6 +1424,11 @@ cite {
     font-weight: 700;
     transition: var(--transition-smooth);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+
+.filter-btn:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
 }
 
 @media (hover: hover) {
@@ -3169,6 +3185,16 @@ footer {
     display: block;
 }
 
+/* Hinweis auf das Referenz-Werk (Auftrag.html?ref=…) */
+.config-reference {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+    padding: 8px 14px;
+    border-left: 3px solid var(--primary-color);
+    border-radius: 8px;
+}
+
 /* Format visual size variants */
 .format-visual--20x30 {
     width: 40px;
@@ -3990,6 +4016,7 @@ h2 {
     cursor: grab;
     -webkit-user-select: none;
     user-select: none;
+    touch-action: none; /* Bild per Touch ziehen, ohne dass die Lightbox mitscrollt */
 }
 
 .wall-frame-container.is-dragging {
@@ -4221,6 +4248,11 @@ h2 {
     flex-direction: column;
     align-items: center;
     outline: none;
+}
+
+.view-thumb-btn:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
 }
 
 @media (hover: hover) {

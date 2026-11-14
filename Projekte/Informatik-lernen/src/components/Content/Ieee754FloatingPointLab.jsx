@@ -135,12 +135,12 @@ export default function Ieee754FloatingPointLab() {
             {/* Input & Presets */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="w-full md:w-80">
-                <label className="text-xs font-semibold text-slate-400 block mb-1">Dezimalwert eingeben</label>
-                <input
+                <label htmlFor="ieee754-floating-point-lab-1" className="text-xs font-semibold text-slate-400 block mb-1">Dezimalwert eingeben</label>
+                <input id="ieee754-floating-point-lab-1"
                   type="text"
                   value={inputNumber}
                   onChange={(e) => handleInputChange(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-lg"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-lg"
                   placeholder="z.B. 3.14159"
                 />
               </div>
@@ -247,7 +247,7 @@ export default function Ieee754FloatingPointLab() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-slate-800/80 p-4 rounded-xl border border-rose-900/50">
                 <span className="text-xs text-rose-300 font-semibold block">1. Vorzeichen (Sign)</span>
-                <span className="text-xl font-bold text-white mt-1 block">
+                <span className="text-xl font-bold text-slate-50 mt-1 block">
                   {parsedBits.signBit === '1' ? 'Negativ (-)' : 'Positiv (+)'}
                 </span>
                 <span className="text-xs text-slate-400 block mt-1 font-mono">(-1)^{parsedBits.signBit} = {parsedBits.signBit === '1' ? '-1' : '+1'}</span>
@@ -255,7 +255,7 @@ export default function Ieee754FloatingPointLab() {
 
               <div className="bg-slate-800/80 p-4 rounded-xl border border-amber-900/50">
                 <span className="text-xs text-amber-300 font-semibold block">2. Exponent (mit Bias 127)</span>
-                <span className="text-xl font-bold text-white mt-1 block font-mono">
+                <span className="text-xl font-bold text-slate-50 mt-1 block font-mono">
                   {parsedBits.exponentInt} - 127 = {parsedBits.unbiasedExponent}
                 </span>
                 <span className="text-xs text-slate-400 block mt-1 font-mono">2^{parsedBits.unbiasedExponent}</span>
@@ -279,24 +279,24 @@ export default function Ieee754FloatingPointLab() {
       {activeTab === 'twoscomp' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Sliders className="w-5 h-5 text-cyan-400" />
               Signed Integer Konvertierung
             </h2>
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">Dezimaler Ganzzahlwert</label>
-                <input
+                <label htmlFor="ieee754-floating-point-lab-2" className="text-xs text-slate-300 block mb-1">Dezimaler Ganzzahlwert</label>
+                <input id="ieee754-floating-point-lab-2"
                   type="number"
                   value={intVal}
                   onChange={(e) => setIntVal(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-lg"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-50 font-mono text-lg"
                 />
               </div>
 
               <div>
-                <label className="text-xs text-slate-300 block mb-1">Wortbreite (Bit)</label>
+                <span className="text-xs text-slate-300 block mb-1">Wortbreite (Bit)</span>
                 <div className="flex gap-2">
                   {[8, 16, 32].map((bits) => (
                     <button
@@ -329,7 +329,7 @@ export default function Ieee754FloatingPointLab() {
           </div>
 
           <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white">Binäre Darstellung</h2>
+            <h2 className="text-lg font-bold text-slate-50">Binäre Darstellung</h2>
 
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-center space-y-2">
               <span className="text-xs text-slate-400">Zweierkomplement Bit-Muster:</span>
@@ -342,7 +342,7 @@ export default function Ieee754FloatingPointLab() {
             </div>
 
             <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 space-y-2 text-xs text-slate-300">
-              <span className="font-bold text-white block">So funktioniert das Zweierkomplement bei negativen Zahlen:</span>
+              <span className="font-bold text-slate-50 block">So funktioniert das Zweierkomplement bei negativen Zahlen:</span>
               <ol className="list-decimal list-inside space-y-1 text-slate-300">
                 <li>Betrag als positive Binärzahl darstellen (z.B. +42 = 00101010)</li>
                 <li>Alle Bits invertieren (Einerkomplement: 11010101)</li>
@@ -357,7 +357,7 @@ export default function Ieee754FloatingPointLab() {
       {activeTab === 'kvmap' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-50 flex items-center gap-2">
               <Layers className="w-5 h-5 text-cyan-400" />
               2-Variablen KV-Diagramm (A, B)
             </h2>
@@ -412,7 +412,7 @@ export default function Ieee754FloatingPointLab() {
           </div>
 
           <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white">Minimierte Boolesche Funktion (DNF)</h2>
+            <h2 className="text-lg font-bold text-slate-50">Minimierte Boolesche Funktion (DNF)</h2>
 
             <div className="bg-slate-950 p-6 rounded-xl border border-slate-800 font-mono text-center space-y-2">
               <span className="text-xs text-slate-400">Minimierte Gleichung f(A, B):</span>
@@ -422,7 +422,7 @@ export default function Ieee754FloatingPointLab() {
             </div>
 
             <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700 space-y-2 text-xs text-slate-300">
-              <span className="font-bold text-white block">Regeln für Karnaugh-Veitch Diagramme:</span>
+              <span className="font-bold text-slate-50 block">Regeln für Karnaugh-Veitch Diagramme:</span>
               <ul className="list-disc list-inside space-y-1 text-slate-300">
                 <li>Blöcke aus 1ern müssen Zweierpotenzen sein (1, 2, 4, 8 Zellen).</li>
                 <li>Je größer die Blöcke, desto weniger Variablen verbleiben im minimierten Term.</li>

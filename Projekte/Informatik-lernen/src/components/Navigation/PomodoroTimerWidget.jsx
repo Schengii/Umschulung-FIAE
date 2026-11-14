@@ -68,7 +68,7 @@ export default function PomodoroTimerWidget() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="bg-slate-900 border border-slate-700/80 rounded-2xl p-4 shadow-2xl w-72 text-white space-y-3 backdrop-blur-md"
+            className="bg-slate-900 border border-slate-700/80 rounded-2xl p-4 shadow-2xl w-72 text-slate-50 space-y-3 backdrop-blur-md"
           >
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export default function PomodoroTimerWidget() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"
+                className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-50"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -88,7 +88,7 @@ export default function PomodoroTimerWidget() {
               <button
                 onClick={() => switchMode('focus')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  mode === 'focus' ? 'bg-rose-600 text-white' : 'text-slate-400 hover:text-white'
+                  mode === 'focus' ? 'bg-rose-600 text-white' : 'text-slate-400 hover:text-slate-50'
                 }`}
               >
                 Fokus (25m)
@@ -96,7 +96,7 @@ export default function PomodoroTimerWidget() {
               <button
                 onClick={() => switchMode('break')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  mode === 'break' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'
+                  mode === 'break' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-slate-50'
                 }`}
               >
                 Pause (5m)
@@ -105,7 +105,7 @@ export default function PomodoroTimerWidget() {
 
             {/* Timer Display */}
             <div className="text-center py-2">
-              <div className="text-4xl font-mono font-bold tracking-wider text-white">
+              <div className="text-4xl font-mono font-bold tracking-wider text-slate-50">
                 {formattedTime}
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block">
@@ -137,7 +137,7 @@ export default function PomodoroTimerWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-900/90 hover:bg-slate-800 text-white border border-slate-700 rounded-full shadow-xl backdrop-blur-md transition group"
+            className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-900/90 hover:bg-slate-800 text-slate-50 border border-slate-700 rounded-full shadow-xl backdrop-blur-md transition group"
           >
             <Timer className="w-4 h-4 text-rose-400 animate-pulse" />
             <span className="text-xs font-mono font-bold">{formattedTime}</span>

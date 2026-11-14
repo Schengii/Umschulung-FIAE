@@ -105,7 +105,7 @@ export function generateEui64(macAddress, prefix = 'fe80::') {
   };
 }
 
-export function ipToBinary32(ip) {
+function ipToBinary32(ip) {
   const octets = ip.trim().split('.').map(Number);
   if (octets.length !== 4 || octets.some(o => isNaN(o) || o < 0 || o > 255)) {
     return null;

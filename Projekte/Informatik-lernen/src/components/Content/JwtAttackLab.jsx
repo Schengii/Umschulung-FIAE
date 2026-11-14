@@ -107,26 +107,26 @@ export default function JwtAttackLab({ onRewardXP }) {
       </div>
 
       {tab === 'alg_none' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '20px' }}>
           <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
             <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)', display: 'block', marginBottom: '10px' }}>
               Original-Token (Payload):
             </span>
-            <pre style={{ margin: '0 0 14px 0', padding: '12px', background: '#090d16', color: '#38bdf8', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', overflowX: 'auto' }}>
+            <pre style={{ margin: '0 0 14px 0', padding: '12px', background: 'var(--bg-secondary)', color: 'var(--accent-cyan)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', overflowX: 'auto' }}>
 {JSON.stringify(decodedOriginal.payload, null, 2)}
             </pre>
 
             <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--accent-rose)', display: 'block', marginBottom: '10px' }}>
               Gefälschtes Token (role → admin, unsigniert):
             </span>
-            <pre style={{ margin: 0, padding: '12px', background: '#090d16', color: '#f87171', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+            <pre style={{ margin: 0, padding: '12px', background: 'var(--bg-secondary)', color: 'var(--accent-rose)', borderRadius: '8px', fontFamily: 'monospace', fontSize: '0.78rem', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
 {JSON.stringify(forged.forgedPayload, null, 2)}
             </pre>
           </div>
 
           <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Server-Verteidigung (Algorithmus-Allowlist):</label>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Server-Verteidigung (Algorithmus-Allowlist):</span>
               <button
                 onClick={() => setDefenseEnabled(!defenseEnabled)}
                 className={`btn ${defenseEnabled ? 'btn-primary' : 'btn-secondary'}`}
@@ -141,7 +141,7 @@ export default function JwtAttackLab({ onRewardXP }) {
               background: algNoneVerdict.accepted ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
               border: `1px solid ${algNoneVerdict.accepted ? '#ef4444' : '#10b981'}`
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: algNoneVerdict.accepted ? '#ef4444' : '#10b981', marginBottom: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: algNoneVerdict.accepted ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginBottom: '6px' }}>
                 {algNoneVerdict.accepted ? <Bug size={16} /> : <ShieldCheck size={16} />}
                 {algNoneVerdict.accepted ? 'Angriff erfolgreich!' : 'Angriff blockiert'}
               </div>
@@ -153,10 +153,10 @@ export default function JwtAttackLab({ onRewardXP }) {
 
       {tab === 'weak_secret' && (
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+          <label htmlFor="jwt-attack-lab-1" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
             Tatsächliches Server-Secret (probiere z. B. "secret" oder ein starkes Secret):
           </label>
-          <input
+          <input id="jwt-attack-lab-1"
             type="text"
             value={actualSecret}
             onChange={(e) => setActualSecret(e.target.value)}
@@ -168,14 +168,14 @@ export default function JwtAttackLab({ onRewardXP }) {
             background: crackResult.cracked ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
             border: `1px solid ${crackResult.cracked ? '#ef4444' : '#10b981'}`
           }}>
-            <div style={{ fontWeight: 'bold', color: crackResult.cracked ? '#ef4444' : '#10b981' }}>
+            <div style={{ fontWeight: 'bold', color: crackResult.cracked ? 'var(--accent-rose)' : 'var(--accent-emerald)' }}>
               {crackResult.cracked ? `❌ Secret geknackt: "${crackResult.secret}" (Wordlist-Treffer)` : '✅ Secret nicht in gängiger Wordlist gefunden'}
             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.8rem', fontFamily: 'monospace' }}>
             {crackResult.attempts.map((a, idx) => (
-              <div key={idx} style={{ color: a.matched ? '#ef4444' : 'var(--text-muted)' }}>
+              <div key={idx} style={{ color: a.matched ? 'var(--accent-rose)' : 'var(--text-muted)' }}>
                 {a.matched ? '✓' : '✗'} Versuch: "{a.candidate}"
               </div>
             ))}
@@ -185,10 +185,10 @@ export default function JwtAttackLab({ onRewardXP }) {
 
       {tab === 'kid_injection' && (
         <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+          <label htmlFor="jwt-attack-lab-2" style={{ display: 'block', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
             "kid" Header-Wert (probiere Pfad-Traversal wie "../../dev/null"):
           </label>
-          <input
+          <input id="jwt-attack-lab-2"
             type="text"
             value={kidValue}
             onChange={(e) => setKidValue(e.target.value)}
@@ -196,7 +196,7 @@ export default function JwtAttackLab({ onRewardXP }) {
           />
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Server sanitisiert kid (Allowlist):</label>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Server sanitisiert kid (Allowlist):</span>
             <button
               onClick={() => setKidSanitized(!kidSanitized)}
               className={`btn ${kidSanitized ? 'btn-primary' : 'btn-secondary'}`}
@@ -211,7 +211,7 @@ export default function JwtAttackLab({ onRewardXP }) {
             background: kidVerdict.vulnerable ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
             border: `1px solid ${kidVerdict.vulnerable ? '#ef4444' : '#10b981'}`
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: kidVerdict.vulnerable ? '#ef4444' : '#10b981', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: kidVerdict.vulnerable ? 'var(--accent-rose)' : 'var(--accent-emerald)', marginBottom: '6px' }}>
               {kidVerdict.vulnerable ? <Bug size={16} /> : <ShieldCheck size={16} />}
               {kidVerdict.vulnerable ? 'Verwundbar' : 'Abgesichert'}
             </div>

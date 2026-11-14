@@ -64,7 +64,7 @@ export default function GitMergeConflictLab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-950 via-amber-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-orange-700/40 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-orange-950 via-amber-950 to-slate-900 rounded-2xl p-6 text-slate-50 shadow-xl border border-orange-700/40 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -94,7 +94,7 @@ export default function GitMergeConflictLab() {
             onClick={() => handleSelectScenario(sc.id)}
             className={`p-4 rounded-xl border text-left transition ${
               selectedScenarioId === sc.id
-                ? 'bg-orange-950/80 border-orange-500 text-white shadow-lg'
+                ? 'bg-orange-950/80 border-orange-500 text-slate-50 shadow-lg'
                 : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
             }`}
           >
@@ -155,7 +155,7 @@ export default function GitMergeConflictLab() {
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <Code2 className="w-5 h-5 text-orange-400" />
-            <span className="text-sm font-bold text-white font-mono">{scenario.fileName} (Merging)</span>
+            <span className="text-sm font-bold text-slate-50 font-mono">{scenario.fileName} (Merging)</span>
             <span className={`px-2.5 py-0.5 rounded text-xs font-bold font-mono ${
               stillHasConflict
                 ? 'bg-rose-950 text-rose-300 border border-rose-800'

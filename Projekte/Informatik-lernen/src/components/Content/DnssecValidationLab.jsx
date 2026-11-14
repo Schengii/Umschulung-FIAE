@@ -296,8 +296,8 @@ export default function DnssecValidationLab() {
 
             <div className="space-y-3 pt-2">
               <div>
-                <label className="text-xs font-medium text-slate-300">Angefragte Subdomain</label>
-                <input
+                <label htmlFor="dnssec-validation-lab-1" className="text-xs font-medium text-slate-300">Angefragte Subdomain</label>
+                <input id="dnssec-validation-lab-1"
                   type="text"
                   value={nsec3Query}
                   onChange={e => setNsec3Query(e.target.value)}
@@ -307,8 +307,8 @@ export default function DnssecValidationLab() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-300">Salt (Hex-Wert)</label>
-                <input
+                <label htmlFor="dnssec-validation-lab-2" className="text-xs font-medium text-slate-300">Salt (Hex-Wert)</label>
+                <input id="dnssec-validation-lab-2"
                   type="text"
                   value={nsec3Salt}
                   onChange={e => setNsec3Salt(e.target.value)}

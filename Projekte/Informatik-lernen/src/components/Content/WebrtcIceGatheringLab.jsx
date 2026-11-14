@@ -59,7 +59,7 @@ export default function WebrtcIceGatheringLab() {
               </span>
               <span className="text-xs text-slate-400">STUN (RFC 8489) & TURN (RFC 8656)</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">
               WebRTC STUN/TURN & ICE Candidate Gathering Studio
             </h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl">
@@ -74,7 +74,7 @@ export default function WebrtcIceGatheringLab() {
             ) : (
               <button
                 onClick={handleTestTrigger}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-slate-950 text-xs font-bold transition shadow"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-black text-xs font-bold transition shadow"
               >
                 <Award size={14} /> 65 XP sichern
               </button>
@@ -87,18 +87,18 @@ export default function WebrtcIceGatheringLab() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            <h2 className="text-base font-semibold text-slate-50 flex items-center gap-2">
               <Network size={18} className="text-indigo-400" />
               Netzwerk- & NAT-Topologie
             </h2>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Lokaler NAT-Typ (Peer A):</label>
-                <select
+                <label htmlFor="webrtc-ice-gathering-lab-1" className="block text-slate-300 font-medium mb-1">Lokaler NAT-Typ (Peer A):</label>
+                <select id="webrtc-ice-gathering-lab-1"
                   value={localNat}
                   onChange={(e) => setLocalNat(/** @type {any} */ (e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50"
                 >
                   <option value="FullCone">Full Cone NAT (Einfaches Hole-Punching)</option>
                   <option value="RestrictedCone">Restricted Cone NAT</option>
@@ -108,11 +108,11 @@ export default function WebrtcIceGatheringLab() {
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">Entfernter NAT-Typ (Peer B):</label>
-                <select
+                <label htmlFor="webrtc-ice-gathering-lab-2" className="block text-slate-300 font-medium mb-1">Entfernter NAT-Typ (Peer B):</label>
+                <select id="webrtc-ice-gathering-lab-2"
                   value={remoteNat}
                   onChange={(e) => setRemoteNat(/** @type {any} */ (e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-50"
                 >
                   <option value="FullCone">Full Cone NAT</option>
                   <option value="PortRestrictedCone">Port Restricted Cone NAT</option>

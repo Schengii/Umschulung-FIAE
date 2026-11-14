@@ -62,8 +62,10 @@ test('Galerie: Suche ohne Treffer zeigt die „Keine Gemälde gefunden“-Meldun
   const { page, context } = await open('/Bildergalerie.html');
   assert.equal(await isDisplayed(page, '#no-gallery-results'), false);
   await page.fill('#gallery-search', 'xyzxyzxyz');
+  await page.waitForSelector('#no-gallery-results', { state: 'visible' }); // Suche ist entprellt
   assert.equal(await isDisplayed(page, '#no-gallery-results'), true);
   await page.fill('#gallery-search', '');
+  await page.waitForSelector('#no-gallery-results', { state: 'hidden' });
   assert.equal(await isDisplayed(page, '#no-gallery-results'), false);
   await context.close();
 });
@@ -85,6 +87,47 @@ test('Lightbox: zeigt keine erfundenen Kundenstimmen zu einzelnen Werken', async
   await page.waitForSelector('#lightbox', { state: 'visible' });
   const lightboxText = await page.textContent('#lightbox');
   assert.doesNotMatch(lightboxText, /Elena M\.|Stefan K\.|Karin S\./);
+  await context.close();
+});
+
+test('Lightbox: Fokus kehrt nach dem Blättern zum auslösenden Link zurück', async () => {
+  const { page, context } = await open('/Bildergalerie.html');
+  await page.focus('.gallery-item a');
+  const triggerHref = await page.evaluate(() => document.activeElement.getAttribute('href'));
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('#lightbox', { state: 'visible' });
+  await page.click('#lightbox .next');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#lightbox', { state: 'hidden' });
+  assert.equal(await page.evaluate(() => document.activeElement.getAttribute('href')), triggerHref);
+  await context.close();
+});
+
+test('Lightbox: Escape schließt auch bei fokussiertem Eingabefeld', async () => {
+  const { page, context } = await open('/Bildergalerie.html');
+  await page.click('.gallery-item a');
+  await page.waitForSelector('#lightbox', { state: 'visible' });
+  await page.evaluate(() => document.getElementById('lb-scale-slider').focus());
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#lightbox', { state: 'hidden' });
+  await context.close();
+});
+
+test('Speicher: ungültige Sprache/Theme in localStorage lassen Navigation und Footer intakt', async () => {
+  const { page, context, errors } = await open('/Home.html', {
+    storage: { manufaktur_lang: 'fr', manufaktur_theme: 'x' }
+  });
+  assert.ok(await page.$('header nav'), 'Navigation fehlt');
+  assert.ok(await page.$('footer'), 'Footer fehlt');
+  assert.equal(await page.evaluate(() => document.documentElement.getAttribute('data-theme')).then(t => ['light', 'dark'].includes(t)), true);
+  assert.deepEqual(errors, []);
+  await context.close();
+});
+
+test('Sprachwechsel: Fokus bleibt auf dem Sprach-Button', async () => {
+  const { page, context } = await open('/Home.html');
+  await page.click('#lang-toggle-btn');
+  await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'lang-toggle-btn');
   await context.close();
 });
 
@@ -235,6 +278,29 @@ const SAVED_CONFIG = JSON.stringify({
   step: 4, motiv: 'Tierportrait', format: '30×40 cm', technik: 'Acryl', lieferzeit: 'ca. 2–3 Wochen'
 });
 
+test('Konfigurator: Fokus wandert beim Schrittwechsel auf die neue Überschrift, nicht beim Laden', async () => {
+  const { page, context } = await open('/Auftrag.html');
+  assert.equal(await page.evaluate(() => document.activeElement === document.body), true, 'Fokus beim Laden unverändert');
+  await page.click('#panel-1 .option-card');
+  await page.click('#next-1');
+  await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'step2-title');
+  await page.click('#panel-2 .btn-back');
+  await page.waitForFunction(() => document.activeElement && document.activeElement.id === 'step1-title');
+  await context.close();
+});
+
+test('FAQ-Akkordeon: geschlossene Antworten sind ausgeblendet, geöffnete sichtbar', async () => {
+  const { page, context } = await open('/Leistungen.html');
+  const content = page.locator('.accordion-header').first().locator('xpath=following-sibling::*[1]');
+  assert.equal(await content.evaluate(el => getComputedStyle(el).visibility), 'hidden');
+  await page.locator('.accordion-header').first().click();
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.accordion-header').nextElementSibling;
+    return getComputedStyle(el).visibility === 'visible' && el.getBoundingClientRect().height > 20;
+  });
+  await context.close();
+});
+
 test('Konfigurator: gespeicherte Konfiguration blendet das Wiederherstellen-Banner ein', async () => {
   const { page, context } = await open('/Auftrag.html', { storage: { manufaktur_konfigurator_state: SAVED_CONFIG } });
   assert.equal(await isDisplayed(page, '#restore-banner'), true);
@@ -286,8 +352,8 @@ test('Konfigurator: ?ref= wird als reiner Text angezeigt, HTML wird nicht einges
   const payload = '<img src=x id=injected-probe><a href="https://example.com">Klick</a>';
   const { page, context } = await open('/Auftrag.html?kat=tiere&ref=' + encodeURIComponent(payload));
   assert.equal(await page.$('#injected-probe'), null);
-  assert.equal(await page.$('#hint-1 a'), null);
-  assert.ok((await page.textContent('#hint-1')).includes(payload), 'Referenz erscheint als Text');
+  assert.equal(await page.$('#config-reference a'), null);
+  assert.ok((await page.textContent('#config-reference')).includes(payload), 'Referenz erscheint als Text');
   await context.close();
 });
 
@@ -464,4 +530,172 @@ test('Galerie: Vorschaubilder werden als AVIF mit WebP-Fallback ausgeliefert', a
   assert.match(info.current, /\.avif$/);
   assert.ok(info.loaded);
   assert.deepEqual(errors, []);
+});
+
+/* ---------- Ergänzte Abdeckung: Navigation, Sortierung, Favoriten, Verlauf, Modale ---------- */
+
+test('Navigation mobil: Hamburger öffnet das Menü, Escape schließt es und gibt den Fokus zurück', async () => {
+  const { page, context, errors } = await open('/Home.html', { context: { viewport: { width: 390, height: 800 } } });
+  await page.click('.hamburger');
+  assert.equal(await page.getAttribute('.hamburger', 'aria-expanded'), 'true');
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getAttribute('.hamburger', 'aria-expanded'), 'false');
+  await context.close();
+  assert.deepEqual(errors, []);
+});
+
+test('Navigation mobil: nach Sprachwechsel öffnet der Hamburger genau einmal (kein doppelter Listener)', async () => {
+  const { page, context } = await open('/Home.html', { context: { viewport: { width: 390, height: 800 } } });
+  await page.evaluate(() => document.getElementById('lang-toggle-btn').click());
+  await page.waitForFunction(() => document.documentElement.lang === 'en');
+  await page.click('.hamburger');
+  assert.equal(await page.getAttribute('.hamburger', 'aria-expanded'), 'true');
+  await context.close();
+});
+
+test('Galerie: Sortierung nach Titel A–Z und Z–A ordnet die Karten um', async () => {
+  const { page, context, errors } = await open('/Bildergalerie.html');
+  const titles = () => page.$$eval('.gallery-item', els =>
+    els.filter(e => e.offsetParent !== null).map(e => (e.querySelector('img').title || e.querySelector('img').alt).trim()));
+  await page.selectOption('#gallery-sort-select', 'title-asc');
+  const asc = await titles();
+  assert.ok(asc.length > 5);
+  assert.deepEqual(asc, [...asc].sort((a, b) => a.localeCompare(b, 'de')));
+  await page.selectOption('#gallery-sort-select', 'title-desc');
+  const desc = await titles();
+  assert.deepEqual(desc, [...desc].sort((a, b) => b.localeCompare(a, 'de')));
+  await context.close();
+  assert.deepEqual(errors, []);
+});
+
+test('Galerie: Favorit merken zählt hoch, speichert die Werk-ID und filtert auf „Gemerkt“', async () => {
+  const { page, context, errors } = await open('/Bildergalerie.html');
+  await page.click('.gallery-item .fav-toggle-btn');
+  assert.equal(await page.textContent('#fav-count'), '1');
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('manufaktur_favorites')));
+  assert.equal(stored.length, 1);
+  assert.equal(typeof stored[0], 'string');
+  await page.click('[data-filter="favoriten"]');
+  const visible = await page.$$eval('.gallery-item', els => els.filter(e => e.offsetParent !== null).length);
+  assert.equal(visible, 1);
+  await context.close();
+  assert.deepEqual(errors, []);
+});
+
+test('Speicher: ungültige Favoriten in localStorage werden ignoriert', async () => {
+  const { page, context, errors } = await open('/Bildergalerie.html', {
+    storage: { manufaktur_favorites: '{"a":1}' }
+  });
+  assert.equal(await page.textContent('#fav-count'), '0');
+  await context.close();
+  assert.deepEqual(errors, []);
+});
+
+test('Verlauf: Zurück-Taste schließt die Lightbox und bleibt auf der Galerie', async () => {
+  const { page, context } = await open('/Bildergalerie.html');
+  await page.click('.gallery-item a');
+  await page.waitForSelector('#lightbox', { state: 'visible' });
+  await page.goBack();
+  await page.waitForSelector('#lightbox', { state: 'hidden' });
+  assert.ok(page.url().includes('Bildergalerie.html'));
+  await context.close();
+});
+
+test('Verlauf: Zurück-Taste nimmt den Galerie-Filter zurück', async () => {
+  const { page, context } = await open('/Bildergalerie.html');
+  await page.click('[data-filter="tiere"]');
+  assert.equal(await page.getAttribute('[data-filter="tiere"]', 'aria-pressed'), 'true');
+  await page.goBack();
+  await page.waitForFunction(() => document.querySelector('[data-filter="alle"]').getAttribute('aria-pressed') === 'true');
+  await context.close();
+});
+
+test('Flyer: Bild ist per Tastatur bedienbar, Escape schließt und gibt den Fokus zurück', async () => {
+  const { page, context, errors } = await open('/UeberMich.html');
+  await page.focus('.flyer-image');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('#flyerModal', { state: 'visible' });
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#flyerModal', { state: 'hidden' });
+  assert.equal(await page.evaluate(() => document.activeElement.classList.contains('flyer-image')), true);
+  await context.close();
+  assert.deepEqual(errors, []);
+});
+
+test('Konfigurator: ?kat= wählt nur das passende Motiv, unbekannte Werte keines', async () => {
+  const sel = async (kat) => {
+    const { page, context } = await open('/Auftrag.html?kat=' + kat);
+    const v = await page.$$eval('.option-card[aria-checked="true"], .option-card.selected, .option-card.active',
+      els => els.map(e => e.getAttribute('data-value')));
+    await context.close();
+    return v;
+  };
+  assert.deepEqual(await sel('tiere'), ['Tierportrait']);
+  assert.deepEqual(await sel('landschaften'), ['Landschaft']);
+  assert.deepEqual(await sel('pflanzen'), ['Stillleben']);
+  assert.deepEqual(await sel('xyz'), []);
+});
+
+test('404: Seite funktioniert auch unter einer verschachtelten URL (Styles laden, Skip-Link bleibt lokal)', async () => {
+  const { page, context, errors } = await open('/gibt/es/nicht.html');
+  assert.ok((await page.title()).includes('nicht gefunden'));
+  assert.equal(await page.evaluate(() => Array.from(document.styleSheets).some(sh => { try { return sh.cssRules.length > 50; } catch { return false; } })), true);
+  await page.focus('.skip-link');
+  await page.keyboard.press('Enter');
+  assert.ok(page.url().endsWith('/gibt/es/nicht.html'));
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'main-content');
+  await context.close();
+  assert.deepEqual(errors.filter(e => !/404/.test(e)), []);
+});
+
+test('CSP: die einzigen Inline-Skripte sind JSON-LD-Daten, nichts Ausführbares', () => {
+  const pages = fs.readdirSync(__dirname + '/..').filter(f => f.endsWith('.html'));
+  for (const f of pages) {
+    const html = fs.readFileSync(__dirname + '/../' + f, 'utf8');
+    for (const m of html.matchAll(/<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi)) {
+      const attrs = m[1] || '';
+      if (/\ssrc\s*=/.test(attrs) || !m[2].trim()) continue;
+      assert.match(attrs, /type="application\/ld\+json"/, `${f}: ausführbares Inline-Skript (CSP blockiert es)`);
+    }
+  }
+  assert.ok(!/'sha256-/.test(fs.readFileSync(__dirname + '/../vercel.json', 'utf8')));
+});
+
+test('SEO: Atelier und Künstlerin sind in allen JSON-LD-Blöcken dieselbe Entität (@id, ArtGallery)', () => {
+  const walk = (node, out) => {
+    if (Array.isArray(node)) node.forEach(n => walk(n, out));
+    else if (node && typeof node === 'object') {
+      const t = [].concat(node['@type'] || []);
+      if (t.includes('LocalBusiness')) out.push(['LocalBusiness-Rest', node]);
+      if (node.name === 'ManuFAKTUR Schenk' && !node['@id'] && node['@type'] !== 'WebSite') out.push(['ohne @id', node]);
+      Object.values(node).forEach(v => walk(v, out));
+    }
+  };
+  for (const f of fs.readdirSync(__dirname + '/..').filter(x => x.endsWith('.html'))) {
+    const html = fs.readFileSync(__dirname + '/../' + f, 'utf8');
+    for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      const problems = [];
+      walk(JSON.parse(m[1]), problems);
+      assert.deepEqual(problems.map(([k]) => f + ': ' + k), []);
+    }
+  }
+});
+
+test('i18n: auf Englisch bleiben Favoriten-Buttons, Flyer-Dialog und Alt-Texte nicht deutsch', async () => {
+  const check = async (path, selectors) => {
+    const { page, context } = await open(path, { storage: { manufaktur_lang: 'en' } });
+    await page.waitForFunction(() => document.documentElement.lang === 'en');
+    await page.waitForTimeout(400);
+    for (const [sel, attr] of selectors) {
+      const v = await page.$eval(sel, (el, a) => el.getAttribute(a), attr);
+      assert.ok(v && !/[äöüß]|Favoriten hinzu|Großansicht/.test(v), `${path} ${sel}[${attr}] ist noch deutsch: ${v}`);
+    }
+    await context.close();
+  };
+  await check('/Bildergalerie.html', [
+    ['.fav-toggle-btn', 'aria-label'], ['.fav-toggle-btn', 'title'],
+    ['#flyerModal', 'aria-label'], ['#modalImg', 'alt'], ['#wall-frame-container', 'title'], ['.flyer-image', 'alt']
+  ]);
+  await check('/UeberMich.html', [['.about-image img', 'alt'], ['#flyerModal', 'aria-label']]);
+  await check('/Kontakt.html', [['.flip-card-back img', 'alt']]);
 });

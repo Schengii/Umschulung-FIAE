@@ -122,7 +122,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <span style={{
               background: 'rgba(16, 185, 129, 0.15)',
-              color: '#10b981',
+              color: 'var(--accent-emerald)',
               padding: '0.35rem 0.75rem',
               borderRadius: '2rem',
               fontWeight: 600,
@@ -170,8 +170,8 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                   cursor: 'pointer',
                   fontWeight: 600,
                   fontSize: '0.9rem',
-                  background: isActive ? '#10b981' : 'rgba(255, 255, 255, 0.05)',
-                  color: isActive ? '#fff' : 'var(--text-muted, #94a3b8)',
+                  background: isActive ? 'var(--accent-emerald)' : 'rgba(255, 255, 255, 0.05)',
+                  color: isActive ? 'var(--text-on-accent)' : 'var(--text-muted, #94a3b8)',
                   transition: 'all 0.2s ease'
                 }}
               >
@@ -185,7 +185,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
 
       {/* TAB 1: SKONTO VS KREDIT */}
       {activeTab === 'kredit' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '1.5rem' }}>
           {/* Eingabe-Panel */}
           <div style={{
             background: 'var(--bg-card, #1e293b)',
@@ -284,7 +284,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                 color: 'var(--text-muted, #94a3b8)'
               }}>
                 <strong>IHK Formel für effektiven Jahreszins:</strong>
-                <div style={{ fontFamily: 'monospace', color: '#10b981', marginTop: '0.25rem' }}>
+                <div style={{ fontFamily: 'monospace', color: 'var(--accent-emerald)', marginTop: '0.25rem' }}>
                   p_eff = (Skontosatz × 360) / (Zahlungsziel - Skontofrist)
                 </div>
               </div>
@@ -309,7 +309,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.75rem', borderRadius: '0.5rem', borderLeft: '4px solid #10b981' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#10b981', textTransform: 'uppercase', fontWeight: 600 }}>Effektiver Skontozins</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)', textTransform: 'uppercase', fontWeight: 600 }}>Effektiver Skontozins</div>
                   <div style={{ fontSize: '1.5rem', fontWeight: 700, marginTop: '0.25rem' }}>
                     {kreditResult.effektiverLieferantenzins.toFixed(2)}% <span style={{ fontSize: '0.85rem', fontWeight: 400 }}>p.a.</span>
                   </div>
@@ -330,15 +330,15 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px solid var(--border-color, #334155)' }}>
                   <span>Erzielter Skontoabzug (+):</span>
-                  <strong style={{ color: '#10b981' }}>{kreditResult.skontoBetrag.toFixed(2)} €</strong>
+                  <strong style={{ color: 'var(--accent-emerald)' }}>{kreditResult.skontoBetrag.toFixed(2)} €</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px solid var(--border-color, #334155)' }}>
                   <span>Bankkreditzinsen für {kreditResult.kreditdauerTage} Tage (-):</span>
-                  <strong style={{ color: '#ef4444' }}>{kreditResult.bankkreditzinsen.toFixed(2)} €</strong>
+                  <strong style={{ color: 'var(--accent-rose)' }}>{kreditResult.bankkreditzinsen.toFixed(2)} €</strong>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderTop: '2px solid var(--border-color, #334155)', fontSize: '1rem' }}>
                   <span><strong>Finanzieller Netto-Vorteil:</strong></span>
-                  <strong style={{ color: kreditResult.zinsgewinn > 0 ? '#10b981' : '#ef4444', fontSize: '1.15rem' }}>
+                  <strong style={{ color: kreditResult.zinsgewinn > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)', fontSize: '1.15rem' }}>
                     {kreditResult.zinsgewinn > 0 ? '+' : ''}{kreditResult.zinsgewinn.toFixed(2)} €
                   </strong>
                 </div>
@@ -352,7 +352,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
               borderRadius: '0.75rem',
               border: `1px solid ${kreditResult.lohntSichBankkredit ? '#10b981' : '#ef4444'}`
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: kreditResult.lohntSichBankkredit ? '#10b981' : '#ef4444', marginBottom: '0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: kreditResult.lohntSichBankkredit ? 'var(--accent-emerald)' : 'var(--accent-rose)', marginBottom: '0.25rem' }}>
                 {kreditResult.lohntSichBankkredit ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
                 IHK-Musterentscheidung:
               </div>
@@ -377,7 +377,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
             Quantitativer Angebotsvergleich: Vollständiges Kalkulationsschema
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
             <AngebotKalkulation
               angebot={angebotA}
               ergebnis={resA}
@@ -406,7 +406,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
             gap: '1rem'
           }}>
             <div>
-              <strong>Quantitativer Gesamtsieger:</strong> <span style={{ color: '#10b981', fontWeight: 700 }}>{guenstigerName}</span>
+              <strong>Quantitativer Gesamtsieger:</strong> <span style={{ color: 'var(--accent-emerald)', fontWeight: 700 }}>{guenstigerName}</span>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-muted, #94a3b8)', marginTop: '0.2rem' }}>
                 Ersparnis gegenüber dem Mitbewerber: <strong>{preisDifferenz} €</strong>
               </div>
@@ -445,12 +445,13 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                 {qualKriterien.map((krit) => (
                   <tr key={krit.name} style={{ borderBottom: '1px solid var(--border-color, #334155)' }}>
                     <td style={{ padding: '0.75rem', fontWeight: 500 }}>{krit.name}</td>
-                    <td style={{ padding: '0.75rem', textAlign: 'center', color: '#10b981', fontWeight: 600 }}>
+                    <td style={{ padding: '0.75rem', textAlign: 'center', color: 'var(--accent-emerald)', fontWeight: 600 }}>
                       {krit.gewichtungProzent}%
                     </td>
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
                       <input
                         type="number"
+                        aria-label={`${krit.name}: Bewertung TechSource GmbH (1-10)`}
                         min="1"
                         max="10"
                         value={qualScores['TechSource GmbH']?.[krit.name] ?? 5}
@@ -467,6 +468,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
                       <input
                         type="number"
+                        aria-label={`${krit.name}: Bewertung ByteDirect AG (1-10)`}
                         min="1"
                         max="10"
                         value={qualScores['ByteDirect AG']?.[krit.name] ?? 5}
@@ -486,7 +488,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
             </table>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1rem' }}>
             {qualResult.rangliste.map((item) => (
               <div
                 key={item.anbieterName}
@@ -505,7 +507,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                   <strong style={{ fontSize: '1.1rem' }}>{item.anbieterName}</strong>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#10b981' }}>Nutzwert</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)' }}>Nutzwert</div>
                   <strong style={{ fontSize: '1.4rem' }}>{item.nutzwert.toFixed(2)}</strong>
                 </div>
               </div>
@@ -560,7 +562,7 @@ function AngebotKalkulation({ angebot, ergebnis, onChange, titelFarbe, istGuenst
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h3 style={{ margin: 0, fontSize: '1.1rem', color: titelFarbe }}>{angebot.anbieterName}</h3>
         {istGuenstigster && (
-          <span style={{ background: '#10b981', color: '#fff', fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', fontWeight: 700 }}>
+          <span style={{ background: 'var(--accent-emerald)', color: 'var(--text-on-accent)', fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', fontWeight: 700 }}>
             GÜNSTIGSTER
           </span>
         )}
@@ -571,7 +573,7 @@ function AngebotKalkulation({ angebot, ergebnis, onChange, titelFarbe, istGuenst
           <span>Listeneinkaufspreis:</span>
           <input type="number" value={angebot.listeneinkaufspreis} onChange={setFeld('listeneinkaufspreis')} style={zahlenfeld('100px')} />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#ef4444' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--accent-rose)' }}>
           <span>- Lieferantenrabatt:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <input type="number" value={angebot.rabattProzent} onChange={setFeld('rabattProzent')} style={zahlenfeld('45px')} />
@@ -582,7 +584,7 @@ function AngebotKalkulation({ angebot, ergebnis, onChange, titelFarbe, istGuenst
           <span>= Zieleinkaufspreis:</span>
           <span>{ergebnis.zieleinkaufspreis.toFixed(2)} €</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#ef4444' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--accent-rose)' }}>
           <span>- Lieferantenskonto:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <input type="number" value={angebot.skontoProzent} onChange={setFeld('skontoProzent')} style={zahlenfeld('45px')} />
@@ -593,7 +595,7 @@ function AngebotKalkulation({ angebot, ergebnis, onChange, titelFarbe, istGuenst
           <span>= Bareinkaufspreis:</span>
           <span>{ergebnis.bareinkaufspreis.toFixed(2)} €</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#10b981' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--accent-emerald)' }}>
           <span>+ Bezugskosten:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
             <span>+</span>
@@ -608,7 +610,7 @@ function AngebotKalkulation({ angebot, ergebnis, onChange, titelFarbe, istGuenst
           fontSize: '1.1rem',
           borderTop: '2px solid var(--border-color, #334155)',
           paddingTop: '0.5rem',
-          color: istGuenstigster ? '#10b981' : 'inherit'
+          color: istGuenstigster ? 'var(--accent-emerald)' : 'inherit'
         }}>
           <span>= Bezugspreis (Einstandspreis):</span>
           <span>{ergebnis.bezugspreis.toFixed(2)} €</span>
