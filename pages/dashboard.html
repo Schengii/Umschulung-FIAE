@@ -65,6 +65,22 @@
                     <h2 lang="en">Dashboard</h2>
                     <p lang="de">Willkommen im interaktiven Dashboard. Hier können Sie wichtige Kennzahlen und Projektstatistiken einsehen.</p>
                     <p lang="en">Welcome to the interactive dashboard. Here you can view key metrics and project statistics.</p>
+                    <!-- Optional personalisation (formerly the name gate on index.html) -->
+                    <p id="welcome-text" class="dashboard-welcome"></p>
+                    <form id="username-form" class="username-form">
+                        <label for="username-input">
+                            <span lang="de">Name (optional, bleibt nur in diesem Browser)</span>
+                            <span lang="en">Name (optional, stays in this browser only)</span>
+                        </label>
+                        <div class="username-form-row">
+                            <input type="text" id="username-input" class="form-control" maxlength="60" autocomplete="name" placeholder="z. B. Erika Muster" data-en-placeholder="e.g. Jane Doe">
+                            <button type="submit" class="btn-secondary">
+                                <span lang="de">Speichern</span>
+                                <span lang="en">Save</span>
+                            </button>
+                        </div>
+                        <p id="username-status" class="username-status" role="status" aria-live="polite"></p>
+                    </form>
                     <!-- GitHub Commit Grid Widget -->
                     <div class="mt-2rem">
                         <h3>

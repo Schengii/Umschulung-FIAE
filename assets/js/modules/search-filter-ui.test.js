@@ -95,13 +95,6 @@ describe('search and filter: filtering', () => {
         expect(visible()).toEqual(['c1', 'c2', 'c3']);
         expect(noResults().style.display).toBe('none');
     });
-
-    it('leaves the cards of the welcome page alone', async () => {
-        document.body.insertAdjacentHTML('beforeend', '<button id="mySubmit">Los</button>');
-        await initSearchAndFilter();
-        search('gibt-es-nicht');
-        expect(visible()).toEqual(['c1', 'c2', 'c3']);
-    });
 });
 
 describe('age calculator', () => {

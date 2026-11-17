@@ -83,12 +83,9 @@ function applyFilters() {
     if (!APP.SEARCHABLE_PAGES.includes(currentPage)) return;
 
     const cards = document.querySelectorAll('.card, .card2');
-    const isWelcomePage = !!document.getElementById('mySubmit');
     let visibleCount = 0;
 
     cards.forEach((card) => {
-        if (isWelcomePage) return;
-
         const shouldShow = matchesCardFilter(card.classList, card.textContent, currentCategory, currentSearchQuery);
         card.style.display = shouldShow ? '' : 'none';
         if (shouldShow) visibleCount++;

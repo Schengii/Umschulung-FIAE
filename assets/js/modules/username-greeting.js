@@ -1,13 +1,11 @@
 /**
- * Username & Recruiter Greeting Module — Welcome page and dashboard personalization
+ * Username & Recruiter Greeting Module — optional personalisation on the dashboard and the
+ * recruiter greeting on home.html.
  * Supports session-based recruiter greetings via URL query parameters (?c=Company or ?n=Name).
  */
 import { escapeHtml } from './html-utils.js';
 
 export function initUsernameGreeting() {
-    const mySubmit = document.getElementById('mySubmit');
-    const myText = /** @type {HTMLInputElement} */ (document.getElementById('myText'));
-
     // Parse URL parameters and store in sessionStorage for persistence during the session
     const urlParams = new URLSearchParams(window.location.search);
     const companyParam = urlParams.get('c') || urlParams.get('company');
@@ -26,68 +24,39 @@ export function initUsernameGreeting() {
         }
     }
 
-    if (mySubmit && myText) {
-        const storedName = AppStorage.getItem(STORAGE_KEYS.USERNAME);
-        if (storedName) {
-            myText.value = storedName;
-            updateWelcomeH1(storedName);
-        }
-
-        mySubmit.addEventListener('click', () => {
-            const username = myText.value.trim();
-            if (username) {
-                AppStorage.setItem(STORAGE_KEYS.USERNAME, username);
-                updateWelcomeH1(username);
-
-                const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
-                mySubmit.style.backgroundColor = '#10b981';
-                mySubmit.innerHTML = `
-                    <span lang="de">Gespeichert!</span>
-                    <span lang="en">Saved!</span>
-                `;
-                document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-
-                setTimeout(() => {
-                    mySubmit.style.backgroundColor = '';
-                    mySubmit.innerHTML = `
-                        <span lang="de">Eintreten</span>
-                        <span lang="en">Enter</span>
-                    `;
-                    document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
-                    const path = window.location.pathname;
-                    const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
-                    window.location.href = isPagesFolder ? 'home.html' : 'pages/home.html';
-                }, 800);
-            } else {
-                myText.focus();
-            }
-        });
-
-        myText.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') mySubmit.click();
-        });
-
-        document.addEventListener('langchange', () => {
-            updateWelcomeH1(myText.value.trim());
-        });
-    }
-
+    initUsernameForm();
     updateDashboardGreeting();
     document.addEventListener('langchange', updateDashboardGreeting);
 }
 
-/** @param {string} username */
-function updateWelcomeH1(username) {
-    const myH1 = document.getElementById('myH1');
-    if (!myH1) return;
-    const lang = document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
-    myH1.textContent = username
-        ? lang === 'de'
-            ? `Willkommen zurück, ${username}!`
-            : `Welcome back, ${username}!`
-        : lang === 'de'
-          ? 'Willkommen'
-          : 'Welcome';
+/**
+ * Optional name field on the dashboard. Saving an empty field forgets the stored name.
+ * The visitor stays on the page; the greeting above the form updates in place.
+ */
+function initUsernameForm() {
+    const form = /** @type {HTMLFormElement | null} */ (document.getElementById('username-form'));
+    const input = /** @type {HTMLInputElement | null} */ (document.getElementById('username-input'));
+    const status = document.getElementById('username-status');
+    if (!form || !input) return;
+
+    input.value = AppStorage.getItem(STORAGE_KEYS.USERNAME, '') || '';
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = input.value.trim();
+        input.value = username;
+        if (username) {
+            AppStorage.setItem(STORAGE_KEYS.USERNAME, username);
+        } else {
+            AppStorage.removeItem(STORAGE_KEYS.USERNAME);
+        }
+        if (status) {
+            status.innerHTML = username
+                ? '<span lang="de">Gespeichert.</span><span lang="en">Saved.</span>'
+                : '<span lang="de">Name entfernt.</span><span lang="en">Name removed.</span>';
+        }
+        updateDashboardGreeting();
+    });
 }
 
 function updateDashboardGreeting() {
@@ -194,8 +163,8 @@ function updateDashboardGreeting() {
             const username = AppStorage.getItem(STORAGE_KEYS.USERNAME, '');
             const greeting =
                 lang === 'de'
-                    ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Umschulungs-Portfolio.`
-                    : `Hello${username ? `, ${username}` : ''}! Welcome to my retraining portfolio.`;
+                    ? `Hallo${username ? `, ${username}` : ''}! Willkommen auf meinem Portfolio.`
+                    : `Hello${username ? `, ${username}` : ''}! Welcome to my portfolio.`;
             welcomeText.textContent = greeting;
         }
     }

@@ -1,12 +1,15 @@
 // @vitest-environment happy-dom
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { installPageGlobals, removePageGlobals, resetDocument } from '../../../scripts/test-support/dom-helpers.js';
 import { initUsernameGreeting } from './username-greeting.js';
 
-const WELCOME_PAGE = `
-    <h1 id="myH1"></h1>
-    <input id="myText">
-    <button id="mySubmit"><span lang="de">Eintreten</span><span lang="en">Enter</span></button>`;
+const FORM_PAGE = `
+    <p id="welcome-text"></p>
+    <form id="username-form">
+        <input id="username-input">
+        <button type="submit">Speichern</button>
+        <p id="username-status" role="status"></p>
+    </form>`;
 
 const DASHBOARD_PAGE = `
     <p id="welcome-text"></p>
@@ -33,7 +36,6 @@ beforeEach(() => {
 });
 afterEach(() => {
     removePageGlobals();
-    vi.useRealTimers();
     document.documentElement.removeAttribute('lang');
 });
 
@@ -110,18 +112,18 @@ describe('username greeting: dashboard without a recruiter link', () => {
         storage.setItem('username', 'Erika');
         resetDocument(DASHBOARD_PAGE);
         initUsernameGreeting();
-        expect($('#welcome-text').textContent).toBe('Hallo, Erika! Willkommen auf meinem Umschulungs-Portfolio.');
+        expect($('#welcome-text').textContent).toBe('Hallo, Erika! Willkommen auf meinem Portfolio.');
         expect($('#recruiter-greeting-banner').style.display).toBe('none');
     });
 
     it('greets anonymously without a name and re-renders on a language change', () => {
         resetDocument(DASHBOARD_PAGE);
         initUsernameGreeting();
-        expect($('#welcome-text').textContent).toBe('Hallo! Willkommen auf meinem Umschulungs-Portfolio.');
+        expect($('#welcome-text').textContent).toBe('Hallo! Willkommen auf meinem Portfolio.');
 
         document.documentElement.setAttribute('lang', 'en');
         document.dispatchEvent(new CustomEvent('langchange'));
-        expect($('#welcome-text').textContent).toBe('Hello! Welcome to my retraining portfolio.');
+        expect($('#welcome-text').textContent).toBe('Hello! Welcome to my portfolio.');
     });
 
     it('never renders the stored name as markup', () => {
@@ -132,55 +134,43 @@ describe('username greeting: dashboard without a recruiter link', () => {
     });
 });
 
-describe('username greeting: welcome page', () => {
-    it('prefills the stored name and shows the personal heading', () => {
+describe('username greeting: personalisation form on the dashboard', () => {
+    const submit = () => $('#username-form').dispatchEvent(new Event('submit', { cancelable: true }));
+
+    it('prefills the stored name', () => {
         storage.setItem('username', 'Erika');
-        resetDocument(WELCOME_PAGE);
+        resetDocument(FORM_PAGE);
         initUsernameGreeting();
-        expect($('#myText').value).toBe('Erika');
-        expect($('#myH1').textContent).toBe('Willkommen zurück, Erika!');
+        expect($('#username-input').value).toBe('Erika');
     });
 
-    it('shows the plain heading for a new visitor and in English', () => {
-        resetDocument(WELCOME_PAGE);
-        document.documentElement.setAttribute('lang', 'en');
+    it('stores the trimmed name, confirms it and updates the greeting in place', () => {
+        resetDocument(FORM_PAGE);
         initUsernameGreeting();
-        document.dispatchEvent(new CustomEvent('langchange'));
-        expect($('#myH1').textContent).toBe('Welcome');
-    });
-
-    it('stores the name, confirms it and moves on to the home page', () => {
-        vi.useFakeTimers();
-        resetDocument(WELCOME_PAGE);
-        initUsernameGreeting();
-        $('#myText').value = '  Erika  ';
-        $('#mySubmit').click();
+        $('#username-input').value = '  Erika  ';
+        submit();
 
         expect(storage.getItem('username')).toBe('Erika');
-        expect($('#myH1').textContent).toBe('Willkommen zurück, Erika!');
-        expect($('#mySubmit').textContent).toContain('Gespeichert!');
-        expect($('#mySubmit').style.backgroundColor).not.toBe('');
-
-        vi.advanceTimersByTime(800);
-        expect($('#mySubmit').textContent).toContain('Eintreten');
-        expect($('#mySubmit').style.backgroundColor).toBe('');
+        expect($('#username-input').value).toBe('Erika');
+        expect($('#username-status').textContent).toContain('Gespeichert.');
+        expect($('#welcome-text').textContent).toBe('Hallo, Erika! Willkommen auf meinem Portfolio.');
+        expect(window.location.pathname).toBe('/pages/home.html');
     });
 
-    it('keeps focus in the field instead of saving an empty name', () => {
-        resetDocument(WELCOME_PAGE);
+    it('forgets the stored name when the field is saved empty', () => {
+        storage.setItem('username', 'Erika');
+        resetDocument(FORM_PAGE);
         initUsernameGreeting();
-        $('#myText').value = '   ';
-        $('#mySubmit').click();
+        $('#username-input').value = '   ';
+        submit();
+
         expect(storage.getItem('username')).toBeNull();
-        expect(document.activeElement).toBe($('#myText'));
+        expect($('#username-status').textContent).toContain('Name entfernt.');
+        expect($('#welcome-text').textContent).toBe('Hallo! Willkommen auf meinem Portfolio.');
     });
 
-    it('submits with the Enter key', () => {
-        vi.useFakeTimers();
-        resetDocument(WELCOME_PAGE);
-        initUsernameGreeting();
-        $('#myText').value = 'Erika';
-        $('#myText').dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-        expect(storage.getItem('username')).toBe('Erika');
+    it('does nothing without the form', () => {
+        resetDocument(DASHBOARD_PAGE);
+        expect(() => initUsernameGreeting()).not.toThrow();
     });
 });

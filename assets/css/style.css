@@ -4715,33 +4715,6 @@ html nav {
     align-items: center;
 }
 
-.welcome-theme-toggle {
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-md);
-    font-size: 0.85rem;
-    min-width: 75px;
-    cursor: pointer;
-}
-
-button.welcome-theme-toggle {
-    width: 32px;
-    height: 32px;
-    padding: 0.25rem;
-    min-width: unset;
-}
-
-.welcome-form-group {
-    margin-top: 1.5rem;
-}
-
-.welcome-skip-desc {
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
-}
-
 /* Recruiter Application Status Tracker (Stepper) */
 .recruiter-tracker-card {
     display: none; /* Controlled dynamically by JS username-greeting.js */
@@ -5105,35 +5078,6 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
     flex-shrink: 0;
 }
 
-/* Portal background glow effects */
-.portal-glow-1, .portal-glow-2 {
-    position: fixed;
-    width: min(350px, 70vw);
-    height: min(350px, 70vw);
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.22;
-    pointer-events: none;
-    z-index: -1;
-    overflow: hidden;
-    animation: portalPulse 8s infinite alternate;
-}
-.portal-glow-1 {
-    background: var(--primary);
-    top: 15%;
-    left: 10%;
-}
-.portal-glow-2 {
-    background: var(--accent);
-    bottom: 15%;
-    right: 10%;
-    animation-delay: 4s;
-}
-
-@keyframes portalPulse {
-    0% { transform: scale(1) translate(0, 0); opacity: 0.12; }
-    100% { transform: scale(1.3) translate(20px, -20px); opacity: 0.22; }
-}
 .carousel-track {
     display: flex;
     height: 100%;
@@ -5462,34 +5406,6 @@ textarea:focus-visible,
 .stagger-delay-5 { transition-delay: 0.40s !important; }
 .stagger-delay-6 { transition-delay: 0.48s !important; }
 
-/* 7. Ambient Background Glow Morphing */
-.portal-glow-1,
-.portal-glow-2 {
-    animation: ambientMorph 14s ease-in-out infinite alternate;
-}
-.portal-glow-2 {
-    animation-delay: -7s;
-    animation-duration: 18s;
-}
-@keyframes ambientMorph {
-    0% {
-        transform: scale(1) translate(0px, 0px) rotate(0deg);
-        opacity: 0.35;
-    }
-    33% {
-        transform: scale(1.25) translate(40px, -30px) rotate(120deg);
-        opacity: 0.55;
-    }
-    66% {
-        transform: scale(0.9) translate(-30px, 40px) rotate(240deg);
-        opacity: 0.4;
-    }
-    100% {
-        transform: scale(1.15) translate(20px, -20px) rotate(360deg);
-        opacity: 0.5;
-    }
-}
-
 /* 8. Interactive Highlights / Key Points Grid on Home */
 .home-points-grid {
     display: grid;
@@ -5552,8 +5468,6 @@ textarea:focus-visible,
         transform: none !important;
     }
     .hero-badge,
-    .portal-glow-1,
-    .portal-glow-2,
     .live-dot-pulse::after {
         animation: none !important;
     }

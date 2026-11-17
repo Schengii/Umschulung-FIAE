@@ -465,3 +465,37 @@
 #achievements-progress-bar {
     width: 0%;
 }
+
+/* Optional personalisation (username-greeting.js) */
+.dashboard-welcome:empty {
+    display: none;
+}
+
+.username-form {
+    margin-top: 1rem;
+}
+
+.username-form label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.username-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.username-form-row .form-control {
+    flex: 1 1 14rem;
+    min-width: 0;
+}
+
+.username-status {
+    min-height: 1.25rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}

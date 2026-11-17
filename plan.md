@@ -57,7 +57,7 @@ Vier PRs sind offen und blockieren zum Teil die Punkte weiter unten.
 
 Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stärksten.
 
-- [ ] **1.1 Startseite ohne Namens-Schranke.** (M)
+- [x] **1.1 Startseite ohne Namens-Schranke.** (M) Erledigt 2026-11-17 (Branch `feat/landing-und-dashboard-daten`). Nebenbei gefunden und behoben: Die Recruiter-Begrüßung auf `home.html` war seit dem Lazy-Loading tot. Offen: QR-Links aus `qr-generator.js` zeigen auf `portfolio.html`/`lebenslauf.html`, dort lädt `username-greeting.js` nicht, die Parameter `?c=`/`?n=` werden also erst wirksam, wenn der Besucher selbst `home.html` öffnet.
   `index.html` zeigt unter der Hauptdomain nur ein Formular „Bitte gib deinen Namen ein“. Suchmaschinen und Link-Vorschauen bekommen damit eine fast leere Seite, Besucher brauchen einen Klick mehr.
   Vorschlag: `index.html` wird die eigentliche Landingpage (Hero, drei stärkste Projekte, Kontakt), die Namenseingabe wandert als optionale Personalisierung ins Dashboard oder in den Footer.
   Betroffen: `index.html`, `pages/home.html`, `username-greeting.js`, `landing_page.spec.js`, `manifest.json` (`start_url`), `sitemap.xml`, `lighthouserc.json`.

@@ -1,6 +1,6 @@
 /* Rules that only apply on index.html (landing page). The hero and the point cards come from
    modules/hero_showcase.css and home.css, which index.html shares with pages/home.html
-   (ADR 0014, addendum 2026-11-14). */
+   (ADR 0014, addendum 2026-11-17). */
 
 .landing-project {
     display: flex;
