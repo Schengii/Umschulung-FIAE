@@ -174,28 +174,30 @@ function renderNav(currentPage) {
     const pagePrefix = isPagesFolder ? '' : 'pages/';
     const indexPath = isPagesFolder ? '../index.html' : 'index.html';
 
-    // Determine active navigation group
-    const ausbildungPages = [
+    // Pages of each navigation group (marks the group as active)
+    const profilPages = [
+        'ueber-mich.html',
+        'lebenslauf.html',
+        'portfolio.html',
+        'projekt-detail.html',
+        'architecture.html',
+    ];
+    const umschulungPages = [
         'ausbildungsablauf.html',
         'berufsfoerderungswerk.html',
         'kostentraeger.html',
         'praktikumsbetrieb.html',
+        'links.html',
     ];
-    const ueberMichPages = ['ueber-mich.html', 'lebenslauf.html'];
-    const weiteresPages = [
-        'quiz.html',
-        'snake.html',
-        'games.html',
-        'memory.html',
-        'flashcards.html',
-        'interview-trainer.html',
-        'playground.html',
-        'architecture.html',
-        'dashboard.html',
-        'git-simulator.html',
+    const lernenPages = [
         'ihk-cockpit.html',
-        'challenge-lab.html',
+        'flashcards.html',
+        'quiz.html',
+        'interview-trainer.html',
+        'git-simulator.html',
+        'dashboard.html',
     ];
+    const spielwiesePages = ['games.html', 'snake.html', 'memory.html', 'playground.html', 'challenge-lab.html'];
 
     /** @param {string | string[]} pages */
     const active = (pages) => {
@@ -213,24 +215,21 @@ function renderNav(currentPage) {
                 <li class="nav-item${active('home.html')}">
                     <a href="${pagePrefix}home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 </li>
-                <li class="nav-item${active(ueberMichPages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-user" aria-hidden="true"></i> <span lang="de">Über mich</span><span lang="en">About Me</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                <li class="nav-item${active(profilPages)}">
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> <span lang="de">Profil</span><span lang="en">Profile</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-id-card" aria-hidden="true"></i> <span lang="de">Profil &amp; Werdegang</span><span lang="en">Profile &amp; Career</span></li>
                         <li role="none"><a href="${pagePrefix}ueber-mich.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> <span lang="de">Steckbrief &amp; Über mich</span><span lang="en">Profile &amp; About Me</span></a></li>
                         <li role="none"><a href="${pagePrefix}lebenslauf.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span lang="de">Interaktiver Lebenslauf</span><span lang="en">Interactive CV / Resume</span></a></li>
+                        <li role="none"><a href="${pagePrefix}portfolio.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
+                        <li role="none"><a href="${pagePrefix}architecture.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> <span lang="de">Architektur &amp; C4</span><span lang="en">Architecture &amp; C4</span></a></li>
                     </ul>
                 </li>
-                <li class="nav-item${active(ausbildungPages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Ausbildung</span><span lang="en">Education</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                <li class="nav-item${active(umschulungPages)}">
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Umschulung</span><span lang="en">Retraining</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-school" aria-hidden="true"></i> <span lang="de">Stationen &amp; Ablauf</span><span lang="en">Stations &amp; Process</span></li>
                         <li role="none"><a href="${pagePrefix}ausbildungsablauf.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-timeline" aria-hidden="true"></i> <span lang="de">Ablauf Ausbildung</span><span lang="en">Training Process</span></a></li>
                         <li role="none"><a href="${pagePrefix}berufsfoerderungswerk.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-building-columns" aria-hidden="true"></i> <span lang="de">BFW Dortmund</span><span lang="en">BFW Dortmund Center</span></a></li>
                         <li role="none"><a href="${pagePrefix}praktikumsbetrieb.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-building-user" aria-hidden="true"></i> <span lang="de">Praktikumsbetrieb (DFG Bonn)</span><span lang="en">Internship (DFG Bonn)</span></a></li>
-
-                        <li class="dropdown-divider" role="separator"></li>
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i> <span lang="de">Kostenträger &amp; Träger</span><span lang="en">Sponsors &amp; Institutions</span></li>
                         <li role="none"><a href="${pagePrefix}kostentraeger.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-money-check-dollar" aria-hidden="true"></i> <span lang="de">Kostenträger Übersicht</span><span lang="en">Sponsors Overview</span></a></li>
                         <li class="dropdown-item" role="none">
                             <a href="${pagePrefix}kostentraeger.html" class="dropdown-link" aria-haspopup="true" aria-expanded="false" role="menuitem"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> <span lang="de">Träger-Portale</span><span lang="en">Sponsor Portals</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
@@ -240,52 +239,41 @@ function renderNav(currentPage) {
                                 <li role="none"><a href="https://www.arbeitsagentur.de/menschen-mit-behinderungen/berufliche-rehabilitation" target="_blank" rel="noopener" class="dropdown-link" role="menuitem"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> <span lang="de">Agentur für Arbeit</span><span lang="en">Employment Agency</span></a></li>
                             </ul>
                         </li>
+                        <li role="none"><a href="${pagePrefix}links.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-external-link" aria-hidden="true"></i> <span lang="de">Quellen &amp; Links</span><span lang="en">Sources &amp; Links</span></a></li>
                     </ul>
                 </li>
-                <li class="nav-item${active('portfolio.html')}">
-                    <a href="${pagePrefix}portfolio.html" class="nav-link"><i class="fa fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a>
-                </li>
-                <li class="nav-item${active(['impressum.html', 'datenschutz.html'])}">
-                    <a href="${pagePrefix}impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Impressum</span><span lang="en">Contact</span></a>
-                </li>
-                <li class="nav-item${active('news.html')}">
-                    <a href="${pagePrefix}news.html" class="nav-link"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> News</a>
-                </li>
-                <li class="nav-item${active('links.html')}">
-                    <a href="${pagePrefix}links.html" class="nav-link"><i class="fa fa-external-link" aria-hidden="true"></i> Links</a>
-                </li>
-                <li class="nav-item${active(weiteresPages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><span lang="de">Weiteres</span><span lang="en">More</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                <li class="nav-item${active(lernenPages)}">
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-graduation-cap" aria-hidden="true"></i> <span lang="de">Lernen</span><span lang="en">Learning</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span lang="de">IHK &amp; Abschluss</span><span lang="en">IHK &amp; Exam</span></li>
-                        <li role="none"><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link" role="menuitem"><span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit (80h)</span></a></li>
-                        <li role="none"><a href="${pagePrefix}flashcards.html" class="dropdown-link" role="menuitem"><span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
-                        <li role="none"><a href="${pagePrefix}quiz.html" class="dropdown-link" role="menuitem"><span lang="de">IHK Prüfungs-Quiz</span><span lang="en">IHK Exam Quiz</span></a></li>
-
-                        <li class="dropdown-divider" role="separator"></li>
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-code" aria-hidden="true"></i> <span lang="de">Deep Tech &amp; Sandbox</span><span lang="en">Deep Tech &amp; Sandbox</span></li>
-                        <li role="none"><a href="${pagePrefix}architecture.html" class="dropdown-link" role="menuitem"><span lang="de">Architektur &amp; C4</span><span lang="en">Architecture &amp; C4</span></a></li>
-                        <li role="none"><a href="${pagePrefix}playground.html" class="dropdown-link" role="menuitem"><span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
-                        <li role="none"><a href="${pagePrefix}challenge-lab.html" class="dropdown-link" role="menuitem"><span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
-                        <li role="none"><a href="${pagePrefix}git-simulator.html" class="dropdown-link" role="menuitem"><span lang="de">Git Simulator (CRT)</span><span lang="en">Git Simulator (CRT)</span></a></li>
-
-                        <li class="dropdown-divider" role="separator"></li>
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Karriere-Tools</span><span lang="en">Career Tools</span></li>
-                        <li role="none"><a href="${pagePrefix}dashboard.html" class="dropdown-link" role="menuitem"><span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
-                        <li role="none"><a href="${pagePrefix}interview-trainer.html" class="dropdown-link" role="menuitem"><span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
-
-                        <li class="dropdown-divider" role="separator"></li>
-                        <li class="dropdown-header" role="presentation"><i class="fa-solid fa-dice" aria-hidden="true"></i> <span lang="de">Spielerei (zum Ausprobieren)</span><span lang="en">Just for fun (try it out)</span></li>
+                        <li role="none"><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit (80h)</span></a></li>
+                        <li role="none"><a href="${pagePrefix}flashcards.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-clone" aria-hidden="true"></i> <span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
+                        <li role="none"><a href="${pagePrefix}quiz.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span lang="de">IHK Prüfungs-Quiz</span><span lang="en">IHK Exam Quiz</span></a></li>
+                        <li role="none"><a href="${pagePrefix}interview-trainer.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-comments" aria-hidden="true"></i> <span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
+                        <li role="none"><a href="${pagePrefix}git-simulator.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> <span lang="de">Git Simulator (CRT)</span><span lang="en">Git Simulator (CRT)</span></a></li>
+                        <li role="none"><a href="${pagePrefix}dashboard.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item${active(spielwiesePages)}">
+                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-dice" aria-hidden="true"></i> <span lang="de">Spielwiese</span><span lang="en">Playground</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-item" role="none">
-                            <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                            <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-dice" aria-hidden="true"></i> <span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
                             <ul class="sub-dropdown-menu" role="menu">
                                 <li role="none"><a href="${pagePrefix}snake.html" class="dropdown-link" role="menuitem">Snake JS</a></li>
                                 <li role="none"><a href="${pagePrefix}memory.html" class="dropdown-link" role="menuitem">Memory JS</a></li>
                                 <li role="none"><a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Alle Games</span><span lang="en">All Games</span></a></li>
                             </ul>
                         </li>
+                        <li role="none"><a href="${pagePrefix}playground.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code-fork" aria-hidden="true"></i> <span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
+                        <li role="none"><a href="${pagePrefix}challenge-lab.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> <span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
                         <li role="none"><a href="${indexPath}" class="dropdown-link" role="menuitem"><span lang="de">Startseite (Terminal)</span><span lang="en">Welcome (Terminal)</span></a></li>
                     </ul>
+                </li>
+                <li class="nav-item${active('news.html')}">
+                    <a href="${pagePrefix}news.html" class="nav-link"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> News</a>
+                </li>
+                <li class="nav-item${active(['impressum.html', 'datenschutz.html'])}">
+                    <a href="${pagePrefix}impressum.html" class="nav-link"><i class="fa fa-phone" aria-hidden="true"></i> <span lang="de">Kontakt</span><span lang="en">Contact</span></a>
                 </li>
             </ul>
 
