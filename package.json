@@ -45,6 +45,7 @@
     "build-search-index": "node scripts/build_search_index.js",
     "check-search-index": "node scripts/build_search_index.js --check",
     "generate-site-stats": "node scripts/generate_site_stats.js",
+    "generate-cv-pdf": "node scripts/generate_cv_pdf.js",
     "sync-structured-data": "node scripts/sync_structured_data.js",
     "check-structured-data": "node scripts/sync_structured_data.js --check",
     "check-site-stats": "node scripts/generate_site_stats.js --check",

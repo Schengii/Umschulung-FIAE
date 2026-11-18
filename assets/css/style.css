@@ -4601,40 +4601,6 @@ html nav {
     color: #555;
 }
 
-/* Printing styles */
-@media print {
-    body > * {
-        display: none !important;
-    }
-    #cert-modal {
-        display: block !important;
-        position: absolute !important;
-        inset: 0 !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    #cert-modal .modal-content {
-        max-width: 100% !important;
-        max-height: 100% !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        border: none !important;
-        background: transparent !important;
-    }
-    #cert-modal .modal-close,
-    #cert-modal .modal-actions {
-        display: none !important;
-    }
-    .ihk-certificate-container {
-        border: 10px double #000 !important;
-        background: #fff !important;
-        margin: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        box-shadow: none !important;
-    }
-}
-
 .qr-inputs-panel .form-control {
     width: 100%;
     padding: 0.75rem;

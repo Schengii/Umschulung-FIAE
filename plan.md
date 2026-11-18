@@ -114,7 +114,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
   `home.html` hat 711 Zeilen und rund 15 Abschnitte, darunter „Was ist ein Fachinformatiker?“ und BFW-Informationen. Für Recruiter zählen Profil, Projekte, Skills, Kontakt. Die Erklärtexte zur Umschulung auf ihre eigenen Seiten verschieben und nur verlinken.
 - [ ] **3.4 Navigation gruppieren.** (M)
   Die Navigation führt 23 Ziele. Vorschlag: „Profil“ (Über mich, Lebenslauf, Projekte), „Umschulung“ (Ablauf, BFW, Kostenträger, Praktikum), „Lernen“ (Kartei, Simulator, Cockpit, Trainer, Git), „Spielwiese“ (Spiele, Playground, Challenge Lab). Tastaturbedienung und `aria-expanded` mit testen.
-- [ ] **3.5 Lebenslauf aus einer Quelle.** (M)
+- [x] **3.5 Lebenslauf aus einer Quelle.** (M) Skript und Stand-Datum fertig (2026-11-18); `assets/pdf/Lebenslauf.pdf` ist bewusst noch die alte, von Hand gepflegte Datei. **Offen beim Eigentümer:** erzeugte PDF ansehen (`npm run generate-cv-pdf -- --out <Pfad>`), dann ohne `--out` ausführen und committen.
   `Lebenslauf.pdf` und `lebenslauf.html` werden getrennt gepflegt. Die PDF aus der HTML-Seite erzeugen (Playwright `page.pdf()` mit `print.css`) als `npm run generate-cv-pdf`, damit beide Stände gleich sind. Stand-Datum auf der Seite anzeigen.
 
 ---

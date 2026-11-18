@@ -739,3 +739,10 @@
         break-inside: avoid;
     }
 }
+
+.cv-stand {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: right;
+}
