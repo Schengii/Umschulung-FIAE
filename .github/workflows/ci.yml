@@ -71,6 +71,9 @@ jobs:
       - name: Check site stats schema
         run: npm run check-site-stats
 
+      - name: Verify Generated JSON-LD Blocks
+        run: npm run check-structured-data
+
       - name: Verify Lighthouse Audits Every Sitemap Page
         run: npm run check-lighthouse-urls
 

@@ -45,11 +45,13 @@
     "build-search-index": "node scripts/build_search_index.js",
     "check-search-index": "node scripts/build_search_index.js --check",
     "generate-site-stats": "node scripts/generate_site_stats.js",
+    "sync-structured-data": "node scripts/sync_structured_data.js",
+    "check-structured-data": "node scripts/sync_structured_data.js --check",
     "check-site-stats": "node scripts/generate_site_stats.js --check",
     "import-flashcards": "node scripts/import_vault_flashcards.js",
     "check-flashcards": "node scripts/import_vault_flashcards.js --check",
     "regen": "npm run subset-icons && npm run build-search-index && npm run generate-sw-assets",
-    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-site-stats && npm run check-flashcards && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-site-stats && npm run check-structured-data && npm run check-flashcards && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

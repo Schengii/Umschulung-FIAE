@@ -95,6 +95,13 @@ for (const file of files) {
         const h1Count = (markup.match(/<h1[\s>]/gi) || []).length;
         if (h1Count !== 1) problems.push(`expected exactly one <h1> in the page source, found ${h1Count}`);
     }
+    // Link previews: og:image must be a PNG/JPEG (not every platform renders WebP) and exist in the repo.
+    const ogImage = html.match(/<meta property="og:image" content="([^"]*)"/i);
+    if (ogImage) {
+        const imagePath = ogImage[1].replace(/^https?:\/\/[^/]+\//, '');
+        if (!/\.(png|jpe?g)$/i.test(imagePath)) problems.push(`og:image must be PNG or JPEG (${ogImage[1]})`);
+        else if (!fs.existsSync(path.join(root, imagePath))) problems.push(`og:image file is missing (${imagePath})`);
+    }
     if (!STYLE_EXCEPTIONS.has(path.basename(file))) {
         if (/<style[\s>]/i.test(html)) problems.push('inline <style> element (move the rules into assets/css)');
         const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/i);

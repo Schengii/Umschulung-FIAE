@@ -97,9 +97,9 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
   Die Sprache wird nur clientseitig umgeschaltet, es gibt keine eigene URL und kein `hreflang`. Kleinster Schritt: `?lang=en` in `components.js` vor dem ersten Paint auswerten, `<link rel="alternate" hreflang>` auf allen Seiten und in der Sitemap, `check-head` prüft das. Der Sprachschalter setzt den Parameter.
 - [ ] **2.4 Saubere URLs.** (M)
   Kanonisch ist heute `https://www.max-schenk.tech/index.html`. `cleanUrls` und eine Weiterleitung von `/index.html` auf `/` in `vercel.json` prüfen, Canonical und Sitemap anpassen. Vorher klären, ob der Service Worker (Abgleich über `.html`) und die relativen Pfade damit zurechtkommen. Ergebnis als Nachtrag in ADR 0008.
-- [ ] **2.5 Mehr strukturierte Daten.** (S)
+- [x] **2.5 Mehr strukturierte Daten.** (S) Erledigt 2026-11-18: `FAQPage` nur auf `ausbildungsablauf` (`kostentraeger` hat kein FAQ), `ItemList` auf `portfolio`, `WebSite` gab es auf `index.html` schon. Beide Blöcke werden von `sync_structured_data.js` erzeugt und geprüft.
   JSON-LD gibt es auf 6 Seiten. Ergänzen: `FAQPage` für die FAQ-Akkordeons (`ausbildungsablauf`, `kostentraeger`), `ItemList` der Projekte auf `portfolio.html`, `WebSite` auf der Startseite. Danach `npm run check-csp:fix`.
-- [ ] **2.6 Vorschaubilder vereinheitlichen.** (S)
+- [x] **2.6 Vorschaubilder vereinheitlichen.** (S) Erledigt 2026-11-18, vereinfacht: alle Seiten nutzen `og-cover.png` (1200 × 630); Bilder je Seitentitel erzeugen bleibt offen. `check-head` prüft Format und Existenz.
   Drei Seiten nutzen WebP als `og:image`, das zeigen nicht alle Plattformen an. Überall PNG oder JPG in 1200 × 630. `generate_og_image.js` kann je Seite ein Bild mit dem Seitentitel erzeugen. `check-head` prüft Format und Existenz der Datei.
 
 ---
