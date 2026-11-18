@@ -89,6 +89,12 @@ for (const file of files) {
     }
 
     const problems = [];
+    // Every page with a main landmark has exactly one static <h1> (the banner title is a <p>).
+    if (/<main[^>]*id="main-content"/i.test(html)) {
+        const markup = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<script[\s\S]*?<\/script>/gi, '');
+        const h1Count = (markup.match(/<h1[\s>]/gi) || []).length;
+        if (h1Count !== 1) problems.push(`expected exactly one <h1> in the page source, found ${h1Count}`);
+    }
     if (!STYLE_EXCEPTIONS.has(path.basename(file))) {
         if (/<style[\s>]/i.test(html)) problems.push('inline <style> element (move the rules into assets/css)');
         const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/i);

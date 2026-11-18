@@ -88,7 +88,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 ## Phase 2: Auffindbarkeit (SEO)
 
-- [ ] **2.1 Eigene `<h1>` je Seite im HTML.** (M)
+- [x] **2.1 Eigene `<h1>` je Seite im HTML.** (M) Erledigt 2026-11-18 (Branch `feat/landing-und-dashboard-daten`). `news`, `git-simulator` und `projekt-detail` haben keine sichtbare Seitenüberschrift und bekommen eine `sr-only`-`<h1>`; `projekt-detail` zeigt den Projekttitel weiter als `<h2>` (wird mit 2.2 neu bewertet).
   20 von 28 Seiten haben keine `<h1>` im Quelltext. Die einzige `<h1>` kommt per JavaScript aus `components.js` und ist auf allen Seiten gleich. Jede Seite bekommt ihre eigene statische `<h1>` (meist die heutige erste `<h2>`), der Banner-Titel wird ein `<p>`. `check-head` um die Regel „genau eine `<h1>`“ erweitern.
 - [ ] **2.2 Projektseiten indexierbar machen.** (L)
   `projekt-detail.html?repo=…` entsteht vollständig im Browser und steht nicht in der Sitemap. Die acht Projekte sind damit für Suchmaschinen kaum sichtbar.
