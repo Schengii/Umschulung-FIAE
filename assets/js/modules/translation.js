@@ -36,6 +36,34 @@ export function translateAttributes(root, lang) {
     }
 }
 
+/**
+ * URL of the current page in the given language: `?lang=en` for English, no parameter for German
+ * (the canonical form). Other query parameters and the hash stay.
+ * @param {string} href
+ * @param {string} lang 'de' or 'en'
+ * @returns {string}
+ */
+export function buildLangUrl(href, lang) {
+    const url = new URL(href);
+    if (lang === 'en') url.searchParams.set('lang', 'en');
+    else url.searchParams.delete('lang');
+    return url.toString();
+}
+
+/** Keeps address bar and canonical link in step with the language (the hreflang pair). */
+function syncLangUrl(/** @type {string} */ lang) {
+    try {
+        window.history.replaceState(window.history.state, '', buildLangUrl(window.location.href, lang));
+    } catch {
+        // file:// or sandboxed frames: the address bar just stays as it is
+    }
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+        const href = canonical.getAttribute('href');
+        if (href) canonical.setAttribute('href', buildLangUrl(href, lang));
+    }
+}
+
 const currentLang = () => document.documentElement.getAttribute('lang') || APP.DEFAULT_LANG;
 
 export function initTranslation() {
@@ -44,6 +72,8 @@ export function initTranslation() {
 
     const storedLang = AppStorage.getItem(STORAGE_KEYS.LANG, APP.DEFAULT_LANG);
     document.documentElement.setAttribute('lang', storedLang);
+    // Arrived through the English hreflang link: make the canonical link match that variant.
+    if (new URLSearchParams(window.location.search).get('lang') === storedLang) syncLangUrl(storedLang);
     updateLangToggleButton(storedLang);
     translateAttributes(document, storedLang);
 
@@ -62,6 +92,7 @@ export function initTranslation() {
 
         document.documentElement.setAttribute('lang', newLang);
         AppStorage.setItem(STORAGE_KEYS.LANG, newLang);
+        syncLangUrl(newLang);
         updateLangToggleButton(newLang);
         translateAttributes(document, newLang);
 

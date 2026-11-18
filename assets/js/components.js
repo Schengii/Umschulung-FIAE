@@ -29,6 +29,9 @@
         // Same key translation.js writes (STORAGE_KEYS.LANG). Set here, before the first
         // paint: applied only at layout-ready, an English visitor first saw the German text
         // and then a re-layout.
+        // ?lang=de|en (the hreflang targets) wins over the stored choice and becomes the new choice.
+        const urlLang = new URLSearchParams(window.location.search).get('lang');
+        if (urlLang === 'de' || urlLang === 'en') localStorage.setItem('lang', urlLang);
         const storedLang = localStorage.getItem('lang');
         if (storedLang === 'de' || storedLang === 'en') document.documentElement.setAttribute('lang', storedLang);
 

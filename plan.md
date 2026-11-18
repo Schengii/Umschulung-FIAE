@@ -93,7 +93,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 - [ ] **2.2 Projektseiten indexierbar machen.** (L)
   `projekt-detail.html?repo=…` entsteht vollständig im Browser und steht nicht in der Sitemap. Die acht Projekte sind damit für Suchmaschinen kaum sichtbar.
   Vorschlag: `generate_projects_data.js` schreibt je Projekt eine statische Seite `pages/projekte/<slug>.html` mit Titel, Beschreibung, Bild, `og:image` und JSON-LD (`SoftwareSourceCode` oder `CreativeWork`). ADR 0004 (Seiten von Hand) bleibt für die Inhaltsseiten bestehen; für generierte Daten-Seiten ein neues ADR.
-- [ ] **2.3 Englische Fassung auffindbar machen.** (M)
+- [x] **2.3 Englische Fassung auffindbar machen.** (M) Erledigt 2026-11-18 wie beschrieben (`?lang=en`, `hreflang`, Sitemap). Die englische Variante entsteht weiter erst im Browser; echte statische EN-Seiten wären ein eigenes Vorhaben.
   Die Sprache wird nur clientseitig umgeschaltet, es gibt keine eigene URL und kein `hreflang`. Kleinster Schritt: `?lang=en` in `components.js` vor dem ersten Paint auswerten, `<link rel="alternate" hreflang>` auf allen Seiten und in der Sitemap, `check-head` prüft das. Der Sprachschalter setzt den Parameter.
 - [ ] **2.4 Saubere URLs.** (M)
   Kanonisch ist heute `https://www.max-schenk.tech/index.html`. `cleanUrls` und eine Weiterleitung von `/index.html` auf `/` in `vercel.json` prüfen, Canonical und Sitemap anpassen. Vorher klären, ob der Service Worker (Abgleich über `.html`) und die relativen Pfade damit zurechtkommen. Ergebnis als Nachtrag in ADR 0008.

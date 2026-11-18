@@ -95,6 +95,20 @@ for (const file of files) {
         const h1Count = (markup.match(/<h1[\s>]/gi) || []).length;
         if (h1Count !== 1) problems.push(`expected exactly one <h1> in the page source, found ${h1Count}`);
     }
+    // Language alternates: a page with a canonical URL names its German and English variant (?lang=en).
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/i);
+    if (canonical) {
+        const en = canonical[1] + (canonical[1].includes('?') ? '&' : '?') + 'lang=en';
+        for (const [lang, href] of [
+            ['de', canonical[1]],
+            ['en', en],
+            ['x-default', canonical[1]],
+        ]) {
+            if (!html.includes(`<link rel="alternate" hreflang="${lang}" href="${href}">`)) {
+                problems.push(`missing hreflang="${lang}" alternate (${href})`);
+            }
+        }
+    }
     // Link previews: og:image must be a PNG/JPEG (not every platform renders WebP) and exist in the repo.
     const ogImage = html.match(/<meta property="og:image" content="([^"]*)"/i);
     if (ogImage) {

@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { installPageGlobals, removePageGlobals, resetDocument } from '../../../scripts/test-support/dom-helpers.js';
-import { initTranslation, translateAttributes } from './translation.js';
+import { initTranslation, translateAttributes, buildLangUrl } from './translation.js';
 
 const PAGE = `
     <button id="lang-toggle" type="button"></button>
@@ -100,5 +100,18 @@ describe('initTranslation', () => {
         await tick();
 
         expect(attr('late', 'aria-label')).toBe('Back');
+    });
+});
+
+describe('buildLangUrl', () => {
+    it('setzt ?lang=en für Englisch und entfernt den Parameter für Deutsch', () => {
+        expect(buildLangUrl('https://x.test/pages/a.html', 'en')).toBe('https://x.test/pages/a.html?lang=en');
+        expect(buildLangUrl('https://x.test/pages/a.html?lang=en', 'de')).toBe('https://x.test/pages/a.html');
+    });
+
+    it('behält andere Parameter und den Anker', () => {
+        expect(buildLangUrl('https://x.test/p.html?repo=a%20b#top', 'en')).toBe(
+            'https://x.test/p.html?repo=a+b&lang=en#top'
+        );
     });
 });

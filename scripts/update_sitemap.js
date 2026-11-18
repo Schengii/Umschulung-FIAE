@@ -73,6 +73,19 @@ for (const page of listPages()) {
     if (!indexable && isListed) problems.push(`${page} is listed although it is noindex/parameterised`);
 }
 
+for (const block of sitemap.match(/<url>[\s\S]*?<\/url>/g) || []) {
+    const loc = (block.match(/<loc>([^<]+)<\/loc>/) || [])[1];
+    for (const [lang, href] of [
+        ['de', loc],
+        ['en', `${loc}?lang=en`],
+        ['x-default', loc],
+    ]) {
+        if (!block.includes(`<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`)) {
+            problems.push(`${loc} lacks the hreflang="${lang}" alternate in sitemap.xml`);
+        }
+    }
+}
+
 if (problems.length > 0) {
     for (const problem of problems) console.error(`✗ ${problem}`);
     console.error('\nsitemap.xml and the pages disagree — fix the entries above.');
