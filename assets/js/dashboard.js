@@ -58,15 +58,28 @@ function initPwaTelemetry() {
     const toast = (text, type) => window.showToast && window.showToast(text, type);
     const hasCacheApi = 'caches' in window;
 
-    /** Reads the site's precache: name, number of entries and how many of them are pages. */
+    /**
+     * Reads the site's caches: the precache (name, pages) plus the bounded runtime cache, and how much
+     * storage the origin uses in total (navigator.storage.estimate, where the browser offers it).
+     */
     async function readCache() {
         if (!hasCacheApi) return null;
         const names = (await caches.keys()).filter((name) => name.startsWith('umschulung-fiae-'));
-        if (names.length === 0) return null;
-        const name = names[names.length - 1];
+        const precacheNames = names.filter((name) => !name.endsWith('-runtime'));
+        if (precacheNames.length === 0) return null;
+        const name = precacheNames[precacheNames.length - 1];
         const requests = await (await caches.open(name)).keys();
         const pages = requests.filter((req) => /(\.html|\/)$/.test(new URL(req.url).pathname)).length;
-        return { name, files: requests.length, pages };
+        const runtimeRequests = names.includes(`${name}-runtime`)
+            ? await (await caches.open(`${name}-runtime`)).keys()
+            : [];
+        let usedBytes = null;
+        try {
+            usedBytes = (await navigator.storage?.estimate?.())?.usage ?? null;
+        } catch {
+            // estimate() can be blocked (private mode); the card then just omits the size
+        }
+        return { name, files: requests.length + runtimeRequests.length, pages, usedBytes };
     }
 
     async function render() {
@@ -105,9 +118,13 @@ function initPwaTelemetry() {
         });
         if (cacheSize) {
             cacheSize.textContent = cache
-                ? en
-                    ? `${cache.files} files`
-                    : `${cache.files} Dateien`
+                ? `${en ? `${cache.files} files` : `${cache.files} Dateien`}${
+                      cache.usedBytes === null
+                          ? ''
+                          : en
+                            ? `, ${(cache.usedBytes / 1048576).toFixed(1)} MB used by this site`
+                            : `, ${(cache.usedBytes / 1048576).toFixed(1)} MB belegt (Website gesamt)`
+                  }`
                 : en
                   ? 'No cache yet'
                   : 'Noch kein Cache';

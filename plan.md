@@ -146,11 +146,11 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
 
 ## Phase 5: Robustheit (PWA, Sicherheit)
 
-- [ ] **5.1 Laufzeit-Cache des Service Workers begrenzen.** (M)
+- [x] **5.1 Laufzeit-Cache des Service Workers begrenzen.** (M) Erledigt 2026-11-18. Entscheidung: Demos unter `/Projekte/` werden gar nicht mehr gecacht (also offline nicht verfügbar); `flashcards-extended.json` liegt im begrenzten Laufzeit-Cache.
   `sw.js` legt jede erfolgreiche Antwort desselben Origins in den einen Cache, auch die Demos unter `Projekte/` (zusammen 82 MB) und `flashcards-extended.json`. Es gibt keine Obergrenze. Vorschlag: eigener Laufzeit-Cache mit Höchstzahl an Einträgen, Demos unter `/Projekte/` vom Caching ausnehmen oder getrennt begrenzen. Dazu `navigator.storage.estimate()` in der Dashboard-Karte „PWA Offline-Cache“ anzeigen.
-- [ ] **5.2 Zeitlimit für Network-First.** (S)
+- [x] **5.2 Zeitlimit für Network-First.** (S) Erledigt 2026-11-18 (3 s, `navigationPreload`).
   HTML wartet ohne Limit auf das Netz. Bei schlechter Verbindung hängt die Seite, obwohl eine Kopie im Cache liegt. Nach rund 3 Sekunden die Cache-Fassung liefern, zusätzlich `navigationPreload` aktivieren.
-- [ ] **5.3 Unit-Tests für `sw.js`.** (M)
+- [x] **5.3 Unit-Tests für `sw.js`.** (M) Erledigt 2026-11-18 (`modules/sw-strategy.js`).
   Die Fetch-Logik ist nur über E2E abgedeckt. Die Entscheidungen (welche Strategie für welche Anfrage, Offline-Fallback, Cache-Bereinigung) in reine Funktionen ziehen und mit Vitest testen.
 - [ ] **5.4 Header-CSP ohne `script-src 'unsafe-inline'`.** (M)
   Die Meta-CSP der Seiten ist streng, die Header-CSP in `vercel.json` erlaubt Inline-Skripte. Der Header schützt deshalb allein nichts, wo ein Meta-Tag fehlt (zum Beispiel in einer Demo unter `Projekte/`). Vorschlag: `verify_csp_hashes.js` schreibt die Vereinigung aller Hashes in den Header von `vercel.json` (generiert, mit Check), für `/Projekte/*` gilt eine eigene Regel. Nachtrag in ADR 0003.
