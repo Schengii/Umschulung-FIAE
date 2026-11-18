@@ -108,7 +108,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 - [ ] **3.1 Fallstudien statt Kurzbeschreibungen.** (L)
   Je Projekt ein fester Aufbau: Ausgangslage, eigene Rolle, Architekturentscheidung, Ergebnis, Gelerntes, plus zwei bis drei Bildschirmfotos. Die Felder kommen in `portfolio-metadata.json`, `check-sync` prüft Vollständigkeit (DE und EN). Am ausführlichsten für das Abschlussprojekt EcoChef.
-- [ ] **3.2 Diese Site als Projekt zeigen.** (M)
+- [x] **3.2 Diese Site als Projekt zeigen.** (M) Erledigt 2026-11-18 (Eintrag in `staticProjects`). Abweichung: Die ADRs werden nicht als eigene Seite ausgeliefert; der Projekttext verweist auf `docs/adr` im Repository. Eine gerenderte ADR-Seite bleibt offen.
   Das Portfolio ist selbst das technisch stärkste Stück (CSP, PWA, 806 Tests, 15 ADRs), taucht aber in der Projektliste nicht auf. Eintrag in `staticProjects`, mit Verweis auf `architecture.html`. Die ADRs als lesbare Seite ausliefern (`docs/` steht heute in `.vercelignore`).
 - [ ] **3.3 Startseite straffen.** (M)
   `home.html` hat 711 Zeilen und rund 15 Abschnitte, darunter „Was ist ein Fachinformatiker?“ und BFW-Informationen. Für Recruiter zählen Profil, Projekte, Skills, Kontakt. Die Erklärtexte zur Umschulung auf ihre eigenen Seiten verschieben und nur verlinken.

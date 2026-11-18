@@ -9,9 +9,25 @@ const projectsDataFile = path.resolve(__dirname, '..', 'assets', 'js', 'projects
 const projectsJsonFile = path.resolve(__dirname, '..', 'assets', 'data', 'projects.json');
 const projectsBaseDir = path.resolve(__dirname, '..', 'Projekte');
 
-// Static projects that are not scanned
+// Static projects that are not scanned. `lockLink` keeps `link` even if the GitHub repository
+// names another homepage; the field is removed again before the data is written.
 /** @type {Array<Record<string, any>>} */
-const staticProjects = [];
+const staticProjects = [
+    {
+        repoName: 'Umschulung-FIAE',
+        titleDe: '🧭 Dieses Portfolio — PWA ohne Framework',
+        titleEn: '🧭 This Portfolio — Framework-free PWA',
+        tags: ['Vanilla JS (ES-Module)', 'PWA / Service Worker', 'CSP', 'Playwright', 'Vitest', 'GitHub Actions'],
+        image: 'assets/images/og-cover.png',
+        link: 'pages/architecture.html',
+        githubUrl: 'https://github.com/Schengii/Umschulung-FIAE',
+        lockLink: true,
+        descDe: 'Die Website, die du gerade siehst: statisches HTML/CSS/JS ohne Framework und Bundler, offlinefähig als PWA, mit strenger Content-Security-Policy, zweisprachig (DE/EN) und barrierearm (WCAG 2.1 AA). Qualität sichern Unit- und E2E-Tests in vier Browsern, Lighthouse-Schwellen und über 20 automatische Prüfskripte in der CI. Die Architekturentscheidungen sind als ADRs im Repository dokumentiert (docs/adr).',
+        descEn: 'The website you are looking at: static HTML/CSS/JS without a framework or bundler, offline-capable as a PWA, with a strict Content Security Policy, bilingual (DE/EN) and accessible (WCAG 2.1 AA). Quality is backed by unit and E2E tests in four browsers, Lighthouse thresholds and over 20 automated check scripts in CI. The architecture decisions are documented as ADRs in the repository (docs/adr).',
+        category: 'web',
+        language: 'JavaScript',
+    },
+];
 
 // Scan local folders for portfolio-metadata.json
 function scanLocalProjects() {
@@ -144,7 +160,7 @@ async function build() {
                 project.githubUrl = info.html_url;
                 project.updatedAt = info.updated_at;
                 project.language = project.language || info.language || '';
-                if (info.homepage && info.homepage.trim() !== '') {
+                if (info.homepage && info.homepage.trim() !== '' && !project.lockLink) {
                     project.link = info.homepage;
                 }
                 console.log(`Enriched ${project.repoName}: ${project.stars} stars`);
@@ -162,7 +178,7 @@ async function build() {
                 } else {
                     project.githubUrl = folderMatch
                         ? `https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/${encodeURIComponent(folderName)}`
-                        : undefined;
+                        : project.githubUrl;
                 }
                 project.updatedAt = resolveFallbackUpdatedAt({
                     folderName,
@@ -172,6 +188,8 @@ async function build() {
                 console.log(`Fallback for ${project.repoName} (No API info)`);
             }
         }
+
+        delete project.lockLink;
 
         // Ensure every project has a valid images array containing at least 2 images
         if (!project.images || !Array.isArray(project.images)) {

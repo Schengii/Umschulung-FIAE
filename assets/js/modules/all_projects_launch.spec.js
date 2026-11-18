@@ -30,7 +30,8 @@ test.describe('All Projects 1-Click Launch E2E Verification', () => {
             const rawLink = proj.link;
             expect(rawLink, `Project ${proj.titleDe} has no launch link`).toBeTruthy();
 
-            const resolvedPath = rawLink.startsWith('Projekte/') ? `../${rawLink}` : rawLink;
+            // Links are root-relative; portfolio.js resolves them with resolveAssetPath
+            const resolvedPath = /^https?:/.test(rawLink) ? rawLink : `../${rawLink}`;
             const targetUrl = new URL(resolvedPath, portfolioUrl).href;
 
             const projPageErrors = [];
