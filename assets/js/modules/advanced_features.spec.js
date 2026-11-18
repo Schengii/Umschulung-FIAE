@@ -97,7 +97,7 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
         await expect(modal).toBeHidden();
     });
 
-    test('sollte den FIAE AI Copilot öffnen und auf Fragen antworten', async ({ page }) => {
+    test('sollte den Portfolio-Assistenten öffnen und auf Fragen antworten', async ({ page }) => {
         await page.goto('/pages/home.html');
         await settle(page);
 

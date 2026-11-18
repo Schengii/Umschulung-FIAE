@@ -53,7 +53,7 @@ Umschulung-FIAE/
 │   │   ├── portfolio.js         # Steuerungslogik für das Portfolio-Rendering, Schnellsuche & Highlights
 │   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank
 │   │   └── modules/             # Abgekapselte Feature-Module & E2E-Tests
-│   │       ├── portfolio-copilot.js     # Offline-fähiger AI Portfolio Copilot
+│   │       ├── portfolio-copilot.js     # Portfolio-Assistent (Stichwortsuche, offline)
 │   │       ├── ihk-cockpit.js           # Nutzwertanalyse & 80h Phasenplan Steuerung
 │   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
 │   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
@@ -239,7 +239,7 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 ### ⚙️ Code-Refactoring & neue Module (August 2026)
 - **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.
 - **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*EcoChef*, *Amazon 2.0*, *ElektroCheck AI*, *ManuFaktur*) ohne Verlassen des Portfolios.
-- **Lokaler Client-seitiger KI-Portfolio-Copilot (`portfolio-copilot.js`)**: 100% offline-fähiges Chat-Widget für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
+- **Portfolio-Assistent (`portfolio-copilot.js`)**: Chat-Widget ohne Sprachmodell, das Fragen mit Stichwörtern einer festen Wissensbasis abgleicht und vollständig im Browser läuft, für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
 - **Executive Dossier 2.0 & Rollenbasierter PDF-Generator (`executive-dossier.js`)**: Maßgeschneiderter 1-Klick-Export für Fullstack-, Backend- oder IHK-Prüfer-Profile.
 - **Clean-Code & RegEx Challenge-Lab (`challenge-lab.html` & `challenge-lab.js`)**: Interaktives Coding-Lab zu IT-Sicherheit (SQL-Injection), RegEx, Pure Functions und Big-O mit XP-Gamification.
 - **In-Browser Java 21 & C++23 WASM Runner (`playground.html` & `playground.js`)**: Interaktiver Bytecode-Compiler & WebAssembly-Runner mit Syntax-Tabs und Live-Ausführung im Browser.

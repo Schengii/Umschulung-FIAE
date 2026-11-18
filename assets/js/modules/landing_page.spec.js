@@ -45,21 +45,30 @@ test.describe('Landing Page Tests', () => {
         await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     });
 
-    test('sollte den Benutzernamen speichern und zur home.html weiterleiten', async ({ page }) => {
-        const nameInput = page.locator('#myText');
-        const submitButton = page.locator('#mySubmit');
+    test('zeigt Name, Rolle, Projekte und Kontakt ohne Interaktion', async ({ page }) => {
+        await expect(page.locator('#hero-section h1')).toHaveText('Maximilian Schenk');
+        await expect(page.locator('.hero-subtitle')).toContainText('Fachinformatiker für Anwendungsentwicklung');
+        // Keine Namens-Schranke mehr auf der Startseite (Plan 1.1).
+        await expect(page.locator('main input')).toHaveCount(0);
 
-        // Namen eingeben und auf "Eintreten" klicken
-        await nameInput.fill('Tester');
-        await submitButton.click();
+        const projects = page.locator('.landing-project');
+        await expect(projects).toHaveCount(3);
+        for (const link of await projects.locator('a.landing-project-link').all()) {
+            await expect(link).toHaveAttribute('href', /projekt-detail\.html\?repo=/);
+        }
+        await expect(page.locator('.landing-contact a[href^="mailto:"]')).toBeVisible();
+        await expect(page.locator('.hero-cta a[href="pages/lebenslauf.html"]')).toBeVisible();
+    });
 
-        // Überprüfen, ob zur home.html weitergeleitet wurde
-        // 800 ms Erfolgs-Feedback vor dem Redirect + Laden von home.html: auf langsamem CI-WebKit
-        // reichen die Standard-5 s nicht immer.
-        await expect(page).toHaveURL(/.*home.html/, { timeout: 15000 });
+    test('speichert den Namen optional im Dashboard und bleibt auf der Seite', async ({ page }) => {
+        await page.goto('/pages/dashboard.html');
+        const input = page.locator('#username-input');
+        await input.fill('Tester');
+        await input.press('Enter');
 
-        // Überprüfen, ob der Name im Local Storage gespeichert wurde
-        const storedName = await page.evaluate(() => localStorage.getItem('username'));
-        expect(storedName).toBe('Tester');
+        await expect(page.locator('#username-status')).toContainText('Gespeichert.');
+        await expect(page.locator('#welcome-text')).toContainText('Hallo, Tester!');
+        await expect(page).toHaveURL(/dashboard\.html$/);
+        expect(await page.evaluate(() => localStorage.getItem('username'))).toBe('Tester');
     });
 });

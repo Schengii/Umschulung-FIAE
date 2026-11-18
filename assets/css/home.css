@@ -1,4 +1,5 @@
-/* Rules that only apply on pages/home.html (split out of style.css). */
+/* Rules for pages/home.html (split out of style.css). index.html loads this sheet too, because
+   the landing page reuses the hero and the point cards (ADR 0014, addendum 2026-11-17). */
 .timeline-item:hover .timeline-badge {
     background-color: var(--primary);
     color: var(--text-on-primary);

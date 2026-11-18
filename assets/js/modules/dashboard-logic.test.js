@@ -56,34 +56,30 @@ describe('getContributionLevel', () => {
 
 describe('buildContributionData', () => {
     const today = new Date(2026, 9, 18, 12);
+    const byDay = { '2026-10-18': 3, '2026-10-17': 2, '2026-10-16': 1, '2026-10-10': 4, '2024-01-01': 9 };
 
-    it('builds 371 days ending today with the live commits', () => {
-        const { cells } = buildContributionData(today, 3);
+    it('builds 371 days ending today from the real counts', () => {
+        const { cells } = buildContributionData(today, byDay);
         expect(cells).toHaveLength(371);
         expect(cells[370].commits).toBe(3);
         expect(cells[370].date.toDateString()).toBe(today.toDateString());
+        expect(cells[369].commits).toBe(2);
+        expect(cells[362].commits).toBe(4);
     });
 
-    it('is deterministic for the same day', () => {
-        expect(buildContributionData(today, 0)).toEqual(buildContributionData(today, 0));
+    it('counts only days inside the range and finds the longest streak', () => {
+        const { totalCommits, maxStreak } = buildContributionData(today, byDay);
+        expect(totalCommits).toBe(10);
+        expect(maxStreak).toBe(3);
     });
 
-    it('sums the commits and keeps the streak within the day count', () => {
-        const { cells, totalCommits, maxStreak } = buildContributionData(today, 2);
-        expect(totalCommits).toBe(cells.reduce((sum, cell) => sum + cell.commits, 0));
-        expect(maxStreak).toBeGreaterThan(0);
-        expect(maxStreak).toBeLessThanOrEqual(371);
-    });
-
-    it('keeps weekends quieter than weekdays', () => {
-        const { cells } = buildContributionData(today, 0);
-        const sum = (days) => days.reduce((total, cell) => total + cell.commits, 0);
-        const weekend = cells.filter((cell) => [0, 6].includes(cell.date.getDay()));
-        const weekdays = cells.filter((cell) => ![0, 6].includes(cell.date.getDay()));
-        expect(sum(weekend) / weekend.length).toBeLessThan(sum(weekdays) / weekdays.length);
+    it('is empty without commits', () => {
+        const { totalCommits, maxStreak } = buildContributionData(today, {});
+        expect(totalCommits).toBe(0);
+        expect(maxStreak).toBe(0);
     });
 
     it('supports a shorter range', () => {
-        expect(buildContributionData(today, 1, 7).cells).toHaveLength(7);
+        expect(buildContributionData(today, byDay, 7).cells).toHaveLength(7);
     });
 });

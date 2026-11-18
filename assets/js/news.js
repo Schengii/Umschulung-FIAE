@@ -1,3 +1,20 @@
+/**
+ * Formats the ISO date of a news entry ('2026-07-06') for display: '06. Juli 2026' (de) or
+ * 'July 06, 2026' (en). Returns the input unchanged when it is not a valid date.
+ * @param {string} isoDate
+ * @param {string} lang
+ */
+function formatNewsDate(isoDate, lang) {
+    const date = new Date(`${isoDate}T00:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(isoDate)) || Number.isNaN(date.getTime())) return String(isoDate ?? '');
+    return date.toLocaleDateString(lang === 'en' ? 'en-US' : 'de-DE', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const newsArticlesContainer = document.getElementById('news-articles-container');
     const filterButtons = document.querySelectorAll('.btn-filter');
@@ -19,7 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let visibleCount = 0;
 
         // newsData is assumed to be globally available from news_data.js
-        newsData.forEach((article) => {
+        // Newest first, independent of the order in news_data.js (ISO dates sort as text).
+        const sortedNews = [...newsData].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+        sortedNews.forEach((article) => {
             const titleDe = (article.title_de || '').toLowerCase();
             const titleEn = (article.title_en || '').toLowerCase();
             const contentDe = (article.content_de || []).join(' ').toLowerCase();
@@ -40,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 articleElement.id = article.id;
 
                 const title = currentLanguage === 'de' ? article.title_de : article.title_en;
-                const date = currentLanguage === 'de' ? article.date_de : article.date_en;
+                const date = formatNewsDate(article.date, currentLanguage);
                 const content = currentLanguage === 'de' ? article.content_de : article.content_en;
 
                 let contentHtml = '';
@@ -61,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span lang="en">Share</span>
                         </button>
                     </div>
-                    <p class="card-source"><span lang="${currentLanguage}">${date}</span></p>
+                    <p class="card-source"><time datetime="${article.date}" lang="${currentLanguage}">${date}</time></p>
                     ${contentHtml}
                     <div style="margin-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem;">
                         <button type="button" class="like-article-btn" data-id="${article.id}" style="background: none; border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; cursor: pointer; color: ${liked ? 'var(--primary)' : 'var(--text-secondary)'}; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">

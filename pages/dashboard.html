@@ -61,22 +61,38 @@
         <div class="layout-grid">
             <div class="left-col">
                 <div class="card">
-                    <h2 lang="de">Dashboard</h2>
-                    <h2 lang="en">Dashboard</h2>
+                    <h1><span lang="de">Dashboard</span><span lang="en">Dashboard</span></h1>
                     <p lang="de">Willkommen im interaktiven Dashboard. Hier können Sie wichtige Kennzahlen und Projektstatistiken einsehen.</p>
                     <p lang="en">Welcome to the interactive dashboard. Here you can view key metrics and project statistics.</p>
+                    <!-- Optional personalisation (formerly the name gate on index.html) -->
+                    <p id="welcome-text" class="dashboard-welcome"></p>
+                    <form id="username-form" class="username-form">
+                        <label for="username-input">
+                            <span lang="de">Name (optional, bleibt nur in diesem Browser)</span>
+                            <span lang="en">Name (optional, stays in this browser only)</span>
+                        </label>
+                        <div class="username-form-row">
+                            <input type="text" id="username-input" class="form-control" maxlength="60" autocomplete="name" placeholder="z. B. Erika Muster" data-en-placeholder="e.g. Jane Doe">
+                            <button type="submit" class="btn-secondary">
+                                <span lang="de">Speichern</span>
+                                <span lang="en">Save</span>
+                            </button>
+                        </div>
+                        <p id="username-status" class="username-status" role="status" aria-live="polite"></p>
+                    </form>
                     <!-- GitHub Commit Grid Widget -->
                     <div class="mt-2rem">
                         <h3>
-                            <span lang="de"><i class="fa fa-code-fork" aria-hidden="true"></i> Umschulungs-Beiträge (Simuliert)</span>
-                            <span lang="en"><i class="fa fa-code-fork" aria-hidden="true"></i> Retraining Contributions (Simulated)</span>
+                            <span lang="de"><i class="fa fa-code-fork" aria-hidden="true"></i> Commits in diesem Repository</span>
+                            <span lang="en"><i class="fa fa-code-fork" aria-hidden="true"></i> Commits in this repository</span>
                         </h3>
-                        <p lang="de">Simulierter Verlauf meiner Beiträge von 2024 bis 2026. Aktionen und Spielsiege auf der Website hinterlassen hier live neue Einträge!</p>
-                        <p lang="en">Simulated history of my contributions from 2024 to 2026. Actions and game victories on this site leave live new entries here!</p>
+                        <p lang="de">Echte Commits dieses Portfolios aus der Git-Historie, ein Feld je Tag (Stand der letzten Auswertung: <span id="site-stats-date">–</span>).</p>
+                        <p lang="en">Real commits of this portfolio from the Git history, one cell per day (last update: <span id="site-stats-date-en">–</span>).</p>
                         <div class="commit-grid-wrapper">
                             <div class="commit-grid-header">
                                 <span id="commit-grid-total">0 Commits</span>
                                 <span id="commit-grid-streak">Streak: 0 Tage / Days</span>
+                                <span id="commit-grid-live"></span>
                             </div>
                             <div class="commit-grid-scroller">
                                 <div id="commit-grid" class="commit-grid"></div>
@@ -121,11 +137,21 @@
                     <!-- Developer Metrics & QA Dashboard -->
                     <div class="mt-2rem">
                         <h3>
-                            <span lang="de"><i class="fa fa-chart-line" aria-hidden="true"></i> Code-Qualität &amp; QA-Metriken (Simuliert)</span>
-                            <span lang="en"><i class="fa fa-chart-line" aria-hidden="true"></i> Code Quality &amp; QA Metrics (Simulated)</span>
+                            <span lang="de"><i class="fa fa-chart-line" aria-hidden="true"></i> Code-Qualität &amp; QA-Metriken</span>
+                            <span lang="en"><i class="fa fa-chart-line" aria-hidden="true"></i> Code Quality &amp; QA Metrics</span>
                         </h3>
-                        <p lang="de">Interaktive Übersicht über die Software-Qualitätsmetriken meiner Projekte. Passen Sie die Parameter an, um die Auswirkungen auf die Release-Bereitschaft zu simulieren.</p>
-                        <p lang="en">Interactive overview of the software quality metrics of my projects. Adjust the parameters to simulate the impact on release readiness.</p>
+                        <h4>
+                            <span lang="de">Gemessene Werte dieser Website</span>
+                            <span lang="en">Measured values of this site</span>
+                        </h4>
+                        <ul id="site-stats-list" class="site-stats-list"></ul>
+
+                        <h4>
+                            <span lang="de">Rechenbeispiel Release-Bereitschaft</span>
+                            <span lang="en">Release readiness calculator example</span>
+                        </h4>
+                        <p lang="de">Frei einstellbares Rechenbeispiel mit Gewichtung, keine Messwerte: Die Startwerte sind Beispielzahlen.</p>
+                        <p lang="en">Freely adjustable example with weighting, not measured values: the starting values are sample numbers.</p>
                         
                         <div class="notenrechner-container">
                             <form id="qa-metrics-form" class="project-form">

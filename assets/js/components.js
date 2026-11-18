@@ -152,10 +152,10 @@ function renderHeader(currentPage) {
     return `
     <header class="app-header">
         <div class="header-banner">
-            <h1 class="header-title">
-                <span lang="de">Meine Umschulung zum Fachinformatiker für Anwendungsentwicklung</span>
-                <span lang="en">My Retraining as an IT Specialist in Application Development</span>
-            </h1>
+            <p class="header-title">
+                <span lang="de">Maximilian Schenk · Fachinformatiker für Anwendungsentwicklung</span>
+                <span lang="en">Maximilian Schenk · IT Specialist in Application Development</span>
+            </p>
         </div>
         ${renderNav(currentPage)}
     </header>`;
@@ -565,11 +565,6 @@ document.addEventListener('DOMContentLoaded', () => {
     earlyLayoutObserver.disconnect();
     // Fallback for anything the observer did not catch.
     injectHeader();
-    // Pages with their own <h1> would otherwise have two; the banner title then is plain text.
-    const bannerTitle = document.querySelector('.app-header .header-title');
-    if (bannerTitle && document.querySelector('h1:not(.app-header h1)')) {
-        bannerTitle.setAttribute('role', 'presentation');
-    }
     initBreadcrumbs();
 
     const path = window.location.pathname;

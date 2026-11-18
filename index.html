@@ -3,26 +3,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-uY1Rdp+UN4bWDo2/VUv8zzxjXOYF00HOyfllsjjMo0M='; style-src 'self'; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://api.github.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Willkommen - Umschulung IT | Maximilian Schenk</title>
+    <title>Fachinformatiker für Anwendungsentwicklung – Portfolio | Maximilian Schenk</title>
     <link rel="canonical" href="https://www.max-schenk.tech/index.html">
-    <meta name="description" content="Portfolio von Maximilian Schenk — Umschulung zum Fachinformatiker für Anwendungsentwicklung am BFW Dortmund mit Praktikum bei der DFG in Bonn.">
+    <meta name="description" content="Maximilian Schenk, Fachinformatiker für Anwendungsentwicklung aus Bonn: Projekte mit TypeScript, React und C++, Werdegang, Lebenslauf und Kontakt.">
     <meta name="author" content="Maximilian Schenk">
-    <meta property="og:title" content="Willkommen - Umschulung IT — Maximilian Schenk">
-    <meta property="og:description" content="Portfolio von Maximilian Schenk — Umschulung zum Fachinformatiker für Anwendungsentwicklung am BFW Dortmund mit Praktikum bei der DFG in Bonn.">
+    <meta property="og:title" content="Maximilian Schenk – Fachinformatiker für Anwendungsentwicklung">
+    <meta property="og:description" content="Maximilian Schenk, Fachinformatiker für Anwendungsentwicklung aus Bonn: Projekte mit TypeScript, React und C++, Werdegang, Lebenslauf und Kontakt.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.max-schenk.tech/index.html">
     <meta property="og:image" content="https://www.max-schenk.tech/assets/images/og-cover.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Willkommen - Umschulung IT — Maximilian Schenk">
-    <meta name="twitter:description" content="Portfolio von Maximilian Schenk — Umschulung zum Fachinformatiker für Anwendungsentwicklung am BFW Dortmund mit Praktikum bei der DFG in Bonn.">
+    <meta name="twitter:title" content="Maximilian Schenk – Fachinformatiker für Anwendungsentwicklung">
+    <meta name="twitter:description" content="Maximilian Schenk, Fachinformatiker für Anwendungsentwicklung aus Bonn: Projekte mit TypeScript, React und C++, Werdegang, Lebenslauf und Kontakt.">
     <meta name="twitter:image" content="https://www.max-schenk.tech/assets/images/og-cover.png">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="preload" href="assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/inter-700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/modules/hero_showcase.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/landing.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Maximilian Schenk – Portfolio",
+        "url": "https://www.max-schenk.tech/",
+        "inLanguage": ["de", "en"],
+        "author": {
+            "@type": "Person",
+            "name": "Maximilian Schenk",
+            "jobTitle": "Fachinformatiker für Anwendungsentwicklung",
+            "url": "https://www.max-schenk.tech",
+            "sameAs": [
+                "https://github.com/Schengii",
+                "https://linkedin.com/in/maximilian-schenk"
+            ]
+        }
+    }
+    </script>
     <script src="assets/js/components.js"></script>
 </head>
 
@@ -31,81 +53,136 @@
         <span lang="de">Zum Inhalt springen</span>
         <span lang="en">Skip to content</span>
     </a>
-    
-    <header class="relative-header">
-        <span lang="de">Portfolio Umschulung zum Fachinformatiker</span>
-        <span lang="en">Portfolio Retraining - Application Development</span>
-        
-        <div class="header-nav-controls">
-            <div class="a11y-customizer-container">
-                <button id="a11y-toggle" class="theme-toggle welcome-theme-toggle" aria-label="Barrierefreiheit & Lesehilfe" data-en-aria-label="Accessibility & reading aids" title="Barrierefreiheit & Lesehilfe" data-en-title="Accessibility & reading aids">
-                    <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
-                </button>
-                <div id="a11y-dropdown" class="a11y-dropdown-menu" role="menu">
-                    <div class="a11y-dropdown-title"><i class="fa-solid fa-universal-access"></i> Barrierefreiheit</div>
-                    <button id="btn-toggle-dyslexia" class="btn-filter a11y-option-btn">
-                        <i class="fa-solid fa-book-open-reader"></i> <span lang="de">Legasthenie-Hilfe</span><span lang="en">Dyslexia Mode</span>
-                    </button>
-                    <button id="btn-toggle-colorblind" class="btn-filter a11y-option-btn">
-                        <i class="fa-solid fa-eye"></i> <span lang="de">Rot-Grün-Schutz</span><span lang="en">Colorblind Mode</span>
-                    </button>
-                    <button id="btn-toggle-font-scale" class="btn-filter a11y-option-btn">
-                        <i class="fa-solid fa-text-height"></i> <span lang="de">Schriftgröße</span><span lang="en">Font Size</span>
-                    </button>
-                    <button id="btn-toggle-high-contrast" class="btn-filter a11y-option-btn">
-                        <i class="fa-solid fa-circle-half-stroke"></i> <span lang="de">Hochkontrast (AAA)</span><span lang="en">High Contrast (AAA)</span>
-                    </button>
+
+    <div id="site-header"></div>
+    <div id="site-nav"></div>
+
+    <main id="main-content" class="main-container">
+
+        <!-- Hero: who, what, where to go next -->
+        <section class="hero-section" id="hero-section">
+            <div class="hero-visual">
+                <div class="hero-avatar-ring">
+                    <img src="assets/images/maximilian_schenk_portrait.jpg" width="457" height="686" alt="Maximilian Schenk" class="hero-avatar-img">
                 </div>
             </div>
-            <button id="lang-toggle" class="theme-toggle welcome-theme-toggle" aria-label="Sprache umschalten"></button>
-            <button id="theme-toggle" class="theme-toggle welcome-theme-toggle" aria-label="Design umschalten" data-en-aria-label="Toggle theme">
-                <i class="fa-solid fa-moon" aria-hidden="true"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Decorative background glow blobs for premium portal aesthetic -->
-    <div class="portal-glow-1"></div>
-    <div class="portal-glow-2"></div>
-    
-    <main id="main-content" class="main-container">
-        <div class="welcome-container card">
-            <h1 id="myH1" class="text-gradient">
-                <span lang="de">Willkommen</span>
-                <span lang="en">Welcome</span>
-            </h1>
-            
-            <p lang="de">Bitte gib deinen Namen ein, um das Dashboard zu personalisieren.</p>
-            <p lang="en">Please enter your name to personalize the dashboard.</p>
-            
-            <div class="form-group welcome-form-group">
-                <label for="myText">
-                    <span lang="de">Name / Benutzername</span>
-                    <span lang="en">Name / Username</span>
-                </label>
-                <input type="text" id="myText" class="form-control" placeholder="z. B. Max Mustermann" data-en-placeholder="e.g. Jane Doe" autocomplete="name">
-            </div>
-
-            <button id="mySubmit" class="btn-primary margin-bottom-1-5rem">
-                <span lang="de">Eintreten</span>
-                <span lang="en">Enter</span>
-            </button>
-
-            <div class="card dashed-card">
-                <h2 class="card-subheading">
-                    <span lang="de">Direkt zum Dashboard</span>
-                    <span lang="en">Directly to Dashboard</span>
-                </h2>
-                <p class="welcome-skip-desc">
-                    <span lang="de">Du kannst die Personalisierung auch überspringen.</span>
-                    <span lang="en">You can also skip the personalization.</span>
+            <div class="hero-content">
+                <h1 class="hero-title hero-glow-title">Maximilian Schenk</h1>
+                <p class="hero-subtitle hero-glow-text">
+                    <span lang="de">Fachinformatiker für Anwendungsentwicklung</span>
+                    <span lang="en">IT Specialist in Application Development</span>
                 </p>
-                <a href="pages/home.html" class="btn-primary btn-primary-block">
-                    <span lang="de">Dashboard öffnen</span>
-                    <span lang="en">Open Dashboard</span>
-                </a>
+                <p class="hero-description">
+                    <span lang="de">IHK-geprüft nach zwei Jahren Umschulung am BFW Dortmund, mit Praktikum bei der Deutschen Forschungsgemeinschaft in Bonn. Ich entwickle Webanwendungen mit TypeScript und React und suche meine erste Festanstellung als Entwickler.</span>
+                    <span lang="en">IHK certified after two years of retraining at BFW Dortmund, with an internship at the German Research Foundation in Bonn. I build web applications with TypeScript and React and am looking for my first permanent role as a developer.</span>
+                </p>
+                <div class="hero-cta">
+                    <a href="pages/portfolio.html" class="btn-primary hero-btn">
+                        <i class="fa fa-code" aria-hidden="true"></i>
+                        <span lang="de">Projekte ansehen</span><span lang="en">View projects</span>
+                    </a>
+                    <a href="pages/lebenslauf.html" class="btn-secondary hero-btn">
+                        <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                        <span lang="de">Lebenslauf</span><span lang="en">Résumé</span>
+                    </a>
+                    <a href="pages/home.html#contact-section" class="btn-secondary hero-btn">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <span lang="de">Kontakt aufnehmen</span><span lang="en">Get in touch</span>
+                    </a>
+                </div>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="fa fa-check-circle" aria-hidden="true"></i> <span lang="de">IHK geprüft</span><span lang="en">IHK certified</span></span>
+                    <span class="hero-badge"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, DE</span>
+                    <span class="hero-badge"><i class="fa fa-rocket" aria-hidden="true"></i> <span lang="de">Sofort verfügbar</span><span lang="en">Available now</span></span>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Three projects that show the range -->
+        <section class="card margin-top-2rem" aria-labelledby="landing-projects-title">
+            <h2 id="landing-projects-title">
+                <span lang="de">Ausgewählte Projekte</span><span lang="en">Selected projects</span>
+            </h2>
+            <div class="home-points-grid">
+                <article class="point-card landing-project">
+                    <img src="assets/images/ecochef_showcase.webp" width="1024" height="1024" alt="" loading="lazy" decoding="async" class="landing-project-img">
+                    <p class="landing-project-label"><i class="fa-solid fa-utensils" aria-hidden="true"></i> <span lang="de">IHK-Abschlussprojekt</span><span lang="en">IHK final project</span></p>
+                    <h3 class="point-title">EcoChef</h3>
+                    <p class="point-desc">
+                        <span lang="de">Rezept-Assistent als Hybrid-App: Aus den Zutaten im Kühlschrank erzeugt die Gemini-API Rezeptvorschläge.</span>
+                        <span lang="en">Recipe assistant as a hybrid app: the Gemini API turns the ingredients in your fridge into recipe suggestions.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">Lit / TypeScript</span>
+                        <span class="point-tag">Gemini API</span>
+                        <span class="point-tag">Cordova PWA</span>
+                    </div>
+                    <a href="pages/projekt-detail.html?repo=EcoChef" class="landing-project-link" aria-label="Projekt ansehen: EcoChef" data-en-aria-label="View project: EcoChef">
+                        <span lang="de">Projekt ansehen</span><span lang="en">View project</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+
+                <article class="point-card landing-project">
+                    <img src="assets/images/elektrocheck_showcase.webp" width="1024" height="1024" alt="" loading="lazy" decoding="async" class="landing-project-img">
+                    <p class="landing-project-label"><i class="fa-solid fa-bolt" aria-hidden="true"></i> <span lang="de">KI-Anwendung</span><span lang="en">AI application</span></p>
+                    <h3 class="point-title">ElektroCheck AI</h3>
+                    <p class="point-desc">
+                        <span lang="de">Web-App, die Prüfprotokolle nach DGUV V3 mit Unterstützung der OpenAI-API auswertet.</span>
+                        <span lang="en">Web app that analyses DGUV V3 inspection reports with the help of the OpenAI API.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">React / Vite</span>
+                        <span class="point-tag">OpenAI API</span>
+                        <span class="point-tag">PDF Parsing</span>
+                    </div>
+                    <a href="pages/projekt-detail.html?repo=ElektroCheck-AI" class="landing-project-link" aria-label="Projekt ansehen: ElektroCheck AI" data-en-aria-label="View project: ElektroCheck AI">
+                        <span lang="de">Projekt ansehen</span><span lang="en">View project</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+
+                <article class="point-card landing-project">
+                    <img src="assets/images/minecraft_showcase.webp" width="1024" height="1024" alt="" loading="lazy" decoding="async" class="landing-project-img">
+                    <p class="landing-project-label"><i class="fa-solid fa-cube" aria-hidden="true"></i> <span lang="de">Systemnahe Entwicklung</span><span lang="en">Low-level development</span></p>
+                    <h3 class="point-title">C++ Voxel Engine</h3>
+                    <p class="point-desc">
+                        <span lang="de">3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft, mit Redstone-Logikschaltungen.</span>
+                        <span lang="en">3D voxel engine in C++20 and OpenGL 4.5 modelled on Minecraft, with redstone logic circuits.</span>
+                    </p>
+                    <div class="point-badges">
+                        <span class="point-tag">C++20</span>
+                        <span class="point-tag">OpenGL 4.5</span>
+                        <span class="point-tag">CMake</span>
+                    </div>
+                    <a href="pages/projekt-detail.html?repo=Minecraft" class="landing-project-link" aria-label="Projekt ansehen: C++ Voxel Engine" data-en-aria-label="View project: C++ Voxel Engine">
+                        <span lang="de">Projekt ansehen</span><span lang="en">View project</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+            </div>
+            <p class="landing-more">
+                <a href="pages/portfolio.html" class="btn-secondary">
+                    <span lang="de">Alle Projekte</span><span lang="en">All projects</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </p>
+        </section>
+
+        <!-- Where to go from here -->
+        <section class="card margin-top-2rem" aria-labelledby="landing-more-title">
+            <h2 id="landing-more-title">
+                <span lang="de">Mehr über mich</span><span lang="en">More about me</span>
+            </h2>
+            <ul class="landing-links">
+                <li><a href="pages/home.html"><span lang="de">Profil, Werdegang und Kontaktformular</span><span lang="en">Profile, career path and contact form</span></a></li>
+                <li><a href="pages/ueber-mich.html"><span lang="de">Über mich, Skills und Zertifikate</span><span lang="en">About me, skills and certificates</span></a></li>
+                <li><a href="pages/ausbildungsablauf.html"><span lang="de">So lief die Umschulung ab</span><span lang="en">How the retraining went</span></a></li>
+                <li><a href="pages/architecture.html"><span lang="de">Architektur dieser Website</span><span lang="en">Architecture of this website</span></a></li>
+                <li><a href="pages/dashboard.html"><span lang="de">Dashboard mit Lernwerkzeugen</span><span lang="en">Dashboard with learning tools</span></a></li>
+            </ul>
+            <p class="landing-contact">
+                <a href="mailto:sche-max@web.de"><i class="fa-solid fa-envelope" aria-hidden="true"></i> sche-max@web.de</a>
+                <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
+                <a href="https://github.com/Schengii" target="_blank" rel="noopener"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
+            </p>
+        </section>
     </main>
 
     <div id="site-footer"></div>

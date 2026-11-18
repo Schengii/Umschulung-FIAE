@@ -68,6 +68,9 @@ jobs:
       - name: Verify the Imported Flashcard Deck
         run: npm run check-flashcards
 
+      - name: Check site stats schema
+        run: npm run check-site-stats
+
       - name: Verify Lighthouse Audits Every Sitemap Page
         run: npm run check-lighthouse-urls
 

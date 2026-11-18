@@ -23,6 +23,7 @@ export function initDashboard() {
     renderProjectCount();
     renderRecentProjects();
     initQaMetrics();
+    renderSiteStats();
     initDailyQuestionWidget();
     renderLearningRecommendations();
     initCommitGrid();
@@ -558,11 +559,90 @@ function initCommitGrid() {
     const totalSpan = document.getElementById('commit-grid-total');
     const streakSpan = document.getElementById('commit-grid-streak');
 
+    loadSiteStats().then((stats) => {
+        if (stats) renderCommitGrid(gridContainer, totalSpan, streakSpan, stats.commits.byDay);
+    });
+    updateLiveActions();
+}
+
+/** Gemessene Werte (Tests, Coverage, Seiten, ADRs, Commits) aus site-stats.json. */
+function renderSiteStats() {
+    const list = document.getElementById('site-stats-list');
+    if (!list) return;
+    loadSiteStats().then((stats) => {
+        if (!stats) {
+            list.hidden = true;
+            return;
+        }
+        const nf = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 });
+        /** @type {[string, string, string][]} */
+        const rows = [['Commits', 'Commits', nf.format(stats.commits.total)]];
+        if (stats.tests) {
+            rows.push([
+                'Unit-Tests',
+                'Unit tests',
+                `${nf.format(stats.tests.unit)} (${stats.tests.files} Dateien / files)`,
+            ]);
+        }
+        if (stats.coverage) {
+            rows.push(
+                ['Coverage (Statements)', 'Coverage (statements)', `${nf.format(stats.coverage.statements)} %`],
+                ['Coverage (Branches)', 'Coverage (branches)', `${nf.format(stats.coverage.branches)} %`]
+            );
+        }
+        rows.push(
+            ['Seiten', 'Pages', nf.format(stats.pages)],
+            ['Architekturentscheidungen (ADRs)', 'Architecture decisions (ADRs)', nf.format(stats.adrs)]
+        );
+        list.innerHTML = rows
+            .map(
+                ([de, en, val]) =>
+                    `<li><span lang="de">${de}</span><span lang="en">${en}</span>: <strong>${val}</strong></li>`
+            )
+            .join('');
+        const dateDe = document.getElementById('site-stats-date');
+        const dateEn = document.getElementById('site-stats-date-en');
+        const d = new Date(`${stats.generatedAt}T12:00:00`);
+        if (dateDe) dateDe.textContent = d.toLocaleDateString('de-DE');
+        if (dateEn) dateEn.textContent = d.toLocaleDateString('en-US');
+    });
+}
+
+/** @type {Promise<any> | null} */
+let siteStatsPromise = null;
+
+/** Lädt assets/data/site-stats.json einmal; null, wenn die Datei fehlt oder defekt ist. */
+function loadSiteStats() {
+    if (!siteStatsPromise) {
+        siteStatsPromise = fetch(
+            /** @type {(p: string) => string} */ (window.resolveAssetPath || ((p) => p))('assets/data/site-stats.json')
+        )
+            .then((r) => (r.ok ? r.json() : /** @type {any} */ (null)))
+            .catch(() => /** @type {any} */ (null));
+    }
+    return siteStatsPromise;
+}
+
+/** Zeigt die Aktionen dieses Besuchs auf der Seite, getrennt von den echten Commits im Raster. */
+function updateLiveActions() {
+    const el = document.getElementById('commit-grid-live');
+    if (!el) return;
+    const lang = document.documentElement.getAttribute('lang') || 'de';
+    const n = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
+    el.textContent = lang === 'de' ? `Deine Aktionen auf dieser Seite: ${n}` : `Your actions on this site: ${n}`;
+}
+
+/**
+ * @param {HTMLElement} gridContainer
+ * @param {HTMLElement | null} totalSpan
+ * @param {HTMLElement | null} streakSpan
+ * @param {Record<string, number>} commitsByDay
+ */
+function renderCommitGrid(gridContainer, totalSpan, streakSpan, commitsByDay) {
     const lang = document.documentElement.getAttribute('lang') || 'de';
 
     // Representing ~1 year of activity (53 weeks * 7 days = 371 cells)
-    const liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
-    const { cells: cellsData, totalCommits, maxStreak } = buildContributionData(new Date(), liveCommitsToday);
+    const { cells: cellsData, totalCommits, maxStreak } = buildContributionData(new Date(), commitsByDay);
 
     // Render cells
     gridContainer.innerHTML = '';
@@ -610,9 +690,7 @@ function initCommitGrid() {
     // Update totals
     if (totalSpan) {
         totalSpan.textContent =
-            lang === 'de'
-                ? `${totalCommits} Beiträge im letzten Jahr`
-                : `${totalCommits} contributions in the last year`;
+            lang === 'de' ? `${totalCommits} Commits im letzten Jahr` : `${totalCommits} commits in the last year`;
     }
     if (streakSpan) {
         streakSpan.textContent = lang === 'de' ? `Beste Strähne: ${maxStreak} Tage` : `Best Streak: ${maxStreak} days`;
@@ -621,6 +699,7 @@ function initCommitGrid() {
 
 // Listen to global language change to keep recommendations in sync
 document.addEventListener('langchange', () => {
+    updateLiveActions();
     const existingRecCard = document.querySelector('.right-col .card[aria-labelledby="recommendations-title"]');
     if (existingRecCard) {
         existingRecCard.remove();
@@ -628,14 +707,14 @@ document.addEventListener('langchange', () => {
     renderLearningRecommendations();
 });
 
-// Global function to trigger a live commit on the dashboard from games/other areas
+// Zählt Aktionen des Besuchers (Spiele, Kartei, …); wird von den Seiten-Scripts aufgerufen
 window.addLiveCommit = function () {
     let liveCommitsToday = parseInt(AppStorage.getItem('github_live_commits_today', 0)) || 0;
     liveCommitsToday++;
     AppStorage.setItem('github_live_commits_today', liveCommitsToday);
 
-    // Re-initialize if we are on dashboard
-    initCommitGrid();
+    // Nur der Zähler dieses Besuchs; das Raster zeigt ausschließlich echte Commits
+    updateLiveActions();
 };
 
 /* ==========================================================================

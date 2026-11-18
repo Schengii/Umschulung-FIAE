@@ -35,10 +35,14 @@ test.describe('New Interactive Features E2E Verification', () => {
         await settle(page);
 
         const slotBtn = page.locator('.btn-slot').first();
-        await slotBtn.click();
-
         const confirmBtn = page.locator('#confirm-booking-btn');
-        await expect(confirmBtn).toBeVisible();
+        // The module is imported lazily after "fiae:layout-ready"; "networkidle" does not
+        // guarantee its click listener is attached yet (seen in Firefox on a slow CI runner).
+        // A click before that is lost, so repeat it until the confirm button shows.
+        await expect(async () => {
+            await slotBtn.click();
+            await expect(confirmBtn).toBeVisible({ timeout: 1000 });
+        }).toPass({ timeout: 15000 });
         await confirmBtn.click();
 
         const success = page.locator('#booking-success');

@@ -82,20 +82,14 @@ export function getContributionLevel(commits) {
 }
 
 /**
- * Builds the simulated contribution history: seeded pseudo-random days (fewer on weekends), the
- * last day shows the live commits of today.
+ * Builds the contribution grid from real commit counts (assets/data/site-stats.json): one cell per
+ * day ending today, days without commits count 0.
  * @param {Date} today
- * @param {number} liveCommitsToday
+ * @param {Record<string, number>} commitsByDay ISO date (YYYY-MM-DD, local time) to commit count
  * @param {number} [totalDays] 371 = 53 weeks
  * @returns {{ cells: { date: Date, commits: number }[], totalCommits: number, maxStreak: number }}
  */
-export function buildContributionData(today, liveCommitsToday, totalDays = 371) {
-    let seed = 42;
-    const random = () => {
-        const x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
-    };
-
+export function buildContributionData(today, commitsByDay, totalDays = 371) {
     const cells = [];
     let totalCommits = 0;
     let currentStreak = 0;
@@ -104,20 +98,12 @@ export function buildContributionData(today, liveCommitsToday, totalDays = 371) 
     for (let i = totalDays - 1; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(today.getDate() - i);
-
-        let commits;
-        if (i === 0) {
-            commits = liveCommitsToday;
-        } else {
-            const dayOfWeek = date.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-            const value = random();
-            if (isWeekend) {
-                commits = value > 0.9 ? Math.floor(value * 3) : 0;
-            } else {
-                commits = value > 0.4 ? Math.floor(value * 8) : 0;
-            }
-        }
+        const key = [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, '0'),
+            String(date.getDate()).padStart(2, '0'),
+        ].join('-');
+        const commits = Number(commitsByDay[key]) || 0;
 
         totalCommits += commits;
         if (commits > 0) {

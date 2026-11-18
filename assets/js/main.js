@@ -84,7 +84,7 @@ const IDLE_MODULES = [
 // at the top of its own init function — this only decides whether the file
 // gets fetched at all, the module's own guard still applies as usual.
 const LAZY_MODULES = [
-    ['./modules/username-greeting.js', 'initUsernameGreeting', '#mySubmit'],
+    ['./modules/username-greeting.js', 'initUsernameGreeting', '#username-form, #recruiter-greeting-banner'],
     ['./modules/contact-form.js', 'initContactForm', '#contact-form, #hire-me-form'],
     ['./modules/skill-bars.js', 'initSkillBars', '.skill-fill'],
     ['./modules/skill-radar.js', 'initSkillRadar', '#skill-radar-container'],
