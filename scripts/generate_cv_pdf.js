@@ -21,9 +21,10 @@ const PAGE = path.join(ROOT, 'pages', 'lebenslauf.html');
 function setStandDate(html, date) {
     const iso = date.toISOString().slice(0, 10);
     const [y, m, d] = iso.split('-');
+    /** @type {Record<string, string>} */
     const text = { de: `${d}.${m}.${y}`, en: `${m}/${d}/${y}` };
     return html.replace(
-        /(<time class="cv-stand-date" lang="(de|en)" datetime=")[^"]*(">)[^<]*(<\/time>)/g,
+        /(<time class="cv-stand-date" data-format="(de|en)" datetime=")[^"]*(">)[^<]*(<\/time>)/g,
         (_, head, lang, mid, tail) => `${head}${iso}${mid}${text[lang]}${tail}`
     );
 }
@@ -39,6 +40,7 @@ async function main() {
     if (updated !== html) fs.writeFileSync(PAGE, updated);
 
     // The page needs its ES modules, which browsers do not load from file://: serve the repo locally.
+    /** @type {Record<string, string>} */
     const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
     const server = http.createServer((req, res) => {
         const file = path.join(ROOT, decodeURIComponent(new URL(req.url || '/', 'http://x').pathname));
