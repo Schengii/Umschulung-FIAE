@@ -26,6 +26,21 @@ test.describe('Dashboard: Frage des Tages', () => {
 // must stay the same.
 test.describe('Dashboard: Aktivitätsraster und Lernempfehlungen', () => {
     test('sollte 371 Tage, Summen und Empfehlungen aus den gespeicherten Schwächen rendern', async ({ page }) => {
+        // Raster aus festen Messwerten: heute 5 Commits (Stufe 3), gestern 1
+        const key = (offset) => {
+            const d = new Date();
+            d.setDate(d.getDate() - offset);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+        const stats = {
+            generatedAt: key(0),
+            commits: { total: 6, byDay: { [key(0)]: 5, [key(1)]: 1 } },
+            pages: 28,
+            adrs: 15,
+            tests: null,
+            coverage: null,
+        };
+        await page.route('**/assets/data/site-stats.json', (route) => route.fulfill({ json: stats }));
         await page.goto('/pages/dashboard.html');
         await page.evaluate(() => {
             localStorage.setItem('github_live_commits_today', '5');
@@ -38,6 +53,9 @@ test.describe('Dashboard: Aktivitätsraster und Lernempfehlungen', () => {
         await expect(page.locator('#commit-grid .commit-cell')).toHaveCount(371);
         await expect(page.locator('#commit-grid .commit-cell').last()).toHaveClass(/level-3/);
         await expect(page.locator('#commit-grid-streak')).toContainText('Beste Strähne');
+        await expect(page.locator('#commit-grid-total')).toContainText('6 Commits');
+        await expect(page.locator('#commit-grid-live')).toContainText('5');
+        await expect(page.locator('#site-stats-list')).toContainText('Seiten');
 
         const links = page.locator('.card[aria-labelledby="recommendations-title"] a');
         await expect(links).toHaveCount(2);
