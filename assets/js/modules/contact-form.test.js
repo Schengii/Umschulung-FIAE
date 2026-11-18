@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { resetDocument } from '../../../scripts/test-support/dom-helpers.js';
-import { initContactForm } from './contact-form.js';
+import { initContactForm, checkSubmission, MIN_FILL_MS, COOLDOWN_MS, LIMITS } from './contact-form.js';
 
 const PAGE = `
     <form id="contact-form" onsubmit="return false">
@@ -16,7 +16,10 @@ const PAGE = `
 const field = (id, value) => {
     document.getElementById(id).value = value;
 };
+// Time is controlled: the form measures how long it has been on the page.
+let now = 1_000_000;
 const fill = (name = 'Erika', email = 'erika@example.org', message = 'Hallo') => {
+    now += MIN_FILL_MS + 1000;
     field('contact-name', name);
     field('contact-email', email);
     field('contact-message', message);
@@ -29,6 +32,8 @@ const flush = async () => {
 };
 
 beforeEach(() => {
+    now = 1_000_000;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
     resetDocument(PAGE);
     delete globalThis.APP;
 });
@@ -140,7 +145,7 @@ describe('contact-form: with a Web3Forms key', () => {
     });
 
     it('falls back to the mail client when the service reports an error', async () => {
-        vi.useFakeTimers();
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
         vi.spyOn(console, 'warn').mockImplementation(() => {});
         globalThis.fetch = respond({ success: false, message: 'quota' });
         initContactForm();
@@ -153,7 +158,7 @@ describe('contact-form: with a Web3Forms key', () => {
     });
 
     it('hides the feedback again after a few seconds', async () => {
-        vi.useFakeTimers();
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
         globalThis.fetch = respond({ success: true });
         initContactForm();
         fill();
@@ -162,5 +167,68 @@ describe('contact-form: with a Web3Forms key', () => {
 
         vi.advanceTimersByTime(6000);
         expect(feedback().style.display).toBe('none');
+    });
+});
+
+describe('checkSubmission', () => {
+    const ok = { name: 'Erika', email: 'e@x.de', message: 'Hallo', elapsedMs: MIN_FILL_MS, sinceLastSendMs: null };
+
+    it('lässt eine normale Eingabe durch', () => {
+        expect(checkSubmission(ok)).toBeNull();
+    });
+
+    it('bremst zu schnelles Absenden', () => {
+        expect(checkSubmission({ ...ok, elapsedMs: MIN_FILL_MS - 1 }).reason).toBe('too-fast');
+    });
+
+    it('sperrt nach dem Senden für die Dauer der Wartezeit', () => {
+        const blocked = checkSubmission({ ...ok, sinceLastSendMs: 10_000 });
+        expect(blocked.reason).toBe('cooldown');
+        expect(blocked.de).toContain('50 Sekunden');
+        expect(checkSubmission({ ...ok, sinceLastSendMs: COOLDOWN_MS })).toBeNull();
+    });
+
+    it('begrenzt die Längen der Felder', () => {
+        expect(checkSubmission({ ...ok, message: 'x'.repeat(LIMITS.message + 1) }).reason).toBe('too-long');
+        expect(checkSubmission({ ...ok, name: 'x'.repeat(LIMITS.name + 1) }).reason).toBe('too-long');
+        expect(checkSubmission({ ...ok, message: 'x'.repeat(LIMITS.message) })).toBeNull();
+    });
+});
+
+describe('contact-form: Missbrauchsschutz', () => {
+    beforeEach(() => {
+        globalThis.APP = { WEB3FORMS_KEY: 'test-key' };
+    });
+
+    it('sendet nicht, wenn das Formular sofort nach dem Laden abgeschickt wird', () => {
+        globalThis.fetch = vi.fn();
+        initContactForm();
+        field('contact-name', 'Bot');
+        field('contact-email', 'bot@example.org');
+        field('contact-message', 'Spam');
+        submit();
+        expect(globalThis.fetch).not.toHaveBeenCalled();
+        expect(feedback().textContent).toContain('sehr schnell');
+    });
+
+    it('sperrt ein zweites Absenden direkt nach dem Erfolg', async () => {
+        globalThis.fetch = vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ success: true }) }));
+        initContactForm();
+        fill();
+        submit();
+        await flush();
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+
+        fill();
+        submit();
+        await flush();
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+        expect(feedback().textContent).toContain('Bitte warte noch');
+
+        now += COOLDOWN_MS;
+        fill();
+        submit();
+        await flush();
+        expect(globalThis.fetch).toHaveBeenCalledTimes(2);
     });
 });

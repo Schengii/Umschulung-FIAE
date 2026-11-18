@@ -3,7 +3,8 @@ import crypto from 'crypto';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
-const { hashOf, extractInlineScripts } = require('./verify_csp_hashes.js');
+const { hashOf, extractInlineScripts, withScriptHashes, collectSiteHashes } = require('./verify_csp_hashes.js');
+const vercelConfig = require('../vercel.json');
 
 describe('verify_csp_hashes: hashOf', () => {
     it('produces identical hashes for CRLF and LF content (Windows checkout invariance)', () => {
@@ -63,5 +64,28 @@ describe('verify_csp_hashes: extractInlineScripts', () => {
     it('returns empty array when no inline scripts are present', () => {
         const html = '<script src="app.js"></script><script src="vendor.js"></script>';
         expect(extractInlineScripts(html)).toEqual([]);
+    });
+});
+
+describe('verify_csp_hashes: header CSP', () => {
+    it('withScriptHashes ersetzt script-src durch self plus Hashes und lässt den Rest unberührt', () => {
+        const out = withScriptHashes("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self';", [
+            'sha256-a',
+            'sha256-b',
+        ]);
+        expect(out).toBe("default-src 'self'; script-src 'self' 'sha256-a' 'sha256-b'; style-src 'self';");
+    });
+
+    it('collectSiteHashes ist sortiert und ohne Dubletten', () => {
+        const hashes = collectSiteHashes();
+        expect(hashes.length).toBeGreaterThan(0);
+        expect(hashes).toEqual([...new Set(hashes)].sort());
+    });
+
+    it('die Header-CSP der Seiten erlaubt kein unsafe-inline für Skripte', () => {
+        const rule = vercelConfig.headers.find((r) => r.source.startsWith('/((?!pages/playground'));
+        const csp = rule.headers.find((h) => h.key === 'Content-Security-Policy').value;
+        expect(/script-src[^;]*'unsafe-inline'/.test(csp)).toBe(false);
+        expect(rule.source).toContain('Projekte/');
     });
 });

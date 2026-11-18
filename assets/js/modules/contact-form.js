@@ -2,6 +2,45 @@
  * Contact Form Module — triggers mailto
  * Handles both #contact-form (impressum.html) and #hire-me-form (portfolio.html).
  */
+/** Mindestzeit zwischen Seitenaufruf und Absenden: Bots füllen und senden sofort. */
+export const MIN_FILL_MS = 3000;
+/** Sperre nach erfolgreichem Senden, gegen versehentliches Doppelsenden und Massenversand. */
+export const COOLDOWN_MS = 60000;
+/** Obergrenzen der Felder (entsprechen den maxlength-Attributen im HTML). */
+export const LIMITS = { name: 100, email: 254, message: 5000 };
+
+/**
+ * Prüft Zeit, Sperre und Längen vor dem Absenden.
+ * @param {{ name: string, email: string, message: string, elapsedMs: number, sinceLastSendMs: number | null }} input
+ *   elapsedMs: Zeit seit dem Aufruf der Seite; sinceLastSendMs: Zeit seit dem letzten erfolgreichen Senden (null: noch nie)
+ * @returns {null | { reason: 'too-fast' | 'cooldown' | 'too-long', de: string, en: string }}
+ */
+export function checkSubmission({ name, email, message, elapsedMs, sinceLastSendMs }) {
+    if (sinceLastSendMs !== null && sinceLastSendMs < COOLDOWN_MS) {
+        const seconds = Math.ceil((COOLDOWN_MS - sinceLastSendMs) / 1000);
+        return {
+            reason: 'cooldown',
+            de: `Deine Nachricht wurde gerade gesendet. Bitte warte noch ${seconds} Sekunden, bevor du eine weitere sendest.`,
+            en: `Your message was just sent. Please wait ${seconds} more seconds before sending another one.`,
+        };
+    }
+    if (elapsedMs < MIN_FILL_MS) {
+        return {
+            reason: 'too-fast',
+            de: 'Das ging sehr schnell. Bitte prüfe deine Eingaben und sende noch einmal.',
+            en: 'That was very fast. Please check your entries and send again.',
+        };
+    }
+    if (name.length > LIMITS.name || email.length > LIMITS.email || message.length > LIMITS.message) {
+        return {
+            reason: 'too-long',
+            de: `Eingabe zu lang (Name höchstens ${LIMITS.name}, Nachricht höchstens ${LIMITS.message} Zeichen).`,
+            en: `Entry too long (name at most ${LIMITS.name}, message at most ${LIMITS.message} characters).`,
+        };
+    }
+    return null;
+}
+
 export function initContactForm() {
     // Handle main contact form (impressum.html)
     _bindContactForm('contact-form', 'contact-name', 'contact-email', 'contact-message', 'form-feedback');
@@ -21,6 +60,10 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
     if (!form) return;
 
     form.removeAttribute('onsubmit');
+
+    const shownAt = Date.now();
+    /** @type {number | null} */
+    let lastSentAt = null;
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -63,6 +106,22 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                 feedback.className = 'form-feedback warning';
                 feedback.innerHTML =
                     '<span lang="de">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span><span lang="en">Please enter a valid email address.</span>';
+            }
+            return;
+        }
+
+        const blocked = checkSubmission({
+            name: name.value,
+            email: email.value,
+            message: message.value,
+            elapsedMs: Date.now() - shownAt,
+            sinceLastSendMs: lastSentAt === null ? null : Date.now() - lastSentAt,
+        });
+        if (blocked) {
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'form-feedback warning';
+                feedback.innerHTML = `<span lang="de">${blocked.de}</span><span lang="en">${blocked.en}</span>`;
             }
             return;
         }
@@ -111,6 +170,7 @@ function _bindContactForm(formId, nameId, emailId, messageId, feedbackId) {
                 })
                 .then((data) => {
                     if (data.success) {
+                        lastSentAt = Date.now();
                         if (feedback) {
                             feedback.style.display = 'block';
                             feedback.className = 'form-feedback success';

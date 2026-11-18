@@ -31,6 +31,7 @@ const COPY_ENTRIES = [
     'sitemap.xml',
     'CNAME',
     '.nojekyll',
+    '.well-known',
 ];
 
 // Directories that are never part of the site. This mirrors .gitignore (Vercel only ever

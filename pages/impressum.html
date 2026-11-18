@@ -164,12 +164,12 @@
 
                         <div class="form-group">
                             <label for="contact-name">Name *</label>
-                            <input type="text" id="contact-name" class="form-control" required placeholder="Dein Name" data-en-placeholder="Your name">
+                            <input type="text" id="contact-name" class="form-control" required maxlength="100" placeholder="Dein Name" data-en-placeholder="Your name">
                         </div>
 
                         <div class="form-group">
                             <label for="contact-email">E-Mail *</label>
-                            <input type="email" id="contact-email" class="form-control" required placeholder="deine@mail.de" data-en-placeholder="your@mail.com">
+                            <input type="email" id="contact-email" class="form-control" required maxlength="254" placeholder="deine@mail.de" data-en-placeholder="your@mail.com">
                         </div>
 
                         <div class="form-group">
@@ -177,7 +177,7 @@
                                 <span lang="de">Nachricht</span>
                                 <span lang="en">Message</span>
                                 *</label>
-                            <textarea id="contact-message" class="form-control contact-message-textarea" rows="5" required placeholder="..."></textarea>
+                            <textarea id="contact-message" class="form-control contact-message-textarea" rows="5" required maxlength="5000" placeholder="..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-primary">

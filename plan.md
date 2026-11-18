@@ -152,11 +152,11 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   HTML wartet ohne Limit auf das Netz. Bei schlechter Verbindung hängt die Seite, obwohl eine Kopie im Cache liegt. Nach rund 3 Sekunden die Cache-Fassung liefern, zusätzlich `navigationPreload` aktivieren.
 - [x] **5.3 Unit-Tests für `sw.js`.** (M) Erledigt 2026-11-18 (`modules/sw-strategy.js`).
   Die Fetch-Logik ist nur über E2E abgedeckt. Die Entscheidungen (welche Strategie für welche Anfrage, Offline-Fallback, Cache-Bereinigung) in reine Funktionen ziehen und mit Vitest testen.
-- [ ] **5.4 Header-CSP ohne `script-src 'unsafe-inline'`.** (M)
+- [x] **5.4 Header-CSP ohne `script-src 'unsafe-inline'`.** (M) Erledigt 2026-11-18 (`verify_csp_hashes.js` erzeugt die Hash-Liste, ADR 0003 nachgetragen).
   Die Meta-CSP der Seiten ist streng, die Header-CSP in `vercel.json` erlaubt Inline-Skripte. Der Header schützt deshalb allein nichts, wo ein Meta-Tag fehlt (zum Beispiel in einer Demo unter `Projekte/`). Vorschlag: `verify_csp_hashes.js` schreibt die Vereinigung aller Hashes in den Header von `vercel.json` (generiert, mit Check), für `/Projekte/*` gilt eine eigene Regel. Nachtrag in ADR 0003.
-- [ ] **5.5 Weitere Sicherheits-Header.** (S)
+- [x] **5.5 Weitere Sicherheits-Header.** (S) Erledigt 2026-11-18. **Offen beim Eigentümer:** in den GitHub-Einstellungen „Private vulnerability reporting“ aktivieren, sonst führt der Kontakt-Link der `security.txt` ins Leere.
   `Cross-Origin-Opener-Policy: same-origin` ergänzen und gegen die Demos testen. `/.well-known/security.txt` anlegen und in `COPY_ENTRIES` aufnehmen.
-- [ ] **5.6 Kontaktformular gegen Missbrauch härten.** (S)
+- [x] **5.6 Kontaktformular gegen Missbrauch härten.** (S) Erledigt 2026-11-18. Der Web3Forms-Schlüssel bleibt öffentlich; die Sperren gelten nur im Browser und stoppen keine gezielten Skripte.
   Der Web3Forms-Schlüssel ist öffentlich und nicht an die Domain gebunden (nur im Pro-Tarif möglich). Der Honeypot ist vorhanden. Ergänzen: Mindestzeit zwischen Seitenaufruf und Absenden, Sperre nach dem Absenden, Längenbegrenzung der Felder.
 
 ---

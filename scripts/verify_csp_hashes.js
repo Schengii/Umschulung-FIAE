@@ -111,18 +111,78 @@ function verifyCspHashes({ files: targetFiles = files, fix: shouldFix = fix } = 
     return { hadFailure, fixedCount, pageCount: targetFiles.length };
 }
 
+const vercelPath = path.join(root, 'vercel.json');
+// Header rule for the site itself: everything except the playground and the demo builds.
+const SITE_HEADER_SOURCE = '/((?!pages/playground\\.html|Projekte/).*)';
+
+/**
+ * Union of the script hashes of all pages whose meta CSP does not allow inline scripts anyway.
+ * The HTTP header carries exactly this set, so it allows every inline script the pages
+ * legitimately contain and nothing else (ADR 0003, update 2026-11-18).
+ * @param {string[]} [targetFiles]
+ * @returns {string[]} sorted, unique `sha256-...` values
+ */
+function collectSiteHashes(targetFiles = files) {
+    const hashes = new Set();
+    for (const file of targetFiles) {
+        const html = fs.readFileSync(file, 'utf8');
+        const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]*)"/i);
+        if (csp && /script-src[^;]*'unsafe-inline'/.test(csp[1])) continue;
+        for (const script of extractInlineScripts(html)) hashes.add(hashOf(script));
+    }
+    return [...hashes].sort();
+}
+
+/**
+ * script-src of the site header: 'self' plus the hashes, without 'unsafe-inline'.
+ * @param {string} headerValue current CSP header value
+ * @param {string[]} hashes
+ * @returns {string}
+ */
+function withScriptHashes(headerValue, hashes) {
+    const scriptSrc = `script-src 'self' ${hashes.map((h) => `'${h}'`).join(' ')}`;
+    return headerValue.replace(/script-src[^;]*/, scriptSrc);
+}
+
+/**
+ * Checks (and with fix rewrites) the CSP header of the site rule in vercel.json.
+ * @param {{ fix?: boolean, targetFiles?: string[] }} [options]
+ * @returns {{ ok: boolean, message: string }}
+ */
+function verifyHeaderCsp({ fix: shouldFix = false, targetFiles = files } = {}) {
+    const config = JSON.parse(fs.readFileSync(vercelPath, 'utf8'));
+    const rule = config.headers.find((/** @type {any} */ r) => r.source === SITE_HEADER_SOURCE);
+    const header = rule && rule.headers.find((/** @type {any} */ h) => h.key === 'Content-Security-Policy');
+    if (!header) return { ok: false, message: `vercel.json: no CSP header rule for ${SITE_HEADER_SOURCE}` };
+    const expected = withScriptHashes(header.value, collectSiteHashes(targetFiles));
+    if (header.value === expected) return { ok: true, message: 'vercel.json header CSP matches the page hashes.' };
+    if (!shouldFix) return { ok: false, message: 'vercel.json header CSP is out of date (run check-csp:fix).' };
+    header.value = expected;
+    fs.writeFileSync(vercelPath, JSON.stringify(config, null, 2) + '\n');
+    return { ok: true, message: 'vercel.json header CSP updated.' };
+}
+
 module.exports = {
     extractInlineScripts,
+    collectSiteHashes,
+    withScriptHashes,
+    verifyHeaderCsp,
     hashOf,
     verifyCspHashes,
 };
 
 if (require.main === module) {
     const { hadFailure, fixedCount, pageCount } = verifyCspHashes();
+    const header = verifyHeaderCsp({ fix });
 
     if (fix) {
-        console.log(`\n${fixedCount} file(s) updated.`);
+        console.log(`\n${fixedCount} file(s) updated. ${header.message}`);
         process.exit(0);
+    }
+
+    if (!header.ok) {
+        console.error(`✗ ${header.message}`);
+        process.exit(1);
     }
 
     if (hadFailure) {
