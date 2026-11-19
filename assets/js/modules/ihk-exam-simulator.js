@@ -257,6 +257,9 @@ export function initIhkExamSimulator() {
         modeButtons
     );
     const examPanel = element('section', { class: 'exam-panel', hidden: '' });
+    /** @param {...(Node | string | null | undefined)} children */
+    const setPanel = (...children) =>
+        examPanel.replaceChildren(...children.filter((child) => child !== null && child !== undefined));
     // Announces the remaining time at a few marks without reading every second aloud.
     const announcer = element('div', { class: 'sr-only', role: 'status', 'aria-live': 'polite' });
 
@@ -270,7 +273,8 @@ export function initIhkExamSimulator() {
             'The standard quiz about this website, or a timed exam simulation with a breakdown per topic.'
         );
         modeButtons.setAttribute('aria-label', t('Quiz-Modus', 'Quiz mode'));
-        timerDisplay.querySelector('.exam-timer-label').textContent = t('⏱️ Restzeit:', '⏱️ Time left:');
+        const timerLabel = timerDisplay.querySelector('.exam-timer-label');
+        if (timerLabel) timerLabel.textContent = t('⏱️ Restzeit:', '⏱️ Time left:');
         modeButtons.querySelectorAll('.btn-exam-mode').forEach((button, index) => {
             const [key, de, en] = MODE_BUTTONS[index];
             button.textContent = t(de, en);
@@ -341,13 +345,14 @@ export function initIhkExamSimulator() {
 
     /** Adds the finished run to the statistics over all runs and to the list of open mistakes. */
     function recordStatistics() {
+        const state = /** @type {NonNullable<typeof run>} */ (run);
         AppStorage.setItem(
             STORAGE_KEYS.EXAM_TOPIC_STATS,
-            JSON.stringify(addRunToTopicStats(readTopicStats(), run.questions, run.answers))
+            JSON.stringify(addRunToTopicStats(readTopicStats(), state.questions, state.answers))
         );
         AppStorage.setItem(
             STORAGE_KEYS.EXAM_WRONG_QUESTIONS,
-            JSON.stringify(updateWrongQuestions(readWrongQuestions(), run.questions, run.answers))
+            JSON.stringify(updateWrongQuestions(readWrongQuestions(), state.questions, state.answers))
         );
     }
 
@@ -400,7 +405,7 @@ export function initIhkExamSimulator() {
         run = null;
         submitArmed = false;
         const isExam = mode !== 'standard';
-        quizContainer.classList.toggle('exam-active', isExam);
+        quizContainer?.classList.toggle('exam-active', isExam);
         examPanel.hidden = !isExam;
         timerDisplay.hidden = !isExam;
         timerDisplay.classList.remove('exam-timer-low');
@@ -505,9 +510,10 @@ export function initIhkExamSimulator() {
     }
 
     function renderIntro() {
-        const config = modeConfig(run.mode);
-        const stored = readResults()[run.mode];
-        const isWeakness = run.mode === 'weak';
+        const state = /** @type {NonNullable<typeof run>} */ (run);
+        const config = modeConfig(state.mode);
+        const stored = readResults()[state.mode];
+        const isWeakness = state.mode === 'weak';
         const available = isWeakness ? pickWeaknessRun().length : config.questionCount;
         const start = element('button', {
             type: 'button',
@@ -517,7 +523,7 @@ export function initIhkExamSimulator() {
         });
         start.addEventListener('click', startRun);
         if (isWeakness && available === 0) {
-            examPanel.replaceChildren(
+            setPanel(
                 element('h3', { class: 'exam-heading', text: t(config.de, config.en) }),
                 element('p', {
                     id: 'exam-weak-empty',
@@ -531,7 +537,7 @@ export function initIhkExamSimulator() {
             return;
         }
 
-        examPanel.replaceChildren(
+        setPanel(
             element('h3', { class: 'exam-heading', text: t(config.de, config.en) }),
             element('p', {
                 text: isWeakness
@@ -827,7 +833,7 @@ export function initIhkExamSimulator() {
         next.disabled = index === questions.length - 1;
         next.addEventListener('click', () => goTo(index + 1));
 
-        const countOpen = () => run.questions.filter((item, i) => !isAnswered(item, run.answers[i])).length;
+        const countOpen = () => questions.filter((item, i) => !isAnswered(item, answers[i])).length;
         const open = countOpen();
         const submit = element('button', {
             type: 'button',
@@ -872,7 +878,7 @@ export function initIhkExamSimulator() {
             });
         }
 
-        examPanel.replaceChildren(
+        setPanel(
             element(
                 'div',
                 { class: 'exam-question-meta' },
@@ -912,8 +918,9 @@ export function initIhkExamSimulator() {
     }
 
     function renderResult() {
+        const state = /** @type {NonNullable<typeof run>} */ (run);
         const language = lang();
-        const result = evaluateExam(run.questions, run.answers);
+        const result = evaluateExam(state.questions, state.answers);
 
         const table = element(
             'table',
@@ -948,8 +955,8 @@ export function initIhkExamSimulator() {
         table.appendChild(body);
 
         const review = element('ol', { class: 'exam-review' });
-        run.questions.forEach((question, index) => {
-            const given = run.answers[index];
+        state.questions.forEach((question, index) => {
+            const given = state.answers[index];
             const isCorrect = isFullyCorrect(question, given);
             const score = scoreAnswer(question, given);
             const givenText = givenAnswerText(question, given, language);
@@ -986,7 +993,7 @@ export function initIhkExamSimulator() {
             id: 'exam-restart-btn',
             text: t('Neue Prüfung starten', 'Start a new exam'),
         });
-        again.addEventListener('click', () => selectMode(run.mode));
+        again.addEventListener('click', () => selectMode(state.mode));
 
         const hasOpenMistakes = readWrongQuestions().length > 0;
         const repeat = hasOpenMistakes
@@ -1008,9 +1015,9 @@ export function initIhkExamSimulator() {
 
         const weakNames = result.weakTopics.map((topic) => EXAM_TOPICS[topic][language]).join(', ');
 
-        examPanel.replaceChildren(
+        setPanel(
             element('h3', { class: 'exam-heading', tabindex: '-1', text: t('Ergebnis', 'Result') }),
-            run.timedOut
+            state.timedOut
                 ? element('p', { class: 'exam-warning', text: t('⏰ Die Zeit ist abgelaufen.', '⏰ Time is up.') })
                 : null,
             element(
