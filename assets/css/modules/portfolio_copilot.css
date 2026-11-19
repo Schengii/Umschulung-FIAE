@@ -6,6 +6,13 @@
     pointer-events: none;
 }
 
+/* Meldungen sitzen über dem Launcher, statt ihn zu überdecken oder von ihm verdeckt zu werden.
+   Das Präfix `html` hebt die Spezifität über style.css, das nach diesem Modul geladen wird. */
+html .achievement-toast,
+html .toast-container {
+    bottom: calc(8.75rem + var(--cookie-banner-h, 0px));
+}
+
 /* Floating Launcher Button */
 #copilot-toggle-btn {
     pointer-events: auto;
@@ -420,8 +427,14 @@
 
 /* Mobile Responsive Drawer Styling */
 @media (max-width: 600px) {
+    /* Der Assistent-Button deckte sonst Erfolgsmeldungen und Toasts am unteren Rand ab. */
+    html .achievement-toast,
+    html .toast-container {
+        bottom: calc(4.75rem + var(--cookie-banner-h, 0px));
+    }
+
     #copilot-toggle-btn {
-        bottom: 1.25rem;
+        bottom: calc(1.25rem + var(--cookie-banner-h, 0px));
         right: 1.25rem;
         padding: 0.65rem 0.9rem;
         font-size: 0.85rem;

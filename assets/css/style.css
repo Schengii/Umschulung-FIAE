@@ -48,7 +48,7 @@
      --bg-page: #f8fafc;
      --bg-card: rgba(255, 255, 255, 0.65);
      --bg-header: rgba(255, 255, 255, 0.65);
-     --bg-nav: rgba(15, 23, 42, 0.75);
+     --bg-nav: rgba(15, 23, 42, 0.94);
      --bg-nav-item-hover: #1e293b;
      --bg-nav-active: #2563eb;
  
@@ -2701,6 +2701,34 @@ html[lang="en"] [lang="de"] {
     text-decoration: none;
 }
 
+/* Gemeinsame Form der Standard-Buttons. :where() hält die Spezifität bei null, damit
+   .hero-btn und seitenspezifische Regeln (Polsterung, Radius) weiter gewinnen. Ohne diese
+   Regel waren .btn-secondary und .btn nur 19 px hohe Textzeilen mit Rahmen. */
+:where(.btn, .btn-secondary:not(.hero-btn)) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.6rem 1.25rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+:where(.btn-sm) {
+    min-height: 2.25rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem;
+}
+
+.btn.btn-primary {
+    width: auto;
+}
+
 .hero-badge {
     display: inline-flex;
     align-items: center;
@@ -2781,7 +2809,7 @@ html[lang="en"] [lang="de"] {
    layout shift on every unlock. */
 .achievement-toast {
     position: fixed;
-    bottom: 1.5rem;
+    bottom: calc(1.5rem + var(--cookie-banner-h, 0px));
     right: 1.5rem;
     transform: translateY(calc(100% + 3rem));
     visibility: hidden;
@@ -3234,7 +3262,7 @@ html nav {
 
 .toast-container {
     position: fixed;
-    bottom: 1.5rem;
+    bottom: calc(1.5rem + var(--cookie-banner-h, 0px));
     right: 1.5rem;
     z-index: 2000;
     display: flex;
@@ -5227,6 +5255,15 @@ body.cursor-active .cursor-glow {
 }
 [data-theme="dark"] .audio-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.05);
+}
+
+/* In der Fußzeile ist der Schalter eine Pille mit Text; die feste 38-px-Größe des Icon-Buttons
+   machte daraus einen Kreis, der die Textzeile sprengte. */
+.footer-meta-row .audio-toggle-btn {
+    width: auto;
+    height: auto;
+    min-height: 1.75rem;
+    gap: 0.35rem;
 }
 
 /* Accessibility - Keyboard Navigation Focus Ring (WCAG Compliance) */

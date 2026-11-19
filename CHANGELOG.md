@@ -4,6 +4,13 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Behoben (Styling)
+- **Buttons**: `.btn` und `.btn-secondary` hatten keine Grundform (19 px hohe Textzeilen mit Rahmen, z. B. Cockpit-Tabs, Git-Simulator, Kartei). Jetzt gemeinsame Form mit Polsterung, Radius und 44 px Mindesthöhe (`:where()`, damit `.hero-btn` und Seitenregeln gewinnen).
+- **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.
+- **Navigation im hellen Theme**: Der Hintergrund war ein halbtransparentes, schlammiges Grau, jetzt deckender (0,94).
+- **Fußzeile**: Der Audio-Schalter ist wieder eine Pille mit Text statt eines 38-px-Kreises.
+- **Test**: `daily_question.spec.js` (Aktivitätsraster) war in Firefox und WebKit rot, weil der Service Worker `page.route` umging; nicht flaky, sondern ein Testfehler.
+
 ## [1.6.0] - 2026-11-19
 
 #### Hinzugefügt (Plan 3.1)
