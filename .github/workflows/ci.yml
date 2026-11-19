@@ -138,8 +138,24 @@ jobs:
         if: matrix.root == 'dist'
         run: npm run build:dist
 
+      - name: Read Playwright Version
+        id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ steps.playwright-version.outputs.version }}
+
       - name: Install Playwright Browser (${{ matrix.browser }})
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Install Playwright System Dependencies (${{ matrix.browser }})
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps ${{ matrix.browser }}
 
       - name: Run Playwright E2E Tests (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }}

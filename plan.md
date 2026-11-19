@@ -174,11 +174,11 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   `jsconfig.json` hat `strict: false`. Nach `noImplicitAny` ist `strictNullChecks` der Schritt mit dem größten Nutzen (viele `querySelector`-Ergebnisse). Vorgehen wie zuvor: Fehler zählen, Zahl als Obergrenze festschreiben, schrittweise auf 0.
 - [ ] **6.5 Visuelle Regressionstests.** (M)
   Es gibt keinen `toHaveScreenshot`-Test, obwohl zwei Themes, mehrere Akzentfarben und vier A11y-Modi bestehen. Ein Spec für fünf Kernseiten in hell und dunkel, nur Chromium, mit eingefrorenen Animationen. Referenzbilder in der CI erzeugen (Linux), nicht lokal unter Windows.
-- [ ] **6.6 ESLint-Globals aus dem Paket `globals`.** (S)
+- [x] **6.6 ESLint-Globals aus dem Paket `globals`.** (S) Erledigt 2026-11-19: `globals.browser`/`node`/`serviceworker`, Sonderregel in CLAUDE.md gestrichen.
   `eslint.config.js` pflegt rund 45 Browser- und Node-Globals von Hand, deshalb der Umweg über `window.HTMLCanvasElement` (siehe CLAUDE.md). `globals.browser` für `assets/js`, `globals.node` für `scripts`, `globals.serviceworker` für `sw.js`. Danach die Sonderregel in CLAUDE.md streichen.
-- [ ] **6.7 Rauschen in der Testausgabe entfernen.** (S)
+- [ ] **6.7 Rauschen in der Testausgabe entfernen.** (S) Versucht 2026-11-19, noch offen: Die Meldung entsteht in happy-dom beim Anhängen und Setzen von `src` in `quick-sandbox.test.js`; weder `handleDisabledFileLoadingAsSuccess`, `disableIframePageLoading`, ein `console.error`-Filter noch ein `error`-Listener unterdrücken sie.
   Die Unit-Tests schreiben mehrfach `DOMException: Failed to load iframe page` (happy-dom). In den betroffenen Tests die iframe-Navigation abschalten, damit echte Fehler auffallen.
-- [ ] **6.8 Links nach außen prüfen.** (S)
+- [x] **6.8 Links nach außen prüfen.** (S) Erledigt 2026-11-19: `scripts/check_external_links.js` und `links.yml` (montags, Issue bei toten Links). Erstlauf: 24 Links, alle erreichbar.
   Die Quellenabschnitte verweisen auf DRV, Arbeitsagentur, DGUV und weitere. Ein wöchentlicher Workflow prüft externe Links und öffnet bei toten Links ein Issue (kein CI-Gate, weil fremde Server schwanken).
 
 ---
@@ -187,28 +187,28 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
 
 - [ ] **7.1 Repo-Größe entscheiden.** (M, Entscheidung beim Eigentümer)
   `.git` 281 MB. Im Arbeitsbaum liegen fünf Videos (17 MB), eine Präsentation (8 MB) und die Demo-Builds. Optionen: (a) so lassen, (b) Videos und Präsentation extern ausliefern und nur verlinken, (c) Git-LFS mit Umschreiben der Historie und Force-Push. Empfehlung: (b), weil ohne Eingriff in die Historie. Ergebnis als ADR.
-- [ ] **7.2 E2E-Laufzeit senken.** (S)
+- [x] **7.2 E2E-Laufzeit senken.** (S) Erledigt 2026-11-19: `actions/cache` (SHA-gepinnt) je Browser und Playwright-Version; die Laufzeitersparnis zeigt erst der nächste CI-Lauf.
   Ein CI-Lauf dauert rund 15 Minuten. Die Playwright-Browser über `actions/cache` (Schlüssel: Playwright-Version) zwischenspeichern.
 - [ ] **7.3 Playwright-Sperre auflösen.** (M)
   `@playwright/test` ist auf 1.63.0 festgelegt, aktuell ist 1.65.1. Die Ursache der hängenden WebKit-Klicks auf `portfolio.html` in einem Test-PR eingrenzen. Wiedervorlage laut `dependabot.yml`: 2027-01-31.
 - [ ] **7.4 Font Awesome 7 bewerten.** (M)
   6.7.2 ist installiert, 7.3.1 aktuell. Prüfen, ob das Subset-Skript die neuen Familien lesen kann, sonst die Sperre mit neuer Wiedervorlage verlängern.
-- [ ] **7.5 Sync-Zeitplan und Doku angleichen.** (S)
+- [x] **7.5 Sync-Zeitplan und Doku angleichen.** (S) Erledigt 2026-11-19: Doku auf „täglich“ angepasst.
   `sync.yml` läuft täglich (`0 4 * * *`), CLAUDE.md spricht von wöchentlich. Eines von beiden anpassen.
-- [ ] **7.6 Einmal-Skripte aufräumen.** (S)
+- [x] **7.6 Einmal-Skripte aufräumen.** (S) Erledigt 2026-11-19: fünf Skripte samt npm-Scripts und README-Zeilen gelöscht. Offen: `compress_images.js` und `optimize_images.js` sind noch nicht zusammengeführt.
   `add_og_meta.js`, `fix_project_html_paths.js`, `localize_vendor_assets.js`, `audit_cleanup.js` und `install_sync_triggers.js` sehen nach Migrationshilfen aus. Prüfen, welche noch gebraucht werden, den Rest samt npm-Script und README-Zeile löschen. `compress_images.js` und `optimize_images.js` zusammenführen.
 
 ---
 
 ## Phase 8: Dokumentation
 
-- [ ] **8.1 README an den Stand angleichen.** (S)
+- [x] **8.1 README an den Stand angleichen.** (S) Erledigt 2026-11-19 (ohne Projektzahl).
   „Über 20 Projekte“ (es sind 8), „Font Awesome 6.5.2“ (es ist 6.7.2), „KI-Portfolio-Copilot“ (siehe 1.3). Zahlen möglichst aus `site-stats.json` (Punkt 1.2) ableiten oder weglassen.
-- [ ] **8.2 Changelog teilen.** (S)
+- [x] **8.2 Changelog teilen.** (S) Erledigt 2026-11-19 (`docs/changelog-archiv.md`).
   `CHANGELOG.md` hat 101 KB. Versionen vor 1.5.0 nach `docs/changelog-archiv.md` verschieben.
-- [ ] **8.3 Neue ADRs.** (S je ADR)
+- [ ] **8.3 Neue ADRs.** (S je ADR) Teilweise 2026-11-19: ADR 0016 (Cache) und 0017 (Header-CSP). Offen: ADR zu 2.2 und 7.1, sobald diese entschieden sind; Vault-Notiz „Übersicht“ nachziehen.
   Für 2.2 (generierte Projektseiten), 5.1 (Cache-Grenzen), 5.4 (generierte Header-CSP) und 7.1 (große Dateien). Die Vault-Notiz „Umschulung-FIAE Portfolio – Übersicht“ nennt noch 12 ADRs, es sind 15.
-- [ ] **8.4 `CONTRIBUTING.md` und `GEMINI.md`.** (S)
+- [x] **8.4 `CONTRIBUTING.md` und `GEMINI.md`.** (S) Erledigt 2026-11-19 (`GEMINI.md` verwies schon auf CLAUDE.md).
   `CONTRIBUTING.md` um den Ablauf „Änderung, `npm run regen`, `npm run check`, Changelog“ ergänzen. `GEMINI.md` auf CLAUDE.md verweisen lassen, statt Regeln doppelt zu führen.
 
 ---
