@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 4.6)
+- **Mündliche Prüfung im Cockpit**: 24 statt 8 Fragen mit Musterantworten und Bewertungskriterien, Selbsteinschätzung per Checkliste, gespeicherte Bilanz je Themengebiet.
+
 #### Hinzugefügt (Plan 4.5)
 - **Verlauf der Prüfungsergebnisse**: Neuer Speicher `exam_history` und ein SVG-Liniendiagramm im Dashboard (gesamt oder je Themengebiet, mit Bestehensgrenze).
 

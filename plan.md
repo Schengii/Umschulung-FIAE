@@ -139,7 +139,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   Einstellbare Zahl neuer Karten je Tag, Sitzung mit Fortschrittsanzeige und Abschlussbild (richtig, falsch, nächste Fälligkeit).
 - [x] **4.5 Verlauf der Prüfungsergebnisse.** (M) Erledigt 2026-11-19: Die Läufe wurden bisher nur als Bestwert gespeichert, neuer Schlüssel `exam_history` (je Lauf Datum, Modus, Quote, Themen; im Backup und in der Datenschutzerklärung); SVG-Liniendiagramm im Dashboard gesamt und je Themengebiet (`exam-history.js`).
   Ein Liniendiagramm im Dashboard (SVG, ohne Bibliothek) zeigt die Quote über die Zeit und je Themengebiet. Vorher prüfen, ob die Ergebnisse je Lauf mit Datum gespeichert werden, sonst das Format erweitern.
-- [ ] **4.6 Mündliche Prüfung im Cockpit ausbauen.** (M)
+- [x] **4.6 Mündliche Prüfung im Cockpit ausbauen.** (M) Erledigt 2026-11-19: Katalog von 8 auf 24 Fragen in 10 Themengebieten (`fachgespraech-questions.js`, je Frage Musterantwort und drei Kriterien), Selbsteinschätzung als Checkliste, Ergebnisse je Themengebiet unter `fachgespraech_results` (Backup, Datenschutz) mit Bilanz, schwächstes Gebiet zuerst (`fachgespraech-stats.js`).
   `ihk-cockpit.js` hat mit 60 % die niedrigste Branch-Coverage der getesteten Kernmodule. Fragenkatalog erweitern, Musterantworten und Selbsteinschätzung ergänzen, Ergebnisse speichern (neuer Schlüssel in die Backup-Allowlist).
 
 ---

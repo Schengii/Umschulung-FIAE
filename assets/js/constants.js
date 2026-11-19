@@ -25,6 +25,7 @@ const STORAGE_KEYS = Object.freeze({
     GITHUB_LIVE_COMMITS_TODAY: 'github_live_commits_today',
     EXAM_RESULTS: 'exam_results',
     EXAM_HISTORY: 'exam_history',
+    FACHGESPRAECH_RESULTS: 'fachgespraech_results',
     EXAM_TOPIC_STATS: 'exam_topic_stats',
     EXAM_WRONG_QUESTIONS: 'exam_wrong_questions',
     QUIZ_BEST_SCORE: 'quiz_best_score',
