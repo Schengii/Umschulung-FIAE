@@ -2,6 +2,8 @@
 
 Stand: 2026-11-14, Analyse auf `main` (`a1867a6`), Version 1.5.0 plus `[Unreleased]`.
 
+**Fortschritt 2026-11-19 (Version 1.6.0, `main` ab `3ae6a61`):** Abgehakt sind alle Punkte außer neun. Offen und warum: 0.3 und 0.6 (Entscheidung und Secret beim Eigentümer), 3.1 (Inhalte für sieben Projekte), 4.1 (Ziel 20 Fragen je Thema), 6.3 (weitere Seiten-Scripts zerlegen), 6.4 (267 Null-Fehler abbauen), 6.5 (Referenzbilder aus der CI), 7.1 (Entscheidung, ADR 0019) und 7.3 (nur per Test-PR in der CI zu klären). Übergabe an die nächste Sitzung: `docs/handoff-2026-11-19.md`.
+
 ## Ausgangslage
 
 Gemessen am 2026-11-14:
