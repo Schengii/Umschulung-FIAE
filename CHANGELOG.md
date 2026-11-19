@@ -5,6 +5,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ## [Unreleased]
 
 #### Geändert (Plan 6.6, 6.8, 7.2, 7.5, 7.6, 8.1–8.4)
+- **Tests (Plan 6.2)**: Neue Unit-Tests für das Copilot-Widget, die C4-Initialisierung, Praktikums-Medien, Über-mich, Blog, Impressum, Slideshow und Timeline-Scroll.
 - **Qualitäts-Ratschen (Plan 6.1, 6.4)**: Die Coverage-Messung umfasst jetzt auch `assets/js/*.js` mit eigener Schwelle (ADR 0015, Nachtrag). `npm run check-strict-null` zählt die Fehler unter `strictNullChecks` (aktuell 356) und lässt sie nicht steigen.
 - **ESLint-Globals** kommen aus dem Paket `globals` (`browser`, `node`, `serviceworker`); die Handliste und die Sonderregel für DOM-Konstruktoren in CLAUDE.md entfallen.
 - **Externe Links**: `scripts/check_external_links.js` und der wöchentliche Workflow `links.yml` öffnen bei toten Links ein Issue (kein CI-Gate).
