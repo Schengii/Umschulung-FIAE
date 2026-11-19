@@ -35,6 +35,8 @@ const STORAGE_KEYS = Object.freeze({
     FLASHCARDS_DUE_DATES: 'flashcards_due_dates',
     FLASHCARDS_STARRED: 'flashcards_starred',
     FLASHCARDS_CUSTOM: 'flashcards_custom',
+    FLASHCARDS_NEW_PER_DAY: 'flashcards_new_per_day',
+    FLASHCARDS_NEW_TODAY: 'flashcards_new_today',
     KNOWN_FLASHCARDS: 'known_flashcards',
     FLASHCARD_TOTAL_COUNT: 'flashcard_total_count',
     FLASHCARD_CORRECT_COUNT: 'flashcard_correct_count',

@@ -63,6 +63,24 @@
                     </div>
 
                     <!-- Category Tabs -->
+                    <div class="new-per-day-panel">
+                        <label for="new-per-day">
+                            <span lang="de">Neue Karten der IHK-Kartei pro Tag</span><span lang="en">New IHK index cards per day</span>
+                        </label>
+                        <input type="number" id="new-per-day" min="0" max="100" step="1" value="10" inputmode="numeric" aria-describedby="new-per-day-hint">
+                        <span class="small-muted" id="new-per-day-hint">
+                            <span lang="de">Nur diese Zahl ungesehener Karten erscheint täglich unter „Heute fällig“.</span><span lang="en">Only this many unseen cards appear in "Due today" each day.</span>
+                        </span>
+                    </div>
+
+                    <div class="session-box" id="session-box" hidden>
+                        <div class="session-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Fortschritt der Sitzung" data-en-aria-label="Session progress">
+                            <div class="session-bar" id="session-bar"></div>
+                        </div>
+                        <p class="small-muted" id="session-text" role="status"></p>
+                        <p class="session-summary" id="session-summary" role="status" hidden></p>
+                    </div>
+
                     <div class="category-tabs" id="category-tabs">
                         <button class="category-tab active" data-cat="all">
                             <span lang="de">Alle</span><span lang="en">All</span>

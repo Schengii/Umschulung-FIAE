@@ -11,6 +11,15 @@ import {
     MAX_BOX_LEVEL,
 } from './modules/leitner-box.js';
 import {
+    normalizeNewPerDay,
+    readNewToday,
+    introduceNewCards,
+    startSession,
+    recordAnswer,
+    sessionProgress,
+    nextDueInDays,
+} from './modules/study-session.js';
+import {
     EXTENDED_DECK_PATH,
     EXTENDED_ENABLED_KEY,
     cardText,
@@ -280,6 +289,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const dueCountEl = document.getElementById('due-count');
     const dueSummaryEl = document.getElementById('due-summary');
 
+    // Tageslimit für neue Karten der IHK-Kartei und Sitzung im Tab „Heute fällig“
+    const newPerDayInput = /** @type {HTMLInputElement | null} */ (document.getElementById('new-per-day'));
+    const sessionBox = document.getElementById('session-box');
+    const sessionBar = document.getElementById('session-bar');
+    const sessionText = document.getElementById('session-text');
+    const sessionSummaryEl = document.getElementById('session-summary');
+    let newPerDay = normalizeNewPerDay(AppStorage.getItem('flashcards_new_per_day'));
+    let newToday = readNewToday(
+        (() => {
+            try {
+                return JSON.parse(AppStorage.getItem('flashcards_new_today', 'null'));
+            } catch (_e) {
+                return null;
+            }
+        })(),
+        Date.now()
+    );
+    /** @type {import('./modules/study-session.js').SessionTally | null} */
+    let session = null;
+    if (newPerDayInput) newPerDayInput.value = String(newPerDay);
+
+    /** Füllt die heutigen neuen Karten bis zum Limit auf und merkt sie sich. */
+    function introduceToday() {
+        const current = readNewToday(newToday, Date.now());
+        const next = introduceNewCards(getFullDatabase(), boxLevels, current, newPerDay);
+        if (next !== newToday) {
+            newToday = next;
+            AppStorage.setItem('flashcards_new_today', JSON.stringify(newToday));
+        }
+    }
+
+    if (newPerDayInput) {
+        newPerDayInput.addEventListener('change', () => {
+            newPerDay = normalizeNewPerDay(newPerDayInput.value);
+            newPerDayInput.value = String(newPerDay);
+            AppStorage.setItem('flashcards_new_per_day', String(newPerDay));
+            filterDeck();
+        });
+    }
+
+    function renderSession() {
+        if (!sessionBox) return;
+        const active = currentCategory === 'due' && session !== null;
+        sessionBox.hidden = !active;
+        if (!active || !session) return;
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const percent = sessionProgress(session);
+        if (sessionBar) {
+            sessionBar.style.width = `${percent}%`;
+            sessionBar.parentElement?.setAttribute('aria-valuenow', String(percent));
+        }
+        if (sessionText) {
+            sessionText.textContent =
+                lang === 'de'
+                    ? `Sitzung: ${session.correct} richtig, ${session.wrong} falsch, ${percent} % erledigt`
+                    : `Session: ${session.correct} correct, ${session.wrong} wrong, ${percent}% done`;
+        }
+        if (sessionSummaryEl) {
+            const finished = filteredDeck.length === 0 && session.correct + session.wrong > 0;
+            sessionSummaryEl.hidden = !finished;
+            if (finished) {
+                const days = nextDueInDays(dueDates, Date.now());
+                let next;
+                if (days === null) next = lang === 'de' ? 'keine weitere Fälligkeit' : 'nothing due later';
+                else if (days === 1) next = lang === 'de' ? 'morgen' : 'tomorrow';
+                else next = lang === 'de' ? `in ${days} Tagen` : `in ${days} days`;
+                sessionSummaryEl.textContent =
+                    lang === 'de'
+                        ? `Sitzung beendet: ${session.correct} richtig, ${session.wrong} falsch. Nächste Fälligkeit: ${next}.`
+                        : `Session finished: ${session.correct} correct, ${session.wrong} wrong. Next due: ${next}.`;
+            }
+        }
+    }
+
     // A damaged entry (manual edit, interrupted write) must not take the page down.
     /**
      * @param {string} key
@@ -497,27 +580,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterDeck() {
+        introduceToday();
         filteredDeck = cardsForTab(getFullDatabase(), currentCategory, {
             starredIds,
             boxLevels,
             dueDates,
             now: Date.now(),
+            introducedIds: newToday.ids,
         });
+        session = currentCategory === 'due' ? startSession(filteredDeck.length) : null;
 
         currentIndex = 0;
         resetCardState();
         renderCard();
         renderStats();
+        renderSession();
     }
 
     // In the "due" deck a correctly answered card is done for today: rebuild the deck and stay
     // at the same position, which now holds the next card.
     function dropAnsweredDueCard() {
         const position = currentIndex;
-        filteredDeck = dueCards(getFullDatabase(), boxLevels, dueDates, Date.now());
+        filteredDeck = dueCards(getFullDatabase(), boxLevels, dueDates, Date.now(), newToday.ids);
         currentIndex = filteredDeck.length === 0 ? 0 : position % filteredDeck.length;
         resetCardState();
         renderCard();
+        renderSession();
     }
 
     // 4. Render active card
@@ -658,6 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             renderStats();
+            if (session) session = recordAnswer(session, true);
 
             if (currentCategory === 'due') {
                 setTimeout(dropAnsweredDueCard, 300);
@@ -710,6 +799,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             renderStats();
+            if (session) session = recordAnswer(session, false);
+            renderSession();
 
             // Auto flip card back to retry
             setTimeout(() => {
@@ -844,7 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Cards due for review today
-        const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now()).length;
+        const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now(), newToday.ids).length;
         if (dueCountEl) dueCountEl.textContent = String(dueCount);
         if (dueSummaryEl) {
             const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -870,6 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCustomList();
         renderStats();
         renderExtendedStatus();
+        renderSession();
     });
 
     // Initial load

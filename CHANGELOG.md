@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 4.4)
+- **Tageslimit und Sitzungen**: Einstellbare Zahl neuer IHK-Kartei-Karten pro Tag, Fortschrittsbalken und Abschlussbild (richtig, falsch, nächste Fälligkeit) im Tab „Heute fällig“.
+
 #### Hinzugefügt (Plan 4.3)
 - **Leitner-Box mit fünf Stufen**: Intervalle 1, 3, 7, 14 und 30 Tage, Reiter und Statistik für Box 4 und 5. Als gelernt (und für das Achievement „flashcard_master“) gilt nur noch Box 5; gespeicherte Stände werden ohne Verlust übernommen.
 

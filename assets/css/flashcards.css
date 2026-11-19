@@ -293,3 +293,37 @@
 .category-tab[hidden] {
     display: none;
 }
+
+.new-per-day-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+}
+.new-per-day-panel input[type='number'] {
+    width: 5rem;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg, transparent);
+    color: inherit;
+}
+.session-box {
+    margin-bottom: 1rem;
+}
+.session-track {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--border);
+    overflow: hidden;
+}
+.session-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+.session-summary {
+    font-weight: 600;
+}

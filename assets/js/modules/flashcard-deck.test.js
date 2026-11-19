@@ -61,6 +61,15 @@ describe('dueCards', () => {
         const dueDates = { vault_000000000002: NOW + 3 * DAY };
         expect(dueCards(deck, boxLevels, dueDates, NOW).map((c) => c.id)).toEqual(['vault_000000000001']);
     });
+
+    it('adds the unseen imported cards that were introduced as new cards today', () => {
+        const deck = combineDeck({ core: [], custom: [], extended, includeExtended: true });
+        const ids = dueCards(deck, {}, {}, NOW, ['vault_000000000002']).map((c) => c.id);
+        expect(ids).toEqual(['vault_000000000002']);
+        expect(cardsForTab(deck, 'due', state({ introducedIds: ['vault_000000000001'] })).map((c) => c.id)).toEqual([
+            'vault_000000000001',
+        ]);
+    });
 });
 
 describe('card helpers', () => {

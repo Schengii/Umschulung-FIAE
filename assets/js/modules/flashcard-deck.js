@@ -38,16 +38,21 @@ export function combineDeck({ core, custom, extended = [], includeExtended = fal
 }
 
 /**
- * Cards due today. A card of the IHK-Kartei only counts once it has been answered: two thousand
- * unseen cards would bury the reviews in the "due" tab.
+ * Cards due today. A card of the IHK-Kartei only counts once it has been answered or was picked as
+ * one of today's new cards (study-session.js): two thousand unseen cards would bury the reviews
+ * in the "due" tab.
  * @param {Card[]} cards
  * @param {Record<string, number>} boxLevels
  * @param {Record<string, number>} dueDates
  * @param {number} now
+ * @param {string[]} [introducedIds] new cards of the IHK-Kartei introduced today
  */
-export function dueCards(cards, boxLevels, dueDates, now) {
+export function dueCards(cards, boxLevels, dueDates, now, introducedIds = []) {
+    const introduced = new Set(introducedIds);
     return filterDue(
-        cards.filter((card) => !isExtendedCard(card) || boxLevels[card.id] !== undefined),
+        cards.filter(
+            (card) => !isExtendedCard(card) || boxLevels[card.id] !== undefined || introduced.has(String(card.id))
+        ),
         dueDates,
         now
     );
@@ -57,9 +62,9 @@ export function dueCards(cards, boxLevels, dueDates, now) {
  * Cards of one tab.
  * @param {Card[]} cards combined deck
  * @param {string} category tab key (`all`, `due`, `marked`, `custom`, `extended`, `box1`-`box5` or a category)
- * @param {{starredIds: Array<string | number>, boxLevels: Record<string, number>, dueDates: Record<string, number>, now: number}} state
+ * @param {{starredIds: Array<string | number>, boxLevels: Record<string, number>, dueDates: Record<string, number>, now: number, introducedIds?: string[]}} state
  */
-export function cardsForTab(cards, category, { starredIds, boxLevels, dueDates, now }) {
+export function cardsForTab(cards, category, { starredIds, boxLevels, dueDates, now, introducedIds }) {
     switch (category) {
         case 'all':
             return [...cards];
@@ -70,7 +75,7 @@ export function cardsForTab(cards, category, { starredIds, boxLevels, dueDates, 
         case 'extended':
             return cards.filter(isExtendedCard);
         case 'due':
-            return dueCards(cards, boxLevels, dueDates, now);
+            return dueCards(cards, boxLevels, dueDates, now, introducedIds);
         case 'box1':
         case 'box2':
         case 'box3':

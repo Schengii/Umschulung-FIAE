@@ -135,7 +135,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   Ein Feld `type` am Fragenobjekt, die Auswertung je Typ als reine Funktion mit Vitest.
 - [x] **4.3 Leitner-Box auf fünf Stufen.** (M) Erledigt 2026-11-19: Boxen 4 und 5 (14 und 30 Tage); gespeicherte Stände bleiben gültig (Box 3 behält 7 Tage), als gelernt zählt nur Box 5, ältere „gelernt“-Markierungen werden beim Laden bereinigt; Dashboard-Zähler und Achievement hängen an Box 5.
   `leitner-box.js` kennt drei Stufen mit 1, 3 und 7 Tagen. Bei 2 000 Karten kommt jede gelernte Karte damit wöchentlich wieder. Fünf Stufen (1, 3, 7, 14, 30 Tage) mit Migration der gespeicherten Stände; das Achievement „flashcard_master“ an die höchste Stufe binden.
-- [ ] **4.4 Tageslimit und Sitzungen in der Kartei.** (M)
+- [x] **4.4 Tageslimit und Sitzungen in der Kartei.** (M) Erledigt 2026-11-19: Tageslimit für neue Kartei-Karten (Standard 10, Schlüssel `flashcards_new_per_day`, `flashcards_new_today`; im Backup und in der Datenschutzerklärung), Sitzungsanzeige und Abschlussbild in „Heute fällig“ (`study-session.js`).
   Einstellbare Zahl neuer Karten je Tag, Sitzung mit Fortschrittsanzeige und Abschlussbild (richtig, falsch, nächste Fälligkeit).
 - [ ] **4.5 Verlauf der Prüfungsergebnisse.** (M)
   Ein Liniendiagramm im Dashboard (SVG, ohne Bibliothek) zeigt die Quote über die Zeit und je Themengebiet. Vorher prüfen, ob die Ergebnisse je Lauf mit Datum gespeichert werden, sonst das Format erweitern.
