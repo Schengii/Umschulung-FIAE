@@ -106,7 +106,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 ## Phase 3: Recruiter-Nutzen
 
-- [ ] **3.1 Fallstudien statt Kurzbeschreibungen.** (L)
+- [ ] **3.1 Fallstudien statt Kurzbeschreibungen.** (L) Teilweise 2026-11-19: Aufbau steht (`assets/data/case-studies.json`, je Projekt Ausgangslage, Rolle, Entscheidung, Ergebnis, Gelerntes in DE und EN; Prüfung der Vollständigkeit im Generator und per Test; Anzeige auf der statischen Projektseite). Für EcoChef liegt ein **Entwurf** vor, geschrieben aus der Projektdokumentation (`FACHLICHE_DOKUMENTATION.md`): bitte gegenlesen, vor allem die Angaben zur eigenen Rolle. Für die übrigen sieben Projekte und die Bildschirmfotos fehlen die Inhalte, die nur der Eigentümer liefern kann.
   Je Projekt ein fester Aufbau: Ausgangslage, eigene Rolle, Architekturentscheidung, Ergebnis, Gelerntes, plus zwei bis drei Bildschirmfotos. Die Felder kommen in `portfolio-metadata.json`, `check-sync` prüft Vollständigkeit (DE und EN). Am ausführlichsten für das Abschlussprojekt EcoChef.
 - [x] **3.2 Diese Site als Projekt zeigen.** (M) Erledigt 2026-11-18 (Eintrag in `staticProjects`). Abweichung: Die ADRs werden nicht als eigene Seite ausgeliefert; der Projekttext verweist auf `docs/adr` im Repository. Eine gerenderte ADR-Seite bleibt offen.
   Das Portfolio ist selbst das technisch stärkste Stück (CSP, PWA, 806 Tests, 15 ADRs), taucht aber in der Projektliste nicht auf. Eintrag in `staticProjects`, mit Verweis auf `architecture.html`. Die ADRs als lesbare Seite ausliefern (`docs/` steht heute in `.vercelignore`).

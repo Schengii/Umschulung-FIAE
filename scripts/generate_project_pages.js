@@ -106,12 +106,62 @@ async function imageSize(file) {
     }
 }
 
+const CASE_STUDY_FIELDS = ['situation', 'role', 'decision', 'result', 'learned'];
+
+/**
+ * Fallstudien (assets/data/case-studies.json, Plan 3.1): jedes Feld in DE und EN, nur für bekannte Projekte.
+ * @param {Record<string, Record<string, string>>} studies
+ * @param {string[]} repoNames
+ * @returns {string[]} Probleme, leer wenn alles stimmt
+ */
+function validateCaseStudies(studies, repoNames) {
+    /** @type {string[]} */
+    const problems = [];
+    for (const [repo, study] of Object.entries(studies)) {
+        if (!repoNames.includes(repo)) problems.push(`Fallstudie "${repo}" gehört zu keinem Projekt`);
+        for (const field of CASE_STUDY_FIELDS) {
+            for (const lang of ['De', 'En']) {
+                if (!String(study[field + lang] || '').trim())
+                    problems.push(`Fallstudie ${repo}: ${field}${lang} fehlt`);
+            }
+        }
+    }
+    return problems;
+}
+
+const CASE_STUDY_HEADINGS = [
+    ['situation', 'Ausgangslage', 'Starting point'],
+    ['role', 'Meine Rolle', 'My role'],
+    ['decision', 'Architekturentscheidung', 'Architecture decision'],
+    ['result', 'Ergebnis', 'Result'],
+    ['learned', 'Gelernt', 'What I learned'],
+];
+
+/** @param {Record<string, string> | undefined} study */
+function renderCaseStudy(study) {
+    if (!study) return '';
+    const parts = CASE_STUDY_HEADINGS.map(
+        ([
+            key,
+            de,
+            en,
+        ]) => `                    <h2 class="case-study-heading"><span lang="de">${de}</span><span lang="en">${en}</span></h2>
+                    <p lang="de">${escapeHtml(study[`${key}De`])}</p>
+                    <p lang="en">${escapeHtml(study[`${key}En`])}</p>`
+    );
+    return `                    <section class="case-study" aria-label="Fallstudie">
+${parts.join('\n')}
+                    </section>
+`;
+}
+
 /**
  * @param {Record<string, any>} project
  * @param {string} cspMeta
  * @param {{width: number, height: number} | null} size
+ * @param {Record<string, string> | undefined} study
  */
-function renderPage(project, cspMeta, size) {
+function renderPage(project, cspMeta, size, study) {
     const pageName = pageNameFor(project.repoName);
     const url = `${SITE}/pages/${pageName}`;
     const titleDe = plainTitle(project.titleDe);
@@ -221,7 +271,7 @@ ${JSON.stringify(jsonLd, null, 2)}
                     ${img}
                     <p lang="de">${escapeHtml(project.descDe)}</p>
                     <p lang="en">${escapeHtml(project.descEn)}</p>
-                    <p class="project-static-tags">${tags.join(' ')}</p>
+${renderCaseStudy(study)}                    <p class="project-static-tags">${tags.join(' ')}</p>
                     <div class="project-static-actions">
                         ${buttons.join('\n                        ')}
                     </div>
@@ -246,10 +296,23 @@ async function main() {
     const cspMeta = /<meta http-equiv="Content-Security-Policy"[^>]*>/i.exec(detail)?.[0];
     if (!cspMeta) throw new Error('projekt-detail.html hat keinen CSP-<meta>');
 
+    const studies = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'data', 'case-studies.json'), 'utf8'));
+    const studyProblems = validateCaseStudies(
+        studies,
+        projects.map((/** @type {{repoName: string}} */ p) => p.repoName)
+    );
+    if (studyProblems.length) {
+        for (const problem of studyProblems) console.error(`✗ ${problem}`);
+        process.exit(1);
+    }
+
     const expected = new Map();
     for (const project of projects) {
         const size = project.image ? await imageSize(project.image) : null;
-        expected.set(pageNameFor(project.repoName), withInlineHashes(renderPage(project, cspMeta, size)));
+        expected.set(
+            pageNameFor(project.repoName),
+            withInlineHashes(renderPage(project, cspMeta, size, studies[project.repoName]))
+        );
     }
 
     const existing = fs.readdirSync(pagesDir).filter(isGeneratedPage);
@@ -289,4 +352,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { slugFor, pageNameFor, isGeneratedPage, PAGE_PREFIX };
+module.exports = { validateCaseStudies, slugFor, pageNameFor, isGeneratedPage, PAGE_PREFIX };

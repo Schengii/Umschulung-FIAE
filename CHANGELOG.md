@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 3.1)
+- **Fallstudien**: Struktur `case-studies.json` mit Vollständigkeitsprüfung, Anzeige auf den Projektseiten, Entwurf für EcoChef.
+
 #### Hinzugefügt (Plan 3.3)
 - **Startseite gestrafft**: Die Erklärtexte zu Fachinformatiker und BFW wohnen auf `ausbildungsablauf.html` und `berufsfoerderungswerk.html`, `home.html` verlinkt nur noch.
 

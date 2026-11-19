@@ -23,7 +23,7 @@ test.describe('Projektseiten', () => {
 
             await page.goto(`/pages/${name}`);
             await expect(page.locator('h1')).toHaveCount(1);
-            await expect(page.locator('main .card p[lang="de"]')).toHaveCount(1);
+            await expect(page.locator('main article.card > p[lang="de"]')).toHaveCount(1);
             await expect(page.locator('a[href^="projekt-detail.html?repo="]')).toHaveCount(1);
 
             const ld = JSON.parse(await page.locator('script[type="application/ld+json"]').first().textContent());
@@ -35,8 +35,8 @@ test.describe('Projektseiten', () => {
 
     test('Sprachschalter zeigt den englischen Text', async ({ page }) => {
         await page.goto(`/pages/${generated[0]}?lang=en`);
-        await expect(page.locator('main .card p[lang="en"]')).toBeVisible();
-        await expect(page.locator('main .card p[lang="de"]')).toBeHidden();
+        await expect(page.locator('main article.card > p[lang="en"]')).toBeVisible();
+        await expect(page.locator('main article.card > p[lang="de"]')).toBeHidden();
     });
 
     test('externe Links öffnen sicher und Bilder tragen Maße', async ({ page }) => {
@@ -61,5 +61,13 @@ test.describe('Projektseiten', () => {
             expect(item.url).toMatch(/\/pages\/projekt-[a-z0-9-]+\.html$/);
             expect(generated).toContain(item.url.split('/').pop());
         }
+    });
+
+    test('EcoChef hat eine Fallstudie mit fünf Abschnitten, andere Projekte noch nicht', async ({ page }) => {
+        await page.goto('/pages/projekt-ecochef.html');
+        await expect(page.locator('.case-study .case-study-heading')).toHaveCount(5);
+        await expect(page.locator('.case-study p[lang="de"]')).toHaveCount(5);
+        await page.goto('/pages/projekt-minecraft.html');
+        await expect(page.locator('.case-study')).toHaveCount(0);
     });
 });

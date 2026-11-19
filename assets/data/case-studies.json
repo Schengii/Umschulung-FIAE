@@ -1,0 +1,14 @@
+{
+  "EcoChef": {
+    "situationDe": "Zum Abschluss der Umschulung war ein IHK-Projekt von 80 Stunden verlangt. Ich wollte ein Problem aus dem Alltag lösen: Lebensmittel verderben, weil im Kühlschrank der Überblick fehlt und die Rezeptsuche mühsam ist.",
+    "situationEn": "The retraining ended with an IHK project of 80 hours. I wanted to solve an everyday problem: food spoils because there is no overview of the fridge and searching for recipes is tedious.",
+    "roleDe": "Ich habe das Projekt allein umgesetzt: Anforderungen, Entwurf, Implementierung, Tests, Dokumentation und die Präsentation vor dem Prüfungsausschuss.",
+    "roleEn": "I carried out the project on my own: requirements, design, implementation, tests, documentation and the presentation to the examination board.",
+    "decisionDe": "Die Oberfläche besteht aus Web Components mit Lit und TypeScript im strikten Modus, verpackt mit Cordova als Android-App und PWA. Der Gemini-Schlüssel liegt nicht im Client, sondern hinter einer Serverless Function als Proxy. Die Wahl des Frameworks habe ich in einer Nutzwertanalyse begründet (im IHK-Cockpit nachzurechnen).",
+    "decisionEn": "The interface is built from web components with Lit and strict TypeScript, packaged with Cordova as an Android app and PWA. The Gemini key is not in the client but behind a serverless function acting as a proxy. I justified the framework choice with a utility analysis (reproducible in the IHK cockpit).",
+    "resultDe": "Die App erzeugt aus Zutaten oder einem Kühlschrankfoto strukturierte Rezepte mit Nährwerten und CO₂-Einsparung, hat einen Kochmodus mit Sprachausgabe, eine Vorratskammer mit Scans und einen verschlüsselten Abgleich zwischen Geräten. Jest- und Playwright-Tests laufen in der CI. Das Projekt ist als Demo und im Quellcode öffentlich.",
+    "resultEn": "From ingredients or a fridge photo the app generates structured recipes with nutrition values and CO₂ savings. It has a cooking mode with speech output, a pantry with scans and an encrypted sync between devices. Jest and Playwright tests run in CI. The project is public as a demo and in source.",
+    "learnedDe": "KI-Antworten müssen wie Eingaben von außen behandelt werden: mit Schema, Validierung und Fallback. Außerdem hat sich gezeigt, dass Sicherheit (Schlüssel, Eingabe-Härtung, Ende-zu-Ende-Verschlüsselung) früh in den Entwurf gehört, nicht erst an den Schluss.",
+    "learnedEn": "AI responses must be treated like input from outside: with schema, validation and fallback. It also showed that security (keys, input hardening, end-to-end encryption) belongs in the design early, not at the end."
+  }
+}
