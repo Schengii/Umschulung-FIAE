@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 7.4)
+- **Font Awesome 7.3.1** statt 6.7.2; Subset-Skript liest auch die 7er-`@font-face`-Quelle.
+
 #### Hinzugefügt (Plan 4.1)
 - **Fragenpool**: 91 statt 63 Fragen und ein Schema-Check (`npm run check-exam-questions`) für alle Aufgabentypen.
 

@@ -191,11 +191,11 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   Ein CI-Lauf dauert rund 15 Minuten. Die Playwright-Browser über `actions/cache` (Schlüssel: Playwright-Version) zwischenspeichern.
 - [ ] **7.3 Playwright-Sperre auflösen.** (M)
   `@playwright/test` ist auf 1.63.0 festgelegt, aktuell ist 1.65.1. Die Ursache der hängenden WebKit-Klicks auf `portfolio.html` in einem Test-PR eingrenzen. Wiedervorlage laut `dependabot.yml`: 2027-01-31.
-- [ ] **7.4 Font Awesome 7 bewerten.** (M)
+- [x] **7.4 Font Awesome 7 bewerten.** (M) Erledigt 2026-11-19: Font Awesome 7.3.1 übernommen. Das Subset-Skript brauchte nur eine Anpassung (7 schreibt `format("woff2")` nicht mehr), alle 182 verwendeten Icons gibt es weiter, `check-icons` und `icons.spec.js` sind grün, Sichtprüfung der Kartei-Seite ohne Auffälligkeit. Die Dependabot-Sperre entfällt (ADR 0009, Nachtrag).
   6.7.2 ist installiert, 7.3.1 aktuell. Prüfen, ob das Subset-Skript die neuen Familien lesen kann, sonst die Sperre mit neuer Wiedervorlage verlängern.
 - [x] **7.5 Sync-Zeitplan und Doku angleichen.** (S) Erledigt 2026-11-19: Doku auf „täglich“ angepasst.
   `sync.yml` läuft täglich (`0 4 * * *`), CLAUDE.md spricht von wöchentlich. Eines von beiden anpassen.
-- [x] **7.6 Einmal-Skripte aufräumen.** (S) Erledigt 2026-11-19: fünf Skripte samt npm-Scripts und README-Zeilen gelöscht. Offen: `compress_images.js` und `optimize_images.js` sind noch nicht zusammengeführt.
+- [x] **7.6 Einmal-Skripte aufräumen.** (S) Erledigt 2026-11-19: fünf Skripte samt npm-Scripts und README-Zeilen gelöscht. `compress_images.js` ist in `optimize_images.js --compress` aufgegangen.
   `add_og_meta.js`, `fix_project_html_paths.js`, `localize_vendor_assets.js`, `audit_cleanup.js` und `install_sync_triggers.js` sehen nach Migrationshilfen aus. Prüfen, welche noch gebraucht werden, den Rest samt npm-Script und README-Zeile löschen. `compress_images.js` und `optimize_images.js` zusammenführen.
 
 ---

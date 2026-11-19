@@ -300,6 +300,9 @@
     align-items: center;
     gap: 0.5rem 0.75rem;
     margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
 }
 .new-per-day-panel input[type='number'] {
     width: 5rem;

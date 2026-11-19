@@ -28,7 +28,7 @@
     "typecheck": "tsc --noEmit -p jsconfig.json && tsc --noEmit -p jsconfig.sw.json",
     "check-strict-null": "node scripts/check_strict_null.js",
     "optimize-images": "node scripts/optimize_images.js",
-    "compress-images": "node scripts/compress_images.js",
+    "compress-images": "node scripts/optimize_images.js --compress",
     "audit-project-paths": "node scripts/audit_project_html_paths.js",
     "check-project-links": "node scripts/check_all_project_links.js",
     "generate-og-image": "node scripts/generate_og_image.js",
@@ -54,7 +54,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@fortawesome/fontawesome-free": "6.7.2",
+    "@fortawesome/fontawesome-free": "7.3.1",
     "@playwright/test": "1.63.0",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^5.1.0",

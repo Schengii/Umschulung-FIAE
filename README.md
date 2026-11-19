@@ -122,7 +122,7 @@ Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf
 
 ### 3c. Lokale Drittanbieter-Ressourcen & Datenschutz
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
-  - Icon-Font (Font Awesome 6.7.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
+  - Icon-Font (Font Awesome 7.3.1) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Font Awesome wird als **generiertes Subset** ausgeliefert: `npm run subset-icons` baut CSS und WOFF2 aus dem npm-Paket und behält nur die tatsächlich verwendeten Icons (ca. 21 KB CSS + 22 KB Fonts statt 103 KB + 300 KB). Ein neues Icon erscheint erst nach diesem Befehl; `check-icons` prüft das in der CI (ADR 0009).
   - **QR-Codes** (Lernstand-Sync im Dashboard, Recruiter-Link-Generator) werden lokal im Browser erzeugt (`qrcode-generator`, MIT, `assets/vendor/qrcode/`). Es geht kein Lernstand und kein Link an einen QR-Webdienst; `api.qrserver.com` ist aus den CSPs entfernt. Ist ein Lernstand für einen QR-Code zu groß, weist die Oberfläche auf den Datei-Export hin.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
@@ -157,7 +157,7 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run check-project-links` | `check_all_project_links.js` | Verifiziert, dass alle Projekt-Links tatsächlich erreichbar sind |
 | `npm run check-head` | `check_head_consistency.js` | Prüft, ob jede Seite die gemeinsamen `<head>`-Boilerplate-Tags (CSP, Viewport, Favicon, Stylesheets, `meta author`, OG-Tags) enthält — verhindert stillen Drift wie die zunächst fehlende CSP in Root-`404.html` |
 | `npm run optimize-images` | `optimize_images.js` | Audit-Report über Bildgrößen (read-only, keine Änderungen) |
-| `npm run compress-images` | `compress_images.js` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
+| `npm run compress-images` | `optimize_images.js --compress` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
 | `npm run build:dist` | `build_minified.js` | Produktions-Build: minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung) und bricht ab, wenn ein verlinktes Projekt-Demo oder Medium im Ergebnis fehlt. Vercel führt genau diesen Befehl aus und liefert `dist/` aus (`vercel.json`, ADR 0008). Der Name bleibt `build:dist`, damit weiterhin nichts von Vercels Zero-Config-Erkennung abhängt (ADR 0005) |
 | `npm run audit-project-paths` | `audit_project_html_paths.js` | Findet fehlerhafte relative Pfade in Sub-Projekt-HTML |
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
