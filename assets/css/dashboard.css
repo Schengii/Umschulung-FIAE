@@ -507,3 +507,41 @@
     display: grid;
     gap: 0.35rem;
 }
+
+/* Verlauf der Prüfungsergebnisse (SVG-Liniendiagramm) */
+.exam-history-chart {
+    margin-top: 0.75rem;
+}
+.history-chart {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.history-grid {
+    stroke: var(--border);
+    stroke-width: 1;
+}
+.history-pass {
+    stroke: var(--text-secondary);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+}
+.history-axis {
+    fill: var(--text-secondary);
+    font-size: 10px;
+}
+.history-line {
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+.history-dot {
+    fill: var(--primary);
+    stroke: var(--bg-card, #fff);
+    stroke-width: 1.5;
+}
+#exam-history-topic {
+    margin-left: 0.5rem;
+    max-width: 100%;
+}

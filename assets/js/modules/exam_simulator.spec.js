@@ -64,6 +64,10 @@ test.describe('IHK-Prüfungssimulation', () => {
 
         const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('exam_results')));
         expect(stored.ap1).toMatchObject({ attempts: 1, best: 100, last: 100 });
+        const history = await page.evaluate(() => JSON.parse(localStorage.getItem('exam_history')));
+        expect(history).toHaveLength(1);
+        expect(history[0]).toMatchObject({ mode: 'ap1', percent: 100 });
+        expect(history[0].topics.length).toBeGreaterThan(0);
         const achievements = await page.evaluate(() => localStorage.getItem('achievements') || '');
         expect(achievements).toContain('exam_passed');
     });

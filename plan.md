@@ -137,7 +137,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   `leitner-box.js` kennt drei Stufen mit 1, 3 und 7 Tagen. Bei 2 000 Karten kommt jede gelernte Karte damit wöchentlich wieder. Fünf Stufen (1, 3, 7, 14, 30 Tage) mit Migration der gespeicherten Stände; das Achievement „flashcard_master“ an die höchste Stufe binden.
 - [x] **4.4 Tageslimit und Sitzungen in der Kartei.** (M) Erledigt 2026-11-19: Tageslimit für neue Kartei-Karten (Standard 10, Schlüssel `flashcards_new_per_day`, `flashcards_new_today`; im Backup und in der Datenschutzerklärung), Sitzungsanzeige und Abschlussbild in „Heute fällig“ (`study-session.js`).
   Einstellbare Zahl neuer Karten je Tag, Sitzung mit Fortschrittsanzeige und Abschlussbild (richtig, falsch, nächste Fälligkeit).
-- [ ] **4.5 Verlauf der Prüfungsergebnisse.** (M)
+- [x] **4.5 Verlauf der Prüfungsergebnisse.** (M) Erledigt 2026-11-19: Die Läufe wurden bisher nur als Bestwert gespeichert, neuer Schlüssel `exam_history` (je Lauf Datum, Modus, Quote, Themen; im Backup und in der Datenschutzerklärung); SVG-Liniendiagramm im Dashboard gesamt und je Themengebiet (`exam-history.js`).
   Ein Liniendiagramm im Dashboard (SVG, ohne Bibliothek) zeigt die Quote über die Zeit und je Themengebiet. Vorher prüfen, ob die Ergebnisse je Lauf mit Datum gespeichert werden, sonst das Format erweitern.
 - [ ] **4.6 Mündliche Prüfung im Cockpit ausbauen.** (M)
   `ihk-cockpit.js` hat mit 60 % die niedrigste Branch-Coverage der getesteten Kernmodule. Fragenkatalog erweitern, Musterantworten und Selbsteinschätzung ergänzen, Ergebnisse speichern (neuer Schlüssel in die Backup-Allowlist).

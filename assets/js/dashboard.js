@@ -12,6 +12,8 @@ import {
     getContributionLevel,
     buildContributionData,
 } from './modules/dashboard-logic.js';
+import { escapeHtml } from './modules/html-utils.js';
+import { parseHistory, historyTopics, rateSeries, buildLineChartSvg } from './modules/exam-history.js';
 import { getLocalDateKey, getDailyQuestionIndex, loadDailyState, recordDailyAnswer } from './modules/daily-question.js';
 
 export function initDashboard() {
@@ -26,6 +28,7 @@ export function initDashboard() {
     renderSiteStats();
     initDailyQuestionWidget();
     renderLearningRecommendations();
+    renderExamHistory();
     initCommitGrid();
     renderAchievementsWidget();
     initPwaTelemetry();
@@ -564,6 +567,75 @@ function renderLearningRecommendations() {
         </ul>
     `;
     container.appendChild(recommendationCard);
+}
+
+/* ==========================================================================
+   EXAM HISTORY (line chart of the simulator results over time)
+   ========================================================================== */
+function renderExamHistory() {
+    const container = document.querySelector('.right-col');
+    if (!container) return;
+
+    const history = parseHistory(AppStorage.getItem(STORAGE_KEYS.EXAM_HISTORY, '[]'));
+    const topics = historyTopics(history);
+
+    const card = document.createElement('section');
+    card.className = 'card fade-in visible';
+    card.id = 'exam-history-card';
+    card.setAttribute('aria-labelledby', 'exam-history-title');
+    card.innerHTML = `
+        <h3 id="exam-history-title"><span lang="de">📈 Verlauf der Prüfungsergebnisse</span><span lang="en">📈 Exam Results Over Time</span></h3>
+        <p id="exam-history-empty" class="small-muted"${history.length ? ' hidden' : ''}>
+            <span lang="de">Noch keine Prüfungssimulation abgeschlossen. Nach dem ersten Lauf erscheint hier die Quote im Zeitverlauf.</span><span lang="en">No exam simulation finished yet. After the first run the rate over time appears here.</span>
+        </p>
+        <div id="exam-history-body"${history.length ? '' : ' hidden'}>
+            <label for="exam-history-topic" class="small-muted"><span lang="de">Themengebiet</span><span lang="en">Topic</span></label>
+            <select id="exam-history-topic">
+                <option value=""></option>
+                ${topics
+                    .map((topic) => {
+                        const info = EXAM_TOPICS[topic] || { de: topic, en: topic };
+                        return `<option value="${escapeHtml(topic)}" data-de="${escapeHtml(info.de)}" data-en="${escapeHtml(info.en)}"></option>`;
+                    })
+                    .join('')}
+            </select>
+            <div id="exam-history-chart" class="exam-history-chart"></div>
+            <p id="exam-history-caption" class="small-muted" role="status"></p>
+        </div>
+    `;
+    container.appendChild(card);
+
+    const select = /** @type {HTMLSelectElement} */ (card.querySelector('#exam-history-topic'));
+    const chart = /** @type {HTMLElement} */ (card.querySelector('#exam-history-chart'));
+    const caption = /** @type {HTMLElement} */ (card.querySelector('#exam-history-caption'));
+
+    function draw() {
+        const lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de';
+        for (const option of select.options) {
+            option.textContent = option.value
+                ? option.getAttribute(`data-${lang}`)
+                : lang === 'de'
+                  ? 'Gesamt'
+                  : 'Overall';
+        }
+        const series = rateSeries(history, select.value || undefined);
+        const label = select.selectedOptions[0]?.textContent || '';
+        chart.innerHTML = buildLineChartSvg(series, {
+            title: lang === 'de' ? `Quote je Lauf: ${label}` : `Rate per run: ${label}`,
+        });
+        const last = series.at(-1);
+        caption.textContent = last
+            ? lang === 'de'
+                ? `${series.length} Läufe, zuletzt ${last.percent} %. Gestrichelt: Bestehensgrenze (50 %).`
+                : `${series.length} runs, latest ${last.percent}%. Dashed: pass mark (50%).`
+            : lang === 'de'
+              ? 'Für dieses Themengebiet gibt es noch keine Läufe.'
+              : 'No runs for this topic yet.';
+    }
+
+    select.addEventListener('change', draw);
+    document.addEventListener('langchange', draw);
+    draw();
 }
 
 /* ==========================================================================

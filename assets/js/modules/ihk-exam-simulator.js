@@ -10,6 +10,7 @@
  */
 
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './exam-questions.js';
+import { parseHistory, addRunToHistory } from './exam-history.js';
 import { getIhkGrade } from './grade-calculator.js';
 import {
     addRunToTopicStats,
@@ -285,6 +286,16 @@ export function initIhkExamSimulator() {
             date: new Date().toISOString(),
         };
         AppStorage.setItem(STORAGE_KEYS.EXAM_RESULTS, JSON.stringify(results));
+        AppStorage.setItem(
+            STORAGE_KEYS.EXAM_HISTORY,
+            JSON.stringify(
+                addRunToHistory(parseHistory(AppStorage.getItem(STORAGE_KEYS.EXAM_HISTORY, '[]')), {
+                    mode: examMode,
+                    percent: result.percent,
+                    topics: result.topics,
+                })
+            )
+        );
 
         // Weak topics feed the learning recommendations on the dashboard.
         if (result.weakTopics.length > 0) {

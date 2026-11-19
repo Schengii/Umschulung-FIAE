@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 4.5)
+- **Verlauf der Prüfungsergebnisse**: Neuer Speicher `exam_history` und ein SVG-Liniendiagramm im Dashboard (gesamt oder je Themengebiet, mit Bestehensgrenze).
+
 #### Hinzugefügt (Plan 4.4)
 - **Tageslimit und Sitzungen**: Einstellbare Zahl neuer IHK-Kartei-Karten pro Tag, Fortschrittsbalken und Abschlussbild (richtig, falsch, nächste Fälligkeit) im Tab „Heute fällig“.
 
