@@ -29,3 +29,7 @@ Der Name `build:dist` bleibt. Da der Build-Befehl jetzt ausdrücklich in `vercel
 - Ein fehlschlagender Build blockiert das Deployment; Vercel liefert dann den letzten erfolgreichen Stand weiter aus (das Verhalten, das in ADR 0005 unbemerkt blieb). Nach Änderungen an Build oder `vercel.json` den Status des Deployments prüfen.
 - Vercel installiert für den Build die `devDependencies` (esbuild). Das Projekt hat ausschließlich `devDependencies`; sie dürfen deshalb nicht per Installations-Flag ausgeschlossen werden.
 - Die erste Auslieferung nach dieser Umstellung sollte als Preview-Deployment geprüft werden (Startseite, eine Seite unter `pages/`, ein Projekt-Demo unter `Projekte/*/dist/`, ein Video), bevor sie auf `main` landet: Der Build ist lokal und in der CI getestet, die Vercel-Konfiguration selbst aber erst dort.
+
+## Nachtrag 2026-11-19: Kanonische Startseite
+
+Die Startseite heißt jetzt `https://www.max-schenk.tech/` statt `…/index.html`: `vercel.json` leitet `/index.html` dauerhaft auf `/` um, Canonical, `hreflang`, `og:url` und Sitemap nennen `/`, und `manifest.json` startet auf `./`. Der Service Worker kannte `./` schon im Precache. `cleanUrls` (Seiten ohne `.html`) bleibt bewusst aus: Es würde jede Seiten-URL, Canonical, Sitemap, `hreflang`-Paare, den `.html`-Abgleich im Service Worker und die bestehenden Verlinkungen auf einmal ändern, ohne dass sich Titel oder Inhalt verbessern. Der Gewinn (hübschere URLs) steht in keinem Verhältnis zum Risiko, bestehende Links und Suchergebnisse zu verlieren.

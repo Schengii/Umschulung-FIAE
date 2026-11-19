@@ -28,6 +28,12 @@ const ORIGIN = 'https://www.max-schenk.tech/';
 // Reachable only with a query string (?repo=…); the bare URL has no content of its own.
 const PARAMETERISED_PAGES = new Set(['pages/projekt-detail.html']);
 
+// Die Startseite hat die kanonische URL "/" (`/index.html` leitet Vercel dorthin um, vercel.json).
+/** @param {string} page */
+const urlForPage = (page) => ORIGIN + (page === 'index.html' ? '' : page);
+/** @param {string} url */
+const pageForUrl = (url) => (url === ORIGIN ? 'index.html' : url.slice(ORIGIN.length));
+
 const isNoIndex = (/** @type {string} */ html) => /<meta name="robots" content="[^"]*noindex/i.test(html);
 
 function listPages() {
@@ -61,14 +67,14 @@ const problems = [];
 for (const url of listed) {
     if (!url.startsWith(ORIGIN)) {
         problems.push(`${url} does not start with ${ORIGIN}`);
-    } else if (!fs.existsSync(path.join(root, url.slice(ORIGIN.length)))) {
+    } else if (!fs.existsSync(path.join(root, pageForUrl(url)))) {
         problems.push(`${url} is listed but the file does not exist`);
     }
 }
 for (const page of listPages()) {
     const html = fs.readFileSync(path.join(root, page), 'utf8');
     const indexable = !isNoIndex(html) && !PARAMETERISED_PAGES.has(page);
-    const isListed = listed.includes(ORIGIN + page);
+    const isListed = listed.includes(urlForPage(page));
     if (indexable && !isListed) problems.push(`${page} is indexable but missing from sitemap.xml`);
     if (!indexable && isListed) problems.push(`${page} is listed although it is noindex/parameterised`);
 }
@@ -101,7 +107,7 @@ let updated = 0;
 const next = sitemap.replace(
     /(<loc>([^<]+)<\/loc>\s*<lastmod>)([^<]*)(<\/lastmod>)/g,
     (whole, head, url, oldDate, tail) => {
-        const date = lastModified(url.slice(ORIGIN.length)) || oldDate;
+        const date = lastModified(pageForUrl(url)) || oldDate;
         if (date !== oldDate) updated++;
         return head + date + tail;
     }

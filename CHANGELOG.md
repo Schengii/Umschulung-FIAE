@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 2.4)
+- **Startseite unter `/`**: `/index.html` leitet auf `/` um, Canonical, Sitemap und Manifest nennen `/` (ADR 0008, Nachtrag).
+
 #### Hinzugefügt (Plan 2.2)
 - **Statische Projektseiten**: `pages/projekt-<slug>.html` je Projekt, generiert aus `projects.json` (Titel, Beschreibung, JSON-LD, Sitemap), `ItemList` verweist darauf (ADR 0018).
 

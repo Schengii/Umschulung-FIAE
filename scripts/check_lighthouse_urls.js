@@ -18,7 +18,8 @@ const EXCLUDED = new Map();
 const ORIGIN = 'https://www.max-schenk.tech/';
 
 const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
-const sitemapPages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, ''));
+// Die Startseite steht in der Sitemap als "/", Lighthouse prüft sie als index.html.
+const sitemapPages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, '') || 'index.html');
 
 const config = JSON.parse(fs.readFileSync(path.join(root, 'lighthouserc.json'), 'utf8'));
 const audited = new Set(config.ci.collect.url.map((/** @type {string} */ url) => url.replace('http://localhost/', '')));
