@@ -43,9 +43,7 @@ describe('JSON-LD builder', () => {
     it('baut eine ItemList mit absoluten URLs und maskiertem Repo-Namen', () => {
         const ld = buildProjectsJsonLd([{ repoName: 'Wohnungssuche KI', titleDe: 'W' }]);
         expect(ld.numberOfItems).toBe(1);
-        expect(ld.itemListElement[0].url).toBe(
-            'https://www.max-schenk.tech/pages/projekt-detail.html?repo=Wohnungssuche%20KI'
-        );
+        expect(ld.itemListElement[0].url).toBe('https://www.max-schenk.tech/pages/projekt-wohnungssuche-ki.html');
     });
 });
 

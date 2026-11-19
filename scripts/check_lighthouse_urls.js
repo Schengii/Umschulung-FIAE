@@ -23,7 +23,17 @@ const sitemapPages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[
 const config = JSON.parse(fs.readFileSync(path.join(root, 'lighthouserc.json'), 'utf8'));
 const audited = new Set(config.ci.collect.url.map((/** @type {string} */ url) => url.replace('http://localhost/', '')));
 
-const missing = sitemapPages.filter((page) => !audited.has(page) && !EXCLUDED.has(page));
+// Die Projektseiten (scripts/generate_project_pages.js) sind alle aus demselben Template erzeugt:
+// Lighthouse prüft eine davon als Stichprobe, nicht jede einzeln.
+const GENERATED = /^pages\/projekt-(?!detail\.html)[a-z0-9-]+\.html$/;
+const generatedPages = sitemapPages.filter((page) => GENERATED.test(page));
+const generatedSample = generatedPages.some((page) => audited.has(page));
+
+const missing = sitemapPages.filter((page) => !audited.has(page) && !EXCLUDED.has(page) && !GENERATED.test(page));
+if (generatedPages.length && !generatedSample) {
+    console.error('✗ keine der generierten Projektseiten steht als Stichprobe in lighthouserc.json');
+    process.exit(1);
+}
 const unknown = [...audited].filter((page) => !sitemapPages.includes(page));
 
 if (missing.length || unknown.length) {

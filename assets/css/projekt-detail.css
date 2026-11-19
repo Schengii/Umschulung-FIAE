@@ -267,3 +267,24 @@
     border: none;
     background-color: #ffffff;
 }
+
+/* Statische Projektseiten (scripts/generate_project_pages.js) */
+.project-static-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: var(--radius-md);
+}
+.project-static-tags {
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.project-static-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}

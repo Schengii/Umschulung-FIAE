@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 2.2)
+- **Statische Projektseiten**: `pages/projekt-<slug>.html` je Projekt, generiert aus `projects.json` (Titel, Beschreibung, JSON-LD, Sitemap), `ItemList` verweist darauf (ADR 0018).
+
 #### Hinzugefügt (Plan 6.5)
 - **Visuelle Regressionstests**: `visual.spec.js` (fünf Kernseiten, helles und dunkles Thema, Chromium, Bewegung eingefroren) mit `npm run test:visual`; Referenzbilder erzeugt der Workflow `visual.yml` unter Linux. **Behoben nebenbei:** Der lange Banner-Titel wurde im 44 px hohen Banner abgeschnitten (jetzt einzeilig auf dem Desktop, zweizeilig auf schmalen Schirmen).
 
