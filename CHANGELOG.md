@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 3.3)
+- **Startseite gestrafft**: Die Erklärtexte zu Fachinformatiker und BFW wohnen auf `ausbildungsablauf.html` und `berufsfoerderungswerk.html`, `home.html` verlinkt nur noch.
+
 #### Hinzugefügt (Plan 2.4)
 - **Startseite unter `/`**: `/index.html` leitet auf `/` um, Canonical, Sitemap und Manifest nennen `/` (ADR 0008, Nachtrag).
 
