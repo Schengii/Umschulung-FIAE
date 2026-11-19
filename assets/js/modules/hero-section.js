@@ -35,6 +35,7 @@ export function initHeroSection() {
     // 1. Typing animation with smooth pacing
     const typingEl = document.getElementById('hero-typing');
     if (typingEl) {
+        const typing = /** @type {HTMLElement} */ (typingEl);
         const phrases = [...heroPhrases(lang)];
 
         // Moving text that never stops is a problem with prefers-reduced-motion (WCAG 2.2.2):
@@ -56,11 +57,11 @@ export function initHeroSection() {
             const currentPhrase = phrases[phraseIndex];
 
             if (isDeleting) {
-                typingEl.textContent = currentPhrase.substring(0, charIndex - 1);
+                typing.textContent = currentPhrase.substring(0, charIndex - 1);
                 charIndex--;
                 typingSpeed = 35;
             } else {
-                typingEl.textContent = currentPhrase.substring(0, charIndex + 1);
+                typing.textContent = currentPhrase.substring(0, charIndex + 1);
                 charIndex++;
                 typingSpeed = 75;
             }
@@ -110,8 +111,9 @@ function initHeroParticles(container) {
     container.style.position = 'relative';
     container.insertBefore(canvas, container.firstChild);
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    const ctx = /** @type {CanvasRenderingContext2D} */ (context);
 
     let width = (canvas.width = container.offsetWidth);
     let height = (canvas.height = container.offsetHeight);
@@ -129,8 +131,16 @@ function initHeroParticles(container) {
     const particles = [];
 
     class HeroParticle {
+        x = 0;
+        y = 0;
+        vx = 0;
+        vy = 0;
         radius = 0;
         baseRadius = 0;
+        color = '';
+        alpha = 0;
+        pulseSpeed = 0;
+        pulsePhase = 0;
 
         constructor() {
             this.reset(true);
