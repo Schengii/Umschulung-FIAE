@@ -5108,6 +5108,13 @@ html nav {
     color: var(--danger, #f87171) !important;
 }
 
+.background-glass {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
 /* Badges (Status-Pillen) */
 .badge {
     display: inline-flex;
