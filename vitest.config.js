@@ -14,9 +14,9 @@ module.exports = defineConfig({
       exclude: ['**/*.test.js', '**/*.spec.js', 'assets/js/projects_data.js'],
       reporter: ['text-summary', 'text'],
       // Ratchet (ADR 0015): just below the current value so coverage cannot silently drop; raise it
-      // when the actual value stays well above (2026-10-28: 81 / 73 / 83 / 82 %).
+      // when the actual value stays well above (2026-11-19: 96 / 84 / 98 / 98 %).
       thresholds: {
-        'assets/js/modules/**': { statements: 78, branches: 70, functions: 80, lines: 79 },
+        'assets/js/modules/**': { statements: 92, branches: 80, functions: 94, lines: 94 },
         // Seiten-Scripts (Plan 6.1): eigene, niedrigere Schwelle, nach ADR 0015 hochziehen.
         'assets/js/*.js': { statements: 0.5, branches: 0.5, functions: 0.1, lines: 0.5 },
       },
