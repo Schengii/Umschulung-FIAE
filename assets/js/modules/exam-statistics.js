@@ -9,6 +9,8 @@
  *  - wrong questions: `string[]` of question ids, most recently missed last
  */
 
+import { isFullyCorrect } from './question-types.js';
+
 /** @typedef {import('./exam-questions.js').ExamQuestion} ExamQuestion */
 /** @typedef {Record<string, {total: number, correct: number}>} TopicStats */
 
@@ -70,7 +72,7 @@ export function parseWrongQuestions(raw) {
  * like in the exam itself.
  * @param {TopicStats} stats
  * @param {ExamQuestion[]} questions
- * @param {(number | null | undefined)[]} answers
+ * @param {unknown[]} answers
  * @returns {TopicStats} a new object, the input stays untouched
  */
 export function addRunToTopicStats(stats, questions, answers) {
@@ -80,7 +82,7 @@ export function addRunToTopicStats(stats, questions, answers) {
     questions.forEach((question, index) => {
         const entry = next[question.topic] || { total: 0, correct: 0 };
         entry.total++;
-        if (answers[index] === question.correct) entry.correct++;
+        if (isFullyCorrect(question, answers[index])) entry.correct++;
         next[question.topic] = entry;
     });
     return next;
@@ -91,15 +93,15 @@ export function addRunToTopicStats(stats, questions, answers) {
  * question answered correctly now is removed.
  * @param {string[]} wrongIds
  * @param {ExamQuestion[]} questions
- * @param {(number | null | undefined)[]} answers
+ * @param {unknown[]} answers
  * @returns {string[]}
  */
 export function updateWrongQuestions(wrongIds, questions, answers) {
     const missed = new Set(
-        questions.filter((question, index) => answers[index] !== question.correct).map((question) => question.id)
+        questions.filter((question, index) => !isFullyCorrect(question, answers[index])).map((question) => question.id)
     );
     const solved = new Set(
-        questions.filter((question, index) => answers[index] === question.correct).map((question) => question.id)
+        questions.filter((question, index) => isFullyCorrect(question, answers[index])).map((question) => question.id)
     );
     const kept = wrongIds.filter((id) => !solved.has(id) && !missed.has(id));
     return [...kept, ...missed].slice(-MAX_WRONG_QUESTIONS);

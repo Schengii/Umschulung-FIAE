@@ -5,6 +5,7 @@
 import { computeQualityScore, getQualityStatus } from './modules/grade-calculator.js';
 import { Achievements } from './modules/achievements.js';
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './modules/exam-questions.js';
+import { isSingleChoice } from './modules/question-types.js';
 import {
     rankLearningRecommendations,
     getRecommendationCategoryName,
@@ -435,8 +436,10 @@ function initDailyQuestionWidget() {
     function render() {
         const lang = /** @type {'de' | 'en'} */ (document.documentElement.getAttribute('lang') || 'de');
         const dateKey = getLocalDateKey();
-        const index = getDailyQuestionIndex(dateKey, EXAM_QUESTIONS.length);
-        const question = EXAM_QUESTIONS[index];
+        // Die Frage des Tages ist immer eine Einfachauswahl; die anderen Aufgabentypen gehören in die Prüfung.
+        const dailyPool = EXAM_QUESTIONS.filter(isSingleChoice);
+        const index = getDailyQuestionIndex(dateKey, dailyPool.length);
+        const question = dailyPool[index];
         const state = loadDailyState();
 
         if (streakCount) {

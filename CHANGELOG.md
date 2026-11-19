@@ -4,6 +4,12 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 4.1)
+- **Fragenpool**: 91 statt 63 Fragen und ein Schema-Check (`npm run check-exam-questions`) für alle Aufgabentypen.
+
+#### Hinzugefügt (Plan 4.2)
+- **Neue Aufgabentypen in der Prüfungssimulation**: Mehrfachauswahl mit Teilpunkten, Reihenfolge, Zuordnung, Zahleneingabe mit Toleranz und Lückentext; Bewertung je Typ als reine Funktion.
+
 #### Hinzugefügt (Plan 4.6)
 - **Mündliche Prüfung im Cockpit**: 24 statt 8 Fragen mit Musterantworten und Bewertungskriterien, Selbsteinschätzung per Checkliste, gespeicherte Bilanz je Themengebiet.
 

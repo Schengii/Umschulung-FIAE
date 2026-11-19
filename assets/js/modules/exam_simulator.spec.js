@@ -28,12 +28,45 @@ test.describe('IHK-Prüfungssimulation', () => {
         }).toPass({ timeout: 20000 });
     }
 
-    /** Question text -> text of the right answer, read from the module the page itself uses. */
+    /** Question text -> the question with its model answer, read from the module the page itself uses. */
     async function loadSolutions(page) {
         return page.evaluate(async () => {
             const { EXAM_QUESTIONS } = await import('/assets/js/modules/exam-questions.js');
-            return Object.fromEntries(EXAM_QUESTIONS.map((q) => [q.question.de, q.answers[q.correct].de]));
+            return Object.fromEntries(EXAM_QUESTIONS.map((q) => [q.question.de, q]));
         });
+    }
+
+    /** Answers the question on screen with its model answer, whatever the question type. */
+    async function answerWithModel(page, q) {
+        const type = q.type || 'single';
+        const area = panel(page).locator('.exam-answers').first();
+        if (type === 'single') {
+            await panel(page).getByRole('radio', { name: q.answers[q.correct].de, exact: true }).click();
+        } else if (type === 'multi') {
+            for (const index of q.correctSet) {
+                await panel(page).getByRole('checkbox', { name: q.answers[index].de, exact: true }).click();
+            }
+        } else if (type === 'order') {
+            const wanted = q.items.map((item) => item.de);
+            for (let target = 0; target < wanted.length; target++) {
+                let at = (await area.locator('.exam-order-item span').allTextContents()).indexOf(wanted[target]);
+                while (at > target) {
+                    await area.locator('.exam-order-item').nth(at).getByRole('button').first().click();
+                    at -= 1;
+                }
+            }
+            await area.locator('.exam-order-confirm').click();
+        } else if (type === 'match') {
+            for (let i = 0; i < q.pairs.length; i++) {
+                await area.locator('.exam-match-select').nth(i).selectOption({ label: q.pairs[i].right.de });
+            }
+        } else if (type === 'numeric') {
+            await area.locator('.exam-numeric-input').fill(String(q.answer));
+        } else if (type === 'cloze') {
+            for (let i = 0; i < q.blanks.length; i++) {
+                await area.locator('.exam-cloze-input').nth(i).fill(q.blanks[i][0]);
+            }
+        }
     }
 
     test('sollte eine fehlerfreie AP1-Prüfung mit Note 1 auswerten', async ({ page }) => {
@@ -46,7 +79,7 @@ test.describe('IHK-Prüfungssimulation', () => {
         for (let i = 0; i < 15; i++) {
             await expect(panel(page).locator('.exam-question-meta')).toContainText(`Frage ${i + 1} von 15`);
             const question = await panel(page).locator('.exam-question').textContent();
-            await panel(page).getByRole('radio', { name: solutions[question], exact: true }).click();
+            await answerWithModel(page, solutions[question]);
             await expect(steps.nth(i)).toHaveClass(/answered/);
             if (i < 14) await page.getByRole('button', { name: 'Weiter', exact: true }).click();
         }
@@ -99,7 +132,7 @@ test.describe('IHK-Prüfungssimulation', () => {
         await startExam(page, 'ap2');
         await expect(page.locator('#timer-countdown')).toHaveText(/^(20:00|19:5\d)$/);
 
-        await panel(page).getByRole('radio').first().click();
+        await panel(page).locator('.exam-answers').first().waitFor();
         await page.clock.fastForward('20:01');
 
         await expect(panel(page).locator('.exam-warning')).toContainText('Die Zeit ist abgelaufen');
