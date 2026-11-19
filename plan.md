@@ -185,7 +185,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
 
 ## Phase 7: CI, Repo und Abhängigkeiten
 
-- [ ] **7.1 Repo-Größe entscheiden.** (M, Entscheidung beim Eigentümer)
+- [ ] **7.1 Repo-Größe entscheiden.** (M, Entscheidung beim Eigentümer) Stand 2026-11-19: ADR 0019 mit den drei Optionen und der Empfehlung (b) ist als „Vorgeschlagen“ geschrieben. Die Entscheidung (und bei (b) die Wahl des Hosts samt Datenschutztext) liegt beim Eigentümer.
   `.git` 281 MB. Im Arbeitsbaum liegen fünf Videos (17 MB), eine Präsentation (8 MB) und die Demo-Builds. Optionen: (a) so lassen, (b) Videos und Präsentation extern ausliefern und nur verlinken, (c) Git-LFS mit Umschreiben der Historie und Force-Push. Empfehlung: (b), weil ohne Eingriff in die Historie. Ergebnis als ADR.
 - [x] **7.2 E2E-Laufzeit senken.** (S) Erledigt 2026-11-19: `actions/cache` (SHA-gepinnt) je Browser und Playwright-Version; die Laufzeitersparnis zeigt erst der nächste CI-Lauf.
   Ein CI-Lauf dauert rund 15 Minuten. Die Playwright-Browser über `actions/cache` (Schlüssel: Playwright-Version) zwischenspeichern.
@@ -206,7 +206,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   „Über 20 Projekte“ (es sind 8), „Font Awesome 6.5.2“ (es ist 6.7.2), „KI-Portfolio-Copilot“ (siehe 1.3). Zahlen möglichst aus `site-stats.json` (Punkt 1.2) ableiten oder weglassen.
 - [x] **8.2 Changelog teilen.** (S) Erledigt 2026-11-19 (`docs/changelog-archiv.md`).
   `CHANGELOG.md` hat 101 KB. Versionen vor 1.5.0 nach `docs/changelog-archiv.md` verschieben.
-- [ ] **8.3 Neue ADRs.** (S je ADR) Teilweise 2026-11-19: ADR 0016 (Cache) und 0017 (Header-CSP). Offen: ADR zu 2.2 und 7.1, sobald diese entschieden sind; Vault-Notiz „Übersicht“ nachziehen.
+- [x] **8.3 Neue ADRs.** (S je ADR) Erledigt 2026-11-19: ADR 0016 (Cache-Grenzen), 0017 (Header-CSP), 0018 (Projektseiten), 0019 (große Dateien, vorgeschlagen). Offen beim Eigentümer: die Vault-Notiz „Umschulung-FIAE Portfolio – Übersicht“ nennt noch 12 ADRs, es sind jetzt 19.
   Für 2.2 (generierte Projektseiten), 5.1 (Cache-Grenzen), 5.4 (generierte Header-CSP) und 7.1 (große Dateien). Die Vault-Notiz „Umschulung-FIAE Portfolio – Übersicht“ nennt noch 12 ADRs, es sind 15.
 - [x] **8.4 `CONTRIBUTING.md` und `GEMINI.md`.** (S) Erledigt 2026-11-19 (`GEMINI.md` verwies schon auf CLAUDE.md).
   `CONTRIBUTING.md` um den Ablauf „Änderung, `npm run regen`, `npm run check`, Changelog“ ergänzen. `GEMINI.md` auf CLAUDE.md verweisen lassen, statt Regeln doppelt zu führen.

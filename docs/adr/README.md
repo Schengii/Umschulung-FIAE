@@ -26,6 +26,7 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0016](0016-laufzeit-cache-begrenzen.md) | Laufzeit-Cache begrenzen, Demos nicht cachen | Akzeptiert |
 | [0017](0017-generierte-header-csp.md) | Header-CSP aus den Inline-Script-Hashes erzeugen | Akzeptiert, ergänzt 0003 |
 | [0018](0018-generierte-projektseiten.md) | Projektseiten aus den Projektdaten generieren | Akzeptiert, ergänzt 0004 |
+| [0019](0019-grosse-dateien-und-repo-groesse.md) | Große Dateien und Repository-Größe | Vorgeschlagen |
 
 Hinweis zu 0001 und 0005: Beide beschreiben einen Stand, in dem die Produktion den unminifizierten Repo-Root auslieferte. Das gilt seit 0008 nicht mehr; die übrigen Aussagen (kein Bundler, keine Pfad-Umschreibung, Skriptname `build:dist`) bleiben gültig.
 
