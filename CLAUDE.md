@@ -10,6 +10,7 @@ Portfolio- und IHK-Prüfungsvorbereitungs-Site (PWA) für die Umschulung zum FIA
 npm run dev            # http-server auf :8080 (-c-1, kein Cache)
 npm test               # Playwright E2E (Chromium, Firefox, WebKit, Pixel 5), startet Server selbst
 npm run test:unit      # Vitest (assets/js/modules/**/*.test.js und scripts/**/*.test.js, Node-Umgebung)
+npm run test:visual    # visuelle Regression (5 Seiten, hell/dunkel, nur Chromium); Referenzbilder erzeugt der Workflow visual.yml unter Linux (Eingabe update), lokale *-win32.png sind git-ignoriert
 npm run test:coverage  # Vitest mit Coverage-Bericht und Schwellenwert (assets/js/modules, v8, Ratsche nach ADR 0015; der CI-Job `quality` führt die Unit-Tests über diesen Befehl aus)
 npm run lint           # ESLint über assets/js, scripts und sw.js (Projekte/ ist ignoriert)
 npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)

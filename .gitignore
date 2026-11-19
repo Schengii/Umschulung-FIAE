@@ -59,3 +59,7 @@ Projekte/**/capacitor-cordova-android-plugins/
 Projekte/**/world_saves/
 Projekte/**/.husky/
 coverage/
+
+# Referenzbilder der visuellen Tests kommen aus der CI (Linux), nicht von lokalen Läufen
+assets/js/modules/visual.spec.js-snapshots/*-win32.png
+assets/js/modules/visual.spec.js-snapshots/*-darwin.png

@@ -10,6 +10,8 @@
     "dev": "http-server . -p 8080 -c-1",
     "build:dist": "node scripts/build_minified.js",
     "test": "playwright test",
+    "test:visual": "node scripts/run_visual.js",
+    "test:visual:update": "node scripts/run_visual.js --update",
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "generate-data": "node scripts/generate_projects_data.js",
