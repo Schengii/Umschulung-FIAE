@@ -1,15 +1,7 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
-import {
-    advanceBoxLevel,
-    resetBoxLevel,
-    computeBoxStats,
-    nextDueDate,
-    daysUntilDue,
-    masteredIds,
-    MAX_BOX_LEVEL,
-} from './modules/leitner-box.js';
+import { computeBoxStats, daysUntilDue, masteredIds, MAX_BOX_LEVEL } from './modules/leitner-box.js';
 import {
     normalizeNewPerDay,
     readNewToday,
@@ -19,6 +11,7 @@ import {
     sessionProgress,
     nextDueInDays,
 } from './modules/study-session.js';
+import { reviewCard, allMastered, countWrongAnswer } from './modules/flashcard-review.js';
 import {
     EXTENDED_DECK_PATH,
     EXTENDED_ENABLED_KEY,
@@ -703,6 +696,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Applies the answer to box, due date and the list of known cards (rules in flashcard-review.js)
+     * and stores the result.
+     * @param {string | number} id
+     * @param {boolean} correct
+     * @returns {Array<string | number>} the known cards afterwards
+     */
+    function applyReview(id, correct) {
+        const next = reviewCard(
+            { boxLevels, dueDates, known: JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]') },
+            id,
+            correct,
+            Date.now()
+        );
+        // boxLevels and dueDates are shared with the rest of the page: update them in place.
+        for (const [target, source] of /** @type {const} */ ([
+            [boxLevels, next.boxLevels],
+            [dueDates, next.dueDates],
+        ])) {
+            for (const key of Object.keys(target)) delete target[key];
+            Object.assign(target, source);
+        }
+        AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+        AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
+        AppStorage.setItem('known_flashcards', JSON.stringify(next.known));
+        return next.known;
+    }
+
     // Leitner system correction: Correct advances card, Wrong resets to box 1
     if (btnCorrect) {
         btnCorrect.addEventListener('click', (e) => {
@@ -714,33 +735,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
-                // Leitner box level upgrade
-                const currentLevel = boxLevels[currentCard.id] || 1;
-                const nextLevel = advanceBoxLevel(currentLevel);
-                boxLevels[currentCard.id] = nextLevel;
-                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
-                dueDates[currentCard.id] = nextDueDate(nextLevel, Date.now());
-                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
-
-                // Only the highest box counts as known (mastered)
-                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
-                if (nextLevel === MAX_BOX_LEVEL) {
-                    if (!knownCards.includes(currentCard.id)) {
-                        knownCards.push(currentCard.id);
-                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                    }
-                } else {
-                    // Remove if dropped below the highest box
-                    const kidx = knownCards.indexOf(currentCard.id);
-                    if (kidx !== -1) {
-                        knownCards.splice(kidx, 1);
-                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                    }
-                }
-
+                const known = applyReview(currentCard.id, true);
                 const masteryIds = masteryCards(getFullDatabase()).map((card) => card.id);
-                const allMastered = masteryIds.every((id) => knownCards.includes(id));
-                if (allMastered && typeof Achievements !== 'undefined') {
+                if (allMastered(masteryIds, known) && typeof Achievements !== 'undefined') {
                     Achievements.unlock('flashcard_master');
                 }
             }
@@ -772,29 +769,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
-                // Reset box level to 1
-                boxLevels[currentCard.id] = resetBoxLevel();
-                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
-                // Not known: due again right away.
-                delete dueDates[currentCard.id];
-                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
-
-                // Remove from known cards list
-                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
-                const kidx = knownCards.indexOf(currentCard.id);
-                if (kidx !== -1) {
-                    knownCards.splice(kidx, 1);
-                    AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                }
+                applyReview(currentCard.id, false);
 
                 // Record learning recommendations
                 const wrongCounts = JSON.parse(
                     AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
                 );
-                wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
                 AppStorage.setItem(
                     STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS,
-                    JSON.stringify(wrongCounts)
+                    JSON.stringify(countWrongAnswer(wrongCounts, currentCard.category))
                 );
             }
 

@@ -35,6 +35,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Leitner-Box mit fünf Stufen**: Intervalle 1, 3, 7, 14 und 30 Tage, Reiter und Statistik für Box 4 und 5. Als gelernt (und für das Achievement „flashcard_master“) gilt nur noch Box 5; gespeicherte Stände werden ohne Verlust übernommen.
 
 #### Geändert (Plan 6.6, 6.8, 7.2, 7.5, 7.6, 8.1–8.4)
+- **Zerlegung (Plan 6.3, erster Schritt)**: Die Regeln beim Beantworten einer Lernkarte (Box, Fälligkeit, „gelernt“) liegen als reine Funktionen in `modules/flashcard-review.js` mit Unit-Tests, `flashcards.js` verdrahtet nur noch.
 - **Testausgabe (Plan 6.7)**: Die iframe-Meldung von happy-dom (`Failed to load iframe page`) erscheint nicht mehr im Unit-Testlauf.
 - **Tests (Plan 6.2, Fortsetzung)**: Auch Scroll-Animationen, Premium-Effekte und Hero-Partikel sind getestet; die Modul-Schwelle der Coverage steigt auf 92 / 80 / 94 / 94 %.
 - **Tests (Plan 6.2)**: Neue Unit-Tests für das Copilot-Widget, die C4-Initialisierung, Praktikums-Medien, Über-mich, Blog, Impressum, Slideshow und Timeline-Scroll.
