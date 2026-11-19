@@ -9,6 +9,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.
 - **Navigation im hellen Theme**: Der Hintergrund war ein halbtransparentes, schlammiges Grau, jetzt deckender (0,94).
 - **Fußzeile**: Der Audio-Schalter ist wieder eine Pille mit Text statt eines 38-px-Kreises.
+- **Fehlende Regeln**: Rund 56 Hilfsklassen (`flex-between`, `me-2`, `font-size-1-15rem`, `w-40-pct` …), `.badge`-Familie, `.btn-outline*`, `.chip-btn` und die QR-Formularfelder hatten nie eine CSS-Regel und erschienen als Browser-Standard. Ergänzt in `style.css` (Hilfsklassen-Block), mit Hell-/Dunkel-Farben für Badges und Erfolg/Fehler.
 - **Test**: `daily_question.spec.js` (Aktivitätsraster) war in Firefox und WebKit rot, weil der Service Worker `page.route` umging; nicht flaky, sondern ein Testfehler.
 
 ## [1.6.0] - 2026-11-19
