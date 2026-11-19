@@ -56,7 +56,7 @@ export function dueCards(cards, boxLevels, dueDates, now) {
 /**
  * Cards of one tab.
  * @param {Card[]} cards combined deck
- * @param {string} category tab key (`all`, `due`, `marked`, `custom`, `extended`, `box1`-`box3` or a category)
+ * @param {string} category tab key (`all`, `due`, `marked`, `custom`, `extended`, `box1`-`box5` or a category)
  * @param {{starredIds: Array<string | number>, boxLevels: Record<string, number>, dueDates: Record<string, number>, now: number}} state
  */
 export function cardsForTab(cards, category, { starredIds, boxLevels, dueDates, now }) {
@@ -74,6 +74,8 @@ export function cardsForTab(cards, category, { starredIds, boxLevels, dueDates, 
         case 'box1':
         case 'box2':
         case 'box3':
+        case 'box4':
+        case 'box5':
             return filterByBox(cards, boxLevels, category);
         default:
             return cards.filter((card) => card.category === category);

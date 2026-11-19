@@ -1,7 +1,15 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
-import { advanceBoxLevel, resetBoxLevel, computeBoxStats, nextDueDate, daysUntilDue } from './modules/leitner-box.js';
+import {
+    advanceBoxLevel,
+    resetBoxLevel,
+    computeBoxStats,
+    nextDueDate,
+    daysUntilDue,
+    masteredIds,
+    MAX_BOX_LEVEL,
+} from './modules/leitner-box.js';
 import {
     EXTENDED_DECK_PATH,
     EXTENDED_ENABLED_KEY,
@@ -260,12 +268,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const newAnswer = /** @type {HTMLInputElement} */ (document.getElementById('new-card-answer'));
     const customListEl = document.getElementById('custom-cards-list');
 
-    const box1Count = document.getElementById('box1-count');
-    const box2Count = document.getElementById('box2-count');
-    const box3Count = document.getElementById('box3-count');
-    const box1Bar = document.getElementById('box1-bar');
-    const box2Bar = document.getElementById('box2-bar');
-    const box3Bar = document.getElementById('box3-bar');
+    // Eine Zeile je Box (1..MAX_BOX_LEVEL): Zähler und Balken.
+    const boxViews = Array.from({ length: MAX_BOX_LEVEL }, (_, i) => ({
+        level: i + 1,
+        count: document.getElementById(`box${i + 1}-count`),
+        bar: document.getElementById(`box${i + 1}-bar`),
+    }));
 
     if (!cardEl || !hintEl || !questionEl || !answerEl) return;
 
@@ -291,6 +299,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const starredIds = readStored('flashcards_starred', []);
     let customCards = readStored('flashcards_custom', []);
     const boxLevels = readStored('flashcards_box_levels', {});
+
+    // Migration von drei auf fünf Boxen: Als gelernt gilt nur noch die höchste Box. Gespeicherte
+    // Boxen behalten ihr Intervall, ältere „gelernt“-Markierungen aus Box 3 entfallen.
+    {
+        const mastered = new Set(masteredIds(boxLevels));
+        const known = readStored('known_flashcards', []);
+        const kept = known.filter((/** @type {string | number} */ id) => mastered.has(String(id)));
+        if (kept.length !== known.length) AppStorage.setItem('known_flashcards', JSON.stringify(kept));
+    }
     // cardId -> timestamp of the day the card is due again (see leitner-box.js)
     const dueDates = readStored('flashcards_due_dates', {});
 
@@ -617,15 +634,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 dueDates[currentCard.id] = nextDueDate(nextLevel, Date.now());
                 AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
 
-                // If level is 3, count as known (mastered)
+                // Only the highest box counts as known (mastered)
                 const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
-                if (nextLevel === 3) {
+                if (nextLevel === MAX_BOX_LEVEL) {
                     if (!knownCards.includes(currentCard.id)) {
                         knownCards.push(currentCard.id);
                         AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
                     }
                 } else {
-                    // Remove if dropped below level 3
+                    // Remove if dropped below the highest box
                     const kidx = knownCards.indexOf(currentCard.id);
                     if (kidx !== -1) {
                         knownCards.splice(kidx, 1);
@@ -818,17 +835,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullDatabase = getFullDatabase();
         const total = fullDatabase.length;
 
-        const { 1: b1, 2: b2, 3: b3 } = computeBoxStats(fullDatabase, boxLevels);
+        const stats = computeBoxStats(fullDatabase, boxLevels);
 
-        // Set counts
-        if (box1Count) box1Count.textContent = String(b1);
-        if (box2Count) box2Count.textContent = String(b2);
-        if (box3Count) box3Count.textContent = String(b3);
-
-        // Set bars width
-        if (box1Bar) box1Bar.style.width = total > 0 ? `${(b1 / total) * 100}%` : '0%';
-        if (box2Bar) box2Bar.style.width = total > 0 ? `${(b2 / total) * 100}%` : '0%';
-        if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
+        // Set counts and bar widths
+        for (const { level, count, bar } of boxViews) {
+            if (count) count.textContent = String(stats[level]);
+            if (bar) bar.style.width = total > 0 ? `${(stats[level] / total) * 100}%` : '0%';
+        }
 
         // Cards due for review today
         const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now()).length;
@@ -846,9 +859,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Sync with dashboard progress (Box 3 count / total count)
+        // Sync with dashboard progress (mastered = highest box / total count)
         AppStorage.setItem('flashcard_total_count', total);
-        AppStorage.setItem('flashcard_correct_count', b3);
+        AppStorage.setItem('flashcard_correct_count', stats[MAX_BOX_LEVEL]);
     }
 
     // i18n support alignment

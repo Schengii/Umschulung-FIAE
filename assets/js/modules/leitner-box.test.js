@@ -11,6 +11,7 @@ import {
     startOfDay,
     REVIEW_INTERVAL_DAYS,
     MAX_BOX_LEVEL,
+    masteredIds,
     MIN_BOX_LEVEL,
 } from './leitner-box.js';
 
@@ -18,10 +19,12 @@ describe('advanceBoxLevel', () => {
     it('advances one level', () => {
         expect(advanceBoxLevel(1)).toBe(2);
         expect(advanceBoxLevel(2)).toBe(3);
+        expect(advanceBoxLevel(4)).toBe(5);
     });
 
-    it('caps at MAX_BOX_LEVEL', () => {
-        expect(advanceBoxLevel(3)).toBe(MAX_BOX_LEVEL);
+    it('has five boxes and caps at MAX_BOX_LEVEL', () => {
+        expect(MAX_BOX_LEVEL).toBe(5);
+        expect(advanceBoxLevel(5)).toBe(MAX_BOX_LEVEL);
     });
 
     it('treats a missing/undefined level as MIN_BOX_LEVEL before advancing', () => {
@@ -40,13 +43,13 @@ describe('computeBoxStats', () => {
 
     it('defaults cards with no recorded level to box 1', () => {
         const stats = computeBoxStats(cards, {});
-        expect(stats).toEqual({ 1: 4, 2: 0, 3: 0 });
+        expect(stats).toEqual({ 1: 4, 2: 0, 3: 0, 4: 0, 5: 0 });
     });
 
     it('counts cards per box based on boxLevels', () => {
         // card1->box2, card2->box3, card3->box2, card4->box1
         const stats = computeBoxStats(cards, { 1: 2, 2: 3, 3: 2, 4: 1 });
-        expect(stats).toEqual({ 1: 1, 2: 2, 3: 1 });
+        expect(stats).toEqual({ 1: 1, 2: 2, 3: 1, 4: 0, 5: 0 });
     });
 });
 
@@ -75,10 +78,12 @@ describe('review scheduling', () => {
     const dayOffset = (timestamp) => Math.round((timestamp - startOfDay(reviewedAt)) / 86400000);
 
     it('grows the interval with the box', () => {
-        expect(REVIEW_INTERVAL_DAYS).toEqual({ 1: 1, 2: 3, 3: 7 });
+        expect(REVIEW_INTERVAL_DAYS).toEqual({ 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 });
         expect(dayOffset(nextDueDate(1, reviewedAt))).toBe(1);
         expect(dayOffset(nextDueDate(2, reviewedAt))).toBe(3);
         expect(dayOffset(nextDueDate(3, reviewedAt))).toBe(7);
+        expect(dayOffset(nextDueDate(4, reviewedAt))).toBe(14);
+        expect(dayOffset(nextDueDate(5, reviewedAt))).toBe(30);
     });
 
     it('makes a card due from midnight of the due day', () => {
@@ -114,5 +119,25 @@ describe('review scheduling', () => {
         expect(daysUntilDue(undefined, reviewedAt)).toBe(0);
         expect(daysUntilDue(nextDueDate(1, reviewedAt), reviewedAt)).toBe(1);
         expect(daysUntilDue(nextDueDate(3, reviewedAt), reviewedAt)).toBe(7);
+    });
+});
+
+describe('five boxes', () => {
+    const deck = [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }, { id: 'e' }];
+
+    it('counts all five boxes', () => {
+        const stats = computeBoxStats(deck, { a: 1, b: 4, c: 5, d: 5 });
+        expect(stats).toEqual({ 1: 2, 2: 0, 3: 0, 4: 1, 5: 2 });
+    });
+
+    it('filters box4 and box5 and ignores unknown categories', () => {
+        const levels = { a: 4, b: 5, c: 5 };
+        expect(filterByBox(deck, levels, 'box4').map((c) => c.id)).toEqual(['a']);
+        expect(filterByBox(deck, levels, 'box5').map((c) => c.id)).toEqual(['b', 'c']);
+        expect(filterByBox(deck, levels, 'box6')).toHaveLength(5);
+    });
+
+    it('treats only the highest box as mastered (old stored box 3 is not)', () => {
+        expect(masteredIds({ a: 3, b: 5, c: 4, d: 5 }).sort()).toEqual(['b', 'd']);
     });
 });

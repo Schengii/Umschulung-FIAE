@@ -12,7 +12,7 @@
 /** @typedef {Record<string|number, number|undefined>} BoxLevels card id -> box (1..MAX_BOX_LEVEL) */
 /** @typedef {Record<string|number, number|undefined>} DueDates card id -> due timestamp */
 
-export const MAX_BOX_LEVEL = 3;
+export const MAX_BOX_LEVEL = 5;
 export const MIN_BOX_LEVEL = 1;
 
 /**
@@ -35,7 +35,8 @@ export function resetBoxLevel() {
  */
 export function computeBoxStats(cards, boxLevels) {
     /** @type {Record<number, number>} */
-    const counts = { 1: 0, 2: 0, 3: 0 };
+    const counts = {};
+    for (let level = MIN_BOX_LEVEL; level <= MAX_BOX_LEVEL; level++) counts[level] = 0;
     cards.forEach((card) => {
         const level = boxLevels[card.id] || MIN_BOX_LEVEL;
         if (counts[level] !== undefined) counts[level]++;
@@ -44,7 +45,7 @@ export function computeBoxStats(cards, boxLevels) {
 }
 
 /**
- * Filters a full card deck down to one Leitner category ('box1'|'box2'|'box3').
+ * Filters a full card deck down to one Leitner category ('box1' .. 'box5').
  * @template {LeitnerCard} T
  * @param {T[]} cards
  * @param {BoxLevels} boxLevels
@@ -52,10 +53,9 @@ export function computeBoxStats(cards, boxLevels) {
  * @returns {T[]}
  */
 export function filterByBox(cards, boxLevels, boxCategory) {
-    /** @type {Record<string, number>} */
-    const levelOfCategory = { box1: 1, box2: 2, box3: 3 };
-    const targetLevel = levelOfCategory[boxCategory];
-    if (!targetLevel) return [...cards];
+    const match = /^box([1-9])$/.exec(boxCategory);
+    const targetLevel = match ? Number(match[1]) : 0;
+    if (!targetLevel || targetLevel > MAX_BOX_LEVEL) return [...cards];
     if (targetLevel === MIN_BOX_LEVEL) {
         return cards.filter((c) => (boxLevels[c.id] || MIN_BOX_LEVEL) === targetLevel);
     }
@@ -64,11 +64,21 @@ export function filterByBox(cards, boxLevels, boxCategory) {
 
 /**
  * Days until a card is due again after a correct answer moved it into the given box. In
- * practice only boxes 2 and 3 get a date: a correct answer always leaves box 1, and a wrong
+ * practice only boxes 2 to 5 get a date: a correct answer always leaves box 1, and a wrong
  * answer puts the card back into box 1 without a date, i.e. due immediately.
  */
 /** @type {Readonly<Record<number, number>>} */
-export const REVIEW_INTERVAL_DAYS = Object.freeze({ 1: 1, 2: 3, 3: 7 });
+export const REVIEW_INTERVAL_DAYS = Object.freeze({ 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 });
+
+/**
+ * Ids of the cards in the highest box. Only these count as mastered; stored boxes from the time
+ * of three boxes stay valid (box 3 kept its 7 days) but no longer mean "mastered".
+ * @param {BoxLevels} boxLevels
+ * @returns {string[]}
+ */
+export function masteredIds(boxLevels) {
+    return Object.keys(boxLevels).filter((id) => boxLevels[id] === MAX_BOX_LEVEL);
+}
 
 /**
  * Local midnight of the day `timestamp` falls on.

@@ -171,7 +171,9 @@
 /* Flashcards: page specific rules (formerly an inline <style> block). */
 .tab-box1 { border-bottom: 2px solid #ef4444; }
 .tab-box2 { border-bottom: 2px solid #f97316; }
-.tab-box3 { border-bottom: 2px solid #10b981; }
+.tab-box3 { border-bottom: 2px solid #eab308; }
+.tab-box4 { border-bottom: 2px solid #84cc16; }
+.tab-box5 { border-bottom: 2px solid #10b981; }
 .tab-due { border-bottom: 2px solid var(--primary); }
 .due-count-badge {
     display: inline-block;
@@ -216,7 +218,9 @@
 }
 #box1-bar { width: 0%; background: #ef4444; }
 #box2-bar { width: 0%; background: #f97316; }
-#box3-bar { width: 0%; background: #10b981; }
+#box3-bar { width: 0%; background: #eab308; }
+#box4-bar { width: 0%; background: #84cc16; }
+#box5-bar { width: 0%; background: #10b981; }
 #create-card-form { margin-top: 1rem; }
 #new-card-cat, #new-card-question, #new-card-answer, #create-card-form button {
     width: 100%;

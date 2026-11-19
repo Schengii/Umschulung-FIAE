@@ -133,7 +133,7 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   - Lückentext für SQL und Pseudocode mit Abgleich nach Normalisierung
 
   Ein Feld `type` am Fragenobjekt, die Auswertung je Typ als reine Funktion mit Vitest.
-- [ ] **4.3 Leitner-Box auf fünf Stufen.** (M)
+- [x] **4.3 Leitner-Box auf fünf Stufen.** (M) Erledigt 2026-11-19: Boxen 4 und 5 (14 und 30 Tage); gespeicherte Stände bleiben gültig (Box 3 behält 7 Tage), als gelernt zählt nur Box 5, ältere „gelernt“-Markierungen werden beim Laden bereinigt; Dashboard-Zähler und Achievement hängen an Box 5.
   `leitner-box.js` kennt drei Stufen mit 1, 3 und 7 Tagen. Bei 2 000 Karten kommt jede gelernte Karte damit wöchentlich wieder. Fünf Stufen (1, 3, 7, 14, 30 Tage) mit Migration der gespeicherten Stände; das Achievement „flashcard_master“ an die höchste Stufe binden.
 - [ ] **4.4 Tageslimit und Sitzungen in der Kartei.** (M)
   Einstellbare Zahl neuer Karten je Tag, Sitzung mit Fortschrittsanzeige und Abschlussbild (richtig, falsch, nächste Fälligkeit).

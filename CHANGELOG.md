@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt (Plan 4.3)
+- **Leitner-Box mit fünf Stufen**: Intervalle 1, 3, 7, 14 und 30 Tage, Reiter und Statistik für Box 4 und 5. Als gelernt (und für das Achievement „flashcard_master“) gilt nur noch Box 5; gespeicherte Stände werden ohne Verlust übernommen.
+
 #### Geändert (Plan 6.6, 6.8, 7.2, 7.5, 7.6, 8.1–8.4)
 - **Tests (Plan 6.2)**: Neue Unit-Tests für das Copilot-Widget, die C4-Initialisierung, Praktikums-Medien, Über-mich, Blog, Impressum, Slideshow und Timeline-Scroll.
 - **Qualitäts-Ratschen (Plan 6.1, 6.4)**: Die Coverage-Messung umfasst jetzt auch `assets/js/*.js` mit eigener Schwelle (ADR 0015, Nachtrag). `npm run check-strict-null` zählt die Fehler unter `strictNullChecks` (aktuell 356) und lässt sie nicht steigen.
