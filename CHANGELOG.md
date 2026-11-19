@@ -4,6 +4,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-19
+
 #### Hinzugefügt (Plan 3.1)
 - **Fallstudien**: Struktur `case-studies.json` mit Vollständigkeitsprüfung, Anzeige auf den Projektseiten, Entwurf für EcoChef.
 

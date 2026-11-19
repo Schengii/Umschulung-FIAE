@@ -81,7 +81,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
   - Der QR- und `#sync=`-Abgleich des Lernstands.
 
   Dazu ein Test, der die im Text genannten Schlüssel gegen `STORAGE_KEYS` prüft (Muster: `progress-backup.test.js`). Rechtstexte bitte selbst gegenlesen, das ist keine Rechtsberatung.
-- [ ] **1.7 Release 1.6.0 schneiden.** (S)
+- [x] **1.7 Release 1.6.0 schneiden.** (S) Erledigt 2026-11-19: Version 1.6.0 in `package.json`, Changelog-Abschnitt datiert, lokaler Tag `v1.6.0` auf dem Release-Commit. **Offen beim Eigentümer:** Branch mergen, Tag pushen (`git push origin v1.6.0`), die News-Einträge zu 1.6.0 schreiben.
   `[Unreleased]` enthält rund 30 Einträge. Version in `package.json` anheben, Changelog-Abschnitt datieren, Git-Tag setzen.
 
 ---
