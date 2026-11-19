@@ -157,7 +157,7 @@ export function initC4Architecture() {
         switcher.className =
             'c4-level-bar margin-bottom-1rem p-2 background-glass border-radius-6px flex-between align-center flex-wrap gap-2';
         switcher.innerHTML = `
-            <div class="d-flex align-center gap-2">
+            <div class="d-flex align-center flex-wrap gap-2">
                 <span class="font-weight-600 font-size-0-85rem color-primary me-2">
                     <i class="fa-solid fa-layer-group me-1"></i> C4 Architecture Level:
                 </span>

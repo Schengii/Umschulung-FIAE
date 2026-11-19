@@ -319,6 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const projectImgResolved = project.image ? (window.resolveAssetPath || ((p) => p))(project.image) : '';
 
+        if (!detailContainer) return;
         detailContainer.innerHTML = `
             ${projectImgResolved ? `<img src="${safeUrl(projectImgResolved)}" alt="${escapeHtml(title)}" style="width: 100%; border-radius: var(--radius-lg); margin-bottom: 1.5rem; border: 1px solid var(--border);" data-img-fallback="contain">` : ''}
             
@@ -372,9 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /** @param {ProjectDetailData} project */
     function initProjectVideoPlayer(project) {
         const videoEl = /** @type {HTMLVideoElement} */ (document.getElementById('project-video-player'));
-        const tracksContainer = document.getElementById('project-video-tracks');
-        const currentTitleEl = document.getElementById('project-video-current-title');
-        const currentDescEl = document.getElementById('project-video-current-desc');
+        const tracksContainer = /** @type {HTMLElement} */ (document.getElementById('project-video-tracks'));
+        const currentTitleEl = /** @type {HTMLElement} */ (document.getElementById('project-video-current-title'));
+        const currentDescEl = /** @type {HTMLElement} */ (document.getElementById('project-video-current-desc'));
 
         if (!videoEl || !tracksContainer || !currentTitleEl || !currentDescEl) return;
 
@@ -485,9 +486,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function initIhkStepper(project) {
         const prevBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-prev-btn'));
         const nextBtn = /** @type {HTMLButtonElement} */ (document.getElementById('stepper-next-btn'));
-        const indicator = document.getElementById('stepper-indicator');
-        const progressFill = document.getElementById('stepper-progress-fill');
-        const container = document.getElementById('stepper-slides-container');
+        const indicator = /** @type {HTMLElement} */ (document.getElementById('stepper-indicator'));
+        const progressFill = /** @type {HTMLElement} */ (document.getElementById('stepper-progress-fill'));
+        const container = /** @type {HTMLElement} */ (document.getElementById('stepper-slides-container'));
 
         if (!prevBtn || !nextBtn || !indicator || !progressFill || !container) return;
 
@@ -652,34 +653,35 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.insertAdjacentHTML('beforeend', modalHTML);
             modal = document.getElementById('live-demo-modal');
         }
+        const demoModal = /** @type {HTMLElement} */ (modal);
 
         const iframe = /** @type {HTMLIFrameElement} */ (document.getElementById('demo-iframe'));
-        const titleSpan = document.getElementById('demo-project-title');
-        const closeBtn = document.getElementById('demo-close-btn');
-        const reloadBtn = document.getElementById('demo-reload-btn');
-        const fullscreenBtn = document.getElementById('demo-fullscreen-btn');
+        const titleSpan = /** @type {HTMLElement} */ (document.getElementById('demo-project-title'));
+        const closeBtn = /** @type {HTMLElement} */ (document.getElementById('demo-close-btn'));
+        const reloadBtn = /** @type {HTMLElement} */ (document.getElementById('demo-reload-btn'));
+        const fullscreenBtn = /** @type {HTMLElement} */ (document.getElementById('demo-fullscreen-btn'));
 
         startBtn.addEventListener('click', () => {
             const lang = document.documentElement.getAttribute('lang') || 'de';
             titleSpan.textContent = lang === 'de' ? project.titleDe : project.titleEn;
             iframe.src = (window.resolveAssetPath || ((p) => p))(project.link);
-            modal.style.display = 'flex';
+            demoModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         });
 
         closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
+            demoModal.style.display = 'none';
             iframe.src = '';
             document.body.style.overflow = '';
         });
 
         reloadBtn.addEventListener('click', () => {
-            iframe.contentWindow.location.reload();
+            iframe.contentWindow?.location.reload();
         });
 
         fullscreenBtn.addEventListener('click', () => {
             if (!document.fullscreenElement) {
-                modal.requestFullscreen().catch((err) => {
+                demoModal.requestFullscreen().catch((err) => {
                     console.warn(`Error attempting to enable full-screen mode: ${err.message}`);
                 });
             } else {

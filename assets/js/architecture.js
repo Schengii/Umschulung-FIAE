@@ -245,8 +245,8 @@ class ArchitectureExplorer {
         // Hotspot click handlers inside SVG diagrams
         document.querySelectorAll('.hotspot').forEach((hotspot) => {
             hotspot.addEventListener('click', (e) => {
-                const project = hotspot.getAttribute('data-project');
-                const component = hotspot.getAttribute('data-component');
+                const project = hotspot.getAttribute('data-project') ?? '';
+                const component = hotspot.getAttribute('data-component') ?? '';
                 this.showComponentDetails(project, component);
 
                 // Highlight active hotspot
@@ -328,6 +328,7 @@ class ArchitectureExplorer {
     start3dEngine() {
         if (!this.canvas3d) return;
         const ctx = this.canvas3d.getContext('2d');
+        if (!ctx) return;
         const nodes = [
             { label: 'Client / PWA', x: -140, y: -40, z: 0, color: '#38bdf8' },
             { label: 'API Gateway', x: 0, y: -70, z: 60, color: '#a855f7' },
@@ -460,17 +461,17 @@ class ArchitectureExplorer {
                     <span class="route-summary small-muted" style="margin-left:auto; font-size:0.75rem;">${sumText}</span>
                 </div>
             `;
-            this.apiRoutesList.insertAdjacentHTML('beforeend', routeHTML);
+            this.apiRoutesList?.insertAdjacentHTML('beforeend', routeHTML);
         });
 
         // Attach click listeners to route list
-        const routeItems = this.apiRoutesList.querySelectorAll('.api-route-item');
-        routeItems.forEach((item) => {
+        const routeItems = this.apiRoutesList?.querySelectorAll('.api-route-item');
+        routeItems?.forEach((item) => {
             item.addEventListener('click', () => {
                 routeItems.forEach((ri) => ri.classList.remove('active'));
                 item.classList.add('active');
 
-                this.activeRouteIndex = parseInt(item.getAttribute('data-index'));
+                this.activeRouteIndex = parseInt(item.getAttribute('data-index') ?? '0');
                 this.renderApiDetails();
             });
         });
@@ -593,8 +594,8 @@ class ArchitectureExplorer {
         } else {
             const activeHotspot = document.querySelector('.active-hotspot');
             if (activeHotspot) {
-                const project = activeHotspot.getAttribute('data-project');
-                const component = activeHotspot.getAttribute('data-component');
+                const project = activeHotspot.getAttribute('data-project') ?? '';
+                const component = activeHotspot.getAttribute('data-component') ?? '';
                 this.showComponentDetails(project, component);
             }
         }

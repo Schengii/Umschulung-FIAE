@@ -9,16 +9,17 @@ export function initQrGenerator() {
     const nameInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-name-input'));
     const targetSelect = /** @type {HTMLSelectElement} */ (document.getElementById('qr-target-select'));
 
-    const placeholder = document.getElementById('qr-code-placeholder');
-    const imageContainer = document.getElementById('qr-code-image-container');
-    const resultDetails = document.getElementById('qr-result-details');
-    const instructionText = document.getElementById('qr-instruction-text');
+    const placeholder = /** @type {HTMLElement} */ (document.getElementById('qr-code-placeholder'));
+    const imageContainer = /** @type {HTMLElement} */ (document.getElementById('qr-code-image-container'));
+    const resultDetails = /** @type {HTMLElement} */ (document.getElementById('qr-result-details'));
+    const instructionText = /** @type {HTMLElement} */ (document.getElementById('qr-instruction-text'));
     const generatedLinkInput = /** @type {HTMLInputElement} */ (document.getElementById('qr-generated-link'));
 
     const copyBtn = document.getElementById('qr-copy-btn');
     const downloadBtn = document.getElementById('qr-download-btn');
 
     if (!companyInput || !nameInput || !targetSelect) return;
+    if (!placeholder || !imageContainer || !resultDetails || !instructionText) return;
 
     /** @type {ReturnType<typeof setTimeout> | null} */
     let debounceTimeout = null;

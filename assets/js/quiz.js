@@ -107,9 +107,9 @@ const questionsEN = [
 ];
 
 // DOM Elemente
-const questionElement = document.getElementById('question');
-const answerButtons = document.getElementById('answer-buttons');
-const nextButton = document.getElementById('next-btn');
+const questionElement = /** @type {HTMLElement} */ (document.getElementById('question')); // fester Bestandteil von quiz.html
+const answerButtons = /** @type {HTMLElement} */ (document.getElementById('answer-buttons')); // fester Bestandteil von quiz.html
+const nextButton = /** @type {HTMLElement} */ (document.getElementById('next-btn')); // fester Bestandteil von quiz.html
 const quizProgress = document.getElementById('quiz-progress');
 
 // Spielvariablen

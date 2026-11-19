@@ -25,6 +25,10 @@ test.describe('Dashboard: Frage des Tages', () => {
 // dashboard.js delegates its calculations to modules/dashboard-logic.js (D01); the rendered result
 // must stay the same.
 test.describe('Dashboard: Aktivitätsraster und Lernempfehlungen', () => {
+    // Nach dem Reload beantwortet der Service Worker site-stats.json selbst; page.route sieht diese
+    // Anfrage in Firefox und WebKit dann nicht mehr und das Raster zeigt die echten Daten.
+    test.use({ serviceWorkers: 'block' });
+
     test('sollte 371 Tage, Summen und Empfehlungen aus den gespeicherten Schwächen rendern', async ({ page }) => {
         // Raster aus festen Messwerten: heute 5 Commits (Stufe 3), gestern 1
         const key = (offset) => {

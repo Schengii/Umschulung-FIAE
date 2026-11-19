@@ -9,11 +9,12 @@ import { PLAYGROUND_TEMPLATES } from './modules/playground-templates.js';
 class CodePlayground {
     constructor() {
         this.activeTab = 'html';
-        this.runTimeout = null;
+        /** @type {ReturnType<typeof setTimeout> | undefined} */
+        this.runTimeout = undefined;
 
-        this.htmlEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-html'));
-        this.cssEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-css'));
-        this.jsEditor = /** @type {HTMLInputElement} */ (document.getElementById('editor-js'));
+        this.htmlEditor = /** @type {HTMLTextAreaElement} */ (document.getElementById('editor-html'));
+        this.cssEditor = /** @type {HTMLTextAreaElement} */ (document.getElementById('editor-css'));
+        this.jsEditor = /** @type {HTMLTextAreaElement} */ (document.getElementById('editor-js'));
 
         this.htmlWrapper = document.getElementById('wrapper-html');
         this.cssWrapper = document.getElementById('wrapper-css');
@@ -26,9 +27,9 @@ class CodePlayground {
         this.previewIframe = /** @type {HTMLIFrameElement} */ (document.getElementById('preview-iframe'));
         this.consoleLogBox = document.getElementById('console-log-box');
 
-        this.btnHtml = document.getElementById('btn-tab-html');
-        this.btnCss = document.getElementById('btn-tab-css');
-        this.btnJs = document.getElementById('btn-tab-js');
+        this.btnHtml = /** @type {HTMLElement} */ (document.getElementById('btn-tab-html'));
+        this.btnCss = /** @type {HTMLElement} */ (document.getElementById('btn-tab-css'));
+        this.btnJs = /** @type {HTMLElement} */ (document.getElementById('btn-tab-js'));
 
         this.runBtn = document.getElementById('run-code-btn');
         this.clearConsoleBtn = document.getElementById('clear-console-btn');
@@ -146,7 +147,7 @@ class CodePlayground {
         const templateBtns = document.querySelectorAll('.template-select-btn');
         templateBtns.forEach((btn) => {
             btn.addEventListener('click', (e) => {
-                const templKey = btn.getAttribute('data-template');
+                const templKey = btn.getAttribute('data-template') ?? '';
                 this.loadTemplate(templKey);
             });
         });
