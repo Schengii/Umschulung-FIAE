@@ -9,6 +9,7 @@
  */
 
 import { EXTRA_QUESTIONS } from './exam-questions-extra.js';
+import { MORE_QUESTIONS } from './exam-questions-more.js';
 
 /**
  * @typedef {{de: string, en: string}} Bilingual
@@ -1196,4 +1197,4 @@ const BASE_QUESTIONS = [
  * from exam-questions-extra.js (see question-types.js for how each type is scored).
  * @type {ExamQuestion[]}
  */
-export const EXAM_QUESTIONS = [...BASE_QUESTIONS, ...EXTRA_QUESTIONS];
+export const EXAM_QUESTIONS = [...BASE_QUESTIONS, ...EXTRA_QUESTIONS, ...MORE_QUESTIONS];

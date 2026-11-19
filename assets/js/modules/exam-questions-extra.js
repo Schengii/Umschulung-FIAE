@@ -45,7 +45,7 @@ function make(id, exam, topic, question, explanation, body) {
  * @param {number} correct
  * @param {[string, string]} explanation
  */
-const single = (id, exam, topic, question, answers, correct, explanation) =>
+export const single = (id, exam, topic, question, answers, correct, explanation) =>
     make(id, exam, topic, question, explanation, { answers: answers.map(b), correct });
 
 /**
