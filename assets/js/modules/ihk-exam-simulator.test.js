@@ -8,6 +8,7 @@ import {
     shuffle,
 } from './ihk-exam-simulator.js';
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './exam-questions.js';
+import { isSingleChoice, validateQuestion } from './question-types.js';
 
 /** Deterministic pseudo random numbers (linear congruential generator). */
 function seededRandom(seed) {
@@ -47,17 +48,10 @@ describe('question pool', () => {
             const label = question.id;
             expect(Object.keys(EXAM_MODES), label).toContain(question.exam);
             expect(Object.keys(EXAM_TOPICS), label).toContain(question.topic);
-            expect(question.answers, label).toHaveLength(4);
-            expect(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < 4, label).toBe(
-                true
-            );
-            for (const text of [question.question, question.explanation, ...question.answers]) {
-                expect(text.de.trim().length, label).toBeGreaterThan(0);
-                expect(text.en.trim().length, label).toBeGreaterThan(0);
-            }
-            // Four different answers per language, otherwise two options would look identical.
-            expect(new Set(question.answers.map((answer) => answer.de)).size, label).toBe(4);
-            expect(new Set(question.answers.map((answer) => answer.en)).size, label).toBe(4);
+            expect(validateQuestion(question), label).toEqual([]);
+            // Different answers per language, otherwise two options would look identical.
+            expect(new Set(question.answers.map((answer) => answer.de)).size, label).toBe(question.answers.length);
+            expect(new Set(question.answers.map((answer) => answer.en)).size, label).toBe(question.answers.length);
         }
     });
 
@@ -69,7 +63,7 @@ describe('question pool', () => {
     });
 
     it('does not always put the right answer in the same position', () => {
-        const positions = new Set(EXAM_QUESTIONS.map((question) => question.correct));
+        const positions = new Set(EXAM_QUESTIONS.filter(isSingleChoice).map((question) => question.correct));
         expect(positions.size).toBe(4);
     });
 });

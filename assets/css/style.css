@@ -3691,9 +3691,12 @@ html nav {
 
 /* Header Title Gradient & Animation (Glossy Metallic Sheen & Pulsing Glow) */
 .header-title {
-    font-size: clamp(1.2rem, 3.7vw, 1.5rem);
+    /* Der Titel ist lang ("Maximilian Schenk · Fachinformatiker für Anwendungsentwicklung"): Er muss in den
+       44 px des Banners passen, auf dem Desktop einzeilig, auf schmalen Schirmen höchstens zweizeilig. */
+    font-size: clamp(0.62rem, 1.45vw, 1.1rem);
+    line-height: 1.25;
     font-weight: 800;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 25%, #ffffff 50%, #60a5fa 75%, #ffffff 100%);
     background-size: 250% auto;

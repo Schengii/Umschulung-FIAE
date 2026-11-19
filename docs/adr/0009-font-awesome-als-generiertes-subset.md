@@ -18,7 +18,7 @@ Naheliegende Alternativen:
 
 - Es durchsucht Seiten, Skripte und Daten nach `fa-…`-Klassennamen, behält im CSS alle Nicht-Icon-Regeln und von den Icon-Regeln nur die verwendeten Selektoren, reduziert `@font-face` auf WOFF2 und entfernt die Font-Awesome-4-Kompatibilitäts-Faces.
 - Die drei Fonts (solid, regular, brands) werden mit `subset-font` auf die Codepoints dieser Icons beschnitten.
-- Die ausgelieferten Pfade bleiben unverändert (`css/all.min.css`, `webfonts/fa-*.woff2`). Der Name `all.min.css` ist damit nicht mehr wörtlich zu nehmen; er bleibt, weil auch Seiten unter `Projekte/` auf diesen Pfad verlinken, die der wöchentliche Sync überschreibt.
+- Die ausgelieferten Pfade bleiben unverändert (`css/all.min.css`, `webfonts/fa-*.woff2`). Der Name `all.min.css` ist damit nicht mehr wörtlich zu nehmen; er bleibt, weil auch Seiten unter `Projekte/` auf diesen Pfad verlinken, die der tägliche Sync überschreibt.
 
 `npm run check-icons` ist ein CI-Gate und schlägt fehl, wenn das eingecheckte CSS nicht zu den aktuell verwendeten Icons passt. `sync_projects.js` führt `subset-icons` nach jedem Sync aus. Der E2E-Test `icons.spec.js` prüft auf jeder Seite, dass kein Icon-Element ohne Glyph bleibt.
 
@@ -32,3 +32,7 @@ Ergebnis: rund 21 KB CSS und 22 KB Fonts.
 - Font-Awesome-4-Namen (`fa-clock-o`, `fa-file-pdf-o` …) haben in Font Awesome 6 kein Glyph. Fünf solche Stellen waren schon vor dem Subset leer und wurden beim Einführen des Tests korrigiert.
 - Ein Versions-Upgrade ist eine Änderung der gepinnten Version in `package.json` plus `npm run subset-icons`.
 - **Nachtrag 2026-10-28:** Ab 6.7 steht der Glyph nicht mehr in `.fa-x:before{content:"…"}`, sondern in `.fa-x{--fa:"…"}`; die Basisklassen (`.fa`, `.fa-solid` …) setzen `content:var(--fa)`. Das Skript liest beide Formate und schreibt die Selektoren in der Form zurück, in der sie im Paket stehen. Damit ist 6.7.2 eingespielt und Dependabot sperrt nur noch Major-Updates (Font Awesome 7 hat neue Klassennamen und Font-Familien).
+
+## Nachtrag 2026-11-19: Font Awesome 7
+
+Das Subset-Skript liest Font Awesome 7 (`.fa-name{--fa:"…"}` wie schon ab 6.7). Angepasst wurde nur das Auslesen der `@font-face`-Quelle, weil 7 `format("woff2")` weglässt. Alle 182 verwendeten Icon-Namen gibt es in 7.3.1 weiter, `check-icons` und `icons.spec.js` (Glyph je Icon auf jeder Seite) sind grün. Die Sperre in `dependabot.yml` entfällt.

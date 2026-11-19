@@ -30,13 +30,69 @@ function currentQuestion() {
     return EXAM_QUESTIONS.find((question) => question.question.de === text || question.question.en === text);
 }
 
-/** Clicks the answer button whose text is the given answer of the question. */
-function choose(question, answerIndex) {
-    const lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de';
-    const text = question.answers[answerIndex][lang];
-    $$('.exam-answer')
-        .find((button) => button.textContent === text)
-        .click();
+const language = () => (document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de');
+
+/** Dispatches an input or change event like a real edit. */
+function fire(node, type) {
+    node.dispatchEvent(new window.Event(type, { bubbles: true }));
+}
+
+/** Moves the items of an ordering question into the wanted order with the up buttons. */
+function arrange(texts) {
+    texts.forEach((text, target) => {
+        let items = $$('.exam-order-item');
+        let at = items.findIndex((li) => li.querySelector('span').textContent === text);
+        while (at > target) {
+            items[at].querySelectorAll('button')[0].click();
+            items = $$('.exam-order-item');
+            at -= 1;
+        }
+    });
+    $('.exam-order-confirm').click();
+}
+
+/**
+ * Answers the question on screen, whatever its type, with the model answer (right = true) or a
+ * clearly wrong one (right = false).
+ */
+function answerCurrent(question, right) {
+    const lang = language();
+    const type = question.type || 'single';
+    if (type === 'single') {
+        const index = right ? question.correct : (question.correct + 1) % 4;
+        $$('.exam-answer')
+            .find((button) => button.textContent === question.answers[index][lang])
+            .click();
+    } else if (type === 'multi') {
+        const wanted = right
+            ? question.correctSet
+            : [question.answers.findIndex((_answer, index) => !question.correctSet.includes(index))];
+        for (const index of wanted) {
+            $$('.exam-answer')
+                .find((button) => button.textContent === question.answers[index][lang])
+                .click();
+        }
+    } else if (type === 'order') {
+        const texts = question.items.map((item) => item[lang]);
+        arrange(right ? texts : [...texts].reverse());
+    } else if (type === 'match') {
+        question.pairs.forEach((pair, index) => {
+            const target = right ? pair : question.pairs[(index + 1) % question.pairs.length];
+            const select = $$('.exam-match-select')[index];
+            const option = [...select.options].find((entry) => entry.textContent === target.right[lang]);
+            select.value = option.value;
+            fire(select, 'change');
+        });
+    } else if (type === 'numeric') {
+        const input = $('.exam-numeric-input');
+        input.value = String(right ? question.answer : question.answer + 1000);
+        fire(input, 'input');
+    } else if (type === 'cloze') {
+        $$('.exam-cloze-input').forEach((input, index) => {
+            input.value = right ? question.blanks[index][0] : 'zzz';
+            fire(input, 'input');
+        });
+    }
 }
 
 /** Answers every question with the right (true), a wrong (false) or no (null) answer. */
@@ -44,7 +100,7 @@ function answerAll(mode, how) {
     const questionCount = $$('.exam-step').length;
     for (let i = 0; i < questionCount; i++) {
         const question = currentQuestion();
-        if (how !== null) choose(question, how ? question.correct : (question.correct + 1) % 4);
+        if (how !== null) answerCurrent(question, how);
         if (i < questionCount - 1) buttonByText('Weiter').click();
     }
 }
@@ -140,10 +196,10 @@ describe('exam simulator: mode selection', () => {
 });
 
 describe('exam simulator: answering', () => {
-    it('starts a run with the configured number of questions and four answers each', () => {
+    it('starts a run with the configured number of questions and an answer area', () => {
         startExam('ap1');
         expect($$('.exam-step')).toHaveLength(EXAM_MODES.ap1.questionCount);
-        expect($$('.exam-answer')).toHaveLength(4);
+        expect($('.exam-answers')).not.toBeNull();
         expect(panel().textContent).toContain(`Frage 1 von ${EXAM_MODES.ap1.questionCount}`);
         expect(currentQuestion()).toBeDefined();
     });
@@ -151,11 +207,13 @@ describe('exam simulator: answering', () => {
     it('marks the chosen answer and keeps no feedback during the exam', () => {
         startExam('ap1');
         const question = currentQuestion();
-        choose(question, question.correct);
+        answerCurrent(question, true);
 
-        const selected = $$('.exam-answer.selected');
-        expect(selected).toHaveLength(1);
-        expect(selected[0].getAttribute('aria-checked')).toBe('true');
+        if (!question.type) {
+            const selected = $$('.exam-answer.selected');
+            expect(selected).toHaveLength(1);
+            expect(selected[0].getAttribute('aria-checked')).toBe('true');
+        }
         expect($('.exam-step.answered')).not.toBeNull();
         expect(panel().textContent).not.toContain('Richtig:');
     });
@@ -310,7 +368,7 @@ describe('exam simulator: hand in', () => {
             const { questionCount } = EXAM_MODES.wiso;
             for (let i = 0; i < questionCount; i++) {
                 const question = currentQuestion();
-                choose(question, question.correct);
+                answerCurrent(question, true);
                 if (i < questionCount - 1) buttonByText('Next').click();
             }
         }
@@ -414,5 +472,62 @@ describe('exam simulator: statistics and repeating weaknesses', () => {
         $('#exam-submit-btn').click();
         expect($('#exam-repeat-weak-btn')).toBeNull();
         expect($('.exam-nav a[href="flashcards.html"]')).toBeNull();
+    });
+});
+
+describe('exam simulator: question types', () => {
+    const original = [...EXAM_QUESTIONS];
+    afterEach(() => EXAM_QUESTIONS.splice(0, EXAM_QUESTIONS.length, ...original));
+
+    for (const type of ['multi', 'order', 'match', 'numeric', 'cloze']) {
+        it(`scores ${type} questions with the model answer as 100 % and a wrong one lower`, () => {
+            const ofType = original.filter((question) => question.type === type);
+            const exam = ofType[0].exam;
+            const pool = ofType.filter((question) => question.exam === exam);
+            EXAM_QUESTIONS.splice(0, EXAM_QUESTIONS.length, ...pool);
+
+            startExam(exam);
+            expect($$('.exam-step')).toHaveLength(pool.length);
+            answerAll(exam, true);
+            buttonByText('Prüfung abgeben').click();
+            expect($('#exam-score').textContent).toContain('(100 %)');
+            expect($$('.exam-review > li.exam-review-correct')).toHaveLength(pool.length);
+
+            $('#exam-restart-btn').click();
+            $('#exam-start-btn').click();
+            answerAll(exam, false);
+            buttonByText('Prüfung abgeben').click();
+            expect($('#exam-score').textContent).not.toContain('(100 %)');
+            expect($$('.exam-review > li.exam-review-wrong').length).toBeGreaterThan(0);
+            expect($('.exam-review').textContent).toContain('Richtig:');
+        });
+    }
+
+    it('shows partial credit for a half-right multiple choice answer in the review', () => {
+        const question = original.find((entry) => entry.id === 'ap1-sec-multi-passwort');
+        EXAM_QUESTIONS.splice(0, EXAM_QUESTIONS.length, question);
+        startExam('ap1');
+        const [first] = question.correctSet;
+        $$('.exam-answer')
+            .find((button) => button.textContent === question.answers[first].de)
+            .click();
+        buttonByText('Prüfung abgeben').click();
+        expect($('.exam-review').textContent).toContain('% der Punkte');
+        expect($('#exam-score').textContent).toContain('0 von 1 richtig');
+        expect($('#exam-score').textContent).toContain('(33 %)');
+    });
+
+    it('counts a typed question as answered only with a number in it', () => {
+        const question = original.find((entry) => entry.type === 'numeric');
+        EXAM_QUESTIONS.splice(0, EXAM_QUESTIONS.length, question);
+        startExam(question.exam);
+        expect($('.exam-step.answered')).toBeNull();
+        const input = $('.exam-numeric-input');
+        input.value = 'abc';
+        input.dispatchEvent(new window.Event('input', { bubbles: true }));
+        expect($('.exam-step.answered')).toBeNull();
+        input.value = '12';
+        input.dispatchEvent(new window.Event('input', { bubbles: true }));
+        expect($('.exam-step.answered')).not.toBeNull();
     });
 });

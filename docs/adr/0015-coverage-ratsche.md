@@ -23,3 +23,11 @@
 ## Nachtrag 2026-10-28
 
 Mit den Logik-Modulen der Seiten-Scripts (`flashcard-deck`, `portfolio-logic`, `project-detail-logic`, `snake-logic`, `memory-logic`, `quiz-logic`) und Tests für die bisher ungetesteten Module liegt der Ist-Wert bei 81 % Statements, 73 % Branches, 83 % Functions und 82 % Lines. Die Schwellen stehen jetzt bei 78 / 70 / 80 / 79 %.
+
+## Nachtrag 2026-11-19
+
+Die Messung umfasst jetzt auch die Seiten-Scripts `assets/js/*.js` (Ausnahme `projects_data.js`). Für sie gilt eine eigene Schwelle, weil sie bisher nur über Playwright laufen und in der Unit-Messung bei rund 0,6 % liegen (Schwelle 0,5 / 0,5 / 0,1 / 0,5 %). Wird Logik daraus in `modules/` ausgelagert (Plan 6.3), sinkt der Anteil, den dieses Glob noch misst, und die Schwelle wird angehoben. Die Module-Schwelle bleibt bei 78 / 70 / 80 / 79 %.
+
+## Nachtrag 2026-11-19 (Module)
+
+Nach den Tests für Copilot, C4-Diagramm, Praktikums-Medien, Effekt-Module, Prüfungstypen, Kartei-Sitzung und Verlauf liegen `assets/js/modules` bei 96 % Statements, 84 % Branches, 98 % Functions und 98 % Lines. Die Schwellen stehen jetzt bei 92 / 80 / 94 / 94 %; kein Modul liegt mehr unter 60 % der Zeilen.

@@ -9,6 +9,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { pageNameFor } = require('./generate_project_pages');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://www.max-schenk.tech';
@@ -70,7 +71,7 @@ function buildProjectsJsonLd(projects) {
             '@type': 'ListItem',
             position: i + 1,
             name: p.titleDe,
-            url: `${SITE}/pages/projekt-detail.html?repo=${encodeURIComponent(p.repoName)}`,
+            url: `${SITE}/pages/${pageNameFor(p.repoName)}`,
         })),
     };
 }

@@ -10,6 +10,17 @@
  */
 
 import { EXAM_QUESTIONS, EXAM_TOPICS } from './exam-questions.js';
+import { parseHistory, addRunToHistory } from './exam-history.js';
+import {
+    scoreAnswer,
+    isAnswered,
+    isFullyCorrect,
+    typeOf,
+    shuffleableIndices,
+    correctAnswerText,
+    givenAnswerText,
+    parseNumber,
+} from './question-types.js';
 import { getIhkGrade } from './grade-calculator.js';
 import {
     addRunToTopicStats,
@@ -132,30 +143,34 @@ export function pickExamQuestions(pool, exam, count, random = Math.random) {
 
 /**
  * @param {import('./exam-questions.js').ExamQuestion[]} questions
- * @param {(number | null | undefined)[]} answers chosen answer index per question
+ * @param {unknown[]} answers answer per question (shape depends on the question type, see question-types.js)
  */
 export function evaluateExam(questions, answers) {
     const topics = new Map();
     let correct = 0;
     let answered = 0;
+    let points = 0;
 
     questions.forEach((question, index) => {
         const given = answers[index];
-        const isCorrect = given === question.correct;
-        if (given !== null && given !== undefined) answered++;
-        if (isCorrect) correct++;
+        const score = scoreAnswer(question, given);
+        if (isAnswered(question, given)) answered++;
+        if (score === 1) correct++;
+        points += score;
 
-        const topic = topics.get(question.topic) || { topic: question.topic, total: 0, correct: 0 };
+        const topic = topics.get(question.topic) || { topic: question.topic, total: 0, correct: 0, points: 0 };
         topic.total++;
-        if (isCorrect) topic.correct++;
+        topic.points += score;
+        if (score === 1) topic.correct++;
         topics.set(question.topic, topic);
     });
 
     const total = questions.length;
-    const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
-    const topicResults = [...topics.values()].map((topic) => ({
+    // Partial credit (multiple choice, ordering, matching, cloze) counts into the rate.
+    const percent = total === 0 ? 0 : Math.round((points / total) * 100);
+    const topicResults = [...topics.values()].map(({ points: topicPoints, ...topic }) => ({
         ...topic,
-        percent: Math.round((topic.correct / topic.total) * 100),
+        percent: Math.round((topicPoints / topic.total) * 100),
     }));
 
     return {
@@ -204,7 +219,7 @@ export function initIhkExamSimulator() {
     /** @param {string} de @param {string} en */
     const t = (de, en) => (lang() === 'en' ? en : de);
 
-    /** @type {{mode: string, questions: import('./exam-questions.js').ExamQuestion[], order: number[][], answers: (number|null)[], index: number, deadline: number, view: 'intro'|'running'|'result', timedOut: boolean} | null} */
+    /** @type {{mode: string, questions: import('./exam-questions.js').ExamQuestion[], order: number[][], answers: any[], index: number, deadline: number, view: 'intro'|'running'|'result', timedOut: boolean} | null} */
     let run = null;
     let mode = 'standard';
     let timerId = 0;
@@ -285,6 +300,16 @@ export function initIhkExamSimulator() {
             date: new Date().toISOString(),
         };
         AppStorage.setItem(STORAGE_KEYS.EXAM_RESULTS, JSON.stringify(results));
+        AppStorage.setItem(
+            STORAGE_KEYS.EXAM_HISTORY,
+            JSON.stringify(
+                addRunToHistory(parseHistory(AppStorage.getItem(STORAGE_KEYS.EXAM_HISTORY, '[]')), {
+                    mode: examMode,
+                    percent: result.percent,
+                    topics: result.topics,
+                })
+            )
+        );
 
         // Weak topics feed the learning recommendations on the dashboard.
         if (result.weakTopics.length > 0) {
@@ -404,8 +429,8 @@ export function initIhkExamSimulator() {
         run = {
             mode,
             questions,
-            order: questions.map((question) => shuffle(question.answers.map((_answer, index) => index))),
-            answers: questions.map(() => /** @type {number | null} */ (null)),
+            order: questions.map((question) => shuffle(shuffleableIndices(question))),
+            answers: questions.map(() => /** @type {any} */ (null)),
             index: 0,
             deadline: Date.now() + config.durationSeconds * 1000,
             view: 'running',
@@ -540,15 +565,216 @@ export function initIhkExamSimulator() {
         );
     }
 
-    function renderQuestion() {
-        const { questions, answers, order, index } = run;
-        const question = questions[index];
+    /**
+     * Input element of the current question; the shape depends on its type (question-types.js).
+     * @param {import('./exam-questions.js').ExamQuestion} question
+     * @param {number} index position of the question in the run
+     * @param {string} questionId id of the heading that labels the input
+     * @returns {HTMLElement}
+     */
+    function renderAnswerInput(question, index, questionId) {
+        const state = /** @type {NonNullable<typeof run>} */ (run);
+        const items = question.items || [];
+        const pairs = question.pairs || [];
+        const blanks = question.blanks || [];
+        const template = question.template || { de: '', en: '' };
         const language = lang();
-        const questionId = 'exam-question-text';
+        const type = typeOf(question);
+        const refresh = (/** @type {string} */ focusSelector) => {
+            submitArmed = false;
+            renderQuestion();
+            /** @type {HTMLElement | null} */ (examPanel.querySelector(focusSelector))?.focus();
+        };
+        /** Marks the step of this question as answered without re-rendering (keeps typing focus). */
+        const syncStep = () => {
+            examPanel
+                .querySelector('.exam-step.current')
+                ?.classList.toggle('answered', isAnswered(question, state.answers[index]));
+        };
 
+        if (type === 'multi') {
+            const group = element('div', { class: 'exam-answers', role: 'group', 'aria-labelledby': questionId });
+            state.order[index].forEach((answerIndex) => {
+                const chosen = /** @type {number[]} */ (state.answers[index] || []);
+                const selected = chosen.includes(answerIndex);
+                const option = element('button', {
+                    type: 'button',
+                    class: `btn-quiz exam-answer${selected ? ' selected' : ''}`,
+                    role: 'checkbox',
+                    'aria-checked': String(selected),
+                    'data-answer': String(answerIndex),
+                    text: question.answers[answerIndex][language],
+                });
+                option.addEventListener('click', () => {
+                    const next = selected ? chosen.filter((entry) => entry !== answerIndex) : [...chosen, answerIndex];
+                    state.answers[index] = next.length ? next : null;
+                    refresh(`[data-answer="${answerIndex}"]`);
+                });
+                group.appendChild(option);
+            });
+            return group;
+        }
+
+        if (type === 'order') {
+            const sequence = /** @type {number[]} */ (state.answers[index] || state.order[index]);
+            const list = element('ol', { class: 'exam-order', 'aria-labelledby': questionId });
+            const move = (/** @type {number} */ from, /** @type {number} */ to) => {
+                const next = [...sequence];
+                next.splice(to, 0, /** @type {number} */ (next.splice(from, 1)[0]));
+                state.answers[index] = next;
+                refresh(`[data-position="${to}"]`);
+            };
+            sequence.forEach((itemIndex, position) => {
+                const up = /** @type {HTMLButtonElement} */ (
+                    element('button', {
+                        type: 'button',
+                        class: 'btn-secondary exam-order-btn',
+                        'aria-label': t('Nach oben', 'Move up'),
+                        text: '↑',
+                    })
+                );
+                const down = /** @type {HTMLButtonElement} */ (
+                    element('button', {
+                        type: 'button',
+                        class: 'btn-secondary exam-order-btn',
+                        'aria-label': t('Nach unten', 'Move down'),
+                        text: '↓',
+                    })
+                );
+                up.disabled = position === 0;
+                down.disabled = position === sequence.length - 1;
+                up.addEventListener('click', () => move(position, position - 1));
+                down.addEventListener('click', () => move(position, position + 1));
+                list.appendChild(
+                    element(
+                        'li',
+                        { class: 'exam-order-item', 'data-position': String(position), tabindex: '-1' },
+                        element('span', { text: items[itemIndex][language] }),
+                        up,
+                        down
+                    )
+                );
+            });
+            const confirm = element('button', {
+                type: 'button',
+                class: 'btn-secondary exam-order-confirm',
+                text: state.answers[index]
+                    ? t('Reihenfolge übernommen ✓', 'Order confirmed ✓')
+                    : t('Diese Reihenfolge übernehmen', 'Confirm this order'),
+            });
+            confirm.addEventListener('click', () => {
+                state.answers[index] = [...sequence];
+                refresh('.exam-order-confirm');
+            });
+            return element('div', { class: 'exam-answers' }, list, confirm);
+        }
+
+        if (type === 'match') {
+            const chosen = /** @type {(number | null)[]} */ (
+                state.answers[index] || pairs.map(() => /** @type {number | null} */ (null))
+            );
+            const rows = element('div', {
+                class: 'exam-answers exam-match',
+                role: 'group',
+                'aria-labelledby': questionId,
+            });
+            pairs.forEach((pair, pairIndex) => {
+                const selectId = `exam-match-${index}-${pairIndex}`;
+                const select = /** @type {HTMLSelectElement} */ (
+                    element('select', { id: selectId, class: 'exam-match-select' })
+                );
+                select.appendChild(element('option', { value: '', text: t('– auswählen –', '– choose –') }));
+                state.order[index].forEach((rightIndex) => {
+                    select.appendChild(
+                        element('option', {
+                            value: String(rightIndex),
+                            text: pairs[rightIndex].right[language],
+                        })
+                    );
+                });
+                select.value = chosen[pairIndex] === null ? '' : String(chosen[pairIndex]);
+                select.addEventListener('change', () => {
+                    const next = [...chosen];
+                    next[pairIndex] = select.value === '' ? null : Number(select.value);
+                    chosen[pairIndex] = next[pairIndex];
+                    state.answers[index] = next.some((entry) => entry !== null) ? next : null;
+                    syncStep();
+                    submitArmed = false;
+                });
+                rows.appendChild(
+                    element(
+                        'div',
+                        { class: 'exam-match-row' },
+                        element('label', { for: selectId, text: pair.left[language] }),
+                        select
+                    )
+                );
+            });
+            return rows;
+        }
+
+        if (type === 'numeric') {
+            const inputId = `exam-numeric-${index}`;
+            const input = /** @type {HTMLInputElement} */ (
+                element('input', {
+                    id: inputId,
+                    class: 'exam-numeric-input',
+                    type: 'text',
+                    inputmode: 'decimal',
+                    autocomplete: 'off',
+                })
+            );
+            const stored = state.answers[index];
+            input.value = stored === null || stored === undefined ? '' : String(stored);
+            input.addEventListener('input', () => {
+                state.answers[index] = parseNumber(input.value) === null ? null : input.value.trim();
+                syncStep();
+                submitArmed = false;
+            });
+            return element(
+                'div',
+                { class: 'exam-answers exam-numeric' },
+                element('label', { for: inputId, text: t('Ihre Antwort:', 'Your answer:') }),
+                input,
+                question.unit ? element('span', { class: 'exam-numeric-unit', text: question.unit }) : null
+            );
+        }
+
+        if (type === 'cloze') {
+            const typed = /** @type {string[]} */ (state.answers[index] || blanks.map(() => ''));
+            const line = element('p', { class: 'exam-cloze', role: 'group', 'aria-labelledby': questionId });
+            template[language].split(/\{(\d+)\}/).forEach((part, partIndex) => {
+                if (partIndex % 2 === 0) {
+                    if (part) line.append(part);
+                    return;
+                }
+                const blankIndex = Number(part) - 1;
+                const input = /** @type {HTMLInputElement} */ (
+                    element('input', {
+                        type: 'text',
+                        class: 'exam-cloze-input',
+                        autocomplete: 'off',
+                        autocapitalize: 'off',
+                        spellcheck: 'false',
+                        'aria-label': t(`Lücke ${blankIndex + 1}`, `Blank ${blankIndex + 1}`),
+                    })
+                );
+                input.value = typed[blankIndex] || '';
+                input.addEventListener('input', () => {
+                    typed[blankIndex] = input.value;
+                    state.answers[index] = typed.some((entry) => entry.trim() !== '') ? [...typed] : null;
+                    syncStep();
+                    submitArmed = false;
+                });
+                line.append(input);
+            });
+            return element('div', { class: 'exam-answers' }, line);
+        }
+
+        // Classic single choice.
         const options = element('div', { class: 'exam-answers', role: 'radiogroup', 'aria-labelledby': questionId });
-        order[index].forEach((answerIndex) => {
-            const selected = answers[index] === answerIndex;
+        state.order[index].forEach((answerIndex) => {
+            const selected = state.answers[index] === answerIndex;
             const option = element('button', {
                 type: 'button',
                 class: `btn-quiz exam-answer${selected ? ' selected' : ''}`,
@@ -557,17 +783,25 @@ export function initIhkExamSimulator() {
                 text: question.answers[answerIndex][language],
             });
             option.addEventListener('click', () => {
-                run.answers[index] = answerIndex;
-                submitArmed = false;
-                renderQuestion();
-                /** @type {HTMLElement} */ (examPanel.querySelector('.exam-answer.selected'))?.focus();
+                state.answers[index] = answerIndex;
+                refresh('.exam-answer.selected');
             });
             options.appendChild(option);
         });
+        return options;
+    }
+
+    function renderQuestion() {
+        const { questions, answers, order, index } = /** @type {NonNullable<typeof run>} */ (run);
+        const question = questions[index];
+        const language = lang();
+        const questionId = 'exam-question-text';
+
+        const options = renderAnswerInput(question, index, questionId);
 
         const steps = element('div', { class: 'exam-steps', role: 'group', 'aria-label': t('Fragen', 'Questions') });
         questions.forEach((_question, stepIndex) => {
-            const answeredStep = answers[stepIndex] !== null;
+            const answeredStep = isAnswered(_question, answers[stepIndex]);
             const step = element('button', {
                 type: 'button',
                 class: `exam-step${stepIndex === index ? ' current' : ''}${answeredStep ? ' answered' : ''}`,
@@ -593,7 +827,8 @@ export function initIhkExamSimulator() {
         next.disabled = index === questions.length - 1;
         next.addEventListener('click', () => goTo(index + 1));
 
-        const open = answers.filter((answer) => answer === null).length;
+        const countOpen = () => run.questions.filter((item, i) => !isAnswered(item, run.answers[i])).length;
+        const open = countOpen();
         const submit = element('button', {
             type: 'button',
             class: 'btn-primary',
@@ -601,7 +836,7 @@ export function initIhkExamSimulator() {
             text: submitArmed ? t('Trotzdem abgeben', 'Hand in anyway') : t('Prüfung abgeben', 'Hand in exam'),
         });
         submit.addEventListener('click', () => {
-            if (open > 0 && !submitArmed) {
+            if (countOpen() > 0 && !submitArmed) {
                 submitArmed = true;
                 renderQuestion();
                 /** @type {HTMLElement} */ (examPanel.querySelector('#exam-submit-btn'))?.focus();
@@ -626,9 +861,11 @@ export function initIhkExamSimulator() {
                 if (!('speechSynthesis' in window)) return;
                 window.speechSynthesis.cancel();
                 const qText = question.question[language] || '';
-                const optsText = order[index]
-                    .map((ai, i) => `${String.fromCharCode(65 + i)}: ${question.answers[ai][language]}`)
-                    .join('. ');
+                const optsText = ['single', 'multi'].includes(typeOf(question))
+                    ? order[index]
+                          .map((ai, i) => `${String.fromCharCode(65 + i)}: ${question.answers[ai][language]}`)
+                          .join('. ')
+                    : '';
                 const utterance = new SpeechSynthesisUtterance(`${qText}. ${optsText}`);
                 utterance.lang = language === 'en' ? 'en-US' : 'de-DE';
                 window.speechSynthesis.speak(utterance);
@@ -713,7 +950,9 @@ export function initIhkExamSimulator() {
         const review = element('ol', { class: 'exam-review' });
         run.questions.forEach((question, index) => {
             const given = run.answers[index];
-            const isCorrect = given === question.correct;
+            const isCorrect = isFullyCorrect(question, given);
+            const score = scoreAnswer(question, given);
+            const givenText = givenAnswerText(question, given, language);
             review.appendChild(
                 element(
                     'li',
@@ -723,12 +962,18 @@ export function initIhkExamSimulator() {
                         text:
                             (isCorrect ? '✓ ' : '✗ ') +
                             t('Deine Antwort: ', 'Your answer: ') +
-                            (given === null ? t('keine', 'none') : question.answers[given][language]),
+                            (givenText === null ? t('keine', 'none') : givenText) +
+                            (!isCorrect && score > 0
+                                ? t(
+                                      ` (${Math.round(score * 100)} % der Punkte)`,
+                                      ` (${Math.round(score * 100)}% of the points)`
+                                  )
+                                : ''),
                     }),
                     isCorrect
                         ? null
                         : element('p', {
-                              text: t('Richtig: ', 'Correct: ') + question.answers[question.correct][language],
+                              text: t('Richtig: ', 'Correct: ') + correctAnswerText(question, language),
                           }),
                     element('p', { class: 'exam-review-explanation', text: question.explanation[language] })
                 )

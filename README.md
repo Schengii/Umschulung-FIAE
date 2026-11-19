@@ -122,7 +122,7 @@ Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf
 
 ### 3c. Lokale Drittanbieter-Ressourcen & Datenschutz
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
-  - Icon-Font (Font Awesome 6.5.2) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
+  - Icon-Font (Font Awesome 7.3.1) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Font Awesome wird als **generiertes Subset** ausgeliefert: `npm run subset-icons` baut CSS und WOFF2 aus dem npm-Paket und behält nur die tatsächlich verwendeten Icons (ca. 21 KB CSS + 22 KB Fonts statt 103 KB + 300 KB). Ein neues Icon erscheint erst nach diesem Befehl; `check-icons` prüft das in der CI (ADR 0009).
   - **QR-Codes** (Lernstand-Sync im Dashboard, Recruiter-Link-Generator) werden lokal im Browser erzeugt (`qrcode-generator`, MIT, `assets/vendor/qrcode/`). Es geht kein Lernstand und kein Link an einen QR-Webdienst; `api.qrserver.com` ist aus den CSPs entfernt. Ist ein Lernstand für einen QR-Code zu groß, weist die Oberfläche auf den Datei-Export hin.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
@@ -157,13 +157,9 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run check-project-links` | `check_all_project_links.js` | Verifiziert, dass alle Projekt-Links tatsächlich erreichbar sind |
 | `npm run check-head` | `check_head_consistency.js` | Prüft, ob jede Seite die gemeinsamen `<head>`-Boilerplate-Tags (CSP, Viewport, Favicon, Stylesheets, `meta author`, OG-Tags) enthält — verhindert stillen Drift wie die zunächst fehlende CSP in Root-`404.html` |
 | `npm run optimize-images` | `optimize_images.js` | Audit-Report über Bildgrößen (read-only, keine Änderungen) |
-| `npm run compress-images` | `compress_images.js` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
+| `npm run compress-images` | `optimize_images.js --compress` | Verlustbehaftetes Re-Encoding aller Bilder > 80 KB (in-place) |
 | `npm run build:dist` | `build_minified.js` | Produktions-Build: minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung) und bricht ab, wenn ein verlinktes Projekt-Demo oder Medium im Ergebnis fehlt. Vercel führt genau diesen Befehl aus und liefert `dist/` aus (`vercel.json`, ADR 0008). Der Name bleibt `build:dist`, damit weiterhin nichts von Vercels Zero-Config-Erkennung abhängt (ADR 0005) |
-| `npm run audit-cleanup` | `audit_cleanup.js` | Verzeichnisgrößen-/Dateianzahl-Report je Ordner |
 | `npm run audit-project-paths` | `audit_project_html_paths.js` | Findet fehlerhafte relative Pfade in Sub-Projekt-HTML |
-| `npm run fix-project-paths` | `fix_project_html_paths.js` | Korrigiert die von `audit-project-paths` gefundenen Pfade |
-| `npm run localize-vendor-assets` | `localize_vendor_assets.js` | Ersetzt externe CDN-Referenzen in den Seiten durch die lokalen `assets/vendor/`-Kopien |
-| `npm run add-og-meta` | `add_og_meta.js` | Ergänzt fehlende OpenGraph/Twitter-Meta-Tags (idempotent) |
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
 | `npm run check-lighthouse-urls` | `check_lighthouse_urls.js` | Prüft, dass `lighthouserc.json` jede Seite der `sitemap.xml` abdeckt |
 | `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` mit Schwellenwert (Ratsche, ADR 0015); die CI führt die Unit-Tests über diesen Befehl aus |
@@ -206,7 +202,7 @@ npm run dev
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Git-Simulator, Prüfungssimulation, IHK-Cockpit, Copilot, Challenge-Lab, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
+Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Git-Simulator, Prüfungssimulation, IHK-Cockpit, Portfolio-Assistent, Challenge-Lab, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
 
 ### 5. Unit-Tests ausführen (Vitest)
 ```bash
@@ -230,7 +226,7 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 
 ## 🌟 Veröffentlichungs-Zusammenfassung (Release 2026)
 
-- **Über 20 Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
+- **Vielfältige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
 - **WCAG 2.1 AA Accessibility** (axe-core in der CI; Hochkontrast-Modus mit 7:1): Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
 - **Automatisierte Tests**: Playwright-E2E-Suite in vier Browser-Profilen plus Vitest-Unit-Tests für die Kernlogik (`npm test`, `npm run test:unit`).

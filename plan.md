@@ -81,7 +81,7 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
   - Der QR- und `#sync=`-Abgleich des Lernstands.
 
   Dazu ein Test, der die im Text genannten Schlüssel gegen `STORAGE_KEYS` prüft (Muster: `progress-backup.test.js`). Rechtstexte bitte selbst gegenlesen, das ist keine Rechtsberatung.
-- [ ] **1.7 Release 1.6.0 schneiden.** (S)
+- [x] **1.7 Release 1.6.0 schneiden.** (S) Erledigt 2026-11-19: Version 1.6.0 in `package.json`, Changelog-Abschnitt datiert, lokaler Tag `v1.6.0` auf dem Release-Commit. **Offen beim Eigentümer:** Branch mergen, Tag pushen (`git push origin v1.6.0`), die News-Einträge zu 1.6.0 schreiben.
   `[Unreleased]` enthält rund 30 Einträge. Version in `package.json` anheben, Changelog-Abschnitt datieren, Git-Tag setzen.
 
 ---
@@ -90,12 +90,12 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 - [x] **2.1 Eigene `<h1>` je Seite im HTML.** (M) Erledigt 2026-11-18 (Branch `feat/landing-und-dashboard-daten`). `news`, `git-simulator` und `projekt-detail` haben keine sichtbare Seitenüberschrift und bekommen eine `sr-only`-`<h1>`; `projekt-detail` zeigt den Projekttitel weiter als `<h2>` (wird mit 2.2 neu bewertet).
   20 von 28 Seiten haben keine `<h1>` im Quelltext. Die einzige `<h1>` kommt per JavaScript aus `components.js` und ist auf allen Seiten gleich. Jede Seite bekommt ihre eigene statische `<h1>` (meist die heutige erste `<h2>`), der Banner-Titel wird ein `<p>`. `check-head` um die Regel „genau eine `<h1>`“ erweitern.
-- [ ] **2.2 Projektseiten indexierbar machen.** (L)
+- [x] **2.2 Projektseiten indexierbar machen.** (L) Erledigt 2026-11-19: `generate_project_pages.js` schreibt je Projekt `pages/projekt-<slug>.html` (Titel, Beschreibung, JSON-LD `CreativeWork`, Bild mit Maßen, Links), `check-sync` prüft sie, 9 Sitemap-Einträge, `ItemList` zeigt auf die statischen Seiten, ADR 0018. `og:image` bleibt `og-cover.png` (`check-head`). Die Titel der Seiten stehen als Daten in `projects.json`; ausführlichere Texte folgen mit 3.1.
   `projekt-detail.html?repo=…` entsteht vollständig im Browser und steht nicht in der Sitemap. Die acht Projekte sind damit für Suchmaschinen kaum sichtbar.
   Vorschlag: `generate_projects_data.js` schreibt je Projekt eine statische Seite `pages/projekte/<slug>.html` mit Titel, Beschreibung, Bild, `og:image` und JSON-LD (`SoftwareSourceCode` oder `CreativeWork`). ADR 0004 (Seiten von Hand) bleibt für die Inhaltsseiten bestehen; für generierte Daten-Seiten ein neues ADR.
 - [x] **2.3 Englische Fassung auffindbar machen.** (M) Erledigt 2026-11-18 wie beschrieben (`?lang=en`, `hreflang`, Sitemap). Die englische Variante entsteht weiter erst im Browser; echte statische EN-Seiten wären ein eigenes Vorhaben.
   Die Sprache wird nur clientseitig umgeschaltet, es gibt keine eigene URL und kein `hreflang`. Kleinster Schritt: `?lang=en` in `components.js` vor dem ersten Paint auswerten, `<link rel="alternate" hreflang>` auf allen Seiten und in der Sitemap, `check-head` prüft das. Der Sprachschalter setzt den Parameter.
-- [ ] **2.4 Saubere URLs.** (M)
+- [x] **2.4 Saubere URLs.** (M) Erledigt 2026-11-19 in kleinem Umfang: Die Startseite ist kanonisch `/` (Redirect in `vercel.json`, Canonical, hreflang, Sitemap, `start_url`), Test `scripts/clean_urls.test.js`. `cleanUrls` für alle Seiten bewusst nicht eingeführt, Begründung als Nachtrag in ADR 0008. Der Redirect wirkt erst auf Vercel, lokal nicht prüfbar.
   Kanonisch ist heute `https://www.max-schenk.tech/index.html`. `cleanUrls` und eine Weiterleitung von `/index.html` auf `/` in `vercel.json` prüfen, Canonical und Sitemap anpassen. Vorher klären, ob der Service Worker (Abgleich über `.html`) und die relativen Pfade damit zurechtkommen. Ergebnis als Nachtrag in ADR 0008.
 - [x] **2.5 Mehr strukturierte Daten.** (S) Erledigt 2026-11-18: `FAQPage` nur auf `ausbildungsablauf` (`kostentraeger` hat kein FAQ), `ItemList` auf `portfolio`, `WebSite` gab es auf `index.html` schon. Beide Blöcke werden von `sync_structured_data.js` erzeugt und geprüft.
   JSON-LD gibt es auf 6 Seiten. Ergänzen: `FAQPage` für die FAQ-Akkordeons (`ausbildungsablauf`, `kostentraeger`), `ItemList` der Projekte auf `portfolio.html`, `WebSite` auf der Startseite. Danach `npm run check-csp:fix`.
@@ -106,11 +106,11 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 ## Phase 3: Recruiter-Nutzen
 
-- [ ] **3.1 Fallstudien statt Kurzbeschreibungen.** (L)
+- [ ] **3.1 Fallstudien statt Kurzbeschreibungen.** (L) Teilweise 2026-11-19: Aufbau steht (`assets/data/case-studies.json`, je Projekt Ausgangslage, Rolle, Entscheidung, Ergebnis, Gelerntes in DE und EN; Prüfung der Vollständigkeit im Generator und per Test; Anzeige auf der statischen Projektseite). Für EcoChef liegt ein **Entwurf** vor, geschrieben aus der Projektdokumentation (`FACHLICHE_DOKUMENTATION.md`): bitte gegenlesen, vor allem die Angaben zur eigenen Rolle. Für die übrigen sieben Projekte und die Bildschirmfotos fehlen die Inhalte, die nur der Eigentümer liefern kann.
   Je Projekt ein fester Aufbau: Ausgangslage, eigene Rolle, Architekturentscheidung, Ergebnis, Gelerntes, plus zwei bis drei Bildschirmfotos. Die Felder kommen in `portfolio-metadata.json`, `check-sync` prüft Vollständigkeit (DE und EN). Am ausführlichsten für das Abschlussprojekt EcoChef.
 - [x] **3.2 Diese Site als Projekt zeigen.** (M) Erledigt 2026-11-18 (Eintrag in `staticProjects`). Abweichung: Die ADRs werden nicht als eigene Seite ausgeliefert; der Projekttext verweist auf `docs/adr` im Repository. Eine gerenderte ADR-Seite bleibt offen.
   Das Portfolio ist selbst das technisch stärkste Stück (CSP, PWA, 806 Tests, 15 ADRs), taucht aber in der Projektliste nicht auf. Eintrag in `staticProjects`, mit Verweis auf `architecture.html`. Die ADRs als lesbare Seite ausliefern (`docs/` steht heute in `.vercelignore`).
-- [ ] **3.3 Startseite straffen.** (M)
+- [x] **3.3 Startseite straffen.** (M) Erledigt 2026-11-19: Die Erklärkarte „Was ist ein Fachinformatiker?“ liegt jetzt auf `ausbildungsablauf.html`, die BFW-Karte entfiel (steht schon auf `berufsfoerderungswerk.html`); `home.html` zeigt stattdessen eine Karte mit drei Links und ist um rund 60 Zeilen kürzer. Offen: weitere Abschnitte (Quellen, Praktikum-Seitenkarte) könnten noch folgen, wenn sie Recruiter nicht nutzen.
   `home.html` hat 711 Zeilen und rund 15 Abschnitte, darunter „Was ist ein Fachinformatiker?“ und BFW-Informationen. Für Recruiter zählen Profil, Projekte, Skills, Kontakt. Die Erklärtexte zur Umschulung auf ihre eigenen Seiten verschieben und nur verlinken.
 - [x] **3.4 Navigation gruppieren.** (M) Erledigt 2026-11-18. Abweichung vom Vorschlag: „Projekte“ steht in „Profil“, „Quellen & Links“ in „Umschulung“, das Dashboard in „Lernen“; News und Kontakt bleiben eigene Einträge.
   Die Navigation führt 23 Ziele. Vorschlag: „Profil“ (Über mich, Lebenslauf, Projekte), „Umschulung“ (Ablauf, BFW, Kostenträger, Praktikum), „Lernen“ (Kartei, Simulator, Cockpit, Trainer, Git), „Spielwiese“ (Spiele, Playground, Challenge Lab). Tastaturbedienung und `aria-expanded` mit testen.
@@ -123,9 +123,9 @@ Diese Punkte sieht ein Recruiter als Erstes. Sie sind klein, wirken aber am stä
 
 Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprobe sinnvoll. Der Fragenpool ist dafür die schwächste Stelle.
 
-- [ ] **4.1 Fragenpool vergrößern.** (L)
+- [ ] **4.1 Fragenpool vergrößern.** (L) Stand 2026-11-19: Pool von 63 auf 124 Fragen (6 bis 11 je Thema, alle Aufgabentypen vertreten), Schema-Check `check-exam-questions` in `check` und CI (Typ, Pflichtfelder, eindeutige Ids und Fragetexte, DE und EN, Erklärung). Abweichung: Der Pool bleibt ein JS-Modul statt JSON (wird synchron von Simulator, Dashboard und Tests genutzt). Offen: das Ziel von 20 Fragen je Thema; das ist Inhaltsarbeit, die fachlich gegengelesen werden sollte.
   63 Fragen auf 14 Themen, je Thema 3 bis 6. Ein Durchgang wiederholt sich nach wenigen Läufen. Ziel: mindestens 20 je Thema. Die Fragen in eine JSON-Datei auslagern (`assets/data/exam-questions.json`), mit Schema-Check wie `check-flashcards` (eindeutige IDs, gültiger `correct`-Index, DE und EN vorhanden, Erklärung nicht leer).
-- [ ] **4.2 Neue Aufgabentypen.** (L)
+- [x] **4.2 Neue Aufgabentypen.** (L) Erledigt 2026-11-19: Fünf neue Aufgabentypen (`multi` mit Teilpunkten, `order`, `match`, `numeric` mit Toleranz, `cloze` mit Normalisierung) mit reiner Bewertung je Typ in `question-types.js`; Simulator, Statistik und Prüfungsauswertung typfähig, Teilpunkte fließen in die Quote ein, die Frage des Tages bleibt Einfachauswahl.
   Heute gibt es nur Multiple Choice mit einer richtigen Antwort, die AP2 fragt überwiegend offen. Erweiterung in `ihk-exam-simulator.js` und `exam-statistics.js`:
   - Mehrfachauswahl mit Teilpunkten
   - Zuordnung und Reihenfolge (zum Beispiel OSI-Schichten, Projektphasen)
@@ -133,13 +133,13 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
   - Lückentext für SQL und Pseudocode mit Abgleich nach Normalisierung
 
   Ein Feld `type` am Fragenobjekt, die Auswertung je Typ als reine Funktion mit Vitest.
-- [ ] **4.3 Leitner-Box auf fünf Stufen.** (M)
+- [x] **4.3 Leitner-Box auf fünf Stufen.** (M) Erledigt 2026-11-19: Boxen 4 und 5 (14 und 30 Tage); gespeicherte Stände bleiben gültig (Box 3 behält 7 Tage), als gelernt zählt nur Box 5, ältere „gelernt“-Markierungen werden beim Laden bereinigt; Dashboard-Zähler und Achievement hängen an Box 5.
   `leitner-box.js` kennt drei Stufen mit 1, 3 und 7 Tagen. Bei 2 000 Karten kommt jede gelernte Karte damit wöchentlich wieder. Fünf Stufen (1, 3, 7, 14, 30 Tage) mit Migration der gespeicherten Stände; das Achievement „flashcard_master“ an die höchste Stufe binden.
-- [ ] **4.4 Tageslimit und Sitzungen in der Kartei.** (M)
+- [x] **4.4 Tageslimit und Sitzungen in der Kartei.** (M) Erledigt 2026-11-19: Tageslimit für neue Kartei-Karten (Standard 10, Schlüssel `flashcards_new_per_day`, `flashcards_new_today`; im Backup und in der Datenschutzerklärung), Sitzungsanzeige und Abschlussbild in „Heute fällig“ (`study-session.js`).
   Einstellbare Zahl neuer Karten je Tag, Sitzung mit Fortschrittsanzeige und Abschlussbild (richtig, falsch, nächste Fälligkeit).
-- [ ] **4.5 Verlauf der Prüfungsergebnisse.** (M)
+- [x] **4.5 Verlauf der Prüfungsergebnisse.** (M) Erledigt 2026-11-19: Die Läufe wurden bisher nur als Bestwert gespeichert, neuer Schlüssel `exam_history` (je Lauf Datum, Modus, Quote, Themen; im Backup und in der Datenschutzerklärung); SVG-Liniendiagramm im Dashboard gesamt und je Themengebiet (`exam-history.js`).
   Ein Liniendiagramm im Dashboard (SVG, ohne Bibliothek) zeigt die Quote über die Zeit und je Themengebiet. Vorher prüfen, ob die Ergebnisse je Lauf mit Datum gespeichert werden, sonst das Format erweitern.
-- [ ] **4.6 Mündliche Prüfung im Cockpit ausbauen.** (M)
+- [x] **4.6 Mündliche Prüfung im Cockpit ausbauen.** (M) Erledigt 2026-11-19: Katalog von 8 auf 24 Fragen in 10 Themengebieten (`fachgespraech-questions.js`, je Frage Musterantwort und drei Kriterien), Selbsteinschätzung als Checkliste, Ergebnisse je Themengebiet unter `fachgespraech_results` (Backup, Datenschutz) mit Bilanz, schwächstes Gebiet zuerst (`fachgespraech-stats.js`).
   `ihk-cockpit.js` hat mit 60 % die niedrigste Branch-Coverage der getesteten Kernmodule. Fragenkatalog erweitern, Musterantworten und Selbsteinschätzung ergänzen, Ergebnisse speichern (neuer Schlüssel in die Backup-Allowlist).
 
 ---
@@ -163,52 +163,52 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
 
 ## Phase 6: Tests und Codequalität
 
-- [ ] **6.1 Coverage auch für die Seiten-Scripts messen.** (M)
+- [x] **6.1 Coverage auch für die Seiten-Scripts messen.** (M) Erledigt 2026-11-19: Seiten-Scripts in der Messung, eigene Schwelle (Ist 0,6 %, weil sie bisher nur E2E-getestet sind); Anheben folgt mit 6.3.
   `vitest.config.js` misst nur `assets/js/modules`. `assets/js/*.js` (rund 9 000 Zeilen, darunter `flashcards.js` 870, `interview.js` 822, `components.js` 807, `dashboard.js` 741) bleibt ungemessen. In die Messung aufnehmen, eigene niedrige Schwelle setzen und nach ADR 0015 hochziehen.
-- [ ] **6.2 Module ohne oder mit wenig Tests.** (M)
+- [x] **6.2 Module ohne oder mit wenig Tests.** (M) Erledigt 2026-11-19 für Copilot-Widget (95 %), C4-Init, Praktikums-Medien, About-me, Blog, Impressum, Slideshow, Timeline (neue Tests `*-widget`, `*-init`, `small-modules`, `content-modules`). Danach auch `hero-section.js`, `premium-effects.js` und `scroll-animations.js` getestet (2026-11-19); kein Modul liegt mehr unter 60 % der Zeilen, die Modul-Schwelle steht jetzt bei 92 / 80 / 94 / 94 %.
   0 %: `praktikumsbetrieb-media.js` (449 Zeilen), `about-me-enhancements.js`, `blog-enhancements.js`, `impressum-enhancements.js`, `project-slideshow.js`. Unter 40 %: `timeline-scroll.js` (8 %), `portfolio-copilot.js` (18 %), `scroll-animations.js` (24 %), `c4-architecture.js` (24 %), `hero-section.js` (33 %), `premium-effects.js` (36 %).
   Reihenfolge nach Nutzen: Copilot (Antwortlogik), C4-Diagramm, Praktikums-Medien.
-- [ ] **6.3 Große Seiten-Scripts weiter zerlegen.** (L)
+- [ ] **6.3 Große Seiten-Scripts weiter zerlegen.** (L) Fortschritt 2026-11-19: `flashcards.js` ist um Sitzung/Tageslimit (`study-session.js`) und die Antwortregeln (`flashcard-review.js`, getestet) erleichtert. Offen: `interview.js`, `dashboard.js`, `components.js` und der Rest von `flashcards.js` (Rendering und Ereignisse).
   `flashcards.js`, `interview.js`, `dashboard.js` und `components.js` mischen Rendering, Zustand und Ereignisse. Nach dem Muster der Git-Engine (ADR 0011): Zustand und Regeln als reine Module, das Seiten-Script nur noch als Verdrahtung.
-- [ ] **6.4 `strictNullChecks` als nächste Typ-Ratsche.** (L)
+- [ ] **6.4 `strictNullChecks` als nächste Typ-Ratsche.** (L) Ratsche erledigt 2026-11-19 (`check-strict-null`, Obergrenze 356 Fehler). Fortschritt 2026-11-19: 356 auf 267 gesenkt (`hero-section`, `modal`, `scroll-animations`, `confetti`). Offen: die übrigen 267 schrittweise abbauen, größte Brocken `architecture.js`, `ihk-exam-simulator.js`, `quiz.js`, `qr-generator.js`.
   `jsconfig.json` hat `strict: false`. Nach `noImplicitAny` ist `strictNullChecks` der Schritt mit dem größten Nutzen (viele `querySelector`-Ergebnisse). Vorgehen wie zuvor: Fehler zählen, Zahl als Obergrenze festschreiben, schrittweise auf 0.
-- [ ] **6.5 Visuelle Regressionstests.** (M)
+- [ ] **6.5 Visuelle Regressionstests.** (M) Erledigt 2026-11-19 bis auf die Referenzbilder: `visual.spec.js` (5 Seiten, hell und dunkel, nur Chromium, Bewegung eingefroren, dynamische Bereiche maskiert), `npm run test:visual`, Workflow `visual.yml`. **Offen beim Eigentümer:** Workflow einmal mit „update“ starten, Artefakt `visual-snapshots` einchecken; vorher läuft der Vergleich nicht. Dabei gefunden und behoben: Der Banner-Titel war im 44-px-Banner abgeschnitten.
   Es gibt keinen `toHaveScreenshot`-Test, obwohl zwei Themes, mehrere Akzentfarben und vier A11y-Modi bestehen. Ein Spec für fünf Kernseiten in hell und dunkel, nur Chromium, mit eingefrorenen Animationen. Referenzbilder in der CI erzeugen (Linux), nicht lokal unter Windows.
-- [ ] **6.6 ESLint-Globals aus dem Paket `globals`.** (S)
+- [x] **6.6 ESLint-Globals aus dem Paket `globals`.** (S) Erledigt 2026-11-19: `globals.browser`/`node`/`serviceworker`, Sonderregel in CLAUDE.md gestrichen.
   `eslint.config.js` pflegt rund 45 Browser- und Node-Globals von Hand, deshalb der Umweg über `window.HTMLCanvasElement` (siehe CLAUDE.md). `globals.browser` für `assets/js`, `globals.node` für `scripts`, `globals.serviceworker` für `sw.js`. Danach die Sonderregel in CLAUDE.md streichen.
-- [ ] **6.7 Rauschen in der Testausgabe entfernen.** (S)
+- [x] **6.7 Rauschen in der Testausgabe entfernen.** (S) Erledigt 2026-11-19: Die Meldung gelangt über `process.stderr` ins Log, nicht über `console`; `scripts/test-support/quiet-happy-dom.js` (als `setupFiles`) verwirft genau diese eine Meldung, alles andere bleibt sichtbar.
   Die Unit-Tests schreiben mehrfach `DOMException: Failed to load iframe page` (happy-dom). In den betroffenen Tests die iframe-Navigation abschalten, damit echte Fehler auffallen.
-- [ ] **6.8 Links nach außen prüfen.** (S)
+- [x] **6.8 Links nach außen prüfen.** (S) Erledigt 2026-11-19: `scripts/check_external_links.js` und `links.yml` (montags, Issue bei toten Links). Erstlauf: 24 Links, alle erreichbar.
   Die Quellenabschnitte verweisen auf DRV, Arbeitsagentur, DGUV und weitere. Ein wöchentlicher Workflow prüft externe Links und öffnet bei toten Links ein Issue (kein CI-Gate, weil fremde Server schwanken).
 
 ---
 
 ## Phase 7: CI, Repo und Abhängigkeiten
 
-- [ ] **7.1 Repo-Größe entscheiden.** (M, Entscheidung beim Eigentümer)
+- [ ] **7.1 Repo-Größe entscheiden.** (M, Entscheidung beim Eigentümer) Stand 2026-11-19: ADR 0019 mit den drei Optionen und der Empfehlung (b) ist als „Vorgeschlagen“ geschrieben. Die Entscheidung (und bei (b) die Wahl des Hosts samt Datenschutztext) liegt beim Eigentümer.
   `.git` 281 MB. Im Arbeitsbaum liegen fünf Videos (17 MB), eine Präsentation (8 MB) und die Demo-Builds. Optionen: (a) so lassen, (b) Videos und Präsentation extern ausliefern und nur verlinken, (c) Git-LFS mit Umschreiben der Historie und Force-Push. Empfehlung: (b), weil ohne Eingriff in die Historie. Ergebnis als ADR.
-- [ ] **7.2 E2E-Laufzeit senken.** (S)
+- [x] **7.2 E2E-Laufzeit senken.** (S) Erledigt 2026-11-19: `actions/cache` (SHA-gepinnt) je Browser und Playwright-Version; die Laufzeitersparnis zeigt erst der nächste CI-Lauf.
   Ein CI-Lauf dauert rund 15 Minuten. Die Playwright-Browser über `actions/cache` (Schlüssel: Playwright-Version) zwischenspeichern.
-- [ ] **7.3 Playwright-Sperre auflösen.** (M)
+- [ ] **7.3 Playwright-Sperre auflösen.** (M) Stand 2026-11-19: Mit 1.65.1 laufen die WebKit-Specs zu `portfolio.html` (`new_features`, `all_projects_launch`, 12 Tests) lokal unter Windows grün, wie schon bei 1.64. Die Sperre bleibt, bis ein Test-PR die CI-Läufe (Linux) zeigt; das lässt sich lokal nicht entscheiden.
   `@playwright/test` ist auf 1.63.0 festgelegt, aktuell ist 1.65.1. Die Ursache der hängenden WebKit-Klicks auf `portfolio.html` in einem Test-PR eingrenzen. Wiedervorlage laut `dependabot.yml`: 2027-01-31.
-- [ ] **7.4 Font Awesome 7 bewerten.** (M)
+- [x] **7.4 Font Awesome 7 bewerten.** (M) Erledigt 2026-11-19: Font Awesome 7.3.1 übernommen. Das Subset-Skript brauchte nur eine Anpassung (7 schreibt `format("woff2")` nicht mehr), alle 182 verwendeten Icons gibt es weiter, `check-icons` und `icons.spec.js` sind grün, Sichtprüfung der Kartei-Seite ohne Auffälligkeit. Die Dependabot-Sperre entfällt (ADR 0009, Nachtrag).
   6.7.2 ist installiert, 7.3.1 aktuell. Prüfen, ob das Subset-Skript die neuen Familien lesen kann, sonst die Sperre mit neuer Wiedervorlage verlängern.
-- [ ] **7.5 Sync-Zeitplan und Doku angleichen.** (S)
+- [x] **7.5 Sync-Zeitplan und Doku angleichen.** (S) Erledigt 2026-11-19: Doku auf „täglich“ angepasst.
   `sync.yml` läuft täglich (`0 4 * * *`), CLAUDE.md spricht von wöchentlich. Eines von beiden anpassen.
-- [ ] **7.6 Einmal-Skripte aufräumen.** (S)
+- [x] **7.6 Einmal-Skripte aufräumen.** (S) Erledigt 2026-11-19: fünf Skripte samt npm-Scripts und README-Zeilen gelöscht. `compress_images.js` ist in `optimize_images.js --compress` aufgegangen.
   `add_og_meta.js`, `fix_project_html_paths.js`, `localize_vendor_assets.js`, `audit_cleanup.js` und `install_sync_triggers.js` sehen nach Migrationshilfen aus. Prüfen, welche noch gebraucht werden, den Rest samt npm-Script und README-Zeile löschen. `compress_images.js` und `optimize_images.js` zusammenführen.
 
 ---
 
 ## Phase 8: Dokumentation
 
-- [ ] **8.1 README an den Stand angleichen.** (S)
+- [x] **8.1 README an den Stand angleichen.** (S) Erledigt 2026-11-19 (ohne Projektzahl).
   „Über 20 Projekte“ (es sind 8), „Font Awesome 6.5.2“ (es ist 6.7.2), „KI-Portfolio-Copilot“ (siehe 1.3). Zahlen möglichst aus `site-stats.json` (Punkt 1.2) ableiten oder weglassen.
-- [ ] **8.2 Changelog teilen.** (S)
+- [x] **8.2 Changelog teilen.** (S) Erledigt 2026-11-19 (`docs/changelog-archiv.md`).
   `CHANGELOG.md` hat 101 KB. Versionen vor 1.5.0 nach `docs/changelog-archiv.md` verschieben.
-- [ ] **8.3 Neue ADRs.** (S je ADR)
+- [x] **8.3 Neue ADRs.** (S je ADR) Erledigt 2026-11-19: ADR 0016 (Cache-Grenzen), 0017 (Header-CSP), 0018 (Projektseiten), 0019 (große Dateien, vorgeschlagen). Offen beim Eigentümer: die Vault-Notiz „Umschulung-FIAE Portfolio – Übersicht“ nennt noch 12 ADRs, es sind jetzt 19.
   Für 2.2 (generierte Projektseiten), 5.1 (Cache-Grenzen), 5.4 (generierte Header-CSP) und 7.1 (große Dateien). Die Vault-Notiz „Umschulung-FIAE Portfolio – Übersicht“ nennt noch 12 ADRs, es sind 15.
-- [ ] **8.4 `CONTRIBUTING.md` und `GEMINI.md`.** (S)
+- [x] **8.4 `CONTRIBUTING.md` und `GEMINI.md`.** (S) Erledigt 2026-11-19 (`GEMINI.md` verwies schon auf CLAUDE.md).
   `CONTRIBUTING.md` um den Ablauf „Änderung, `npm run regen`, `npm run check`, Changelog“ ergänzen. `GEMINI.md` auf CLAUDE.md verweisen lassen, statt Regeln doppelt zu führen.
 
 ---

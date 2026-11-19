@@ -3,11 +3,12 @@
 (function () {
     'use strict';
 
-    const modal = document.getElementById('project-modal');
+    // Die Prüfung läuft einmal hier; die Funktionen darunter greifen auf modal und modalBody zu.
+    const modal = /** @type {HTMLElement} */ (document.getElementById('project-modal'));
     if (!modal) return;
 
     const _modalContent = modal.querySelector('.modal-content');
-    const modalBody = document.getElementById('modal-body');
+    const modalBody = /** @type {HTMLElement} */ (document.getElementById('modal-body'));
 
     // ── Open modal when a project card body is clicked (not on link/button) ──
     document.addEventListener('click', function (e) {
@@ -266,7 +267,7 @@
                         btn.style.borderColor = 'var(--primary)';
                         btn.style.background = 'var(--primary-light)';
 
-                        const idx = parseInt(btn.dataset.index);
+                        const idx = parseInt(btn.dataset.index || '0');
                         const item = projectData.videoPlaylist[idx];
                         player.src = item.url;
                         player.play().catch(() => {});
@@ -288,9 +289,9 @@
 
         // Bind carousel navigation click listeners
         if (hasCarousel) {
-            const track = modalBody.querySelector('#modal-carousel-track');
-            const prevBtn = modalBody.querySelector('#carousel-prev');
-            const nextBtn = modalBody.querySelector('#carousel-next');
+            const track = /** @type {HTMLElement} */ (modalBody.querySelector('#modal-carousel-track'));
+            const prevBtn = /** @type {HTMLElement} */ (modalBody.querySelector('#carousel-prev'));
+            const nextBtn = /** @type {HTMLElement} */ (modalBody.querySelector('#carousel-next'));
             const carouselDots = modalBody.querySelectorAll('.carousel-dot');
             let activeIdx = 0;
             const maxIdx = images.length - 1;
@@ -319,7 +320,7 @@
             carouselDots.forEach((dot) => {
                 dot.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const newIdx = parseInt(dot.dataset.index);
+                    const newIdx = parseInt(dot.dataset.index || '0');
                     updateCarousel(newIdx);
                 });
             });

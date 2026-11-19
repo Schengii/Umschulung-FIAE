@@ -3,6 +3,11 @@
  * @description Interaktive Nutzwertanalyse, 80h Phasenplan und Fachgesprächs-Simulator
  */
 
+import { FACHGESPRAECH_QUESTIONS } from './fachgespraech-questions.js';
+import { parseFachgespraechStats, recordFachgespraechAnswer, summarizeFachgespraech } from './fachgespraech-stats.js';
+
+const FG_STORAGE_KEY = 'fachgespraech_results';
+
 export function initIhkCockpit() {
     const isCockpitPage = document.querySelector('.page-ihk-cockpit') || document.getElementById('panel-nwa');
     if (!isCockpitPage) return;
@@ -280,57 +285,6 @@ function initPhasenplan() {
 /* -------------------------------------------------------------
  * 3. Fachgesprächs-Simulator
  * ------------------------------------------------------------- */
-const FACHGESPRAECH_QUESTIONS = [
-    {
-        category: 'Software-Architektur & Patterns',
-        question:
-            'Warum haben Sie sich in Ihrem Abschlussprojekt für eine Entkopplung über Web Components / Module entschieden und welches Architektur-Muster (z.B. MVC, MVVM, Clean Architecture) liegt zugrunde?',
-        answer: 'Web Components bieten native Kapselung (Shadow DOM & Custom Elements) ohne Framework-Lock-in. Durch die Trennung von Präsentationsschicht (Views/Components), State-Management (Services/Stores) und Datenschicht (IndexedDB / REST-API) wird das Prinzip der "Separation of Concerns" (SoC) und Testbarkeit nach Clean Architecture gewährleistet.',
-    },
-    {
-        category: 'Datenbanken & Datenmodellierung',
-        question:
-            'Erklären Sie die 1., 2. und 3. Normalform anhand Ihrer Datenbank-Modellierung. Warum ist Denormalisierung im Frontend-Cache dennoch manchmal sinnvoll?',
-        answer: '1NF: Atomare Werte, keine Wiederholungsgruppen. 2NF: 1NF + jedes Nicht-Schlüsselattribut ist voll funktional vom Primärschlüssel abhängig. 3NF: 2NF + keine transitiven Abhängigkeiten. Denormalisierung im IndexedDB/Client-Cache reduziert teure JOIN-Operationen und ermöglicht blitzschnelle Lesezugriffe im Offline-Modus.',
-    },
-    {
-        category: 'Wirtschaftlichkeit & Make-or-Buy',
-        question:
-            'Wie haben Sie die wirtschaftliche Sinnhaftigkeit Ihres Projekts nachgewiesen? Erläutern Sie Ihre Amortisationsrechnung und Nutzwertanalyse.',
-        answer: 'Über eine Kosten-Nutzen-Analyse und Nutzwertanalyse mit gewichteten Kriterien (Kosten, Wartbarkeit, Datenschutz). Die Einmalkosten der Entwicklung (80h × Stundensatz = 4.800 €) stehen einer monatlichen Zeiteinsparung von 15 Stunden pro Mitarbeiter gegenüber. Bei 50 €/h spart das Unternehmen 750 €/Monat, womit sich das Projekt nach ca. 6,4 Monaten amortisiert (ROI).',
-    },
-    {
-        category: 'Datenschutz, DSGVO & IT-Sicherheit',
-        question:
-            'Welche technischen und organisatorischen Maßnahmen (TOMs) haben Sie zum Schutz personenbezogener Daten und gegen Angriffe wie XSS/SQL-Injection implementiert?',
-        answer: 'DSGVO: Privacy by Design, Datensparsamkeit, lokale Speicherung sensibler Daten im IndexedDB/LocalStorage, keine Drittanbieter-Tracker. Sicherheit: Strikte Content Security Policy (CSP), Context-Aware Escaping gegen XSS, Prepared Statements/ORM gegen SQL-Injection, HTTPS-only und SRI-Hashes.',
-    },
-    {
-        category: 'Qualitätssicherung & Testing',
-        question:
-            'Welche Teststrategie haben Sie gewählt und warum reichen reine Unit-Tests bei einer modernen Webanwendung nicht aus?',
-        answer: 'Pyramiden-Teststrategie: Schnelle Unit-Tests für isolierte Geschäftslogik, Integrationstests für Service-Worker & Caching, und automatisierte Playwright E2E-Tests für reale Nutzerinteraktionen (Navigation, Offline-Verhalten, Rendering). Unit-Tests prüfen isolierte Bausteine, während E2E-Tests das Zusammenspiel der gesamten PWA sicherstellen.',
-    },
-    {
-        category: 'Design Patterns & Clean Code',
-        question:
-            'Erläutern Sie das Strategy Pattern und die SOLID-Prinzipien. Wie tragen diese zur Wartbarkeit Ihrer Anwendung bei?',
-        answer: 'Das Strategy Pattern kapselt austauschbare Algorithmen (z. B. verschiedene Rabattberechnungen oder Export-Formate) hinter einer gemeinsamen Schnittstelle. Dadurch wird das Open-Closed-Principle (OCP aus SOLID) erfüllt: Neue Strategien können hinzugefügt werden, ohne bestehenden Code modifizieren zu müssen.',
-    },
-    {
-        category: 'Asynchrone Programmierung & Web Workers',
-        question:
-            'Wie verhindert man in JavaScript, dass rechenintensive Operationen den UI-Thread blockieren, und wie funktioniert der Event Loop?',
-        answer: 'JavaScript läuft standardmäßig in einem Single-Thread-Event-Loop (Call Stack, Web APIs, Task/Microtask Queue). Rechenintensive Aufgaben (wie KI-Entscheidungen oder Bildverarbeitung) werden in Web Worker ausgelagert. Diese laufen in separaten Hintergrund-Threads und kommunizieren asynchron über Message-Channels via postMessage().',
-    },
-    {
-        category: 'API-Design & Schnittstellen',
-        question:
-            'Was unterscheidet eine RESTful API von WebSockets und wann ist welches Kommunikationsprotokoll vorzuziehen?',
-        answer: 'REST basiert auf dem zustandslosen HTTP Request-Response-Modell und eignet sich ideal für CRUD-Operationen, Caching und strukturierte Datenaustausche. WebSockets bieten nach dem HTTP 101 Handshake eine persistente, bidirektionale Vollduplex-Verbindung mit minimalem Overhead für Realtime-Events (z. B. Chats, Live-Telemetry oder Multiplayer-Games).',
-    },
-];
-
 let currentQuestionIndex = -1;
 let answeredCount = 0;
 let score = 0;
@@ -346,6 +300,7 @@ function initFachgespraech() {
 
     if (!btnStart) return;
 
+    renderBilanz();
     btnStart.addEventListener('click', loadNextQuestion);
     btnReveal.addEventListener('click', revealAnswer);
     btnGood.addEventListener('click', () => gradeAnswer(true));
@@ -370,6 +325,7 @@ function loadNextQuestion() {
     if (questionEl)
         questionEl.textContent = `Frage ${currentQuestionIndex + 1}/${FACHGESPRAECH_QUESTIONS.length}: ${q.question}`;
     if (answerEl) answerEl.textContent = q.answer;
+    renderCriteria(q.criteria);
     if (answerBox) answerBox.style.display = 'none';
 
     btnStart.textContent = '⏭️ Nächste Frage';
@@ -438,10 +394,78 @@ function revealAnswer() {
     }
 }
 
+/**
+ * Selbsteinschätzung: Die Bewertungskriterien der Frage als Checkliste neben der Musterantwort.
+ * @param {string[]} criteria
+ */
+function renderCriteria(criteria) {
+    const list = document.getElementById('fg-criteria');
+    if (!list) return;
+    list.replaceChildren(
+        ...criteria.map((criterion, index) => {
+            const item = document.createElement('li');
+            const label = document.createElement('label');
+            const box = document.createElement('input');
+            box.type = 'checkbox';
+            box.id = `fg-criterion-${index}`;
+            label.append(box, ' ', criterion);
+            item.append(label);
+            return item;
+        })
+    );
+}
+
+/** @returns {{hit: number, total: number}} */
+function readCriteria() {
+    const boxes = document.querySelectorAll('#fg-criteria input[type="checkbox"]');
+    return {
+        hit: [...boxes].filter((box) => /** @type {HTMLInputElement} */ (box).checked).length,
+        total: boxes.length,
+    };
+}
+
+function readFgStats() {
+    return parseFachgespraechStats(typeof AppStorage !== 'undefined' ? AppStorage.getItem(FG_STORAGE_KEY, '{}') : null);
+}
+
+/** Bilanz über alle Übungen: schwächste Kategorie zuerst. */
+function renderBilanz() {
+    const list = document.getElementById('fg-stats-list');
+    if (!list) return;
+    const summary = summarizeFachgespraech(readFgStats());
+    list.replaceChildren(
+        ...summary.map((entry) => {
+            const item = document.createElement('li');
+            const criteria = entry.criteriaPercent === null ? '' : `, ${entry.criteriaPercent} % der Kriterien`;
+            item.textContent = `${entry.category}: ${entry.total}× geübt, ${entry.goodPercent} % gut${criteria}`;
+            return item;
+        })
+    );
+    const box = document.getElementById('fg-stats');
+    if (box) box.hidden = summary.length === 0;
+}
+
 /** @param {boolean} isGood */
 function gradeAnswer(isGood) {
     answeredCount++;
     if (isGood) score += 10;
+
+    const current = FACHGESPRAECH_QUESTIONS[currentQuestionIndex];
+    if (current && typeof AppStorage !== 'undefined') {
+        const { hit, total } = readCriteria();
+        AppStorage.setItem(
+            FG_STORAGE_KEY,
+            JSON.stringify(
+                recordFachgespraechAnswer(readFgStats(), {
+                    category: current.category,
+                    good: isGood,
+                    criteriaHit: hit,
+                    criteriaTotal: total,
+                })
+            )
+        );
+        renderBilanz();
+    }
 
     const scoreDisplay = document.getElementById('fg-score-display');
     if (scoreDisplay) {

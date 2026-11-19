@@ -171,7 +171,9 @@
 /* Flashcards: page specific rules (formerly an inline <style> block). */
 .tab-box1 { border-bottom: 2px solid #ef4444; }
 .tab-box2 { border-bottom: 2px solid #f97316; }
-.tab-box3 { border-bottom: 2px solid #10b981; }
+.tab-box3 { border-bottom: 2px solid #eab308; }
+.tab-box4 { border-bottom: 2px solid #84cc16; }
+.tab-box5 { border-bottom: 2px solid #10b981; }
 .tab-due { border-bottom: 2px solid var(--primary); }
 .due-count-badge {
     display: inline-block;
@@ -216,7 +218,9 @@
 }
 #box1-bar { width: 0%; background: #ef4444; }
 #box2-bar { width: 0%; background: #f97316; }
-#box3-bar { width: 0%; background: #10b981; }
+#box3-bar { width: 0%; background: #eab308; }
+#box4-bar { width: 0%; background: #84cc16; }
+#box5-bar { width: 0%; background: #10b981; }
 #create-card-form { margin-top: 1rem; }
 #new-card-cat, #new-card-question, #new-card-answer, #create-card-form button {
     width: 100%;
@@ -288,4 +292,41 @@
 }
 .category-tab[hidden] {
     display: none;
+}
+
+.new-per-day-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+.new-per-day-panel input[type='number'] {
+    width: 5rem;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg, transparent);
+    color: inherit;
+}
+.session-box {
+    margin-bottom: 1rem;
+}
+.session-track {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--border);
+    overflow: hidden;
+}
+.session-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+.session-summary {
+    font-weight: 600;
 }

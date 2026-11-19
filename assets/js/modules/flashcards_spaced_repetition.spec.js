@@ -69,4 +69,20 @@ test.describe('Flashcards: Spaced Repetition', () => {
         await expect(page.locator('#card-question')).not.toHaveText('Frage...');
         expect(Number(await dueCount(page).textContent())).toBeGreaterThan(1);
     });
+
+    test('sollte alte Stände von drei Boxen übernehmen: Box 3 behält ihr Intervall, gilt aber nicht mehr als gelernt', async ({
+        page,
+    }) => {
+        await page.addInitScript(() => {
+            if (localStorage.getItem('seeded')) return;
+            localStorage.setItem('seeded', '1');
+            localStorage.setItem('flashcards_box_levels', JSON.stringify({ 1: 3, 2: 5 }));
+            localStorage.setItem('known_flashcards', JSON.stringify([1, 2]));
+        });
+        await page.goto('/pages/flashcards.html');
+        await expect(page.locator('#box3-count')).toHaveText('1');
+        await expect(page.locator('#box5-count')).toHaveText('1');
+        const known = await page.evaluate(() => JSON.parse(localStorage.getItem('known_flashcards') || '[]'));
+        expect(known).toEqual([2]);
+    });
 });

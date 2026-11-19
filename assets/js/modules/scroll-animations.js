@@ -154,8 +154,9 @@ function initTechParticles() {
     hero.style.position = 'relative';
     hero.insertBefore(canvas, hero.firstChild);
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    const ctx = /** @type {CanvasRenderingContext2D} */ (context);
 
     let width = (canvas.width = hero.offsetWidth);
     let height = (canvas.height = hero.offsetHeight);

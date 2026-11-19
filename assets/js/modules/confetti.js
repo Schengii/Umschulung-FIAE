@@ -3,10 +3,11 @@
  * Spawns colorful paper particles on victory/highscores.
  */
 const Confetti = {
-    /** @type {HTMLCanvasElement | null} */
-    canvas: null,
-    /** @type {CanvasRenderingContext2D | null} */
-    ctx: null,
+    // Erst nach start() gesetzt (und in stop() wieder entfernt); die Methoden laufen nur dazwischen.
+    /** @type {HTMLCanvasElement} */
+    canvas: /** @type {any} */ (null),
+    /** @type {CanvasRenderingContext2D} */
+    ctx: /** @type {any} */ (null),
     /** @type {Array<Record<string, any>>} */
     particles: [],
     /** @type {number | null} */
@@ -129,7 +130,7 @@ const Confetti = {
         if (this.canvas) {
             window.removeEventListener('resize', this.resizeHandler);
             document.body.removeChild(this.canvas);
-            this.canvas = null;
+            this.canvas = /** @type {any} */ (null);
             this.ctx = null;
         }
         this.particles = [];

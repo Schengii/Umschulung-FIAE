@@ -1,7 +1,17 @@
 /**
  * Flashcards Module — Interactive IHK Exam Preparation
  */
-import { advanceBoxLevel, resetBoxLevel, computeBoxStats, nextDueDate, daysUntilDue } from './modules/leitner-box.js';
+import { computeBoxStats, daysUntilDue, masteredIds, MAX_BOX_LEVEL } from './modules/leitner-box.js';
+import {
+    normalizeNewPerDay,
+    readNewToday,
+    introduceNewCards,
+    startSession,
+    recordAnswer,
+    sessionProgress,
+    nextDueInDays,
+} from './modules/study-session.js';
+import { reviewCard, allMastered, countWrongAnswer } from './modules/flashcard-review.js';
 import {
     EXTENDED_DECK_PATH,
     EXTENDED_ENABLED_KEY,
@@ -260,17 +270,91 @@ document.addEventListener('DOMContentLoaded', () => {
     const newAnswer = /** @type {HTMLInputElement} */ (document.getElementById('new-card-answer'));
     const customListEl = document.getElementById('custom-cards-list');
 
-    const box1Count = document.getElementById('box1-count');
-    const box2Count = document.getElementById('box2-count');
-    const box3Count = document.getElementById('box3-count');
-    const box1Bar = document.getElementById('box1-bar');
-    const box2Bar = document.getElementById('box2-bar');
-    const box3Bar = document.getElementById('box3-bar');
+    // Eine Zeile je Box (1..MAX_BOX_LEVEL): Zähler und Balken.
+    const boxViews = Array.from({ length: MAX_BOX_LEVEL }, (_, i) => ({
+        level: i + 1,
+        count: document.getElementById(`box${i + 1}-count`),
+        bar: document.getElementById(`box${i + 1}-bar`),
+    }));
 
     if (!cardEl || !hintEl || !questionEl || !answerEl) return;
 
     const dueCountEl = document.getElementById('due-count');
     const dueSummaryEl = document.getElementById('due-summary');
+
+    // Tageslimit für neue Karten der IHK-Kartei und Sitzung im Tab „Heute fällig“
+    const newPerDayInput = /** @type {HTMLInputElement | null} */ (document.getElementById('new-per-day'));
+    const sessionBox = document.getElementById('session-box');
+    const sessionBar = document.getElementById('session-bar');
+    const sessionText = document.getElementById('session-text');
+    const sessionSummaryEl = document.getElementById('session-summary');
+    let newPerDay = normalizeNewPerDay(AppStorage.getItem('flashcards_new_per_day'));
+    let newToday = readNewToday(
+        (() => {
+            try {
+                return JSON.parse(AppStorage.getItem('flashcards_new_today', 'null'));
+            } catch (_e) {
+                return null;
+            }
+        })(),
+        Date.now()
+    );
+    /** @type {import('./modules/study-session.js').SessionTally | null} */
+    let session = null;
+    if (newPerDayInput) newPerDayInput.value = String(newPerDay);
+
+    /** Füllt die heutigen neuen Karten bis zum Limit auf und merkt sie sich. */
+    function introduceToday() {
+        const current = readNewToday(newToday, Date.now());
+        const next = introduceNewCards(getFullDatabase(), boxLevels, current, newPerDay);
+        if (next !== newToday) {
+            newToday = next;
+            AppStorage.setItem('flashcards_new_today', JSON.stringify(newToday));
+        }
+    }
+
+    if (newPerDayInput) {
+        newPerDayInput.addEventListener('change', () => {
+            newPerDay = normalizeNewPerDay(newPerDayInput.value);
+            newPerDayInput.value = String(newPerDay);
+            AppStorage.setItem('flashcards_new_per_day', String(newPerDay));
+            filterDeck();
+        });
+    }
+
+    function renderSession() {
+        if (!sessionBox) return;
+        const active = currentCategory === 'due' && session !== null;
+        sessionBox.hidden = !active;
+        if (!active || !session) return;
+        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const percent = sessionProgress(session);
+        if (sessionBar) {
+            sessionBar.style.width = `${percent}%`;
+            sessionBar.parentElement?.setAttribute('aria-valuenow', String(percent));
+        }
+        if (sessionText) {
+            sessionText.textContent =
+                lang === 'de'
+                    ? `Sitzung: ${session.correct} richtig, ${session.wrong} falsch, ${percent} % erledigt`
+                    : `Session: ${session.correct} correct, ${session.wrong} wrong, ${percent}% done`;
+        }
+        if (sessionSummaryEl) {
+            const finished = filteredDeck.length === 0 && session.correct + session.wrong > 0;
+            sessionSummaryEl.hidden = !finished;
+            if (finished) {
+                const days = nextDueInDays(dueDates, Date.now());
+                let next;
+                if (days === null) next = lang === 'de' ? 'keine weitere Fälligkeit' : 'nothing due later';
+                else if (days === 1) next = lang === 'de' ? 'morgen' : 'tomorrow';
+                else next = lang === 'de' ? `in ${days} Tagen` : `in ${days} days`;
+                sessionSummaryEl.textContent =
+                    lang === 'de'
+                        ? `Sitzung beendet: ${session.correct} richtig, ${session.wrong} falsch. Nächste Fälligkeit: ${next}.`
+                        : `Session finished: ${session.correct} correct, ${session.wrong} wrong. Next due: ${next}.`;
+            }
+        }
+    }
 
     // A damaged entry (manual edit, interrupted write) must not take the page down.
     /**
@@ -291,6 +375,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const starredIds = readStored('flashcards_starred', []);
     let customCards = readStored('flashcards_custom', []);
     const boxLevels = readStored('flashcards_box_levels', {});
+
+    // Migration von drei auf fünf Boxen: Als gelernt gilt nur noch die höchste Box. Gespeicherte
+    // Boxen behalten ihr Intervall, ältere „gelernt“-Markierungen aus Box 3 entfallen.
+    {
+        const mastered = new Set(masteredIds(boxLevels));
+        const known = readStored('known_flashcards', []);
+        const kept = known.filter((/** @type {string | number} */ id) => mastered.has(String(id)));
+        if (kept.length !== known.length) AppStorage.setItem('known_flashcards', JSON.stringify(kept));
+    }
     // cardId -> timestamp of the day the card is due again (see leitner-box.js)
     const dueDates = readStored('flashcards_due_dates', {});
 
@@ -480,27 +573,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterDeck() {
+        introduceToday();
         filteredDeck = cardsForTab(getFullDatabase(), currentCategory, {
             starredIds,
             boxLevels,
             dueDates,
             now: Date.now(),
+            introducedIds: newToday.ids,
         });
+        session = currentCategory === 'due' ? startSession(filteredDeck.length) : null;
 
         currentIndex = 0;
         resetCardState();
         renderCard();
         renderStats();
+        renderSession();
     }
 
     // In the "due" deck a correctly answered card is done for today: rebuild the deck and stay
     // at the same position, which now holds the next card.
     function dropAnsweredDueCard() {
         const position = currentIndex;
-        filteredDeck = dueCards(getFullDatabase(), boxLevels, dueDates, Date.now());
+        filteredDeck = dueCards(getFullDatabase(), boxLevels, dueDates, Date.now(), newToday.ids);
         currentIndex = filteredDeck.length === 0 ? 0 : position % filteredDeck.length;
         resetCardState();
         renderCard();
+        renderSession();
     }
 
     // 4. Render active card
@@ -598,6 +696,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Applies the answer to box, due date and the list of known cards (rules in flashcard-review.js)
+     * and stores the result.
+     * @param {string | number} id
+     * @param {boolean} correct
+     * @returns {Array<string | number>} the known cards afterwards
+     */
+    function applyReview(id, correct) {
+        const next = reviewCard(
+            { boxLevels, dueDates, known: JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]') },
+            id,
+            correct,
+            Date.now()
+        );
+        // boxLevels and dueDates are shared with the rest of the page: update them in place.
+        for (const [target, source] of /** @type {const} */ ([
+            [boxLevels, next.boxLevels],
+            [dueDates, next.dueDates],
+        ])) {
+            for (const key of Object.keys(target)) delete target[key];
+            Object.assign(target, source);
+        }
+        AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
+        AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
+        AppStorage.setItem('known_flashcards', JSON.stringify(next.known));
+        return next.known;
+    }
+
     // Leitner system correction: Correct advances card, Wrong resets to box 1
     if (btnCorrect) {
         btnCorrect.addEventListener('click', (e) => {
@@ -609,38 +735,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
-                // Leitner box level upgrade
-                const currentLevel = boxLevels[currentCard.id] || 1;
-                const nextLevel = advanceBoxLevel(currentLevel);
-                boxLevels[currentCard.id] = nextLevel;
-                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
-                dueDates[currentCard.id] = nextDueDate(nextLevel, Date.now());
-                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
-
-                // If level is 3, count as known (mastered)
-                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
-                if (nextLevel === 3) {
-                    if (!knownCards.includes(currentCard.id)) {
-                        knownCards.push(currentCard.id);
-                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                    }
-                } else {
-                    // Remove if dropped below level 3
-                    const kidx = knownCards.indexOf(currentCard.id);
-                    if (kidx !== -1) {
-                        knownCards.splice(kidx, 1);
-                        AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                    }
-                }
-
+                const known = applyReview(currentCard.id, true);
                 const masteryIds = masteryCards(getFullDatabase()).map((card) => card.id);
-                const allMastered = masteryIds.every((id) => knownCards.includes(id));
-                if (allMastered && typeof Achievements !== 'undefined') {
+                if (allMastered(masteryIds, known) && typeof Achievements !== 'undefined') {
                     Achievements.unlock('flashcard_master');
                 }
             }
 
             renderStats();
+            if (session) session = recordAnswer(session, true);
 
             if (currentCategory === 'due') {
                 setTimeout(dropAnsweredDueCard, 300);
@@ -666,33 +769,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const currentCard = filteredDeck[currentIndex];
             if (currentCard) {
-                // Reset box level to 1
-                boxLevels[currentCard.id] = resetBoxLevel();
-                AppStorage.setItem('flashcards_box_levels', JSON.stringify(boxLevels));
-                // Not known: due again right away.
-                delete dueDates[currentCard.id];
-                AppStorage.setItem('flashcards_due_dates', JSON.stringify(dueDates));
-
-                // Remove from known cards list
-                const knownCards = JSON.parse(AppStorage.getItem('known_flashcards', '[]') || '[]');
-                const kidx = knownCards.indexOf(currentCard.id);
-                if (kidx !== -1) {
-                    knownCards.splice(kidx, 1);
-                    AppStorage.setItem('known_flashcards', JSON.stringify(knownCards));
-                }
+                applyReview(currentCard.id, false);
 
                 // Record learning recommendations
                 const wrongCounts = JSON.parse(
                     AppStorage.getItem(STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS, '{}')
                 );
-                wrongCounts[currentCard.category] = (wrongCounts[currentCard.category] || 0) + 1;
                 AppStorage.setItem(
                     STORAGE_KEYS.LEARNING_RECOMMENDATIONS_FLASHCARDS_WRONG_COUNTS,
-                    JSON.stringify(wrongCounts)
+                    JSON.stringify(countWrongAnswer(wrongCounts, currentCard.category))
                 );
             }
 
             renderStats();
+            if (session) session = recordAnswer(session, false);
+            renderSession();
 
             // Auto flip card back to retry
             setTimeout(() => {
@@ -818,20 +909,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullDatabase = getFullDatabase();
         const total = fullDatabase.length;
 
-        const { 1: b1, 2: b2, 3: b3 } = computeBoxStats(fullDatabase, boxLevels);
+        const stats = computeBoxStats(fullDatabase, boxLevels);
 
-        // Set counts
-        if (box1Count) box1Count.textContent = String(b1);
-        if (box2Count) box2Count.textContent = String(b2);
-        if (box3Count) box3Count.textContent = String(b3);
-
-        // Set bars width
-        if (box1Bar) box1Bar.style.width = total > 0 ? `${(b1 / total) * 100}%` : '0%';
-        if (box2Bar) box2Bar.style.width = total > 0 ? `${(b2 / total) * 100}%` : '0%';
-        if (box3Bar) box3Bar.style.width = total > 0 ? `${(b3 / total) * 100}%` : '0%';
+        // Set counts and bar widths
+        for (const { level, count, bar } of boxViews) {
+            if (count) count.textContent = String(stats[level]);
+            if (bar) bar.style.width = total > 0 ? `${(stats[level] / total) * 100}%` : '0%';
+        }
 
         // Cards due for review today
-        const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now()).length;
+        const dueCount = dueCards(fullDatabase, boxLevels, dueDates, Date.now(), newToday.ids).length;
         if (dueCountEl) dueCountEl.textContent = String(dueCount);
         if (dueSummaryEl) {
             const lang = document.documentElement.getAttribute('lang') || 'de';
@@ -846,9 +933,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Sync with dashboard progress (Box 3 count / total count)
+        // Sync with dashboard progress (mastered = highest box / total count)
         AppStorage.setItem('flashcard_total_count', total);
-        AppStorage.setItem('flashcard_correct_count', b3);
+        AppStorage.setItem('flashcard_correct_count', stats[MAX_BOX_LEVEL]);
     }
 
     // i18n support alignment
@@ -857,6 +944,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCustomList();
         renderStats();
         renderExtendedStatus();
+        renderSession();
     });
 
     // Initial load

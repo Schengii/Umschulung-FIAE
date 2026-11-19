@@ -63,6 +63,24 @@
                     </div>
 
                     <!-- Category Tabs -->
+                    <div class="new-per-day-panel">
+                        <label for="new-per-day">
+                            <span lang="de">Neue Karten der IHK-Kartei pro Tag</span><span lang="en">New IHK index cards per day</span>
+                        </label>
+                        <input type="number" id="new-per-day" min="0" max="100" step="1" value="10" inputmode="numeric" aria-describedby="new-per-day-hint">
+                        <span class="small-muted" id="new-per-day-hint">
+                            <span lang="de">Nur diese Zahl ungesehener Karten erscheint täglich unter „Heute fällig“.</span><span lang="en">Only this many unseen cards appear in "Due today" each day.</span>
+                        </span>
+                    </div>
+
+                    <div class="session-box" id="session-box" hidden>
+                        <div class="session-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Fortschritt der Sitzung" data-en-aria-label="Session progress">
+                            <div class="session-bar" id="session-bar"></div>
+                        </div>
+                        <p class="small-muted" id="session-text" role="status"></p>
+                        <p class="session-summary" id="session-summary" role="status" hidden></p>
+                    </div>
+
                     <div class="category-tabs" id="category-tabs">
                         <button class="category-tab active" data-cat="all">
                             <span lang="de">Alle</span><span lang="en">All</span>
@@ -99,7 +117,13 @@
                             <span>Box 2</span>
                         </button>
                         <button class="category-tab tab-box3" data-cat="box3">
-                            <span>Box 3 🏆</span>
+                            <span>Box 3</span>
+                        </button>
+                        <button class="category-tab tab-box4" data-cat="box4">
+                            <span>Box 4</span>
+                        </button>
+                        <button class="category-tab tab-box5" data-cat="box5">
+                            <span>Box 5 🏆</span>
                         </button>
                     </div>
 
@@ -158,10 +182,10 @@
                         <span lang="en">📦 Study Boxes (Leitner System)</span>
                     </h3>
                     <p lang="de" class="small-muted">
-                        Karten steigen auf, wenn du sie weißt, und kommen dann erst später wieder: Box 2 nach 3 Tagen, Box 3 nach 7 Tagen. Neue und falsch beantwortete Karten liegen in Box 1 und sind sofort fällig.
+                        Karten steigen auf, wenn du sie weißt, und kommen dann erst später wieder: Box 2 nach 3, Box 3 nach 7, Box 4 nach 14 und Box 5 nach 30 Tagen. Als gelernt gilt eine Karte in Box 5. Neue und falsch beantwortete Karten liegen in Box 1 und sind sofort fällig.
                     </p>
                     <p lang="en" class="small-muted">
-                        Cards advance when you know them and come back later: box 2 after 3 days, box 3 after 7 days. New and wrongly answered cards sit in box 1 and are due right away.
+                        Cards advance when you know them and come back later: box 2 after 3, box 3 after 7, box 4 after 14 and box 5 after 30 days. A card counts as mastered in box 5. New and wrongly answered cards sit in box 1 and are due right away.
                     </p>
                     <p id="due-summary" class="due-summary" role="status"></p>
                     <button type="button" id="study-calendar-btn" class="btn-secondary study-calendar-btn">
@@ -190,10 +214,24 @@
                         </div>
                         <div class="leitner-box-stat">
                             <div class="leitner-box-stat-header">
-                                <span>Box 3 (Meister / Mastered 🏆)</span>
+                                <span>Box 3 (Festigen / Consolidating)</span>
                                 <span id="box3-count">0</span>
                             </div>
                             <div class="skill-track leitner-bar-track"><div id="box3-bar" class="skill-fill"></div></div>
+                        </div>
+                        <div class="leitner-box-stat">
+                            <div class="leitner-box-stat-header">
+                                <span>Box 4 (Sicher / Solid)</span>
+                                <span id="box4-count">0</span>
+                            </div>
+                            <div class="skill-track leitner-bar-track"><div id="box4-bar" class="skill-fill"></div></div>
+                        </div>
+                        <div class="leitner-box-stat">
+                            <div class="leitner-box-stat-header">
+                                <span>Box 5 (Meister / Mastered 🏆)</span>
+                                <span id="box5-count">0</span>
+                            </div>
+                            <div class="skill-track leitner-bar-track"><div id="box5-bar" class="skill-fill"></div></div>
                         </div>
                     </div>
                 </section>

@@ -1,5 +1,6 @@
 const js = require('@eslint/js');
 const eslintConfigPrettier = require('eslint-config-prettier');
+const globals = require('globals');
 
 module.exports = [
   {
@@ -19,48 +20,9 @@ module.exports = [
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
-        window: 'readonly',
-        document: 'readonly',
-        console: 'readonly',
-        navigator: 'readonly',
-        localStorage: 'readonly',
-        sessionStorage: 'readonly',
-        fetch: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        requestAnimationFrame: 'readonly',
-        CustomEvent: 'readonly',
-        EventTarget: 'readonly',
-        URLSearchParams: 'readonly',
-        caches: 'readonly',
-        self: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        process: 'readonly',
-        __dirname: 'readonly',
-        Buffer: 'readonly',
-        Event: 'readonly',
-        IntersectionObserver: 'readonly',
-        MutationObserver: 'readonly',
-        Node: 'readonly',
+        ...globals.browser,
+        ...globals.node,
         Prism: 'readonly',
-        Blob: 'readonly',
-        TextEncoder: 'readonly',
-        URL: 'readonly',
-        alert: 'readonly',
-        confirm: 'readonly',
-        prompt: 'readonly',
-        history: 'readonly',
-        SpeechSynthesisUtterance: 'readonly',
-        performance: 'readonly',
-        cancelAnimationFrame: 'readonly',
-        Request: 'readonly',
-        Response: 'readonly',
-        HTMLImageElement: 'readonly',
-        getComputedStyle: 'readonly',
-        clients: 'readonly',
         // Cross-file browser globals. Classic <script> includes define them in the shared
         // global scope (constants.js: APP, STORAGE_KEYS; components.js: AppStorage;
         // news_data.js: newsData; toast.js: showToast), and three ES modules attach
@@ -90,17 +52,9 @@ module.exports = [
     },
   },
   {
-    // The happy-dom unit tests use the DOM constructors the page code relies on.
-    files: ['**/*.test.js'],
-    languageOptions: {
-      globals: {
-        KeyboardEvent: 'readonly',
-        MouseEvent: 'readonly',
-        File: 'readonly',
-        Storage: 'readonly',
-        globalThis: 'readonly',
-      },
-    },
+    // Der Service Worker läuft im Worker-Scope (clients, caches, skipWaiting ...).
+    files: ['sw.js'],
+    languageOptions: { globals: { ...globals.serviceworker } },
   },
   eslintConfigPrettier,
 ];

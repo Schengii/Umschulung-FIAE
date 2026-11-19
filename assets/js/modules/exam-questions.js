@@ -8,6 +8,9 @@
  * IHK exams. They are not original exam tasks.
  */
 
+import { EXTRA_QUESTIONS } from './exam-questions-extra.js';
+import { MORE_QUESTIONS } from './exam-questions-more.js';
+
 /**
  * @typedef {{de: string, en: string}} Bilingual
  * @typedef {object} ExamQuestion
@@ -15,9 +18,18 @@
  * @property {'ap1' | 'ap2' | 'wiso'} exam
  * @property {string} topic key of EXAM_TOPICS
  * @property {Bilingual} question
- * @property {Bilingual[]} answers
- * @property {number} correct
+ * @property {Bilingual[]} answers answer options (empty for order, match, numeric and cloze)
+ * @property {number} correct index of the right answer (-1 where the type has no single one)
  * @property {Bilingual} explanation
+ * @property {'single' | 'multi' | 'order' | 'match' | 'numeric' | 'cloze'} [type] default: single
+ * @property {number[]} [correctSet] multi: indices of all right answers
+ * @property {Bilingual[]} [items] order: the items in the correct order
+ * @property {{left: Bilingual, right: Bilingual}[]} [pairs] match: each left item belongs to the right one
+ * @property {number} [answer] numeric: the right value
+ * @property {number} [tolerance] numeric: accepted deviation
+ * @property {string} [unit] numeric: unit shown next to the input
+ * @property {Bilingual} [template] cloze: text with {1}, {2} ... for the blanks
+ * @property {string[][]} [blanks] cloze: accepted spellings per blank
  */
 
 /**
@@ -71,7 +83,7 @@ function q(id, exam, topic, de, en, answers, correct, explanationDe, explanation
 }
 
 /** @type {ExamQuestion[]} */
-export const EXAM_QUESTIONS = [
+const BASE_QUESTIONS = [
     // ------------------------------------------------------------------ AP1
     q(
         'ap1-hw-raid1',
@@ -1179,3 +1191,10 @@ export const EXAM_QUESTIONS = [
         'While the agreement is in force, strikes and lock-outs over the matters it regulates are not permitted.'
     ),
 ];
+
+/**
+ * The whole pool: the classic single-choice questions plus the additional questions and types
+ * from exam-questions-extra.js (see question-types.js for how each type is scored).
+ * @type {ExamQuestion[]}
+ */
+export const EXAM_QUESTIONS = [...BASE_QUESTIONS, ...EXTRA_QUESTIONS, ...MORE_QUESTIONS];

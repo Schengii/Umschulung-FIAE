@@ -155,7 +155,7 @@ describe('ihk cockpit', () => {
         it('shows the first question with a 90 second countdown', async () => {
             await start();
             el('btn-fg-start').click();
-            expect(text('fg-question-text')).toMatch(/^Frage 1\/8: /);
+            expect(text('fg-question-text')).toMatch(/^Frage 1\/\d+: /);
             expect(text('fg-category-badge')).not.toBe('');
             expect(text('fg-timer')).toContain('01:30');
             expect(el('btn-fg-reveal').style.display).toBe('inline-block');
@@ -191,7 +191,7 @@ describe('ihk cockpit', () => {
             el('btn-fg-reveal').click();
             el('btn-fg-grade-good').click();
             expect(text('fg-score-display')).toBe('1 Fragen geübt (10 Punkte)');
-            expect(text('fg-question-text')).toMatch(/^Frage 2\/8: /);
+            expect(text('fg-question-text')).toMatch(/^Frage 2\/\d+: /);
             expect(el('fg-answer-box').style.display).toBe('none');
 
             el('btn-fg-reveal').click();
@@ -199,12 +199,54 @@ describe('ihk cockpit', () => {
             expect(text('fg-score-display')).toBe('2 Fragen geübt (10 Punkte)');
         });
 
+        it('zeigt die Bewertungskriterien als Checkliste zur Selbsteinschätzung', async () => {
+            await start(PAGE.replace('<span id="fg-timer">', '<ul id="fg-criteria"></ul><span id="fg-timer">'));
+            el('btn-fg-start').click();
+            expect(document.querySelectorAll('#fg-criteria input[type="checkbox"]')).toHaveLength(3);
+            el('btn-fg-start').click();
+            expect(document.querySelectorAll('#fg-criteria input[type="checkbox"]')).toHaveLength(3);
+            expect(document.querySelectorAll('#fg-criteria input:checked')).toHaveLength(0);
+        });
+
+        it('speichert Ergebnis und Selbsteinschätzung und zeigt die Bilanz', async () => {
+            const store = {};
+            globalThis.AppStorage = {
+                getItem: (key, fallback) => (key in store ? store[key] : fallback),
+                setItem: (key, value) => {
+                    store[key] = String(value);
+                },
+            };
+            try {
+                await start(
+                    PAGE.replace(
+                        '<span id="fg-timer">',
+                        '<ul id="fg-criteria"></ul><div id="fg-stats" hidden><ul id="fg-stats-list"></ul></div><span id="fg-timer">'
+                    )
+                );
+                el('btn-fg-start').click();
+                el('btn-fg-reveal').click();
+                document.querySelector('#fg-criteria input').click();
+                document.querySelectorAll('#fg-criteria input')[1].click();
+                el('btn-fg-grade-good').click();
+
+                const saved = JSON.parse(store.fachgespraech_results);
+                const [category] = Object.keys(saved);
+                expect(saved[category]).toEqual({ total: 1, good: 1, criteriaHit: 2, criteriaTotal: 3 });
+                expect(el('fg-stats').hidden).toBe(false);
+                expect(text('fg-stats-list')).toContain('1× geübt, 100 % gut, 67 % der Kriterien');
+            } finally {
+                delete globalThis.AppStorage;
+            }
+        });
+
         it('wraps around after the last question', async () => {
             await start();
-            for (let i = 0; i < 8; i++) el('btn-fg-start').click();
-            expect(text('fg-question-text')).toMatch(/^Frage 8\/8: /);
+            const { FACHGESPRAECH_QUESTIONS } = await import('./fachgespraech-questions.js');
+            const count = FACHGESPRAECH_QUESTIONS.length;
+            for (let i = 0; i < count; i++) el('btn-fg-start').click();
+            expect(text('fg-question-text')).toMatch(new RegExp(`^Frage ${count}/${count}: `));
             el('btn-fg-start').click();
-            expect(text('fg-question-text')).toMatch(/^Frage 1\/8: /);
+            expect(text('fg-question-text')).toMatch(/^Frage 1\/\d+: /);
         });
     });
 });

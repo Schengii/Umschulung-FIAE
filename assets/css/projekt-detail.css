@@ -267,3 +267,34 @@
     border: none;
     background-color: #ffffff;
 }
+
+/* Statische Projektseiten (scripts/generate_project_pages.js) */
+.project-static-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: var(--radius-md);
+}
+.project-static-tags {
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.project-static-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.case-study {
+    margin-top: 1.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+.case-study-heading {
+    font-size: 1.1rem;
+    margin: 1.25rem 0 0.4rem;
+}

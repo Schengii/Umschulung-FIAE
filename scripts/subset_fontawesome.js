@@ -174,7 +174,8 @@ function rewriteFontFace(block) {
     // "FontAwesome" is the Font Awesome 4 family name; nothing here uses the v4 class names.
     if (family === 'FontAwesome') return null;
     const body = block.body.replace(/src:[^;}]+/, (/** @type {string} */ src) => {
-        const woff2 = /url\([^)]+\.woff2\) format\("woff2"\)/.exec(src);
+        // Font Awesome 6 writes `format("woff2")` after the url, 7 does not.
+        const woff2 = /url\([^)]+\.woff2\)(?: format\("woff2"\))?/.exec(src);
         if (!woff2) throw new Error(`@font-face for "${family}" has no WOFF2 source`);
         return `src:${woff2[0]}`;
     });
