@@ -8,6 +8,9 @@ module.exports = defineConfig({
     // Every file gets its own environment: the happy-dom tests register document listeners that
     // would otherwise leak into the next file of the same worker.
     isolate: true,
+    // happy-dom meldet jede iframe-Navigation als DOMException im Testlog; die Setup-Datei verwirft genau diese
+    // Meldung (Plan 6.7), alles andere bleibt sichtbar.
+    setupFiles: ['scripts/test-support/quiet-happy-dom.js'],
     coverage: {
       provider: 'v8',
       include: ['assets/js/modules/**/*.js', 'assets/js/*.js'],
