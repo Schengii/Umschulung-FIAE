@@ -20,11 +20,11 @@ class InterviewSimulator {
         /** @type {Array<Record<string, any>>} */
         this.history = []; // records of questions, answers, and scores
 
-        this.chatContainer = document.getElementById('chat-history');
+        this.chatContainer = /** @type {HTMLElement} */ (document.getElementById('chat-history'));
         this.setupForm = document.getElementById('setup-form');
-        this.setupCard = document.getElementById('setup-card');
-        this.chatCard = document.getElementById('chat-card');
-        this.resultCard = document.getElementById('result-card');
+        this.setupCard = /** @type {HTMLElement} */ (document.getElementById('setup-card'));
+        this.chatCard = /** @type {HTMLElement} */ (document.getElementById('chat-card'));
+        this.resultCard = /** @type {HTMLElement} */ (document.getElementById('result-card'));
         this.inputText = /** @type {HTMLInputElement} */ (document.getElementById('user-input-text'));
         this.sendBtn = /** @type {HTMLButtonElement} */ (document.getElementById('send-btn'));
         this.micBtn = /** @type {HTMLButtonElement} */ (document.getElementById('mic-btn'));
