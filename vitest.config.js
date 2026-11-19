@@ -10,12 +10,16 @@ module.exports = defineConfig({
     isolate: true,
     coverage: {
       provider: 'v8',
-      include: ['assets/js/modules/**/*.js'],
-      exclude: ['**/*.test.js', '**/*.spec.js'],
+      include: ['assets/js/modules/**/*.js', 'assets/js/*.js'],
+      exclude: ['**/*.test.js', '**/*.spec.js', 'assets/js/projects_data.js'],
       reporter: ['text-summary', 'text'],
       // Ratchet (ADR 0015): just below the current value so coverage cannot silently drop; raise it
       // when the actual value stays well above (2026-10-28: 81 / 73 / 83 / 82 %).
-      thresholds: { statements: 78, branches: 70, functions: 80, lines: 79 },
+      thresholds: {
+        'assets/js/modules/**': { statements: 78, branches: 70, functions: 80, lines: 79 },
+        // Seiten-Scripts (Plan 6.1): eigene, niedrigere Schwelle, nach ADR 0015 hochziehen.
+        'assets/js/*.js': { statements: 0.5, branches: 0.5, functions: 0.1, lines: 0.5 },
+      },
     },
   },
 });

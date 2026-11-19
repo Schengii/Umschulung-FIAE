@@ -92,6 +92,9 @@ jobs:
       - name: JSDoc Type Check
         run: npm run typecheck
 
+      - name: strictNullChecks Ratchet
+        run: npm run check-strict-null
+
       - name: Run Vitest Unit Test Suite (with coverage thresholds)
         run: npm run test:coverage
 

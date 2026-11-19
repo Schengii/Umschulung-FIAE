@@ -13,7 +13,7 @@ npm run test:unit      # Vitest (assets/js/modules/**/*.test.js und scripts/**/*
 npm run test:coverage  # Vitest mit Coverage-Bericht und Schwellenwert (assets/js/modules, v8, Ratsche nach ADR 0015; der CI-Job `quality` führt die Unit-Tests über diesen Befehl aus)
 npm run lint           # ESLint über assets/js, scripts und sw.js (Projekte/ ist ignoriert)
 npm run format:check   # Prettier, gleiche Pfade (format:fix zum Beheben)
-npm run typecheck      # tsc via jsconfig.json + jsconfig.sw.json (CI-Gate, 0 Fehler, `noImplicitAny` ist aktiv; Tests/Specs sind ausgenommen)
+npm run typecheck      # tsc via jsconfig.json + jsconfig.sw.json (CI-Gate, 0 Fehler, `noImplicitAny` ist aktiv; Tests/Specs sind ausgenommen; `npm run check-strict-null` ist die Ratsche für `strictNullChecks`: Fehlerzahl aus `jsconfig.strict.json` darf `scripts/strict-null-baseline.json` nicht übersteigen, nach Behebungen mit `node scripts/check_strict_null.js --update` absenken)
 npm run build:dist     # Produktions-Build nach dist/ (esbuild-Minify, kein Bundling, Pfade bleiben identisch); bewusst kein `build`-Script (ADR 0005)
 npm run regen          # subset-icons + build-search-index + generate-sw-assets, in dieser Reihenfolge (nach Änderungen an Seiten/Assets)
 npm run check          # alle statischen CI-Gates am Stück (check-*, inkl. check-search-index und check-flashcards, lint, format, typecheck, Unit-Tests)

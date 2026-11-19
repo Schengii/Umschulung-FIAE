@@ -163,14 +163,14 @@ Die Lernwerkzeuge bleiben als Angebot für andere Umschüler und als Arbeitsprob
 
 ## Phase 6: Tests und Codequalität
 
-- [ ] **6.1 Coverage auch für die Seiten-Scripts messen.** (M)
+- [x] **6.1 Coverage auch für die Seiten-Scripts messen.** (M) Erledigt 2026-11-19: Seiten-Scripts in der Messung, eigene Schwelle (Ist 0,6 %, weil sie bisher nur E2E-getestet sind); Anheben folgt mit 6.3.
   `vitest.config.js` misst nur `assets/js/modules`. `assets/js/*.js` (rund 9 000 Zeilen, darunter `flashcards.js` 870, `interview.js` 822, `components.js` 807, `dashboard.js` 741) bleibt ungemessen. In die Messung aufnehmen, eigene niedrige Schwelle setzen und nach ADR 0015 hochziehen.
 - [ ] **6.2 Module ohne oder mit wenig Tests.** (M)
   0 %: `praktikumsbetrieb-media.js` (449 Zeilen), `about-me-enhancements.js`, `blog-enhancements.js`, `impressum-enhancements.js`, `project-slideshow.js`. Unter 40 %: `timeline-scroll.js` (8 %), `portfolio-copilot.js` (18 %), `scroll-animations.js` (24 %), `c4-architecture.js` (24 %), `hero-section.js` (33 %), `premium-effects.js` (36 %).
   Reihenfolge nach Nutzen: Copilot (Antwortlogik), C4-Diagramm, Praktikums-Medien.
 - [ ] **6.3 Große Seiten-Scripts weiter zerlegen.** (L)
   `flashcards.js`, `interview.js`, `dashboard.js` und `components.js` mischen Rendering, Zustand und Ereignisse. Nach dem Muster der Git-Engine (ADR 0011): Zustand und Regeln als reine Module, das Seiten-Script nur noch als Verdrahtung.
-- [ ] **6.4 `strictNullChecks` als nächste Typ-Ratsche.** (L)
+- [ ] **6.4 `strictNullChecks` als nächste Typ-Ratsche.** (L) Ratsche erledigt 2026-11-19 (`check-strict-null`, Obergrenze 356 Fehler). Offen: die 356 Fehler schrittweise abbauen.
   `jsconfig.json` hat `strict: false`. Nach `noImplicitAny` ist `strictNullChecks` der Schritt mit dem größten Nutzen (viele `querySelector`-Ergebnisse). Vorgehen wie zuvor: Fehler zählen, Zahl als Obergrenze festschreiben, schrittweise auf 0.
 - [ ] **6.5 Visuelle Regressionstests.** (M)
   Es gibt keinen `toHaveScreenshot`-Test, obwohl zwei Themes, mehrere Akzentfarben und vier A11y-Modi bestehen. Ein Spec für fünf Kernseiten in hell und dunkel, nur Chromium, mit eingefrorenen Animationen. Referenzbilder in der CI erzeugen (Linux), nicht lokal unter Windows.
