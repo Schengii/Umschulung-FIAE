@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Neu
+- **Prüfungsfehler als Karteikarten**: Im Ergebnis der IHK-Prüfungssimulation legt „Fehler als Karteikarten merken“ jede nicht vollständig richtig beantwortete Frage als eigene Karte an (Box 1, heute fällig, Thema als Hinweis, Antwort mit Erklärung). Bereits vorhandene Karten werden nicht doppelt angelegt und behalten ihre Box. Logik in `modules/exam-to-flashcards.js` (getestet). Zeilenumbrüche eigener Karten werden jetzt dargestellt.
+
 #### Behoben (Styling)
 - **Buttons**: `.btn` und `.btn-secondary` hatten keine Grundform (19 px hohe Textzeilen mit Rahmen, z. B. Cockpit-Tabs, Git-Simulator, Kartei). Jetzt gemeinsame Form mit Polsterung, Radius und 44 px Mindesthöhe (`:where()`, damit `.hero-btn` und Seitenregeln gewinnen).
 - **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.
