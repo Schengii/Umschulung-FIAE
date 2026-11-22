@@ -37,6 +37,8 @@ test.describe('Visuelle Regression', () => {
                     fullPage: false,
                     animations: 'disabled',
                     caret: 'hide',
+                    // Toast und Assistent-Button erscheinen zeitversetzt: ausblenden statt maskieren.
+                    stylePath: 'scripts/visual-hide.css',
                     maxDiffPixelRatio: 0.015,
                     // Inhalte, die sich von selbst ändern, bleiben außen vor.
                     mask: [
