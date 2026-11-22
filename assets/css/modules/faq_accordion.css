@@ -15,9 +15,12 @@
     overflow: hidden;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-.faq-item:hover {
-    border-color: var(--primary);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+@media (hover: hover) {
+    .faq-item:hover {
+        border-color: var(--primary);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
 }
 .faq-trigger {
     width: 100%;
@@ -39,8 +42,11 @@
 .faq-trigger:focus-visible {
     background: rgba(37, 99, 235, 0.05);
 }
-.faq-trigger:hover {
-    color: var(--primary);
+
+@media (hover: hover) {
+    .faq-trigger:hover {
+        color: var(--primary);
+    }
 }
 .faq-icon {
     font-size: 0.85rem;

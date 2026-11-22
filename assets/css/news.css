@@ -26,7 +26,7 @@
     padding-left: 2.5rem;
     height: 38px;
     border-radius: 20px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--field-border);
     background: var(--bg-card);
     color: var(--text-primary);
     outline: none;
@@ -72,10 +72,13 @@
     gap: 0.35rem;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.copy-article-btn:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
+
+@media (hover: hover) {
+    .copy-article-btn:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
 }
 .news-no-results {
     text-align: center;

@@ -1,9 +1,11 @@
 /* Rules for pages/home.html (split out of style.css). index.html loads this sheet too, because
    the landing page reuses the hero and the point cards (ADR 0014, addendum 2026-11-17). */
-.timeline-item:hover .timeline-badge {
-    background-color: var(--primary);
-    color: var(--text-on-primary);
-    transform: scale(1.1);
+@media (hover: hover) {
+    .timeline-item:hover .timeline-badge {
+        background-color: var(--primary);
+        color: var(--text-on-primary);
+        transform: scale(1.1);
+    }
 }
 
 .timeline-date {
@@ -18,11 +20,13 @@
     color: var(--text-secondary);
 }
 
-.timeline-item:hover .timeline-badge {
-    background-color: var(--primary);
-    color: var(--text-on-primary);
-    transform: scale(1.25);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+@media (hover: hover) {
+    .timeline-item:hover .timeline-badge {
+        background-color: var(--primary);
+        color: var(--text-on-primary);
+        transform: scale(1.25);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    }
 }
 
 .sources-list {
@@ -271,10 +275,13 @@
     animation-delay: -0.6s;
     animation-duration: 4.2s;
 }
-.hero-badge:hover {
-    transform: translateY(-4px) scale(1.05) !important;
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
-    border-color: var(--primary);
+
+@media (hover: hover) {
+    .hero-badge:hover {
+        transform: translateY(-4px) scale(1.05) !important;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+        border-color: var(--primary);
+    }
 }
 
 /* 5. Live Status Indicator Dots & Pulse */
@@ -326,16 +333,22 @@
     background: var(--primary);
     transition: width 0.25s ease;
 }
-.point-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-    border-color: var(--primary);
+
+@media (hover: hover) {
+    .point-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        border-color: var(--primary);
+    }
 }
 .point-card:hover::before {
     width: 6px;
 }
-[data-theme="dark"] .point-card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+
+@media (hover: hover) {
+    [data-theme="dark"] .point-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
 }
 .point-icon-wrapper {
     width: 44px;
@@ -349,8 +362,11 @@
     font-size: 1.25rem;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.point-card:hover .point-icon-wrapper {
-    transform: scale(1.15) rotate(5deg);
+
+@media (hover: hover) {
+    .point-card:hover .point-icon-wrapper {
+        transform: scale(1.15) rotate(5deg);
+    }
 }
 .point-title {
     font-size: 1.05rem;
@@ -380,9 +396,12 @@
     border: 1px solid var(--border);
     transition: all 0.2s ease;
 }
-.point-card:hover .point-tag {
-    border-color: var(--primary);
-    color: var(--primary);
+
+@media (hover: hover) {
+    .point-card:hover .point-tag {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
 }
 .hero-content, .hero-visual {
     position: relative;
