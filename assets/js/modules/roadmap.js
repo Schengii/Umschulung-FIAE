@@ -36,9 +36,6 @@ export function initRoadmap() {
             project_title_de: 'Glücksspiel JS',
             project_title_en: 'Glücksspiel JS',
             project_link: 'Projekte/Glücksspiel/index.html',
-            playground_title_de: 'Algorithmus-Demo',
-            playground_title_en: 'Algorithm Demo',
-            playground_link: 'playground.html',
         },
         2: {
             title_de: 'Phase 2: OOP & Datenbanken',
@@ -62,9 +59,6 @@ export function initRoadmap() {
             project_title_de: 'Arbeitszeiterfassung',
             project_title_en: 'Time Tracking Tool',
             project_link: 'Projekte/arbeitszeiterfassung/index.html',
-            playground_title_de: 'Datenbank-Demo',
-            playground_title_en: 'Database Demo',
-            playground_link: 'playground.html',
         },
         3: {
             title_de: 'Phase 3: Web-Development & APIs',
@@ -88,9 +82,6 @@ export function initRoadmap() {
             project_title_de: 'Jobsuche Portal',
             project_title_en: 'Job Search Portal',
             project_link: 'Projekte/Jobbsuche/index.html',
-            playground_title_de: 'API Fetcher Demo',
-            playground_title_en: 'API Fetcher Demo',
-            playground_link: 'playground.html',
         },
         4: {
             title_de: 'Phase 4: Software-Engineering & agile Methoden',
@@ -114,9 +105,6 @@ export function initRoadmap() {
             project_title_de: 'Finance AI Bot',
             project_title_en: 'Finance AI Bot',
             project_link: 'Projekte/finance-ai-bot/index.html',
-            playground_title_de: 'Testing Playground',
-            playground_title_en: 'Testing Playground',
-            playground_link: 'playground.html',
         },
         5: {
             title_de: 'Phase 5: IHK-Projekt & Abschluss',
@@ -140,9 +128,6 @@ export function initRoadmap() {
             project_title_de: 'EcoChef (IHK)',
             project_title_en: 'EcoChef (IHK)',
             project_link: 'Projekte/EcoChef/www/index.html',
-            playground_title_de: 'EcoChef Code Playground',
-            playground_title_en: 'EcoChef Code Playground',
-            playground_link: 'playground.html',
         },
     };
 
@@ -224,10 +209,6 @@ export function initRoadmap() {
                     <a href="${data.project_link}" class="btn-primary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; text-decoration:none; padding:0.6rem 1.2rem; font-size:0.9rem;">
                         <i class="fa fa-external-link" aria-hidden="true"></i>
                         <span>${lang === 'de' ? data.project_title_de : data.project_title_en} ${lang === 'de' ? 'öffnen' : 'open'}</span>
-                    </a>
-                    <a href="${data.playground_link}" class="btn-secondary" style="display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; text-decoration:none; padding:0.6rem 1.2rem; font-size:0.9rem;">
-                        <i class="fa fa-code" aria-hidden="true"></i>
-                        <span>${lang === 'de' ? data.playground_title_de : data.playground_title_en}</span>
                     </a>
                 </div>
             </div>

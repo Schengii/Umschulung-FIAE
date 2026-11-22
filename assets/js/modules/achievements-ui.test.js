@@ -20,7 +20,6 @@ beforeEach(() => {
 afterEach(() => {
     removePageGlobals();
     vi.useRealTimers();
-    delete window.GameAudio;
 });
 
 describe('Achievements: notification', () => {
@@ -52,12 +51,6 @@ describe('Achievements: notification', () => {
         Achievements.unlock('does_not_exist');
         expect(toasts()).toHaveLength(1);
         expect(unlocked()).toEqual(['konami_master']);
-    });
-
-    it('plays the success sound through GameAudio when it is available', () => {
-        window.GameAudio = { play: vi.fn() };
-        Achievements.unlock('memory_fast');
-        expect(window.GameAudio.play).toHaveBeenCalledWith('success');
     });
 
     it('slides the toast in, then out, then removes it', async () => {

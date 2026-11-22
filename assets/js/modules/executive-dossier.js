@@ -27,7 +27,6 @@ const DOSSIER_TEMPLATES = {
             'Minecraft 3D Voxel Engine (C++20, OpenGL 4.5, Biome & Redstone)',
             'Informatik-lernen (TypeScript/Vite Lernplattform & Algorithmen)',
             'ManuFaktur (Responsive Web-Architektur & Kunstgalerie)',
-            'SQL & Relational DB Playground (PostgreSQL / SQLite)',
         ],
         skills: 'C++20, Modern TypeScript / JavaScript, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading',
     },

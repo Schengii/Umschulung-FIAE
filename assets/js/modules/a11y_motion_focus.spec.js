@@ -8,7 +8,7 @@ import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 test.describe('prefers-reduced-motion', () => {
     test.use({ reducedMotion: 'reduce' });
 
-    const pages = ['pages/home.html', 'pages/portfolio.html', 'pages/games.html', 'pages/snake.html'];
+    const pages = ['pages/home.html', 'pages/portfolio.html'];
 
     for (const pageName of pages) {
         test(`${pageName}: keine Dauer-Animation und keine Dekoration per Zeiger/Partikel`, async ({ page }) => {

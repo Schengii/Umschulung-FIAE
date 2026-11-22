@@ -1,23 +1,23 @@
 import { test, expect } from '@playwright/test';
 
-// Navigation: Home, Profil, Projekte, Umschulung, Spielwiese, News und Kontakt.
+// Navigation: Home, Profil, Projekte, Umschulung, News und Kontakt.
 test.describe('Navigation: gruppierte Hauptnavigation', () => {
     test.use({ viewport: { width: 1280, height: 800 } });
 
-    test('zeigt sieben Einträge, drei davon als Aufklappmenü', async ({ page }) => {
+    test('zeigt sechs Einträge, zwei davon als Aufklappmenü', async ({ page }) => {
         await page.goto('/pages/home.html');
-        await expect(page.locator('#nav-menu > .nav-item')).toHaveCount(7);
-        await expect(page.locator('#nav-menu > .nav-item > a[aria-haspopup="true"]')).toHaveCount(3);
+        await expect(page.locator('#nav-menu > .nav-item')).toHaveCount(6);
+        await expect(page.locator('#nav-menu > .nav-item > a[aria-haspopup="true"]')).toHaveCount(2);
     });
 
     test('Aufklappmenü per Tastatur: Enter öffnet, Escape schließt, aria-expanded folgt', async ({ page }) => {
         await page.goto('/pages/home.html');
-        const spielwiese = page.locator('#nav-menu > .nav-item', { hasText: /Spielwiese/ }).first();
-        const trigger = spielwiese.locator('> a');
+        const profil = page.locator('#nav-menu > .nav-item', { hasText: /Profil/ }).first();
+        const trigger = profil.locator('> a');
         await trigger.focus();
         await page.keyboard.press('Enter');
         await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-        await expect(spielwiese.locator('.dropdown-link', { hasText: 'Code Playground' })).toBeVisible();
+        await expect(profil.locator('.dropdown-link', { hasText: 'Lebenslauf' })).toBeVisible();
         await page.keyboard.press('Escape');
         await expect(trigger).toHaveAttribute('aria-expanded', 'false');
     });
@@ -29,7 +29,6 @@ test.describe('Navigation: gruppierte Hauptnavigation', () => {
             ['/pages/portfolio.html', 'Projekte'],
             ['/pages/ueber-mich.html', 'Profil'],
             ['/pages/kostentraeger.html', 'Umschulung'],
-            ['/pages/snake.html', 'Spielwiese'],
         ];
         for (const [url, group] of cases) {
             await page.goto(url);

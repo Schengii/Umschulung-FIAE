@@ -39,11 +39,6 @@ export function initEasterEggs() {
             Confetti.start(5000);
         }
 
-        // Play victory sound
-        if (typeof GameAudio !== 'undefined') {
-            GameAudio.play('win');
-        }
-
         // Show easter egg message
         const msg = document.createElement('div');
         msg.style.cssText = `

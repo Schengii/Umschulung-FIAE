@@ -16,10 +16,6 @@ const qrCodesToGenerate = [
         url: `${baseDomain}/pages/portfolio.html`,
     },
     {
-        filename: 'qr_playground.png',
-        url: `${baseDomain}/pages/playground.html`,
-    },
-    {
         filename: 'qr_home.png',
         url: `${baseDomain}/pages/home.html`,
     },

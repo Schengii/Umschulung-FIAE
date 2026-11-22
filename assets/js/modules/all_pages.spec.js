@@ -5,7 +5,6 @@ const pages = [
     'index.html',
     'pages/home.html',
     'pages/portfolio.html',
-    'pages/challenge-lab.html',
     'pages/links.html',
     'pages/ausbildungsablauf.html',
     'pages/ueber-mich.html',
@@ -14,14 +13,10 @@ const pages = [
     'pages/impressum.html',
     'pages/datenschutz.html',
     'pages/architecture.html',
-    'pages/games.html',
     'pages/kostentraeger.html',
     'pages/lebenslauf.html',
-    'pages/memory.html',
     'pages/news.html',
-    'pages/playground.html',
     'pages/projekt-detail.html?repo=EcoChef',
-    'pages/snake.html',
 ];
 
 test.beforeEach(async ({ page }) => {

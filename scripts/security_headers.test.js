@@ -19,7 +19,7 @@ describe('Sicherheits-Header in vercel.json', () => {
         const sources = vercel.headers
             .filter((rule) => rule.headers.some((h) => h.key === 'Content-Security-Policy'))
             .map((rule) => rule.source);
-        expect(sources).toHaveLength(3); // Seiten, Demos unter /Projekte/, playground.html
+        expect(sources).toHaveLength(2); // Seiten, Demos unter /Projekte/
     });
 });
 

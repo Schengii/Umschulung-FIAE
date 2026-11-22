@@ -137,8 +137,7 @@ const Confetti = {
     },
 };
 
-// memory.js, quiz.js, snake.js, git-simulator.js and easter-eggs.js reach this through a
-// `typeof Confetti !== 'undefined'` check, i.e. they expect a global.
+// easter-eggs.js reaches this through a `typeof Confetti !== 'undefined'` check, i.e. it expects a global.
 window.Confetti = Confetti;
 
 export function initConfetti() {

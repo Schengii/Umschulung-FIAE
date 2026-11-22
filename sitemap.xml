@@ -25,14 +25,6 @@
         <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/portfolio.html"/>
     </url>
     <url>
-        <loc>https://www.max-schenk.tech/pages/challenge-lab.html</loc>
-        <lastmod>2026-11-18</lastmod>
-        <priority>0.85</priority>
-        <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/challenge-lab.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/challenge-lab.html?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/challenge-lab.html"/>
-    </url>
-    <url>
         <loc>https://www.max-schenk.tech/pages/news.html</loc>
         <lastmod>2026-11-18</lastmod>
         <priority>0.7</priority>
@@ -105,44 +97,12 @@
         <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/praktikumsbetrieb.html"/>
     </url>
     <url>
-        <loc>https://www.max-schenk.tech/pages/playground.html</loc>
-        <lastmod>2026-11-18</lastmod>
-        <priority>0.5</priority>
-        <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/playground.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/playground.html?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/playground.html"/>
-    </url>
-    <url>
         <loc>https://www.max-schenk.tech/pages/architecture.html</loc>
         <lastmod>2026-11-18</lastmod>
         <priority>0.5</priority>
         <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/architecture.html"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/architecture.html?lang=en"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/architecture.html"/>
-    </url>
-    <url>
-        <loc>https://www.max-schenk.tech/pages/games.html</loc>
-        <lastmod>2026-11-18</lastmod>
-        <priority>0.4</priority>
-        <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/games.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/games.html?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/games.html"/>
-    </url>
-    <url>
-        <loc>https://www.max-schenk.tech/pages/snake.html</loc>
-        <lastmod>2026-11-18</lastmod>
-        <priority>0.4</priority>
-        <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/snake.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/snake.html?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/snake.html"/>
-    </url>
-    <url>
-        <loc>https://www.max-schenk.tech/pages/memory.html</loc>
-        <lastmod>2026-11-18</lastmod>
-        <priority>0.4</priority>
-        <xhtml:link rel="alternate" hreflang="de" href="https://www.max-schenk.tech/pages/memory.html"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.max-schenk.tech/pages/memory.html?lang=en"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.max-schenk.tech/pages/memory.html"/>
     </url>
     <url>
         <loc>https://www.max-schenk.tech/pages/datenschutz.html</loc>

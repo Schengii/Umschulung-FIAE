@@ -29,7 +29,6 @@ function installPageGlobals(overrides = {}) {
             THEME: 'portfolio_theme',
             LANG: 'portfolio_lang',
             COOKIE_CONSENT: 'cookie_consent',
-            SNAKE_HIGHSCORE: 'snake_highscore',
             MEMORY_BEST_MOVES: 'memory_best_moves',
             MEMORY_BEST_TIME: 'memory_best_time',
         },

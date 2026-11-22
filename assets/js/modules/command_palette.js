@@ -43,13 +43,6 @@
             url: 'ueber-mich.html',
         },
         {
-            titleDe: 'SQL & Code Playground',
-            titleEn: 'SQL & Code Playground',
-            category: 'Tools',
-            icon: 'fa-terminal',
-            url: 'playground.html',
-        },
-        {
             titleDe: 'C4 Software-Architektur Diagramm',
             titleEn: 'C4 Architecture Diagram',
             category: 'Architektur',

@@ -83,7 +83,7 @@ describe('verify_csp_hashes: header CSP', () => {
     });
 
     it('die Header-CSP der Seiten erlaubt kein unsafe-inline für Skripte', () => {
-        const rule = vercelConfig.headers.find((r) => r.source.startsWith('/((?!pages/playground'));
+        const rule = vercelConfig.headers.find((r) => r.source.startsWith('/((?!Projekte/'));
         const csp = rule.headers.find((h) => h.key === 'Content-Security-Policy').value;
         expect(/script-src[^;]*'unsafe-inline'/.test(csp)).toBe(false);
         expect(rule.source).toContain('Projekte/');
