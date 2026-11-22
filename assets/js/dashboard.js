@@ -267,6 +267,7 @@ function renderRecentProjects() {
         .then((r) => r.json())
         .then((projects) => {
             const lang = document.documentElement.getAttribute('lang') || 'de';
+            const resolveAssetPath = window.resolveAssetPath || ((/** @type {string} */ p) => p);
             const recent = projects.slice(-3).reverse();
 
             const card = document.createElement('div');
@@ -279,8 +280,8 @@ function renderRecentProjects() {
                         .map(
                             (/** @type {Record<string, any>} */ p) => `
                         <li style="padding:0.75rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-weight:600;">${p.title}</span>
-                            <a href="${p.link}" style="font-size:0.85rem;">
+                            <span style="font-weight:600;">${escapeHtml(lang === 'de' ? p.titleDe : p.titleEn)}</span>
+                            <a href="${escapeHtml(resolveAssetPath(p.link))}" style="font-size:0.85rem;">
                                 ${lang === 'de' ? 'Öffnen →' : 'Open →'}
                             </a>
                         </li>
