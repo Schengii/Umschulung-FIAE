@@ -109,12 +109,13 @@ function readPreviousUpdatedAt() {
 function fetchRepoInfo(repoName) {
     return new Promise((resolve) => {
         if (!repoName) return resolve(null);
+        /** @type {Record<string, string>} */
+        const headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' };
+        if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
         const options = {
             hostname: 'api.github.com',
             path: `/repos/Schengii/${repoName}`,
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-            },
+            headers,
         };
         https
             .get(options, (res) => {
@@ -129,6 +130,12 @@ function fetchRepoInfo(repoName) {
                         } catch {
                             resolve(null);
                         }
+                    } else if (res.statusCode === 403 || res.statusCode === 429) {
+                        // Rate-Limit: kein Hinweis auf ein fehlendes Repo, daher nicht als Fallback behandeln.
+                        console.error(
+                            `GitHub-API-Limit erreicht (HTTP ${res.statusCode}). GITHUB_TOKEN setzen und erneut ausführen; es wurden keine Dateien geändert.`
+                        );
+                        process.exit(1);
                     } else {
                         resolve(null);
                     }
