@@ -171,7 +171,8 @@ export function buildDemoBackup(now) {
             exam_history: JSON.stringify(history),
             exam_topic_stats: JSON.stringify(topicStats),
             exam_wrong_questions: JSON.stringify(wrongQuestions),
-            quiz_best_score: '9',
+            // The quiz has 5 questions; the best score is a count of right answers (4 of 5).
+            quiz_best_score: '4',
             interview_best_score: '85',
             learning_recommendations_quiz_weak_categories: JSON.stringify(['database', 'wiso']),
             learning_recommendations_flashcards_wrong_counts: JSON.stringify({ database: 4, network: 2 }),
