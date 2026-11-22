@@ -12,20 +12,6 @@ export const Achievements = {
             desc_de: 'Du hast das Portfolio zum ersten Mal besucht!',
             desc_en: 'You visited the portfolio for the first time!',
         },
-        snake_50: {
-            icon: '🐍',
-            title_de: 'Snake-Profi',
-            title_en: 'Snake Pro',
-            desc_de: 'Im Snake-Spiel 50 Punkte erreicht.',
-            desc_en: 'Scored 50 points in Snake.',
-        },
-        memory_fast: {
-            icon: '⚡',
-            title_de: 'Blitzmerker',
-            title_en: 'Speed Memory',
-            desc_de: 'Memory in unter 60 Sekunden geschafft.',
-            desc_en: 'Completed Memory in under 60 seconds.',
-        },
         dark_mode_fan: {
             icon: '🌙',
             title_de: 'Dark-Mode Fan',
@@ -124,11 +110,6 @@ export const Achievements = {
 
         // Trigger animation
         requestAnimationFrame(() => toast.classList.add('show'));
-
-        // Play sound (silent unless the visitor enabled sound)
-        if (typeof window !== 'undefined' && window.GameAudio) {
-            window.GameAudio.play('success');
-        }
 
         // Auto-dismiss
         setTimeout(() => {

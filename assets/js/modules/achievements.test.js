@@ -43,7 +43,7 @@ describe('Achievements logic', () => {
     it('checks whether an achievement is unlocked', () => {
         storageMap.set('achievements', JSON.stringify(['first_visit']));
         expect(Achievements.isUnlocked('first_visit')).toBe(true);
-        expect(Achievements.isUnlocked('snake_50')).toBe(false);
+        expect(Achievements.isUnlocked('konami_master')).toBe(false);
     });
 
     it('ignores unknown achievement IDs', () => {
@@ -60,8 +60,8 @@ describe('Achievements logic', () => {
         Achievements.unlock('first_visit');
         expect(Achievements.getUnlocked()).toEqual(['first_visit']);
 
-        Achievements.unlock('snake_50');
-        expect(Achievements.getUnlocked()).toEqual(['first_visit', 'snake_50']);
+        Achievements.unlock('konami_master');
+        expect(Achievements.getUnlocked()).toEqual(['first_visit', 'konami_master']);
     });
 
     it('dispatches achievementunlocked event on document', () => {

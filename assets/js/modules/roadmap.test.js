@@ -51,7 +51,7 @@ describe('roadmap', () => {
         expect(document.getElementById('drawer-title').textContent).toMatch(/^Phase 1/);
         expect(checkboxes().length).toBeGreaterThan(0);
         expect(content().textContent).toContain('Kernkompetenzen');
-        expect(content().querySelectorAll('a[href]')).toHaveLength(2);
+        expect(content().querySelectorAll('a[href]')).toHaveLength(1);
     });
 
     it('uses English texts when the page language is English', () => {

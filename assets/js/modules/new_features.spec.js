@@ -108,22 +108,6 @@ test.describe('New Interactive Features E2E Verification', () => {
         await expect(radarDots.first()).toHaveAttribute('style', /cursor:\s*pointer/);
     });
 
-    test('sollte den Java & C++ WASM Runner auf playground.html laden', async ({ page }) => {
-        await page.goto('/pages/playground.html');
-        await settle(page);
-
-        const wasmBtn = page.locator('button[data-template="wasm-runner"]');
-        await expect(wasmBtn).toBeVisible();
-        await wasmBtn.click();
-        await page.waitForTimeout(500);
-
-        const frame = page.frameLocator('#preview-iframe');
-        const compileBtn = frame.locator('#compile-btn');
-        await expect(compileBtn).toBeVisible();
-        await compileBtn.click();
-        await expect(frame.locator('#term-out')).toContainText('Hello from Java 21 WebContainer!');
-    });
-
     test('sollte den 3D Architektur-Graphen auf architecture.html initialisieren', async ({ page }) => {
         await page.goto('/pages/architecture.html');
         await settle(page);

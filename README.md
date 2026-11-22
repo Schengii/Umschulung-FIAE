@@ -33,9 +33,7 @@ Umschulung-FIAE/
 │   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
 │   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName) mit Code-Explorer & Live-Demo
 │   ├── architecture.html       # Interaktives C4-Architekturdiagramm & 3D Dependency Graph
-│   ├── challenge-lab.html      # Clean Code & RegEx Interactive Challenge Lab
-│   ├── playground.html         # In-Browser Web Sandbox & WASM Code Runner
-│   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, games.html, etc.)
+│   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, etc.)
 │
 ├── assets/                      # Globale Web-Ressourcen
 │   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, print.css)
@@ -124,7 +122,7 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung & Tests
-- **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Challenge-Lab, Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
+- **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
 - **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung), Snake und Memory — sowie die Generator-Skripte unter `scripts/`.
 - **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc), dazu die Konsistenz-Checks aus Abschnitt 6.
 - **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
@@ -189,7 +187,7 @@ npm run dev
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Portfolio-Assistent, Challenge-Lab, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
+Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Portfolio-Assistent, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
 
 ### 5. Unit-Tests ausführen (Vitest)
 ```bash
@@ -222,8 +220,6 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 - **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*EcoChef*, *Amazon 2.0*, *ElektroCheck AI*, *ManuFaktur*) ohne Verlassen des Portfolios.
 - **Portfolio-Assistent (`portfolio-copilot.js`)**: Chat-Widget ohne Sprachmodell, das Fragen mit Stichwörtern einer festen Wissensbasis abgleicht und vollständig im Browser läuft, für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
 - **Executive Dossier 2.0 & Rollenbasierter PDF-Generator (`executive-dossier.js`)**: Maßgeschneiderter 1-Klick-Export für Fullstack-, Backend- oder IHK-Prüfer-Profile.
-- **Clean-Code & RegEx Challenge-Lab (`challenge-lab.html` & `challenge-lab.js`)**: Interaktives Coding-Lab zu IT-Sicherheit (SQL-Injection), RegEx, Pure Functions und Big-O mit XP-Gamification.
-- **In-Browser Java 21 & C++23 WASM Runner (`playground.html` & `playground.js`)**: Interaktiver Bytecode-Compiler & WebAssembly-Runner mit Syntax-Tabs und Live-Ausführung im Browser.
 - **Interaktiver 3D Systemarchitektur-Graph (`architecture.html` & `architecture.js`)**: 3D-Knotengraph mit Orbit-Kamerasteuerung, dynamischer Projektion und Komponenten-Telemetrie.
 - **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
 - **Side-by-Side Projekt-Vergleichsmatrix (`project_compare.js`)**: Interaktive Gegenüberstellung von 2 bis 3 Projekten hinsichtlich Architektur-Badges, Tech-Stack, Key Learnings und Live-Demo Links im Bottom-Drawer.

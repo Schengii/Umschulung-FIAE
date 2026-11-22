@@ -1,14 +1,10 @@
 /**
- * Premium Effects Phase 2 Module — Page transitions and synthesized interface sounds.
+ * Premium Effects Phase 2 Module — Page transitions.
  */
-import { GameAudio } from './game-audio.js';
 
 export function initPremiumEffectsP2() {
     // 1. Initialize Page Transition Overlay
     initPageTransitions();
-
-    // 2. Initialize UI Audio Core
-    initUIAudio();
 }
 
 /**
@@ -76,33 +72,5 @@ function initPageTransitions() {
         setTimeout(() => {
             window.location.href = href;
         }, 350);
-    });
-}
-
-/**
- * Hover and click cues on interactive elements. Silent unless the visitor enabled sound
- * (see GameAudio); checked up front so no AudioContext is created while muted.
- */
-function initUIAudio() {
-    const selectors = 'a, button, .card, .nav-item, input, select';
-
-    document.addEventListener('mouseover', (e) => {
-        if (GameAudio.isMuted) return;
-        const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
-        // Debounce or filter out continuous hovers on identical target
-        if (el && el.dataset.audioHovered !== 'true') {
-            el.dataset.audioHovered = 'true';
-            GameAudio.play('ui-hover');
-            setTimeout(() => {
-                delete el.dataset.audioHovered;
-            }, 250);
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (GameAudio.isMuted) return;
-        const el = /** @type {HTMLElement} */ (e.target).closest(selectors);
-        // The sound toggle plays its own confirmation cue.
-        if (el && el.id !== 'audio-toggle') GameAudio.play('ui-click');
     });
 }

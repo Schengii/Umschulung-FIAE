@@ -2,28 +2,6 @@ import { test, expect } from '@playwright/test';
 import { settle } from '../../../scripts/test-support/e2e-helpers.js';
 
 test.describe('Advanced Features & Tools E2E Verification', () => {
-    test('sollte das Clean-Code & RegEx Challenge-Lab bedienen und XP sammeln', async ({ page }) => {
-        await page.goto('/pages/challenge-lab.html');
-        await settle(page);
-
-        // Solve Lab 1 (SQL Injection -> Option B)
-        const lab1OptB = page.locator('button[data-challenge-id="c1"][data-opt-id="b"]');
-        await lab1OptB.click();
-        const feedback1 = page.locator('#feedback-c1');
-        await expect(feedback1).toBeVisible();
-        await expect(feedback1).toContainText('Exzellent gelöst');
-
-        // Solve Lab 2 (RegEx PLZ -> Option A)
-        const lab2OptA = page.locator('button[data-challenge-id="c2"][data-opt-id="a"]');
-        await lab2OptA.click();
-
-        // Verify Score & Rank update
-        const scoreDisplay = page.locator('#lab-score-display');
-        await expect(scoreDisplay).toHaveText('100 XP');
-        const progressDisplay = page.locator('#lab-progress-display');
-        await expect(progressDisplay).toHaveText('2 / 4 Labs');
-    });
-
     test('sollte das Quick-Sandbox Modal im Portfolio öffnen und bedienen', async ({ page }) => {
         await page.goto('/pages/portfolio.html');
         await settle(page);

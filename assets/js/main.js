@@ -17,7 +17,7 @@
  *    event is ever missed for any reason.
  *
  * 2) Lazy loading: most modules only matter on one or a couple of pages
- *    (e.g. challenge-lab.js only does anything on challenge-lab.html). Importing
+ *    (e.g. portfolio-logic.js only does anything on portfolio.html). Importing
  *    all of them statically meant every page — including a plain legal
  *    notice page — paid for ~50 JS requests regardless of whether anything
  *    used them. LAZY_MODULES below dynamically imports each one only when a
@@ -51,7 +51,6 @@ import { initKeyboardShortcuts } from './modules/keyboard-shortcuts.js';
 import { initAchievements } from './modules/achievements.js';
 import { initPremiumEffects } from './modules/premium-effects.js';
 import { initPremiumEffectsP2 } from './modules/premium-effects-p2.js';
-import { initGameAudio } from './modules/game-audio.js';
 
 const CORE_INITIALIZERS = [
     initTheme,
@@ -67,7 +66,6 @@ const CORE_INITIALIZERS = [
     initAchievements,
     initPremiumEffects,
     initPremiumEffectsP2,
-    initGameAudio,
 ];
 
 // [dynamic import path, named export to call] — loaded on every page, but only once the
@@ -115,7 +113,6 @@ const LAZY_MODULES = [
     // one-time DOM check runs. It self-inits via a direct <script type="module"> include
     // on portfolio.html instead (see quick-sandbox.js bottom).
     ['./modules/executive-dossier.js', 'initExecutiveDossier', '[data-open-dossier]'],
-    ['./modules/challenge-lab.js', 'initChallengeLab', '.page-challenge-lab, #lab-challenges-list'],
     ['./modules/portfolio_exporter.js', 'initPortfolioExporter', '.portfolio-filters'],
 ];
 

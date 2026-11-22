@@ -184,7 +184,6 @@ function renderNav(currentPage) {
         'praktikumsbetrieb.html',
         'links.html',
     ];
-    const spielwiesePages = ['games.html', 'snake.html', 'memory.html', 'playground.html', 'challenge-lab.html'];
 
     /** @param {string | string[]} pages */
     const active = (pages) => {
@@ -230,21 +229,6 @@ function renderNav(currentPage) {
                             </ul>
                         </li>
                         <li role="none"><a href="${pagePrefix}links.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-external-link" aria-hidden="true"></i> <span lang="de">Quellen &amp; Links</span><span lang="en">Sources &amp; Links</span></a></li>
-                    </ul>
-                </li>
-                <li class="nav-item${active(spielwiesePages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-dice" aria-hidden="true"></i> <span lang="de">Spielwiese</span><span lang="en">Playground</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-item" role="none">
-                            <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-dice" aria-hidden="true"></i> <span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu" role="menu">
-                                <li role="none"><a href="${pagePrefix}snake.html" class="dropdown-link" role="menuitem">Snake JS</a></li>
-                                <li role="none"><a href="${pagePrefix}memory.html" class="dropdown-link" role="menuitem">Memory JS</a></li>
-                                <li role="none"><a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Alle Games</span><span lang="en">All Games</span></a></li>
-                            </ul>
-                        </li>
-                        <li role="none"><a href="${pagePrefix}playground.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code-fork" aria-hidden="true"></i> <span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
-                        <li role="none"><a href="${pagePrefix}challenge-lab.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> <span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('news.html')}">
@@ -392,11 +376,6 @@ function renderFooter() {
                 <p class="footer-meta-row">
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
-                    &nbsp;&middot;&nbsp;
-                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Audio: Sound einschalten" title="Sound einschalten" aria-pressed="false">
-                        <i class="fa-solid ${AppStorage.getItem('sound_enabled') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
-                        <span>Audio</span>
-                    </button>
                     &nbsp;&middot;&nbsp;
                     <span title="Tastaturkürzel" data-en-title="Keyboard shortcuts" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
                     &nbsp;&middot;&nbsp;

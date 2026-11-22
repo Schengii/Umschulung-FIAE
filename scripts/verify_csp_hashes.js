@@ -9,7 +9,7 @@
  * hashes listed in that page's CSP meta tag.
  *
  * Pages whose CSP declares 'unsafe-inline' for script-src are skipped, since
- * inline scripts there are allowed regardless of hash (see playground.html).
+ * inline scripts there are allowed regardless of hash.
  *
  * Usage:
  *   node scripts/verify_csp_hashes.js          # check only, exits 1 on drift
@@ -112,8 +112,8 @@ function verifyCspHashes({ files: targetFiles = files, fix: shouldFix = fix } = 
 }
 
 const vercelPath = path.join(root, 'vercel.json');
-// Header rule for the site itself: everything except the playground and the demo builds.
-const SITE_HEADER_SOURCE = '/((?!pages/playground\\.html|Projekte/).*)';
+// Header rule for the site itself: everything except the demo builds.
+const SITE_HEADER_SOURCE = '/((?!Projekte/).*)';
 
 /**
  * Union of the script hashes of all pages whose meta CSP does not allow inline scripts anyway.

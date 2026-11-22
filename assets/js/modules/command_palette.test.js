@@ -120,8 +120,8 @@ describe('command palette', () => {
 
     it('filters by title and category, ignoring case', () => {
         openPalette();
-        type('playground');
-        expect(titles()).toEqual(['SQL & Code Playground']);
+        type('architektur');
+        expect(titles()).toEqual(['C4 Software-Architektur Diagramm']);
 
         type('KARRIERE');
         expect(titles()).toEqual(['Lebenslauf & Zeugnisse']);
@@ -130,8 +130,8 @@ describe('command palette', () => {
     it('searches the English titles when the page is English', () => {
         document.documentElement.setAttribute('lang', 'en');
         openPalette();
-        type('playground');
-        expect(titles()).toEqual(['SQL & Code Playground']);
+        type('architecture');
+        expect(titles()).toEqual(['C4 Architecture Diagram']);
     });
 
     it('shows the search text as text, never as markup', () => {
@@ -162,9 +162,9 @@ describe('command palette', () => {
 
     it('opens the selected entry with Enter', () => {
         openPalette();
-        type('playground');
+        type('architektur');
         pressKey('Enter');
-        expect(window.location.href).toBe('http://localhost/pages/playground.html');
+        expect(window.location.href).toBe('http://localhost/pages/architecture.html');
         window.happyDOM.setURL('http://localhost/index.html');
     });
 
