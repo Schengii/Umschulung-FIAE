@@ -5,7 +5,7 @@
  * never look stale. Nothing here touches localStorage directly: the storage is passed in.
  */
 
-import { BACKUP_APP_ID, BACKUP_VERSION } from './progress-backup.js';
+import { BACKUP_APP_ID, BACKUP_VERSION, applyBackup, createBackup, isBackupKey } from './progress-backup.js';
 import { EXAM_QUESTIONS } from './exam-questions.js';
 import { rankTopics } from './exam-statistics.js';
 import { startOfDay } from './leitner-box.js';
@@ -177,4 +177,76 @@ export function buildDemoBackup(now) {
             learning_recommendations_flashcards_wrong_counts: JSON.stringify({ database: 4, network: 2 }),
         },
     };
+}
+
+/** @typedef {Pick<Storage, 'length' | 'key' | 'getItem' | 'setItem' | 'removeItem'>} DemoStorage */
+
+/** @param {DemoStorage} storage */
+export function isDemoActive(storage) {
+    return storage.getItem(DEMO_ACTIVE_KEY) === '1';
+}
+
+/**
+ * The visitor's settings as backup entries, so they survive both directions of the switch.
+ * @param {DemoStorage} storage
+ * @returns {[string, string][]}
+ */
+function personalEntries(storage) {
+    /** @type {[string, string][]} */
+    const entries = [];
+    for (const key of PERSONAL_KEYS) {
+        const value = storage.getItem(key);
+        if (value !== null) entries.push([key, value]);
+    }
+    return entries;
+}
+
+/**
+ * Loads the sample state. The real progress is parked under DEMO_SNAPSHOT_KEY first. Calling it
+ * while the sample state is already loaded does nothing, so the parked state is never overwritten.
+ * @param {DemoStorage} storage
+ * @param {Date} now
+ */
+export function activateDemo(storage, now) {
+    if (isDemoActive(storage)) return;
+    const progress = Object.fromEntries(
+        Object.entries(createBackup(storage).data).filter(([key]) => !PERSONAL_KEYS.includes(key))
+    );
+    storage.setItem(DEMO_SNAPSHOT_KEY, JSON.stringify(progress));
+    try {
+        applyBackup(storage, [...Object.entries(buildDemoBackup(now).data), ...personalEntries(storage)]);
+        storage.setItem(DEMO_ACTIVE_KEY, '1');
+    } catch (error) {
+        // Storage full or blocked halfway: put the real progress back before reporting the failure.
+        try {
+            deactivateDemo(storage);
+        } catch (_e) {
+            /* nothing more to do */
+        }
+        throw error;
+    }
+}
+
+/**
+ * Brings the real progress back and removes the sample state. A missing or damaged snapshot
+ * leaves only the visitor's settings behind; it never throws because of the snapshot's content.
+ * @param {DemoStorage} storage
+ */
+export function deactivateDemo(storage) {
+    /** @type {[string, string][]} */
+    let progress = [];
+    try {
+        const parsed = JSON.parse(storage.getItem(DEMO_SNAPSHOT_KEY) || 'null');
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            progress = Object.entries(parsed).filter(
+                (/** @type {[string, unknown]} */ [key, value]) =>
+                    typeof value === 'string' && isBackupKey(key) && !PERSONAL_KEYS.includes(key)
+            );
+        }
+    } catch (_e) {
+        progress = [];
+    }
+    applyBackup(storage, [...progress, ...personalEntries(storage)]);
+    storage.removeItem(DEMO_SNAPSHOT_KEY);
+    storage.removeItem(DEMO_ACTIVE_KEY);
 }
