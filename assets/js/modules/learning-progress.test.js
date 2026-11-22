@@ -2,6 +2,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { installPageGlobals, removePageGlobals, resetDocument } from '../../../scripts/test-support/dom-helpers.js';
 import { initLearningProgress } from './learning-progress.js';
+import { QUIZ_QUESTION_COUNT } from './quiz-questions.js';
 
 const PAGE = `
     <div id="progress-flashcards-bar"></div><span id="progress-flashcards"></span>
@@ -48,14 +49,35 @@ describe('learning-progress', () => {
         expect(text('progress-quiz')).toBe('0%');
     });
 
-    it('shows the best quiz and interview scores', () => {
-        storage.setItem('quiz_best_score', '80');
+    it('shows the best quiz score (a count of right answers) as a percentage of the questions', () => {
+        storage.setItem('quiz_best_score', String(QUIZ_QUESTION_COUNT - 1));
         storage.setItem('interview_best_score', '65');
         initLearningProgress();
-        expect(text('progress-quiz')).toBe('80%');
-        expect(width('progress-quiz-bar')).toBe('80%');
+        const expected = `${Math.round(((QUIZ_QUESTION_COUNT - 1) / QUIZ_QUESTION_COUNT) * 100)}%`;
+        expect(text('progress-quiz')).toBe(expected);
+        expect(width('progress-quiz-bar')).toBe(expected);
+        expect(text('hs-quiz')).toBe(expected);
         expect(text('progress-interview')).toBe('65%');
-        expect(text('hs-quiz')).toBe('80%');
+    });
+
+    it('shows a perfect quiz score as 100% and never more', () => {
+        storage.setItem('quiz_best_score', String(QUIZ_QUESTION_COUNT));
+        initLearningProgress();
+        expect(text('progress-quiz')).toBe('100%');
+        storage.setItem('quiz_best_score', '9999');
+        initLearningProgress();
+        expect(text('progress-quiz')).toBe('100%');
+        expect(width('progress-quiz-bar')).toBe('100%');
+    });
+
+    it('shows 0% for a quiz best of zero and leaves the highscore line alone for damaged values', () => {
+        storage.setItem('quiz_best_score', '0');
+        initLearningProgress();
+        expect(text('progress-quiz')).toBe('0%');
+        storage.setItem('quiz_best_score', 'kaputt');
+        resetDocument(PAGE);
+        initLearningProgress();
+        expect(text('hs-quiz')).toBe('?');
     });
 
     it('renders the game highscores', () => {
