@@ -1,6 +1,0 @@
-/* Nur für visual.spec.js: zeitversetzt erscheinende Elemente ausblenden (stylePath umgeht die Seiten-CSP). */
-.achievement-toast,
-#portfolio-copilot-container,
-#copilot-toggle-btn {
-    display: none !important;
-}
