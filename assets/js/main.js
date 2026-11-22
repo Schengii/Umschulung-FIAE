@@ -84,7 +84,7 @@ const IDLE_MODULES = [
 const LAZY_MODULES = [
     ['./modules/username-greeting.js', 'initUsernameGreeting', '#username-form, #recruiter-greeting-banner'],
     ['./modules/contact-form.js', 'initContactForm', '#contact-form, #hire-me-form'],
-    ['./modules/skill-bars.js', 'initSkillBars', '.skill-fill'],
+    ['./modules/skill-bars.js', 'initSkillBars', '.skill-bar'],
     ['./modules/skill-radar.js', 'initSkillRadar', '#skill-radar-container'],
     ['./modules/roadmap.js', 'initRoadmap', '.roadmap-item'],
     ['./modules/project-slideshow.js', 'initSlideshow', '#slide-viewer'],

@@ -6,22 +6,30 @@ export function initSkillRadar() {
     const container = document.getElementById('skill-radar-container');
     if (!container) return;
 
+    // Stufen statt Prozenten: 1 Grundkenntnisse, 2 Fortgeschritten, 3 Sicher im Einsatz
+    const LEVEL_LABELS = [
+        '',
+        'Grundkenntnisse / Basic knowledge',
+        'Fortgeschritten / Intermediate',
+        'Sicher im Einsatz / Confident in use',
+    ];
+    const MAX_LEVEL = 3;
     const skills = [
-        { name: 'HTML/CSS', value: 85 },
-        { name: 'JavaScript', value: 75 },
-        { name: 'Java/OOP', value: 70 },
-        { name: 'SQL/DB', value: 65 },
-        { name: 'Git', value: 80 },
-        { name: 'Spring Boot', value: 60 },
-        { name: 'React', value: 55 },
-        { name: 'Testing', value: 50 },
-        { name: 'KI/AI', value: 70 },
+        { name: 'HTML/CSS', level: 3 },
+        { name: 'JavaScript', level: 3 },
+        { name: 'Java/OOP', level: 2 },
+        { name: 'SQL/DB', level: 2 },
+        { name: 'Git', level: 3 },
+        { name: 'Spring Boot', level: 1 },
+        { name: 'React', level: 3 },
+        { name: 'Testing', level: 2 },
+        { name: 'KI/AI', level: 3 },
     ];
 
     const size = 280;
     const center = size / 2;
     const maxRadius = center - 40;
-    const levels = 5;
+    const levels = MAX_LEVEL;
     const angleStep = (2 * Math.PI) / skills.length;
 
     let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="skill-radar-svg">`;
@@ -50,7 +58,7 @@ export function initSkillRadar() {
     let points = '';
     skills.forEach((skill, i) => {
         const angle = angleStep * i - Math.PI / 2;
-        const r = (skill.value / 100) * maxRadius;
+        const r = (skill.level / MAX_LEVEL) * maxRadius;
         const x = center + Math.cos(angle) * r;
         const y = center + Math.sin(angle) * r;
         points += `${x},${y} `;
@@ -61,11 +69,11 @@ export function initSkillRadar() {
     // Draw skill dots
     skills.forEach((skill, i) => {
         const angle = angleStep * i - Math.PI / 2;
-        const r = (skill.value / 100) * maxRadius;
+        const r = (skill.level / MAX_LEVEL) * maxRadius;
         const x = center + Math.cos(angle) * r;
         const y = center + Math.sin(angle) * r;
         svg += `<circle cx="${x}" cy="${y}" r="4" fill="var(--primary)" stroke="white" stroke-width="1.5" class="radar-dot" style="cursor:pointer;" data-skill="${skill.name}">
-            <title>${skill.name}: ${skill.value}%</title>
+            <title>${skill.name}: ${LEVEL_LABELS[skill.level]}</title>
         </circle>`;
     });
 

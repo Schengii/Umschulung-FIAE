@@ -38,19 +38,12 @@ afterEach(() => {
     vi.restoreAllMocks();
 });
 
-const bar = (name) =>
-    `<div class="skill-bar"><span class="skill-name">${name}</span><div class="skill-fill"></div></div>`;
+const bar = (name) => `<div class="skill-bar"><span class="skill-name">${name}</span></div>`;
 
 describe('skill-bars', () => {
     it('does nothing without bars', () => {
         resetDocument('');
         expect(() => initSkillBars()).not.toThrow();
-    });
-
-    it('animates the fill once it is visible', () => {
-        resetDocument(bar('Git'));
-        initSkillBars();
-        expect(document.querySelector('.skill-fill').classList.contains('animated')).toBe(true);
     });
 
     it('is a plain bar outside the portfolio', () => {
