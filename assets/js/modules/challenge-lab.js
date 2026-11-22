@@ -235,7 +235,7 @@ function renderChallenges() {
       </div>
 
       <!-- Feedback Area -->
-      <div id="feedback-${challenge.id}" style="display: none; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.9rem; margin-top: 0.5rem;"></div>
+      <div id="feedback-${challenge.id}" role="status" aria-live="polite" style="display: none; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.9rem; margin-top: 0.5rem;"></div>
     `;
 
         container.appendChild(card);

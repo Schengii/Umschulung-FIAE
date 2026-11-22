@@ -32,6 +32,18 @@ test.describe('Visuelle Regression', () => {
                 await page.goto(url);
                 await page.evaluate(() => document.fonts.ready);
                 await page.waitForLoadState('networkidle');
+                // Achievement-Toast und Assistent-Button erscheinen zeitversetzt: dauerhaft ausblenden.
+                // element.style statt Stylesheet, weil die Seiten-CSP eingefügte <style>-Elemente blockt.
+                await page.evaluate(() => {
+                    const hide = () =>
+                        document
+                            .querySelectorAll('.achievement-toast, #portfolio-copilot-container, #copilot-toggle-btn')
+                            .forEach((el) =>
+                                /** @type {HTMLElement} */ (el).style.setProperty('display', 'none', 'important')
+                            );
+                    hide();
+                    new MutationObserver(hide).observe(document.body, { childList: true, subtree: true });
+                });
 
                 await expect(page).toHaveScreenshot(`${name}-${scheme}.png`, {
                     fullPage: false,
