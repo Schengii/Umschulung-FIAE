@@ -5,6 +5,7 @@
 
 import { FACHGESPRAECH_QUESTIONS } from './fachgespraech-questions.js';
 import { parseFachgespraechStats, recordFachgespraechAnswer, summarizeFachgespraech } from './fachgespraech-stats.js';
+import { escapeHtml } from './html-utils.js';
 
 const FG_STORAGE_KEY = 'fachgespraech_results';
 
@@ -164,9 +165,9 @@ function renderNwaTable() {
         const thA = document.getElementById('th-option-a')?.textContent || 'Option A';
         const thB = document.getElementById('th-option-b')?.textContent || 'Option B';
         if (totalScoreA > totalScoreB) {
-            winnerEl.innerHTML = `🏆 <strong>Eindeutiger Sieger: ${thA}</strong> mit ${totalScoreA.toFixed(1)} Punkten (+${diff} Pkt Vorsprung). Erfüllt die IHK-Projektanforderungen optimal.`;
+            winnerEl.innerHTML = `🏆 <strong>Eindeutiger Sieger: ${escapeHtml(thA)}</strong> mit ${totalScoreA.toFixed(1)} Punkten (+${diff} Pkt Vorsprung). Erfüllt die IHK-Projektanforderungen optimal.`;
         } else if (totalScoreB > totalScoreA) {
-            winnerEl.innerHTML = `🏆 <strong>Eindeutiger Sieger: ${thB}</strong> mit ${totalScoreB.toFixed(1)} Punkten (+${diff} Pkt Vorsprung).`;
+            winnerEl.innerHTML = `🏆 <strong>Eindeutiger Sieger: ${escapeHtml(thB)}</strong> mit ${totalScoreB.toFixed(1)} Punkten (+${diff} Pkt Vorsprung).`;
         } else {
             winnerEl.innerHTML = `⚖️ <strong>Gleichstand</strong> (${totalScoreA.toFixed(1)} Pkt). Bitte Kriterien-Gewichtung anpassen.`;
         }

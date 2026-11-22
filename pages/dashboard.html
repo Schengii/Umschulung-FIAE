@@ -61,6 +61,15 @@
 
     <!-- Main Content -->
     <main id="main-content" class="main-container">
+        <div id="demo-banner" class="demo-banner" role="status" hidden>
+            <p class="demo-banner-text">
+                <span lang="de"><strong>Beispiel-Lernstand:</strong> Diese Daten sind nicht dein Fortschritt. Dein echter Stand ist gesichert.</span>
+                <span lang="en"><strong>Sample progress:</strong> This data is not your progress. Your real progress is safely stored.</span>
+            </p>
+            <button type="button" id="demo-banner-reset" class="btn-secondary">
+                <span lang="de">Meinen Stand zurückholen</span><span lang="en">Restore my progress</span>
+            </button>
+        </div>
         <div class="layout-grid">
             <div class="left-col">
                 <div class="card">
@@ -389,6 +398,23 @@
                             <span lang="de">QR-Sync</span><span lang="en">QR Sync</span>
                         </button>
                         <input type="file" id="backup-file-input" class="sr-only" accept="application/json,.json" tabindex="-1" aria-label="Sicherungsdatei auswählen" data-en-aria-label="Choose backup file">
+                    </div>
+                    <div class="demo-mode" id="demo-mode">
+                        <h4 class="demo-mode-title"><span lang="de">Beispiel-Lernstand</span><span lang="en">Sample progress</span></h4>
+                        <p class="demo-mode-text">
+                            <span lang="de">Zeigt alle Lernbereiche mit Beispieldaten. Dein echter Stand wird gesichert und lässt sich jederzeit zurückholen. Neuer Fortschritt in der Demo geht dabei verloren; Export und Import sind währenddessen gesperrt.</span>
+                            <span lang="en">Shows every learning area with sample data. Your real progress is stored safely and can be restored at any time. New progress made in the demo is lost on restore; export and import are locked meanwhile.</span>
+                        </p>
+                        <div class="backup-actions">
+                            <button type="button" id="demo-load-btn" class="btn-secondary">
+                                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                                <span lang="de">Beispiel-Lernstand laden</span><span lang="en">Load sample progress</span>
+                            </button>
+                            <button type="button" id="demo-reset-btn" class="btn-secondary" hidden>
+                                <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                                <span lang="de">Meinen Stand zurückholen</span><span lang="en">Restore my progress</span>
+                            </button>
+                        </div>
                     </div>
                     <div id="backup-qr-display" class="backup-qr-display" hidden>
                         <div class="backup-qr-box">

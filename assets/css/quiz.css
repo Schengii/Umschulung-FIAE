@@ -292,7 +292,8 @@
     background: #ef4444;
 }
 
-.exam-recommendation {
+.exam-recommendation,
+.exam-cards-status {
     margin-top: 1rem;
     font-weight: 600;
 }

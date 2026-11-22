@@ -234,6 +234,9 @@ async function main() {
     try {
         execSync('npm run generate-data', { cwd: rootDir, stdio: 'inherit' });
         execSync('npm run check-sync', { cwd: rootDir, stdio: 'inherit' });
+        // The generated project pages carry a JSON-LD dateModified, so their inline-script hash
+        // changes on every sync; the CSP hashes in the pages and in vercel.json must follow.
+        execSync('npm run check-csp:fix', { cwd: rootDir, stdio: 'inherit' });
         // Synced project metadata and demo pages can bring icons the subset does not have yet.
         execSync('npm run subset-icons', { cwd: rootDir, stdio: 'inherit' });
         // projects_data.js and the icon subset are precached, so new content changes the
