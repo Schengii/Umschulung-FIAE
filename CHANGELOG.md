@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Neu
+- **Prüfungsfehler als Karteikarten**: Im Ergebnis der IHK-Prüfungssimulation legt „Fehler als Karteikarten merken“ jede nicht vollständig richtig beantwortete Frage als eigene Karte an (Box 1, heute fällig, Thema als Hinweis, Antwort mit Erklärung). Bereits vorhandene Karten werden nicht doppelt angelegt und behalten ihre Box. Logik in `modules/exam-to-flashcards.js` (getestet). Zeilenumbrüche eigener Karten werden jetzt dargestellt.
+
 #### Behoben
 - **Quiz-Bestleistung im Dashboard**: Das Quiz speichert die Zahl richtiger Antworten (z. B. 4 von 5), das Dashboard zeigte sie als Prozent („4 %“). Jetzt wird der Anteil der Fragen berechnet (80 %), höchstens 100 %; ein beschädigter Wert erscheint nicht mehr als „kaputt%“. Die Fragen liegen dafür in `modules/quiz-questions.js` (mit `QUIZ_QUESTION_COUNT`).
 

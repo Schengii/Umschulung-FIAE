@@ -22,6 +22,7 @@ import {
     parseNumber,
 } from './question-types.js';
 import { getIhkGrade } from './grade-calculator.js';
+import { addMistakesAsCards } from './exam-to-flashcards.js';
 import {
     addRunToTopicStats,
     parseTopicStats,
@@ -341,6 +342,39 @@ export function initIhkExamSimulator() {
 
     function readWrongQuestions() {
         return parseWrongQuestions(AppStorage.getItem(STORAGE_KEYS.EXAM_WRONG_QUESTIONS, '[]'));
+    }
+
+    /**
+     * Stores the wrongly answered questions as custom flashcards (box 1, due today).
+     * @param {ExamQuestion[]} questions
+     * @param {unknown[]} answers
+     * @returns {{added: number, alreadyKnown: number} | null} null when the storage refused the write
+     */
+    function saveMistakesAsCards(questions, answers) {
+        const readJson = (/** @type {string} */ key, /** @type {unknown} */ fallback) => {
+            try {
+                return JSON.parse(AppStorage.getItem(key, null) || 'null') ?? fallback;
+            } catch (_e) {
+                return fallback;
+            }
+        };
+        const storedCards = readJson('flashcards_custom', []);
+        const storedBoxes = readJson('flashcards_box_levels', {});
+        const result = addMistakesAsCards({
+            questions,
+            answers,
+            cards: Array.isArray(storedCards) ? storedCards : [],
+            boxLevels: storedBoxes && typeof storedBoxes === 'object' && !Array.isArray(storedBoxes) ? storedBoxes : {},
+        });
+        try {
+            if (result.added > 0) {
+                AppStorage.setItem('flashcards_custom', JSON.stringify(result.cards));
+                AppStorage.setItem('flashcards_box_levels', JSON.stringify(result.boxLevels));
+            }
+        } catch (_e) {
+            return null;
+        }
+        return { added: result.added, alreadyKnown: result.alreadyKnown };
     }
 
     /** Adds the finished run to the statistics over all runs and to the list of open mistakes. */
@@ -1013,6 +1047,32 @@ export function initIhkExamSimulator() {
               })
             : null;
 
+        const mistakeCount = state.questions.filter(
+            (question, index) => !isFullyCorrect(question, state.answers[index])
+        ).length;
+        const remember = mistakeCount
+            ? element('button', {
+                  type: 'button',
+                  class: 'btn-secondary',
+                  id: 'exam-mistakes-to-cards-btn',
+                  text: t('🃏 Fehler als Karteikarten merken', '🃏 Save mistakes as flashcards'),
+              })
+            : null;
+        const cardsStatus = element('p', { class: 'exam-cards-status', id: 'exam-cards-status', role: 'status' });
+        remember?.addEventListener('click', () => {
+            const added = saveMistakesAsCards(state.questions, state.answers);
+            cardsStatus.textContent = added
+                ? t(
+                      `${added.added} Karte(n) angelegt${added.alreadyKnown ? `, ${added.alreadyKnown} gab es schon` : ''}. Du findest sie in den Lernkarten unter „Eigene Karten“.`,
+                      `${added.added} card(s) created${added.alreadyKnown ? `, ${added.alreadyKnown} already existed` : ''}. You will find them in the flashcards under "My cards".`
+                  )
+                : t(
+                      'Die Karten konnten nicht gespeichert werden (Speicher voll oder blockiert).',
+                      'The cards could not be saved (storage full or blocked).'
+                  );
+            if (added) /** @type {HTMLButtonElement} */ (remember).disabled = true;
+        });
+
         const weakNames = result.weakTopics.map((topic) => EXAM_TOPICS[topic][language]).join(', ');
 
         setPanel(
@@ -1040,7 +1100,8 @@ export function initIhkExamSimulator() {
                 : null,
             element('h3', { class: 'exam-subheading', text: t('Fragen im Überblick', 'Question review') }),
             review,
-            element('div', { class: 'exam-nav' }, again, repeat, flashcardsLink)
+            element('div', { class: 'exam-nav' }, again, repeat, remember, flashcardsLink),
+            cardsStatus
         );
     }
 
