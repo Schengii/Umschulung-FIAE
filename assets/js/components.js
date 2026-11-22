@@ -408,10 +408,10 @@ function renderCookieBanner() {
     <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie-Hinweis" data-en-aria-label="Cookie notice">
         <div class="cookie-content">
             <p>
-                <span lang="de">Diese Website speichert Einstellungen (wie Theme, Sprache und Barrierefreiheit) lokal im Browser (Local Storage). Schriftarten und Icons werden datenschutzfreundlich lokal gehostet. Mehr dazu in der <a href="${datenschutzPath}">Datenschutzerklärung</a>.</span>
-                <span lang="en">This website stores preferences (such as theme, language, and accessibility) locally in your browser (Local Storage). Fonts and icons are self-hosted locally for privacy. Learn more in the <a href="${datenschutzPath}">Privacy Policy</a>.</span>
+                <span lang="de">Diese Website speichert Einstellungen (Theme, Sprache, Barrierefreiheit) nur lokal in Ihrem Browser. Schriften und Icons werden lokal geladen. <a href="${datenschutzPath}">Datenschutzerklärung</a></span>
+                <span lang="en">This website stores preferences (theme, language, accessibility) only locally in your browser. Fonts and icons are loaded locally. <a href="${datenschutzPath}">Privacy Policy</a></span>
             </p>
-            <button id="cookie-accept" class="btn-primary" style="width: auto; padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+            <button id="cookie-accept" class="btn-primary cookie-accept-btn">
                 <span lang="de">Verstanden</span>
                 <span lang="en">Got it</span>
             </button>

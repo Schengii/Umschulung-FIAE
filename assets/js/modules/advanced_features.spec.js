@@ -43,6 +43,10 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
         await page.goto('/pages/home.html');
         await settle(page);
 
+        // Auf dem Handy bleibt der Assistent-Button ausgeblendet, bis der Hinweis bestätigt ist.
+        const accept = page.locator('#cookie-accept');
+        if (await accept.isVisible()) await accept.click();
+
         // Open Copilot
         await page.click('#copilot-toggle-btn');
         const chatBox = page.locator('#copilot-chat-box');

@@ -1,0 +1,200 @@
+[
+    {
+        "name": "AI-Softwareentwickler-Team",
+        "html_url": "https://github.com/Schengii/AI-Softwareentwickler-Team",
+        "homepage": "",
+        "topics": [
+            "ai-agents",
+            "claude-code",
+            "code-generation",
+            "fastapi",
+            "gemini-api",
+            "github-actions",
+            "llm",
+            "mcp-server",
+            "multi-agent",
+            "pytest",
+            "python"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T18:03:53Z",
+        "updated_at": "2026-11-02T10:09:29Z",
+        "fork": false
+    },
+    {
+        "name": "career-tracker-api",
+        "html_url": "https://github.com/Schengii/career-tracker-api",
+        "homepage": "",
+        "topics": [
+            "docker",
+            "github-actions",
+            "java",
+            "jpa",
+            "junit5",
+            "mockito",
+            "openapi",
+            "postgresql",
+            "rest-api",
+            "spring-boot"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-18T19:16:42Z",
+        "updated_at": "2026-10-31T15:04:09Z",
+        "fork": false
+    },
+    {
+        "name": "eco-chef",
+        "html_url": "https://github.com/Schengii/eco-chef",
+        "homepage": "https://eco-chef-theta.vercel.app",
+        "topics": [
+            "accessibility",
+            "claude-code",
+            "cordova",
+            "food-waste",
+            "gemini-api",
+            "jest",
+            "lit",
+            "typescript",
+            "vercel",
+            "webcomponents"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T04:33:58Z",
+        "updated_at": "2026-10-30T10:19:04Z",
+        "fork": false
+    },
+    {
+        "name": "Finanzenportfolio",
+        "html_url": "https://github.com/Schengii/Finanzenportfolio",
+        "homepage": "https://schengii.github.io/Finanzenportfolio/",
+        "topics": [
+            "github-pages",
+            "portfolio-tracker",
+            "pwa",
+            "react",
+            "recharts",
+            "typescript",
+            "vite",
+            "vitest",
+            "web-crypto",
+            "webauthn"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T09:43:38Z",
+        "updated_at": "2026-10-25T14:11:28Z",
+        "fork": false
+    },
+    {
+        "name": "Informatik-Lern-App",
+        "html_url": "https://github.com/Schengii/Informatik-Lern-App",
+        "homepage": "",
+        "topics": [],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T18:44:09Z",
+        "updated_at": "2026-11-21T15:56:07Z",
+        "fork": false
+    },
+    {
+        "name": "Informatik-lernen",
+        "html_url": "https://github.com/Schengii/Informatik-lernen",
+        "homepage": "https://informatik-lernen.vercel.app",
+        "topics": [
+            "accessibility",
+            "claude-ai",
+            "fachinformatiker",
+            "gdpr",
+            "gemini-api",
+            "ihk",
+            "javascript",
+            "learning-platform",
+            "react",
+            "vercel-deployment",
+            "vite",
+            "zustand"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T16:54:06Z",
+        "updated_at": "2026-11-02T12:48:23Z",
+        "fork": false
+    },
+    {
+        "name": "job-application-career-manager",
+        "html_url": "https://github.com/Schengii/job-application-career-manager",
+        "homepage": "https://job-application-career-manager.vercel.app",
+        "topics": [
+            "chrome-extension",
+            "claude-code",
+            "github-actions",
+            "next-js",
+            "playwright",
+            "postgresql",
+            "prisma",
+            "react",
+            "tailwindcss",
+            "typescript",
+            "vitest",
+            "zod"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-20T02:41:29Z",
+        "updated_at": "2026-11-04T13:36:28Z",
+        "fork": false
+    },
+    {
+        "name": "ManuFaktur",
+        "html_url": "https://github.com/Schengii/ManuFaktur",
+        "homepage": "https://www.manufaktur-malerei.de",
+        "topics": [
+            "accessibility",
+            "css3",
+            "gdpr",
+            "html5",
+            "i18n",
+            "javascript",
+            "portfolio-website",
+            "pwa",
+            "vanilla-js"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-20T03:25:24Z",
+        "updated_at": "2026-11-06T10:56:46Z",
+        "fork": false
+    },
+    {
+        "name": "Schengii",
+        "html_url": "https://github.com/Schengii/Schengii",
+        "homepage": "",
+        "topics": [],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-07T12:14:53Z",
+        "updated_at": "2026-10-21T14:01:45Z",
+        "fork": false
+    },
+    {
+        "name": "SprachenLernenApo",
+        "html_url": "https://github.com/Schengii/SprachenLernenApo",
+        "homepage": "",
+        "topics": [],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-21T18:55:36Z",
+        "updated_at": "2026-11-20T19:16:32Z",
+        "fork": false
+    },
+    {
+        "name": "Umschulung-FIAE",
+        "html_url": "https://github.com/Schengii/Umschulung-FIAE",
+        "homepage": "https://max-schenk.tech",
+        "topics": [
+            "accessibility",
+            "playwright",
+            "portfolio",
+            "pwa",
+            "vanilla-javascript",
+            "vitest"
+        ],
+        "stargazers_count": 0,
+        "pushed_at": "2026-11-22T19:23:09Z",
+        "updated_at": "2026-11-02T12:20:51Z",
+        "fork": false
+    }
+]

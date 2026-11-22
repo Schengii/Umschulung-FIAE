@@ -1,10 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
     detailUrl,
     findProject,
-    isCacheFresh,
+    loadLocalRepos,
     mergeProjects,
-    parseStoredList,
     relatedProjects,
     safeColor,
     safeUrl,
@@ -36,19 +35,20 @@ describe('safeColor', () => {
     });
 });
 
-describe('parseStoredList / isCacheFresh', () => {
-    it('parses a stored list and survives damaged values', () => {
-        expect(parseStoredList('[1,2]')).toEqual([1, 2]);
-        expect(parseStoredList('{"a":1}')).toEqual([]);
-        expect(parseStoredList('{kaputt')).toEqual([]);
-        expect(parseStoredList(null)).toEqual([]);
+describe('loadLocalRepos', () => {
+    it('liest die lokale Repository-Liste', async () => {
+        const fetchFn = vi.fn().mockResolvedValue({ ok: true, json: async () => [{ name: 'a' }] });
+        await expect(loadLocalRepos('assets/data/github-repos.json', fetchFn)).resolves.toEqual([{ name: 'a' }]);
+        expect(fetchFn).toHaveBeenCalledWith('assets/data/github-repos.json');
     });
 
-    it('treats a cache as fresh only with data and a recent timestamp', () => {
-        expect(isCacheFresh([{}], '1000', 1500, 1000)).toBe(true);
-        expect(isCacheFresh([{}], '1000', 2500, 1000)).toBe(false);
-        expect(isCacheFresh([], '1000', 1500, 1000)).toBe(false);
-        expect(isCacheFresh([{}], null, 1500, 1000)).toBe(false);
+    it('liefert eine leere Liste bei Fehlern, falschem Format oder fehlender Datei', async () => {
+        const notOk = vi.fn().mockResolvedValue({ ok: false });
+        const notList = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ a: 1 }) });
+        const broken = vi.fn().mockRejectedValue(new Error('offline'));
+        await expect(loadLocalRepos('x', notOk)).resolves.toEqual([]);
+        await expect(loadLocalRepos('x', notList)).resolves.toEqual([]);
+        await expect(loadLocalRepos('x', broken)).resolves.toEqual([]);
     });
 });
 
