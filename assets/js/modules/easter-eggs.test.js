@@ -21,7 +21,6 @@ const KONAMI = [
 beforeAll(() => initEasterEggs());
 
 let confetti;
-let audio;
 let achievements;
 
 const press = (key, target = document.body) =>
@@ -33,17 +32,14 @@ beforeEach(() => {
     vi.useFakeTimers();
     resetDocument('<input id="field"><textarea id="area"></textarea>');
     confetti = { start: vi.fn() };
-    audio = { play: vi.fn() };
     achievements = { unlock: vi.fn() };
     globalThis.Confetti = confetti;
-    globalThis.GameAudio = audio;
     globalThis.Achievements = achievements;
 });
 afterEach(() => {
     press('x'); // reset a half-typed sequence
     vi.useRealTimers();
     delete globalThis.Confetti;
-    delete globalThis.GameAudio;
     delete globalThis.Achievements;
 });
 
@@ -53,7 +49,6 @@ describe('easter-eggs: Konami code', () => {
 
         expect(egg()).not.toBeNull();
         expect(confetti.start).toHaveBeenCalledWith(5000);
-        expect(audio.play).toHaveBeenCalledWith('win');
         expect(achievements.unlock).toHaveBeenCalledWith('konami_master');
     });
 
@@ -87,9 +82,8 @@ describe('easter-eggs: Konami code', () => {
         expect(document.body.contains(message)).toBe(false);
     });
 
-    it('works without the optional confetti, audio and achievement modules', () => {
+    it('works without the optional confetti and achievement modules', () => {
         delete globalThis.Confetti;
-        delete globalThis.GameAudio;
         delete globalThis.Achievements;
         expect(() => pressAll(KONAMI)).not.toThrow();
         expect(egg()).not.toBeNull();

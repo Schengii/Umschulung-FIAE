@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { filterRadarSkills, filterListSkills, sortSkills } from './skills-filter.js';
 
 const skills = [
-    { name: 'Zebra Skill', category: 'soft', score: 50 },
-    { name: 'Alpha Skill', category: 'tech', score: 90 },
-    { name: 'Mid Skill', category: 'tech', score: 70 },
+    { name: 'Zebra Skill', category: 'soft', level: 1 },
+    { name: 'Alpha Skill', category: 'tech', level: 3 },
+    { name: 'Mid Skill', category: 'tech', level: 2 },
 ];
 const repsForAll = ['Alpha Skill', 'Mid Skill'];
 
@@ -34,12 +34,12 @@ describe('sortSkills', () => {
         expect(sortSkills(skills, 'alpha').map((s) => s.name)).toEqual(['Alpha Skill', 'Mid Skill', 'Zebra Skill']);
     });
 
-    it('sorts by descending score for "level-desc"', () => {
-        expect(sortSkills(skills, 'level-desc').map((s) => s.score)).toEqual([90, 70, 50]);
+    it('sorts by descending level for "level-desc"', () => {
+        expect(sortSkills(skills, 'level-desc').map((s) => s.level)).toEqual([3, 2, 1]);
     });
 
-    it('sorts by ascending score for "level-asc"', () => {
-        expect(sortSkills(skills, 'level-asc').map((s) => s.score)).toEqual([50, 70, 90]);
+    it('sorts by ascending level for "level-asc"', () => {
+        expect(sortSkills(skills, 'level-asc').map((s) => s.level)).toEqual([1, 2, 3]);
     });
 
     it('leaves order untouched for an unknown/default mode', () => {

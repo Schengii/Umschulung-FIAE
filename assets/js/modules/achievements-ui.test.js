@@ -20,7 +20,6 @@ beforeEach(() => {
 afterEach(() => {
     removePageGlobals();
     vi.useRealTimers();
-    delete window.GameAudio;
 });
 
 describe('Achievements: notification', () => {
@@ -40,9 +39,9 @@ describe('Achievements: notification', () => {
 
     it('uses English texts when the page is English', () => {
         document.documentElement.setAttribute('lang', 'en');
-        Achievements.unlock('git_master');
+        Achievements.unlock('konami_master');
         expect(toasts()[0].textContent).toContain('Achievement Unlocked!');
-        expect(toasts()[0].textContent).toContain(Achievements.definitions.git_master.title_en);
+        expect(toasts()[0].textContent).toContain(Achievements.definitions.konami_master.title_en);
         document.documentElement.removeAttribute('lang');
     });
 
@@ -52,12 +51,6 @@ describe('Achievements: notification', () => {
         Achievements.unlock('does_not_exist');
         expect(toasts()).toHaveLength(1);
         expect(unlocked()).toEqual(['konami_master']);
-    });
-
-    it('plays the success sound through GameAudio when it is available', () => {
-        window.GameAudio = { play: vi.fn() };
-        Achievements.unlock('exam_passed');
-        expect(window.GameAudio.play).toHaveBeenCalledWith('success');
     });
 
     it('slides the toast in, then out, then removes it', async () => {
@@ -87,6 +80,10 @@ describe('Achievements: page tracking (initAchievements)', () => {
     it('unlocks "first visit" once and remembers the visit', () => {
         expect(unlocked()).toContain('first_visit');
         expect(storage.getItem('has_visited')).toBe('true');
+    });
+
+    it('shows no toast for the first visit', () => {
+        expect(document.querySelector('.achievement-toast')).toBeNull();
     });
 
     it('records the visited page', () => {

@@ -2,9 +2,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { resetDocument, trackDocumentListeners } from '../../../scripts/test-support/dom-helpers.js';
 
-const audio = vi.hoisted(() => ({ isMuted: true, play: vi.fn() }));
-vi.mock('./game-audio.js', () => ({ GameAudio: audio }));
-
 const { initPremiumEffectsP2 } = await import('./premium-effects-p2.js');
 
 const PAGE = `
@@ -16,7 +13,6 @@ const PAGE = `
     <a id="download" href="https://example.org/pages/quiz.html" download>Download</a>
     <a id="pdf" href="https://example.org/assets/cv.pdf">PDF</a>
     <a id="mail" href="mailto:a@example.org">Mail</a>
-    <button id="audio-toggle">Ton</button>
     <button id="plain">Knopf</button>`;
 
 const overlay = () => document.querySelector('.page-transition-overlay');
@@ -34,8 +30,6 @@ describe('premium effects phase 2', () => {
         removeListeners = trackDocumentListeners();
         window.happyDOM.setURL('https://example.org/start.html');
         resetDocument(PAGE);
-        audio.isMuted = true;
-        audio.play.mockClear();
         initPremiumEffectsP2();
     });
 
@@ -99,36 +93,6 @@ describe('premium effects phase 2', () => {
             document.getElementById('internal').addEventListener('click', (e) => e.preventDefault());
             click('internal');
             expect(overlay().classList.contains('active')).toBe(false);
-        });
-    });
-
-    describe('interface sounds', () => {
-        it('stays silent while sound is off', () => {
-            document.getElementById('plain').dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
-            click('plain');
-            expect(audio.play).not.toHaveBeenCalled();
-        });
-
-        it('plays a click cue, but not for the sound toggle itself', () => {
-            audio.isMuted = false;
-            click('plain');
-            expect(audio.play).toHaveBeenCalledWith('ui-click');
-            audio.play.mockClear();
-            click('audio-toggle');
-            expect(audio.play).not.toHaveBeenCalled();
-        });
-
-        it('plays the hover cue once per 250 ms for the same element', () => {
-            audio.isMuted = false;
-            const hover = () =>
-                document.getElementById('plain').dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
-            hover();
-            hover();
-            expect(audio.play).toHaveBeenCalledTimes(1);
-            expect(audio.play).toHaveBeenCalledWith('ui-hover');
-            vi.advanceTimersByTime(250);
-            hover();
-            expect(audio.play).toHaveBeenCalledTimes(2);
         });
     });
 });

@@ -39,6 +39,13 @@ jobs:
       - name: Run Subprojects Sync Script
         run: npm run sync-projects
 
+      - name: Refresh public GitHub repository data
+        # Die Seiten lesen assets/data/github-repos.json statt api.github.com (Datenschutz, ADR 0020).
+        # Schlägt der Abruf fehl, bleibt die vorhandene Datei unverändert.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run fetch-github-repos
+
       - name: Open Pull Request if Changes Detected
         id: cpr
         uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3

@@ -1,20 +1,5 @@
 const newsData = [
     {
-        id: 'ihk-kartei-2000-karten',
-        category: 'milestone',
-        date: '2026-10-28',
-        title_de: '🗂️ IHK-Kartei: rund 2 000 Lernkarten für AP1, AP2 und WiSo',
-        title_en: '🗂️ IHK Card Index: Around 2,000 Flashcards for AP1, AP2 and WiSo',
-        content_de: [
-            'Die Lernkarten-Seite hat eine zuschaltbare IHK-Kartei bekommen: rund 2 000 Karten aus meinen eigenen Prüfungsnotizen zu AP1, AP2 und Wirtschafts- und Sozialkunde. Die Karten laufen durch dieselbe Leitner-Box wie die Kernkarten, mit Fälligkeitsterminen und Export des Lernplans als Kalenderdatei.',
-            'Die Kartei ist nur auf Deutsch verfügbar und wird erst geladen, wenn der Schalter „Erweiterte IHK-Kartei einbeziehen“ aktiv ist. Wer sich gerade auf die Abschlussprüfung vorbereitet, kann sie frei nutzen.',
-        ],
-        content_en: [
-            'The flashcards page now has an optional IHK card index: around 2,000 cards from my own exam notes on AP1, AP2 and economics and social studies. The cards run through the same Leitner box as the core cards, with due dates and an export of the study plan as a calendar file.',
-            'The card index is available in German only and is loaded only once the switch "Erweiterte IHK-Kartei einbeziehen" is on. Anyone preparing for the final exam is welcome to use it.',
-        ],
-    },
-    {
         id: 'portfolio-release-1-5-0',
         category: 'milestone',
         date: '2026-10-24',

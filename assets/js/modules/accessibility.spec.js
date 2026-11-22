@@ -8,11 +8,7 @@ import AxeBuilder from '@axe-core/playwright';
 const pages = [
     'index.html',
     'pages/home.html',
-    'pages/dashboard.html',
     'pages/portfolio.html',
-    'pages/ihk-cockpit.html',
-    'pages/challenge-lab.html',
-    'pages/git-simulator.html',
     'pages/links.html',
     'pages/ausbildungsablauf.html',
     'pages/ueber-mich.html',
@@ -21,17 +17,10 @@ const pages = [
     'pages/impressum.html',
     'pages/datenschutz.html',
     'pages/architecture.html',
-    'pages/flashcards.html',
-    'pages/games.html',
-    'pages/interview-trainer.html',
     'pages/kostentraeger.html',
     'pages/lebenslauf.html',
-    'pages/memory.html',
     'pages/news.html',
-    'pages/playground.html',
     'pages/projekt-detail.html?repo=EcoChef',
-    'pages/quiz.html',
-    'pages/snake.html',
 ];
 
 // A first visit follows the system colour scheme, so both themes are real entry states and

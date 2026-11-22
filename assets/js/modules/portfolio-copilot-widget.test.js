@@ -58,7 +58,7 @@ describe('Portfolio-Assistent (Widget)', () => {
         vi.advanceTimersByTime(300);
         expect($('copilot-typing-indicator')).toBeNull();
         const reply = botMessages().at(-1);
-        expect(reply.querySelector('a.copilot-link-btn').getAttribute('href')).toContain('ihk-cockpit.html');
+        expect(reply.querySelector('a.copilot-link-btn').getAttribute('href')).toContain('projekt-ecochef.html');
     });
 
     it('antwortet auf Englisch, wenn die Seite Englisch ist', async () => {

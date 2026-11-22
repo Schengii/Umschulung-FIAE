@@ -1,14 +1,13 @@
 /**
- * Project detail page. The data handling (merge with the GitHub API, URL guards, related
+ * Project detail page. The data handling (merge with the local GitHub data, URL guards, related
  * projects) lives DOM-free in modules/project-detail-logic.js; this file renders.
  */
 import { escapeHtml } from './modules/html-utils.js';
 import {
     detailUrl,
     findProject,
-    isCacheFresh,
     mergeProjects,
-    parseStoredList,
+    loadLocalRepos,
     relatedProjects,
     safeColor,
     safeUrl,
@@ -22,31 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const breadcrumbCurrent = document.getElementById('breadcrumb-current-project');
     const relatedSection = document.getElementById('related-projects-section');
     const relatedContainer = document.getElementById('related-projects-container');
-    const GITHUB_USERNAME = 'Schengii';
-    const CACHE_KEY = STORAGE_KEYS.GITHUB_PROJECTS_CACHE;
-    const CACHE_TIME_KEY = STORAGE_KEYS.GITHUB_PROJECTS_CACHE_TIME;
-    const CACHE_DURATION = 3600000; // 1 hour
-
-    async function fetchGitHubRepos() {
-        const cachedData = AppStorage.getItem(CACHE_KEY);
-        const cachedTime = AppStorage.getItem(CACHE_TIME_KEY);
-        const cachedRepos = parseStoredList(cachedData);
-        if (isCacheFresh(cachedRepos, cachedTime, Date.now(), CACHE_DURATION)) {
-            return cachedRepos;
-        }
-        try {
-            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-            if (!response.ok) throw new Error('GitHub API request failed');
-            const repos = await response.json();
-            AppStorage.setItem(CACHE_KEY, JSON.stringify(repos));
-            AppStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-            return repos;
-        } catch (e) {
-            console.warn('Could not fetch from GitHub, using cache if available.', e);
-            return cachedRepos;
-        }
-    }
-
     async function loadAndDisplayProject() {
         if (!detailContainer) return;
 
@@ -69,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? /** @type {Promise<ProjectDetailData[]>} */ (res.json())
                         : /** @type {ProjectDetailData[]} */ ([])
                 ),
-                fetchGitHubRepos(),
+                loadLocalRepos((window.resolveAssetPath || ((p) => p))('assets/data/github-repos.json')),
             ]);
 
             const allProjects = mergeProjects(staticProjects, githubRepos);

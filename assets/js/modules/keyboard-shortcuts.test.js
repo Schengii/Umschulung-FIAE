@@ -73,30 +73,6 @@ describe('keyboard-shortcuts: global keys', () => {
     });
 });
 
-describe('keyboard-shortcuts: flashcards', () => {
-    it('arrow keys page through the cards', () => {
-        const prev = clicks('btn-prev');
-        const next = clicks('btn-next');
-        key('ArrowLeft');
-        key('ArrowRight');
-        key('ArrowRight');
-        expect(prev).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledTimes(2);
-    });
-
-    it('space flips the card without scrolling the page', () => {
-        const flip = clicks('flashcard');
-        const event = key(' ');
-        expect(flip).toHaveBeenCalledTimes(1);
-        expect(event.defaultPrevented).toBe(true);
-    });
-
-    it('does not claim space on pages without a flashcard', () => {
-        document.getElementById('flashcard').remove();
-        expect(key(' ').defaultPrevented).toBe(false);
-    });
-});
-
 describe('keyboard-shortcuts: help and modals', () => {
     it('? opens the shortcut help and a second ? closes it', () => {
         key('?');

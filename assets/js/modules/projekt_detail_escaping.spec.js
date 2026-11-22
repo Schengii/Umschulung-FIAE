@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-// projekt-detail.html merges projects.json with the GitHub API response (cached in
-// localStorage). Topics and the homepage of a repository are free text there, so the page must
-// render them as text and must not link a `javascript:` homepage.
-test.describe('Projektdetail: Daten aus der GitHub-API werden escaped', () => {
+// projekt-detail.html merges projects.json with assets/data/github-repos.json (written by the
+// daily sync from the GitHub API). Topics and the homepage of a repository are free text there,
+// so the page must render them as text and must not link a `javascript:` homepage.
+test.describe('Projektdetail: Daten aus github-repos.json werden escaped', () => {
     test('Topics mit HTML erscheinen als Text, javascript:-Homepage wird verworfen', async ({ page }) => {
         let dialogShown = false;
         page.on('dialog', async (dialog) => {
@@ -12,22 +12,20 @@ test.describe('Projektdetail: Daten aus der GitHub-API werden escaped', () => {
         });
 
         const payload = '<img src=x id="pwn" onerror="alert(1)">';
-        await page.addInitScript((topic) => {
-            localStorage.setItem(
-                'github_projects_cache',
-                JSON.stringify([
+        await page.route('**/assets/data/github-repos.json', (route) =>
+            route.fulfill({
+                json: [
                     {
                         name: 'Amazon-2.0',
                         stargazers_count: 3,
                         html_url: 'https://github.com/Schengii/Amazon-2.0',
                         updated_at: '2026-10-01T00:00:00Z',
-                        topics: [topic],
+                        topics: [payload],
                         homepage: 'javascript:alert(1)',
                     },
-                ])
-            );
-            localStorage.setItem('github_projects_cache_time', String(Date.now()));
-        }, payload);
+                ],
+            })
+        );
 
         await page.goto('/pages/projekt-detail.html?repo=Amazon-2.0');
 

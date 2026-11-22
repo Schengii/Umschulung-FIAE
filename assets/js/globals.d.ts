@@ -9,7 +9,6 @@ interface AppStorageStatic {
     removeItem(key: string): boolean;
 }
 
-declare var GameAudio: any;
 declare var Achievements: any;
 declare var Confetti: any;
 declare var Prism: any;
@@ -28,7 +27,6 @@ interface Window {
     };
     AppStorage: AppStorageStatic;
     Achievements: any;
-    GameAudio: any;
     Confetti: any;
     loadStylesheet: (assetPath: string) => Promise<void>;
     closeProjectModal: any;

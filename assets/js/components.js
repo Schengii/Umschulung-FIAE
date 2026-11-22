@@ -175,13 +175,8 @@ function renderNav(currentPage) {
     const indexPath = isPagesFolder ? '../index.html' : 'index.html';
 
     // Pages of each navigation group (marks the group as active)
-    const profilPages = [
-        'ueber-mich.html',
-        'lebenslauf.html',
-        'portfolio.html',
-        'projekt-detail.html',
-        'architecture.html',
-    ];
+    const profilPages = ['home.html', 'ueber-mich.html', 'lebenslauf.html', 'architecture.html'];
+    const projektePages = ['portfolio.html', 'projekt-detail.html'];
     const umschulungPages = [
         'ausbildungsablauf.html',
         'berufsfoerderungswerk.html',
@@ -189,15 +184,6 @@ function renderNav(currentPage) {
         'praktikumsbetrieb.html',
         'links.html',
     ];
-    const lernenPages = [
-        'ihk-cockpit.html',
-        'flashcards.html',
-        'quiz.html',
-        'interview-trainer.html',
-        'git-simulator.html',
-        'dashboard.html',
-    ];
-    const spielwiesePages = ['games.html', 'snake.html', 'memory.html', 'playground.html', 'challenge-lab.html'];
 
     /** @param {string | string[]} pages */
     const active = (pages) => {
@@ -212,17 +198,20 @@ function renderNav(currentPage) {
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
             <ul class="nav-menu" id="nav-menu">
-                <li class="nav-item${active('home.html')}">
-                    <a href="${pagePrefix}home.html" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+                <li class="nav-item${active('index.html')}">
+                    <a href="${indexPath}" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 </li>
                 <li class="nav-item${active(profilPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> <span lang="de">Profil</span><span lang="en">Profile</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu" role="menu">
+                        <li role="none"><a href="${pagePrefix}home.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-address-card" aria-hidden="true"></i> <span lang="de">Werdegang &amp; Kontakt</span><span lang="en">Career &amp; Contact</span></a></li>
                         <li role="none"><a href="${pagePrefix}ueber-mich.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-user-tie" aria-hidden="true"></i> <span lang="de">Steckbrief &amp; Über mich</span><span lang="en">Profile &amp; About Me</span></a></li>
                         <li role="none"><a href="${pagePrefix}lebenslauf.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span lang="de">Interaktiver Lebenslauf</span><span lang="en">Interactive CV / Resume</span></a></li>
-                        <li role="none"><a href="${pagePrefix}portfolio.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
                         <li role="none"><a href="${pagePrefix}architecture.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-sitemap" aria-hidden="true"></i> <span lang="de">Architektur &amp; C4</span><span lang="en">Architecture &amp; C4</span></a></li>
                     </ul>
+                </li>
+                <li class="nav-item${active(projektePages)}">
+                    <a href="${pagePrefix}portfolio.html" class="nav-link"><i class="fa fa-code" aria-hidden="true"></i> <span lang="de">Projekte</span><span lang="en">Projects</span></a>
                 </li>
                 <li class="nav-item${active(umschulungPages)}">
                     <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-university" aria-hidden="true"></i> <span lang="de">Umschulung</span><span lang="en">Retraining</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
@@ -240,33 +229,6 @@ function renderNav(currentPage) {
                             </ul>
                         </li>
                         <li role="none"><a href="${pagePrefix}links.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-external-link" aria-hidden="true"></i> <span lang="de">Quellen &amp; Links</span><span lang="en">Sources &amp; Links</span></a></li>
-                    </ul>
-                </li>
-                <li class="nav-item${active(lernenPages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-graduation-cap" aria-hidden="true"></i> <span lang="de">Lernen</span><span lang="en">Learning</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li role="none"><a href="${pagePrefix}ihk-cockpit.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> <span lang="de">🎓 IHK Cockpit (80h)</span><span lang="en">🎓 IHK Cockpit (80h)</span></a></li>
-                        <li role="none"><a href="${pagePrefix}flashcards.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-clone" aria-hidden="true"></i> <span lang="de">IHK Lernkarten</span><span lang="en">IHK Flashcards</span></a></li>
-                        <li role="none"><a href="${pagePrefix}quiz.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span lang="de">IHK Prüfungs-Quiz</span><span lang="en">IHK Exam Quiz</span></a></li>
-                        <li role="none"><a href="${pagePrefix}interview-trainer.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-comments" aria-hidden="true"></i> <span lang="de">Bewerbungs-Trainer</span><span lang="en">Interview Trainer</span></a></li>
-                        <li role="none"><a href="${pagePrefix}git-simulator.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> <span lang="de">Git Simulator (CRT)</span><span lang="en">Git Simulator (CRT)</span></a></li>
-                        <li role="none"><a href="${pagePrefix}dashboard.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> <span lang="de">Dashboard</span><span lang="en">Dashboard</span></a></li>
-                    </ul>
-                </li>
-                <li class="nav-item${active(spielwiesePages)}">
-                    <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false"><i class="fa fa-dice" aria-hidden="true"></i> <span lang="de">Spielwiese</span><span lang="en">Playground</span> <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-item" role="none">
-                            <a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-dice" aria-hidden="true"></i> <span lang="de">Mini-Games Hub</span><span lang="en">Mini-Games Hub</span> <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                            <ul class="sub-dropdown-menu" role="menu">
-                                <li role="none"><a href="${pagePrefix}snake.html" class="dropdown-link" role="menuitem">Snake JS</a></li>
-                                <li role="none"><a href="${pagePrefix}memory.html" class="dropdown-link" role="menuitem">Memory JS</a></li>
-                                <li role="none"><a href="${pagePrefix}games.html" class="dropdown-link" role="menuitem"><span lang="de">Alle Games</span><span lang="en">All Games</span></a></li>
-                            </ul>
-                        </li>
-                        <li role="none"><a href="${pagePrefix}playground.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-code-fork" aria-hidden="true"></i> <span lang="de">Code Playground</span><span lang="en">Code Playground</span></a></li>
-                        <li role="none"><a href="${pagePrefix}challenge-lab.html" class="dropdown-link" role="menuitem"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> <span lang="de">🧩 Challenge Lab</span><span lang="en">🧩 Challenge Lab</span></a></li>
-                        <li role="none"><a href="${indexPath}" class="dropdown-link" role="menuitem"><span lang="de">Startseite (Terminal)</span><span lang="en">Welcome (Terminal)</span></a></li>
                     </ul>
                 </li>
                 <li class="nav-item${active('news.html')}">
@@ -346,6 +308,7 @@ function renderFooter() {
     const path = window.location.pathname;
     const isPagesFolder = path.includes('/pages/') || path.includes('\\pages\\');
     const pagePrefix = isPagesFolder ? '' : 'pages/';
+    const indexPath = isPagesFolder ? '../index.html' : 'index.html';
 
     return `
     <footer class="app-footer">
@@ -384,7 +347,7 @@ function renderFooter() {
                     <h4 lang="de">Navigation</h4>
                     <h4 lang="en">Navigation</h4>
                     <ul class="footer-links-list">
-                        <li><a href="${pagePrefix}home.html" class="footer-link">Home</a></li>
+                        <li><a href="${indexPath}" class="footer-link">Home</a></li>
                         <li><a href="${pagePrefix}portfolio.html" class="footer-link"><span lang="de">Projekte</span><span lang="en">Projects</span></a></li>
                         <li><a href="${pagePrefix}news.html" class="footer-link">News</a></li>
                         <li><a href="${pagePrefix}impressum.html" class="footer-link"><span lang="de">Impressum &amp; Kontakt</span><span lang="en">Contact</span></a></li>
@@ -413,11 +376,6 @@ function renderFooter() {
                 <p class="footer-meta-row">
                     <span lang="de"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Zuletzt aktualisiert: Juli 2026</span>
                     <span lang="en"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Last updated: July 2026</span>
-                    &nbsp;&middot;&nbsp;
-                    <button id="audio-toggle" class="audio-toggle-btn" style="border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px 8px; font-size: 0.75rem; background: var(--bg-card); cursor: pointer; color: var(--text-primary); display: inline-flex; align-items: center; gap: 4px;" aria-label="Audio: Sound einschalten" title="Sound einschalten" aria-pressed="false">
-                        <i class="fa-solid ${AppStorage.getItem('sound_enabled') === 'true' ? 'fa-volume-high' : 'fa-volume-xmark'}" aria-hidden="true"></i>
-                        <span>Audio</span>
-                    </button>
                     &nbsp;&middot;&nbsp;
                     <span title="Tastaturkürzel" data-en-title="Keyboard shortcuts" style="cursor:help;"><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:0.75rem;">?</kbd> <span lang="de">Shortcuts</span><span lang="en">Shortcuts</span></span>
                     &nbsp;&middot;&nbsp;
@@ -450,10 +408,10 @@ function renderCookieBanner() {
     <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie-Hinweis" data-en-aria-label="Cookie notice">
         <div class="cookie-content">
             <p>
-                <span lang="de">Diese Website speichert Einstellungen (wie Theme, Sprache und Barrierefreiheit) lokal im Browser (Local Storage). Schriftarten und Icons werden datenschutzfreundlich lokal gehostet. Mehr dazu in der <a href="${datenschutzPath}">Datenschutzerklärung</a>.</span>
-                <span lang="en">This website stores preferences (such as theme, language, and accessibility) locally in your browser (Local Storage). Fonts and icons are self-hosted locally for privacy. Learn more in the <a href="${datenschutzPath}">Privacy Policy</a>.</span>
+                <span lang="de">Diese Website speichert Einstellungen (Theme, Sprache, Barrierefreiheit) nur lokal in Ihrem Browser. Schriften und Icons werden lokal geladen. <a href="${datenschutzPath}">Datenschutzerklärung</a></span>
+                <span lang="en">This website stores preferences (theme, language, accessibility) only locally in your browser. Fonts and icons are loaded locally. <a href="${datenschutzPath}">Privacy Policy</a></span>
             </p>
-            <button id="cookie-accept" class="btn-primary" style="width: auto; padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+            <button id="cookie-accept" class="btn-primary cookie-accept-btn">
                 <span lang="de">Verstanden</span>
                 <span lang="en">Got it</span>
             </button>

@@ -577,11 +577,6 @@ class ArchitectureExplorer {
             respBody.textContent = JSON.stringify(route.responseMock, null, 4);
             respSection.classList.remove('collapsed');
 
-            // Play audio effect
-            if (typeof GameAudio !== 'undefined') {
-                GameAudio.play('match');
-            }
-
             // Practice commit grid increase!
             this.addPracticeCommit();
         }, 800);

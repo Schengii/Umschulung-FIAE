@@ -4,41 +4,69 @@
  */
 import { filterRadarSkills, filterListSkills, sortSkills } from './modules/skills-filter.js';
 
+/** Drei Stufen statt selbst vergebener Prozentwerte; jede Stufe wird durch Projekte belegt. */
+/** @type {Record<number, {de: string, en: string}>} */
+const LEVELS = {
+    1: { de: 'Grundkenntnisse', en: 'Basic knowledge' },
+    2: { de: 'Fortgeschritten', en: 'Intermediate' },
+    3: { de: 'Sicher im Einsatz', en: 'Confident in use' },
+};
+const MAX_LEVEL = 3;
+
+/** @type {{name: string, level: number, proofs: [string, string][], category: string, descDe: string, descEn: string, refLink: string, refTextDe: string, refTextEn: string}[]} */
 const SKILLS_DATA = [
     // Frontend
     {
         name: 'HTML5 / CSS3',
-        score: 90,
+        level: 3,
+        proofs: [
+            ['projekt-manufaktur.html', 'ManuFAKTUR'],
+            ['projekt-umschulung-fiae.html', 'Dieses Portfolio'],
+        ],
         category: 'frontend',
         descDe: 'Semantisches HTML, CSS-Layouts (Flexbox, Grid), responsive Anpassungen und BFW-barrierefreie Designs.',
         descEn: 'Semantic HTML, CSS layouts (Flexbox, Grid), responsive design, and accessible markup.',
-        refLink: 'playground.html',
-        refTextDe: 'Im Code Playground testen',
-        refTextEn: 'Test in Code Playground',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'JavaScript (ES6+)',
-        score: 85,
+        level: 3,
+        proofs: [
+            ['projekt-umschulung-fiae.html', 'Dieses Portfolio'],
+            ['projekt-manufaktur.html', 'ManuFAKTUR'],
+        ],
         category: 'frontend',
         descDe: 'Moderne Syntax, Asynchronität (Promises, async/await), DOM-Manipulation und Event-Handling.',
         descEn: 'Modern ES6+ syntax, asynchronous programming (Promises, async/await), DOM and Event APIs.',
-        refLink: 'playground.html',
-        refTextDe: 'Im Code Playground testen',
-        refTextEn: 'Test in Code Playground',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'TypeScript',
-        score: 75,
+        level: 2,
+        proofs: [
+            ['projekt-amazon-2-0.html', 'Amazon 2.0'],
+            ['projekt-finanzenportfolio.html', 'Finanzportfolio'],
+            ['projekt-informatik-lernen.html', 'Informatik-Lernen'],
+        ],
         category: 'frontend',
         descDe: 'Statische Typisierung, Interfaces, Generics und sichere Datenstrukturen in App-Projekten.',
         descEn: 'Static typing, Interfaces, Generics, and robust data structures in application projects.',
-        refLink: 'playground.html',
-        refTextDe: 'TypeScript ansehen',
-        refTextEn: 'View TypeScript',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'React 19 & Vite',
-        score: 85,
+        level: 3,
+        proofs: [
+            ['projekt-finanzenportfolio.html', 'Finanzportfolio'],
+            ['projekt-elektrocheck-ai.html', 'ElektroCheck AI'],
+            ['projekt-informatik-lernen.html', 'Informatik-Lernen'],
+        ],
         category: 'frontend',
         descDe: 'Moderne SPA-Architekturen, Hooks, Zustand-Store, reaktive Datenflüsse und Vite Tooling.',
         descEn: 'Modern SPA architectures, Hooks, Zustand store, reactive state flows, and Vite tooling.',
@@ -48,7 +76,8 @@ const SKILLS_DATA = [
     },
     {
         name: 'Lit (Web Components)',
-        score: 80,
+        level: 3,
+        proofs: [['projekt-ecochef.html', 'EcoChef']],
         category: 'frontend',
         descDe: 'Erstellung modularer, reaktiver Web Components im Entwicklerteam der DFG.',
         descEn: 'Creating modular, reactive Web Components within the DFG web development team.',
@@ -58,7 +87,8 @@ const SKILLS_DATA = [
     },
     {
         name: 'Apache Cordova',
-        score: 70,
+        level: 2,
+        proofs: [['projekt-ecochef.html', 'EcoChef']],
         category: 'frontend',
         descDe: 'Kompilierung von Webanwendungen in native Hybrid-Apps für Android und iOS.',
         descEn: 'Compiling web applications into native hybrid apps for Android and iOS.',
@@ -69,47 +99,56 @@ const SKILLS_DATA = [
     // Backend
     {
         name: 'Java SE',
-        score: 75,
+        level: 2,
+        proofs: [],
         category: 'backend',
         descDe: 'Objektorientierung (OOP), Datenstrukturen, Unit-Testing (JUnit) und IHK-Kernkompetenzen.',
         descEn: 'Object-oriented programming (OOP), standard data structures, unit testing, and core IHK modules.',
-        refLink: 'flashcards.html',
-        refTextDe: 'Mit Lernkarten üben',
-        refTextEn: 'Practice with Flashcards',
+        refLink: 'lebenslauf.html',
+        refTextDe: 'Im Lebenslauf ansehen',
+        refTextEn: 'View in CV',
     },
     {
         name: 'C# / .NET',
-        score: 65,
+        level: 2,
+        proofs: [],
         category: 'backend',
         descDe: 'Grundlagen der C#-Entwicklung, Klassenhierarchien und OOP-Paradigmen.',
         descEn: 'Basics of C# development, class hierarchies, and OOP paradigms.',
-        refLink: 'flashcards.html',
-        refTextDe: 'Mit Lernkarten üben',
-        refTextEn: 'Practice with Flashcards',
+        refLink: 'lebenslauf.html',
+        refTextDe: 'Im Lebenslauf ansehen',
+        refTextEn: 'View in CV',
     },
     {
         name: 'SQL (PostgreSQL)',
-        score: 80,
+        level: 2,
+        proofs: [],
         category: 'backend',
         descDe: 'Relationale Schemata, JOINs, Indexierung, Unterabfragen und referenzielle Integrität.',
         descEn: 'Relational schemas, JOIN queries, indexing, subqueries, and referential integrity.',
-        refLink: 'flashcards.html',
-        refTextDe: 'SQL Lernkarten ansehen',
-        refTextEn: 'View SQL Flashcards',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'REST APIs',
-        score: 85,
+        level: 3,
+        proofs: [
+            ['projekt-ecochef.html', 'EcoChef'],
+            ['projekt-elektrocheck-ai.html', 'ElektroCheck AI'],
+            ['projekt-wohnungssuche-ki.html', 'Wohnungssuche KI'],
+        ],
         category: 'backend',
         descDe: 'Integration, Entwurf und Konsumierung von RESTful Web Services via JSON.',
         descEn: 'Integration, design, and consumption of RESTful Web Services via JSON.',
-        refLink: 'playground.html',
-        refTextDe: 'API Fetcher testen',
-        refTextEn: 'Test API Fetcher',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'C++20 & 3D Engine',
-        score: 75,
+        level: 2,
+        proofs: [['projekt-minecraft.html', 'Minecraft C++ Engine']],
         category: 'backend',
         descDe: 'Moderne C++-Standards (C++20), RAII, Smart Pointer, OpenGL 4.5 Grafikpipeline und CMake.',
         descEn: 'Modern C++ standards (C++20), RAII, smart pointers, OpenGL 4.5 graphics pipeline, and CMake.',
@@ -119,7 +158,12 @@ const SKILLS_DATA = [
     },
     {
         name: 'Generative KI (Gemini & OpenAI)',
-        score: 85,
+        level: 3,
+        proofs: [
+            ['projekt-ecochef.html', 'EcoChef'],
+            ['projekt-elektrocheck-ai.html', 'ElektroCheck AI'],
+            ['projekt-wohnungssuche-ki.html', 'Wohnungssuche KI'],
+        ],
         category: 'backend',
         descDe: 'Strukturierte LLM-Prompts, JSON-Schema-Guards, multimodale Einbettung und RAG-Pipelines.',
         descEn: 'Structured LLM prompting, JSON schema guards, multimodal embeddings, and RAG pipelines.',
@@ -130,27 +174,33 @@ const SKILLS_DATA = [
     // Tools
     {
         name: 'Git / GitHub',
-        score: 85,
+        level: 3,
+        proofs: [['projekt-umschulung-fiae.html', 'Dieses Portfolio']],
         category: 'tools',
         descDe: 'Versionsverwaltung, Branching (Gitflow), Pull Requests und CI/CD-Workflows.',
         descEn: 'Version control, branching (Gitflow), pull requests, and CI/CD pipelines.',
-        refLink: 'dashboard.html',
-        refTextDe: 'GitHub Grid ansehen',
-        refTextEn: 'View GitHub Grid',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'npm / Webpack Basics',
-        score: 70,
+        level: 2,
+        proofs: [
+            ['projekt-amazon-2-0.html', 'Amazon 2.0'],
+            ['projekt-finanzenportfolio.html', 'Finanzportfolio'],
+        ],
         category: 'tools',
         descDe: 'Paketmanagement, Script-Automatisierung und Asset-Bundling.',
         descEn: 'Package management, scripting automation, and asset bundling.',
-        refLink: 'playground.html',
-        refTextDe: 'Code Playground ansehen',
-        refTextEn: 'View Code Playground',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'Docker Basics',
-        score: 60,
+        level: 1,
+        proofs: [],
         category: 'tools',
         descDe: 'Grundwissen zur Containerisierung lokaler Entwicklungsumgebungen.',
         descEn: 'Basic knowledge of containerizing local development environments.',
@@ -161,17 +211,19 @@ const SKILLS_DATA = [
     // Electronics
     {
         name: 'SPS / PLC (TIA-Portal)',
-        score: 70,
+        level: 2,
+        proofs: [],
         category: 'electronics',
         descDe: 'Programmierung von Industriesteuerungen (FUP, KOP, Grafcet) für Betriebstechnik.',
         descEn: 'Programming industrial controllers (FBD, LD, Grafcet) for electrical engineering.',
-        refLink: 'playground.html',
-        refTextDe: 'SPS-Simulator starten',
-        refTextEn: 'Start PLC Simulator',
+        refLink: 'portfolio.html',
+        refTextDe: 'Projekte ansehen',
+        refTextEn: 'View projects',
     },
     {
         name: 'DGUV Vorschrift 3',
-        score: 85,
+        level: 3,
+        proofs: [],
         category: 'electronics',
         descDe: 'Sicherheitsprüfung ortsveränderlicher elektrischer Betriebsmittel gemäß Unfallverhütungsvorschrift.',
         descEn: 'Safety inspection of mobile electrical devices in compliance with accident prevention regulations.',
@@ -217,9 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
         svgEl.innerHTML = '';
 
         // 1. Draw grid circles (concentric webs)
-        const levels = [25, 50, 75, 100];
-        levels.forEach((level) => {
-            const rad = maxRadius * (level / 100);
+        for (let level = 1; level <= MAX_LEVEL; level++) {
+            const rad = maxRadius * (level / MAX_LEVEL);
             const points = [];
             for (let i = 0; i < N; i++) {
                 const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
@@ -231,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
             polygon.setAttribute('points', points.join(' '));
             polygon.setAttribute('class', 'grid-line');
             svgEl.appendChild(polygon);
-        });
+        }
 
         // 2. Draw axis lines and text labels
         skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
@@ -285,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const polyPoints = [];
         skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
             const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
-            const scoreRad = maxRadius * (s.score / 100);
+            const scoreRad = maxRadius * (s.level / MAX_LEVEL);
             const px = cx + scoreRad * Math.cos(angle);
             const py = cy + scoreRad * Math.sin(angle);
             polyPoints.push(`${px},${py}`);
@@ -299,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 4. Draw interactive circles (dots) on each vertex
         skills.forEach((/** @type {Record<string, any>} */ s, /** @type {number} */ i) => {
             const angle = (i * 2 * Math.PI) / N - Math.PI / 2;
-            const scoreRad = maxRadius * (s.score / 100);
+            const scoreRad = maxRadius * (s.level / MAX_LEVEL);
             const px = cx + scoreRad * Math.cos(angle);
             const py = cy + scoreRad * Math.sin(angle);
 
@@ -312,7 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Interactive Tooltip Title & Click Event
             const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-            title.textContent = `${s.name}: ${s.score}% (Klicken zum Filtern)`;
+            const radarLang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de';
+            title.textContent = `${s.name}: ${LEVELS[s.level][radarLang]}`;
             dot.appendChild(title);
 
             dot.addEventListener('click', () => {
@@ -324,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderDetailsGrid() {
-        const lang = document.documentElement.getAttribute('lang') || 'de';
+        const lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'de';
         // Get ALL skills of this category (not just the representatives)
         const sortSelect = /** @type {HTMLInputElement} */ (document.getElementById('skills-sort-select'));
         const sortVal = sortSelect ? sortSelect.value : 'default';
@@ -336,12 +388,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="skill-matrix-card">
                 <div class="skill-card-header">
                     <span class="skill-card-name">${s.name}</span>
-                    <span class="skill-card-badge">${s.score}%</span>
+                    <span class="skill-card-badge">${LEVELS[s.level ?? 1][lang]}</span>
                 </div>
-                <div class="skill-track" style="height:6px; background:var(--border); border-radius:3px; overflow:hidden; position:relative;">
-                    <div class="skill-fill" data-width="${s.score}%" style="width:0%; background:var(--primary); height:100%; transition:width 1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+                <div class="skill-level" role="img" aria-label="${LEVELS[s.level ?? 1][lang]}">
+                    ${[1, 2, 3].map((n) => `<span class="skill-level-step${n <= (s.level ?? 1) ? ' is-on' : ''}"></span>`).join('')}
                 </div>
                 <div class="skill-card-desc">${lang === 'de' ? s.descDe : s.descEn}</div>
+                <div class="skill-card-proof">
+                    <span class="skill-card-proof-label">${lang === 'de' ? 'Beleg' : 'Evidence'}:</span>
+                    ${
+                        s.proofs.length
+                            ? s.proofs
+                                  .map(
+                                      (/** @type {[string, string]} */ [href, title]) =>
+                                          `<a href="${href}">${title}</a>`
+                                  )
+                                  .join(', ')
+                            : lang === 'de'
+                              ? 'kein eigenes Projekt, siehe Lebenslauf'
+                              : 'no project of my own, see CV'
+                    }
+                </div>
                 <div class="skill-card-footer">
                     <a href="${s.refLink}" class="skill-card-link">
                         <i class="fa-solid fa-square-arrow-up-right"></i>
@@ -352,14 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `
             )
             .join('');
-
-        // Trigger transition width after rendering
-        setTimeout(() => {
-            const fills = listGrid.querySelectorAll('.skill-fill');
-            fills.forEach((fill) => {
-                fill.style.width = fill.getAttribute('data-width');
-            });
-        }, 50);
     }
 
     // Bind click events on filter tabs
@@ -371,11 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderRadarChart();
             renderDetailsGrid();
-
-            // Dynamic commit grid tick (Punkte sammeln!)
-            if (typeof window.addLiveCommit === 'function') {
-                window.addLiveCommit();
-            }
         });
     });
 

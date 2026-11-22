@@ -54,21 +54,9 @@ test.describe('Landing Page Tests', () => {
         const projects = page.locator('.landing-project');
         await expect(projects).toHaveCount(3);
         for (const link of await projects.locator('a.landing-project-link').all()) {
-            await expect(link).toHaveAttribute('href', /projekt-detail\.html\?repo=/);
+            await expect(link).toHaveAttribute('href', /^pages\/projekt-[a-z0-9-]+\.html$/);
         }
         await expect(page.locator('.landing-contact a[href^="mailto:"]')).toBeVisible();
         await expect(page.locator('.hero-cta a[href="pages/lebenslauf.html"]')).toBeVisible();
-    });
-
-    test('speichert den Namen optional im Dashboard und bleibt auf der Seite', async ({ page }) => {
-        await page.goto('/pages/dashboard.html');
-        const input = page.locator('#username-input');
-        await input.fill('Tester');
-        await input.press('Enter');
-
-        await expect(page.locator('#username-status')).toContainText('Gespeichert.');
-        await expect(page.locator('#welcome-text')).toContainText('Hallo, Tester!');
-        await expect(page).toHaveURL(/dashboard\.html$/);
-        expect(await page.evaluate(() => localStorage.getItem('username'))).toBe('Tester');
     });
 });

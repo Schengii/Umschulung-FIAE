@@ -6,10 +6,17 @@
 (function () {
     'use strict';
 
+    /** Static project page (same slug rule as scripts/generate_project_pages.js, ADR 0018). */
+    const projectPageName = (/** @type {string} */ repo) =>
+        `projekt-${repo
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')}.html`;
+
     const NAV_ITEMS = [
         {
-            titleDe: 'Home / Dashboard',
-            titleEn: 'Home / Dashboard',
+            titleDe: 'Home',
+            titleEn: 'Home',
             category: 'Navigation',
             icon: 'fa-house',
             url: 'home.html',
@@ -34,41 +41,6 @@
             category: 'Profil',
             icon: 'fa-user',
             url: 'ueber-mich.html',
-        },
-        {
-            titleDe: 'IHK Notenrechner & AP1/AP2 Simulator',
-            titleEn: 'IHK Grade Calculator',
-            category: 'Tools',
-            icon: 'fa-calculator',
-            url: 'dashboard.html',
-        },
-        {
-            titleDe: 'IHK Lernkarten (Spaced Repetition)',
-            titleEn: 'IHK Flashcards',
-            category: 'Lernen',
-            icon: 'fa-layer-group',
-            url: 'flashcards.html',
-        },
-        {
-            titleDe: 'Interaktiver Bewerbungs-Trainer',
-            titleEn: 'Interview Trainer',
-            category: 'Karriere',
-            icon: 'fa-user-tie',
-            url: 'interview-trainer.html',
-        },
-        {
-            titleDe: 'SQL & Code Playground',
-            titleEn: 'SQL & Code Playground',
-            category: 'Lernen',
-            icon: 'fa-terminal',
-            url: 'playground.html',
-        },
-        {
-            titleDe: 'Git Branching Simulator (CRT Terminal)',
-            titleEn: 'Git Branching Simulator',
-            category: 'Games & Sim',
-            icon: 'fa-code-branch',
-            url: 'git-simulator.html',
         },
         {
             titleDe: 'C4 Software-Architektur Diagramm',
@@ -149,7 +121,9 @@
             const projectsList = window.projectsData || window._cachedProjectsData || [];
             if (Array.isArray(projectsList) && projectsList.length > 0) {
                 projectsList.forEach((proj) => {
-                    const detailUrl = `${pagePrefix}projekt-detail.html?repo=${encodeURIComponent(proj.repoName || '')}`;
+                    const detailUrl = proj.repoName
+                        ? pagePrefix + projectPageName(proj.repoName)
+                        : `${pagePrefix}projekt-detail.html?title=${encodeURIComponent(proj.titleDe || '')}`;
                     items.push({
                         titleDe: proj.titleDe || proj.repoName || '',
                         titleEn: proj.titleEn || proj.repoName || '',

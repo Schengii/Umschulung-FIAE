@@ -194,6 +194,17 @@
     font-weight: 600;
 }
 
+.skill-card-proof {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.skill-card-proof-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
 .skill-card-desc {
     font-size: 0.8rem;
     color: var(--text-muted);

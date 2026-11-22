@@ -17,7 +17,7 @@
  *    event is ever missed for any reason.
  *
  * 2) Lazy loading: most modules only matter on one or a couple of pages
- *    (e.g. ihk-cockpit.js only does anything on ihk-cockpit.html). Importing
+ *    (e.g. portfolio-logic.js only does anything on portfolio.html). Importing
  *    all of them statically meant every page — including a plain legal
  *    notice page — paid for ~50 JS requests regardless of whether anything
  *    used them. LAZY_MODULES below dynamically imports each one only when a
@@ -51,7 +51,6 @@ import { initKeyboardShortcuts } from './modules/keyboard-shortcuts.js';
 import { initAchievements } from './modules/achievements.js';
 import { initPremiumEffects } from './modules/premium-effects.js';
 import { initPremiumEffectsP2 } from './modules/premium-effects-p2.js';
-import { initGameAudio } from './modules/game-audio.js';
 
 const CORE_INITIALIZERS = [
     initTheme,
@@ -67,7 +66,6 @@ const CORE_INITIALIZERS = [
     initAchievements,
     initPremiumEffects,
     initPremiumEffectsP2,
-    initGameAudio,
 ];
 
 // [dynamic import path, named export to call] — loaded on every page, but only once the
@@ -86,23 +84,18 @@ const IDLE_MODULES = [
 const LAZY_MODULES = [
     ['./modules/username-greeting.js', 'initUsernameGreeting', '#username-form, #recruiter-greeting-banner'],
     ['./modules/contact-form.js', 'initContactForm', '#contact-form, #hire-me-form'],
-    ['./modules/skill-bars.js', 'initSkillBars', '.skill-fill'],
+    ['./modules/skill-bars.js', 'initSkillBars', '.skill-bar'],
     ['./modules/skill-radar.js', 'initSkillRadar', '#skill-radar-container'],
     ['./modules/roadmap.js', 'initRoadmap', '.roadmap-item'],
     ['./modules/project-slideshow.js', 'initSlideshow', '#slide-viewer'],
     ['./modules/age-calculator.js', 'initAgeCalculator', '#my-age, #my-age-en, #my-age-de'],
     ['./modules/hero-section.js', 'initHeroSection', '#hero-section'],
     ['./modules/blog-enhancements.js', 'initBlogEnhancements', 'article.card'],
-    ['./modules/learning-progress.js', 'initLearningProgress', '#progress-flashcards-bar'],
     ['./modules/praktikumsbetrieb-media.js', 'initPraktikumsbetriebMedia', '#dfg-gallery-section'],
-    ['./dashboard.js', 'initDashboard', '#commit-grid'],
-    ['./modules/progress-backup.js', 'initProgressBackup', '#progress-backup'],
-    ['./modules/study-calendar.js', 'initStudyCalendar', '#study-calendar-btn'],
     ['./modules/project-freshness.js', 'initProjectFreshness', '#dynamic-projects-container'],
     ['./modules/qr-generator.js', 'initQrGenerator', '#qr-company-input'],
     ['./modules/document-preview.js', 'initDocumentPreview', 'a[href$=".docx"], a[href$=".pptx"]'],
     ['./modules/faq-accordion.js', 'initFaqAccordion', '#faq-accordion-container'],
-    ['./git-simulator.js', 'initGitSimulator', '#terminal-output'],
     ['./modules/recruiter-filter.js', 'initRecruiterFilter', '.role-filter-container'],
     ['./modules/about-me-enhancements.js', 'initAboutMeEnhancements', '#bridge-display'],
     ['./modules/impressum-enhancements.js', 'initImpressumEnhancements', '.map-2click-container'],
@@ -114,15 +107,12 @@ const LAZY_MODULES = [
         '#btn-cv-print-header, #btn-cv-print-card, .btn-export-pdf, [data-action="export-pdf"]',
     ],
     ['./modules/ical-generator.js', 'initIcalGenerator', '#confirm-booking-btn'],
-    ['./modules/ihk-exam-simulator.js', 'initIhkExamSimulator', '.quiz-container'],
     ['./modules/c4-architecture.js', 'initC4Architecture', '.arch-tabs-bar'],
-    ['./modules/ihk-cockpit.js', 'initIhkCockpit', '.page-ihk-cockpit, #panel-nwa'],
     // Note: quick-sandbox.js is intentionally NOT lazy-loaded here — its trigger buttons are
     // injected dynamically into portfolio.js's project cards, which can render after this
     // one-time DOM check runs. It self-inits via a direct <script type="module"> include
     // on portfolio.html instead (see quick-sandbox.js bottom).
     ['./modules/executive-dossier.js', 'initExecutiveDossier', '[data-open-dossier]'],
-    ['./modules/challenge-lab.js', 'initChallengeLab', '.page-challenge-lab, #lab-challenges-list'],
     ['./modules/portfolio_exporter.js', 'initPortfolioExporter', '.portfolio-filters'],
 ];
 

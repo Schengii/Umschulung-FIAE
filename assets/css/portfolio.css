@@ -8,27 +8,6 @@
     color: var(--text-primary);
 }
 
-/* Skill-Level Prozentsätze */
-.skill-85 {
-    --skill-level: 85%;
-}
-
-.skill-80 {
-    --skill-level: 80%;
-}
-
-.skill-75 {
-    --skill-level: 75%;
-}
-
-.skill-70 {
-    --skill-level: 70%;
-}
-
-.skill-65 {
-    --skill-level: 65%;
-}
-
 /* Utility Margin Classes */
 .mt-1rem {
     margin-top: 1rem;

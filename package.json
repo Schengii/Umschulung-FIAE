@@ -23,6 +23,7 @@
     "check-lighthouse-urls": "node scripts/check_lighthouse_urls.js",
     "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
+    "fetch-github-repos": "node scripts/fetch_github_repos.js",
     "lint": "eslint assets/js scripts sw.js",
     "lint:fix": "eslint assets/js scripts sw.js --fix",
     "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\" sw.js",
@@ -47,11 +48,8 @@
     "sync-structured-data": "node scripts/sync_structured_data.js",
     "check-structured-data": "node scripts/sync_structured_data.js --check",
     "check-site-stats": "node scripts/generate_site_stats.js --check",
-    "import-flashcards": "node scripts/import_vault_flashcards.js",
-    "check-flashcards": "node scripts/import_vault_flashcards.js --check",
-    "check-exam-questions": "node scripts/check_exam_questions.js",
     "regen": "npm run subset-icons && npm run build-search-index && npm run generate-sw-assets",
-    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-site-stats && npm run check-structured-data && npm run check-flashcards && npm run check-exam-questions && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run check-strict-null && npm run test:unit"
+    "check": "npm run check-sync && npm run check-head && npm run check-csp && npm run check-icons && npm run check-sitemap && npm run check-bilingual && npm run check-search-index && npm run check-site-stats && npm run check-structured-data && npm run check-lighthouse-urls && npm run check-sw-assets && npm run check-project-links && npm run lint && npm run format:check && npm run typecheck && npm run check-strict-null && npm run test:unit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -59,9 +57,9 @@
     "@fortawesome/fontawesome-free": "7.3.1",
     "@playwright/test": "1.63.0",
     "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "^5.1.1",
     "esbuild": "^0.28.2",
-    "eslint": "^10.12.0",
+    "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.14.0",
     "happy-dom": "^21.0.3",

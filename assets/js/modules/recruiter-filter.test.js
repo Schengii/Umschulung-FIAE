@@ -19,7 +19,6 @@ describe('recruiter filter', () => {
     beforeEach(() => {
         resetDocument(PAGE);
         installPageGlobals({
-            STORAGE_KEYS: { GITHUB_PROJECTS_CACHE: 'cache', GITHUB_PROJECTS_CACHE_TIME: 'cache_time' },
             APP: { GITHUB_USERNAME: 'someone' },
         });
         vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
@@ -95,7 +94,7 @@ describe('recruiter filter', () => {
         await flush();
         const names = [...document.querySelectorAll('.git-activity-repo')].map((a) => a.textContent);
         expect(names).toEqual(['neu', 'd', 'c', 'b']);
-        expect(globalThis.AppStorage.data.get('cache')).toBeTruthy();
+        expect(fetch).toHaveBeenCalledWith('assets/data/github-repos.json');
     });
 
     it('shows repo names as text, never as markup', async () => {

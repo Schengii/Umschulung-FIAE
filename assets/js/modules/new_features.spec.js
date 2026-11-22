@@ -16,20 +16,6 @@ test.describe('New Interactive Features E2E Verification', () => {
         await expect(sortSelect).toBeVisible();
     });
 
-    test('sollte den IHK Prüfungs-Simulator Modus auf quiz.html schalten', async ({ page }) => {
-        await page.goto('/pages/quiz.html');
-        await settle(page);
-
-        const modeSelector = page.locator('.ihk-mode-selector');
-        await expect(modeSelector).toBeVisible();
-
-        const ap1Btn = page.locator('button[data-mode="ap1"]');
-        await ap1Btn.click();
-
-        const timer = page.locator('#exam-timer-display');
-        await expect(timer).toBeVisible();
-    });
-
     test('sollte den iCal Event-Generator auf impressum.html auslösen', async ({ page }) => {
         await page.goto('/pages/impressum.html');
         await settle(page);
@@ -63,18 +49,6 @@ test.describe('New Interactive Features E2E Verification', () => {
 
         const info = c4Switcher.locator('#c4-level-info');
         await expect(info).toContainText('Container Diagramm');
-    });
-
-    test('sollte den Git-Simulator mit neuen Levels 5 & 6 laden', async ({ page }) => {
-        await page.goto('/pages/git-simulator.html');
-        await settle(page);
-
-        const dropdown = page.locator('#level-select');
-        await expect(dropdown).toBeVisible();
-        await dropdown.selectOption('lvl5');
-
-        const badge = page.locator('#level-status-badge');
-        await expect(badge).toBeVisible();
     });
 
     test('sollte die Command Palette (Strg+K) öffnen, suchen und navigieren', async ({ page }) => {
@@ -134,22 +108,6 @@ test.describe('New Interactive Features E2E Verification', () => {
         await expect(radarDots.first()).toHaveAttribute('style', /cursor:\s*pointer/);
     });
 
-    test('sollte den Java & C++ WASM Runner auf playground.html laden', async ({ page }) => {
-        await page.goto('/pages/playground.html');
-        await settle(page);
-
-        const wasmBtn = page.locator('button[data-template="wasm-runner"]');
-        await expect(wasmBtn).toBeVisible();
-        await wasmBtn.click();
-        await page.waitForTimeout(500);
-
-        const frame = page.frameLocator('#preview-iframe');
-        const compileBtn = frame.locator('#compile-btn');
-        await expect(compileBtn).toBeVisible();
-        await compileBtn.click();
-        await expect(frame.locator('#term-out')).toContainText('Hello from Java 21 WebContainer!');
-    });
-
     test('sollte den 3D Architektur-Graphen auf architecture.html initialisieren', async ({ page }) => {
         await page.goto('/pages/architecture.html');
         await settle(page);
@@ -162,17 +120,5 @@ test.describe('New Interactive Features E2E Verification', () => {
         await expect(panel3d).toBeVisible();
         const canvas3d = page.locator('#arch-3d-canvas');
         await expect(canvas3d).toBeVisible();
-    });
-
-    test('sollte das PWA Offline-Sync Telemetrie Widget auf dashboard.html anzeigen', async ({ page }) => {
-        await page.goto('/pages/dashboard.html');
-        await settle(page);
-
-        const badge = page.locator('#pwa-sync-status-badge');
-        await expect(badge).toBeVisible();
-        const cacheSize = page.locator('#pwa-cache-size');
-        // Real Cache API numbers, available once the service worker has finished installing.
-        await expect(cacheSize).toContainText(/\d+ (Dateien|files)/, { timeout: 20000 });
-        await expect(page.locator('.pwa-cache-name').first()).toContainText('umschulung-fiae-');
     });
 });

@@ -101,15 +101,15 @@
         page-break-inside: avoid;
     }
 
-    /* Skill bars in print */
-    .skill-fill {
+    /* Skill-Stufen im Druck */
+    .skill-level-step {
+        border: 1px solid #9ca3af !important;
+    }
+
+    .skill-level-step.is-on {
         background: #374151 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
-    }
-
-    .skill-track {
-        border: 1px solid #9ca3af !important;
     }
 
     /* Page breaks */

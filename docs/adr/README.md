@@ -14,11 +14,9 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0004](0004-head-konsistenz-guard-statt-templating.md) | `<head>`-Konsistenz-Guard statt Templating-System | Akzeptiert |
 | [0005](0005-build-skript-nicht-build-nennen.md) | Lokales Build-Skript nicht `build` nennen (Vercel Zero-Config-Falle) | Akzeptiert |
 | [0006](0006-warum-vanilla-js-ohne-framework.md) | Warum Vanilla JS statt SPA-Framework (React/Vue/Angular) | Akzeptiert |
-| [0007](0007-git-simulator-in-memory-state.md) | Git-Simulator: In-Memory-State, SVG-Visualisierung, Custom-Parser | Akzeptiert, ergänzt durch 0011 |
 | [0008](0008-produktion-liefert-dist-aus.md) | Produktion liefert den Minify-Build (`dist/`) aus | Akzeptiert |
 | [0009](0009-font-awesome-als-generiertes-subset.md) | Font Awesome als generiertes Subset | Akzeptiert |
 | [0010](0010-cache-name-aus-inhalts-hash.md) | Cache-Name des Service Workers aus einem Inhalts-Hash | Akzeptiert |
-| [0011](0011-git-simulator-engine-als-eigenes-modul.md) | Git-Simulator: Logik als DOM-freie Engine | Akzeptiert |
 | [0012](0012-unterprojekt-sync-strategie.md) | Synchronisations-Strategie für Unterprojekte (REPO_MAPPING und preserve-Listen) | Akzeptiert |
 | [0013](0013-styles-nur-aus-dateien.md) | Styles nur aus Dateien: `style-src 'self'` plus `style-src-attr` | Akzeptiert, ergänzt 0003 |
 | [0014](0014-seitenspezifische-stylesheets.md) | Seitenspezifische Stylesheets statt einer großen `style.css` | Akzeptiert |
@@ -26,7 +24,8 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0016](0016-laufzeit-cache-begrenzen.md) | Laufzeit-Cache begrenzen, Demos nicht cachen | Akzeptiert |
 | [0017](0017-generierte-header-csp.md) | Header-CSP aus den Inline-Script-Hashes erzeugen | Akzeptiert, ergänzt 0003 |
 | [0018](0018-generierte-projektseiten.md) | Projektseiten aus den Projektdaten generieren | Akzeptiert, ergänzt 0004 |
-| [0019](0019-grosse-dateien-und-repo-groesse.md) | Große Dateien und Repository-Größe | Vorgeschlagen |
+| [0019](0019-grosse-dateien-und-repo-groesse.md) | Große Dateien und Repository-Größe | Angenommen |
+| [0020](0020-github-daten-lokal.md) | GitHub-Repositorydaten lokal statt Laufzeitabruf | Akzeptiert |
 
 Hinweis zu 0001 und 0005: Beide beschreiben einen Stand, in dem die Produktion den unminifizierten Repo-Root auslieferte. Das gilt seit 0008 nicht mehr; die übrigen Aussagen (kein Bundler, keine Pfad-Umschreibung, Skriptname `build:dist`) bleiben gültig.
 

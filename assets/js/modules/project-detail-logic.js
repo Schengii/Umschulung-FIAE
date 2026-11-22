@@ -31,28 +31,22 @@ export function safeUrl(value) {
 export const safeColor = (value) => (/^#[0-9a-f]{3,8}$/i.test(String(value)) ? String(value) : 'var(--primary)');
 
 /**
- * Stored JSON list; a damaged entry (manual edit, half-written value) gives an empty list.
- * @param {string | null | undefined} text
- * @returns {any[]}
+ * Die öffentlichen GitHub-Repositories aus der lokalen Datei assets/data/github-repos.json
+ * (täglich per Sync aktualisiert, scripts/fetch_github_repos.js). Es gibt keinen Aufruf an
+ * api.github.com mehr, die Besucher-IP geht also nicht an GitHub. Ohne Datei: leere Liste.
+ * @param {string} url
+ * @param {typeof fetch} [fetchFn]
+ * @returns {Promise<Array<Record<string, any>>>}
  */
-export function parseStoredList(text) {
+export async function loadLocalRepos(url, fetchFn = fetch) {
     try {
-        const parsed = JSON.parse(text || '[]');
-        return Array.isArray(parsed) ? parsed : [];
+        const response = await fetchFn(url);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
     } catch (_e) {
         return [];
     }
-}
-
-/**
- * Whether a cached API response is still fresh.
- * @param {any[]} cached
- * @param {string | null | undefined} cachedTime milliseconds as stored
- * @param {number} now
- * @param {number} maxAge
- */
-export function isCacheFresh(cached, cachedTime, now, maxAge) {
-    return cached.length > 0 && Boolean(cachedTime) && now - parseInt(String(cachedTime), 10) < maxAge;
 }
 
 /**
@@ -124,10 +118,20 @@ export function relatedProjects(current, projects, limit = 3) {
 }
 
 /**
+ * File name of the generated static project page (same rule as scripts/generate_project_pages.js, ADR 0018).
+ * @param {string} repoName
+ */
+export const projectPageName = (repoName) =>
+    `projekt-${repoName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')}.html`;
+
+/**
  * Link to the detail page of a project.
  * @param {ProjectDetailData} project
  */
 export const detailUrl = (project) =>
     project.repoName
-        ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
+        ? projectPageName(project.repoName)
         : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;

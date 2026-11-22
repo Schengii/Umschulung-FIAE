@@ -12,41 +12,6 @@ export const Achievements = {
             desc_de: 'Du hast das Portfolio zum ersten Mal besucht!',
             desc_en: 'You visited the portfolio for the first time!',
         },
-        flashcard_master: {
-            icon: '🧠',
-            title_de: 'Lernkarten-Meister',
-            title_en: 'Flashcard Master',
-            desc_de: 'Alle Lernkarten mindestens einmal als "Gewusst" markiert.',
-            desc_en: 'Marked all flashcards as "Got it" at least once.',
-        },
-        quiz_perfect: {
-            icon: '🏆',
-            title_de: 'Quiz-Champion',
-            title_en: 'Quiz Champion',
-            desc_de: '100% im Quiz erreicht.',
-            desc_en: 'Scored 100% on the quiz.',
-        },
-        snake_50: {
-            icon: '🐍',
-            title_de: 'Snake-Profi',
-            title_en: 'Snake Pro',
-            desc_de: 'Im Snake-Spiel 50 Punkte erreicht.',
-            desc_en: 'Scored 50 points in Snake.',
-        },
-        memory_fast: {
-            icon: '⚡',
-            title_de: 'Blitzmerker',
-            title_en: 'Speed Memory',
-            desc_de: 'Memory in unter 60 Sekunden geschafft.',
-            desc_en: 'Completed Memory in under 60 seconds.',
-        },
-        interview_ace: {
-            icon: '💼',
-            title_de: 'Interview-Ass',
-            title_en: 'Interview Ace',
-            desc_de: 'Über 80% im Interview-Trainer erreicht.',
-            desc_en: 'Scored over 80% in the Interview Trainer.',
-        },
         dark_mode_fan: {
             icon: '🌙',
             title_de: 'Dark-Mode Fan',
@@ -75,20 +40,6 @@ export const Achievements = {
             desc_de: 'Mindestens 5 verschiedene Seiten besucht.',
             desc_en: 'Visited at least 5 different pages.',
         },
-        exam_passed: {
-            icon: '🎓',
-            title_de: 'Prüfung bestanden',
-            title_en: 'Exam Passed',
-            desc_de: 'Eine IHK-Prüfungssimulation mit mindestens 50 % bestanden.',
-            desc_en: 'Passed an IHK exam simulation with at least 50%.',
-        },
-        git_master: {
-            icon: '🌿',
-            title_de: 'Git-Profi',
-            title_en: 'Git Pro',
-            desc_de: 'Eine Challenge im Git-Simulator bestanden.',
-            desc_en: 'Passed a challenge in the Git simulator.',
-        },
         cv_downloaded: {
             icon: '📄',
             title_de: 'Bewerbungsmappe geöffnet',
@@ -113,8 +64,12 @@ export const Achievements = {
         return this.getUnlocked().includes(id);
     },
 
-    /** @param {string} id */
-    unlock(id) {
+    /**
+     * @param {string} id
+     * @param {{ silent?: boolean }} [options] silent: freischalten ohne Toast (z. B. beim ersten Besuch,
+     *   wo Cookie-Hinweis und Chat-Button schon auf dem Bildschirm liegen)
+     */
+    unlock(id, { silent = false } = {}) {
         if (!this.definitions[id] || this.isUnlocked(id)) return;
 
         const key = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.ACHIEVEMENTS) || 'achievements';
@@ -125,7 +80,7 @@ export const Achievements = {
         }
 
         if (typeof document !== 'undefined') {
-            this.showNotification(id);
+            if (!silent) this.showNotification(id);
             document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
         }
     },
@@ -160,11 +115,6 @@ export const Achievements = {
         // Trigger animation
         requestAnimationFrame(() => toast.classList.add('show'));
 
-        // Play sound (silent unless the visitor enabled sound)
-        if (typeof window !== 'undefined' && window.GameAudio) {
-            window.GameAudio.play('success');
-        }
-
         // Auto-dismiss
         setTimeout(() => {
             toast.classList.remove('show');
@@ -184,7 +134,7 @@ export function initAchievements() {
     // Track first visit
     if (!AppStorage.getItem('has_visited')) {
         AppStorage.setItem('has_visited', 'true');
-        Achievements.unlock('first_visit');
+        Achievements.unlock('first_visit', { silent: true });
     }
 
     // Track page visits for explorer achievement

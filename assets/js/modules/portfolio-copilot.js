@@ -51,9 +51,9 @@ export const KNOWLEDGE_BASE = [
         keywords: ['abschluss', 'projekt', 'ihk', 'ecochef', 'antrag', 'doku', 'phasenplan', 'thesis', 'graduation'],
         responseDe: `Das IHK-Abschlussprojekt ist <strong>EcoChef</strong>: Ein KI-gestützter Rezept- & Nachhaltigkeitsplaner als PWA (Lit 3.x, TypeScript, Gemini KI API & IndexedDB) nach Clean Architecture, mit vollständiger Nutzwertanalyse und 80h Phasenplan.`,
         responseEn: `The IHK graduation project is <strong>EcoChef</strong>: An AI-driven recipe and sustainability planner built as a PWA (Lit 3.x, TypeScript, Gemini AI API & IndexedDB) following Clean Architecture with utility analysis and an 80-hour phase plan.`,
-        link: 'ihk-cockpit.html',
-        linkTextDe: 'IHK-Cockpit & EcoChef Doku',
-        linkTextEn: 'IHK Cockpit & Documentation',
+        link: 'projekt-ecochef.html',
+        linkTextDe: 'EcoChef ansehen',
+        linkTextEn: 'View EcoChef',
     },
     {
         keywords: ['react', 'web', 'frontend', 'typescript', 'javascript', 'html', 'css', 'pwa', 'lit', 'vite'],
@@ -107,11 +107,11 @@ export const KNOWLEDGE_BASE = [
     },
     {
         keywords: ['git', 'version', 'branch', 'merge', 'rebase', 'workflow', 'github'],
-        responseDe: `Maximilian nutzt professionelle Git-Workflows (Feature-Branching, Rebase, Tags, Conventional Commits). Seine Git-Kenntnisse sind im Retro-CRT Git Simulator mit 6 Leveln visualisiert!`,
-        responseEn: `Maximilian applies production Git workflows (feature branching, rebase, tagging, conventional commits). You can test his command-line mastery in the interactive Git Simulator!`,
-        link: 'git-simulator.html',
-        linkTextDe: 'Git-Simulator ausprobieren',
-        linkTextEn: 'Try Git Simulator',
+        responseDe: `Maximilian nutzt professionelle Git-Workflows (Feature-Branching, Rebase, Tags, Conventional Commits). Mehr dazu im Lebenslauf.`,
+        responseEn: `Maximilian applies production Git workflows (feature branching, rebase, tagging, conventional commits). More details in the résumé.`,
+        link: 'lebenslauf.html',
+        linkTextDe: 'Zum Lebenslauf',
+        linkTextEn: 'View résumé',
     },
 ];
 

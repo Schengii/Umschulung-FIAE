@@ -4,9 +4,18 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
-#### Neu
-- **Beispiel-Lernstand**: Auf dem Dashboard füllt ein Schalter alle Lernbereiche (Kartei, Prüfungsverlauf, Themenstatistik, Lernkalender, Empfehlungen) mit Beispieldaten, damit Besucher das volle Bild sehen. Der echte Stand wird gesichert und lässt sich zurückholen; Einstellungen (Name, Theme, Sprache …) bleiben erhalten. Ein Banner kennzeichnet den Demo-Zustand, Export, Import und QR-Sync sind währenddessen gesperrt. Logik in `modules/demo-progress.js` (Daten relativ zu heute, getestet).
-- **Prüfungsfehler als Karteikarten**: Im Ergebnis der IHK-Prüfungssimulation legt „Fehler als Karteikarten merken“ jede nicht vollständig richtig beantwortete Frage als eigene Karte an (Box 1, heute fällig, Thema als Hinweis, Antwort mit Erklärung). Bereits vorhandene Karten werden nicht doppelt angelegt und behalten ihre Box. Logik in `modules/exam-to-flashcards.js` (getestet). Zeilenumbrüche eigener Karten werden jetzt dargestellt.
+#### Entfernt
+- **Spielwiese**: Die Seiten Mini-Games-Hub, Snake, Memory, Code Playground und Challenge Lab sind samt Skripten, Modulen, Tests, Stylesheets, Bildern, Menü-, Sitemap- und Lighthouse-Einträgen entfernt, ebenso das Game-Modal im Portfolio, der Audio-Schalter in der Fußzeile samt Ton-System, die Spiel-Achievements und die Datenschutz-Einträge zu Highscores und Ton. Die Header-CSP-Sonderregel für `playground.html` in `vercel.json` entfällt.
+- **Lernbereich**: Die Seiten IHK Cockpit, Lernkarten (samt IHK-Kartei), Prüfungs-Quiz, Bewerbungs-Trainer, Git Simulator und Dashboard sind samt Skripten, Modulen, Tests, Stylesheets, Daten, Bildern, Sitemap-, Menü- und Suchindex-Einträgen entfernt, ebenso Prüfungssimulator, Tagesfrage, Lernstand-Backup mit QR-Sync, Beispiel-Lernstand, die zugehörigen Achievements und Datenschutz-Abschnitte. Das Quiz ist auch aus dem Spiele-Hub verschwunden. ADR 0007 und 0011 entfallen.
+
+#### Geändert
+- **Erster Besuch auf dem Handy**: Der Cookie-Hinweis ist kürzer und kompakter (Text oben, kleiner Button), der Toast „Erster Besuch“ entfällt (Erfolg wird still freigeschaltet), und der Assistent-Button bleibt ausgeblendet, bis der Hinweis bestätigt ist. Der Hinweis berücksichtigt die iPhone-Home-Leiste (`safe-area-inset-bottom`).
+- **Datenschutz**: Die Seiten rufen `api.github.com` nicht mehr zur Laufzeit ab. `scripts/fetch_github_repos.js` schreibt die öffentlichen Repositories im täglichen Sync nach `assets/data/github-repos.json`, die Seiten lesen nur diese Datei. `api.github.com` ist aus der CSP entfernt, Datenschutzerklärung Abschnitt 8 angepasst (ADR 0020).
+- **Medien**: Die fünf EcoChef-Demovideos und die eingebetteten Videos in `Max PPT Version3.pptx` sind neu kodiert (Videos 16,3 MB auf 3,4 MB, PPTX 7,79 MB auf 3,68 MB, kein sichtbarer Qualitätsverlust). ADR 0019 ist mit „Option 1 mit Komprimierung“ angenommen.
+- **Skill-Matrix**: Statt selbst vergebener Prozentwerte zeigen Skills-Matrix (`ueber-mich.html`), Skill-Balken und Skill-Radar (`portfolio.html`) drei Stufen (Grundkenntnisse, Fortgeschritten, Sicher im Einsatz). Jede Karte nennt ihre Beleg-Projekte; Skills ohne eigenes Projekt sind so gekennzeichnet. Die Stufen sind jetzt an beiden Stellen identisch.
+- **Aufräumen**: Rund 760 Zeilen ungenutzter Regeln (Zertifikat-Modal, Commit-Grid, Admin-Bereich, Backup-QR u. a.) aus `style.css` entfernt; README an den aktuellen Stand angepasst.
+- **Navigation**: „Home“ führt zur Landingpage, `home.html` ist als „Werdegang & Kontakt“ unter „Profil“ erreichbar, „Projekte“ ist ein eigener Hauptpunkt.
+- **Projektlinks**: Landingpage, Befehlspalette, Projektvergleich und verwandte Projekte verlinken auf die statischen Projektseiten statt auf `projekt-detail.html?repo=…`.
 
 #### Behoben
 - **Dashboard „Letzte Projekte“**: Titel standen als „undefined“ da (`title` statt `titleDe`/`titleEn`), die Links ließen sich aus `pages/` nicht auflösen.

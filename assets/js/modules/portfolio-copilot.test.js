@@ -60,10 +60,10 @@ describe('findBestMatch', () => {
         expect(result.maxScore).toBeGreaterThan(0);
     });
 
-    it('matches EcoChef query to "ihk-cockpit.html"', () => {
+    it('matches EcoChef query to "projekt-ecochef.html"', () => {
         const result = findBestMatch('Erzähl mir über das IHK Abschlussprojekt EcoChef');
         expect(result.bestMatch).not.toBeNull();
-        expect(result.bestMatch?.link).toBe('ihk-cockpit.html');
+        expect(result.bestMatch?.link).toBe('projekt-ecochef.html');
         expect(result.maxScore).toBeGreaterThan(0);
     });
 

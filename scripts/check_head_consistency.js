@@ -64,8 +64,7 @@ const CHECKS = [
 ];
 
 // Styles come from files: no inline <style> and no 'unsafe-inline' for style elements (ADR 0013).
-// playground.html runs user code in a srcdoc iframe that inherits its CSP, so it is the one exception.
-const STYLE_EXCEPTIONS = new Set(['playground.html']);
+const STYLE_EXCEPTIONS = new Set();
 
 let hadFailure = false;
 

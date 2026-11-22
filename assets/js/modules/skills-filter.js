@@ -1,4 +1,4 @@
-/** @typedef {{name: string, category?: string, score?: number, [key: string]: any}} SkillItem */
+/** @typedef {{name: string, category?: string, level?: number, [key: string]: any}} SkillItem */
 
 /**
  * @file skills-filter.js
@@ -39,9 +39,9 @@ export function sortSkills(skills, mode) {
     if (mode === 'alpha') {
         sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else if (mode === 'level-desc') {
-        sorted.sort((a, b) => b.score - a.score);
+        sorted.sort((a, b) => b.level - a.level);
     } else if (mode === 'level-asc') {
-        sorted.sort((a, b) => a.score - b.score);
+        sorted.sort((a, b) => a.level - b.level);
     }
     return sorted;
 }
