@@ -1,28 +1,27 @@
 # Handoff
 
-Stand: 2026-11-22 · `main` auf `868921e` (PR #83 und #84 gemergt)
+Stand: 2026-11-22 · `main` auf `a98837c` (PR #91 gemergt, CI grün)
 
 ## Ziel
-Portfolio-Site als Bewerbungsvorzeigestück straffen: Navigation neu ordnen, Lern- und Spielbereich entfernen, Verbesserungsplan abarbeiten.
+Portfolio-Site als Bewerbungsvorzeigestück straffen und professionell machen: Aufräumen, Inhalte belegen, Styling, Datenschutz, Barrierefreiheit.
 
 ## Erledigt
-- PR #83 gemergt: Header neu (Projekte eigener Punkt), Plan 1.1 (statische Projektlinks), Plan 1.2 (`home.html` = „Werdegang & Kontakt“, Home = `index.html`), Lernbereich komplett entfernt.
-- PR #84 gemergt (CI grün): Spielwiese entfernt (Games-Hub, Snake, Memory, Code Playground, Challenge Lab), dazu Game-Modal im Portfolio, Ton-System samt Audio-Schalter, Spiel-Achievements, Datenschutz-Einträge, `modal.css`, Playground-Sonderregel in `vercel.json`.
-- Navigation hat jetzt sechs Punkte: Home, Profil, Projekte, Umschulung, News, Kontakt.
-- Verbesserungsplan im Vault: `01 Projects/Umschulung-FIAE Portfolio/Verbesserungsplan 2026-11-22.md`.
+- Gemergt: #86 (tote CSS-Regeln, README), #87 (Skill-Stufen mit Projektbelegen statt Prozenten), #88 (Videos 16,3 auf 3,4 MB, PPTX 7,79 auf 3,68 MB, ADR 0019), #90 (ruhiger erster Besuch auf dem Handy, GitHub-Daten lokal, ADR 0020).
+- Gemergt #91: Hamburger-Menü ab 1100 px (Schalter waren zwischen 769 und 1250 px abgeschnitten), 96 Hover-Regeln in `@media (hover: hover)`, `prefers-contrast` und `forced-colors`, `--field-border` (3:1), lesbare Nav-Suche.
+- axe über alle 23 Seiten, 2 Themes, 5 Akzente: keine Verstöße. Chromium und Mobile-E2E lokal grün.
 
 ## Entscheidungen
-- „Alles Bereichsbezogene löschen“, inkl. Backup, Tagesfrage, Ton, Quiz im Hub.
-- Behalten: Achievement-System (Rest-Erfolge), `confetti.js`, Prism (`projekt-detail.html`), `ical-generator.js`, Projektkategorie „Spiele“ (Minecraft).
-- Merge nur nach grüner CI, mit Merge-Commit.
-- Historie bleibt: `plan.md`, `docs/handoff-2026-11-19.md`, `docs/changelog-archiv.md`, ältere ADRs.
+- Medien bleiben selbst gehostet und werden komprimiert (kein externes Hosting).
+- GitHub-Repos kommen aus `assets/data/github-repos.json` (täglicher Sync), `api.github.com` ist aus der CSP entfernt.
+- Hamburger-Schwelle 1100 px, auch für iPad quer.
+- `safe-area-inset` entfällt (Viewport ohne `viewport-fit=cover`).
 
 ## Offene Punkte
-- CI auf `main` nach dem Merge von #84 nicht abgewartet.
-- Vault-Plan: Phase 2 (Lernbereich) hinfällig, noch nicht angepasst; `plan.md` führt Lern- und Spielpunkte weiter.
-- `assets/css/modules/ihk_cockpit.css` ist gelöscht; auf tote Regeln in `style.css` und CSS-Rest prüfen.
-- Plan 1.3 bis 1.6 (Fallstudien, Skill-Matrix ohne Prozente, Belege/PDF, Java/Spring-Aussage) brauchen Inhalte von Max.
-- Hero-Texte von `index.html` und `pages/home.html` überschneiden sich weiter.
+- `Max PPT Version3.pptx` noch nicht in PowerPoint geprüft (eingebettete Videos neu kodiert).
+- `generate-data` erzeugt ohne `GITHUB_TOKEN` bei Rate-Limit veraltete Projektdaten (nur mit Token ausführen oder Skript absichern).
+- Styling Schritt 3: Buttonsystem (17 Varianten), Tokens und Breakpoints vereinheitlichen, `!important` (207 in `style.css`), `transition: all`, CSS/JS-Cache (`vercel.json`).
+- Brauchen Inhalte von Max: Fallstudien (1.3), Lebenslauf-PDF (1.5), Java/Spring-Aussage (1.6); Stufen in `assets/js/skills_matrix.js` und `assets/js/modules/skill-radar.js` prüfen.
+- Plan 3.1 (og:image je Projektseite), 3.2 (`assets/js/news_data.js` aktualisieren).
 
 ## Nächster Schritt
-CI auf `main` prüfen (`gh run list --branch main`). Danach `Verbesserungsplan 2026-11-22.md` anpassen und Plan 1.4 angehen (`assets/js/skills_matrix.js`).
+Styling Schritt 3 in `assets/css/style.css` beginnen (Buttons zuerst), danach `npm run regen` und `npm run check`.
