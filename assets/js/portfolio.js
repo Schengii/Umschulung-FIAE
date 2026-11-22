@@ -571,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!link) return;
 
         const href = link.getAttribute('href') || '';
-        const isGameLink = href === 'snake.html' || href === 'memory.html' || href === 'quiz.html';
+        const isGameLink = href === 'snake.html' || href === 'memory.html';
 
         if (isGameLink) {
             e.preventDefault();

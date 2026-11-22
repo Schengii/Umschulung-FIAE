@@ -1,15 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-// Visuelle Regression (Plan 6.5): fünf Kernseiten in hellem und dunklem Thema, nur Chromium.
+// Visuelle Regression (Plan 6.5): zwei Kernseiten in hellem und dunklem Thema, nur Chromium.
 // Läuft nur mit VISUAL=1 (npm run test:visual), weil die Referenzbilder aus der CI (Linux) stammen:
 // Schrift-Rendering unterscheidet sich je Betriebssystem. Referenzbilder erzeugt der Workflow
 // `visual.yml` (Eingabe "update"), das Ergebnis wird als Artefakt geladen und eingecheckt.
 const PAGES = [
     ['home', '/pages/home.html'],
     ['portfolio', '/pages/portfolio.html'],
-    ['flashcards', '/pages/flashcards.html'],
-    ['quiz', '/pages/quiz.html'],
-    ['dashboard', '/pages/dashboard.html'],
 ];
 
 test.describe('Visuelle Regression', () => {

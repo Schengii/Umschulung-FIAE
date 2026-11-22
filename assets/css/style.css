@@ -1314,70 +1314,6 @@ nav.topnav {
     aspect-ratio: 1;
 }
 
-/* Quiz Game */
-.quiz-container {
-    max-width: 600px;
-    margin: 2rem auto;
-}
-
-.quiz-progress-bar {
-    width: 100%;
-    height: 6px;
-    background-color: var(--border);
-    border-radius: var(--radius-full);
-    margin-bottom: 2rem;
-    overflow: hidden;
-}
-
-.quiz-progress {
-    height: 100%;
-    background-color: var(--primary);
-    width: 0%;
-    transition: width 0.3s ease-out;
-}
-
-.quiz-buttons {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    margin: 1.5rem 0;
-}
-
-.btn-quiz {
-    background-color: var(--bg-page);
-    border: 2px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-quiz:hover:not(:disabled) {
-    border-color: var(--primary);
-    background-color: var(--primary-light);
-}
-
-.btn-quiz.correct {
-    background-color: #d1fae5;
-    border-color: #10b981;
-    color: #065f46;
-}
-
-.btn-quiz.incorrect {
-    background-color: #fee2e2;
-    border-color: #ef4444;
-    color: #991b1b;
-}
-
-.btn-quiz:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
 #next-btn {
     display: none;
     margin-top: 1rem;
@@ -2157,22 +2093,6 @@ html[lang="en"] [lang="de"] {
     font-size: 1.3rem;
 }
 
-/* Dashboard and BFW Helper Classes to replace inline styles */
-.dashboard-placeholder {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background-color: var(--bg-page);
-    border: 1px dashed var(--border);
-    border-radius: var(--radius-md);
-    text-align: center;
-    color: var(--text-muted);
-}
-
-.dashboard-placeholder i.dashboard-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
 .bfw-campus-img {
     max-height: 480px;
     width: 100%;
@@ -2299,78 +2219,6 @@ html[lang="en"] [lang="de"] {
     transition: opacity 0.15s ease;
 }
 
-/* Daily Exam Question Widget (OPT-08) */
-.daily-question-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.daily-question-header h3 {
-    margin: 0;
-}
-
-.daily-streak-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.35rem 0.75rem;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15));
-    border: 1px solid rgba(245, 158, 11, 0.4);
-    border-radius: var(--radius-full);
-    font-weight: 700;
-    color: #d97706;
-    font-size: 0.85rem;
-}
-
-.exam-topic-chip {
-    padding: 0.15rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-}
-
-.daily-status-badge {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--radius-sm);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-.daily-opt-btn {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    padding: 0.65rem 0.85rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    text-align: left;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.daily-opt-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-.daily-explanation {
-    margin-top: 0.5rem;
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.9rem;
-    line-height: 1.4;
-}
-
 .roadmap-item {
     position: relative;
     margin-bottom: 2rem;
@@ -2449,50 +2297,7 @@ html[lang="en"] [lang="de"] {
     transition: var(--transition);
 }
 
-/* 3D Flashcard Structure */
-.flashcard {
-    width: 100%;
-    aspect-ratio: 1.8 / 1;
-    min-height: 250px;
-    cursor: pointer;
-    perspective: 1000px;
-}
 
-.flashcard-front,
-.flashcard-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: var(--radius-lg);
-    border: 2px solid var(--border);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    box-shadow: var(--shadow-md);
-    background-color: var(--bg-card);
-    transition: border-color 0.3s;
-}
-
-.btn-card-action {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    background-color: var(--bg-card);
-    color: var(--text-primary);
-}
 
 /* ==========================================================================
    FEATURE 4: IHK-PROJEKT SLIDESHOW / SHOWCASE
@@ -2612,23 +2417,6 @@ html[lang="en"] [lang="de"] {
 .aside-image-card {
     padding: 1rem;
     text-align: center;
-}
-
-.exam-speak-btn {
-    background: none;
-    border: none;
-    font-size: 1.15rem;
-    color: var(--primary);
-    cursor: pointer;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    transition: transform 0.2s ease, color 0.2s ease;
-    margin-left: auto;
-    line-height: 1;
-}
-.exam-speak-btn:hover {
-    transform: scale(1.15);
-    color: var(--primary-hover);
 }
 
 /* ==========================================================================

@@ -26,21 +26,15 @@ Umschulung-FIAE/
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 │
 ├── pages/                       # Alle Inhaltsseiten
-│   ├── home.html                # Hauptseite / Landing-Dashboard & Recruiter-Cockpit
+│   ├── home.html                # Werdegang & Kontakt (Profil)
 │   ├── portfolio.html           # Projekt-Galerie & Code-Showcase (Filter & Schnellsuche)
-│   ├── ihk-cockpit.html         # IHK-Abschlussprojekt EcoChef (NWA, 80h Phasenplan, Fachgespräch, Bewertungsmatrix)
 │   ├── lebenslauf.html          # Interaktiver Lebenslauf mit Schema.org Person/ProfilePage & 1-Click PDF-Export
 │   ├── ueber-mich.html          # Steckbrief, Skill-Radar & Elektroniker-FIAE-Transfermatrix
-│   ├── dashboard.html           # IHK-Notensimulation, Lernfortschritt, PWA-Status & Export/Import des Fortschritts
 │   ├── links.html               # Quellen-Sammlung & Recruiter QR-Generator
 │   ├── projekt-detail.html      # Dynamische Detailseite für Projekte (?repo=RepoName) mit Code-Explorer & Live-Demo
 │   ├── architecture.html       # Interaktives C4-Architekturdiagramm & 3D Dependency Graph
 │   ├── challenge-lab.html      # Clean Code & RegEx Interactive Challenge Lab
-│   ├── flashcards.html         # IHK-Lernkarten mit Leitner-Boxen, Fälligkeitsterminen und optionaler IHK-Kartei (rund 2 000 Karten)
-│   ├── quiz.html               # Website-Quiz und IHK-Prüfungssimulation (AP1, AP2, WISO) mit Zeitlimit
-│   ├── interview-trainer.html  # Interaktiver Bewerbungs-Trainer für FIAE
 │   ├── playground.html         # In-Browser Web Sandbox & WASM Code Runner
-│   ├── git-simulator.html      # Retro Hacker CRT Git-Befehlssimulator (6 Level)
 │   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, games.html, etc.)
 │
 ├── assets/                      # Globale Web-Ressourcen
@@ -54,17 +48,11 @@ Umschulung-FIAE/
 │   │   ├── projects_data.js     # Automatisch generierte JS-Projektdatenbank
 │   │   └── modules/             # Abgekapselte Feature-Module & E2E-Tests
 │   │       ├── portfolio-copilot.js     # Portfolio-Assistent (Stichwortsuche, offline)
-│   │       ├── ihk-cockpit.js           # Nutzwertanalyse & 80h Phasenplan Steuerung
 │   │       ├── executive-dossier.js     # 1-Click Executive Summary Modal
 │   │       ├── all_pages.spec.js        # Playwright E2E Test-Suite (Seitenstabilität)
 │   │       ├── all_projects_launch.spec.js # E2E Launch-Test aller Projekte
-│   │       ├── git-engine.js            # DOM-freie Logik des Git-Simulators inkl. Rebase -i (Vitest-getestet)
-│   │       ├── daily-question.js        # Prüfungsfrage des Tages mit Streak-Tracking & Persistenz
 │   │       ├── c4-architecture.js       # Interaktives C4-Modell mit Komponenten-Drilldown & Code-Links
-│   │       ├── exam-questions.js        # Zweisprachiger Fragenpool der Prüfungssimulation (DE/EN)
-│   │       ├── progress-backup.js       # Export/Import des Fortschritts inkl. QR-Code Device Sync
 │   │       ├── qr-local.js              # Lokaler QR-Renderer (SVG) auf Basis von assets/vendor/qrcode, ohne Drittanbieter
-│   │       ├── dashboard-logic.js       # DOM-freie Dashboard-Logik (Lernempfehlungen, Aktivitätsraster), Vitest-getestet
 │   │       └── ...                      # Weitere Module
 │   │
 │   ├── data/                    # JSON-Datenspeicher (projects.json)
@@ -124,7 +112,7 @@ Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf
 - **Lokale Drittanbieter-Ressourcen (`assets/vendor/`)**:
   - Icon-Font (Font Awesome 7.3.1) und Syntax-Highlighter (Prism.js) sind **100 % lokal gehostet**.
   - Font Awesome wird als **generiertes Subset** ausgeliefert: `npm run subset-icons` baut CSS und WOFF2 aus dem npm-Paket und behält nur die tatsächlich verwendeten Icons (ca. 21 KB CSS + 22 KB Fonts statt 103 KB + 300 KB). Ein neues Icon erscheint erst nach diesem Befehl; `check-icons` prüft das in der CI (ADR 0009).
-  - **QR-Codes** (Lernstand-Sync im Dashboard, Recruiter-Link-Generator) werden lokal im Browser erzeugt (`qrcode-generator`, MIT, `assets/vendor/qrcode/`). Es geht kein Lernstand und kein Link an einen QR-Webdienst; `api.qrserver.com` ist aus den CSPs entfernt. Ist ein Lernstand für einen QR-Code zu groß, weist die Oberfläche auf den Datei-Export hin.
+  - **QR-Codes** (Recruiter-Link-Generator) werden lokal im Browser erzeugt (`qrcode-generator`, MIT, `assets/vendor/qrcode/`). Es geht kein Link an einen QR-Webdienst; `api.qrserver.com` ist aus den CSPs entfernt.
   - Sämtliche externen CDN-Abhängigkeiten (z. B. `cdnjs.cloudflare.com`) wurden entfernt.
   - Die Content-Security-Policy (CSP) ist strikt gehärtet.
 - **Google Maps 2-Klick-Datenschutzlösung**: Karten im Impressum werden standardmäßig blockiert und erst nach aktiver Nutzereinwilligung dynamisch geladen.
@@ -136,8 +124,8 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung & Tests
-- **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Git-Simulator, Prüfungssimulation, Lernkarten, Fortschritts-Backup, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
-- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Git-Engine, Leitner-Box/Fälligkeiten, Kartenstapel, Prüfungsauswertung und Fragenpool, Backup-Format, Notenrechner, Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung), Snake, Memory und Quiz — sowie die Generator-Skripte unter `scripts/`.
+- **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Challenge-Lab, Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
+- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung), Snake und Memory — sowie die Generator-Skripte unter `scripts/`.
 - **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc), dazu die Konsistenz-Checks aus Abschnitt 6.
 - **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
 - Konkrete Testzahlen stehen bewusst nicht hier, sie veralten sofort — `npm test` und `npm run test:unit` geben den aktuellen Stand aus.
@@ -163,7 +151,6 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
 | `npm run check-lighthouse-urls` | `check_lighthouse_urls.js` | Prüft, dass `lighthouserc.json` jede Seite der `sitemap.xml` abdeckt |
 | `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` mit Schwellenwert (Ratsche, ADR 0015); die CI führt die Unit-Tests über diesen Befehl aus |
-| `npm run import-flashcards` | `import_vault_flashcards.js` | Erzeugt die IHK-Kartei `assets/data/flashcards-extended.json` aus den Karteikarten im Obsidian-Vault (nur lokal); `npm run check-flashcards` prüft sie in `check` und CI |
 | `npm run generate-qr-codes` | `generate_qr_codes.js` | Erzeugt QR-Codes für Kernseiten (Lebenslauf/PDF-Export) |
 
 ---
@@ -202,13 +189,13 @@ npm run dev
 ```bash
 npm test
 ```
-Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Git-Simulator, Prüfungssimulation, IHK-Cockpit, Portfolio-Assistent, Challenge-Lab, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
+Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrierten Projekte, Portfolio-Assistent, Challenge-Lab, Theme-Umschaltung und Barrierefreiheit. Für schnelle Iteration: `npx playwright test --project=chromium`; gegen den Produktions-Build: `npm run build:dist` und danach `E2E_ROOT=dist npx playwright test --project=chromium`.
 
 ### 5. Unit-Tests ausführen (Vitest)
 ```bash
 npm run test:unit
 ```
-Testet die reine Kernlogik (Git-Engine, Leitner-Box, Prüfungsauswertung, Backup-Format, Notenrechner/QA-Score, Skills-Matrix-Filter) isoliert ohne Browser — Konfiguration in `vitest.config.js`. `npm run test:coverage` erzeugt zusätzlich einen Coverage-Bericht.
+Testet die reine Kernlogik (Skills-Matrix-Filter, Portfolio-Logik, Snake, Memory) isoliert ohne Browser — Konfiguration in `vitest.config.js`. `npm run test:coverage` erzeugt zusätzlich einen Coverage-Bericht.
 
 ### 6. Linting
 ```bash
@@ -230,18 +217,14 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 - **WCAG 2.1 AA Accessibility** (axe-core in der CI; Hochkontrast-Modus mit 7:1): Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
 - **Automatisierte Tests**: Playwright-E2E-Suite in vier Browser-Profilen plus Vitest-Unit-Tests für die Kernlogik (`npm test`, `npm run test:unit`).
-- **Lernwerkzeuge**: Lernkarten mit echter Wiederholungsplanung, IHK-Prüfungssimulation mit Zeitlimit und Auswertung je Themengebiet, Git-Simulator mit sechs Leveln, Export/Import des Lernfortschritts.
 
 ### ⚙️ Code-Refactoring & neue Module (August 2026)
-- **IHK Projektarbeits- & Prüfungs-Cockpit (`ihk-cockpit.html` & `ihk-cockpit.js`)**: Interaktive Nutzwertanalyse (NWA) mit Presets, 80h-Phasenplan (Gantt) und Timer-gestützter Fachgesprächs-Simulator.
 - **In-Browser Quick-Sandbox & Live-Play (`quick-sandbox.js`)**: Schwebendes Modal zur direkten Ausführung von Web- & Canvas-Projekten (*EcoChef*, *Amazon 2.0*, *ElektroCheck AI*, *ManuFaktur*) ohne Verlassen des Portfolios.
 - **Portfolio-Assistent (`portfolio-copilot.js`)**: Chat-Widget ohne Sprachmodell, das Fragen mit Stichwörtern einer festen Wissensbasis abgleicht und vollständig im Browser läuft, für Recruiter & Prüfer mit Intent-Matching und Deep-Links.
 - **Executive Dossier 2.0 & Rollenbasierter PDF-Generator (`executive-dossier.js`)**: Maßgeschneiderter 1-Klick-Export für Fullstack-, Backend- oder IHK-Prüfer-Profile.
 - **Clean-Code & RegEx Challenge-Lab (`challenge-lab.html` & `challenge-lab.js`)**: Interaktives Coding-Lab zu IT-Sicherheit (SQL-Injection), RegEx, Pure Functions und Big-O mit XP-Gamification.
 - **In-Browser Java 21 & C++23 WASM Runner (`playground.html` & `playground.js`)**: Interaktiver Bytecode-Compiler & WebAssembly-Runner mit Syntax-Tabs und Live-Ausführung im Browser.
 - **Interaktiver 3D Systemarchitektur-Graph (`architecture.html` & `architecture.js`)**: 3D-Knotengraph mit Orbit-Kamerasteuerung, dynamischer Projektion und Komponenten-Telemetrie.
-- **Voice-Assisted AI Interview Simulator (`interview.js` & `interview-trainer.html`)**: Sprachausgabe (SpeechSynthesis) und Spracheingabe per Mikrofon (SpeechRecognition) für realistische IHK-Fachgespräche.
-- **PWA-Status (`dashboard.html` & `dashboard.js`)**: Zeigt den tatsächlichen Zustand von Service Worker, Cache Storage (Name, Anzahl der Dateien und Seiten) und Netzwerk; prüft auf Wunsch die Offline-Verfügbarkeit und sucht nach Updates.
 - **Global Command Palette (`Strg + K` / `Cmd + K`) (`command_palette.js`)**: Fuzzy-Schnellsuche quer über alle Seiten, Projekte und IHK-Lernressourcen mit Tastaturnavigation.
 - **Side-by-Side Projekt-Vergleichsmatrix (`project_compare.js`)**: Interaktive Gegenüberstellung von 2 bis 3 Projekten hinsichtlich Architektur-Badges, Tech-Stack, Key Learnings und Live-Demo Links im Bottom-Drawer.
 

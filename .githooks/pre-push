@@ -23,8 +23,8 @@ fi
 # E2E-Smoke (Chromium, ca. 1 Minute): fängt rote Specs ab, die `npm run check` nicht sieht.
 # Überspringen mit SKIP_E2E=1 git push
 if [ "${SKIP_E2E:-0}" != "1" ]; then
-    echo "🔍 [PRE-PUSH] Führe E2E-Smoke (icons, advanced_features, git_simulator) aus..."
-    npx playwright test icons advanced_features git_simulator --project=chromium --reporter=line
+    echo "🔍 [PRE-PUSH] Führe E2E-Smoke (icons, advanced_features) aus..."
+    npx playwright test icons advanced_features --project=chromium --reporter=line
     SMOKE_CODE=$?
     if [ $SMOKE_CODE -ne 0 ]; then
         echo "======================================================================"

@@ -12,7 +12,7 @@ const STORAGE_KEYS = new Function('window', `${read('assets/js/constants.js')}; 
 });
 
 // Keys the code uses without an entry in STORAGE_KEYS.
-const KEYS_OUTSIDE_CONSTANTS = ['flashcards_extended_enabled', 'last_backup_at'];
+const KEYS_OUTSIDE_CONSTANTS = [];
 
 const html = read('pages/datenschutz.html');
 const listMatch = /<ul id="storage-key-list">([\s\S]*?)<\/ul>/.exec(html);

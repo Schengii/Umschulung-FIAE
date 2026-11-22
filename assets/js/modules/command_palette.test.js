@@ -120,18 +120,18 @@ describe('command palette', () => {
 
     it('filters by title and category, ignoring case', () => {
         openPalette();
-        type('git');
-        expect(titles()).toEqual(['Git Branching Simulator (CRT Terminal)']);
+        type('playground');
+        expect(titles()).toEqual(['SQL & Code Playground']);
 
         type('KARRIERE');
-        expect(titles()).toEqual(['Lebenslauf & Zeugnisse', 'Interaktiver Bewerbungs-Trainer']);
+        expect(titles()).toEqual(['Lebenslauf & Zeugnisse']);
     });
 
     it('searches the English titles when the page is English', () => {
         document.documentElement.setAttribute('lang', 'en');
         openPalette();
-        type('flashcards');
-        expect(titles()).toEqual(['IHK Flashcards']);
+        type('playground');
+        expect(titles()).toEqual(['SQL & Code Playground']);
     });
 
     it('shows the search text as text, never as markup', () => {
@@ -183,7 +183,7 @@ describe('command palette', () => {
         expect(titles()).toEqual(['Demo-Projekt']);
 
         items()[0].click();
-        expect(window.location.href).toBe('http://localhost/pages/projekt-detail.html?repo=Demo%20Repo');
+        expect(window.location.href).toBe('http://localhost/pages/projekt-demo-repo.html');
         window.happyDOM.setURL('http://localhost/index.html');
     });
 });
