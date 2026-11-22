@@ -9,6 +9,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Lernbereich**: Die Seiten IHK Cockpit, Lernkarten (samt IHK-Kartei), Prüfungs-Quiz, Bewerbungs-Trainer, Git Simulator und Dashboard sind samt Skripten, Modulen, Tests, Stylesheets, Daten, Bildern, Sitemap-, Menü- und Suchindex-Einträgen entfernt, ebenso Prüfungssimulator, Tagesfrage, Lernstand-Backup mit QR-Sync, Beispiel-Lernstand, die zugehörigen Achievements und Datenschutz-Abschnitte. Das Quiz ist auch aus dem Spiele-Hub verschwunden. ADR 0007 und 0011 entfallen.
 
 #### Geändert
+- **Aufräumen**: Rund 760 Zeilen ungenutzter Regeln (Zertifikat-Modal, Commit-Grid, Admin-Bereich, Backup-QR u. a.) aus `style.css` entfernt; README an den aktuellen Stand angepasst.
 - **Navigation**: „Home“ führt zur Landingpage, `home.html` ist als „Werdegang & Kontakt“ unter „Profil“ erreichbar, „Projekte“ ist ein eigener Hauptpunkt.
 - **Projektlinks**: Landingpage, Befehlspalette, Projektvergleich und verwandte Projekte verlinken auf die statischen Projektseiten statt auf `projekt-detail.html?repo=…`.
 
