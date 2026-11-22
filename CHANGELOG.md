@@ -4,6 +4,10 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Verbessert (A11y)
+- **Live-Regionen**: Level-Status im Git-Simulator, Prüfungsfortschritt im Cockpit, XP-Anzeige und Antwort-Feedback im Challenge-Lab sowie das Interview-Ergebnis werden jetzt von Screenreadern angesagt. Die Playground-Konsole ist ein fokussierbares `role="log"`.
+- **Cockpit**: Die Sieger-Meldung der Nutzwertanalyse escaped die Optionsnamen (`escapeHtml`).
+
 #### Behoben (CI)
 - **Projekt-Sync**: `sync_projects.js` führt nach `generate-data` jetzt `check-csp:fix` aus. Die generierten Projektseiten ändern mit `dateModified` ihren Inline-Script-Hash; ohne Nachführen in `vercel.json` schlug `check-csp` auf dem Sync-Branch fehl.
 
