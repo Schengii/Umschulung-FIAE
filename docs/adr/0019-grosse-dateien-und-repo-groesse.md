@@ -1,6 +1,6 @@
 # 0019 — Große Dateien und Repository-Größe
 
-**Status:** Vorgeschlagen (Entscheidung beim Eigentümer, Plan 7.1)
+**Status:** Angenommen (Option 1 mit Komprimierung, 2026-11-22)
 **Datum:** 2026-11-19
 
 ## Kontext
@@ -23,6 +23,10 @@ Option 2, weil sie ohne Eingriff in die Historie auskommt und das Wachstum stopp
 - `assets/videos/` und `assets/powerpoint/` entfallen aus `COPY_ENTRIES`/dem Repository; Verweise in `praktikumsbetrieb-media.js`, `projects.json` (Download-Karten) und `README.md` werden auf die externen URLs umgestellt.
 - `check-csp` und `vercel.json` bekommen den neuen Host in `media-src`/`img-src`; ADR 0003 wird nachgetragen.
 
-## Offene Entscheidung
+## Entscheidung (2026-11-22)
 
-Bis der Eigentümer entscheidet, gilt Option 1.
+Der Eigentümer hat sich gegen externes Hosting entschieden (Regel „keine externen Ressourcen“, Offline-Nutzung bleibt). Stattdessen wurden die Medien einmalig verkleinert:
+
+- Die fünf Videos (`assets/videos/V1` bis `V5`) sind mit `ffmpeg` neu kodiert (H.264, CRF 29, Preset slow, Audio AAC 64 kbit/s mono, `faststart`): 16,3 MB auf 3,4 MB, Auflösung und Dauer unverändert, SSIM gegenüber dem Original 0,98 bis 0,996.
+- `Max PPT Version3.pptx` enthält dieselben Videos V1 und V2 eingebettet; sie wurden durch die verkleinerten Fassungen ersetzt: 7,79 MB auf 3,68 MB. Die Größenangaben auf den Seiten und in den Projektdaten sind angepasst.
+- Die Historie in `.git` bleibt unverändert (kein Umschreiben, kein LFS). Neue Binärdateien sollen vor dem Commit in ähnlicher Weise verkleinert werden.
