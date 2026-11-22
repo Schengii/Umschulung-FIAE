@@ -80,10 +80,10 @@ export function initIcalGenerator() {
                     <a href="${notifyMailto}" class="btn btn-sm btn-primary border-radius-4px font-size-0-8rem">
                         <i class="fa-solid fa-paper-plane me-1"></i> <span lang="de">Anfrage senden</span><span lang="en">Send Request</span>
                     </a>
-                    <a href="${gcalUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary border-radius-4px font-size-0-8rem">
+                    <a href="${gcalUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary border-radius-4px font-size-0-8rem">
                         <i class="fa-brands fa-google me-1"></i> Google Calendar
                     </a>
-                    <button type="button" id="btn-download-ics" class="btn btn-sm btn-outline-primary border-radius-4px font-size-0-8rem">
+                    <button type="button" id="btn-download-ics" class="btn btn-sm btn-secondary border-radius-4px font-size-0-8rem">
                         <i class="fa-solid fa-calendar-plus me-1"></i> .ics iCal Datei
                     </button>
                 </div>
