@@ -36,8 +36,8 @@ Umschulung-FIAE/
 │   └── ...                      # Weitere Seiten (impressum.html, datenschutz.html, news.html, etc.)
 │
 ├── assets/                      # Globale Web-Ressourcen
-│   ├── css/                     # Stylesheets (style.css, modal.css, skeletons.css, print.css)
-│   │   └── modules/             # Modulare Stylesheets (portfolio_copilot.css, ihk_cockpit.css, etc.)
+│   ├── css/                     # Stylesheets (style.css, skeletons.css, print.css)
+│   │   └── modules/             # Modulare Stylesheets (portfolio_copilot.css, command_palette.css, etc.)
 │   ├── js/                      # Script-Dateien & ES6-Module
 │   │   ├── main.js              # Kern-Initialisierung & robuster Modul-Loader
 │   │   ├── components.js        # Header, Footer, kategorisierte Navigation, Accessibility Manager & Templating
@@ -123,7 +123,7 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 
 ### 5. Qualitätssicherung & Tests
 - **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
-- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung), Snake und Memory — sowie die Generator-Skripte unter `scripts/`.
+- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung) — sowie die Generator-Skripte unter `scripts/`.
 - **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc), dazu die Konsistenz-Checks aus Abschnitt 6.
 - **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
 - Konkrete Testzahlen stehen bewusst nicht hier, sie veralten sofort — `npm test` und `npm run test:unit` geben den aktuellen Stand aus.
@@ -193,7 +193,7 @@ Die Test-Suite verifiziert alle HTML-Seiten, den 1-Click Launch aller registrier
 ```bash
 npm run test:unit
 ```
-Testet die reine Kernlogik (Skills-Matrix-Filter, Portfolio-Logik, Snake, Memory) isoliert ohne Browser — Konfiguration in `vitest.config.js`. `npm run test:coverage` erzeugt zusätzlich einen Coverage-Bericht.
+Testet die reine Kernlogik (Skills-Matrix-Filter, Portfolio-Logik) isoliert ohne Browser — Konfiguration in `vitest.config.js`. `npm run test:coverage` erzeugt zusätzlich einen Coverage-Bericht.
 
 ### 6. Linting
 ```bash
