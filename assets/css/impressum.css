@@ -32,8 +32,10 @@
     transition: var(--transition-normal);
 }
 
-.map-2click-container:hover {
-    border-color: var(--primary-color, #38bdf8);
+@media (hover: hover) {
+    .map-2click-container:hover {
+        border-color: var(--primary-color, #38bdf8);
+    }
 }
 
 .map-placeholder-overlay {

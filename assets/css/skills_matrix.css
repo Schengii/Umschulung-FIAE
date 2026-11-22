@@ -24,10 +24,12 @@
     gap: 0.5rem;
 }
 
-.skills-tab:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--bg-page);
+@media (hover: hover) {
+    .skills-tab:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--bg-page);
+    }
 }
 
 .skills-tab.active {
@@ -119,9 +121,11 @@
     cursor: pointer;
 }
 
-.skills-radar-svg circle.radar-dot:hover {
-    fill: var(--primary);
-    r: 6;
+@media (hover: hover) {
+    .skills-radar-svg circle.radar-dot:hover {
+        fill: var(--primary);
+        r: 6;
+    }
 }
 
 .skills-radar-svg .grid-line {
@@ -167,10 +171,12 @@
     gap: 0.5rem;
 }
 
-.skill-matrix-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .skill-matrix-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+        border-color: var(--primary);
+    }
 }
 
 .skill-card-header {

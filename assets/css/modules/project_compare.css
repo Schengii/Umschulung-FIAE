@@ -72,8 +72,10 @@
     font-size: 1rem;
 }
 
-.compare-column-close:hover {
-    color: var(--danger, #ef4444);
+@media (hover: hover) {
+    .compare-column-close:hover {
+        color: var(--danger, #ef4444);
+    }
 }
 
 .compare-feature-row {
@@ -131,8 +133,10 @@
     font-size: 0.9rem;
 }
 
-.compare-floating-bar:hover {
-    transform: scale(1.05);
+@media (hover: hover) {
+    .compare-floating-bar:hover {
+        transform: scale(1.05);
+    }
 }
 
 .compare-floating-bar.hidden {

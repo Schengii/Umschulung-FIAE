@@ -66,9 +66,12 @@
     background: rgba(255, 255, 255, 0.1);
     color: #f1f5f9;
 }
-.doc-preview-close:hover {
-    background: var(--primary, #2563eb);
-    color: #ffffff;
+
+@media (hover: hover) {
+    .doc-preview-close:hover {
+        background: var(--primary, #2563eb);
+        color: #ffffff;
+    }
 }
 .doc-preview-body {
     padding: 2.5rem 1.5rem 1.5rem;

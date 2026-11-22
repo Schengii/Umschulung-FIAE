@@ -31,9 +31,14 @@
     text-decoration: none;
 }
 
-.landing-project-link:hover,
 .landing-project-link:focus-visible {
     text-decoration: underline;
+}
+
+@media (hover: hover) {
+    .landing-project-link:hover {
+        text-decoration: underline;
+    }
 }
 
 .landing-more {

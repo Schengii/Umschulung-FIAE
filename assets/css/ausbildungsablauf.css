@@ -18,15 +18,19 @@
     background: linear-gradient(to bottom, var(--primary), var(--accent));
 }
 
-.roadmap-item:hover .roadmap-badge {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: var(--text-on-primary);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+@media (hover: hover) {
+    .roadmap-item:hover .roadmap-badge {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: var(--text-on-primary);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    }
 }
 
-.roadmap-item:hover .roadmap-badge i {
-    color: white;
+@media (hover: hover) {
+    .roadmap-item:hover .roadmap-badge i {
+        color: white;
+    }
 }
 
 /* Detail Drawer (Roadmap) */
@@ -67,8 +71,10 @@
     gap: 1.25rem;
 }
 
-.roadmap-drawer-close:hover {
-    color: var(--primary);
+@media (hover: hover) {
+    .roadmap-drawer-close:hover {
+        color: var(--primary);
+    }
 }
 
 .roadmap-overlay {
@@ -98,10 +104,12 @@
     color: var(--text-primary);
 }
 
-.code-copy-btn:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .code-copy-btn:hover {
+        background: var(--primary);
+        color: var(--text-on-primary);
+        border-color: var(--primary);
+    }
 }
 
 .aside-image-card img {

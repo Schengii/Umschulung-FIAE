@@ -128,8 +128,10 @@
     transition: color 0.2s;
 }
 
-.contact-list li a:hover {
-    color: var(--primary);
+@media (hover: hover) {
+    .contact-list li a:hover {
+        color: var(--primary);
+    }
 }
 
 /* Skills Section */
@@ -264,8 +266,10 @@
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.timeline-v2-item:hover {
-    transform: translateX(6px);
+@media (hover: hover) {
+    .timeline-v2-item:hover {
+        transform: translateX(6px);
+    }
 }
 
 .timeline-v2-marker {

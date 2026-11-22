@@ -59,6 +59,8 @@
  
      --border: rgba(203, 213, 225, 0.7);
      --border-hover: rgba(148, 163, 184, 0.9);
+    /* Rahmen von Eingabefeldern: mind. 3:1 gegen den Kartenhintergrund (WCAG 1.4.11) */
+    --field-border: #64748b;
 
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
     --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.12), 0 2px 4px -2px rgb(0 0 0 / 0.08);
@@ -100,6 +102,7 @@
  
     --border: rgba(71, 85, 105, 0.65);
     --border-hover: rgba(100, 116, 139, 0.85);
+    --field-border: #94a3b8;
 
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
     --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
@@ -442,9 +445,11 @@ a {
     transition: var(--transition);
 }
 
-a:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
+@media (hover: hover) {
+    a:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+    }
 }
 
 img,
@@ -602,10 +607,16 @@ nav.topnav {
     border-bottom: 2px solid transparent;
 }
 
-.nav-link:hover,
 .nav-link:focus {
     background-color: var(--bg-nav-item-hover);
     color: white;
+}
+
+@media (hover: hover) {
+    .nav-link:hover {
+        background-color: var(--bg-nav-item-hover);
+        color: white;
+    }
 }
 
 .nav-item.active .nav-link {
@@ -660,11 +671,17 @@ nav.topnav {
     transition: var(--transition);
 }
 
-.dropdown-link:hover,
-.dropdown-link:focus,
-.dropdown-item:hover>.dropdown-link {
+.dropdown-link:focus {
     background-color: var(--primary-light);
     color: var(--primary);
+}
+
+@media (hover: hover) {
+    .dropdown-link:hover,
+    .dropdown-item:hover>.dropdown-link {
+        background-color: var(--primary-light);
+        color: var(--primary);
+    }
 }
 
 /* Secondary Sub-Dropdown (nested) */
@@ -711,8 +728,10 @@ nav.topnav {
     transition: transform 0.2s;
 }
 
-.nav-item:hover .fa-caret-down {
-    transform: rotate(180deg);
+@media (hover: hover) {
+    .nav-item:hover .fa-caret-down {
+        transform: rotate(180deg);
+    }
 }
 
 /* Nav Controls (Search & Theme Toggle) */
@@ -739,8 +758,14 @@ nav.topnav {
     transition: var(--transition);
 }
 
+/* Die Suche sitzt auf der dunklen Navigationsleiste (auch im hellen Theme): helle Platzhalter-
+   und Icon-Farbe, beim Fokus (heller Feldhintergrund) wieder dunkel. */
 .search-input::placeholder {
-    color: var(--text-secondary);
+    color: #94a3b8;
+}
+
+.search-input:focus::placeholder {
+    color: var(--text-muted);
 }
 
 .search-input:focus {
@@ -754,9 +779,13 @@ nav.topnav {
 .search-icon {
     position: absolute;
     left: 0.75rem;
-    color: var(--text-secondary);
+    color: #cbd5e1;
     pointer-events: none;
     font-size: 0.9rem;
+}
+
+.search-container:focus-within .search-icon {
+    color: var(--text-muted);
 }
 
 /* Theme Toggle Button */
@@ -774,10 +803,16 @@ nav.topnav {
     justify-content: center;
 }
 
-.theme-toggle:hover,
 .theme-toggle:focus {
     background-color: var(--bg-nav-item-hover);
     color: white;
+}
+
+@media (hover: hover) {
+    .theme-toggle:hover {
+        background-color: var(--bg-nav-item-hover);
+        color: white;
+    }
 }
 
 /* ==========================================================================
@@ -795,10 +830,12 @@ nav.topnav {
     transition: var(--transition);
 }
 
-.card:hover {
-    box-shadow: var(--shadow-lg);
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .card:hover {
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+    }
 }
 
 /* Card titles */
@@ -985,9 +1022,11 @@ nav.topnav {
     text-decoration: none;
 }
 
-.breadcrumb a:hover {
-    color: var(--primary);
-    text-decoration: underline;
+@media (hover: hover) {
+    .breadcrumb a:hover {
+        color: var(--primary);
+        text-decoration: underline;
+    }
 }
 
 /* ==========================================================================
@@ -1090,11 +1129,10 @@ nav.topnav {
     flex-shrink: 0;
 }
 
-/* Handy: kompakter Hinweis (Text oben, kleiner Button darunter) mit Platz für die
-   Home-Indicator-Leiste des iPhones. */
+/* Handy: kompakter Hinweis (Text oben, kleiner Button darunter). */
 @media (max-width: 600px) {
     .cookie-banner {
-        padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        padding: 0.75rem 1rem;
     }
 
     .cookie-content {
@@ -1153,7 +1191,7 @@ nav.topnav {
 .qr-result-link-input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--field-border);
     border-radius: var(--radius-md);
     background-color: var(--bg-card);
     color: var(--text-primary);
@@ -1164,7 +1202,6 @@ nav.topnav {
 
 .form-control:focus,
 .qr-form-input:focus {
-    outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
@@ -1182,10 +1219,12 @@ nav.topnav {
     transition: var(--transition);
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+@media (hover: hover) {
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
 }
 
 .btn-primary:active {
@@ -1250,9 +1289,11 @@ footer .icons a {
     border-radius: var(--radius-full);
 }
 
-footer .icons a:hover {
-    color: white;
-    background-color: var(--bg-nav-item-hover);
+@media (hover: hover) {
+    footer .icons a:hover {
+        color: white;
+        background-color: var(--bg-nav-item-hover);
+    }
 }
 
 /* ==========================================================================
@@ -1281,7 +1322,29 @@ footer .icons a:hover {
     }
 }
 
-@media screen and (max-width: 768px) {
+/* Zwischen Hamburger-Menü und voller Desktop-Breite: engere Navigation, damit nichts abgeschnitten wird. */
+@media screen and (min-width: 1101px) and (max-width: 1279px) {
+    .nav-link {
+        padding: 0 0.8rem;
+    }
+
+    .nav-controls {
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        width: 130px;
+    }
+
+    .search-input:focus {
+        width: 150px;
+    }
+}
+
+/* Hamburger-Menü ab 1100 px abwärts: die ausgeschriebene Navigation braucht je nach Seite
+   rund 1070 px (Startseite) bis 1250 px (Seiten mit Suchfeld); darunter wurden Sprach- und
+   Theme-Schalter abgeschnitten. */
+@media screen and (max-width: 1100px) {
     .nav-wrapper {
         padding: 0 0.5rem;
     }
@@ -1489,9 +1552,11 @@ html[lang="en"] [lang="de"] {
     transition: var(--transition);
 }
 
-.btn-filter:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+@media (hover: hover) {
+    .btn-filter:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
 }
 
 .btn-filter.active {
@@ -1519,11 +1584,13 @@ html[lang="en"] [lang="de"] {
     transition: var(--transition);
 }
 
-.tech-tag:hover {
-    background-color: var(--primary);
-    color: var(--text-on-primary);
-    border-color: var(--primary);
-    transform: translateY(-1px);
+@media (hover: hover) {
+    .tech-tag:hover {
+        background-color: var(--primary);
+        color: var(--text-on-primary);
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
 }
 
 [data-theme="dark"] .tech-tag {
@@ -1560,13 +1627,15 @@ html[lang="en"] [lang="de"] {
         border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.left-col .card:hover,
-.right-col .card:hover,
-.layout-single .card:hover,
-.welcome-container.card:hover {
-    transform: translateY(-6px) scale(1.008) translateZ(0);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px 2px rgba(37, 99, 235, 0.08);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .left-col .card:hover,
+    .right-col .card:hover,
+    .layout-single .card:hover,
+    .welcome-container.card:hover {
+        transform: translateY(-6px) scale(1.008) translateZ(0);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px 2px rgba(37, 99, 235, 0.08);
+        border-color: var(--primary);
+    }
 }
 
 /* Timeline Hover badge effects */
@@ -1742,8 +1811,10 @@ html[lang="en"] [lang="de"] {
     transition: var(--transition);
 }
 
-.roadmap-item:hover {
-    transform: translateX(5px);
+@media (hover: hover) {
+    .roadmap-item:hover {
+        transform: translateX(5px);
+    }
 }
 
 .roadmap-badge {
@@ -1936,10 +2007,12 @@ html[lang="en"] [lang="de"] {
     cursor: pointer;
 }
 
-.btn-secondary:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    text-decoration: none;
+@media (hover: hover) {
+    .btn-secondary:hover {
+        background: var(--primary);
+        color: var(--text-on-primary);
+        text-decoration: none;
+    }
 }
 
 /* Gemeinsame Form der Standard-Buttons. :where() hält die Spezifität bei null, damit
@@ -1996,8 +2069,10 @@ html[lang="en"] [lang="de"] {
     transition: r 0.2s ease;
 }
 
-.radar-dot:hover {
-    r: 6;
+@media (hover: hover) {
+    .radar-dot:hover {
+        r: 6;
+    }
 }
 
 /* ==========================================================================
@@ -2146,11 +2221,13 @@ html[lang="en"] [lang="de"] {
     text-decoration: none;
 }
 
-.share-btn:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    border-color: var(--primary);
-    text-decoration: none;
+@media (hover: hover) {
+    .share-btn:hover {
+        background: var(--primary);
+        color: var(--text-on-primary);
+        border-color: var(--primary);
+        text-decoration: none;
+    }
 }
 
 /* ==========================================================================
@@ -2265,10 +2342,12 @@ html nav {
     padding: 1.5rem;
 }
 
-.project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+    }
 }
 
 .project-card-header h3 {
@@ -2290,8 +2369,10 @@ html nav {
     transform: none !important;
 }
 
-.project-card:hover .img-fallback {
-    transform: none !important;
+@media (hover: hover) {
+    .project-card:hover .img-fallback {
+        transform: none !important;
+    }
 }
 
 /* Project description */
@@ -2335,10 +2416,12 @@ html nav {
     color: var(--text-primary) !important;
 }
 
-.btn-github:hover {
-    background: var(--text-secondary);
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+@media (hover: hover) {
+    .btn-github:hover {
+        background: var(--text-secondary);
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 }
 
 [data-theme="dark"] .btn-github {
@@ -2347,9 +2430,11 @@ html nav {
     color: var(--text-secondary) !important;
 }
 
-[data-theme="dark"] .btn-github:hover {
-    background: #4b5563;
-    color: #ffffff !important;
+@media (hover: hover) {
+    [data-theme="dark"] .btn-github:hover {
+        background: #4b5563;
+        color: #ffffff !important;
+    }
 }
 
 /* ==========================================================================
@@ -2454,11 +2539,13 @@ html nav {
     z-index: 10;
 }
 
-.modal-close:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    border-color: var(--primary);
-    transform: rotate(90deg);
+@media (hover: hover) {
+    .modal-close:hover {
+        background: var(--primary);
+        color: var(--text-on-primary);
+        border-color: var(--primary);
+        transform: rotate(90deg);
+    }
 }
 
 /* ==========================================================================
@@ -2563,9 +2650,11 @@ html nav {
     pointer-events: all;
 }
 
-.back-to-top:hover {
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.55);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .back-to-top:hover {
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.55);
+        transform: translateY(-2px);
+    }
 }
 
 /* ==========================================================================
@@ -2611,14 +2700,18 @@ html nav {
     flex-shrink: 0;
 }
 
-.topnav #theme-toggle:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: var(--text-on-primary);
+@media (hover: hover) {
+    .topnav #theme-toggle:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--text-on-primary);
+    }
 }
 
-.topnav #theme-toggle:hover {
-    transform: rotate(20deg);
+@media (hover: hover) {
+    .topnav #theme-toggle:hover {
+        transform: rotate(20deg);
+    }
 }
 
 .topnav #theme-toggle.rotate {
@@ -2640,10 +2733,12 @@ html nav {
     justify-content: center;
 }
 
-.topnav #lang-toggle:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: var(--text-on-primary);
+@media (hover: hover) {
+    .topnav #lang-toggle:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--text-on-primary);
+    }
 }
 
 /* ==========================================================================
@@ -3193,12 +3288,14 @@ html nav {
     text-decoration: none;
 }
 
-.social-icon:hover {
-    color: var(--footer-social-hover-color);
-    background-color: var(--primary);
-    border-color: var(--primary);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+@media (hover: hover) {
+    .social-icon:hover {
+        color: var(--footer-social-hover-color);
+        background-color: var(--primary);
+        border-color: var(--primary);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
 }
 
 /* Link Columns */
@@ -3221,8 +3318,10 @@ html nav {
     align-self: flex-start;
 }
 
-.footer-link:hover {
-    color: var(--text-footer-title);
+@media (hover: hover) {
+    .footer-link:hover {
+        color: var(--text-footer-title);
+    }
 }
 
 /* Underline slide effect */
@@ -3489,10 +3588,12 @@ html nav {
     transition: var(--transition);
 }
 
-.download-item-box:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+@media (hover: hover) {
+    .download-item-box:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .btn-download {
@@ -3509,9 +3610,11 @@ html nav {
     transition: var(--transition);
 }
 
-.btn-download:hover {
-    background: var(--primary-hover);
-    text-decoration: none;
+@media (hover: hover) {
+    .btn-download:hover {
+        background: var(--primary-hover);
+        text-decoration: none;
+    }
 }
 
 /* ==========================================================================
@@ -4124,11 +4227,14 @@ html nav {
     color: var(--primary);
     cursor: pointer;
 }
-.btn-outline:hover,
-.btn-outline-primary:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    text-decoration: none;
+
+@media (hover: hover) {
+    .btn-outline:hover,
+    .btn-outline-primary:hover {
+        background: var(--primary);
+        color: var(--text-on-primary);
+        text-decoration: none;
+    }
 }
 .btn-outline-secondary {
     background: transparent;
@@ -4136,9 +4242,12 @@ html nav {
     color: var(--text-secondary);
     cursor: pointer;
 }
-.btn-outline-secondary:hover {
-    background: var(--bg-nav-item-hover);
-    color: var(--text-on-nav);
+
+@media (hover: hover) {
+    .btn-outline-secondary:hover {
+        background: var(--bg-nav-item-hover);
+        color: var(--text-on-nav);
+    }
 }
 
 /* Chips (Schnellauswahl, z. B. Skill-Matchmaker) */
@@ -4158,10 +4267,13 @@ html nav {
     cursor: pointer;
     transition: var(--transition);
 }
-.chip-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-1px);
+
+@media (hover: hover) {
+    .chip-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-1px);
+    }
 }
 .chip-btn:active {
     transform: translateY(0);
@@ -4214,14 +4326,18 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
     opacity: 1;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 0 1px 1px var(--primary);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 0 1px 1px var(--primary);
+        border-color: var(--primary);
+    }
 }
 
-[data-theme="dark"] .card:hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 1px 1px var(--primary);
+@media (hover: hover) {
+    [data-theme="dark"] .card:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 1px 1px var(--primary);
+    }
 }
 
 /* Premium Text Gradient with shifting effect */
@@ -4255,8 +4371,11 @@ body, header, nav, footer, .card, .btn-primary, .theme-toggle, input, textarea, 
     border: 2px solid var(--bg-page);
     transition: var(--transition);
 }
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+
+@media (hover: hover) {
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+    }
 }
 
 /* Glowing accent effects */
@@ -4374,11 +4493,17 @@ body.cursor-active .cursor-glow {
     transform-style: preserve-3d;
     perspective: 1000px;
 }
-.card-tilt-3d:hover {
-    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1) !important;
+
+@media (hover: hover) {
+    .card-tilt-3d:hover {
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1) !important;
+    }
 }
-[data-theme="dark"] .card-tilt-3d:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+
+@media (hover: hover) {
+    [data-theme="dark"] .card-tilt-3d:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+    }
 }
 /* Sub-elements within 3D card that lift up */
 
@@ -4587,11 +4712,13 @@ textarea:focus-visible,
 }
 
 /* 10. Micro-Wiggle & Icon Animations */
-.card:hover h2 i,
-.card:hover h3 i,
-.btn-primary:hover i,
-.nav-link:hover i {
-    animation: iconWiggle 0.5s ease;
+@media (hover: hover) {
+    .card:hover h2 i,
+    .card:hover h3 i,
+    .btn-primary:hover i,
+    .nav-link:hover i {
+        animation: iconWiggle 0.5s ease;
+    }
 }
 @keyframes iconWiggle {
     0%, 100% { transform: rotate(0deg); }
@@ -4725,11 +4852,64 @@ textarea:focus-visible,
     }
 }
 
-@media (max-width: 900px) {
-}
-
 /* "DE | EN" wrapped onto two lines at phone width. */
 .topnav #lang-toggle {
     white-space: nowrap;
     gap: 0.35rem;
+}
+
+/* ==========================================================================
+   KONTRAST-PRÄFERENZEN
+   ========================================================================== */
+
+/* Betriebssystem verlangt mehr Kontrast: kräftigere Rahmen, dunklerer Text, deckende Karten. */
+@media (prefers-contrast: more) {
+    :root {
+        --border: #475569;
+        --border-hover: #0f172a;
+        --field-border: #334155;
+        --text-secondary: #0f172a;
+        --text-muted: #1e293b;
+        --bg-card: #ffffff;
+    }
+
+    html[data-theme="dark"] {
+        --border: #94a3b8;
+        --border-hover: #f8fafc;
+        --field-border: #cbd5e1;
+        --text-secondary: #ffffff;
+        --text-muted: #f1f5f9;
+        --bg-card: #0b1220;
+    }
+}
+
+/* Windows-Hochkontrast: Farben erzwingt das System. Was nur über Hintergrund, Schatten oder
+   Verlauf sichtbar war, bekommt eine Kontur, und der Fokusring bleibt erhalten. */
+@media (forced-colors: active) {
+    :focus-visible {
+        outline: 3px solid Highlight !important;
+        outline-offset: 2px;
+    }
+
+    button,
+    [class*="btn-"],
+    .badge,
+    .tech-tag,
+    .accent-dot-btn {
+        border: 1px solid ButtonText;
+    }
+
+    .skill-level-step {
+        border: 1px solid CanvasText;
+    }
+
+    .skill-level-step.is-on {
+        background: Highlight;
+    }
+
+    .card,
+    .cookie-banner,
+    .achievement-toast {
+        border: 1px solid CanvasText;
+    }
 }

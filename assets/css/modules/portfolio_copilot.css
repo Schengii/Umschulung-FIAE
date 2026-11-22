@@ -38,10 +38,12 @@ html .toast-container {
     -webkit-tap-highlight-color: transparent;
 }
 
-#copilot-toggle-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.6), 0 4px 12px rgba(0, 0, 0, 0.2);
-    color: #ffffff;
+@media (hover: hover) {
+    #copilot-toggle-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.6), 0 4px 12px rgba(0, 0, 0, 0.2);
+        color: #ffffff;
+    }
 }
 
 #copilot-toggle-btn:active {
@@ -187,13 +189,17 @@ html .toast-container {
     justify-content: center;
 }
 
-.copilot-icon-btn:hover {
-    color: var(--text-primary, #0f172a);
-    background: rgba(0, 0, 0, 0.06);
+@media (hover: hover) {
+    .copilot-icon-btn:hover {
+        color: var(--text-primary, #0f172a);
+        background: rgba(0, 0, 0, 0.06);
+    }
 }
 
-[data-theme="dark"] .copilot-icon-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+@media (hover: hover) {
+    [data-theme="dark"] .copilot-icon-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
 }
 
 /* Chat Messages */
@@ -286,11 +292,13 @@ html .toast-container {
     border-color: rgba(96, 165, 250, 0.3);
 }
 
-.copilot-link-btn:hover {
-    background: var(--primary, #2563eb);
-    color: var(--text-on-primary);
-    border-color: var(--primary, #2563eb);
-    transform: translateY(-1px);
+@media (hover: hover) {
+    .copilot-link-btn:hover {
+        background: var(--primary, #2563eb);
+        color: var(--text-on-primary);
+        border-color: var(--primary, #2563eb);
+        transform: translateY(-1px);
+    }
 }
 
 /* Typing Indicator Animation */
@@ -356,12 +364,14 @@ html .toast-container {
     color: #93c5fd;
 }
 
-.copilot-chip:hover {
-    background: var(--primary, #2563eb);
-    color: var(--text-on-primary);
-    border-color: var(--primary, #2563eb);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+@media (hover: hover) {
+    .copilot-chip:hover {
+        background: var(--primary, #2563eb);
+        color: var(--text-on-primary);
+        border-color: var(--primary, #2563eb);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
 }
 
 /* Form Input Bar */
@@ -416,9 +426,11 @@ html .toast-container {
     transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.copilot-send-btn:hover {
-    background: var(--primary-hover, #1d4ed8);
-    transform: scale(1.03);
+@media (hover: hover) {
+    .copilot-send-btn:hover {
+        background: var(--primary-hover, #1d4ed8);
+        transform: scale(1.03);
+    }
 }
 
 .copilot-send-btn:active {

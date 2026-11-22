@@ -84,10 +84,12 @@
     transition: var(--transition);
 }
 
-.social-sidebar-link:hover {
-    background-color: var(--primary);
-    color: var(--text-on-primary);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    .social-sidebar-link:hover {
+        background-color: var(--primary);
+        color: var(--text-on-primary);
+        transform: translateY(-2px);
+    }
 }
 
 .btn-view {
@@ -104,9 +106,11 @@
     transition: var(--transition);
 }
 
-.btn-view:hover {
-    background: var(--border-hover);
-    text-decoration: none;
+@media (hover: hover) {
+    .btn-view:hover {
+        background: var(--border-hover);
+        text-decoration: none;
+    }
 }
 
 .downloads-grid {

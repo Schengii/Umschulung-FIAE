@@ -97,10 +97,16 @@
     text-decoration: none;
 }
 
-.command-palette-item:hover,
 .command-palette-item.active {
     background: var(--primary-light);
     color: var(--primary);
+}
+
+@media (hover: hover) {
+    .command-palette-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
 }
 
 .command-palette-item .item-icon {
@@ -162,8 +168,10 @@
     margin-right: 0.5rem;
 }
 
-.cmd-k-trigger:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    background: var(--primary-light);
+@media (hover: hover) {
+    .cmd-k-trigger:hover {
+        color: var(--primary);
+        border-color: var(--primary);
+        background: var(--primary-light);
+    }
 }

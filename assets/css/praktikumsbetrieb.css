@@ -44,9 +44,11 @@
     z-index: 10;
 }
 
-.btn-slide-nav:hover:not(:disabled) {
-    background: var(--primary);
-    border-color: var(--primary);
+@media (hover: hover) {
+    .btn-slide-nav:hover:not(:disabled) {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
 }
 
 .btn-slide-nav:disabled {
@@ -122,13 +124,22 @@
     color: var(--text);
 }
 
-.ppt-download-card:hover,
 .ppt-download-card:focus {
     transform: translateY(-2px);
     border-color: var(--primary);
     box-shadow: var(--shadow-md);
     outline: 3px solid var(--primary);
     outline-offset: 3px;
+}
+
+@media (hover: hover) {
+    .ppt-download-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-md);
+        outline: 3px solid var(--primary);
+        outline-offset: 3px;
+    }
 }
 
 .ppt-icon-wrapper {
@@ -224,11 +235,18 @@
     gap: 0.5rem;
 }
 
-.gallery-tab-btn:hover,
 .gallery-tab-btn:focus {
     color: var(--text);
     border-color: var(--text-muted);
     outline: 2px solid var(--primary);
+}
+
+@media (hover: hover) {
+    .gallery-tab-btn:hover {
+        color: var(--text);
+        border-color: var(--text-muted);
+        outline: 2px solid var(--primary);
+    }
 }
 
 .gallery-tab-btn.active {
@@ -396,11 +414,18 @@
     color: var(--text);
 }
 
-.playlist-track-btn:hover,
 .playlist-track-btn:focus {
     border-color: var(--primary);
     outline: 2px solid var(--primary);
     outline-offset: 1px;
+}
+
+@media (hover: hover) {
+    .playlist-track-btn:hover {
+        border-color: var(--primary);
+        outline: 2px solid var(--primary);
+        outline-offset: 1px;
+    }
 }
 
 .playlist-track-btn.active {
@@ -512,9 +537,11 @@
     animation: fadeIn 0.4s ease-out forwards;
 }
 
-.bounding-box:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+@media (hover: hover) {
+    .bounding-box:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+    }
 }
 
 .bounding-box-label {

@@ -44,9 +44,11 @@
     user-select: none;
 }
 
-.tree-item:hover {
-    background-color: rgba(37, 99, 235, 0.08);
-    color: var(--primary);
+@media (hover: hover) {
+    .tree-item:hover {
+        background-color: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+    }
 }
 
 .tree-item.active {
@@ -97,10 +99,12 @@
     gap: 0.3rem;
 }
 
-.btn-copy-code:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.3);
+@media (hover: hover) {
+    .btn-copy-code:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.3);
+    }
 }
 
 .explorer-code-pane pre {
@@ -239,9 +243,11 @@
     transition: var(--transition);
 }
 
-.demo-btn-control:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
+@media (hover: hover) {
+    .demo-btn-control:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
 }
 
 .demo-btn-control.close-btn {
@@ -250,9 +256,11 @@
     color: #fca5a5;
 }
 
-.demo-btn-control.close-btn:hover {
-    background-color: rgba(239, 68, 68, 0.4);
-    color: #ffffff;
+@media (hover: hover) {
+    .demo-btn-control.close-btn:hover {
+        background-color: rgba(239, 68, 68, 0.4);
+        color: #ffffff;
+    }
 }
 
 .demo-modal-body {
