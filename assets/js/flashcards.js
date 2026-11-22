@@ -642,7 +642,9 @@ document.addEventListener('DOMContentLoaded', () => {
             hintEl.append(' ', source);
         }
         // Built-in and imported cards contain trusted markup; user-created cards are plain text.
-        const markup = (/** @type {string} */ text) => (hasTrustedMarkup(card) ? text : escapeHtml(text));
+        // Line breaks of those cards (e.g. cards made from exam mistakes) survive: escape first, then break.
+        const markup = (/** @type {string} */ text) =>
+            hasTrustedMarkup(card) ? text : escapeHtml(text).replace(/\n/g, '<br>');
         // No lang attribute here: the site hides [lang="de"] in English mode.
         questionEl.innerHTML = markup(cardText(card, 'question', lang).text);
         answerEl.innerHTML = markup(cardText(card, 'answer', lang).text);
