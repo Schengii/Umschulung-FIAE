@@ -1,27 +1,12 @@
 /**
- * Skill Bars Module — Animated skill bar fill via IntersectionObserver
- * Supports interactive filtering when clicked.
+ * Skill Bars Module — macht die Skill-Zeilen auf der Portfolio-Seite per Klick/Tastatur
+ * zum Projektfilter (Stufenanzeige, keine Prozentbalken).
  */
 export function initSkillBars() {
-    const skillFills = document.querySelectorAll('.skill-fill');
-    if (!skillFills.length) return;
-
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    observer.unobserve(entry.target);
-                }
-            });
-        },
-        { threshold: 0.5 }
-    );
-
-    skillFills.forEach((fill) => observer.observe(fill));
+    const skillBars = document.querySelectorAll('.skill-bar');
+    if (!skillBars.length) return;
 
     // Handle interactive skill filtering for portfolio
-    const skillBars = document.querySelectorAll('.skill-bar');
     skillBars.forEach((bar) => {
         // Only make clickable on pages where project search/filtering exists
         if (document.getElementById('portfolio-searchbar')) {
