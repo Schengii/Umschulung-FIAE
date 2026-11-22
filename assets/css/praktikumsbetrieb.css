@@ -229,7 +229,9 @@
     color: var(--text-muted);
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -410,7 +412,9 @@
     border-radius: var(--radius-md);
     cursor: pointer;
     text-align: left;
-    transition: all 0.2s ease;
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
     color: var(--text);
 }
 
@@ -614,7 +618,9 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 1rem;
-    transition: all 0.3s ease;
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
     animation: fadeIn 0.4s ease-out;
 }
 

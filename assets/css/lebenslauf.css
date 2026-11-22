@@ -282,7 +282,9 @@
     background: var(--bg-page);
     border: 3px solid var(--border);
     box-shadow: 0 0 0 3px var(--bg-page);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timeline-v2-marker.active {
