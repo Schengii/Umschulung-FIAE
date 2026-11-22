@@ -23,6 +23,7 @@
     "check-lighthouse-urls": "node scripts/check_lighthouse_urls.js",
     "check-sw-assets": "node scripts/generate_sw_assets.js --check",
     "sync-projects": "node scripts/sync_projects.js",
+    "fetch-github-repos": "node scripts/fetch_github_repos.js",
     "lint": "eslint assets/js scripts sw.js",
     "lint:fix": "eslint assets/js scripts sw.js --fix",
     "format:check": "prettier --check \"assets/js/**/*.js\" \"scripts/**/*.js\" sw.js",

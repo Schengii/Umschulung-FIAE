@@ -14,8 +14,6 @@ const STORAGE_KEYS = Object.freeze({
     PORTFOLIO_COLORBLIND: 'portfolio_colorblind',
     PORTFOLIO_FONT_SCALE: 'portfolio_font_scale',
     PORTFOLIO_CONTRAST: 'portfolio_contrast',
-    GITHUB_PROJECTS_CACHE: 'github_projects_cache',
-    GITHUB_PROJECTS_CACHE_TIME: 'github_projects_cache_time',
     GITHUB_LIVE_COMMITS_TODAY: 'github_live_commits_today',
 });
 

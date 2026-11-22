@@ -82,6 +82,10 @@ describe('Achievements: page tracking (initAchievements)', () => {
         expect(storage.getItem('has_visited')).toBe('true');
     });
 
+    it('shows no toast for the first visit', () => {
+        expect(document.querySelector('.achievement-toast')).toBeNull();
+    });
+
     it('records the visited page', () => {
         expect(JSON.parse(storage.getItem('visited_pages'))).toContain('index.html');
     });

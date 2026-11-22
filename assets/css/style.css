@@ -1083,10 +1083,44 @@ nav.topnav {
     text-decoration: underline;
 }
 
+.cookie-content .cookie-accept-btn {
+    width: auto;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+/* Handy: kompakter Hinweis (Text oben, kleiner Button darunter) mit Platz für die
+   Home-Indicator-Leiste des iPhones. */
 @media (max-width: 600px) {
+    .cookie-banner {
+        padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    }
+
     .cookie-content {
         flex-direction: column;
-        text-align: center;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .cookie-content p {
+        font-size: 0.78rem;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    .cookie-content .cookie-accept-btn {
+        align-self: flex-end;
+        padding: 0.4rem 1.1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Solange der Hinweis offen ist, bleibt der Assistent-Button auf dem Handy ausgeblendet,
+   damit nicht Banner, Toast und Button gleichzeitig die Seite verdecken. */
+@media (max-width: 600px) {
+    body:has(#cookie-banner) #copilot-toggle-btn {
+        display: none;
     }
 }
 

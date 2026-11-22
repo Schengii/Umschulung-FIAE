@@ -2,6 +2,8 @@
  * Recruiter Filter Module
  * Dynamically switches target role and focus skills in the Steckbrief card based on selected profile.
  */
+import { loadLocalRepos } from './project-detail-logic.js';
+
 export function initRecruiterFilter() {
     const filterButtons = document.querySelectorAll('.role-filter-container .btn-filter');
     const positionCell = document.getElementById('steckbrief-position');
@@ -46,29 +48,13 @@ export function initRecruiterFilter() {
     renderGitActivity();
 }
 
-const GITHUB_CACHE_DURATION = 3600000; // 1 hour; cache shared with projekt-detail.js
-
 /**
- * The public repositories of the portfolio owner, from the cache projekt-detail.js also
- * uses or from the GitHub API (unauthenticated: 60 requests per hour and IP).
- * @returns {Promise<Array<{name: string, html_url: string, pushed_at: string, fork?: boolean}>>}
+ * The public repositories of the portfolio owner, from the local data file the daily sync
+ * keeps current (no request to api.github.com, see loadLocalRepos).
+ * @returns {Promise<Array<Record<string, any>>>}
  */
-async function loadPublicRepos() {
-    const cachedTime = parseInt(AppStorage.getItem(STORAGE_KEYS.GITHUB_PROJECTS_CACHE_TIME) || '0', 10);
-    if (Date.now() - cachedTime < GITHUB_CACHE_DURATION) {
-        try {
-            const cached = JSON.parse(AppStorage.getItem(STORAGE_KEYS.GITHUB_PROJECTS_CACHE) || '[]');
-            if (Array.isArray(cached) && cached.length > 0) return cached;
-        } catch (_e) {
-            // Damaged cache entry: fall through to the network.
-        }
-    }
-    const response = await fetch(`https://api.github.com/users/${APP.GITHUB_USERNAME}/repos?per_page=100`);
-    if (!response.ok) throw new Error(`GitHub API responded with ${response.status}`);
-    const repos = await response.json();
-    AppStorage.setItem(STORAGE_KEYS.GITHUB_PROJECTS_CACHE, JSON.stringify(repos));
-    AppStorage.setItem(STORAGE_KEYS.GITHUB_PROJECTS_CACHE_TIME, Date.now().toString());
-    return repos;
+function loadPublicRepos() {
+    return loadLocalRepos((window.resolveAssetPath || ((p) => p))('assets/data/github-repos.json'));
 }
 
 /**

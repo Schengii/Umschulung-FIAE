@@ -64,8 +64,12 @@ export const Achievements = {
         return this.getUnlocked().includes(id);
     },
 
-    /** @param {string} id */
-    unlock(id) {
+    /**
+     * @param {string} id
+     * @param {{ silent?: boolean }} [options] silent: freischalten ohne Toast (z. B. beim ersten Besuch,
+     *   wo Cookie-Hinweis und Chat-Button schon auf dem Bildschirm liegen)
+     */
+    unlock(id, { silent = false } = {}) {
         if (!this.definitions[id] || this.isUnlocked(id)) return;
 
         const key = (typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.ACHIEVEMENTS) || 'achievements';
@@ -76,7 +80,7 @@ export const Achievements = {
         }
 
         if (typeof document !== 'undefined') {
-            this.showNotification(id);
+            if (!silent) this.showNotification(id);
             document.dispatchEvent(new CustomEvent('achievementunlocked', { detail: id }));
         }
     },
@@ -130,7 +134,7 @@ export function initAchievements() {
     // Track first visit
     if (!AppStorage.getItem('has_visited')) {
         AppStorage.setItem('has_visited', 'true');
-        Achievements.unlock('first_visit');
+        Achievements.unlock('first_visit', { silent: true });
     }
 
     // Track page visits for explorer achievement
