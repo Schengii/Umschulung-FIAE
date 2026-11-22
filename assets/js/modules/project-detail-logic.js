@@ -124,10 +124,20 @@ export function relatedProjects(current, projects, limit = 3) {
 }
 
 /**
+ * File name of the generated static project page (same rule as scripts/generate_project_pages.js, ADR 0018).
+ * @param {string} repoName
+ */
+export const projectPageName = (repoName) =>
+    `projekt-${repoName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')}.html`;
+
+/**
  * Link to the detail page of a project.
  * @param {ProjectDetailData} project
  */
 export const detailUrl = (project) =>
     project.repoName
-        ? `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`
+        ? projectPageName(project.repoName)
         : `projekt-detail.html?title=${encodeURIComponent(project.titleDe)}`;

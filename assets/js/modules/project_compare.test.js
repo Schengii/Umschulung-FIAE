@@ -123,7 +123,7 @@ describe('project comparison', () => {
         expect(columns[0].textContent).toContain('Offline-First');
         expect(columns[0].textContent).toContain('Offline-Sync');
         expect(columns[0].querySelector('a[target="_blank"]').getAttribute('href')).toBe('https://example.org/ecochef');
-        expect(columns[0].querySelector('a[href^="projekt-detail.html?repo=EcoChef"]')).not.toBeNull();
+        expect(columns[0].querySelector('a[href="projekt-ecochef.html"]')).not.toBeNull();
     });
 
     it('falls back to defaults for missing fields and omits sections without data', async () => {

@@ -100,7 +100,7 @@ describe('findProject / withSafeLink / detailUrl', () => {
     });
 
     it('builds the detail URL from repo or encoded title', () => {
-        expect(detailUrl(projects[0])).toBe('projekt-detail.html?repo=A');
+        expect(detailUrl(projects[0])).toBe('projekt-a.html');
         expect(detailUrl(projects[1])).toBe('projekt-detail.html?title=Beta%20%26%20Co');
     });
 });

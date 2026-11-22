@@ -6,6 +6,13 @@
 (function () {
     'use strict';
 
+    /** Static project page (same slug rule as scripts/generate_project_pages.js, ADR 0018). */
+    const projectPageName = (/** @type {string} */ repo) =>
+        `projekt-${repo
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')}.html`;
+
     /** @type {Array<Record<string, any>>} */
     const selectedProjects = [];
     const MAX_COMPARE = 3;
@@ -169,7 +176,7 @@
 
                     <div style="margin-top: auto; padding-top: 0.5rem; display: flex; gap: 0.5rem;">
                         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="btn-primary font-size-0-75rem padding-4px-8px" style="flex:1; text-align:center;">Launch Demo</a>` : ''}
-                        <a href="projekt-detail.html?repo=${encodeURIComponent(p.repoName || '')}" class="btn-secondary font-size-0-75rem padding-4px-8px" style="flex:1; text-align:center;">Deep-Dive</a>
+                        <a href="${p.repoName ? projectPageName(p.repoName) : 'projekt-detail.html'}" class="btn-secondary font-size-0-75rem padding-4px-8px" style="flex:1; text-align:center;">Deep-Dive</a>
                     </div>
                 </div>
             `;

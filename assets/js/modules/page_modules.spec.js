@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 // The page scripts of these pages became ES modules with their rules in modules/*-logic.js.
 // These specs play each page once, with the stored data the old scripts rendered unescaped.
-test.describe('Seiten-Module: Spiele, Quiz und Interview-Trainer', () => {
+test.describe('Seiten-Module: Spiele', () => {
     /** @param {import('@playwright/test').Page} page */
     const collectErrors = (page) => {
         /** @type {string[]} */
@@ -76,40 +76,5 @@ test.describe('Seiten-Module: Spiele, Quiz und Interview-Trainer', () => {
         await expect(page.locator('#memory-result')).toBeVisible();
         await expect(page.locator('#memory-result')).toContainText(/8 Züge|8 moves/);
         await expect(page.locator('#memory-highscore-list-body tr').first()).toContainText('8');
-    });
-
-    test('Quiz: läuft durch, speichert die Bestleistung als Zahl', async ({ page }) => {
-        const errors = collectErrors(page);
-        await page.addInitScript(() => localStorage.setItem('quiz_best_score', '<img src=x id="pwn-quiz">'));
-        await page.goto('/pages/quiz.html');
-        await expect(page.locator('#pwn-quiz')).toHaveCount(0);
-        await expect(page.locator('#quiz-best-score')).toContainText(/noch keine|none yet/);
-
-        const total = await page.evaluate(() => document.querySelectorAll('#answer-buttons .btn-quiz').length);
-        expect(total).toBe(4);
-        for (let i = 0; i < 20; i++) {
-            const answers = page.locator('#answer-buttons .btn-quiz');
-            if ((await answers.count()) === 0) break;
-            await answers.first().click();
-            await page.locator('#next-btn').click();
-        }
-        await expect(page.locator('#question')).toContainText(/Quiz beendet|Quiz Finished/);
-        const stored = await page.evaluate(() => localStorage.getItem('quiz_best_score'));
-        expect(stored).toMatch(/^\d+$/);
-        expect(errors).toEqual([]);
-    });
-
-    test('Interview-Trainer: bewertet eine Antwort über das Evaluator-Modul', async ({ page }) => {
-        const errors = collectErrors(page);
-        await page.goto('/pages/interview-trainer.html');
-        await page.locator('#setup-form button[type="submit"], #setup-form .btn-primary').first().click();
-        await expect(page.locator('#chat-card')).toBeVisible();
-        await expect(page.locator('#chat-history .bot-bubble').first()).toBeVisible();
-
-        await page.locator('#user-input-text').fill('Kapselung, Vererbung und Polymorphie, dazu Abstraktion.');
-        await page.locator('#send-btn').click();
-        await expect(page.locator('#chat-history .feedback-bubble')).toBeVisible({ timeout: 10000 });
-        await expect(page.locator('#chat-history .feedback-bubble strong').first()).toContainText('%');
-        expect(errors).toEqual([]);
     });
 });

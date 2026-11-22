@@ -3,7 +3,6 @@
  * Ctrl+K: Open command palette / search
  * T: Toggle theme
  * L: Toggle language
- * Arrow keys: Flashcard navigation
  * ?: Show shortcuts help
  */
 export function initKeyboardShortcuts() {
@@ -61,32 +60,6 @@ export function initKeyboardShortcuts() {
             return;
         }
 
-        // Arrow keys for flashcard navigation
-        if (e.key === 'ArrowLeft') {
-            const prevBtn = document.getElementById('btn-prev');
-            if (prevBtn) {
-                prevBtn.click();
-                return;
-            }
-        }
-        if (e.key === 'ArrowRight') {
-            const nextBtn = document.getElementById('btn-next');
-            if (nextBtn) {
-                nextBtn.click();
-                return;
-            }
-        }
-
-        // Space to flip flashcard
-        if (e.key === ' ' || e.key === 'Space') {
-            const flashcard = document.getElementById('flashcard');
-            if (flashcard) {
-                e.preventDefault();
-                flashcard.click();
-                return;
-            }
-        }
-
         // Escape — close modals/help
         if (e.key === 'Escape') {
             if (helpModal && helpModal.style.display !== 'none') {
@@ -127,14 +100,6 @@ export function initKeyboardShortcuts() {
                             <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="padding: 0.5rem;"><kbd style="background: var(--bg-page); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); font-family: monospace;">L</kbd></td>
                                 <td style="padding: 0.5rem;"><span lang="de">Sprache umschalten</span><span lang="en">Toggle language</span></td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--border);">
-                                <td style="padding: 0.5rem;"><kbd style="background: var(--bg-page); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); font-family: monospace;">←</kbd> <kbd style="background: var(--bg-page); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); font-family: monospace;">→</kbd></td>
-                                <td style="padding: 0.5rem;"><span lang="de">Lernkarten blättern</span><span lang="en">Navigate flashcards</span></td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid var(--border);">
-                                <td style="padding: 0.5rem;"><kbd style="background: var(--bg-page); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); font-family: monospace;">Space</kbd></td>
-                                <td style="padding: 0.5rem;"><span lang="de">Lernkarte umdrehen</span><span lang="en">Flip flashcard</span></td>
                             </tr>
                             <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="padding: 0.5rem;"><kbd style="background: var(--bg-page); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); font-family: monospace;">?</kbd></td>

@@ -40,9 +40,9 @@ describe('Achievements: notification', () => {
 
     it('uses English texts when the page is English', () => {
         document.documentElement.setAttribute('lang', 'en');
-        Achievements.unlock('git_master');
+        Achievements.unlock('konami_master');
         expect(toasts()[0].textContent).toContain('Achievement Unlocked!');
-        expect(toasts()[0].textContent).toContain(Achievements.definitions.git_master.title_en);
+        expect(toasts()[0].textContent).toContain(Achievements.definitions.konami_master.title_en);
         document.documentElement.removeAttribute('lang');
     });
 
@@ -56,7 +56,7 @@ describe('Achievements: notification', () => {
 
     it('plays the success sound through GameAudio when it is available', () => {
         window.GameAudio = { play: vi.fn() };
-        Achievements.unlock('exam_passed');
+        Achievements.unlock('memory_fast');
         expect(window.GameAudio.play).toHaveBeenCalledWith('success');
     });
 
