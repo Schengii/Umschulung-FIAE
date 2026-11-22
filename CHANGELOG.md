@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Behoben (CI)
+- **Projekt-Sync**: `sync_projects.js` führt nach `generate-data` jetzt `check-csp:fix` aus. Die generierten Projektseiten ändern mit `dateModified` ihren Inline-Script-Hash; ohne Nachführen in `vercel.json` schlug `check-csp` auf dem Sync-Branch fehl.
+
 #### Behoben (Styling)
 - **Buttons**: `.btn` und `.btn-secondary` hatten keine Grundform (19 px hohe Textzeilen mit Rahmen, z. B. Cockpit-Tabs, Git-Simulator, Kartei). Jetzt gemeinsame Form mit Polsterung, Radius und 44 px Mindesthöhe (`:where()`, damit `.hero-btn` und Seitenregeln gewinnen).
 - **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.
