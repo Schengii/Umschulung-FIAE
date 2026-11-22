@@ -7,6 +7,16 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 #### Neu
 - **Prüfungsfehler als Karteikarten**: Im Ergebnis der IHK-Prüfungssimulation legt „Fehler als Karteikarten merken“ jede nicht vollständig richtig beantwortete Frage als eigene Karte an (Box 1, heute fällig, Thema als Hinweis, Antwort mit Erklärung). Bereits vorhandene Karten werden nicht doppelt angelegt und behalten ihre Box. Logik in `modules/exam-to-flashcards.js` (getestet). Zeilenumbrüche eigener Karten werden jetzt dargestellt.
 
+#### Behoben
+- **Quiz-Bestleistung im Dashboard**: Das Quiz speichert die Zahl richtiger Antworten (z. B. 4 von 5), das Dashboard zeigte sie als Prozent („4 %“). Jetzt wird der Anteil der Fragen berechnet (80 %), höchstens 100 %; ein beschädigter Wert erscheint nicht mehr als „kaputt%“. Die Fragen liegen dafür in `modules/quiz-questions.js` (mit `QUIZ_QUESTION_COUNT`).
+
+#### Verbessert (A11y)
+- **Live-Regionen**: Level-Status im Git-Simulator, Prüfungsfortschritt im Cockpit, XP-Anzeige und Antwort-Feedback im Challenge-Lab sowie das Interview-Ergebnis werden jetzt von Screenreadern angesagt. Die Playground-Konsole ist ein fokussierbares `role="log"`.
+- **Cockpit**: Die Sieger-Meldung der Nutzwertanalyse escaped die Optionsnamen (`escapeHtml`).
+
+#### Behoben (CI)
+- **Projekt-Sync**: `sync_projects.js` führt nach `generate-data` jetzt `check-csp:fix` aus. Die generierten Projektseiten ändern mit `dateModified` ihren Inline-Script-Hash; ohne Nachführen in `vercel.json` schlug `check-csp` auf dem Sync-Branch fehl.
+
 #### Behoben (Styling)
 - **Buttons**: `.btn` und `.btn-secondary` hatten keine Grundform (19 px hohe Textzeilen mit Rahmen, z. B. Cockpit-Tabs, Git-Simulator, Kartei). Jetzt gemeinsame Form mit Polsterung, Radius und 44 px Mindesthöhe (`:where()`, damit `.hero-btn` und Seitenregeln gewinnen).
 - **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.

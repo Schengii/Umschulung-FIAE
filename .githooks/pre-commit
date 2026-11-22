@@ -93,6 +93,16 @@ for file in $STAGED_FILES; do
         .githooks/*)
             continue
             ;;
+        # Gleiche Pfad-Allowlist wie .gitleaks.toml (Demo-Daten, generierte Bundles)
+        Projekte/*/dist/*|\
+        Projekte/Informatik-lernen/src/utils/jwtConfusionEngine.js|Projekte/Informatik-lernen/src/utils/jwtConfusionEngine.jsx|\
+        Projekte/Informatik-lernen/src/components/Content/ApiMockStudioLab.js|Projekte/Informatik-lernen/src/components/Content/ApiMockStudioLab.jsx|\
+        Projekte/Informatik-lernen/src/components/Content/WebSocketProtocolLab.js|Projekte/Informatik-lernen/src/components/Content/WebSocketProtocolLab.jsx|\
+        Projekte/Informatik-lernen/src/data/websocketData.js|Projekte/Informatik-lernen/src/data/websocketData.jsx|\
+        "Projekte/ElektroCheck AI/.vs/"*|\
+        "Projekte/Wohnungssuche KI/frontend/dist/sw.js"|"Projekte/Wohnungssuche KI/frontend/public/sw.js")
+            continue
+            ;;
     esac
 
     if [ ! -f "$file" ]; then
@@ -143,7 +153,7 @@ for file in $STAGED_FILES; do
 
     # 6. Zuweisungen wie API_KEY=, SECRET=, TOKEN= mit nichtleerem Wert
     # Schließt unkritische Platzhalter (your_..., placeholder, example, dummy, empty) aus
-    ASSIGNMENT_MATCH=$(echo "$DIFF_CONTENT" | grep -iE '\b(API_KEY|SECRET|TOKEN)\s*[:=]\s*["\x27]?[^"'\''\s#]+' | grep -v -iE '(your_|_here|example|dummy|placeholder|mock|undefined|null|"")')
+    ASSIGNMENT_MATCH=$(echo "$DIFF_CONTENT" | grep -iE '\b(API_KEY|SECRET|TOKEN)\s*[:=]\s*["\x27]?[^"'\''\s#]+' | grep -v -F '${{ secrets.' | grep -v -iE '(your_|_here|example|dummy|placeholder|mock|undefined|null|"")')
     if [ -n "$ASSIGNMENT_MATCH" ]; then
         FILE_PATTERNS="${FILE_PATTERNS}  - Muster: Zuweisung mit nichtleerem Wert (API_KEY= / SECRET= / TOKEN=)
 "

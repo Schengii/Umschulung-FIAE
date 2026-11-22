@@ -2,6 +2,18 @@
  * Learning Progress Module — Tracks and displays progress across learning tools
  * Reads saved scores from localStorage and renders progress bars on the dashboard.
  */
+import { parseBestScore, percentage } from './quiz-logic.js';
+import { QUIZ_QUESTION_COUNT } from './quiz-questions.js';
+
+/**
+ * The quiz stores its best score as a count of right answers; the dashboard shows a share.
+ * @returns {number | null} 0 to 100, null when nothing valid is stored
+ */
+function quizBestPercent() {
+    const score = parseBestScore(AppStorage.getItem('quiz_best_score', null));
+    return score === null ? null : Math.min(100, percentage(score, QUIZ_QUESTION_COUNT));
+}
+
 export function initLearningProgress() {
     // Flashcard progress
     const flashcardBar = document.getElementById('progress-flashcards-bar');
@@ -18,9 +30,9 @@ export function initLearningProgress() {
     const quizBar = document.getElementById('progress-quiz-bar');
     const quizText = document.getElementById('progress-quiz');
     if (quizBar && quizText) {
-        const quizScore = parseInt(AppStorage.getItem('quiz_best_score', '0')) || 0;
-        quizBar.style.width = quizScore + '%';
-        quizText.textContent = quizScore + '%';
+        const quizPercent = quizBestPercent() ?? 0;
+        quizBar.style.width = quizPercent + '%';
+        quizText.textContent = quizPercent + '%';
     }
 
     // Interview progress
@@ -51,9 +63,9 @@ export function initLearningProgress() {
     }
 
     if (hsQuiz) {
-        const quizScore = AppStorage.getItem('quiz_best_score', null);
-        if (quizScore) {
-            hsQuiz.textContent = quizScore + '%';
+        const quizPercent = quizBestPercent();
+        if (quizPercent !== null) {
+            hsQuiz.textContent = quizPercent + '%';
         }
     }
 }
