@@ -36,7 +36,7 @@ const RUN_DAYS_AGO = [54, 47, 40, 33, 26, 19, 12, 8, 5, 2, 1];
 const MODES = ['ap1', 'ap2', 'wiso'];
 
 /** [topic, questions per run] per exam. Topics are keys of EXAM_TOPICS. */
-const RUN_TOPICS = {
+const RUN_TOPICS = /** @type {Record<string, [string, number][]>} */ ({
     ap1: [
         ['hardware', 4],
         ['network', 4],
@@ -56,7 +56,7 @@ const RUN_TOPICS = {
         ['business', 3],
         ['codetermination', 3],
     ],
-};
+});
 
 /** How well the visitor "starts" in each topic (share of correct answers in the first run). */
 const START_SKILL = {
