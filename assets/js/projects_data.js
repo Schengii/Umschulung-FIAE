@@ -45,7 +45,7 @@ window.projectsData = [
         "titleDe": "IHK-Präsentation (EcoChef)",
         "titleEn": "IHK Presentation (EcoChef)",
         "url": "assets/powerpoint/Max PPT Version3.pptx",
-        "size": "7.79 MB"
+        "size": "3.68 MB"
       }
     ],
     "videoPlaylist": [
@@ -163,7 +163,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-11-13T11:41:53.000Z",
+    "updatedAt": "2026-11-22T18:53:44.351Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
