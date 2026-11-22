@@ -250,3 +250,82 @@ export function deactivateDemo(storage) {
     storage.removeItem(DEMO_SNAPSHOT_KEY);
     storage.removeItem(DEMO_ACTIVE_KEY);
 }
+
+const LOCKED_BUTTONS = ['#backup-export-btn', '#backup-import-btn', '#backup-qr-btn'];
+
+/**
+ * Wires the sample-progress controls of the dashboard's backup card. While the sample state is
+ * loaded, the banner is visible and export, import and QR sync are locked, so the sample data can
+ * never be taken for a real backup.
+ * @param {HTMLElement} card the #progress-backup section
+ * @param {DemoStorage} storage
+ */
+export function initDemoMode(card, storage) {
+    const loadButton = /** @type {HTMLButtonElement | null} */ (card.querySelector('#demo-load-btn'));
+    const resetButton = /** @type {HTMLButtonElement | null} */ (card.querySelector('#demo-reset-btn'));
+    const banner = document.getElementById('demo-banner');
+    const bannerReset = document.getElementById('demo-banner-reset');
+    if (!loadButton || !resetButton || !banner) return;
+
+    const lockedButtons = LOCKED_BUTTONS.flatMap((selector) => {
+        const button = card.querySelector(selector);
+        return button instanceof HTMLButtonElement ? [button] : [];
+    });
+
+    function render() {
+        const active = isDemoActive(storage);
+        /** @type {HTMLElement} */ (loadButton).hidden = active;
+        /** @type {HTMLElement} */ (resetButton).hidden = !active;
+        /** @type {HTMLElement} */ (banner).hidden = !active;
+        // The "no backup exported yet" nudge would be about the sample data.
+        const reminder = card.querySelector('#backup-reminder');
+        if (active && reminder instanceof HTMLElement) reminder.hidden = true;
+        for (const button of lockedButtons) {
+            button.disabled = active;
+            if (active) {
+                button.setAttribute('title', 'Gesperrt, solange der Beispiel-Lernstand geladen ist');
+                button.setAttribute('data-en-title', 'Locked while the sample progress is loaded');
+            } else {
+                button.removeAttribute('title');
+                button.removeAttribute('data-en-title');
+            }
+        }
+    }
+
+    /**
+     * @param {() => void} action
+     * @param {{de: string, en: string}} question
+     */
+    async function confirmAndRun(action, question) {
+        if (!(await window.showConfirm(question))) return;
+        try {
+            action();
+        } catch (_e) {
+            await window.showAlert({
+                de: 'Das Umschalten ist fehlgeschlagen (Speicher voll oder blockiert). Dein Fortschritt wurde nicht verändert.',
+                en: 'Switching failed (storage full or blocked). Your progress was not changed.',
+            });
+            return;
+        }
+        // Every widget on the page read its data at load time.
+        window.location.reload();
+    }
+
+    const askReset = () =>
+        confirmAndRun(() => deactivateDemo(storage), {
+            de: 'Deinen echten Stand zurückholen? Neuer Fortschritt aus der Demo geht verloren.',
+            en: 'Restore your real progress? New progress made in the demo is lost.',
+        });
+
+    loadButton.addEventListener('click', () =>
+        confirmAndRun(() => activateDemo(storage, new Date()), {
+            de: 'Beispiel-Lernstand laden? Dein echter Stand wird gesichert und lässt sich zurückholen.',
+            en: 'Load the sample progress? Your real progress is stored safely and can be restored.',
+        })
+    );
+    resetButton.addEventListener('click', askReset);
+    bannerReset?.addEventListener('click', askReset);
+
+    render();
+    card.setAttribute('data-demo-ready', 'true');
+}

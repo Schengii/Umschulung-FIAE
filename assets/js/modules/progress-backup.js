@@ -477,4 +477,8 @@ export function initProgressBackup() {
 
     // The module loads lazily; the E2E specs wait for this before they click.
     card.setAttribute('data-ready', 'true');
+
+    // The sample-progress controls live in their own module (it imports this one, hence the dynamic
+    // import); it marks the card with data-demo-ready once its listeners are in place.
+    import('./demo-progress.js').then(({ initDemoMode }) => initDemoMode(card, window.localStorage)).catch(() => {});
 }

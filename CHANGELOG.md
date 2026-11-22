@@ -4,6 +4,12 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Neu
+- **Beispiel-Lernstand**: Auf dem Dashboard füllt ein Schalter alle Lernbereiche (Kartei, Prüfungsverlauf, Themenstatistik, Lernkalender, Empfehlungen) mit Beispieldaten, damit Besucher das volle Bild sehen. Der echte Stand wird gesichert und lässt sich zurückholen; Einstellungen (Name, Theme, Sprache …) bleiben erhalten. Ein Banner kennzeichnet den Demo-Zustand, Export, Import und QR-Sync sind währenddessen gesperrt. Logik in `modules/demo-progress.js` (Daten relativ zu heute, getestet).
+
+#### Behoben
+- **Dashboard „Letzte Projekte“**: Titel standen als „undefined“ da (`title` statt `titleDe`/`titleEn`), die Links ließen sich aus `pages/` nicht auflösen.
+
 #### Behoben (Styling)
 - **Buttons**: `.btn` und `.btn-secondary` hatten keine Grundform (19 px hohe Textzeilen mit Rahmen, z. B. Cockpit-Tabs, Git-Simulator, Kartei). Jetzt gemeinsame Form mit Polsterung, Radius und 44 px Mindesthöhe (`:where()`, damit `.hero-btn` und Seitenregeln gewinnen).
 - **Cookie-Banner auf dem Handy**: Der Assistent-Button verdeckte „Verstanden“. Die Bannerhöhe liegt jetzt als `--cookie-banner-h` an, Assistent-Button, Toasts und Erfolgsmeldungen sitzen darüber und überdecken sich nicht mehr.
