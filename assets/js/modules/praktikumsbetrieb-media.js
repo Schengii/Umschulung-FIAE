@@ -138,10 +138,10 @@ export function initPraktikumsbetriebMedia() {
 
 // 1. Setup DFG Interactive Gallery
 function setupDfgGallery() {
-    const tabsContainer = document.getElementById('dfg-gallery-tabs');
+    const tabsContainer = /** @type {HTMLElement} */ (document.getElementById('dfg-gallery-tabs'));
     const imageEl = /** @type {HTMLImageElement} */ (document.getElementById('dfg-gallery-img'));
-    const titleEl = document.getElementById('dfg-gallery-title');
-    const descEl = document.getElementById('dfg-gallery-desc');
+    const titleEl = /** @type {HTMLElement} */ (document.getElementById('dfg-gallery-title'));
+    const descEl = /** @type {HTMLElement} */ (document.getElementById('dfg-gallery-desc'));
 
     if (!tabsContainer || !imageEl || !titleEl || !descEl) return;
 
@@ -212,9 +212,9 @@ function setupDfgGallery() {
 // 2. Setup EcoChef Video Playlist Player
 function setupEcoChefVideoPlayer() {
     const videoEl = /** @type {HTMLVideoElement} */ (document.getElementById('ecochef-video-player'));
-    const tracksContainer = document.getElementById('ecochef-video-tracks');
-    const currentTitleEl = document.getElementById('ecochef-video-current-title');
-    const currentDescEl = document.getElementById('ecochef-video-current-desc');
+    const tracksContainer = /** @type {HTMLElement} */ (document.getElementById('ecochef-video-tracks'));
+    const currentTitleEl = /** @type {HTMLElement} */ (document.getElementById('ecochef-video-current-title'));
+    const currentDescEl = /** @type {HTMLElement} */ (document.getElementById('ecochef-video-current-desc'));
 
     if (!videoEl || !tracksContainer || !currentTitleEl || !currentDescEl) return;
 
@@ -295,7 +295,7 @@ function setupElektroCheckScanner() {
     const playIcon = document.getElementById('scanner-play-icon');
     const statusBox = document.getElementById('scanner-status');
     const resultsCard = document.getElementById('scanner-results-card');
-    const resultsList = document.getElementById('scanner-results-list');
+    const resultsList = /** @type {HTMLElement} */ (document.getElementById('scanner-results-list'));
 
     if (!runBtn || !clearBtn || !laser || !statusBox || !resultsCard || !resultsList) return;
 

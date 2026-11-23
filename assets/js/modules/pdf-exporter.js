@@ -136,10 +136,10 @@ function generateFactsheetModal() {
 
     document.body.appendChild(modal);
 
-    modal.querySelector('.btn-close-modal').addEventListener('click', () => modal.remove());
+    modal.querySelector('.btn-close-modal')?.addEventListener('click', () => modal.remove());
     modal.querySelectorAll('.btn-close-modal').forEach((b) => b.addEventListener('click', () => modal.remove()));
 
-    modal.querySelector('#btn-do-print').addEventListener('click', () => {
+    modal.querySelector('#btn-do-print')?.addEventListener('click', () => {
         window.print();
     });
 }

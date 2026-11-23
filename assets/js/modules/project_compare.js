@@ -48,7 +48,7 @@
             renderComparison();
         });
 
-        drawer.querySelector('#compare-drawer-close').addEventListener('click', () => {
+        drawer.querySelector('#compare-drawer-close')?.addEventListener('click', () => {
             drawer.classList.remove('open');
         });
 
@@ -186,7 +186,7 @@
         // Bind remove buttons inside compare columns
         grid.querySelectorAll('.compare-column-close').forEach((btn) => {
             btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
+                const idx = parseInt(btn.dataset.index || '0');
                 const removed = selectedProjects.splice(idx, 1)[0];
 
                 // Uncheck button on card

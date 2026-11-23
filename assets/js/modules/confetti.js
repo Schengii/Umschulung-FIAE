@@ -34,7 +34,7 @@ const Confetti = {
         this.canvas.style.zIndex = '99999';
         document.body.appendChild(this.canvas);
 
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = /** @type {CanvasRenderingContext2D} */ (this.canvas.getContext('2d'));
         this.resize();
 
         // Handle resize
@@ -128,10 +128,10 @@ const Confetti = {
         }
 
         if (this.canvas) {
-            window.removeEventListener('resize', this.resizeHandler);
-            document.body.removeChild(this.canvas);
+            if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
+            document.body.removeChild(/** @type {Node} */ (this.canvas));
             this.canvas = /** @type {any} */ (null);
-            this.ctx = null;
+            this.ctx = /** @type {any} */ (null);
         }
         this.particles = [];
     },

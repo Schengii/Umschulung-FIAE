@@ -32,7 +32,8 @@ export function computeMatchScore(activeSkills, projects) {
 }
 
 export function initSkillMatchmaker() {
-    const container = document.getElementById('skill-matchmaker-widget');
+    // Der Guard bricht ab, wenn das Widget fehlt; der Cast gilt damit auch in den Funktionen unten.
+    const container = /** @type {HTMLElement} */ (document.getElementById('skill-matchmaker-widget'));
     if (!container) return;
 
     const availableSkills = [
@@ -113,6 +114,7 @@ export function initSkillMatchmaker() {
         container.querySelectorAll('.chip-btn').forEach((btn) => {
             btn.addEventListener('click', () => {
                 const skillId = btn.getAttribute('data-skill');
+                if (!skillId) return;
                 if (selectedSkills.has(skillId)) {
                     selectedSkills.delete(skillId);
                     btn.classList.remove('active');

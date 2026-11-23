@@ -235,8 +235,9 @@ const SKILLS_DATA = [
 
 document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.skills-tab');
-    const svgEl = document.getElementById('skills-radar-svg');
-    const listGrid = document.getElementById('skills-list-grid');
+    // Der Guard darunter bricht ab, wenn eines fehlt; die Casts gelten damit auch in den Funktionen.
+    const svgEl = /** @type {HTMLElement} */ (document.getElementById('skills-radar-svg'));
+    const listGrid = /** @type {HTMLElement} */ (document.getElementById('skills-list-grid'));
 
     if (!svgEl || !listGrid) return;
 
@@ -424,9 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bind click events on filter tabs
     tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
-            document.querySelector('.skills-tab.active').classList.remove('active');
+            document.querySelector('.skills-tab.active')?.classList.remove('active');
             tab.classList.add('active');
-            activeCategory = tab.getAttribute('data-cat');
+            activeCategory = tab.getAttribute('data-cat') || 'all';
 
             renderRadarChart();
             renderDetailsGrid();

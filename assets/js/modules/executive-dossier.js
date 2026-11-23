@@ -156,7 +156,7 @@ function attachDossierEvents() {
             btn.classList.add('active', 'btn-primary');
             btn.classList.remove('btn-secondary');
 
-            renderDossierPreview(btn.dataset.type);
+            renderDossierPreview(btn.dataset.type || '');
         });
     });
 

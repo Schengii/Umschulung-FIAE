@@ -28,9 +28,9 @@ export function initDocumentPreview() {
         }
     }
 
-    const closeBtn = modal.querySelector('.doc-preview-close');
-    const backdrop = modal.querySelector('.doc-preview-backdrop');
-    const body = modal.querySelector('.doc-preview-body');
+    const closeBtn = /** @type {HTMLElement} */ (modal.querySelector('.doc-preview-close'));
+    const backdrop = /** @type {HTMLElement} */ (modal.querySelector('.doc-preview-backdrop'));
+    const body = /** @type {HTMLElement} */ (modal.querySelector('.doc-preview-body'));
     /** Element that had the focus when the preview opened, so closing can hand it back. */
     let opener = /** @type {HTMLElement | null} */ (null);
 
@@ -118,7 +118,7 @@ export function initDocumentPreview() {
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
         opener = /** @type {HTMLElement | null} */ (document.activeElement);
-        /** @type {HTMLElement | null} */ (closeBtn).focus();
+        closeBtn.focus();
     };
 
     const closePreviewModal = () => {

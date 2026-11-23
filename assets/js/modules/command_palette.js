@@ -101,7 +101,7 @@
         document.body.appendChild(overlay);
 
         const input = /** @type {HTMLInputElement} */ (overlay.querySelector('#command-palette-input'));
-        const results = overlay.querySelector('#command-palette-results');
+        const results = /** @type {HTMLElement} */ (overlay.querySelector('#command-palette-results'));
         let selectedIndex = 0;
         /** @type {Array<Record<string, any>>} */
         let currentItems = [];
@@ -234,7 +234,8 @@
                         <span>${lang === 'de' ? 'Keine passenden Einträge für' : 'No matching entries for'} "<strong></strong>"${lang === 'de' ? ' gefunden' : ''}.</span>
                     </li>
                 `;
-                results.querySelector('strong').textContent = filterText;
+                const strong = results.querySelector('strong');
+                if (strong) strong.textContent = filterText;
                 return;
             }
 

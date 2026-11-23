@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (techParam || searchParam) {
-            const cleanQuery = cleanSearchParam(techParam || searchParam);
+            const cleanQuery = cleanSearchParam(techParam || searchParam || '');
             if (searchInput) searchInput.value = cleanQuery;
             currentSearchTerm = cleanQuery;
         }
@@ -398,7 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
             pageBtn.addEventListener('click', () => {
                 currentPage = i;
                 renderAllProjects();
-                window.scrollTo({ top: document.getElementById('portfolio-searchbar').offsetTop, behavior: 'smooth' });
+                window.scrollTo({
+                    top: document.getElementById('portfolio-searchbar')?.offsetTop ?? 0,
+                    behavior: 'smooth',
+                });
             });
             paginationContainer.appendChild(pageBtn);
         }
@@ -451,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (testimonialDots.length && testimonialItems.length) {
         testimonialDots.forEach((dot) => {
             dot.addEventListener('click', () => {
-                const idx = parseInt(dot.dataset.index);
+                const idx = parseInt(dot.dataset.index || '0');
                 testimonialItems.forEach((item) => item.classList.remove('active'));
                 testimonialDots.forEach((d) => d.classList.remove('active'));
                 if (testimonialItems[idx]) testimonialItems[idx].classList.add('active');
