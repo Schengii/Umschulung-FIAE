@@ -17,7 +17,6 @@
     .search-container,
     .btn-filter,
     .portfolio-filters,
-    .admin-card,
     .sort-select,
     #dark-mode-toggle,
     #print-portfolio,
@@ -29,20 +28,14 @@
     #portfolio-searchbar,
     .project-search-input,
     .modal,
-    .btn-admin-toggle,
     .hire-me-form,
     #hire-me-form,
     .status-widget,
     #copilot-toggle-btn,
     #copilot-drawer,
     #command-palette-overlay,
-    .audio-pitch-card,
     .c4-level-bar,
-    .arch-tabs-bar,
-    .recruiter-filters,
-    .badge-filter,
-    .token-auth-box,
-    .interactive-only {
+    .arch-tabs-bar {
         display: none !important;
     }
 

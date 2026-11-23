@@ -4,10 +4,26 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Geändert
+- **Barrierefreiheit (Lesbarkeit)**: Karten-Fließtext von 15,6 auf 16 px, Kleintext (`.card-source`, `.font-size-0-8rem`) von 12,8/13,6 auf 14 px, `.token-card-description` auf 16 px mit Zeilenabstand 1,5, Hero- und Offline-Text linksbündig. Die Detailseite meldet fehlende Projekte per `console.warn` statt `console.error`.
+
+## [1.7.0] - 2026-11-23
+
 #### Hinzugefügt
+- **Sicherheit**: `modal.js` setzt alle Werte aus `data-*`-Attributen und Projektdaten nur noch escaped in `innerHTML` (neue lokale `esc`/`escUrl`, `javascript:`-URLs werden zu `#`). `docs/innerhtml-audit.md` wertet alle 115 `innerHTML`-Stellen aus (keine ist von Besuchern steuerbar). Die Ratsche `npm run check-innerhtml` (Baseline `scripts/innerhtml-baseline.json`, Teil von `npm run check` und `ci.yml`) verhindert neue ungeschützte Stellen.
+- **Tests**: Die Seiten-Scripts sind jetzt per Unit-Test abgedeckt: `components.js`, `modal.js`, `news.js`, `toast.js`, `architecture.js`, `portfolio.js`, `projekt-detail.js`, `skills_matrix.js` (rund 120 neue Tests, Seiten-Coverage von 1 auf 90 % Lines). Klassische Scripts laden die Tests über `scripts/test-support/classic-script.js`; neuer E2E-Spec `project_modal.spec.js`.
+- **ADR 0021**: Spielwiese und Minecraft entfernt (ergänzt ADR 0003, 0013, 0014).
 - **Doku**: `CLAUDE.md`, `README.md` und ADR 0018 beschreiben `strictNullChecks`-Baseline 0, `GITHUB_TOKEN` für `generate-data`, die Projekt-Vorschaubilder, das Buttonsystem und das Escaping der Breadcrumbs.
 - **Link-Vorschau**: Jede generierte Projektseite hat ein eigenes 1200×630-Vorschaubild (`assets/images/og/projekt-<slug>.jpg`, erzeugt aus dem Showcase-Bild durch `generate_project_pages.js`) als `og:image`/`twitter:image` statt überall `og-cover.png`; Größe als `og:image:width`/`height`.
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
+
+#### Geändert
+- **LinkedIn**: Profil-Link überall auf `https://www.linkedin.com/in/maxschenk-dev` umgestellt (Seiten, Footer, Schema.org-`sameAs`, Teilen-Leiste).
+- **Coverage-Schwellen**: Module 95/80/96/97 % (vorher 92/80/94/94), Seiten-Scripts 88/72/85/88 % (vorher 0,5 %).
+- **Lighthouse**: Schwellen Performance ≥ 0,86 (vorher 0,8), Accessibility ≥ 0,93 und Best Practices ≥ 0,95 (vorher je 0,9); SEO ≥ 0,9 und CLS ≤ 0,1 unverändert. Neu gemessen: `projekt-amazon-2-0.html`.
+- **Playwright**: 1.65.1 (exakt gepinnt); die Dependabot-Sperre für 1.64 und höher entfällt, weil die WebKit-Specs in der CI mit 1.65.1 grün sind.
+- **Test-Log**: `quiet-happy-dom.js` blendet zusätzlich die happy-dom-Meldungen zu nicht geladenen Stylesheets und Scripts aus.
+- **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung. `CONTRIBUTING.md`, `SECURITY.md` und `CODE_OF_CONDUCT.md` liegen jetzt in `.github/` (GitHub erkennt sie dort weiterhin).
 
 #### Entfernt
 - **Minecraft**: Das Projekt ist aus der Seite entfernt: `Projekte/Minecraft`, Projektseite, Vorschau- und Showcase-Bild, Sync- und Sichtbarkeitseintrag, Sandbox-Eintrag, Startseiten-Karte (ersetzt durch Wohnungssuche KI), Code-Snippet und C++20-Filter im Portfolio, Skill „C++20 & 3D Engine“, Copilot-Antwort samt Chip „C++ & Godot“, Dossier-Eintrag sowie Sitemap-Eintrag.
@@ -15,6 +31,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Lernbereich**: Die Seiten IHK Cockpit, Lernkarten (samt IHK-Kartei), Prüfungs-Quiz, Bewerbungs-Trainer, Git Simulator und Dashboard sind samt Skripten, Modulen, Tests, Stylesheets, Daten, Bildern, Sitemap-, Menü- und Suchindex-Einträgen entfernt, ebenso Prüfungssimulator, Tagesfrage, Lernstand-Backup mit QR-Sync, Beispiel-Lernstand, die zugehörigen Achievements und Datenschutz-Abschnitte. Das Quiz ist auch aus dem Spiele-Hub verschwunden. ADR 0007 und 0011 entfallen.
 
 #### Geändert
+- **Aufräumen**: 24 ungenutzte CSS-Regeln bzw. Selektoren entfernt (Token-Formular und `locked-placeholder-title` in `lebenslauf.css`, `.cmd-k-trigger`, `.theme-dark`, `.hero-typing-wrap`, `.hero-actions`, Admin-/Filter-Selektoren in `print.css`, `.scroll-reveal-left/-right`, `.simulator-layout`, `.card-margin-top`, `.code-pre`, `.testimonial-quote/-author`, `.section-subtitle`). Die letzten sechs hielt nur noch `Projekte/Minecraft` am Leben.
 - **Typprüfung**: `strictNullChecks` meldet keine Fehler mehr (Baseline von 89 auf 0). Fehlende DOM-Elemente, `getAttribute`-Rückgaben und `dataset`-Werte werden jetzt geprüft statt vorausgesetzt (u. a. Roadmap, Skills-Matrix, Befehlspalette, Konfetti).
 - **Styling**: Die 16 `!important` am Profilbild in `lebenslauf.css` entfallen (keine konkurrierende Regel). Die übrigen in `style.css` bleiben bewusst: Nutzer-Overrides (Legasthenie-Schrift, Schriftgröße, Kontrast- und Farbenblind-Themes), Reduced-Motion-Reset und Fokusring; die Druckregeln überschreiben Bildschirmstile absichtlich.
 - **Styling**: `--transition` animiert nicht mehr `all`, sondern nur Farben, Rahmen, Schatten, Transform, Deckkraft, Filter, Sichtbarkeit, Breite und Höhe (`max-height`); Theme-Wechsel und Layoutänderungen lösen keine Übergänge mehr aus. `.btn-outline` und `.btn-outline-primary` sind in `.btn-secondary` aufgegangen, die ungenutzten Klassen `.btn-download` und `.btn-shimmer` entfallen. Auch die 12 `transition: all` in den Seiten-Stylesheets nennen jetzt ihre Eigenschaften. `scripts/generate_projects_data.js` nutzt `GITHUB_TOKEN`, wenn gesetzt, und bricht bei API-Rate-Limit ab, statt Sterne 0 und Monorepo-Links zu schreiben.
@@ -95,7 +112,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Externe Links**: `scripts/check_external_links.js` und der wöchentliche Workflow `links.yml` öffnen bei toten Links ein Issue (kein CI-Gate).
 - **CI**: Playwright-Browser werden je Browser und Playwright-Version zwischengespeichert.
 - **Aufräumen**: Fünf Einmal-Skripte (`add_og_meta`, `fix_project_html_paths`, `localize_vendor_assets`, `audit_cleanup`, `install_sync_triggers`) samt npm-Scripts und README-Zeilen entfernt; Sync-Zeitplan in der Doku auf „täglich“ angeglichen.
-- **Doku**: README-Zahlen korrigiert, Changelog vor 1.5.0 nach `docs/changelog-archiv.md` verschoben, ADR 0016 (Cache-Grenzen) und 0017 (generierte Header-CSP), `CONTRIBUTING.md` mit Ablauf `regen`, `check`, Changelog.
+- **Doku**: README-Zahlen korrigiert, Changelog vor 1.5.0 nach `docs/archiv/changelog-archiv.md` verschoben, ADR 0016 (Cache-Grenzen) und 0017 (generierte Header-CSP), `CONTRIBUTING.md` mit Ablauf `regen`, `check`, Changelog.
 
 #### Hinzugefügt
 - **Lebenslauf-PDF aus der Seite**: `npm run generate-cv-pdf` (`scripts/generate_cv_pdf.js`) setzt das Stand-Datum auf `lebenslauf.html` (neue Zeile „Stand“, DE/EN) auf heute und druckt die Seite mit Playwright in eine A4-PDF (Standard `assets/pdf/Lebenslauf.pdf`, mit `--out <datei>` anderswo). Dabei gefunden und behoben: Eine veraltete Druckregel in `style.css` (`body > * { display: none }` für ein nicht mehr vorhandenes Zertifikat-Modal) blendete beim Drucken die ganze Seite aus, „Als PDF exportieren“ auf dem Lebenslauf lieferte also eine leere Seite; E2E-Spec `print_cv`.
@@ -188,4 +205,4 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ---
 
-Ältere Versionen (vor 1.5.0): [`docs/changelog-archiv.md`](docs/changelog-archiv.md).
+Ältere Versionen (vor 1.5.0): [`docs/archiv/changelog-archiv.md`](docs/archiv/changelog-archiv.md).

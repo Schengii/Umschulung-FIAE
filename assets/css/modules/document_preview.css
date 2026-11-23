@@ -62,10 +62,6 @@
     transition: background 0.2s, color 0.2s;
     z-index: 10;
 }
-.theme-dark .doc-preview-close {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f1f5f9;
-}
 
 @media (hover: hover) {
     .doc-preview-close:hover {

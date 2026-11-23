@@ -365,9 +365,6 @@ html[data-reduced-motion="true"] ::after {
 .a11y-option-btn:last-child {
     margin-bottom: 0;
 }
-.card-margin-top {
-    margin-top: 1.5rem;
-}
 
 /* ==========================================================================
    RESET & BASE STYLES
@@ -871,7 +868,7 @@ nav.topnav {
 
 .card h5,
 .card .card-source {
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
     font-weight: 500;
     margin-bottom: 1.25rem;
@@ -890,7 +887,7 @@ nav.topnav {
 .card p {
     color: var(--text-secondary);
     margin-bottom: 1.25rem;
-    font-size: 0.975rem;
+    font-size: 1rem;
 }
 
 .card p:last-child {
@@ -1749,15 +1746,6 @@ html[lang="en"] [lang="de"] {
     color: var(--text-muted);
 }
 
-.code-pre {
-    background: var(--bg-page);
-    padding: 1rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin-bottom: 1rem;
-}
-
 /* Status widget as a card (home.html, portfolio.html — green gradient style) */
 .card.status-widget {
     background: linear-gradient(135deg, #10b981, #059669);
@@ -2097,24 +2085,6 @@ html[lang="en"] [lang="de"] {
         opacity: 1;
         transform: translateX(0);
     }
-}
-
-.testimonial-quote {
-    font-style: italic;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    border-left: 3px solid var(--primary);
-    padding-left: 1rem;
-    margin: 0.75rem 0;
-}
-
-.testimonial-author {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
 }
 
 /* ==========================================================================
@@ -3611,11 +3581,6 @@ html nav {
 @media (max-width: 600px) {
 }
 
-.section-subtitle {
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-}
-
 .download-icon.word {
     color: #2b579a;
 }
@@ -3928,7 +3893,7 @@ html nav {
     font-size: 0.75rem !important;
 }
 .font-size-0-8rem {
-    font-size: 0.8rem !important;
+    font-size: 0.875rem !important;
 }
 .font-size-0-85rem {
     font-size: 0.85rem !important;
@@ -4711,9 +4676,7 @@ textarea:focus-visible,
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
-    .scroll-reveal,
-    .scroll-reveal-left,
-    .scroll-reveal-right {
+    .scroll-reveal {
         opacity: 1 !important;
         transform: none !important;
     }
@@ -4808,8 +4771,7 @@ textarea:focus-visible,
 /* Grid children default to min-width: auto and grew to the width of their widest content (the
    contribution heatmap, long headings), which pushed the column past the viewport and got it
    clipped. */
-.layout-grid > *,
-.simulator-layout > * {
+.layout-grid > * {
     min-width: 0;
 }
 

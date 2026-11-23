@@ -24,6 +24,16 @@ Umschulung-FIAE/
 ├── sw.js                        # Service Worker für Offline-Caching & PWA-Fähigkeit (Precache-Liste und Cache-Name generiert)
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
+├── CLAUDE.md / GEMINI.md        # Arbeitsregeln für KI-Assistenten (GEMINI.md verweist nur auf CLAUDE.md)
+├── CHANGELOG.md / HANDOFF.md    # Änderungsprotokoll und Übergabe an die nächste Sitzung
+├── vercel.json & .vercelignore  # Hosting: Security-Header, Cache-Regeln, Build-Ausschlüsse
+├── dist/                        # Produktions-Build (generiert, git-ignoriert, wird von Vercel ausgeliefert)
+├── .github/                     # CI-Workflows (ci, visual, sync, links, gitleaks), Dependabot, Vorlagen sowie CONTRIBUTING, SECURITY und CODE_OF_CONDUCT
+├── .githooks/                   # Pre-Commit (Secrets-Schutz) und Pre-Push (npm run check, Chromium-Smoke)
+├── docs/                        # Doku
+│   ├── adr/                     # Architekturentscheidungen (Index in adr/README.md)
+│   ├── innerhtml-audit.md       # Auswertung aller innerHTML-Stellen (Grundlage der Ratsche check-innerhtml)
+│   └── archiv/                  # Abgeschlossenes: Verbesserungsplan 2026-11-14, Changelog vor 1.5.0
 │
 ├── pages/                       # Alle Inhaltsseiten
 │   ├── home.html                # Werdegang & Kontakt (Profil)
@@ -123,9 +133,9 @@ Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live
 
 ### 5. Qualitätssicherung & Tests
 - **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
-- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung) — sowie die Generator-Skripte unter `scripts/`.
-- **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc, `strictNullChecks` ohne Fehler und per Ratsche gesichert), dazu die Konsistenz-Checks aus Abschnitt 6.
-- **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
+- **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung) — sowie die Generator-Skripte unter `scripts/`. Die Seiten-Scripts (`components.js`, `modal.js`, `news.js`, `toast.js`, `architecture.js`, `portfolio.js`, `projekt-detail.js`, `skills_matrix.js`) testen `*.test.js` neben dem Modulcode: klassische Scripts über `scripts/test-support/classic-script.js` (läuft per `vm` mit echtem Dateipfad, damit die Coverage zählt), ES-Module per Import.
+- **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc, `strictNullChecks` ohne Fehler und per Ratsche gesichert), dazu die Konsistenz-Checks aus Abschnitt 6 und die `innerHTML`-Ratsche `check-innerhtml` (Audit in `docs/innerhtml-audit.md`).
+- **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,86), Accessibility (≥ 0,93), Best Practices (≥ 0,95), SEO (≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
 - Konkrete Testzahlen stehen bewusst nicht hier, sie veralten sofort — `npm test` und `npm run test:unit` geben den aktuellen Stand aus.
 
 ### 6. Wartungsskripte (`scripts/`)
@@ -147,6 +157,7 @@ Alle Skripte sind als npm-Scripts registriert und einzeln über `npm run <name>`
 | `npm run build:dist` | `build_minified.js` | Produktions-Build: minifiziert `assets/js`/`assets/css` per esbuild nach `dist/`, kopiert alles andere unverändert (keine Pfad-/HTML-Änderungen, keine CSP-Auswirkung) und bricht ab, wenn ein verlinktes Projekt-Demo oder Medium im Ergebnis fehlt. Vercel führt genau diesen Befehl aus und liefert `dist/` aus (`vercel.json`, ADR 0008). Der Name bleibt `build:dist`, damit weiterhin nichts von Vercels Zero-Config-Erkennung abhängt (ADR 0005) |
 | `npm run audit-project-paths` | `audit_project_html_paths.js` | Findet fehlerhafte relative Pfade in Sub-Projekt-HTML |
 | `npm run generate-og-image` | `generate_og_image.js` | Erzeugt das geteilte Social-Preview-Bild `og-cover.png` |
+| `npm run check-innerhtml` | `check_innerhtml.js` | Ratsche: zählt je Datei die `innerHTML`-Stellen mit ungeschütztem `${…}`-Ausdruck (Baseline `innerhtml-baseline.json`, `--update` senkt sie) |
 | `npm run check-lighthouse-urls` | `check_lighthouse_urls.js` | Prüft, dass `lighthouserc.json` jede Seite der `sitemap.xml` abdeckt |
 | `npm run test:coverage` | `vitest --coverage` | Coverage-Bericht der Unit-Tests für `assets/js/modules/` mit Schwellenwert (Ratsche, ADR 0015); die CI führt die Unit-Tests über diesen Befehl aus |
 | `npm run generate-qr-codes` | `generate_qr_codes.js` | Erzeugt QR-Codes für Kernseiten (Lebenslauf/PDF-Export) |
