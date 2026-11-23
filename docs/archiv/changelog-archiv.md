@@ -1,6 +1,6 @@
 # Changelog-Archiv
 
-Versionen vor 1.5.0 (2026-10-24). Der aktuelle Stand steht in [`CHANGELOG.md`](../CHANGELOG.md).
+Versionen vor 1.5.0 (2026-10-24). Der aktuelle Stand steht in [`CHANGELOG.md`](../../CHANGELOG.md).
 
 ## [1.4.0] - 2026-10-18
 

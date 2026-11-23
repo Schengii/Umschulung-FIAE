@@ -4,6 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Portfolio-Site (PWA) für die Umschulung zum FIAE. Reines statisches Vanilla HTML/CSS/JS (ES-Module, kein Framework, kein Bundler). Repo-Sprache (Doku, Kommentare, UI) ist überwiegend Deutsch; neue Texte bitte zweisprachig (DE/EN) halten, wie die bestehenden Seiten. Architekturentscheidungen stehen in `docs/adr/` (z. B. 0001 Minify statt Bundler, 0003 CSP, 0013 Styles nur aus Dateien, 0014 Seitenstylesheets, 0004 Head-Konsistenz, 0006 Vanilla JS, 0008 Auslieferung von `dist/`, 0009 Icon-Subset, 0010 Cache-Name, 0012 Sub-Projekt-Sync, 0015 Coverage-Ratsche).
 
+## Projektstruktur
+
+`pages/` (Inhaltsseiten, `projekt-<slug>.html` generiert), `assets/` (`css/` Basis + Seiten-CSS + `modules/`, `js/` + `js/modules/` mit Tests daneben, `data/` generierte/kuratierte JSON, `images/`, `fonts/`, `vendor/`, `pdf/`, `powerpoint/`, `videos/`), `Projekte/` (Sync, nicht anfassen), `scripts/` (Build-, Check- und Generator-Skripte, Test-Helfer unter `scripts/test-support/`), `docs/adr/` (Entscheidungen) und `docs/archiv/` (Abgeschlossenes: alter Verbesserungsplan, Changelog vor 1.5.0), `.github/` (Workflows), `.githooks/`. Im Root liegen nur Konfiguration, Einstiegsseiten (`index.html`, `404.html`), PWA-Dateien (`sw.js`, `manifest.json`), Doku (`README`, `CHANGELOG`, `HANDOFF`; `CONTRIBUTING`, `SECURITY` und `CODE_OF_CONDUCT` liegen in `.github/`) und die Assistenten-Regeln (`CLAUDE.md`, `GEMINI.md`). Neue Dokumente gehören nach `docs/`, nicht in den Root; erledigte Pläne nach `docs/archiv/`. `dist/` und `test-results/` sind generiert und git-ignoriert.
+
 ## Befehle
 
 ```bash
