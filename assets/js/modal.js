@@ -10,6 +10,21 @@
     const _modalContent = modal.querySelector('.modal-content');
     const modalBody = /** @type {HTMLElement} */ (document.getElementById('modal-body'));
 
+    // Klassisches Script ohne import: lokale Kopie von escapeHtml. Alle Werte aus data-Attributen und
+    // Projektdaten laufen vor dem Einsetzen in innerHTML hindurch.
+    const esc = (/** @type {unknown} */ value) =>
+        String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    // Nur relative und http(s)-URLs zulassen (kein javascript:, data: o. Ä.), danach escapen.
+    const escUrl = (/** @type {unknown} */ value) => {
+        const url = String(value ?? '').trim();
+        return esc(/^(?:[a-z][a-z0-9+.-]*:)/i.test(url) && !/^https?:/i.test(url) ? '#' : url);
+    };
+
     // ── Open modal when a project card body is clicked (not on link/button) ──
     document.addEventListener('click', function (e) {
         // Close if click is on the overlay backdrop (outside modal-content)
@@ -61,7 +76,7 @@
         }
 
         const tagsHTML = tags.length
-            ? `<div class="tech-tags">${tags.map((/** @type {string} */ t) => `<span class="tech-tag">${t}</span>`).join('')}</div>`
+            ? `<div class="tech-tags">${tags.map((/** @type {string} */ t) => `<span class="tech-tag">${esc(t)}</span>`).join('')}</div>`
             : '';
 
         // Check if there is a video playlist in window.projectsData
@@ -91,7 +106,7 @@
             const playlistOptions = playlist
                 .map((vid, idx) => {
                     const title = lang === 'de' ? vid.titleDe : vid.titleEn;
-                    return `<button type="button" class="video-select-btn${idx === 0 ? ' active' : ''}" data-index="${idx}" data-url="${vid.url}" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; border-radius: var(--radius-sm); font-weight: 600; color: var(--text-secondary); transition: var(--transition);">${title}</button>`;
+                    return `<button type="button" class="video-select-btn${idx === 0 ? ' active' : ''}" data-index="${idx}" data-url="${escUrl(vid.url)}" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; border: 1px solid var(--border); background: var(--bg-card); cursor: pointer; border-radius: var(--radius-sm); font-weight: 600; color: var(--text-secondary); transition: var(--transition);">${esc(title)}</button>`;
                 })
                 .join('\n');
 
@@ -102,13 +117,13 @@
             mediaHTML = `
             <div class="modal-media-wrapper" style="margin-bottom: 1rem;">
                 <div class="video-container" style="background: #000; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/9; max-height: 300px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
-                    <video id="modal-video-player" controls src="${initialVideoUrl}" style="width: 100%; height: 100%; object-fit: contain;"></video>
+                    <video id="modal-video-player" controls src="${escUrl(initialVideoUrl)}" style="width: 100%; height: 100%; object-fit: contain;"></video>
                 </div>
                 <div class="video-playlist-selector" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
                     ${playlistOptions}
                 </div>
                 <p id="modal-video-description" class="small-muted" style="margin-top: 0.5rem; font-size: 0.8rem; font-style: italic; border-left: 2px solid var(--primary); padding-left: 0.5rem;">
-                    ${initialDesc}
+                    ${esc(initialDesc)}
                 </p>
             </div>
         `;
@@ -117,7 +132,7 @@
             const slides = images
                 .map(
                     (/** @type {string} */ img) => `
-            <img src="${(window.resolveAssetPath || ((p) => p))(img)}" class="carousel-slide-img" alt="${titleDe}" data-img-fallback="fallback">
+            <img src="${escUrl((window.resolveAssetPath || ((p) => p))(img))}" class="carousel-slide-img" alt="${esc(titleDe)}" data-img-fallback="fallback">
         `
                 )
                 .join('\n');
@@ -146,20 +161,20 @@
             const singleImg = (window.resolveAssetPath || ((p) => p))(images[0]);
             mediaHTML = `
             <div class="project-image-container" style="aspect-ratio:16/9;max-height:240px;margin-bottom:1rem;">
-               <img src="${singleImg}" alt="${titleDe}" class="project-image" loading="lazy" data-img-fallback="fallback">
+               <img src="${escUrl(singleImg)}" alt="${esc(titleDe)}" class="project-image" loading="lazy" data-img-fallback="fallback">
             </div>`;
         }
 
         const resolvedLink = link ? (window.resolveAssetPath || ((p) => p))(link) : '';
         const linkHTML = link
-            ? `<a href="${resolvedLink}" target="_blank" rel="noopener" class="btn-project">
+            ? `<a href="${escUrl(resolvedLink)}" target="_blank" rel="noopener" class="btn-project">
            <span lang="de"><i class="fa fa-external-link" aria-hidden="true"></i> Projekt öffnen</span>
            <span lang="en"><i class="fa fa-external-link" aria-hidden="true"></i> Open Project</span>
          </a>`
             : '';
 
         const githubHTML = github
-            ? `<a href="${github}" target="_blank" rel="noopener" class="btn-project btn-github">
+            ? `<a href="${escUrl(github)}" target="_blank" rel="noopener" class="btn-project btn-github">
            <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
          </a>`
             : '';
@@ -172,8 +187,8 @@
           ${projectData.architectureBadges
               .map(
                   (b) => `
-            <span class="badge" style="background: ${b.color}15; color: ${b.color}; border: 1px solid ${b.color}40; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
-              <i class="fa-solid fa-layer-group" style="margin-right: 4px; font-size: 0.65rem;"></i>${b.name}
+            <span class="badge" style="background: ${esc(b.color)}15; color: ${esc(b.color)}; border: 1px solid ${esc(b.color)}40; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+              <i class="fa-solid fa-layer-group" style="margin-right: 4px; font-size: 0.65rem;"></i>${esc(b.name)}
             </span>
           `
               )
@@ -196,13 +211,13 @@
           <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
             <p style="margin: 0 0 0.35rem 0;">
               <strong style="color: var(--text-primary);"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; margin-right: 4px;"></i><span lang="de">Herausforderung:</span><span lang="en">Challenge:</span></strong>
-              <span lang="de">${kl.challengeDe}</span>
-              <span lang="en">${kl.challengeEn}</span>
+              <span lang="de">${esc(kl.challengeDe)}</span>
+              <span lang="en">${esc(kl.challengeEn)}</span>
             </p>
             <p style="margin: 0 0 0.35rem 0;">
               <strong style="color: var(--text-primary);"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 4px;"></i><span lang="de">Lösung:</span><span lang="en">Solution:</span></strong>
-              <span lang="de">${kl.solutionDe}</span>
-              <span lang="en">${kl.solutionEn}</span>
+              <span lang="de">${esc(kl.solutionDe)}</span>
+              <span lang="en">${esc(kl.solutionEn)}</span>
             </p>
             ${
                 kl.architectureHighlightsDe && kl.architectureHighlightsDe.length > 0
@@ -212,8 +227,8 @@
                     .map(
                         (/** @type {string} */ hDe, /** @type {number} */ i) => `
                   <li>
-                    <span lang="de">${hDe}</span>
-                    <span lang="en">${(kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe}</span>
+                    <span lang="de">${esc(hDe)}</span>
+                    <span lang="en">${esc((kl.architectureHighlightsEn && kl.architectureHighlightsEn[i]) || hDe)}</span>
                   </li>
                 `
                     )
@@ -228,13 +243,13 @@
         }
 
         modalBody.innerHTML = `
-      <h2 id="modal-title" lang="de" style="margin-bottom:0.25rem;">${titleDe}</h2>
-      <h2 lang="en" style="margin-bottom:0.5rem;">${titleEn}</h2>
+      <h2 id="modal-title" lang="de" style="margin-bottom:0.25rem;">${esc(titleDe)}</h2>
+      <h2 lang="en" style="margin-bottom:0.5rem;">${esc(titleEn)}</h2>
       ${archBadgesHTML}
       ${mediaHTML}
       ${tagsHTML}
-      <p lang="de" style="margin:0.75rem 0;">${descDe}</p>
-      <p lang="en" style="margin:0.75rem 0;">${descEn}</p>
+      <p lang="de" style="margin:0.75rem 0;">${esc(descDe)}</p>
+      <p lang="en" style="margin:0.75rem 0;">${esc(descEn)}</p>
       ${keyLearningsHTML}
       <div class="modal-buttons">
         ${linkHTML}
