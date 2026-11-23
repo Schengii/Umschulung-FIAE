@@ -92,6 +92,9 @@ jobs:
       - name: strictNullChecks Ratchet
         run: npm run check-strict-null
 
+      - name: innerHTML Ratchet (ungeschützte Interpolation)
+        run: npm run check-innerhtml
+
       - name: Run Vitest Unit Test Suite (with coverage thresholds)
         run: npm run test:coverage
 

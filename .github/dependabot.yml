@@ -11,13 +11,6 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
-    ignore:
-      # Playwright 1.64 macht in der CI die WebKit-Specs auf portfolio.html rot (Klick wartet ewig auf
-      # "stable"); lokal reproduzierbar nicht. Bis die Ursache geklärt ist, bleibt 1.63 exakt gepinnt.
-      # Wiedervorlage: bei jedem neuen Playwright-Minor die WebKit-Specs lokal und in einem Test-PR prüfen,
-      # spätestens bis 2027-01-31 entscheiden, ob die Regel entfällt.
-      - dependency-name: '@playwright/test'
-        versions: ['>=1.64.0']
     commit-message:
       prefix: 'chore(deps)'
 

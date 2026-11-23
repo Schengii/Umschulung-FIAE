@@ -21,6 +21,7 @@
 .offline-text {
     margin-bottom: 2rem;
     color: var(--text-secondary);
+    text-align: left;
 }
 .offline-buttons-row {
     display: flex;
