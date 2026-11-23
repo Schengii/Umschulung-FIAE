@@ -10,6 +10,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
 #### Geändert
+- **LinkedIn**: Profil-Link überall auf `https://www.linkedin.com/in/maxschenk-dev` umgestellt (Seiten, Footer, Schema.org-`sameAs`, Teilen-Leiste).
 - **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung. `CONTRIBUTING.md`, `SECURITY.md` und `CODE_OF_CONDUCT.md` liegen jetzt in `.github/` (GitHub erkennt sie dort weiterhin).
 
 #### Entfernt
