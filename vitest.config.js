@@ -20,8 +20,9 @@ module.exports = defineConfig({
       // when the actual value stays well above (2026-11-23: 96.5 / 81.3 / 97.5 / 98.2 %).
       thresholds: {
         'assets/js/modules/**': { statements: 95, branches: 80, functions: 96, lines: 97 },
-        // Seiten-Scripts (Plan 6.1): eigene, niedrigere Schwelle, nach ADR 0015 hochziehen.
-        'assets/js/*.js': { statements: 0.5, branches: 0.5, functions: 0.1, lines: 0.5 },
+        // Seiten-Scripts (Plan 6.1, 3.4): eigene, niedrigere Schwelle, nach ADR 0015 hochziehen
+        // (2026-11-23: 89.5 / 74.2 / 86.9 / 90.3 %). Ohne Tests bleiben dialog.js, main.js und die Datenschalen.
+        'assets/js/*.js': { statements: 88, branches: 72, functions: 85, lines: 88 },
       },
     },
   },
