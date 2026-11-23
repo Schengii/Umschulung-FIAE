@@ -308,17 +308,6 @@
         font-size: clamp(1.4rem, 5vw, 1.85rem);
     }
 
-    .hero-actions {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.65rem;
-    }
-
-    .hero-actions .btn {
-        width: 100%;
-        justify-content: center;
-    }
-
     .hero-avatar-ring {
         width: 130px;
         height: 130px;

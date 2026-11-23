@@ -365,9 +365,6 @@ html[data-reduced-motion="true"] ::after {
 .a11y-option-btn:last-child {
     margin-bottom: 0;
 }
-.card-margin-top {
-    margin-top: 1.5rem;
-}
 
 /* ==========================================================================
    RESET & BASE STYLES
@@ -1749,15 +1746,6 @@ html[lang="en"] [lang="de"] {
     color: var(--text-muted);
 }
 
-.code-pre {
-    background: var(--bg-page);
-    padding: 1rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    margin-bottom: 1rem;
-}
-
 /* Status widget as a card (home.html, portfolio.html — green gradient style) */
 .card.status-widget {
     background: linear-gradient(135deg, #10b981, #059669);
@@ -2097,24 +2085,6 @@ html[lang="en"] [lang="de"] {
         opacity: 1;
         transform: translateX(0);
     }
-}
-
-.testimonial-quote {
-    font-style: italic;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    border-left: 3px solid var(--primary);
-    padding-left: 1rem;
-    margin: 0.75rem 0;
-}
-
-.testimonial-author {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
 }
 
 /* ==========================================================================
@@ -3609,11 +3579,6 @@ html nav {
    ========================================================================== */
 
 @media (max-width: 600px) {
-}
-
-.section-subtitle {
-    color: var(--primary);
-    margin-bottom: 0.5rem;
 }
 
 .download-icon.word {
