@@ -118,13 +118,14 @@ Gehaltsvorstellung und Arbeitszeugnisse werden bewusst **nicht** öffentlich auf
 
 ### 4. Projekt-Registrierung & Build-Script (`generate_projects_data.js`)
 Scannt die Unterordner in `Projekte/` nach `portfolio-metadata.json`, zieht Live-Daten aus der GitHub API und generiert die konsolidierten Datenbanken [projects.json](assets/data/projects.json) sowie `assets/js/projects_data.js`.
-- Befehl zum Ausführen: `npm run generate-data`
+- Befehl zum Ausführen: `npm run generate-data` (mit gesetztem `GITHUB_TOKEN`; ohne Token bricht der Lauf bei GitHub-Rate-Limit ab, statt veraltete Daten zu schreiben)
+- Erzeugt zusätzlich je Projekt die statische Seite `pages/projekt-<slug>.html` und ein eigenes Link-Vorschaubild `assets/images/og/projekt-<slug>.jpg`
 - Prüfbefehl: `npm run check-sync`
 
 ### 5. Qualitätssicherung & Tests
 - **E2E-Tests (Playwright, `npm test`)**: Seitenstabilität aller HTML-Seiten, axe-core-Prüfung (WCAG 2.1 AA) im dunklen **und** hellen Theme, Icon-Abdeckung des Font-Awesome-Subsets, Start aller Projekt-Demos sowie die interaktiven Module (Quick-Sandbox, Projektvergleich, Command Palette …). Läuft in Chromium, Firefox, WebKit und Pixel 5; in der CI zusätzlich gegen den minifizierten `dist`-Build.
 - **Unit-Tests (Vitest, `npm run test:unit`)**: reine Kernlogik in `assets/js/modules/` — u. a. Skills-Filter, Portfolio-Filter/-Sortierung, Projektdetail (URL-Prüfung) — sowie die Generator-Skripte unter `scripts/`.
-- **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc), dazu die Konsistenz-Checks aus Abschnitt 6.
+- **Statische Gates**: ESLint, Prettier, Typecheck (`tsc` über JSDoc, `strictNullChecks` ohne Fehler und per Ratsche gesichert), dazu die Konsistenz-Checks aus Abschnitt 6.
 - **Lighthouse-CI** (`lighthouserc.json`): misst den `dist`-Build; Performance (≥ 0,8), Accessibility, SEO, Best Practices (je ≥ 0,9) und CLS (≤ 0,1) sind harte Schwellen.
 - Konkrete Testzahlen stehen bewusst nicht hier, sie veralten sofort — `npm test` und `npm run test:unit` geben den aktuellen Stand aus.
 
