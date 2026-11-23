@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="portfolio.html" class="btn-primary">Zurück zum Portfolio</a>
                 </div>
             `;
-            console.error('Error loading project details:', error);
+            console.warn('Error loading project details:', error);
         }
     }
 

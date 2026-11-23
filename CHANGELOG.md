@@ -4,6 +4,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Geändert
+- **Barrierefreiheit (Lesbarkeit)**: Karten-Fließtext von 15,6 auf 16 px, Kleintext (`.card-source`, `.font-size-0-8rem`) von 12,8/13,6 auf 14 px, `.token-card-description` auf 16 px mit Zeilenabstand 1,5, Hero- und Offline-Text linksbündig. Die Detailseite meldet fehlende Projekte per `console.warn` statt `console.error`.
+
 ## [1.7.0] - 2026-11-23
 
 #### Hinzugefügt
