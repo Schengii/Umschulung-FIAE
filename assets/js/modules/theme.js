@@ -14,7 +14,7 @@ export function initTheme() {
     document.documentElement.setAttribute('data-theme', initialTheme);
     updateThemeIcon(initialTheme);
     document.addEventListener('langchange', () => {
-        updateThemeIcon(document.documentElement.getAttribute('data-theme'));
+        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'light');
     });
 
     themeToggle.addEventListener('click', () => {

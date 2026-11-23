@@ -31,7 +31,7 @@ export function translateAttributes(root, lang) {
             if (!element.hasAttribute(`data-de-${name}`)) {
                 element.setAttribute(`data-de-${name}`, element.getAttribute(name) || '');
             }
-            element.setAttribute(name, lang === 'en' ? english : element.getAttribute(`data-de-${name}`));
+            element.setAttribute(name, lang === 'en' ? english : element.getAttribute(`data-de-${name}`) || '');
         }
     }
 }

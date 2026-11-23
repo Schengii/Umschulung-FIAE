@@ -165,9 +165,11 @@ function initCardGlowTracking() {
             if (frameId) return;
             frameId = requestAnimationFrame(() => {
                 frameId = 0;
-                const rect = pending.card.getBoundingClientRect();
-                pending.card.style.setProperty('--mouse-x', `${pending.x - rect.left}px`);
-                pending.card.style.setProperty('--mouse-y', `${pending.y - rect.top}px`);
+                const current = pending;
+                if (!current) return;
+                const rect = current.card.getBoundingClientRect();
+                current.card.style.setProperty('--mouse-x', `${current.x - rect.left}px`);
+                current.card.style.setProperty('--mouse-y', `${current.y - rect.top}px`);
             });
         },
         { passive: true }

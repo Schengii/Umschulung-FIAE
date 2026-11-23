@@ -21,7 +21,7 @@ export function initSlideshow() {
         slides[currentSlide].classList.add('active');
 
         // Update indicator
-        indicator.textContent = `${currentSlide + 1} / ${slides.length}`;
+        if (indicator) indicator.textContent = `${currentSlide + 1} / ${slides.length}`;
 
         // Disable buttons at boundaries
         prevBtn.disabled = currentSlide === 0;

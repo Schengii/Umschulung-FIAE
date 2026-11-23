@@ -154,7 +154,7 @@ const ICON_BODY = /^(content|--fa):"((?:[^"\\]|\\.)*)";?$/;
  * @returns {{names: string[], glyph: string, pseudo: string} | null} pseudo is ':before' for the old format, '' for the new one
  */
 function parseIconRule(block) {
-    if (block.type !== 'rule') return null;
+    if (block.type !== 'rule' || block.body === undefined || block.prelude === undefined) return null;
     const body = ICON_BODY.exec(block.body.trim());
     if (!body) return null;
     const oldFormat = body[1] === 'content';
@@ -170,10 +170,11 @@ function parseIconRule(block) {
 
 /** @param {CssBlock} block */
 function rewriteFontFace(block) {
-    const family = /font-family:"([^"]+)"/.exec(block.body)?.[1];
+    const blockBody = block.body ?? '';
+    const family = /font-family:"([^"]+)"/.exec(blockBody)?.[1];
     // "FontAwesome" is the Font Awesome 4 family name; nothing here uses the v4 class names.
     if (family === 'FontAwesome') return null;
-    const body = block.body.replace(/src:[^;}]+/, (/** @type {string} */ src) => {
+    const body = blockBody.replace(/src:[^;}]+/, (/** @type {string} */ src) => {
         // Font Awesome 6 writes `format("woff2")` after the url, 7 does not.
         const woff2 = /url\([^)]+\.woff2\)(?: format\("woff2"\))?/.exec(src);
         if (!woff2) throw new Error(`@font-face for "${family}" has no WOFF2 source`);

@@ -172,7 +172,7 @@ export function initAchievements() {
     document.addEventListener('click', (e) => {
         const target = /** @type {HTMLElement} */ (e.target);
         const link = target.closest('a[href]');
-        const isCvLink = link && /lebenslauf[^/]*\.pdf$/i.test(link.getAttribute('href'));
+        const isCvLink = link && /lebenslauf[^/]*\.pdf$/i.test(link.getAttribute('href') || '');
         if (isCvLink || target.closest('#btn-cv-print-header, #btn-cv-print-card')) {
             Achievements.unlock('cv_downloaded');
         }

@@ -166,7 +166,7 @@ function attachEventListeners() {
         if (trigger) {
             e.preventDefault();
             const projKey = trigger.dataset.sandboxProject;
-            openSandbox(projKey);
+            if (projKey) openSandbox(projKey);
         }
     });
 }

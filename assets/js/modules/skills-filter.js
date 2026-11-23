@@ -39,9 +39,9 @@ export function sortSkills(skills, mode) {
     if (mode === 'alpha') {
         sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else if (mode === 'level-desc') {
-        sorted.sort((a, b) => b.level - a.level);
+        sorted.sort((a, b) => (b.level ?? 0) - (a.level ?? 0));
     } else if (mode === 'level-asc') {
-        sorted.sort((a, b) => a.level - b.level);
+        sorted.sort((a, b) => (a.level ?? 0) - (b.level ?? 0));
     }
     return sorted;
 }
