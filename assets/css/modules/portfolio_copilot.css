@@ -283,7 +283,9 @@ html .toast-container {
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.15s ease;
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
 }
 
 [data-theme="dark"] .copilot-link-btn {
@@ -353,7 +355,9 @@ html .toast-container {
     font-weight: 500;
     color: var(--primary, #2563eb);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition-property: color, background, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
     -webkit-user-select: none;
     user-select: none;
 }

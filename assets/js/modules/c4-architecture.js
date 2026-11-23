@@ -161,13 +161,13 @@ export function initC4Architecture() {
                 <span class="font-weight-600 font-size-0-85rem color-primary me-2">
                     <i class="fa-solid fa-layer-group me-1"></i> C4 Architecture Level:
                 </span>
-                <button type="button" class="btn btn-sm btn-outline-primary btn-c4-level active" data-level="1">
+                <button type="button" class="btn btn-sm btn-secondary btn-c4-level active" data-level="1">
                     L1: System Context
                 </button>
-                <button type="button" class="btn btn-sm btn-outline-primary btn-c4-level" data-level="2">
+                <button type="button" class="btn btn-sm btn-secondary btn-c4-level" data-level="2">
                     L2: Container Diagram
                 </button>
-                <button type="button" class="btn btn-sm btn-outline-primary btn-c4-level" data-level="3">
+                <button type="button" class="btn btn-sm btn-secondary btn-c4-level" data-level="3">
                     L3: Component View
                 </button>
             </div>
