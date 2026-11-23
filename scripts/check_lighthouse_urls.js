@@ -22,7 +22,18 @@ const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 const sitemapPages = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, '') || 'index.html');
 
 const config = JSON.parse(fs.readFileSync(path.join(root, 'lighthouserc.json'), 'utf8'));
-const audited = new Set(config.ci.collect.url.map((/** @type {string} */ url) => url.replace('http://localhost/', '')));
+// Seiten, die Lighthouse prüft, obwohl sie nicht in der Sitemap stehen (Seite -> Grund).
+const EXTRA_AUDITED = new Map([
+    [
+        'pages/projekt-detail.html',
+        'dynamische Detailseite, Inhalt kommt aus ?repo=; die Sitemap listet die generierten Projektseiten',
+    ],
+]);
+
+// Query-Strings (z. B. ?repo=EcoChef) gehören zur Messung, nicht zur Seitenliste.
+const audited = new Set(
+    config.ci.collect.url.map((/** @type {string} */ url) => url.replace('http://localhost/', '').replace(/\?.*$/, ''))
+);
 
 // Die Projektseiten (scripts/generate_project_pages.js) sind alle aus demselben Template erzeugt:
 // Lighthouse prüft eine davon als Stichprobe, nicht jede einzeln.
@@ -35,7 +46,7 @@ if (generatedPages.length && !generatedSample) {
     console.error('✗ keine der generierten Projektseiten steht als Stichprobe in lighthouserc.json');
     process.exit(1);
 }
-const unknown = [...audited].filter((page) => !sitemapPages.includes(page));
+const unknown = [...audited].filter((page) => !sitemapPages.includes(page) && !EXTRA_AUDITED.has(page));
 
 if (missing.length || unknown.length) {
     for (const page of missing) console.error(`✗ ${page} is in sitemap.xml but not in lighthouserc.json`);
