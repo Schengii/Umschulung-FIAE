@@ -868,7 +868,7 @@ nav.topnav {
 
 .card h5,
 .card .card-source {
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
     font-weight: 500;
     margin-bottom: 1.25rem;
@@ -887,7 +887,7 @@ nav.topnav {
 .card p {
     color: var(--text-secondary);
     margin-bottom: 1.25rem;
-    font-size: 0.975rem;
+    font-size: 1rem;
 }
 
 .card p:last-child {
@@ -3893,7 +3893,7 @@ html nav {
     font-size: 0.75rem !important;
 }
 .font-size-0-8rem {
-    font-size: 0.8rem !important;
+    font-size: 0.875rem !important;
 }
 .font-size-0-85rem {
     font-size: 0.85rem !important;

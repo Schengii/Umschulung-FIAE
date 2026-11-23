@@ -4,13 +4,25 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Geändert
+- **Barrierefreiheit (Lesbarkeit)**: Karten-Fließtext von 15,6 auf 16 px, Kleintext (`.card-source`, `.font-size-0-8rem`) von 12,8/13,6 auf 14 px, `.token-card-description` auf 16 px mit Zeilenabstand 1,5, Hero- und Offline-Text linksbündig. Die Detailseite meldet fehlende Projekte per `console.warn` statt `console.error`.
+
+## [1.7.0] - 2026-11-23
+
 #### Hinzugefügt
+- **Sicherheit**: `modal.js` setzt alle Werte aus `data-*`-Attributen und Projektdaten nur noch escaped in `innerHTML` (neue lokale `esc`/`escUrl`, `javascript:`-URLs werden zu `#`). `docs/innerhtml-audit.md` wertet alle 115 `innerHTML`-Stellen aus (keine ist von Besuchern steuerbar). Die Ratsche `npm run check-innerhtml` (Baseline `scripts/innerhtml-baseline.json`, Teil von `npm run check` und `ci.yml`) verhindert neue ungeschützte Stellen.
+- **Tests**: Die Seiten-Scripts sind jetzt per Unit-Test abgedeckt: `components.js`, `modal.js`, `news.js`, `toast.js`, `architecture.js`, `portfolio.js`, `projekt-detail.js`, `skills_matrix.js` (rund 120 neue Tests, Seiten-Coverage von 1 auf 90 % Lines). Klassische Scripts laden die Tests über `scripts/test-support/classic-script.js`; neuer E2E-Spec `project_modal.spec.js`.
+- **ADR 0021**: Spielwiese und Minecraft entfernt (ergänzt ADR 0003, 0013, 0014).
 - **Doku**: `CLAUDE.md`, `README.md` und ADR 0018 beschreiben `strictNullChecks`-Baseline 0, `GITHUB_TOKEN` für `generate-data`, die Projekt-Vorschaubilder, das Buttonsystem und das Escaping der Breadcrumbs.
 - **Link-Vorschau**: Jede generierte Projektseite hat ein eigenes 1200×630-Vorschaubild (`assets/images/og/projekt-<slug>.jpg`, erzeugt aus dem Showcase-Bild durch `generate_project_pages.js`) als `og:image`/`twitter:image` statt überall `og-cover.png`; Größe als `og:image:width`/`height`.
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
 #### Geändert
 - **LinkedIn**: Profil-Link überall auf `https://www.linkedin.com/in/maxschenk-dev` umgestellt (Seiten, Footer, Schema.org-`sameAs`, Teilen-Leiste).
+- **Coverage-Schwellen**: Module 95/80/96/97 % (vorher 92/80/94/94), Seiten-Scripts 88/72/85/88 % (vorher 0,5 %).
+- **Lighthouse**: Schwellen Performance ≥ 0,86 (vorher 0,8), Accessibility ≥ 0,93 und Best Practices ≥ 0,95 (vorher je 0,9); SEO ≥ 0,9 und CLS ≤ 0,1 unverändert. Neu gemessen: `projekt-amazon-2-0.html`.
+- **Playwright**: 1.65.1 (exakt gepinnt); die Dependabot-Sperre für 1.64 und höher entfällt, weil die WebKit-Specs in der CI mit 1.65.1 grün sind.
+- **Test-Log**: `quiet-happy-dom.js` blendet zusätzlich die happy-dom-Meldungen zu nicht geladenen Stylesheets und Scripts aus.
 - **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung. `CONTRIBUTING.md`, `SECURITY.md` und `CODE_OF_CONDUCT.md` liegen jetzt in `.github/` (GitHub erkennt sie dort weiterhin).
 
 #### Entfernt
