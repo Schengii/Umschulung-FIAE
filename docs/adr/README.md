@@ -26,6 +26,7 @@ Neue ADRs werden fortlaufend nummeriert angelegt (`NNNN-kurzer-titel.md`) und na
 | [0018](0018-generierte-projektseiten.md) | Projektseiten aus den Projektdaten generieren | Akzeptiert, ergänzt 0004 |
 | [0019](0019-grosse-dateien-und-repo-groesse.md) | Große Dateien und Repository-Größe | Angenommen |
 | [0020](0020-github-daten-lokal.md) | GitHub-Repositorydaten lokal statt Laufzeitabruf | Akzeptiert |
+| [0021](0021-spielwiese-und-minecraft-entfernt.md) | Spielwiese und Minecraft entfernt | Akzeptiert, ergänzt 0003, 0013, 0014 |
 
 Hinweis zu 0001 und 0005: Beide beschreiben einen Stand, in dem die Produktion den unminifizierten Repo-Root auslieferte. Das gilt seit 0008 nicht mehr; die übrigen Aussagen (kein Bundler, keine Pfad-Umschreibung, Skriptname `build:dist`) bleiben gültig.
 
