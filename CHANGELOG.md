@@ -16,7 +16,8 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 #### Geändert
 - **Coverage-Schwellen**: Module 95/80/96/97 % (vorher 92/80/94/94), Seiten-Scripts 88/72/85/88 % (vorher 0,5 %).
-- **Lighthouse**: Schwellen Performance ≥ 0,86 (vorher 0,8), Accessibility ≥ 0,93 und Best Practices ≥ 0,95 (vorher je 0,9); SEO ≥ 0,9 und CLS ≤ 0,1 unverändert. Neu gemessen: `projekt-amazon-2-0.html` und `projekt-detail.html?repo=EcoChef` (`check_lighthouse_urls.js` kennt dynamische Seiten ohne Sitemap-Eintrag).
+- **Lighthouse**: Schwellen Performance ≥ 0,86 (vorher 0,8), Accessibility ≥ 0,93 und Best Practices ≥ 0,95 (vorher je 0,9); SEO ≥ 0,9 und CLS ≤ 0,1 unverändert. Neu gemessen: `projekt-amazon-2-0.html`.
+- **Playwright**: 1.65.1 (exakt gepinnt); die Dependabot-Sperre für 1.64 und höher entfällt, weil die WebKit-Specs in der CI mit 1.65.1 grün sind.
 - **Test-Log**: `quiet-happy-dom.js` blendet zusätzlich die happy-dom-Meldungen zu nicht geladenen Stylesheets und Scripts aus.
 - **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung. `CONTRIBUTING.md`, `SECURITY.md` und `CODE_OF_CONDUCT.md` liegen jetzt in `.github/` (GitHub erkennt sie dort weiterhin).
 

@@ -19,7 +19,8 @@ Portfolio-Site als Bewerbungsvorzeigestück straffen und professionell machen: A
 - Brauchen Max: Fallstudien (`assets/data/case-studies.json`, nur EcoChef vorhanden), Skill-Stufen und Java/Spring-Aussage (`assets/js/skills_matrix.js`, `assets/js/modules/skill-radar.js`), Lebenslauf-PDF und `Max PPT Version3.pptx` prüfen (PLAN 5.1–5.3).
 - Freigabe zum Mergen: PR #102 (Konflikte in `sw.js`/`vercel.json` erwartet, danach `npm run regen` und `npm run check-csp:fix`) und `feat/plan-umsetzung` (PLAN 1.1).
 - Neu gefunden (PLAN N.1–N.3): Endlosschleife bei Sprachwechsel im API-Tab von `architecture.js`, toter `isGame`-Zweig in `portfolio.js`, `dialog.js`/`main.js` ohne Tests.
-- Playwright 1.65.1: Test-Branch `test/playwright-1-65` lief in der CI (Ergebnis in PLAN 4.4); danach Branch löschen und `dependabot.yml`-Ignore anpassen.
+- Neu gefunden (PLAN N.4): `projekt-detail.html` hat in Lighthouse CLS 0,78 und Performance 0,70 und fehlt deshalb in `lighthouserc.json`.
+- Playwright 1.65.1 ist gepinnt (Test-Branch `test/playwright-1-65` kann gelöscht werden); lokal einmal `npm install` und `npx playwright install` ausführen.
 
 ## Nächster Schritt
 Freigabe zum Mergen klären, dann N.1 (Schleife im API-Tab) beheben, danach Inhalte von Max einarbeiten; nach jeder Änderung `npm run regen` und `npm run check`; `generate-data` nur mit `GITHUB_TOKEN`.
