@@ -5,6 +5,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 ## [Unreleased]
 
 #### Hinzugefügt
+- **Link-Vorschau**: Jede generierte Projektseite hat ein eigenes 1200×630-Vorschaubild (`assets/images/og/projekt-<slug>.jpg`, erzeugt aus dem Showcase-Bild durch `generate_project_pages.js`) als `og:image`/`twitter:image` statt überall `og-cover.png`; Größe als `og:image:width`/`height`.
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
 #### Entfernt
