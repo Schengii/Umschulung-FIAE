@@ -9,7 +9,6 @@ const DEMO_ONLY = {
     'Amazon 2.0': ['dist'],
     'ElektroCheck AI': ['dist'],
     'Wohnungssuche KI': ['frontend/dist'],
-    Minecraft: ['index.html', 'web'],
 };
 
 module.exports = { DEMO_ONLY };

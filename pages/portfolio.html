@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CvF4Lb/gstTW5ql73PtoMb6aksNLwNZYTmTZFV49Jm4=' 'sha256-yoER0j1qHJp1zL47ypgPh0X/td876OAKhTucgfAjiXQ=' 'sha256-5mTRu/uJBxDolV4P+q6GEbXpo11szEnmI/uAq9K/9zk='; style-src 'self'; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CvF4Lb/gstTW5ql73PtoMb6aksNLwNZYTmTZFV49Jm4=' 'sha256-yoER0j1qHJp1zL47ypgPh0X/td876OAKhTucgfAjiXQ=' 'sha256-a1FyhMm9AQyARofDJoADClYhRt0P7/l32LJMNhpOfhc='; style-src 'self'; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Umschulung IT | Maximilian Schenk</title>
     <meta name="description"
@@ -62,7 +62,7 @@
         "@context": "https://schema.org",
         "@type": "ItemList",
         "name": "Projekte von Maximilian Schenk",
-        "numberOfItems": 9,
+        "numberOfItems": 8,
         "itemListElement": [
             {
                 "@type": "ListItem",
@@ -103,18 +103,12 @@
             {
                 "@type": "ListItem",
                 "position": 7,
-                "name": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
-                "url": "https://www.max-schenk.tech/pages/projekt-minecraft.html"
-            },
-            {
-                "@type": "ListItem",
-                "position": 8,
                 "name": "🏠 Wohnungssuche KI — Intelligenter Such-Assistent",
                 "url": "https://www.max-schenk.tech/pages/projekt-wohnungssuche-ki.html"
             },
             {
                 "@type": "ListItem",
-                "position": 9,
+                "position": 8,
                 "name": "🧭 Dieses Portfolio — PWA ohne Framework",
                 "url": "https://www.max-schenk.tech/pages/projekt-umschulung-fiae.html"
             }
@@ -219,10 +213,6 @@
                         <i class="fa-brands fa-js" aria-hidden="true"></i>
                         <span lang="de">JavaScript</span><span lang="en">JavaScript</span>
                     </button>
-                    <button class="btn-filter" data-filter="cpp">
-                        <i class="fa-solid fa-cube" aria-hidden="true"></i>
-                        <span lang="de">C++20</span><span lang="en">C++20</span>
-                    </button>
                 </div>
 
                 <!-- No Results Message -->
@@ -312,8 +302,8 @@
                         <div class="code-accordion-title-wrap">
                             <h3 lang="de" class="m-0"><i class="fa fa-code" aria-hidden="true"></i> Code-Qualität &amp; Programmier-Snippets</h3>
                             <h3 lang="en" class="m-0"><i class="fa fa-code" aria-hidden="true"></i> Code Quality &amp; Programming Snippets</h3>
-                            <p lang="de" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Beispiele für sauberen, modularen &amp; wartungsfreundlichen Code (TypeScript, React 19, C++20 &amp; Gemini KI).</p>
-                            <p lang="en" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Examples of clean, modular &amp; maintainable code (TypeScript, React 19, C++20 &amp; Gemini AI).</p>
+                            <p lang="de" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Beispiele für sauberen, modularen &amp; wartungsfreundlichen Code (TypeScript, React 19 &amp; Gemini KI).</p>
+                            <p lang="en" class="code-accordion-hint text-secondary m-0 margin-top-0-25rem">Examples of clean, modular &amp; maintainable code (TypeScript, React 19 &amp; Gemini AI).</p>
                         </div>
                         <div class="code-accordion-badge">
                             <span class="code-accordion-badge-text" lang="de">Code anzeigen</span>
@@ -327,7 +317,6 @@
                         <!-- Tabs to select snippets -->
                         <div class="code-tabs">
                             <button type="button" class="code-tab-btn active" data-target="snippet-ecochef">EcoChef (Lit/TS)</button>
-                            <button type="button" class="code-tab-btn" data-target="snippet-minecraft">Minecraft (C++20)</button>
                             <button type="button" class="code-tab-btn" data-target="snippet-elektrocheck">ElektroCheck (AI/PDF)</button>
                             <button type="button" class="code-tab-btn" data-target="snippet-react">React 19 Hook</button>
                             <button type="button" class="code-tab-btn" data-target="snippet-pwa">PWA Caching</button>
@@ -360,42 +349,6 @@
                                 Kapselt den Aufruf an Google Gemini 1.5 Pro im modularen Service-Layer ab, erzwingt Schema-Validierung und berechnet Nährwerte &amp; CO2-Einsparungen.</p>
                             <p lang="en" class="code-desc"><strong>EcoChef Gemini API Integration (TypeScript):</strong>
                                 Encapsulates Google Gemini 1.5 Pro calls in a modular service layer with strict JSON schema validation and nutrition/carbon footprint analytics.</p>
-                        </div>
-
-                        <!-- Snippet Minecraft: C++20 Voxel Engine -->
-                        <div id="snippet-minecraft" class="code-snippet" style="display: none;">
-                            <pre><code><span class="token comment">// Minecraft C++20 Voxel Engine: Redstone Propagation &amp; Block Updates</span>
-<span class="token keyword">struct</span> <span class="token classname">BlockUpdate</span> {
-    glm::ivec3 position;
-    uint8_t signalStrength;
-};
-
-<span class="token keyword">void</span> <span class="token classname">RedstoneSimulator</span>::<span class="token function">propagateSignal</span>(glm::ivec3 source, uint8_t power) {
-    std::queue&lt;BlockUpdate&gt; updateQueue;
-    updateQueue.push({source, power});
-
-    <span class="token keyword">while</span> (!updateQueue.empty()) {
-        <span class="token keyword">auto</span> current = updateQueue.front();
-        updateQueue.pop();
-
-        <span class="token keyword">if</span> (current.signalStrength == 0) <span class="token keyword">continue</span>;
-
-        <span class="token keyword">for</span> (<span class="token keyword">const auto</span>&amp; dir : ADJACENT_DIRECTIONS) {
-            glm::ivec3 target = current.position + dir;
-            <span class="token keyword">if</span> (world.getBlock(target).type == BlockType::RedstoneWire) {
-                uint8_t newPower = current.signalStrength - 1;
-                <span class="token keyword">if</span> (newPower &gt; world.getSignal(target)) {
-                    world.setSignal(target, newPower);
-                    updateQueue.push({target, newPower});
-                }
-            }
-        }
-    }
-}</code></pre>
-                            <p lang="de" class="code-desc"><strong>Minecraft C++20 Voxel Simulation:</strong>
-                                Effiziente Breadth-First-Propagation für Redstone-Schaltungen in einer 3D-Voxel-Welt mit Zero-Allocation Chunks und OpenGL 4.5 Mesh-Rendering.</p>
-                            <p lang="en" class="code-desc"><strong>Minecraft C++20 Voxel Simulation:</strong>
-                                Efficient breadth-first signal propagation for Redstone circuits in a 3D voxel engine with zero-allocation chunks and OpenGL 4.5 mesh rendering.</p>
                         </div>
 
                         <!-- Snippet ElektroCheck: AI Report Extractor -->

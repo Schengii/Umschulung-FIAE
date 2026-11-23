@@ -19,16 +19,15 @@ const DOSSIER_TEMPLATES = {
         skills: 'TypeScript, JavaScript ES6+, React 19, Lit Web Components, HTML5/CSS3, PWA (Service Worker, IndexedDB), Vite, Playwright E2E',
     },
     backend: {
-        title: 'Executive Dossier: Systems Engineering & C++ / Architecture',
+        title: 'Executive Dossier: Systems Engineering & Architecture',
         role: 'Software Architect & Systems Developer',
         summary:
-            'Fokus auf objektorientierte Systementwicklung, hardwarenahe Programmierung, algorithmische Komplexität und performante Grafik-Engines.',
+            'Fokus auf objektorientierte Systementwicklung, algorithmische Komplexität und saubere, wartbare Architektur.',
         highlights: [
-            'Minecraft 3D Voxel Engine (C++20, OpenGL 4.5, Biome & Redstone)',
             'Informatik-lernen (TypeScript/Vite Lernplattform & Algorithmen)',
             'ManuFaktur (Responsive Web-Architektur & Kunstgalerie)',
         ],
-        skills: 'C++20, Modern TypeScript / JavaScript, OpenGL 4.5, GLSL Shaders, SQL (3NF), Git, Design Patterns, Multithreading',
+        skills: 'Modern TypeScript / JavaScript, SQL (3NF), Git, Design Patterns, Multithreading',
     },
     ihk: {
         title: 'IHK Prüfungs-Dossier: Fachinformatiker Anwendungsentwicklung',
@@ -81,7 +80,7 @@ function injectDossierModal() {
         <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Zielprofil wählen:</label>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <button class="btn btn-sm btn-primary dossier-type-btn active" data-type="fullstack">💻 Fullstack Web / PWA</button>
-          <button class="btn btn-sm btn-secondary dossier-type-btn" data-type="backend">⚙️ C++ / Godot / Systems</button>
+          <button class="btn btn-sm btn-secondary dossier-type-btn" data-type="backend">⚙️ Systems / Architektur</button>
           <button class="btn btn-sm btn-secondary dossier-type-btn" data-type="ihk">🎓 IHK Prüfer-Dossier</button>
         </div>
       </div>

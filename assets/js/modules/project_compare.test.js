@@ -19,7 +19,7 @@ const PROJECTS = [
         },
         link: 'https://example.org/ecochef',
     },
-    { repoName: 'Minecraft', titleDe: 'Voxel DE', titleEn: 'Voxel EN', tags: ['C++'] },
+    { repoName: 'Wohnung', titleDe: 'Wohnung DE', titleEn: 'Wohnung EN', tags: ['Node'] },
     { repoName: 'Amazon', titleDe: 'Shop DE', titleEn: 'Shop EN' },
     { repoName: 'Finanz', titleDe: 'Finanz DE', titleEn: 'Finanz EN' },
 ];
@@ -72,7 +72,7 @@ describe('project comparison', () => {
         card('EcoChef').click();
         expect(bar().classList.contains('hidden')).toBe(false);
         expect(el('compare-count-text').textContent).toBe('1 Projekt vergleichen');
-        card('Minecraft').click();
+        card('Wohnung').click();
         expect(el('compare-count-text').textContent).toBe('2 Projekte vergleichen');
 
         document.documentElement.setAttribute('lang', 'en');
@@ -93,7 +93,7 @@ describe('project comparison', () => {
         const showToast = vi.fn();
         vi.stubGlobal('showToast', showToast);
         await start();
-        for (const repo of ['EcoChef', 'Minecraft', 'Amazon', 'Finanz']) card(repo).click();
+        for (const repo of ['EcoChef', 'Wohnung', 'Amazon', 'Finanz']) card(repo).click();
         expect(card('Finanz').classList.contains('active')).toBe(false);
         expect(el('compare-count-text').textContent).toBe('3 Projekte vergleichen');
         expect(showToast).toHaveBeenCalledWith(
@@ -112,7 +112,7 @@ describe('project comparison', () => {
     it('opens the drawer from the bar and shows one column per project in the page language', async () => {
         await start();
         card('EcoChef').click();
-        card('Minecraft').click();
+        card('Wohnung').click();
         bar().click();
         expect(el('project-compare-drawer').classList.contains('open')).toBe(true);
 
@@ -150,7 +150,7 @@ describe('project comparison', () => {
     it('updates an open drawer on selection and removes a column with its own close button', async () => {
         await start();
         card('EcoChef').click();
-        card('Minecraft').click();
+        card('Wohnung').click();
         bar().click();
         card('Amazon').click();
         expect(grid().querySelectorAll('.compare-column')).toHaveLength(3);

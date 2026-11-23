@@ -67,7 +67,7 @@ test.describe('Projektseiten', () => {
         await page.goto('/pages/projekt-ecochef.html');
         await expect(page.locator('.case-study .case-study-heading')).toHaveCount(5);
         await expect(page.locator('.case-study p[lang="de"]')).toHaveCount(5);
-        await page.goto('/pages/projekt-minecraft.html');
+        await page.goto('/pages/projekt-manufaktur.html');
         await expect(page.locator('.case-study')).toHaveCount(0);
     });
 });

@@ -32,3 +32,7 @@ Beim Umbau (einmalig, Werkzeug nicht im Repo) wurden 344 Regeln verschoben, `sty
 ## Nachtrag 2026-11-17: Landingpage teilt `home.css`
 
 `index.html` ist seit Plan-Punkt 1.1 die Landingpage (vorher eine Namensabfrage). Sie zeigt denselben Hero und dieselben Punktkarten wie `pages/home.html` und bindet deshalb `modules/hero_showcase.css` und `home.css` mit ein, dazu `landing.css` für die eigenen Regeln. Das ist eine bewusste Ausnahme von der Regel „eine Klasse auf zwei Seiten gehört zurück in die Basis“: Die beiden Seiten teilen sich einen ganzen Block, kein einzelnes Bauteil, und alle anderen Seiten bleiben von den Regeln frei. Wer Regeln aus `home.css` ändert, prüft beide Seiten. Wird `home.html` später entschlackt (Plan 3.3), wandert der gemeinsame Teil in ein Modul unter `assets/css/modules/`.
+
+## Nachtrag 2026-11-23: `Projekte/Minecraft` entfernt
+
+Das Projekt `Projekte/Minecraft` ist aus der Seite entfernt. Damit entfallen die Ausnahme „Klassen, die auch `Projekte/Minecraft` aus `style.css` bezieht“ und die Warnung unter „Konsequenzen“: Kein Unterprojekt lädt `style.css` mehr direkt.

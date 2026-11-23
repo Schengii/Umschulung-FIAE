@@ -146,17 +146,6 @@ const SKILLS_DATA = [
         refTextEn: 'View projects',
     },
     {
-        name: 'C++20 & 3D Engine',
-        level: 2,
-        proofs: [['projekt-minecraft.html', 'Minecraft C++ Engine']],
-        category: 'backend',
-        descDe: 'Moderne C++-Standards (C++20), RAII, Smart Pointer, OpenGL 4.5 Grafikpipeline und CMake.',
-        descEn: 'Modern C++ standards (C++20), RAII, smart pointers, OpenGL 4.5 graphics pipeline, and CMake.',
-        refLink: 'portfolio.html',
-        refTextDe: 'Minecraft Engine ansehen',
-        refTextEn: 'View Minecraft Engine',
-    },
-    {
         name: 'Generative KI (Gemini & OpenAI)',
         level: 3,
         proofs: [

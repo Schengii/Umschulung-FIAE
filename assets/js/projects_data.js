@@ -162,8 +162,8 @@ window.projectsData = [
       }
     ],
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-11-22T18:53:44.351Z",
+    "githubUrl": "https://github.com/Schengii/EcoChef",
+    "updatedAt": "2026-10-14T19:43:06Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -181,13 +181,14 @@ window.projectsData = [
       "AI Integration"
     ],
     "image": "assets/images/elektrocheck_showcase.webp",
-    "link": "Projekte/ElektroCheck%20AI/dist/index.html",
+    "link": "https://elektro-check-ai-three.vercel.app",
     "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
     "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
     "category": "ai",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-10-31T15:05:40.000Z",
+    "githubUrl": "https://github.com/Schengii/elektroCheck-ai",
+    "updatedAt": "2026-11-08T12:14:46Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -327,31 +328,6 @@ window.projectsData = [
     ]
   },
   {
-    "repoName": "Minecraft",
-    "titleDe": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
-    "titleEn": "🧱 Minecraft C++ Voxel Engine (1:1 Remake)",
-    "tags": [
-      "C++20",
-      "OpenGL 4.5",
-      "CMake",
-      "Redstone Logic",
-      "3D Voxel Engine",
-      "Procedural Generation"
-    ],
-    "image": "assets/images/minecraft_showcase.webp",
-    "images": [
-      "assets/images/minecraft_showcase.webp",
-      "assets/images/game_leaderboard.webp"
-    ],
-    "link": "Projekte/Minecraft/index.html",
-    "descDe": "Eine hoch-performante 3D-Voxel-Engine in C++20 und OpenGL 4.5 nach dem Vorbild von Minecraft. Bietet voll-funktionale Redstone-Logikschaltungen (Wires, Torches, Levers, Lamps), prozedurale Biome (Wüste, Schnee, Berge), 3D-Höhlensysteme mit Lava/Erzen, Tageszeitzyklus, Wasser-Physik, Inventar-Crafting (2x2) und binäre Chunk-Serialisierung.",
-    "descEn": "A high-performance 3D voxel engine built with C++20 and OpenGL 4.5 inspired by Minecraft. Features complete Redstone logic circuits, procedural biomes, 3D cave generation, dynamic day/night cycles, buoyancy water physics, 2x2 crafting inventory, and binary chunk persistence.",
-    "category": "games",
-    "language": "C++",
-    "stars": 0,
-    "updatedAt": "2026-10-31T15:05:40.000Z"
-  },
-  {
     "repoName": "Wohnungssuche-KI",
     "titleDe": "🏠 Wohnungssuche KI — Intelligenter Such-Assistent",
     "titleEn": "🏠 Wohnungssuche KI — Intelligent Apartment Finder",
@@ -369,7 +345,8 @@ window.projectsData = [
     "category": "ai web",
     "language": "JavaScript",
     "stars": 0,
-    "updatedAt": "2026-10-31T15:05:40.000Z",
+    "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
+    "updatedAt": "2026-11-02T13:17:24Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"

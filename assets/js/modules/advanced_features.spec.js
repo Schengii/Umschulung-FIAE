@@ -53,11 +53,11 @@ test.describe('Advanced Features & Tools E2E Verification', () => {
         await expect(chatBox).toBeVisible();
 
         // Click a suggestion chip
-        await page.click('button.copilot-chip[data-query="Welche C++ und Godot Projekte gibt es?"]');
+        await page.click('button.copilot-chip[data-query="Welche KI und Machine Learning Apps wurden gebaut?"]');
 
         // Verify response
         const lastMsg = page.locator('#copilot-messages .copilot-msg.bot').last();
-        await expect(lastMsg).toContainText('C++20');
-        await expect(lastMsg).toContainText('OpenGL');
+        await expect(lastMsg).toContainText('Gemini');
+        await expect(lastMsg).toContainText('OpenAI');
     });
 });
