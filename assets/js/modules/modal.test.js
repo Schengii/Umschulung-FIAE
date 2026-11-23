@@ -1,11 +1,13 @@
 // @vitest-environment happy-dom
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { resetDocument } from '../../../scripts/test-support/dom-helpers.js';
 
 // modal.js ist ein klassisches Script (IIFE ohne Export): der Test wertet den Quelltext aus.
-const source = fs.readFileSync(path.resolve(__dirname, '..', 'modal.js'), 'utf8');
+const modalPath = path.resolve(__dirname, '..', 'modal.js');
+const source = fs.readFileSync(modalPath, 'utf8');
 
 const PAYLOAD = '<img src=x onerror="window.__xss=1">';
 
@@ -17,7 +19,7 @@ function openModalWith(dataset) {
         <div id="project-modal"><div class="modal-content"><div id="modal-body"></div></div></div>
         <article class="project-card" ${attrs}><span id="card-body">Karte</span></article>
     `);
-    new Function(source)();
+    vm.runInThisContext(source, { filename: modalPath });
     /** @type {HTMLElement} */ (document.getElementById('card-body')).click();
     return /** @type {HTMLElement} */ (document.getElementById('modal-body'));
 }
