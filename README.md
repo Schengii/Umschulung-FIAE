@@ -24,6 +24,16 @@ Umschulung-FIAE/
 ├── sw.js                        # Service Worker für Offline-Caching & PWA-Fähigkeit (Precache-Liste und Cache-Name generiert)
 ├── manifest.json                # PWA-Manifest (Metadaten für App-Installationen auf Mobilgeräten)
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
+├── CLAUDE.md / GEMINI.md        # Arbeitsregeln für KI-Assistenten (GEMINI.md verweist nur auf CLAUDE.md)
+├── CHANGELOG.md / HANDOFF.md    # Änderungsprotokoll und Übergabe an die nächste Sitzung
+├── CONTRIBUTING.md & SECURITY.md # Beitragsablauf und Sicherheitsrichtlinie
+├── vercel.json & .vercelignore  # Hosting: Security-Header, Cache-Regeln, Build-Ausschlüsse
+├── dist/                        # Produktions-Build (generiert, git-ignoriert, wird von Vercel ausgeliefert)
+├── .github/                     # CI-Workflows (ci, visual, sync, links, gitleaks), Dependabot, Vorlagen
+├── .githooks/                   # Pre-Commit (Secrets-Schutz) und Pre-Push (npm run check, Chromium-Smoke)
+├── docs/                        # Doku
+│   ├── adr/                     # Architekturentscheidungen (Index in adr/README.md)
+│   └── archiv/                  # Abgeschlossenes: Verbesserungsplan 2026-11-14, Changelog vor 1.5.0
 │
 ├── pages/                       # Alle Inhaltsseiten
 │   ├── home.html                # Werdegang & Kontakt (Profil)

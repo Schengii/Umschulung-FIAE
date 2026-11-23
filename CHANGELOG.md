@@ -9,6 +9,9 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Link-Vorschau**: Jede generierte Projektseite hat ein eigenes 1200×630-Vorschaubild (`assets/images/og/projekt-<slug>.jpg`, erzeugt aus dem Showcase-Bild durch `generate_project_pages.js`) als `og:image`/`twitter:image` statt überall `og-cover.png`; Größe als `og:image:width`/`height`.
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
+#### Geändert
+- **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung.
+
 #### Entfernt
 - **Minecraft**: Das Projekt ist aus der Seite entfernt: `Projekte/Minecraft`, Projektseite, Vorschau- und Showcase-Bild, Sync- und Sichtbarkeitseintrag, Sandbox-Eintrag, Startseiten-Karte (ersetzt durch Wohnungssuche KI), Code-Snippet und C++20-Filter im Portfolio, Skill „C++20 & 3D Engine“, Copilot-Antwort samt Chip „C++ & Godot“, Dossier-Eintrag sowie Sitemap-Eintrag.
 - **Spielwiese**: Die Seiten Mini-Games-Hub, Snake, Memory, Code Playground und Challenge Lab sind samt Skripten, Modulen, Tests, Stylesheets, Bildern, Menü-, Sitemap- und Lighthouse-Einträgen entfernt, ebenso das Game-Modal im Portfolio, der Audio-Schalter in der Fußzeile samt Ton-System, die Spiel-Achievements und die Datenschutz-Einträge zu Highscores und Ton. Die Header-CSP-Sonderregel für `playground.html` in `vercel.json` entfällt.
@@ -96,7 +99,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **Externe Links**: `scripts/check_external_links.js` und der wöchentliche Workflow `links.yml` öffnen bei toten Links ein Issue (kein CI-Gate).
 - **CI**: Playwright-Browser werden je Browser und Playwright-Version zwischengespeichert.
 - **Aufräumen**: Fünf Einmal-Skripte (`add_og_meta`, `fix_project_html_paths`, `localize_vendor_assets`, `audit_cleanup`, `install_sync_triggers`) samt npm-Scripts und README-Zeilen entfernt; Sync-Zeitplan in der Doku auf „täglich“ angeglichen.
-- **Doku**: README-Zahlen korrigiert, Changelog vor 1.5.0 nach `docs/changelog-archiv.md` verschoben, ADR 0016 (Cache-Grenzen) und 0017 (generierte Header-CSP), `CONTRIBUTING.md` mit Ablauf `regen`, `check`, Changelog.
+- **Doku**: README-Zahlen korrigiert, Changelog vor 1.5.0 nach `docs/archiv/changelog-archiv.md` verschoben, ADR 0016 (Cache-Grenzen) und 0017 (generierte Header-CSP), `CONTRIBUTING.md` mit Ablauf `regen`, `check`, Changelog.
 
 #### Hinzugefügt
 - **Lebenslauf-PDF aus der Seite**: `npm run generate-cv-pdf` (`scripts/generate_cv_pdf.js`) setzt das Stand-Datum auf `lebenslauf.html` (neue Zeile „Stand“, DE/EN) auf heute und druckt die Seite mit Playwright in eine A4-PDF (Standard `assets/pdf/Lebenslauf.pdf`, mit `--out <datei>` anderswo). Dabei gefunden und behoben: Eine veraltete Druckregel in `style.css` (`body > * { display: none }` für ein nicht mehr vorhandenes Zertifikat-Modal) blendete beim Drucken die ganze Seite aus, „Als PDF exportieren“ auf dem Lebenslauf lieferte also eine leere Seite; E2E-Spec `print_cv`.
@@ -189,4 +192,4 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ---
 
-Ältere Versionen (vor 1.5.0): [`docs/changelog-archiv.md`](docs/changelog-archiv.md).
+Ältere Versionen (vor 1.5.0): [`docs/archiv/changelog-archiv.md`](docs/archiv/changelog-archiv.md).
