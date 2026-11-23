@@ -4711,9 +4711,7 @@ textarea:focus-visible,
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
-    .scroll-reveal,
-    .scroll-reveal-left,
-    .scroll-reveal-right {
+    .scroll-reveal {
         opacity: 1 !important;
         transform: none !important;
     }
@@ -4808,8 +4806,7 @@ textarea:focus-visible,
 /* Grid children default to min-width: auto and grew to the width of their widest content (the
    contribution heatmap, long headings), which pushed the column past the viewport and got it
    clipped. */
-.layout-grid > *,
-.simulator-layout > * {
+.layout-grid > * {
     min-width: 0;
 }
 
