@@ -41,12 +41,6 @@ const PLAYABLE_PROJECTS = {
         type: 'Web Application',
         desc: 'Moderne Kunstausstellung & Merkliste mit responsivem Design und dynamischen Filtern.',
     },
-    Minecraft: {
-        title: 'Minecraft Voxel Engine — Web Preview & Showcase',
-        url: '../Projekte/Minecraft/index.html',
-        type: '3D Voxel Engine Demo',
-        desc: 'C++20 & OpenGL Voxel Engine mit Biomen, Chunk-Rendering und Redstone-Logik.',
-    },
     'Wohnungssuche-KI': {
         title: 'Wohnungssuche KI — KI-Immobilien-Scout',
         url: '../Projekte/Wohnungssuche KI/frontend/dist/index.html',

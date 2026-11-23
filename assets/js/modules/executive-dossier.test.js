@@ -97,7 +97,7 @@ describe('executive dossier', () => {
         expect(modal().querySelector('[data-type="fullstack"]').classList.contains('btn-primary')).toBe(false);
 
         modal().querySelector('[data-type="backend"]').click();
-        expect(el('dossier-summary-text').textContent).toContain('hardwarenahe');
+        expect(el('dossier-summary-text').textContent).toContain('algorithmische Komplexität');
     });
 
     it('falls back to the fullstack profile for an unknown type', async () => {

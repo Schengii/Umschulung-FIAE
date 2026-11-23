@@ -65,7 +65,6 @@ Umschulung-FIAE/
 │   ├── Finanzenportfolio/       # Vermögensplaner & Analytics Dashboard (React/Recharts)
 │   ├── Informatik-lernen/       # Interaktive FIAE-Lernplattform (TypeScript & Vite)
 │   ├── ManuFaktur/              # Kunst- & Bildergalerie mit Merkliste (Responsive Vanilla JS)
-│   ├── Minecraft/               # 3D Voxel Engine (C++20 & OpenGL 4.5 mit Redstone & Biomen)
 │   └── Wohnungssuche KI/        # Automatisierte Wohnungssuche mit KI-Exposé-Bewertung
 │
 └── scripts/                     # Automatisierungs- & Build-Skripte (Node.js)
@@ -212,7 +211,7 @@ Strukturelle Entscheidungen (Bundler-Verzicht, Hosting-Wahl, CSP-Strategie, `<he
 
 ## 🌟 Veröffentlichungs-Zusammenfassung (Release 2026)
 
-- **Vielfältige Projekte**: Von Web-PWAs über AI-Bots bis hin zu 3D C++ Voxel Engines und Godot C# RPGs.
+- **Vielfältige Projekte**: Von Web-PWAs über AI-Bots bis hin zu Godot C# RPGs.
 - **WCAG 2.1 AA Accessibility** (axe-core in der CI; Hochkontrast-Modus mit 7:1): Integrierter Barrierefreiheits-Assistent für Legasthenie, Rot-Grün-Schwäche, Hochkontrast und Schriftvergrößerung.
 - **DSGVO-bewusst**: Keine Cookies, kein Tracking, keine externen Schriftart-Verbindungen; Gehalt/Zeugnisse werden nur auf Anfrage per E-Mail geteilt statt öffentlich angezeigt.
 - **Automatisierte Tests**: Playwright-E2E-Suite in vier Browser-Profilen plus Vitest-Unit-Tests für die Kernlogik (`npm test`, `npm run test:unit`).

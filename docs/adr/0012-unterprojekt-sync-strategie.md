@@ -47,4 +47,4 @@ Die Synchronisation erfolgt über ein 3-stufiges, ausfallsicheres Multi-Tier-Sys
 
 ## Nachtrag 2026-10-31 — Private Quell-Repos
 
-Für Projekte mit **privatem** Quell-Repo (Amazon 2.0, ElektroCheck AI, Wohnungssuche KI, Minecraft) übernimmt der Sync nur den Demo-Build und `portfolio-metadata.json` (`DEMO_ONLY` in `scripts/project_visibility.js`). Der Quellcode bleibt im privaten Repo; auf der Website entfallen Code-Link und `codeFiles` für diese Projekte. Alte Commits in der Git-History enthalten die früheren Quellstände weiterhin.
+Für Projekte mit **privatem** Quell-Repo (Amazon 2.0, ElektroCheck AI, Wohnungssuche KI) übernimmt der Sync nur den Demo-Build und `portfolio-metadata.json` (`DEMO_ONLY` in `scripts/project_visibility.js`). Der Quellcode bleibt im privaten Repo; auf der Website entfallen Code-Link und `codeFiles` für diese Projekte. Alte Commits in der Git-History enthalten die früheren Quellstände weiterhin.

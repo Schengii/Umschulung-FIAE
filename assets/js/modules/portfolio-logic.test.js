@@ -25,11 +25,9 @@ describe('matchesCategory', () => {
         expect(matchesCategory(web, 'games')).toBe(false);
     });
 
-    it('finds C++ and TypeScript also through tags', () => {
-        expect(matchesCategory(project({ tags: ['C++17'] }), 'cpp')).toBe(true);
-        expect(matchesCategory(project({ language: 'C++' }), 'cpp')).toBe(true);
+    it('finds TypeScript also through tags', () => {
         expect(matchesCategory(project({ tags: ['TypeScript'] }), 'typescript')).toBe(true);
-        expect(matchesCategory(project({ language: 'Java' }), 'cpp')).toBe(false);
+        expect(matchesCategory(project({ language: 'Java' }), 'typescript')).toBe(false);
     });
 
     it('treats curated repos and five or more stars as highlights', () => {
@@ -65,14 +63,14 @@ describe('sortProjects', () => {
         const sorted = sortProjects(
             [
                 { repoName: 'Hobby', stars: 9 },
-                { repoName: 'Minecraft', stars: 0 },
+                { repoName: 'ManuFaktur', stars: 0 },
                 { repoName: 'Other', stars: 2 },
                 { repoName: 'ElektroCheck-AI', stars: 1 },
                 { repoName: 'EcoChef', stars: 0 },
             ],
             'desc'
         );
-        expect(sorted.map((p) => p.repoName)).toEqual(['EcoChef', 'ElektroCheck-AI', 'Minecraft', 'Hobby', 'Other']);
+        expect(sorted.map((p) => p.repoName)).toEqual(['EcoChef', 'ElektroCheck-AI', 'ManuFaktur', 'Hobby', 'Other']);
     });
 
     it('sorts the uncurated rest ascending on request and leaves the input alone', () => {

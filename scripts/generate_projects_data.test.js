@@ -28,9 +28,9 @@ describe('resolveFallbackUpdatedAt', () => {
 
     it('stays the same on every run while the folder is unchanged', () => {
         const { git } = fakeGit({ log: '2026-10-27T10:25:30+01:00' });
-        const first = resolveFallbackUpdatedAt({ folderName: 'Minecraft', git, now });
+        const first = resolveFallbackUpdatedAt({ folderName: 'ManuFaktur', git, now });
         const later = resolveFallbackUpdatedAt({
-            folderName: 'Minecraft',
+            folderName: 'ManuFaktur',
             git,
             now: () => new Date('2026-12-01T00:00:00.000Z'),
         });
@@ -38,8 +38,8 @@ describe('resolveFallbackUpdatedAt', () => {
     });
 
     it('uses the current time while the folder has uncommitted changes (sync in progress)', () => {
-        const { git } = fakeGit({ status: ' M Projekte/Minecraft/index.html', log: '2026-10-27T10:25:30+01:00' });
-        expect(resolveFallbackUpdatedAt({ folderName: 'Minecraft', git, now })).toBe('2026-11-14T10:00:00.000Z');
+        const { git } = fakeGit({ status: ' M Projekte/ManuFaktur/index.html', log: '2026-10-27T10:25:30+01:00' });
+        expect(resolveFallbackUpdatedAt({ folderName: 'ManuFaktur', git, now })).toBe('2026-11-14T10:00:00.000Z');
     });
 
     it('keeps the previous value when git is not available', () => {
@@ -47,7 +47,7 @@ describe('resolveFallbackUpdatedAt', () => {
             throw new Error('git: command not found');
         };
         const previous = '2026-10-01T08:00:00.000Z';
-        expect(resolveFallbackUpdatedAt({ folderName: 'Minecraft', previous, git, now })).toBe(previous);
+        expect(resolveFallbackUpdatedAt({ folderName: 'ManuFaktur', previous, git, now })).toBe(previous);
     });
 
     it('keeps the previous value when the folder has no commit yet and no changes', () => {

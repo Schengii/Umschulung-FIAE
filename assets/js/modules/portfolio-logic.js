@@ -22,7 +22,6 @@ export const FEATURED_REPOS = [
     'Wohnungssuche-KI',
     'Informatik-lernen',
     'ManuFaktur',
-    'Minecraft',
 ];
 /** @type {string[]} */
 export const DEPRIORITIZED_REPOS = [];
@@ -35,11 +34,10 @@ export const SANDBOX_PLAYABLE_REPOS = [
     'Finanzenportfolio',
     'Informatik-lernen',
     'ManuFaktur',
-    'Minecraft',
     'Wohnungssuche-KI',
 ];
 
-const HIGHLIGHT_REPOS = ['EcoChef', 'ElektroCheck-AI', 'Amazon-2.0', 'Minecraft'];
+const HIGHLIGHT_REPOS = ['EcoChef', 'ElektroCheck-AI', 'Amazon-2.0'];
 
 /** @param {PortfolioProject} project */
 export function isHighlightProject(project) {
@@ -69,7 +67,6 @@ export function matchesCategory(project, category) {
     if (typeof project.category === 'string' && project.category.includes(category)) return true;
     const language = typeof project.language === 'string' ? project.language.toLowerCase() : '';
     if (language === category) return true;
-    if (category === 'cpp') return project.language === 'C++' || hasTag(project, 'c++');
     if (category === 'typescript') return language === 'typescript' || hasTag(project, 'typescript');
     return false;
 }

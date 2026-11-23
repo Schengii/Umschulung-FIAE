@@ -36,11 +36,6 @@ const REPO_MAPPING = {
         url: 'https://github.com/Schengii/ManuFaktur.git',
         targetDir: 'Projekte/ManuFaktur',
     },
-    Minecraft: {
-        url: 'https://github.com/Schengii/Minecraft.git',
-        targetDir: 'Projekte/Minecraft',
-        preserve: ['index.html'],
-    },
     'Wohnungssuche KI': {
         url: 'https://github.com/Schengii/Wohnungssuche-KI.git',
         targetDir: 'Projekte/Wohnungssuche KI',

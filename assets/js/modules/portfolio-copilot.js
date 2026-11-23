@@ -64,14 +64,6 @@ export const KNOWLEDGE_BASE = [
         linkTextEn: 'Web & PWA Projects',
     },
     {
-        keywords: ['c++', 'c#', 'godot', 'engine', 'game', 'opengl', 'minecraft', 'spiele', 'games', 'gaming'],
-        responseDe: `Für System- und Spieleprogrammierung setzt Maximilian auf <strong>C++20 mit OpenGL 4.5</strong> (eigene 3D Voxel Engine mit Biomen, Chunk-Rendering und Redstone-Logik) sowie modulare Game-Architekturen.`,
-        responseEn: `For systems and game programming, Maximilian utilizes <strong>C++20 with OpenGL 4.5</strong> (custom 3D voxel engine with biomes, chunk rendering & redstone logic) and modular game architectures.`,
-        link: 'portfolio.html?filter=game',
-        linkTextDe: 'C++ & Games im Portfolio',
-        linkTextEn: 'C++ & Games',
-    },
-    {
         keywords: [
             'sql',
             'datenbank',
@@ -177,7 +169,6 @@ function injectCopilotWidget() {
 
                 <!-- Suggestion Chips -->
                 <div id="copilot-suggestions">
-                    <button type="button" class="copilot-chip" data-query="Welche C++ und Godot Projekte gibt es?">🎮 C++ & Godot</button>
                     <button type="button" class="copilot-chip" data-query="Erzähle mir vom IHK Abschlussprojekt EcoChef">🎓 IHK EcoChef</button>
                     <button type="button" class="copilot-chip" data-query="Welche Erfahrungen gibt es mit SQL und Datenbanken?">🗄️ SQL & DBs</button>
                     <button type="button" class="copilot-chip" data-query="Welche KI und Machine Learning Apps wurden gebaut?">🤖 KI & AI</button>
@@ -289,7 +280,6 @@ function resetChatHistory() {
             }
         </div>
         <div id="copilot-suggestions">
-            <button type="button" class="copilot-chip" data-query="Welche C++ und Godot Projekte gibt es?">🎮 C++ & Godot</button>
             <button type="button" class="copilot-chip" data-query="Erzähle mir vom IHK Abschlussprojekt EcoChef">🎓 IHK EcoChef</button>
             <button type="button" class="copilot-chip" data-query="Welche Erfahrungen gibt es mit SQL und Datenbanken?">🗄️ SQL & DBs</button>
             <button type="button" class="copilot-chip" data-query="Welche KI und Machine Learning Apps wurden gebaut?">🤖 KI & AI</button>
@@ -351,8 +341,8 @@ function handleUserQuery(queryText) {
         } else {
             botMsg.innerHTML =
                 currentLang === 'en'
-                    ? `<div>Thanks for your question! Maximilian has built hands-on projects in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python, and SQL</strong>. Feel free to pick a suggestion or visit the <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a> directly!</div>`
-                    : `<div>Danke für deine Frage! Maximilian hat praxisnahe Projekte in <strong>C++ (OpenGL), Godot (C#), TypeScript (React/Lit), Python und SQL</strong> entwickelt. Wähle gerne ein Thema oben aus oder springe direkt ins <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a>.</div>`;
+                    ? `<div>Thanks for your question! Maximilian has built hands-on projects in <strong>Godot (C#), TypeScript (React/Lit), Python, and SQL</strong>. Feel free to pick a suggestion or visit the <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a> directly!</div>`
+                    : `<div>Danke für deine Frage! Maximilian hat praxisnahe Projekte in <strong>Godot (C#), TypeScript (React/Lit), Python und SQL</strong> entwickelt. Wähle gerne ein Thema oben aus oder springe direkt ins <a href="${resolvePageLink('portfolio.html')}" class="copilot-link-btn">Portfolio</a>.</div>`;
         }
 
         messages.appendChild(botMsg);
