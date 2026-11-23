@@ -18,6 +18,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
 #### Geändert
+- **LinkedIn**: Profil-Link überall auf `https://www.linkedin.com/in/maxschenk-dev` umgestellt (Seiten, Footer, Schema.org-`sameAs`, Teilen-Leiste).
 - **Coverage-Schwellen**: Module 95/80/96/97 % (vorher 92/80/94/94), Seiten-Scripts 88/72/85/88 % (vorher 0,5 %).
 - **Lighthouse**: Schwellen Performance ≥ 0,86 (vorher 0,8), Accessibility ≥ 0,93 und Best Practices ≥ 0,95 (vorher je 0,9); SEO ≥ 0,9 und CLS ≤ 0,1 unverändert. Neu gemessen: `projekt-amazon-2-0.html`.
 - **Playwright**: 1.65.1 (exakt gepinnt); die Dependabot-Sperre für 1.64 und höher entfällt, weil die WebKit-Specs in der CI mit 1.65.1 grün sind.

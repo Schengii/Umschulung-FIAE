@@ -336,7 +336,7 @@ function renderFooter() {
                     <p lang="en" class="brand-desc">Retraining as an IT Specialist in Application Development. Successfully completed before the IHK in June 2026.</p>
                     <div class="footer-socials">
                         <a href="https://github.com/Schengii" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
-                        <a href="https://linkedin.com/in/maximilian-schenk" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/maxschenk-dev" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
                         <a href="https://instagram.com/schengii" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
                         <a href="mailto:sche-max@web.de" aria-label="E-Mail" data-en-aria-label="Email" class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
                     </div>
