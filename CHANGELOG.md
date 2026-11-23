@@ -10,7 +10,7 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 - **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
 
 #### Geändert
-- **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung.
+- **Projektstruktur**: `plan.md` (erledigter Verbesserungsplan) und `docs/changelog-archiv.md` liegen jetzt unter `docs/archiv/`; die überholte Übergabe `docs/handoff-2026-11-19.md` ist entfernt (aktuell: `HANDOFF.md`). `README.md` (Projektbaum) und `CLAUDE.md` (Abschnitt „Projektstruktur“) beschreiben die Ordneraufteilung. `CONTRIBUTING.md`, `SECURITY.md` und `CODE_OF_CONDUCT.md` liegen jetzt in `.github/` (GitHub erkennt sie dort weiterhin).
 
 #### Entfernt
 - **Minecraft**: Das Projekt ist aus der Seite entfernt: `Projekte/Minecraft`, Projektseite, Vorschau- und Showcase-Bild, Sync- und Sichtbarkeitseintrag, Sandbox-Eintrag, Startseiten-Karte (ersetzt durch Wohnungssuche KI), Code-Snippet und C++20-Filter im Portfolio, Skill „C++20 & 3D Engine“, Copilot-Antwort samt Chip „C++ & Godot“, Dossier-Eintrag sowie Sitemap-Eintrag.

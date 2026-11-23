@@ -10,7 +10,7 @@ Thanks for your interest in this project! Bug reports, ideas and pull requests a
 5. Add an entry to `CHANGELOG.md` for relevant features and fixes; new text is bilingual (DE/EN).
 6. Open a pull request using the template; CI must pass before merging.
 
-Details (CI gates, architecture, conventions) live in [`CLAUDE.md`](CLAUDE.md).
+Details (CI gates, architecture, conventions) live in [`CLAUDE.md`](../CLAUDE.md).
 
 ## Commit messages
 This project uses [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`.

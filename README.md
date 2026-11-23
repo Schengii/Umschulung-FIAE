@@ -26,10 +26,9 @@ Umschulung-FIAE/
 ├── sitemap.xml & robots.txt     # SEO- & Suchmaschinen-Konfigurationen
 ├── CLAUDE.md / GEMINI.md        # Arbeitsregeln für KI-Assistenten (GEMINI.md verweist nur auf CLAUDE.md)
 ├── CHANGELOG.md / HANDOFF.md    # Änderungsprotokoll und Übergabe an die nächste Sitzung
-├── CONTRIBUTING.md & SECURITY.md # Beitragsablauf und Sicherheitsrichtlinie
 ├── vercel.json & .vercelignore  # Hosting: Security-Header, Cache-Regeln, Build-Ausschlüsse
 ├── dist/                        # Produktions-Build (generiert, git-ignoriert, wird von Vercel ausgeliefert)
-├── .github/                     # CI-Workflows (ci, visual, sync, links, gitleaks), Dependabot, Vorlagen
+├── .github/                     # CI-Workflows (ci, visual, sync, links, gitleaks), Dependabot, Vorlagen sowie CONTRIBUTING, SECURITY und CODE_OF_CONDUCT
 ├── .githooks/                   # Pre-Commit (Secrets-Schutz) und Pre-Push (npm run check, Chromium-Smoke)
 ├── docs/                        # Doku
 │   ├── adr/                     # Architekturentscheidungen (Index in adr/README.md)
