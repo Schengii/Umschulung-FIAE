@@ -106,6 +106,49 @@ async function imageSize(file) {
     }
 }
 
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+
+/**
+ * Ob das Projekt ein eigenes lokales Vorschaubild hat (sonst bleibt `og-cover.png`).
+ * @param {{image?: string}} project
+ */
+function hasOwnImage(project) {
+    const image = project.image || '';
+    return Boolean(image) && !/^[a-z]+:/i.test(image) && !image.endsWith('og-cover.png');
+}
+
+/**
+ * Pfad des Link-Vorschaubilds (JPEG, weil Crawler WebP nicht zuverlässig lesen; `check-head` verlangt PNG/JPEG).
+ * @param {Record<string, any>} project
+ */
+function ogImagePath(project) {
+    return hasOwnImage(project)
+        ? `assets/images/og/${pageNameFor(project.repoName).replace(/\.html$/, '')}.jpg`
+        : 'assets/images/og-cover.png';
+}
+
+/**
+ * Erzeugt das 1200x630-JPEG: Projektbild scharf in der Mitte, unscharf vergrößert als Hintergrund.
+ * @param {{image: string}} project
+ * @param {string} target
+ */
+async function writeOgImage(project, target) {
+    const sharp = require('sharp');
+    const source = path.join(root, project.image);
+    const front = await sharp(source).resize({ height: OG_HEIGHT, fit: 'inside' }).toBuffer();
+    const background = await sharp(source)
+        .resize(OG_WIDTH, OG_HEIGHT, { fit: 'cover' })
+        .blur(30)
+        .modulate({ brightness: 0.6 })
+        .toBuffer();
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    await sharp(background)
+        .composite([{ input: front, gravity: 'centre' }])
+        .jpeg({ quality: 82, mozjpeg: true })
+        .toFile(target);
+}
+
 const CASE_STUDY_FIELDS = ['situation', 'role', 'decision', 'result', 'learned'];
 
 /**
@@ -174,6 +217,9 @@ function renderPage(project, cspMeta, size, study) {
     const demo = safeHref(project.link);
     const code = project.githubUrl && /^https?:\/\//i.test(project.githubUrl) ? project.githubUrl : '';
     const image = project.image || project.images?.[0] || '';
+    // Eigenes Vorschaubild je Projekt (nur lokale Pfade); breite Bilder als große Karte, quadratische als kleine
+    const ogImage = `${SITE}/${ogImagePath(project)}`;
+    const ogSize = { width: OG_WIDTH, height: OG_HEIGHT };
     const detail = `projekt-detail.html?repo=${encodeURIComponent(project.repoName)}`;
 
     const jsonLd = {
@@ -224,11 +270,17 @@ function renderPage(project, cspMeta, size, study) {
     <meta property="og:description" content="${escapeHtml(metaDescription)}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="${url}">
-    <meta property="og:image" content="${SITE}/assets/images/og-cover.png">
+    <meta property="og:image" content="${ogImage}">${
+        ogSize
+            ? `
+    <meta property="og:image:width" content="${ogSize.width}">
+    <meta property="og:image:height" content="${ogSize.height}">`
+            : ''
+    }
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${escapeHtml(pageTitle)}">
     <meta name="twitter:description" content="${escapeHtml(metaDescription)}">
-    <meta name="twitter:image" content="${SITE}/assets/images/og-cover.png">
+    <meta name="twitter:image" content="${ogImage}">
     <link rel="canonical" href="${url}">
     <link rel="alternate" hreflang="de" href="${url}">
     <link rel="alternate" hreflang="en" href="${url}?lang=en">
@@ -309,6 +361,19 @@ async function main() {
     const expected = new Map();
     for (const project of projects) {
         const size = project.image ? await imageSize(project.image) : null;
+        if (hasOwnImage(project)) {
+            const target = path.join(root, ogImagePath(project));
+            if (
+                !check &&
+                (!fs.existsSync(target) ||
+                    fs.statSync(target).mtimeMs < fs.statSync(path.join(root, project.image)).mtimeMs)
+            ) {
+                await writeOgImage(project, target);
+            } else if (check && !fs.existsSync(target)) {
+                console.error(`✗ ${ogImagePath(project)} fehlt (npm run generate-data)`);
+                process.exit(1);
+            }
+        }
         expected.set(
             pageNameFor(project.repoName),
             withInlineHashes(renderPage(project, cspMeta, size, studies[project.repoName]))
