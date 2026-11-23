@@ -426,13 +426,27 @@ function renderCookieBanner() {
 function renderBreadcrumb(items) {
     // items = [{ label_de, label_en, href }, ...]
     // Last item is current page (no link)
+    // Klassisches Script ohne import: lokale Kopie von escapeHtml (eigener Name, gemeinsamer globaler Scope).
+    const esc = (/** @type {unknown} */ value) =>
+        String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    // Nur relative und http(s)-Links zulassen (kein javascript:).
+    const safeHref = (/** @type {unknown} */ value) => {
+        const href = String(value ?? '').trim();
+        return /^(?:[a-z][a-z0-9+.-]*:)/i.test(href) && !/^https?:/i.test(href) ? '#' : href;
+    };
     let html = '<nav class="breadcrumb" aria-label="Breadcrumb"><ol>';
     items.forEach((item, i) => {
         const isLast = i === items.length - 1;
+        const labels = `<span lang="de">${esc(item.label_de)}</span><span lang="en">${esc(item.label_en)}</span>`;
         if (isLast) {
-            html += `<li aria-current="page"><span lang="de">${item.label_de}</span><span lang="en">${item.label_en}</span></li>`;
+            html += `<li aria-current="page">${labels}</li>`;
         } else {
-            html += `<li><a href="${item.href}"><span lang="de">${item.label_de}</span><span lang="en">${item.label_en}</span></a></li>`;
+            html += `<li><a href="${esc(safeHref(item.href))}">${labels}</a></li>`;
         }
     });
     html += '</ol></nav>';
