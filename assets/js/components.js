@@ -446,7 +446,7 @@ function initBreadcrumbs() {
     const container = document.getElementById('breadcrumb-container');
     if (!container || container.dataset.rendered === 'true') return;
     try {
-        const items = JSON.parse(container.getAttribute('data-items'));
+        const items = JSON.parse(container.getAttribute('data-items') || '[]');
         container.innerHTML = renderBreadcrumb(items);
         container.dataset.rendered = 'true';
     } catch (e) {

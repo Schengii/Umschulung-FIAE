@@ -3,10 +3,11 @@
  */
 export function initRoadmap() {
     const roadmapItems = document.querySelectorAll('.roadmap-item');
-    const drawer = document.getElementById('roadmap-drawer');
-    const overlay = document.getElementById('roadmap-overlay');
+    // Die Guard-Zeile unten bricht ab, wenn eines fehlt; die Casts gelten also in allen Funktionen.
+    const drawer = /** @type {HTMLElement} */ (document.getElementById('roadmap-drawer'));
+    const overlay = /** @type {HTMLElement} */ (document.getElementById('roadmap-overlay'));
     const closeBtn = document.getElementById('roadmap-drawer-close');
-    const drawerContent = document.getElementById('roadmap-drawer-content');
+    const drawerContent = /** @type {HTMLElement} */ (document.getElementById('roadmap-drawer-content'));
     const drawerTitle = document.getElementById('drawer-title');
 
     if (!roadmapItems.length || !drawer || !overlay || !closeBtn || !drawerContent) return;
@@ -134,8 +135,8 @@ export function initRoadmap() {
     roadmapItems.forEach((item) => {
         item.addEventListener('click', () => {
             const phaseId = item.getAttribute('data-phase');
-            const data = phaseData[phaseId];
-            if (!data) return;
+            const data = phaseId ? phaseData[phaseId] : null;
+            if (!phaseId || !data) return;
 
             openDrawer(data, phaseId);
         });
@@ -157,7 +158,7 @@ export function initRoadmap() {
         const lang = document.documentElement.getAttribute('lang') || 'de';
 
         // Set Header
-        drawerTitle.textContent = lang === 'de' ? data.title_de : data.title_en;
+        if (drawerTitle) drawerTitle.textContent = lang === 'de' ? data.title_de : data.title_en;
 
         // Topics HTML (Interactive Checklist)
         const topics = lang === 'de' ? data.topics_de : data.topics_en;
@@ -239,6 +240,7 @@ export function initRoadmap() {
         checkboxes.forEach((cb) => {
             cb.addEventListener('change', (e) => {
                 const key = /** @type {HTMLInputElement} */ (e.target).getAttribute('data-key');
+                if (!key) return;
                 AppStorage.setItem(key, /** @type {HTMLInputElement} */ (e.target).checked ? 'true' : 'false');
             });
         });

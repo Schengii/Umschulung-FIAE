@@ -39,7 +39,7 @@ function initSkillBridge() {
     function updateBridge(key) {
         const lang = document.documentElement.getAttribute('lang') || 'de';
         const item = bridgeData[key];
-        if (!item) return;
+        if (!item || !displayEl) return;
 
         displayEl.innerHTML = `
             <h4 style="margin-top: 0; color: var(--primary);">${lang === 'de' ? item.titleDe : item.titleEn}</h4>
@@ -51,7 +51,7 @@ function initSkillBridge() {
         btn.addEventListener('click', () => {
             bridgeButtons.forEach((b) => b.classList.remove('active'));
             btn.classList.add('active');
-            updateBridge(btn.getAttribute('data-bridge'));
+            updateBridge(btn.getAttribute('data-bridge') || '');
         });
     });
 
@@ -61,7 +61,7 @@ function initSkillBridge() {
     document.addEventListener('langchange', () => {
         const activeBtn = document.querySelector('.bridge-buttons button.active');
         if (activeBtn) {
-            updateBridge(activeBtn.getAttribute('data-bridge'));
+            updateBridge(activeBtn.getAttribute('data-bridge') || '');
         }
     });
 }

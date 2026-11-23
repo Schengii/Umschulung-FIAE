@@ -117,8 +117,9 @@ export function initKeyboardShortcuts() {
 
             const closeBtn = helpModal.querySelector('#shortcuts-help-close');
             if (closeBtn) {
+                const modalEl = helpModal;
                 closeBtn.addEventListener('click', () => {
-                    helpModal.style.display = 'none';
+                    modalEl.style.display = 'none';
                 });
             }
         }

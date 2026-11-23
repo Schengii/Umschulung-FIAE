@@ -176,7 +176,7 @@ export function initC4Architecture() {
             </span>
         `;
 
-        tabsBar.parentNode.insertBefore(switcher, tabsBar);
+        tabsBar.parentNode?.insertBefore(switcher, tabsBar);
 
         const levelBtns = switcher.querySelectorAll('.btn-c4-level');
         const levelInfo = switcher.querySelector('#c4-level-info');
@@ -187,7 +187,7 @@ export function initC4Architecture() {
                 btn.classList.add('active');
 
                 const lvl = btn.dataset.level;
-                if (levelInfo) levelInfo.textContent = C4_DESCRIPTIONS[lvl] || '';
+                if (levelInfo) levelInfo.textContent = (lvl && C4_DESCRIPTIONS[lvl]) || '';
 
                 const hotspots = document.querySelectorAll('.hotspot');
                 hotspots.forEach((h) => {

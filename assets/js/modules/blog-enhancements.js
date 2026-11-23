@@ -71,7 +71,7 @@ function initSocialShare() {
         // 'unsafe-hashes'/'unsafe-inline' for event handler attributes), so the
         // copy button is wired up here instead of via an onclick="" string.
         const copyBtn = shareContainer.querySelector('.share-copy');
-        copyBtn.addEventListener('click', () => {
+        copyBtn?.addEventListener('click', () => {
             navigator.clipboard.writeText(window.location.href).then(() => {
                 copyBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
                 setTimeout(() => {

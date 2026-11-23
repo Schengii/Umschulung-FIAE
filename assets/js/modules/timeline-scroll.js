@@ -51,7 +51,7 @@ export function initTimelineScroll() {
             }
 
             // Update active path y2 SVG coordinate
-            activeLine.setAttribute('y2', progressHeight.toString());
+            activeLine?.setAttribute('y2', progressHeight.toString());
 
             // Activate markers dynamically
             items.forEach((item) => {
