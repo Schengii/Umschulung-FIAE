@@ -4,6 +4,10 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei festgehalten
 
 ## [Unreleased]
 
+#### Hinzugefügt
+- **Link-Vorschau**: Jede generierte Projektseite hat ein eigenes 1200×630-Vorschaubild (`assets/images/og/projekt-<slug>.jpg`, erzeugt aus dem Showcase-Bild durch `generate_project_pages.js`) als `og:image`/`twitter:image` statt überall `og-cover.png`; Größe als `og:image:width`/`height`.
+- **News**: Eintrag „Update November 2026“ fasst Skill-Stufen, Handy-Feinschliff und Barrierefreiheit zusammen.
+
 #### Entfernt
 - **Spielwiese**: Die Seiten Mini-Games-Hub, Snake, Memory, Code Playground und Challenge Lab sind samt Skripten, Modulen, Tests, Stylesheets, Bildern, Menü-, Sitemap- und Lighthouse-Einträgen entfernt, ebenso das Game-Modal im Portfolio, der Audio-Schalter in der Fußzeile samt Ton-System, die Spiel-Achievements und die Datenschutz-Einträge zu Highscores und Ton. Die Header-CSP-Sonderregel für `playground.html` in `vercel.json` entfällt.
 - **Lernbereich**: Die Seiten IHK Cockpit, Lernkarten (samt IHK-Kartei), Prüfungs-Quiz, Bewerbungs-Trainer, Git Simulator und Dashboard sind samt Skripten, Modulen, Tests, Stylesheets, Daten, Bildern, Sitemap-, Menü- und Suchindex-Einträgen entfernt, ebenso Prüfungssimulator, Tagesfrage, Lernstand-Backup mit QR-Sync, Beispiel-Lernstand, die zugehörigen Achievements und Datenschutz-Abschnitte. Das Quiz ist auch aus dem Spiele-Hub verschwunden. ADR 0007 und 0011 entfallen.

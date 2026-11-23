@@ -1,5 +1,20 @@
 const newsData = [
     {
+        id: 'portfolio-update-2026-11',
+        category: 'milestone',
+        date: '2026-11-23',
+        title_de: '✨ Update November 2026: Skill-Stufen mit Belegen, Handy-Feinschliff und mehr Barrierefreiheit',
+        title_en: '✨ November 2026 Update: Evidence-Based Skill Levels, Mobile Polish and Better Accessibility',
+        content_de: [
+            'Die Skills-Matrix zeigt keine selbst vergebenen Prozentwerte mehr, sondern drei Stufen, und jede Karte nennt die Projekte, die den Skill belegen. Außerdem sind die Seiten schlanker: kleinere Demovideos, kürzerer Cookie-Hinweis auf dem Handy und GitHub-Daten, die nicht mehr zur Laufzeit abgerufen werden.',
+            'Bei der Barrierefreiheit gibt es ein Hamburger-Menü, das auch auf Tablets nichts mehr abschneidet, Hover-Effekte nur noch auf Geräten mit Hover, kräftigere Eingabefelder und Unterstützung für hohen Kontrast. Die Einzelheiten stehen im Changelog des Repositorys.',
+        ],
+        content_en: [
+            'The skills matrix no longer shows self-assigned percentages but three levels, and every card names the projects that back the skill. The pages are also leaner: smaller demo videos, a shorter cookie notice on phones and GitHub data that is no longer fetched at runtime.',
+            'On accessibility there is a hamburger menu that no longer clips on tablets, hover effects only on devices with hover, stronger input borders and support for high contrast. The details are in the changelog of the repository.',
+        ],
+    },
+    {
         id: 'portfolio-release-1-5-0',
         category: 'milestone',
         date: '2026-10-24',
