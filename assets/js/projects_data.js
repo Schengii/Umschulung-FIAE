@@ -45,7 +45,7 @@ window.projectsData = [
         "titleDe": "IHK-Präsentation (EcoChef)",
         "titleEn": "IHK Presentation (EcoChef)",
         "url": "assets/powerpoint/Max PPT Version3.pptx",
-        "size": "3.68 MB"
+        "size": "7.79 MB"
       }
     ],
     "videoPlaylist": [
@@ -162,8 +162,8 @@ window.projectsData = [
       }
     ],
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/EcoChef",
-    "updatedAt": "2026-10-14T19:43:06Z",
+    "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
+    "updatedAt": "2026-11-23T13:49:09.887Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -181,14 +181,13 @@ window.projectsData = [
       "AI Integration"
     ],
     "image": "assets/images/elektrocheck_showcase.webp",
-    "link": "https://elektro-check-ai-three.vercel.app",
+    "link": "Projekte/ElektroCheck%20AI/dist/index.html",
     "descDe": "ElektroCheck AI ist eine intelligente Web-Applikation zur Analyse von DGUV V3 Prüfprotokollen. Mittels künstlicher Intelligenz scannt die Anwendung Sicherheitsberichte von Elektroprüfungen, identifiziert Anomalien oder Mängel im Text und schlägt vollautomatisch strukturierte Maßnahmenpläne vor.",
     "descEn": "ElektroCheck AI is an intelligent web application for analyzing DGUV V3 safety inspection reports. Powered by artificial intelligence, it scans safety reports, identifies anomalies or defects, and generates structured action plans automatically.",
     "category": "ai",
     "language": "JavaScript",
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/elektroCheck-ai",
-    "updatedAt": "2026-11-08T12:14:46Z",
+    "updatedAt": "2026-10-31T15:05:40.000Z",
     "images": [
       "assets/images/elektrocheck_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
@@ -345,8 +344,7 @@ window.projectsData = [
     "category": "ai web",
     "language": "JavaScript",
     "stars": 0,
-    "githubUrl": "https://github.com/Schengii/Wohnungssuche-KI",
-    "updatedAt": "2026-11-02T13:17:24Z",
+    "updatedAt": "2026-10-31T15:05:40.000Z",
     "images": [
       "assets/images/wohnungssuche_showcase.webp",
       "assets/images/ai_chat_showcase.webp"
