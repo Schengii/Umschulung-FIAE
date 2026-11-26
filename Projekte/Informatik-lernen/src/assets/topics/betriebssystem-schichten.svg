@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Schichtenmodell: Nutzer, Anwendungen, Betriebssystem, Treiber und Hardware</title>
+  <desc id="d">Fünf übereinanderliegende Schichten. Oben der Nutzer, darunter die Anwendungen wie Browser und Textverarbeitung, dann das Betriebssystem mit vier Aufgaben (Prozessverwaltung, Speicherverwaltung, Dateiverwaltung, Geräteverwaltung), darunter die Treiber und ganz unten die Hardware. Pfeile zeigen, dass jede Schicht nur mit der direkt benachbarten spricht.</desc>
+  <rect width="820" height="340" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Das Betriebssystem vermittelt zwischen Programmen und Hardware</text>
+  <g text-anchor="middle" fill="#0f172a" font-size="14" font-weight="700">
+    <rect x="110" y="44" width="600" height="40" rx="8" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="410" y="70">Nutzer (du an Tastatur, Maus oder Touchscreen)</text>
+    <rect x="110" y="96" width="600" height="44" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="410" y="124">Anwendungen: Browser, Textverarbeitung, Spiele, Messenger</text>
+    <rect x="110" y="152" width="600" height="92" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="176">Betriebssystem (Windows, macOS, Linux, Android, iOS)</text>
+    <rect x="130" y="188" width="130" height="46" rx="6" fill="#ffffff" stroke="#b45309"/><text x="195" y="208" font-size="12">Prozess-</text><text x="195" y="224" font-size="12">verwaltung</text>
+    <rect x="276" y="188" width="130" height="46" rx="6" fill="#ffffff" stroke="#b45309"/><text x="341" y="208" font-size="12">Speicher-</text><text x="341" y="224" font-size="12">verwaltung</text>
+    <rect x="422" y="188" width="130" height="46" rx="6" fill="#ffffff" stroke="#b45309"/><text x="487" y="208" font-size="12">Datei-</text><text x="487" y="224" font-size="12">verwaltung</text>
+    <rect x="568" y="188" width="130" height="46" rx="6" fill="#ffffff" stroke="#b45309"/><text x="633" y="208" font-size="12">Geräte-</text><text x="633" y="224" font-size="12">verwaltung</text>
+    <rect x="110" y="256" width="600" height="34" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="410" y="278">Treiber: übersetzen für Drucker, Grafikkarte, WLAN-Chip</text>
+    <rect x="110" y="298" width="600" height="34" rx="8" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="410" y="320">Hardware: Prozessor, Speicher, Festplatte, Bildschirm</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none"><path d="M760 64 V316"/></g>
+  <g fill="#475569"><polygon points="760,64 754,76 766,76"/><polygon points="760,316 754,304 766,304"/></g>
+  <text x="770" y="196" font-size="11" fill="#475569" transform="rotate(90 770 196)" text-anchor="middle">Anfragen und Antworten</text>
+</svg>

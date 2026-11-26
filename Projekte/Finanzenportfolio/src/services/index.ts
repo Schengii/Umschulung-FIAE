@@ -3,6 +3,8 @@
  */
 export * from './cloudSyncService';
 export * from './cryptoStorage';
+export * from './secureStore';
+export * from './marketProxy';
 export * from './fxRatesService';
 export * from './icalExporter';
 export * from './indexedDbStorage';

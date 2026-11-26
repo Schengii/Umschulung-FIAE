@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Cloud, UploadCloud, DownloadCloud, Key, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { uploadToWebDav, downloadFromWebDav, DEFAULT_WEBDAV_CONFIG, type WebDavConfig } from '../services/cloudSyncService';
+import { secureGet, secureSet } from '../services/secureStore';
 import type { Portfolio } from '../types';
 
 interface CloudSyncModalProps {
@@ -17,7 +18,7 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
   onImportSyncData
 }) => {
   const [config, setConfig] = useState<WebDavConfig>(() => {
-    const saved = localStorage.getItem('finanz_webdav_config');
+    const saved = secureGet('finanz_webdav_config');
     return saved ? JSON.parse(saved) : DEFAULT_WEBDAV_CONFIG;
   });
 
@@ -29,7 +30,7 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
 
   const saveConfig = (newCfg: WebDavConfig) => {
     setConfig(newCfg);
-    localStorage.setItem('finanz_webdav_config', JSON.stringify(newCfg));
+    secureSet('finanz_webdav_config', JSON.stringify(newCfg));
   };
 
   const handleUpload = async () => {

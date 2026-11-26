@@ -1,4 +1,5 @@
-export const WEB_COMPONENTS_DATA = [
+import { WEB_COMPONENTS_EXTRA } from './kurseWissenExtra';
+const BASE_WEB_COMPONENTS_DATA = [
   {
     id: 'lit',
     name: 'Lit.dev (LitElement)',
@@ -54,3 +55,5 @@ public class MainView extends VerticalLayout {
 customElements.define('custom-button', CustomButton);`
   }
 ];
+
+export const WEB_COMPONENTS_DATA = [...BASE_WEB_COMPONENTS_DATA, ...WEB_COMPONENTS_EXTRA];

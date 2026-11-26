@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "tsc --noEmit",
+    "lint": "tsc -b --noEmit && biome lint --diagnostic-level=error",
+    "lint:warnings": "biome lint",
     "test": "vitest run",
     "preview": "vite preview",
     "prepare": "git config core.hooksPath .githooks || exit 0"
@@ -21,6 +22,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.6.9",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",

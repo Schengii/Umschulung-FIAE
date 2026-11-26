@@ -14,6 +14,8 @@ import {
 import { calculateTcoAndRoi } from '../../utils/tcoCalculations';
 import { soundManager } from '../../utils/audioSystem';
 import { useStore } from '../../store/useStore';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { TCO_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function TcoRoiCalculatorLab() {
   const { awardXP } = useStore();
@@ -338,6 +340,7 @@ export default function TcoRoiCalculatorLab() {
           </div>
         </div>
       </div>
+      <LabDrillSection title="IHK-Drill: TCO & ROI" questions={TCO_DRILL_QUESTIONS} />
     </div>
   );
 }

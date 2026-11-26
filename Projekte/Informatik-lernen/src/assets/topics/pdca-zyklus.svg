@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">PDCA-Zyklus: Plan, Do, Check, Act als Kreislauf der kontinuierlichen Verbesserung</title>
+  <desc id="d">Vier Kästen im Kreis: Plan (Ziele und Maßnahmen planen), Do (umsetzen), Check (Ergebnisse prüfen und mit dem Ziel vergleichen) und Act (Standardisieren oder nachsteuern). Pfeile verbinden die Kästen im Uhrzeigersinn, von Act führt der Kreislauf zurück zu Plan.</desc>
+  <rect width="820" height="340" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">PDCA: Kreislauf der Verbesserung</text>
+  <g font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">
+    <rect x="130" y="60" width="240" height="90" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <text x="250" y="92">Plan</text><text x="250" y="114" font-size="12" font-weight="400">Ziel, Kriterien und Maßnahmen</text><text x="250" y="132" font-size="12" font-weight="400">festlegen</text>
+    <rect x="450" y="60" width="240" height="90" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="570" y="92">Do</text><text x="570" y="114" font-size="12" font-weight="400">Maßnahmen umsetzen,</text><text x="570" y="132" font-size="12" font-weight="400">Daten erfassen</text>
+    <rect x="450" y="210" width="240" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="570" y="242">Check</text><text x="570" y="264" font-size="12" font-weight="400">Ergebnis mit Ziel vergleichen</text><text x="570" y="282" font-size="12" font-weight="400">(Soll-Ist, Test, Audit)</text>
+    <rect x="130" y="210" width="240" height="90" rx="10" fill="#fce7f3" stroke="#be185d" stroke-width="2"/>
+    <text x="250" y="242">Act</text><text x="250" y="264" font-size="12" font-weight="400">Standardisieren, was wirkt,</text><text x="250" y="282" font-size="12" font-weight="400">sonst nachsteuern</text>
+  </g>
+  <g stroke="#475569" stroke-width="3" fill="none">
+    <path d="M370 105 H450"/><path d="M570 150 V210"/><path d="M450 255 H370"/><path d="M250 210 V150"/>
+  </g>
+  <g fill="#475569">
+    <polygon points="450,105 440,99 440,111"/><polygon points="570,210 564,200 576,200"/><polygon points="370,255 380,249 380,261"/><polygon points="250,150 244,160 256,160"/>
+  </g>
+  <text x="410" y="188" text-anchor="middle" font-size="13" fill="#475569">Wiederholen: Jeder Durchlauf hebt das Niveau</text>
+</svg>

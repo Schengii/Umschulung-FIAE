@@ -10,10 +10,12 @@ import {
   KOSTENSTELLEN,
   ZUSCHLAGSAETZE_ERLAEUTERUNG,
 } from '../../utils/wisoBabEngine';
+import { useStore } from '../../store/useStore';
 
 const XP_REWARD = 65;
 
 export default function WisoBabLab({ onXPGain }) {
+  const recordMistakeResults = useStore((s) => s.recordMistakeResults);
   const [aktivesTab, setAktivesTab] = useState('bab');
   const [xpVergeben, setXpVergeben] = useState(false);
 
@@ -85,6 +87,8 @@ export default function WisoBabLab({ onXPGain }) {
 
   const handleDrillSubmit = () => {
     setDrillSubmitted(true);
+    // Falsche Antworten kommen ins Fehlerjournal (Wiederholung über das Dashboard)
+    recordMistakeResults?.(IHK_BAB_DRILL_QUESTIONS.map((q) => ({ id: q.id, correct: drillAnswers[q.id] === q.richtigIndex })));
     const score = IHK_BAB_DRILL_QUESTIONS.reduce(
       (acc, q) => acc + (drillAnswers[q.id] === q.richtigIndex ? 1 : 0),
       0

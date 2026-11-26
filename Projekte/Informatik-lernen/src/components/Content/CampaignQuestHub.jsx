@@ -1,5 +1,7 @@
 import React from 'react';
 import { CAMPAIGN_CHAPTERS } from '../../data/campaignData';
+import DeepDive from '../Shared/DeepDive';
+import { CAMPAIGN_DEEPDIVES } from '../../data/vertiefungDataPraxis';
 import { Compass, Circle, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP }) {
@@ -57,6 +59,8 @@ export default function CampaignQuestHub({ userState, onNavigateTab, onRewardXP 
               <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginBottom: '20px', lineHeight: 1.5 }}>
                 {ch.desc}
               </p>
+
+              <DeepDive deepDive={CAMPAIGN_DEEPDIVES[ch.id]} title="🔬 Fachlicher Hintergrund & Prüfungsbezug" />
 
               {/* Quests List */}
               <div style={{ display: 'grid', gap: '10px' }}>

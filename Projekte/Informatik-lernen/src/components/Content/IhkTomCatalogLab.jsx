@@ -3,6 +3,8 @@ import { ShieldCheck, Lock, FileText, Download, Award, Sparkles } from 'lucide-r
 import { DEFAULT_TOM_MEASURES, evaluateTomAudit, generateTomMarkdownDoc } from '../../utils/ihkTomCatalogEngine';
 import { useStore } from '../../store/useStore';
 import { triggerHaptic } from '../../utils/haptics';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { TOM_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function IhkTomCatalogLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -275,6 +277,7 @@ export default function IhkTomCatalogLab({ onRewardXP }) {
           </div>
         </div>
       )}
+      <LabDrillSection title="IHK-Drill: TOMs nach Art. 32 DSGVO" questions={TOM_DRILL_QUESTIONS} />
     </div>
   );
 }

@@ -61,7 +61,7 @@ export default function PomodoroTimerWidget() {
   const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
   return (
-    <div className="fixed bottom-20 right-6 z-40">
+    <div className="fixed bottom-20 right-3 sm:right-6 z-40">
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -137,10 +137,12 @@ export default function PomodoroTimerWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
+            aria-label={`Pomodoro-Timer öffnen (${formattedTime})`}
             className="flex items-center gap-2 px-3.5 py-2.5 bg-slate-900/90 hover:bg-slate-800 text-slate-50 border border-slate-700 rounded-full shadow-xl backdrop-blur-md transition group"
           >
             <Timer className="w-4 h-4 text-rose-400 animate-pulse" />
-            <span className="text-xs font-mono font-bold">{formattedTime}</span>
+            {/* Auf kleinen Bildschirmen nur das Symbol, solange der Timer nicht läuft (weniger Überdeckung von Inhalten) */}
+            <span className={`text-xs font-mono font-bold ${isRunning ? '' : 'hidden sm:inline'}`}>{formattedTime}</span>
             {isRunning && (
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
             )}

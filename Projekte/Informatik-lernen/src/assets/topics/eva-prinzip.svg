@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">EVA-Prinzip: Eingabe, Verarbeitung, Ausgabe mit Beispielgeräten und Speicher</title>
+  <desc id="d">Drei Kästen von links nach rechts mit Pfeilen dazwischen: Eingabe (Tastatur, Maus, Mikrofon, Touchscreen), Verarbeitung (Prozessor und Arbeitsspeicher) und Ausgabe (Bildschirm, Lautsprecher, Drucker). Unter dem mittleren Kasten steht der dauerhafte Speicher (SSD oder Festplatte), mit dem die Verarbeitung Daten austauscht.</desc>
+  <rect width="820" height="320" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Jeder Computer arbeitet nach dem EVA-Prinzip</text>
+  <g text-anchor="middle" fill="#0f172a">
+    <rect x="30" y="60" width="220" height="140" rx="12" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <text x="140" y="90" font-size="17" font-weight="700">E wie Eingabe</text>
+    <text x="140" y="120" font-size="13">Tastatur</text><text x="140" y="140" font-size="13">Maus, Touchpad</text><text x="140" y="160" font-size="13">Mikrofon, Kamera</text><text x="140" y="180" font-size="13">Touchscreen</text>
+    <rect x="300" y="60" width="220" height="140" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="410" y="90" font-size="17" font-weight="700">V wie Verarbeitung</text>
+    <text x="410" y="125" font-size="13">Prozessor (CPU) rechnet</text><text x="410" y="145" font-size="13">Arbeitsspeicher (RAM)</text><text x="410" y="165" font-size="13">hält die aktuellen Daten</text>
+    <rect x="570" y="60" width="220" height="140" rx="12" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="680" y="90" font-size="17" font-weight="700">A wie Ausgabe</text>
+    <text x="680" y="120" font-size="13">Bildschirm</text><text x="680" y="140" font-size="13">Lautsprecher, Kopfhörer</text><text x="680" y="160" font-size="13">Drucker</text><text x="680" y="180" font-size="13">Vibration, Lämpchen</text>
+    <rect x="300" y="250" width="220" height="44" rx="10" fill="#fce7f3" stroke="#be185d" stroke-width="2"/>
+    <text x="410" y="277" font-size="14" font-weight="700">Speicher (SSD / Festplatte)</text>
+  </g>
+  <g stroke="#475569" stroke-width="3" fill="none">
+    <path d="M250 130 H300"/><path d="M520 130 H570"/><path d="M410 200 V250"/>
+  </g>
+  <g fill="#475569">
+    <polygon points="300,130 290,124 290,136"/><polygon points="570,130 560,124 560,136"/>
+    <polygon points="410,250 404,240 416,240"/><polygon points="410,200 404,210 416,210"/>
+  </g>
+  <text x="640" y="278" font-size="12" fill="#475569" text-anchor="middle">Daten lesen und dauerhaft sichern</text>
+</svg>

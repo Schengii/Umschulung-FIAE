@@ -4,6 +4,8 @@ import { Headphones, AlertCircle, ShieldCheck, Sparkles, Check } from 'lucide-re
 import { useStore } from '../../store/useStore';
 import { ITSM_INITIAL_TICKETS, evaluateCabRiskScore } from '../../utils/itsmEngine';
 import { onActivationKey } from '../Shared/keyActivation';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { ITSM_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function ItsmSimulatorLab() {
   const { awardXP } = useStore();
@@ -215,6 +217,7 @@ export default function ItsmSimulatorLab() {
           </div>
         </div>
       </div>
+      <LabDrillSection title="IHK-Drill: ITIL & Service Management" questions={ITSM_DRILL_QUESTIONS} />
     </div>
   );
 }

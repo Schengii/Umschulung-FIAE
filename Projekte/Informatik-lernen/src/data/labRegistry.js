@@ -1090,3 +1090,34 @@ export function buildRegistryIndex(registry = LAB_REGISTRY) {
   }
   return index;
 }
+
+let prefetchIndex = null;
+
+/**
+ * Schlüssel, unter dem der Fortschritt eines Labs gespeichert wird (erste Tab-ID des Registry-Eintrags;
+ * Aliase zeigen auf denselben Schlüssel). Unbekannte IDs bleiben unverändert.
+ * @param {string} id
+ * @returns {string}
+ */
+export function resolveLabKey(id) {
+  prefetchIndex = prefetchIndex || buildRegistryIndex();
+  return prefetchIndex.get(id)?.tabs[0] ?? id;
+}
+const prefetched = new Set();
+
+/**
+ * Lädt den Chunk eines Labs vorab (z. B. beim Überfahren eines Menüeintrags), damit der
+ * spätere Tab-Wechsel ohne Ladezeit rendert. Unbekannte Tab-IDs und Fehler werden ignoriert;
+ * jedes Lab wird höchstens einmal angefordert.
+ * @param {string} tabId
+ */
+export function prefetchLab(tabId) {
+  if (prefetched.has(tabId)) return;
+  prefetchIndex = prefetchIndex || buildRegistryIndex();
+  const entry = prefetchIndex.get(tabId);
+  if (!entry) return;
+  prefetched.add(tabId);
+  Promise.resolve()
+    .then(() => entry.load())
+    .catch(() => prefetched.delete(tabId));
+}

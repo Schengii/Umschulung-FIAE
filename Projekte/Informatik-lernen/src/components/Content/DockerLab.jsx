@@ -7,7 +7,11 @@ import {
   DOCKER_DRILL_QUESTIONS
 } from '../../utils/dockerEngine';
 import LabDrillSection from '../Shared/LabDrillSection';
+import { normalizeDrillQuestions } from '../../utils/drillFormat';
 import SourceList from '../Shared/SourceList';
+
+// Drill-Fragen im Format von IhkDrillPanel und Fehlerjournal (die Quelle nutzt englische Feldnamen)
+const DOCKER_DRILL = normalizeDrillQuestions(DOCKER_DRILL_QUESTIONS);
 
 const INITIAL_DOCKERFILE = `FROM node:18-alpine AS builder
 WORKDIR /app
@@ -391,7 +395,7 @@ export default function DockerLab({ onRewardXP }) {
       {activeTab === 'drill' && (
         <LabDrillSection
           title="Docker & Containerization IHK-Prüfungsdrill"
-          questions={DOCKER_DRILL_QUESTIONS}
+          questions={DOCKER_DRILL}
           xpReward={55}
           onRewardXP={onRewardXP}
         />

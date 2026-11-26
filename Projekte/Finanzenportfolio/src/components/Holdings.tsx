@@ -63,7 +63,7 @@ export const Holdings: React.FC<HoldingsProps> = ({
   // Extract all active tags in the portfolio
   const availableTags = useMemo(() => {
     const set = new Set<string>();
-    holdings.forEach(h => (h.tags || []).forEach(t => set.add(t)));
+    holdings.forEach(h => { (h.tags || []).forEach(t => { set.add(t); }); });
     return Array.from(set);
   }, [holdings]);
 

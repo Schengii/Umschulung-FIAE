@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Bilanz: Aktiva (Mittelverwendung) gleich Passiva (Mittelherkunft)</title>
+  <desc id="d">Zwei Spalten mit Beispielwerten in Euro. Aktiva links: Anlagevermögen 400.000 und Umlaufvermögen 300.000, zusammen 700.000. Passiva rechts: Eigenkapital 280.000 und Fremdkapital 420.000, zusammen 700.000. Darunter die Kennzahlen Eigenkapitalquote 40 Prozent und Anlagendeckung.</desc>
+  <rect width="820" height="340" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Bilanz zum Stichtag (in Euro)</text>
+  <g font-size="13" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <text x="205" y="58">Aktiva: Mittelverwendung</text>
+    <text x="615" y="58">Passiva: Mittelherkunft</text>
+    <rect x="40" y="70" width="330" height="120" rx="6" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <text x="205" y="105">Anlagevermögen</text><text x="205" y="127" font-size="12" font-weight="400">Gebäude, Maschinen, IT-Hardware</text><text x="205" y="160" font-size="18">400.000</text>
+    <rect x="40" y="190" width="330" height="90" rx="6" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="205" y="218">Umlaufvermögen</text><text x="205" y="238" font-size="12" font-weight="400">Vorräte, Forderungen, Kasse, Bank</text><text x="205" y="264" font-size="18">300.000</text>
+    <rect x="450" y="70" width="330" height="84" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="615" y="98">Eigenkapital</text><text x="615" y="118" font-size="12" font-weight="400">Einlagen, Rücklagen, Gewinn</text><text x="615" y="142" font-size="18">280.000</text>
+    <rect x="450" y="154" width="330" height="126" rx="6" fill="#fce7f3" stroke="#be185d" stroke-width="2"/>
+    <text x="615" y="190">Fremdkapital</text><text x="615" y="210" font-size="12" font-weight="400">Darlehen, Verbindlichkeiten, Rückstellungen</text><text x="615" y="246" font-size="18">420.000</text>
+  </g>
+  <g font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">
+    <text x="205" y="302">Summe 700.000</text><text x="615" y="302">Summe 700.000</text>
+    <text x="410" y="190" font-size="22">=</text>
+  </g>
+  <text x="205" y="326" text-anchor="middle" font-size="12" fill="#475569">Eigenkapitalquote = 280.000 : 700.000 = 40 %</text>
+  <text x="615" y="326" text-anchor="middle" font-size="12" fill="#475569">Anlagendeckung I = 280.000 : 400.000 = 70 %</text>
+</svg>

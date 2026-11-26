@@ -40,6 +40,8 @@ const CareerRoadmap = lazy(() => import('./components/Content/CareerRoadmap'));
 
 // Zentrale Labs, Simulatoren & Hubs
 // Lazy: zieht examData (Fragenkatalog) nicht in den Haupt-Chunk
+const LearningPathWidget = lazy(() => import('./components/Gamification/LearningPathWidget'));
+const LearningMixWidget = lazy(() => import('./components/Gamification/LearningMixWidget'));
 const MistakeReviewWidget = lazy(() => import('./components/Gamification/MistakeReviewWidget'));
 const LabsDashboard = lazy(() => import('./components/Content/LabsDashboard'));
 const CampaignQuestHub = lazy(() => import('./components/Content/CampaignQuestHub'));
@@ -170,20 +172,22 @@ export default function App() {
   const mainRef = useRef(null);
   useEffect(() => observeAutoLabels(mainRef.current), []);
 
+  // 'sqldungeon' ist kein eigener Tab, sondern ein Spiel im Games-Tab
+  const openLab = (labId) => {
+    if (labId === 'sqldungeon') {
+      setActiveGameId('sql');
+      setActiveTab('games');
+      return;
+    }
+    setActiveTab(labId);
+  };
+
   const activeLabElement = (() => {
     switch (true) {
       case activeTab === 'labs':
         return (
           <LabsDashboard
-            onSelectLab={(labId) => {
-              // 'sqldungeon' ist kein eigener Tab, sondern ein Spiel im Games-Tab
-              if (labId === 'sqldungeon') {
-                setActiveGameId('sql');
-                setActiveTab('games');
-                return;
-              }
-              setActiveTab(labId);
-            }}
+            onSelectLab={openLab}
             userState={userState}
           />
         );
@@ -329,6 +333,16 @@ export default function App() {
 
                 {/* IHK Prüfungs-Countdown & T-Minus Sprint */}
                 <ExamCountdownWidget setActiveTab={setActiveTab} />
+
+                {/* Einstufungstest & täglicher Lernmix */}
+                <Suspense fallback={null}>
+                  <LearningMixWidget />
+                </Suspense>
+
+                {/* Lernpfad: empfohlene nächste Labs */}
+                <Suspense fallback={null}>
+                  <LearningPathWidget onSelectLab={openLab} />
+                </Suspense>
 
                 {/* Fehlerjournal: fällige Wiederholungen */}
                 <Suspense fallback={null}>

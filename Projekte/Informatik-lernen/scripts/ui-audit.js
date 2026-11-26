@@ -105,12 +105,13 @@ function measurePage({ minContrast, maxOverflow }) {
     return cache.get(c);
   };
   const COLOR = /(?:rgba?|oklch|oklab|hsla?|color)\([^)]*\)|#[0-9a-f]{3,8}\b/i;
-  const over = (top, bottom) => ({
-    r: top.r * top.a + bottom.r * (1 - top.a),
-    g: top.g * top.a + bottom.g * (1 - top.a),
-    b: top.b * top.a + bottom.b * (1 - top.a),
-    a: 1,
-  });
+  // Echte Alpha-Komposition (top über bottom); das Ergebnis behält seine Deckkraft.
+  const over = (top, bottom) => {
+    const a = top.a + bottom.a * (1 - top.a);
+    if (a <= 0) return { r: 0, g: 0, b: 0, a: 0 };
+    const mix = (t, bt) => (t * top.a + bt * bottom.a * (1 - top.a)) / a;
+    return { r: mix(top.r, bottom.r), g: mix(top.g, bottom.g), b: mix(top.b, bottom.b), a };
+  };
   const lum = ({ r, g, b }) => {
     const s = [r, g, b].map((v) => {
       const c = v / 255;
@@ -123,20 +124,33 @@ function measurePage({ minContrast, maxOverflow }) {
     const l2 = lum(bg);
     return ((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05));
   };
-  const bgOf = (el) => {
+  // Alle plausiblen Hintergrundfarben hinter einem Element. Ohne Verlauf genau eine;
+  // bei Verläufen je Farbstopp eine (der schlechteste Wert zählt), damit Text auf
+  // Gradient-Flächen nicht gegen die Seitenfarbe gemessen wird.
+  const bgsOf = (el) => {
+    const fallback = parse(window.getComputedStyle(document.documentElement).backgroundColor)
+      || parse(window.getComputedStyle(document.body).backgroundColor)
+      || { r: 15, g: 23, b: 42, a: 1 };
+    /** @type {{r:number,g:number,b:number,a:number}[]} */
+    let stacks = [{ r: 0, g: 0, b: 0, a: 0 }];
     let cur = el;
-    let stack = null;
     while (cur && cur !== document.documentElement) {
       const cs = window.getComputedStyle(cur);
-      const bg = parse(cs.backgroundColor);
-      if (bg && bg.a > 0.02) {
-        stack = stack ? over(stack, bg) : bg;
-        if (stack.a >= 0.98) return stack;
+      const color = parse(cs.backgroundColor);
+      const image = cs.backgroundImage || '';
+      const stops = image.includes('gradient') ? (image.match(new RegExp(COLOR.source, 'gi')) || []).map(parse).filter(Boolean) : [];
+      /** @type {{r:number,g:number,b:number,a:number}[]} */
+      const layers = stops.length ? stops.map((stop) => (color ? over(stop, color) : stop)) : color ? [color] : [];
+      if (layers.length) {
+        // Mehrere Verlaufsfarben verzweigen den Stapel; die Zahl begrenzen
+        const next = [];
+        for (const st of stacks) for (const layer of layers.slice(0, 6)) next.push(st.a > 0 ? over(st, layer) : layer);
+        stacks = next.slice(0, 24);
       }
+      if (stacks.every((st) => st.a >= 0.98)) return stacks;
       cur = cur.parentElement;
     }
-    const htmlBg = parse(window.getComputedStyle(document.documentElement).backgroundColor) || { r: 15, g: 23, b: 42, a: 1 };
-    return stack ? over(stack, htmlBg) : htmlBg;
+    return stacks.map((st) => (st.a > 0 ? over(st, fallback) : fallback));
   };
 
   const lowContrast = [];
@@ -153,12 +167,24 @@ function measurePage({ minContrast, maxOverflow }) {
     if (rect.width === 0 || rect.height === 0) continue;
     const cs = window.getComputedStyle(parent);
     if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) < 0.1) continue;
-    const fg = parse(cs.color);
-    if (!fg || fg.a < 0.1) continue;
-    const bg = bgOf(parent);
-    const eff = fg.a < 1 ? over(fg, bg) : fg;
-    const ratio = cr(eff, bg);
-    if (ratio < minContrast) {
+    // Verlaufstext (`background-clip: text`): Die Schriftfarbe steckt im Verlauf, `color` ist irrelevant.
+    const clipText = /text/.test(cs.webkitBackgroundClip || cs.backgroundClip || '') && (cs.backgroundImage || '').includes('gradient');
+    const fgs = clipText
+      ? (cs.backgroundImage.match(new RegExp(COLOR.source, 'gi')) || []).map(parse).filter((c) => c && c.a >= 0.5)
+      : [parse(cs.color)].filter((c) => c && c.a >= 0.1);
+    if (!fgs.length) continue;
+    const bgCandidates = clipText ? (parent.parentElement ? bgsOf(parent.parentElement) : []) : bgsOf(parent);
+    let ratio = Infinity;
+    let bg = null;
+    let eff = fgs[0];
+    for (const fg of fgs) {
+      for (const candidate of bgCandidates) {
+        const shown = fg.a < 1 ? over(fg, candidate) : fg;
+        const r = cr(shown, candidate);
+        if (r < ratio) { ratio = r; bg = candidate; eff = shown; }
+      }
+    }
+    if (bg && ratio < minContrast) {
       lowContrast.push({
         text: text.slice(0, 40),
         tag,
@@ -177,13 +203,19 @@ function measurePage({ minContrast, maxOverflow }) {
     const cs = window.getComputedStyle(el);
     return /(auto|scroll)/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 2;
   };
+  // Ein Vorfahre, der horizontal abschneidet und selbst im Viewport endet, verdeckt den Überstand
+  // (z. B. dekorative Hintergrundkreise in `overflow-hidden`-Containern, Monaco-Zeilenbereich).
+  const isClipped = (el) => {
+    if (!/(hidden|clip)/.test(window.getComputedStyle(el).overflowX)) return false;
+    return el.getBoundingClientRect().right <= vp + maxOverflow;
+  };
   for (const el of document.querySelectorAll('body *')) {
     const rect = el.getBoundingClientRect();
     if (rect.right > vp + maxOverflow) {
       let cur = el;
       let inScroller = false;
       while (cur && cur !== document.body) {
-        if (isScrollable(cur)) { inScroller = true; break; }
+        if (isScrollable(cur) || isClipped(cur)) { inScroller = true; break; }
         cur = cur.parentElement;
       }
       if (!inScroller && rect.right - vp > overflow) {
@@ -223,7 +255,9 @@ try {
           try {
             await page.goto(`${BASE}/${route}`, { waitUntil: 'load', timeout: 30000 });
             await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-            await page.waitForTimeout(600);
+            // Theme-Wechsel und Einblendungen beenden, sonst misst man Zwischenwerte (Übergänge) statt Endfarben
+            await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; animation: none !important; }' });
+            await page.waitForTimeout(400);
             results.push({ route: `/${route}`, ...(await page.evaluate(measurePage, { minContrast: MIN_CONTRAST, maxOverflow: MAX_OVERFLOW })) });
           } catch (err) {
             results.push({ route: `/${route}`, error: err.message.split('\n')[0] });

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Zusammenspiel von Incident, Problem und Change im IT-Service-Management</title>
+  <desc id="d">Eine Störung wird als Incident aufgenommen und mit einem Workaround behoben. Wiederholte Incidents führen zu einem Problem, dessen Ursache gesucht wird. Die dauerhafte Lösung kommt als Change in den Betrieb.</desc>
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Incident → Problem → Change</text>
+  <g font-size="13" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="100" width="130" height="80" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/><text x="95" y="130">Incident</text><text x="95" y="150" font-size="11" font-weight="400">Dienst schnell</text><text x="95" y="165" font-size="11" font-weight="400">wiederherstellen</text>
+    <rect x="200" y="100" width="130" height="80" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="265" y="130">Workaround</text><text x="265" y="150" font-size="11" font-weight="400">Umgehungslösung,</text><text x="265" y="165" font-size="11" font-weight="400">Nutzer arbeiten weiter</text>
+    <rect x="370" y="100" width="130" height="80" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="435" y="130">Problem</text><text x="435" y="150" font-size="11" font-weight="400">Ursache finden</text><text x="435" y="165" font-size="11" font-weight="400">(Root Cause)</text>
+    <rect x="540" y="100" width="150" height="80" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="615" y="130">Change</text><text x="615" y="150" font-size="11" font-weight="400">dauerhafte Lösung,</text><text x="615" y="165" font-size="11" font-weight="400">geprüft und freigegeben</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="160" y1="140" x2="200" y2="140"/><line x1="330" y1="140" x2="370" y2="140"/><line x1="500" y1="140" x2="540" y2="140"/></g>
+  <g font-size="12" fill="#475569" text-anchor="middle">
+    <text x="95" y="215">Ziel: Verfügbarkeit</text>
+    <text x="435" y="215">Ziel: Wiederholung verhindern</text>
+    <text x="615" y="215">Ziel: kontrollierte Änderung</text>
+    <text x="360" y="260" font-size="13">Wissen aus Incidents landet in der Wissensdatenbank (Known Errors).</text>
+  </g>
+</svg>

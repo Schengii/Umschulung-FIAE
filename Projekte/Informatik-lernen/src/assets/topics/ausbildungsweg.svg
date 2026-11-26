@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Ausbildung zum Fachinformatiker: Verlauf über drei Jahre und Gewichtung der Prüfung</title>
+  <desc id="d">Oben ein Zeitstrahl über drei Ausbildungsjahre mit Berufsschule und Betrieb im Wechsel. Etwa in der Mitte liegt Teil 1 der Abschlussprüfung, am Ende Teil 2. Unten ein Balken mit der Gewichtung der Gesamtnote: Teil 1 zu 20 Prozent, betriebliche Projektarbeit mit Dokumentation, Präsentation und Fachgespräch zu 50 Prozent, zwei berufsspezifische Aufgaben je 10 Prozent und Wirtschafts- und Sozialkunde zu 10 Prozent.</desc>
+  <rect width="820" height="320" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Dual lernen: Betrieb und Berufsschule, drei Jahre</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="30" y="48" width="240" height="40" rx="6" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="150" y="73">1. Ausbildungsjahr</text>
+    <rect x="290" y="48" width="240" height="40" rx="6" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="410" y="73">2. Ausbildungsjahr</text>
+    <rect x="550" y="48" width="240" height="40" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="670" y="73">3. Ausbildungsjahr</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none"><path d="M410 88 V118"/><path d="M790 88 V118"/></g>
+  <g fill="#475569"><polygon points="410,118 404,108 416,108"/><polygon points="790,118 784,108 796,108"/></g>
+  <g font-size="12" text-anchor="middle" fill="#0f172a">
+    <text x="410" y="136" font-weight="700">Abschlussprüfung Teil 1</text><text x="410" y="152">etwa Mitte der Ausbildung, 90 Minuten</text>
+    <text x="760" y="136" font-weight="700">Teil 2</text><text x="760" y="152">am Ende</text>
+  </g>
+  <text x="30" y="196" font-size="14" font-weight="700" fill="#0f172a">Gewichtung der Gesamtnote</text>
+  <g font-size="12" font-weight="700" text-anchor="middle" fill="#0f172a" stroke="#334155" stroke-width="1.5">
+    <rect x="30" y="208" width="148" height="46" fill="#e0e7ff"/><text x="104" y="236" stroke="none">Teil 1: 20 %</text>
+    <rect x="178" y="208" width="370" height="46" fill="#fef3c7"/><text x="363" y="236" stroke="none">Teil 2: Projektarbeit 50 %</text>
+    <rect x="548" y="208" width="74" height="46" fill="#ccfbf1"/><text x="585" y="236" stroke="none">10 %</text>
+    <rect x="622" y="208" width="74" height="46" fill="#ccfbf1"/><text x="659" y="236" stroke="none">10 %</text>
+    <rect x="696" y="208" width="74" height="46" fill="#fce7f3"/><text x="733" y="236" stroke="none">10 %</text>
+  </g>
+  <g font-size="11" text-anchor="middle" fill="#475569">
+    <text x="585" y="272">fachliche</text><text x="585" y="286">Aufgabe 1</text>
+    <text x="659" y="272">fachliche</text><text x="659" y="286">Aufgabe 2</text>
+    <text x="733" y="272">Wirtschaft,</text><text x="733" y="286">Sozialkunde</text>
+  </g>
+  <text x="363" y="282" text-anchor="middle" font-size="12" fill="#475569">Dokumentation, Präsentation und Fachgespräch</text>
+  <text x="104" y="282" text-anchor="middle" font-size="12" fill="#475569">fachübergreifend</text>
+</svg>

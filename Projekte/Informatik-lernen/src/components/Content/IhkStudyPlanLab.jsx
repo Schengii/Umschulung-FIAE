@@ -1,61 +1,95 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  Calendar, Target, CheckCircle2, 
-  ArrowRight, Award, Check 
-} from 'lucide-react';
-import { 
-  IHK_EXAM_DATES, 
-  IHK_DISCIPLINES, 
-  calculateExamCountdown, 
-  generateAdaptiveStudyPlan 
-} from '../../utils/ihkStudyPlanEngine';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Calendar, Target, ArrowRight, Award, Check, RefreshCw } from 'lucide-react';
+import { IHK_DISCIPLINES, calculateExamCountdown, getIhkExamDates } from '../../utils/ihkStudyPlanEngine';
+import { DISCIPLINE_TO_CAREER, MIX_DAYS_TARGET, disciplineForCareer } from '../../utils/studyPlanEngine';
+import { useStudyPlan } from '../Shared/useStudyPlan';
 import { useStore } from '../../store/useStore';
 
-// Stabile Referenz: ein `|| {}` im Render erzeugt jedes Mal ein neues Objekt und entwertet useMemo-Abhängigkeiten.
-const EMPTY_OBJECT = Object.freeze({});
+const HOURS_OPTIONS = [3, 6, 10];
+const PHASE_LABELS = {
+  learn: 'Lernen',
+  deepen: 'Vertiefen (IHK)',
+  consolidate: 'Festigen'
+};
 
-export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }) {
-  const storeUserState = useStore((s) => s.userState);
-  const storeToggleWeek = useStore((s) => s.toggleStudyPlanWeek);
+const selectStyle = {
+  width: '100%',
+  padding: '10px 14px',
+  borderRadius: '10px',
+  border: '1px solid var(--border-color)',
+  background: 'var(--bg-secondary)',
+  color: 'var(--text-main)',
+  fontSize: '0.95rem',
+  fontWeight: 600
+};
 
-  const currentUserState = userState || storeUserState;
-  const persistedWeeks = currentUserState?.studyPlanWeeks || EMPTY_OBJECT;
+function formatDay(dateKey) {
+  const [y, m, d] = dateKey.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+}
 
-  const [selectedExamId, setSelectedExamId] = useState('winter_2026');
-  const [selectedDiscipline, setSelectedDiscipline] = useState('fiae');
-  const [localWeeks, setLocalWeeks] = useState({});
+function formatFullDay(dateKey) {
+  const [y, m, d] = dateKey.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+// Fortschrittszeile „x von y“ mit Balken
+function Goal({ label, done, target }) {
+  const percent = target > 0 ? Math.min(100, Math.round((done / target) * 100)) : 100;
+  return (
+    <div style={{ minWidth: '170px' }}>
+      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+        {label}: {done} von {target}
+      </div>
+      <div
+        role="progressbar"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={target}
+        aria-valuenow={Math.min(done, target)}
+        style={{ height: '6px', borderRadius: '999px', background: 'var(--border-color)', overflow: 'hidden', marginTop: '4px' }}
+      >
+        <div style={{ width: `${percent}%`, height: '100%', background: percent >= 100 ? 'var(--accent-emerald)' : 'var(--accent-amber)' }} />
+      </div>
+    </div>
+  );
+}
+
+export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP }) {
+  const userState = useStore((s) => s.userState);
+  const setUserState = useStore((s) => s.setUserState);
+  const setCareerFilter = useStore((s) => s.setCareerFilter);
+  const setStudyPlanPrefs = useStore((s) => s.setStudyPlanPrefs);
   const [xpClaimed, setXpClaimed] = useState(false);
+  const [now] = useState(() => new Date());
 
-  // Kombinierter Zustand: Persistierter Zustand hat Vorrang bzw. wird mit lokalem Zustand vereint
-  const completedWeeks = useMemo(() => {
-    return { ...localWeeks, ...persistedWeeks };
-  }, [localWeeks, persistedWeeks]);
+  const examDate = userState.examTargetDate || '';
+  const hoursPerWeek = userState.studyHoursPerWeek || 6;
+  const discipline = disciplineForCareer(userState.careerFilter);
+  const plan = useStudyPlan();
 
-  const selectedExam = useMemo(() => {
-    return IHK_EXAM_DATES.find(e => e.id === selectedExamId) || IHK_EXAM_DATES[0];
-  }, [selectedExamId]);
-
-  const countdown = useMemo(() => {
-    return calculateExamCountdown(selectedExam.date);
-  }, [selectedExam]);
-
-  const studyPlan = useMemo(() => {
-    return generateAdaptiveStudyPlan(selectedDiscipline, countdown.weeksRemaining || 8);
-  }, [selectedDiscipline, countdown.weeksRemaining]);
-
-  const toggleWeek = (weekNum) => {
-    if (storeToggleWeek) {
-      storeToggleWeek(weekNum);
-    } else {
-      setLocalWeeks(prev => ({
-        ...prev,
-        [weekNum]: !prev[weekNum]
-      }));
+  // Der wirksame Planstart (rollierend) wird gespeichert, damit die Wochengrenzen stabil bleiben
+  useEffect(() => {
+    if (plan.status === 'active' && plan.planStart !== userState.studyPlanStart) {
+      setStudyPlanPrefs({ planStart: plan.planStart });
     }
-  };
+  }, [plan.status, plan.planStart, userState.studyPlanStart, setStudyPlanPrefs]);
 
-  const completedCount = Object.values(completedWeeks).filter(Boolean).length;
-  const progressPercent = studyPlan.length > 0 ? Math.round((completedCount / studyPlan.length) * 100) : 0;
+  const examOptions = useMemo(() => {
+    const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const all = [...getIhkExamDates(now.getFullYear() - 1), ...getIhkExamDates(now.getFullYear())].filter((e) => e.date >= todayKey);
+    const unique = all.filter((e, i) => all.findIndex((x) => x.date === e.date) === i);
+    if (examDate && !unique.some((e) => e.date === examDate)) {
+      unique.unshift({ id: 'custom', name: `Eigener Termin (${formatFullDay(examDate)})`, date: examDate });
+    }
+    return unique;
+  }, [now, examDate]);
+
+  const countdown = examDate ? calculateExamCountdown(examDate, now) : null;
+  const currentWeek = plan.weeks.find((w) => w.isCurrent);
+  const weekTarget = currentWeek ? currentWeek.targets.labs + MIX_DAYS_TARGET : 0;
+  const weekDone = currentWeek ? Math.min(currentWeek.done.labs, currentWeek.targets.labs) + Math.min(currentWeek.done.mixDays, MIX_DAYS_TARGET) : 0;
+  const weekPercent = weekTarget > 0 ? Math.round((weekDone / weekTarget) * 100) : 0;
 
   const handleClaimXP = () => {
     if (!xpClaimed && onRewardXP) {
@@ -68,19 +102,17 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', color: 'var(--text-main)' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ background: 'linear-gradient(135deg, var(--accent-amber), #d97706)', padding: '10px', borderRadius: '12px', color: '#fff' }}>
-              <Calendar size={28} />
-            </div>
-            <div>
-              <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-                IHK Prüfungs-Countdown & Adaptiver Lernplaner
-              </h1>
-              <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-                Wochenbasierte Vorbereitung für FIAE, FISI, FIDP, FIDV, IT-SE & ITSM mit IHK-Prüfungsterminen
-              </p>
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ background: 'linear-gradient(135deg, var(--accent-amber), #d97706)', padding: '10px', borderRadius: '12px', color: '#fff' }}>
+            <Calendar size={28} aria-hidden="true" />
+          </div>
+          <div>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+              IHK Prüfungs-Countdown & Adaptiver Lernplaner
+            </h1>
+            <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+              Dein Plan für die nächsten Wochen – berechnet aus Einstufungstest, Fehlerjournal, Fortschritt und Prüfungstermin
+            </p>
           </div>
         </div>
 
@@ -106,101 +138,113 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
         </button>
       </div>
 
-      {/* Countdown Hero Banner */}
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '24px', borderRadius: '20px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+      {/* Countdown */}
+      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', padding: '24px', borderRadius: '20px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
         <div>
           <div style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-dim)', fontWeight: 700 }}>
             Verbleibende Zeit bis zur IHK-Abschlussprüfung
           </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', marginTop: '8px' }}>
-            <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-amber)' }}>
-              {countdown.daysRemaining}
-            </span>
-            <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>Tage</span>
-            <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-cyan)', marginLeft: '12px' }}>
-              {countdown.weeksRemaining}
-            </span>
-            <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>Wochen</span>
-          </div>
-          <div style={{ fontSize: '0.9rem', color: 'var(--text-dim)', marginTop: '6px' }}>
-            Prüfungstermin: <strong>{new Date(selectedExam.date).toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
-          </div>
+          {countdown ? (
+            <>
+              <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', columnGap: '16px', rowGap: '4px', marginTop: '8px' }}>
+                <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-amber)' }}>{countdown.daysRemaining}</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>Tage</span>
+                <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{countdown.weeksRemaining}</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-muted)' }}>Wochen</span>
+              </div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-dim)', marginTop: '6px' }}>
+                Prüfungstermin: <strong>{formatFullDay(examDate)}</strong>
+              </div>
+            </>
+          ) : (
+            <p style={{ marginTop: '8px', color: 'var(--text-muted)' }}>Wähle unten deinen Prüfungstermin, dann entsteht dein Plan.</p>
+          )}
         </div>
 
-        {/* Progress Box */}
-        <div style={{ background: 'var(--bg-tertiary)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Lernplan Fortschritt</div>
-          <div style={{ fontSize: '2rem', fontWeight: 900, color: progressPercent >= 70 ? 'var(--accent-emerald)' : 'var(--accent-amber)', marginTop: '4px' }}>
-            {progressPercent}%
+        {currentWeek && (
+          <div style={{ background: 'var(--bg-tertiary)', padding: '16px 24px', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Diese Woche</div>
+            <div style={{ fontSize: '2rem', fontWeight: 900, color: weekPercent >= 70 ? 'var(--accent-emerald)' : 'var(--accent-amber)', marginTop: '4px' }}>
+              {weekPercent}%
+            </div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+              {weekDone} von {weekTarget} Zielen erreicht
+            </div>
           </div>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-            {completedCount} von {studyPlan.length} Wochen absolviert
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* Selectors */}
-      <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
+      {/* Einstellungen */}
+      <div style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '16px', border: '1px solid var(--border-color)', marginBottom: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '16px' }}>
         <div>
-          <label htmlFor="ihk-study-plan-lab-1" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
+          <label htmlFor="study-plan-exam" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
             IHK Prüfungstermin:
           </label>
-          <select id="ihk-study-plan-lab-1"
-            value={selectedExamId}
-            onChange={(e) => setSelectedExamId(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              borderRadius: '10px',
-              border: '1px solid var(--border-color)',
-              background: 'var(--bg-secondary)',
-              color: 'var(--text-main)',
-              fontSize: '0.95rem',
-              fontWeight: 600
-            }}
+          <select
+            id="study-plan-exam"
+            value={examDate}
+            onChange={(e) => setUserState((prev) => ({ ...prev, examTargetDate: e.target.value }))}
+            style={selectStyle}
           >
-            {IHK_EXAM_DATES.map(e => (
-              <option key={e.id} value={e.id}>{e.name}</option>
+            {!examDate && <option value="">Bitte Termin wählen …</option>}
+            {examOptions.map((e) => (
+              <option key={e.id} value={e.date}>{e.name}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <label htmlFor="ihk-study-plan-lab-2" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
+          <label htmlFor="study-plan-discipline" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
             Deine Fachrichtung:
           </label>
-          <select id="ihk-study-plan-lab-2"
-            value={selectedDiscipline}
-            onChange={(e) => setSelectedDiscipline(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              borderRadius: '10px',
-              border: '1px solid var(--border-color)',
-              background: 'var(--bg-secondary)',
-              color: 'var(--text-main)',
-              fontSize: '0.95rem',
-              fontWeight: 600
-            }}
+          <select
+            id="study-plan-discipline"
+            value={discipline}
+            onChange={(e) => setCareerFilter(DISCIPLINE_TO_CAREER[e.target.value] || 'all')}
+            style={selectStyle}
           >
-            {IHK_DISCIPLINES.map(d => (
+            {IHK_DISCIPLINES.map((d) => (
               <option key={d.id} value={d.id}>{d.name}</option>
             ))}
           </select>
         </div>
+
+        <div>
+          <label htmlFor="study-plan-hours" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '6px' }}>
+            Lernzeit pro Woche:
+          </label>
+          <select
+            id="study-plan-hours"
+            value={hoursPerWeek}
+            onChange={(e) => setStudyPlanPrefs({ hoursPerWeek: Number(e.target.value) })}
+            style={selectStyle}
+          >
+            {[...new Set([...HOURS_OPTIONS, hoursPerWeek])].sort((a, b) => a - b).map((h) => (
+              <option key={h} value={h}>{h} Stunden</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* Weekly Plan Roadmap */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '8px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
-          <Target size={22} color="var(--accent-amber)" /> Dein personalisierter Wochenplan
-        </h2>
+      {/* Zustände ohne Plan */}
+      {plan.status === 'none' && (
+        <p role="status" style={{ color: 'var(--text-muted)' }}>Ohne Prüfungstermin gibt es noch keinen Plan.</p>
+      )}
+      {plan.status === 'expired' && (
+        <p role="status" style={{ color: 'var(--text-muted)' }}>
+          Dieser Prüfungstermin liegt in der Vergangenheit. Wähle oben einen neuen Termin, dann entsteht ein frischer Plan.
+        </p>
+      )}
 
-        <div role="list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {studyPlan.map((week) => {
-            const isDone = !!completedWeeks[week.weekNumber];
+      {/* Wochenplan */}
+      {plan.status === 'active' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '8px 0', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
+            <Target size={22} color="var(--accent-amber)" aria-hidden="true" /> Dein personalisierter Wochenplan
+          </h2>
 
-            return (
+          <div role="list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {plan.weeks.map((week) => (
               <div
                 key={week.weekNumber}
                 role="listitem"
@@ -209,88 +253,82 @@ export default function IhkStudyPlanLab({ onNavigateTab, onRewardXP, userState }
                   padding: '20px',
                   borderRadius: '16px',
                   border: '1px solid var(--border-color)',
-                  borderLeft: isDone ? '6px solid #10b981' : '6px solid var(--accent-amber)',
+                  borderLeft: `6px solid ${week.isCurrent ? 'var(--accent-amber)' : 'var(--border-color)'}`,
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '16px',
-                  opacity: isDone ? 0.75 : 1,
-                  transition: 'all 0.2s ease'
+                  flexDirection: 'column',
+                  gap: '12px'
                 }}
               >
-                <div style={{ flex: 1, minWidth: '260px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: isDone ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)', color: isDone ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
-                      Woche {week.weekNumber}
-                    </span>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>~{week.targetHours}h Lernaufwand</span>
-                  </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: 'rgba(245,158,11,0.15)', color: 'var(--accent-amber)' }}>
+                    Woche {week.weekNumber}
+                  </span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>
+                    {formatDay(week.startDate)} – {formatDay(week.endDate)} · {PHASE_LABELS[week.phase]}
+                  </span>
+                  {week.isCurrent && <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>Aktuelle Woche</span>}
+                </div>
 
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '4px 0', textDecoration: isDone ? 'line-through' : 'none', color: 'var(--text-main)' }}>
-                    {week.title}
-                  </h3>
+                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                  {week.targets.labs > 0 && <Goal label="Labs abgeschlossen" done={week.done.labs} target={week.targets.labs} />}
+                  <Goal label="Lernmix-Tage" done={week.done.mixDays} target={week.targets.mixDays} />
+                </div>
 
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
-                    {week.tags.map(t => (
-                      <span key={t} style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', background: 'var(--bg-tertiary)', border: '1px solid var(--border-subtle)', padding: '2px 8px', borderRadius: '4px' }}>
-                        {t}
-                      </span>
+                {week.labs.length > 0 && (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '8px' }}>
+                    {week.labs.map(({ lab, reason }) => (
+                      <li key={lab.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                        <span style={{ display: 'grid', gap: '2px', minWidth: 0 }}>
+                          <span style={{ fontWeight: 700 }}>{lab.title}</span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>{reason}</span>
+                        </span>
+                        {onNavigateTab && (
+                          <button
+                            onClick={() => onNavigateTab(lab.id)}
+                            aria-label={`Lab öffnen: ${lab.title}`}
+                            style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'transparent', color: 'var(--text-main)', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', width: 'auto' }}
+                          >
+                            Lab öffnen <ArrowRight size={14} aria-hidden="true" />
+                          </button>
+                        )}
+                      </li>
                     ))}
+                  </ul>
+                )}
+
+                {week.tasks.length > 0 && (
+                  <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--text-main)', display: 'grid', gap: '4px' }}>
+                    {week.tasks.map((task) => (
+                      <li key={task}>{task}</li>
+                    ))}
+                  </ul>
+                )}
+
+                {(week.phase !== 'learn' || week.retest) && onNavigateTab && (
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {week.phase !== 'learn' && (
+                      <button
+                        onClick={() => onNavigateTab('exam')}
+                        style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'transparent', color: 'var(--text-main)', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', width: 'auto' }}
+                      >
+                        Prüfungssimulation öffnen
+                      </button>
+                    )}
+                    {week.retest && (
+                      <button
+                        onClick={() => onNavigateTab('dashboard')}
+                        style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'transparent', color: 'var(--text-main)', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', width: 'auto' }}
+                      >
+                        <RefreshCw size={14} aria-hidden="true" /> Zum Einstufungstest (Dashboard)
+                      </button>
+                    )}
                   </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {onNavigateTab && (
-                    <button
-                      onClick={() => onNavigateTab(week.recommendedLab)}
-                      style={{
-                        padding: '8px 14px',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-color)',
-                        background: 'transparent',
-                        color: 'var(--text-main)',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      Lab öffnen <ArrowRight size={14} />
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => toggleWeek(week.weekNumber)}
-                    role="checkbox"
-                    aria-checked={isDone}
-                    aria-label={`Woche ${week.weekNumber} als ${isDone ? 'offen' : 'erledigt'} markieren`}
-                    style={{
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: isDone ? 'var(--accent-emerald)' : 'var(--bg-tertiary)',
-                      color: isDone ? 'var(--text-on-accent)' : 'var(--text-main)',
-                      fontSize: '0.85rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px'
-                    }}
-                  >
-                    <CheckCircle2 size={16} />
-                    {isDone ? 'Erledigt' : 'Als erledigt markieren'}
-                  </button>
-                </div>
+                )}
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

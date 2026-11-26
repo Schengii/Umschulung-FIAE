@@ -45,7 +45,7 @@ export default function JwksRotationLab() {
             gap: '8px',
             padding: '10px 18px',
             borderRadius: '8px',
-            background: 'linear-gradient(90deg, #9333ea, #c084fc)',
+            background: 'linear-gradient(90deg, #7e22ce, #9333ea)',
             color: '#fff',
             fontWeight: 'bold',
             fontSize: '0.88rem',

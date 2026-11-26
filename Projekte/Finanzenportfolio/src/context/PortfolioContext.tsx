@@ -1,9 +1,23 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useRef } from 'react';
 import type { Portfolio, Transaction, WatchlistItem, SavingsPlan, AssetMappingRule, PortfolioStats, Holding, PortfolioSnapshot, TaxCountry, RealEstateAsset, DepositLadderItem, TargetAllocation } from '../types';
 import { fetchLiveExchangeRates, fetchLiveCryptoPrices, fetchLiveStockPrices } from '../services/marketDataApi';
 import { calculateIRR, calculateTTWRR, calculateRealizedGains, calculateCryptoTaxFreeShares, calculateDynamicPortfolioRiskMetrics } from '../components/performanceUtils';
 import { encryptData, decryptData } from '../services/cryptoStorage';
-import { saveToIndexedDB } from '../services/indexedDbStorage';
+import { saveToIndexedDB, removeFromIndexedDB } from '../services/indexedDbStorage';
+import {
+  VAULT_KEY,
+  isVaultConfigured,
+  getSessionPin,
+  setSessionPin,
+  secureGet,
+  secureSet,
+  unlockSecrets,
+  persistSecrets,
+  lockSecrets,
+  restoreSecretsToPlaintext,
+  removeSecretsBundle
+} from '../services/secureStore';
+import { createRecoveryKey, removeRecoveryKey } from '../services/recoveryKey';
 
 interface PortfolioContextType {
   portfolios: Portfolio[];
@@ -22,8 +36,11 @@ interface PortfolioContextType {
   activeBrokerFilter: string;
   setActiveBrokerFilter: (broker: string) => void;
   isVaultLocked: boolean;
-  lockVault: () => void;
-  unlockVault: (unlockedPortfolios: Portfolio[]) => void;
+  lockVault: () => Promise<void>;
+  unlockVault: (unlockedPortfolios: Portfolio[], pin: string) => Promise<void>;
+  enableVault: (pin: string) => Promise<void>;
+  /** Erzeugt einen neuen Recovery-Key für die aktuelle PIN (nur bei entsperrtem Tresor); einmalig anzeigen. */
+  createVaultRecoveryKey: () => Promise<string | null>;
   resetVault: () => void;
   changeVaultPin: (oldPin: string, newPin: string) => Promise<boolean>;
   disableVault: (pin: string) => Promise<boolean>;
@@ -168,12 +185,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   });
 
   const [snapshots, setSnapshots] = useState<PortfolioSnapshot[]>(() => {
-    const saved = localStorage.getItem('finanz_snapshots');
+    const saved = secureGet('finanz_snapshots');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [holdingTagsMap, setHoldingTagsMap] = useState<Record<string, string[]>>(() => {
-    const saved = localStorage.getItem('finanz_holding_tags');
+    const saved = secureGet('finanz_holding_tags');
     return saved ? JSON.parse(saved) : {
       AAPL: ['#Core', '#Tech', '#Dividende'],
       EUNL: ['#Core', '#Weltweit'],
@@ -224,12 +241,31 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     MSFT: 415.50
   });
 
-  // Save to localStorage and IndexedDB
+  const portfoliosRef = useRef<Portfolio[]>(portfolios);
   useEffect(() => {
-    if (!isVaultLocked) {
-      localStorage.setItem('finanz_portfolios', JSON.stringify(portfolios));
-      saveToIndexedDB('finanz_portfolios', portfolios);
+    portfoliosRef.current = portfolios;
+  }, [portfolios]);
+
+  // Verschlüsselt den aktuellen Stand in den Tresor (kein Klartext-Backup bei aktivem Tresor).
+  const flushVault = async (): Promise<void> => {
+    const pin = getSessionPin();
+    if (!pin || !isVaultConfigured()) return;
+    localStorage.setItem(VAULT_KEY, await encryptData(JSON.stringify(portfoliosRef.current), pin));
+    localStorage.removeItem('finanz_portfolios');
+    void removeFromIndexedDB('finanz_portfolios');
+  };
+
+  // Persistenz: bei aktivem Tresor nur verschlüsselt, sonst localStorage + IndexedDB
+  useEffect(() => {
+    if (isVaultLocked) return;
+    if (isVaultConfigured()) {
+      const timer = setTimeout(() => {
+        flushVault().catch(err => console.error('Tresor-Speicherung fehlgeschlagen', err));
+      }, 500);
+      return () => clearTimeout(timer);
     }
+    localStorage.setItem('finanz_portfolios', JSON.stringify(portfolios));
+    saveToIndexedDB('finanz_portfolios', portfolios);
   }, [portfolios, isVaultLocked]);
 
   useEffect(() => {
@@ -241,11 +277,11 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, [taxAllowanceEur]);
 
   useEffect(() => {
-    localStorage.setItem('finanz_snapshots', JSON.stringify(snapshots));
+    secureSet('finanz_snapshots', JSON.stringify(snapshots));
   }, [snapshots]);
 
   useEffect(() => {
-    localStorage.setItem('finanz_holding_tags', JSON.stringify(holdingTagsMap));
+    secureSet('finanz_holding_tags', JSON.stringify(holdingTagsMap));
   }, [holdingTagsMap]);
 
   useEffect(() => {
@@ -256,20 +292,44 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     localStorage.setItem('finanz_active_portfolio', activePortfolioId);
   }, [activePortfolioId]);
 
-  const lockVault = () => {
-    if (localStorage.getItem('finanz_encrypted_vault')) {
-      setIsVaultLocked(true);
+  // Sperren: erst alles verschlüsselt wegschreiben, dann PIN und Geheimnisse aus dem Speicher entfernen
+  const lockVault = async (): Promise<void> => {
+    if (!isVaultConfigured()) return;
+    try {
+      await flushVault();
+      await persistSecrets();
+    } catch (err) {
+      console.error('Sperren: Speichern fehlgeschlagen', err);
     }
+    lockSecrets();
+    setIsVaultLocked(true);
+  };
+
+  // Tresor aktivieren: Portfolios + Geheimnisse verschlüsseln, Klartext-Kopien entfernen
+  const enableVault = async (pin: string): Promise<void> => {
+    const cipher = await encryptData(JSON.stringify(portfoliosRef.current), pin);
+    localStorage.setItem(VAULT_KEY, cipher);
+    await unlockSecrets(pin); // setzt Session-PIN und migriert Klartext-Geheimnisse
+    localStorage.removeItem('finanz_portfolios');
+    void removeFromIndexedDB('finanz_portfolios');
+  };
+
+  const createVaultRecoveryKey = async (): Promise<string | null> => {
+    const pin = getSessionPin();
+    if (!pin || !isVaultConfigured()) return null;
+    return createRecoveryKey(pin);
   };
 
   // Change PIN with old PIN verification
   const changeVaultPin = async (oldPin: string, newPin: string): Promise<boolean> => {
-    const cipher = localStorage.getItem('finanz_encrypted_vault');
+    const cipher = localStorage.getItem(VAULT_KEY);
     if (!cipher) return false;
     try {
-      const decrypted = await decryptData(cipher, oldPin);
-      const newCipher = await encryptData(decrypted, newPin);
-      localStorage.setItem('finanz_encrypted_vault', newCipher);
+      await decryptData(cipher, oldPin); // Verifikation der alten PIN
+      localStorage.setItem(VAULT_KEY, await encryptData(JSON.stringify(portfoliosRef.current), newPin));
+      setSessionPin(newPin);
+      await persistSecrets();
+      removeRecoveryKey(); // wrappt die alte PIN -> neuen Key erzeugen lassen
       return true;
     } catch {
       return false;
@@ -278,19 +338,18 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Safely disable vault encryption
   const disableVault = async (pin: string): Promise<boolean> => {
-    const cipher = localStorage.getItem('finanz_encrypted_vault');
+    const cipher = localStorage.getItem(VAULT_KEY);
     if (!cipher) {
-      localStorage.removeItem('finanz_encrypted_vault');
       setIsVaultLocked(false);
       return true;
     }
     try {
-      const decrypted = await decryptData(cipher, pin);
-      const parsed = JSON.parse(decrypted);
-      if (Array.isArray(parsed)) {
-        setPortfolios(parsed);
-      }
-      localStorage.removeItem('finanz_encrypted_vault');
+      await decryptData(cipher, pin); // Verifikation
+      localStorage.removeItem(VAULT_KEY);
+      restoreSecretsToPlaintext();
+      removeRecoveryKey();
+      setSessionPin(null);
+      setPortfolios([...portfoliosRef.current]); // löst Klartext-Persistenz aus
       setIsVaultLocked(false);
       return true;
     } catch {
@@ -306,29 +365,50 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const resetTimer = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        if (localStorage.getItem('finanz_encrypted_vault')) {
-          setIsVaultLocked(true);
-        }
+        void lockVault();
       }, autoLockMinutes * 60 * 1000);
     };
 
     resetTimer();
     const events = ['mousedown', 'mousemove', 'keydown', 'touchstart', 'scroll'];
-    events.forEach(ev => window.addEventListener(ev, resetTimer));
+    events.forEach(ev => { window.addEventListener(ev, resetTimer); });
 
     return () => {
       clearTimeout(timer);
-      events.forEach(ev => window.removeEventListener(ev, resetTimer));
+      events.forEach(ev => { window.removeEventListener(ev, resetTimer); });
     };
   }, [isVaultLocked, autoLockMinutes]);
 
-  const unlockVault = (unlockedPortfolios: Portfolio[]) => {
-    setPortfolios(unlockedPortfolios);
+  const unlockVault = async (unlockedPortfolios: Portfolio[], pin: string): Promise<void> => {
+    await unlockSecrets(pin);
+
+    // Migration: Frühere Versionen schrieben zusätzlich eine (aktuellere) Klartext-Kopie.
+    // Diese hat Vorrang vor dem veralteten Tresor-Stand und wird danach entfernt.
+    let restored = unlockedPortfolios;
+    try {
+      const legacyPlain = localStorage.getItem('finanz_portfolios');
+      const parsed = legacyPlain ? JSON.parse(legacyPlain) : null;
+      if (Array.isArray(parsed) && parsed.length > 0) restored = parsed;
+    } catch {
+      // defekte Klartext-Kopie ignorieren
+    }
+    localStorage.removeItem('finanz_portfolios');
+    void removeFromIndexedDB('finanz_portfolios');
+
+    const savedSnapshots = secureGet('finanz_snapshots');
+    if (savedSnapshots) setSnapshots(JSON.parse(savedSnapshots));
+    const savedTags = secureGet('finanz_holding_tags');
+    if (savedTags) setHoldingTagsMap(JSON.parse(savedTags));
+
+    setPortfolios(restored);
     setIsVaultLocked(false);
   };
 
   const resetVault = () => {
-    localStorage.removeItem('finanz_encrypted_vault');
+    localStorage.removeItem(VAULT_KEY);
+    removeSecretsBundle();
+    removeRecoveryKey();
+    lockSecrets();
     setIsVaultLocked(false);
   };
 
@@ -860,6 +940,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       isVaultLocked,
       lockVault,
       unlockVault,
+      enableVault,
+      createVaultRecoveryKey,
       resetVault,
       changeVaultPin,
       disableVault,

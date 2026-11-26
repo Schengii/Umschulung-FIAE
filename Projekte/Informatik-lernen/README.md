@@ -30,7 +30,7 @@ Interaktive Lernplattform und Prüfungsvorbereitung für Fachinformatiker (FIAE,
 | 🚀 Junior Developer | Coding-Challenges (Web-Worker-Sandbox), SQL-Sandbox, Git, REST/GraphQL, Docker, CI/CD |
 | 🔥 Senior / Architekten | Kubernetes, eBPF, DNSSEC, TLS 1.3, WebAuthn, RAG/LLM, Observability, Linux-Kernel-Themen |
 
-Die **vollständige, automatisch erzeugte Lab-Liste** steht in [`docs/LABS.md`](docs/LABS.md) (Quelle: `src/data/labModulesData.js`, Aktualisierung mit `npm run docs:labs`). Gamification: XP, Level, Badges, Streak, 365-Tage-Heatmap, Spaced Repetition (SM-2), Fehlerjournal.
+Die **vollständige, automatisch erzeugte Lab-Liste** steht in [`docs/LABS.md`](docs/LABS.md) (Quelle: `src/data/labModulesData.js`, Aktualisierung mit `npm run docs:labs`). Gamification: XP, Level, Badges, Streak, 365-Tage-Heatmap, Spaced Repetition (SM-2), Fehlerjournal, Einstufungstest und täglicher Lernmix.
 
 ## 📁 Ordnerstruktur
 
@@ -45,9 +45,9 @@ Informatik-lernen/
 ├── public/                    Statische Assets, PWA-Icons
 ├── scripts/                   new-lab.js (Lab-Scaffold), gen-lab-list.js (docs/LABS.md), OG-Image, PWA-Icons
 ├── src/
-│   ├── assets/topics/         25 SVG-Diagramme für Wissensartikel
+│   ├── assets/topics/         52 SVG-Diagramme für Wissensartikel und Einsteiger-Kurs
 │   ├── components/            Content/ (Labs, TopicReader), Games/, Navigation/, Shared/ …
-│   ├── data/                  labRegistry.js, labModulesData.js, topicsData.js, topics/ (24 Artikel)
+│   ├── data/                  labRegistry.js, labModulesData.js, topicsData.js, topics/ (38 Artikel)
 │   ├── store/                 Zustand-Store (useStore.js) mit LocalStorage-/IndexedDB-Persistenz
 │   ├── styles/global.css      CSS-Variablen-Design-System & Markdown-Typografie
 │   └── utils/                 *Engine.js (reine Logik), markdownEngine.js, storage, uiPreferences
@@ -73,7 +73,7 @@ Informatik-lernen/
 5. **PWA & Bundle**: `vite-plugin-pwa` mit Precache der App-Chunks; Vendor-Chunks (`react/ui/charts/pdf/sql`) mit `size-limit`-Budgets, schwere Chunks (inkl. des lokal gebündelten Monaco-Editors) per Runtime-Cache.
 6. **Audio**: Soundeffekte werden zur Laufzeit per Web Audio API synthetisiert.
 7. **Qualität (CI)**: `npm audit` → `lint:ci` → `typecheck` → `test:coverage` (führt alle Tests aus) → `build` → `size` → `e2e`; danach Lighthouse auf dem Build-Artefakt. Smoke- und axe-A11y-Tests rendern jedes Lab automatisch.
-8. **Wissensartikel (Wissen)**: 24 modularisierte Lernartikel (`src/data/topics/`) mit sicherer Markdown-Engine (`src/utils/markdownEngine.js`), interaktiven Aufgaben, Quizzes und SVG-Diagrammen (`src/assets/topics/`). Lazy-Loading per dynamischem Import und Deep-Linking (`/wissen/<topicId>`).
+8. **Wissensartikel (Wissen)**: 35 modularisierte Lernartikel (`src/data/topics/`, u. a. Hardware, Elektrotechnik/USV, Betriebssysteme, Netzwerkdienste, IT-Sicherheit im Betrieb, ITSM, DevOps/Container, Softwarearchitektur, Datenanalyse/ML, IIoT/Industrie 4.0, Beschaffung/Bilanz, Qualität/Fachgespräch) mit sicherer Markdown-Engine (`src/utils/markdownEngine.js`), interaktiven Aufgaben, Quizzes und SVG-Diagrammen (`src/assets/topics/`). Lazy-Loading per dynamischem Import und Deep-Linking (`/wissen/<topicId>`).
 
 ## ♿ Barrierefreiheit
 
@@ -148,7 +148,10 @@ Das Repository ist für nahtlose Zusammenarbeit mit Entwicklern und KI-Agenten (
 - Ausführliche Feature-Beschreibungen und Änderungshistorie bis v3.74.0: [`docs/README-Archiv.md`](docs/README-Archiv.md)
 
 ### Aktuelle Version (v3.80.0) & Neueste Verbesserungen
-- **Vollständige Umsetzung PLAN.md (M01–M19)**: 2.275 Unit-Tests, 63 Playwright E2E-Tests, 252 Labs und 189 Util- und Engine-Module.
+- **Vollständige Umsetzung PLAN.md (M01–M19)**: 2.288 Unit-Tests, 63 Playwright E2E-Tests, 252 Labs und 189 Util- und Engine-Module.
+- **Adaptiver Prüfungsplan**: Der Prüfungsplaner leitet aus Einstufungstest, Fehlerjournal, Fortschritt und Prüfungstermin einen rollierenden 4-Wochen-Plan ab (`src/utils/studyPlanEngine.js`); Phasen Lernen, Vertiefen und Festigen, Wochenziele aus echten Daten.
+- **Lernpfad „Empfohlen für dich“**: Die Dashboard-Karte `LearningPathWidget` (Logik in `src/utils/learningPathEngine.js`) empfiehlt 3 Labs mit Begründung aus Einstufungstest, Fehlerjournal, Prüfungstermin, Rolle und Fortschritt; Berufsfilter und „Nicht jetzt“ werden im Spielstand gespeichert. Drill-Fehler heben das jeweilige Lab, `src/data/labExamDomains.js` ordnet IHK-Labs einem Prüfungsbereich zu.
+- **Einstufungstest & täglicher Lernmix**: Das Dashboard-Widget „Heute lernen“ (`LearningMixWidget`, Logik in `src/utils/learningMixEngine.js`) startet einen 12-Fragen-Einstufungstest als Startwert für den Bereitschafts-Score und einen Tages-Lernmix mit 10 Aufgaben (fällige Fehler, bis zu 3 Karteikarten nach SM-2, neue Fragen aus den schwächsten Bereichen).
 - **Lab-Ausbau & Simulationen**: Vollständiger Ausbau von DockerLab, KubernetesLab, WebSocketsLab, OAuthOidcLab und CloudDevOpsLab mit eigenen Engines, Lintern und XP-Drills.
 - **Barrierefreiheit (WCAG AA & 375 px)**: TopicReader mit Tastatur-Skip-Link, Fokus-Management und Scroll-Spy (`aria-current="location"`); alle 25 Topic-SVGs mit `<desc id="d">` und `<title id="t">`; 0 Layout-Überläufe bei 375 px.
 - **PWA-Precache Optimierung**: Precache auf 2.4 MB (101 Chunks) gesenkt; Kern-Labs offline geprecacht, On-Demand-Labs über StaleWhileRevalidate Runtime-Cache bedient.

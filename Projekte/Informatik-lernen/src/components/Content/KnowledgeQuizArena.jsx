@@ -46,7 +46,7 @@ export default function KnowledgeQuizArena({ onRewardXP }) {
           <Trophy size={32} style={{ color: 'var(--accent-amber)' }} /> Interaktive IT Wissens-Quiz Arena
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem' }}>
-          Teste dein Wissen über KI-Trends, Cloud, Kubernetes, IT-Basics und IHK-Themen.
+          Teste dein Wissen in elf Kategorien: KI, Cloud und DevOps, IT-Basics, Hardware, Betriebssysteme, Netzwerk, Sicherheit, ITSM, Datenanalyse, Industrie 4.0 und Wirtschaft.
         </p>
       </div>
 

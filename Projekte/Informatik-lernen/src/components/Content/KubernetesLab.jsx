@@ -7,7 +7,11 @@ import {
   K8S_DRILL_QUESTIONS
 } from '../../utils/kubernetesEngine';
 import LabDrillSection from '../Shared/LabDrillSection';
+import { normalizeDrillQuestions } from '../../utils/drillFormat';
 import SourceList from '../Shared/SourceList';
+
+// Drill-Fragen im Format von IhkDrillPanel und Fehlerjournal (die Quelle nutzt englische Feldnamen)
+const K8S_DRILL = normalizeDrillQuestions(K8S_DRILL_QUESTIONS);
 
 const INITIAL_DEPLOYMENT_YAML = `apiVersion: apps/v1
 kind: Deployment
@@ -406,7 +410,7 @@ export default function KubernetesLab({ onRewardXP }) {
       {activeTab === 'drill' && (
         <LabDrillSection
           title="Kubernetes & Cloud Native IHK-Prüfungsdrill"
-          questions={K8S_DRILL_QUESTIONS}
+          questions={K8S_DRILL}
           xpReward={55}
           onRewardXP={onRewardXP}
         />

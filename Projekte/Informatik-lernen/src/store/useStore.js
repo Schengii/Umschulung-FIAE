@@ -201,15 +201,57 @@ export const useStore = create((set) => {
       });
     },
 
-    toggleStudyPlanWeek: (weekNum) => {
+    // Einstufungstest: Ergebnis je Bereich (siehe learningMixEngine.scorePlacement)
+    recordPlacementResult: (placement) => {
+      if (!placement || typeof placement !== 'object') return;
       set((state) => {
-        const prev = state.userState;
-        const currentWeeks = prev.studyPlanWeeks || {};
-        const updatedWeeks = {
-          ...currentWeeks,
-          [weekNum]: !currentWeeks[weekNum]
-        };
-        const updatedState = { ...prev, studyPlanWeeks: updatedWeeks };
+        const updatedState = { ...state.userState, placementResult: placement };
+        saveUserState(updatedState);
+        return { userState: updatedState };
+      });
+    },
+
+    // Einstellungen des Prüfungsplans: Beginn von Woche 1 und Lernstunden pro Woche
+    setStudyPlanPrefs: ({ planStart, hoursPerWeek } = {}) => {
+      set((state) => {
+        const patch = {};
+        if (typeof planStart === 'string') patch.studyPlanStart = planStart;
+        if (Number.isFinite(hoursPerWeek) && hoursPerWeek > 0 && hoursPerWeek <= 60) patch.studyHoursPerWeek = hoursPerWeek;
+        if (Object.keys(patch).length === 0) return state;
+        const updatedState = { ...state.userState, ...patch };
+        saveUserState(updatedState);
+        return { userState: updatedState };
+      });
+    },
+
+    // Berufsfilter (Labs-Dashboard und Lernpfad)
+    setCareerFilter: (careerId) => {
+      if (typeof careerId !== 'string') return;
+      set((state) => {
+        const updatedState = { ...state.userState, careerFilter: careerId };
+        saveUserState(updatedState);
+        return { userState: updatedState };
+      });
+    },
+
+    // Lernpfad-Empfehlung ausblenden, bis `untilDate` (YYYY-MM-DD) erreicht ist
+    snoozePathLab: (labId, untilDate) => {
+      if (typeof labId !== 'string' || typeof untilDate !== 'string') return;
+      set((state) => {
+        const updatedState = { ...state.userState, pathSnoozed: { ...(state.userState.pathSnoozed || {}), [labId]: untilDate } };
+        saveUserState(updatedState);
+        return { userState: updatedState };
+      });
+    },
+
+    // Täglicher Lernmix abgeschlossen: { date, correct, total }
+    recordDailyMixResult: (log) => {
+      if (!log || typeof log !== 'object') return;
+      set((state) => {
+        // Erledigte Tage für den Wochenfortschritt im Prüfungsplan (letzte 14 behalten)
+        const days = Array.isArray(state.userState.mixDays) ? state.userState.mixDays : [];
+        const mixDays = typeof log.date === 'string' ? [...new Set([...days, log.date])].sort().slice(-14) : days;
+        const updatedState = { ...state.userState, dailyMixLog: log, mixDays };
         saveUserState(updatedState);
         return { userState: updatedState };
       });

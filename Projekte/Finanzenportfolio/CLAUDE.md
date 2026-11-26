@@ -22,7 +22,7 @@
 |---|---|
 | `npm run dev` | Lokaler Vite Dev-Server (standardmäßig Port 5173) |
 | `npm run build` | TypeScript-Kompilierung (`tsc -b`) & Vite Production Build (`vite build`) |
-| `npm run lint` | TypeScript Type-Check ohne Emit (`tsc --noEmit`) |
+| `npm run lint` | TypeScript Type-Check (`tsc -b --noEmit`) + Biome-Lint (nur Fehler); `npm run lint:warnings` zeigt alle Warnungen |
 | `npm run test` | Alle Vitest Unit- und Integrationstests ausführen (`vitest run`) |
 | `npm run preview` | Lokale Vorschau des Production Builds |
 

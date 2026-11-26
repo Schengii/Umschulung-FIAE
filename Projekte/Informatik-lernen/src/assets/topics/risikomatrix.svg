@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Risikomatrix: Eintrittswahrscheinlichkeit gegen Schadenshöhe mit den Bereichen niedrig, mittel und hoch</title>
+  <desc id="d">Eine Matrix mit drei mal drei Feldern. Je höher Wahrscheinlichkeit und Schaden, desto höher das Risiko. Unten links liegt niedriges Risiko in Grün, in der Mitte mittleres Risiko in Gelb, oben rechts hohes Risiko in Rot.</desc>
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Risikomatrix: Wahrscheinlichkeit × Schaden</text>
+  <g font-size="13" font-weight="600" text-anchor="middle" fill="#0f172a">
+    <rect x="200" y="50" width="120" height="70" fill="#fde68a" stroke="#ffffff" stroke-width="3"/><text x="260" y="90">mittel</text>
+    <rect x="320" y="50" width="120" height="70" fill="#fca5a5" stroke="#ffffff" stroke-width="3"/><text x="380" y="90">hoch</text>
+    <rect x="440" y="50" width="120" height="70" fill="#f87171" stroke="#ffffff" stroke-width="3"/><text x="500" y="90">hoch</text>
+    <rect x="200" y="120" width="120" height="70" fill="#bbf7d0" stroke="#ffffff" stroke-width="3"/><text x="260" y="160">niedrig</text>
+    <rect x="320" y="120" width="120" height="70" fill="#fde68a" stroke="#ffffff" stroke-width="3"/><text x="380" y="160">mittel</text>
+    <rect x="440" y="120" width="120" height="70" fill="#fca5a5" stroke="#ffffff" stroke-width="3"/><text x="500" y="160">hoch</text>
+    <rect x="200" y="190" width="120" height="70" fill="#86efac" stroke="#ffffff" stroke-width="3"/><text x="260" y="230">niedrig</text>
+    <rect x="320" y="190" width="120" height="70" fill="#bbf7d0" stroke="#ffffff" stroke-width="3"/><text x="380" y="230">niedrig</text>
+    <rect x="440" y="190" width="120" height="70" fill="#fde68a" stroke="#ffffff" stroke-width="3"/><text x="500" y="230">mittel</text>
+  </g>
+  <g font-size="13" fill="#475569" text-anchor="middle">
+    <text x="260" y="282">gering</text><text x="380" y="282">mittel</text><text x="500" y="282">hoch</text>
+    <text x="380" y="304" font-weight="600">Schadenshöhe</text>
+    <text x="185" y="230" text-anchor="end">selten</text><text x="185" y="160" text-anchor="end">möglich</text><text x="185" y="90" text-anchor="end">häufig</text>
+    <text x="70" y="160" font-weight="600" transform="rotate(-90 70 160)">Wahrscheinlichkeit</text>
+  </g>
+</svg>

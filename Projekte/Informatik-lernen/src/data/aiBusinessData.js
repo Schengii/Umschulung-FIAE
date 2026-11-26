@@ -1,4 +1,5 @@
-export const AI_BUSINESS_MODULES = [
+import { AI_BUSINESS_EXTRA } from './kurseWissenExtra';
+const BASE_AI_BUSINESS_MODULES = [
   {
     id: 'prompt_templates',
     title: '1. Business & Marketing Prompt Templates (Golem-Style)',
@@ -68,3 +69,5 @@ class DeepLearningClassifier(nn.Module):
     bestPractice: 'Neuronale Netze lernen durch Minimierung einer Loss-Funktion mittels Gradient Descent & Backpropagation.'
   }
 ];
+
+export const AI_BUSINESS_MODULES = [...BASE_AI_BUSINESS_MODULES, ...AI_BUSINESS_EXTRA];

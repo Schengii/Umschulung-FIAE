@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { secureGet, secureSet } from '../services/secureStore';
 import { Webhook, Key, Copy, Check, Play, CheckCircle2, X } from 'lucide-react';
 import type { Transaction } from '../types';
 
@@ -79,7 +80,7 @@ export const EmailWebhookDispatcherModal: React.FC<EmailWebhookDispatcherModalPr
   baseCurrency = 'EUR'
 }) => {
   const [webhookToken, setWebhookToken] = useState<string>(() => {
-    return localStorage.getItem('finanz_webhook_token') || `wh_sec_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+    return secureGet('finanz_webhook_token') || `wh_sec_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
   });
 
   const [copiedToken, setCopiedToken] = useState<boolean>(false);
@@ -89,16 +90,16 @@ export const EmailWebhookDispatcherModal: React.FC<EmailWebhookDispatcherModalPr
   const [bookingSuccess, setBookingSuccess] = useState<boolean>(false);
 
   const [logs, setLogs] = useState<WebhookLogItem[]>(() => {
-    const saved = localStorage.getItem('finanz_webhook_logs');
+    const saved = secureGet('finanz_webhook_logs');
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('finanz_webhook_token', webhookToken);
+    secureSet('finanz_webhook_token', webhookToken);
   }, [webhookToken]);
 
   useEffect(() => {
-    localStorage.setItem('finanz_webhook_logs', JSON.stringify(logs));
+    secureSet('finanz_webhook_logs', JSON.stringify(logs));
   }, [logs]);
 
   if (!isOpen) return null;

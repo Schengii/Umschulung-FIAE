@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Zwei-Faktor-Anmeldung: Wissen, Besitz und Sein, mindestens zwei davon kombinieren</title>
+  <desc id="d">Drei Kästen nebeneinander: Wissen (Passwort, PIN), Besitz (Smartphone mit App, Sicherheitsschlüssel) und Sein (Fingerabdruck, Gesicht). Darunter ein Ablauf: Erst das Passwort eingeben, dann einen zweiten Nachweis wie einen Code aus der Authenticator-App bestätigen, erst danach ist die Anmeldung erfolgreich. Ein gestohlenes Passwort allein genügt Angreifern dann nicht.</desc>
+  <rect width="820" height="320" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Zwei Nachweise statt einem: Das Passwort allein reicht nicht</text>
+  <g text-anchor="middle" fill="#0f172a">
+    <rect x="30" y="46" width="240" height="110" rx="12" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="150" y="74" font-size="16" font-weight="700">Wissen</text><text x="150" y="100" font-size="13">Passwort, PIN,</text><text x="150" y="120" font-size="13">Antwort auf Sicherheitsfrage</text><text x="150" y="142" font-size="11" fill="#475569">„etwas, das du weißt“</text>
+    <rect x="290" y="46" width="240" height="110" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="74" font-size="16" font-weight="700">Besitz</text><text x="410" y="100" font-size="13">Smartphone mit App,</text><text x="410" y="120" font-size="13">Sicherheitsschlüssel (USB)</text><text x="410" y="142" font-size="11" fill="#475569">„etwas, das du hast“</text>
+    <rect x="550" y="46" width="240" height="110" rx="12" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="670" y="74" font-size="16" font-weight="700">Sein</text><text x="670" y="100" font-size="13">Fingerabdruck,</text><text x="670" y="120" font-size="13">Gesichtserkennung</text><text x="670" y="142" font-size="11" fill="#475569">„etwas, das du bist“</text>
+  </g>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="40" y="206" width="190" height="56" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="135" y="230">1. Passwort</text><text x="135" y="248" font-weight="400" font-size="12">eingeben</text>
+    <rect x="315" y="206" width="190" height="56" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="230">2. Zweiter Nachweis</text><text x="410" y="248" font-weight="400" font-size="12">z. B. Code aus der App</text>
+    <rect x="590" y="206" width="190" height="56" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="685" y="230">3. Angemeldet</text><text x="685" y="248" font-weight="400" font-size="12">Zugriff erlaubt</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none"><path d="M230 234 H315"/><path d="M505 234 H590"/></g>
+  <g fill="#475569"><polygon points="315,234 305,228 305,240"/><polygon points="590,234 580,228 580,240"/></g>
+  <text x="410" y="298" text-anchor="middle" font-size="13" fill="#475569">Wer nur dein Passwort kennt, scheitert am zweiten Schritt.</text>
+</svg>

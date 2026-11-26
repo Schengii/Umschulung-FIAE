@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Calculator, X, AlertCircle, Info, Check } from 'lucide-react';
 import type { Holding, Transaction } from '../types';
 import { calculateDetailedVorabpauschale, HISTORICAL_BASISZINS } from '../utils/vorabpauschaleUtils';
+import { parseDateString } from '../utils/finance/currencyUtils';
 
 interface VorabpauschaleModalProps {
   isOpen: boolean;
@@ -41,13 +42,22 @@ export const VorabpauschaleModal: React.FC<VorabpauschaleModalProps> = ({
   // Perform calculation
   const calcResult = useMemo(() => {
     const customRate = useCustomZins ? parseFloat(customZinsInput) / 100 : undefined;
+    // Erstes Kaufdatum je ETF: bei Erwerb im Steuerjahr wird der Basisertrag monatsanteilig gekürzt
+    const firstBuy: Record<string, string> = {};
+    [...transactions]
+      .filter(tx => tx.type === 'BUY')
+      .sort((a, b) => parseDateString(a.date).getTime() - parseDateString(b.date).getTime())
+      .forEach(tx => {
+        if (!firstBuy[tx.ticker]) firstBuy[tx.ticker] = tx.date;
+      });
+    const holdingsWithPurchase = holdings.map(h => ({ ...h, purchaseDate: firstBuy[h.ticker] }));
     return calculateDetailedVorabpauschale(
-      holdings,
+      holdingsWithPurchase,
       dividendsByTicker,
       selectedYear,
       customRate
     );
-  }, [holdings, dividendsByTicker, selectedYear, useCustomZins, customZinsInput]);
+  }, [holdings, transactions, dividendsByTicker, selectedYear, useCustomZins, customZinsInput]);
 
   if (!isOpen) return null;
 

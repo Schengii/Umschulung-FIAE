@@ -40,3 +40,35 @@ describe('IHK Zuschlagskalkulation Engine', () => {
     expect(res.barverkaufspreis).toBe(26235);
   });
 });
+
+describe('IHK Zuschlagskalkulation – Golden-Werte bis zum Bruttoverkaufspreis', () => {
+  const input = {
+    fertigungsmaterial: 10000,
+    materialgemeinkostensatzProzent: 10,
+    fertigungslohn: 5000,
+    fertigungsgemeinkostensatzProzent: 100,
+    sondereinzelkostenFertigung: 500,
+    verwaltungsgemeinkostensatzProzent: 5,
+    vertriebsgemeinkostensatzProzent: 5,
+    sondereinzelkostenVertrieb: 200,
+    gewinnzuschlagProzent: 10,
+    kundenskontoProzent: 2,
+    kundenrabattProzent: 5,
+    umsatzsteuerProzent: 19
+  };
+
+  it('rechnet Skonto und Rabatt „im Hundert“ (Divisor 0,98 bzw. 0,95), nicht „auf Hundert“', () => {
+    const res = calculateZuschlagskalkulation(input);
+    expect(res.zielverkaufspreis).toBe(26770.41); // 26235 / 0,98
+    expect(res.skontoBetrag).toBe(535.41);
+    expect(res.nettoverkaufspreis).toBe(28179.38); // 26770,408… / 0,95
+    expect(res.bruttoverkaufspreis).toBe(33533.46); // × 1,19
+  });
+
+  it('ohne Skonto, Rabatt und Umsatzsteuer entspricht der Verkaufspreis dem Barverkaufspreis', () => {
+    const res = calculateZuschlagskalkulation({ ...input, kundenskontoProzent: 0, kundenrabattProzent: 0, umsatzsteuerProzent: 0 });
+    expect(res.zielverkaufspreis).toBe(26235);
+    expect(res.nettoverkaufspreis).toBe(26235);
+    expect(res.bruttoverkaufspreis).toBe(26235);
+  });
+});

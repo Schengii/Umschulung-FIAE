@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Calendar, Target, Clock, ChevronRight, Zap, Activity } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { calculateExamReadiness } from '../../utils/examReadinessEngine';
+import { placementToDomainStats, mergeDomainStats } from '../../utils/learningMixEngine';
+import { toDateKey } from '../../utils/mistakeJournalEngine';
 import { onActivationKey } from '../Shared/keyActivation';
 
 const IHK_EXAM_PRESETS = [
@@ -18,7 +20,7 @@ function nextPresetIsoDate(preset) {
   if (target < now) {
     target = new Date(currentYear + 1, preset.month, preset.day);
   }
-  return target.toISOString().slice(0, 10);
+  return toDateKey(target); // lokale Zeit; toISOString() verschob das Datum in UTC+ um einen Tag
 }
 
 function calculateDaysRemaining(targetDateStr) {
@@ -86,7 +88,8 @@ export default function ExamCountdownWidget({ setActiveTab }) {
       }
     };
 
-    return calculateExamReadiness(domainStats);
+    // Einstufungstest liefert einen Startwert, auch wenn noch keine Themen abgeschlossen sind
+    return calculateExamReadiness(mergeDomainStats(domainStats, placementToDomainStats(userState.placementResult)));
   }, [userState]);
 
   const sprintRecommendations = useMemo(() => [
@@ -245,9 +248,9 @@ export default function ExamCountdownWidget({ setActiveTab }) {
               }}
             >
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>{rec.title}</span>
-                  <span className="badge badge-indigo" style={{ fontSize: '0.7rem' }}>{rec.badge}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ flex: 1, minWidth: 0, fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>{rec.title}</span>
+                  <span className="badge badge-indigo" style={{ fontSize: '0.7rem', flexShrink: 0, whiteSpace: 'nowrap', padding: '3px 10px' }}>{rec.badge}</span>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
                   {rec.desc}

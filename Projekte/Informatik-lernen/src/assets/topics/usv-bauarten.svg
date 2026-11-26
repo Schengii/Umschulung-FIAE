@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 350" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Die drei USV-Bauarten nach IEC 62040-3: Offline (VFD), Line-Interactive (VI) und Online (VFI)</title>
+  <desc id="d">Drei Signalwege vom Netz zur Last. Offline: Netz direkt zur Last, Wechselrichter nur bei Ausfall. Line-Interactive: zusätzlich Spannungsregelung. Online: Gleichrichter, Batterie und Wechselrichter versorgen die Last dauerhaft.</desc>
+  <rect width="860" height="350" fill="#ffffff"/>
+  <text x="430" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">USV-Bauarten im Vergleich</text>
+  <g font-size="13" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <text x="20" y="84" text-anchor="start" fill="#475569">Offline (VFD)</text>
+    <rect x="200" y="62" width="80" height="34" rx="6" fill="#e0e7ff" stroke="#4338ca"/><text x="240" y="84">Netz</text>
+    <rect x="330" y="62" width="120" height="34" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="390" y="84">Umschalter</text>
+    <rect x="500" y="62" width="80" height="34" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="540" y="84">Last</text>
+    <rect x="330" y="108" width="120" height="26" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="390" y="126" font-size="11">Akku + Wechselrichter</text>
+
+    <text x="20" y="184" text-anchor="start" fill="#475569">Line-Interactive (VI)</text>
+    <rect x="200" y="162" width="80" height="34" rx="6" fill="#e0e7ff" stroke="#4338ca"/><text x="240" y="184">Netz</text>
+    <rect x="330" y="162" width="120" height="34" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="390" y="184">Regelung (AVR)</text>
+    <rect x="500" y="162" width="80" height="34" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="540" y="184">Last</text>
+    <rect x="330" y="208" width="120" height="26" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="390" y="226" font-size="11">Akku + Wechselrichter</text>
+
+    <text x="20" y="302" text-anchor="start" fill="#475569">Online (VFI)</text>
+    <rect x="200" y="280" width="70" height="34" rx="6" fill="#e0e7ff" stroke="#4338ca"/><text x="235" y="302">Netz</text>
+    <rect x="300" y="280" width="110" height="34" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="355" y="302">Gleichrichter</text>
+    <rect x="440" y="280" width="110" height="34" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="495" y="302">Wechselrichter</text>
+    <rect x="580" y="280" width="70" height="34" rx="6" fill="#ccfbf1" stroke="#0f766e"/><text x="615" y="302">Last</text>
+    <rect x="395" y="248" width="70" height="22" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="430" y="264" font-size="11">Akku</text>
+  </g>
+  <g stroke="#475569" stroke-width="2">
+    <line x1="280" y1="79" x2="330" y2="79"/><line x1="450" y1="79" x2="500" y2="79"/><line x1="390" y1="96" x2="390" y2="108"/>
+    <line x1="280" y1="179" x2="330" y2="179"/><line x1="450" y1="179" x2="500" y2="179"/><line x1="390" y1="196" x2="390" y2="208"/>
+    <line x1="270" y1="297" x2="300" y2="297"/><line x1="410" y1="297" x2="440" y2="297"/><line x1="550" y1="297" x2="580" y2="297"/>
+    <line x1="430" y1="270" x2="430" y2="280"/>
+  </g>
+  <g font-size="12" fill="#475569">
+    <text x="680" y="84">Umschaltzeit meist 2–10 ms</text>
+    <text x="620" y="184">Spannungsregelung ohne Akku</text>
+    <text x="680" y="302">keine Umschaltzeit</text>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Ablauf einer Webanfrage: DNS-Auflösung, TCP-Handshake, TLS-Handshake und HTTP-Anfrage</title>
+  <desc id="d">Ein Sequenzdiagramm mit drei Teilnehmern: Browser, DNS-Resolver und Webserver. Schritt 1: Der Browser fragt den DNS-Resolver nach der IP-Adresse und erhält sie zurück. Schritt 2: Browser und Webserver führen den TCP-Handshake mit SYN, SYN-ACK und ACK aus. Schritt 3: Es folgt der TLS-Handshake mit Zertifikat und Schlüsselaustausch. Schritt 4: Der Browser sendet die HTTP-Anfrage GET und der Webserver antwortet mit Status 200 und dem HTML-Dokument.</desc>
+  <rect width="820" height="400" fill="#ffffff"/>
+  <g font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="60" y="14" width="140" height="34" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="130" y="36">Browser</text>
+    <rect x="340" y="14" width="140" height="34" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="36">DNS-Resolver</text>
+    <rect x="620" y="14" width="140" height="34" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="690" y="36">Webserver</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4">
+    <path d="M130 48 V390"/><path d="M410 48 V390"/><path d="M690 48 V390"/>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M130 90 H404"/><path d="M410 116 H136"/>
+    <path d="M130 160 H684"/><path d="M690 180 H136"/><path d="M130 200 H684"/>
+    <path d="M130 250 H684"/><path d="M690 270 H136"/>
+    <path d="M130 320 H684"/><path d="M690 350 H136"/>
+  </g>
+  <g fill="#475569">
+    <polygon points="404,90 394,84 394,96"/><polygon points="136,116 146,110 146,122"/>
+    <polygon points="684,160 674,154 674,166"/><polygon points="136,180 146,174 146,186"/><polygon points="684,200 674,194 674,206"/>
+    <polygon points="684,250 674,244 674,256"/><polygon points="136,270 146,264 146,276"/>
+    <polygon points="684,320 674,314 674,326"/><polygon points="136,350 146,344 146,356"/>
+  </g>
+  <g font-size="12" fill="#0f172a">
+    <text x="267" y="82" text-anchor="middle">1  Wie lautet die IP von example.org?</text>
+    <text x="273" y="136" text-anchor="middle">IP-Adresse (A- oder AAAA-Eintrag)</text>
+    <text x="410" y="152" text-anchor="middle">2  TCP-Handshake (Port 443)</text>
+    <text x="410" y="174" text-anchor="middle">SYN</text><text x="410" y="194" text-anchor="middle">SYN-ACK</text><text x="410" y="214" text-anchor="middle">ACK</text>
+    <text x="410" y="242" text-anchor="middle">3  TLS-Handshake: Hello, Schlüsselaustausch</text>
+    <text x="410" y="264" text-anchor="middle">Zertifikat, Finished</text>
+    <text x="410" y="312" text-anchor="middle">4  HTTP: GET /index.html (verschlüsselt)</text>
+    <text x="410" y="344" text-anchor="middle">200 OK + HTML-Dokument</text>
+  </g>
+  <text x="410" y="388" text-anchor="middle" font-size="12" fill="#475569">Danach lädt der Browser CSS, JavaScript und Bilder mit weiteren Anfragen nach.</text>
+</svg>

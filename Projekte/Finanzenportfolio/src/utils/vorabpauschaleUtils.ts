@@ -53,6 +53,17 @@ export function getTeilfreistellungsQuote(category: string, ticker: string, name
   return 0.30;
 }
 
+/** Anteil des Jahres, für den die Vorabpauschale anfällt (12 minus volle Monate vor dem Erwerbsmonat) / 12. */
+export function monthsHeldFactor(purchaseDate: string | undefined, taxYear: number): number {
+  if (!purchaseDate) return 1;
+  const parts = purchaseDate.split('.');
+  if (parts.length !== 3) return 1;
+  const month = parseInt(parts[1], 10);
+  const year = parseInt(parts[2], 10);
+  if (!Number.isFinite(month) || year !== taxYear || month < 1 || month > 12) return 1;
+  return (12 - (month - 1)) / 12;
+}
+
 /**
  * Berechnet die exakte Vorabpauschale nach § 18 Investmentsteuergesetz (InvStG).
  * Formel:
@@ -71,6 +82,8 @@ export function calculateDetailedVorabpauschale(
     currentPrice: number;
     totalCost: number;
     teilfreistellungRate?: number;
+    /** Erwerbsdatum (TT.MM.JJJJ) der Position; nur relevant, wenn im Steuerjahr erworben */
+    purchaseDate?: string;
   }>,
   dividendsByTicker: Record<string, number> = {},
   taxYear: number = 2026,
@@ -99,7 +112,9 @@ export function calculateDetailedVorabpauschale(
 
     // Gesetzliche Formel gem. § 18 Abs. 1 & 2 InvStG:
     // Basisertrag = Wert am Jahresanfang * Basiszins * 70%
-    const basisErtragGross = startVal * basisZins * 0.70;
+    // Bei Erwerb im Steuerjahr mindert sich der Basisertrag um 1/12 für jeden vollen Kalendermonat
+    // vor dem Erwerbsmonat (§ 18 Abs. 2 Satz 3 InvStG).
+    const basisErtragGross = startVal * basisZins * 0.70 * monthsHeldFactor(h.purchaseDate, taxYear);
 
     // Tatsächliche Wertsteigerung (inkl. Dividendenanteil für den Vergleich)
     const tatsaechlicherErtrag = Math.max(0, performanceEur + divsPaid);

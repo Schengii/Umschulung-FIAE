@@ -14,6 +14,8 @@ import {
 } from '../../utils/bsiGrundschutzEngine';
 import { useStore } from '../../store/useStore';
 import { onActivationKey } from '../Shared/keyActivation';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { BSI_GRUNDSCHUTZ_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function BsiGrundschutzLab() {
   const { awardXP } = useStore();
@@ -414,6 +416,7 @@ export default function BsiGrundschutzLab() {
           </pre>
         </div>
       )}
+      <LabDrillSection title="IHK-Drill: BSI IT-Grundschutz" questions={BSI_GRUNDSCHUTZ_DRILL_QUESTIONS} />
     </div>
   );
 }

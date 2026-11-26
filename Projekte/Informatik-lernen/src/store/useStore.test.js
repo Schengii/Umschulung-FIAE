@@ -116,3 +116,34 @@ describe('useStore Zustand Store', () => {
     expect(s.streakFreezes).toBe(1);
   });
 });
+
+describe('Prüfungsplan im Store', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    useStore.setState({ userState: { ...initialProfileState, mixDays: [], studyPlanStart: '', studyHoursPerWeek: 6 } });
+  });
+
+  it('merkt sich erledigte Lernmix-Tage ohne Duplikate und begrenzt auf 14', () => {
+    const { recordDailyMixResult } = useStore.getState();
+    for (let day = 1; day <= 20; day++) {
+      recordDailyMixResult({ date: `2026-06-${String(day).padStart(2, '0')}`, correct: 5, total: 10 });
+    }
+    recordDailyMixResult({ date: '2026-06-20', correct: 6, total: 10 });
+    const { mixDays, dailyMixLog } = useStore.getState().userState;
+    expect(mixDays).toHaveLength(14);
+    expect(mixDays[0]).toBe('2026-06-07');
+    expect(mixDays[13]).toBe('2026-06-20');
+    expect(dailyMixLog.correct).toBe(6);
+  });
+
+  it('speichert Planstart und Wochenstunden, ignoriert ungültige Werte', () => {
+    const { setStudyPlanPrefs } = useStore.getState();
+    setStudyPlanPrefs({ planStart: '2026-06-01', hoursPerWeek: 10 });
+    expect(useStore.getState().userState.studyPlanStart).toBe('2026-06-01');
+    expect(useStore.getState().userState.studyHoursPerWeek).toBe(10);
+    setStudyPlanPrefs({ hoursPerWeek: -3 });
+    setStudyPlanPrefs({ hoursPerWeek: 99 });
+    setStudyPlanPrefs({ hoursPerWeek: 'viel' });
+    expect(useStore.getState().userState.studyHoursPerWeek).toBe(10);
+  });
+});

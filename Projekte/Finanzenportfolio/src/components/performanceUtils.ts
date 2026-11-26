@@ -150,34 +150,50 @@ export interface GermanTaxCalculationResult {
   taxableGains: number; // After Teilfreistellung & Crypto > 1y rule
   withholdingTaxEstimate: number; // 26.375% of taxable gains exceeding exemption
   taxExemptionRemaining: number;
+  /** Kurzfristige Krypto-Gewinne (§ 23 EStG): nicht in taxableGains enthalten, persönlicher Steuersatz */
+  cryptoPrivateSaleGains: number;
+  /** true ab 1.000 € (Freigrenze, nicht Freibetrag): dann voll steuerpflichtig */
+  cryptoFreigrenzeExceeded: boolean;
 }
 
 /**
  * Calculates German Capital Gains Tax details based on FIFO and partial exemptions (Teilfreistellung).
  */
-export function calculateGermanTax(
-  transactions: Transaction[],
-  exemptionLimit: number = 1000,
-  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
-): GermanTaxCalculationResult {
-  let realizedGainsRaw = 0;
-  let taxableGains = 0;
+/** Einzelereignis der Kapitalertragsbesteuerung (Verkauf oder Dividende), Beträge in EUR. */
+export interface GermanTaxEvent {
+  kind: 'SALE' | 'DIVIDEND';
+  ticker: string;
+  category: string;
+  /** KAPITAL = § 20 EStG (Abgeltungsteuer), PRIVATE_SALE = § 23 EStG (Krypto, persönlicher Steuersatz) */
+  regime: 'KAPITAL' | 'PRIVATE_SALE';
+  rawGain: number;
+  /** nach Teilfreistellung bzw. Krypto-Haltefrist; kann negativ sein (Verlust) */
+  taxableGain: number;
+}
 
+/** Freigrenze für private Veräußerungsgeschäfte (§ 23 Abs. 3 EStG, ab 2024): ab 1.000 € voll steuerpflichtig. */
+export const PRIVATE_SALE_FREIGRENZE_EUR = 1000;
+
+/**
+ * Ermittelt alle steuerlich relevanten Einzelereignisse per FIFO.
+ * Basis für calculateGermanTax und die Verlusttopf-Logik in calculateEnhancedGermanTax.
+ */
+export function collectGermanTaxEvents(
+  transactions: Transaction[],
+  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
+): GermanTaxEvent[] {
+  const events: GermanTaxEvent[] = [];
   const buyLots: Record<string, Array<{ date: Date; amount: number; price: number; fee: number; rate: number }>> = {};
-  
-  const sortedTxs = [...transactions].sort((a, b) => {
-    const dateA = a.date.split('.').reverse().join('-');
-    const dateB = b.date.split('.').reverse().join('-');
-    return new Date(dateA).getTime() - new Date(dateB).getTime();
-  });
+
+  const sortedTxs = [...transactions].sort(
+    (a, b) => parseDateString(a.date).getTime() - parseDateString(b.date).getTime()
+  );
 
   sortedTxs.forEach(tx => {
     const rate = tx.exchangeRate || rateMap[tx.currency || 'EUR'] || 1.0;
-    
+
     if (tx.type === 'BUY') {
-      if (!buyLots[tx.ticker]) {
-        buyLots[tx.ticker] = [];
-      }
+      if (!buyLots[tx.ticker]) buyLots[tx.ticker] = [];
       buyLots[tx.ticker].push({
         date: parseDateString(tx.date),
         amount: tx.amount,
@@ -190,20 +206,18 @@ export function calculateGermanTax(
       const sellDate = parseDateString(tx.date);
       let taxableGainForTx = 0;
       let rawGainForTx = 0;
-      
+
       const lots = buyLots[tx.ticker] || [];
       while (remainingToSell > 0.000001 && lots.length > 0) {
         const oldestLot = lots[0];
         const holdingDurationDays = (sellDate.getTime() - oldestLot.date.getTime()) / (1000 * 60 * 60 * 24);
-        
-        // Check partial exemptions (Teilfreistellung) under German tax law
-        let exemptionFactor = 0.0; // 0% tax free for stocks
+
+        // Teilfreistellung (§ 20 InvStG) bzw. Haltefrist (§ 23 EStG)
+        let exemptionFactor = 0.0;
         if (tx.category === 'ETF') {
-          exemptionFactor = 0.30; // 30% tax-free for Equity ETFs
-        } else if (tx.category === 'Crypto') {
-          if (holdingDurationDays > 365) {
-            exemptionFactor = 1.0; // 100% tax-free if held > 1 year in Germany
-          }
+          exemptionFactor = 0.30; // Aktienfonds
+        } else if (tx.category === 'Crypto' && holdingDurationDays > 365) {
+          exemptionFactor = 1.0; // nach mehr als einem Jahr steuerfrei
         }
 
         const buyFee = oldestLot.fee || 0;
@@ -213,10 +227,10 @@ export function calculateGermanTax(
           const lotCost = (oldestLot.amount * oldestLot.price + buyFee) / oldestLot.rate;
           const lotRev = (oldestLot.amount * tx.price - sellFee * (oldestLot.amount / tx.amount)) / rate;
           const lotGain = lotRev - lotCost;
-          
+
           rawGainForTx += lotGain;
           taxableGainForTx += lotGain * (1 - exemptionFactor);
-          
+
           remainingToSell -= oldestLot.amount;
           lots.shift();
         } else {
@@ -224,38 +238,75 @@ export function calculateGermanTax(
           const lotCostFraction = (remainingToSell * oldestLot.price + buyFee * fraction) / oldestLot.rate;
           const lotRevFraction = (remainingToSell * tx.price - sellFee * (remainingToSell / tx.amount)) / rate;
           const lotGainFraction = lotRevFraction - lotCostFraction;
-          
+
           rawGainForTx += lotGainFraction;
           taxableGainForTx += lotGainFraction * (1 - exemptionFactor);
-          
+
           oldestLot.amount -= remainingToSell;
           oldestLot.fee = buyFee - buyFee * fraction;
           remainingToSell = 0;
         }
       }
-      
-      realizedGainsRaw += rawGainForTx;
-      taxableGains += Math.max(0, taxableGainForTx);
+
+      events.push({
+        kind: 'SALE',
+        ticker: tx.ticker,
+        category: tx.category,
+        regime: tx.category === 'Crypto' ? 'PRIVATE_SALE' : 'KAPITAL',
+        rawGain: rawGainForTx,
+        taxableGain: taxableGainForTx
+      });
     } else if (tx.type === 'DIVIDEND') {
-      // Dividends are fully taxable (with ETF exemption if applicable)
-      const divRevenue = ((tx.amount * tx.price) - (tx.tax || 0)) / rate;
-      let exemptionFactor = 0.0;
-      if (tx.category === 'ETF') exemptionFactor = 0.30;
-      
-      realizedGainsRaw += divRevenue;
-      taxableGains += divRevenue * (1 - exemptionFactor);
+      // Steuerpflichtig ist die Brutto-Dividende; einbehaltene (Quellen-)Steuer wird angerechnet,
+      // mindert aber nicht die Bemessungsgrundlage.
+      const grossDividend = (tx.amount * tx.price) / rate;
+      const exemptionFactor = tx.category === 'ETF' ? 0.30 : 0.0;
+      events.push({
+        kind: 'DIVIDEND',
+        ticker: tx.ticker,
+        category: tx.category,
+        regime: 'KAPITAL',
+        rawGain: grossDividend,
+        taxableGain: grossDividend * (1 - exemptionFactor)
+      });
     }
   });
 
+  return events;
+}
+
+export function calculateGermanTax(
+  transactions: Transaction[],
+  exemptionLimit: number = 1000,
+  rateMap: Record<string, number> = DEFAULT_EXCHANGE_RATES
+): GermanTaxCalculationResult {
+  const events = collectGermanTaxEvents(transactions, rateMap);
+
+  let realizedGainsRaw = 0;
+  let kapitalGains = 0;
+  let privateSaleGains = 0;
+  events.forEach(e => {
+    realizedGainsRaw += e.rawGain;
+    if (e.regime === 'KAPITAL') kapitalGains += e.taxableGain;
+    else privateSaleGains += e.taxableGain;
+  });
+
+  // Verluste werden mit Gewinnen desselben Zeitraums verrechnet (§ 20 Abs. 6 EStG);
+  // ein negatives Gesamtergebnis wird auf 0 begrenzt.
+  const taxableGains = Math.max(0, kapitalGains);
+  const cryptoPrivateSaleGains = Math.max(0, privateSaleGains);
+
   const taxableGainsExceedingExemption = Math.max(0, taxableGains - exemptionLimit);
-  const withholdingTaxEstimate = taxableGainsExceedingExemption * 0.26375; // 25% KapESt + 5.5% Soli on KapESt
+  const withholdingTaxEstimate = taxableGainsExceedingExemption * 0.26375; // 25% KapESt + 5.5% Soli
   const taxExemptionRemaining = Math.max(0, exemptionLimit - taxableGains);
 
   return {
     realizedGainsRaw,
     taxableGains,
     withholdingTaxEstimate,
-    taxExemptionRemaining
+    taxExemptionRemaining,
+    cryptoPrivateSaleGains,
+    cryptoFreigrenzeExceeded: cryptoPrivateSaleGains >= PRIVATE_SALE_FREIGRENZE_EUR
   };
 }
 
@@ -1364,56 +1415,59 @@ export function calculateEnhancedGermanTax(
   hasChurchTax: boolean = false,
   churchTaxRatePercent: number = 9.0 // 8% in Bayern/Baden-Württemberg, 9% rest
 ): EnhancedGermanTaxResult {
+  // Echte Einzelergebnisse (FIFO, nach Teilfreistellung) je Verkauf bzw. Dividende
+  const events = collectGermanTaxEvents(transactions).filter(e => e.regime === 'KAPITAL');
+
   let stockGains = 0;
   let stockLosses = 0;
   let otherGains = 0;
   let otherLosses = 0;
-
-  const basicTax = calculateGermanTax(transactions, exemptionLimitEur);
-
-  // Classify transactions into Stock vs. General pools
-  transactions.forEach(t => {
-    if (t.type === 'SELL') {
-      const revenue = (t.amount * t.price) - (t.fee || 0);
-      // In tests/simulation, if sold, check whether it was gain or loss
-      if (t.category === 'Stock') {
-        if (revenue > 0 && basicTax.realizedGainsRaw > 0) stockGains += revenue * 0.1;
-        else stockLosses += revenue * 0.1;
-      } else {
-        if (revenue > 0 && basicTax.realizedGainsRaw > 0) otherGains += revenue * 0.1;
-        else otherLosses += revenue * 0.1;
-      }
+  events.forEach(e => {
+    const isStockSale = e.kind === 'SALE' && e.category === 'Stock';
+    const v = e.taxableGain;
+    if (isStockSale) {
+      if (v >= 0) stockGains += v;
+      else stockLosses += -v;
+    } else if (v >= 0) {
+      otherGains += v;
+    } else {
+      otherLosses += -v;
     }
   });
 
-  // Section 20 (6) EStG: Stock losses can ONLY be offset against Stock gains
+  // § 20 Abs. 6 Satz 4 EStG: Aktienverluste dürfen NUR mit Aktiengewinnen verrechnet werden
   let stockLossPool = initialStockLossPool + stockLosses;
   const stockGainOffset = Math.min(stockGains, stockLossPool);
-  const netStockGains = Math.max(0, stockGains - stockGainOffset);
-  stockLossPool = Math.max(0, stockLossPool - stockGainOffset);
+  let netStockGains = stockGains - stockGainOffset;
+  stockLossPool -= stockGainOffset;
 
-  // General loss pool can offset other gains AND net stock gains
+  // Allgemeiner Verlusttopf: erst gegen sonstige Gewinne, dann gegen verbleibende Aktiengewinne
   let generalLossPool = initialGeneralLossPool + otherLosses;
   const otherGainOffset = Math.min(otherGains, generalLossPool);
-  generalLossPool = Math.max(0, generalLossPool - otherGainOffset);
+  const netOtherGains = otherGains - otherGainOffset;
+  generalLossPool -= otherGainOffset;
 
   if (generalLossPool > 0 && netStockGains > 0) {
     const stockOffsetFromGen = Math.min(netStockGains, generalLossPool);
-    generalLossPool = Math.max(0, generalLossPool - stockOffsetFromGen);
+    netStockGains -= stockOffsetFromGen;
+    generalLossPool -= stockOffsetFromGen;
   }
 
-
-  const taxableGainsFinal = basicTax.taxableGains;
+  const taxableGainsFinal = netStockGains + netOtherGains;
   const taxableExceedingExemption = Math.max(0, taxableGainsFinal - exemptionLimitEur);
 
   // Standard flat tax (25% + 5.5% Soli = 26.375%)
   let baseFlatRate = 0.26375;
   let churchTaxFactor = 0;
   if (hasChurchTax) {
-    // Formula under KiSt: e = (K - 4*E) / (4 + k)
+    // § 32d Abs. 1 EStG: Die Kirchensteuer mindert die Bemessungsgrundlage der Einkommensteuer:
+    //   e = 0,25 / (1 + 0,25 · k)   (k = Kirchensteuersatz)
+    // Soli (5,5 %) und Kirchensteuer (k) werden auf diese ermäßigte Einkommensteuer erhoben.
+    // 9 % KiSt -> 27,99 %, 8 % KiSt -> 27,82 % Gesamtbelastung.
     const k = churchTaxRatePercent / 100;
-    baseFlatRate = 0.25 / (1 + k) * (1 + 0.055 + k);
-    churchTaxFactor = (0.25 / (1 + k)) * k;
+    const reducedIncomeTaxRate = 0.25 / (1 + 0.25 * k);
+    baseFlatRate = reducedIncomeTaxRate * 1.055; // ESt + Soli (ohne Kirchensteuer)
+    churchTaxFactor = reducedIncomeTaxRate * k;
   }
 
   const abgeltungsteuerStandardEur = taxableExceedingExemption * baseFlatRate;
@@ -1468,7 +1522,7 @@ export function calculateCorrelationMatrix(holdings: Holding[]): CorrelationMatr
   const activeHoldings = holdings.filter(h => h.currentValue > 0).slice(0, 10);
   const tickers = activeHoldings.map(h => h.ticker);
   const names: Record<string, string> = {};
-  activeHoldings.forEach(h => names[h.ticker] = h.name);
+  activeHoldings.forEach(h => { names[h.ticker] = h.name; });
 
   const matrix: Record<string, Record<string, number>> = {};
   const pairwise: CorrelationItem[] = [];
@@ -2932,7 +2986,7 @@ export function calculateDachTax(
   const realizedGains = calculateRealizedGains(transactions);
   const totalDividends = transactions
     .filter(t => t.type === 'DIVIDEND')
-    .reduce((sum, t) => sum + (t.amount * t.price - t.tax) / (t.exchangeRate || 1), 0);
+    .reduce((sum, t) => sum + (t.amount * t.price) / (t.exchangeRate || 1), 0); // brutto; Quellensteuer wird angerechnet, nicht abgezogen
 
   const totalRawIncome = Math.max(0, realizedGains + totalDividends);
 
@@ -2981,9 +3035,13 @@ export function calculateDachTax(
   }
 
   // Deutschland (DE): 25% + 5.5% Soli = 26.375%
-  const allowanceUsed = Math.min(allowanceLimitEur, totalRawIncome);
+  // Bemessungsgrundlage nach Teilfreistellung (§ 20 InvStG), Verlustverrechnung und
+  // ohne kurzfristige Krypto-Gewinne (§ 23 EStG, persönlicher Steuersatz)
+  const de = calculateGermanTax(transactions, allowanceLimitEur);
+  const deIncome = de.taxableGains;
+  const allowanceUsed = Math.min(allowanceLimitEur, deIncome);
   const allowanceRemaining = Math.max(0, allowanceLimitEur - allowanceUsed);
-  const taxableAfterAllowance = Math.max(0, totalRawIncome - allowanceUsed);
+  const taxableAfterAllowance = Math.max(0, deIncome - allowanceUsed);
   const taxDue = taxableAfterAllowance * 0.26375;
   const etfHoldingsCount = holdings.filter(h => h.category === 'ETF').length;
 
@@ -2992,7 +3050,7 @@ export function calculateDachTax(
     countryName: 'Deutschland (Abgeltungsteuer 26,375%)',
     totalTaxableIncomeEur: taxableAfterAllowance,
     totalTaxDueEur: Math.round(taxDue * 100) / 100,
-    effectiveTaxRatePct: totalRawIncome > 0 ? (taxDue / totalRawIncome) * 100 : 0,
+    effectiveTaxRatePct: deIncome > 0 ? (taxDue / deIncome) * 100 : 0,
     allowanceUsedEur: allowanceUsed,
     allowanceRemainingEur: allowanceRemaining,
     details: [
@@ -3001,7 +3059,10 @@ export function calculateDachTax(
       etfHoldingsCount > 0
         ? `Teilfreistellung für deine ${etfHoldingsCount} ETFs (Aktienfonds 30%, Mischfonds 15%) berücksichtigt`
         : `Teilfreistellung für Aktien-ETFs (30%) und Mischfonds (15%) berücksichtigt`,
-      `Kryptogewinne nach 1 Jahr Haltefrist steuerfrei (§ 23 EStG)`
+      `Kryptogewinne nach 1 Jahr Haltefrist steuerfrei (§ 23 EStG)`,
+      ...(de.cryptoPrivateSaleGains > 0
+        ? [`Kurzfristige Krypto-Gewinne ${de.cryptoPrivateSaleGains.toLocaleString('de-DE', { maximumFractionDigits: 2 })} € nicht enthalten (§ 23 EStG, persönlicher Steuersatz; ${de.cryptoFreigrenzeExceeded ? 'Freigrenze 1.000 € überschritten, voll steuerpflichtig' : 'unter der Freigrenze von 1.000 € steuerfrei'})`]
+        : [])
     ]
   };
 }

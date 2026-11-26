@@ -89,10 +89,10 @@ describe('Wissensartikel (topicsData + topics/*.js)', () => {
     });
   }
 
-  it('alle 25 Topic-SVGs besitzen Barrierefreiheits-Tags (title, desc, aria-labelledby) (M17)', () => {
+  it('alle Topic-SVGs (mindestens 37) besitzen Barrierefreiheits-Tags (title, desc, aria-labelledby) (M17)', () => {
     const topicsSvgDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../assets/topics');
     const svgFiles = fs.readdirSync(topicsSvgDir).filter((f) => f.endsWith('.svg'));
-    expect(svgFiles.length).toBe(25);
+    expect(svgFiles.length).toBeGreaterThanOrEqual(37);
     for (const f of svgFiles) {
       const content = fs.readFileSync(path.join(topicsSvgDir, f), 'utf8');
       expect(content, `${f} muss title besitzen`).toContain('<title id="t">');

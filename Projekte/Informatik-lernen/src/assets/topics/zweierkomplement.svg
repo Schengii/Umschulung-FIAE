@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 260" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Zweierkomplement bei 4 Bit: alle 16 Bitmuster mit vorzeichenloser und vorzeichenbehafteter Deutung</title>
+  <desc id="d">Eine Tabelle mit den 16 Bitmustern von 0000 bis 1111. Darunter steht der Wert ohne Vorzeichen von 0 bis 15 und der Wert im Zweierkomplement von 0 bis 7 und danach von minus 8 bis minus 1. Das führende Bit ist bei negativen Zahlen eins. Von 0111 (sieben) springt der Wert bei einem Überlauf auf 1000 (minus acht).</desc>
+  <rect width="820" height="260" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">4 Bit: dieselben Muster, zwei Deutungen</text>
+  <g font-size="12" text-anchor="middle" fill="#0f172a">
+    <text x="6" y="82" text-anchor="start" font-size="11" font-weight="700">Bitmuster</text>
+    <text x="6" y="140" text-anchor="start" font-size="11" font-weight="700">ohne Vorzeichen</text>
+    <text x="6" y="198" text-anchor="start" font-size="11" font-weight="700">Zweierkomplement</text>
+  </g>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="112" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="134" y="82">0000</text>
+    <rect x="156" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="178" y="82">0001</text>
+    <rect x="200" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="222" y="82">0010</text>
+    <rect x="244" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="266" y="82">0011</text>
+    <rect x="288" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="310" y="82">0100</text>
+    <rect x="332" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="354" y="82">0101</text>
+    <rect x="376" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="398" y="82">0110</text>
+    <rect x="420" y="60" width="44" height="34" fill="#e0e7ff" stroke="#4338ca"/><text x="442" y="82">0111</text>
+    <rect x="464" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="486" y="82">1000</text>
+    <rect x="508" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="530" y="82">1001</text>
+    <rect x="552" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="574" y="82">1010</text>
+    <rect x="596" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="618" y="82">1011</text>
+    <rect x="640" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="662" y="82">1100</text>
+    <rect x="684" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="706" y="82">1101</text>
+    <rect x="728" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="750" y="82">1110</text>
+    <rect x="772" y="60" width="44" height="34" fill="#fce7f3" stroke="#be185d"/><text x="794" y="82">1111</text>
+  </g>
+  <g font-size="14" text-anchor="middle" fill="#0f172a">
+    <text x="134" y="140">0</text><text x="178" y="140">1</text><text x="222" y="140">2</text><text x="266" y="140">3</text>
+    <text x="310" y="140">4</text><text x="354" y="140">5</text><text x="398" y="140">6</text><text x="442" y="140">7</text>
+    <text x="486" y="140">8</text><text x="530" y="140">9</text><text x="574" y="140">10</text><text x="618" y="140">11</text>
+    <text x="662" y="140">12</text><text x="706" y="140">13</text><text x="750" y="140">14</text><text x="794" y="140">15</text>
+  </g>
+  <g font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <text x="134" y="198">0</text><text x="178" y="198">1</text><text x="222" y="198">2</text><text x="266" y="198">3</text>
+    <text x="310" y="198">4</text><text x="354" y="198">5</text><text x="398" y="198">6</text><text x="442" y="198">7</text>
+    <text x="486" y="198" fill="#be185d">-8</text><text x="530" y="198" fill="#be185d">-7</text><text x="574" y="198" fill="#be185d">-6</text><text x="618" y="198" fill="#be185d">-5</text>
+    <text x="662" y="198" fill="#be185d">-4</text><text x="706" y="198" fill="#be185d">-3</text><text x="750" y="198" fill="#be185d">-2</text><text x="794" y="198" fill="#be185d">-1</text>
+  </g>
+  <path d="M442 214 C 442 244, 486 244, 486 214" stroke="#475569" stroke-width="2" fill="none"/>
+  <polygon points="486,214 480,224 492,224" fill="#475569"/>
+  <text x="464" y="254" text-anchor="middle" font-size="12" fill="#475569">Überlauf: 7 + 1 ergibt -8</text>
+</svg>

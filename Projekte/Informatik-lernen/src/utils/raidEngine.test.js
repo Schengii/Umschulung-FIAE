@@ -51,3 +51,24 @@ describe('raidEngine (IHK Storage & RAID Rechner)', () => {
     expect(hasParityBlock).toBe(true);
   });
 });
+
+describe('raidEngine – Golden-Werte (Lehrbuchformeln)', () => {
+  it('RAID 0: volle Kapazität, kein Ausfall erlaubt', () => {
+    const res = calculateRaidStorage({ raidLevel: 0, diskCount: 4, diskSizeTB: 4 });
+    expect(res.usableCapacityTB).toBe(16);
+    expect(res.maxFailedDisks).toBe(0);
+    expect(res.efficiencyPercent).toBe(100);
+  });
+
+  it('RAID 1 mit 3 Platten: Kapazität einer Platte, 2 Ausfälle tolerierbar', () => {
+    const res = calculateRaidStorage({ raidLevel: 1, diskCount: 3, diskSizeTB: 2 });
+    expect(res.usableCapacityTB).toBe(2);
+    expect(res.maxFailedDisks).toBe(2);
+  });
+
+  it('RAID 5 Mindestanzahl: Mit zu wenigen Platten wird auf das Minimum angehoben', () => {
+    const res = calculateRaidStorage({ raidLevel: 5, diskCount: 1, diskSizeTB: 4 });
+    expect(res.rawCapacityTB).toBe(12); // Minimum 3 Platten
+    expect(res.usableCapacityTB).toBe(8);
+  });
+});

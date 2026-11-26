@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { DRILL_QUESTIONS } from './drillQuestions';
+import { DRILL_QUESTIONS, DRILL_LAB_BY_QUESTION_ID } from './drillQuestions';
+import { LAB_MODULES } from './labModulesData';
 import { EXAM_QUESTIONS } from './examData';
 
 describe('DRILL_QUESTIONS', () => {
@@ -22,5 +23,17 @@ describe('DRILL_QUESTIONS', () => {
       expect(Number.isInteger(q.correct) && q.correct >= 0 && q.correct < q.options.length, `${q.id}: correct`).toBe(true);
       expect(q.explanation?.length, `${q.id}: explanation`).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('DRILL_LAB_BY_QUESTION_ID', () => {
+  it('ordnet jede Drill-Frage einem existierenden Lab zu', () => {
+    const labIds = new Set(LAB_MODULES.map((m) => m.id));
+    for (const q of DRILL_QUESTIONS) {
+      const lab = DRILL_LAB_BY_QUESTION_ID[q.id];
+      expect(lab, `${q.id}: Lab`).toBeTruthy();
+      expect(labIds.has(lab), `${q.id}: Lab-ID ${lab} fehlt in LAB_MODULES`).toBe(true);
+    }
+    expect(Object.keys(DRILL_LAB_BY_QUESTION_ID)).toHaveLength(DRILL_QUESTIONS.length);
   });
 });

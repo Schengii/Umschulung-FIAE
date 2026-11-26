@@ -1,5 +1,6 @@
 import React from 'react';
 import { onActivationKey } from '../Shared/keyActivation';
+import { prefetchLab } from '../../data/labRegistry';
 
 export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 'rgba(99, 102, 241, 0.15)', badgeColor = 'var(--accent-primary)' }) {
   return (
@@ -40,7 +41,8 @@ export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 
               justifyContent: 'space-between',
               gap: '12px'
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-tertiary)'; }}
+            onFocus={() => prefetchLab(item.id)}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-tertiary)'; prefetchLab(item.id); }}
             onMouseLeave={(e) => { e.currentTarget.style.background = isActive ? 'rgba(99, 102, 241, 0.14)' : 'transparent'; }}
           >
             <div style={{ flex: 1 }}>

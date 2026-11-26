@@ -48,7 +48,7 @@ export function checkPriceAlerts(
   holdings: Holding[]
 ): { updatedAlerts: PriceAlert[]; newlyTriggered: PriceAlert[] } {
   const holdingsMap = new Map<string, Holding>();
-  holdings.forEach(h => holdingsMap.set(h.ticker.toUpperCase(), h));
+  holdings.forEach(h => { holdingsMap.set(h.ticker.toUpperCase(), h); });
 
   const newlyTriggered: PriceAlert[] = [];
 

@@ -59,3 +59,35 @@ describe('vlsmEngine (IHK Subnetting & VLSM Planer)', () => {
     expect(res.isOverflow).toBe(true);
   });
 });
+
+describe('vlsmEngine – Golden-Werte (klassische IHK-Aufgabe, von Hand gerechnet)', () => {
+  it('192.168.10.0/24 mit 100/50/25/10 Hosts: /25, /26, /27, /28 lückenlos hintereinander', () => {
+    const res = calculateVlsm({
+      baseIp: '192.168.10.0',
+      basePrefix: 24,
+      subnets: [
+        { id: 'a', name: 'Klein', requiredHosts: 10 },
+        { id: 'b', name: 'Groß', requiredHosts: 100 },
+        { id: 'c', name: 'Mittel', requiredHosts: 50 },
+        { id: 'd', name: 'Büro', requiredHosts: 25 }
+      ]
+    });
+    const row = res.subnets.map((s) => [s.prefix, s.networkAddress, s.broadcastAddress, s.subnetMask]);
+    expect(row).toEqual([
+      ['/25', '192.168.10.0', '192.168.10.127', '255.255.255.128'],
+      ['/26', '192.168.10.128', '192.168.10.191', '255.255.255.192'],
+      ['/27', '192.168.10.192', '192.168.10.223', '255.255.255.224'],
+      ['/28', '192.168.10.224', '192.168.10.239', '255.255.255.240']
+    ]);
+    expect(res.totalAllocatedIps).toBe(128 + 64 + 32 + 16);
+    expect(res.freeIpsRemaining).toBe(16);
+    expect(res.isOverflow).toBe(false);
+  });
+
+  it('Grenzfälle der Hostzahl: 30 Hosts passen in /27, 31 Hosts brauchen /26, 62 → /26, 63 → /25', () => {
+    expect(getRequiredHostBits(30)).toBe(5);
+    expect(getRequiredHostBits(31)).toBe(6);
+    expect(getRequiredHostBits(62)).toBe(6);
+    expect(getRequiredHostBits(63)).toBe(7);
+  });
+});
