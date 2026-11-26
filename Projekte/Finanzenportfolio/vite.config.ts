@@ -1,10 +1,20 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import { CSP_META } from './csp.ts'
+
+// CSP als <meta> nur im Produktions-Build (Dev-Server/HMR braucht Inline-Skripte)
+const cspMetaPlugin = (): Plugin => ({
+  name: 'inject-csp-meta',
+  apply: 'build',
+  transformIndexHtml: () => [
+    { tag: 'meta', attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP_META }, injectTo: 'head-prepend' }
+  ]
+})
 
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
-  plugins: [react()],
+  plugins: [react(), cspMetaPlugin()],
   build: {
     rollupOptions: {
       output: {

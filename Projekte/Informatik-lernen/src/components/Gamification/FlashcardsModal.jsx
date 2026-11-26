@@ -206,6 +206,11 @@ export default function FlashcardsModal({ isOpen, onClose, onRewardXP }) {
               {currentCard.back}
             </p>
           )}
+          {isFlipped && currentCard.more && (
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55', margin: '14px 0 0', textAlign: 'left', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+              <strong style={{ color: 'var(--accent-teal)' }}>🔬 Vertiefung:</strong> {currentCard.more}
+            </p>
+          )}
         </div>
 
         {/* Rating Buttons */}

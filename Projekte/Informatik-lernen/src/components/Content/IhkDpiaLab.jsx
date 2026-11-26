@@ -10,6 +10,8 @@ import {
 import { useStore } from '../../store/useStore';
 import { triggerHaptic } from '../../utils/haptics';
 import { onActivationKey } from '../Shared/keyActivation';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { DPIA_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function IhkDpiaLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -351,6 +353,7 @@ export default function IhkDpiaLab({ onRewardXP }) {
           </pre>
         </div>
       )}
+      <LabDrillSection title="IHK-Drill: Datenschutz-Folgenabschätzung" questions={DPIA_DRILL_QUESTIONS} />
     </div>
   );
 }

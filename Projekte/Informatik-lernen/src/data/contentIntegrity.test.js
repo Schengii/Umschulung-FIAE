@@ -37,6 +37,13 @@ describe('Prüfungsfragen (examData)', () => {
     }
   });
 
+  it('Quellenangaben sind gültige https-Links mit Beschriftung', () => {
+    for (const q of EXAM_QUESTIONS.filter((x) => x.source)) {
+      expect(q.source.url, `Exam #${q.id}`).toMatch(/^https:\/\//);
+      expect(q.source.label?.length, `Exam #${q.id}`).toBeGreaterThan(0);
+    }
+  });
+
   it('Prüfungsmodi haben gültige Dauer und Bestehensgrenze', () => {
     for (const m of IHK_EXAM_MODES) {
       expect(m.durationMinutes, m.id).toBeGreaterThan(0);

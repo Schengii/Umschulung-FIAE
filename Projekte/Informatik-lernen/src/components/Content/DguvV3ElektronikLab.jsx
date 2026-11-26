@@ -10,6 +10,8 @@ import {
   evaluateRcdProtection,
   calculateUpsBatteryRuntime
 } from '../../utils/dguvV3ElektronikEngine';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { DGUV_V3_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function DguvV3ElektronikLab({ onAwardXP }) {
   const [selectedClass, setSelectedClass] = useState('class_1');
@@ -317,6 +319,7 @@ export default function DguvV3ElektronikLab({ onAwardXP }) {
           )}
         </div>
       </div>
+      <LabDrillSection title="IHK-Drill: DGUV V3 & VDE 0701-0702" questions={DGUV_V3_DRILL_QUESTIONS} />
     </div>
   );
 }

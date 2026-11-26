@@ -415,6 +415,14 @@ export default function ExamSimulator({ onCompleteExam, onRecordResults }) {
               {isSubmitted && q.explanation && (
                 <div style={{ marginTop: '16px', padding: '12px 16px', background: 'var(--bg-secondary)', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
                   <strong>Erklärung & IHK-Musterlösung:</strong> {q.explanation}
+                  {q.source?.url && /^https:\/\//.test(q.source.url) && (
+                    <div style={{ marginTop: '8px', fontSize: '0.8rem' }}>
+                      Quelle:{' '}
+                      <a href={q.source.url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)' }}>
+                        {q.source.label || q.source.url}
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

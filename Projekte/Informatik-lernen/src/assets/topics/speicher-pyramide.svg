@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Speicherpyramide: Je schneller der Speicher, desto kleiner und teurer ist er</title>
+  <desc id="d">Eine Pyramide aus fünf Stufen. Ganz oben die Register in der CPU, darunter der Cache, dann der Arbeitsspeicher (RAM), dann SSD und ganz unten Festplatte oder Cloud. Nach oben werden die Stufen schneller, kleiner und teurer, nach unten langsamer, größer und günstiger. Die oberen Stufen sind flüchtig, SSD, Festplatte und Cloud speichern dauerhaft.</desc>
+  <rect width="820" height="360" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Speicher: schnell und klein oben, langsam und groß unten</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <polygon points="410,46 450,86 370,86" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="410" y="80" font-size="11">Register</text>
+    <polygon points="370,90 450,90 482,132 338,132" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="116">Cache</text>
+    <polygon points="338,136 482,136 514,178 306,178" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="410" y="162">Arbeitsspeicher (RAM)</text>
+    <polygon points="306,182 514,182 546,224 274,224" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="410" y="208">SSD</text>
+    <polygon points="274,228 546,228 578,270 242,270" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="410" y="254">Festplatte, USB-Stick, Cloud</text>
+  </g>
+  <g font-size="12" fill="#0f172a">
+    <text x="600" y="76">Nanosekunden, Kilo- bis Megabyte</text>
+    <text x="600" y="120">Nanosekunden, Megabyte</text>
+    <text x="600" y="166">schnell, Gigabyte (flüchtig)</text>
+    <text x="600" y="212">Gigabyte bis Terabyte (dauerhaft)</text>
+    <text x="600" y="258">am langsamsten, bis viele Terabyte</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none"><path d="M70 70 V270"/></g>
+  <g fill="#475569"><polygon points="70,70 64,82 76,82"/><polygon points="70,270 64,258 76,258"/></g>
+  <text x="62" y="170" font-size="12" fill="#475569" text-anchor="middle" transform="rotate(-90 62 170)">schneller und teurer je Byte</text>
+  <text x="410" y="320" text-anchor="middle" font-size="13" fill="#475569">Beim Ausschalten verlieren Register, Cache und RAM ihren Inhalt, SSD, Festplatte und Cloud nicht.</text>
+</svg>

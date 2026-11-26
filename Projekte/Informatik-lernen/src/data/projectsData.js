@@ -1,6 +1,9 @@
-export const MICRO_PROJECTS = [
+import { MICRO_PROJECTS_EXTRA } from './kurseWissenExtra';
+const BASE_MICRO_PROJECTS = [
   {
     id: 'proj_react_todo',
+    icon: '✅',
+    estimatedTime: '2 Stunden',
     title: '1. Interaktive ToDo-App mit React & LocalStorage',
     category: 'Frontend Webdev',
     difficulty: 'Einsteiger',
@@ -40,6 +43,8 @@ export default function TodoApp() {
   },
   {
     id: 'proj_py_scraper',
+    icon: '🕷️',
+    estimatedTime: '2-3 Stunden',
     title: '2. Python Web Scraper für IT-News',
     category: 'Backend & Automation',
     difficulty: 'Azubi / Junior',
@@ -65,6 +70,8 @@ if response.status_code == 200:
   },
   {
     id: 'proj_docker_api',
+    icon: '🐳',
+    estimatedTime: '3-4 Stunden',
     title: '3. Dockerisierte Node.js Express REST API',
     category: 'DevOps & Backend',
     difficulty: 'Senior / Expert',
@@ -90,3 +97,5 @@ EXPOSE 3000
 CMD ["node", "app.js"]`
   }
 ];
+
+export const MICRO_PROJECTS = [...BASE_MICRO_PROJECTS, ...MICRO_PROJECTS_EXTRA];

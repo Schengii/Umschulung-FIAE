@@ -163,7 +163,7 @@ window.projectsData = [
     ],
     "stars": 0,
     "githubUrl": "https://github.com/Schengii/Umschulung-FIAE/tree/main/Projekte/EcoChef",
-    "updatedAt": "2026-11-23T13:49:09.887Z",
+    "updatedAt": "2026-11-23T19:08:22.000Z",
     "images": [
       "assets/images/ecochef_showcase.webp",
       "assets/images/ai_chat_showcase.webp"

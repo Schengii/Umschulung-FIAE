@@ -4,8 +4,13 @@ import { BookOpen, Plus, Trash2, Tag, Search, Download, Sparkles, Edit3, Eye, Da
 import { useStore } from '../../store/useStore';
 import { saveItem, deleteItem } from '../../utils/indexedDbStorage';
 import { onActivationKey } from '../Shared/keyActivation';
+import { NOTEBOOK_TEMPLATES } from '../../data/notebookTemplates';
+import MarkdownView from '../Shared/MarkdownView';
 
 const STORAGE_KEY = 'it_devgame_personal_notes';
+
+/** Aktuelle Zeit als Anzeige-Text (außerhalb der Komponente, damit der Render rein bleibt). */
+const nowLabel = () => new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' });
 
 const INITIAL_SAMPLE_NOTES = [
   {
@@ -111,6 +116,32 @@ export default function PersonalNotebookLab() {
     }
   };
 
+  const handleAddTemplate = (template) => {
+    const id = `tpl_${template.id}`;
+    if (notes.some((n) => n.id === id)) {
+      setSelectedNoteId(id);
+      setSearchQuery('');
+      setSelectedTag('ALL');
+      return;
+    }
+    const newNote = {
+      id,
+      title: template.title,
+      tags: [...template.tags],
+      content: template.content,
+      updatedAt: nowLabel()
+    };
+    setNotes([newNote, ...notes]);
+    setSelectedNoteId(id);
+    setSearchQuery('');
+    setSelectedTag('ALL');
+    saveItem('notes', newNote).catch(() => {});
+    if (!noteCreatedXpClaimed) {
+      setNoteCreatedXpClaimed(true);
+      awardXP(10, 'note_created');
+    }
+  };
+
   const handleUpdateCurrentNote = (field, value) => {
     setNotes(notes.map(n => {
       if (n.id === selectedNoteId) {
@@ -175,6 +206,33 @@ export default function PersonalNotebookLab() {
         </div>
       </div>
 
+      {/* Spickzettel-Vorlagen */}
+      <details className="glass-panel" style={{ padding: '16px 20px', borderRadius: 'var(--radius-lg)' }}>
+        <summary style={{ cursor: 'pointer', fontWeight: 800, color: 'var(--text-main)' }}>
+          📚 Spickzettel-Vorlagen ({NOTEBOOK_TEMPLATES.length}) – mit einem Klick als eigene Notiz hinzufügen
+        </summary>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '10px', marginTop: '14px' }}>
+          {NOTEBOOK_TEMPLATES.map((tpl) => {
+            const added = notes.some((n) => n.id === `tpl_${tpl.id}`);
+            return (
+              <div key={tpl.id} style={{ padding: '12px 14px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>{tpl.title}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>{tpl.description}</div>
+                <button
+                  type="button"
+                  onClick={() => handleAddTemplate(tpl)}
+                  className={`btn ${added ? 'btn-ghost' : 'btn-secondary'}`}
+                  style={{ padding: '6px 12px', fontSize: '0.82rem' }}
+                  aria-label={`${added ? 'Öffnen' : 'Hinzufügen'}: ${tpl.title}`}
+                >
+                  {added ? 'Öffnen' : 'Hinzufügen'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </details>
+
       {/* 2-Pane: Notes Sidebar + Markdown Editor/Preview */}
       <div className="grid-responsive" style={{ gridTemplateColumns: 'minmax(min(300px, 100%), 1fr) minmax(440px, 2fr)', gap: '20px' }}>
         {/* Notes Sidebar */}
@@ -186,6 +244,7 @@ export default function PersonalNotebookLab() {
               <input
                 type="text"
                 placeholder="Notizen durchsuchen..."
+                aria-label="Notizen durchsuchen"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{ flex: 1, background: 'transparent', border: 'none', color: 'var(--text-main)', outline: 'none', fontSize: '0.88rem' }}
@@ -292,6 +351,7 @@ export default function PersonalNotebookLab() {
               <input
                 type="text"
                 placeholder="Komma-getrennte Tags (z.B. IHK, SQL, Docker)..."
+                aria-label="Tags der Notiz, durch Komma getrennt"
                 value={selectedNote.tags?.join(', ') || ''}
                 onChange={(e) => {
                   const tagsArr = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
@@ -320,11 +380,10 @@ export default function PersonalNotebookLab() {
                   color: 'var(--text-main)',
                   lineHeight: '1.6',
                   fontSize: '0.92rem',
-                  whiteSpace: 'pre-wrap',
                   fontFamily: 'system-ui, sans-serif'
                 }}
               >
-                {selectedNote.content}
+                <MarkdownView markdown={selectedNote.content} />
               </div>
             ) : (
               <textarea

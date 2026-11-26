@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Ablaufplan eines kleinen Programms: Punkte dreimal um 10 erhöhen und prüfen, ob mehr als 25 erreicht sind</title>
+  <desc id="d">Ein Ablaufplan von oben nach unten: Start, punkte gleich 0 setzen, Zähler gleich 0 setzen. Dann eine Raute: Zähler kleiner als 3? Bei ja wird punkte um 10 und der Zähler um 1 erhöht und der Ablauf kehrt zur Raute zurück. Bei nein folgt eine zweite Raute: punkte größer als 25? Bei ja Ausgabe Gewonnen, bei nein Ausgabe Leider nicht. Danach Ende. Nach drei Durchläufen ist punkte gleich 30.</desc>
+  <rect width="820" height="400" fill="#ffffff"/>
+  <text x="410" y="24" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">So denkt ein Programm: Schritt für Schritt</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a" stroke-width="2">
+    <rect x="320" y="38" width="100" height="30" rx="15" fill="#f1f5f9" stroke="#334155"/><text x="370" y="58">Start</text>
+    <rect x="290" y="86" width="160" height="34" rx="4" fill="#e0e7ff" stroke="#4338ca"/><text x="370" y="108">punkte = 0, zaehler = 0</text>
+    <polygon points="370,138 450,168 370,198 290,168" fill="#fef3c7" stroke="#b45309"/><text x="370" y="172">zaehler &lt; 3 ?</text>
+    <rect x="500" y="148" width="180" height="40" rx="4" fill="#e0e7ff" stroke="#4338ca"/><text x="590" y="166" font-size="12">punkte = punkte + 10</text><text x="590" y="181" font-size="12">zaehler = zaehler + 1</text>
+    <polygon points="370,226 450,256 370,286 290,256" fill="#fef3c7" stroke="#b45309"/><text x="370" y="260">punkte &gt; 25 ?</text>
+    <rect x="130" y="304" width="150" height="34" rx="4" fill="#ccfbf1" stroke="#0f766e"/><text x="205" y="326">Ausgabe: Gewonnen!</text>
+    <rect x="470" y="304" width="170" height="34" rx="4" fill="#fce7f3" stroke="#be185d"/><text x="555" y="326">Ausgabe: Leider nicht</text>
+    <rect x="320" y="360" width="100" height="30" rx="15" fill="#f1f5f9" stroke="#334155"/><text x="370" y="380">Ende</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M370 68 V86"/><path d="M370 120 V138"/><path d="M450 168 H500"/><path d="M590 148 V126 H370"/>
+    <path d="M370 198 V226"/><path d="M290 256 H205 V304"/><path d="M450 256 H555 V304"/><path d="M205 338 V350 H370 V360"/><path d="M555 338 V350 H370"/>
+  </g>
+  <g fill="#475569"><polygon points="370,86 364,76 376,76"/><polygon points="370,138 364,128 376,128"/><polygon points="500,168 490,162 490,174"/><polygon points="370,226 364,216 376,216"/><polygon points="205,304 199,294 211,294"/><polygon points="555,304 549,294 561,294"/><polygon points="370,360 364,350 376,350"/></g>
+  <g font-size="12" font-weight="700" fill="#be185d" text-anchor="middle"><text x="475" y="160">ja</text><text x="388" y="214">nein</text><text x="268" y="248">ja</text><text x="470" y="248">nein</text></g>
+  <text x="700" y="120" font-size="12" fill="#475569" text-anchor="middle">Nach 3 Runden:</text><text x="700" y="138" font-size="12" fill="#475569" text-anchor="middle">punkte = 30</text>
+</svg>

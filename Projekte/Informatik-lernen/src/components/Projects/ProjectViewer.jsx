@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { MICRO_PROJECTS } from '../../data/projectsData';
 import { FolderGit2, CheckCircle2, Code } from 'lucide-react';
 import { onActivationKey } from '../Shared/keyActivation';
+import DeepDive from '../Shared/DeepDive';
+import { PROJECT_DEEPDIVES } from '../../data/vertiefungDataPraxis';
 
 export default function ProjectViewer({ onCompleteProject }) {
   const [activeProjId, setActiveProjId] = useState(MICRO_PROJECTS[0].id);
@@ -109,11 +111,13 @@ export default function ProjectViewer({ onCompleteProject }) {
               </div>
             )}
 
+            <DeepDive deepDive={PROJECT_DEEPDIVES[activeProj.id]} />
+
             <button
               className="btn btn-success"
               onClick={() => handleFinishProject(activeProj.id)}
               disabled={completedProjects.includes(activeProj.id)}
-              style={{ opacity: completedProjects.includes(activeProj.id) ? 0.7 : 1 }}
+              style={{ marginTop: '24px', opacity: completedProjects.includes(activeProj.id) ? 0.7 : 1 }}
             >
               <CheckCircle2 size={18} /> {completedProjects.includes(activeProj.id) ? 'Projekt Erfolgreich Absolviert!' : `Projekt Abschließen (+${activeProj.xpReward} XP)`}
             </button>

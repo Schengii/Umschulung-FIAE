@@ -1,3 +1,4 @@
+import { yahooSearchProxyUrl } from './marketProxy';
 import type { AssetCategory, Sector, Region } from '../types';
 
 export interface IsinMetadata {
@@ -136,15 +137,10 @@ export async function fetchOnlineIsinMetadata(
     return localMatch;
   }
 
-  // 3. Online lookup via Yahoo / CORS proxy
+  // 3. Online lookup via Yahoo (eigener Proxy)
   try {
-    const queryUrl = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(cleanId)}&quotesCount=1&newsCount=0`;
-    let response = await fetch(queryUrl).catch(() => null);
-
-    if (!response || !response.ok) {
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(queryUrl)}`;
-      response = await fetch(proxyUrl).catch(() => null);
-    }
+    const searchUrl = yahooSearchProxyUrl(cleanId);
+    const response = searchUrl ? await fetch(searchUrl).catch(() => null) : null;
 
     if (response && response.ok) {
       const json = await response.json();

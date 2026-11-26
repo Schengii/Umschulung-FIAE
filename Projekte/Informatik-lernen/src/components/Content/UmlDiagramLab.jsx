@@ -16,7 +16,7 @@ import {
 import { useStore } from '../../store/useStore';
 
 export default function UmlDiagramLab({ onRewardXP }) {
-  const { awardXP } = useStore();
+  const { awardXP, recordMistakeResults } = useStore();
   const [activeTab, setActiveTab] = useState('sequence');
   const [participants] = useState(DEFAULT_SEQUENCE_PARTICIPANTS);
   const [messages] = useState(DEFAULT_SEQUENCE_MESSAGES);
@@ -62,6 +62,8 @@ export default function UmlDiagramLab({ onRewardXP }) {
       ...prev,
       [qId]: { selected: optionIdx, isCorrect }
     }));
+    // Falsche Antworten kommen ins Fehlerjournal (Wiederholung über das Dashboard)
+    recordMistakeResults?.([{ id: qId, correct: isCorrect }]);
     if (isCorrect) {
       if (onRewardXP) onRewardXP(20);
       else awardXP(20, 'uml_master');

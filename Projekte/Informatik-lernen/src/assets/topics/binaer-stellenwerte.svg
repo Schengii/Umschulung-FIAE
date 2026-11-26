@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 280" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Stellenwerte eines Bytes: Der Binärcode 01000001 ergibt die Zahl 65 und den Buchstaben A</title>
+  <desc id="d">Eine Reihe von acht Feldern mit den Stellenwerten 128, 64, 32, 16, 8, 4, 2 und 1. Darunter stehen die Bits 0, 1, 0, 0, 0, 0, 0, 1. Nur die Stellenwerte 64 und 1 sind eingeschaltet. Die Summe 64 plus 1 ergibt 65, im ASCII-Code der Buchstabe A.</desc>
+  <rect width="820" height="280" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Ein Byte hat 8 Stellen, jede zählt doppelt so viel wie die rechte</text>
+  <g font-size="13" text-anchor="middle" fill="#475569">
+    <text x="85" y="76">2 hoch 7</text><text x="175" y="76">2 hoch 6</text><text x="265" y="76">2 hoch 5</text><text x="355" y="76">2 hoch 4</text><text x="445" y="76">2 hoch 3</text><text x="535" y="76">2 hoch 2</text><text x="625" y="76">2 hoch 1</text><text x="715" y="76">2 hoch 0</text>
+  </g>
+  <g font-size="20" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="40" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="85" y="117">128</text>
+    <rect x="130" y="86" width="90" height="46" fill="#e0e7ff" stroke="#334155" stroke-width="2"/><text x="175" y="117">64</text>
+    <rect x="220" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="265" y="117">32</text>
+    <rect x="310" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="355" y="117">16</text>
+    <rect x="400" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="445" y="117">8</text>
+    <rect x="490" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="535" y="117">4</text>
+    <rect x="580" y="86" width="90" height="46" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="625" y="117">2</text>
+    <rect x="670" y="86" width="90" height="46" fill="#e0e7ff" stroke="#334155" stroke-width="2"/><text x="715" y="117">1</text>
+  </g>
+  <g font-size="30" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="40" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="85" y="179" fill="#94a3b8">0</text>
+    <rect x="130" y="140" width="90" height="56" fill="#fef3c7" stroke="#b45309" stroke-width="3"/><text x="175" y="179">1</text>
+    <rect x="220" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="265" y="179" fill="#94a3b8">0</text>
+    <rect x="310" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="355" y="179" fill="#94a3b8">0</text>
+    <rect x="400" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="445" y="179" fill="#94a3b8">0</text>
+    <rect x="490" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="535" y="179" fill="#94a3b8">0</text>
+    <rect x="580" y="140" width="90" height="56" fill="#ffffff" stroke="#334155" stroke-width="2"/><text x="625" y="179" fill="#94a3b8">0</text>
+    <rect x="670" y="140" width="90" height="56" fill="#fef3c7" stroke="#b45309" stroke-width="3"/><text x="715" y="179">1</text>
+  </g>
+  <text x="410" y="232" text-anchor="middle" font-size="17" fill="#0f172a">Eingeschaltete Stellen addieren: 64 + 1 = <tspan font-weight="700">65</tspan></text>
+  <text x="410" y="260" text-anchor="middle" font-size="15" fill="#475569">Im ASCII-Code ist 65 der Buchstabe A</text>
+</svg>

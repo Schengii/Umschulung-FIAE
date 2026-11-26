@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Lock, KeyRound, AlertCircle, ShieldAlert, Fingerprint, Sparkles } from 'lucide-react';
 import { decryptData } from '../services/cryptoStorage';
 import { hasRegisteredPasskey, authenticateWithPasskey } from '../services/webAuthnService';
+import { hasRecoveryKey, recoverPinWithKey } from '../services/recoveryKey';
 import type { Portfolio } from '../types';
 
 interface VaultUnlockModalProps {
   isOpen: boolean;
-  onUnlocked: (portfolios: Portfolio[]) => void;
+  onUnlocked: (portfolios: Portfolio[], pin: string) => void | Promise<void>;
   onResetVault: () => void;
 }
 
@@ -19,6 +20,8 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [passkeyAvailable, setPasskeyAvailable] = useState(false);
+  const [showRecovery, setShowRecovery] = useState(false);
+  const [recoveryInput, setRecoveryInput] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -39,7 +42,7 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
     const parsedPortfolios: Portfolio[] = JSON.parse(decryptedJson);
 
     if (Array.isArray(parsedPortfolios)) {
-      onUnlocked(parsedPortfolios);
+      await onUnlocked(parsedPortfolios, pinToUse);
     } else {
       throw new Error('Ungültiges Datenformat');
     }
@@ -56,6 +59,21 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
       await performDecryption(pin);
     } catch {
       setErrorMsg('Falsches Master-Passwort / PIN. Zugriff verweigert.');
+    } finally {
+      setIsDecrypting(false);
+    }
+  };
+
+  const handleRecoveryUnlock = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!recoveryInput.trim()) return;
+    setIsDecrypting(true);
+    setErrorMsg(null);
+    try {
+      const recoveredPin = await recoverPinWithKey(recoveryInput);
+      await performDecryption(recoveredPin);
+    } catch {
+      setErrorMsg('Recovery-Key ungültig. Bitte Eingabe prüfen.');
     } finally {
       setIsDecrypting(false);
     }
@@ -140,6 +158,38 @@ export const VaultUnlockModal: React.FC<VaultUnlockModalProps> = ({
             {isDecrypting ? 'Entschlüssele...' : 'Tresor mit PIN entsperren'}
           </button>
         </form>
+
+        {hasRecoveryKey() && (
+          <div className="text-center space-y-3">
+            <button
+              type="button"
+              onClick={() => setShowRecovery(!showRecovery)}
+              className="text-slate-400 hover:text-emerald-400 text-xs transition-colors"
+            >
+              PIN vergessen? Mit Recovery-Key entsperren
+            </button>
+            {showRecovery && (
+              <form onSubmit={handleRecoveryUnlock} className="space-y-2">
+                <input
+                  type="text"
+                  value={recoveryInput}
+                  onChange={(e) => setRecoveryInput(e.target.value)}
+                  placeholder="XXXX-XXXX-XXXX-..."
+                  autoComplete="off"
+                  spellCheck={false}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
+                />
+                <button
+                  type="submit"
+                  disabled={isDecrypting || !recoveryInput.trim()}
+                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-100 font-bold rounded-xl text-xs"
+                >
+                  Mit Recovery-Key entsperren
+                </button>
+              </form>
+            )}
+          </div>
+        )}
 
         <div className="pt-4 border-t border-slate-800/80 text-center">
           <button

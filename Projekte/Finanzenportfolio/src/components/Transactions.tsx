@@ -77,7 +77,7 @@ export const Transactions: React.FC<TransactionsProps> = ({
 
   const handleBatchDelete = () => {
     if (confirm(`${selectedIds.length} ausgewählte Transaktionen wirklich löschen?`)) {
-      selectedIds.forEach(id => onDeleteTransaction(id));
+      selectedIds.forEach(id => { onDeleteTransaction(id); });
       setSelectedIds([]);
     }
   };

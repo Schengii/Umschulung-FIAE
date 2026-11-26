@@ -55,6 +55,36 @@ export const TOPICS = [
     summary: 'Wie aus Zeichen Bytes werden: ASCII, ISO-8859-1, Unicode und UTF-8 im Detail, Mojibake erkennen sowie die Austauschformate CSV, JSON, XML, YAML und Markdown.'
   },
   {
+    id: 'boolesche_logik_zahlendarstellung',
+    title: 'Boolesche Logik & Zahlendarstellung: Gatter, Zweierkomplement, Bitoperationen',
+    category: 'Grundlagen',
+    difficultyLevel: 'Einsteiger',
+    targetRoles: ['anfaenger', 'azubi', 'junior', 'pro'],
+    icon: '🔢',
+    readTime: '10 Min',
+    summary: 'AND, OR, NOT, XOR, NAND und NOR mit Wahrheitstabellen, De Morgan, Halbaddierer, negative Zahlen im Zweierkomplement, Wertebereiche, Bitoperationen und Rundungsfehler bei Gleitkommazahlen.'
+  },
+  {
+    id: 'programmierlogik_pap_struktogramm',
+    title: 'Programmierlogik: Variablen, Schleifen, Pseudocode, PAP & Struktogramm',
+    category: 'Grundlagen',
+    difficultyLevel: 'Einsteiger',
+    targetRoles: ['anfaenger', 'azubi', 'junior', 'pro'],
+    icon: '🧩',
+    readTime: '11 Min',
+    summary: 'Eigenschaften eines Algorithmus, Datentypen und Operatoren, Sequenz, Verzweigung und die drei Schleifenarten, Pseudocode, Programmablaufplan und Struktogramm, Schreibtischtest sowie Syntax-, Laufzeit- und Logikfehler.'
+  },
+  {
+    id: 'web_vom_klick_zur_seite',
+    title: 'Vom Klick zur Webseite: URL, DNS, TCP, TLS und HTTP Schritt für Schritt',
+    category: 'Grundlagen',
+    difficultyLevel: 'Einsteiger',
+    targetRoles: ['anfaenger', 'azubi', 'junior', 'pro'],
+    icon: '🌍',
+    readTime: '11 Min',
+    summary: 'Aufbau einer URL, Namensauflösung per DNS und Record-Typen, TCP-Handshake, TLS-Zertifikate, HTTP-Methoden und Statuscodes, Rendering, Caching sowie Fehlersuche mit nslookup, curl und Browser-Entwicklertools.'
+  },
+  {
     id: 'subnetting_ipv4_ipv6',
     title: 'IP-Adressierung & Subnetting (IPv4 und IPv6)',
     category: 'Netzwerke',
@@ -273,6 +303,126 @@ export const TOPICS = [
     icon: '🤖',
     readTime: '10 Min',
     summary: 'KI, Machine Learning und Deep Learning abgegrenzt, Lernarten, Training mit Verlustfunktion und Gradientenabstieg, Overfitting, CNN, Transformer, LLMs, RAG und die Risikoklassen des EU AI Act.'
+  },
+  {
+    id: 'hardware_rechnerarchitektur',
+    title: 'Hardware & Rechnerarchitektur: CPU, RAM, Mainboard, Schnittstellen und Beschaffung',
+    category: 'IT-Systeme',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🖥️',
+    readTime: '14 Min',
+    summary: 'Aufbau eines PCs, Kenngrößen von CPU und RAM, Datenraten von DDR, SATA, PCIe und USB, Netzteil und Stromkosten, Auswahl und Beschaffung von Arbeitsplätzen.'
+  },
+  {
+    id: 'elektrotechnik_usv_arbeitsschutz',
+    title: 'Elektrotechnik, USV & Arbeitsschutz (DGUV V3)',
+    category: 'IT-Systeme',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '⚡',
+    readTime: '15 Min',
+    summary: 'Ohmsches Gesetz, Wirk- und Scheinleistung, USV-Bauarten und Dimensionierung, Überbrückungszeit, Schutzmaßnahmen, fünf Sicherheitsregeln, Prüfwerte nach DGUV V3 und PUE.'
+  },
+  {
+    id: 'betriebssysteme_administration',
+    title: 'Betriebssysteme & Administration: Linux, Windows, Active Directory',
+    category: 'IT-Systeme',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🐧',
+    readTime: '14 Min',
+    summary: 'Kernel, Prozesse und Dateisysteme, MBR gegen GPT, Linux-Rechte mit chmod, systemd, NTFS- und Freigaberechte, Active Directory, GPO, AGDLP, Updates, Rollout und Skripting.'
+  },
+  {
+    id: 'netzwerkdienste_technik',
+    title: 'Netzwerkdienste & -technik: DHCP, DNS, VLAN, Routing, WLAN, VPN, Firewall',
+    category: 'Netzwerke',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🛰️',
+    readTime: '14 Min',
+    summary: 'DHCP-Ablauf, DNS-Records, VLAN und Trunking, Inter-VLAN-Routing, Routing-Tabelle, NAT, WLAN-Standards, VPN, Firewall mit DMZ, strukturierte Verkabelung und Fehlersuche.'
+  },
+  {
+    id: 'it_sicherheit_betrieb',
+    title: 'IT-Sicherheit im Betrieb: Risikoanalyse, Härtung, Patch-Management, Incident Response',
+    category: 'Sicherheit & Recht',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🛡️',
+    readTime: '13 Min',
+    summary: 'Schutzbedarf und Maximumprinzip, Risikomatrix und ALE, Risikobehandlung, Systemhärtung, CVSS und Patching, Segmentierung, Logging, Incident Response, BCM und ISMS.'
+  },
+  {
+    id: 'itsm_itil_support',
+    title: 'IT-Service-Management & Support: ITIL, Incident, Problem, Change, SLA',
+    category: 'IT-Systeme',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🎧',
+    readTime: '14 Min',
+    summary: 'Incident, Service Request, Problem und Change, Priorität aus Auswirkung und Dringlichkeit, Support-Ebenen, CMDB, SLA, OLA und UC, MTBF, MTTR und Verfügbarkeit.'
+  },
+  {
+    id: 'devops_container_cicd',
+    title: 'DevOps, Container & CI/CD: Pipeline, Docker, Kubernetes, Deployment',
+    category: 'Softwareentwicklung',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🐳',
+    readTime: '15 Min',
+    summary: 'DevOps und DORA-Kennzahlen, CI, Continuous Delivery und Deployment, Pipeline-Stufen, Container und Images, Dockerfile, Kubernetes-Grundbausteine, Blue-Green und Canary, Infrastructure as Code, GitOps, Observability.'
+  },
+  {
+    id: 'softwarearchitektur_microservices',
+    title: 'Softwarearchitektur: Qualitätsmerkmale, Schichten, Monolith und Microservices, Resilienz',
+    category: 'Softwareentwicklung',
+    difficultyLevel: 'Senior / Expert',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🏗️',
+    readTime: '16 Min',
+    summary: 'ISO 25010, Kopplung und Kohäsion, SOLID, Schichten, MVC, hexagonale und ereignisgesteuerte Architektur, Monolith gegen Microservices, CAP, Saga, Circuit Breaker, Verfügbarkeit von Dienstketten, ADR.'
+  },
+  {
+    id: 'datenanalyse_statistik_ml',
+    title: 'Datenanalyse, Statistik & Machine Learning: Kennzahlen, Regression, Modellbewertung',
+    category: 'Künstliche Intelligenz',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '📊',
+    readTime: '16 Min',
+    summary: 'Mittelwert, Median, Standardabweichung, IQR und Ausreißer, Korrelation und Regression, Datenaufbereitung, überwachtes und unüberwachtes Lernen, Overfitting, Konfusionsmatrix, Präzision, Trefferquote und F1.'
+  },
+  {
+    id: 'iiot_industrie40',
+    title: 'IIoT & Industrie 4.0: Automatisierungspyramide, SPS, OPC UA, MQTT, OT-Sicherheit',
+    category: 'IT-Systeme',
+    difficultyLevel: 'Senior / Expert',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🏭',
+    readTime: '17 Min',
+    summary: 'Industrie 4.0 und CPS, Automatisierungspyramide, Sensoren und 4-20-mA-Signale, SPS-Zyklus und IEC 61131-3, Feldbus und Industrial Ethernet, MQTT und OPC UA, Edge, OEE, IT/OT-Sicherheit nach IEC 62443.'
+  },
+  {
+    id: 'beschaffung_bilanz_zahlungsverkehr',
+    title: 'Beschaffung, Bilanz & Zahlungsverkehr: Angebotsvergleich, Skonto, Buchen, Kennzahlen',
+    category: 'Projekt & Wirtschaft',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '🧾',
+    readTime: '17 Min',
+    summary: 'Beschaffungsprozess, Kaufvertrag, Mängelrüge und Verzug, Bezugskalkulation, Skonto, Nutzwertanalyse, Rechnung und E-Rechnung, Zahlungsarten, Bilanz, Buchungssätze, Abschreibung, Eigenkapitalquote und Liquidität.'
+  },
+  {
+    id: 'qualitaet_dokumentation_fachgespraech',
+    title: 'Qualität, Dokumentation & Fachgespräch: Abnahme, Projektabschluss, IHK-Projektarbeit',
+    category: 'Projekt & Wirtschaft',
+    difficultyLevel: 'Azubi / IHK',
+    targetRoles: ['azubi', 'junior', 'pro'],
+    icon: '📝',
+    readTime: '16 Min',
+    summary: 'Qualitätsmanagement, PDCA, SMART-Ziele, Abnahmeprotokoll, Übergabe, Soll-Ist-Vergleich, Lessons Learned, Dokumentationsarten, Aufbau der Projektdokumentation, Präsentation und Fachgespräch.'
   }
 ];
 

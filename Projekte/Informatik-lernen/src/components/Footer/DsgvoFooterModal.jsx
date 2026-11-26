@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useDialogA11y } from '../Shared/useDialogA11y';
+import { Link } from 'react-router-dom';
 import { Shield, FileText, ExternalLink, X, Heart, Code2, HelpCircle, GitBranch } from 'lucide-react';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -67,29 +68,29 @@ export default function DsgvoFooterModal() {
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem' }}>
               <li>
-                <a href="#dashboard" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/" className="footer-link">
                   🌱 Anfängerkurs ohne Vorwissen
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#campaign" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/campaign" className="footer-link">
                   🗺️ Story-Kampagne: Der IT-Aufstieg
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#exam" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/exam" className="footer-link">
                   🎓 IHK AP1 &amp; AP2 Prüfungssimulator
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#languages" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/languages" className="footer-link">
                   🐍 Programmiersprachen Academy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#ai_business" style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s ease' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/ai_business" className="footer-link">
                   🤖 AI &amp; Deep Learning Masterclass
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -101,29 +102,29 @@ export default function DsgvoFooterModal() {
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem' }}>
               <li>
-                <a href="#cpu_architecture_lab" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/cpu_architecture_lab" className="footer-link">
                   🔬 Von-Neumann CPU &amp; RAM Simulator
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#sql_optimizer_lab" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/sql_optimizer_lab" className="footer-link">
                   ⚡ SQL EXPLAIN Query Optimizer
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#git_graph_lab" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/git_graph_lab" className="footer-link">
                   🌿 Git Branching &amp; Rebase Graph
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#docker" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/docker" className="footer-link">
                   🐳 Docker &amp; Container Orchestrierung
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#oral_exam" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                <Link to="/oral_exam" className="footer-link">
                   🎙️ IHK Mündliches Fachgespräch (Voice)
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

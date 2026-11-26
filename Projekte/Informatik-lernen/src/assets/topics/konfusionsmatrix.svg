@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Konfusionsmatrix mit Beispielwerten und daraus berechneten Kennzahlen</title>
+  <desc id="d">Eine Vier-Felder-Tabelle mit tatsächlicher Klasse in den Zeilen und vorhergesagter Klasse in den Spalten: 40 richtig positive, 20 falsch negative, 10 falsch positive und 130 richtig negative. Rechts stehen Genauigkeit 85 Prozent, Präzision 80 Prozent, Trefferquote 66,7 Prozent und F1-Wert 72,7 Prozent.</desc>
+  <rect width="900" height="340" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Konfusionsmatrix (n = 200)</text>
+  <g font-size="12" fill="#475569" text-anchor="middle">
+    <text x="215" y="62">Vorhersage: positiv</text>
+    <text x="365" y="62">Vorhersage: negativ</text>
+    <text x="60" y="130" transform="rotate(-90 60 130)">tatsächlich</text>
+  </g>
+  <g font-size="12" fill="#0f172a" text-anchor="end">
+    <text x="128" y="115">positiv</text>
+    <text x="128" y="205">negativ</text>
+  </g>
+  <g text-anchor="middle" fill="#0f172a">
+    <rect x="140" y="75" width="150" height="80" rx="6" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/>
+    <text x="215" y="108" font-size="26" font-weight="700">40</text><text x="215" y="130" font-size="12">TP (richtig positiv)</text>
+    <rect x="290" y="75" width="150" height="80" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+    <text x="365" y="108" font-size="26" font-weight="700">20</text><text x="365" y="130" font-size="12">FN (falsch negativ)</text>
+    <rect x="140" y="155" width="150" height="80" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <text x="215" y="188" font-size="26" font-weight="700">10</text><text x="215" y="210" font-size="12">FP (falsch positiv)</text>
+    <rect x="290" y="155" width="150" height="80" rx="6" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <text x="365" y="188" font-size="26" font-weight="700">130</text><text x="365" y="210" font-size="12">TN (richtig negativ)</text>
+  </g>
+  <g font-size="13" fill="#0f172a">
+    <text x="480" y="90" font-weight="700">Kennzahlen</text>
+    <text x="480" y="118">Genauigkeit = (TP+TN) / n = 170/200 = 85 %</text>
+    <text x="480" y="146">Präzision = TP / (TP+FP) = 40/50 = 80 %</text>
+    <text x="480" y="174">Trefferquote = TP / (TP+FN) = 40/60 = 66,7 %</text>
+    <text x="480" y="202">F1 = 2·P·R / (P+R) = 72,7 %</text>
+  </g>
+  <text x="450" y="285" text-anchor="middle" font-size="12" fill="#475569">Präzision: Wie viele der als positiv gemeldeten sind es wirklich?</text>
+  <text x="450" y="304" text-anchor="middle" font-size="12" fill="#475569">Trefferquote: Wie viele der echten Positiven wurden gefunden?</text>
+</svg>

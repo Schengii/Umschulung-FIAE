@@ -1,3 +1,5 @@
+import { secureGet } from './secureStore';
+import { yahooChartProxyUrl } from './marketProxy';
 const FX_API_URL = 'https://open.er-api.com/v6/latest/EUR';
 const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,solana,ripple,polkadot,dogecoin,chainlink,avalanche-2&vs_currencies=eur,usd';
 
@@ -98,7 +100,7 @@ export function savePricesToCache(newPrices: Record<string, number>) {
 export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<string, number>> {
   const cached = getCachedPrices();
   const fetchedPrices: Record<string, number> = { ...cached };
-  const finnhubKey = typeof localStorage !== 'undefined' ? localStorage.getItem('finanz_finnhub_api_key') : null;
+  const finnhubKey = typeof localStorage !== 'undefined' ? secureGet('finanz_finnhub_api_key') : null;
 
   for (const ticker of tickers) {
     if (ticker === 'CASH') continue;
@@ -121,28 +123,10 @@ export async function fetchLiveStockPrices(tickers: string[]): Promise<Record<st
       }
     }
 
-    // Try direct Yahoo fetch
-    if (!priceFound) {
+    // Yahoo Finance über den eigenen Proxy (kein Drittanbieter-Proxy, siehe marketProxy.ts)
+    const proxyUrl = priceFound ? null : yahooChartProxyUrl(ticker);
+    if (proxyUrl) {
       try {
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`;
-        const res = await fetch(url);
-        if (res.ok) {
-          const json = await res.json();
-          const meta = json?.chart?.result?.[0]?.meta;
-          if (meta && meta.regularMarketPrice) {
-            fetchedPrices[ticker] = meta.regularMarketPrice;
-            priceFound = true;
-          }
-        }
-      } catch {
-        // CORS block expected on browser
-      }
-    }
-
-    // Fallback using CORS proxy if direct failed
-    if (!priceFound) {
-      try {
-        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d`)}`;
         const res = await fetch(proxyUrl);
         if (res.ok) {
           const json = await res.json();

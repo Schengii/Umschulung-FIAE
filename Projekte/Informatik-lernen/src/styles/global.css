@@ -237,6 +237,14 @@ button {
   color: inherit;
 }
 
+/* Formularelemente erben sonst die Browser-Schrift (Arial) statt Inter/Barrierefreiheits-Schrift */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
 /* Allow absolute dropdown popovers to expand beyond parent wrapper button width */
 .nav-dropdown-popover {
   max-width: none !important;
@@ -2202,4 +2210,24 @@ select:focus-visible,
   top: 1rem;
   outline: 2px solid #ffffff;
   outline-offset: 2px;
+}
+
+/* Header-Badge (XP/Level): auf schmalen Bildschirmen ohne Symbole, damit "0 XP" und "Lvl 1" nicht umbrechen */
+@media (max-width: 480px) {
+  .nav-badge-icon {
+    display: none;
+  }
+}
+
+/* Fußzeilen-Links: ausreichend große Trefferfläche (WCAG 2.5.8) und Tastaturfokus */
+.footer-link {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.footer-link:hover,
+.footer-link:focus-visible {
+  color: var(--accent-primary);
 }

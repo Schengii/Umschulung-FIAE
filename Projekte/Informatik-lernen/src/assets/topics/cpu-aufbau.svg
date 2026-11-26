@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Aufbau der CPU und der Befehlszyklus Fetch, Decode, Execute</title>
+  <desc id="d">Links ein großer Kasten für den Prozessor mit vier Bausteinen: Steuerwerk, Rechenwerk (ALU), Register und Cache. Über einen Bus ist der Prozessor mit dem Arbeitsspeicher rechts verbunden. Unten laufen drei Schritte im Kreislauf: Befehl holen (Fetch), Befehl entschlüsseln (Decode), Befehl ausführen (Execute), danach beginnt der nächste Befehl.</desc>
+  <rect width="820" height="330" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Die CPU arbeitet Befehl für Befehl ab</text>
+  <rect x="30" y="46" width="470" height="170" rx="14" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+  <text x="50" y="68" font-size="14" font-weight="700" fill="#334155">CPU (Prozessor)</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="50" y="80" width="200" height="56" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="150" y="105">Steuerwerk</text><text x="150" y="123" font-size="11" font-weight="400">holt und verteilt Befehle</text>
+    <rect x="270" y="80" width="210" height="56" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="375" y="105">Rechenwerk (ALU)</text><text x="375" y="123" font-size="11" font-weight="400">rechnet und vergleicht</text>
+    <rect x="50" y="146" width="200" height="56" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="150" y="171">Register</text><text x="150" y="189" font-size="11" font-weight="400">winzig, blitzschnell</text>
+    <rect x="270" y="146" width="210" height="56" rx="8" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="375" y="171">Cache</text><text x="375" y="189" font-size="11" font-weight="400">schneller Zwischenspeicher</text>
+  </g>
+  <path d="M500 130 H600" stroke="#475569" stroke-width="3" fill="none"/>
+  <polygon points="600,130 590,124 590,136" fill="#475569"/><polygon points="500,130 510,124 510,136" fill="#475569"/>
+  <text x="550" y="118" text-anchor="middle" font-size="12" fill="#475569">Bus</text>
+  <rect x="600" y="80" width="190" height="100" rx="12" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+  <text x="695" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Arbeitsspeicher</text><text x="695" y="144" text-anchor="middle" font-size="12" fill="#0f172a">(RAM)</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="70" y="250" width="190" height="50" rx="25" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="165" y="280">1  Fetch: Befehl holen</text>
+    <rect x="315" y="250" width="190" height="50" rx="25" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="410" y="280">2  Decode: verstehen</text>
+    <rect x="560" y="250" width="190" height="50" rx="25" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="655" y="280">3  Execute: ausführen</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none"><path d="M260 275 H315"/><path d="M505 275 H560"/><path d="M750 275 H790 V232 H165 V250"/></g>
+  <g fill="#475569"><polygon points="315,275 305,269 305,281"/><polygon points="560,275 550,269 550,281"/><polygon points="165,250 159,240 171,240"/></g>
+  <text x="470" y="226" text-anchor="middle" font-size="12" fill="#475569">danach der nächste Befehl, Milliarden Mal pro Sekunde</text>
+</svg>

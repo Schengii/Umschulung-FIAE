@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { secureGet, secureSet } from '../services/secureStore';
 import type { Portfolio } from '../types';
 import { Plus, Trash2, Landmark, Building, PiggyBank, CreditCard, PieChart } from 'lucide-react';
 
@@ -21,7 +22,7 @@ export const NetWorthDashboard: React.FC<NetWorthDashboardProps> = ({
   currentTotalValue
 }) => {
   const [customAssets, setCustomAssets] = useState<CustomAsset[]>(() => {
-    const saved = localStorage.getItem('finanz_networth_custom_assets');
+    const saved = secureGet('finanz_networth_custom_assets');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -40,7 +41,7 @@ export const NetWorthDashboard: React.FC<NetWorthDashboardProps> = ({
 
   // Save custom assets to localStorage
   useEffect(() => {
-    localStorage.setItem('finanz_networth_custom_assets', JSON.stringify(customAssets));
+    secureSet('finanz_networth_custom_assets', JSON.stringify(customAssets));
   }, [customAssets]);
 
   // Aggregate Real Estate from all active portfolios

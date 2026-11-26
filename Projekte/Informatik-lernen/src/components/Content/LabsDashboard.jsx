@@ -15,10 +15,11 @@ function getTodayGermanDate() {
 }
 
 export default function LabsDashboard({ onSelectLab }) {
-  const { userState } = useStore();
+  const { userState, setCareerFilter } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [careerFilter, setCareerFilter] = useState('all'); // 'all' | 'ap1' | 'fiae' | 'fisi' | 'itse' | 'wiso'
+  // Berufsfilter ('all' | 'ap1' | 'fiae' | 'fisi' | 'itse' | 'wiso') liegt im Spielstand, damit Lernpfad und Labs-Dashboard ihn teilen
+  const careerFilter = userState?.careerFilter || 'all';
   const [showBerichtsheftModal, setShowBerichtsheftModal] = useState(false);
   const [copied, setCopied] = useState(false);
 

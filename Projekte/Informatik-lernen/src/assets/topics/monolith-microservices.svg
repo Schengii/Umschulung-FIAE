@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Monolith und Microservices im Vergleich</title>
+  <desc id="d">Links ein Monolith: ein Block mit Benutzeroberfläche, Bestellung, Zahlung und Lager und einer gemeinsamen Datenbank. Rechts Microservices: ein API-Gateway verteilt Anfragen an drei Dienste für Bestellung, Zahlung und Lager, jeder mit eigener Datenbank, verbunden über Nachrichten.</desc>
+  <rect width="860" height="330" fill="#ffffff"/>
+  <text x="200" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Monolith</text>
+  <text x="620" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Microservices</text>
+  <g font-size="12" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <rect x="60" y="50" width="280" height="190" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+    <rect x="80" y="70" width="240" height="30" rx="6" fill="#ffffff" stroke="#4338ca"/><text x="200" y="90">Benutzeroberfläche</text>
+    <rect x="80" y="112" width="110" height="30" rx="6" fill="#ffffff" stroke="#4338ca"/><text x="135" y="132">Bestellung</text>
+    <rect x="210" y="112" width="110" height="30" rx="6" fill="#ffffff" stroke="#4338ca"/><text x="265" y="132">Zahlung</text>
+    <rect x="80" y="154" width="110" height="30" rx="6" fill="#ffffff" stroke="#4338ca"/><text x="135" y="174">Lager</text>
+    <text x="265" y="174" font-size="11" font-weight="400">ein Prozess</text>
+    <rect x="130" y="200" width="140" height="30" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="200" y="220">gemeinsame DB</text>
+    <rect x="470" y="45" width="300" height="32" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/><text x="620" y="66">API-Gateway</text>
+    <rect x="440" y="125" width="110" height="46" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="495" y="153">Bestellung</text>
+    <rect x="565" y="125" width="110" height="46" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="620" y="153">Zahlung</text>
+    <rect x="690" y="125" width="110" height="46" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="745" y="153">Lager</text>
+    <rect x="450" y="205" width="90" height="28" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="495" y="224" font-size="11">DB A</text>
+    <rect x="575" y="205" width="90" height="28" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="620" y="224" font-size="11">DB B</text>
+    <rect x="700" y="205" width="90" height="28" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="745" y="224" font-size="11">DB C</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M560 77 L495 125"/><path d="M620 77 V125"/><path d="M680 77 L745 125"/>
+    <path d="M495 171 V205"/><path d="M620 171 V205"/><path d="M745 171 V205"/>
+    <path d="M550 148 H565" stroke-dasharray="4 3"/><path d="M675 148 H690" stroke-dasharray="4 3"/>
+  </g>
+  <g font-size="12" fill="#475569">
+    <text x="60" y="270">+ einfach zu entwickeln, testen, betreiben</text>
+    <text x="60" y="290">+ lokale Aufrufe, eine Transaktion</text>
+    <text x="60" y="310">– skaliert nur als Ganzes, Änderungen betreffen alles</text>
+    <text x="440" y="270">+ getrennt skalier- und deploybar, teamweise</text>
+    <text x="440" y="290">+ Ausfall bleibt eher lokal begrenzt</text>
+    <text x="440" y="310">– verteiltes System: Netzwerk, Konsistenz, Betrieb</text>
+  </g>
+</svg>

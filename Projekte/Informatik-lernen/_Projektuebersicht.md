@@ -24,6 +24,16 @@ date: 2026-10-29
 
 ---
 
+## 📚 Theorieausbau im Wissen-Tab (unveröffentlicht)
+1. **Zwölf neue Theorieartikel** in `src/data/topics/` (Metadaten in `topicsData.js`, Abbildungen in `src/assets/topics/`): Hardware & Rechnerarchitektur, Elektrotechnik/USV/Arbeitsschutz, Betriebssysteme & Administration, Netzwerkdienste & -technik, IT-Sicherheit im Betrieb, ITSM/ITIL, DevOps/Container/CI-CD, Softwarearchitektur/Microservices, Datenanalyse/Statistik/ML (FIDP), IIoT/Industrie 4.0 (FIDV), Beschaffung/Bilanz/Zahlungsverkehr, Qualität/Dokumentation/Fachgespräch.
+2. Jeder Artikel: Lernziele, Rechenwege, Prüfungshinweise, Übungen mit Lösung, Quiz, Lab-Verweise, Quellen mit Prüfdatum und eine eigene SVG-Abbildung. Der Test `topics.test.js` verlangt jetzt mindestens 37 SVGs mit Barrierefreiheits-Tags.
+3. Quellen sind auf Erreichbarkeit geprüft, aber nicht Satz für Satz verglichen. Fristen (E-Rechnung) und IHK-Vorgaben vor Verwendung gegen die aktuelle Rechtslage prüfen.
+4. **Drei weitere Grundlagen-Artikel** (Boolesche Logik & Zahlendarstellung, Programmierlogik mit PAP/Struktogramm, Vom Klick zur Webseite) mit je einer SVG; damit 38 Artikel und 40 SVGs.
+5. **Einsteiger-Kurs mit Theorie-Lesebuch**: Der Kurs besteht jetzt aus Teil 1 (12 kompakte Kapitel mit Vertiefung) und Teil 2 (10 ausführliche Kapitel inkl. Glossar, Daten in `anfaengerTheorie*.js`).
+6. **Einsteiger-Kurs Teil 1 ausgebaut**: Alle 12 Grundkurs-Kapitel haben jetzt Theorietext, Grafik (SVG in `src/assets/topics/`), kleine Aufgaben mit Lösung (`Shared/MiniAufgaben.jsx`) und Quellen (`anfaengerGrundkurs*.js`); damit 52 SVGs.
+
+---
+
 ## 🎯 Ausbau dünner Labs (unveröffentlicht, PLAN P17)
 1. **Apache Kafka (`KafkaEventLab.jsx` & `src/utils/kafkaEventEngine.js`)**: Producer mit Schlüssel → Partition, Partitions-Logs mit Offsets, zwei Consumer Groups mit eigener Zuweisung, Lag und Fan-out, Repartitionierung, Vergleich Kafka/Queue, 6 Drillfragen, Quellen (kafka.apache.org, KIP-480, Vault-ADR).
 2. **WebAssembly & Rust (`WasmRustLab.jsx` & `src/utils/wasmBinaryEngine.js`)**: echtes, Byte für Byte erzeugtes Wasm-Modul (add, mul, memory), Binär-Inspektor mit Sektionen und LEB128, Ausführung im Browser mit i32-Überlauf, `memory.grow()`, 6 Drillfragen, Quellen (WebAssembly-Spezifikation, MDN, rustc book).
@@ -82,6 +92,11 @@ date: 2026-10-29
 8. **KI-, Tooling- & Entwickler-Infrastruktur (Claude, Gemini & GitHub)**:
    - `CHANGELOG.md` nach Keep a Changelog Standard, `GEMINI.md` als Leitfaden für Google Antigravity & Gemini.
    - `.gitattributes` für LF-Normalisierung, GitHub PR-/Issue-Templates (`.github/`), Dependabot und `.vscode/`.
+9. **Einstufungstest & täglicher Lernmix (`LearningMixWidget.jsx` & `src/utils/learningMixEngine.js`)**:
+   - Einstufungstest mit 12 Fragen (je 3 aus AP1, AP2 Planung, AP2 Entwicklung, WiSo); das Ergebnis (`userState.placementResult`) fließt als Startwert in den Bereitschafts-Score des `ExamCountdownWidget` (+20 XP).
+   - Adaptiver Prüfungsplan (`IhkStudyPlanLab.jsx` & `src/utils/studyPlanEngine.js`): rollierender 4-Wochen-Plan mit Phasen Lernen/Vertiefen/Festigen; Fortschritt aus `labProgress` und `userState.mixDays`, Einstellungen `studyPlanStart` und `studyHoursPerWeek`.
+   - Lernpfad-Karte „Empfohlen für dich“ (`LearningPathWidget.jsx` & `src/utils/learningPathEngine.js`): 3 begründete Lab-Empfehlungen aus Einstufungsergebnis, Fehlerjournal, Prüfungstermin, Rolle und Fortschritt; Berufsfilter (`userState.careerFilter`) und Ausblenden (`userState.pathSnoozed`).
+   - Tages-Lernmix mit 10 Aufgaben pro Tag: fällige Fehler aus dem Fehlerjournal, bis zu 3 Karteikarten (SM-2) und neue Fragen aus den schwächsten Bereichen; Ergebnis in `userState.dailyMixLog`, XP einmal täglich.
 
 ---
 

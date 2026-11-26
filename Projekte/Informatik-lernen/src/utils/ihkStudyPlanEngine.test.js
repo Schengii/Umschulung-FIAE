@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateExamCountdown, generateAdaptiveStudyPlan, getIhkExamDates, IHK_DISCIPLINES } from './ihkStudyPlanEngine';
+import { calculateExamCountdown, getIhkExamDates, IHK_DISCIPLINES } from './ihkStudyPlanEngine';
 
 describe('ihkStudyPlanEngine', () => {
   it('generiert dynamische Prüfungstermine für das angegebene Jahr', () => {
@@ -28,39 +28,7 @@ describe('ihkStudyPlanEngine', () => {
     expect(countdown.weeksRemaining).toBe(0);
   });
 
-  it('generiert für alle 6 IHK-Fachrichtungen maßgeschneiderte Lernpläne', () => {
-    const disciplines = ['fiae', 'fisi', 'fidp', 'fidv', 'itse', 'itsm'];
-    expect(IHK_DISCIPLINES.length).toBe(6);
-
-    disciplines.forEach((disc) => {
-      const plan = generateAdaptiveStudyPlan(disc, 6);
-      expect(plan.length).toBe(6);
-      expect(plan[0].focus).toBeTruthy();
-      expect(plan[0].tags.length).toBeGreaterThan(0);
-    });
-
-    const fiaePlan = generateAdaptiveStudyPlan('fiae', 6);
-    expect(fiaePlan[0].focus).toContain('Software-Architektur');
-
-    const fisiPlan = generateAdaptiveStudyPlan('fisi', 6);
-    expect(fisiPlan[0].focus).toContain('IPv6');
-
-    const fidvPlan = generateAdaptiveStudyPlan('fidv', 6);
-    expect(fidvPlan[0].focus).toContain('Cyber-physische Systeme');
-  });
-
-  it('integriert Prüfungssimulations-Meilensteine mit kanonischer Route "exam"', () => {
-    const plan = generateAdaptiveStudyPlan('fiae', 10);
-    const mockWeeks = plan.filter(w => w.recommendedLab === 'exam');
-    expect(mockWeeks.length).toBeGreaterThanOrEqual(1);
-    expect(mockWeeks[mockWeeks.length - 1].weekNumber).toBe(10);
-  });
-
-  it('begrenzt die Wochenanzahl auf das erlaubte Minimum und Maximum', () => {
-    const minPlan = generateAdaptiveStudyPlan('fiae', 1);
-    expect(minPlan.length).toBe(2);
-
-    const maxPlan = generateAdaptiveStudyPlan('fiae', 30);
-    expect(maxPlan.length).toBe(24);
+  it('bietet alle 6 IHK-Fachrichtungen an', () => {
+    expect(IHK_DISCIPLINES.map((d) => d.id)).toEqual(['fiae', 'fisi', 'fidp', 'fidv', 'itse', 'itsm']);
   });
 });

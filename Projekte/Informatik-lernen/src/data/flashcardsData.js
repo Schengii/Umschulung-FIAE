@@ -1,4 +1,6 @@
-export const FLASHCARDS_DATA = [
+import { FLASHCARDS_EXTRA } from './flashcardsExtra';
+import { FLASHCARD_MORE } from './vertiefungDataRest';
+const BASE_FLASHCARDS_DATA = [
   {
     id: 1,
     category: 'Grundlagen',
@@ -140,3 +142,7 @@ export const FLASHCARDS_DATA = [
     back: 'Lineare Suche: O(n) (muss im Worst Case jedes Element prüfen).\nBinäre Suche: O(log n) (halbiert den Suchraum in jedem Schritt, setzt sortiertes Array voraus).'
   }
 ];
+
+export const FLASHCARDS_DATA = [...BASE_FLASHCARDS_DATA, ...FLASHCARDS_EXTRA].map((card) => (
+  FLASHCARD_MORE[card.id] ? { ...card, more: FLASHCARD_MORE[card.id] } : card
+));

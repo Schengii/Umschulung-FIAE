@@ -209,13 +209,13 @@ export default function Navbar({
               }}
               title="Profil, Level & Einstellungen"
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-amber)', fontSize: '0.85rem', fontWeight: '800' }}>
-                <Flame size={15} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-amber)', fontSize: '0.85rem', fontWeight: '800', whiteSpace: 'nowrap' }}>
+                <Flame size={15} className="nav-badge-icon" />
                 <span>{userState.xp} XP</span>
               </div>
               <div style={{ height: '14px', width: '1px', background: 'var(--border-color)' }} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-teal)', fontSize: '0.85rem', fontWeight: '800' }}>
-                <Trophy size={15} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-teal)', fontSize: '0.85rem', fontWeight: '800', whiteSpace: 'nowrap' }}>
+                <Trophy size={15} className="nav-badge-icon" />
                 <span>Lvl {userState.level}</span>
               </div>
               <ChevronDown size={14} style={{ transform: activeDropdown === 'profile_menu' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease', color: 'var(--text-muted)' }} />

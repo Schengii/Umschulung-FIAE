@@ -125,7 +125,7 @@ export function calculatePortfolioDeltaHedging(
   );
 
   const holdingMap = new Map<string, Holding>();
-  holdings.forEach(h => holdingMap.set(h.ticker.toUpperCase(), h));
+  holdings.forEach(h => { holdingMap.set(h.ticker.toUpperCase(), h); });
 
   const positions: OptionPositionGreeks[] = optionTxs.map((t, idx) => {
     const underlying = holdingMap.get(t.ticker.toUpperCase());

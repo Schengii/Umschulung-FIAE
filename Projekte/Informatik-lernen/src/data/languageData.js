@@ -1,4 +1,6 @@
-export const PROGRAMMING_LANGUAGES = [
+import { LANGUAGES_EXTRA } from './kurseWissenExtra';
+import { LANGUAGE_EXTRA_TOPICS } from './vertiefungDataPraxis';
+const BASE_PROGRAMMING_LANGUAGES = [
   {
     id: 'python',
     name: 'Python Masterclass (W3Schools Style)',
@@ -272,3 +274,8 @@ fn calculate_length(s: &String) -> usize {
   }
 ];
 
+
+export const PROGRAMMING_LANGUAGES = [...BASE_PROGRAMMING_LANGUAGES, ...LANGUAGES_EXTRA].map((lang) => ({
+  ...lang,
+  topics: [...lang.topics, ...(LANGUAGE_EXTRA_TOPICS[lang.id] || [])]
+}));

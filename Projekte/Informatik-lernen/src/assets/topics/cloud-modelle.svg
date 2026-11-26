@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Cloud-Dienstmodelle IaaS, PaaS und SaaS: Wer verwaltet welche Schicht</title>
+  <desc id="d">Drei Spalten mit acht Schichten von oben nach unten: Anwendung, Daten, Laufzeit, Betriebssystem, Virtualisierung, Server, Speicher, Netzwerk. Bei IaaS verwaltet der Kunde Anwendung, Daten, Laufzeit und Betriebssystem, der Anbieter den Rest. Bei PaaS verwaltet der Kunde nur Anwendung und Daten. Bei SaaS verwaltet der Anbieter alle Schichten, der Kunde nutzt nur die fertige Anwendung.</desc>
+  <rect width="820" height="400" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Je mehr Cloud, desto weniger musst du selbst verwalten</text>
+  <g font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <text x="320" y="58">IaaS</text><text x="320" y="74" font-size="11" font-weight="400">Infrastruktur mieten</text>
+    <text x="500" y="58">PaaS</text><text x="500" y="74" font-size="11" font-weight="400">Plattform mieten</text>
+    <text x="680" y="58">SaaS</text><text x="680" y="74" font-size="11" font-weight="400">fertige Software nutzen</text>
+  </g>
+  <g font-size="13" fill="#0f172a" text-anchor="end">
+    <text x="228" y="104">Anwendung</text><text x="228" y="140">Daten</text><text x="228" y="176">Laufzeit</text><text x="228" y="212">Betriebssystem</text><text x="228" y="248">Virtualisierung</text><text x="228" y="284">Server</text><text x="228" y="320">Speicher</text><text x="228" y="356">Netzwerk</text>
+  </g>
+  <g stroke="#334155" stroke-width="1">
+    <rect x="240" y="84" width="160" height="32" fill="#e0e7ff"/><rect x="420" y="84" width="160" height="32" fill="#e0e7ff"/><rect x="600" y="84" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="120" width="160" height="32" fill="#e0e7ff"/><rect x="420" y="120" width="160" height="32" fill="#e0e7ff"/><rect x="600" y="120" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="156" width="160" height="32" fill="#e0e7ff"/><rect x="420" y="156" width="160" height="32" fill="#fef3c7"/><rect x="600" y="156" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="192" width="160" height="32" fill="#e0e7ff"/><rect x="420" y="192" width="160" height="32" fill="#fef3c7"/><rect x="600" y="192" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="228" width="160" height="32" fill="#fef3c7"/><rect x="420" y="228" width="160" height="32" fill="#fef3c7"/><rect x="600" y="228" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="264" width="160" height="32" fill="#fef3c7"/><rect x="420" y="264" width="160" height="32" fill="#fef3c7"/><rect x="600" y="264" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="300" width="160" height="32" fill="#fef3c7"/><rect x="420" y="300" width="160" height="32" fill="#fef3c7"/><rect x="600" y="300" width="160" height="32" fill="#fef3c7"/>
+    <rect x="240" y="336" width="160" height="32" fill="#fef3c7"/><rect x="420" y="336" width="160" height="32" fill="#fef3c7"/><rect x="600" y="336" width="160" height="32" fill="#fef3c7"/>
+  </g>
+  <rect x="250" y="382" width="14" height="12" fill="#e0e7ff" stroke="#334155"/><text x="270" y="392" font-size="12" fill="#0f172a">verwaltest du selbst</text>
+  <rect x="430" y="382" width="14" height="12" fill="#fef3c7" stroke="#334155"/><text x="450" y="392" font-size="12" fill="#0f172a">verwaltet der Anbieter</text>
+  <text x="680" y="392" font-size="12" fill="#475569" text-anchor="middle">Beispiel: Web-Mail, Online-Office</text>
+</svg>

@@ -7,7 +7,11 @@ import {
   OAUTH_OIDC_DRILL_QUESTIONS
 } from '../../utils/oauthOidcEngine';
 import LabDrillSection from '../Shared/LabDrillSection';
+import { normalizeDrillQuestions } from '../../utils/drillFormat';
 import SourceList from '../Shared/SourceList';
+
+// Drill-Fragen im Format von IhkDrillPanel und Fehlerjournal (die Quelle nutzt englische Feldnamen)
+const OAUTH_OIDC_DRILL = normalizeDrillQuestions(OAUTH_OIDC_DRILL_QUESTIONS);
 
 const INITIAL_JWT = `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF1dGgta2V5LTEifQ.eyJzdWIiOiJ1c2VyXzk4Mjc0MSIsIm5hbWUiOiJBbGV4IFNjaG1pZHQiLCJlbWFpbCI6ImFsZXhAZGV2Z2FtZS5kZSIsInJvbGVzIjpbImF6dWJpIiwiZGV2ZWxvcGVyIl0sImlzcyI6Imh0dHBzOi8vYXV0aC5pbmZvcm1hdGlrLWxlcm5lbi5kZSIsImF1ZCI6ImFwaS5pbmZvcm1hdGlrLWxlcm5lbi5kZSIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoyMDgwMDAwMDAwfQ.simulated_rsa_signature_verification_ok`;
 
@@ -411,7 +415,7 @@ export default function OauthOidcLab({ onRewardXP }) {
       {activeTab === 'drill' && (
         <LabDrillSection
           title="OAuth 2.0 & OIDC Security IHK-Prüfungsdrill"
-          questions={OAUTH_OIDC_DRILL_QUESTIONS}
+          questions={OAUTH_OIDC_DRILL}
           xpReward={55}
           onRewardXP={onRewardXP}
         />

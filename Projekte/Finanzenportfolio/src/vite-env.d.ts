@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_DEFAULT_WEBDAV_URL?: string;
   readonly VITE_DEFAULT_WEBHOOK_URL?: string;
   readonly VITE_ENABLE_MOCK_DATA?: string;
+  readonly VITE_MARKET_PROXY_URL?: string;
 }
 
 interface ImportMeta {

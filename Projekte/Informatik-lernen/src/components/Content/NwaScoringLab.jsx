@@ -10,6 +10,8 @@ import {
   DEFAULT_NWA_OPTIONS 
 } from '../../utils/nwaEngine';
 import { useStore } from '../../store/useStore';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { NWA_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function NwaScoringLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -320,6 +322,7 @@ export default function NwaScoringLab({ onRewardXP }) {
           </div>
         </div>
       </div>
+      <LabDrillSection title="IHK-Drill: Nutzwertanalyse" questions={NWA_DRILL_QUESTIONS} />
     </div>
   );
 }

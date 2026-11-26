@@ -7,7 +7,11 @@ import {
   CLOUD_DEVOPS_DRILL_QUESTIONS
 } from '../../utils/cloudDevOpsEngine';
 import LabDrillSection from '../Shared/LabDrillSection';
+import { normalizeDrillQuestions } from '../../utils/drillFormat';
 import SourceList from '../Shared/SourceList';
+
+// Drill-Fragen im Format von IhkDrillPanel und Fehlerjournal (die Quelle nutzt englische Feldnamen)
+const CLOUD_DEVOPS_DRILL = normalizeDrillQuestions(CLOUD_DEVOPS_DRILL_QUESTIONS);
 
 const INITIAL_PIPELINE = `name: CI/CD Production Pipeline
 on:
@@ -416,7 +420,7 @@ export default function CloudDevOpsLab({ onRewardXP }) {
       {activeTab === 'drill' && (
         <LabDrillSection
           title="Cloud Architecture & DevOps IHK-Prüfungsdrill"
-          questions={CLOUD_DEVOPS_DRILL_QUESTIONS}
+          questions={CLOUD_DEVOPS_DRILL}
           xpReward={55}
           onRewardXP={onRewardXP}
         />

@@ -68,3 +68,25 @@ export async function saveToIndexedDB<T>(key: string, value: T): Promise<void> {
     // LocalStorage quota may be exceeded; IndexedDB already has the data
   }
 }
+
+/**
+ * Entfernt einen Wert aus IndexedDB und localStorage (z. B. Klartext-Kopien bei aktivem Tresor).
+ */
+export async function removeFromIndexedDB(key: string): Promise<void> {
+  try {
+    const db = await openDatabase();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).delete(key);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  } catch {
+    // IndexedDB nicht verfügbar – localStorage wird trotzdem bereinigt
+  }
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignorieren
+  }
+}

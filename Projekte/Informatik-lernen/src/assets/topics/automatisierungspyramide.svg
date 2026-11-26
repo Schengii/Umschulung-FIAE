@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Automatisierungspyramide: von der Feldebene bis zur Unternehmensebene</title>
+  <desc id="d">Fünf Ebenen von unten nach oben: Feldebene mit Sensoren und Aktoren, Steuerungsebene mit SPS, Prozessleitebene mit SCADA und HMI, Betriebsleitebene mit MES und Unternehmensebene mit ERP. Rechts stehen typische Kommunikationsarten und Zeitverhalten: unten Echtzeit im Millisekundenbereich, oben Stunden bis Tage.</desc>
+  <rect width="860" height="340" fill="#ffffff"/>
+  <text x="430" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Automatisierungspyramide (nach ISA-95)</text>
+  <g font-size="13" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <polygon points="330,46 430,46 450,86 310,86" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="380" y="72">ERP</text>
+    <polygon points="310,90 450,90 475,130 285,130" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="380" y="116">MES</text>
+    <polygon points="285,134 475,134 500,174 260,174" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="380" y="160">SCADA / HMI</text>
+    <polygon points="260,178 500,178 525,218 235,218" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="380" y="204">SPS / PLC</text>
+    <polygon points="235,222 525,222 550,262 210,262" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="380" y="248">Sensoren und Aktoren</text>
+  </g>
+  <g font-size="12" fill="#475569">
+    <text x="20" y="72">Unternehmensebene</text><text x="20" y="116">Betriebsleitebene</text><text x="20" y="160">Prozessleitebene</text><text x="20" y="204">Steuerungsebene</text><text x="20" y="248">Feldebene</text>
+    <text x="580" y="72">Aufträge, Finanzen: Tage bis Wochen</text>
+    <text x="580" y="116">Produktionsplanung: Stunden bis Tage</text>
+    <text x="580" y="160">Visualisieren, Überwachen: Sekunden</text>
+    <text x="580" y="204">Regeln, Steuern: 1 bis 100 ms</text>
+    <text x="580" y="248">Messen, Schalten: Echtzeit</text>
+  </g>
+  <text x="430" y="296" text-anchor="middle" font-size="12" fill="#475569">Unten: Feldbus und Industrial Ethernet (PROFINET, EtherCAT, Modbus). Oben: IT-Netz (OPC UA, MQTT, REST).</text>
+  <text x="430" y="316" text-anchor="middle" font-size="12" fill="#475569">Industrie 4.0 vernetzt die Ebenen auch vertikal, bis in die Cloud.</text>
+</svg>

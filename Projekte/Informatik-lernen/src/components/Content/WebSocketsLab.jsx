@@ -8,7 +8,11 @@ import {
   WEBSOCKETS_DRILL_QUESTIONS
 } from '../../utils/webSocketsEngine';
 import LabDrillSection from '../Shared/LabDrillSection';
+import { normalizeDrillQuestions } from '../../utils/drillFormat';
 import SourceList from '../Shared/SourceList';
+
+// Drill-Fragen im Format von IhkDrillPanel und Fehlerjournal (die Quelle nutzt englische Feldnamen)
+const WEBSOCKETS_DRILL = normalizeDrillQuestions(WEBSOCKETS_DRILL_QUESTIONS);
 
 const SOURCES = [
   { title: 'RFC 6455 – The WebSocket Protocol', url: 'https://datatracker.ietf.org/doc/html/rfc6455', note: 'Offizieller IETF-Standard: Handshake, Masking, Framing und Opcodes' },
@@ -476,7 +480,7 @@ export default function WebSocketsLab({ onRewardXP }) {
       {activeTab === 'drill' && (
         <LabDrillSection
           title="WebSockets & Realtime Networking IHK-Prüfungsdrill"
-          questions={WEBSOCKETS_DRILL_QUESTIONS}
+          questions={WEBSOCKETS_DRILL}
           xpReward={55}
           onRewardXP={onRewardXP}
         />

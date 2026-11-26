@@ -8,6 +8,8 @@ import {
   IHK_CPM_TEMPLATES 
 } from '../../utils/cpmEngine';
 import { useStore } from '../../store/useStore';
+import LabDrillSection from '../Shared/LabDrillSection';
+import { CPM_DRILL_QUESTIONS } from '../../data/labDrillsIhk';
 
 export default function CpmNetworkLab({ onRewardXP }) {
   const { awardXP } = useStore();
@@ -542,6 +544,7 @@ export default function CpmNetworkLab({ onRewardXP }) {
           </button>
         </form>
       </div>
+      <LabDrillSection title="IHK-Drill: Netzplan & kritischer Pfad" questions={CPM_DRILL_QUESTIONS} />
     </div>
   );
 }

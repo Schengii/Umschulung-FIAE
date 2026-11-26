@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 300" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">CI/CD-Pipeline: Commit, Build, Test, Image, Staging, Freigabe, Produktion mit Rückmeldung</title>
+  <desc id="d">Sieben Stufen von links nach rechts: Code-Commit, Build, automatische Tests, Container-Image in der Registry, Deployment auf Staging, manuelle Freigabe und Produktion. Continuous Integration umfasst die ersten vier Stufen, Continuous Delivery reicht bis zur Freigabe, Continuous Deployment automatisiert auch die Produktion. Ein Pfeil führt von Produktion über Monitoring zurück zum Commit.</desc>
+  <rect width="860" height="300" fill="#ffffff"/>
+  <text x="430" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">CI/CD-Pipeline im Überblick</text>
+  <g font-size="12" font-weight="600" fill="#0f172a" text-anchor="middle">
+    <rect x="15" y="95" width="100" height="60" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="65" y="122">Commit</text><text x="65" y="140" font-size="10" font-weight="400">Push ins Repo</text>
+    <rect x="135" y="95" width="100" height="60" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="185" y="122">Build</text><text x="185" y="140" font-size="10" font-weight="400">kompilieren</text>
+    <rect x="255" y="95" width="100" height="60" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="305" y="122">Tests</text><text x="305" y="140" font-size="10" font-weight="400">Unit, Lint, SAST</text>
+    <rect x="375" y="95" width="100" height="60" rx="8" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="425" y="122">Image</text><text x="425" y="140" font-size="10" font-weight="400">in Registry</text>
+    <rect x="495" y="95" width="100" height="60" rx="8" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="545" y="122">Staging</text><text x="545" y="140" font-size="10" font-weight="400">Integrationstest</text>
+    <rect x="615" y="95" width="100" height="60" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="665" y="122">Freigabe</text><text x="665" y="140" font-size="10" font-weight="400">manuell</text>
+    <rect x="735" y="95" width="110" height="60" rx="8" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="790" y="122">Produktion</text><text x="790" y="140" font-size="10" font-weight="400">Rollout</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M115 125 H135"/><path d="M235 125 H255"/><path d="M355 125 H375"/><path d="M475 125 H495"/><path d="M595 125 H615"/><path d="M715 125 H735"/>
+    <path d="M790 155 V250 H65 V155"/>
+  </g>
+  <g fill="#475569"><polygon points="65,155 60,165 70,165"/></g>
+  <text x="430" y="243" text-anchor="middle" font-size="12" fill="#475569">Monitoring und Feedback: Fehler und Metriken fließen in den nächsten Commit</text>
+  <g font-size="12" font-weight="600" text-anchor="middle">
+    <path d="M15 70 H475" stroke="#4338ca" stroke-width="3"/><text x="245" y="62" fill="#4338ca">Continuous Integration</text>
+    <path d="M15 82 H715" stroke="#0f766e" stroke-width="3"/><text x="615" y="75" fill="#0f766e" font-size="11">Continuous Delivery (bereit für Produktion)</text>
+    <path d="M15 276 H845" stroke="#be185d" stroke-width="3" opacity="0"/>
+  </g>
+  <text x="775" y="190" text-anchor="end" font-size="11" fill="#be185d">Continuous Deployment:</text>
+  <text x="775" y="205" text-anchor="end" font-size="11" fill="#be185d">ohne Freigabe-Schritt</text>
+</svg>

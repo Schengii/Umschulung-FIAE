@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">DNS-Auflösung: Von der Frage nach einem Namen zur IP-Adresse</title>
+  <desc id="d">Links der Browser, der den Namen www.beispiel.de auflösen möchte. Er fragt den DNS-Resolver (Schritt 1). Der Resolver fragt nacheinander einen Root-Nameserver (Schritt 2), den Nameserver der Endung .de (Schritt 3) und den Nameserver der Domain beispiel.de (Schritt 4). Der letzte liefert die IP-Adresse, die der Resolver an den Browser zurückgibt (Schritt 5). Danach verbindet sich der Browser mit dem Webserver.</desc>
+  <rect width="820" height="360" fill="#ffffff"/>
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">DNS: Das Telefonbuch des Internets in vier Stufen</text>
+  <g text-anchor="middle" fill="#0f172a" font-size="14" font-weight="700">
+    <rect x="30" y="140" width="150" height="70" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="105" y="170">Browser</text><text x="105" y="190" font-size="11" font-weight="400">sucht www.beispiel.de</text>
+    <rect x="260" y="140" width="150" height="70" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="335" y="170">DNS-Resolver</text><text x="335" y="190" font-size="11" font-weight="400">Router oder Provider</text>
+    <rect x="520" y="50" width="270" height="56" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="655" y="76">Root-Nameserver</text><text x="655" y="94" font-size="11" font-weight="400">kennt die Server für .de, .com, .org</text>
+    <rect x="520" y="130" width="270" height="56" rx="10" fill="#f1f5f9" stroke="#334155" stroke-width="2"/><text x="655" y="156">TLD-Nameserver für .de</text><text x="655" y="174" font-size="11" font-weight="400">kennt die Server von beispiel.de</text>
+    <rect x="520" y="210" width="270" height="56" rx="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="655" y="236">Nameserver von beispiel.de</text><text x="655" y="254" font-size="11" font-weight="400">kennt die IP-Adresse von www</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none">
+    <path d="M180 165 H260"/><path d="M410 160 L520 80"/><path d="M410 168 H520"/><path d="M410 190 L520 238"/><path d="M260 192 H180"/>
+  </g>
+  <g fill="#475569">
+    <polygon points="260,165 250,159 250,171"/><polygon points="520,80 510,80 514,90"/><polygon points="520,168 510,162 510,174"/><polygon points="520,238 510,238 514,228"/><polygon points="180,192 190,186 190,198"/>
+  </g>
+  <g font-size="12" font-weight="700" fill="#be185d" text-anchor="middle">
+    <text x="220" y="156">1</text><text x="470" y="108">2</text><text x="465" y="160">3</text><text x="470" y="226">4</text><text x="220" y="212">5</text>
+  </g>
+  <g font-size="13" fill="#0f172a">
+    <text x="30" y="300">1  Browser fragt den Resolver  ·  2 bis 4  Resolver fragt Stufe für Stufe nach</text>
+    <text x="30" y="322">5  Resolver meldet die IP-Adresse zurück, danach lädt der Browser die Seite</text>
+    <text x="30" y="344" fill="#475569">Antworten merkt sich der Resolver eine Zeit lang (Cache), das spart spätere Anfragen.</text>
+  </g>
+</svg>

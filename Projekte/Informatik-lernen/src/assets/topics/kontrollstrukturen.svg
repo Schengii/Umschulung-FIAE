@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Die drei Kontrollstrukturen als Programmablaufplan und Struktogramm: Sequenz, Verzweigung, Schleife</title>
+  <desc id="d">Drei Spalten. Sequenz: zwei Anweisungen untereinander. Verzweigung: eine Raute mit Bedingung, links der Ja-Zweig und rechts der Nein-Zweig, die danach wieder zusammenlaufen. Schleife: eine Raute mit Bedingung, bei Ja geht der Ablauf in den Schleifenrumpf und von dort zurück zur Bedingung, bei Nein verlässt er die Schleife.</desc>
+  <rect width="820" height="330" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Drei Bausteine genügen für jeden Algorithmus</text>
+  <g font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <text x="140" y="62">Sequenz</text><text x="410" y="62">Verzweigung</text><text x="680" y="62">Schleife (kopfgesteuert)</text>
+  </g>
+  <g font-size="12" text-anchor="middle" fill="#0f172a" stroke-width="2">
+    <rect x="80" y="80" width="120" height="40" rx="4" fill="#e0e7ff" stroke="#4338ca"/><text x="140" y="105">Anweisung 1</text>
+    <rect x="80" y="160" width="120" height="40" rx="4" fill="#e0e7ff" stroke="#4338ca"/><text x="140" y="185">Anweisung 2</text>
+
+    <polygon points="410,80 470,115 410,150 350,115" fill="#fef3c7" stroke="#b45309"/><text x="410" y="119">Bedingung?</text>
+    <rect x="300" y="190" width="100" height="36" rx="4" fill="#ccfbf1" stroke="#0f766e"/><text x="350" y="212">Ja-Zweig</text>
+    <rect x="420" y="190" width="100" height="36" rx="4" fill="#fce7f3" stroke="#be185d"/><text x="470" y="212">Nein-Zweig</text>
+
+    <polygon points="680,80 740,115 680,150 620,115" fill="#fef3c7" stroke="#b45309"/><text x="680" y="119">Bedingung?</text>
+    <rect x="620" y="190" width="120" height="36" rx="4" fill="#ccfbf1" stroke="#0f766e"/><text x="680" y="212">Rumpf</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <path d="M140 120 V160"/>
+    <path d="M380 128 L350 128 V190"/><path d="M440 128 L470 128 V190"/>
+    <path d="M350 226 V262 H410"/><path d="M470 226 V262 H410"/><path d="M410 262 V282"/>
+    <path d="M680 150 V190"/><path d="M680 226 V250 H590 V115 H620"/><path d="M740 115 H790 V282"/>
+  </g>
+  <g fill="#475569">
+    <polygon points="140,160 134,150 146,150"/>
+    <polygon points="350,190 344,180 356,180"/><polygon points="470,190 464,180 476,180"/><polygon points="410,282 404,272 416,272"/>
+    <polygon points="680,190 674,180 686,180"/><polygon points="620,115 610,109 610,121"/><polygon points="790,282 784,272 796,272"/>
+  </g>
+  <g font-size="12" fill="#0f172a" text-anchor="middle">
+    <text x="336" y="168">ja</text><text x="486" y="168">nein</text>
+    <text x="692" y="170">ja</text><text x="765" y="108">nein</text>
+    <text x="410" y="302" fill="#475569">danach geht es gemeinsam weiter</text>
+    <text x="680" y="302" fill="#475569">Bedingung wird vor jedem Durchlauf geprüft</text>
+    <text x="140" y="302" fill="#475569">von oben nach unten</text>
+  </g>
+</svg>

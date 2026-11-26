@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { WEB_COMPONENTS_DATA } from '../../data/webComponentsData';
 import { Layers } from 'lucide-react';
+import DeepDive from '../Shared/DeepDive';
+import { WC_DEEPDIVES } from '../../data/vertiefungData';
 
 export default function WebComponentsHub() {
   const [selectedId, setSelectedId] = useState(WEB_COMPONENTS_DATA[0].id);
@@ -14,7 +16,7 @@ export default function WebComponentsHub() {
           <Layers size={32} style={{ color: 'var(--accent-teal)' }} /> Web Components & Micro-Frontends Hub
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem' }}>
-          Lerne moderne Komponenten-Technologien: **Lit.dev**, **Vaadin** und **Native W3C Web Components**.
+          Lerne moderne Komponenten-Technologien: Lit.dev, Vaadin, Stencil und native W3C Web Components, inklusive Theming und Tests.
         </p>
       </div>
 
@@ -62,6 +64,8 @@ export default function WebComponentsHub() {
             <code>{activeComp.exampleCode}</code>
           </pre>
         </div>
+
+        <DeepDive deepDive={WC_DEEPDIVES[activeComp.id]} />
       </div>
     </div>
   );

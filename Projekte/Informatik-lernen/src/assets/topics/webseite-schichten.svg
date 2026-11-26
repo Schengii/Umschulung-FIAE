@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" font-family="Inter, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">Eine Webseite besteht aus HTML, CSS und JavaScript</title>
+  <desc id="d">Drei Spalten mit je einem kurzen Codebeispiel: HTML beschreibt Inhalt und Aufbau (eine Überschrift und ein Absatz), CSS bestimmt das Aussehen (türkise Überschrift), JavaScript bestimmt das Verhalten (Klick auf einen Knopf ändert den Text). Alle drei fließen in den Browser, der daraus die fertige Seite anzeigt.</desc>
+  <rect width="820" height="340" fill="#ffffff"/>
+  <text x="410" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Drei Sprachen, eine Webseite</text>
+  <g text-anchor="middle" font-weight="700" fill="#0f172a">
+    <rect x="30" y="44" width="240" height="132" rx="12" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/><text x="150" y="68" font-size="15">HTML: Inhalt und Aufbau</text>
+    <rect x="290" y="44" width="240" height="132" rx="12" fill="#ccfbf1" stroke="#0f766e" stroke-width="2"/><text x="410" y="68" font-size="15">CSS: Aussehen</text>
+    <rect x="550" y="44" width="240" height="132" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="670" y="68" font-size="15">JavaScript: Verhalten</text>
+  </g>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="12" fill="#0f172a">
+    <text x="46" y="100">&lt;h1&gt;Hallo Welt&lt;/h1&gt;</text><text x="46" y="120">&lt;p&gt;Mein erster Text&lt;/p&gt;</text><text x="46" y="140">&lt;button&gt;Klick&lt;/button&gt;</text>
+    <text x="306" y="100">h1 {</text><text x="306" y="120">  color: teal;</text><text x="306" y="140">  font-size: 2rem;</text><text x="306" y="160">}</text>
+    <text x="566" y="100">button.onclick = () =&gt;</text><text x="566" y="120">  text.innerText =</text><text x="566" y="140">    "Danke!";</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none"><path d="M150 176 V200 H380 V216"/><path d="M410 176 V216"/><path d="M670 176 V200 H440 V216"/></g>
+  <g fill="#475569"><polygon points="380,216 374,206 386,206"/><polygon points="410,216 404,206 416,206"/><polygon points="440,216 434,206 446,206"/></g>
+  <rect x="200" y="222" width="420" height="98" rx="12" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+  <rect x="200" y="222" width="420" height="26" rx="12" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
+  <text x="215" y="240" font-size="12" fill="#334155">Browser: https://beispiel.de</text>
+  <text x="230" y="278" font-size="22" font-weight="700" fill="#0f766e">Hallo Welt</text>
+  <text x="230" y="298" font-size="13" fill="#0f172a">Mein erster Text</text>
+  <rect x="470" y="268" width="80" height="28" rx="6" fill="#fef3c7" stroke="#b45309"/><text x="510" y="287" font-size="13" text-anchor="middle" font-weight="700" fill="#0f172a">Klick</text>
+</svg>
