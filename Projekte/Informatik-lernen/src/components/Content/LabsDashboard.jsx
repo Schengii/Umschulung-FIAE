@@ -18,6 +18,8 @@ export default function LabsDashboard({ onSelectLab }) {
   const { userState, setCareerFilter } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'open' | 'done'
+  const [difficultyFilter, setDifficultyFilter] = useState('all');
   // Berufsfilter ('all' | 'ap1' | 'fiae' | 'fisi' | 'itse' | 'wiso') liegt im Spielstand, damit Lernpfad und Labs-Dashboard ihn teilen
   const careerFilter = userState?.careerFilter || 'all';
   const [showBerichtsheftModal, setShowBerichtsheftModal] = useState(false);
@@ -47,6 +49,19 @@ export default function LabsDashboard({ onSelectLab }) {
     { id: 'wiso', name: 'WISO & BWL', icon: Briefcase }
   ];
 
+  const labProgress = userState?.labProgress;
+
+  // Fortschritt je Themengebiet für die Kategorie-Chips („3/18“)
+  const categoryProgress = useMemo(() => {
+    const result = {};
+    for (const lab of LAB_MODULES) {
+      const entry = (result[lab.category] ||= { done: 0, total: 0 });
+      entry.total += 1;
+      if (labProgress?.[resolveLabKey(lab.id)]?.completed) entry.done += 1;
+    }
+    return result;
+  }, [labProgress]);
+
   const filteredLabs = useMemo(() => {
     return LAB_MODULES.filter(lab => {
       const textToSearch = `${lab.title} ${lab.desc} ${lab.tags.join(' ')}`.toLowerCase();
@@ -56,11 +71,14 @@ export default function LabsDashboard({ onSelectLab }) {
 
       const matchesCareerFilter = matchesCareer(lab, careerFilter);
 
-      return matchesSearch && matchesCat && matchesCareerFilter;
-    });
-  }, [searchTerm, selectedCategory, careerFilter]);
+      const matchesDifficulty = difficultyFilter === 'all' || lab.difficulty === difficultyFilter;
+      const done = Boolean(labProgress?.[resolveLabKey(lab.id)]?.completed);
+      const matchesStatus = statusFilter === 'all' || (statusFilter === 'done' ? done : !done);
 
-  const labProgress = userState?.labProgress;
+      return matchesSearch && matchesCat && matchesCareerFilter && matchesDifficulty && matchesStatus;
+    });
+  }, [searchTerm, selectedCategory, careerFilter, difficultyFilter, statusFilter, labProgress]);
+
   const progressSummary = useMemo(
     () => summarizeLabProgress(LAB_MODULES, labProgress, resolveLabKey),
     [labProgress]
@@ -69,6 +87,20 @@ export default function LabsDashboard({ onSelectLab }) {
     () => recommendNextLabs(LAB_MODULES, { careerId: careerFilter, progress: labProgress, resolveKey: resolveLabKey, limit: 3 }),
     [careerFilter, labProgress]
   );
+
+  const recommendedIds = useMemo(() => new Set(nextLabs.map((l) => l.id)), [nextLabs]);
+  const statusOptions = [
+    { id: 'all', name: 'Alle' },
+    { id: 'open', name: 'Offen' },
+    { id: 'done', name: 'Erledigt' }
+  ];
+  const difficultyOptions = [
+    { id: 'all', name: 'Alle Level' },
+    { id: 'Beginner', name: 'Einsteiger' },
+    { id: 'Intermediate', name: 'Fortgeschritten' },
+    { id: 'Advanced', name: 'Profi' },
+    { id: 'Expert', name: 'Experte' }
+  ];
 
   // Generierung des Textes für das Ausbildungsberichtsheft
   const generateBerichtsheftText = () => {
@@ -231,10 +263,56 @@ Die Zusammenhänge zwischen Protokollheadern, kaufmännischen Formeln und Progra
               style={{ fontSize: '0.82rem', padding: '6px 14px', whiteSpace: 'nowrap' }}
             >
               {c.name}
+              {c.id !== 'all' && categoryProgress[c.id] && (
+                <span style={{ marginLeft: '6px', opacity: 0.8, fontWeight: 600 }} title="Erledigte Labs / alle Labs im Themengebiet">
+                  {categoryProgress[c.id].done}/{categoryProgress[c.id].total}
+                </span>
+              )}
             </button>
           ))}
         </div>
       </div>
+
+      {/* Status- und Level-Filter */}
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
+        <div role="group" aria-label="Status filtern" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Status:</span>
+          {statusOptions.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              aria-pressed={statusFilter === o.id}
+              onClick={() => setStatusFilter(o.id)}
+              className={`btn ${statusFilter === o.id ? 'btn-primary' : 'btn-ghost'}`}
+              style={{ fontSize: '0.82rem', padding: '4px 12px' }}
+            >
+              {o.name}
+            </button>
+          ))}
+        </div>
+        <label htmlFor="lab-difficulty-filter" style={{ display: 'flex', gap: '6px', alignItems: 'center', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+          Level:
+          <select
+            id="lab-difficulty-filter"
+            value={difficultyFilter}
+            onChange={(e) => setDifficultyFilter(e.target.value)}
+            style={{ padding: '6px 10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-primary)', color: 'var(--text-main)', border: '1px solid var(--border-color)' }}
+          >
+            {difficultyOptions.map((o) => (
+              <option key={o.id} value={o.id}>{o.name}</option>
+            ))}
+          </select>
+        </label>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }} aria-live="polite">
+          {filteredLabs.length} von {LAB_MODULES.length} Labs
+        </span>
+      </div>
+
+      {filteredLabs.length === 0 && (
+        <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '32px 0' }}>
+          Keine Labs für diese Filter gefunden. Lockere Suche, Status oder Level.
+        </p>
+      )}
 
       {/* Lab Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: '20px' }}>
@@ -296,11 +374,11 @@ Die Zusammenhänge zwischen Protokollheadern, kaufmännischen Formeln und Progra
               </div>
 
               <button
-                className="btn btn-primary"
+                className={`btn ${recommendedIds.has(lab.id) ? 'btn-primary' : 'btn-outline'}`}
                 onClick={() => onSelectLab(lab.id)}
                 style={{ width: '100%', gap: '8px', justifyContent: 'center' }}
               >
-                <Play size={16} /> Laboratorium Starten
+                <Play size={16} aria-hidden="true" /> {progress?.visits ? 'Fortsetzen' : 'Starten'}
               </button>
             </div>
           );

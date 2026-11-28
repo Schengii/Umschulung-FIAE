@@ -5,6 +5,8 @@
  * BGB § 288 default interest & statutory compensation, and categorizes dunning stages.
  */
 
+import { BASISZINSSATZ_BEISPIEL_PERCENT } from '../data/legalConstants';
+
 /**
  * @typedef {object} SkontoInput
  * @property {number} [skontoPercent]
@@ -70,7 +72,7 @@ export function calculateVerzugszinsen({
   rechnungsbetrag = 10000,
   verzugstage = 45,
   isB2B = true,
-  basiszinssatzPercent = 3.62
+  basiszinssatzPercent = BASISZINSSATZ_BEISPIEL_PERCENT
 }) {
   const betrag = Math.max(10, rechnungsbetrag);
   const tage = Math.max(1, verzugstage);

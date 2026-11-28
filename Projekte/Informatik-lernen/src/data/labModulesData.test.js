@@ -76,3 +76,11 @@ describe('LAB_REGISTRY', () => {
     }
   });
 });
+
+describe('Neu-Abzeichen', () => {
+  it('trägt nur ein kleiner Teil der Labs ein „Neu“-Abzeichen', () => {
+    const fresh = LAB_MODULES.filter((lab) => /\bneu\b/i.test(lab.badge || ''));
+    expect(fresh.length).toBeGreaterThan(0);
+    expect(fresh.length).toBeLessThanOrEqual(15);
+  });
+});

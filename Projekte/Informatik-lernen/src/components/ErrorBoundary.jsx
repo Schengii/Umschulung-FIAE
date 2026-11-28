@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { captureException } from '../utils/errorMonitoring.js';
+import { isChunkLoadError, recoverFromChunkError } from '../utils/chunkErrorRecovery.js';
 
 /**
  * Globale Error Boundary für das Content-/Lab-Rendering.
@@ -45,12 +46,21 @@ class ErrorBoundary extends React.Component {
     // VITE_SENTRY_DSN, siehe src/utils/errorMonitoring.js), damit Abstürze
     // einzelner Labs bei echten Nutzern auf der Live-Seite sichtbar werden.
     captureException(error, { componentStack: errorInfo?.componentStack, resetKey: this.props.resetKey });
+    // Veralteter Chunk nach einem Deploy: einmal automatisch mit frischem Stand neu laden.
+    if (isChunkLoadError(error)) {
+      recoverFromChunkError();
+    }
     if (typeof this.props.onError === 'function') {
       this.props.onError(error, errorInfo);
     }
   }
 
   handleRetry = () => {
+    // Ein erneuter Render lädt denselben kaputten Chunk nochmal – hier hilft nur Cache leeren + Neuladen.
+    if (isChunkLoadError(this.state.error)) {
+      recoverFromChunkError({ force: true });
+      return;
+    }
     this.setState({ hasError: false, error: null });
   };
 

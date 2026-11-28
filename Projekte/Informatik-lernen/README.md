@@ -148,7 +148,7 @@ Das Repository ist für nahtlose Zusammenarbeit mit Entwicklern und KI-Agenten (
 - Ausführliche Feature-Beschreibungen und Änderungshistorie bis v3.74.0: [`docs/README-Archiv.md`](docs/README-Archiv.md)
 
 ### Aktuelle Version (v3.80.0) & Neueste Verbesserungen
-- **Vollständige Umsetzung PLAN.md (M01–M19)**: 2.288 Unit-Tests, 63 Playwright E2E-Tests, 252 Labs und 189 Util- und Engine-Module.
+- **Vollständige Umsetzung PLAN.md (M01–M19)**: 2.605 Unit-Tests, 63 Playwright E2E-Tests, 252 Labs und 189 Util- und Engine-Module.
 - **Adaptiver Prüfungsplan**: Der Prüfungsplaner leitet aus Einstufungstest, Fehlerjournal, Fortschritt und Prüfungstermin einen rollierenden 4-Wochen-Plan ab (`src/utils/studyPlanEngine.js`); Phasen Lernen, Vertiefen und Festigen, Wochenziele aus echten Daten.
 - **Lernpfad „Empfohlen für dich“**: Die Dashboard-Karte `LearningPathWidget` (Logik in `src/utils/learningPathEngine.js`) empfiehlt 3 Labs mit Begründung aus Einstufungstest, Fehlerjournal, Prüfungstermin, Rolle und Fortschritt; Berufsfilter und „Nicht jetzt“ werden im Spielstand gespeichert. Drill-Fehler heben das jeweilige Lab, `src/data/labExamDomains.js` ordnet IHK-Labs einem Prüfungsbereich zu.
 - **Einstufungstest & täglicher Lernmix**: Das Dashboard-Widget „Heute lernen“ (`LearningMixWidget`, Logik in `src/utils/learningMixEngine.js`) startet einen 12-Fragen-Einstufungstest als Startwert für den Bereitschafts-Score und einen Tages-Lernmix mit 10 Aufgaben (fällige Fehler, bis zu 3 Karteikarten nach SM-2, neue Fragen aus den schwächsten Bereichen).

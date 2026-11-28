@@ -9,6 +9,41 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 
 ## [Unveröffentlicht]
 
+### Behoben
+
+- Lohn-Lab: Beschriftungen (Zusatzbeitrag, Pflegeversicherung, Beitragsbemessungsgrenzen) zeigten noch Werte von 2024, obwohl die Beträge schon nach 2026 rechneten; sie werden jetzt aus `legalConstants.js` abgeleitet.
+
+- WiSo-Rechtsformen: Gesetzeszitate und Gewinnverteilung nach dem MoPeG (seit 1.1.2024) korrigiert: GbR-Geschäftsführung § 715 BGB, OHG-Haftung § 126 HGB, Führung/Vertretung §§ 116, 124 HGB; die 4-%-Verzinsung der Kapitalanteile (OHG/KG) entfällt (`wisoCompanyFormsEngine.js`).
+
+- WiSo-Lohnabrechnung: Sozialversicherungswerte auf Stand 2026 (BBG KV/PV 5.812,50 €, RV/AV 8.450 €, Pflegeversicherung 3,6 % statt 4,0 %, durchschnittlicher Zusatzbeitrag 2,9 %), vorher Stand 2024 (`wisoPayrollEngine.js`).
+
+- PWA-Update: „Jetzt aktualisieren“ lud nur neu und lieferte weiter die alte Version, weil der neue Service Worker (vite-plugin-pwa 2.x: `skipWaiting` nur per Nachricht) dauerhaft wartete. Der Toast schickt jetzt `SKIP_WAITING` und lädt nach dem Übernehmen neu (`src/utils/pwaUpdate.js`).
+
+- Veraltete Chunks nach einem Deploy: Scheitert ein `import()` mit „Failed to fetch dynamically imported module“ (offene Seite kennt alte Hashes, Service Worker/SPA-Fallback liefert kein JS), leert die `ErrorBoundary` einmalig Service Worker und Caches und lädt neu (Sperrfrist 60 s gegen Schleifen); „Erneut versuchen“ erzwingt das bei Chunk-Fehlern (`src/utils/chunkErrorRecovery.js`). Vorher lud der Retry denselben kaputten Chunk erneut.
+
+### Geändert
+
+- Verhaltens-Tests für `WisoCapitalValueLab` und `WisoInterestCalculationsLab` (Anzeige gegen Engine, Slider, Szenario, Zinseszins-Modus, XP).
+
+- Verhaltens-Tests für `WisoFinancingLab`, `WisoMaschinenstundensatzLab` und `WisoLiquiditaetLab` (Anzeige gegen Engine, Eingaben, XP).
+
+- Verhaltens-Tests für `WisoBreakEvenLab`, `WisoZuschlagskalkulationLab`, `IhkTransferTimeLab` und `IhkGradeCalculatorLab` (Anzeige gegen Engine, Eingaben, Szenarien, MEP-Hinweis, XP).
+
+- Verhaltens-Tests für die IHK-Rechenlabs `RaidCalculatorLab`, `NwaScoringLab` und `CpmNetworkLab` (Anzeige gegen Engine-Ergebnis, Eingaben, Szenarien, XP nur einmal).
+
+- Verhaltens-Tests für `WisoPayrollLab` und `WisoDunningLab` (Engine-Anbindung, Eingaben, Kirchensteuer-Option, B2B/B2C-Umschaltung, XP nur einmal).
+
+- Stichtagswerte (BBG, Beitragssätze, Beispiel-Basiszins) zentral in `src/data/legalConstants.js` mit Stand-Datum; ein Test schlägt an, wenn der Stand älter als 13 Monate ist. `wisoPayrollEngine.js` und `wisoDunningEngine.js` beziehen die Werte von dort.
+
+- WiSo-Labs: Hinweis im Mahnwesen-Lab, dass der Basiszinssatz ein Beispielwert ist, und im Lohn-Lab, dass die Lohnsteuer eine vereinfachte Näherung ist.
+
+- Dashboard-Kacheln „Empfohlene Lernbereiche“: Themen-Badges (IHK, FISI, Cloud & DevOps, Studio …) statt fast durchgängig „Neu“; der fest verdrahtete Hinweis „Neu aktualisiert v3.48.0“ entfällt (`DashboardQuickAccessGrid.jsx`).
+
+- Labs-&-Tools-Dropdown: Suchfeld (Titel, Beschreibung, Badge) und Gruppen nach Themengebiet statt einer langen flachen Liste (`NavDropdownMenu` mit `searchable`/`groupOf`, `labsMenuGroupOf` in `navbarMenuItems.js`).
+
+- Prüfungs-Countdown (`ExamCountdownWidget`): Bei weniger als 5 bearbeiteten Aufgaben zeigt das Widget „noch zu wenig Daten“ statt Score und Notenprognose (vorher z. B. „6,4 % / Note 5“).
+- **UI-Verbesserungen nach Gesamtdurchgang**: Seitenwechsel scrollt an den Anfang und setzt den Fokus auf `<main>` (`App.jsx`); Dashboard zeigt Lernmix, Fehlerjournal und Lernpfad zuerst, Countdown, Heatmap, Skill-Baum und Skill-Matrix sind einklappbar (`Shared/DashboardSection.jsx`, Zustand im LocalStorage), dazu ein „Weiter: <Lab>“-Button im Hero (`findResumeLab` in `labProgressEngine.js`); das „Neu“-Abzeichen tragen nur noch die drei jüngsten Labs je Themendatei (`labModulesData.js`); Labs-Hub mit Status-Filter (Offen/Erledigt), Level-Filter, Fortschritt je Themengebiet und ruhigerem Karten-Button („Starten“/„Fortsetzen“, hervorgehoben nur bei Empfehlungen); rohes LaTeX im Untertitel des Angebotsvergleich-Labs entfernt.
+
 ### Hinzugefügt
 - **Einsteiger-Kurs Teil 1 deutlich ausgebaut** (`src/data/anfaengerGrundkurs.js`, `anfaengerGrundkurs2.js`): Zu jedem der 12 Grundkurs-Kapitel (EVA-Prinzip bis IT als Beruf) gibt es jetzt einen ausführlichen Theorietext von Grund auf (Lesezeit 9 bis 11 Minuten, Tabellen, Beispiele, Merksätze), eine eigene Grafik (12 neue SVGs: EVA, CPU-Aufbau, Stellenwerte, DNS, Betriebssystem-Schichten, Ablaufplan, HTML/CSS/JS, Speicherpyramide, Zwei-Faktor, Heimnetz, Cloud-Modelle, Ausbildungsweg), drei bis vier kleine Aufgaben mit Tipp und Lösung (neue Komponente `Shared/MiniAufgaben.jsx`) sowie Quellenlisten (W3Schools, BSI, NIST, RFCs, IHK, Wikipedia). Fakten aus den Quellen geprüft, u. a. BSI-Passwortempfehlung (mindestens 8 Zeichen mit vier Zeichenarten oder 25 Zeichen, Passphrase, WLAN mindestens 20 Zeichen, Zwei-Faktor, schnelle Updates), IHK-Prüfungsstruktur (Teil 1: 20 %, Projektarbeit 50 %, Projekt höchstens 80 Stunden in der Anwendungsentwicklung und 40 Stunden sonst) und NIST-Cloud-Definition. Die Passwortangabe in Kapitel 9 des Grundkurses wurde an die BSI-Empfehlung angepasst. `anfaengerGrundkurs.test.js` sichert Aufbau, Grafiken, Aufgaben und Quellen.
 - **Drei neue Grundlagen-Artikel im Wissen-Tab** (`src/data/topics/`): „Boolesche Logik & Zahlendarstellung“ (Gatter, Zweierkomplement, Bitoperationen, IEEE 754), „Programmierlogik: Variablen, Schleifen, Pseudocode, PAP & Struktogramm“ (mit Schreibtischtest und Fehlerarten) und „Vom Klick zur Webseite“ (URL, DNS, TCP, TLS, HTTP, Fehlersuche). Je mit Abbildung (`zweierkomplement.svg`, `kontrollstrukturen.svg`, `webanfrage-ablauf.svg`), vier Übungen, sechs bis sieben Quizfragen, Lab-Verweisen und Quellen. Die Normen DIN 66001/66261 und IEEE 754 stehen ohne Link in den Quellen (Seiten nicht abrufbar).
@@ -35,6 +70,22 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 - Neue Engine `src/utils/learningMixEngine.js` (`@ts-check`) mit Tests, neue Store-Aktionen `recordPlacementResult` und `recordDailyMixResult`, neue Spielstand-Felder `placementResult` und `dailyMixLog`.
 
 ### Geändert
+
+- Verhaltens-Tests für `WisoCapitalValueLab` und `WisoInterestCalculationsLab` (Anzeige gegen Engine, Slider, Szenario, Zinseszins-Modus, XP).
+
+- Verhaltens-Tests für `WisoFinancingLab`, `WisoMaschinenstundensatzLab` und `WisoLiquiditaetLab` (Anzeige gegen Engine, Eingaben, XP).
+
+- Verhaltens-Tests für `WisoBreakEvenLab`, `WisoZuschlagskalkulationLab`, `IhkTransferTimeLab` und `IhkGradeCalculatorLab` (Anzeige gegen Engine, Eingaben, Szenarien, MEP-Hinweis, XP).
+
+- Verhaltens-Tests für die IHK-Rechenlabs `RaidCalculatorLab`, `NwaScoringLab` und `CpmNetworkLab` (Anzeige gegen Engine-Ergebnis, Eingaben, Szenarien, XP nur einmal).
+
+- Verhaltens-Tests für `WisoPayrollLab` und `WisoDunningLab` (Engine-Anbindung, Eingaben, Kirchensteuer-Option, B2B/B2C-Umschaltung, XP nur einmal).
+
+- Stichtagswerte (BBG, Beitragssätze, Beispiel-Basiszins) zentral in `src/data/legalConstants.js` mit Stand-Datum; ein Test schlägt an, wenn der Stand älter als 13 Monate ist. `wisoPayrollEngine.js` und `wisoDunningEngine.js` beziehen die Werte von dort.
+
+- WiSo-Labs: Hinweis im Mahnwesen-Lab, dass der Basiszinssatz ein Beispielwert ist, und im Lohn-Lab, dass die Lohnsteuer eine vereinfachte Näherung ist.
+
+- Dashboard-Kacheln „Empfohlene Lernbereiche“: Themen-Badges (IHK, FISI, Cloud & DevOps, Studio …) statt fast durchgängig „Neu“; der fest verdrahtete Hinweis „Neu aktualisiert v3.48.0“ entfällt (`DashboardQuickAccessGrid.jsx`).
 - **Labs vorladen**: Beim Überfahren oder Fokussieren eines Menüeintrags lädt `prefetchLab` (`src/data/labRegistry.js`) den Lab-Chunk vorab, jedes Lab höchstens einmal; der Tab-Wechsel rendert dadurch ohne Ladezeit.
 - **Service Worker nur im Produktions-Build registriert** (`src/main.jsx`): Im Dev-Server entfällt der Konsolenfehler „unsupported MIME type“.
 
@@ -45,6 +96,12 @@ und dieses Projekt hält sich an [Semantic Versioning](https://semver.org/spec/v
 - **Altbestand des Prüfungsplaners (Phase 4d)**: `generateAdaptiveStudyPlan`, die feste Themenliste `STUDY_TRACKS` und `IHK_EXAM_DATES` aus `ihkStudyPlanEngine.js` sowie Store-Aktion `toggleStudyPlanWeek` und Spielstand-Feld `studyPlanWeeks` sind entfernt. Alte Spielstände mit `studyPlanWeeks` bleiben ladbar (unbekannte Felder werden beim Import beibehalten) und werden nicht mehr verwendet.
 
 ### Behoben
+
+- Lohn-Lab: Beschriftungen (Zusatzbeitrag, Pflegeversicherung, Beitragsbemessungsgrenzen) zeigten noch Werte von 2024, obwohl die Beträge schon nach 2026 rechneten; sie werden jetzt aus `legalConstants.js` abgeleitet.
+
+- WiSo-Rechtsformen: Gesetzeszitate und Gewinnverteilung nach dem MoPeG (seit 1.1.2024) korrigiert: GbR-Geschäftsführung § 715 BGB, OHG-Haftung § 126 HGB, Führung/Vertretung §§ 116, 124 HGB; die 4-%-Verzinsung der Kapitalanteile (OHG/KG) entfällt (`wisoCompanyFormsEngine.js`).
+
+- WiSo-Lohnabrechnung: Sozialversicherungswerte auf Stand 2026 (BBG KV/PV 5.812,50 €, RV/AV 8.450 €, Pflegeversicherung 3,6 % statt 4,0 %, durchschnittlicher Zusatzbeitrag 2,9 %), vorher Stand 2024 (`wisoPayrollEngine.js`).
 - **Web-Components-Hub**: `**fett**` in der Einleitung wurde als Sternchen angezeigt.
 - **Notizen-Vorschau**: Die „Vorschau“ zeigte bisher den rohen Markdown-Text; sie rendert jetzt das Markdown.
 - **Einsteiger-Kurs**: `**fett**` in den Kapiteltexten wurde als Sternchen angezeigt; die Hervorhebung wird jetzt korrekt dargestellt.

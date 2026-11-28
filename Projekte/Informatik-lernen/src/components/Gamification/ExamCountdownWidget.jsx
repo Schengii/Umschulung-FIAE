@@ -23,6 +23,14 @@ function nextPresetIsoDate(preset) {
   return toDateKey(target); // lokale Zeit; toISOString() verschob das Datum in UTC+ um einen Tag
 }
 
+// Unter dieser Zahl bearbeiteter Aufgaben ist der Score nicht aussagekräftig.
+export const MIN_TASKS_FOR_READINESS = 5;
+
+export function hasEnoughReadinessData(readiness) {
+  const total = (readiness?.domains || []).reduce((sum, d) => sum + (d.completedTasks || 0), 0);
+  return total >= MIN_TASKS_FOR_READINESS;
+}
+
 function calculateDaysRemaining(targetDateStr) {
   if (!targetDateStr) return null;
   const target = new Date(targetDateStr);
@@ -91,6 +99,8 @@ export default function ExamCountdownWidget({ setActiveTab }) {
     // Einstufungstest liefert einen Startwert, auch wenn noch keine Themen abgeschlossen sind
     return calculateExamReadiness(mergeDomainStats(domainStats, placementToDomainStats(userState.placementResult)));
   }, [userState]);
+
+  const enoughData = hasEnoughReadinessData(readiness);
 
   const sprintRecommendations = useMemo(() => [
     {
@@ -211,14 +221,24 @@ export default function ExamCountdownWidget({ setActiveTab }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-main)' }}>
             <Activity size={18} color="var(--accent-primary)" />
-            Adaptiver IHK-Prüfungsbereitschafts-Score: {readiness.overallReadinessPercent}%
+            {enoughData
+              ? `Adaptiver IHK-Prüfungsbereitschafts-Score: ${readiness.overallReadinessPercent}%`
+              : 'Prüfungsbereitschaft: noch zu wenig Daten'}
           </div>
-          <span className="badge badge-indigo" style={{ fontWeight: 700 }}>
-            Prognose: {readiness.gradeEstimate}
-          </span>
+          {enoughData && (
+            <span className="badge badge-indigo" style={{ fontWeight: 700 }}>
+              Prognose: {readiness.gradeEstimate}
+            </span>
+          )}
         </div>
 
-        {readiness.recommendedFocus.length > 0 && (
+        {!enoughData && (
+          <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            Bearbeite mindestens {MIN_TASKS_FOR_READINESS} Aufgaben, Labs oder den Einstufungstest, dann erscheint hier deine Prognose.
+          </div>
+        )}
+
+        {enoughData && readiness.recommendedFocus.length > 0 && (
           <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
             <strong style={{ color: 'var(--accent-rose)' }}>⚠️ Priorisierter Trainingsbedarf:</strong>{' '}
             {readiness.recommendedFocus.slice(0, 2).join(' • ')}

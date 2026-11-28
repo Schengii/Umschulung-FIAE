@@ -48,6 +48,9 @@ const CampaignQuestHub = lazy(() => import('./components/Content/CampaignQuestHu
 
 import { LAB_REGISTRY, buildRegistryIndex } from './data/labRegistry';
 import { observeAutoLabels } from './utils/a11yAutoLabel';
+import DashboardSection from './components/Shared/DashboardSection';
+import { LAB_MODULES } from './data/labModulesData';
+import { findResumeLab } from './utils/labProgressEngine';
 import DashboardQuickAccessGrid from './components/Content/DashboardQuickAccessGrid';
 
 import { USER_ROLES } from './data/userProfiles';
@@ -113,6 +116,23 @@ export default function App() {
     if (entry) recordLabVisit(entry.tabs[0]);
   }, [activeTab, recordLabVisit]);
 
+  // Seitenwechsel: an den Anfang scrollen und den Fokus auf den Inhalt setzen
+  // (sonst startet ein Lab mitten auf der Seite und Screenreader bleiben in der Navigation).
+  const mainRef = useRef(null);
+  const isFirstRoute = useRef(true);
+  useEffect(() => {
+    if (isFirstRoute.current) {
+      isFirstRoute.current = false;
+      return;
+    }
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    } catch {
+      // jsdom: scrollTo nicht implementiert
+    }
+    mainRef.current?.focus({ preventScroll: true });
+  }, [location.pathname]);
+
   // Global Ctrl + K / Cmd + K Keydown Shortcut Listener
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -169,10 +189,10 @@ export default function App() {
   // weiter unten erhalten, da sie mehr als ein einzelnes Lab rendern.
   // A11y-Sicherheitsnetz: unbeschriftete Steuerelemente in Labs bekommen einen
   // aus dem Kontext abgeleiteten aria-label (siehe utils/a11yAutoLabel.js).
-  const mainRef = useRef(null);
   useEffect(() => observeAutoLabels(mainRef.current), []);
 
   // 'sqldungeon' ist kein eigener Tab, sondern ein Spiel im Games-Tab
+  const resumeLab = findResumeLab(LAB_MODULES, userState?.labProgress, (id) => LAB_REGISTRY_INDEX.get(id)?.tabs[0] ?? id);
   const openLab = (labId) => {
     if (labId === 'sqldungeon') {
       setActiveGameId('sql');
@@ -262,7 +282,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main ref={mainRef} style={{ flex: 1, maxWidth: '1280px', width: '100%', margin: '0 auto', padding: '24px 20px 40px 20px', position: 'relative' }}>
+      <main ref={mainRef} tabIndex={-1} id="main-content" style={{ outline: 'none', flex: 1, maxWidth: '1280px', width: '100%', margin: '0 auto', padding: '24px 20px 40px 20px', position: 'relative' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -301,10 +321,20 @@ export default function App() {
                     </div>
 
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      {resumeLab && (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => openLab(resumeLab.id)}
+                          style={{ minHeight: '48px', fontSize: '0.95rem', background: 'var(--gradient-cta)', gap: '8px' }}
+                        >
+                          <ArrowRight size={18} aria-hidden="true" /> Weiter: {resumeLab.title}
+                        </button>
+                      )}
+
                       <button
-                        className="btn btn-primary"
+                        className={`btn ${resumeLab ? 'btn-secondary' : 'btn-primary'}`}
                         onClick={() => setActiveTab('campaign')}
-                        style={{ minHeight: '48px', fontSize: '0.95rem', background: 'var(--gradient-cta)', gap: '8px' }}
+                        style={{ minHeight: '48px', fontSize: '0.95rem', gap: '8px', ...(resumeLab ? {} : { background: 'var(--gradient-cta)' }) }}
                       >
                         <Compass size={18} /> Story Kampagne
                       </button>
@@ -328,37 +358,38 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* 365-Tage GitHub-Style Aktivitäts-Heatmap */}
-                <ActivityHeatmapWidget />
-
-                {/* IHK Prüfungs-Countdown & T-Minus Sprint */}
-                <ExamCountdownWidget setActiveTab={setActiveTab} />
-
-                {/* Einstufungstest & täglicher Lernmix */}
+                {/* Heute: Lernmix, Lernpfad und Fehlerjournal stehen oben, Statistik klappt ein */}
                 <Suspense fallback={null}>
                   <LearningMixWidget />
                 </Suspense>
 
-                {/* Lernpfad: empfohlene nächste Labs */}
-                <Suspense fallback={null}>
-                  <LearningPathWidget onSelectLab={openLab} />
-                </Suspense>
-
-                {/* Fehlerjournal: fällige Wiederholungen */}
                 <Suspense fallback={null}>
                   <MistakeReviewWidget />
                 </Suspense>
 
-                {/* Daily Challenge Widget */}
+                <Suspense fallback={null}>
+                  <LearningPathWidget onSelectLab={openLab} />
+                </Suspense>
+
+                <DashboardSection id="exam" title="IHK Prüfungs-Countdown & Bereitschaft" summary="Prüfungstermin, Bereitschafts-Score und Power-Sprint">
+                  <ExamCountdownWidget setActiveTab={setActiveTab} />
+                </DashboardSection>
+
                 <DailyChallengeWidget onCompleteChallenge={(xp) => awardXP(xp, 'daily_master')} />
 
-                {/* RPG Skill Tree Widget */}
-                <SkillTreeWidget userState={userState} onRewardXP={(xp) => awardXP(xp)} />
+                <DashboardSection id="heatmap" title="Lern-Aktivität (365 Tage)" summary="Streak, Einheiten und Heatmap" defaultOpen={false}>
+                  <ActivityHeatmapWidget />
+                </DashboardSection>
 
-                {/* Skill Matrix Visualizer */}
-                <Suspense fallback={null}>
-                  <SkillMatrixWidget userState={userState} />
-                </Suspense>
+                <DashboardSection id="skilltree" title="Skill-Baum" summary="Freischaltbare Themen und XP-Belohnungen" defaultOpen={false}>
+                  <SkillTreeWidget userState={userState} onRewardXP={(xp) => awardXP(xp)} />
+                </DashboardSection>
+
+                <DashboardSection id="skillmatrix" title="Skill-Matrix" summary="Stärken und Schwächen nach Themenbereich" defaultOpen={false}>
+                  <Suspense fallback={null}>
+                    <SkillMatrixWidget userState={userState} />
+                  </Suspense>
+                </DashboardSection>
 
                 {/* Feature Modules Quick Access Grid */}
                 <DashboardQuickAccessGrid setActiveTab={setActiveTab} />

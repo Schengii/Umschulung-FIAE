@@ -2,6 +2,32 @@
  * Navigations-Menüstruktur für Navbar Dropdowns (Labs, Prüfung, Kurse)
  */
 
+import { LAB_MODULES } from './labModulesData';
+
+/** Gruppennamen für das Labs-Dropdown (Kategorie-IDs wie im Labs-Hub). */
+const MENU_CATEGORY_NAMES = {
+  ihk: 'IHK Prüfung & Karriere',
+  wiso: 'WISO & Wirtschaft',
+  fiae: 'Anwendungsentwicklung',
+  code: 'Anwendungsentwicklung',
+  network: 'Netzwerke & Protokolle',
+  hardware: 'Hardware & Elektronik',
+  linux: 'Hardware & Elektronik',
+  algorithms: 'Algorithmen & Datenstrukturen',
+  architecture: 'Architektur',
+  devops: 'DevOps & Git',
+  cloud: 'Cloud & Container',
+  security: 'Security & Auth',
+  ai: 'Künstliche Intelligenz',
+  databases: 'Datenbanken & SQL',
+  database: 'Datenbanken & SQL'
+};
+
+const LAB_CATEGORY_BY_ID = new Map(LAB_MODULES.map((lab) => [lab.id, lab.category]));
+
+/** Gruppe eines Menüeintrags; Einträge ohne Lab (Hub, Prüfung, Spickzettel …) bleiben ungruppiert. */
+export const labsMenuGroupOf = (item) => MENU_CATEGORY_NAMES[LAB_CATEGORY_BY_ID.get(item.id)] || null;
+
 export const labsMenuItems = [
   { id: 'labs', label: '🧪 Alle Labs & Simulatoren Hub', desc: 'Zentrale Übersicht aller 60+ interaktiven Labs', badge: 'Hub' },
   { id: 'sql_window_functions_lab', label: '⚡ SQL Window Functions & Analytics Studio', desc: 'ROW_NUMBER, RANK, DENSE_RANK, NTILE & PARTITION BY', badge: 'Neu' },

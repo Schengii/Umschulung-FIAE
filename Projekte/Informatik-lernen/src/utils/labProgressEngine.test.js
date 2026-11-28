@@ -4,7 +4,8 @@ import {
   recordCompletion,
   matchesCareer,
   summarizeLabProgress,
-  recommendNextLabs
+  recommendNextLabs,
+  findResumeLab
 } from './labProgressEngine';
 
 const lab = (id, difficulty, category = 'fiae', tags = ['#x']) => ({ id, difficulty, category, tags });
@@ -106,5 +107,23 @@ describe('recommendNextLabs', () => {
   it('liefert eine leere Liste, wenn alles abgeschlossen ist', () => {
     const progress = recordCompletion({}, 'x', '2026-10-07');
     expect(recommendNextLabs([lab('x', 'Beginner')], { progress })).toEqual([]);
+  });
+});
+
+describe('findResumeLab', () => {
+  const mods = [lab('a', 'Beginner'), lab('b', 'Beginner'), lab('c', 'Beginner')];
+
+  it('liefert null ohne begonnene Labs', () => {
+    expect(findResumeLab(mods, {})).toBeNull();
+    expect(findResumeLab(mods, undefined)).toBeNull();
+  });
+
+  it('wählt das zuletzt besuchte, nicht abgeschlossene Lab', () => {
+    const progress = {
+      a: { visits: 1, lastVisit: '2026-11-01', completed: false },
+      b: { visits: 2, lastVisit: '2026-11-20', completed: false },
+      c: { visits: 1, lastVisit: '2026-11-25', completed: true }
+    };
+    expect(findResumeLab(mods, progress)?.id).toBe('b');
   });
 });
