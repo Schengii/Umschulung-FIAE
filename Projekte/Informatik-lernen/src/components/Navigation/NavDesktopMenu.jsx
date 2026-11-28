@@ -1,6 +1,6 @@
 import React from 'react';
 import { Terminal, GraduationCap, BookOpen, ChevronDown } from 'lucide-react';
-import { labsMenuItems, examMenuItems, learnMenuItems } from '../../data/navbarMenuItems';
+import { labsMenuItems, labsMenuGroupOf, examMenuItems, learnMenuItems } from '../../data/navbarMenuItems';
 import NavDropdownMenu from './NavDropdownMenu';
 
 export default function NavDesktopMenu({
@@ -54,7 +54,7 @@ export default function NavDesktopMenu({
           <ChevronDown size={14} style={{ transform: activeDropdown === 'labs' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
         </button>
         {activeDropdown === 'labs' && (
-          <NavDropdownMenu items={labsMenuItems} activeTab={activeTab} onSelect={navigateTo} badgeBg="rgba(99, 102, 241, 0.15)" badgeColor="var(--accent-primary)" />
+          <NavDropdownMenu items={labsMenuItems} searchable groupOf={labsMenuGroupOf} searchLabel="Labs und Tools durchsuchen" activeTab={activeTab} onSelect={navigateTo} badgeBg="rgba(99, 102, 241, 0.15)" badgeColor="var(--accent-primary)" />
         )}
       </div>
 

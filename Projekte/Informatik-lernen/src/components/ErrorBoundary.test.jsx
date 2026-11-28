@@ -3,6 +3,12 @@ import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import ErrorBoundary from './ErrorBoundary';
+import { recoverFromChunkError } from '../utils/chunkErrorRecovery';
+
+vi.mock('../utils/chunkErrorRecovery', async (importOriginal) => ({
+  ...(await importOriginal()),
+  recoverFromChunkError: vi.fn().mockResolvedValue(true)
+}));
 
 afterEach(() => {
   cleanup();
@@ -111,5 +117,31 @@ describe('ErrorBoundary', () => {
 
     expect(onError).toHaveBeenCalledTimes(1);
     expect(onError.mock.calls[0][0].message).toBe('Kaboom aus einem simulierten Lab-Absturz');
+  });
+
+  it('heilt einen veralteten Chunk automatisch und beim manuellen Retry erzwungen', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    function StaleChunk() {
+      throw new TypeError('Failed to fetch dynamically imported module: http://x/assets/Lab-1.js');
+    }
+    render(
+      <ErrorBoundary resetKey="a">
+        <StaleChunk />
+      </ErrorBoundary>
+    );
+    expect(recoverFromChunkError).toHaveBeenCalledWith();
+    fireEvent.click(screen.getByText('Erneut versuchen'));
+    expect(recoverFromChunkError).toHaveBeenCalledWith({ force: true });
+  });
+
+  it('löst bei gewöhnlichen Fehlern keinen Neuladevorgang aus', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(recoverFromChunkError).mockClear();
+    render(
+      <ErrorBoundary resetKey="a">
+        <Bomb shouldThrow={true} />
+      </ErrorBoundary>
+    );
+    expect(recoverFromChunkError).not.toHaveBeenCalled();
   });
 });

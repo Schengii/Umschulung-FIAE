@@ -21,7 +21,7 @@ const answerAll = (max) => {
     const group = screen.queryByRole('group', { name: /Antwortmöglichkeiten/i });
     if (!group) break;
     fireEvent.click(group.querySelector('button'));
-    fireEvent.click(screen.getByRole('button', { name: /Nächste Frage|Auswerten/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^(Nächste Frage|Auswerten)/i }));
   }
 };
 

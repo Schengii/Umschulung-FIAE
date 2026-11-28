@@ -129,3 +129,21 @@ export function recommendNextLabs(modules, { careerId = 'all', progress, resolve
     .slice(0, Math.max(0, limit))
     .map(({ lab }) => lab);
 }
+
+/**
+ * Das zuletzt besuchte, noch nicht abgeschlossene Lab (für „Weiterlernen“).
+ * @param {LabModuleLike[]} modules
+ * @param {LabProgress | undefined | null} progress
+ * @param {(moduleId: string) => string} [resolveKey]
+ * @returns {LabModuleLike | null}
+ */
+export function findResumeLab(modules, progress, resolveKey = (id) => id) {
+  /** @type {{ lab: LabModuleLike, last: string } | null} */
+  let best = null;
+  for (const lab of modules) {
+    const entry = progress?.[resolveKey(lab.id)];
+    if (!entry || entry.completed || !entry.lastVisit) continue;
+    if (!best || entry.lastVisit > best.last) best = { lab, last: entry.lastVisit };
+  }
+  return best ? best.lab : null;
+}

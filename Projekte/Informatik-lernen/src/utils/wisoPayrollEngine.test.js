@@ -25,11 +25,11 @@ describe('wisoPayrollEngine', () => {
   });
 
   it('begrenzt Beiträge an den Beitragsbemessungsgrenzen (BBG)', () => {
-    const normal = calculatePayroll({ grossSalary: 5000 });
+    const normal = calculatePayroll({ grossSalary: 6000 });
     const highCap = calculatePayroll({ grossSalary: 12000 });
 
-    // KV / PV ist bei 5175€ gedeckelt
-    expect(highCap.employee.health).toBeCloseTo(normal.employee.health, -2);
+    // KV / PV ist ab 5.812,50 € (2026) gedeckelt
+    expect(highCap.employee.health).toBeCloseTo(normal.employee.health, 2);
     expect(highCap.employer.totalCost).toBeGreaterThan(12000);
   });
 });

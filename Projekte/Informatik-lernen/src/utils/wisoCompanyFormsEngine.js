@@ -55,9 +55,9 @@ export const COMPANY_FORMS = [
     minCapital: 'Kein Mindestkapital (0 €)',
     liability: 'Gesamtschuldnerisch, unbeschränkt und persönlich aller Gesellschafter',
     commercialRegister: 'Kein Eintrag (optional: Gesellschaftsregister eGbR)',
-    management: 'Gemeinschaftliche Geschäftsführung aller Gesellschafter (§ 709 BGB)',
+    management: 'Gemeinschaftliche Geschäftsführung aller Gesellschafter (§ 715 BGB)',
     organs: 'Gesellschafter',
-    profitDistribution: 'Nach Köpfen (sofern vertraglich nicht anders vereinbart)',
+    profitDistribution: 'Nach Vereinbarung, sonst nach dem Wert der Beiträge, sonst gleichmäßig (§ 709 BGB)',
     bestFor: 'Gemeinsame Projektarbeit, Startups in der Findungsphase'
   },
   {
@@ -65,11 +65,11 @@ export const COMPANY_FORMS = [
     name: 'Offene Handelsgesellschaft (OHG)',
     category: 'Personengesellschaft',
     minCapital: 'Kein Mindestkapital (0 €)',
-    liability: 'Unbeschränkt, persönlich, primär und gesamtschuldnerisch aller Gesellschafter (§ 128 HGB)',
+    liability: 'Unbeschränkt, persönlich, primär und gesamtschuldnerisch aller Gesellschafter (§ 126 HGB)',
     commercialRegister: 'Pflicht: Handelsregister Abteilung A (HRA)',
-    management: 'Einzelgeschäftsführung & Einzelvertretung (§§ 115, 125 HGB)',
+    management: 'Einzelgeschäftsführung & Einzelvertretung (§§ 116, 124 HGB)',
     organs: 'Gesellschafter',
-    profitDistribution: '4% auf den Kapitalanteil, Rest nach Köpfen (§ 121 HGB a.F.)',
+    profitDistribution: 'Nach Vereinbarung, sonst nach dem Wert der Beiträge, sonst gleichmäßig (§ 709 BGB i. V. m. § 105 Abs. 3 HGB; die frühere 4-%-Regel entfiel mit dem MoPeG zum 1.1.2024)',
     bestFor: 'Handelsbetriebe mehrerer Partner mit hoher gegenseitiger Vertrauensbasis'
   },
   {
@@ -81,7 +81,7 @@ export const COMPANY_FORMS = [
     commercialRegister: 'Pflicht: Handelsregister Abteilung A (HRA)',
     management: 'Ausschließlich Komplementär (Kommanditist ist von Führung ausgeschlossen)',
     organs: 'Komplementär (Vollhafter) & Kommanditist (Teilhafter)',
-    profitDistribution: '4% auf Kapitalanteil, Rest im angemessenen Verhältnis (§ 168 HGB)',
+    profitDistribution: 'Nach Vereinbarung, sonst nach dem Wert der Beiträge (§ 709 BGB i. V. m. § 105 Abs. 3 HGB; § 168 HGB a. F. entfiel mit dem MoPeG zum 1.1.2024)',
     bestFor: 'Beschaffung von Eigenkapital durch reine Geldgeber ohne Führungsbefugnis'
   },
   {

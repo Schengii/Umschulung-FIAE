@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { onActivationKey } from '../Shared/keyActivation';
 import { prefetchLab } from '../../data/labRegistry';
 
-export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 'rgba(99, 102, 241, 0.15)', badgeColor = 'var(--accent-primary)' }) {
+/**
+ * Filtert Menüeinträge nach Suchtext (Titel, Beschreibung, Badge) und ordnet sie in Gruppen.
+ * Einträge ohne Gruppe stehen zuerst, die übrigen Gruppen in der Reihenfolge ihres ersten Auftretens.
+ * @param {Array<{id: string, label: string, desc?: string, badge?: string}>} items
+ * @param {string} query
+ * @param {((item: object) => string | null | undefined) | undefined} groupOf
+ * @returns {Array<{ name: string | null, items: object[] }>}
+ */
+export function groupMenuItems(items, query = '', groupOf) {
+  const q = query.trim().toLowerCase();
+  const visible = q
+    ? items.filter((item) => `${item.label} ${item.desc || ''} ${item.badge || ''}`.toLowerCase().includes(q))
+    : items;
+  if (!groupOf) return visible.length ? [{ name: null, items: visible }] : [];
+  const groups = new Map();
+  for (const item of visible) {
+    const name = groupOf(item) || null;
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(item);
+  }
+  const result = [...groups.entries()].map(([name, list]) => ({ name, items: list }));
+  return result.sort((a, b) => (a.name === null ? -1 : b.name === null ? 1 : 0));
+}
+
+export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 'rgba(99, 102, 241, 0.15)', badgeColor = 'var(--accent-primary)', searchable = false, groupOf, searchLabel = 'Menü durchsuchen' }) {
+  const [query, setQuery] = useState('');
+  const searchRef = useRef(null);
+  useEffect(() => {
+    if (searchable) searchRef.current?.focus();
+  }, [searchable]);
+  const groups = useMemo(() => groupMenuItems(items, searchable ? query : '', groupOf), [items, query, searchable, groupOf]);
+
   return (
     <div
       className="animate-fade-in nav-dropdown-popover"
@@ -24,7 +55,40 @@ export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 
         gap: '6px'
       }}
     >
-      {items.map((item) => {
+      {searchable && (
+        <input
+          ref={searchRef}
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Suchen …"
+          aria-label={searchLabel}
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+            padding: '9px 12px',
+            borderRadius: '10px',
+            border: '1px solid var(--border-color)',
+            background: 'var(--bg-secondary, var(--bg-card))',
+            color: 'var(--text-main)',
+            fontSize: '0.9rem'
+          }}
+        />
+      )}
+      {searchable && groups.length === 0 && (
+        <div role="status" style={{ padding: '12px 14px', color: 'var(--text-muted)', fontSize: '0.88rem' }}>
+          Kein Treffer für „{query}“.
+        </div>
+      )}
+      {groups.map((group) => (
+        <React.Fragment key={group.name ?? '__general'}>
+          {group.name && (
+            <div style={{ padding: '10px 14px 2px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+              {group.name} <span style={{ fontWeight: 600 }}>({group.items.length})</span>
+            </div>
+          )}
+          {group.items.map((item) => {
         const isActive = activeTab === item.id;
         return (
           <div role="button" tabIndex={0} onKeyDown={onActivationKey(() => onSelect(item.id))}
@@ -60,7 +124,9 @@ export default function NavDropdownMenu({ items, activeTab, onSelect, badgeBg = 
             )}
           </div>
         );
-      })}
+          })}
+        </React.Fragment>
+      ))}
     </div>
   );
 }

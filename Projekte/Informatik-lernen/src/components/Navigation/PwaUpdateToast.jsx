@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, RefreshCw, X } from 'lucide-react';
+import { applyPwaUpdate } from '../../utils/pwaUpdate';
 
 export default function PwaUpdateToast() {
   const [showToast, setShowToast] = useState(false);
@@ -31,8 +32,10 @@ export default function PwaUpdateToast() {
 
   if (!showToast) return null;
 
+  // Aktiviert den wartenden Service Worker (SKIP_WAITING) und lädt danach neu – ein bloßes
+  // Neuladen lieferte weiter die alte Version.
   const handleReload = () => {
-    window.location.reload();
+    applyPwaUpdate();
   };
 
   return (

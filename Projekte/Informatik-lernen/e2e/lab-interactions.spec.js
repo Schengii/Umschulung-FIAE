@@ -86,7 +86,7 @@ for (const { search, expected } of [
   test(`Lab-Dashboard: "${search}" öffnet ein sichtbares Lab`, async ({ page }) => {
     await page.goto('/labs');
     await page.getByPlaceholder(/Suche nach Tags/i).fill(search);
-    await page.getByRole('button', { name: /Laboratorium Starten/i }).first().click();
+    await page.getByRole('button', { name: /^(Starten|Fortsetzen)$/ }).first().click();
     await expect(page.locator('main h1, main h2').filter({ hasText: expected }).first()).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Dieses Modul ist abgestürzt')).toHaveCount(0);
   });

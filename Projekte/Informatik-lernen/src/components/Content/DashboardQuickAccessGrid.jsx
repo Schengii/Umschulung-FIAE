@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { onActivationKey } from '../Shared/keyActivation';
 
 export default function DashboardQuickAccessGrid({ setActiveTab }) {
@@ -11,7 +11,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Offizielle Entscheidungsmatrix mit Gewichtung & K.O.-Kriterien für die Projektdokumentation.',
       actionText: 'NWA Berechnen',
       color: 'var(--accent-primary)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'raid_calculator',
@@ -20,7 +20,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'RAID 0, 1, 5, 6, 10 & 50 Kapazitäten, Rebuild-Dauer, URE-Risiko & Block-Matrix.',
       actionText: 'RAID Konfigurieren',
       color: 'var(--accent-teal)',
-      badge: 'FISI Neu'
+      badge: 'FISI'
     },
     {
       id: 'vlsm_subnet',
@@ -29,7 +29,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Hierarchische IPv4-Subnetzaufteilung nach Host-Bedarf ohne Adressraum-Verschwendung.',
       actionText: 'VLSM Berechnen',
       color: 'var(--accent-amber)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'ihk_project_proposal',
@@ -38,7 +38,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'AO 2020 Stundenprüfung (FIAE 80h / FISI 40h), Phasenverteilung & Genehmigungs-Checkliste.',
       actionText: 'Antrag Prüfen',
       color: 'var(--accent-emerald)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'cpm_network',
@@ -47,7 +47,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Vorwärts- & Rückwärtsrechnung, FAZ/FEZ/SAZ/SEZ, Pufferzeiten GP/FP & Kritischer Pfad.',
       actionText: 'Netzplan Starten',
       color: 'var(--accent-purple)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'ihk_transfer_time_lab',
@@ -56,7 +56,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Bit vs. Byte, KiB vs. kB, Brutto- vs. Netto-Datenrate & Protokoll-Overhead mit Rechenweg.',
       actionText: 'Dauer Berechnen',
       color: 'var(--accent-blue, #2563eb)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'uml_diagram',
@@ -65,7 +65,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Synchrone/asynchrone Aufrufe modellieren, IHK-Linter prüfen und Mermaid.js exportieren.',
       actionText: 'Diagramm Öffnen',
       color: 'var(--accent-rose)',
-      badge: 'Neu'
+      badge: 'Software'
     },
     {
       id: 'terraform',
@@ -74,7 +74,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Deklaratives State-Management, Execution Plans (Diff) & Directed Acyclic Graph (DAG).',
       actionText: 'IaC Simulieren',
       color: 'var(--accent-indigo)',
-      badge: 'Neu'
+      badge: 'Cloud & DevOps'
     },
     {
       id: 'oral_defense_studio',
@@ -83,7 +83,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: '15-minütiges mündliches Fachgespräch mit Sprachausgabe, Persona-Prüfern & Bewertungsmatrix.',
       actionText: 'Fachgespräch Starten',
       color: 'var(--accent-rose)',
-      badge: 'IHK Neu'
+      badge: 'IHK'
     },
     {
       id: 'ansible_playbook',
@@ -92,7 +92,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Automatisierte Server-Provisionierung, Host-Inventories & Idempotenz-Beweis.',
       actionText: 'Playbook Ausführen',
       color: 'var(--accent-teal)',
-      badge: 'FISI Neu'
+      badge: 'FISI'
     },
     {
       id: 'computation_worker',
@@ -101,7 +101,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Main Thread vs. Background Worker CPU-Benchmarks ohne UI-Freezing (60fps).',
       actionText: 'Worker Benchmark',
       color: 'var(--accent-amber)',
-      badge: 'Neu'
+      badge: 'Software'
     },
     {
       id: 'os_scheduler',
@@ -110,7 +110,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'CPU-Scheduling (FCFS, SJF, Round Robin), animiertes Gantt-Diagramm & Bankier-Algorithmus.',
       actionText: 'Scheduling Testen',
       color: 'var(--accent-primary)',
-      badge: 'Flagship'
+      badge: 'Studio'
     },
     {
       id: 'packet_sniffer',
@@ -119,7 +119,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Schichten 2–7 Paket-Dissektion, synchroner Hex-Dump und Wireshark-Style Display-Filter.',
       actionText: 'Pakete Analysieren',
       color: 'var(--accent-teal)',
-      badge: 'Flagship'
+      badge: 'Studio'
     },
     {
       id: 'erd_designer',
@@ -128,7 +128,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Interaktiver Datenbankmodell-Designer mit 1NF-3NF Audit & SQL DDL Export.',
       actionText: 'ERD Erstellen',
       color: 'var(--accent-purple)',
-      badge: 'Flagship'
+      badge: 'Studio'
     },
     {
       id: 'transformer_attention',
@@ -137,7 +137,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Self-Attention Heatmap, Temperature / Top-P Sampling und autonomer AI-Agent ReAct-Loop.',
       actionText: 'LLM Verstehen',
       color: 'var(--accent-rose)',
-      badge: 'Flagship'
+      badge: 'Studio'
     },
     {
       id: 'cloud_canvas',
@@ -146,7 +146,7 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
       desc: 'Multi-Tier Topologie-Planung, Compound Availability (99.99%) & SPOF Linter.',
       actionText: 'Architektur Planen',
       color: 'var(--accent-cyan)',
-      badge: 'Flagship'
+      badge: 'Studio'
     },
     {
       id: 'ihk_grade_calculator',
@@ -219,9 +219,6 @@ export default function DashboardQuickAccessGrid({ setActiveTab }) {
         <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
           Empfohlene Lernbereiche &amp; Flagship Studios
         </h2>
-        <span className="badge badge-indigo" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Sparkles size={14} /> Neu aktualisiert v3.48.0
-        </span>
       </div>
 
       <div className="grid-responsive" style={{ marginBottom: '40px' }}>

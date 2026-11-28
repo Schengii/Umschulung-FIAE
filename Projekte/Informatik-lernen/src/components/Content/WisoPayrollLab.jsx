@@ -4,6 +4,10 @@ import {
 } from 'lucide-react';
 import { calculatePayroll } from '../../utils/wisoPayrollEngine';
 import { useStore } from '../../store/useStore';
+import { SOCIAL_INSURANCE_2026 as SI } from '../../data/legalConstants';
+
+const pct = (x) => (x * 100).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+const eur0 = (x) => x.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: x % 1 ? 2 : 0 });
 
 export default function WisoPayrollLab() {
   const { awardXP } = useStore();
@@ -46,6 +50,9 @@ export default function WisoPayrollLab() {
               </h1>
               <p style={{ margin: '4px 0 0', color: 'var(--text-secondary, #64748b)', fontSize: '0.95rem' }}>
                 Sozialabgaben (KV, PV, RV, AV), Steuerklassen I–VI & Arbeitgeber-Gesamtkostenbelastung nach IHK-Standard
+              </p>
+              <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                Lohnsteuer ist eine vereinfachte Näherung (Pauschalfaktoren je Steuerklasse, nicht der amtliche Tarif) und ersetzt keine echte Abrechnung.
               </p>
             </div>
           </div>
@@ -221,11 +228,11 @@ export default function WisoPayrollLab() {
               </div>
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
-              <span>Krankenversicherung (KV 7,3% + Zusatz 0,85%):</span>
+              <span>Krankenversicherung (KV 7,3% + Zusatz {pct(SI.healthAdditionalAvg / 2)}%):</span>
               <strong>{payroll.employee.health.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
-              <span>Pflegeversicherung (PV):</span>
+              <span>Pflegeversicherung (PV {pct(SI.careTotal / 2)}%{payroll.employee.care > payroll.employer.care ? ` + ${pct(SI.careChildlessSurcharge)}% Kinderlosenzuschlag` : ''}):</span>
               <strong>{payroll.employee.care.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
@@ -258,7 +265,7 @@ export default function WisoPayrollLab() {
               <strong>{payroll.employer.health.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
-              <span>AG-Anteil Pflegeversicherung (2,2%):</span>
+              <span>AG-Anteil Pflegeversicherung ({pct(SI.careTotal / 2)}%):</span>
               <strong>{payroll.employer.care.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
@@ -290,7 +297,7 @@ export default function WisoPayrollLab() {
           💡 IHK WISO-Wissen: Paritätsprinzip & Beitragsbemessungsgrenzen
         </h3>
         <p style={{ fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary, #475569)', margin: 0 }}>
-          In der deutschen Sozialversicherung gilt das <strong>Paritätsprinzip</strong>: Arbeitnehmer und Arbeitgeber teilen sich die Beiträge zur Kranken-, Pflege-, Renten- und Arbeitslosenversicherung grundsätzlich zu gleichen Teilen (50/50). Eine Ausnahme bildet der <strong>Zuschlag für Kinderlose</strong> in der Pflegeversicherung (+0,6%), den der Arbeitnehmer alleine trägt. Bei Überschreiten der monatlichen <strong>Beitragsbemessungsgrenzen</strong> (KV/PV: 5.175 €, RV/AV: 7.550 €) steigen die Sozialabgaben nicht weiter an.
+          In der deutschen Sozialversicherung gilt das <strong>Paritätsprinzip</strong>: Arbeitnehmer und Arbeitgeber teilen sich die Beiträge zur Kranken-, Pflege-, Renten- und Arbeitslosenversicherung grundsätzlich zu gleichen Teilen (50/50). Eine Ausnahme bildet der <strong>Zuschlag für Kinderlose</strong> in der Pflegeversicherung (+0,6%), den der Arbeitnehmer alleine trägt. Bei Überschreiten der monatlichen <strong>Beitragsbemessungsgrenzen</strong> (KV/PV: {eur0(SI.bbgHealthCareMonthly)}, RV/AV: {eur0(SI.bbgPensionMonthly)}) steigen die Sozialabgaben nicht weiter an.
         </p>
       </div>
     </div>

@@ -57,3 +57,24 @@ describe('LabsDashboard Lernfortschritt', () => {
     expect(within(card).getByText('Abgeschlossen')).toBeTruthy();
   });
 });
+
+describe('LabsDashboard Filter', () => {
+  it('filtert nach Status „Erledigt“ und zeigt Zähler', () => {
+    useStore.setState({
+      userState: {
+        ...initialProfileState,
+        labProgress: { stp_protocol_lab: { visits: 1, lastVisit: '2026-10-07', completed: true, completedOn: '2026-10-07' } }
+      }
+    });
+    render(<LabsDashboard onSelectLab={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Erledigt' }));
+    expect(screen.getByText(new RegExp(`1 von ${LAB_MODULES.length} Labs$`))).toBeTruthy();
+  });
+
+  it('filtert nach Level', () => {
+    render(<LabsDashboard onSelectLab={() => {}} />);
+    fireEvent.change(screen.getByLabelText(/level/i), { target: { value: 'Expert' } });
+    const expected = LAB_MODULES.filter((m) => m.difficulty === 'Expert').length;
+    expect(screen.getByText(new RegExp(`^${expected} von ${LAB_MODULES.length} Labs$`))).toBeTruthy();
+  });
+});

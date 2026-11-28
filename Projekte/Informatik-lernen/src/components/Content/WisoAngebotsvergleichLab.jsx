@@ -115,7 +115,7 @@ export default function WisoAngebotsvergleichLab({ onRewardXP }) {
                 IHK WISO Angebotsvergleich & Skontorechner
               </h1>
               <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-muted, #94a3b8)', fontSize: '0.9rem' }}>
-                Kaufmännischer Angebotsvergleich, Skonto-Effektivzins ($p_{'{eff}'}$) vs. Kontokorrentkredit & qualitative Nutzwertmatrix
+                Kaufmännischer Angebotsvergleich, Skonto-Effektivzins (p_eff) vs. Kontokorrentkredit & qualitative Nutzwertmatrix
               </p>
             </div>
           </div>
